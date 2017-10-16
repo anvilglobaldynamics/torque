@@ -3,7 +3,7 @@
   "authors": [
     "Sayem Shafayet"
   ],
-  "license": "https://github.com/iShafayet/Rewardables/blob/master/LICENSE",
+  "license": "https://github.com/iShafayet/Torque/blob/master/LICENSE",
   "dependencies": {
     "app-layout": "PolymerElements/app-layout#2.0-preview",
     "app-route": "PolymerElements/app-route#2.0-preview",
