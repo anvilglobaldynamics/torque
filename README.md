@@ -1,9 +1,9 @@
 # torque
 The best POS and inventory management system money can buy.
 
-# installation for developers
+# Instructions for developers
 
-[Instructions are here](meta/dev-notes/dev-setup.md)
+[Environment and Project setup for development](meta/dev-notes/dev-setup.md)
 
 
 
