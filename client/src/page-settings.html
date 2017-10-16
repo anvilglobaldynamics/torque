@@ -11,8 +11,6 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
 <link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
 
-<link rel="import" href="view-user.html">
-
 <link rel="import" href="my-swipe-behavior.html">
 
 <link rel="import" href="shared-styles.html">
@@ -21,7 +19,7 @@
   <template>
     <style include="shared-styles">
       @media (min-width: 960px) {
-         :host {
+        :host {
           display: block;
           padding-top: 24px;
         }
@@ -83,48 +81,31 @@
     <div class="wrapper layout vertical" id="wrapper">
 
       <paper-tabs id="main-view-selector" class="view-selector" selected="{{paperTabSelectedViewIndex}}" fit-container>
+        <paper-tab>App</paper-tab>
         <paper-tab>General</paper-tab>
-        <paper-tab>Sync/Account</paper-tab>
-        <paper-tab>Backup/Recovery</paper-tab>
+        <paper-tab>Others</paper-tab>
       </paper-tabs>
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 0)]]">
         <div class="card vertical layout">
           <div class="option">
-            <paper-checkbox on-change="showHiddenChanged" checked="{{shouldShowHidden}}">Should Show hidden</paper-checkbox>
+            <paper-checkbox on-change="shouldUseWebsocketsChanged" checked="{{shouldUseWebsockets}}">Use Websockets</paper-checkbox>
             <div class="note">
-              If checked, all hidden history, tasks and pleasures will become visible.
-            </div>
-          </div>
-
-          <div class="option">
-            <paper-checkbox on-change="allowDeletionhanged" checked="{{shouldAllowDeletion}}">Allow deletion</paper-checkbox>
-            <div class="note">
-              If checked, deleting history will be allowed.
+              If checked, the app will try to use websockets.
             </div>
           </div>
 
         </div>
       </template>
 
-      <view-user is-active="[[$equals(paperTabSelectedViewIndex, 1)]]"></view-user>
+      <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 1)]]">
+        Nothing so far
+      </template>
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 2)]]">
-
-        <template is="dom-if" if="[[!_exportedData]]">
-          <div class="export-area">
-            <paper-button raised class="primary" on-tap="exportDataTapped">Export Data</paper-button>
-            <br><br><br>
-            <paper-button raised class="primary" on-tap="resetDataTapped">Export and Reset Data</paper-button>
-          </div>
-        </template>
-
-        <template is="dom-if" if="[[_exportedData]]">
-          <div class="exported-data">
-            [[_exportedData]]
-          </div>
-        </template>
+        Nothing so far, tab 3
       </template>
+
 
   </template>
 
@@ -136,10 +117,7 @@
 
       static get properties() {
         return {
-          _exportedData: { type: String, value: null },
-          shouldShowHidden: { type: Boolean, value: false },
-          shouldAllowDeletion: { type: Boolean, value: false },
-          paperTabSelectedViewIndex: { type: Number, value: 0, observer: '_paperTabSelectedViewIndexChanged' },
+          shouldUseWebsockets: { type: Boolean, value: false },
         };
       }
 
@@ -184,8 +162,7 @@
         this.app.currentPageIsModal = false;
         this.paperTabSelectedViewIndex = 0;
         let settings = this.app.db.find('settings', (({ which }) => which === 'only'))[0];
-        this.shouldShowHidden = settings.shouldShowHidden
-        this.shouldAllowDeletion = settings.shouldAllowDeletion
+        this.shouldUseWebsockets = settings.shouldUseWebsockets
         this._loadLastPaperTabSelectedViewIndex()
       }
 
@@ -196,66 +173,11 @@
 
       // region: general settinggs =================================
 
-      showHiddenChanged(e) {
+      shouldUseWebsocketsChanged(e) {
         this.app.db.update('settings', ({ which }) => which === 'only', (doc) => {
-          doc.shouldShowHidden = this.shouldShowHidden;
+          doc.shouldUseWebsockets = this.shouldUseWebsockets;
           return doc
         });
-      }
-
-      allowDeletionhanged(e) {
-        this.app.db.update('settings', ({ which }) => which === 'only', (doc) => {
-          doc.shouldAllowDeletion = this.shouldAllowDeletion;
-          return doc
-        });
-      }
-
-      // region: export/import =================================
-
-      _collectDataFromDatabase() {
-        let data = {};
-        let collectionNameList = ['task', 'pleasure', 'transaction', 'status']
-        for (let collectionName of collectionNameList) {
-          data[collectionName] = this.app.db.find(collectionName);
-        }
-        return data;
-      }
-
-      exportDataTapped(e) {
-        let data = this._collectDataFromDatabase();
-        data = JSON.stringify(data, null, 2);
-        this._exportedData = data;
-        this._createDownloadableFile(data);
-      }
-
-      _createDownloadableFile(content) {
-        var blob = new Blob([content]);
-        var objectURL = window.URL.createObjectURL(blob, { type: 'text/json' });
-        var identifier = 'rewardables-data.json';
-        var a = window.document.createElement('a');
-        a.href = objectURL;
-        a.target = "_blank";
-        a.download = identifier;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
-
-      resetDataTapped(e) {
-        this.app.showModalConfirmation("Are you sure?", "Are you sure to erase everything? This is irreverible unless you have a backup.", (answer) => {
-          if (answer) {
-            this.exportDataTapped(null);
-            this._clearLocalStorage();
-            baselib.delay(1000, _ => {
-              this.app.navigateTo('home');
-              window.location.reload();
-            });
-          }
-        })
-      }
-
-      _clearLocalStorage() {
-        localStorage.clear();
       }
 
       // region: misc =================================
