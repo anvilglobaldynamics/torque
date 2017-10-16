@@ -3,8 +3,6 @@
   "shell": "src/torque-app.html",
   "fragments": [
     "src/page-home.html",
-    "src/page-task-editor.html",
-    "src/page-pleasure-editor.html",
     "src/page-error404.html",
     "src/page-settings.html",
     "src/page-about.html"
