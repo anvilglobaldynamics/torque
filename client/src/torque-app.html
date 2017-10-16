@@ -1,0 +1,266 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../bower_components/atomicdb/atomicdb.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-app.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-dialog-behavior.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-page-manager-behavior.html">
+
+<link rel="import" href="my-db-behavior.html">
+<link rel="import" href="my-http-behavior.html">
+
+<link rel="lazy-import" href="page-home.html">
+<link rel="lazy-import" href="page-settings.html">
+<link rel="lazy-import" href="page-error404.html">
+<link rel="lazy-import" href="page-about.html">
+
+<link rel="import" href="shared-icons.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="torque-app">
+  <template>
+    <style include="shared-styles">
+      :host {
+        --app-primary-color: #E65100;
+        --app-secondary-color: black;
+        display: block;
+      }
+
+      app-drawer-layout:not([narrow]) [drawer-toggle] {
+        display: none;
+      }
+
+      app-header {
+        color: #fff;
+        background-color: var(--app-primary-color);
+      }
+
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
+
+      .drawer-list {
+        margin: 0 020px;
+      }
+
+      .drawer-list a {
+        display: block;
+        padding: 0 16px;
+        text-decoration: none;
+        color: var(--app-secondary-color);
+        line-height: 40px;
+      }
+
+      .drawer-list a.iron-selected {
+        color: black;
+        font-weight: bold;
+      }
+
+      .footer {
+        margin-top: 36px;
+        margin-bottom: 36px;
+        text-align: center;
+        color: #424242;
+      }
+
+      .footer .grey {
+        color: #616161;
+      }
+    </style>
+
+    <app-drawer-layout fullbleed responsive-width="2560px">
+      <!-- Drawer content -->
+      <app-drawer id="drawer" slot="drawer">
+        <app-toolbar>Rewardables</app-toolbar>
+        <iron-selector selected="[[pageName]]" attr-for-selected="name" class="drawer-list" role="navigation">
+          <a name="home" href="home">Home</a>
+          <a name="settings" href="settings">Settings</a>
+          <a name="about" href="about">About</a>
+        </iron-selector>
+      </app-drawer>
+
+      <!-- Main content -->
+      <app-header-layout has-scrolling-region>
+
+        <app-header slot="header">
+          <app-toolbar>
+            <template is="dom-if" if="[[!currentPageIsModal]]">
+              <paper-icon-button icon="shared-icons:menu" drawer-toggle></paper-icon-button>
+            </template>
+            <template is="dom-if" if="[[currentPageIsModal]]">
+              <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
+            </template>
+            <div main-title class="flex">[[$getPageTitle(pageTitleList.length)]]</div>
+            <!-- <div ></div> -->
+            <template is="dom-if" if="[[shouldShowSaveButton]]">
+              <paper-icon-button icon="save" on-click="saveButtonOnTopBarPressed"></paper-icon-button>
+            </template>
+            <template is="dom-if" if="[[activeServiceCount]]">
+              <paper-icon-button icon="swap-vert"></paper-icon-button>
+            </template>
+          </app-toolbar>
+        </app-header>
+
+        <iron-pages on-iron-select="mainIronPagesIronSelected" id="main-iron-pages" selected="[[pageName]]" attr-for-selected="name"
+          fallback-selection="error404" role="main">
+          <page-home name="home"></page-home>
+          <page-settings name="settings"></page-settings>
+          <page-error404 name="error404"></page-error404>
+          <page-about name="about"></page-about>
+        </iron-pages>
+
+        <div class="footer">
+          <a href="https://ishafayet.me">Sayem Shafayet</a> &copy; 2017
+        </div>
+      </app-header-layout>
+    </app-drawer-layout>
+
+    <div class="super-class-insertion-point"></div>
+  </template>
+
+  <script>
+    class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, MyDbBehavior, MyHttpBehavior) {
+
+      static get is() { return 'torque-app'; }
+
+      static get properties() {
+        return {
+          appVersion: {
+            type: String,
+            value: '0.0.0'
+          },
+          definitionRevisionVersion: {
+            type: Number,
+            value: 1
+          },
+          brandName: {
+            type: String,
+            value: 'Torque'
+          },
+          currentPageIsModal: {
+            type: Boolean,
+            value: false
+          },
+          activeServiceCount: {
+            type: Number,
+            value: 0
+          }
+        };
+      }
+
+      static get template() {
+        this.insertExternalTemplate(FxApp.template, '.super-class-insertion-point');
+        this.insertExternalTemplate(FxDialogBehavior.template, '.super-class-insertion-point');
+        return this.getOwnTemplate();
+      }
+
+      constructor() {
+        super();
+        this._initializeDatabase();
+        this._fillDatabase();
+        this.db.observe('user', (...args) => this._reflectDatabaseChanges(...args));
+        this._intializeServiceManager();
+        this._reflectDatabaseChanges();
+        this._manageProductionVariables();
+        this.pushPageTitle(this.brandName);
+      }
+
+      _manageProductionVariables() {
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          this.jsonPostApiPathPrefix = 'http://localhost:8540/api/';
+        } else {
+          this.jsonPostApiPathPrefix = `https://server1.torque.com/api/`;
+        }
+      }
+
+      _initializeDatabase() {
+        this.db = new atomicdb.Atomicdb({
+          name: 'torque-main',
+          storageEngine: localStorage,
+          serializationEngine: JSON,
+          uniqueKey: 'idOnClient'
+        });
+        this.db.initializeDatabase();
+        this.db.defineCollection({
+          name: 'settings'
+        });
+        this.db.defineCollection({
+          name: 'user'
+        });
+      }
+
+      _fillDatabase() {
+        this.db.upsert('settings', (({ which }) => which === 'only'), (doc => doc), {
+          which: 'only',
+          shouldUseWebsockets: false
+        });
+      }
+
+      _intializeServiceManager() {
+        this.serviceManager.on('service-change', (event) => {
+          this.activeServiceCount = event.detail.activeCount;
+        })
+        this.serviceManager.on('error', (event) => {
+          this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
+        });
+      }
+
+      _reflectDatabaseChanges() {
+        this.user = this.db.find('user', (({ which }) => which === 'only'))[0] || null;
+      }
+
+      // ====================== navigation =============================
+
+      _pageNameChanged() {
+        var resolvedPageUrl = this.resolveUrl('page-' + this.pageName + '.html');
+        Polymer.importHref(resolvedPageUrl, null, (_ => this.pageName = 'error404'), true);
+      }
+
+      mainIronPagesIronSelected(e, details) {
+        if (e.target.nodeName !== 'IRON-PAGES') return;
+        if (!details.item) return;
+        this._notifyPageSelect(details.item);
+      }
+
+      // ======================  events =============================
+
+      // ====================== delegated events =============================
+
+      backButtonOnTopBarPressed(e) {
+        if ('backButtonOnTopBarPressed' in this.activePageElement) {
+          this.activePageElement.backButtonOnTopBarPressed(e)
+        }
+      }
+
+      saveButtonOnTopBarPressed(e) {
+        if ('saveButtonOnTopBarPressed' in this.activePageElement) {
+          this.activePageElement.saveButtonOnTopBarPressed(e)
+        }
+      }
+
+      // ====================== utilities =============================
+
+      showAlertMessage(...args) {
+        this.showModalDialog.apply(this, args);
+      }
+
+    }
+
+    window.customElements.define(TorqueApp.is, TorqueApp);
+  </script>
+</dom-module>

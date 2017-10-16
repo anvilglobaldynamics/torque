@@ -1,0 +1,255 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="my-db-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-home">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding: 24px;
+        }
+      }
+
+      .wrapper {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      paper-tabs.view-selector {
+        --paper-tabs: {
+          background-color: var(--app-primary-color);
+          color: white;
+        }
+      }
+
+      .new-fab {
+        position: fixed;
+        bottom: 50px;
+        right: 50px;
+      }
+
+      .empty-list-message {
+        padding: 32px;
+        text-align: center;
+      }
+
+      paper-item {
+        border-bottom: 1px solid #eeeeee;
+      }
+
+      paper-item:last-of-type {
+        border-bottom: none;
+      }
+
+      /* .done {
+        text-decoration: line-through;
+        color: #ccc;
+      } */
+
+      .transaction {
+        font-weight: normal;
+      }
+
+      .transaction .title {
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 14px;
+        /* margin-top: 4px; */
+      }
+
+      .transaction .time {
+        font-size: 12px;
+        color: #757575;
+        line-height: 16px;
+      }
+
+      /* .transaction .task strong {
+        color: #1B5E20;
+      }
+
+      .transaction .pleasure strong {
+        color: #BF360C;
+      } */
+
+      .task-points,
+      .pleasure-points {
+        display: block;
+        min-width: 40px;
+        height: 40px;
+        text-align: center;
+        color: #555;
+        border-radius: 50%;
+        background: #ddd;
+        font-size: 20px;
+        line-height: 40px;
+        margin-right: 10px;
+        font-weight: bold;
+        margin-bottom: 6px;
+        margin-top: 6px;
+      }
+
+      .task-points {
+        background: #80DEEA;
+        color: #212121;
+      }
+
+      .pleasure-points {
+        background: #F06292;
+        color: #FAFAFA;
+      }
+
+      .favorite {
+        color: red;
+      }
+
+      .transaction-context-icon {
+        background: #FAFAFA;
+        border-radius: 50%;
+        margin-right: 4px;
+      }
+
+      #wrapper {
+        min-height: 100vh;
+      }
+
+      .toggle-task-icon {
+        margin-top: 6px;
+        margin-bottom: 6px;
+        background: #80DEEA;
+        border-radius: 50%;
+        margin-right: 10px;
+        color: #212121;
+      }
+
+      .task-context-icon {
+        --paper-icon-button: {
+          background: #E0E0E0;
+        }
+        border-radius: 50%;
+        margin-right: 4px;
+      }
+
+      .task .title {
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 14px;
+        /* margin-top: 4px; */
+      }
+
+      .task .second-line {
+        font-size: 12px;
+        color: #757575;
+        line-height: 16px;
+      }
+
+      .toggle-pleasure-icon {
+        margin-top: 6px;
+        margin-bottom: 6px;
+        background: #F06292;
+        border-radius: 50%;
+        margin-right: 10px;
+        color: white;
+      }
+
+      .pleasure-context-icon {
+        --paper-icon-button: {
+          background: #E0E0E0;
+        }
+        border-radius: 50%;
+        margin-right: 4px;
+      }
+
+      .pleasure .title {
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 14px;
+        /* margin-top: 4px; */
+      }
+
+      .pleasure .second-line {
+        font-size: 12px;
+        color: #757575;
+        line-height: 16px;
+      }
+
+      .is-hidden {
+        color: red;
+      }
+
+      .card {
+        margin: 8px;
+      }
+    </style>
+
+    <div class="wrapper layout vertical" id="wrapper">
+      <!-- <h1>Reward Points Earned: [[points]]</h1> -->
+      <div>Hello!</div>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageHome extends FxPage.mixin(MyDbBehavior) {
+      static get is() {
+        return 'page-home';
+      }
+
+      static get properties() {
+        return {
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onFirstNavigation() {
+        super.onFirstNavigation();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.app.pushPageTitle('Home');
+        this._reflectDatabaseChanges();
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _reflectDatabaseChanges() {
+
+      }
+
+      // region: ui consistency ===========================
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageHome.is, PageHome);
+  </script>
+</dom-module>

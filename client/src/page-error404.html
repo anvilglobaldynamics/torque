@@ -1,0 +1,55 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-error404">
+  <template>
+    <style include="shared-styles">
+       :host {
+        display: block;
+        padding: 10px;
+      }
+
+      .circle {
+        display: inline-block;
+        width: 48px;
+        height: 48px;
+        text-align: center;
+        color: #555;
+        border-radius: 50%;
+        background: #ddd;
+        font-size: 30px;
+        line-height: 48px;
+      }
+
+      .card {
+        text-align: center;
+      }
+    </style>
+
+    <div class="card">
+      <div class="circle">404</div>
+      <h1>Content not found.</h1>
+      <p>The requested content could not be found</p>
+      <p><a href="[[rootPath]]">Head back to home.</a></p>
+    </div>
+
+  </template>
+
+  <script>
+    class PageError404 extends FxPage {
+      static get is() { return 'page-error404'; }
+      static get properties() {
+        return {
+          // This shouldn't be neccessary, but the Analyzer isn't picking up
+          // Polymer.Element#rootPath
+          rootPath: String,
+        };
+      }
+    }
+
+    window.customElements.define(PageError404.is, PageError404);
+  </script>
+</dom-module>
