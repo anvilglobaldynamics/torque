@@ -1,0 +1,50 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/torque-app.html",
+  "fragments": [
+    "src/page-home.html",
+    "src/page-task-editor.html",
+    "src/page-pleasure-editor.html",
+    "src/page-error404.html",
+    "src/page-settings.html",
+    "src/page-about.html"
+  ],
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/*.js"
+  ],
+  "lint": {
+    "rules": [
+      "polymer-2"
+    ]
+  },
+  "builds": [
+    {
+      "name": "custom-es5-legacy-bundled",
+      "js": {
+        "minify": true,
+        "compile": true
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      },
+      "bundle": {
+        "excludes": [],
+        "stripComments": true,
+        "inlineCss": true,
+        "sourcemaps": false
+      },
+      "addServiceWorker": false,
+      "addPushManifest": false,
+      "preset": "es5-bundled"
+    }
+  ]
+}
