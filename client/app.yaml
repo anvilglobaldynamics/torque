@@ -1,0 +1,30 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /bower_components
+  static_dir: build/custom-es5-legacy-bundled/bower_components
+  secure: always
+
+- url: /images
+  static_dir: build/custom-es5-legacy-bundled/images
+  secure: always
+
+- url: /src
+  static_dir: build/custom-es5-legacy-bundled/src
+  secure: always
+
+- url: /vendor-assets
+  static_dir: build/custom-es5-legacy-bundled/vendor-assets
+  secure: always
+
+- url: /manifest.json
+  static_files: build/custom-es5-legacy-bundled/manifest.json
+  upload: build/custom-es5-legacy-bundled/manifest.json
+  secure: always
+
+- url: /.*
+  static_files: build/custom-es5-legacy-bundled/index.html
+  upload: build/custom-es5-legacy-bundled/index.html
+  secure: always
