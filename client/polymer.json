@@ -5,6 +5,8 @@
     "src/page-home.html",
     "src/page-error404.html",
     "src/page-settings.html",
+    "src/page-register.html",
+    "src/page-login.html",
     "src/page-about.html"
   ],
   "sources": [
