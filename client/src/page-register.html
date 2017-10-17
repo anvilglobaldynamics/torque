@@ -31,6 +31,7 @@
       <iron-form id="register-form">
         <form>
           <div class="card vertical layout">
+            <div class="std-dialog-header">REGISTER</div>
             <paper-input value="{{registerForm.email}}" required pattern="^.+@.+\..+$" minlength="3" error-message="Please enter a valid email"
               label="A valid email address"></paper-input>
             <paper-input value="{{registerForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long"
@@ -40,7 +41,7 @@
               <paper-button raised class="primary" on-tap="registerTapped">Register</paper-button>
             </div>
             <div class="horizontal layout button-row center-center">
-              <div class="link light"  on-tap="loginTapped">Already have an account?</div>
+              <div class="link light" on-tap="loginTapped">Already have an account?</div>
             </div>
           </div>
         </form>
@@ -102,7 +103,7 @@
 
       // region: ui =================================
 
-      loginTapped(){
+      loginTapped() {
         this.app.navigateTo('/login')
       }
 
