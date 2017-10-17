@@ -7,7 +7,7 @@
 <dom-module id="page-error404">
   <template>
     <style include="shared-styles">
-       :host {
+      :host {
         display: block;
         padding: 10px;
       }
@@ -33,7 +33,9 @@
       <div class="circle">404</div>
       <h1>Content not found.</h1>
       <p>The requested content could not be found</p>
-      <p><a href="[[rootPath]]">Head back to home.</a></p>
+      <p>
+        <a href="[[rootPath]]">Back to Dashboard.</a>
+      </p>
     </div>
 
   </template>
@@ -43,8 +45,6 @@
       static get is() { return 'page-error404'; }
       static get properties() {
         return {
-          // This shouldn't be neccessary, but the Analyzer isn't picking up
-          // Polymer.Element#rootPath
           rootPath: String,
         };
       }

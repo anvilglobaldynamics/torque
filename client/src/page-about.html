@@ -27,39 +27,9 @@
           color: white;
         }
       }
-
-      .wrapper {
-        max-width: 960px;
-        margin: 0 auto;
-      }
-
-      .export-area {
-        padding: 40px;
-        text-align: center;
-      }
-
-      paper-button.primary {
-        background: var(--app-primary-color);
-        color: white;
-      }
-
-      .exported-data {
-        padding: 10px;
-        font-family: monospace;
-        max-height: 620px;
-        overflow: scroll;
-      }
-
-      .card {
-        margin: 10px;
-      }
-
-      #wrapper {
-        min-height: 100vh;
-      }
     </style>
 
-    <div class="wrapper layout vertical" id="wrapper">
+    <div class="std-page layout vertical" id="wrapper">
 
       <paper-tabs id="main-view-selector" class="view-selector" selected="{{paperTabSelectedViewIndex}}" fit-container>
         <paper-tab>About</paper-tab>
