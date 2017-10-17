@@ -6,7 +6,7 @@
   <template>
     <style is="custom-style" include="iron-flex iron-flex-alignment">
       .card {
-        margin: 24px;
+        margin: 8px;
         padding: 16px;
         color: #424242;
         border-radius: 5px;
@@ -20,9 +20,42 @@
         font-size: 22px;
       }
 
+      .std-small-page {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+
+      .std-page {
+        max-width: 760px;
+        margin: 0 auto;
+        min-height: 100vh;
+      }
+
+      .button-row {
+        margin-top: 12px;
+      }
+
+      div.link {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      div.link.primary {
+        color: var(--app-primary-color-dark);
+      }
+
+      div.link.light {
+        color: var(--app-primary-color-light);
+      }
+
       paper-icon-button {
         min-width: 40px;
         max-width: 40px;
+      }
+
+      paper-button.primary {
+        background: var(--app-primary-color);
+        color: white;
       }
     </style>
   </template>

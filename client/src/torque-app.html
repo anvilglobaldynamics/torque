@@ -28,6 +28,8 @@
 <link rel="lazy-import" href="page-settings.html">
 <link rel="lazy-import" href="page-error404.html">
 <link rel="lazy-import" href="page-about.html">
+<link rel="lazy-import" href="page-login.html">
+<link rel="lazy-import" href="page-register.html">
 
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
@@ -36,8 +38,14 @@
   <template>
     <style include="shared-styles">
       :host {
-        --app-primary-color: #E65100;
-        --app-secondary-color: black;
+        --app-primary-color: #9C27B0;
+        --app-primary-color-dark: #4A148C;
+        --app-primary-color-light: #7B1FA2;
+        --app-primary-text-color: #ffffff;
+        --app-text: #000000;
+        --app-text-light: #424242;
+        --app-text-lighter: #757575;
+        --app-text-invert: #ffffff;
         display: block;
       }
 
@@ -46,28 +54,29 @@
       }
 
       app-header {
-        color: #fff;
+        color: var(--app-primary-text-color);
         background-color: var(--app-primary-color);
       }
 
       app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
+        --paper-icon-button-ink-color: var(--app-primary-text-color);
       }
 
       .drawer-list {
         margin: 0 020px;
       }
 
+      .logout-link,
       .drawer-list a {
         display: block;
         padding: 0 16px;
         text-decoration: none;
-        color: var(--app-secondary-color);
+        color: var(--app-text);
         line-height: 40px;
       }
 
       .drawer-list a.iron-selected {
-        color: black;
+        color: var(--app-text);
         font-weight: bold;
       }
 
@@ -75,11 +84,7 @@
         margin-top: 36px;
         margin-bottom: 36px;
         text-align: center;
-        color: #424242;
-      }
-
-      .footer .grey {
-        color: #616161;
+        color: var(--app-text-lighter);
       }
     </style>
 
@@ -92,6 +97,7 @@
           <a name="settings" href="settings">Settings</a>
           <a name="about" href="about">About</a>
         </iron-selector>
+        <div class="link primary logout-link" on-tap="logoutTapped">Logout</div>
       </app-drawer>
 
       <!-- Main content -->
@@ -106,7 +112,6 @@
               <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
             </template>
             <div main-title class="flex">[[$getPageTitle(pageTitleList.length)]]</div>
-            <!-- <div ></div> -->
             <template is="dom-if" if="[[shouldShowSaveButton]]">
               <paper-icon-button icon="save" on-click="saveButtonOnTopBarPressed"></paper-icon-button>
             </template>
@@ -122,10 +127,13 @@
           <page-settings name="settings"></page-settings>
           <page-error404 name="error404"></page-error404>
           <page-about name="about"></page-about>
+          <page-login name="login"></page-login>
+          <page-register name="register"></page-register>
         </iron-pages>
 
         <div class="footer">
-          <a href="https://ishafayet.me">Sayem Shafayet</a> &copy; 2017
+          &copy; 2017
+          <a href="https://ishafayet.me">TechOps Corp.</a> All Rights Reserved
         </div>
       </app-header-layout>
     </app-drawer-layout>
@@ -238,6 +246,11 @@
       }
 
       // ======================  events =============================
+
+      logoutTapped(e = null) {
+        this.db.remove('user', (doc => true));
+        this.navigateTo('/login')
+      }
 
       // ====================== delegated events =============================
 

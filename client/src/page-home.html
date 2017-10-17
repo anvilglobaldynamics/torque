@@ -224,15 +224,12 @@
         this.confirmPageReady();
       }
 
-      onFirstNavigation() {
-        super.onFirstNavigation();
-      }
-
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.app.pushPageTitle('Home');
         this._reflectDatabaseChanges();
+        this._ensureAccess();
       }
 
       onNavigateOut() {
@@ -242,6 +239,12 @@
 
       _reflectDatabaseChanges() {
 
+      }
+
+      _ensureAccess(){
+        if (!this.app.user){
+          this.app.navigateTo('/login')
+        }
       }
 
       // region: ui consistency ===========================

@@ -164,11 +164,18 @@
         let settings = this.app.db.find('settings', (({ which }) => which === 'only'))[0];
         this.shouldUseWebsockets = settings.shouldUseWebsockets
         this._loadLastPaperTabSelectedViewIndex()
+        this._ensureAccess();
       }
 
       onNavigateOut() {
         super.onNavigateOut();
         this._exportedData = null;
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login')
+        }
       }
 
       // region: general settinggs =================================

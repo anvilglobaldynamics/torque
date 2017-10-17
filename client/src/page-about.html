@@ -71,7 +71,8 @@
 
         <div class="card">
           <div>This project is created and maintained by
-            <a href="https://ishafayet.me">Sayem Shafayet</a> and <a href="https://ishafayet.me">Mujtaba Nowshad</a> 
+            <a href="https://ishafayet.me">Sayem Shafayet</a> and
+            <a href="https://ishafayet.me">Mujtaba Nowshad</a>
           </div>
           <br>
           <br>
@@ -141,10 +142,20 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.paperTabSelectedViewIndex = 0;
-
       }
+
+      onNavigateIn() {
+        this._ensureAccess();
+      }
+
       onNavigateOut() {
         super.onNavigateOut();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login')
+        }
       }
 
       // region: misc =================================      
