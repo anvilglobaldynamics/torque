@@ -11,6 +11,7 @@ let { TemplateManager } = require('./template-manager');
 
 let { UserRegisterApi } = require('./apis/user-register');
 let { UserLoginApi } = require('./apis/user-login');
+let { UserLogoutApi } = require('./apis/user-logout');
 let { VerifyEmailApi } = require('./apis/verify-email');
 
 let config, logger, database, server, emailService, templateManager;
@@ -61,6 +62,7 @@ Promise.resolve()
     server.registerGetApi('/verify-email/:link', VerifyEmailApi);
     server.registerPostApi('/api/user-register', UserRegisterApi);
     server.registerPostApi('/api/user-login', UserLoginApi);
+    server.registerPostApi('/api/user-logout', UserLogoutApi);
     return Promise.resolve();
   })
   .then(() => {

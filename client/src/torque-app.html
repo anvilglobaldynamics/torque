@@ -248,8 +248,10 @@
       // ======================  events =============================
 
       logoutTapped(e = null) {
-        this.db.remove('user', (doc => true));
-        this.navigateTo('/login')
+        this.callUserLogoutApi({}, (err, response) => {
+          this.db.remove('user', (doc => true));
+          this.navigateTo('/login');
+        })
       }
 
       // ====================== delegated events =============================

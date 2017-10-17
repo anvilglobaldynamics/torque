@@ -10,6 +10,7 @@ exports.sessionMixin = (DatabaseClass) => class extends DatabaseClass {
       userId: Joi.number().required(),
       apiKey: Joi.string().length(64).required(),
       createdDatetimeStamp: Joi.number().required(),
+      closedDatetimeStamp: Joi.number().required().allow(null),
       hasExpried: Joi.boolean().required()
     });
   }
@@ -62,6 +63,7 @@ exports.sessionMixin = (DatabaseClass) => class extends DatabaseClass {
       userId,
       apiKey,
       createdDatetimeStamp: (new Date).getTime(),
+      closedDatetimeStamp: null,
       hasExpried: false
     }
     this._insertSession(session, (err, id) => {
@@ -71,6 +73,20 @@ exports.sessionMixin = (DatabaseClass) => class extends DatabaseClass {
 
   getSessionByApiKey(apiKey, cbfn) {
     this.findOne('session', { apiKey }, cbfn);
+  }
+
+  closeSession(id, cbfn) {
+    let mod = {
+      $set: {
+        hasExpried: true,
+        closedDatetimeStamp: (new Date).getTime()
+      }
+    }
+    this._updateSession({ id }, mod, (err, count) => {
+      if (err) return cbfn(err);
+      if (count !== 1) return cbfn(new Error("Session Not Found"));
+      return cbfn();
+    });
   }
 
   makeSessionAnInvalidSession(id, cbfn) {

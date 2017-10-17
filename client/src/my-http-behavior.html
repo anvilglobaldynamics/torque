@@ -11,10 +11,10 @@
           super(...args);
         }
 
-        _callAuthenticatedJsonPostApi(data, cbfn) {
+        _callAuthenticatedJsonPostApi(url, data, cbfn) {
           if ('user' in this && 'apiKey' in this.user) {
             data.apiKey = this.user.apiKey;
-            this.callJsonPostApi('sync-data', data, cbfn);
+            this.callJsonPostApi(url, data, cbfn);
           } else {
             this.showAlertMessage("No Api Key");
           }
@@ -26,6 +26,10 @@
 
         callUserLoginApi(data, cbfn) {
           this.callJsonPostApi('user-login', data, cbfn);
+        }
+
+        callUserLogoutApi(data, cbfn) {
+          this._callAuthenticatedJsonPostApi('user-logout', data, cbfn);
         }
 
       }

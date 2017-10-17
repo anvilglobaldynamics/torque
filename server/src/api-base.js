@@ -129,11 +129,12 @@ class Api {
       } else {
         body = value;
         if (this.requiresAuthentication) {
+          let { apiKey } = body;
           this.authenticate(body, (err, userId) => {
             if (err) {
               this.fail(err);
             } else {
-              this.handle({ userId, body });
+              this.handle({ userId, body, apiKey });
             }
           })
         } else {
