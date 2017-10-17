@@ -103,7 +103,7 @@
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
 
-        <app-header slot="header">
+        <app-header slot="header" style$="[[$invisibleUnless(user)]]">
           <app-toolbar>
             <template is="dom-if" if="[[!currentPageIsModal]]">
               <paper-icon-button icon="shared-icons:menu" drawer-toggle></paper-icon-button>
@@ -270,6 +270,14 @@
 
       showAlertMessage(...args) {
         this.showModalDialog.apply(this, args);
+      }
+
+      $invisibleUnless(condition) {
+        if (!condition) {
+          return 'visibility:hidden; '
+        } else {
+          return '';
+        }
       }
 
     }
