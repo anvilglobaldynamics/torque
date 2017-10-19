@@ -5,6 +5,9 @@
   (_ => {
     let { HttpRequestService, WebsocketRequestService, ServiceManager } = window.ServiceTree;
 
+    const WEBSOCKET_DELAY_BEFORE_RETRYING = 30 * 1000;
+    let lastWebsocketFailureTimestamp = 0;
+
     if (!window.MyHttpBehavior) {
       /* @polymerMixin */
       window.MyHttpBehavior = (SuperClass) => class extends FxHttpBehavior(SuperClass) {
@@ -37,13 +40,19 @@
         }
 
         callCombinedJsonApi(path, data, cbfn) {
-          this.callJsonWebsocketApi(path, data, (err, message) => {
-            if (err) {
-              this.callJsonPostApi(path, data, cbfn);
-            } else {
-              cbfn(null, message);
-            }
-          })
+          let now = (new Date).getTime();
+          if (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING) {
+            this.callJsonPostApi(path, data, cbfn);
+          } else {
+            this.callJsonWebsocketApi(path, data, (err, message) => {
+              if (err) {
+                lastWebsocketFailureTimestamp = (new Date).getTime();
+                this.callJsonPostApi(path, data, cbfn);
+              } else {
+                cbfn(null, message);
+              }
+            })
+          }
         }
 
         // api call utls ===================================
