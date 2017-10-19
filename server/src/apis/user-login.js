@@ -4,6 +4,8 @@ let Joi = require('joi');
 let cryptolib = require('crypto');
 let { generateRandomString } = require('./../utils/random-string');
 
+const EMAIL_VERIFICATION_WINDOW = 5 * 24 * 60 * 60 * 1000;
+
 exports.UserLoginApi = class extends Api {
 
   get autoValidates() { return true; }
@@ -39,7 +41,7 @@ exports.UserLoginApi = class extends Api {
         this.database.findEmailVerificationRequestByForUserId(user.id, (err, { createdDatetimeStamp }) => {
           let now = (new Date).getTime();
           let diff = now - createdDatetimeStamp;
-          if (diff < 24 * 60 * 60 * 1000) {
+          if (diff < EMAIL_VERIFICATION_WINDOW) {
             let warning = "You have less than 24 hours to verify your email address."
             return cbfn({ user, warning });
           } else {
