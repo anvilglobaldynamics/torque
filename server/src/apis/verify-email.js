@@ -23,7 +23,7 @@ exports.VerifyEmailApi = class extends Api {
   }
 
   handle() {
-    let params = this.request.params;
+    let params = this.getQueryParameters();
     if (!('link' in params)) {
       return this._showFailed('Invalid url format.');
     }

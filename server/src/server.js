@@ -1,6 +1,8 @@
 
 let express = require('express');
 let bodyParser = require('body-parser');
+let WebSocket = require('ws');
+let Joi = require('joi');
 let jsonParser = bodyParser.json({
   limit: '100kb'
 });
@@ -12,14 +14,11 @@ class Server {
     this.config = config;
     this._hostname = config.hostname;
     this._port = config.port;
+    this._websocketPort = config.websocketPort;
     this._expressApp = express();
   }
 
   initialize(cbfn) {
-    // this._expressApp.get('*', (req, res) => {
-    //   this.logger.log("GET", req.url);
-    //   res.send(`You have reached the API server for ${this.config.baseName}`);
-    // });
     this._expressApp.settings['x-powered-by'] = false;
     this._expressApp.set('etag', false);
     this._expressApp.use(function (req, res, next) {
@@ -27,10 +26,63 @@ class Server {
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
       next();
     });
+
     this._expressApp.listen(this._port, () => {
       this.logger.info("(server)> server listening on port", this._port);
-      return cbfn();
+      this._initializeWebsocket(cbfn);
+      return;
     });
+  }
+
+  _initializeWebsocket(cbfn) {
+    this._wsServer = new WebSocket.Server({ port: this._websocketPort });
+    this._wsApiList = [];
+
+    this.logger.info("(server)> websocket server listening on port", this._websocketPort);
+
+    this._wsServer.on('connection', (ws, req) => {
+      ws.on('message', (message) => {
+        try {
+          message = JSON.parse(message);
+        } catch (err) {
+          ws.send("Expected message to be a valid JSON");
+          return;
+        }
+
+        if ((typeof message !== 'object') || (message === null)) {
+          ws.send("Expected message to be a stringified object.");
+          return;
+        }
+
+        let schema = Joi.object().keys({
+          requestUid: Joi.string().length(16).required(),
+          path: Joi.string().min(1).max(32).required(),
+          body: Joi.object().required()
+        });
+        let { error, value } = Joi.validate(message, schema);
+        if (error) {
+          ws.send("Socket request validation error." + JSON.stringify(error));
+          return;
+        }
+        message = value;
+
+        let route = this._wsApiList.find(({ path }) => {
+          return path === message.path;
+        });
+        if (!route) {
+          ws.send("Unkown route requested");
+          return;
+        }
+
+        let { ApiClass } = route;
+        this.logger.info('WS', `${message.path} ${message.requestUid}`);
+        let api = new ApiClass(this, this.database, this.logger, null, null, ws, 'ws', message.requestUid);
+        api._prehandlePostOrWsApi(message.body);
+
+      });
+    });
+
+    cbfn();
   }
 
   setLogger(logger) {
@@ -50,19 +102,23 @@ class Server {
   }
 
   registerGetApi(path, ApiClass) {
-    return this._expressApp.get(path, jsonParser, (req, res) => {
+    this._expressApp.get(path, jsonParser, (req, res) => {
       this.logger.info('GET', req.url);
-      let api = new ApiClass(this, this.database, this.logger, req, res);
-      api.prehandleGetApi();
+      let api = new ApiClass(this, this.database, this.logger, req, res, null, 'get');
+      api._prehandleGetApi();
     });
   }
 
   registerPostApi(path, ApiClass) {
-    return this._expressApp.post(path, jsonParser, (req, res) => {
+    this._expressApp.post(path, jsonParser, (req, res) => {
       this.logger.info('POST', req.url);
-      let api = new ApiClass(this, this.database, this.logger, req, res);
-      api.prehandlePostApi();
+      let api = new ApiClass(this, this.database, this.logger, req, res, null, 'post');
+      api._prehandlePostOrWsApi(req.body);
     });
+    this._wsApiList.push({
+      path,
+      ApiClass
+    })
   }
 
 }

@@ -10,6 +10,7 @@ class ConfigLoader {
     return {
       "baseName": "torque-server",
       "port": 8540,
+      "websocketPort": 8541,
       "hostname": "localhost",
       "log": {
         "logStandardOutputToFile": true,
