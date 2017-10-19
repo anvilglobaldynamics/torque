@@ -16,6 +16,7 @@
     "moment": "^2.18.1",
     "mongodb": "^2.2.30",
     "user-home": "^2.0.0",
+    "ws": "^3.2.0",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
