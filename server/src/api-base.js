@@ -1,7 +1,7 @@
 
 let _knownErrorCodeList = [];
 
-let Joi = require('joi')
+let Joi = require('joi');
 
 class Api {
 
@@ -9,14 +9,15 @@ class Api {
     _knownErrorCodeList.push(code);
   }
 
-  constructor(server, database, logger, request, response, socket, channel) {
+  constructor(server, database, logger, request, response, socket, channel, requestUid = null) {
     this.server = server;
     this.database = database;
     this.logger = logger;
     this._request = request;
     this._response = response;
     this._socket = socket;
-    this.channel = channel;
+    this._channel = channel;
+    this._requestUid = requestUid;
   }
 
   // region: properties (subclass needs to override) ==========
@@ -31,20 +32,32 @@ class Api {
 
   // region: internals ==========
 
+  _sendResponse(data) {
+    if (this._channel === 'ws') {
+      let reponse = {
+        requestUid: this._requestUid,
+        message: data
+      }
+      reponse = JSON.stringify(reponse);
+      this._socket.send(reponse);
+    } else {
+      this._response.send(data);
+    }
+  }
+
   _prehandleGetApi() {
     this.handle();
   }
 
-  _prehandlePostApi() {
-    let body;
+  _prehandlePostOrWsApi(body) {
     if (this.autoValidates) {
-      let schema = this._requestSchema;
+      let schema = this.requestSchema;
       if (this.requiresAuthentication) {
         schema = schema.keys({
           apiKey: Joi.string().length(64).required()
         })
       }
-      let { error, value } = this.validate(this._request.body, schema);
+      let { error, value } = this.validate(body, schema);
       if (error) {
         this.fail(error, error);
       } else {
@@ -76,7 +89,7 @@ class Api {
 
   fail(originalErrorObject, extraData) {
     let errorObject = this.failable(originalErrorObject, extraData);
-    this._response.send({ hasError: true, error: errorObject });
+    this._sendResponse({ hasError: true, error: errorObject });
   }
 
   validate(object, schema) {
@@ -85,11 +98,14 @@ class Api {
 
   success(object = {}) {
     object.hasError = false;
-    this._response.send(object);
+    this._sendResponse(object);
   }
 
   getQueryParameters() {
-    return this._request.params;
+    if (this._channel === 'get') {
+      return this._request.params;
+    }
+    return {};
   }
 
   // region: access control ==========================
@@ -126,7 +142,7 @@ class Api {
       model.error = model.error.replace(/\\n/g, '<br>');
     }
     let html = this.server.templateManager.generateHtml('generic-message', model);
-    this._response.send(html);
+    this._sendResponse(html);
   }
 
   // region: error handling =========================================
