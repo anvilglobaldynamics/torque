@@ -5,13 +5,21 @@ let Joi = require('joi')
 
 class Api {
 
-  constructor(server, database, logger, request, response) {
+  static addKnownErrorCode(code) {
+    _knownErrorCodeList.push(code);
+  }
+
+  constructor(server, database, logger, request, response, socket, channel) {
     this.server = server;
     this.database = database;
     this.logger = logger;
-    this.request = request;
-    this.response = response;
+    this._request = request;
+    this._response = response;
+    this._socket = socket;
+    this.channel = channel;
   }
+
+  // region: properties (subclass needs to override) ==========
 
   get autoValidates() {
     return false;
@@ -21,9 +29,107 @@ class Api {
     return false;
   }
 
-  static addKnownErrorCode(code) {
-    _knownErrorCodeList.push(code);
+  // region: internals ==========
+
+  _prehandleGetApi() {
+    this.handle();
   }
+
+  _prehandlePostApi() {
+    let body;
+    if (this.autoValidates) {
+      let schema = this._requestSchema;
+      if (this.requiresAuthentication) {
+        schema = schema.keys({
+          apiKey: Joi.string().length(64).required()
+        })
+      }
+      let { error, value } = this.validate(this._request.body, schema);
+      if (error) {
+        this.fail(error, error);
+      } else {
+        body = value;
+        if (this.requiresAuthentication) {
+          let { apiKey } = body;
+          this.authenticate(body, (err, userId) => {
+            if (err) {
+              this.fail(err);
+            } else {
+              this.handle({ userId, body, apiKey });
+            }
+          })
+        } else {
+          this.handle({ body });
+        }
+      }
+    }
+  }
+
+  // region: interfaces (subclass needs to override these) ===========
+
+  handle() {
+    this.fail(new Error("Api Not Handled"));
+    return
+  }
+
+  // region: network access ===============================
+
+  fail(originalErrorObject, extraData) {
+    let errorObject = this.failable(originalErrorObject, extraData);
+    this._response.send({ hasError: true, error: errorObject });
+  }
+
+  validate(object, schema) {
+    return Joi.validate(object, schema);
+  }
+
+  success(object = {}) {
+    object.hasError = false;
+    this._response.send(object);
+  }
+
+  getQueryParameters() {
+    return this._request.params;
+  }
+
+  // region: access control ==========================
+
+  authenticate(body, cbfn) {
+    if (!('apiKey' in body)) {
+      return this.fail(new Error("Developer Error: apiKey is missing from body."));
+    }
+    let apiKey = body.apiKey;
+    delete body['apiKey'];
+    this.database.getSessionByApiKey(apiKey, (err, session) => {
+      if (err) return this.fail(err);
+      if (!session) return this.fail(new Error("Invalid apiKey Provided!"));
+      let hasExpired = session.hasExpired || (((new Date).getTime() - session.createdDatetimeStamp) > 24 * 60 * 60 * 1000);
+      if (hasExpired) {
+        err = new Error("Invalid apiKey Provided!");
+        err.code = "APIKEY_EXPIRED";
+        return this.fail(err);
+      }
+      cbfn(null, session.userId);
+    });
+
+  }
+
+  // region: template rendering ==========================
+
+  sendGenericHtmlMessage(title, body, errorObject = null) {
+    let model = {
+      title,
+      body
+    }
+    if (errorObject && this.server.mode === 'development') {
+      model.error = JSON.stringify(errorObject);
+      model.error = model.error.replace(/\\n/g, '<br>');
+    }
+    let html = this.server.templateManager.generateHtml('generic-message', model);
+    this._response.send(html);
+  }
+
+  // region: error handling =========================================
 
   _stringifyErrorObject(errorObject) {
     if (!(errorObject instanceof Error)) {
@@ -61,92 +167,6 @@ class Api {
     this.logger.silent('error', originalErrorObject);
     this.logger.silent('error-response', errorObject);
     return errorObject;
-  }
-
-  fail(originalErrorObject, extraData) {
-    let errorObject = this.failable(originalErrorObject, extraData);
-    this.response.send({ hasError: true, error: errorObject });
-  }
-
-  validate(object, schema) {
-    return Joi.validate(object, schema);
-  }
-
-  success(object = {}) {
-    object.hasError = false;
-    this.response.send(object);
-  }
-
-  authenticate(body, cbfn) {
-    if (!('apiKey' in body)) {
-      return this.fail(new Error("Developer Error: apiKey is missing from body."));
-    }
-    let apiKey = body.apiKey;
-    delete body['apiKey'];
-    this.database.getSessionByApiKey(apiKey, (err, session) => {
-      if (err) return this.fail(err);
-      if (!session) return this.fail(new Error("Invalid apiKey Provided!"));
-      let hasExpired = session.hasExpired || (((new Date).getTime() - session.createdDatetimeStamp) > 24 * 60 * 60 * 1000);
-      if (hasExpired) {
-        err = new Error("Invalid apiKey Provided!");
-        err.code = "APIKEY_EXPIRED";
-        return this.fail(err);
-      }
-      cbfn(null, session.userId);
-    });
-    
-  }
-
-  sendGenericHtmlMessage(title, body, errorObject = null) {
-    let model = {
-      title,
-      body
-    }
-    if (errorObject && this.server.mode === 'development') {
-      model.error = JSON.stringify(errorObject);
-      model.error = model.error.replace(/\\n/g, '<br>');
-    }
-    let html = this.server.templateManager.generateHtml('generic-message', model);
-    this.response.send(html);
-  }
-
-  prehandleGetApi() {
-    this.handle();
-  }
-
-  prehandlePostApi() {
-    let body;
-    if (this.autoValidates) {
-      let schema = this.requestSchema;
-      if (this.requiresAuthentication) {
-        schema = schema.keys({
-          apiKey: Joi.string().length(64).required()
-        })
-      }
-      let { error, value } = this.validate(this.request.body, schema);
-      if (error) {
-        this.fail(error, error);
-      } else {
-        body = value;
-        if (this.requiresAuthentication) {
-          let { apiKey } = body;
-          this.authenticate(body, (err, userId) => {
-            if (err) {
-              this.fail(err);
-            } else {
-              this.handle({ userId, body, apiKey });
-            }
-          })
-        } else {
-          this.handle({ body });
-        }
-      }
-    }
-  }
-
-  handle() {
-    this.fail(new Error("Api Not Handled"));
-    return
   }
 
 }
