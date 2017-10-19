@@ -51,9 +51,10 @@
         _applyApiKey(data) {
           if ('user' in this && 'apiKey' in this.user) {
             data.apiKey = this.user.apiKey;
-            this.callJsonPostApi(path, data, cbfn);
+            return true;
           } else {
             this.showAlertMessage("No Api Key");
+            return false;
           }
         }
 
