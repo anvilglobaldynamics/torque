@@ -31,7 +31,7 @@
     "atomicdb": "^0.1.8",
     "service-tree": "^0.0.1",
     "service-tree-http-request-service": "^0.0.2",
-    "polymer-fx": "^0.0.1"
+    "polymer-fx": "^0.0.2"
   },
   "resolutions": {
     "polymer": "^2.0.0-rc.3",
