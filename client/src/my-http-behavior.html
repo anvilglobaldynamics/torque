@@ -41,7 +41,7 @@
             if (err) {
               this.callJsonPostApi(path, data, cbfn);
             } else {
-              cbfn(null, cbfn);
+              cbfn(null, message);
             }
           })
         }
