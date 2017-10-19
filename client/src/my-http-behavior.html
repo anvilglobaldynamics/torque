@@ -1,0 +1,39 @@
+<link rel="import" href="../bower_components/polymer-fx/fx-http-behavior.html">
+<script>
+  (_ => {
+    let { HttpRequestService, ServiceManager } = window.ServiceTree;
+
+    if (!window.MyHttpBehavior) {
+      /* @polymerMixin */
+      window.MyHttpBehavior = (SuperClass) => class extends FxHttpBehavior(SuperClass) {
+
+        constructor(...args) {
+          super(...args);
+        }
+
+        _callAuthenticatedJsonPostApi(url, data, cbfn) {
+          if ('user' in this && 'apiKey' in this.user) {
+            data.apiKey = this.user.apiKey;
+            this.callJsonPostApi(url, data, cbfn);
+          } else {
+            this.showAlertMessage("No Api Key");
+          }
+        }
+
+        callUserRegisterApi(data, cbfn) {
+          this.callJsonPostApi('user-register', data, cbfn);
+        }
+
+        callUserLoginApi(data, cbfn) {
+          this.callJsonPostApi('user-login', data, cbfn);
+        }
+
+        callUserLogoutApi(data, cbfn) {
+          this._callAuthenticatedJsonPostApi('user-logout', data, cbfn);
+        }
+
+      }
+    }
+  })();
+
+</script>

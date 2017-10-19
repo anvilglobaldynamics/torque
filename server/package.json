@@ -1,0 +1,30 @@
+{
+  "name": "torque-server",
+  "license": "CUSTOM",
+  "version": "0.0.0",
+  "description": "torque server",
+  "main": "start.js",
+  "dependencies": {
+    "baselib": "^0.1.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "handlebars": "^4.0.10",
+    "inline-css": "^2.2.2",
+    "joi": "^10.6.0",
+    "mailgun-js": "^0.12.1",
+    "mkpath": "^1.0.0",
+    "moment": "^2.18.1",
+    "mongodb": "^2.2.30",
+    "user-home": "^2.0.0",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "request": "^2.83.0"
+  },
+  "scripts": {
+    "start": "node start.js",
+    "test": "mocha"
+  },
+  "private": true
+}

@@ -1,0 +1,24 @@
+{
+  "baseName": "torque-server",
+  "port": 8540,
+  "hostname": "localhost",
+  "log": {
+    "logStandardOutputToFile": true,
+    "logErrorOutputToFile": true,
+    "logStandardOutputToConsole": true,
+    "logErrorOutputToConsole": true,
+    "patchConsoleObject": true,
+    "dir": "./logs",
+    "format": "json"
+  },
+  "db": {
+    "path": "mongodb://localhost:27017/torque"
+  },
+  "email": {
+    "enabled": false,
+    "publicKey": "pubkey-00000000000000000000000000000",
+    "privateKey": "key-00000000000000000000000000000",
+    "domain": "mg.torque.com",
+    "from": "Torque Team <postmaster@mg.torque.com>"
+  }
+}

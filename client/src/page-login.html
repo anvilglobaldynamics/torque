@@ -1,0 +1,140 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="my-db-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-login">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding-top: 24px;
+        }
+      }
+    </style>
+
+    <div class="layout vertical std-small-page" id="wrapper">
+
+      <iron-form id="register-form">
+        <form>
+          <div class="card vertical layout">
+            <div class="std-dialog-header">LOGIN</div>
+            <paper-input value="{{loginForm.email}}" required pattern="^.+@.+\..+$" minlength="3" error-message="Please enter a valid email"
+              label="A valid email address"></paper-input>
+            <paper-input value="{{loginForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long"
+              label="A minimum 8 digit password"></paper-input>
+            <div class="horizontal layout button-row end">
+              <div class="link light" on-tap="forgotPasswordTapped">Forgot your password?</div>
+              <div class="flex"></div>
+              <paper-button raised class="primary" on-tap="loginTapped">Login</paper-button>
+            </div>
+            <div class="horizontal layout button-row center-center">
+              <div class="link light" on-tap="registerTapped">Don't have an account?</div>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+  </template>
+
+  <script>
+    class PageLogin extends FxPage.mixin(MyDbBehavior, FxCommonBehavior) {
+      static get is() {
+        return 'page-login';
+      }
+
+      static get properties() {
+        return {
+          loginForm: {
+            type: Object,
+            value: _ => ({
+              email: 'newtest1@gmail.com',
+              password: 'qwerty1234'
+            })
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady()
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.resetProperties('loginForm');
+      }
+
+      // region: login =================================
+
+      _processUserLogin({ email, password }) {
+        let data = { email, password };
+        this.app.callUserLoginApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) {
+            this.app.showModalDialog("Sorry!", response.error.message);
+          } else {
+            let { apiKey, warning = null, sessionId } = response;
+            this.setCurrentUserToDb({ email, apiKey, warning, sessionId });
+            this.app.navigateTo('/home');
+          }
+        });
+      }
+
+      // region: ui =================================
+
+      registerTapped() {
+        this.app.navigateTo('/register')
+      }
+
+      forgotPasswordTapped() {
+        this.app.showAlertMessage("Coming soon", "Feature under construction.")
+      }
+
+      loginTapped() {
+        this.elemAll('#register-form paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#register-form').validate()) return;
+
+        let { email, password } = this.loginForm;
+        this._processUserLogin({ email, password });
+      }
+
+      // region: misc =================================
+
+      wrapperSwiped(direction) {
+        if (direction === 'left') {
+          if (this.paperTabSelectedViewIndex < 2) {
+            this.paperTabSelectedViewIndex += 1;
+          }
+        } else if (direction === 'right') {
+          if (this.paperTabSelectedViewIndex > 0) {
+            this.paperTabSelectedViewIndex -= 1;
+          }
+        }
+      }
+
+    }
+
+    window.customElements.define(PageLogin.is, PageLogin);
+  </script>
+</dom-module>
