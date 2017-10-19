@@ -1,7 +1,9 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-http-behavior.html">
+<script src="websocket-request-service.js"></script>
 <script>
+
   (_ => {
-    let { HttpRequestService, ServiceManager } = window.ServiceTree;
+    let { HttpRequestService, WebsocketRequestService, ServiceManager } = window.ServiceTree;
 
     if (!window.MyHttpBehavior) {
       /* @polymerMixin */
@@ -9,27 +11,66 @@
 
         constructor(...args) {
           super(...args);
+          this.websocketHost = 'ws://localhost:8000';
+          this.websocketApiPathPrefix = '/api/';
         }
 
-        _callAuthenticatedJsonPostApi(url, data, cbfn) {
+        // internals ===================================
+
+        callJsonWebsocketApi(path, data, cbfn) {
+          let url = `${this.websocketApiPathPrefix}${path}`
+          let service = new WebsocketRequestService(this.websocketHost, url, { responseType: 'json' });
+          service.on('end', (event) => {
+            if (event.detail.resolution === 'success') {
+              cbfn(null, event.detail.body);
+            } else {
+              cbfn(event.detail);
+            }
+          });
+          service.on('error', (event) => {
+            // suppress the event so that it does not bubble to service manager
+            event.bubbles = false;
+          });
+          baselib.setImmediate(_ => service.request('json', data));
+          this.serviceManager.manage(service);
+          return service;
+        }
+
+        callCombinedJsonApi(path, data, cbfn) {
+          this.callJsonWebsocketApi(path, data, (err, message) => {
+            if (err) {
+              this.callJsonPostApi(path, data, cbfn);
+            } else {
+              cbfn(null, cbfn);
+            }
+          })
+        }
+
+        // api call utls ===================================
+
+        _applyApiKey(data) {
           if ('user' in this && 'apiKey' in this.user) {
             data.apiKey = this.user.apiKey;
-            this.callJsonPostApi(url, data, cbfn);
+            this.callJsonPostApi(path, data, cbfn);
           } else {
             this.showAlertMessage("No Api Key");
           }
         }
 
+        // api calls ===================================
+
         callUserRegisterApi(data, cbfn) {
-          this.callJsonPostApi('user-register', data, cbfn);
+          this.callCombinedJsonApi('user-register', data, cbfn);
         }
 
         callUserLoginApi(data, cbfn) {
-          this.callJsonPostApi('user-login', data, cbfn);
+          // this.callJsonPostApi('user-login', data, cbfn);
+          this.callCombinedJsonApi('user-login', data, cbfn);
         }
 
         callUserLogoutApi(data, cbfn) {
-          this._callAuthenticatedJsonPostApi('user-logout', data, cbfn);
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('user-logout', data, cbfn);
         }
 
       }
