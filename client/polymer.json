@@ -25,7 +25,7 @@
   },
   "builds": [
     {
-      "name": "custom-es5-legacy-bundled",
+      "name": "custom-es5-bundled",
       "js": {
         "minify": true,
         "compile": true
@@ -45,6 +45,24 @@
       "addServiceWorker": false,
       "addPushManifest": false,
       "preset": "es5-bundled"
+    },
+    {
+      "basePath": "/android_asset/www/",
+      "name": "custom-es5-android",
+      "js": {
+        "minify": false,
+        "compile": true
+      },
+      "css": {
+        "minify": false
+      },
+      "html": {
+        "minify": false
+      },
+      "bundle": false,
+      "addServiceWorker": false,
+      "addPushManifest": false
     }
   ]
 }
+
