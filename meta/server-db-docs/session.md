@@ -6,7 +6,8 @@ Joi.object().keys({
   userId: Joi.number().required(),
   apiKey: Joi.string().length(64).required(),
   createdDatetimeStamp: Joi.number().required(),
-  closedDatetimeStamp: Joi.number().required().allow(null),
+  terminateDatetimeStamp: Joi.number().required(),
+  terminatedBy: Joi.string().required(),
   hasExpried: Joi.boolean().required()
 });
 ```
