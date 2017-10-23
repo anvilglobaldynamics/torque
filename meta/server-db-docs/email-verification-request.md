@@ -12,6 +12,3 @@ Joi.object().keys({
   isVerificationComplete: Joi.boolean().required(),
 });
 ```
-
-
-
