@@ -12,7 +12,7 @@ Joi.object().keys({
   additionalPaymentHistory: Joi.object().keys({
     creditedDatetimeStamp: Joi.number().required(),
     acceptedByUserId: Joi.number().required(),
-    amount: Joi.number().required(),
+    amount: Joi.number().required()
   });
 });
 ```
