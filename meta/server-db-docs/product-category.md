@@ -8,7 +8,7 @@ Joi.object().keys({
   name: Joi.string().min(1).max(64).required(),
   organizationId: Joi.number().required(),
   ParentProductCategoryId: Joi.number().required(),
-  <!-- TODO: Unit -->
+  unit: Joi.string().required(),
   defaultDiscountType: Joi.string().required(),
   defaultDiscountValue: Joi.number().required(),
   defaultPurchasePrice: Joi.number().required(),
