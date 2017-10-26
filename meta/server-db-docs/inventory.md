@@ -11,7 +11,7 @@ Joi.object().keys({
   allowManualTransfer: Joi.boolean().required(),
   products: Joi.array().items(
     Joi.object().keys({
-      productId: Joi.number().required()
+      productId: Joi.number().required(),
       count: Joi.number().required()
     });
   );

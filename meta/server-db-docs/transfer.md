@@ -7,6 +7,11 @@ Joi.object().keys({
   createdByUserId: Joi.number().required(),
   fromInventoryId: Joi.number().required(),
   toInventoryId: Joi.number().required(),
-  <!-- TODO: ProductList -->
+  productList: Joi.array().items(
+    Joi.object().keys({
+      productId: Joi.number().required(),
+      count: Joi.number().required()
+    });
+  );
 });
 ```

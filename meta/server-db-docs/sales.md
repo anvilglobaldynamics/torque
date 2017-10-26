@@ -8,11 +8,19 @@ Joi.object().keys({
   lastModifiedByUserId: Joi.number().required(),
   outletId: Joi.number().required(),
   customerId: Joi.number().required(),
-  <!-- TODO: ProductList -->
+  productList: Joi.array().items(
+    Joi.object().keys({
+      productId: Joi.number().required(),
+      count: Joi.number().required(),
+      discountType: Joi.string().required(),
+      discountValue: Joi.number().required(),
+      salePrice: Joi.number().required()
+    });
+  );
   payment: Joi.object().keys({
     totalAmount: Joi.number().required(),
     vatAmount: Joi.number().required(),
-    <!-- TODO: DiscountType -->
+    discountType: Joi.string().required(),
     discountValue: Joi.number().required(),
     discountedAmount: Joi.number().required(),
     serviceChargeAmount: Joi.number().required(),

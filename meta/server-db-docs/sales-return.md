@@ -8,7 +8,7 @@ Joi.object().keys({
   isDeleted: Joi.boolean().required(),
   returnedProductList: Joi.array().items(
     Joi.object().keys({
-      productId: Joi.number().required()
+      productId: Joi.number().required(),
       count: Joi.number().required()
     });
   );
