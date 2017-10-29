@@ -1,4 +1,3 @@
-
 This API handles logging in of an user.
 
 url: `api/user-login`
@@ -43,5 +42,5 @@ Signup is successful
 }
 ```
 
-### notes:
+### db changes:
 updates the `user` and `session` collections in db.

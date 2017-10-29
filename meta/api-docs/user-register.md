@@ -1,4 +1,3 @@
-
 This API handles signing up of a new user. After signing up, a user has 24 hours to 
 click on the email validation link sent the email Address associated with it.
 
@@ -39,5 +38,5 @@ Signup is successful
 }
 ```
 
-### notes:
+### db changes:
 updates the `user` and `email-verification-request` collections in db.

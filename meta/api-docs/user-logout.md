@@ -1,4 +1,3 @@
-
 This API handles logging out of an user making the apiKey invalid.
 
 url: `api/user-logout`
@@ -32,5 +31,5 @@ Logout is successful
 }
 ```
 
-### notes:
+### db changes:
 updates the `session` collection in db.
