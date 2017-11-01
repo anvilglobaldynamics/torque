@@ -6,7 +6,11 @@ method: `POST`
 
 ### request: 
 ```
-{}
+{
+  apiKey: Joi.string().length(64).required(),
+  organizationId: Joi.number().required(),
+  activationKey: Joi.string().required()
+}
 ```
 
 ### response (on error):
@@ -14,14 +18,17 @@ method: `POST`
 {
   "hasError": true,
   "error": {
-      code,
-      message
-    }
+    code,
+    message
+  }
 }
 ```
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
+{ code: ORGANIZATION_INVALID } // the organization id is invalid
+{ code: ACTIVATION_KEY_INVALID } // the avtivation key is invalid
 ```
 
 ### response (on success):
@@ -32,4 +39,4 @@ Possible Error Codes:
 ```
 
 ### db changes:
-updates the `collection-name` collection in db.
+updates the `organization` collection in db.
