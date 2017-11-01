@@ -16,10 +16,15 @@ method: `POST`
 {
   "hasError": true,
   "error": {
-      code,
-      message
-    }
+    code,
+    message
+  }
 }
+```
+Possible Error Codes:
+```
+{ code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
 ```
 
 ### response (on success):
