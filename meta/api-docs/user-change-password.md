@@ -6,7 +6,11 @@ method: `POST`
 
 ### request: 
 ```
-{}
+{
+  apiKey: Joi.string().length(64).required(),
+  oldPassword: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required(),
+  newPassword: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
+}
 ```
 
 ### response (on error):
@@ -14,14 +18,16 @@ method: `POST`
 {
   "hasError": true,
   "error": {
-      code,
-      message
-    }
+    code,
+    message
+  }
 }
 ```
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: OLD_PASSWORD_INVALID } // the old password is invalid
+{ code: APIKEY_INVALID } // the api key is invalid
 ```
 
 ### response (on success):
@@ -32,4 +38,4 @@ Possible Error Codes:
 ```
 
 ### db changes:
-updates the `collection-name` collection in db.
+updates the `user` and `session` collection in db.
