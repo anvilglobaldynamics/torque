@@ -36,7 +36,8 @@ Possible Error Codes:
 ### response (on success):
 ```
 {
-  "hasError": false
+  "hasError": false,
+  "status": "success"
 }
 ```
 
