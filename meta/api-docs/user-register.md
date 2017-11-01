@@ -8,7 +8,9 @@ method: `POST`
 ### request: 
 ```
 {
-  email: Joi.string().email().required().min(3).max(30),
+  email: Joi.string().email().min(3).max(30).required(),
+  fullName: Joi.string().min(1).max(64).required(),
+  phone: Joi.string().alphanum().min(11).max(14).required(),
   password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
 }
 ```
@@ -18,15 +20,16 @@ method: `POST`
 {
   "hasError": true,
   "error": {
-      code,
-      message
-    }
+    code,
+    message
+  }
 }
 ```
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: EMAIL_ALREADY_IN_USE } // the email id is already associated with an user
+{ code: PHONE_ALREADY_IN_USE } // the phone number is already associated
 ```
 
 ### response (on success):
