@@ -7,7 +7,10 @@ method: `POST`
 ### request: 
 ```
 {
-  email: Joi.string().email().required().min(3).max(30),
+  emailOrPhone: Joi.alternatives([
+    Joi.string().email().min(3).max(30), // if email
+    Joi.string().alphanum().min(11).max(14), // if phone
+  ]).required()
   password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
 }
 ```
@@ -17,17 +20,19 @@ method: `POST`
 {
   "hasError": true,
   "error": {
-      code,
-      message
-    }
+    code,
+    message
+  }
 }
 ```
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: WRONG_PASSWORD } // the password didn't match
 { code: USER_NOT_FOUND } // no user is associated with the given id
 { code: USER_BANNED } // the user is banned
 { code: USER_REQUIRES_EMAIL_VERIFICATION } // the user requires email verification
+{ code: USER_REQUIRES_PHONE_VERIFICATION } // the user requires phone verification
 ```
 
 ### response (on success):
@@ -43,4 +48,4 @@ Signup is successful
 ```
 
 ### db changes:
-updates the `user` and `session` collections in db.
+updates the `session` collections in db.
