@@ -34,9 +34,10 @@ Possible Error Codes:
 ### response (on success):
 ```
 {
-  "hasError": false
+  "hasError": false,
+  "status": "success"
 }
 ```
 
 ### db changes:
-updates the `organization` collection in db.
+updates the `organization` and `activation-key` collection in db.
