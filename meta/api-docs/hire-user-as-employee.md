@@ -6,7 +6,19 @@ method: `POST`
 
 ### request: 
 ```
-{}
+{
+  apiKey: Joi.string().length(64).required(),
+
+  emailOrPhone: Joi.alternatives([
+    Joi.string().email().min(3).max(30), // if email
+    Joi.string().alphanum().min(11).max(14), // if phone
+  ]).required(),
+
+  role: Joi.string().required(),
+  designation: Joi.string().required(),
+  companyProvidedId: Joi.string().alphanum().required(),
+  <!-- TODO: privileges -->
+}
 ```
 
 ### response (on error):
@@ -22,14 +34,16 @@ method: `POST`
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: ALREADY_EMPLOYED } // the user exists and is already employed by another organization
 ```
 
 ### response (on success):
 ```
 {
-  "hasError": false
+  "hasError": false,
+  "status": "success"
 }
 ```
 
 ### db changes:
-updates the `collection-name` collection in db.
+updates the `employment` collection in db.
