@@ -12,7 +12,7 @@ method: `POST`
   organizationId: Joi.number().required(),
   physicalAddress: Joi.string().min(1).max(128).required(),
   contactPersonName: Joi.string().min(1).max(64).required(),
-  phone: Joi.string().alphanum().min(11).max(14).required(),
+  phone: Joi.string().alphanum().min(11).max(14).required()
 }
 ```
 
