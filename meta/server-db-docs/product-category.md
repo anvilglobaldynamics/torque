@@ -7,7 +7,7 @@ Joi.object().keys({
   lastModifiedDatetimeStamp: Joi.number().required(),
   name: Joi.string().min(1).max(64).required(),
   organizationId: Joi.number().required(),
-  ParentProductCategoryId: Joi.number().required(),
+  parentProductCategoryId: Joi.number().required(),
   unit: Joi.string().required(),
   defaultDiscountType: Joi.string().required(),
   defaultDiscountValue: Joi.number().required(),

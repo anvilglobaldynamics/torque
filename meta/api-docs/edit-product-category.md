@@ -14,9 +14,9 @@ method: `POST`
 {
   "hasError": true,
   "error": {
-      code,
-      message
-    }
+    code,
+    message
+  }
 }
 ```
 Possible Error Codes:
@@ -27,7 +27,8 @@ Possible Error Codes:
 ### response (on success):
 ```
 {
-  "hasError": false
+  "hasError": false,
+  "status": "success"
 }
 ```
 
