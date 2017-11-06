@@ -17,7 +17,7 @@ method: `POST`
   defaultDiscountType: Joi.string().required(),
   defaultDiscountValue: Joi.number().required(),
   defaultPurchasePrice: Joi.number().required(),
-  defaultVAT: Joi.number().required(),
+  defaultVat: Joi.number().required(),
   defaultSalePrice: Joi.number().required()
 }
 ```
