@@ -8,6 +8,8 @@ method: `POST`
 ```
 {
   apiKey: Joi.string().length(64).required(),
+  organizationId: Joi.number().required(),
+
   name: Joi.string().min(1).max(64).required(),
   primaryBusinessAddress: Joi.string().min(1).max(128).required(),
   phone: Joi.string().alphanum().min(11).max(14).required(),
@@ -29,6 +31,7 @@ Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
+{ code: ORGANIZATION_INVALID } // organization not found
 { code: EMAIL_ALREADY_IN_USE } // the email id is already associated
 { code: PHONE_ALREADY_IN_USE } // the phone number is already associated
 ```
