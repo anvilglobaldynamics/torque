@@ -8,6 +8,7 @@ method: `POST`
 ```
 {
   apiKey: Joi.string().length(64).required(),
+  productCategoryId: Joi.number().required(),
 
   <!-- TODO: can we change parent category? parentProductCategoryId: Joi.number().required(), -->
 
@@ -35,6 +36,7 @@ Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
+{ code: PRODUCT_CATEGORY_INVALID } // product category not found
 { code: PARENT_PRODUCT_CATEGORY_INVALID } // the Parent Product Category is invalid
 ```
 
