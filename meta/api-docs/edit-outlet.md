@@ -8,6 +8,8 @@ method: `POST`
 ```
 {
   apiKey: Joi.string().length(64).required(),
+  outletId: Joi.number().required(),
+
   name: Joi.string().min(1).max(64).required(),
   physicalAddress: Joi.string().min(1).max(128).required(),
   contactPersonName: Joi.string().min(1).max(64).required(),
@@ -29,6 +31,7 @@ Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
+{ code: OUTLET_INVALID } // outlet not found
 { code: PHONE_ALREADY_IN_USE } // the phone number is already associated with another organization
 ```
 
