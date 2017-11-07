@@ -6,7 +6,9 @@ method: `POST`
 
 ### request: 
 ```
-{}
+{
+
+}
 ```
 
 ### response (on error):
@@ -22,6 +24,7 @@ method: `POST`
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: INVENTORY_NOT_EMPTY } // the inventory contained in this inventory container is not empty
 ```
 
 ### response (on success):

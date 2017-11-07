@@ -9,9 +9,7 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
   productCategoryId: Joi.number().required(),
-
-  <!-- TODO: can we change parent category? parentProductCategoryId: Joi.number().required(), -->
-
+  parentProductCategoryId: Joi.number().required(),
   name: Joi.string().min(1).max(64).required(),
   unit: Joi.string().required(),
   defaultDiscountType: Joi.string().required(),

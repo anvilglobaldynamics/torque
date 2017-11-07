@@ -7,6 +7,7 @@ Joi.object().keys({
   lastModifiedDatetimeStamp: Joi.number().required(),
   fullName: Joi.string().min(1).max(64).required(),
   phone: Joi.string().alphanum().min(11).max(14).required(),
+  organizationId: Joi.number().required(),
   balance: Joi.number().required(),
   isDeleted: Joi.boolean().required(),
   additionalPaymentHistory: Joi.object().keys({

@@ -14,9 +14,9 @@ method: `POST`
 {
   "hasError": true,
   "error": {
-      code,
-      message
-    }
+    code,
+    message
+  }
 }
 ```
 Possible Error Codes:
@@ -27,9 +27,10 @@ Possible Error Codes:
 ### response (on success):
 ```
 {
-  "hasError": false
+  "hasError": false,
+  "roleList": Joi.array().items(Joi.string().required())
 }
 ```
 
 ### db changes:
-updates the `collection-name` collection in db.
+updates No collection in db.

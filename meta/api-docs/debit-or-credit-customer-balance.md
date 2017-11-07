@@ -6,7 +6,12 @@ method: `POST`
 
 ### request: 
 ```
-{}
+{
+  apiKey
+  customerId
+  action:
+  amount:
+}
 ```
 
 ### response (on error):

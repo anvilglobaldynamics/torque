@@ -16,7 +16,10 @@ method: `POST`
   role: Joi.string().required(),
   designation: Joi.string().required(),
   companyProvidedId: Joi.string().alphanum().required(),
-  <!-- TODO: privileges -->
+
+  privileges: Joi.object().keys({
+    [Look up privileges here](../server-db-docs/employment.md)
+  });
 
   fullName: Joi.string().min(1).max(64).required(),
   nid: Joi.string().min(16).max(16).required(),
