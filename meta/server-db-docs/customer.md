@@ -10,6 +10,7 @@ Joi.object().keys({
   organizationId: Joi.number().required(),
   balance: Joi.number().required(),
   isDeleted: Joi.boolean().required(),
+  
   additionalPaymentHistory: Joi.object().keys({
     creditedDatetimeStamp: Joi.number().required(),
     acceptedByUserId: Joi.number().required(),

@@ -6,7 +6,10 @@ method: `POST`
 
 ### request: 
 ```
-{}
+{
+  apiKey: Joi.string().length(64).required(),
+  customerId: Joi.number().required()
+}
 ```
 
 ### response (on error):
@@ -14,22 +17,25 @@ method: `POST`
 {
   "hasError": true,
   "error": {
-      code,
-      message
-    }
+    code,
+    message
+  }
 }
 ```
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: CUSTOMER_INVALID } // customer does not exist
+<!-- TODO: delete all customer? -->
 ```
 
 ### response (on success):
 ```
 {
-  "hasError": false
+  "hasError": false,
+  "status": "success"
 }
 ```
 
 ### db changes:
-updates the `collection-name` collection in db.
+updates the `customer` collection in db.

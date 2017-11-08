@@ -6,7 +6,12 @@ method: `POST`
 
 ### request: 
 ```
-{}
+{
+  apiKey: Joi.string().length(64).required(),
+
+  fullName: Joi.string().min(1).max(64).required(),
+  phone: Joi.string().alphanum().min(11).max(14).required()
+}
 ```
 
 ### response (on error):
@@ -14,22 +19,25 @@ method: `POST`
 {
   "hasError": true,
   "error": {
-      code,
-      message
-    }
+    code,
+    message
+  }
 }
 ```
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
+{ code: PHONE_ALREADY_IN_USE } // the phone number is already associated
 ```
 
 ### response (on success):
 ```
 {
-  "hasError": false
+  "hasError": false,
+  "status": "success"
 }
 ```
 
 ### db changes:
-updates the `collection-name` collection in db.
+updates the `customer` collection in db.
