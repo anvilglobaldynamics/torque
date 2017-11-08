@@ -6,7 +6,10 @@ method: `POST`
 
 ### request: 
 ```
-{}
+{
+  apiKey: Joi.string().length(64).required(),
+  customerId: Joi.number().required()
+}
 ```
 
 ### response (on error):
@@ -14,9 +17,9 @@ method: `POST`
 {
   "hasError": true,
   "error": {
-      code,
-      message
-    }
+    code,
+    message
+  }
 }
 ```
 Possible Error Codes:
@@ -27,9 +30,24 @@ Possible Error Codes:
 ### response (on success):
 ```
 {
-  "hasError": false
+  "hasError": false,
+  "customer": Joi.object().keys({
+    createdDatetimeStamp: Joi.number().required(),
+    lastModifiedDatetimeStamp: Joi.number().required(),
+
+    fullName: Joi.string().min(1).max(64).required(),
+    phone: Joi.string().alphanum().min(11).max(14).required(),
+    organizationId: Joi.number().required(),
+    balance: Joi.number().required(),
+    
+    additionalPaymentHistory: Joi.object().keys({
+      creditedDatetimeStamp: Joi.number().required(),
+      acceptedByUserId: Joi.number().required(),
+      amount: Joi.number().required()
+    });
+  });
 }
 ```
 
 ### db changes:
-updates the `collection-name` collection in db.
+updates No collection in db.
