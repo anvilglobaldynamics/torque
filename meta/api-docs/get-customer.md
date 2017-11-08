@@ -25,6 +25,8 @@ method: `POST`
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
+{ code: CUSTOMER_INVALID } // customer does not exist
 ```
 
 ### response (on success):
@@ -39,6 +41,7 @@ Possible Error Codes:
     phone: Joi.string().alphanum().min(11).max(14).required(),
     organizationId: Joi.number().required(),
     balance: Joi.number().required(),
+    organizationId: Joi.number().required(),
     
     additionalPaymentHistory: Joi.object().keys({
       creditedDatetimeStamp: Joi.number().required(),
