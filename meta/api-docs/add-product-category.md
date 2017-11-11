@@ -10,7 +10,7 @@ method: `POST`
   apiKey: Joi.string().length(64).required(),
 
   organizationId: Joi.number().required(),
-  parentProductCategoryId: Joi.number().required(),
+  parentProductCategoryId: Joi.number().allow(null).required(),
 
   name: Joi.string().min(1).max(64).required(),
   unit: Joi.string().required(),

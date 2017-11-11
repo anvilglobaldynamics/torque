@@ -1,6 +1,6 @@
 This API handles attempt to add one or more product to inventory.
 
-url: `api/add-to-inventory`
+url: `api/add-product-to-inventory`
 
 method: `POST`
 
