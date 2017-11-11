@@ -42,6 +42,7 @@ method: `POST`
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
 { code: EMAIL_ALREADY_IN_USE } // the email id is already associated with an user
 { code: PHONE_ALREADY_IN_USE } // the phone number is already associated
 { code: ALREADY_EMPLOYED } // the user exists and is already employed by another organization

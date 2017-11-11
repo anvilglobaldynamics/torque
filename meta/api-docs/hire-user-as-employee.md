@@ -14,6 +14,7 @@ method: `POST`
     Joi.string().alphanum().min(11).max(14), // if phone
   ]).required(),
 
+  organizationId: Joi.number().required(),
   role: Joi.string().required(),
   designation: Joi.string().required(),
   companyProvidedId: Joi.string().alphanum().required(),
@@ -37,6 +38,8 @@ method: `POST`
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
+{ code: EMPLOYEE_INVALID } // could not be find employee
 { code: ALREADY_EMPLOYED } // the user exists and is already employed by another organization
 ```
 

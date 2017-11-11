@@ -6,7 +6,20 @@ method: `POST`
 
 ### request: 
 ```
-{}
+{
+  apiKey: Joi.string().length(64).required(),
+  employmentId: Joi.number().required(),
+
+  isActive: Joi.boolean().required(), 
+
+  role: Joi.string().required(),
+  designation: Joi.string().required(),
+  companyProvidedId: Joi.string().alphanum().required(),
+  
+  privileges: Joi.object().keys({
+    [Look up privileges here](../server-db-docs/employment.md)
+  });
+}
 ```
 
 ### response (on error):
@@ -22,6 +35,8 @@ method: `POST`
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
+{ code: EMPLOYEE_INVALID } // the employmentId could not be found
 ```
 
 ### response (on success):
@@ -33,4 +48,7 @@ Possible Error Codes:
 ```
 
 ### db changes:
-updates the `collection-name` collection in db.
+updates the `employment` collection in db.
+
+### notes:
+isActive indicates if the employee is fired or not. 
