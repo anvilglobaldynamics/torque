@@ -1,4 +1,4 @@
-This API handles get the list of sales to populate sales lists request.
+This API handles get a sales request.
 
 url: `api/get-sales`
 
@@ -35,7 +35,7 @@ Possible Error Codes:
 {
   "hasError": false,
 
-  sale: Joi.object().keys({
+  sales: Joi.object().keys({
     createdDatetimeStamp: Joi.number().required(),
     lastModifiedDatetimeStamp: Joi.number().required(),
     lastModifiedByUserId: Joi.number().required(),
