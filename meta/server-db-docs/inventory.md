@@ -10,13 +10,13 @@ Joi.object().keys({
   organizationId: Joi.number().required(),
   allowManualTransfer: Joi.boolean().required(),
 
-  products: Joi.array().items(
+  productList: Joi.array().items(
     Joi.object().keys({
       productId: Joi.number().required(),
       count: Joi.number().required()
     });
   );
-  
+
   isDeleted: Joi.boolean().required()
 });
 ```

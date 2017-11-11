@@ -38,7 +38,7 @@ Possible Error Codes:
 {
   "hasError": false,
 
-  products: Joi.array().items(
+  productList: Joi.array().items(
     Joi.object().keys({
       productId: Joi.number().required(),
       count: Joi.number().required()

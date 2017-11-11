@@ -11,7 +11,7 @@ method: `POST`
 
   inventoryId: Joi.number().required(),
 
-  products: Joi.array().items(
+  productList: Joi.array().items(
     Joi.object().keys({
       productCategoryId: Joi.number().required(),
       purchasePrice: Joi.number().required(),
