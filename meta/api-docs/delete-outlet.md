@@ -7,7 +7,8 @@ method: `POST`
 ### request: 
 ```
 {
-
+  apiKey: Joi.string().length(64).required(),
+  outletId: Joi.number().required()
 }
 ```
 
@@ -16,23 +17,26 @@ method: `POST`
 {
   "hasError": true,
   "error": {
-      code,
-      message
-    }
+    code,
+    message
+  }
 }
 ```
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
+{ code: OUTLET_INVALID } // outlet does not exist
 { code: INVENTORY_NOT_EMPTY } // the inventory contained in this inventory container is not empty
 ```
 
 ### response (on success):
 ```
 {
-  "hasError": false
+  "hasError": false,
+  "status": "success"
 }
 ```
 
 ### db changes:
-updates the `collection-name` collection in db.
+updates the `outlet` collection in db.

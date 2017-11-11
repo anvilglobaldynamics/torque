@@ -25,8 +25,8 @@ method: `POST`
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
 { code: CUSTOMER_INVALID } // customer does not exist
-<!-- TODO: delete all customer? -->
 ```
 
 ### response (on success):
@@ -39,3 +39,6 @@ Possible Error Codes:
 
 ### db changes:
 updates the `customer` collection in db.
+
+### notes;
+in future we could restrict removal of non zero balance customer
