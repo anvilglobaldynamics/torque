@@ -31,6 +31,7 @@ method: `POST`
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
 { code: OUTLET_INVALID } // outlet could not be found 
 { code: CUSTOMER_INVALID } // customer could not be found
 { code: ORGANIZATION_INVALID } // organization could not be found
@@ -70,7 +71,7 @@ Possible Error Codes:
         paidAmount: Joi.number().required(),
         changeAmount: Joi.number().required()
       });
-      isModified: Joi.boolean().required(),
+      isModified: Joi.boolean().required()
     });
   )
 }
