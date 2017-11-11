@@ -6,7 +6,10 @@ method: `POST`
 
 ### request: 
 ```
-{}
+{
+  apiKey: Joi.string().length(64).required(),
+  phone: Joi.string().alphanum().min(11).max(14).required()
+}
 ```
 
 ### response (on error):
@@ -22,6 +25,7 @@ method: `POST`
 Possible Error Codes:
 ```
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: PHONE_INVALID } // phone is not in system
 ```
 
 ### response (on success):
@@ -32,4 +36,4 @@ Possible Error Codes:
 ```
 
 ### db changes:
-updates the `collection-name` collection in db.
+updates no collection in db.
