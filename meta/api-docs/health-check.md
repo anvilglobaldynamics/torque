@@ -6,7 +6,13 @@ method: `GET`
 
 ### request: 
 ```
-{}
+{
+  clientDetails: Joi.object().keys({
+    clientId: Joi.string().required(),
+    platform: Joi.string().required(),
+    location: Joi.string().required()
+  })
+}
 ```
 
 ### response (on error):
@@ -14,9 +20,9 @@ method: `GET`
 {
   "hasError": true,
   "error": {
-      code,
-      message
-    }
+    code,
+    message
+  }
 }
 ```
 Possible Error Codes:
@@ -27,9 +33,13 @@ Possible Error Codes:
 ### response (on success):
 ```
 {
-  "hasError": false
+  "hasError": false,
+  "healthStatus": Joi.object().keys({})
 }
 ```
 
 ### db changes:
-updates the `collection-name` collection in db.
+updates no collection in db.
+
+### notes:
+in future this could initiate health checks logs.
