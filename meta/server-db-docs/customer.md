@@ -11,10 +11,12 @@ Joi.object().keys({
   balance: Joi.number().required(),
   isDeleted: Joi.boolean().required(),
   
-  additionalPaymentHistory: Joi.object().keys({
-    creditedDatetimeStamp: Joi.number().required(),
-    acceptedByUserId: Joi.number().required(),
-    amount: Joi.number().required()
-  });
+  additionalPaymentHistory: Joi.array().items(
+    Joi.object().keys({
+      creditedDatetimeStamp: Joi.number().required(),
+      acceptedByUserId: Joi.number().required(),
+      amount: Joi.number().required()
+    });
+  )
 });
 ```
