@@ -5,7 +5,7 @@ url: `api/find-user-by-phone-number`
 method: `POST`
 
 ### request: 
-```
+```js
 {
   apiKey: Joi.string().length(64).required(),
   phone: Joi.string().alphanum().min(11).max(14).required()
@@ -13,7 +13,7 @@ method: `POST`
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -22,14 +22,15 @@ method: `POST`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: PHONE_INVALID } // phone is not in system
 ```
 
 ### response (on success):
-```
+```js
 {
   "hasError": false,
   "user": Joi.object().keys({

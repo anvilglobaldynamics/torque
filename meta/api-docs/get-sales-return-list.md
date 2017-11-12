@@ -5,7 +5,7 @@ url: `api/get-sales-return-list`
 method: `POST`
 
 ### request: 
-```
+```js
 {
   apiKey: Joi.string().length(64).required(),
 
@@ -19,7 +19,7 @@ method: `POST`
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -28,8 +28,9 @@ method: `POST`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: OUTLET_INVALID } // outlet could not be found 
@@ -38,7 +39,7 @@ Possible Error Codes:
 ```
 
 ### response (on success):
-```
+```js
 {
   "hasError": false,
 

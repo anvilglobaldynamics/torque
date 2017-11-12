@@ -5,14 +5,14 @@ url: `api/get-organization-list`
 method: `POST`
 
 ### request: 
-```
+```js
 {
   apiKey: Joi.string().length(64).required()
 }
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -21,14 +21,15 @@ method: `POST`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 ```
 
 ### response (on success):
-```
+```js
 {
   "hasError": false,
   "organizationList": Joi.array().items(

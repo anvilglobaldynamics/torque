@@ -5,7 +5,7 @@ url: `api/add-new-employee`
 method: `POST`
 
 ### request: 
-```
+```js
 {
   apiKey: Joi.string().length(64).required(),
 
@@ -30,7 +30,7 @@ method: `POST`
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -39,17 +39,18 @@ method: `POST`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: EMAIL_ALREADY_IN_USE } // the email id is already associated with an user
 { code: PHONE_ALREADY_IN_USE } // the phone number is already associated
-{ code: ALREADY_EMPLOYED } // the user exists and is already employed by another organization
+{ code: ALREADY_EMPLOYED } // the user exists and is already employed by the same organization
 ```
 
 ### response (on success):
-```
+```js
 {
   "hasError": false,
   "status": "success"
@@ -57,4 +58,4 @@ Possible Error Codes:
 ```
 
 ### db changes:
-updates the `employment` collection in db.
+updates the `user` and `employment` collection in db.

@@ -8,16 +8,15 @@ url: `api/get-aggregated-inventory-details`
 method: `POST`
 
 ### request: 
-```
+```js
 {
   apiKey: Joi.string().length(64).required(),
-
   inventoryId: Joi.number().required(),
 }
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -26,15 +25,16 @@ method: `POST`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: INVENTORY_INVALID } // inventory could not be found
 ```
 
 ### response (on success):
-```
+```js
 {
   "hasError": false,
 

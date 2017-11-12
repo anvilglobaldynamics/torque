@@ -5,7 +5,7 @@ url: `api/user-change-password`
 method: `POST`
 
 ### request: 
-```
+```js
 {
   apiKey: Joi.string().length(64).required(),
   oldPassword: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required(),
@@ -14,7 +14,7 @@ method: `POST`
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -23,15 +23,16 @@ method: `POST`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: OLD_PASSWORD_INVALID } // the old password is invalid
 { code: APIKEY_INVALID } // the api key is invalid
 ```
 
 ### response (on success):
-```
+```js
 {
   "hasError": false
 }

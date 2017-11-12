@@ -5,7 +5,7 @@ url: `api/user-reset-password`
 method: `POST`
 
 ### request: 
-```
+```js
 {
   emailOrPhone: Joi.alternatives([
     Joi.string().email().min(3).max(30), // if email
@@ -15,7 +15,7 @@ method: `POST`
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -24,8 +24,9 @@ method: `POST`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: USER_NOT_FOUND } // no user is associated with the given id
 { code: USER_BANNED } // the user is banned
@@ -34,7 +35,7 @@ Possible Error Codes:
 ```
 
 ### response (on success):
-```
+```js
 {
   "hasError": false
 }
@@ -45,3 +46,4 @@ updates the `user` collection in db.
 
 ### notes:
 * user can not reset password using unverified email or phone, client will ask user to contact support with that email or phone.
+* user is sent an email

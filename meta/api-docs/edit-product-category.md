@@ -5,7 +5,7 @@ url: `api/edit-product-category`
 method: `POST`
 
 ### request: 
-```
+```js
 {
   apiKey: Joi.string().length(64).required(),
   productCategoryId: Joi.number().required(),
@@ -21,7 +21,7 @@ method: `POST`
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -30,8 +30,9 @@ method: `POST`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: PRODUCT_CATEGORY_INVALID } // product category not found
@@ -39,7 +40,7 @@ Possible Error Codes:
 ```
 
 ### response (on success):
-```
+```js
 {
   "hasError": false,
   "status": "success"

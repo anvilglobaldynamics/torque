@@ -5,7 +5,7 @@ url: `api/hire-user-as-employee`
 method: `POST`
 
 ### request: 
-```
+```js
 {
   apiKey: Joi.string().length(64).required(),
 
@@ -26,7 +26,7 @@ method: `POST`
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -35,8 +35,9 @@ method: `POST`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: EMPLOYEE_INVALID } // could not be find employee
@@ -44,7 +45,7 @@ Possible Error Codes:
 ```
 
 ### response (on success):
-```
+```js
 {
   "hasError": false,
   "status": "success"

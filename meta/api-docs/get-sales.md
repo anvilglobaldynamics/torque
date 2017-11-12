@@ -5,7 +5,7 @@ url: `api/get-sales`
 method: `POST`
 
 ### request: 
-```
+```js
 {
   apiKey: Joi.string().length(64).required(),
   salesId:  Joi.number().required()
@@ -13,7 +13,7 @@ method: `POST`
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -22,8 +22,9 @@ method: `POST`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: SALES_INVALID } // sales could not be found
@@ -31,7 +32,7 @@ Possible Error Codes:
 ```
 
 ### response (on success):
-```
+```js
 {
   "hasError": false,
 

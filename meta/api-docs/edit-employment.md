@@ -5,7 +5,7 @@ url: `api/edit-employment`
 method: `POST`
 
 ### request: 
-```
+```js
 {
   apiKey: Joi.string().length(64).required(),
   employmentId: Joi.number().required(),
@@ -23,7 +23,7 @@ method: `POST`
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -32,15 +32,16 @@ method: `POST`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: EMPLOYEE_INVALID } // the employmentId could not be found
 ```
 
 ### response (on success):
-```
+```js
 {
   "hasError": false,
   "status": "success"
@@ -51,4 +52,4 @@ Possible Error Codes:
 updates the `employment` collection in db.
 
 ### notes:
-isActive indicates if the employee is fired or not. 
+`isActive` indicates if the employee is fired or not. 

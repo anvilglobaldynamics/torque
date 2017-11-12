@@ -5,7 +5,7 @@ url: `api/user-login`
 method: `POST`
 
 ### request: 
-```
+```js
 {
   emailOrPhone: Joi.alternatives([
     Joi.string().email().min(3).max(30), // if email
@@ -16,7 +16,7 @@ method: `POST`
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -25,8 +25,9 @@ method: `POST`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: WRONG_PASSWORD } // the password didn't match
 { code: USER_NOT_FOUND } // no user is associated with the given id
@@ -37,7 +38,7 @@ Possible Error Codes:
 
 ### response (on success):
 Signup is successful
-```
+```js
 {
   "hasError": false,
   "status": "success"

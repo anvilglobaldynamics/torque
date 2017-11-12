@@ -5,7 +5,7 @@ url: `api/get-product-category-list`
 method: `POST`
 
 ### request: 
-```
+```js
 {
   apiKey: Joi.string().length(64).required(),
   organizationId: Joi.number().required()
@@ -13,7 +13,7 @@ method: `POST`
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -22,19 +22,20 @@ method: `POST`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: ORGANIZATION_INVALID } // the organization id is invalid
 ```
 
 ### response (on success):
-```
+```js
 {
   "hasError": false,
   
-  productCategoryList: Joi.array().items(
+  "productCategoryList": Joi.array().items(
     Joi.object().keys({
       id: Joi.number().required(),
       name: Joi.string().min(1).max(64).required(),
