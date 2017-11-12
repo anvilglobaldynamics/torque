@@ -1,6 +1,6 @@
 This API handles user password reset attempt, ota.
 
-url: `api/user-reset-password`
+url: `api/user-reset-password--request`
 
 method: `POST`
 
@@ -46,4 +46,4 @@ updates the `user` collection in db.
 
 ### notes:
 * user can not reset password using unverified email or phone, client will ask user to contact support with that email or phone.
-* user is sent an email
+* user is sent an email with a link like `https://torque-client.com/#/password-reset/${uniqueToken}`
