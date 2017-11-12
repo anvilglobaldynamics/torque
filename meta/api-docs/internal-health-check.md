@@ -1,22 +1,22 @@
 This API handles check of network and server connection status
 
-url: `api/health-check`
+url: `api/internal-health-check`
 
-method: `GET`
+method: `POST`
 
 ### request: 
-```
+```js
 {
   clientDetails: Joi.object().keys({
-    clientId: Joi.string().required(),
-    platform: Joi.string().required(),
-    location: Joi.string().required()
+    clientId: Joi.string(),
+    platform: Joi.string(),
+    location: Joi.string()
   })
 }
 ```
 
 ### response (on error):
-```
+```js
 {
   "hasError": true,
   "error": {
@@ -25,13 +25,14 @@ method: `GET`
   }
 }
 ```
+
 Possible Error Codes:
-```
+```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 ```
 
 ### response (on success):
-```
+```js
 {
   "hasError": false,
   "healthStatus": Joi.object().keys({})
