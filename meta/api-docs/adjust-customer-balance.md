@@ -10,7 +10,7 @@ method: `POST`
   apiKey: Joi.string().length(64).required(),
   customerId: Joi.number().max(999999999999999).required(),
 
-  action: Joi.string().required().valid('payment', 'withdrawl'), 
+  action: Joi.string().valid('payment', 'withdrawl').required(), 
   balance: Joi.number().max(999999999999999).required()
 }
 ```

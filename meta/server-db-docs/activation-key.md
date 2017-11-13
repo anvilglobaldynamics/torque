@@ -3,9 +3,9 @@ This collection contains activation keys
 ## signature
 ```
 Joi.object().keys({
-  keyString: Joi.string().required(),
+  keyString: Joi.string().max(1024).required(),
   isUsed: Joi.boolean().required(),
-  generatedBy: Joi.string().required(),
+  generatedBy: Joi.string().max(1024).required(),
   daysWorth: Joi.number().max(999999999999999).required(),
   createdDatetimeStamp: Joi.number().max(999999999999999).required(),
   usedByOrganizationId: Joi.number().max(999999999999999).required(),

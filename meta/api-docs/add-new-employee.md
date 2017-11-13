@@ -13,8 +13,8 @@ method: `POST`
   phone: Joi.string().alphanum().min(11).max(14).required(),
   password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required(),
 
-  role: Joi.string().required(),
-  designation: Joi.string().required(),
+  role: Joi.string().max(1024).required(),
+  designation: Joi.string().max(1024).required(),
   companyProvidedId: Joi.string().alphanum().required(),
 
   privileges: Joi.object().keys({

@@ -32,7 +32,7 @@ Possible Error Codes:
 ```js
 {
   "hasError": false,
-  "designationList": Joi.array().items(Joi.string().required())
+  "designationList": Joi.array().items(Joi.string().max(1024).required())
 }
 ```
 

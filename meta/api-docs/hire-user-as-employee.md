@@ -15,8 +15,8 @@ method: `POST`
   ]).required(),
 
   organizationId: Joi.number().max(999999999999999).required(),
-  role: Joi.string().required(),
-  designation: Joi.string().required(),
+  role: Joi.string().max(1024).required(),
+  designation: Joi.string().max(1024).required(),
   companyProvidedId: Joi.string().alphanum().required(),
   
   privileges: Joi.object().keys({

@@ -13,8 +13,8 @@ method: `POST`
   parentProductCategoryId: Joi.number().max(999999999999999).allow(null).required(),
 
   name: Joi.string().min(1).max(64).required(),
-  unit: Joi.string().required(),
-  defaultDiscountType: Joi.string().required(),
+  unit: Joi.string().max(1024).required(),
+  defaultDiscountType: Joi.string().max(1024).required(),
   defaultDiscountValue: Joi.number().max(999999999999999).required(),
   defaultPurchasePrice: Joi.number().max(999999999999999).required(),
   defaultVat: Joi.number().max(999999999999999).required(),

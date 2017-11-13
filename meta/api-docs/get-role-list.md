@@ -32,7 +32,7 @@ Possible Error Codes:
 ```js
 {
   "hasError": false,
-  "roleList": Joi.array().items(Joi.string().required())
+  "roleList": Joi.array().items(Joi.string().max(1024).required())
 }
 ```
 

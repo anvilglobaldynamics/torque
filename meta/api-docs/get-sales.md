@@ -46,7 +46,7 @@ Possible Error Codes:
       Joi.object().keys({
         productId: Joi.number().max(999999999999999).required(),
         count: Joi.number().max(999999999999999).required(),
-        discountType: Joi.string().required(),
+        discountType: Joi.string().max(1024).required(),
         discountValue: Joi.number().max(999999999999999).required(),
         salePrice: Joi.number().max(999999999999999).required()
       });
@@ -54,7 +54,7 @@ Possible Error Codes:
     payment: Joi.object().keys({
       totalAmount: Joi.number().max(999999999999999).required(),
       vatAmount: Joi.number().max(999999999999999).required(),
-      discountType: Joi.string().required(),
+      discountType: Joi.string().max(1024).required(),
       discountValue: Joi.number().max(999999999999999).required(),
       discountedAmount: Joi.number().max(999999999999999).required(),
       serviceChargeAmount: Joi.number().max(999999999999999).required(),
