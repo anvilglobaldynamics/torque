@@ -8,7 +8,7 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  organizationId: Joi.number().required(),
+  organizationId: Joi.number().max(999999999999999).required(),
 }
 ```
 
@@ -37,7 +37,7 @@ Possible Error Codes:
   "warehouseList": Joi.array().items(
     Joi.object().keys({
       name: Joi.string().min(1).max(64).required(),
-      organizationId: Joi.number().required(),
+      organizationId: Joi.number().max(999999999999999).required(),
       physicalAddress: Joi.string().min(1).max(128).required(),
       contactPersonName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().alphanum().min(11).max(14).required()

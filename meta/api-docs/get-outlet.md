@@ -8,7 +8,7 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  outletId: Joi.number().required()
+  outletId: Joi.number().max(999999999999999).required()
 }
 ```
 
@@ -35,11 +35,11 @@ Possible Error Codes:
 {
   "hasError": false,
   "outlet": Joi.object().keys({
-    createdDatetimeStamp: Joi.number().required(),
-    lastModifiedDatetimeStamp: Joi.number().required(),
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
     name: Joi.string().min(1).max(64).required(),
-    organizationId: Joi.number().required(),
+    organizationId: Joi.number().max(999999999999999).required(),
     physicalAddress: Joi.string().min(1).max(128).required(),
     contactPersonName: Joi.string().min(1).max(64).required(),
     phone: Joi.string().alphanum().min(11).max(14).required()

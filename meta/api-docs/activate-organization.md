@@ -8,7 +8,7 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  organizationId: Joi.number().required(),
+  organizationId: Joi.number().max(999999999999999).required(),
   activationKey: Joi.string().length(19).required() // XXXX-XXXX-XXXX-XXXX
 }
 ```

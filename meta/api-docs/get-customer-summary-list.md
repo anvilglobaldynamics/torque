@@ -8,7 +8,7 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  organizationId: Joi.number().required()
+  organizationId: Joi.number().max(999999999999999).required()
 }
 ```
 
@@ -36,17 +36,17 @@ Possible Error Codes:
   "hasError": false,
   "customerList": Joi.array().items(
     Joi.object().keys({
-      createdDatetimeStamp: Joi.number().required(),
-      lastModifiedDatetimeStamp: Joi.number().required(),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       fullName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().alphanum().min(11).max(14).required(),
-      balance: Joi.number().required(),
+      balance: Joi.number().max(999999999999999).required(),
       
       additionalPaymentHistory: Joi.array().items(
         Joi.object().keys({
-          creditedDatetimeStamp: Joi.number().required(),
-          acceptedByUserId: Joi.number().required(),
-          amount: Joi.number().required()
+          creditedDatetimeStamp: Joi.number().max(999999999999999).required(),
+          acceptedByUserId: Joi.number().max(999999999999999).required(),
+          amount: Joi.number().max(999999999999999).required()
         });
       )
     })

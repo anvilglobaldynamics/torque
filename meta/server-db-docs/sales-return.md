@@ -3,15 +3,15 @@ This collection contains an sales return
 ## signature
 ```
 Joi.object().keys({
-  createdDatetimeStamp: Joi.number().required(),
-  salesId: Joi.number().required(),
+  createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+  salesId: Joi.number().max(999999999999999).required(),
   isDeleted: Joi.boolean().required(),
   returnedProductList: Joi.array().items(
     Joi.object().keys({
-      productId: Joi.number().required(),
-      count: Joi.number().required()
+      productId: Joi.number().max(999999999999999).required(),
+      count: Joi.number().max(999999999999999).required()
     });
   );
-  creditedAmount: Joi.number().required()
+  creditedAmount: Joi.number().max(999999999999999).required()
 });
 ```

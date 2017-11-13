@@ -3,8 +3,8 @@ This collection contains a user
 ## signature
 ```
 Joi.object().keys({
-  createdDatetimeStamp: Joi.number().required(),
-  lastModifiedDatetimeStamp: Joi.number().required(),
+  createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+  lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
   fullName: Joi.string().min(1).max(64).required(),
   phone: Joi.string().alphanum().min(11).max(14).required(),
   passwordHash: Joi.string().min(64).max(64).required(),

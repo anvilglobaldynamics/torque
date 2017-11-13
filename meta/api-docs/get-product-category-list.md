@@ -8,7 +8,7 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  organizationId: Joi.number().required()
+  organizationId: Joi.number().max(999999999999999).required()
 }
 ```
 
@@ -37,16 +37,16 @@ Possible Error Codes:
   
   "productCategoryList": Joi.array().items(
     Joi.object().keys({
-      id: Joi.number().required(),
+      id: Joi.number().max(999999999999999).required(),
       name: Joi.string().min(1).max(64).required(),
-      organizationId: Joi.number().required(),
-      parentProductCategoryId: Joi.number().required(),
+      organizationId: Joi.number().max(999999999999999).required(),
+      parentProductCategoryId: Joi.number().max(999999999999999).required(),
       unit: Joi.string().required(),
       defaultDiscountType: Joi.string().required(),
-      defaultDiscountValue: Joi.number().required(),
-      defaultPurchasePrice: Joi.number().required(),
-      defaultVat: Joi.number().required(),
-      defaultSalePrice: Joi.number().required(),
+      defaultDiscountValue: Joi.number().max(999999999999999).required(),
+      defaultPurchasePrice: Joi.number().max(999999999999999).required(),
+      defaultVat: Joi.number().max(999999999999999).required(),
+      defaultSalePrice: Joi.number().max(999999999999999).required(),
     });
   ),
 }

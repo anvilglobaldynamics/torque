@@ -14,7 +14,7 @@ method: `POST`
     Joi.string().alphanum().min(11).max(14), // if phone
   ]).required(),
 
-  organizationId: Joi.number().required(),
+  organizationId: Joi.number().max(999999999999999).required(),
   role: Joi.string().required(),
   designation: Joi.string().required(),
   companyProvidedId: Joi.string().alphanum().required(),

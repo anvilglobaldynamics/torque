@@ -8,7 +8,7 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  organizationId: Joi.number().required() 
+  organizationId: Joi.number().max(999999999999999).required()
 }
 ```
 
@@ -34,10 +34,10 @@ Possible Error Codes:
 {
   "hasError": false,
   "metrics": Joi.object().keys({
-    totalNumberOfSalesToday: Joi.number().required(),
-    totalAmountSoldToday: Joi.number().required(),
-    totalNumberOfSalesThisMonth: Joi.number().required(),
-    totalAmountSoldThisMonth: Joi.number().required()
+    totalNumberOfSalesToday: Joi.number().max(999999999999999).required(),
+    totalAmountSoldToday: Joi.number().max(999999999999999).required(),
+    totalNumberOfSalesThisMonth: Joi.number().max(999999999999999).required(),
+    totalAmountSoldThisMonth: Joi.number().max(999999999999999).required()
   });
 }
 ```

@@ -9,15 +9,15 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
 
-  salesId: Joi.number().allow(null).required(),
+  salesId: Joi.number().max(999999999999999).allow(null).required(),
 
   returnedProductList: Joi.array().items(
     Joi.object().keys({
-      productId: Joi.number().required(),
-      count: Joi.number().required()
+      productId: Joi.number().max(999999999999999).required(),
+      count: Joi.number().max(999999999999999).required()
     });
   ),
-  creditedAmount: Joi.number().required()
+  creditedAmount: Joi.number().max(999999999999999).required()
 }
 ```
 

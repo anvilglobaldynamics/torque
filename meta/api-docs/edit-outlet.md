@@ -8,7 +8,7 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  outletId: Joi.number().required(),
+  outletId: Joi.number().max(999999999999999).required(),
 
   name: Joi.string().min(1).max(64).required(),
   physicalAddress: Joi.string().min(1).max(128).required(),

@@ -9,14 +9,14 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
 
-  inventoryId: Joi.number().required(),
+  inventoryId: Joi.number().max(999999999999999).required(),
 
   productList: Joi.array().items(
     Joi.object().keys({
-      productCategoryId: Joi.number().required(),
-      purchasePrice: Joi.number().required(),
-      salePrice: Joi.number().required(),
-      count: Joi.number().required()
+      productCategoryId: Joi.number().max(999999999999999).required(),
+      purchasePrice: Joi.number().max(999999999999999).required(),
+      salePrice: Joi.number().max(999999999999999).required(),
+      count: Joi.number().max(999999999999999).required()
     });
   );
 }

@@ -8,10 +8,10 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  customerId: Joi.number().required(),
+  customerId: Joi.number().max(999999999999999).required(),
 
   action: Joi.string().required().valid('payment', 'withdrawl'), 
-  balance: Joi.number().required()
+  balance: Joi.number().max(999999999999999).required()
 }
 ```
 

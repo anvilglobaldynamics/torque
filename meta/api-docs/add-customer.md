@@ -8,11 +8,11 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  organizationId: Joi.number().required(),
+  organizationId: Joi.number().max(999999999999999).required(),
 
   fullName: Joi.string().min(1).max(64).required(),
   phone: Joi.string().alphanum().min(11).max(14).required(),
-  openingBalance: Joi.number().required()
+  openingBalance: Joi.number().max(999999999999999).required()
 }
 ```
 

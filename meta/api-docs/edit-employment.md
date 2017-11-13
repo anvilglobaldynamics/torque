@@ -8,7 +8,7 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  employmentId: Joi.number().required(),
+  employmentId: Joi.number().max(999999999999999).required(),
 
   isActive: Joi.boolean().required(), 
 

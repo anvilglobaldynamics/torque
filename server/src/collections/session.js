@@ -7,10 +7,10 @@ exports.sessionMixin = (DatabaseClass) => class extends DatabaseClass {
 
   get sessionSchema() {
     return Joi.object().keys({
-      userId: Joi.number().required(),
+      userId: Joi.number().max(999999999999999).required(),
       apiKey: Joi.string().length(64).required(),
-      createdDatetimeStamp: Joi.number().required(),
-      closedDatetimeStamp: Joi.number().required().allow(null),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      closedDatetimeStamp: Joi.number().max(999999999999999).required().allow(null),
       hasExpried: Joi.boolean().required()
     });
   }
