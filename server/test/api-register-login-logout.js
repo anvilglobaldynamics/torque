@@ -1,23 +1,24 @@
 
 let expect = require('chai').expect;
 let { callApi } = require('./utils');
-let { Program } = require('./../src/index');
+let {
+  initializeServer,
+  terminateServer
+} = require('./lib');
 
 const email = `t${(new Date).getTime()}@gmail.com`;
 const password = "123545678";
 const fullName = "Test User";
 const phone = "01700889988";
 
-let mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
 let apiKey = null;
 
-describe('Server', _ => {
-  it('Server should start without issues', testDoneFn => {
-    mainProgram.initiateServer(_ => {
-      testDoneFn();
-    });
+it('START', testDoneFn => {
+  initializeServer(_ => {
+    testDoneFn();
   });
 });
+
 
 describe('API', _ => {
 
@@ -147,9 +148,6 @@ describe('API', _ => {
 
 });
 
-describe('Server', _ => {
-  it('Server should close without issues', testDoneFn => {
-    setTimeout(_ => mainProgram.terminateServer(), 300);
-    testDoneFn();
-  });
+it('END', testDoneFn => {
+  terminateServer(testDoneFn);
 });
