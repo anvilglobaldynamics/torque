@@ -45,6 +45,15 @@ Signup is successful
   "apiKey": 64 character apiKey string
   "sessionId": Number
   "warning": string (optional. This property is passed when the user needs to be notified of something)
+  "user": { 
+    fullName: String
+    email: String
+    phone: String
+    nid: String
+    physicalAddress: String
+    emergencyContact: String
+    bloodGroup: String
+  },
 }
 ```
 

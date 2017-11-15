@@ -41,9 +41,10 @@ class Logger {
     }
   }
 
-  constructor(options) {
+  constructor(options, isMuted = false) {
     this.options = this._validateOptions(options);
     this.inInCommit = false;
+    this.isMuted = isMuted;
   }
 
   _parse(content) {
@@ -126,7 +127,9 @@ class Logger {
       data: args
     }
     this._saveToDisk(entry);
-    console.log.apply(console, args);
+    if (!this.isMuted) {
+      console.log.apply(console, args);
+    }
   }
 
   important(...args) {
@@ -136,7 +139,9 @@ class Logger {
       data: args
     }
     this._saveToDisk(entry);
-    console.log.apply(console, args);
+    if (!this.isMuted) {
+      console.log.apply(console, args);
+    }
   }
 
   inspect(object) {
@@ -150,7 +155,9 @@ class Logger {
       data: args
     }
     this._saveToDisk(entry);
-    console.log.apply(console, ['INFO'].concat(args));
+    if (!this.isMuted) {
+      console.log.apply(console, ['INFO'].concat(args));
+    }
   }
 
   error(err) {
@@ -163,7 +170,9 @@ class Logger {
       stack: err.stack
     }
     this._saveToDisk(entry);
-    console.error(err);
+    if (!this.isMuted) {
+      console.error(err);
+    }
   }
 
 }

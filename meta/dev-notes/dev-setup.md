@@ -22,6 +22,7 @@
 5. run `polymer serve --port 8545` on a separate terminal and keep it running. Client now should be running on `localhost:8545`.
 
 # Testing server
-1. navigate to `torque/server` directory.
-2. run `npm test`
+1. Make sure that server is **NOT** running.
+2. navigate to `torque/server` directory.
+3. run `npm test`
 

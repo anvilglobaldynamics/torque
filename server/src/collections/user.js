@@ -7,9 +7,19 @@ exports.userMixin = (DatabaseClass) => class extends DatabaseClass {
 
   get userSchema() {
     return Joi.object().keys({
-      email: Joi.string().email().required().min(3).max(30),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+      fullName: Joi.string().min(1).max(64).required(),
+      phone: Joi.string().alphanum().min(11).max(14).required(),
       passwordHash: Joi.string().min(64).max(64).required(),
-      isValid: Joi.boolean().required(),
+      email: Joi.string().email().min(3).max(30).required(),
+      nid: Joi.string().min(16).max(16).allow('').required(),
+      physicalAddress: Joi.string().min(1).max(128).allow('').required(),
+      emergencyContact: Joi.number().min(6).max(11).allow('').required(),
+      bloodGroup: Joi.string().alphanum().min(2).max(3).allow('').required(),
+      isDeleted: Joi.boolean().required(),
+      isPhoneVerified: Joi.boolean().required(),
+      isEmailVerified: Joi.boolean().required(),
       isBanned: Joi.boolean().required()
     });
   }
@@ -50,11 +60,21 @@ exports.userMixin = (DatabaseClass) => class extends DatabaseClass {
    * @param {any} { email, passwordHash } 
    * @param {any} cbfn 
    */
-  createUser({ email, passwordHash }, cbfn) {
+  createUser({ email, phone, fullName, passwordHash }, cbfn) {
     let user = {
+      createdDatetimeStamp: (new Date).getTime(),
+      lastModifiedDatetimeStamp: (new Date).getTime(),
       email,
       passwordHash,
-      isValid: false,
+      phone,
+      fullName,
+      nid: '',
+      physicalAddress: '',
+      emergencyContact: '',
+      bloodGroup: '',
+      isDeleted: false,
+      isPhoneVerified: false,
+      isEmailVerified: false,
       isBanned: false
     }
     this._insertUser(user, (err, id) => {
@@ -66,8 +86,14 @@ exports.userMixin = (DatabaseClass) => class extends DatabaseClass {
     this.findOne('user', { 'id': id }, cbfn);
   }
 
-  findUserByEmailAndPasswordHash({ email, passwordHash }, cbfn) {
-    this.findOne('user', { email, passwordHash }, cbfn);
+  findUserByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }, cbfn) {
+    this.findOne('user', {
+      $or: [
+        { email: emailOrPhone },
+        { phone: emailOrPhone }
+      ],
+      passwordHash
+    }, cbfn);
   }
 
   makeUserAValidUser(id, cbfn) {
