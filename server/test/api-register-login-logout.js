@@ -7,8 +7,10 @@ let { Program } = require('./../src/index');
 
 let mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
 
-const email = `t${(new Date).getTime()}@gmail.com`
-const password = "123545678"
+const email = `t${(new Date).getTime()}@gmail.com`;
+const password = "123545678";
+const fullName = "Test User";
+const phone = "01700889988";
 
 describe('Server', _ => {
   it('Server should start without issues', testDoneFn => {
@@ -27,7 +29,9 @@ describe('API', _ => {
       callApi('api/user-register', {
         json: {
           email,
-          password
+          password,
+          phone,
+          fullName
         }
       }, (err, response, body) => {
         expect(response.statusCode).to.equal(200)
@@ -43,7 +47,9 @@ describe('API', _ => {
       callApi('api/user-register', {
         json: {
           email,
-          password
+          password,
+          phone,
+          fullName
         }
       }, (err, response, body) => {
         expect(response.statusCode).to.equal(200)
@@ -57,8 +63,10 @@ describe('API', _ => {
 
       callApi('api/user-register', {
         json: {
-          email,
-          password
+          email: (email + '%'),
+          password,
+          phone,
+          fullName
         }
       }, (err, response, body) => {
         expect(response.statusCode).to.equal(200)
@@ -73,7 +81,9 @@ describe('API', _ => {
       callApi('api/user-register', {
         json: {
           email,
-          password: 'short'
+          password: 'short',
+          phone,
+          fullName
         }
       }, (err, response, body) => {
         expect(response.statusCode).to.equal(200)
@@ -87,11 +97,11 @@ describe('API', _ => {
 
   describe('user-login', _ => {
 
-    it('api/user-login (Correct): ' + email, testDoneFn => {
+    it('api/user-login (Correct, Using Email): ' + email, testDoneFn => {
 
       callApi('api/user-login', {
         json: {
-          email,
+          emailOrPhone: email,
           password
         }
       }, (err, response, body) => {
@@ -113,6 +123,7 @@ describe('API', _ => {
 
 describe('Server', _ => {
   it('Server should close without issues', testDoneFn => {
-    mainProgram.terminateServer();
+    setTimeout(_ => mainProgram.terminateServer(), 300);
+    testDoneFn();
   });
 });
