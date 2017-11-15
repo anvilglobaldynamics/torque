@@ -1,16 +1,15 @@
 
 let expect = require('chai').expect;
-
 let { callApi } = require('./utils');
-
 let { Program } = require('./../src/index');
-
-let mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
 
 const email = `t${(new Date).getTime()}@gmail.com`;
 const password = "123545678";
 const fullName = "Test User";
 const phone = "01700889988";
+
+let mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
+let apiKey = null;
 
 describe('Server', _ => {
   it('Server should start without issues', testDoneFn => {
@@ -21,6 +20,8 @@ describe('Server', _ => {
 });
 
 describe('API', _ => {
+
+  // ================================================== Register
 
   describe('user-register', _ => {
 
@@ -95,6 +96,8 @@ describe('API', _ => {
 
   });
 
+  // ================================================== Login
+
   describe('user-login', _ => {
 
     it('api/user-login (Correct, Using Email): ' + email, testDoneFn => {
@@ -112,6 +115,8 @@ describe('API', _ => {
         expect(body).to.have.property('sessionId').that.is.a('number')
         expect(body).to.have.property('warning').that.is.a('string').that.equals('You have less than 24 hours to verify your email address.')
         expect(body).to.have.property('user').that.is.an('object')
+
+        apiKey = body.apiKey;
         testDoneFn();
       })
 
@@ -119,6 +124,26 @@ describe('API', _ => {
 
   });
 
+  // ================================================== Logout
+
+  describe('user-logout', _ => {
+
+    it('api/user-logout (Correct): ' + email, testDoneFn => {
+
+      callApi('api/user-logout', {
+        json: {
+          apiKey
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.have.property('hasError').that.equals(false);
+        expect(body).to.have.property('status').that.equals('success');
+        testDoneFn();
+      });
+
+    });
+
+  });
 
 });
 
