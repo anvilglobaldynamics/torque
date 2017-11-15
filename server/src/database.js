@@ -129,9 +129,11 @@ class Database {
 let { userMixin } = require('./collections/user');
 let { emailVerificationRequestMixin } = require('./collections/email-verification-request');
 let { sessionMixin } = require('./collections/session');
+let { organizationMixin } = require('./collections/organization');
 
 Database = userMixin(Database);
 Database = emailVerificationRequestMixin(Database);
 Database = sessionMixin(Database);
+Database = organizationMixin(Database);
 
 exports.Database = Database;
