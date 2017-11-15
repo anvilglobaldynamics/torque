@@ -5,14 +5,13 @@ let { callApi } = require('./utils');
 
 let { Program } = require('./../src/index');
 
-let mainProgram;
+let mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
 
 const email = `t${(new Date).getTime()}@gmail.com`
 const password = "123545678"
 
 describe('Server', _ => {
-  it('Server should start without issues', testDoneFn => {    
-    mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
+  it('Server should start without issues', testDoneFn => {
     mainProgram.initiateServer(_ => {
       testDoneFn();
     });
@@ -20,7 +19,7 @@ describe('Server', _ => {
 });
 
 describe('API', _ => {
- 
+
   describe('user-register', _ => {
 
     it('api/user-register (Valid, Unique): ' + email, testDoneFn => {
@@ -113,7 +112,7 @@ describe('API', _ => {
 });
 
 describe('Server', _ => {
-  it('Server should close without issues', testDoneFn => {    
+  it('Server should close without issues', testDoneFn => {
     mainProgram.terminateServer();
   });
 });
