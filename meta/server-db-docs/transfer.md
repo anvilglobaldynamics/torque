@@ -3,14 +3,14 @@ This collection contains an transfer
 ## signature
 ```
 Joi.object().keys({
-  createdDatetimeStamp: Joi.number().required(),
-  createdByUserId: Joi.number().required(),
-  fromInventoryId: Joi.number().required(),
-  toInventoryId: Joi.number().required(),
+  createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+  createdByUserId: Joi.number().max(999999999999999).required(),
+  fromInventoryId: Joi.number().max(999999999999999).required(),
+  toInventoryId: Joi.number().max(999999999999999).required(),
   productList: Joi.array().items(
     Joi.object().keys({
-      productId: Joi.number().required(),
-      count: Joi.number().required()
+      productId: Joi.number().max(999999999999999).required(),
+      count: Joi.number().max(999999999999999).required()
     });
   );
 });

@@ -1,6 +1,6 @@
-This API handles logging out of an user making the apiKey invalid.
+This API handles gets designation list to be assigned to new employee request.
 
-url: `api/user-logout`
+url: `api/get-designation-list`
 
 method: `POST`
 
@@ -29,13 +29,12 @@ Possible Error Codes:
 ```
 
 ### response (on success):
-Logout is successful
 ```js
 {
   "hasError": false,
-  "status": "success"
+  "designationList": Joi.array().items(Joi.string().max(1024).required())
 }
 ```
 
 ### db changes:
-updates the `session` collection in db.
+updates No collection in db.

@@ -1,6 +1,6 @@
-This API handles logging in of an user.
+This API handles user password reset attempt, ota.
 
-url: `api/user-login`
+url: `api/user-reset-password--request`
 
 method: `POST`
 
@@ -10,8 +10,7 @@ method: `POST`
   emailOrPhone: Joi.alternatives([
     Joi.string().email().min(3).max(30), // if email
     Joi.string().alphanum().min(11).max(14), // if phone
-  ]).required(),
-  password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
+  ]).required()
 }
 ```
 
@@ -29,7 +28,6 @@ method: `POST`
 Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
-{ code: WRONG_PASSWORD } // the password didn't match
 { code: USER_NOT_FOUND } // no user is associated with the given id
 { code: USER_BANNED } // the user is banned
 { code: USER_REQUIRES_EMAIL_VERIFICATION } // the user requires email verification
@@ -37,16 +35,15 @@ Possible Error Codes:
 ```
 
 ### response (on success):
-Signup is successful
 ```js
 {
-  "hasError": false,
-  "status": "success"
-  "apiKey": 64 character apiKey string
-  "sessionId": Number
-  "warning": string (optional. This property is passed when the user needs to be notified of something)
+  "hasError": false
 }
 ```
 
 ### db changes:
-updates the `session` collections in db.
+updates the `user` collection in db.
+
+### notes:
+* user can not reset password using unverified email or phone, client will ask user to contact support with that email or phone.
+* user is sent an email with a link like `https://torque-client.com/#/password-reset/${uniqueToken}`

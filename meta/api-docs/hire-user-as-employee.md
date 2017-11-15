@@ -1,0 +1,56 @@
+This API handles hiring an already existing user.
+
+url: `api/hire-user-as-employee`
+
+method: `POST`
+
+### request: 
+```js
+{
+  apiKey: Joi.string().length(64).required(),
+
+  emailOrPhone: Joi.alternatives([
+    Joi.string().email().min(3).max(30), // if email
+    Joi.string().alphanum().min(11).max(14), // if phone
+  ]).required(),
+
+  organizationId: Joi.number().max(999999999999999).required(),
+  role: Joi.string().max(1024).required(),
+  designation: Joi.string().max(1024).required(),
+  companyProvidedId: Joi.string().alphanum().required(),
+  
+  privileges: Joi.object().keys({
+    [Look up privileges here](../server-db-docs/employment.md)
+  });
+}
+```
+
+### response (on error):
+```js
+{
+  "hasError": true,
+  "error": {
+    code,
+    message
+  }
+}
+```
+
+Possible Error Codes:
+```js
+{ code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
+{ code: EMPLOYEE_INVALID } // could not be find employee
+{ code: ALREADY_EMPLOYED } // the user exists and is already employed by another organization
+```
+
+### response (on success):
+```js
+{
+  "hasError": false,
+  "status": "success"
+}
+```
+
+### db changes:
+updates the `employment` collection in db.

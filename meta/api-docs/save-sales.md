@@ -1,13 +1,19 @@
-This collection contains an sale
+This API handles submission of sale form
 
-## signature
-```
-Joi.object().keys({
-  createdDatetimeStamp: Joi.number().max(999999999999999).required(),
-  lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-  lastModifiedByUserId: Joi.number().max(999999999999999).required(),
+url: `api/save-sales`
+
+method: `POST`
+
+### request: 
+```js
+{
+  apiKey: Joi.string().length(64).required(),
+
+  salesId: Joi.number().max(999999999999999).allow(null).required(),
+
   outletId: Joi.number().max(999999999999999).required(),
   customerId: Joi.number().max(999999999999999).required(),
+
   productList: Joi.array().items(
     Joi.object().keys({
       productId: Joi.number().max(999999999999999).required(),
@@ -29,7 +35,40 @@ Joi.object().keys({
     paidAmount: Joi.number().max(999999999999999).required(),
     changeAmount: Joi.number().max(999999999999999).required()
   });
-  isModified: Joi.boolean().required(),
-  isDeleted: Joi.boolean().required()
-});
+}
 ```
+
+### response (on error):
+```js
+{
+  "hasError": true,
+  "error": {
+    code,
+    message
+  }
+}
+```
+
+Possible Error Codes:
+```js
+{ code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
+{ code: OUTLET_INVALID } // outlet could not be found 
+{ code: CUSTOMER_INVALID } // customer could not be found
+{ code: PRODUCT_INVALID } // product could not be found
+{ code: INSUFFICIENT_PRODUCT } // not enough product in inventory
+```
+
+### response (on success):
+```js
+{
+  "hasError": false,
+  "status": "success"
+}
+```
+
+### db changes:
+updates the `sales` and `inventory` collection in db.
+
+### notes:
+in future we could save draft sale in db.

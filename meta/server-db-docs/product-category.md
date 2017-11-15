@@ -3,17 +3,17 @@ This collection contains an product category
 ## signature
 ```
 Joi.object().keys({
-  createdDatetimeStamp: Joi.number().required(),
-  lastModifiedDatetimeStamp: Joi.number().required(),
+  createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+  lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
   name: Joi.string().min(1).max(64).required(),
-  organizationId: Joi.number().required(),
-  ParentProductCategoryId: Joi.number().required(),
-  unit: Joi.string().required(),
-  defaultDiscountType: Joi.string().required(),
-  defaultDiscountValue: Joi.number().required(),
-  defaultPurchasePrice: Joi.number().required(),
-  defaultVAT: Joi.number().required(),
-  defaultSalePrice: Joi.number().required(),
+  organizationId: Joi.number().max(999999999999999).required(),
+  parentProductCategoryId: Joi.number().max(999999999999999).required(),
+  unit: Joi.string().max(1024).required(),
+  defaultDiscountType: Joi.string().max(1024).required(),
+  defaultDiscountValue: Joi.number().max(999999999999999).required(),
+  defaultPurchasePrice: Joi.number().max(999999999999999).required(),
+  defaultVat: Joi.number().max(999999999999999).required(),
+  defaultSalePrice: Joi.number().max(999999999999999).required(),
   isDeleted: Joi.boolean().required(),
   isReturnable: Joi.boolean().required()
 });

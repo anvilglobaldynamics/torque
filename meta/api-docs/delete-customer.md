@@ -1,13 +1,14 @@
-This API handles logging out of an user making the apiKey invalid.
+This API handles attempt to delete a customer
 
-url: `api/user-logout`
+url: `api/delete-customer`
 
 method: `POST`
 
 ### request: 
 ```js
 {
-  apiKey: Joi.string().length(64).required()
+  apiKey: Joi.string().length(64).required(),
+  customerId: Joi.number().max(999999999999999).required()
 }
 ```
 
@@ -21,15 +22,14 @@ method: `POST`
   }
 }
 ```
-
 Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
+{ code: CUSTOMER_INVALID } // customer does not exist
 ```
 
 ### response (on success):
-Logout is successful
 ```js
 {
   "hasError": false,
@@ -38,4 +38,7 @@ Logout is successful
 ```
 
 ### db changes:
-updates the `session` collection in db.
+updates the `customer` collection in db.
+
+### notes;
+in future we could restrict removal of non zero balance customer

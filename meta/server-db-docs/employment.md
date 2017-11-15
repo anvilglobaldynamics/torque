@@ -3,12 +3,12 @@ This collection contains an employment
 ## signature
 ```
 Joi.object().keys({
-  createdDatetimeStamp: Joi.number().required(),
-  lastModifiedDatetimeStamp: Joi.number().required(),
-  userId: Joi.number().required(),
-  organizationId: Joi.number().required(),
-  designation: Joi.string().required(),
-  role: Joi.string().required(),
+  createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+  lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+  userId: Joi.number().max(999999999999999).required(),
+  organizationId: Joi.number().max(999999999999999).required(),
+  designation: Joi.string().max(1024).required(),
+  role: Joi.string().max(1024).required(),
   companyProvidedId: Joi.string().alphanum().required(),
   privileges: Joi.object().keys({
     PRIV_VIEW_USERS: Joi.boolean().required(),
