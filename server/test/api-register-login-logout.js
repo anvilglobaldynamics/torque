@@ -1,10 +1,7 @@
 
 let expect = require('chai').expect;
-let request = require('request');
 
-let genUrl = (path) => {
-  return "http://localhost:8540/" + path
-}
+let { callApi } = require('./utils');
 
 const email = `t${(new Date).getTime()}@gmail.com`
 const password = "123545678"
@@ -15,66 +12,62 @@ describe.only('API', _ => {
 
     it('api/user-register (Valid, Unique): ' + email, testDoneFn => {
 
-      request
-        .post(genUrl('api/user-register'), {
-          json: {
-            email,
-            password
-          }
-        }, (err, response, body) => {
-          expect(response.statusCode).to.equal(200)
-          expect(body).to.have.property('hasError').that.equals(false)
-          expect(body).to.have.property('status').that.equals('success')
-          testDoneFn()
-        })
+      callApi('api/user-register', {
+        json: {
+          email,
+          password
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200)
+        expect(body).to.have.property('hasError').that.equals(false)
+        expect(body).to.have.property('status').that.equals('success')
+        testDoneFn()
+      })
 
     });
 
     it('api/user-register (Valid, Not Unique): ' + email, testDoneFn => {
 
-      request
-        .post(genUrl('api/user-register'), {
-          json: {
-            email,
-            password
-          }
-        }, (err, response, body) => {
-          expect(response.statusCode).to.equal(200)
-          expect(body).to.have.property('hasError').that.equals(true)
-          testDoneFn()
-        })
+      callApi('api/user-register', {
+        json: {
+          email,
+          password
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200)
+        expect(body).to.have.property('hasError').that.equals(true)
+        testDoneFn()
+      })
 
     });
 
     it('api/user-register (Invalid Email): ' + email + '%', testDoneFn => {
 
-      request
-        .post(genUrl('api/user-register'), {
-          json: {
-            email,
-            password
-          }
-        }, (err, response, body) => {
-          expect(response.statusCode).to.equal(200)
-          expect(body).to.have.property('hasError').that.equals(true)
-          testDoneFn()
-        })
+      callApi('api/user-register', {
+        json: {
+          email,
+          password
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200)
+        expect(body).to.have.property('hasError').that.equals(true)
+        testDoneFn()
+      })
 
     });
 
     it('api/user-register (Invalid Password): ' + email, testDoneFn => {
 
-      request
-        .post(genUrl('api/user-register'), {
-          json: {
-            email,
-            password: 'short'
-          }
-        }, (err, response, body) => {
-          expect(response.statusCode).to.equal(200)
-          expect(body).to.have.property('hasError').that.equals(true)
-          testDoneFn()
-        })
+      callApi('api/user-register', {
+        json: {
+          email,
+          password: 'short'
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200)
+        expect(body).to.have.property('hasError').that.equals(true)
+        testDoneFn()
+      })
 
     });
 
@@ -84,21 +77,20 @@ describe.only('API', _ => {
 
     it('api/user-login (Correct): ' + email, testDoneFn => {
 
-      request
-        .post(genUrl('api/user-login'), {
-          json: {
-            email,
-            password
-          }
-        }, (err, response, body) => {
-          expect(response.statusCode).to.equal(200);
-          expect(body).to.have.property('hasError').that.equals(false);
-          expect(body).to.have.property('status').that.equals('success');
-          expect(body).to.have.property('apiKey').that.is.a('string')
-          expect(body).to.have.property('sessionId').that.is.a('number')
-          expect(body).to.have.property('warning').that.is.a('string').that.equals('You have less than 24 hours to verify your email address.')
-          testDoneFn();
-        })
+      callApi('api/user-login', {
+        json: {
+          email,
+          password
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.have.property('hasError').that.equals(false);
+        expect(body).to.have.property('status').that.equals('success');
+        expect(body).to.have.property('apiKey').that.is.a('string')
+        expect(body).to.have.property('sessionId').that.is.a('number')
+        expect(body).to.have.property('warning').that.is.a('string').that.equals('You have less than 24 hours to verify your email address.')
+        testDoneFn();
+      })
 
     });
 
