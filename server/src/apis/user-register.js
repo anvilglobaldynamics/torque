@@ -12,8 +12,10 @@ exports.UserRegisterApi = class extends Api {
 
   get requestSchema() {
     return Joi.object().keys({
-      email: Joi.string().email().required().min(3).max(30),
-      password: Joi.string().min(8).max(30).required()
+      email: Joi.string().email().min(3).max(30).required(),
+      fullName: Joi.string().min(1).max(64).required(),
+      phone: Joi.string().alphanum().min(11).max(14).required(),
+      password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
     });
   }
 
@@ -37,10 +39,12 @@ exports.UserRegisterApi = class extends Api {
     });
   }
 
-  _createUser({ email, password }, cbfn) {
+  _createUser({ email, fullName, phone, password }, cbfn) {
     let passwordHash = this._makeHash(password);
     let user = {
       email,
+      fullName,
+      phone,
       passwordHash
     }
     this.database.createUser(user, (err, userId) => {
@@ -68,8 +72,8 @@ exports.UserRegisterApi = class extends Api {
   }
 
   handle({ body }) {
-    let { email, password } = body;
-    this._createUser({ email, password }, (userId) => {
+    let { email, fullName, phone, password } = body;
+    this._createUser({ email, fullName, phone, password }, (userId) => {
       this.success({ status: "success" });
       this._createEmailVerificationRequest({ email, userId }, (verificationLink) => {
         this._sendVerificationMail({ email, verificationLink });

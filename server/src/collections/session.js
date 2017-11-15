@@ -10,7 +10,8 @@ exports.sessionMixin = (DatabaseClass) => class extends DatabaseClass {
       userId: Joi.number().max(999999999999999).required(),
       apiKey: Joi.string().length(64).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
-      closedDatetimeStamp: Joi.number().max(999999999999999).required().allow(null),
+      terminatedDatetimeStamp: Joi.number().max(999999999999999).required().allow(null),
+      terminatedBy: Joi.string().allow('').max(1024).required(),
       hasExpried: Joi.boolean().required()
     });
   }
@@ -63,7 +64,8 @@ exports.sessionMixin = (DatabaseClass) => class extends DatabaseClass {
       userId,
       apiKey,
       createdDatetimeStamp: (new Date).getTime(),
-      closedDatetimeStamp: null,
+      terminatedDatetimeStamp: null,
+      terminatedBy:'',
       hasExpried: false
     }
     this._insertSession(session, (err, id) => {
@@ -79,7 +81,7 @@ exports.sessionMixin = (DatabaseClass) => class extends DatabaseClass {
     let mod = {
       $set: {
         hasExpried: true,
-        closedDatetimeStamp: (new Date).getTime()
+        terminatedDatetimeStamp: (new Date).getTime()
       }
     }
     this._updateSession({ id }, mod, (err, count) => {

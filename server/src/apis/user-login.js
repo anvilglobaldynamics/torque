@@ -14,8 +14,11 @@ exports.UserLoginApi = class extends Api {
 
   get requestSchema() {
     return Joi.object().keys({
-      email: Joi.string().email().required().min(3).max(30),
-      password: Joi.string().min(8).max(30).required()
+      emailOrPhone: Joi.alternatives([
+        Joi.string().email().min(3).max(30), // if email
+        Joi.string().alphanum().min(11).max(14), // if phone
+      ]).required(),
+      password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
     });
   }
 
@@ -29,9 +32,9 @@ exports.UserLoginApi = class extends Api {
   If the user is not valid (verified), the response is failed.
   If the user is banned, the response is failed.
   */
-  _getUserIfValid({ email, password }, cbfn) {
+  _getUserIfValid({ emailOrPhone, password }, cbfn) {
     let passwordHash = this._makeHash(password);
-    this.database.findUserByEmailAndPasswordHash({ email, passwordHash }, (err, user) => {
+    this.database.findUserByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }, (err, user) => {
       if (err) return this.fail(err);
       if (!user) {
         let err = new Error("No user matched the email and password combination");
@@ -39,6 +42,7 @@ exports.UserLoginApi = class extends Api {
         return this.fail(err);
       } else if (!user.isValid) {
         this.database.findEmailVerificationRequestByForUserId(user.id, (err, { createdDatetimeStamp }) => {
+          if (err) return this.fail(err);
           let now = (new Date).getTime();
           let diff = now - createdDatetimeStamp;
           if (diff < EMAIL_VERIFICATION_WINDOW) {
@@ -73,10 +77,33 @@ exports.UserLoginApi = class extends Api {
   }
 
   handle({ body }) {
-    let { email, password } = body;
-    this._getUserIfValid({ email, password }, ({ user, warning }) => {
+    let { emailOrPhone, password } = body;
+    this._getUserIfValid({ emailOrPhone, password }, ({ user, warning }) => {
       this._createSession(user.id, ({ apiKey, sessionId }) => {
-        this.success({ status: "success", apiKey, warning, sessionId });
+        let {
+          fullName,
+          email,
+          phone,
+          nid,
+          physicalAddress,
+          emergencyContact,
+          bloodGroup,
+        } = user;
+        this.success({
+          status: "success",
+          apiKey,
+          warning,
+          sessionId,
+          user: {
+            fullName,
+            email,
+            phone,
+            nid,
+            physicalAddress,
+            emergencyContact,
+            bloodGroup
+          }
+        });
       });
     });
   }
