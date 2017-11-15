@@ -111,6 +111,7 @@ describe('API', _ => {
         expect(body).to.have.property('apiKey').that.is.a('string')
         expect(body).to.have.property('sessionId').that.is.a('number')
         expect(body).to.have.property('warning').that.is.a('string').that.equals('You have less than 24 hours to verify your email address.')
+        expect(body).to.have.property('user').that.is.an('object')
         testDoneFn();
       })
 
