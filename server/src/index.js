@@ -22,12 +22,12 @@ class Program {
 
   constructor({ allowUnsafeApis = false, muteLogger = false }) {
     this.allowUnsafeApis = allowUnsafeApis;
-    this.muteLogger =  muteLogger;
+    this.muteLogger = muteLogger;
   }
 
   // NOTE: Intended to be used during testing
-  deleteDocByIdFromDb(collection, id) {
-
+  deleteDocByIdFromDb(collection, id, callback) {
+    database.deleteMany(collection, { id }, callback);
   }
 
   // NOTE: Intended to be used during testing or by process manager
@@ -42,7 +42,7 @@ class Program {
         return promisify(ConfigLoader, ConfigLoader.getComputedConfig);
       })
       .then(([nonFatalErrorList, _config]) => {
-        if (!this.muteLogger){
+        if (!this.muteLogger) {
           ConfigLoader.reportErrorAndConfig(nonFatalErrorList, _config, mode);
         }
         config = _config;
