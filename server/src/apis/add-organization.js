@@ -1,8 +1,6 @@
 
 let { Api } = require('./../api-base');
 let Joi = require('joi');
-let cryptolib = require('crypto');
-let { generateRandomString } = require('./../utils/random-string');
 
 exports.AddOrganizationApi = class extends Api {
 
@@ -23,7 +21,7 @@ exports.AddOrganizationApi = class extends Api {
   _createOrganization({ name, primaryBusinessAddress, phone, email }, cbfn) {
     // NOTE: Because all new organizations get 1 day of free access
     let date = (new Date)
-    date.setHours((date.getHours()+24));
+    date.setHours((date.getHours() + 24));
     let licenceExpiresOnDatetimeStamp = date.getTime();
 
     let organization = {

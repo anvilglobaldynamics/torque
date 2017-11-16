@@ -12,9 +12,9 @@ let {
 const email = `t${(new Date).getTime()}@gmail.com`;
 const password = "123545678";
 const fullName = "Test User";
-const phone = 't' + String((new Date).getTime()).split('').reverse().slice(0,11).join('');
+const phone = 't' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 const orgEmail = `o${(new Date).getTime()}@gmail.com`;
-const orgPhone = 'o' + String((new Date).getTime()).split('').reverse().slice(0,11).join('');
+const orgPhone = 'o' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 
 let apiKey = null;
 
@@ -34,7 +34,6 @@ describe('add-organization', _ => {
       });
     });
   });
-
 
   it('api/add-organization', testDoneFn => {
 
