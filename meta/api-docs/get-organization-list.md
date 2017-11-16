@@ -34,6 +34,7 @@ Possible Error Codes:
   "hasError": false,
   "organizationList": Joi.array().items(
     Joi.object().keys({
+      id
       name: Joi.string().min(1).max(64).required(),
       primaryBusinessAddress: Joi.string().min(1).max(128).required(),
       phone: Joi.string().alphanum().min(11).max(14).required(),
