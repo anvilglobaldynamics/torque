@@ -88,7 +88,7 @@ class Logger {
                 throw new Error("Corrupted log");
               }
             }
-            fslib.close(fd);
+            fslib.close(fd, err => { 'pass' });
             cbfn(null);
             return
           });
