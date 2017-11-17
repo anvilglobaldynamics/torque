@@ -41,8 +41,9 @@ exports.UserLoginApi = class extends Api {
         err.code = 'USER_NOT_FOUND';
         return this.fail(err);
       } else if (!user.isValid) {
-        this.database.findEmailVerificationRequestByForUserId(user.id, (err, { createdDatetimeStamp }) => {
+        this.database.findEmailVerificationRequestByForUserId(user.id, (err, emailVerificationRequest) => {
           if (err) return this.fail(err);
+          let { createdDatetimeStamp } = emailVerificationRequest;
           let now = (new Date).getTime();
           let diff = now - createdDatetimeStamp;
           if (diff < EMAIL_VERIFICATION_WINDOW) {

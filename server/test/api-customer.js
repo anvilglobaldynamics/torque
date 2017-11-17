@@ -1,4 +1,3 @@
-
 let expect = require('chai').expect;
 
 let { callApi } = require('./utils');
@@ -15,10 +14,11 @@ const fullName = "Test User";
 const phone = 't' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 const orgEmail = `o${(new Date).getTime()}@gmail.com`;
 const orgPhone = 'o' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const customerPhone = 'o' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 
 let apiKey = null;
 
-describe('add-organization', _ => {
+describe('add-customer', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -37,15 +37,15 @@ describe('add-organization', _ => {
     });
   });
 
-  it('api/add-organization', testDoneFn => {
+  it('api/add-customer', testDoneFn => {
 
-    callApi('api/add-organization', {
+    callApi('api/add-customer', {
       json: {
         apiKey,
-        name: "My Organization",
-        primaryBusinessAddress: "My Address",
-        phone: orgPhone,
-        email: orgEmail
+        organizationId: 0,
+        fullName: "A Test Customer",
+        phone: customerPhone,
+        openingBalance: '500',
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -59,6 +59,5 @@ describe('add-organization', _ => {
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
   });
-
 
 });
