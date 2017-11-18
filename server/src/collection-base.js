@@ -12,6 +12,14 @@ class Collection {
     this.uniqueDefList = null; // subclass needs to define
   }
 
+  __validateAgainstSchema(doc, cbfn) {
+    let { error: err } = Joi.validate(doc, this.joiSchema, {
+      convert: false
+    });
+    if (err) return cbfn(err);
+    cbfn();
+  }
+
   /*
    Validates a document against a schema. Also checks if keys are unique.
    uniqueDefList = [
@@ -43,25 +51,26 @@ class Collection {
     });
   }
 
-  // __updateOneSafe(collectionName, query, modifications, schema, cbfn) {
-  //   this.findOne(collectionName, query, (err, originalDoc) => {
-  //     if (err) return cbfn(err);
-  //     this.updateOne(collectionName, query, modifications, (err, wasSuccessful) => {
-  //       if (err) return cbfn(err);
-  //       this.findOne(collectionName, query, (err, updatedDoc) => {
-  //         if (err) return cbfn(err);
-
-  //       });
-  //     });
-  //   });
-  //   // get original doc
-  //   // do modiciation
-  //   // get modified doc
-  //   // validate modified doc
-  //   // if ok return ok
-  //   // else replace with original and return error
-
-  // }
+  __updateOneSafe(query, modifications, cbfn) {
+    this.database.findOne(this.collectionName, query, (err, originalDoc) => {
+      if (err) return cbfn(err);
+      this.database.updateOne(this.collectionName, query, modifications, (err, wasSuccessful) => {
+        if (err) return cbfn(err);
+        this.database.findOne(this.collectionName, query, (err, updatedDoc) => {
+          if (err) return cbfn(err);
+          this.__validateAgainstSchema(this.updatedDoc, (err) => {
+            if (err) {
+              this.database.replaceOne(this.collectionName, { id: originalDoc.id }, originalDoc, (err, wasUpdated) => {
+                cbfn(err, false);
+              })
+            } else {
+              cbfn(null, true);
+            }
+          });
+        });
+      });
+    });
+  }
 
   _find(query, ...args) {
     return this.database.find(this.collectionName, query, ...args);
@@ -87,7 +96,8 @@ class Collection {
   }
 
   _update(query, modifications, cbfn) {
-    return this.database.updateOne(this.collectionName, query, modifications, cbfn);
+    return this.__updateOneSafe(query, modifications, cbfn);
+    // return this.database.updateOne(this.collectionName, query, modifications, cbfn);
   }
 
   _delete(query, cbfn) {
