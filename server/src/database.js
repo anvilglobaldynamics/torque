@@ -47,7 +47,7 @@ class Database {
         setImmediate(_ => cbfn(err, docList))
       });
     } catch (_err) {
-      err = _err;
+      let err = _err;
       setImmediate(_ => cbfn(err))
     }
     return;
