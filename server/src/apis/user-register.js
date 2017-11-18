@@ -47,7 +47,7 @@ exports.UserRegisterApi = class extends Api {
       phone,
       passwordHash
     }
-    this.database.createUser(user, (err, userId) => {
+    this.database.user.create(user, (err, userId) => {
       if (err) {
         if ('code' in err && err.code === 'DUPLICATE_email') {
           err = new Error("Provided email address is already in use");
@@ -61,10 +61,10 @@ exports.UserRegisterApi = class extends Api {
 
   _createEmailVerificationRequest({ email, userId }, cbfn) {
     let verificationToken = generateRandomString(64);
-    this.database.ensureVerificationTokenIsUnique(verificationToken, (err, isUnique) => {
+    this.database.emailVerificationRequest.ensureVerificationTokenIsUnique(verificationToken, (err, isUnique) => {
       if (err) return this.fail(err);
       if (!isUnique) return this._createEmailVerificationRequest({ email }, cbfn);
-      this.database.createEmailVerificationRequest({ userId, email, origin: 'user-register', verificationToken }, (err) => {
+      this.database.emailVerificationRequest.create({ userId, email, origin: 'user-register', verificationToken }, (err) => {
         let verificationLink = this._generateVerificationLink(verificationToken);
         return cbfn(verificationLink);
       });
@@ -74,8 +74,8 @@ exports.UserRegisterApi = class extends Api {
   handle({ body }) {
     let { email, fullName, phone, password } = body;
     this._createUser({ email, fullName, phone, password }, (userId) => {
-      this.success({ status: "success" });
       this._createEmailVerificationRequest({ email, userId }, (verificationLink) => {
+        this.success({ status: "success" });
         this._sendVerificationMail({ email, verificationLink });
       });
     });
