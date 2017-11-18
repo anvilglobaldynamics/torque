@@ -79,10 +79,6 @@ exports.UserRegisterApi = class extends Api {
         this._sendVerificationMail({ email, verificationLink });
       });
     });
-
-
-
-
   }
 
 }

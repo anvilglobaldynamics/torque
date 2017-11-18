@@ -49,7 +49,6 @@ exports.AddOrganizationApi = class extends Api {
     this._createOrganization({ name, primaryBusinessAddress, phone, email }, (organizationId) => {
       this.success({ status: "success" });
     });
-
   }
 
 }
