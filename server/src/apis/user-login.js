@@ -34,15 +34,20 @@ exports.UserLoginApi = class extends Api {
   */
   _getUserIfValid({ emailOrPhone, password }, cbfn) {
     let passwordHash = this._makeHash(password);
-    this.database.findUserByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }, (err, user) => {
+    this.database.user.findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }, (err, user) => {
       if (err) return this.fail(err);
       if (!user) {
         let err = new Error("No user matched the email and password combination");
         err.code = 'USER_NOT_FOUND';
         return this.fail(err);
       } else if (!user.isValid) {
-        this.database.findEmailVerificationRequestByForUserId(user.id, (err, { createdDatetimeStamp }) => {
+        this.database.emailVerificationRequest.findByForUserId(user.id, (err, emailVerificationRequest) => {
           if (err) return this.fail(err);
+          if (!emailVerificationRequest){
+            err = new Error("Email verification request not found.")
+            return this.fail(err);
+          }
+          let { createdDatetimeStamp } = emailVerificationRequest;
           let now = (new Date).getTime();
           let diff = now - createdDatetimeStamp;
           if (diff < EMAIL_VERIFICATION_WINDOW) {
@@ -66,10 +71,10 @@ exports.UserLoginApi = class extends Api {
 
   _createSession(userId, cbfn) {
     let apiKey = generateRandomString(64);
-    this.database.ensureApiKeyIsUnique(apiKey, (err, isUnique) => {
+    this.database.session.ensureApiKeyIsUnique(apiKey, (err, isUnique) => {
       if (err) return this.fail(err);
       if (!isUnique) return this._createSession({ userId }, cbfn);
-      this.database.createSession({ userId, apiKey }, (err, sessionId) => {
+      this.database.session.create({ userId, apiKey }, (err, sessionId) => {
         if (err) return this.fail(err);
         return cbfn({ apiKey, sessionId });
       });
