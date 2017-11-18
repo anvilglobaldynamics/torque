@@ -1,12 +1,15 @@
 
+const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
-let { ensureKeysAreUnique } = require('./../utils/ensure-unique');
+exports.SessionCollection = class extends Collection {
 
-exports.sessionMixin = (DatabaseClass) => class extends DatabaseClass {
+  constructor(...args) {
+    super(...args);
 
-  get sessionSchema() {
-    return Joi.object().keys({
+    this.collectionName = 'session';
+
+    this.joiSchema = Joi.object().keys({
       userId: Joi.number().max(999999999999999).required(),
       apiKey: Joi.string().length(64).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
@@ -14,94 +17,71 @@ exports.sessionMixin = (DatabaseClass) => class extends DatabaseClass {
       terminatedBy: Joi.string().allow('').max(1024).required(),
       hasExpried: Joi.boolean().required()
     });
-  }
 
-  _validateSession(doc, cbfn) {
-    let { error: err } = Joi.validate(doc, this.sessionSchema, { convert: false });
-    if (err) return cbfn(err);
-    let uniqueKeyList = ['apiKey']
-    ensureKeysAreUnique(this, 'session', {}, doc, uniqueKeyList, (err) => {
-      if (err) return cbfn(err);
-      cbfn();
-    });
-  }
-
-  _insertSession(doc, cbfn) {
-    this._validateSession(doc, (err) => {
-      if (err) return cbfn(err);
-      this.autoGenerateKey('session', (err, sessionId) => {
-        if (err) return cbfn(err);
-        doc.id = sessionId;
-        this.insertOne('session', doc, (err, count) => {
-          if (err) return cbfn(err);
-          if (count !== 1) return cbfn(new Error("Could not insert session for reasons unknown."));
-          return cbfn(null, sessionId);
-        });
-      });
-    });
-  }
-
-  _updateSession(query, modifications, cbfn) {
-    this.update('session', query, modifications, cbfn);
+    this.uniqueDefList = [
+      {
+        additionalQueryFilters: {},
+        uniqueKeyList: ['apiKey']
+      }
+    ]
   }
 
   ensureApiKeyIsUnique(apiKey, cbfn) {
     let query = { apiKey }
-    this.findOne('session', query, (err, doc) => {
+    this._findOne(query, (err, doc) => {
       if (err) return cbfn(err);
-      if (doc) return cbfn(null, false);
-      return cbfn(null, true);
+      if (doc) {
+        return cbfn(null, false);
+      } else {
+        return cbfn(null, true);
+      }
     });
   }
 
-  /**
-   * Creates a session if the email is unique
-   * @param {any} { email, passwordHash } 
-   * @param {any} cbfn 
-   */
-  createSession({ userId, apiKey }, cbfn) {
-    let session = {
+  create({ userId, apiKey }, cbfn) {
+    let user = {
       userId,
       apiKey,
       createdDatetimeStamp: (new Date).getTime(),
       terminatedDatetimeStamp: null,
-      terminatedBy:'',
+      terminatedBy: '',
       hasExpried: false
     }
-    this._insertSession(session, (err, id) => {
+    this._insert(user, (err, id) => {
       return cbfn(err, id);
     })
   }
 
-  getSessionByApiKey(apiKey, cbfn) {
-    this.findOne('session', { apiKey }, cbfn);
+  getByApiKey(apiKey, cbfn) {
+    this._findOne({ apiKey }, cbfn);
   }
 
-  closeSession(id, cbfn) {
+  close(id, cbfn) {
     let mod = {
       $set: {
         hasExpried: true,
         terminatedDatetimeStamp: (new Date).getTime()
       }
     }
-    this._updateSession({ id }, mod, (err, count) => {
+    this._update({ id }, mod, (err, wasUpdated) => {
       if (err) return cbfn(err);
-      if (count !== 1) return cbfn(new Error("Session Not Found"));
+      if (!wasUpdated) return cbfn(new Error("Session Not Found"));
       return cbfn();
     });
   }
 
-  makeSessionAnInvalidSession(id, cbfn) {
+  makeExpired(id, cbfn) {
     let mod = {
       $set: {
         hasExpried: true
       }
     }
-    this._updateSession({ id }, mod, (err, count) => {
+    this._update({ id }, mod, (err, wasUpdated) => {
       if (err) return cbfn(err);
-      if (count !== 1) return cbfn(new Error("Session Not Found"));
+      if (!wasUpdated) return cbfn(new Error("Session Not Found"));
       return cbfn();
     });
   }
 
 }
+
