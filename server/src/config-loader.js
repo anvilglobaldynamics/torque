@@ -112,13 +112,13 @@ class ConfigLoader {
 
   static reportErrorAndConfig(nonFatalErrorList, _config, mode) {
     if (nonFatalErrorList.length > 0) {
-      console.log(`${nonFatalErrorList.length} error(s) occurred during loading config. Default config will be applied.`)
+      console.log(`(config)> ${nonFatalErrorList.length} error(s) occurred during loading config. Default config will be applied.`)
       for (let nonFatalError of nonFatalErrorList) {
         console.error(nonFatalError);
       }
     }
     if (mode !== 'production') {
-      console.log('Final config:\n', JSON.stringify(_config, null, 2));
+      console.log('(config)> Final config:\n', JSON.stringify(_config, null, 2));
     }
   }
 

@@ -6,5 +6,5 @@ let mainProgram = new Program({
 });
 
 mainProgram.initiateServer(_ => {
-  console.log('Server Initiated Completely.')
+  console.log('(program)> Server Initiated Completely.')
 });
