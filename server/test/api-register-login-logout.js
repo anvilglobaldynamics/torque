@@ -6,14 +6,12 @@ let {
   terminateServer
 } = require('./lib');
 
-const email = `t${(new Date).getTime()}@gmail.com`;
+const email = `t1${(new Date).getTime()}@gmail.com`;
 const password = "123545678";
 const fullName = "Test User";
-const phone = "01700889988";
+const phone = 't1' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 
 let apiKey = null;
-
-
 
 describe('API', _ => {
 
