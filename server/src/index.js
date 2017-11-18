@@ -15,6 +15,11 @@ let { UserLogoutApi } = require('./apis/user-logout');
 let { VerifyEmailApi } = require('./apis/verify-email');
 let { AddOrganizationApi } = require('./apis/add-organization');
 
+let { UserCollection } = require('./collections/user');
+let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
+let { SessionCollection } = require('./collections/session');
+let { OrganizationCollection } = require('./collections/organization');
+
 let config, logger, database, server, emailService, templateManager;
 
 let mode = detectMode();
@@ -68,6 +73,10 @@ class Program {
       })
       .then(() => {
         logger.info('(server)> database initialized.');
+        database.registerCollection('user', UserCollection);
+        database.registerCollection('emailVerificationRequest', EmailVerificationRequestCollection);
+        database.registerCollection('session', SessionCollection);
+        database.registerCollection('organization', OrganizationCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })
