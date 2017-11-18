@@ -14,9 +14,9 @@ exports.UserLogoutApi = class extends Api {
   }
 
   handle({ body, userId, apiKey }) {
-    this.database.getSessionByApiKey(apiKey, (err, session)=>{
+    this.database.session.getByApiKey(apiKey, (err, session)=>{
       if (err) return this.fail(err);
-      this.database.closeSession(session.id, (err)=>{
+      this.database.session.close(session.id, (err)=>{
         if (err) return this.fail(err);
         this.success({ status: "success" });
       })
