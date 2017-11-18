@@ -28,7 +28,7 @@ exports.AddOrganizationApi = class extends Api {
       name, primaryBusinessAddress, phone, email,
       licenceExpiresOnDatetimeStamp
     }
-    this.database.createOrganization(organization, (err, organizationId) => {
+    this.database.organization.create(organization, (err, organizationId) => {
       if (err) {
         if ('code' in err && err.code === 'DUPLICATE_email') {
           err = new Error("Provided email address is already in use");
