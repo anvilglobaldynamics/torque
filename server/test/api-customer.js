@@ -37,7 +37,7 @@ describe('add-customer', _ => {
     });
   });
 
-  it('api/add-customer', testDoneFn => {
+  it('api/add-customer (Valid, Unique): ', testDoneFn => {
 
     callApi('api/add-customer', {
       json: {
@@ -51,6 +51,26 @@ describe('add-customer', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-customer (Valid, Not Unique): ', testDoneFn => {
+    
+    callApi('api/add-customer', {
+      json: {
+        apiKey,
+        organizationId: 0,
+        fullName: "Another Test Customer",
+        phone: customerPhone,
+        openingBalance: '500',
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('PHONE_ALREADY_IN_USE');
       testDoneFn();
     })
 
