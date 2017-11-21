@@ -15,10 +15,13 @@ const fullName = "Test User";
 const phone = 't2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 const orgEmail = `o2${(new Date).getTime()}@gmail.com`;
 const orgPhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const orgEmail2 = `o2C${(new Date).getTime()}@gmail.com`;
 const org2Email = `o22${(new Date).getTime()}@gmail.com`;
 const org2Phone = 'o22' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 
+
 let apiKey = null;
+let organizationList = null;
 
 describe('add-organization', _ => {
 
@@ -85,6 +88,27 @@ describe('add-organization', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('organizationList').that.is.an('array');
+      organizationList = body.organizationList;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/edit-organization', testDoneFn => {
+
+    callApi('api/edit-organization', {
+      json: {
+        apiKey,
+        organizationId: organizationList[0].id,
+        name: "My Organization",
+        primaryBusinessAddress: "My Address",
+        phone: orgPhone,
+        email: orgEmail2
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
       testDoneFn();
     });
 

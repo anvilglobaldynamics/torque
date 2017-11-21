@@ -44,6 +44,15 @@ exports.OrganizationCollection = class extends Collection {
     });
   }
 
+  update({ organizationId }, { name, primaryBusinessAddress, phone, email }, cbfn) {
+    let modifications = {
+      $set: {
+        name, primaryBusinessAddress, phone, email
+      }
+    }
+    this._update({ organizationId }, modifications, cbfn);
+  }
+
   listByIdList(idList, cbfn) {
     this._find({ id: { $in: idList } }, cbfn);
   }

@@ -15,6 +15,7 @@ let { UserLogoutApi } = require('./apis/user-logout');
 let { VerifyEmailApi } = require('./apis/verify-email');
 let { AddOrganizationApi } = require('./apis/add-organization');
 let { GetrganizationListApi } = require('./apis/get-organization-list');
+let { EditOrganizationApi } = require('./apis/edit-organization');
 
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
@@ -99,6 +100,7 @@ class Program {
         server.registerPostApi('/api/user-logout', UserLogoutApi);
         server.registerPostApi('/api/add-organization', AddOrganizationApi);
         server.registerPostApi('/api/get-organization-list', GetrganizationListApi);
+        server.registerPostApi('/api/edit-organization', EditOrganizationApi);
         return Promise.resolve();
       })
       .then(() => {
