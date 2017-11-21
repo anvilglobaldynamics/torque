@@ -55,7 +55,7 @@ exports.EmploymentCollection = class extends Collection {
 
     this.uniqueKeyDefList = [
       {
-        additionalQueryFilters: {},
+        filters: {},
         keyList: []
       }
     ]

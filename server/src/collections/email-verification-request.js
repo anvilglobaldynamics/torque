@@ -21,7 +21,7 @@ exports.EmailVerificationRequestCollection = class extends Collection {
 
     this.uniqueKeyDefList = [
       {
-        additionalQueryFilters: {},
+        filters: {},
         keyList: ['verificationToken']
       }
     ]

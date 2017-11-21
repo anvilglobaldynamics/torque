@@ -25,7 +25,7 @@ class Collection {
    Validates a document against a schema. Also checks if keys are unique.
    uniqueKeyDefList = [
      {
-       additionalQueryFilters: additional query to isolate a collection (i.e. by organizationId etc...)
+       filters: additional query to isolate a collection (i.e. by organizationId etc...)
        keyList: list of keys that need to be unique.
      }
    ]
@@ -38,8 +38,8 @@ class Collection {
 
     let promiseList = this.uniqueKeyDefList.map(uniqueKeyDef => {
       return new Promise((accept, reject) => {
-        let { additionalQueryFilters, keyList } = uniqueKeyDef;
-        ensureKeysAreUnique(this.database, this.collectionName, additionalQueryFilters, doc, keyList, (err) => {
+        let { filters, keyList } = uniqueKeyDef;
+        ensureKeysAreUnique(this.database, this.collectionName, filters, doc, keyList, (err) => {
           if (err) return reject(err);
           accept();
         });

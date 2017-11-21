@@ -20,7 +20,7 @@ exports.SessionCollection = class extends Collection {
 
     this.uniqueKeyDefList = [
       {
-        additionalQueryFilters: {},
+        filters: {},
         keyList: ['apiKey']
       }
     ]

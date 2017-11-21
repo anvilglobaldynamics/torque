@@ -28,7 +28,7 @@ exports.UserCollection = class extends Collection {
 
     this.uniqueKeyDefList = [
       {
-        additionalQueryFilters: {},
+        filters: {},
         keyList: ['email', 'phone']
       }
     ]

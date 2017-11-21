@@ -29,7 +29,7 @@ exports.CustomerCollection = class extends Collection {
 
     this.uniqueKeyDefList = [
       {
-        additionalQueryFilters: {},
+        filters: {},
         keyList: ['phone']
       }
     ]
