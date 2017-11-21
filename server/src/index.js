@@ -19,6 +19,7 @@ let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
 let { SessionCollection } = require('./collections/session');
 let { OrganizationCollection } = require('./collections/organization');
+let { EmploymentCollection } = require('./collections/employment');
 
 let config, logger, database, server, emailService, templateManager;
 
@@ -77,6 +78,7 @@ class Program {
         database.registerCollection('emailVerificationRequest', EmailVerificationRequestCollection);
         database.registerCollection('session', SessionCollection);
         database.registerCollection('organization', OrganizationCollection);
+        database.registerCollection('employment', EmploymentCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })

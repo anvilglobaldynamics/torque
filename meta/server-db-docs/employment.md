@@ -9,7 +9,7 @@ Joi.object().keys({
   organizationId: Joi.number().max(999999999999999).required(),
   designation: Joi.string().max(1024).required(),
   role: Joi.string().max(1024).required(),
-  companyProvidedId: Joi.string().alphanum().required(),
+  companyProvidedId: Joi.string().alphanum().allow('').required(),
   privileges: Joi.object().keys({
     PRIV_VIEW_USERS: Joi.boolean().required(),
     PRIV_MODIFY_USERS: Joi.boolean().required(),
@@ -37,12 +37,12 @@ Joi.object().keys({
 
     PRIV_VIEW_ORGANIZATION_STATISTICS: Joi.boolean().required(),
     PRIV_MODIFY_ORGANIZATION: Joi.boolean().required(),
-    
+
     PRIV_VIEW_CUSTOMER: Joi.boolean().required(),
     PRIV_ADD_CUSTOMER_DURING_SALES: Joi.boolean().required(),
     PRIV_MODIFY_CUSTOMER: Joi.boolean().required(),
     PRIV_MANAGE_CUSTOMER_DEBT: Joi.boolean().required()
-  });
+  }),
   isActive: Joi.boolean().required(),
 });
 ```
