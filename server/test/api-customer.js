@@ -15,10 +15,12 @@ const phone = 't' + String((new Date).getTime()).split('').reverse().slice(0, 11
 const orgEmail = `o${(new Date).getTime()}@gmail.com`;
 const orgPhone = 'o' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 const customerPhone = 'o' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const updatedCustomerPhone = 'o' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 
 let apiKey = null;
+let customerList = null;
 
-describe('add-customer', _ => {
+describe('customer', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -136,7 +138,7 @@ describe('add-customer', _ => {
 
   });
 
-  it('api/add-customer (Invalid phone): ', testDoneFn => {
+  it('api/add-customer (Invalid openingBalance): ', testDoneFn => {
     
     callApi('api/add-customer', {
       json: {
@@ -151,6 +153,59 @@ describe('add-customer', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-customer-summary-list (Valid): ', testDoneFn => {
+    
+    callApi('api/get-customer-summary-list', {
+      json: {
+        apiKey,
+        organizationId: 0
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('customerList');
+      customerList = body.customerList;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/edit-customer (Valid, Unique): ', testDoneFn => {
+    
+    callApi('api/edit-customer', {
+      json: {
+        apiKey,
+        customerId: customerList[customerList.length - 1].id,
+
+        fullName: "A Test Customer",
+        phone: updatedCustomerPhone,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-customer (Valid): ', testDoneFn => {
+    
+    callApi('api/get-customer', {
+      json: {
+        apiKey,
+        customerId: customerList[customerList.length - 1].id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('customer');
+      expect(body.customer.phone).to.equal(updatedCustomerPhone);
       testDoneFn();
     })
 

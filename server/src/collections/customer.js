@@ -52,9 +52,9 @@ exports.customerMixin = (DatabaseClass) => class extends DatabaseClass {
     });
   }
 
-  _updateCustomer(query, modifications, cbfn) {
-    this.update('customer', query, modifications, cbfn);
-  }
+  // _updateCustomer(query, modifications, cbfn) {
+  //   this.update('customer', query, modifications, cbfn);
+  // }
 
   // public:
 
@@ -76,6 +76,21 @@ exports.customerMixin = (DatabaseClass) => class extends DatabaseClass {
     this._insertCustomer(customer, (err, id) => {
       return cbfn(err, id);
     })
+  }
+
+  updateCustomer({ customerId, fullName, phone }, cbfn) {
+    let modifications = {
+      $set: { fullName, phone }
+    }
+    this.update('customer', { id: customerId }, modifications, cbfn);
+  }
+
+  findCustomerSummaryListByOrganizationId({ organizationId }, cbfn) {
+    this.find('customer', { organizationId }, cbfn);
+  }
+
+  findCustomerByCustomerId({ customerId }, cbfn) {
+    this.findOne('customer', { id: customerId }, cbfn);
   }
 
 }

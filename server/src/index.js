@@ -15,6 +15,9 @@ let { UserLogoutApi } = require('./apis/user-logout');
 let { VerifyEmailApi } = require('./apis/verify-email');
 let { AddOrganizationApi } = require('./apis/add-organization');
 let { AddCustomerApi } = require('./apis/add-customer');
+let { GetCustomerApi } = require('./apis/get-customer');
+let { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
+let { EditCustomerApi } = require('./apis/edit-customer');
 
 let config, logger, database, server, emailService, templateManager;
 
@@ -88,6 +91,9 @@ class Program {
         server.registerPostApi('/api/user-logout', UserLogoutApi);
         server.registerPostApi('/api/add-organization', AddOrganizationApi);
         server.registerPostApi('/api/add-customer', AddCustomerApi);
+        server.registerPostApi('/api/get-customer', GetCustomerApi);
+        server.registerPostApi('/api/get-customer-summary-list', GetCustomerSummaryListApi);
+        server.registerPostApi('/api/edit-customer', EditCustomerApi);
         return Promise.resolve();
       })
       .then(() => {
