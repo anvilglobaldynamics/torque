@@ -175,6 +175,22 @@ describe('customer', _ => {
 
   });
 
+  it('api/get-customer-summary-list (Invalid organizationId): ', testDoneFn => {
+    
+    callApi('api/get-customer-summary-list', {
+      json: {
+        apiKey,
+        organizationId: 99
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      // expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
+      testDoneFn();
+    })
+
+  });
+
   it('api/edit-customer (Valid, Unique): ', testDoneFn => {
     
     callApi('api/edit-customer', {
@@ -222,6 +238,23 @@ describe('customer', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-customer (Deleted): ', testDoneFn => {
+    
+    callApi('api/get-customer', {
+      json: {
+        apiKey,
+        customerId: customerList[customerList.length - 1].id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('customer');
+      expect(body.customer.isDeleted).to.equal(true);
       testDoneFn();
     })
 

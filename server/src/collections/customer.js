@@ -93,7 +93,7 @@ exports.customerMixin = (DatabaseClass) => class extends DatabaseClass {
   }
 
   findCustomerSummaryListByOrganizationId({ organizationId }, cbfn) {
-    this.find('customer', { organizationId }, cbfn);
+    this.find('customer', { organizationId, isDeleted: false }, cbfn);
   }
 
   findCustomerByCustomerId({ customerId }, cbfn) {
