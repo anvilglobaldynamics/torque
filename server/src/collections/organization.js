@@ -2,7 +2,6 @@
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
-
 exports.OrganizationCollection = class extends Collection {
 
   constructor(...args) {
@@ -42,7 +41,7 @@ exports.OrganizationCollection = class extends Collection {
     }
     this._insert(user, (err, id) => {
       return cbfn(err, id);
-    })
+    });
   }
-  
+
 }
