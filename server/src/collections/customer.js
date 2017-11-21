@@ -85,6 +85,13 @@ exports.customerMixin = (DatabaseClass) => class extends DatabaseClass {
     this.update('customer', { id: customerId }, modifications, cbfn);
   }
 
+  deleteCustomer({ customerId }, cbfn) {
+    let modifications = {
+      $set: { isDeleted: true }
+    }
+    this.update('customer', { id: customerId }, modifications, cbfn);
+  }
+
   findCustomerSummaryListByOrganizationId({ organizationId }, cbfn) {
     this.find('customer', { organizationId }, cbfn);
   }

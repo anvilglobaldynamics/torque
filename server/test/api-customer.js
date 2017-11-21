@@ -211,6 +211,22 @@ describe('customer', _ => {
 
   });
 
+  it('api/delete-customer (Valid): ', testDoneFn => {
+    
+    callApi('api/delete-customer', {
+      json: {
+        apiKey,
+        customerId: customerList[customerList.length - 1].id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
   });

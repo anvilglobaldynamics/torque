@@ -18,6 +18,7 @@ let { AddCustomerApi } = require('./apis/add-customer');
 let { GetCustomerApi } = require('./apis/get-customer');
 let { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
 let { EditCustomerApi } = require('./apis/edit-customer');
+let { DeleteCustomerApi } = require('./apis/delete-customer');
 
 let config, logger, database, server, emailService, templateManager;
 
@@ -94,6 +95,7 @@ class Program {
         server.registerPostApi('/api/get-customer', GetCustomerApi);
         server.registerPostApi('/api/get-customer-summary-list', GetCustomerSummaryListApi);
         server.registerPostApi('/api/edit-customer', EditCustomerApi);
+        server.registerPostApi('/api/delete-customer', DeleteCustomerApi);
         return Promise.resolve();
       })
       .then(() => {
