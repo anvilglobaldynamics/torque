@@ -44,4 +44,8 @@ exports.OrganizationCollection = class extends Collection {
     });
   }
 
+  listByIdList(idList, cbfn) {
+    this._find({ id: { $in: idList } }, cbfn);
+  }
+
 }
