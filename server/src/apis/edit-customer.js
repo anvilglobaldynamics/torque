@@ -19,7 +19,7 @@ exports.EditCustomerApi = class extends Api {
   }
 
   _editCustomer({ customerId, fullName, phone }, cbfn) {
-    this.database.updateCustomer({ customerId, fullName, phone }, (err) => {
+    this.database.customer.update({ customerId, fullName, phone }, (err) => {
       if(err) return this.fail(err);
       return cbfn()
     });

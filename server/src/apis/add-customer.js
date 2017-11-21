@@ -11,7 +11,7 @@ exports.AddCustomerApi = class extends Api {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),
       organizationId: Joi.number().max(999999999999999).required(),
-      
+
       fullName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().alphanum().min(11).max(14).required(),
       openingBalance: Joi.number().max(999999999999999).required()
@@ -22,7 +22,7 @@ exports.AddCustomerApi = class extends Api {
     let customer = {
       organizationId, fullName, phone, openingBalance
     }
-    this.database.createCustomer(customer, (err, customerId) => {
+    this.database.customer.create(customer, (err, customerId) => {
       if (err) {
         if ('code' in err && err.code === 'DUPLICATE_phone') {
           err = new Error("Provided phone number is already in use");

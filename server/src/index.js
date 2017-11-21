@@ -16,17 +16,18 @@ let { VerifyEmailApi } = require('./apis/verify-email');
 let { AddOrganizationApi } = require('./apis/add-organization');
 let { GetrganizationListApi } = require('./apis/get-organization-list');
 let { EditOrganizationApi } = require('./apis/edit-organization');
+let { AddCustomerApi } = require('./apis/add-customer');
+let { GetCustomerApi } = require('./apis/get-customer');
+let { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
+let { EditCustomerApi } = require('./apis/edit-customer');
+let { DeleteCustomerApi } = require('./apis/delete-customer');
 
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
 let { SessionCollection } = require('./collections/session');
 let { OrganizationCollection } = require('./collections/organization');
 let { EmploymentCollection } = require('./collections/employment');
-let { AddCustomerApi } = require('./apis/add-customer');
-let { GetCustomerApi } = require('./apis/get-customer');
-let { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
-let { EditCustomerApi } = require('./apis/edit-customer');
-let { DeleteCustomerApi } = require('./apis/delete-customer');
+let { CustomerCollection } = require('./collections/customer');
 
 let config, logger, database, server, emailService, templateManager;
 
@@ -86,6 +87,7 @@ class Program {
         database.registerCollection('session', SessionCollection);
         database.registerCollection('organization', OrganizationCollection);
         database.registerCollection('employment', EmploymentCollection);
+        database.registerCollection('customer', CustomerCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })

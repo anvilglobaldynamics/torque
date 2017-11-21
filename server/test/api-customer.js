@@ -185,7 +185,7 @@ describe('customer', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
-      // expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
+      expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
       testDoneFn();
     })
 

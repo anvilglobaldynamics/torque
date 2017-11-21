@@ -1,12 +1,15 @@
 
+const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
-let { ensureKeysAreUnique } = require('./../utils/ensure-unique');
+exports.CustomerCollection = class extends Collection {
 
-exports.customerMixin = (DatabaseClass) => class extends DatabaseClass {
+  constructor(...args) {
+    super(...args);
 
-  get customerSchema() {
-    return Joi.object().keys({
+    this.collectionName = 'customer';
+
+    this.joiSchema = Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       fullName: Joi.string().min(1).max(64).required(),
@@ -14,7 +17,7 @@ exports.customerMixin = (DatabaseClass) => class extends DatabaseClass {
       organizationId: Joi.number().max(999999999999999).required(),
       balance: Joi.number().max(999999999999999).required(),
       isDeleted: Joi.boolean().required(),
-      
+
       additionalPaymentHistory: Joi.array().items(
         Joi.object().keys({
           creditedDatetimeStamp: Joi.number().max(999999999999999).required(),
@@ -23,48 +26,22 @@ exports.customerMixin = (DatabaseClass) => class extends DatabaseClass {
         })
       )
     });
+
+    this.uniqueDefList = [
+      {
+        additionalQueryFilters: {},
+        uniqueKeyList: ['phone']
+      }
+    ]
   }
 
-  _validateCustomer(doc, cbfn) {
-    let { error: err } = Joi.validate(doc, this.customerSchema, {
-      convert: false
-    });
-    if (err) return cbfn(err);
-    let uniqueKeyList = ['phone']
-    ensureKeysAreUnique(this, 'customer', {}, doc, uniqueKeyList, (err) => {
-      if (err) return cbfn(err);
-      cbfn();
-    });
-  }
-
-  _insertCustomer(doc, cbfn) {
-    this._validateCustomer(doc, (err) => {
-      if (err) return cbfn(err);
-      this.autoGenerateKey('customer', (err, customerId) => {
-        if (err) return cbfn(err);
-        doc.id = customerId;
-        this.insertOne('customer', doc, (err, count) => {
-          if (err) return cbfn(err);
-          if (count !== 1) return cbfn(new Error("Could not insert customer for reasons unknown."));
-          return cbfn(null, customerId);
-        });
-      });
-    });
-  }
-
-  // _updateCustomer(query, modifications, cbfn) {
-  //   this.update('customer', query, modifications, cbfn);
-  // }
-
-  // public:
-
-  createCustomer({ organizationId, fullName, phone, openingBalance }, cbfn) {
+  create({ organizationId, fullName, phone, openingBalance }, cbfn) {
     let customer = {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
-      fullName, 
-      organizationId, 
-      phone, 
+      fullName,
+      organizationId,
+      phone,
       balance: openingBalance,
       additionalPaymentHistory: [{
         creditedDatetimeStamp: (new Date).getTime(),
@@ -73,31 +50,31 @@ exports.customerMixin = (DatabaseClass) => class extends DatabaseClass {
       }],
       isDeleted: false
     }
-    this._insertCustomer(customer, (err, id) => {
+    this._insert(customer, (err, id) => {
       return cbfn(err, id);
     })
   }
 
-  updateCustomer({ customerId, fullName, phone }, cbfn) {
+  update({ customerId, fullName, phone }, cbfn) {
     let modifications = {
       $set: { fullName, phone }
     }
-    this.update('customer', { id: customerId }, modifications, cbfn);
+    this._update({ id: customerId }, modifications, cbfn);
   }
 
-  deleteCustomer({ customerId }, cbfn) {
+  delete({ customerId }, cbfn) {
     let modifications = {
       $set: { isDeleted: true }
     }
-    this.update('customer', { id: customerId }, modifications, cbfn);
+    this._update({ id: customerId }, modifications, cbfn);
   }
 
-  findCustomerSummaryListByOrganizationId({ organizationId }, cbfn) {
-    this.find('customer', { organizationId, isDeleted: false }, cbfn);
+  listByOrganizationId({ organizationId }, cbfn) {
+    this._find({ organizationId, isDeleted: false }, cbfn);
   }
 
-  findCustomerByCustomerId({ customerId }, cbfn) {
-    this.findOne('customer', { id: customerId }, cbfn);
+  findById({ customerId }, cbfn) {
+    this._findOne({ id: customerId }, cbfn);
   }
 
 }

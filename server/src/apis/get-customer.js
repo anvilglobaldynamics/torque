@@ -16,7 +16,7 @@ exports.GetCustomerApi = class extends Api {
   }
 
   _getCustomer({ customerId }, cbfn) {
-    this.database.findCustomerByCustomerId({ customerId }, (err, customer) => {
+    this.database.customer.findById({ customerId }, (err, customer) => {
       if(err) return this.fail(err);
       return cbfn(customer);
     });
