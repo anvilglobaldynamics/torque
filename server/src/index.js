@@ -22,6 +22,11 @@ let { EmailVerificationRequestCollection } = require('./collections/email-verifi
 let { SessionCollection } = require('./collections/session');
 let { OrganizationCollection } = require('./collections/organization');
 let { EmploymentCollection } = require('./collections/employment');
+let { AddCustomerApi } = require('./apis/add-customer');
+let { GetCustomerApi } = require('./apis/get-customer');
+let { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
+let { EditCustomerApi } = require('./apis/edit-customer');
+let { DeleteCustomerApi } = require('./apis/delete-customer');
 
 let config, logger, database, server, emailService, templateManager;
 
@@ -101,6 +106,11 @@ class Program {
         server.registerPostApi('/api/add-organization', AddOrganizationApi);
         server.registerPostApi('/api/get-organization-list', GetrganizationListApi);
         server.registerPostApi('/api/edit-organization', EditOrganizationApi);
+        server.registerPostApi('/api/add-customer', AddCustomerApi);
+        server.registerPostApi('/api/get-customer', GetCustomerApi);
+        server.registerPostApi('/api/get-customer-summary-list', GetCustomerSummaryListApi);
+        server.registerPostApi('/api/edit-customer', EditCustomerApi);
+        server.registerPostApi('/api/delete-customer', DeleteCustomerApi);
         return Promise.resolve();
       })
       .then(() => {

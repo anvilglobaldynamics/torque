@@ -30,12 +30,14 @@ describe('add-organization', _ => {
       registerUser({
         email, password, fullName, phone
       }, _ => {
-        loginUser({
-          emailOrPhone: email, password
-        }, (data) => {
-          apiKey = data.apiKey;
-          testDoneFn();
-        });
+        setTimeout(_ => {
+          loginUser({
+            emailOrPhone: email, password
+          }, (data) => {
+            apiKey = data.apiKey;
+            testDoneFn();
+          });
+        }, 100)
       });
     });
   });
