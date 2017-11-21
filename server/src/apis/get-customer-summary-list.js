@@ -14,9 +14,9 @@ exports.GetCustomerSummaryListApi = class extends Api {
     });
   }
 
-  _getCustomerSummaryList({organizationId}, cbfn) {
+  _getCustomerSummaryList({ organizationId }, cbfn) {
     this.database.customer.listByOrganizationId({ organizationId }, (err, customerList) => {
-      if(err) return this.fail(err);
+      if (err) return this.fail(err);
       return cbfn(customerList);
     });
   }

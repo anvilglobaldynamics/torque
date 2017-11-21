@@ -12,7 +12,7 @@ exports.EditCustomerApi = class extends Api {
       // apiKey: Joi.string().length(64).required(),
 
       customerId: Joi.number().max(999999999999999).required(),
-      
+
       fullName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().alphanum().min(11).max(14).required()
     });
@@ -20,7 +20,7 @@ exports.EditCustomerApi = class extends Api {
 
   _editCustomer({ customerId, fullName, phone }, cbfn) {
     this.database.customer.update({ customerId, fullName, phone }, (err) => {
-      if(err) return this.fail(err);
+      if (err) return this.fail(err);
       return cbfn()
     });
   }
