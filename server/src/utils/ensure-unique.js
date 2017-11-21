@@ -1,7 +1,7 @@
 
-exports.ensureKeysAreUnique = (db, collectionName, extraQuery, doc, uniqueKeyList, cbfn) => {
+exports.ensureKeysAreUnique = (db, collectionName, extraQuery, doc, keyList, cbfn) => {
   let promiseList = [];
-  for (let key of uniqueKeyList) {
+  for (let key of keyList) {
     if (key in doc) {
       let promise = new Promise((resolve, reject) => {
         let query = { [key]: doc[key] };

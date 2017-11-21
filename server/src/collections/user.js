@@ -26,10 +26,10 @@ exports.UserCollection = class extends Collection {
       isBanned: Joi.boolean().required()
     });
 
-    this.uniqueDefList = [
+    this.uniqueKeyDefList = [
       {
         additionalQueryFilters: {},
-        uniqueKeyList: ['email', 'phone']
+        keyList: ['email', 'phone']
       }
     ]
   }

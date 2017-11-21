@@ -18,10 +18,10 @@ exports.SessionCollection = class extends Collection {
       hasExpried: Joi.boolean().required()
     });
 
-    this.uniqueDefList = [
+    this.uniqueKeyDefList = [
       {
         additionalQueryFilters: {},
-        uniqueKeyList: ['apiKey']
+        keyList: ['apiKey']
       }
     ]
   }

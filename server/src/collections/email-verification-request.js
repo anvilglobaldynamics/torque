@@ -19,10 +19,10 @@ exports.EmailVerificationRequestCollection = class extends Collection {
       isVerificationComplete: Joi.boolean().required(),
     });
 
-    this.uniqueDefList = [
+    this.uniqueKeyDefList = [
       {
         additionalQueryFilters: {},
-        uniqueKeyList: ['verificationToken']
+        keyList: ['verificationToken']
       }
     ]
   }

@@ -7,9 +7,10 @@ class Collection {
 
   constructor(database) {
     this.database = database;
-    this.collectionName = null; // subclass needs to define
-    this.joiSchema = null; // subclass needs to define
-    this.uniqueDefList = null; // subclass needs to define
+    this.collectionName = null; // subclass needs to define this property
+    this.joiSchema = null; // subclass needs to define this property
+    this.uniqueKeyDefList = null; // subclass needs to define this property
+    this.foreignKeyDefList = null; // subclass needs to define this property
   }
 
   __validateAgainstSchema(doc, cbfn) {
@@ -19,13 +20,13 @@ class Collection {
     if (err) return cbfn(err);
     cbfn();
   }
-
+  
   /*
    Validates a document against a schema. Also checks if keys are unique.
-   uniqueDefList = [
+   uniqueKeyDefList = [
      {
        additionalQueryFilters: additional query to isolate a collection (i.e. by organizationId etc...)
-       uniqueKeyList: list of keys that need to be unique.
+       keyList: list of keys that need to be unique.
      }
    ]
    */
@@ -35,10 +36,10 @@ class Collection {
     });
     if (err) return cbfn(err);
 
-    let promiseList = this.uniqueDefList.map(uniqueDef => {
+    let promiseList = this.uniqueKeyDefList.map(uniqueKeyDef => {
       return new Promise((accept, reject) => {
-        let { additionalQueryFilters, uniqueKeyList } = uniqueDef;
-        ensureKeysAreUnique(this.database, this.collectionName, additionalQueryFilters, doc, uniqueKeyList, (err) => {
+        let { additionalQueryFilters, keyList } = uniqueKeyDef;
+        ensureKeysAreUnique(this.database, this.collectionName, additionalQueryFilters, doc, keyList, (err) => {
           if (err) return reject(err);
           accept();
         });

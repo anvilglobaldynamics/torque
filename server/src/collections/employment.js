@@ -53,10 +53,10 @@ exports.EmploymentCollection = class extends Collection {
       isActive: Joi.boolean().required(),
     });
 
-    this.uniqueDefList = [
+    this.uniqueKeyDefList = [
       {
         additionalQueryFilters: {},
-        uniqueKeyList: []
+        keyList: []
       }
     ]
   }

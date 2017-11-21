@@ -27,10 +27,10 @@ exports.CustomerCollection = class extends Collection {
       )
     });
 
-    this.uniqueDefList = [
+    this.uniqueKeyDefList = [
       {
         additionalQueryFilters: {},
-        uniqueKeyList: ['phone']
+        keyList: ['phone']
       }
     ]
   }
