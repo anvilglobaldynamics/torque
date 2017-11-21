@@ -44,10 +44,19 @@ exports.AddOrganizationApi = class extends Api {
     });
   }
 
-  handle({ body }) {
+  _setUserAsOwner({ userId, organizationId }, cbfn) {
+    this.database.employment.employNewEmployeeAsOwner({ userId, organizationId }, (err) => {
+      if (err) return this.fail(err);
+      cbfn();
+    })
+  }
+
+  handle({ body, userId }) {
     let { name, primaryBusinessAddress, phone, email } = body;
     this._createOrganization({ name, primaryBusinessAddress, phone, email }, (organizationId) => {
-      this.success({ status: "success" });
+      this._setUserAsOwner({ userId, organizationId }, _ => {
+        this.success({ status: "success" });
+      });
     });
   }
 
