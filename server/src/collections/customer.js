@@ -32,7 +32,15 @@ exports.CustomerCollection = class extends Collection {
         filters: {},
         keyList: ['phone']
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'organization',
+        foreignKey: 'id',
+        referringKey: 'organizationId'
+      }
+    ];
   }
 
   create({ organizationId, fullName, phone, openingBalance }, cbfn) {

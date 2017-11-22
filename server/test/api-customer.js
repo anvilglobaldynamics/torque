@@ -39,6 +39,25 @@ describe('customer', _ => {
     });
   });
 
+  it('api/add-customer (Valid, Foreign Key Invalid): ', testDoneFn => {
+
+    callApi('api/add-customer', {
+      json: {
+        apiKey,
+        organizationId: 999999999,
+        fullName: "A Test Customer",
+        phone: customerPhone,
+        openingBalance: '500',
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body.error).to.have.property('code').that.equals('FOREIGN_KEY_FAILED');
+      testDoneFn();
+    })
+
+  });
+
   it('api/add-customer (Valid, Unique): ', testDoneFn => {
 
     callApi('api/add-customer', {
@@ -59,7 +78,7 @@ describe('customer', _ => {
   });
 
   it('api/add-customer (Valid, Not Unique): ', testDoneFn => {
-    
+
     callApi('api/add-customer', {
       json: {
         apiKey,
@@ -79,7 +98,7 @@ describe('customer', _ => {
   });
 
   it('api/add-customer (Invalid FullName): ', testDoneFn => {
-    
+
     callApi('api/add-customer', {
       json: {
         apiKey,
@@ -99,7 +118,7 @@ describe('customer', _ => {
   });
 
   it('api/add-customer (Invalid organizationId): ', testDoneFn => {
-    
+
     callApi('api/add-customer', {
       json: {
         apiKey,
@@ -119,7 +138,7 @@ describe('customer', _ => {
   });
 
   it('api/add-customer (Invalid phone): ', testDoneFn => {
-    
+
     callApi('api/add-customer', {
       json: {
         apiKey,
@@ -139,7 +158,7 @@ describe('customer', _ => {
   });
 
   it('api/add-customer (Invalid openingBalance): ', testDoneFn => {
-    
+
     callApi('api/add-customer', {
       json: {
         apiKey,
@@ -159,7 +178,7 @@ describe('customer', _ => {
   });
 
   it('api/get-customer-summary-list (Valid): ', testDoneFn => {
-    
+
     callApi('api/get-customer-summary-list', {
       json: {
         apiKey,
@@ -176,7 +195,7 @@ describe('customer', _ => {
   });
 
   it('api/get-customer-summary-list (Invalid organizationId): ', testDoneFn => {
-    
+
     callApi('api/get-customer-summary-list', {
       json: {
         apiKey,
@@ -184,6 +203,7 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
+      console.log('body', body)
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
       testDoneFn();
@@ -192,7 +212,7 @@ describe('customer', _ => {
   });
 
   it('api/edit-customer (Valid, Unique): ', testDoneFn => {
-    
+
     callApi('api/edit-customer', {
       json: {
         apiKey,
@@ -211,7 +231,7 @@ describe('customer', _ => {
   });
 
   it('api/get-customer (Valid): ', testDoneFn => {
-    
+
     callApi('api/get-customer', {
       json: {
         apiKey,
@@ -228,7 +248,7 @@ describe('customer', _ => {
   });
 
   it('api/delete-customer (Valid): ', testDoneFn => {
-    
+
     callApi('api/delete-customer', {
       json: {
         apiKey,
@@ -244,7 +264,7 @@ describe('customer', _ => {
   });
 
   it('api/get-customer (Deleted): ', testDoneFn => {
-    
+
     callApi('api/get-customer', {
       json: {
         apiKey,

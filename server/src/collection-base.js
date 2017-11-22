@@ -81,10 +81,36 @@ class Collection {
     });
   }
 
+  __validateAgainstForeignKeyDefList(doc, cbfn) {
+    Promise.all(this.foreignKeyDefList.map(foreignKeyDef => {
+      return new Promise((accept, reject) => {
+        let { targetCollection, foreignKey, referringKey } = foreignKeyDef;
+        console.log(foreignKeyDef)
+        let query = { [foreignKey]: doc[referringKey] };
+        this.database.find(targetCollection, query, (err, docList) => {
+          if (err) return reject(err);
+          if (docList.length === 1) {
+            return accept();
+          }
+          err = new Error(`FOREIGN_KEY_FAILED. No ${targetCollection}.${foreignKey} equals to ${doc[referringKey]} but is referred by ${this.collectionName}.${referringKey}`);
+          err.code = `FOREIGN_KEY_FAILED`;
+          return reject(err);
+        });
+      });
+    })).then(_ => {
+      cbfn();
+    }).catch(err => {
+      cbfn(err);
+    });
+  }
+
   __validateDocument(doc, isAlreadyInDb, cbfn) {
     this.__validateAgainstSchema(doc, (err, doc) => {
       if (err) return cbfn(err);
-      this.__validateAgainstUniqueKeyDefList(doc, isAlreadyInDb, cbfn);
+      this.__validateAgainstUniqueKeyDefList(doc, isAlreadyInDb, (err) => {
+        if (err) return cbfn(err);
+        this.__validateAgainstForeignKeyDefList(doc, cbfn);
+      });
     });
   }
 
