@@ -55,7 +55,7 @@ exports.AddOrganizationApi = class extends Api {
     let { name, primaryBusinessAddress, phone, email } = body;
     this._createOrganization({ name, primaryBusinessAddress, phone, email }, (organizationId) => {
       this._setUserAsOwner({ userId, organizationId }, _ => {
-        this.success({ status: "success" });
+        this.success({ status: "success", organizationId });
       });
     });
   }

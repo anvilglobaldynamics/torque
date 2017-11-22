@@ -37,7 +37,7 @@ exports.AddCustomerApi = class extends Api {
   handle({ body }) {
     let { organizationId, fullName, phone, openingBalance } = body;
     this._createCustomer({ organizationId, fullName, phone, openingBalance }, (customerId) => {
-      this.success({ status: "success" });
+      this.success({ status: "success", customerId });
     });
   }
 

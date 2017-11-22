@@ -39,7 +39,8 @@ Possible Error Codes:
 ```js
 {
   "hasError": false,
-  "status": "success"
+  "status": "success",
+  "customerId": numeric id of new customer
 }
 ```
 
