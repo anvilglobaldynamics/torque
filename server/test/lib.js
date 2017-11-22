@@ -47,3 +47,13 @@ exports.loginUser = (data, callback) => {
     callback(body);
   })
 }
+
+// ===================================== Organization
+
+exports.addOrganization = (data, callback) => {
+  callApi('api/add-organization', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
