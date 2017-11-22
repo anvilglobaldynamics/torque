@@ -149,6 +149,7 @@ class Api {
 
   _stringifyErrorObject(errorObject) {
     if (!(errorObject instanceof Error)) {
+      this.logger.important('DevError: Invalid Error Object', errorObject);
       throw new Error("expected errorObject to be an instanceof Error");
     }
     let code = 'GENERIC_SERVER_ERROR';
