@@ -5,7 +5,8 @@ let {
   initializeServer,
   terminateServer,
   registerUser,
-  loginUser
+  loginUser,
+  addOrganization
 } = require('./lib');
 
 const email = `t${(new Date).getTime()}@gmail.com`;
@@ -19,6 +20,8 @@ const updatedCustomerPhone = 'o' + String((new Date).getTime()).split('').revers
 
 let apiKey = null;
 let customerList = null;
+let organizationId = null;
+let invalidOrganizationId = 99999999999;
 
 describe('customer', _ => {
 
@@ -32,7 +35,16 @@ describe('customer', _ => {
             emailOrPhone: email, password
           }, (data) => {
             apiKey = data.apiKey;
-            testDoneFn();
+            addOrganization({
+              apiKey,
+              name: "My Organization",
+              primaryBusinessAddress: "My Address",
+              phone: orgPhone,
+              email: orgEmail
+            }, (data)=>{
+              organizationId = data.organizationId
+              testDoneFn();
+            });            
           });
         }, 100)
       });
@@ -44,7 +56,7 @@ describe('customer', _ => {
     callApi('api/add-customer', {
       json: {
         apiKey,
-        organizationId: 999999999,
+        organizationId: invalidOrganizationId,
         fullName: "A Test Customer",
         phone: customerPhone,
         openingBalance: '500',
@@ -63,7 +75,7 @@ describe('customer', _ => {
     callApi('api/add-customer', {
       json: {
         apiKey,
-        organizationId: 0,
+        organizationId: organizationId,
         fullName: "A Test Customer",
         phone: customerPhone,
         openingBalance: '500',
@@ -82,7 +94,7 @@ describe('customer', _ => {
     callApi('api/add-customer', {
       json: {
         apiKey,
-        organizationId: 0,
+        organizationId: organizationId,
         fullName: "A Test Customer",
         phone: customerPhone,
         openingBalance: '500',
@@ -102,7 +114,7 @@ describe('customer', _ => {
     callApi('api/add-customer', {
       json: {
         apiKey,
-        organizationId: 0,
+        organizationId: organizationId,
         fullName: "",
         phone: customerPhone,
         openingBalance: '500',
@@ -142,7 +154,7 @@ describe('customer', _ => {
     callApi('api/add-customer', {
       json: {
         apiKey,
-        organizationId: 0,
+        organizationId: organizationId,
         fullName: "A Test Customer",
         phone: "this is invalid",
         openingBalance: '500',
@@ -162,7 +174,7 @@ describe('customer', _ => {
     callApi('api/add-customer', {
       json: {
         apiKey,
-        organizationId: 0,
+        organizationId: organizationId,
         fullName: "A Test Customer",
         phone: customerPhone,
         openingBalance: 'abc',
@@ -182,7 +194,7 @@ describe('customer', _ => {
     callApi('api/get-customer-summary-list', {
       json: {
         apiKey,
-        organizationId: 0
+        organizationId: organizationId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -201,7 +213,7 @@ describe('customer', _ => {
     callApi('api/get-customer-summary-list', {
       json: {
         apiKey,
-        organizationId: 999999999
+        organizationId: invalidOrganizationId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -218,7 +230,6 @@ describe('customer', _ => {
       json: {
         apiKey,
         customerId: customerList[customerList.length - 1].id,
-
         fullName: "A Test Customer",
         phone: updatedCustomerPhone,
       }
