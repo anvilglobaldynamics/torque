@@ -58,7 +58,20 @@ exports.EmploymentCollection = class extends Collection {
         filters: {},
         keyList: []
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'organization',
+        foreignKey: 'id',
+        referringKey: 'organizationId'
+      },
+      {
+        targetCollection: 'user',
+        foreignKey: 'id',
+        referringKey: 'userId'
+      }
+    ];
   }
 
   __makePrivilegeModel(isForAnOwner) {

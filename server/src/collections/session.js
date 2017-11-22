@@ -23,7 +23,15 @@ exports.SessionCollection = class extends Collection {
         filters: {},
         keyList: ['apiKey']
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'user',
+        foreignKey: 'id',
+        referringKey: 'userId'
+      }
+    ];
   }
 
   ensureApiKeyIsUnique(apiKey, cbfn) {

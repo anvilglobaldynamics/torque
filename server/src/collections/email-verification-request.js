@@ -24,7 +24,15 @@ exports.EmailVerificationRequestCollection = class extends Collection {
         filters: {},
         keyList: ['verificationToken']
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'user',
+        foreignKey: 'id',
+        referringKey: 'forUserId'
+      }
+    ];
   }
 
   create({ userId, email, origin, verificationToken }, cbfn) {
