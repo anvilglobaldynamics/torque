@@ -85,15 +85,14 @@ class Collection {
     Promise.all(this.foreignKeyDefList.map(foreignKeyDef => {
       return new Promise((accept, reject) => {
         let { targetCollection, foreignKey, referringKey } = foreignKeyDef;
-        console.log(foreignKeyDef)
         let query = { [foreignKey]: doc[referringKey] };
         this.database.find(targetCollection, query, (err, docList) => {
           if (err) return reject(err);
           if (docList.length === 1) {
             return accept();
           }
-          err = new Error(`FOREIGN_KEY_FAILED. No ${targetCollection}.${foreignKey} equals to ${doc[referringKey]} but is referred by ${this.collectionName}.${referringKey}`);
-          err.code = `FOREIGN_KEY_FAILED`;
+          err = new Error(`FOREIGN_KEY_VIOLATION. No ${targetCollection}.${foreignKey} equals to ${doc[referringKey]} but is referred by ${this.collectionName}.${referringKey}`);
+          err.code = `FOREIGN_KEY_VIOLATION`;
           return reject(err);
         });
       });
