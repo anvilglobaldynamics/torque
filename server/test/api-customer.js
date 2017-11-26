@@ -6,7 +6,8 @@ let {
   terminateServer,
   registerUser,
   loginUser,
-  addOrganization
+  addOrganization,
+  validateOrganizationSchema
 } = require('./lib');
 
 const email = `t${(new Date).getTime()}@gmail.com`;
@@ -252,6 +253,7 @@ describe('customer', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('customer');
       expect(body.customer.phone).to.equal(updatedCustomerPhone);
+      validateOrganizationSchema(body.customer)
       testDoneFn();
     })
 

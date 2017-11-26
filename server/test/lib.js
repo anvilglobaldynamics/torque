@@ -1,6 +1,7 @@
 
 let { callApi } = require('./utils');
 let { Program } = require('./../src/index');
+let Joi = require('joi');
 
 let mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
 let hasStarted = false;
@@ -41,8 +42,8 @@ exports.registerUser = (data, callback) => {
     json: data
   }, (err, response, body) => {
     setTimeout(_ => {
-    callback(body);
-  }, 10);
+      callback(body);
+    }, 10);
   })
 }
 
@@ -62,4 +63,28 @@ exports.addOrganization = (data, callback) => {
   }, (err, response, body) => {
     callback(body);
   })
+}
+
+exports.validateOrganizationSchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    _id: Joi.string().required(),
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+    fullName: Joi.string().min(1).max(64).required(),
+    phone: Joi.string().alphanum().min(11).max(14).required(),
+    organizationId: Joi.number().max(999999999999999).required(),
+    balance: Joi.number().max(999999999999999).required(),
+    isDeleted: Joi.boolean().required(),
+
+    additionalPaymentHistory: Joi.array().items(
+      Joi.object().keys({
+        creditedDatetimeStamp: Joi.number().max(999999999999999).required(),
+        acceptedByUserId: Joi.number().max(999999999999999).required(),
+        amount: Joi.number().max(999999999999999).required()
+      })
+    )
+  });
+  let {error, value} = Joi.validate(doc, schema);
+  if (error) throw error;
 }
