@@ -13,6 +13,7 @@ let { UserRegisterApi } = require('./apis/user-register');
 let { UserLoginApi } = require('./apis/user-login');
 let { UserLogoutApi } = require('./apis/user-logout');
 let { VerifyEmailApi } = require('./apis/verify-email');
+let { UserChangePasswordApi } = require('./apis/user-change-password');
 
 let { AddOrganizationApi } = require('./apis/add-organization');
 let { GetrganizationListApi } = require('./apis/get-organization-list');
@@ -115,6 +116,7 @@ class Program {
         server.registerPostApi('/api/user-register', UserRegisterApi);
         server.registerPostApi('/api/user-login', UserLoginApi);
         server.registerPostApi('/api/user-logout', UserLogoutApi);
+        server.registerPostApi('/api/user-change-password', UserChangePasswordApi);
         server.registerPostApi('/api/add-organization', AddOrganizationApi);
         server.registerPostApi('/api/get-organization-list', GetrganizationListApi);
         server.registerPostApi('/api/edit-organization', EditOrganizationApi);

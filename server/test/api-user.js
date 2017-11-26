@@ -8,6 +8,7 @@ let {
 
 const email = `t1${(new Date).getTime()}@gmail.com`;
 const password = "123545678";
+const changedPassword = "123545678";
 const fullName = "Test User";
 const phone = 't1' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 
@@ -101,6 +102,66 @@ describe('user apis (1)', _ => {
       json: {
         emailOrPhone: email,
         password
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string')
+      expect(body).to.have.property('sessionId').that.is.a('number')
+      expect(body).to.have.property('warning').that.is.a('string').that.equals('You have less than 24 hours to verify your email address.')
+      expect(body).to.have.property('user').that.is.an('object')
+
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  // ================================================== Change Password
+
+  it('api/user-change-password (Correct): ' + email, testDoneFn => {
+
+    callApi('api/user-change-password', {
+      json: {
+        apiKey,
+        oldPassword: password,
+        newPassword: changedPassword
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
+  // ================================================== Logout
+
+  it('api/user-logout (Correct): ' + email, testDoneFn => {
+
+    callApi('api/user-logout', {
+      json: {
+        apiKey
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    });
+
+  });
+
+  // ================================================== Login
+
+  it('api/user-login (Correct, Using Email and Changed Password): ' + email, testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: email,
+        password: changedPassword
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

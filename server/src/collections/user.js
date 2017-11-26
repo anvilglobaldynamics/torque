@@ -96,4 +96,17 @@ exports.UserCollection = class extends Collection {
     });
   }
 
+  setPasswordHash({ userId, passwordHash }, cbfn) {
+    let mod = {
+      $set: {
+        passwordHash: passwordHash
+      }
+    }
+    this._update({ id: userId }, mod, (err, wasUpdated) => {
+      if (err) return cbfn(err);
+      if (!wasUpdated) return cbfn(new Error("User Not Found"));
+      return cbfn();
+    });
+  }
+
 }
