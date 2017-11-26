@@ -2,9 +2,10 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 let cryptolib = require('crypto');
-let { generateRandomString } = require('./../utils/random-string');
 
-exports.UserRegisterApi = class extends Api {
+let { emailVerificationRequestMixin } = require('./mixins/email-verification-request-mixin.js');
+
+exports.UserRegisterApi = class extends emailVerificationRequestMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -19,24 +20,8 @@ exports.UserRegisterApi = class extends Api {
     });
   }
 
-  _generateVerificationLink(verificationToken) {
-    return `https://server1.rewardables.life/verify-email/${verificationToken}`;
-  }
-
   _makeHash(string) {
     return cryptolib.createHash('sha256').update(string).digest("hex");
-  }
-
-  _sendVerificationMail({ email, verificationLink: activationLink }) {
-    let model = { email, activationLink };
-    this.server.emailService.sendStoredMail('email-verification', model, email, (err, response) => {
-      if ((err) || response.message !== 'Queued. Thank you.') {
-        this.logger.error(err);
-        this.logger.log("Mailgun Response", response);
-        let message = 'Failed to send verification email. Please handle the case manually.'
-        this.logger.important(message, model);
-      }
-    });
   }
 
   _createUser({ email, fullName, phone, password }, cbfn) {
@@ -57,18 +42,6 @@ exports.UserRegisterApi = class extends Api {
       }
       return cbfn(userId);
     });
-  }
-
-  _createEmailVerificationRequest({ email, userId }, cbfn) {
-    let verificationToken = generateRandomString(64);
-    this.database.emailVerificationRequest.ensureVerificationTokenIsUnique(verificationToken, (err, isUnique) => {
-      if (err) return this.fail(err);
-      if (!isUnique) return this._createEmailVerificationRequest({ email }, cbfn);
-      this.database.emailVerificationRequest.create({ userId, email, origin: 'user-register', verificationToken }, (err) => {
-        let verificationLink = this._generateVerificationLink(verificationToken);
-        return cbfn(verificationLink);
-      });
-    })
   }
 
   handle({ body }) {
