@@ -6,7 +6,8 @@ let {
   terminateServer,
   registerUser,
   loginUser,
-  addOrganization
+  addOrganization,
+  validateOutletSchema
 } = require('./lib');
 
 const email = `t2${(new Date).getTime()}@gmail.com`;
@@ -84,6 +85,9 @@ describe('outlet', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('outletList').that.is.an('array');
+      body.outletList.forEach(outlet => {
+        validateOutletSchema(outlet);
+      });
       outletList = body.outletList;
       testDoneFn();
     });
@@ -101,6 +105,7 @@ describe('outlet', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('outlet');
+      validateOutletSchema(body.outlet);
       outletToBeModified = body.outlet;
       testDoneFn();
     });

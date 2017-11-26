@@ -88,3 +88,22 @@ exports.validateCustomerSchema = (doc) => {
   let {error, value} = Joi.validate(doc, schema);
   if (error) throw error;
 }
+
+exports.validateOutletSchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    _id: Joi.string().required(),
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
+    name: Joi.string().min(1).max(64).required(),
+    organizationId: Joi.number().max(999999999999999).required(),
+    physicalAddress: Joi.string().min(1).max(128).required(),
+    contactPersonName: Joi.string().min(1).max(64).required(),
+    phone: Joi.string().alphanum().min(11).max(14).required(),
+
+    isDeleted: Joi.boolean().required()
+  });
+  let {error, value} = Joi.validate(doc, schema);
+  if (error) throw error;
+}
