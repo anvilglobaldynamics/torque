@@ -94,23 +94,23 @@ describe('warehouse', _ => {
 
   });
 
-  // it('api/get-warehouse (Valid)', testDoneFn => {
+  it('api/get-warehouse (Valid)', testDoneFn => {
 
-  //   callApi('api/get-warehouse', {
-  //     json: {
-  //       apiKey,
-  //       warehouseId: warehouseList[0].id
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('warehouse');
-  //     validateWarehouseSchema(body.warehouse);
-  //     warehouseToBeModified = body.warehouse;
-  //     testDoneFn();
-  //   });
+    callApi('api/get-warehouse', {
+      json: {
+        apiKey,
+        warehouseId: warehouseList[0].id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('warehouse');
+      validateWarehouseSchema(body.warehouse);
+      warehouseToBeModified = body.warehouse;
+      testDoneFn();
+    });
 
-  // });
+  });
 
   // it('api/edit-warehouse (Valid)', testDoneFn => {
 
