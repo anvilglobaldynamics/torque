@@ -29,14 +29,12 @@ describe('add-organization', _ => {
       registerUser({
         email, password, fullName, phone
       }, _ => {
-        setTimeout(_ => {
-          loginUser({
-            emailOrPhone: email, password
-          }, (data) => {
-            apiKey = data.apiKey;
-            testDoneFn();
-          });
-        }, 100)
+        loginUser({
+          emailOrPhone: email, password
+        }, (data) => {
+          apiKey = data.apiKey;
+          testDoneFn();
+        });
       });
     });
   });

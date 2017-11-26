@@ -34,25 +34,21 @@ describe('outlet', _ => {
       registerUser({
         email, password, fullName, phone
       }, _ => {
-        setTimeout(_ => {
-          loginUser({
-            emailOrPhone: email, password
+        loginUser({
+          emailOrPhone: email, password
+        }, (data) => {
+          apiKey = data.apiKey;
+          addOrganization({
+            apiKey,
+            name: orgName,
+            primaryBusinessAddress: orgBusinessAddress,
+            phone: orgPhone,
+            email: orgEmail
           }, (data) => {
-            apiKey = data.apiKey;
-            setTimeout(_ => {
-              addOrganization ({
-                apiKey,
-                name: orgName,
-                primaryBusinessAddress: orgBusinessAddress,
-                phone: orgPhone,
-                email: orgEmail
-              }, (data) => {
-                organizationId = data.organizationId;
-                testDoneFn();
-              })
-            }, 100)
-          });
-        }, 100)
+            organizationId = data.organizationId;
+            testDoneFn();
+          })
+        });
       });
     });
   });
@@ -78,7 +74,7 @@ describe('outlet', _ => {
   });
 
   it('api/get-outlet-list', testDoneFn => {
-    
+
     callApi('api/get-outlet-list', {
       json: {
         apiKey,
@@ -95,7 +91,7 @@ describe('outlet', _ => {
   });
 
   it('api/get-outlet', testDoneFn => {
-    
+
     callApi('api/get-outlet', {
       json: {
         apiKey,
@@ -112,7 +108,7 @@ describe('outlet', _ => {
   });
 
   it('api/edit-outlet', testDoneFn => {
-    
+
     callApi('api/edit-outlet', {
       json: {
         apiKey,
@@ -133,7 +129,7 @@ describe('outlet', _ => {
   });
 
   it('api/get-outlet', testDoneFn => {
-    
+
     callApi('api/get-outlet', {
       json: {
         apiKey,
@@ -150,7 +146,7 @@ describe('outlet', _ => {
   });
 
   it('api/delete-outlet', testDoneFn => {
-    
+
     callApi('api/delete-outlet', {
       json: {
         apiKey,
@@ -166,7 +162,7 @@ describe('outlet', _ => {
   });
 
   it('api/get-outlet', testDoneFn => {
-    
+
     callApi('api/get-outlet', {
       json: {
         apiKey,

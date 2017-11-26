@@ -30,23 +30,21 @@ describe('customer', _ => {
       registerUser({
         email, password, fullName, phone
       }, _ => {
-        setTimeout(_ => {
-          loginUser({
-            emailOrPhone: email, password
+        loginUser({
+          emailOrPhone: email, password
+        }, (data) => {
+          apiKey = data.apiKey;
+          addOrganization({
+            apiKey,
+            name: "My Organization",
+            primaryBusinessAddress: "My Address",
+            phone: orgPhone,
+            email: orgEmail
           }, (data) => {
-            apiKey = data.apiKey;
-            addOrganization({
-              apiKey,
-              name: "My Organization",
-              primaryBusinessAddress: "My Address",
-              phone: orgPhone,
-              email: orgEmail
-            }, (data)=>{
-              organizationId = data.organizationId
-              testDoneFn();
-            });            
+            organizationId = data.organizationId
+            testDoneFn();
           });
-        }, 100)
+        });
       });
     });
   });

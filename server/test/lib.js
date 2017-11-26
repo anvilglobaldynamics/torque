@@ -11,12 +11,16 @@ let pendingTerminationRequest = false;
 exports.initializeServer = (callback) => {
   pendingTerminationRequest = false;
   if (hasStarted) {
-    callback();
+    setTimeout(_ => {
+      callback();
+    }, 10);
     return;
   }
   mainProgram.initiateServer(_ => {
     hasStarted = true;
-    callback();
+    setTimeout(_ => {
+      callback();
+    }, 10);
   });
 }
 
