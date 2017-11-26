@@ -22,7 +22,7 @@ const org2Phone = 'o22' + String((new Date).getTime()).split('').reverse().slice
 let apiKey = null;
 let organizationList = null;
 
-describe('add-organization', _ => {
+describe('organization', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

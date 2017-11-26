@@ -13,7 +13,7 @@ const phone = 't1' + String((new Date).getTime()).split('').reverse().slice(0, 1
 
 let apiKey = null;
 
-describe('API', _ => {
+describe('user apis (1)', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -36,6 +36,7 @@ describe('API', _ => {
       expect(response.statusCode).to.equal(200)
       expect(body).to.have.property('hasError').that.equals(false)
       expect(body).to.have.property('status').that.equals('success')
+      expect(body).to.have.property('userId').that.is.a('number');
       testDoneFn()
     })
 

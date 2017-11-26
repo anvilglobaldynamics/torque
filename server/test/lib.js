@@ -40,7 +40,9 @@ exports.registerUser = (data, callback) => {
   callApi('api/user-register', {
     json: data
   }, (err, response, body) => {
+    setTimeout(_ => {
     callback(body);
+  }, 10);
   })
 }
 
