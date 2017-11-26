@@ -16,12 +16,18 @@ let { VerifyEmailApi } = require('./apis/verify-email');
 let { AddOrganizationApi } = require('./apis/add-organization');
 let { GetrganizationListApi } = require('./apis/get-organization-list');
 let { EditOrganizationApi } = require('./apis/edit-organization');
+let { AddOutletApi } = require('./apis/add-outlet');
+let { GetOutletListApi } = require('./apis/get-outlet-list');
+let { GetOutletApi } = require('./apis/get-outlet');
+let { EditOutletApi } = require('./apis/edit-outlet');
+let { DeleteOutletApi } = require('./apis/delete-outlet');
 
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
 let { SessionCollection } = require('./collections/session');
 let { OrganizationCollection } = require('./collections/organization');
 let { EmploymentCollection } = require('./collections/employment');
+let { OutletCollection } = require('./collections/outlet');
 let { AddCustomerApi } = require('./apis/add-customer');
 let { GetCustomerApi } = require('./apis/get-customer');
 let { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
@@ -86,6 +92,7 @@ class Program {
         database.registerCollection('session', SessionCollection);
         database.registerCollection('organization', OrganizationCollection);
         database.registerCollection('employment', EmploymentCollection);
+        database.registerCollection('outlet', OutletCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })
@@ -111,6 +118,11 @@ class Program {
         server.registerPostApi('/api/get-customer-summary-list', GetCustomerSummaryListApi);
         server.registerPostApi('/api/edit-customer', EditCustomerApi);
         server.registerPostApi('/api/delete-customer', DeleteCustomerApi);
+        server.registerPostApi('/api/add-outlet', AddOutletApi);
+        server.registerPostApi('/api/get-outlet-list', GetOutletListApi);
+        server.registerPostApi('/api/get-outlet', GetOutletApi);
+        server.registerPostApi('/api/edit-outlet', EditOutletApi);
+        server.registerPostApi('/api/delete-outlet', DeleteOutletApi);
         return Promise.resolve();
       })
       .then(() => {
