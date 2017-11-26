@@ -6,7 +6,8 @@ let {
   initializeServer,
   terminateServer,
   registerUser,
-  loginUser
+  loginUser,
+  validateOrganizationSchema
 } = require('./lib');
 
 const email = `t2${(new Date).getTime()}@gmail.com`;
@@ -87,6 +88,9 @@ describe('organization', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('organizationList').that.is.an('array');
+      body.organizationList.forEach(organization => {
+        validateOrganizationSchema(organization);
+      });
       organizationList = body.organizationList;
       testDoneFn();
     });

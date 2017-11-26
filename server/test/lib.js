@@ -65,6 +65,8 @@ exports.addOrganization = (data, callback) => {
   })
 }
 
+// ================================== Validation
+
 exports.validateCustomerSchema = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
@@ -103,6 +105,24 @@ exports.validateOutletSchema = (doc) => {
     phone: Joi.string().alphanum().min(11).max(14).required(),
 
     isDeleted: Joi.boolean().required()
+  });
+  let {error, value} = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateOrganizationSchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    name: Joi.string().min(1).max(64).required(),
+    primaryBusinessAddress: Joi.string().min(1).max(128).required(),
+    phone: Joi.string().alphanum().min(11).max(14).required(),
+    email: Joi.string().email().min(3).max(30).required(),
+    employment: Joi.object().keys({ 
+      designation: Joi.string().max(1024).required(), 
+      role: Joi.string().max(1024).required(), 
+      companyProvidedId: Joi.string().alphanum().allow('').required(), 
+      isActive: Joi.boolean().required()
+    })
   });
   let {error, value} = Joi.validate(doc, schema);
   if (error) throw error;
