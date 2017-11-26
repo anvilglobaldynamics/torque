@@ -38,8 +38,8 @@ Possible Error Codes:
 ```js
 {
   "hasError": false,
-  "status": "success"
-  "organizationId": numeric id of new organization
+  "status": "success",
+  "organizationId": Joi.number().max(999999999999999).required()
 }
 ```
 
