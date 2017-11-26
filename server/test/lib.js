@@ -65,7 +65,7 @@ exports.addOrganization = (data, callback) => {
   })
 }
 
-exports.validateOrganizationSchema = (doc) => {
+exports.validateCustomerSchema = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
     _id: Joi.string().required(),

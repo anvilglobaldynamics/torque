@@ -53,7 +53,7 @@ describe('outlet', _ => {
     });
   });
 
-  it('api/add-outlet', testDoneFn => {
+  it('api/add-outlet (Valid)', testDoneFn => {
 
     callApi('api/add-outlet', {
       json: {
@@ -73,7 +73,7 @@ describe('outlet', _ => {
 
   });
 
-  it('api/get-outlet-list', testDoneFn => {
+  it('api/get-outlet-list (Valid)', testDoneFn => {
 
     callApi('api/get-outlet-list', {
       json: {
@@ -90,7 +90,7 @@ describe('outlet', _ => {
 
   });
 
-  it('api/get-outlet', testDoneFn => {
+  it('api/get-outlet (Valid)', testDoneFn => {
 
     callApi('api/get-outlet', {
       json: {
@@ -107,7 +107,7 @@ describe('outlet', _ => {
 
   });
 
-  it('api/edit-outlet', testDoneFn => {
+  it('api/edit-outlet (Valid)', testDoneFn => {
 
     callApi('api/edit-outlet', {
       json: {
@@ -128,7 +128,7 @@ describe('outlet', _ => {
 
   });
 
-  it('api/get-outlet', testDoneFn => {
+  it('api/get-outlet (Valid)', testDoneFn => {
 
     callApi('api/get-outlet', {
       json: {
@@ -145,7 +145,7 @@ describe('outlet', _ => {
 
   });
 
-  it('api/delete-outlet', testDoneFn => {
+  it('api/delete-outlet (Valid)', testDoneFn => {
 
     callApi('api/delete-outlet', {
       json: {
@@ -161,7 +161,7 @@ describe('outlet', _ => {
 
   });
 
-  it('api/get-outlet', testDoneFn => {
+  it('api/get-outlet (Deleted)', testDoneFn => {
 
     callApi('api/get-outlet', {
       json: {

@@ -7,7 +7,7 @@ let {
   registerUser,
   loginUser,
   addOrganization,
-  validateOrganizationSchema
+  validateCustomerSchema
 } = require('./lib');
 
 const email = `t${(new Date).getTime()}@gmail.com`;
@@ -199,6 +199,9 @@ describe('customer', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('customerList');
+      body.customerList.forEach(customer => {
+        validateCustomerSchema(customer)
+      });
       customerList = body.customerList;
       testDoneFn();
     })
@@ -253,7 +256,7 @@ describe('customer', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('customer');
       expect(body.customer.phone).to.equal(updatedCustomerPhone);
-      validateOrganizationSchema(body.customer)
+      validateCustomerSchema(body.customer)
       testDoneFn();
     })
 
