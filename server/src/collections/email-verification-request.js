@@ -19,12 +19,20 @@ exports.EmailVerificationRequestCollection = class extends Collection {
       isVerificationComplete: Joi.boolean().required(),
     });
 
-    this.uniqueDefList = [
+    this.uniqueKeyDefList = [
       {
-        additionalQueryFilters: {},
-        uniqueKeyList: ['verificationToken']
+        filters: {},
+        keyList: ['verificationToken']
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'user',
+        foreignKey: 'id',
+        referringKey: 'forUserId'
+      }
+    ];
   }
 
   create({ userId, email, origin, verificationToken }, cbfn) {

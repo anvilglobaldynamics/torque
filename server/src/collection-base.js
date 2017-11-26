@@ -1,53 +1,115 @@
 
 let Joi = require('joi');
 
-let { ensureKeysAreUnique } = require('./utils/ensure-unique');
-
 class Collection {
 
   constructor(database) {
     this.database = database;
-    this.collectionName = null; // subclass needs to define
-    this.joiSchema = null; // subclass needs to define
-    this.uniqueDefList = null; // subclass needs to define
+
+    this.collectionName = null; // subclass needs to define this property
+
+    this.joiSchema = null; // subclass needs to define this property
+
+    this.uniqueKeyDefList = []; // subclass needs to define this property
+    // example: [
+    //   {
+    //     filters: additional query to isolate a collection (i.e. by organizationId etc...)
+    //     keyList: list of keys that need to be unique.
+    //   }
+    // ]
+
+    this.foreignKeyDefList = []; // subclass needs to define this property
+    // example: [
+    //   {
+    //     targetCollection: name of the target collection
+    //     foreignKey: plain path to the foreign key
+    //     referringKey: local key that refers to the foreign key
+    //   }
+    // ]
   }
 
   __validateAgainstSchema(doc, cbfn) {
-    let { error: err } = Joi.validate(doc, this.joiSchema, {
+    let { error: err, value } = Joi.validate(doc, this.joiSchema, {
       convert: false
     });
     if (err) return cbfn(err);
-    cbfn();
+    cbfn(null, value);
   }
 
-  /*
-   Validates a document against a schema. Also checks if keys are unique.
-   uniqueDefList = [
-     {
-       additionalQueryFilters: additional query to isolate a collection (i.e. by organizationId etc...)
-       uniqueKeyList: list of keys that need to be unique.
-     }
-   ]
-   */
-  __validateDocument(doc, cbfn) {
-    let { error: err } = Joi.validate(doc, this.joiSchema, {
-      convert: false
-    });
-    if (err) return cbfn(err);
-
-    let promiseList = this.uniqueDefList.map(uniqueDef => {
+  __ensureKeysAreUnique(doc, isAlreadyInDb, filters, keyList, cbfn) {
+    Promise.all(keyList.map((key) => {
       return new Promise((accept, reject) => {
-        let { additionalQueryFilters, uniqueKeyList } = uniqueDef;
-        ensureKeysAreUnique(this.database, this.collectionName, additionalQueryFilters, doc, uniqueKeyList, (err) => {
+        if (!(key in doc)) {
+          return reject(new Error(`unique key ${key} is missing from document.`));
+        }
+
+        let query = { [key]: doc[key] };
+        for (let fragment in filters) {
+          query[fragment] = filters[fragment];
+        }
+
+        this.database.find(this.collectionName, query, (err, docList) => {
+          if (err) return reject(err);
+          if ((docList.length === 0 && !isAlreadyInDb) || (docList.length === 1 && isAlreadyInDb)) {
+            return accept();
+          }
+          err = new Error(`Duplicate value found for key ${key}`);
+          err.code = `DUPLICATE_${key}`;
+          return reject(err);
+        });
+      });
+    })).then(_ => {
+      cbfn();
+    }).catch(err => {
+      cbfn(err);
+    });
+  }
+
+  __validateAgainstUniqueKeyDefList(doc, isAlreadyInDb, cbfn) {
+    Promise.all(this.uniqueKeyDefList.map(uniqueKeyDef => {
+      return new Promise((accept, reject) => {
+        let { filters, keyList } = uniqueKeyDef;
+        this.__ensureKeysAreUnique(doc, isAlreadyInDb, filters, keyList, (err) => {
           if (err) return reject(err);
           accept();
         });
       });
-    });
-    Promise.all(promiseList).then(_ => {
+    })).then(_ => {
       cbfn();
     }).catch(err => {
       cbfn(err);
+    });
+  }
+
+  __validateAgainstForeignKeyDefList(doc, cbfn) {
+    Promise.all(this.foreignKeyDefList.map(foreignKeyDef => {
+      return new Promise((accept, reject) => {
+        let { targetCollection, foreignKey, referringKey } = foreignKeyDef;
+        let query = { [foreignKey]: doc[referringKey] };
+        this.database.find(targetCollection, query, (err, docList) => {
+          if (err) return reject(err);
+          if (docList.length === 1) {
+            return accept();
+          }
+          err = new Error(`FOREIGN_KEY_VIOLATION. No ${targetCollection}.${foreignKey} equals to ${doc[referringKey]} but is referred by ${this.collectionName}.${referringKey}`);
+          err.code = `FOREIGN_KEY_VIOLATION`;
+          return reject(err);
+        });
+      });
+    })).then(_ => {
+      cbfn();
+    }).catch(err => {
+      cbfn(err);
+    });
+  }
+
+  __validateDocument(doc, isAlreadyInDb, cbfn) {
+    this.__validateAgainstSchema(doc, (err, doc) => {
+      if (err) return cbfn(err);
+      this.__validateAgainstUniqueKeyDefList(doc, isAlreadyInDb, (err) => {
+        if (err) return cbfn(err);
+        this.__validateAgainstForeignKeyDefList(doc, cbfn);
+      });
     });
   }
 
@@ -81,7 +143,7 @@ class Collection {
   }
 
   _insert(doc, cbfn) {
-    this.__validateDocument(doc, (err) => {
+    this.__validateDocument(doc, false, (err) => {
       if (err) return cbfn(err);
       this.database.autoGenerateKey(this.collectionName, (err, id) => {
         if (err) return cbfn(err);

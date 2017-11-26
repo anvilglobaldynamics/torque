@@ -18,12 +18,20 @@ exports.SessionCollection = class extends Collection {
       hasExpried: Joi.boolean().required()
     });
 
-    this.uniqueDefList = [
+    this.uniqueKeyDefList = [
       {
-        additionalQueryFilters: {},
-        uniqueKeyList: ['apiKey']
+        filters: {},
+        keyList: ['apiKey']
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'user',
+        foreignKey: 'id',
+        referringKey: 'userId'
+      }
+    ];
   }
 
   ensureApiKeyIsUnique(apiKey, cbfn) {

@@ -20,10 +20,10 @@ exports.OrganizationCollection = class extends Collection {
       isDeleted: Joi.boolean().required()
     });
 
-    this.uniqueDefList = [
+    this.uniqueKeyDefList = [
       {
-        additionalQueryFilters: {},
-        uniqueKeyList: ['email', 'phone']
+        filters: {},
+        keyList: ['email', 'phone']
       }
     ]
   }

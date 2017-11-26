@@ -19,7 +19,6 @@ const orgEmail2 = `o2C${(new Date).getTime()}@gmail.com`;
 const org2Email = `o22${(new Date).getTime()}@gmail.com`;
 const org2Phone = 'o22' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 
-
 let apiKey = null;
 let organizationList = null;
 
@@ -119,6 +118,5 @@ describe('add-organization', _ => {
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
   });
-
 
 });

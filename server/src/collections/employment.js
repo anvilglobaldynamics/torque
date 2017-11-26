@@ -53,12 +53,25 @@ exports.EmploymentCollection = class extends Collection {
       isActive: Joi.boolean().required(),
     });
 
-    this.uniqueDefList = [
+    this.uniqueKeyDefList = [
       {
-        additionalQueryFilters: {},
-        uniqueKeyList: []
+        filters: {},
+        keyList: []
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'organization',
+        foreignKey: 'id',
+        referringKey: 'organizationId'
+      },
+      {
+        targetCollection: 'user',
+        foreignKey: 'id',
+        referringKey: 'userId'
+      }
+    ];
   }
 
   __makePrivilegeModel(isForAnOwner) {

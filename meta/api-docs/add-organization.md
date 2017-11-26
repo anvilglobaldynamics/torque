@@ -39,6 +39,7 @@ Possible Error Codes:
 {
   "hasError": false,
   "status": "success"
+  "organizationId": numeric id of new organization
 }
 ```
 
