@@ -112,76 +112,76 @@ describe('warehouse', _ => {
 
   });
 
-  // it('api/edit-warehouse (Valid)', testDoneFn => {
+  it('api/edit-warehouse (Valid)', testDoneFn => {
 
-  //   callApi('api/edit-warehouse', {
-  //     json: {
-  //       apiKey,
-  //       warehouseId: warehouseToBeModified.id,
+    callApi('api/edit-warehouse', {
+      json: {
+        apiKey,
+        warehouseId: warehouseToBeModified.id,
 
-  //       name: "My Warehouse",
-  //       physicalAddress: "wayne manor address",
-  //       phone: warehousePhone2,
-  //       contactPersonName: "test contact person name"
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('status').that.equals('success');
-  //     testDoneFn();
-  //   })
+        name: "My Warehouse",
+        physicalAddress: "wayne manor address",
+        phone: warehousePhone2,
+        contactPersonName: "test contact person name"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
 
-  // });
+  });
 
-  // it('api/get-warehouse (Valid)', testDoneFn => {
+  it('api/get-warehouse (Valid)', testDoneFn => {
 
-  //   callApi('api/get-warehouse', {
-  //     json: {
-  //       apiKey,
-  //       warehouseId: warehouseToBeModified.id
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('warehouse');
-  //     expect(body.warehouse.phone).to.equal(warehousePhone2);
-  //     testDoneFn();
-  //   });
+    callApi('api/get-warehouse', {
+      json: {
+        apiKey,
+        warehouseId: warehouseToBeModified.id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('warehouse');
+      expect(body.warehouse.phone).to.equal(warehousePhone2);
+      testDoneFn();
+    });
 
-  // });
+  });
 
-  // it('api/delete-warehouse (Valid)', testDoneFn => {
+  it('api/delete-warehouse (Valid)', testDoneFn => {
 
-  //   callApi('api/delete-warehouse', {
-  //     json: {
-  //       apiKey,
-  //       warehouseId: warehouseToBeModified.id,
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('status').that.equals('success');
-  //     testDoneFn();
-  //   })
+    callApi('api/delete-warehouse', {
+      json: {
+        apiKey,
+        warehouseId: warehouseToBeModified.id,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
 
-  // });
+  });
 
-  // it('api/get-warehouse (Deleted)', testDoneFn => {
+  it('api/get-warehouse (Deleted)', testDoneFn => {
 
-  //   callApi('api/get-warehouse', {
-  //     json: {
-  //       apiKey,
-  //       warehouseId: warehouseToBeModified.id
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('warehouse');
-  //     expect(body.warehouse.isDeleted).to.equal(true);
-  //     testDoneFn();
-  //   });
+    callApi('api/get-warehouse', {
+      json: {
+        apiKey,
+        warehouseId: warehouseToBeModified.id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('warehouse');
+      expect(body.warehouse.isDeleted).to.equal(true);
+      testDoneFn();
+    });
 
-  // });
+  });
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

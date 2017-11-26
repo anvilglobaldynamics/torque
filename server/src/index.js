@@ -33,6 +33,8 @@ let { DeleteOutletApi } = require('./apis/delete-outlet');
 let { AddWarehouseApi } = require('./apis/add-warehouse');
 let { GetWarehouseListApi } = require('./apis/get-warehouse-list');
 let { GetWarehouseApi } = require('./apis/get-warehouse');
+let { EditWarehouseApi } = require('./apis/edit-warehouse');
+let { DeleteWarehouseApi } = require('./apis/delete-warehouse');
 
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
@@ -137,6 +139,8 @@ class Program {
         server.registerPostApi('/api/add-warehouse', AddWarehouseApi);
         server.registerPostApi('/api/get-warehouse-list', GetWarehouseListApi);
         server.registerPostApi('/api/get-warehouse', GetWarehouseApi);
+        server.registerPostApi('/api/edit-warehouse', EditWarehouseApi);
+        server.registerPostApi('/api/delete-warehouse', DeleteWarehouseApi);
         return Promise.resolve();
       })
       .then(() => {
