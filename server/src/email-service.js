@@ -23,7 +23,12 @@ class EmailService {
       {
         name: 'email-verification',
         path: './src/templates/email/email-verification.html',
-        subject: 'Your verification code for Rewardables.life'
+        subject: 'Your verification code for Torque'
+      },
+      {
+        name: 'generic-message',
+        path: './src/templates/email/generic-message.html',
+        subject: 'Message from Torque'
       }
     ]
     let collector = new AsyncCollector(templateList.length);
