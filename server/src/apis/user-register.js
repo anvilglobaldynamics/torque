@@ -48,7 +48,7 @@ exports.UserRegisterApi = class extends emailVerificationRequestMixin(Api) {
     let { email, fullName, phone, password } = body;
     this._createUser({ email, fullName, phone, password }, (userId) => {
       this._createEmailVerificationRequest({ email, userId }, (verificationLink) => {
-        this.success({ status: "success" });
+        this.success({ status: "success", userId });
         this._sendVerificationMail({ email, verificationLink });
       });
     });

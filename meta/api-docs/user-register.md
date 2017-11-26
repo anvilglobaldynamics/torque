@@ -38,7 +38,8 @@ Signup is successful
 ```js
 {
   "hasError": false,
-  "status": "success"
+  "status": "success",
+  "userId": Joi.number().max(999999999999999).required()
 }
 ```
 
