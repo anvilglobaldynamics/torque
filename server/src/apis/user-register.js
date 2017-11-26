@@ -1,11 +1,11 @@
 
 let { Api } = require('./../api-base');
 let Joi = require('joi');
-let cryptolib = require('crypto');
 
-let { emailVerificationRequestMixin } = require('./mixins/email-verification-request-mixin.js');
+let { emailVerificationRequestMixin } = require('./mixins/email-verification-request-mixin');
+let { userCommonMixin } = require('./mixins/user-common');
 
-exports.UserRegisterApi = class extends emailVerificationRequestMixin(Api) {
+exports.UserRegisterApi = class extends userCommonMixin(emailVerificationRequestMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -18,10 +18,6 @@ exports.UserRegisterApi = class extends emailVerificationRequestMixin(Api) {
       phone: Joi.string().alphanum().min(11).max(14).required(),
       password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
     });
-  }
-
-  _makeHash(string) {
-    return cryptolib.createHash('sha256').update(string).digest("hex");
   }
 
   _createUser({ email, fullName, phone, password }, cbfn) {
