@@ -1,12 +1,12 @@
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
-exports.OutletCollection = class extends Collection {
+exports.WarehouseCollection = class extends Collection {
 
   constructor(...args) {
     super(...args);
 
-    this.collectionName = 'outlet';
+    this.collectionName = 'warehouse';
 
     this.joiSchema = Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
@@ -43,28 +43,28 @@ exports.OutletCollection = class extends Collection {
     });
   }
 
-  update({ outletId }, { name, physicalAddress, phone, contactPersonName }, cbfn) {
+  update({ warehouseId }, { name, physicalAddress, phone, contactPersonName }, cbfn) {
     let modifications = {
       $set: {
         name, physicalAddress, phone, contactPersonName
       }
     }
-    this._update({ id: outletId }, modifications, cbfn);
+    this._update({ id: warehouseId }, modifications, cbfn);
   }
 
-  delete({ outletId }, cbfn) {
+  delete({ warehouseId }, cbfn) {
     let modifications = {
       $set: { isDeleted: true }
     }
-    this._update({ id: outletId }, modifications, cbfn);
+    this._update({ id: warehouseId }, modifications, cbfn);
   }
 
   listByOrganizationId(organizationId, cbfn) {
     this._find({ organizationId }, cbfn);
   }
 
-  getByOutletId(outletId, cbfn) {
-    this._findOne({ id: outletId }, cbfn)
+  getByWarehouseId(warehouseId, cbfn) {
+    this._findOne({ id: warehouseId }, cbfn)
   }
 
 }

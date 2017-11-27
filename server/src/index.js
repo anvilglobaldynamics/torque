@@ -30,6 +30,12 @@ let { GetOutletApi } = require('./apis/get-outlet');
 let { EditOutletApi } = require('./apis/edit-outlet');
 let { DeleteOutletApi } = require('./apis/delete-outlet');
 
+let { AddWarehouseApi } = require('./apis/add-warehouse');
+let { GetWarehouseListApi } = require('./apis/get-warehouse-list');
+let { GetWarehouseApi } = require('./apis/get-warehouse');
+let { EditWarehouseApi } = require('./apis/edit-warehouse');
+let { DeleteWarehouseApi } = require('./apis/delete-warehouse');
+
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
 let { SessionCollection } = require('./collections/session');
@@ -37,6 +43,7 @@ let { OrganizationCollection } = require('./collections/organization');
 let { EmploymentCollection } = require('./collections/employment');
 let { CustomerCollection } = require('./collections/customer');
 let { OutletCollection } = require('./collections/outlet');
+let { WarehouseCollection } = require('./collections/warehouse');
 
 let config, logger, database, server, emailService, templateManager;
 
@@ -98,6 +105,7 @@ class Program {
         database.registerCollection('employment', EmploymentCollection);
         database.registerCollection('customer', CustomerCollection);
         database.registerCollection('outlet', OutletCollection);
+        database.registerCollection('warehouse', WarehouseCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })
@@ -128,6 +136,11 @@ class Program {
         server.registerPostApi('/api/get-outlet', GetOutletApi);
         server.registerPostApi('/api/edit-outlet', EditOutletApi);
         server.registerPostApi('/api/delete-outlet', DeleteOutletApi);
+        server.registerPostApi('/api/add-warehouse', AddWarehouseApi);
+        server.registerPostApi('/api/get-warehouse-list', GetWarehouseListApi);
+        server.registerPostApi('/api/get-warehouse', GetWarehouseApi);
+        server.registerPostApi('/api/edit-warehouse', EditWarehouseApi);
+        server.registerPostApi('/api/delete-warehouse', DeleteWarehouseApi);
         return Promise.resolve();
       })
       .then(() => {
