@@ -146,3 +146,28 @@ exports.validateWarehouseSchema = (doc) => {
   let {error, value} = Joi.validate(doc, schema);
   if (error) throw error;
 }
+
+exports.validateProductCategorySchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    _id: Joi.string().required(),
+
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+    
+    name: Joi.string().min(1).max(64).required(),
+    organizationId: Joi.number().max(999999999999999).required(),
+    parentProductCategoryId: Joi.number().max(999999999999999).required(),
+    unit: Joi.string().max(1024).required(),
+    defaultDiscountType: Joi.string().max(1024).required(),
+    defaultDiscountValue: Joi.number().max(999999999999999).required(),
+    defaultPurchasePrice: Joi.number().max(999999999999999).required(),
+    defaultVat: Joi.number().max(999999999999999).required(),
+    defaultSalePrice: Joi.number().max(999999999999999).required(),
+
+    isDeleted: Joi.boolean().required(),
+    isReturnable: Joi.boolean().required()
+  });
+  let {error, value} = Joi.validate(doc, schema);
+  if (error) throw error;
+}

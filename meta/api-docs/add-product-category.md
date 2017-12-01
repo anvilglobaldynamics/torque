@@ -45,7 +45,8 @@ Possible Error Codes:
 ```js
 {
   "hasError": false,
-  "status": "success"
+  "status": "success",
+  "productCategoryId": productCategoryId
 }
 ```
 

@@ -1,0 +1,57 @@
+const { Collection } = require('./../collection-base');
+const Joi = require('joi');
+
+exports.ProductCategoryCollection = class extends Collection {
+
+  constructor(...args) {
+    super(...args);
+
+    this.collectionName = 'product-category';
+
+    this.joiSchema = Joi.object().keys({
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+      name: Joi.string().min(1).max(64).required(),
+      organizationId: Joi.number().max(999999999999999).required(),
+      parentProductCategoryId: Joi.number().max(999999999999999).allow(null).required(),
+      unit: Joi.string().max(1024).required(),
+      defaultDiscountType: Joi.string().max(1024).required(),
+      defaultDiscountValue: Joi.number().max(999999999999999).required(),
+      defaultPurchasePrice: Joi.number().max(999999999999999).required(),
+      defaultVat: Joi.number().max(999999999999999).required(),
+      defaultSalePrice: Joi.number().max(999999999999999).required(),
+      isDeleted: Joi.boolean().required(),
+      isReturnable: Joi.boolean().required()
+    });
+
+    this.uniqueDefList = [
+      {
+        additionalQueryFilters: {},
+        uniqueKeyList: []
+      }
+    ]
+  }
+
+  create({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice }, cbfn) {
+    let doc = {
+      createdDatetimeStamp: (new Date).getTime(),
+      lastModifiedDatetimeStamp: (new Date).getTime(),
+
+      organizationId, 
+      parentProductCategoryId, 
+      name, 
+      unit, 
+      defaultDiscountType, 
+      defaultDiscountValue,
+      defaultPurchasePrice, 
+      defaultVat, 
+      defaultSalePrice,
+
+      isReturnable: true,
+      isDeleted: false
+    }
+    this._insert(doc, (err, id) => {
+      return cbfn(err, id);
+    });
+  }
+}

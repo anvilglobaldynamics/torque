@@ -36,6 +36,8 @@ let { GetWarehouseApi } = require('./apis/get-warehouse');
 let { EditWarehouseApi } = require('./apis/edit-warehouse');
 let { DeleteWarehouseApi } = require('./apis/delete-warehouse');
 
+let { AddProductCategoryApi } = require('./apis/add-product-category');
+
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
 let { SessionCollection } = require('./collections/session');
@@ -44,6 +46,7 @@ let { EmploymentCollection } = require('./collections/employment');
 let { CustomerCollection } = require('./collections/customer');
 let { OutletCollection } = require('./collections/outlet');
 let { WarehouseCollection } = require('./collections/warehouse');
+let { ProductCategoryCollection } = require('./collections/product-category');
 
 let config, logger, database, server, emailService, templateManager;
 
@@ -106,6 +109,7 @@ class Program {
         database.registerCollection('customer', CustomerCollection);
         database.registerCollection('outlet', OutletCollection);
         database.registerCollection('warehouse', WarehouseCollection);
+        database.registerCollection('productCategory', ProductCategoryCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })
@@ -141,6 +145,7 @@ class Program {
         server.registerPostApi('/api/get-warehouse', GetWarehouseApi);
         server.registerPostApi('/api/edit-warehouse', EditWarehouseApi);
         server.registerPostApi('/api/delete-warehouse', DeleteWarehouseApi);
+        server.registerPostApi('/api/add-product-category', AddProductCategoryApi);
         return Promise.resolve();
       })
       .then(() => {

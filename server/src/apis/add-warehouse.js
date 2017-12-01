@@ -36,7 +36,7 @@ exports.AddWarehouseApi = class extends Api {
     });
   }
 
-  handle({ body, userId }) {
+  handle({ body }) {
     let { name, organizationId, physicalAddress, phone, contactPersonName } = body;
     this._createWarehouse({ name, organizationId, physicalAddress, phone, contactPersonName }, (warehouseId) => {
       this.success({ status: "success", warehouseId });
