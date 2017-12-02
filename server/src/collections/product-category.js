@@ -67,11 +67,22 @@ exports.ProductCategoryCollection = class extends Collection {
     this._findOne({ id: productCategoryId }, cbfn)
   }
 
+  listChildren({ productCategoryId }, cbfn) {
+    this._find({ parentProductCategoryId: productCategoryId }, cbfn)
+  }
+
   update({ productCategoryId }, { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
     let modifications = {
       $set: {
         parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
       }
+    }
+    this._update({ id: productCategoryId }, modifications, cbfn);
+  }
+
+  delete({ productCategoryId }, cbfn) {
+    let modifications = {
+      $set: { isDeleted: true }
     }
     this._update({ id: productCategoryId }, modifications, cbfn);
   }

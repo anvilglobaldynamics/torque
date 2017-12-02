@@ -97,6 +97,52 @@ describe('product-category', _ => {
 
   });
 
+  it('api/add-product-category (Valid child)', testDoneFn => {
+
+    callApi('api/add-product-category', {
+      json: {
+        apiKey,
+        organizationId,
+
+        parentProductCategoryId: productCategoryList[0].id,
+        name: "second product category",
+        unit: "kg",
+        defaultDiscountType: "fixed",
+        defaultDiscountValue: 101,
+        defaultPurchasePrice: 50,
+        defaultVat: 5,
+        defaultSalePrice: 300,
+        isReturnable: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-product-category-list (Valid)', testDoneFn => {
+
+    callApi('api/get-product-category-list', {
+      json: {
+        apiKey,
+        organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('productCategoryList').that.is.an('array');
+      body.productCategoryList.forEach(productCategory => {
+        validateProductCategorySchema(productCategory);
+      });
+      productCategoryList = body.productCategoryList;
+      testDoneFn();
+    });
+
+  });
+
   it('api/edit-product-category (Valid)', testDoneFn => {
 
     callApi('api/edit-product-category', {
@@ -123,7 +169,7 @@ describe('product-category', _ => {
 
   });
 
-  it('api/get-product-category-list (Valid)', testDoneFn => {
+  it('api/get-product-category-list (Valid modification check)', testDoneFn => {
 
     callApi('api/get-product-category-list', {
       json: {
@@ -134,6 +180,11 @@ describe('product-category', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('productCategoryList').that.is.an('array');
+
+      body.productCategoryList.forEach(productCategory => {
+        validateProductCategorySchema(productCategory);
+      });
+      productCategoryList = body.productCategoryList;
 
       expect(body.productCategoryList[0].name).to.equal("new product category name");
       expect(body.productCategoryList[0].isReturnable).to.equal(false);
@@ -148,7 +199,7 @@ describe('product-category', _ => {
     callApi('api/delete-product-category', {
       json: {
         apiKey,
-        warehouseId: warehouseToBeModified.id,
+        productCategoryId: productCategoryList[productCategoryList.length - 1].id
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -156,6 +207,29 @@ describe('product-category', _ => {
       expect(body).to.have.property('status').that.equals('success');
       testDoneFn();
     })
+
+  });
+
+  it('api/get-product-category-list (Valid deletion check)', testDoneFn => {
+
+    callApi('api/get-product-category-list', {
+      json: {
+        apiKey,
+        organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('productCategoryList').that.is.an('array');
+
+      body.productCategoryList.forEach(productCategory => {
+        validateProductCategorySchema(productCategory);
+      });
+      productCategoryList = body.productCategoryList;
+
+      expect(body.productCategoryList[productCategoryList.length - 1].isDeleted).to.equal(true);
+      testDoneFn();
+    });
 
   });
 
@@ -191,7 +265,7 @@ describe('product-category', _ => {
     callApi('api/edit-product-category', {
       json: {
         apiKey,
-        productCategoryId: productCategoryList[0].id,
+        productCategoryId: productCategoryList[productCategoryList.length - 1].id,
 
         parentProductCategoryId: 999,
         name: "new product category name", // modification
@@ -208,6 +282,23 @@ describe('product-category', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error.code).to.equal('PARENT_PRODUCT_CATEGORY_INVALID');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/delete-product-category (Invalid parent deletetion)', testDoneFn => {
+
+    callApi('api/delete-product-category', {
+      json: {
+        apiKey,
+        productCategoryId: productCategoryList[0].id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('PRODUCT_CATEGORY_NOT_CHILDLESS');
       testDoneFn();
     })
 
