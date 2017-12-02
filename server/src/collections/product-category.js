@@ -32,11 +32,10 @@ exports.ProductCategoryCollection = class extends Collection {
     ]
   }
 
-  create({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice }, cbfn) {
+  create({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
     let doc = {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
-
       organizationId, 
       parentProductCategoryId, 
       name, 
@@ -46,8 +45,7 @@ exports.ProductCategoryCollection = class extends Collection {
       defaultPurchasePrice, 
       defaultVat, 
       defaultSalePrice,
-
-      isReturnable: true,
+      isReturnable,
       isDeleted: false
     }
     this._insert(doc, (err, id) => {

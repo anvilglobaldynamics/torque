@@ -61,11 +61,12 @@ describe('product-category', _ => {
         parentProductCategoryId: null,
         name: "first product category",
         unit: "kg",
-        defaultDiscountType: "%",
-        defaultDiscountValue: 1,
+        defaultDiscountType: "percent",
+        defaultDiscountValue: 10,
         defaultPurchasePrice: 99,
         defaultVat: 2,
-        defaultSalePrice: 111
+        defaultSalePrice: 111,
+        isReturnable: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

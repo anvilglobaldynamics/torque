@@ -18,16 +18,23 @@ exports.AddProductCategoryApi = class extends Api {
       name: Joi.string().min(1).max(64).required(),
       unit: Joi.string().max(1024).required(),
       defaultDiscountType: Joi.string().max(1024).required(),
-      defaultDiscountValue: Joi.number().max(999999999999999).required(),
+      defaultDiscountValue: Joi.number().when(
+        ', isReturnable', { 
+          is: 'percent', 
+          then: Joi.number().min(0).max(100).required(), 
+          otherwise: Joi.number().max(999999999999999).required() 
+        }
+      ),
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
-      defaultSalePrice: Joi.number().max(999999999999999).required()
+      defaultSalePrice: Joi.number().max(999999999999999).required(),
+      isReturnable: Joi.boolean().required()
     });
   }
 
-  _createProductCategory({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice }, cbfn) {
+  _createProductCategory({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
     let productCategory = {
-      organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice
+      organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
     }
     this.database.productCategory.create(productCategory, (err, productCategoryId) => {
       if (err) return this.fail(err);
@@ -36,8 +43,8 @@ exports.AddProductCategoryApi = class extends Api {
   }
 
   handle({ body }) {
-    let { organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice } = body;
-    this._createProductCategory({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice }, (productCategoryId) => {
+    let { organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
+    this._createProductCategory({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, (productCategoryId) => {
       this.success({ status: "success", productCategoryId });
     });
   }
