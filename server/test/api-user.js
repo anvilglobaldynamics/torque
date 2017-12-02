@@ -7,6 +7,7 @@ let {
 } = require('./lib');
 
 const email = `t1${(new Date).getTime()}@gmail.com`;
+const changedEmail = `t1t${(new Date).getTime()}@gmail.com`;
 const password = "123545678";
 const changedPassword = "123545678";
 const fullName = "Test User";
@@ -171,8 +172,55 @@ describe('user apis (1)', _ => {
       expect(body).to.have.property('sessionId').that.is.a('number')
       expect(body).to.have.property('warning').that.is.a('string').that.equals('You have less than 24 hours to verify your email address.')
       expect(body).to.have.property('user').that.is.an('object')
-
       apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  // ================================================== Edit Profile
+
+  it('api/user-edit-profile' + email, testDoneFn => {
+
+    callApi('api/user-edit-profile', {
+      json: {
+        apiKey: apiKey,
+        fullName: 'Test User',
+        email: email,
+        phone: phone,
+        nid: '',
+        physicalAddress: '',
+        emergencyContact: '',
+        bloodGroup: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
+  // ================================================== Edit Profile
+
+  it('api/user-edit-profile' + email, testDoneFn => {
+
+    callApi('api/user-edit-profile', {
+      json: {
+        apiKey: apiKey,
+        fullName: 'Test User',
+        email: changedEmail,
+        phone: phone,
+        nid: '',
+        physicalAddress: '',
+        emergencyContact: '',
+        bloodGroup: 'A+'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
       testDoneFn();
     })
 
