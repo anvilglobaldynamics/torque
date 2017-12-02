@@ -19,7 +19,7 @@ exports.AddProductCategoryApi = class extends Api {
       unit: Joi.string().max(1024).required(),
       defaultDiscountType: Joi.string().max(1024).required(),
       defaultDiscountValue: Joi.number().when(
-        ', isReturnable', { 
+        'defaultDiscountType', { 
           is: 'percent', 
           then: Joi.number().min(0).max(100).required(), 
           otherwise: Joi.number().max(999999999999999).required() 

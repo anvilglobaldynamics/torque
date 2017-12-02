@@ -16,7 +16,13 @@ exports.ProductCategoryCollection = class extends Collection {
       parentProductCategoryId: Joi.number().max(999999999999999).allow(null).required(),
       unit: Joi.string().max(1024).required(),
       defaultDiscountType: Joi.string().max(1024).required(),
-      defaultDiscountValue: Joi.number().max(999999999999999).required(),
+      defaultDiscountValue: Joi.number().when(
+        'defaultDiscountType', {
+          is: 'percent',
+          then: Joi.number().min(0).max(100).required(),
+          otherwise: Joi.number().max(999999999999999).required()
+        }
+      ),
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
@@ -36,14 +42,14 @@ exports.ProductCategoryCollection = class extends Collection {
     let doc = {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
-      organizationId, 
-      parentProductCategoryId, 
-      name, 
-      unit, 
-      defaultDiscountType, 
+      organizationId,
+      parentProductCategoryId,
+      name,
+      unit,
+      defaultDiscountType,
       defaultDiscountValue,
-      defaultPurchasePrice, 
-      defaultVat, 
+      defaultPurchasePrice,
+      defaultVat,
       defaultSalePrice,
       isReturnable,
       isDeleted: false
@@ -55,5 +61,14 @@ exports.ProductCategoryCollection = class extends Collection {
 
   listByOrganizationId(organizationId, cbfn) {
     this._find({ organizationId }, cbfn);
+  }
+
+  update({ productCategoryId }, { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
+    let modifications = {
+      $set: {
+        parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
+      }
+    }
+    this._update({ id: productCategoryId }, modifications, cbfn);
   }
 }

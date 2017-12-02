@@ -57,7 +57,7 @@ describe('product-category', _ => {
       json: {
         apiKey,
         organizationId,
-        
+
         parentProductCategoryId: null,
         name: "first product category",
         unit: "kg",
@@ -85,7 +85,6 @@ describe('product-category', _ => {
         organizationId
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('productCategoryList').that.is.an('array');
@@ -98,61 +97,51 @@ describe('product-category', _ => {
 
   });
 
-  // it('api/get-warehouse (Valid)', testDoneFn => {
+  it('api/edit-product-category (Valid)', testDoneFn => {
 
-  //   callApi('api/get-warehouse', {
-  //     json: {
-  //       apiKey,
-  //       warehouseId: warehouseList[0].id
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('warehouse');
-  //     validateWarehouseSchema(body.warehouse);
-  //     warehouseToBeModified = body.warehouse;
-  //     testDoneFn();
-  //   });
+    callApi('api/edit-product-category', {
+      json: {
+        apiKey,
+        productCategoryId: productCategoryList[0].id,
 
-  // });
+        parentProductCategoryId: null,
+        name: "new product category name", // modification
+        unit: "kg",
+        defaultDiscountType: "percent",
+        defaultDiscountValue: 10,
+        defaultPurchasePrice: 99,
+        defaultVat: 2,
+        defaultSalePrice: 111,
+        isReturnable: false // modification
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
 
-  // it('api/edit-warehouse (Valid)', testDoneFn => {
+  });
 
-  //   callApi('api/edit-warehouse', {
-  //     json: {
-  //       apiKey,
-  //       warehouseId: warehouseToBeModified.id,
+  it('api/get-product-category-list (Valid)', testDoneFn => {
 
-  //       name: "My Warehouse",
-  //       physicalAddress: "wayne manor address",
-  //       phone: warehousePhone2,
-  //       contactPersonName: "test contact person name"
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('status').that.equals('success');
-  //     testDoneFn();
-  //   })
+    callApi('api/get-product-category-list', {
+      json: {
+        apiKey,
+        organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('productCategoryList').that.is.an('array');
 
-  // });
+      expect(body.productCategoryList[0].name).to.equal("new product category name");
+      expect(body.productCategoryList[0].isReturnable).to.equal(false);
 
-  // it('api/get-warehouse (Valid)', testDoneFn => {
+      testDoneFn();
+    });
 
-  //   callApi('api/get-warehouse', {
-  //     json: {
-  //       apiKey,
-  //       warehouseId: warehouseToBeModified.id
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('warehouse');
-  //     expect(body.warehouse.phone).to.equal(warehousePhone2);
-  //     testDoneFn();
-  //   });
-
-  // });
+  });
 
   // it('api/delete-warehouse (Valid)', testDoneFn => {
 
@@ -167,23 +156,6 @@ describe('product-category', _ => {
   //     expect(body).to.have.property('status').that.equals('success');
   //     testDoneFn();
   //   })
-
-  // });
-
-  // it('api/get-warehouse (Deleted)', testDoneFn => {
-
-  //   callApi('api/get-warehouse', {
-  //     json: {
-  //       apiKey,
-  //       warehouseId: warehouseToBeModified.id
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('warehouse');
-  //     expect(body.warehouse.isDeleted).to.equal(true);
-  //     testDoneFn();
-  //   });
 
   // });
 
