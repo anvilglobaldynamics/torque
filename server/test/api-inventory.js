@@ -9,6 +9,7 @@ let {
   addOrganization,
   addWarehouse,
   addOutlet,
+  addProductCategory,
   validateInventorySchema
 } = require('./lib');
 
@@ -32,10 +33,13 @@ const outletName = "Test Outlet";
 const outletPhysicalAddress = "Test Outlet Address";
 const outletContactPersonName = "Test Outlet Person";
 
+const productCategoryName = "test product category";
+
 let apiKey = null;
 let organizationId = null;
 let warehouseId = null;
 let outletId = null;
+let productCategoryId = null;
 
 describe('inventory', _ => {
 
@@ -74,7 +78,22 @@ describe('inventory', _ => {
                 contactPersonName: outletContactPersonName
               }, (data) => {
                 outletId = data.outletId;
-                testDoneFn();
+                addProductCategory({
+                  apiKey,
+                  organizationId,
+                  parentProductCategoryId: null,
+                  name: productCategoryName,
+                  unit: "box",
+                  defaultDiscountType: "percent",
+                  defaultDiscountValue: 10,
+                  defaultPurchasePrice: 99,
+                  defaultVat: 3,
+                  defaultSalePrice: 111,
+                  isReturnable: true
+                }, (data) => {
+                  productCategoryId = data.productCategoryId;
+                  testDoneFn();
+                });
               });
             });
           });
@@ -83,22 +102,38 @@ describe('inventory', _ => {
     });
   });
 
+  it('api/add-product-to-inventory (Valid)', testDoneFn => {
+
+    callApi('api/add-product-to-inventory', {
+      json: {
+        apiKey,
+        inventoryId: 0,
+        productList: [{ productCategoryId, purchasePrice: 100, salePrice: 200, count: 10 }]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      testDoneFn();
+    });
+
+  });
+
   // it('api/get-aggregated-inventory-details (Valid)', testDoneFn => {
 
   //   callApi('api/get-aggregated-inventory-details', {
   //     json: {
   //       apiKey,
-  //       inventoryId
+  //       inventoryId: 0
   //     }
   //   }, (err, response, body) => {
   //     expect(response.statusCode).to.equal(200);
   //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('warehouseList').that.is.an('array');
+  //     // expect(body).to.have.property('warehouseList').that.is.an('array');
 
-  //     body.warehouseList.forEach(warehouse => {
-  //       validateWarehouseSchema(warehouse);
-  //     });
-  //     warehouseList = body.warehouseList;
+  //     // body.warehouseList.forEach(warehouse => {
+  //     //   validateWarehouseSchema(warehouse);
+  //     // });
+  //     // warehouseList = body.warehouseList;
 
   //     testDoneFn();
   //   });

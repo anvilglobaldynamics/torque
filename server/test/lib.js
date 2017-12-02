@@ -85,6 +85,16 @@ exports.addOutlet = (data, callback) => {
   })
 }
 
+// ===================================== Product Category
+
+exports.addProductCategory = (data, callback) => {
+  callApi('api/add-product-category', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
 // ================================== Validation
 
 exports.validateCustomerSchema = (doc) => {

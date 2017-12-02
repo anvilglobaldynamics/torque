@@ -41,6 +41,9 @@ let { GetProductCategoryListApi } = require('./apis/get-product-category-list');
 let { EditProductCategoryApi } = require('./apis/edit-product-category');
 let { DeleteProductCategoryApi } = require('./apis/delete-product-category');
 
+let { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-inventory-details');
+let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
+
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
 let { SessionCollection } = require('./collections/session');
@@ -51,6 +54,7 @@ let { OutletCollection } = require('./collections/outlet');
 let { WarehouseCollection } = require('./collections/warehouse');
 let { ProductCategoryCollection } = require('./collections/product-category');
 let { InventoryCollection } = require('./collections/inventory');
+let { ProductCollection } = require('./collections/product');
 
 let config, logger, database, server, emailService, templateManager;
 
@@ -115,6 +119,7 @@ class Program {
         database.registerCollection('warehouse', WarehouseCollection);
         database.registerCollection('productCategory', ProductCategoryCollection);
         database.registerCollection('inventory', InventoryCollection);
+        database.registerCollection('product', ProductCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })
@@ -154,6 +159,8 @@ class Program {
         server.registerPostApi('/api/get-product-category-list', GetProductCategoryListApi);
         server.registerPostApi('/api/edit-product-category', EditProductCategoryApi);
         server.registerPostApi('/api/delete-product-category', DeleteProductCategoryApi);
+        server.registerPostApi('/api/get-aggregated-inventory-details', GetAggregatedInventoryDetailsApi);
+        server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
         return Promise.resolve();
       })
       .then(() => {

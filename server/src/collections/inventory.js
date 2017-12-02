@@ -49,6 +49,13 @@ exports.InventoryCollection = class extends Collection {
     });
   }
 
+  addProduct({ inventoryId, productId, count }, cbfn) {
+    let modifications = {
+      $push: { productList: { productId, count } }
+    }
+    this._update({ id: inventoryId }, modifications, cbfn);
+  }
+
   listByInventoryContainerId(inventoryContainerId, cbfn) {
     this._find({ inventoryContainerId }, cbfn);
   }
