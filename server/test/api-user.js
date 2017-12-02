@@ -246,9 +246,9 @@ describe('user apis (1)', _ => {
 
   // ================================================== Login
 
-  it('api/user-password-reset--request', testDoneFn => {
+  it('api/user-reset-password--request', testDoneFn => {
 
-    callApi('api/user-password-reset--request', {
+    callApi('api/user-reset-password--request', {
       json: {
         emailOrPhone: changedEmail
       }

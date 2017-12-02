@@ -39,7 +39,7 @@ exports.PasswordResetRequestCollection = class extends Collection {
   create({ userId, email, phone, origin, confirmationToken }, cbfn) {
     let user = {
       forEmail: email,
-      forPassword: email,
+      forPhone: phone,
       forUserId: userId,
       origin,
       confirmationToken,
@@ -75,8 +75,8 @@ exports.PasswordResetRequestCollection = class extends Collection {
     });
   }
 
-  findByForUserId(userId, cbfn) {
-    let query = { forUserId: userId }
+  findByConfirmationToken(confirmationToken, cbfn) {
+    let query = { confirmationToken, isPasswordResetComplete: false }
     this._findOne(query, cbfn);
   }
 

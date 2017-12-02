@@ -6,7 +6,7 @@ let { generateRandomString } = require('./../utils/random-string');
 
 let { userCommonMixin } = require('./mixins/user-common');
 
-exports.UserPasswordResetRequestApi = class extends Api {
+exports.UserResetPasswordRequestApi = class extends Api {
 
   get autoValidates() { return true; }
 
