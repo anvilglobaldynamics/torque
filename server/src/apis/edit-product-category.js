@@ -18,10 +18,10 @@ exports.EditProductCategoryApi = class extends Api {
       unit: Joi.string().max(1024).required(),
       defaultDiscountType: Joi.string().max(1024).required(),
       defaultDiscountValue: Joi.number().when(
-        'defaultDiscountType', { 
-          is: 'percent', 
-          then: Joi.number().min(0).max(100).required(), 
-          otherwise: Joi.number().max(999999999999999).required() 
+        'defaultDiscountType', {
+          is: 'percent',
+          then: Joi.number().min(0).max(100).required(),
+          otherwise: Joi.number().max(999999999999999).required()
         }
       ),
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
@@ -29,6 +29,22 @@ exports.EditProductCategoryApi = class extends Api {
       defaultSalePrice: Joi.number().max(999999999999999).required(),
       isReturnable: Joi.boolean().required()
     });
+  }
+
+  _checkAndUpdateProductCategory({ productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
+    if (parentProductCategoryId === null) {
+      this._updateProductCategory({ productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn);
+    } else {
+      this.database.productCategory.getByProductCategoryId(parentProductCategoryId, (err, parentProductCategory) => {
+        if (err) return this.fail(err);
+        if (parentProductCategory === null) {
+          err = new Error("parent product category not found");
+          err.code = "PARENT_PRODUCT_CATEGORY_INVALID";
+          return this.fail(err);
+        }
+        this._updateProductCategory({ productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn);
+      })
+    }
   }
 
   _updateProductCategory({ productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
@@ -41,7 +57,7 @@ exports.EditProductCategoryApi = class extends Api {
 
   handle({ body, userId }) {
     let { productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
-    this._updateProductCategory({ productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, _ => {
+    this._checkAndUpdateProductCategory({ productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, _ => {
       this.success({ status: "success" });
     });
   }

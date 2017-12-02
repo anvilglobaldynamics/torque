@@ -14,15 +14,15 @@ exports.AddProductCategoryApi = class extends Api {
 
       organizationId: Joi.number().max(999999999999999).required(),
       parentProductCategoryId: Joi.number().max(999999999999999).allow(null).required(),
-    
+
       name: Joi.string().min(1).max(64).required(),
       unit: Joi.string().max(1024).required(),
       defaultDiscountType: Joi.string().max(1024).required(),
       defaultDiscountValue: Joi.number().when(
-        'defaultDiscountType', { 
-          is: 'percent', 
-          then: Joi.number().min(0).max(100).required(), 
-          otherwise: Joi.number().max(999999999999999).required() 
+        'defaultDiscountType', {
+          is: 'percent',
+          then: Joi.number().min(0).max(100).required(),
+          otherwise: Joi.number().max(999999999999999).required()
         }
       ),
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
@@ -37,13 +37,13 @@ exports.AddProductCategoryApi = class extends Api {
       organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
     }
 
-    if(parentProductCategoryId === null) {
+    if (parentProductCategoryId === null) {
       this._createProductCategory(productCategory, cbfn);
     } else {
       this.database.productCategory.getByProductCategoryId(parentProductCategoryId, (err, parentProductCategory) => {
         if (err) return this.fail(err);
         if (parentProductCategory === null) {
-          err = new Error( "parent product category not found" );
+          err = new Error("parent product category not found");
           err.code = "PARENT_PRODUCT_CATEGORY_INVALID";
           return this.fail(err);
         }
