@@ -2,6 +2,8 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
+let { userCommonMixin } = require('./mixins/user-common');
+
 exports.UserResetPasswordConfirmApi = class extends userCommonMixin(Api) {
 
   get autoValidates() { return true; }
@@ -10,7 +12,7 @@ exports.UserResetPasswordConfirmApi = class extends userCommonMixin(Api) {
 
   get requestSchema() {
     return Joi.object().keys({
-      uniqueToken: Joi.string().length(16).required(),
+      uniqueToken: Joi.string().length(64).required(),
       newPassword: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
     });
   }
@@ -40,7 +42,7 @@ exports.UserResetPasswordConfirmApi = class extends userCommonMixin(Api) {
     });
   }
 
-  _markPasswordResetRequestAsValid({ uniqueToken: confirmationToken }, cbfn) {
+  _markPasswordResetRequestAsComplete({ uniqueToken: confirmationToken }, cbfn) {
     this.database.passwordResetRequest.applyConfirmationToken(confirmationToken, (err) => {
       if (err) return this.fail(err);
       cbfn();
@@ -66,8 +68,8 @@ exports.UserResetPasswordConfirmApi = class extends userCommonMixin(Api) {
     this._getPasswordResetRequestIfValid({ uniqueToken }, (passwordResetRequest) => {
       let { forUserId: userId } = passwordResetRequest;
       this._setPasswordIfValid({ newPassword, userId }, () => {
-        this._markPasswordResetRequestAsValid({ uniqueToken }, () => {
-          this.success({ status: "success", tokenInfo });
+        this._markPasswordResetRequestAsComplete({ uniqueToken }, () => {
+          this.success({ status: "success" });
           this._notifyPasswordChange({ userId }, () => null);
         });
       });

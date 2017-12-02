@@ -5,7 +5,7 @@ method: `POST`
 ### request: 
 ```js
 {
-  uniqueToken: Joi.string().length(16).required(),
+  uniqueToken: Joi.string().length(64).required(),
   newPassword: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
 }
 ```

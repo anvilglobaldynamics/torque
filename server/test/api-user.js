@@ -10,8 +10,8 @@ let {
 const email = `t1${(new Date).getTime()}@gmail.com`;
 const changedEmail = `t1t${(new Date).getTime()}@gmail.com`;
 const password = "123545678";
-const changedPassword = "123545678"; //FIXME
-const changedPassword2 = "123545678-2";
+const changedPassword = "1235456781";
+const changedPassword2 = "1235456782";
 const fullName = "Test User";
 const phone = 't1' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 
@@ -292,7 +292,6 @@ describe('user apis (1)', _ => {
       if (err) throw err;
       if (docList.length < 1) throw new Error('Expected doc');
       let passwordResetRequest = docList[0];
-      console.log(passwordResetRequest)
 
       callApi('api/user-reset-password--confirm', {
         json: {
@@ -301,7 +300,6 @@ describe('user apis (1)', _ => {
         }
       }, (err, response, body) => {
         expect(response.statusCode).to.equal(200);
-        console.log(body)
         expect(body).to.have.property('hasError').that.equals(false);
         expect(body).to.have.property('status').that.equals('success');
         testDoneFn();
@@ -310,7 +308,28 @@ describe('user apis (1)', _ => {
 
   });
 
+  // ================================================== Login
 
+  it('api/user-login (Correct, Using Email and Changed Password): ' + email, testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: changedEmail,
+        password: changedPassword2
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string')
+      expect(body).to.have.property('sessionId').that.is.a('number')
+      expect(body).to.have.property('warning').that.is.a('string').that.equals('You have less than 24 hours to verify your email address.')
+      expect(body).to.have.property('user').that.is.an('object')
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
 
 
   it('END', testDoneFn => {
