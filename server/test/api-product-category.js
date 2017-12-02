@@ -77,25 +77,26 @@ describe('product-category', _ => {
 
   });
 
-  // it('api/get-warehouse-list (Valid)', testDoneFn => {
+  it('api/get-product-category-list (Valid)', testDoneFn => {
 
-  //   callApi('api/get-warehouse-list', {
-  //     json: {
-  //       apiKey,
-  //       organizationId
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('warehouseList').that.is.an('array');
-  //     body.warehouseList.forEach(warehouse => {
-  //       validateWarehouseSchema(warehouse);
-  //     });
-  //     warehouseList = body.warehouseList;
-  //     testDoneFn();
-  //   });
+    callApi('api/get-product-category-list', {
+      json: {
+        apiKey,
+        organizationId
+      }
+    }, (err, response, body) => {
+      console.log(body);
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('productCategoryList').that.is.an('array');
+      body.productCategoryList.forEach(productCategory => {
+        validateProductCategorySchema(productCategory);
+      });
+      productCategoryList = body.productCategoryList;
+      testDoneFn();
+    });
 
-  // });
+  });
 
   // it('api/get-warehouse (Valid)', testDoneFn => {
 

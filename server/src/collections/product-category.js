@@ -52,4 +52,8 @@ exports.ProductCategoryCollection = class extends Collection {
       return cbfn(err, id);
     });
   }
+
+  listByOrganizationId(organizationId, cbfn) {
+    this._find({ organizationId }, cbfn);
+  }
 }
