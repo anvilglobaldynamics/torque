@@ -32,10 +32,27 @@ exports.AddProductCategoryApi = class extends Api {
     });
   }
 
-  _createProductCategory({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
+  _checkAndCreateProductCategory({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
     let productCategory = {
       organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
     }
+
+    if(parentProductCategoryId === null) {
+      this._createProductCategory(productCategory, cbfn);
+    } else {
+      this.database.productCategory.getByProductCategoryId(parentProductCategoryId, (err, parentProductCategory) => {
+        if (err) return this.fail(err);
+        if (parentProductCategory === null) {
+          err = new Error( "parent product category not found" );
+          err.code = "PARENT_PRODUCT_CATEGORY_INVALID";
+          return this.fail(err);
+        }
+        this._createProductCategory(productCategory, cbfn);
+      })
+    }
+  }
+
+  _createProductCategory(productCategory, cbfn) {
     this.database.productCategory.create(productCategory, (err, productCategoryId) => {
       if (err) return this.fail(err);
       return cbfn(productCategoryId);
@@ -44,7 +61,7 @@ exports.AddProductCategoryApi = class extends Api {
 
   handle({ body }) {
     let { organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
-    this._createProductCategory({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, (productCategoryId) => {
+    this._checkAndCreateProductCategory({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, (productCategoryId) => {
       this.success({ status: "success", productCategoryId });
     });
   }

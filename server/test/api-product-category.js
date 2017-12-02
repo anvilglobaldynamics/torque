@@ -159,6 +159,33 @@ describe('product-category', _ => {
 
   // });
 
+  it('api/add-product-category (Invalid parentProductCategoryId)', testDoneFn => {
+
+    callApi('api/add-product-category', {
+      json: {
+        apiKey,
+        organizationId,
+
+        parentProductCategoryId: 999,
+        name: "first product category",
+        unit: "kg",
+        defaultDiscountType: "percent",
+        defaultDiscountValue: 10,
+        defaultPurchasePrice: 99,
+        defaultVat: 2,
+        defaultSalePrice: 111,
+        isReturnable: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('PARENT_PRODUCT_CATEGORY_INVALID');
+      testDoneFn();
+    })
+
+  });
+
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
   });
