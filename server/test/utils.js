@@ -9,3 +9,8 @@ exports.callApi = (...args) => {
   args[0] = genUrl(args[0]);
   request.post(...args);
 }
+
+exports.callGetApi = (...args) => {
+  args[0] = genUrl(args[0]);
+  request.get(...args);
+}

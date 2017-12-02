@@ -2,27 +2,28 @@
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
-exports.EmailVerificationRequestCollection = class extends Collection {
+exports.PasswordResetRequestCollection = class extends Collection {
 
   constructor(...args) {
     super(...args);
 
-    this.collectionName = 'email-verification-request';
+    this.collectionName = 'password-reset-request';
 
     this.joiSchema = Joi.object().keys({
-      forEmail: Joi.string().email().required().min(3).max(30),
       forUserId: Joi.number().max(999999999999999).required(),
+      forEmail: Joi.string().email().min(3).max(30), 
+      forPhone: Joi.string().alphanum().min(11).max(14),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
-      verifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+      confirmedDatetimeStamp: Joi.number().max(999999999999999).required(),
       origin: Joi.string().max(1024).required(),
-      verificationToken: Joi.string().min(64).max(64).required(),
-      isVerificationComplete: Joi.boolean().required(),
+      confirmationToken: Joi.string().min(64).max(64).required(),
+      isPasswordResetComplete: Joi.boolean().required(),
     });
 
     this.uniqueKeyDefList = [
       {
         filters: {},
-        keyList: ['verificationToken']
+        keyList: ['confirmationToken']
       }
     ];
 
@@ -35,56 +36,52 @@ exports.EmailVerificationRequestCollection = class extends Collection {
     ];
   }
 
-  create({ userId, email, origin, verificationToken }, cbfn) {
+  create({ userId, email, phone, origin, confirmationToken }, cbfn) {
     let user = {
       forEmail: email,
+      forPhone: phone,
       forUserId: userId,
       origin,
-      verificationToken,
+      confirmationToken,
       createdDatetimeStamp: (new Date).getTime(),
-      verifiedDatetimeStamp: 0,
-      isVerificationComplete: false
+      confirmedDatetimeStamp: 0,
+      isPasswordResetComplete: false
     }
     this._insert(user, (err, id) => {
       return cbfn(err, id);
     })
   }
 
-  applyVerificationToken(verificationToken, cbfn) {
-    let query = { verificationToken, isVerificationComplete: false };
+  applyConfirmationToken(confirmationToken, cbfn) {
+    let query = { confirmationToken, isPasswordResetComplete: false };
     this._findOne(query, (err, doc) => {
       if (err) return cbfn(err);
       if (!doc) {
-        let err = new Error('Invalid verification token');
-        err.code = "INVALID_VERIFICATION_TOKEN";
+        let err = new Error('Invalid confirmation token');
+        err.code = "INVALID_CONFIRMATION_TOKEN";
         return cbfn(null, err);
       }
       let mod = {
         $set: {
-          isVerificationComplete: true,
-          verifiedDatetimeStamp: (new Date).getTime()
+          isPasswordResetComplete: true,
+          confirmedDatetimeStamp: (new Date).getTime()
         }
       };
       this._update(query, mod, (err, wasUpdated) => {
         if (err) return cbfn(err);
-        if (!wasUpdated) return cbfn(new Error("Could not update email-verification-request for reasons unknown."));
+        if (!wasUpdated) return cbfn(new Error("Could not update password-reset-request for reasons unknown."));
         return cbfn(null, doc.forUserId);
       });
     });
   }
 
-  findByForUserId(userId, cbfn) {
-    let query = { forUserId: userId }
+  findByConfirmationToken(confirmationToken, cbfn) {
+    let query = { confirmationToken, isPasswordResetComplete: false }
     this._findOne(query, cbfn);
   }
 
-  findByForEmail(forEmail, cbfn) {
-    let query = { forEmail: forEmail }
-    this._findOne(query, cbfn);
-  }
-
-  ensureVerificationTokenIsUnique(verificationToken, cbfn) {
-    let query = { verificationToken }
+  ensureConfirmationTokenIsUnique(confirmationToken, cbfn) {
+    let query = { confirmationToken }
     this._findOne(query, (err, doc) => {
       if (err) return cbfn(err);
       if (doc) {

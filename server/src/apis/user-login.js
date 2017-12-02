@@ -41,13 +41,17 @@ exports.UserLoginApi = class extends Api {
         err.code = 'USER_NOT_FOUND';
         return this.fail(err);
       } else if (!user.isValid) {
-        this.database.emailVerificationRequest.findByForUserId(user.id, (err, emailVerificationRequest) => {
+        this.database.emailVerificationRequest.findByForEmail(user.email, (err, emailVerificationRequest) => {
           if (err) return this.fail(err);
-          if (!emailVerificationRequest){
+          if (!emailVerificationRequest) {
             err = new Error("Email verification request not found.")
             return this.fail(err);
           }
-          let { createdDatetimeStamp } = emailVerificationRequest;
+          let { createdDatetimeStamp, isVerificationComplete } = emailVerificationRequest;
+          if (isVerificationComplete) {
+            let warning = ""
+            return cbfn({ user, warning });
+          }
           let now = (new Date).getTime();
           let diff = now - createdDatetimeStamp;
           if (diff < EMAIL_VERIFICATION_WINDOW) {

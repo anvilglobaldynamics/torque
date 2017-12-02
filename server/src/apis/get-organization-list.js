@@ -18,10 +18,10 @@ exports.GetrganizationListApi = class extends Api {
     return organizationList.map((organization) => {
       let employment = employmentList.find((employment) => employment.organizationId === organization.id);
       let { id, name, primaryBusinessAddress, phone, email } = organization;
-      let { designation, role, companyProvidedId, isActive } = employment;
+      let { designation, role, companyProvidedId, isActive, privileges } = employment;
       return {
         id, name, primaryBusinessAddress, phone, email,
-        employment: { designation, role, companyProvidedId, isActive }
+        employment: { designation, role, companyProvidedId, isActive, privileges }
       };
     });
   }

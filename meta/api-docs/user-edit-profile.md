@@ -13,10 +13,10 @@ method: `POST`
   phone: Joi.string().alphanum().min(11).max(14).required(),
 
   fullName: Joi.string().min(1).max(64).required(),
-  nid: Joi.string().min(16).max(16).required(),
-  physicalAddress: Joi.string().min(1).max(128).required(),
-  emergencyContact: Joi.number().min(6).max(11).required(),
-  bloodGroup: Joi.alphanum().min(2).max(3).required()
+  nid: Joi.string().allow('').min(16).max(16).required(),
+  physicalAddress: Joi.string().allow('').min(1).max(128).required(),
+  emergencyContact: Joi.string().allow('').min(6).max(11).required(),
+  bloodGroup: Joi.string().allow('').min(2).max(3).required()
 }
 ```
 

@@ -13,6 +13,8 @@ let { UserRegisterApi } = require('./apis/user-register');
 let { UserLoginApi } = require('./apis/user-login');
 let { UserLogoutApi } = require('./apis/user-logout');
 let { VerifyEmailApi } = require('./apis/verify-email');
+let { UserChangePasswordApi } = require('./apis/user-change-password');
+let { UserEditProfileApi } = require('./apis/user-edit-profile');
 
 let { AddOrganizationApi } = require('./apis/add-organization');
 let { GetrganizationListApi } = require('./apis/get-organization-list');
@@ -23,6 +25,9 @@ let { GetCustomerApi } = require('./apis/get-customer');
 let { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
 let { EditCustomerApi } = require('./apis/edit-customer');
 let { DeleteCustomerApi } = require('./apis/delete-customer');
+let { UserResetPasswordRequestApi } = require('./apis/user-reset-password--request');
+let { UserResetPasswordGetTokenInfoApi } = require('./apis/user-reset-password--get-token-info');
+let { UserResetPasswordConfirmApi } = require('./apis/user-reset-password--confirm');
 
 let { AddOutletApi } = require('./apis/add-outlet');
 let { GetOutletListApi } = require('./apis/get-outlet-list');
@@ -50,6 +55,7 @@ let { CustomerCollection } = require('./collections/customer');
 let { OutletCollection } = require('./collections/outlet');
 let { WarehouseCollection } = require('./collections/warehouse');
 let { ProductCategoryCollection } = require('./collections/product-category');
+let { PasswordResetRequestCollection } = require('./collections/password-reset-request');
 
 let config, logger, database, server, emailService, templateManager;
 
@@ -63,8 +69,8 @@ class Program {
   }
 
   // NOTE: Intended to be used during testing
-  deleteDocByIdFromDb(collection, id, callback) {
-    database.deleteMany(collection, { id }, callback);
+  exposeDatabaseForTesting() {
+    return database;
   }
 
   // NOTE: Intended to be used during testing or by process manager
@@ -113,6 +119,7 @@ class Program {
         database.registerCollection('outlet', OutletCollection);
         database.registerCollection('warehouse', WarehouseCollection);
         database.registerCollection('productCategory', ProductCategoryCollection);
+        database.registerCollection('passwordResetRequest', PasswordResetRequestCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })
@@ -130,6 +137,8 @@ class Program {
         server.registerPostApi('/api/user-register', UserRegisterApi);
         server.registerPostApi('/api/user-login', UserLoginApi);
         server.registerPostApi('/api/user-logout', UserLogoutApi);
+        server.registerPostApi('/api/user-change-password', UserChangePasswordApi);
+        server.registerPostApi('/api/user-edit-profile', UserEditProfileApi);
         server.registerPostApi('/api/add-organization', AddOrganizationApi);
         server.registerPostApi('/api/get-organization-list', GetrganizationListApi);
         server.registerPostApi('/api/edit-organization', EditOrganizationApi);
@@ -152,6 +161,9 @@ class Program {
         server.registerPostApi('/api/get-product-category-list', GetProductCategoryListApi);
         server.registerPostApi('/api/edit-product-category', EditProductCategoryApi);
         server.registerPostApi('/api/delete-product-category', DeleteProductCategoryApi);
+        server.registerPostApi('/api/user-reset-password--request', UserResetPasswordRequestApi);
+        server.registerPostApi('/api/user-reset-password--get-token-info', UserResetPasswordGetTokenInfoApi);
+        server.registerPostApi('/api/user-reset-password--confirm', UserResetPasswordConfirmApi);
         return Promise.resolve();
       })
       .then(() => {

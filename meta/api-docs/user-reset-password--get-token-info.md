@@ -1,4 +1,4 @@
-url: `api/user-reset-password--confrm`
+url: `api/user-reset-password--validate`
 
 method: `POST`
 
@@ -6,7 +6,6 @@ method: `POST`
 ```js
 {
   uniqueToken: Joi.string().length(64).required(),
-  newPassword: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
 }
 ```
 
@@ -24,6 +23,7 @@ method: `POST`
 Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: PASSWORD_RESET_TOKEN_INVALID } // validation error on one of the fields
 ```
 
 ### response (on success):
@@ -31,6 +31,7 @@ Possible Error Codes:
 {
   "hasError": false,
   "status": "success"
+  ...
 }
 ```
 

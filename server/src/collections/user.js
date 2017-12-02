@@ -18,8 +18,8 @@ exports.UserCollection = class extends Collection {
       email: Joi.string().email().min(3).max(30).required(),
       nid: Joi.string().min(16).max(16).allow('').required(),
       physicalAddress: Joi.string().min(1).max(128).allow('').required(),
-      emergencyContact: Joi.number().min(6).max(11).allow('').required(),
-      bloodGroup: Joi.string().alphanum().min(2).max(3).allow('').required(),
+      emergencyContact: Joi.string().min(6).max(11).allow('').required(),
+      bloodGroup: Joi.string().min(2).max(3).allow('').required(),
       isDeleted: Joi.boolean().required(),
       isPhoneVerified: Joi.boolean().required(),
       isEmailVerified: Joi.boolean().required(),
@@ -60,6 +60,15 @@ exports.UserCollection = class extends Collection {
     this._findOne({ id }, cbfn);
   }
 
+  findByEmailOrPhone({ emailOrPhone }, cbfn) {
+    this._findOne({
+      $or: [
+        { email: emailOrPhone },
+        { phone: emailOrPhone }
+      ],
+    }, cbfn);
+  }
+
   findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }, cbfn) {
     this._findOne({
       $or: [
@@ -83,6 +92,19 @@ exports.UserCollection = class extends Collection {
     });
   }
 
+  setEmailAsUnverified(id, cbfn) {
+    let mod = {
+      $set: {
+        isEmailVerified: false
+      }
+    }
+    this._update({ id }, mod, (err, wasUpdated) => {
+      if (err) return cbfn(err);
+      if (!wasUpdated) return cbfn(new Error("User Not Found"));
+      return cbfn();
+    });
+  }
+
   setPhoneAsVerified(id, cbfn) {
     let mod = {
       $set: {
@@ -90,6 +112,33 @@ exports.UserCollection = class extends Collection {
       }
     }
     this._update({ id }, mod, (err, wasUpdated) => {
+      if (err) return cbfn(err);
+      if (!wasUpdated) return cbfn(new Error("User Not Found"));
+      return cbfn();
+    });
+  }
+
+  setPasswordHash({ userId, passwordHash }, cbfn) {
+    let mod = {
+      $set: {
+        passwordHash: passwordHash
+      }
+    }
+    this._update({ id: userId }, mod, (err, wasUpdated) => {
+      if (err) return cbfn(err);
+      if (!wasUpdated) return cbfn(new Error("User Not Found"));
+      return cbfn();
+    });
+  }
+
+  update(data, cbfn) {
+    let { userId, email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = data;
+    let mod = {
+      $set: {
+        email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup
+      }
+    }
+    this._update({ id: userId }, mod, (err, wasUpdated) => {
       if (err) return cbfn(err);
       if (!wasUpdated) return cbfn(new Error("User Not Found"));
       return cbfn();
