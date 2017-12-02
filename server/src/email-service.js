@@ -26,6 +26,11 @@ class EmailService {
         subject: 'Your verification code for Torque'
       },
       {
+        name: 'password-reset',
+        path: './src/templates/email/password-reset.html',
+        subject: 'Your password reset code for Torque'
+      },
+      {
         name: 'generic-message',
         path: './src/templates/email/generic-message.html',
         subject: 'Message from Torque'
