@@ -243,6 +243,24 @@ describe('user apis (1)', _ => {
 
   });
 
+
+  // ================================================== Login
+
+  it('api/user-password-reset--request', testDoneFn => {
+
+    callApi('api/user-password-reset--request', {
+      json: {
+        emailOrPhone: changedEmail
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
   });

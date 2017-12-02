@@ -60,6 +60,15 @@ exports.UserCollection = class extends Collection {
     this._findOne({ id }, cbfn);
   }
 
+  findByEmailOrPhone({ emailOrPhone }, cbfn) {
+    this._findOne({
+      $or: [
+        { email: emailOrPhone },
+        { phone: emailOrPhone }
+      ],
+    }, cbfn);
+  }
+
   findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }, cbfn) {
     this._findOne({
       $or: [
