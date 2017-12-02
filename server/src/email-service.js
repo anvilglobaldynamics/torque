@@ -8,8 +8,10 @@ let pathlib = require('path')
 
 class EmailService {
 
-  constructor(options) {
-    let { privateKey, domain, from, enabled } = options;
+  constructor(config) {
+    this.config = config;
+
+    let { privateKey, domain, from, enabled } = config.email;
     this.privateKey = privateKey;
     this.domain = domain;
     this.from = from;
@@ -17,23 +19,24 @@ class EmailService {
   }
 
   _loadAndPrepareTemplates(cbfn) {
+    let branding = this.config.branding;
     let cssFilePath = './src/templates/email/common.css'
     let css = fslib.readFileSync(cssFilePath, { encoding: 'utf8' });
     let templateList = [
       {
         name: 'email-verification',
         path: './src/templates/email/email-verification.html',
-        subject: 'Your verification code for Torque'
+        subject: `Your email verification code for ${branding.name}`
       },
       {
         name: 'password-reset',
         path: './src/templates/email/password-reset.html',
-        subject: 'Your password reset code for Torque'
+        subject: `Your password reset code for ${branding.name}`
       },
       {
         name: 'generic-message',
         path: './src/templates/email/generic-message.html',
-        subject: 'Message from Torque'
+        subject: `Message from ${branding.name}`
       }
     ]
     let collector = new AsyncCollector(templateList.length);
@@ -55,6 +58,7 @@ class EmailService {
   }
 
   generateHtml(templateName, model) {
+    Object.assign(model, this.config.branding);
     return this.templates[templateName].compiledTemplate(model);
   }
 
