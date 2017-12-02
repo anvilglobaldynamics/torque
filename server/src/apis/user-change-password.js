@@ -31,8 +31,8 @@ exports.UserChangePasswordApi = class extends userCommonMixin(Api) {
       let passwordHash = this._makeHash(newPassword);
       this.database.user.setPasswordHash({ userId, passwordHash }, (err) => {
         if (err) return this.fail(err);
+        cbfn();
       });
-      cbfn();
     });
   }
 
