@@ -14,11 +14,18 @@ method: `POST`
 
   name: Joi.string().min(1).max(64).required(),
   unit: Joi.string().max(1024).required(),
-  defaultDiscountType: Joi.string().max(1024).required(),
-  defaultDiscountValue: Joi.number().max(999999999999999).required(),
+  defaultDiscountType: Joi.string().max(1024).valid('percent', 'fixed').required(),
+  defaultDiscountValue: Joi.number().when(
+    'defaultDiscountType', { 
+      is: 'percent', 
+      then: Joi.number().min(0).max(100).required(), 
+      otherwise: Joi.number().max(999999999999999).required() 
+    }
+  ),
   defaultPurchasePrice: Joi.number().max(999999999999999).required(),
   defaultVat: Joi.number().max(999999999999999).required(),
-  defaultSalePrice: Joi.number().max(999999999999999).required()
+  defaultSalePrice: Joi.number().max(999999999999999).required(),
+  isReturnable: Joi.boolean().required()
 }
 ```
 
@@ -45,7 +52,8 @@ Possible Error Codes:
 ```js
 {
   "hasError": false,
-  "status": "success"
+  "status": "success",
+  "productCategoryId": productCategoryId
 }
 ```
 
