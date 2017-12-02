@@ -55,8 +55,8 @@ class Program {
   }
 
   // NOTE: Intended to be used during testing
-  deleteDocByIdFromDb(collection, id, callback) {
-    database.deleteMany(collection, { id }, callback);
+  exposeDatabaseForTesting() {
+    return database;
   }
 
   // NOTE: Intended to be used during testing or by process manager
