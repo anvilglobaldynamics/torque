@@ -21,7 +21,7 @@ exports.InventoryCollection = class extends Collection {
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required()
         })
-      ),
+      ).required(),
       isDeleted: Joi.boolean().required()
     });
 
@@ -42,6 +42,7 @@ exports.InventoryCollection = class extends Collection {
       inventoryContainerId,
       type,
       allowManualTransfer,
+      productList: [],
       isDeleted: false
     }
     this._insert(doc, (err, id) => {
@@ -60,14 +61,14 @@ exports.InventoryCollection = class extends Collection {
     this._find({ inventoryContainerId }, cbfn);
   }
 
-  // update({ warehouseId }, { name, physicalAddress, phone, contactPersonName }, cbfn) {
-  //   let modifications = {
-  //     $set: {
-  //       name, physicalAddress, phone, contactPersonName
-  //     }
-  //   }
-  //   this._update({ id: warehouseId }, modifications, cbfn);
-  // }
+  updateProductList({ inventory }, cbfn) {
+    let modifications = {
+      $set: {
+        productList: inventory.productList
+      }
+    }
+    this._update({ id: inventory.id }, modifications, cbfn);
+  }
 
   // delete({ warehouseId }, cbfn) {
   //   let modifications = {
