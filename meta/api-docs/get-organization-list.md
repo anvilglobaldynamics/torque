@@ -43,6 +43,7 @@ Possible Error Codes:
         role: Joi.string().max(1024).required(), 
         companyProvidedId: Joi.string().alphanum().allow('').required(), 
         isActive: Joi.boolean().required()
+        privileges: Joi.object().required()
       })
     });
   )

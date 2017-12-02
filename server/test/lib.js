@@ -123,7 +123,8 @@ exports.validateOrganizationSchema = (doc) => {
       designation: Joi.string().max(1024).required(), 
       role: Joi.string().max(1024).required(), 
       companyProvidedId: Joi.string().alphanum().allow('').required(), 
-      isActive: Joi.boolean().required()
+      isActive: Joi.boolean().required(),
+      privileges: Joi.object()
     })
   });
   let {error, value} = Joi.validate(doc, schema);
