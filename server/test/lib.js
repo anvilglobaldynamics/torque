@@ -1,4 +1,3 @@
-
 let { callApi } = require('./utils');
 let { Program } = require('./../src/index');
 let Joi = require('joi');
@@ -69,6 +68,14 @@ exports.addOrganization = (data, callback) => {
 
 exports.addWarehouse = (data, callback) => {
   callApi('api/add-warehouse', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
+exports.getWarehouse = (data, callback) => {
+  callApi('api/get-warehouse', {
     json: data
   }, (err, response, body) => {
     callback(body);
@@ -203,6 +210,19 @@ exports.validateProductCategorySchema = (doc) => {
 
     isDeleted: Joi.boolean().required(),
     isReturnable: Joi.boolean().required()
+  });
+  let {error, value} = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateProductSchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    _id: Joi.string().required(),
+
+    productCategoryId: Joi.number().max(999999999999999).required(),
+    purchasePrice: Joi.number().max(999999999999999).required(),
+    salePrice: Joi.number().max(999999999999999).required()
   });
   let {error, value} = Joi.validate(doc, schema);
   if (error) throw error;

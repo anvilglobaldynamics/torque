@@ -80,8 +80,8 @@ exports.InventoryCollection = class extends Collection {
   //   this._find({ organizationId }, cbfn);
   // }
 
-  // getByWarehouseId(warehouseId, cbfn) {
-  //   this._findOne({ id: warehouseId }, cbfn)
-  // }
+  getById(inventoryId, cbfn) {
+    this._findOne({ id: inventoryId }, cbfn)
+  }
 
 }

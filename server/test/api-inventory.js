@@ -8,9 +8,12 @@ let {
   loginUser,
   addOrganization,
   addWarehouse,
+  getWarehouse,
   addOutlet,
   addProductCategory,
-  validateInventorySchema
+  validateInventorySchema,
+  validateProductCategorySchema,
+  validateProductSchema
 } = require('./lib');
 
 const email = `t2${(new Date).getTime()}@gmail.com`;
@@ -38,6 +41,7 @@ const productCategoryName = "test product category";
 let apiKey = null;
 let organizationId = null;
 let warehouseId = null;
+let defaultInventoryId = null;
 let outletId = null;
 let productCategoryId = null;
 
@@ -69,30 +73,35 @@ describe('inventory', _ => {
               contactPersonName: warehouseContactPersonName
             }, (data) => {
               warehouseId = data.warehouseId;
-              addOutlet({
-                apiKey,
-                organizationId,
-                name: outletName,
-                physicalAddress: outletPhysicalAddress,
-                phone: outletPhone,
-                contactPersonName: outletContactPersonName
+              getWarehouse({
+                apiKey, warehouseId
               }, (data) => {
-                outletId = data.outletId;
-                addProductCategory({
+                defaultInventoryId = data.defaultInventory.id;
+                addOutlet({
                   apiKey,
                   organizationId,
-                  parentProductCategoryId: null,
-                  name: productCategoryName,
-                  unit: "box",
-                  defaultDiscountType: "percent",
-                  defaultDiscountValue: 10,
-                  defaultPurchasePrice: 99,
-                  defaultVat: 3,
-                  defaultSalePrice: 111,
-                  isReturnable: true
+                  name: outletName,
+                  physicalAddress: outletPhysicalAddress,
+                  phone: outletPhone,
+                  contactPersonName: outletContactPersonName
                 }, (data) => {
-                  productCategoryId = data.productCategoryId;
-                  testDoneFn();
+                  outletId = data.outletId;
+                  addProductCategory({
+                    apiKey,
+                    organizationId,
+                    parentProductCategoryId: null,
+                    name: productCategoryName,
+                    unit: "box",
+                    defaultDiscountType: "percent",
+                    defaultDiscountValue: 10,
+                    defaultPurchasePrice: 99,
+                    defaultVat: 3,
+                    defaultSalePrice: 111,
+                    isReturnable: true
+                  }, (data) => {
+                    productCategoryId = data.productCategoryId;
+                    testDoneFn();
+                  });
                 });
               });
             });
@@ -107,7 +116,7 @@ describe('inventory', _ => {
     callApi('api/add-product-to-inventory', {
       json: {
         apiKey,
-        inventoryId: 0,
+        inventoryId: defaultInventoryId,
         productList: [{ productCategoryId, purchasePrice: 100, salePrice: 200, count: 10 }]
       }
     }, (err, response, body) => {
@@ -118,27 +127,31 @@ describe('inventory', _ => {
 
   });
 
-  // it('api/get-aggregated-inventory-details (Valid)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid)', testDoneFn => {
 
-  //   callApi('api/get-aggregated-inventory-details', {
-  //     json: {
-  //       apiKey,
-  //       inventoryId: 0
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     // expect(body).to.have.property('warehouseList').that.is.an('array');
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: defaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('productList').that.is.an('array');
+      expect(body).to.have.property('matchingProductList').that.is.an('array');
+      expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
 
-  //     // body.warehouseList.forEach(warehouse => {
-  //     //   validateWarehouseSchema(warehouse);
-  //     // });
-  //     // warehouseList = body.warehouseList;
+      body.matchingProductList.forEach(product => {
+        validateProductSchema(product);
+      });
+      body.matchingProductCategoryList.forEach(productCategory => {
+        validateProductCategorySchema(productCategory);
+      });
 
-  //     testDoneFn();
-  //   });
+      testDoneFn();
+    });
 
-  // });
+  });
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

@@ -63,8 +63,12 @@ exports.ProductCategoryCollection = class extends Collection {
     this._find({ organizationId }, cbfn);
   }
 
-  getByProductCategoryId(productCategoryId, cbfn) {
+  getById(productCategoryId, cbfn) {
     this._findOne({ id: productCategoryId }, cbfn)
+  }
+
+  getByIdList(productCategoryIdList, cbfn) {
+    this._find({ id: { $in: productCategoryIdList } }, cbfn);
   }
 
   listChildren({ productCategoryId }, cbfn) {
