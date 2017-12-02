@@ -50,6 +50,7 @@ let { CustomerCollection } = require('./collections/customer');
 let { OutletCollection } = require('./collections/outlet');
 let { WarehouseCollection } = require('./collections/warehouse');
 let { ProductCategoryCollection } = require('./collections/product-category');
+let { InventoryCollection } = require('./collections/inventory');
 
 let config, logger, database, server, emailService, templateManager;
 
@@ -113,6 +114,7 @@ class Program {
         database.registerCollection('outlet', OutletCollection);
         database.registerCollection('warehouse', WarehouseCollection);
         database.registerCollection('productCategory', ProductCategoryCollection);
+        database.registerCollection('inventory', InventoryCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })

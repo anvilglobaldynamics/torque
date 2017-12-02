@@ -83,6 +83,28 @@ describe('inventory', _ => {
     });
   });
 
+  // it('api/get-aggregated-inventory-details (Valid)', testDoneFn => {
+
+  //   callApi('api/get-aggregated-inventory-details', {
+  //     json: {
+  //       apiKey,
+  //       inventoryId
+  //     }
+  //   }, (err, response, body) => {
+  //     expect(response.statusCode).to.equal(200);
+  //     expect(body).to.have.property('hasError').that.equals(false);
+  //     expect(body).to.have.property('warehouseList').that.is.an('array');
+
+  //     body.warehouseList.forEach(warehouse => {
+  //       validateWarehouseSchema(warehouse);
+  //     });
+  //     warehouseList = body.warehouseList;
+
+  //     testDoneFn();
+  //   });
+
+  // });
+
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
   });
