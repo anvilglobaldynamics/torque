@@ -65,6 +65,26 @@ exports.addOrganization = (data, callback) => {
   })
 }
 
+// ===================================== Warehouse
+
+exports.addWarehouse = (data, callback) => {
+  callApi('api/add-warehouse', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
+// ===================================== Outlet
+
+exports.addOutlet = (data, callback) => {
+  callApi('api/add-outlet', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
 // ================================== Validation
 
 exports.validateCustomerSchema = (doc) => {
@@ -173,6 +193,32 @@ exports.validateProductCategorySchema = (doc) => {
 
     isDeleted: Joi.boolean().required(),
     isReturnable: Joi.boolean().required()
+  });
+  let {error, value} = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateInventorySchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    _id: Joi.string().required(),
+
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+    
+    inventoryContainerId: Joi.number().max(999999999999999).required(),
+    name: Joi.string().min(1).max(64).required(),
+    organizationId: Joi.number().max(999999999999999).required(),
+    allowManualTransfer: Joi.boolean().required(),
+  
+    productList: Joi.array().items(
+      Joi.object().keys({
+        productId: Joi.number().max(999999999999999).required(),
+        count: Joi.number().max(999999999999999).required()
+      })
+    ),
+
+    isDeleted: Joi.boolean().required()
   });
   let {error, value} = Joi.validate(doc, schema);
   if (error) throw error;
