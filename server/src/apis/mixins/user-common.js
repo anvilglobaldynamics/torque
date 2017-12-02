@@ -11,7 +11,7 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     this.database.user.getById(userId, (err, user) => {
       if (err) return this.fail(err);
       let email = user.email;
-      let model = { email };
+      let model = { email, textContent: "Your password has changed." };
       this.server.emailService.sendStoredMail('generic-message', model, email, (err, response) => {
         if ((err) || response.message !== 'Queued. Thank you.') {
           this.logger.error(err);

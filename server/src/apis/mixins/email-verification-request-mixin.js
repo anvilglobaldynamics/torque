@@ -7,8 +7,8 @@ exports.emailVerificationRequestMixin = (SuperApiClass) => class extends SuperAp
     return `https://server1.rewardables.life/verify-email/${verificationToken}`;
   }
 
-  _sendVerificationMail({ email, verificationLink: activationLink }) {
-    let model = { email, activationLink };
+  _sendVerificationMail({ email, verificationLink: verificationLink }) {
+    let model = { email, verificationLink };
     this.server.emailService.sendStoredMail('email-verification', model, email, (err, response) => {
       if ((err) || response.message !== 'Queued. Thank you.') {
         this.logger.error(err);

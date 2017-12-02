@@ -8,6 +8,14 @@ class ConfigLoader {
 
   static get _defaultConfig() {
     return {
+      "branding": {
+        "name": "Torque",
+        "serverUrl": "http://localhost:8540",
+        "clientUrl": "http://localhost:8545",
+        "author": "Torque Team",
+        "supportPhone": "017XXXXXXXX",
+        "supportEmail": "support@mg.torque.live"
+      },
       "baseName": "torque-server",
       "port": 8540,
       "websocketPort": 8541,
@@ -28,12 +36,12 @@ class ConfigLoader {
         "enabled": true,
         "publicKey": "pubkey-00000000000000000000000000000",
         "privateKey": "key-00000000000000000000000000000",
-        "domain": "mg.torque.com",
-        "from": "Torque Team <postmaster@mg.torque.com>"
+        "domain": "mg.torque.live",
+        "from": "Torque Team <postmaster@mg.torque.live>"
       },
       "sms": {
         "enabled": true,
-        "from": "TORQUE"
+        "from": "TORQUE TEAM"
       }
     };
   }

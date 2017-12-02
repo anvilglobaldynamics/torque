@@ -96,9 +96,9 @@ class Program {
         server = new Server(config, mode);
         database = new Database(config.db.path);
         logger = new Logger(config.log, this.muteLogger);
-        emailService = new EmailService(config.email);
-        smsService = new SmsService(config.sms);
-        templateManager = new TemplateManager();
+        emailService = new EmailService(config);
+        smsService = new SmsService(config);
+        templateManager = new TemplateManager(config);
         return promisify(logger, logger.initialize);
       })
       .then(() => {

@@ -6,7 +6,8 @@ let pathlib = require('path')
 
 class TemplateManager {
 
-  constructor() {
+  constructor(config) {
+    this.config = config;
   }
 
   _loadAndPrepareTemplates(cbfn) {
@@ -29,6 +30,7 @@ class TemplateManager {
   }
 
   generateHtml(templateName, model) {
+    Object.assign(model, this.config.branding);
     return this.templates[templateName].compiledTemplate(model);
   }
 

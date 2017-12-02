@@ -1,21 +1,24 @@
 
 class SmsService {
 
-  constructor(options) {
-    let { from, enabled } = options;
+  constructor(config) {
+    this.config = config;
+
+    let { from, enabled } = config.sms;
     this.from = from;
     this.enabled = enabled;
   }
 
   _loadAndPrepareTemplates(cbfn) {
+    let branding = this.config.branding;
     let templateList = [
       {
         name: 'phone-verification',
-        templateFn: ({ verificationCode }) => `Your Torque verification code is ${verificationCode}.`,
+        templateFn: ({ verificationCode }) => `Your ${branding.name} verification code is ${verificationCode}.`,
       },
       {
         name: 'password-reset',
-        templateFn: () => `Your Torque password was recently changed.`,
+        templateFn: () => `Your ${branding.name} password was recently changed.`,
       },
       {
         name: 'generic-message',
