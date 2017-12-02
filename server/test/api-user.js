@@ -331,6 +331,65 @@ describe('user apis (1)', _ => {
 
   });
 
+  // ================================================== Logout
+
+  it('api/user-logout (Correct): ' + email, testDoneFn => {
+
+    callApi('api/user-logout', {
+      json: {
+        apiKey
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    });
+
+  });
+
+  // ================================================== Email Verification
+
+  it('api/verify-email', testDoneFn => {
+
+    getDatabase().find('email-verification-request', { forEmail: changedEmail }, (err, docList) => {
+      if (err) throw err;
+      if (docList.length < 1) throw new Error('Expected doc');
+      let emailVerificationRequest = docList[0];
+
+      require('./utils').callGetApi('verify-email/' + emailVerificationRequest.verificationToken, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.contain('Email Verification Successful')
+        testDoneFn();
+      });
+
+    });
+
+  });
+
+  // ================================================== Login
+
+  it('api/user-login (Correct, Using Email and Changed Password): ' + email, testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: changedEmail,
+        password: changedPassword2
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string')
+      expect(body).to.have.property('sessionId').that.is.a('number')
+      expect(body).to.have.property('warning').that.is.a('string').that.not.equals('You have less than 24 hours to verify your email address.')
+      expect(body).to.have.property('warning').that.is.a('string').that.equals('')
+      expect(body).to.have.property('user').that.is.an('object')
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

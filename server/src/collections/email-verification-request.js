@@ -65,7 +65,7 @@ exports.EmailVerificationRequestCollection = class extends Collection {
           verifiedDatetimeStamp: (new Date).getTime()
         }
       };
-      this._updateEmailVerificationRequest(query, mod, (err, wasUpdated) => {
+      this._update(query, mod, (err, wasUpdated) => {
         if (err) return cbfn(err);
         if (!wasUpdated) return cbfn(new Error("Could not update email-verification-request for reasons unknown."));
         return cbfn(null, doc.forUserId);
@@ -75,6 +75,11 @@ exports.EmailVerificationRequestCollection = class extends Collection {
 
   findByForUserId(userId, cbfn) {
     let query = { forUserId: userId }
+    this._findOne(query, cbfn);
+  }
+
+  findByForEmail(forEmail, cbfn) {
+    let query = { forEmail: forEmail }
     this._findOne(query, cbfn);
   }
 
