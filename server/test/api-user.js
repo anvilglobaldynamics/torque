@@ -180,7 +180,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Edit Profile
 
-  it('api/user-edit-profile' + email, testDoneFn => {
+  it('api/user-edit-profile', testDoneFn => {
 
     callApi('api/user-edit-profile', {
       json: {
@@ -204,7 +204,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Edit Profile
 
-  it('api/user-edit-profile' + email, testDoneFn => {
+  it('api/user-edit-profile', testDoneFn => {
 
     callApi('api/user-edit-profile', {
       json: {
