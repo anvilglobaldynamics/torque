@@ -70,17 +70,6 @@ exports.InventoryCollection = class extends Collection {
     this._update({ id: inventory.id }, modifications, cbfn);
   }
 
-  // delete({ warehouseId }, cbfn) {
-  //   let modifications = {
-  //     $set: { isDeleted: true }
-  //   }
-  //   this._update({ id: warehouseId }, modifications, cbfn);
-  // }
-
-  // listByOrganizationId(organizationId, cbfn) {
-  //   this._find({ organizationId }, cbfn);
-  // }
-
   getById(inventoryId, cbfn) {
     this._findOne({ id: inventoryId }, cbfn)
   }
