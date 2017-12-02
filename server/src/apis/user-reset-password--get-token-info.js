@@ -2,7 +2,7 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.UserPasswordResetGetTokenInfoApi = class extends Api {
+exports.UserResetPasswordGetTokenInfoApi = class extends Api {
 
   get autoValidates() { return true; }
 
@@ -10,7 +10,7 @@ exports.UserPasswordResetGetTokenInfoApi = class extends Api {
 
   get requestSchema() {
     return Joi.object().keys({
-      uniqueToken: Joi.string().length(16).required(),
+      uniqueToken: Joi.string().length(64).required(),
     });
   }
 
@@ -31,7 +31,7 @@ exports.UserPasswordResetGetTokenInfoApi = class extends Api {
 
   handle({ body }) {
     let { uniqueToken } = body;
-    this._getTokenInfoIfValid({ emailOrPhone }, (tokenInfo) => {
+    this._getTokenInfoIfValid({ uniqueToken }, (tokenInfo) => {
       this.success({ status: "success", tokenInfo });
     });
   }

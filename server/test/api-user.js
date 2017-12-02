@@ -2,6 +2,7 @@
 let expect = require('chai').expect;
 let { callApi } = require('./utils');
 let {
+  getDatabase,
   initializeServer,
   terminateServer
 } = require('./lib');
@@ -244,7 +245,7 @@ describe('user apis (1)', _ => {
   });
 
 
-  // ================================================== Login
+  // ================================================== Password Reset - Request
 
   it('api/user-reset-password--request', testDoneFn => {
 
@@ -260,6 +261,36 @@ describe('user apis (1)', _ => {
     })
 
   });
+
+  // ================================================== Password Reset - Get Token Info
+
+  it('api/user-reset-password--get-token-info', testDoneFn => {
+
+    getDatabase().find('password-reset-request', { forEmail: changedEmail }, (err, docList) => {
+      if (err) throw err;
+      if (docList.length < 1) throw new Error('Expected doc');
+      let passwordResetRequest = docList[0];
+      console.log(passwordResetRequest)
+
+      callApi('api/user-reset-password--get-token-info', {
+        json: {
+          uniqueToken: passwordResetRequest.confirmationToken
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        console.log(body)
+        expect(body).to.have.property('hasError').that.equals(false);
+        expect(body).to.have.property('status').that.equals('success');
+        testDoneFn();
+      })
+    });
+
+
+
+  });
+
+
+
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

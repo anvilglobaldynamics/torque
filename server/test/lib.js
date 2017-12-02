@@ -9,6 +9,8 @@ let pendingTerminationRequest = false;
 
 // ===================================== Server
 
+exports.getDatabase = ()=> { return mainProgram.exposeDatabaseForTesting(); }
+
 exports.initializeServer = (callback) => {
   pendingTerminationRequest = false;
   if (hasStarted) {
