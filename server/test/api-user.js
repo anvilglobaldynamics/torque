@@ -10,7 +10,8 @@ let {
 const email = `t1${(new Date).getTime()}@gmail.com`;
 const changedEmail = `t1t${(new Date).getTime()}@gmail.com`;
 const password = "123545678";
-const changedPassword = "123545678";
+const changedPassword = "123545678"; //FIXME
+const changedPassword2 = "123545678-2";
 const fullName = "Test User";
 const phone = 't1' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 
@@ -270,11 +271,33 @@ describe('user apis (1)', _ => {
       if (err) throw err;
       if (docList.length < 1) throw new Error('Expected doc');
       let passwordResetRequest = docList[0];
-      console.log(passwordResetRequest)
 
       callApi('api/user-reset-password--get-token-info', {
         json: {
           uniqueToken: passwordResetRequest.confirmationToken
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.have.property('hasError').that.equals(false);
+        expect(body).to.have.property('status').that.equals('success');
+        testDoneFn();
+      })
+    });
+  });
+  // ================================================== Password Reset - Get Token Info
+
+  it('api/user-reset-password--confirm', testDoneFn => {
+
+    getDatabase().find('password-reset-request', { forEmail: changedEmail }, (err, docList) => {
+      if (err) throw err;
+      if (docList.length < 1) throw new Error('Expected doc');
+      let passwordResetRequest = docList[0];
+      console.log(passwordResetRequest)
+
+      callApi('api/user-reset-password--confirm', {
+        json: {
+          uniqueToken: passwordResetRequest.confirmationToken,
+          newPassword: changedPassword2
         }
       }, (err, response, body) => {
         expect(response.statusCode).to.equal(200);
@@ -284,8 +307,6 @@ describe('user apis (1)', _ => {
         testDoneFn();
       })
     });
-
-
 
   });
 

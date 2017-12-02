@@ -27,6 +27,7 @@ let { EditCustomerApi } = require('./apis/edit-customer');
 let { DeleteCustomerApi } = require('./apis/delete-customer');
 let { UserResetPasswordRequestApi } = require('./apis/user-reset-password--request');
 let { UserResetPasswordGetTokenInfoApi } = require('./apis/user-reset-password--get-token-info');
+let { UserResetPasswordConfirmApi } = require('./apis/user-reset-password--confirm');
 
 let { AddOutletApi } = require('./apis/add-outlet');
 let { GetOutletListApi } = require('./apis/get-outlet-list');
@@ -138,6 +139,7 @@ class Program {
         server.registerPostApi('/api/delete-outlet', DeleteOutletApi);
         server.registerPostApi('/api/user-reset-password--request', UserResetPasswordRequestApi);
         server.registerPostApi('/api/user-reset-password--get-token-info', UserResetPasswordGetTokenInfoApi);
+        server.registerPostApi('/api/user-reset-password--confirm', UserResetPasswordConfirmApi);
         return Promise.resolve();
       })
       .then(() => {
