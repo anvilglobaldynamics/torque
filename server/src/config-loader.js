@@ -30,6 +30,10 @@ class ConfigLoader {
         "privateKey": "key-00000000000000000000000000000",
         "domain": "mg.torque.com",
         "from": "Torque Team <postmaster@mg.torque.com>"
+      },
+      "sms": {
+        "enabled": true,
+        "from": "TORQUE"
       }
     };
   }

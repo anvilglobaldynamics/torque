@@ -7,6 +7,7 @@ let { Logger } = require('./logger');
 let { Database } = require('./database');
 let { ConfigLoader } = require('./config-loader');
 let { EmailService } = require('./email-service');
+let { SmsService } = require('./sms-service');
 let { TemplateManager } = require('./template-manager');
 
 let { UserRegisterApi } = require('./apis/user-register');
@@ -57,7 +58,7 @@ let { WarehouseCollection } = require('./collections/warehouse');
 let { ProductCategoryCollection } = require('./collections/product-category');
 let { PasswordResetRequestCollection } = require('./collections/password-reset-request');
 
-let config, logger, database, server, emailService, templateManager;
+let config, logger, database, server, emailService, smsService, templateManager;
 
 let mode = detectMode();
 
@@ -96,6 +97,7 @@ class Program {
         database = new Database(config.db.path);
         logger = new Logger(config.log, this.muteLogger);
         emailService = new EmailService(config.email);
+        smsService = new SmsService(config.sms);
         templateManager = new TemplateManager();
         return promisify(logger, logger.initialize);
       })
