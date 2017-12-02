@@ -143,21 +143,21 @@ describe('product-category', _ => {
 
   });
 
-  // it('api/delete-warehouse (Valid)', testDoneFn => {
+  it('api/delete-product-category (Valid)', testDoneFn => {
 
-  //   callApi('api/delete-warehouse', {
-  //     json: {
-  //       apiKey,
-  //       warehouseId: warehouseToBeModified.id,
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('status').that.equals('success');
-  //     testDoneFn();
-  //   })
+    callApi('api/delete-product-category', {
+      json: {
+        apiKey,
+        warehouseId: warehouseToBeModified.id,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
 
-  // });
+  });
 
   it('api/add-product-category (Invalid parentProductCategoryId)', testDoneFn => {
 
