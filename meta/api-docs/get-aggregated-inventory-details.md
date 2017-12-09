@@ -38,14 +38,14 @@ Possible Error Codes:
 {
   "hasError": false,
 
-  productList: Joi.array().items(
+  "productList": Joi.array().items(
     Joi.object().keys({
       productId: Joi.number().max(999999999999999).required(),
       count: Joi.number().max(999999999999999).required()
     });
   ),
 
-  matchingProductList: Joi.array().items(
+  "matchingProductList": Joi.array().items(
     Joi.object().keys({
       id: Joi.number().max(999999999999999).required(),
       productCategoryId: Joi.number().max(999999999999999).required(),
@@ -54,7 +54,7 @@ Possible Error Codes:
     });
   ),
 
-  matchingProductCategoryList: Joi.array().items(
+  "matchingProductCategoryList": Joi.array().items(
     Joi.object().keys({
       id: Joi.number().max(999999999999999).required(),
       name: Joi.string().min(1).max(64).required(),

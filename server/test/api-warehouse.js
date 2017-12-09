@@ -7,7 +7,8 @@ let {
   registerUser,
   loginUser,
   addOrganization,
-  validateWarehouseSchema
+  validateWarehouseSchema,
+  validateEmbeddedInventorySchema
 } = require('./lib');
 
 const email = `t2${(new Date).getTime()}@gmail.com`;
@@ -105,7 +106,15 @@ describe('warehouse', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('warehouse');
+      expect(body).to.have.property('defaultInventory');
+      expect(body).to.have.property('returnedInventory');
+      expect(body).to.have.property('damagedInventory');
+
       validateWarehouseSchema(body.warehouse);
+      validateEmbeddedInventorySchema(body.defaultInventory);
+      validateEmbeddedInventorySchema(body.returnedInventory);
+      validateEmbeddedInventorySchema(body.damagedInventory);
+
       warehouseToBeModified = body.warehouse;
       testDoneFn();
     });
@@ -133,7 +142,7 @@ describe('warehouse', _ => {
 
   });
 
-  it('api/get-warehouse (Valid)', testDoneFn => {
+  it('api/get-warehouse (Valid modification check)', testDoneFn => {
 
     callApi('api/get-warehouse', {
       json: {
@@ -144,7 +153,15 @@ describe('warehouse', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('warehouse');
+      expect(body).to.have.property('defaultInventory');
+      expect(body).to.have.property('returnedInventory');
+      expect(body).to.have.property('damagedInventory');
       expect(body.warehouse.phone).to.equal(warehousePhone2);
+
+      validateWarehouseSchema(body.warehouse);
+      validateEmbeddedInventorySchema(body.defaultInventory);
+      validateEmbeddedInventorySchema(body.returnedInventory);
+      validateEmbeddedInventorySchema(body.damagedInventory);
       testDoneFn();
     });
 

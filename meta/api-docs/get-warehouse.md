@@ -43,7 +43,31 @@ Possible Error Codes:
     physicalAddress: Joi.string().min(1).max(128).required(),
     contactPersonName: Joi.string().min(1).max(64).required(),
     phone: Joi.string().alphanum().min(11).max(14).required()
-  });
+  }),
+  "defaultInventory": Joi.object().keys({
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+    
+    id: Joi.number().max(999999999999999).required(),
+    name: Joi.string().min(1).max(64).required(),
+    allowManualTransfer: Joi.boolean().required(),
+  }),
+  "returnedInventory": Joi.object().keys({
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+    
+    id: Joi.number().max(999999999999999).required(),
+    name: Joi.string().min(1).max(64).required(),
+    allowManualTransfer: Joi.boolean().required(),
+  }),
+  "damagedInventory": Joi.object().keys({
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+    
+    id: Joi.number().max(999999999999999).required(),
+    name: Joi.string().min(1).max(64).required(),
+    allowManualTransfer: Joi.boolean().required(),
+  })
 }
 ```
 

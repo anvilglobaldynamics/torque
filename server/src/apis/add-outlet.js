@@ -1,4 +1,3 @@
-
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
@@ -36,10 +35,32 @@ exports.AddOutletApi = class extends Api {
     });
   }
 
+  _createInventories({ outletId, organizationId }, cbfn) {
+    this._createInventory({ outletId, organizationId, type: 'default', name: 'Default' }, () => {
+      this._createInventory({ outletId, organizationId, type: 'returned', name: 'Returned' }, () => {
+        this._createInventory({ outletId, organizationId, type: 'damaged', name: 'Damaged' }, () => {
+          cbfn();
+        })
+      })
+    })
+  }
+
+  _createInventory({ outletId, organizationId, type, name }, cbfn) {
+    let inventory = {
+      inventoryContainerId: outletId, organizationId, type, name, allowManualTransfer: true
+    }
+    this.database.inventory.create(inventory, (err, inventoryId) => {
+      if (err) return this.fail(err);
+      cbfn();
+    })
+  }
+
   handle({ body, userId }) {
     let { name, organizationId, physicalAddress, phone, contactPersonName } = body;
     this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName }, (outletId) => {
-      this.success({ status: "success", outletId });
+      this._createInventories({ outletId, organizationId }, () => {
+        this.success({ status: "success", outletId });
+      });
     });
   }
 

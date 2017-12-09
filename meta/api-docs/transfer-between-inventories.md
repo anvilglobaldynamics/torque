@@ -16,8 +16,8 @@ method: `POST`
     Joi.object().keys({
       productId: Joi.number().max(999999999999999).required(),
       count: Joi.number().max(999999999999999).required()
-    });
-  );
+    })
+  )
 }
 ```
 
@@ -39,6 +39,7 @@ Possible Error Codes:
 { code: FROM_INVENTORY_INVALID } // from inventory could not be found
 { code: TO_INVENTORY_INVALID } // to inventory could not be found
 { code: PRODUCT_INVALID } // product could not be found
+{ code: PRODUCT_INSUFFICIENT } // product could not be found
 ```
 
 ### response (on success):

@@ -22,10 +22,31 @@ exports.GetOutletApi = class extends Api {
     })
   }
 
+  _getOutletInventories(outletId, cbfn) {
+    this.database.inventory.listByInventoryContainerId(outletId, (err, inventoryList) => {
+      let defaultInventory, returnedInventory, damagedInventory;
+      inventoryList.forEach(inventory => {
+        if (inventory.type === 'default') {
+          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
+          defaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+        } else if (inventory.type === 'returned') {
+          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
+          returnedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+        } else if (inventory.type === 'damaged') {
+          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
+          damagedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+        }
+      });
+      cbfn(defaultInventory, returnedInventory, damagedInventory);
+    })
+  }
+
   handle({ body }) {
     let { outletId } =  body;
     this._getOutlet(outletId, (outlet) => {
-      this.success({ outlet });
+      this._getOutletInventories(outletId, (defaultInventory, returnedInventory, damagedInventory) => {
+        this.success({ outlet, defaultInventory, returnedInventory, damagedInventory });
+      })
     });
   }
 

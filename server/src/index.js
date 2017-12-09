@@ -47,6 +47,10 @@ let { GetProductCategoryListApi } = require('./apis/get-product-category-list');
 let { EditProductCategoryApi } = require('./apis/edit-product-category');
 let { DeleteProductCategoryApi } = require('./apis/delete-product-category');
 
+let { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-inventory-details');
+let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
+let { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
+
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
 let { SessionCollection } = require('./collections/session');
@@ -57,6 +61,8 @@ let { OutletCollection } = require('./collections/outlet');
 let { WarehouseCollection } = require('./collections/warehouse');
 let { ProductCategoryCollection } = require('./collections/product-category');
 let { PasswordResetRequestCollection } = require('./collections/password-reset-request');
+let { InventoryCollection } = require('./collections/inventory');
+let { ProductCollection } = require('./collections/product');
 
 let config, logger, database, server, emailService, smsService, templateManager;
 
@@ -122,6 +128,8 @@ class Program {
         database.registerCollection('warehouse', WarehouseCollection);
         database.registerCollection('productCategory', ProductCategoryCollection);
         database.registerCollection('passwordResetRequest', PasswordResetRequestCollection);
+        database.registerCollection('inventory', InventoryCollection);
+        database.registerCollection('product', ProductCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })
@@ -166,6 +174,9 @@ class Program {
         server.registerPostApi('/api/user-reset-password--request', UserResetPasswordRequestApi);
         server.registerPostApi('/api/user-reset-password--get-token-info', UserResetPasswordGetTokenInfoApi);
         server.registerPostApi('/api/user-reset-password--confirm', UserResetPasswordConfirmApi);
+        server.registerPostApi('/api/get-aggregated-inventory-details', GetAggregatedInventoryDetailsApi);
+        server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
+        server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
         return Promise.resolve();
       })
       .then(() => {

@@ -22,10 +22,31 @@ exports.GetWarehouseApi = class extends Api {
     })
   }
 
+  _getWarehouseInventories(warehouseId, cbfn) {
+    this.database.inventory.listByInventoryContainerId(warehouseId, (err, inventoryList) => {
+      let defaultInventory, returnedInventory, damagedInventory;
+      inventoryList.forEach(inventory => {
+        if (inventory.type === 'default') {
+          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
+          defaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+        } else if (inventory.type === 'returned') {
+          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
+          returnedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+        } else if (inventory.type === 'damaged') {
+          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
+          damagedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+        }
+      });
+      cbfn(defaultInventory, returnedInventory, damagedInventory);
+    })
+  }
+
   handle({ body }) {
     let { warehouseId } =  body;
     this._getWarehouse(warehouseId, (warehouse) => {
-      this.success({ warehouse });
+      this._getWarehouseInventories(warehouseId, (defaultInventory, returnedInventory, damagedInventory) => {
+        this.success({ warehouse, defaultInventory, returnedInventory, damagedInventory });
+      })
     });
   }
 

@@ -1,4 +1,3 @@
-
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
@@ -36,10 +35,32 @@ exports.AddWarehouseApi = class extends Api {
     });
   }
 
+  _createInventories({ warehouseId, organizationId }, cbfn) {
+    this._createInventory({ warehouseId, organizationId, type: 'default', name: 'Default' }, () => {
+      this._createInventory({ warehouseId, organizationId, type: 'returned', name: 'Returned' }, () => {
+        this._createInventory({ warehouseId, organizationId, type: 'damaged', name: 'Damaged' }, () => {
+          cbfn();
+        })
+      })
+    })
+  }
+
+  _createInventory({ warehouseId, organizationId, type, name }, cbfn) {
+    let inventory = {
+      inventoryContainerId: warehouseId, organizationId, type, name, allowManualTransfer: true
+    }
+    this.database.inventory.create(inventory, (err, inventoryId) => {
+      if (err) return this.fail(err);
+      cbfn();
+    })
+  }
+
   handle({ body }) {
     let { name, organizationId, physicalAddress, phone, contactPersonName } = body;
     this._createWarehouse({ name, organizationId, physicalAddress, phone, contactPersonName }, (warehouseId) => {
-      this.success({ status: "success", warehouseId });
+      this._createInventories({ warehouseId, organizationId }, () => {
+        this.success({ status: "success", warehouseId });
+      });
     });
   }
 

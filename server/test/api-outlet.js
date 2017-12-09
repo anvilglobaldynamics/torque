@@ -7,7 +7,8 @@ let {
   registerUser,
   loginUser,
   addOrganization,
-  validateOutletSchema
+  validateOutletSchema,
+  validateEmbeddedInventorySchema
 } = require('./lib');
 
 const email = `t2${(new Date).getTime()}@gmail.com`;
@@ -105,7 +106,15 @@ describe('outlet', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('outlet');
+      expect(body).to.have.property('defaultInventory');
+      expect(body).to.have.property('returnedInventory');
+      expect(body).to.have.property('damagedInventory');
+
       validateOutletSchema(body.outlet);
+      validateEmbeddedInventorySchema(body.defaultInventory);
+      validateEmbeddedInventorySchema(body.returnedInventory);
+      validateEmbeddedInventorySchema(body.damagedInventory);
+
       outletToBeModified = body.outlet;
       testDoneFn();
     });
@@ -133,7 +142,7 @@ describe('outlet', _ => {
 
   });
 
-  it('api/get-outlet (Valid)', testDoneFn => {
+  it('api/get-outlet (Valid modification check)', testDoneFn => {
 
     callApi('api/get-outlet', {
       json: {
@@ -144,7 +153,15 @@ describe('outlet', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('outlet');
+      expect(body).to.have.property('defaultInventory');
+      expect(body).to.have.property('returnedInventory');
+      expect(body).to.have.property('damagedInventory');
       expect(body.outlet.phone).to.equal(outletPhone2);
+
+      validateOutletSchema(body.outlet);
+      validateEmbeddedInventorySchema(body.defaultInventory);
+      validateEmbeddedInventorySchema(body.returnedInventory);
+      validateEmbeddedInventorySchema(body.damagedInventory);
       testDoneFn();
     });
 
