@@ -92,6 +92,14 @@ exports.addOutlet = (data, callback) => {
   })
 }
 
+exports.getOutlet = (data, callback) => {
+  callApi('api/get-outlet', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
 // ===================================== Product Category
 
 exports.addProductCategory = (data, callback) => {

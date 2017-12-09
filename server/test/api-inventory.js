@@ -9,6 +9,7 @@ let {
   addOrganization,
   addWarehouse,
   getWarehouse,
+  getOutlet,
   addOutlet,
   addProductCategory,
   validateInventorySchema,
@@ -41,11 +42,17 @@ const productCategoryName = "test product category";
 let apiKey = null;
 let organizationId = null;
 let warehouseId = null;
-let defaultInventoryId = null;
 let outletId = null;
 let productCategoryId = null;
-let returnedInventoryId = null;
-let damagedInventoryId = null;
+
+let warehouseDefaultInventoryId = null;
+let warehouseReturnedInventoryId = null;
+let warehouseDamagedInventoryId = null;
+
+let outletDefaultInventoryId = null;
+let outletReturnedInventoryId = null;
+let outletDamagedInventoryId = null;
+
 let productToBeTransferredId = null;
 
 describe('inventory', _ => {
@@ -79,9 +86,9 @@ describe('inventory', _ => {
               getWarehouse({
                 apiKey, warehouseId
               }, (data) => {
-                defaultInventoryId = data.defaultInventory.id;
-                returnedInventoryId = data.returnedInventory.id;
-                damagedInventoryId = data.damagedInventory.id;
+                warehouseDefaultInventoryId = data.defaultInventory.id;
+                warehouseReturnedInventoryId = data.returnedInventory.id;
+                warehouseDamagedInventoryId = data.damagedInventory.id;
                 addOutlet({
                   apiKey,
                   organizationId,
@@ -91,21 +98,28 @@ describe('inventory', _ => {
                   contactPersonName: outletContactPersonName
                 }, (data) => {
                   outletId = data.outletId;
-                  addProductCategory({
-                    apiKey,
-                    organizationId,
-                    parentProductCategoryId: null,
-                    name: productCategoryName,
-                    unit: "box",
-                    defaultDiscountType: "percent",
-                    defaultDiscountValue: 10,
-                    defaultPurchasePrice: 99,
-                    defaultVat: 3,
-                    defaultSalePrice: 111,
-                    isReturnable: true
+                  getOutlet({
+                    apiKey, outletId
                   }, (data) => {
-                    productCategoryId = data.productCategoryId;
-                    testDoneFn();
+                    outletDefaultInventoryId = data.defaultInventory.id;
+                    outletReturnedInventoryId = data.returnedInventory.id;
+                    outletDamagedInventoryId = data.damagedInventory.id;
+                    addProductCategory({
+                      apiKey,
+                      organizationId,
+                      parentProductCategoryId: null,
+                      name: productCategoryName,
+                      unit: "box",
+                      defaultDiscountType: "percent",
+                      defaultDiscountValue: 10,
+                      defaultPurchasePrice: 99,
+                      defaultVat: 3,
+                      defaultSalePrice: 111,
+                      isReturnable: true
+                    }, (data) => {
+                      productCategoryId = data.productCategoryId;
+                      testDoneFn();
+                    });
                   });
                 });
               });
@@ -116,13 +130,15 @@ describe('inventory', _ => {
     });
   });
 
-  it('api/add-product-to-inventory (Valid)', testDoneFn => {
+  it('api/add-product-to-inventory (Valid warehouse)', testDoneFn => {
 
     callApi('api/add-product-to-inventory', {
       json: {
         apiKey,
-        inventoryId: defaultInventoryId,
-        productList: [{ productCategoryId, purchasePrice: 100, salePrice: 200, count: 10 }]
+        inventoryId: warehouseDefaultInventoryId,
+        productList: [
+          { productCategoryId, purchasePrice: 100, salePrice: 200, count: 10 }
+        ]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -132,12 +148,12 @@ describe('inventory', _ => {
 
   });
 
-  it('api/get-aggregated-inventory-details (Valid)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid warehouse)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
         apiKey,
-        inventoryId: defaultInventoryId
+        inventoryId: warehouseDefaultInventoryId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -165,9 +181,11 @@ describe('inventory', _ => {
     callApi('api/transfer-between-inventories', {
       json: {
         apiKey,
-        fromInventoryId: defaultInventoryId,
-        toInventoryId: returnedInventoryId,
-        productList: [{ productId: productToBeTransferredId, count: 1 }]
+        fromInventoryId: warehouseDefaultInventoryId,
+        toInventoryId: warehouseReturnedInventoryId,
+        productList: [
+          { productId: productToBeTransferredId, count: 1 }
+        ]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -182,9 +200,11 @@ describe('inventory', _ => {
     callApi('api/transfer-between-inventories', {
       json: {
         apiKey,
-        fromInventoryId: defaultInventoryId,
-        toInventoryId: returnedInventoryId,
-        productList: [{ productId: productToBeTransferredId, count: 1 }]
+        fromInventoryId: warehouseDefaultInventoryId,
+        toInventoryId: warehouseReturnedInventoryId,
+        productList: [
+          { productId: productToBeTransferredId, count: 1 }
+        ]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -199,36 +219,7 @@ describe('inventory', _ => {
     callApi('api/get-aggregated-inventory-details', {
       json: {
         apiKey,
-        inventoryId: defaultInventoryId
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('productList').that.is.an('array');
-      expect(body).to.have.property('matchingProductList').that.is.an('array');
-      expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
-
-      body.matchingProductList.forEach(product => {
-        validateProductSchema(product);
-      });
-      body.matchingProductCategoryList.forEach(productCategory => {
-        validateProductCategorySchema(productCategory);
-      });
-
-      expect(body.productList[0]).to.have.property('productId').that.equals(productToBeTransferredId);
-      expect(body.productList[0]).to.have.property('count').that.equals(8);
-
-      testDoneFn();
-    });
-
-  });
-
-  it('api/get-aggregated-inventory-details (Valid modification check)', testDoneFn => {
-
-    callApi('api/get-aggregated-inventory-details', {
-      json: {
-        apiKey,
-        inventoryId: returnedInventoryId
+        inventoryId: warehouseReturnedInventoryId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -246,6 +237,84 @@ describe('inventory', _ => {
 
       expect(body.productList[0]).to.have.property('productId').that.equals(productToBeTransferredId);
       expect(body.productList[0]).to.have.property('count').that.equals(2);
+
+      testDoneFn();
+    });
+
+  });
+
+
+  it('api/transfer-between-inventories (Valid Warehouse to Outlet)', testDoneFn => {
+
+    callApi('api/transfer-between-inventories', {
+      json: {
+        apiKey,
+        fromInventoryId: warehouseDefaultInventoryId,
+        toInventoryId: outletDefaultInventoryId,
+        productList: [
+          { productId: productToBeTransferredId, count: 3 }
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-aggregated-inventory-details (Valid modification check, Outlet)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: outletDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('productList').that.is.an('array');
+      expect(body).to.have.property('matchingProductList').that.is.an('array');
+      expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
+
+      body.matchingProductList.forEach(product => {
+        validateProductSchema(product);
+      });
+      body.matchingProductCategoryList.forEach(productCategory => {
+        validateProductCategorySchema(productCategory);
+      });
+
+      expect(body.productList[0]).to.have.property('productId').that.equals(productToBeTransferredId);
+      expect(body.productList[0]).to.have.property('count').that.equals(3);
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-aggregated-inventory-details (Valid modification check, Warehouse)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('productList').that.is.an('array');
+      expect(body).to.have.property('matchingProductList').that.is.an('array');
+      expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
+
+      body.matchingProductList.forEach(product => {
+        validateProductSchema(product);
+      });
+      body.matchingProductCategoryList.forEach(productCategory => {
+        validateProductCategorySchema(productCategory);
+      });
+
+      expect(body.productList[0]).to.have.property('productId').that.equals(productToBeTransferredId);
+      expect(body.productList[0]).to.have.property('count').that.equals(5);
 
       testDoneFn();
     });
