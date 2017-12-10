@@ -1,7 +1,7 @@
 This collection contains an sale
 
 ## signature
-```
+```js
 Joi.object().keys({
   createdDatetimeStamp: Joi.number().max(999999999999999).required(),
   lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
@@ -15,8 +15,8 @@ Joi.object().keys({
       discountType: Joi.string().max(1024).required(),
       discountValue: Joi.number().max(999999999999999).required(),
       salePrice: Joi.number().max(999999999999999).required()
-    });
-  );
+    })
+  ),
   payment: Joi.object().keys({
     totalAmount: Joi.number().max(999999999999999).required(),
     vatAmount: Joi.number().max(999999999999999).required(),
@@ -28,7 +28,7 @@ Joi.object().keys({
     previousCustomerBalance: Joi.number().max(999999999999999).required(),
     paidAmount: Joi.number().max(999999999999999).required(),
     changeAmount: Joi.number().max(999999999999999).required()
-  });
+  }),
   isModified: Joi.boolean().required(),
   isDeleted: Joi.boolean().required()
 });

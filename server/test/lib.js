@@ -112,6 +112,16 @@ exports.addProductCategory = (data, callback) => {
   })
 }
 
+// ===================================== Customer
+
+exports.addCustomer = (data, callback) => {
+  callApi('api/add-customer', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
 // ================================== Validation
 
 exports.validateCustomerSchema = (doc) => {

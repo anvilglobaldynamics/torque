@@ -40,7 +40,7 @@ Possible Error Codes:
 {
   "hasError": false,
   "status": "success",
-  "customerId": numeric id of new customer
+  "customerId": Joi.number().max(999999999999999).required()
 }
 ```
 
