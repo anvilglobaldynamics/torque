@@ -122,7 +122,17 @@ exports.addCustomer = (data, callback) => {
   })
 }
 
-// ================================== Validation
+// ===================================== Inventory
+
+exports.addProductToInventory = (data, callback) => {
+  callApi('api/add-product-to-inventory', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
+// ===================================== Validation
 
 exports.validateCustomerSchema = (doc) => {
   let schema = Joi.object().keys({

@@ -7,11 +7,10 @@ let {
   registerUser,
   loginUser,
   addOrganization,
-  addWarehouse,
   addOutlet,
   addProductCategory,
+  addProductToInventory,
   addCustomer,
-  getWarehouse,
   getOutlet,
   validateInventorySchema,
   validateProductCategorySchema,
@@ -28,11 +27,6 @@ const orgName = "Test Organization";
 const orgBusinessAddress = "Test Org Address";
 const orgPhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 
-const warehousePhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
-const warehouseName = "Test Warehouse";
-const warehousePhysicalAddress = "Test Warehouse Address";
-const warehouseContactPersonName = "Test Warehouse Person";
-
 const outletPhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 const outletName = "Test Outlet";
 const outletPhysicalAddress = "Test Outlet Address";
@@ -46,14 +40,9 @@ const openingBalance = '500';
 
 let apiKey = null;
 let organizationId = null;
-let warehouseId = null;
 let outletId = null;
 let productCategoryId = null;
 let customerId = null;
-
-let warehouseDefaultInventoryId = null;
-let warehouseReturnedInventoryId = null;
-let warehouseDamagedInventoryId = null;
 
 let outletDefaultInventoryId = null;
 let outletReturnedInventoryId = null;
@@ -80,60 +69,51 @@ describe('sales', _ => {
             email: orgEmail
           }, (data) => {
             organizationId = data.organizationId;
-            addWarehouse({
+            addOutlet({
               apiKey,
               organizationId,
-              name: warehouseName,
-              physicalAddress: warehousePhysicalAddress,
-              phone: warehousePhone,
-              contactPersonName: warehouseContactPersonName
+              name: outletName,
+              physicalAddress: outletPhysicalAddress,
+              phone: outletPhone,
+              contactPersonName: outletContactPersonName
             }, (data) => {
-              warehouseId = data.warehouseId;
-              getWarehouse({
-                apiKey, warehouseId
+              outletId = data.outletId;
+              getOutlet({
+                apiKey, outletId
               }, (data) => {
-                warehouseDefaultInventoryId = data.defaultInventory.id;
-                warehouseReturnedInventoryId = data.returnedInventory.id;
-                warehouseDamagedInventoryId = data.damagedInventory.id;
-                addOutlet({
+                outletDefaultInventoryId = data.defaultInventory.id;
+                outletReturnedInventoryId = data.returnedInventory.id;
+                outletDamagedInventoryId = data.damagedInventory.id;
+                addProductCategory({
                   apiKey,
                   organizationId,
-                  name: outletName,
-                  physicalAddress: outletPhysicalAddress,
-                  phone: outletPhone,
-                  contactPersonName: outletContactPersonName
+                  parentProductCategoryId: null,
+                  name: productCategoryName,
+                  unit: "box",
+                  defaultDiscountType: "percent",
+                  defaultDiscountValue: 10,
+                  defaultPurchasePrice: 99,
+                  defaultVat: 3,
+                  defaultSalePrice: 111,
+                  isReturnable: true
                 }, (data) => {
-                  outletId = data.outletId;
-                  getOutlet({
-                    apiKey, outletId
+                  productCategoryId = data.productCategoryId;
+                  addProductToInventory({
+                    apiKey,
+                    inventoryId: outletDefaultInventoryId,
+                    productList: [
+                      { productCategoryId, purchasePrice: 99, salePrice: 200, count: 100 }
+                    ]
                   }, (data) => {
-                    outletDefaultInventoryId = data.defaultInventory.id;
-                    outletReturnedInventoryId = data.returnedInventory.id;
-                    outletDamagedInventoryId = data.damagedInventory.id;
-                    addProductCategory({
+                    addCustomer({
                       apiKey,
                       organizationId,
-                      parentProductCategoryId: null,
-                      name: productCategoryName,
-                      unit: "box",
-                      defaultDiscountType: "percent",
-                      defaultDiscountValue: 10,
-                      defaultPurchasePrice: 99,
-                      defaultVat: 3,
-                      defaultSalePrice: 111,
-                      isReturnable: true
+                      fullName: customerFullName,
+                      phone: customerPhone,
+                      openingBalance
                     }, (data) => {
-                      productCategoryId = data.productCategoryId;
-                      addCustomer({
-                        apiKey,
-                        organizationId,
-                        fullName: customerFullName,
-                        phone: customerPhone,
-                        openingBalance
-                      }, (data) => {
-                        customerId = data.customerId;
-                        testDoneFn();
-                      });
+                      customerId = data.customerId;
+                      testDoneFn();
                     });
                   });
                 });
