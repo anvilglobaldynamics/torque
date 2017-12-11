@@ -99,8 +99,19 @@ exports.SaveSalesApi = class extends Api {
     cbfn();
   }
 
-  _adjustCustomerBalance(customer, cbfn) {
-    cbfn();
+  _handlePayment(payment, customer, cbfn) {
+    let diff = payment.paidAmount - (payment.totalBilled - payment.previousCustomerBalance);
+    if (diff >= 0) {
+      payment.changeAmount = diff;
+      return cbfn(payment)
+    } else {
+      _adjustCustomerBalance(diff, customer);
+    }
+  }
+
+  _adjustCustomerBalance(diff, customer, cbfn) {
+    customer.balance = diff;
+    return cbfn(customer);
   }
 
   _updateInventory(outletDefaultInventory, cbfn) {
@@ -119,14 +130,16 @@ exports.SaveSalesApi = class extends Api {
   handle({ body }) {
     let { salesId, outletId, customerId, productList, payment } = body;
 
+    // FIXME: make below all params obj
     this._getOutletDefaultInventor(outletId, (outletDefaultInventory) => {
       this._getInventoryWithId(outletDefaultInventory.id, (outletDefaultInventory) => {
         this._getCustomerWithId(customerId, (customer) => {
           this._sell(outletDefaultInventory, productList, () => {
-            this._adjustCustomerBalance(customer, () => {
-              this._updateInventory(outletDefaultInventory, () => {
-                this._saveSales(outletId, customerId, productList, payment, () => {
-                  this.success();
+            this._handlePayment(payment, customer, () => {
+                this._updateInventory(outletDefaultInventory, () => {
+                  this._saveSales(outletId, customerId, productList, payment, () => {
+                    this.success();
+                  })
                 })
               })
             })
