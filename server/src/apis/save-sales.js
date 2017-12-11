@@ -41,40 +41,22 @@ exports.SaveSalesApi = class extends Api {
     });
   }
 
-  _getOutletDefaultInventor(outletId, cbfn) {
+  _getOutletDefaultInventory(outletId, cbfn) {
     this.database.inventory.listByInventoryContainerId(outletId, (err, inventoryList) => {
-      let outletDefaultInventory;
-      inventoryList.forEach(inventory => {
-        if (inventory.type === 'default') {
-          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-          outletDefaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
-        }
-      });
-      cbfn(outletDefaultInventory);
-    })
-  }
-
-  _getInventoryWithId(inventoryId, cbfn) {
-    this.database.inventory.getById(inventoryId, (err, inventory) => {
       if (err) return this.fail(err);
-      if (inventory === null) {
-        err = new Error("inventory could not be found");
+      if (inventoryList.length === 0) {
+        err = new Error("Invalid Outlet Or Inventory could not be found");
         err.code = "OUTLET_INVENTORY_INVALID"
         return this.fail(err);
       }
-      let outletDefaultInventory = inventory;
-      cbfn(outletDefaultInventory);
+      let inventory = inventoryList.find(inventory => inventory.type === 'default');
+      let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
+      let outletDefaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+      return cbfn(outletDefaultInventory);
     })
   }
 
-  _getCustomerWithId(customerId, cbfn) {
-    this.database.customer.findById({ customerId }, (err, customer) => {
-      if (err) return this.fail(err);
-      return cbfn(customer);
-    });
-  }
-
-  _getCustomer({ customerId }, cbfn) {
+  _getCustomer(customerId, cbfn) {
     this.database.customer.findById({ customerId }, (err, customer) => {
       if (err) return this.fail(err);
       return cbfn(customer);
@@ -100,18 +82,24 @@ exports.SaveSalesApi = class extends Api {
   }
 
   _handlePayment(payment, customer, cbfn) {
-    let diff = payment.paidAmount - (payment.totalBilled - payment.previousCustomerBalance);
+    let diff = (payment.paidAmount + payment.previousCustomerBalance) - payment.totalBilled;
+    payment.changeAmount = diff;
     if (diff >= 0) {
-      payment.changeAmount = diff;
-      return cbfn(payment)
+      return cbfn(payment);
     } else {
-      _adjustCustomerBalance(diff, customer);
+      this._adjustCustomerBalance(diff, customer, () => {
+        return cbfn(payment);
+      });
     }
   }
 
   _adjustCustomerBalance(diff, customer, cbfn) {
-    customer.balance = diff;
-    return cbfn(customer);
+    let balance = diff;
+    let customerId = customer.id;
+    this.database.customer.updateBalanceOnly({ customerId, balance }, (err) => {
+      if (err) return this.fail();
+      return cbfn();
+    });
   }
 
   _updateInventory(outletDefaultInventory, cbfn) {
@@ -131,22 +119,19 @@ exports.SaveSalesApi = class extends Api {
     let { salesId, outletId, customerId, productList, payment } = body;
 
     // FIXME: make below all params obj
-    this._getOutletDefaultInventor(outletId, (outletDefaultInventory) => {
-      this._getInventoryWithId(outletDefaultInventory.id, (outletDefaultInventory) => {
-        this._getCustomerWithId(customerId, (customer) => {
-          this._sell(outletDefaultInventory, productList, () => {
-            this._handlePayment(payment, customer, () => {
-                this._updateInventory(outletDefaultInventory, () => {
-                  this._saveSales(outletId, customerId, productList, payment, () => {
-                    this.success();
-                  })
-                })
-              })
-            })
-          })
-        })
-      })
-    })
+    this._getOutletDefaultInventory(outletId, (outletDefaultInventory) => {
+      this._getCustomer(customerId, (customer) => {
+        this._sell(outletDefaultInventory, productList, () => {
+          this._handlePayment(payment, customer, () => {
+            this._updateInventory(outletDefaultInventory, () => {
+              this._saveSales(outletId, customerId, productList, payment, () => {
+                this.success();
+              });
+            });
+          });
+        });
+      });
+    });
   }
 
 }
