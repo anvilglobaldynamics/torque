@@ -25,10 +25,14 @@ exports.AdjustCustomerBalanceApi = class extends Api {
     });
   }
 
-  _adjustBalance({ customer, action }, cbfn) {
-    console.log("customer: ", customer);
-    console.log("action: ", action);
-    return cbfn(customer);
+  _adjustBalance({ customer, action, balance }, cbfn) {
+    if (action === 'payment') {
+      customer.balance += balance;
+      return cbfn(customer);
+    } else if (action === 'withdrawl') {
+      customer.balance -= balance;
+      return cbfn(customer);
+    }
   }
 
   _saveAdjustment({ customer }, cbfn) {
@@ -41,7 +45,7 @@ exports.AdjustCustomerBalanceApi = class extends Api {
   handle({ body }) {
     let { customerId, action, balance } = body;
     this._getCustomerWithId({ customerId }, (customer) => {
-      this._adjustBalance({ customer, action }, (customer) => {
+      this._adjustBalance({ customer, action, balance }, (customer) => {
         this._saveAdjustment({ customer }, () => {
           this.success({ status: "success" });
         })
