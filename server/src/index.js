@@ -65,6 +65,7 @@ let { ProductCategoryCollection } = require('./collections/product-category');
 let { PasswordResetRequestCollection } = require('./collections/password-reset-request');
 let { InventoryCollection } = require('./collections/inventory');
 let { ProductCollection } = require('./collections/product');
+let { SalesCollection } = require('./collections/sales');
 
 let config, logger, database, server, emailService, smsService, templateManager;
 
@@ -132,6 +133,7 @@ class Program {
         database.registerCollection('passwordResetRequest', PasswordResetRequestCollection);
         database.registerCollection('inventory', InventoryCollection);
         database.registerCollection('product', ProductCollection);
+        database.registerCollection('sales', SalesCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })

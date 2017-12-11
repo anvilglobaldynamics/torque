@@ -162,7 +162,7 @@ describe('sales', _ => {
 
   });
 
-  it('api/save-sales (Valid)', testDoneFn => {
+  it('api/save-sales (Valid, No Customer)', testDoneFn => {
 
     callApi('api/save-sales', {
       json: {
@@ -204,35 +204,33 @@ describe('sales', _ => {
 
   });
 
-  // it('api/get-aggregated-inventory-details (Valid sales check)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid sales check)', testDoneFn => {
 
-  //   callApi('api/get-aggregated-inventory-details', {
-  //     json: {
-  //       apiKey,
-  //       inventoryId: outletDefaultInventoryId
-  //     }
-  //   }, (err, response, body) => {
-  //     console.log(body);
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('productList').that.is.an('array');
-  //     expect(body).to.have.property('matchingProductList').that.is.an('array');
-  //     expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: outletDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('productList').that.is.an('array');
+      expect(body).to.have.property('matchingProductList').that.is.an('array');
+      expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
 
-  //     body.matchingProductList.forEach(product => {
-  //       validateProductSchema(product);
-  //     });
-  //     body.matchingProductCategoryList.forEach(productCategory => {
-  //       validateProductCategorySchema(productCategory);
-  //     });
+      body.matchingProductList.forEach(product => {
+        validateProductSchema(product);
+      });
+      body.matchingProductCategoryList.forEach(productCategory => {
+        validateProductCategorySchema(productCategory);
+      });
 
-  //     expect(body.matchingProductList[0]).to.have.property('productCategoryId').that.equals(productCategoryId);
-  //     expect(body.productList[0]).to.have.property('count').that.equals(100);
+      expect(body.productList[0]).to.have.property('count').that.equals(98);
 
-  //     testDoneFn();
-  //   });
+      testDoneFn();
+    });
 
-  // });
+  });
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

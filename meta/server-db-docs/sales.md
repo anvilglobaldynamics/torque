@@ -7,7 +7,7 @@ Joi.object().keys({
   lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
   lastModifiedByUserId: Joi.number().max(999999999999999).required(),
   outletId: Joi.number().max(999999999999999).required(),
-  customerId: Joi.number().max(999999999999999).required(),
+  customerId: Joi.number().max(999999999999999).allow(null).required(),
   productList: Joi.array().items(
     Joi.object().keys({
       productId: Joi.number().max(999999999999999).required(),
@@ -25,7 +25,7 @@ Joi.object().keys({
     discountedAmount: Joi.number().max(999999999999999).required(),
     serviceChargeAmount: Joi.number().max(999999999999999).required(),
     totalBilled: Joi.number().max(999999999999999).required(),
-    previousCustomerBalance: Joi.number().max(999999999999999).required(),
+    previousCustomerBalance: Joi.number().max(999999999999999).allow(null).required(),
     paidAmount: Joi.number().max(999999999999999).required(),
     changeAmount: Joi.number().max(999999999999999).required()
   }),

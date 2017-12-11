@@ -41,25 +41,29 @@ exports.SaveSalesApi = class extends Api {
     });
   }
 
-  _getInventoriesWithId(fromInventoryId, toInventoryId, cbfn) {
-    this.database.inventory.getById(fromInventoryId, (err, inventory) => {
+  _getOutletDefaultInventor(outletId, cbfn) {
+    this.database.inventory.listByInventoryContainerId(outletId, (err, inventoryList) => {
+      let outletDefaultInventory;
+      inventoryList.forEach(inventory => {
+        if (inventory.type === 'default') {
+          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
+          outletDefaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+        }
+      });
+      cbfn(outletDefaultInventory);
+    })
+  }
+
+  _getInventoryWithId(inventoryId, cbfn) {
+    this.database.inventory.getById(inventoryId, (err, inventory) => {
       if (err) return this.fail(err);
       if (inventory === null) {
         err = new Error("inventory could not be found");
-        err.code = "FROM_INVENTORY_INVALID"
+        err.code = "OUTLET_INVENTORY_INVALID"
         return this.fail(err);
       }
-      let fromInventory = inventory;
-      this.database.inventory.getById(toInventoryId, (err, inventory) => {
-        if (err) return this.fail(err);
-        if (inventory === null) {
-          err = new Error("inventory could not be found");
-          err.code = "TO_INVENTORY_INVALID"
-          return this.fail(err);
-        }
-        let toInventory = inventory;
-        cbfn(fromInventory, toInventory);
-      })
+      let outletDefaultInventory = inventory;
+      cbfn(outletDefaultInventory);
     })
   }
 
@@ -88,28 +92,51 @@ exports.SaveSalesApi = class extends Api {
     cbfn();
   }
 
-  _updateInventories(fromInventory, toInventory, cbfn) {
-    this.database.inventory.updateProductList({ inventory: fromInventory }, (err) => {
+  _sell(outletDefaultInventory, productList, cbfn) {
+    productList.forEach(product => {
+      let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
+      if (!foundProduct) {
+        err = new Error("product could not be found in source inventory");
+        err.code = "PRODUCT_INVALID"
+        return this.fail(err);
+      }
+      if (foundProduct.count < product.count) {
+        err = new Error("not enough product(s) in source inventory");
+        err.code = "INSUFFICIENT_PRODUCT"
+        return this.fail(err);
+      }
+      foundProduct.count -= product.count;
+    });
+    cbfn();
+  }
+
+  _updateInventory(outletDefaultInventory, cbfn) {
+    this.database.inventory.updateProductList({ inventory: outletDefaultInventory }, (err) => {
       if (err) return this.fail();
-      this.database.inventory.updateProductList({ inventory: toInventory }, (err) => {
-        if (err) return this.fail();
-        cbfn();
-      });
+      cbfn();
     });
   }
 
-  handle({ body }) {
-    console.log("save-sales: ", body);
-    // let { fromInventoryId, toInventoryId, productList } = body;
-    // this._getInventoriesWithId(fromInventoryId, toInventoryId, (fromInventory, toInventory) => {
-    //   this._transfer(fromInventory, toInventory, productList, () => {
-    //     this._updateInventories(fromInventory, toInventory, () => {
-    //       this.success();
-    //     });
-    //   });
-    // });
+  _saveSales(outletId, customerId, productList, payment, cbfn) {
+    this.database.sales.create({outletId, customerId, productList, payment}, (err) => {
+      cbfn();
+    })
+  }
 
-    this.success();
+  handle({ body }) {
+    let { salesId, outletId, customerId, productList, payment } = body;
+
+    this._getOutletDefaultInventor(outletId, (outletDefaultInventory) => {
+      this._getInventoryWithId(outletDefaultInventory.id, (outletDefaultInventory) => {
+        this._sell(outletDefaultInventory, productList, () => {
+          this._updateInventory(outletDefaultInventory, () => {
+            this._saveSales(outletId, customerId, productList, payment, () => {
+              this.success();
+            })
+          })
+        })
+      })
+    })
   }
 
 }
