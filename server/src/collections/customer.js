@@ -70,8 +70,11 @@ exports.CustomerCollection = class extends Collection {
     this._update({ id: customerId }, modifications, cbfn);
   }
 
-  updateBalance({ customerId, balance }, cbfn) {
-    this._update({ id: customerId }, { $set: { balance } }, cbfn);
+  updateBalance({ customerId, balance, additionalPaymentHistory }, cbfn) {
+    let modifications = {
+      $set: { balance, additionalPaymentHistory }
+    }
+    this._update({ id: customerId }, modifications, cbfn);
   }
 
   delete({ customerId }, cbfn) {

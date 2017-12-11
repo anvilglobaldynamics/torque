@@ -309,7 +309,10 @@ describe('customer', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('customer');
+      
       expect(body.customer).to.have.property('balance').that.equals(-80);
+      expect(body.customer).to.have.property('additionalPaymentHistory').to.have.lengthOf(3);
+
       testDoneFn();
     })
 

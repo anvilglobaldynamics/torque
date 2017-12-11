@@ -35,8 +35,18 @@ exports.AdjustCustomerBalanceApi = class extends Api {
     }
   }
 
+  _updateAdditionalPaymentHistoryList({ customer, balance }, cbfn) {
+    let paymentRecord = {
+      creditedDatetimeStamp: (new Date).getTime(),
+      acceptedByUserId: 0, // FIXME:
+      amount: balance
+    }
+    customer.additionalPaymentHistory.push(paymentRecord);
+    return cbfn(customer);
+  }
+
   _saveAdjustment({ customer }, cbfn) {
-    this.database.customer.updateBalance({ customerId: customer.id, balance: customer.balance }, (err) => {
+    this.database.customer.updateBalance({ customerId: customer.id, balance: customer.balance, additionalPaymentHistory: customer.additionalPaymentHistory }, (err) => {
       if (err) return this.fail(err);
       return cbfn()
     });
@@ -46,8 +56,10 @@ exports.AdjustCustomerBalanceApi = class extends Api {
     let { customerId, action, balance } = body;
     this._getCustomerWithId({ customerId }, (customer) => {
       this._adjustBalance({ customer, action, balance }, (customer) => {
-        this._saveAdjustment({ customer }, () => {
-          this.success({ status: "success" });
+        this._updateAdditionalPaymentHistoryList({ customer, balance }, (customer) => {
+          this._saveAdjustment({ customer }, () => {
+            this.success({ status: "success" });
+          })
         })
       })
     })
