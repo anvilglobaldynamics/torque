@@ -68,7 +68,7 @@ Possible Error Codes:
 ```
 
 ### db changes:
-updates the `sales` and `inventory` collection in db.
+updates the `sales`, `customer` and `inventory` collection in db.
 
 ### notes:
 in future we could save draft sale in db.

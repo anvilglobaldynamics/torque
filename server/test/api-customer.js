@@ -244,7 +244,7 @@ describe('customer', _ => {
 
   });
 
-  it('api/get-customer (Valid): ', testDoneFn => {
+  it('api/get-customer (Valid modification check): ', testDoneFn => {
 
     callApi('api/get-customer', {
       json: {
@@ -257,6 +257,43 @@ describe('customer', _ => {
       expect(body).to.have.property('customer');
       expect(body.customer.phone).to.equal(updatedCustomerPhone);
       validateCustomerSchema(body.customer)
+      testDoneFn();
+    })
+
+  });
+
+  it('api/adjust-customer-balance (Valid Payment): ', testDoneFn => {
+
+    callApi('api/adjust-customer-balance', {
+      json: {
+        apiKey,
+        customerId: customerList[customerList.length - 1].id,
+        action: "payment", // Joi.string().valid('payment', 'withdrawl').required()
+        balance: 20,
+      }
+    }, (err, response, body) => {
+      console.log(body);
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-customer (Adjusted Balance): ', testDoneFn => {
+
+    callApi('api/get-customer', {
+      json: {
+        apiKey,
+        customerId: customerList[customerList.length - 1].id
+      }
+    }, (err, response, body) => {
+      // console.log(body)
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('customer');
+      expect(body.customer).to.have.property('balance').that.equals(500);
       testDoneFn();
     })
 

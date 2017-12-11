@@ -67,29 +67,18 @@ exports.SaveSalesApi = class extends Api {
     })
   }
 
-  _transfer(fromInventory, toInventory, productList, cbfn) {
-    productList.forEach(product => {
-      let foundProduct = fromInventory.productList.find(_product => _product.productId === product.productId);
-      if (!foundProduct) {
-        err = new Error("product could not be found in source inventory");
-        err.code = "PRODUCT_INVALID"
-        return this.fail(err);
-      }
-      if (foundProduct.count < product.count) {
-        err = new Error("not enough product(s) in source inventory");
-        err.code = "PRODUCT_INSUFFICIENT"
-        return this.fail(err);
-      }
-      foundProduct.count -= product.count;
-
-      foundProduct = toInventory.productList.find(_product => _product.productId === product.productId);
-      if (!foundProduct) {
-        toInventory.productList.push(product);
-      } else {
-        foundProduct.count += product.count;
-      }
+  _getCustomerWithId(customerId, cbfn) {
+    this.database.customer.findById({ customerId }, (err, customer) => {
+      if (err) return this.fail(err);
+      return cbfn(customer);
     });
-    cbfn();
+  }
+
+  _getCustomer({ customerId }, cbfn) {
+    this.database.customer.findById({ customerId }, (err, customer) => {
+      if (err) return this.fail(err);
+      return cbfn(customer);
+    });
   }
 
   _sell(outletDefaultInventory, productList, cbfn) {
@@ -110,6 +99,10 @@ exports.SaveSalesApi = class extends Api {
     cbfn();
   }
 
+  _adjustCustomerBalance(customer, cbfn) {
+    cbfn();
+  }
+
   _updateInventory(outletDefaultInventory, cbfn) {
     this.database.inventory.updateProductList({ inventory: outletDefaultInventory }, (err) => {
       if (err) return this.fail();
@@ -118,7 +111,7 @@ exports.SaveSalesApi = class extends Api {
   }
 
   _saveSales(outletId, customerId, productList, payment, cbfn) {
-    this.database.sales.create({outletId, customerId, productList, payment}, (err) => {
+    this.database.sales.create({ outletId, customerId, productList, payment }, (err) => {
       cbfn();
     })
   }
@@ -128,10 +121,14 @@ exports.SaveSalesApi = class extends Api {
 
     this._getOutletDefaultInventor(outletId, (outletDefaultInventory) => {
       this._getInventoryWithId(outletDefaultInventory.id, (outletDefaultInventory) => {
-        this._sell(outletDefaultInventory, productList, () => {
-          this._updateInventory(outletDefaultInventory, () => {
-            this._saveSales(outletId, customerId, productList, payment, () => {
-              this.success();
+        this._getCustomerWithId(customerId, (customer) => {
+          this._sell(outletDefaultInventory, productList, () => {
+            this._adjustCustomerBalance(customer, () => {
+              this._updateInventory(outletDefaultInventory, () => {
+                this._saveSales(outletId, customerId, productList, payment, () => {
+                  this.success();
+                })
+              })
             })
           })
         })
