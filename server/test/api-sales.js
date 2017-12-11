@@ -44,6 +44,10 @@ let outletId = null;
 let productCategoryId = null;
 let customerId = null;
 
+let outletInventoryProductList = null;
+let outletInventoryMatchingProductList = null;
+let outletInventoryMatchingProductCategoryList = null;
+
 let outletDefaultInventoryId = null;
 let outletReturnedInventoryId = null;
 let outletDamagedInventoryId = null;
@@ -125,25 +129,7 @@ describe('sales', _ => {
     });
   });
 
-  // it('api/save-sales (Valid)', testDoneFn => {
-
-  //   callApi('api/save-sales', {
-  //     json: {
-  //       apiKey,
-  //       inventoryId: warehouseDefaultInventoryId,
-  //       productList: [
-  //         { productCategoryId, purchasePrice: 100, salePrice: 200, count: 10 }
-  //       ]
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     testDoneFn();
-  //   });
-
-  // });
-
-  it('api/get-aggregated-inventory-details (Valid sales check)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Inventory check)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -151,7 +137,6 @@ describe('sales', _ => {
         inventoryId: outletDefaultInventoryId
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('productList').that.is.an('array');
@@ -165,13 +150,89 @@ describe('sales', _ => {
         validateProductCategorySchema(productCategory);
       });
 
-      expect(body.matchingProductList[0]).to.have.property('productCategoryId').that.equals(productCategoryId);
       expect(body.productList[0]).to.have.property('count').that.equals(100);
+      expect(body.productList[0]).to.have.property('productId');
+
+      outletInventoryProductList = body.productList;
+      outletInventoryMatchingProductList = body.matchingProductList;
+      outletInventoryMatchingProductCategoryList = body.matchingProductCategoryList;
 
       testDoneFn();
     });
 
   });
+
+  it('api/save-sales (Valid)', testDoneFn => {
+
+    callApi('api/save-sales', {
+      json: {
+        apiKey,
+
+        salesId: null,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: outletInventoryProductList[0].productId,
+            count: 2,
+            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+          }
+        ],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          previousCustomerBalance: null,
+          paidAmount: 300,
+          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      testDoneFn();
+    });
+
+  });
+
+  // it('api/get-aggregated-inventory-details (Valid sales check)', testDoneFn => {
+
+  //   callApi('api/get-aggregated-inventory-details', {
+  //     json: {
+  //       apiKey,
+  //       inventoryId: outletDefaultInventoryId
+  //     }
+  //   }, (err, response, body) => {
+  //     console.log(body);
+  //     expect(response.statusCode).to.equal(200);
+  //     expect(body).to.have.property('hasError').that.equals(false);
+  //     expect(body).to.have.property('productList').that.is.an('array');
+  //     expect(body).to.have.property('matchingProductList').that.is.an('array');
+  //     expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
+
+  //     body.matchingProductList.forEach(product => {
+  //       validateProductSchema(product);
+  //     });
+  //     body.matchingProductCategoryList.forEach(productCategory => {
+  //       validateProductCategorySchema(productCategory);
+  //     });
+
+  //     expect(body.matchingProductList[0]).to.have.property('productCategoryId').that.equals(productCategoryId);
+  //     expect(body.productList[0]).to.have.property('count').that.equals(100);
+
+  //     testDoneFn();
+  //   });
+
+  // });
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

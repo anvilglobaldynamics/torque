@@ -51,6 +51,8 @@ let { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-invent
 let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
 let { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
 
+let { SaveSalesApi } = require('./apis/save-sales');
+
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
 let { SessionCollection } = require('./collections/session');
@@ -177,6 +179,7 @@ class Program {
         server.registerPostApi('/api/get-aggregated-inventory-details', GetAggregatedInventoryDetailsApi);
         server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
         server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
+        server.registerPostApi('/api/save-sales', SaveSalesApi);
         return Promise.resolve();
       })
       .then(() => {
