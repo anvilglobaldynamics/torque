@@ -122,6 +122,14 @@ exports.addCustomer = (data, callback) => {
   })
 }
 
+exports.getCustomer = (data, callback) => {
+  callApi('api/get-customer', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
 // ===================================== Inventory
 
 exports.addProductToInventory = (data, callback) => {

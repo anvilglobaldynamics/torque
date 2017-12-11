@@ -11,6 +11,7 @@ let {
   addProductCategory,
   addProductToInventory,
   addCustomer,
+  getCustomer,
   getOutlet,
   validateInventorySchema,
   validateProductCategorySchema,
@@ -51,6 +52,8 @@ let outletInventoryMatchingProductCategoryList = null;
 let outletDefaultInventoryId = null;
 let outletReturnedInventoryId = null;
 let outletDamagedInventoryId = null;
+
+let customerData = null;
 
 let productToBeTransferredId = null;
 
@@ -117,7 +120,12 @@ describe('sales', _ => {
                       openingBalance
                     }, (data) => {
                       customerId = data.customerId;
-                      testDoneFn();
+                      getCustomer({
+                        apiKey, customerId
+                      }, (data) => {
+                        customerData = data.customer;
+                        testDoneFn();
+                      });
                     });
                   });
                 });
@@ -233,7 +241,7 @@ describe('sales', _ => {
           discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
-          previousCustomerBalance: null,
+          previousCustomerBalance: customerData.balance,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
         }

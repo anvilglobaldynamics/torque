@@ -49,9 +49,10 @@ exports.SaveSalesApi = class extends Api {
         err.code = "OUTLET_INVENTORY_INVALID"
         return this.fail(err);
       }
-      let inventory = inventoryList.find(inventory => inventory.type === 'default');
-      let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-      let outletDefaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+      // let inventory = inventoryList.find(inventory => inventory.type === 'default');
+      // let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
+      // let outletDefaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+      let outletDefaultInventory = inventoryList.find(inventory => inventory.type === 'default');
       return cbfn(outletDefaultInventory);
     })
   }
