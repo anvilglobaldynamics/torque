@@ -299,13 +299,12 @@ describe('sales', _ => {
         salesId: newlyCreatedSalesId,
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('sales');
 
       validateSalesSchema(body.sales);
-      
+
       testDoneFn();
     });
 
