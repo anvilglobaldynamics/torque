@@ -39,7 +39,7 @@ Possible Error Codes:
   sales: Joi.object().keys({
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-    lastModifiedByUserId: Joi.number().max(999999999999999).required(),
+    lastModifiedByUserId: Joi.number().max(999999999999999).allow(null).required(),
     outletId: Joi.number().max(999999999999999).required(),
     customerId: Joi.number().max(999999999999999).required(),
     productList: Joi.array().items(
@@ -59,7 +59,7 @@ Possible Error Codes:
       discountedAmount: Joi.number().max(999999999999999).required(),
       serviceChargeAmount: Joi.number().max(999999999999999).required(),
       totalBilled: Joi.number().max(999999999999999).required(),
-      previousCustomerBalance: Joi.number().max(999999999999999).required(),
+      previousCustomerBalance: Joi.number().max(999999999999999).allow(null).required(),
       paidAmount: Joi.number().max(999999999999999).required(),
       changeAmount: Joi.number().max(999999999999999).required()
     }),

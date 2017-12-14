@@ -15,7 +15,8 @@ let {
   getOutlet,
   validateInventorySchema,
   validateProductCategorySchema,
-  validateProductSchema
+  validateProductSchema,
+  validateSalesSchema
 } = require('./lib');
 
 const email = `t2${(new Date).getTime()}@gmail.com`;
@@ -44,6 +45,7 @@ let organizationId = null;
 let outletId = null;
 let productCategoryId = null;
 let customerId = null;
+let newlyCreatedSalesId = null;
 
 let outletInventoryProductList = null;
 let outletInventoryMatchingProductList = null;
@@ -207,6 +209,8 @@ describe('sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('salesId');
       testDoneFn();
     });
 
@@ -249,6 +253,11 @@ describe('sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('salesId');
+
+      newlyCreatedSalesId = body.salesId;
+
       testDoneFn();
     });
 
@@ -277,6 +286,26 @@ describe('sales', _ => {
 
       expect(body.productList[0]).to.have.property('count').that.equals(96);
 
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales (Valid)', testDoneFn => {
+
+    callApi('api/get-sales', {
+      json: {
+        apiKey,
+        salesId: newlyCreatedSalesId,
+      }
+    }, (err, response, body) => {
+      console.log(body);
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('sales');
+
+      validateSalesSchema(body.sales);
+      
       testDoneFn();
     });
 

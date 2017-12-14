@@ -111,8 +111,8 @@ exports.SaveSalesApi = class extends Api {
   }
 
   _saveSales(outletId, customerId, productList, payment, cbfn) {
-    this.database.sales.create({ outletId, customerId, productList, payment }, (err) => {
-      cbfn();
+    this.database.sales.create({ outletId, customerId, productList, payment }, (err, salesId) => {
+      cbfn(salesId);
     })
   }
 
@@ -125,8 +125,8 @@ exports.SaveSalesApi = class extends Api {
         this._sell(outletDefaultInventory, productList, () => {
           this._handlePayment(payment, customer, () => {
             this._updateInventory(outletDefaultInventory, () => {
-              this._saveSales(outletId, customerId, productList, payment, () => {
-                this.success();
+              this._saveSales(outletId, customerId, productList, payment, (salesId) => {
+                this.success({ status: "success", salesId });
               });
             });
           });

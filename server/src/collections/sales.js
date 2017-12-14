@@ -66,4 +66,8 @@ exports.SalesCollection = class extends Collection {
     });
   }
 
+  findById({ salesId }, cbfn) {
+    this._findOne({ id: salesId }, cbfn);
+  }
+
 }

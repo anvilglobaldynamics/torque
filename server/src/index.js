@@ -53,6 +53,7 @@ let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
 let { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
 
 let { SaveSalesApi } = require('./apis/save-sales');
+let { GetSalesApi } = require('./apis/get-sales');
 
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
@@ -184,6 +185,7 @@ class Program {
         server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
         server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
         server.registerPostApi('/api/save-sales', SaveSalesApi);
+        server.registerPostApi('/api/get-sales', GetSalesApi);
         return Promise.resolve();
       })
       .then(() => {
