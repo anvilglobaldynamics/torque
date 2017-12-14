@@ -11,8 +11,6 @@ exports.AddSalesApi = class extends Api {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),
 
-      salesId: Joi.number().max(999999999999999).allow(null).required(),
-
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
 

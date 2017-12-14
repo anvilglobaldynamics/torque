@@ -1,6 +1,6 @@
-This API handles submission of sale form
+This API handles submission of edit sale form
 
-url: `api/add-sales`
+url: `api/edit-sales`
 
 method: `POST`
 
@@ -8,6 +8,8 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
+
+  salesId: Joi.number().max(999999999999999).required(),
 
   outletId: Joi.number().max(999999999999999).required(),
   customerId: Joi.number().max(999999999999999).allow(null).required(),
@@ -51,6 +53,7 @@ Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
+{ code: SALES_INVALID } // sales could not be found
 { code: OUTLET_INVALID } // outlet could not be found 
 { code: CUSTOMER_INVALID } // customer could not be found
 { code: PRODUCT_INVALID } // product could not be found

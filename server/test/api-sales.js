@@ -178,8 +178,6 @@ describe('sales', _ => {
       json: {
         apiKey,
 
-        salesId: null,
-
         outletId,
         customerId: null,
 
@@ -221,8 +219,6 @@ describe('sales', _ => {
     callApi('api/add-sales', {
       json: {
         apiKey,
-
-        salesId: null,
 
         outletId,
         customerId,
