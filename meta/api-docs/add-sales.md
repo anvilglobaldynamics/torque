@@ -1,6 +1,6 @@
 This API handles submission of sale form
 
-url: `api/save-sales`
+url: `api/add-sales`
 
 method: `POST`
 

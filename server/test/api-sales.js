@@ -172,9 +172,9 @@ describe('sales', _ => {
 
   });
 
-  it('api/save-sales (Valid, No Customer)', testDoneFn => {
+  it('api/add-sales (Valid, No Customer)', testDoneFn => {
 
-    callApi('api/save-sales', {
+    callApi('api/add-sales', {
       json: {
         apiKey,
 
@@ -216,9 +216,9 @@ describe('sales', _ => {
 
   });
 
-  it('api/save-sales (Valid, registered Customer)', testDoneFn => {
+  it('api/add-sales (Valid, registered Customer)', testDoneFn => {
 
-    callApi('api/save-sales', {
+    callApi('api/add-sales', {
       json: {
         apiKey,
 
