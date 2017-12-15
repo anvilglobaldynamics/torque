@@ -45,7 +45,7 @@ let organizationId = null;
 let outletId = null;
 let productCategoryId = null;
 let customerId = null;
-let newlyCreatedSalesId = null;
+let salesId = null;
 
 let outletInventoryProductList = null;
 let outletInventoryMatchingProductList = null;
@@ -252,7 +252,7 @@ describe('sales', _ => {
       expect(body).to.have.property('status').that.equals('success');
       expect(body).to.have.property('salesId');
 
-      newlyCreatedSalesId = body.salesId;
+      salesId = body.salesId;
 
       testDoneFn();
     });
@@ -292,7 +292,7 @@ describe('sales', _ => {
     callApi('api/get-sales', {
       json: {
         apiKey,
-        salesId: newlyCreatedSalesId,
+        salesId,
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -412,8 +412,6 @@ describe('sales', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('salesList');
-
-      console.log(body.salesList);
 
       body.salesList.forEach(sales => {
         validateSalesSchema(sales);

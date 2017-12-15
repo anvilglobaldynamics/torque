@@ -1,6 +1,6 @@
 This API handles attempt to return sold product.
 
-url: `api/save-sales-return`
+url: `api/add-sales-return`
 
 method: `POST`
 

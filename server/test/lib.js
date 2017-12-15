@@ -140,6 +140,32 @@ exports.addProductToInventory = (data, callback) => {
   })
 }
 
+exports.getAggregatedInventoryDetails = (data, callback) => {
+  callApi('api/get-aggregated-inventory-details', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
+// ===================================== Sales
+
+exports.addSales = (data, callback) => {
+  callApi('api/add-sales', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
+exports.getSales = (data, callback) => {
+  callApi('api/get-sales', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
 // ===================================== Validation
 
 exports.validateCustomerSchema = (doc) => {
