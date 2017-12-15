@@ -33,11 +33,17 @@ exports.FixtureCollection = class extends Collection {
   }
 
   getRoleList(cbfn) {
-    return this._findByName('role-list', cbfn);
+    return this._findByName('role-list', (err, doc)=>{
+      if (err) return cbfn(err);
+      return cbfn(null, doc.data);
+    });
   }
 
   getPrivilegeList(cbfn) {
-    return this._findByName('privilege-list', cbfn);
+    return this._findByName('privilege-list', (err, doc)=>{
+      if (err) return cbfn(err);
+      return cbfn(null, doc.data);
+    });
   }
 
 }

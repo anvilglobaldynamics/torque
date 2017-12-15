@@ -36,7 +36,37 @@ describe('public apis', _ => {
       expect(body).to.have.property('designationList').that.is.an('array');
       expect(body.designationList).to.contain('Owner');
       testDoneFn();
-    })
+    });
+
+  });
+
+  it('get-privilege-list', testDoneFn => {
+
+    callApi('api/get-privilege-list', {
+      json: {
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('privilegeList').that.is.an('array');
+      expect(body.privilegeList).to.contain('PRIV_ACCESS_POS');
+      testDoneFn();
+    });
+
+  });
+
+  it('get-role-list', testDoneFn => {
+
+    callApi('api/get-role-list', {
+      json: {
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('roleList').that.is.an('array');
+      expect(body.roleList).to.contain('owner');
+      testDoneFn();
+    });
 
   });
 
