@@ -54,6 +54,7 @@ let { TransferBetweenInventoriesApi } = require('./apis/transfer-between-invento
 
 let { InternalStatus } = require('./apis/internal--status');
 
+let { FixtureCollection } = require('./collections/fixture');
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
 let { SessionCollection } = require('./collections/session');
@@ -122,6 +123,7 @@ class Program {
       })
       .then(() => {
         logger.info('(server)> database initialized.');
+        database.registerCollection('fixture', FixtureCollection);
         database.registerCollection('user', UserCollection);
         database.registerCollection('emailVerificationRequest', EmailVerificationRequestCollection);
         database.registerCollection('session', SessionCollection);
