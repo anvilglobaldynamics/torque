@@ -51,6 +51,8 @@ let { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-invent
 let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
 let { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
 
+let { InternalStatus } = require('./apis/internal--status');
+
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
 let { SessionCollection } = require('./collections/session');
@@ -144,6 +146,8 @@ class Program {
       .then(() => {
         logger.info('(server)> registering APIs');
         server.registerGetApi('/verify-email/:link', VerifyEmailApi);
+        server.registerGetApi('/internal--status', InternalStatus);
+
         server.registerPostApi('/api/user-register', UserRegisterApi);
         server.registerPostApi('/api/user-login', UserLoginApi);
         server.registerPostApi('/api/user-logout', UserLogoutApi);
