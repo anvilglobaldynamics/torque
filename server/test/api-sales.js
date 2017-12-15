@@ -312,9 +312,130 @@ describe('sales', _ => {
       json: {
         apiKey,
         organizationId,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate: (new Date("2017-12-14")).getTime(),
+        toDate: (new Date("2017-12-16")).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('salesList');
+
+      body.salesList.forEach(sales => {
+        validateSalesSchema(sales);
+      });
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales-list (Valid with organizationId and outletId)', testDoneFn => {
+
+    callApi('api/get-sales-list', {
+      json: {
+        apiKey,
+        organizationId,
         outletId,
         customerId: null,
-        
+
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: false,
+
+        fromDate: (new Date("2017-12-14")).getTime(),
+        toDate: (new Date("2017-12-16")).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('salesList');
+
+      body.salesList.forEach(sales => {
+        validateSalesSchema(sales);
+      });
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales-list (Valid with organizationId and customerId)', testDoneFn => {
+
+    callApi('api/get-sales-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId,
+
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: true,
+
+        fromDate: (new Date("2017-12-14")).getTime(),
+        toDate: (new Date("2017-12-16")).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('salesList');
+
+      body.salesList.forEach(sales => {
+        validateSalesSchema(sales);
+      });
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales-list (Valid with organizationId and customerId is null)', testDoneFn => {
+
+    callApi('api/get-sales-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: true,
+
+        fromDate: (new Date("2017-12-14")).getTime(),
+        toDate: (new Date("2017-12-16")).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('salesList');
+
+      console.log(body.salesList);
+
+      body.salesList.forEach(sales => {
+        validateSalesSchema(sales);
+      });
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales-list (Valid with organizationId, outletId and customerId)', testDoneFn => {
+
+    callApi('api/get-sales-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId,
+        customerId,
+
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: true,
+
         fromDate: (new Date("2017-12-14")).getTime(),
         toDate: (new Date("2017-12-16")).getTime(),
       }

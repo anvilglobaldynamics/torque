@@ -70,10 +70,29 @@ exports.SalesCollection = class extends Collection {
     this._findOne({ id: salesId }, cbfn);
   }
 
-  listByFilter({ outletId }, cbfn) {
+  listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, cbfn) {
     let filters = {
-      outletId
+      $and: [
+        {
+          outletId: { $in: outletIdList }
+        },
+        {
+          createdDatetimeStamp: {
+            $gte:fromDate,
+            $lte: toDate
+          }
+        }
+      ]
     }
+
+    if(shouldFilterByOutlet) {
+      filters.$and.push({ outletId });
+    }
+
+    if(shouldFilterByCustomer) {
+      filters.$and.push({ customerId });
+    }
+
     this._find(filters, cbfn);
   }
 

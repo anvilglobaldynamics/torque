@@ -12,6 +12,9 @@ method: `POST`
   organizationId: Joi.number().max(999999999999999).required(),
   outletId: Joi.number().max(999999999999999).allow(null).required(),
   customerId: Joi.number().max(999999999999999).allow(null).required(),
+
+  shouldFilterByOutlet: Joi.boolean().required(),
+  shouldFilterByCustomer: Joi.boolean().required(),
   
   fromDate: Joi.number().max(999999999999999).required(),
   toDate: Joi.number().max(999999999999999).required()

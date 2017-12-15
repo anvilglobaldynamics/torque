@@ -14,22 +14,29 @@ exports.GetSalesListApi = class extends Api {
       organizationId: Joi.number().max(999999999999999).required(),
       outletId: Joi.number().max(999999999999999).allow(null).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
+
+      shouldFilterByOutlet: Joi.boolean().required(),
+      shouldFilterByCustomer: Joi.boolean().required(),
       
       fromDate: Joi.number().max(999999999999999).required(),
       toDate: Joi.number().max(999999999999999).required()
     });
   }
 
-  _getSalesList({ organizationId, outletId, customerId, fromDate, toDate }, cbfn) {
-    this.database.sales.listByFilter({ outletId }, (err, salesList) => {
+  _getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, cbfn) {
+    this.database.outlet.listByOrganizationId(organizationId, (err, outletList) => {
       if (err) return this.fail(err);
-      return cbfn(salesList);
+      let outletIdList = outletList.map(outlet => outlet.id);
+      this.database.sales.listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, (err, salesList) => {
+        if (err) return this.fail(err);
+        return cbfn(salesList);
+      });
     });
   }
 
   handle({ body }) {
-    let { organizationId, outletId, customerId, fromDate, toDate } = body;
-    this._getSalesList({ organizationId, outletId, customerId, fromDate, toDate }, (salesList) => {
+    let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate } = body;
+    this._getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, (salesList) => {
       this.success({ salesList: salesList });
     });
   }
