@@ -9,6 +9,7 @@ let { ConfigLoader } = require('./config-loader');
 let { EmailService } = require('./email-service');
 let { SmsService } = require('./sms-service');
 let { TemplateManager } = require('./template-manager');
+let { FixtureManager } = require('./fixture-manager');
 
 let { UserRegisterApi } = require('./apis/user-register');
 let { UserLoginApi } = require('./apis/user-login');
@@ -66,7 +67,7 @@ let { PasswordResetRequestCollection } = require('./collections/password-reset-r
 let { InventoryCollection } = require('./collections/inventory');
 let { ProductCollection } = require('./collections/product');
 
-let config, logger, database, server, emailService, smsService, templateManager;
+let config, logger, database, server, emailService, smsService, templateManager, fixtureManager;
 
 let mode = detectMode();
 
@@ -107,6 +108,7 @@ class Program {
         emailService = new EmailService(config);
         smsService = new SmsService(config);
         templateManager = new TemplateManager(config);
+        fixtureManager = new FixtureManager(config);
         return promisify(logger, logger.initialize);
       })
       .then(() => {
@@ -133,6 +135,14 @@ class Program {
         database.registerCollection('inventory', InventoryCollection);
         database.registerCollection('product', ProductCollection);
         server.setDatabase(database);
+        return Promise.resolve();
+      })
+      .then(() => {
+        logger.info('(server)> initializing fixtures.')
+        return promisify(fixtureManager, fixtureManager.initialize, database);
+      })
+      .then(() => {
+        logger.info('(server)> fixtures initialized.')
         return Promise.resolve();
       })
       .then(() => {
