@@ -7,7 +7,7 @@ exports.FixtureCollection = class extends Collection {
   constructor(...args) {
     super(...args);
 
-    this.collectionName = 'customer';
+    this.collectionName = 'fixture';
 
     this.joiSchema = Joi.object().keys({});
 
@@ -26,7 +26,10 @@ exports.FixtureCollection = class extends Collection {
   }
 
   getDesignationList(cbfn) {
-    return this._findByName('designation-list', cbfn);
+    return this._findByName('designation-list', (err, doc)=>{
+      if (err) return cbfn(err);
+      return cbfn(null, doc.data);
+    });
   }
 
   getRoleList(cbfn) {

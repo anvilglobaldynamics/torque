@@ -53,6 +53,7 @@ let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
 let { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
 
 let { InternalStatus } = require('./apis/internal--status');
+let { GetDesignationListApi } = require('./apis/get-designation-list');
 
 let { FixtureCollection } = require('./collections/fixture');
 let { UserCollection } = require('./collections/user');
@@ -193,6 +194,7 @@ class Program {
         server.registerPostApi('/api/get-aggregated-inventory-details', GetAggregatedInventoryDetailsApi);
         server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
         server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
+        server.registerPostApi('/api/get-designation-list', GetDesignationListApi);
         return Promise.resolve();
       })
       .then(() => {
