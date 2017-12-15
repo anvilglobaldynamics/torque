@@ -54,6 +54,7 @@ let { TransferBetweenInventoriesApi } = require('./apis/transfer-between-invento
 
 let { AddSalesApi } = require('./apis/add-sales');
 let { GetSalesApi } = require('./apis/get-sales');
+let { GetSalesListApi } = require('./apis/get-sales-list');
 
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
@@ -186,6 +187,7 @@ class Program {
         server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
         server.registerPostApi('/api/add-sales', AddSalesApi);
         server.registerPostApi('/api/get-sales', GetSalesApi);
+        server.registerPostApi('/api/get-sales-list', GetSalesListApi);
         return Promise.resolve();
       })
       .then(() => {

@@ -70,4 +70,11 @@ exports.SalesCollection = class extends Collection {
     this._findOne({ id: salesId }, cbfn);
   }
 
+  listByFilter({ outletId }, cbfn) {
+    let filters = {
+      outletId
+    }
+    this._find(filters, cbfn);
+  }
+
 }

@@ -306,6 +306,32 @@ describe('sales', _ => {
 
   });
 
+  it('api/get-sales-list (Valid only organization Id)', testDoneFn => {
+
+    callApi('api/get-sales-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId,
+        customerId: null,
+        
+        fromDate: (new Date("2017-12-14")).getTime(),
+        toDate: (new Date("2017-12-16")).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('salesList');
+
+      body.salesList.forEach(sales => {
+        validateSalesSchema(sales);
+      });
+
+      testDoneFn();
+    });
+
+  });
+
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
   });
