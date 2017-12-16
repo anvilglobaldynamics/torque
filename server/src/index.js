@@ -57,6 +57,7 @@ let { GetSalesApi } = require('./apis/get-sales');
 let { GetSalesListApi } = require('./apis/get-sales-list');
 
 let { AddSalesReturnApi } = require('./apis/add-sales-return');
+let { GetSalesReturnApi } = require('./apis/get-sales-return');
 
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
@@ -193,6 +194,7 @@ class Program {
         server.registerPostApi('/api/get-sales', GetSalesApi);
         server.registerPostApi('/api/get-sales-list', GetSalesListApi);
         server.registerPostApi('/api/add-sales-return', AddSalesReturnApi);
+        server.registerPostApi('/api/get-sales-return', GetSalesReturnApi);
         return Promise.resolve();
       })
       .then(() => {

@@ -46,9 +46,9 @@ exports.SalesReturnCollection = class extends Collection {
     });
   }
 
-  // findById({ salesId }, cbfn) {
-  //   this._findOne({ id: salesId }, cbfn);
-  // }
+  findById({ salesReturnId }, cbfn) {
+    this._findOne({ id: salesReturnId }, cbfn);
+  }
 
   // listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, cbfn) {
   //   let filters = {

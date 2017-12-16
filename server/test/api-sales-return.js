@@ -19,7 +19,8 @@ let {
   validateInventorySchema,
   validateProductCategorySchema,
   validateProductSchema,
-  validateSalesSchema
+  validateSalesSchema,
+  validateSalesReturnSchema
 } = require('./lib');
 
 const email = `t2${(new Date).getTime()}@gmail.com`;
@@ -49,6 +50,7 @@ let outletId = null;
 let productCategoryId = null;
 let customerId = null;
 let salesId = null;
+let salesReturnId = null;
 
 let outletInventoryProductList = null;
 let outletInventoryMatchingProductList = null;
@@ -204,6 +206,8 @@ describe('sales-return', _ => {
       expect(body).to.have.property('status').that.equals('success');
       expect(body).to.have.property('salesReturnId')
 
+      salesReturnId = body.salesReturnId;
+
       testDoneFn();
     });
 
@@ -237,24 +241,41 @@ describe('sales-return', _ => {
 
   });
 
-  // it('api/get-sales (Valid)', testDoneFn => {
+  it('api/get-sales-return (Valid)', testDoneFn => {
 
-  //   callApi('api/get-sales', {
-  //     json: {
-  //       apiKey,
-  //       salesId: salesId,
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('sales');
+    callApi('api/get-sales-return', {
+      json: {
+        apiKey,
+        salesReturnId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('salesReturn');
 
-  //     validateSalesSchema(body.sales);
+      validateSalesReturnSchema(body.salesReturn);
 
-  //     testDoneFn();
-  //   });
+      testDoneFn();
+    });
 
-  // });
+  });
+
+  it('api/get-sales-return (Invalid)', testDoneFn => {
+
+    callApi('api/get-sales-return', {
+      json: {
+        apiKey,
+        salesReturnId: -999,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals("SALES_RETURN_INVALID");
+      testDoneFn();
+    });
+
+  });
 
   // it('api/get-sales-list (Valid only organization Id)', testDoneFn => {
 
