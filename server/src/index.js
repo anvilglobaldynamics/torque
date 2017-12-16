@@ -56,6 +56,8 @@ let { AddSalesApi } = require('./apis/add-sales');
 let { GetSalesApi } = require('./apis/get-sales');
 let { GetSalesListApi } = require('./apis/get-sales-list');
 
+let { AddSalesReturnApi } = require('./apis/add-sales-return');
+
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
 let { SessionCollection } = require('./collections/session');
@@ -69,6 +71,7 @@ let { PasswordResetRequestCollection } = require('./collections/password-reset-r
 let { InventoryCollection } = require('./collections/inventory');
 let { ProductCollection } = require('./collections/product');
 let { SalesCollection } = require('./collections/sales');
+let { SalesReturnCollection } = require('./collections/sales-return');
 
 let config, logger, database, server, emailService, smsService, templateManager;
 
@@ -137,6 +140,7 @@ class Program {
         database.registerCollection('inventory', InventoryCollection);
         database.registerCollection('product', ProductCollection);
         database.registerCollection('sales', SalesCollection);
+        database.registerCollection('salesReturn', SalesReturnCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })
@@ -188,6 +192,7 @@ class Program {
         server.registerPostApi('/api/add-sales', AddSalesApi);
         server.registerPostApi('/api/get-sales', GetSalesApi);
         server.registerPostApi('/api/get-sales-list', GetSalesListApi);
+        server.registerPostApi('/api/add-sales-return', AddSalesReturnApi);
         return Promise.resolve();
       })
       .then(() => {

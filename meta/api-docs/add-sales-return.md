@@ -15,7 +15,7 @@ method: `POST`
     Joi.object().keys({
       productId: Joi.number().max(999999999999999).required(),
       count: Joi.number().max(999999999999999).required()
-    });
+    })
   ),
   creditedAmount: Joi.number().max(999999999999999).required()
 }
@@ -38,13 +38,15 @@ Possible Error Codes:
 { code: APIKEY_INVALID } // the api key is invalid
 { code: SALES_INVALID } // sales not found
 { code: PORDUCT_INVALID } // product not found
+{ code: OUTLET_INVENTORY_INVALID } // outler returned inventory invalid
 ```
 
 ### response (on success):
 ```js
 {
   "hasError": false,
-  "status": "success"
+  "status": "success",
+  salesReturnId: Joi.number().max(999999999999999).required()
 }
 ```
 
