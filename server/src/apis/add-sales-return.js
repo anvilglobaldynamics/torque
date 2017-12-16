@@ -103,13 +103,6 @@ exports.AddSalesReturnApi = class extends Api {
     // TODO: will handle customer payback here in the future
   }
 
-  _updateInventory({ outletReturnedInventory }, cbfn) {
-    this.database.inventory.updateProductList({ inventory: outletReturnedInventory }, (err) => {
-      if (err) return this.fail();
-      cbfn();
-    });
-  }
-
   _addSalesReturn({ salesId, returnedProductList, creditedAmount }, cbfn) {
     this.database.salesReturn.create({ salesId, returnedProductList, creditedAmount }, (err, salesReturnId) => {
       return cbfn(salesReturnId);
@@ -148,10 +141,8 @@ exports.AddSalesReturnApi = class extends Api {
           // this._getCustomer({ customerId: salesId.customerId }, (customer) => {
           // this._calculatePayback({ returnedProductList }, (payment) => {
           // this._handlePayback({ payment, customer }, () => {
-          this._updateInventory({ outletReturnedInventory }, () => {
-            this._addSalesReturn({ salesId, returnedProductList, creditedAmount }, (salesReturnId) => {
-              this.success({ status: "success", salesReturnId: salesReturnId });
-            });
+          this._addSalesReturn({ salesId, returnedProductList, creditedAmount }, (salesReturnId) => {
+            this.success({ status: "success", salesReturnId: salesReturnId });
           });
         });
       })

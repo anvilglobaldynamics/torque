@@ -209,33 +209,33 @@ describe('sales-return', _ => {
 
   });
 
-  // it('api/get-aggregated-inventory-details (Valid sales check)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid return check)', testDoneFn => {
 
-  //   callApi('api/get-aggregated-inventory-details', {
-  //     json: {
-  //       apiKey,
-  //       inventoryId: outletDefaultInventoryId
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('productList').that.is.an('array');
-  //     expect(body).to.have.property('matchingProductList').that.is.an('array');
-  //     expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: outletReturnedInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('productList').that.is.an('array');
+      expect(body).to.have.property('matchingProductList').that.is.an('array');
+      expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
 
-  //     body.matchingProductList.forEach(product => {
-  //       validateProductSchema(product);
-  //     });
-  //     body.matchingProductCategoryList.forEach(productCategory => {
-  //       validateProductCategorySchema(productCategory);
-  //     });
+      body.matchingProductList.forEach(product => {
+        validateProductSchema(product);
+      });
+      body.matchingProductCategoryList.forEach(productCategory => {
+        validateProductCategorySchema(productCategory);
+      });
 
-  //     expect(body.productList[0]).to.have.property('count').that.equals(96);
+      expect(body.productList[0]).to.have.property('count').that.equals(2);
 
-  //     testDoneFn();
-  //   });
+      testDoneFn();
+    });
 
-  // });
+  });
 
   // it('api/get-sales (Valid)', testDoneFn => {
 
