@@ -1,7 +1,7 @@
 This collection contains an sales return
 
 ## signature
-```
+```js
 Joi.object().keys({
   createdDatetimeStamp: Joi.number().max(999999999999999).required(),
   salesId: Joi.number().max(999999999999999).required(),
@@ -10,8 +10,8 @@ Joi.object().keys({
     Joi.object().keys({
       productId: Joi.number().max(999999999999999).required(),
       count: Joi.number().max(999999999999999).required()
-    });
-  );
+    })
+  ),
   creditedAmount: Joi.number().max(999999999999999).required()
 });
 ```

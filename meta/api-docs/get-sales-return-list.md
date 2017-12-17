@@ -10,8 +10,11 @@ method: `POST`
   apiKey: Joi.string().length(64).required(),
 
   organizationId: Joi.number().max(999999999999999).required(),
-  outletId: Joi.number().max(999999999999999).required(),
-  customerId: Joi.number().max(999999999999999).required(),
+  outletId: Joi.number().max(999999999999999).allow(null).required(),
+  customerId: Joi.number().max(999999999999999).allow(null).required(),
+
+  shouldFilterByOutlet: Joi.boolean().required(),
+  shouldFilterByCustomer: Joi.boolean().required(),
   
   fromDate: Joi.number().max(999999999999999).required(),
   toDate: Joi.number().max(999999999999999).required()
@@ -52,8 +55,8 @@ Possible Error Codes:
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required()
-        });
-      );
+        })
+      ),
       creditedAmount: Joi.number().max(999999999999999).required()
     });
   )

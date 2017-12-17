@@ -244,7 +244,7 @@ describe('customer', _ => {
 
   });
 
-  it('api/get-customer (Valid): ', testDoneFn => {
+  it('api/get-customer (Valid modification check): ', testDoneFn => {
 
     callApi('api/get-customer', {
       json: {
@@ -257,6 +257,62 @@ describe('customer', _ => {
       expect(body).to.have.property('customer');
       expect(body.customer.phone).to.equal(updatedCustomerPhone);
       validateCustomerSchema(body.customer)
+      testDoneFn();
+    })
+
+  });
+
+  it('api/adjust-customer-balance (Valid Payment): ', testDoneFn => {
+
+    callApi('api/adjust-customer-balance', {
+      json: {
+        apiKey,
+        customerId: customerList[customerList.length - 1].id,
+        action: "payment",
+        balance: 20,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/adjust-customer-balance (Valid Withdrawl): ', testDoneFn => {
+
+    callApi('api/adjust-customer-balance', {
+      json: {
+        apiKey,
+        customerId: customerList[customerList.length - 1].id,
+        action: "withdrawl",
+        balance: 600,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-customer (Adjusted Balance): ', testDoneFn => {
+
+    callApi('api/get-customer', {
+      json: {
+        apiKey,
+        customerId: customerList[customerList.length - 1].id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('customer');
+      
+      expect(body.customer).to.have.property('balance').that.equals(-80);
+      expect(body.customer).to.have.property('additionalPaymentHistory').to.have.lengthOf(3);
+
       testDoneFn();
     })
 

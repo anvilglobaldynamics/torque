@@ -26,6 +26,7 @@ let { AddCustomerApi } = require('./apis/add-customer');
 let { GetCustomerApi } = require('./apis/get-customer');
 let { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
 let { EditCustomerApi } = require('./apis/edit-customer');
+let { AdjustCustomerBalanceApi } = require('./apis/adjust-customer-balance');
 let { DeleteCustomerApi } = require('./apis/delete-customer');
 let { UserResetPasswordRequestApi } = require('./apis/user-reset-password--request');
 let { UserResetPasswordGetTokenInfoApi } = require('./apis/user-reset-password--get-token-info');
@@ -52,6 +53,14 @@ let { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-invent
 let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
 let { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
 
+let { AddSalesApi } = require('./apis/add-sales');
+let { GetSalesApi } = require('./apis/get-sales');
+let { GetSalesListApi } = require('./apis/get-sales-list');
+
+let { AddSalesReturnApi } = require('./apis/add-sales-return');
+let { GetSalesReturnApi } = require('./apis/get-sales-return');
+let { GetSalesReturnListApi } = require('./apis/get-sales-return-list');
+
 let { InternalStatus } = require('./apis/internal--status');
 let { GetDesignationListApi } = require('./apis/get-designation-list');
 let { GetRoleListApi } = require('./apis/get-role-list');
@@ -70,6 +79,8 @@ let { ProductCategoryCollection } = require('./collections/product-category');
 let { PasswordResetRequestCollection } = require('./collections/password-reset-request');
 let { InventoryCollection } = require('./collections/inventory');
 let { ProductCollection } = require('./collections/product');
+let { SalesCollection } = require('./collections/sales');
+let { SalesReturnCollection } = require('./collections/sales-return');
 
 let config, logger, database, server, emailService, smsService, templateManager, fixtureManager;
 
@@ -139,6 +150,8 @@ class Program {
         database.registerCollection('passwordResetRequest', PasswordResetRequestCollection);
         database.registerCollection('inventory', InventoryCollection);
         database.registerCollection('product', ProductCollection);
+        database.registerCollection('sales', SalesCollection);
+        database.registerCollection('salesReturn', SalesReturnCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })
@@ -175,6 +188,7 @@ class Program {
         server.registerPostApi('/api/get-customer', GetCustomerApi);
         server.registerPostApi('/api/get-customer-summary-list', GetCustomerSummaryListApi);
         server.registerPostApi('/api/edit-customer', EditCustomerApi);
+        server.registerPostApi('/api/adjust-customer-balance', AdjustCustomerBalanceApi);
         server.registerPostApi('/api/delete-customer', DeleteCustomerApi);
         server.registerPostApi('/api/add-outlet', AddOutletApi);
         server.registerPostApi('/api/get-outlet-list', GetOutletListApi);
@@ -196,9 +210,18 @@ class Program {
         server.registerPostApi('/api/get-aggregated-inventory-details', GetAggregatedInventoryDetailsApi);
         server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
         server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
+<<<<<<< HEAD
         server.registerPostApi('/api/get-designation-list', GetDesignationListApi);
         server.registerPostApi('/api/get-role-list', GetRoleListApi);
         server.registerPostApi('/api/get-privilege-list', GetPrivilegeListApi);
+=======
+        server.registerPostApi('/api/add-sales', AddSalesApi);
+        server.registerPostApi('/api/get-sales', GetSalesApi);
+        server.registerPostApi('/api/get-sales-list', GetSalesListApi);
+        server.registerPostApi('/api/add-sales-return', AddSalesReturnApi);
+        server.registerPostApi('/api/get-sales-return', GetSalesReturnApi);
+        server.registerPostApi('/api/get-sales-return-list', GetSalesReturnListApi);
+>>>>>>> sales-apis
         return Promise.resolve();
       })
       .then(() => {

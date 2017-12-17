@@ -1,6 +1,6 @@
-This API handles submission of sale form
+This API handles submission of edit sale form
 
-url: `api/save-sales`
+url: `api/edit-sales`
 
 method: `POST`
 
@@ -9,10 +9,10 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
 
-  salesId: Joi.number().max(999999999999999).allow(null).required(),
+  salesId: Joi.number().max(999999999999999).required(),
 
   outletId: Joi.number().max(999999999999999).required(),
-  customerId: Joi.number().max(999999999999999).required(),
+  customerId: Joi.number().max(999999999999999).allow(null).required(),
 
   productList: Joi.array().items(
     Joi.object().keys({
@@ -21,8 +21,8 @@ method: `POST`
       discountType: Joi.string().max(1024).required(),
       discountValue: Joi.number().max(999999999999999).required(),
       salePrice: Joi.number().max(999999999999999).required()
-    });
-  );
+    })
+  ),
   payment: Joi.object().keys({
     totalAmount: Joi.number().max(999999999999999).required(),
     vatAmount: Joi.number().max(999999999999999).required(),
@@ -31,10 +31,10 @@ method: `POST`
     discountedAmount: Joi.number().max(999999999999999).required(),
     serviceChargeAmount: Joi.number().max(999999999999999).required(),
     totalBilled: Joi.number().max(999999999999999).required(),
-    previousCustomerBalance: Joi.number().max(999999999999999).required(),
+    previousCustomerBalance: Joi.number().max(999999999999999).allow(null).required(),
     paidAmount: Joi.number().max(999999999999999).required(),
     changeAmount: Joi.number().max(999999999999999).required()
-  });
+  })
 }
 ```
 
@@ -53,6 +53,7 @@ Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
+{ code: SALES_INVALID } // sales could not be found
 { code: OUTLET_INVALID } // outlet could not be found 
 { code: CUSTOMER_INVALID } // customer could not be found
 { code: PRODUCT_INVALID } // product could not be found
@@ -63,12 +64,13 @@ Possible Error Codes:
 ```js
 {
   "hasError": false,
-  "status": "success"
+  "status": "success",
+  salesId: Joi.number().max(999999999999999).allow(null).required()
 }
 ```
 
 ### db changes:
-updates the `sales` and `inventory` collection in db.
+updates the `sales`, `customer` and `inventory` collection in db.
 
 ### notes:
 in future we could save draft sale in db.

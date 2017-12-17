@@ -8,7 +8,7 @@ let pendingTerminationRequest = false;
 
 // ===================================== Server
 
-exports.getDatabase = ()=> { return mainProgram.exposeDatabaseForTesting(); }
+exports.getDatabase = () => { return mainProgram.exposeDatabaseForTesting(); }
 
 exports.initializeServer = (callback) => {
   pendingTerminationRequest = false;
@@ -112,7 +112,61 @@ exports.addProductCategory = (data, callback) => {
   })
 }
 
-// ================================== Validation
+// ===================================== Customer
+
+exports.addCustomer = (data, callback) => {
+  callApi('api/add-customer', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
+exports.getCustomer = (data, callback) => {
+  callApi('api/get-customer', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
+// ===================================== Inventory
+
+exports.addProductToInventory = (data, callback) => {
+  callApi('api/add-product-to-inventory', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
+exports.getAggregatedInventoryDetails = (data, callback) => {
+  callApi('api/get-aggregated-inventory-details', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
+// ===================================== Sales
+
+exports.addSales = (data, callback) => {
+  callApi('api/add-sales', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
+exports.getSales = (data, callback) => {
+  callApi('api/get-sales', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
+// ===================================== Validation
 
 exports.validateCustomerSchema = (doc) => {
   let schema = Joi.object().keys({
@@ -134,7 +188,7 @@ exports.validateCustomerSchema = (doc) => {
       })
     )
   });
-  let {error, value} = Joi.validate(doc, schema);
+  let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
 }
 
@@ -153,7 +207,7 @@ exports.validateOutletSchema = (doc) => {
 
     isDeleted: Joi.boolean().required()
   });
-  let {error, value} = Joi.validate(doc, schema);
+  let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
 }
 
@@ -164,15 +218,15 @@ exports.validateOrganizationSchema = (doc) => {
     primaryBusinessAddress: Joi.string().min(1).max(128).required(),
     phone: Joi.string().alphanum().min(11).max(14).required(),
     email: Joi.string().email().min(3).max(30).required(),
-    employment: Joi.object().keys({ 
-      designation: Joi.string().max(1024).required(), 
-      role: Joi.string().max(1024).required(), 
-      companyProvidedId: Joi.string().alphanum().allow('').required(), 
+    employment: Joi.object().keys({
+      designation: Joi.string().max(1024).required(),
+      role: Joi.string().max(1024).required(),
+      companyProvidedId: Joi.string().alphanum().allow('').required(),
       isActive: Joi.boolean().required(),
       privileges: Joi.object()
     })
   });
-  let {error, value} = Joi.validate(doc, schema);
+  let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
 }
 
@@ -191,7 +245,7 @@ exports.validateWarehouseSchema = (doc) => {
 
     isDeleted: Joi.boolean().required()
   });
-  let {error, value} = Joi.validate(doc, schema);
+  let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
 }
 
@@ -202,17 +256,17 @@ exports.validateProductCategorySchema = (doc) => {
 
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-    
+
     name: Joi.string().min(1).max(64).required(),
     organizationId: Joi.number().max(999999999999999).required(),
     parentProductCategoryId: Joi.number().max(999999999999999).allow(null).required(),
     unit: Joi.string().max(1024).required(),
     defaultDiscountType: Joi.string().max(1024).required(),
     defaultDiscountValue: Joi.number().when(
-      'defaultDiscountType', { 
-        is: 'percent', 
-        then: Joi.number().min(0).max(100).required(), 
-        otherwise: Joi.number().max(999999999999999).required() 
+      'defaultDiscountType', {
+        is: 'percent',
+        then: Joi.number().min(0).max(100).required(),
+        otherwise: Joi.number().max(999999999999999).required()
       }
     ),
     defaultPurchasePrice: Joi.number().max(999999999999999).required(),
@@ -222,7 +276,7 @@ exports.validateProductCategorySchema = (doc) => {
     isDeleted: Joi.boolean().required(),
     isReturnable: Joi.boolean().required()
   });
-  let {error, value} = Joi.validate(doc, schema);
+  let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
 }
 
@@ -235,7 +289,7 @@ exports.validateProductSchema = (doc) => {
     purchasePrice: Joi.number().max(999999999999999).required(),
     salePrice: Joi.number().max(999999999999999).required()
   });
-  let {error, value} = Joi.validate(doc, schema);
+  let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
 }
 
@@ -246,13 +300,13 @@ exports.validateInventorySchema = (doc) => {
 
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-    
+
     inventoryContainerId: Joi.number().max(999999999999999).required(),
     type: Joi.string().valid('default', 'returned', 'damaged').required(),
     name: Joi.string().min(1).max(64).required(),
     organizationId: Joi.number().max(999999999999999).required(),
     allowManualTransfer: Joi.boolean().required(),
-  
+
     productList: Joi.array().items(
       Joi.object().keys({
         productId: Joi.number().max(999999999999999).required(),
@@ -262,7 +316,7 @@ exports.validateInventorySchema = (doc) => {
 
     isDeleted: Joi.boolean().required()
   });
-  let {error, value} = Joi.validate(doc, schema);
+  let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
 }
 
@@ -272,10 +326,73 @@ exports.validateEmbeddedInventorySchema = (doc) => {
 
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-    
+
     name: Joi.string().min(1).max(64).required(),
     allowManualTransfer: Joi.boolean().required()
   });
-  let {error, value} = Joi.validate(doc, schema);
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateSalesSchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    _id: Joi.string().required(),
+
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
+    lastModifiedByUserId: Joi.number().max(999999999999999).allow(null).required(),
+    outletId: Joi.number().max(999999999999999).required(),
+    customerId: Joi.number().max(999999999999999).allow(null).required(),
+
+    productList: Joi.array().items(
+      Joi.object().keys({
+        productId: Joi.number().max(999999999999999).required(),
+        count: Joi.number().max(999999999999999).required(),
+        discountType: Joi.string().max(1024).required(),
+        discountValue: Joi.number().max(999999999999999).required(),
+        salePrice: Joi.number().max(999999999999999).required()
+      })
+    ),
+    payment: Joi.object().keys({
+      totalAmount: Joi.number().max(999999999999999).required(),
+      vatAmount: Joi.number().max(999999999999999).required(),
+      discountType: Joi.string().max(1024).required(),
+      discountValue: Joi.number().max(999999999999999).required(),
+      discountedAmount: Joi.number().max(999999999999999).required(),
+      serviceChargeAmount: Joi.number().max(999999999999999).required(),
+      totalBilled: Joi.number().max(999999999999999).required(),
+      previousCustomerBalance: Joi.number().max(999999999999999).allow(null).required(),
+      paidAmount: Joi.number().max(999999999999999).required(),
+      changeAmount: Joi.number().max(999999999999999).required()
+    }),
+
+    isModified: Joi.boolean().required(),
+    isDeleted: Joi.boolean().required()
+  });
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateSalesReturnSchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    _id: Joi.string().required(),
+
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+
+    salesId: Joi.number().max(999999999999999).required(),
+    returnedProductList: Joi.array().items(
+      Joi.object().keys({
+        productId: Joi.number().max(999999999999999).required(),
+        count: Joi.number().max(999999999999999).required()
+      })
+    ),
+    creditedAmount: Joi.number().max(999999999999999).required(),
+
+    isDeleted: Joi.boolean().required()
+  });
+  let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
 }

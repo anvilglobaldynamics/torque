@@ -10,8 +10,11 @@ method: `POST`
   apiKey: Joi.string().length(64).required(),
 
   organizationId: Joi.number().max(999999999999999).required(),
-  outletId: Joi.number().max(999999999999999).required(),
-  customerId: Joi.number().max(999999999999999).required(),
+  outletId: Joi.number().max(999999999999999).allow(null).required(),
+  customerId: Joi.number().max(999999999999999).allow(null).required(),
+
+  shouldFilterByOutlet: Joi.boolean().required(),
+  shouldFilterByCustomer: Joi.boolean().required(),
   
   fromDate: Joi.number().max(999999999999999).required(),
   toDate: Joi.number().max(999999999999999).required()
@@ -58,8 +61,8 @@ Possible Error Codes:
           discountType: Joi.string().max(1024).required(),
           discountValue: Joi.number().max(999999999999999).required(),
           salePrice: Joi.number().max(999999999999999).required()
-        });
-      );
+        })
+      ),
       payment: Joi.object().keys({
         totalAmount: Joi.number().max(999999999999999).required(),
         vatAmount: Joi.number().max(999999999999999).required(),
@@ -71,7 +74,7 @@ Possible Error Codes:
         previousCustomerBalance: Joi.number().max(999999999999999).required(),
         paidAmount: Joi.number().max(999999999999999).required(),
         changeAmount: Joi.number().max(999999999999999).required()
-      });
+      }),
       isModified: Joi.boolean().required()
     });
   )
