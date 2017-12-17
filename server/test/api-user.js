@@ -1,4 +1,3 @@
-
 let expect = require('chai').expect;
 let { callApi } = require('./utils');
 let {
@@ -396,4 +395,3 @@ describe('user apis (1)', _ => {
   });
 
 });
-

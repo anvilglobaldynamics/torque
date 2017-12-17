@@ -56,6 +56,7 @@ exports.UserCollection = class extends Collection {
     })
   }
 
+  // TODO: make below param obj
   getById(id, cbfn) {
     this._findOne({ id }, cbfn);
   }

@@ -12,7 +12,7 @@ method: `POST`
   emailOrPhone: Joi.alternatives([
     Joi.string().email().min(3).max(30), // if email
     Joi.string().alphanum().min(11).max(14), // if phone
-  ]).required(),
+  ]).required()
 }
 ```
 

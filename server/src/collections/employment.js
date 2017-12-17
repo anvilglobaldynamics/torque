@@ -179,4 +179,21 @@ exports.EmploymentCollection = class extends Collection {
     this._find({ userId }, cbfn);
   }
 
+  hireExistingUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, cbfn) {
+    let user = {
+      createdDatetimeStamp: (new Date).getTime(),
+      lastModifiedDatetimeStamp: (new Date).getTime(),
+      userId,
+      organizationId,
+      designation,
+      role,
+      companyProvidedId,
+      privileges,
+      isActive: true
+    }
+    this._insert(user, (err, id) => {
+      return cbfn(err, id);
+    })
+  }
+
 }
