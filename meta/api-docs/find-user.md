@@ -1,6 +1,6 @@
 This API handles check of a phone number being in system or not
 
-url: `api/find-user-by-phone-number`
+url: `api/find-user`
 
 method: `POST`
 
@@ -8,7 +8,11 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  phone: Joi.string().alphanum().min(11).max(14).required()
+
+  emailOrPhone: Joi.alternatives([
+    Joi.string().email().min(3).max(30), // if email
+    Joi.string().alphanum().min(11).max(14), // if phone
+  ]).required(),
 }
 ```
 
@@ -27,6 +31,7 @@ Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: PHONE_INVALID } // phone is not in system
+{ code: EMAIL_INVALID } // email is not in system
 ```
 
 ### response (on success):
