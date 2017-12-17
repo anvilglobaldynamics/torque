@@ -65,6 +65,10 @@ let salesData = null;
 
 let productToBeTransferredId = null;
 
+let fromDate = new Date();
+fromDate.setDate(fromDate.getDate()-1);
+fromDate = fromDate.getTime();
+
 describe('sales-return', _ => {
 
   it('START', testDoneFn => {
@@ -277,152 +281,150 @@ describe('sales-return', _ => {
 
   });
 
-  // it('api/get-sales-list (Valid only organization Id)', testDoneFn => {
+  it('api/get-sales-return-list (Valid only organization Id)', testDoneFn => {
 
-  //   callApi('api/get-sales-list', {
-  //     json: {
-  //       apiKey,
-  //       organizationId,
-  //       outletId: null,
-  //       customerId: null,
+    callApi('api/get-sales-return-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: null,
 
-  //       shouldFilterByOutlet: false,
-  //       shouldFilterByCustomer: false,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
 
-  //       fromDate: (new Date("2017-12-14")).getTime(),
-  //       toDate: (new Date("2017-12-16")).getTime(),
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('salesList');
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('salesReturnList');
 
-  //     body.salesList.forEach(sales => {
-  //       validateSalesSchema(sales);
-  //     });
+      body.salesReturnList.forEach(salesReturn => {
+        validateSalesReturnSchema(salesReturn);
+      });
 
-  //     testDoneFn();
-  //   });
+      testDoneFn();
+    });
 
-  // });
+  });
 
-  // it('api/get-sales-list (Valid with organizationId and outletId)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId and outletId)', testDoneFn => {
 
-  //   callApi('api/get-sales-list', {
-  //     json: {
-  //       apiKey,
-  //       organizationId,
-  //       outletId,
-  //       customerId: null,
+    callApi('api/get-sales-return-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId,
+        customerId: null,
 
-  //       shouldFilterByOutlet: true,
-  //       shouldFilterByCustomer: false,
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: false,
 
-  //       fromDate: (new Date("2017-12-14")).getTime(),
-  //       toDate: (new Date("2017-12-16")).getTime(),
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('salesList');
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('salesReturnList');
 
-  //     body.salesList.forEach(sales => {
-  //       validateSalesSchema(sales);
-  //     });
+      body.salesReturnList.forEach(salesReturn => {
+        validateSalesReturnSchema(salesReturn);
+      });
 
-  //     testDoneFn();
-  //   });
+      testDoneFn();
+    });
 
-  // });
+  });
 
-  // it('api/get-sales-list (Valid with organizationId and customerId)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId and customerId)', testDoneFn => {
 
-  //   callApi('api/get-sales-list', {
-  //     json: {
-  //       apiKey,
-  //       organizationId,
-  //       outletId: null,
-  //       customerId,
+    callApi('api/get-sales-return-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId,
 
-  //       shouldFilterByOutlet: false,
-  //       shouldFilterByCustomer: true,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: true,
 
-  //       fromDate: (new Date("2017-12-14")).getTime(),
-  //       toDate: (new Date("2017-12-16")).getTime(),
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('salesList');
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('salesReturnList');
 
-  //     body.salesList.forEach(sales => {
-  //       validateSalesSchema(sales);
-  //     });
+      body.salesReturnList.forEach(salesReturn => {
+        validateSalesReturnSchema(salesReturn);
+      });
 
-  //     testDoneFn();
-  //   });
+      testDoneFn();
+    });
 
-  // });
+  });
 
-  // it('api/get-sales-list (Valid with organizationId and customerId is null)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId and customerId is null)', testDoneFn => {
 
-  //   callApi('api/get-sales-list', {
-  //     json: {
-  //       apiKey,
-  //       organizationId,
-  //       outletId: null,
-  //       customerId: null,
+    callApi('api/get-sales-return-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: null,
 
-  //       shouldFilterByOutlet: false,
-  //       shouldFilterByCustomer: true,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: true,
 
-  //       fromDate: (new Date("2017-12-14")).getTime(),
-  //       toDate: (new Date("2017-12-16")).getTime(),
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('salesList');
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('salesReturnList');
 
-  //     console.log(body.salesList);
+      body.salesReturnList.forEach(salesReturn => {
+        validateSalesReturnSchema(salesReturn);
+      });
 
-  //     body.salesList.forEach(sales => {
-  //       validateSalesSchema(sales);
-  //     });
+      testDoneFn();
+    });
 
-  //     testDoneFn();
-  //   });
+  });
 
-  // });
+  it('api/get-sales-return-list (Valid with organizationId, outletId and customerId)', testDoneFn => {
 
-  // it('api/get-sales-list (Valid with organizationId, outletId and customerId)', testDoneFn => {
+    callApi('api/get-sales-return-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId,
+        customerId,
 
-  //   callApi('api/get-sales-list', {
-  //     json: {
-  //       apiKey,
-  //       organizationId,
-  //       outletId,
-  //       customerId,
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: true,
 
-  //       shouldFilterByOutlet: true,
-  //       shouldFilterByCustomer: true,
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('salesReturnList');
 
-  //       fromDate: (new Date("2017-12-14")).getTime(),
-  //       toDate: (new Date("2017-12-16")).getTime(),
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('salesList');
+      body.salesReturnList.forEach(salesReturn => {
+        validateSalesReturnSchema(salesReturn);
+      });
 
-  //     body.salesList.forEach(sales => {
-  //       validateSalesSchema(sales);
-  //     });
+      testDoneFn();
+    });
 
-  //     testDoneFn();
-  //   });
-
-  // });
+  });
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

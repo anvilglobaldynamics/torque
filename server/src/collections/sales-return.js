@@ -50,30 +50,29 @@ exports.SalesReturnCollection = class extends Collection {
     this._findOne({ id: salesReturnId }, cbfn);
   }
 
-  // listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, cbfn) {
-  //   let filters = {
-  //     $and: [
-  //       {
-  //         outletId: { $in: outletIdList }
-  //       },
-  //       {
-  //         createdDatetimeStamp: {
-  //           $gte: fromDate,
-  //           $lte: toDate
-  //         }
-  //       }
-  //     ]
-  //   }
+  findBySalesIdList({ salesIdList }, cbfn) {
+    let filter = {
+      salesId: { $in: salesIdList }
+    }
+    this._find(filter, cbfn);
+  }
 
-  //   if (shouldFilterByOutlet) {
-  //     filters.$and.push({ outletId });
-  //   }
+  listByFilters({ salesIdList, fromDate, toDate }, cbfn) {
+    let filters = {
+      $and: [
+        {
+          salesId: { $in: salesIdList }
+        },
+        {
+          createdDatetimeStamp: {
+            $gte: fromDate,
+            $lte: toDate
+          }
+        }
+      ]
+    }
 
-  //   if (shouldFilterByCustomer) {
-  //     filters.$and.push({ customerId });
-  //   }
-
-  //   this._find(filters, cbfn);
-  // }
+    this._find(filters, cbfn);
+  }
 
 }

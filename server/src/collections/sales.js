@@ -96,4 +96,24 @@ exports.SalesCollection = class extends Collection {
     this._find(filters, cbfn);
   }
 
+  listByFiltersForSalesReturn({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, }, cbfn) {
+    let filters = {
+      $and: [
+        {
+          outletId: { $in: outletIdList }
+        }
+      ]
+    }
+
+    if(shouldFilterByOutlet) {
+      filters.$and.push({ outletId });
+    }
+
+    if(shouldFilterByCustomer) {
+      filters.$and.push({ customerId });
+    }
+
+    this._find(filters, cbfn);
+  }
+
 }

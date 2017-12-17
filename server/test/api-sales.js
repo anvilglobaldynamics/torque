@@ -59,6 +59,10 @@ let customerData = null;
 
 let productToBeTransferredId = null;
 
+let fromDate = new Date();
+fromDate.setDate(fromDate.getDate()-1);
+fromDate = fromDate.getTime();
+
 describe('sales', _ => {
 
   it('START', testDoneFn => {
@@ -318,8 +322,8 @@ describe('sales', _ => {
         shouldFilterByOutlet: false,
         shouldFilterByCustomer: false,
 
-        fromDate: (new Date("2017-12-14")).getTime(),
-        toDate: (new Date("2017-12-16")).getTime(),
+        fromDate,
+        toDate: (new Date()).getTime(),
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -347,8 +351,8 @@ describe('sales', _ => {
         shouldFilterByOutlet: true,
         shouldFilterByCustomer: false,
 
-        fromDate: (new Date("2017-12-14")).getTime(),
-        toDate: (new Date("2017-12-16")).getTime(),
+        fromDate,
+        toDate: (new Date()).getTime(),
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -376,8 +380,8 @@ describe('sales', _ => {
         shouldFilterByOutlet: false,
         shouldFilterByCustomer: true,
 
-        fromDate: (new Date("2017-12-14")).getTime(),
-        toDate: (new Date("2017-12-16")).getTime(),
+        fromDate,
+        toDate: (new Date()).getTime(),
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -405,8 +409,8 @@ describe('sales', _ => {
         shouldFilterByOutlet: false,
         shouldFilterByCustomer: true,
 
-        fromDate: (new Date("2017-12-14")).getTime(),
-        toDate: (new Date("2017-12-16")).getTime(),
+        fromDate,
+        toDate: (new Date()).getTime(),
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -434,8 +438,8 @@ describe('sales', _ => {
         shouldFilterByOutlet: true,
         shouldFilterByCustomer: true,
 
-        fromDate: (new Date("2017-12-14")).getTime(),
-        toDate: (new Date("2017-12-16")).getTime(),
+        fromDate,
+        toDate: (new Date()).getTime(),
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
