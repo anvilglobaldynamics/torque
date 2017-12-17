@@ -13,19 +13,21 @@ method: `POST`
   phone: Joi.string().alphanum().min(11).max(14).required(),
   password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required(),
 
+  organizationId: Joi.number().max(999999999999999).required(),
+
   role: Joi.string().max(1024).required(),
   designation: Joi.string().max(1024).required(),
   companyProvidedId: Joi.string().alphanum().required(),
 
   privileges: Joi.object().keys({
     [Look up privileges here](../server-db-docs/employment.md)
-  });
+  }),
 
   fullName: Joi.string().min(1).max(64).required(),
   nid: Joi.string().min(16).max(16).required(),
   physicalAddress: Joi.string().min(1).max(128).required(),
   emergencyContact: Joi.number().min(6).max(11).required(),
-  bloodGroup: Joi.alphanum().min(2).max(3).required(),
+  bloodGroup: Joi.alphanum().min(2).max(3).required()
 }
 ```
 
