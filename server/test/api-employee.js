@@ -6,7 +6,8 @@ let {
   terminateServer,
   registerUser,
   loginUser,
-  addOrganization
+  addOrganization,
+  validateUserSchema
 } = require('./lib');
 
 const email = `t2${(new Date).getTime()}@gmail.com`;
@@ -62,7 +63,7 @@ describe('employee', _ => {
     });
   });
 
-  it('api/hire-user-as-employee (Valid, all privileges): ' + email, testDoneFn => {
+  it('api/hire-user-as-employee (Valid, all privileges)', testDoneFn => {
 
     callApi('api/hire-user-as-employee', {
       json: {
@@ -117,7 +118,7 @@ describe('employee', _ => {
 
   });
 
-  it('api/hire-user-as-employee (Invalid user): ' + email, testDoneFn => {
+  it('api/hire-user-as-employee (Invalid user)', testDoneFn => {
 
     callApi('api/hire-user-as-employee', {
       json: {
@@ -166,6 +167,80 @@ describe('employee', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error).to.have.property('code').that.equals('USER_INVALID');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/find-user (Valid phone)', testDoneFn => {
+
+    callApi('api/find-user', {
+      json: {
+        apiKey,
+        emailOrPhone: empPhone
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('user');
+
+      validateUserSchema(body.user);
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/find-user (Valid email)', testDoneFn => {
+
+    callApi('api/find-user', {
+      json: {
+        apiKey,
+        emailOrPhone: empEmail
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('user');
+
+      validateUserSchema(body.user);
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/find-user (Invalid email)', testDoneFn => {
+
+    callApi('api/find-user', {
+      json: {
+        apiKey,
+        emailOrPhone: 'test@test.com'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('USER_DOES_NOT_EXIST');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/find-user (Invalid phone)', testDoneFn => {
+
+    callApi('api/find-user', {
+      json: {
+        apiKey,
+        emailOrPhone: '01726404040'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('USER_DOES_NOT_EXIST');
 
       testDoneFn();
     })

@@ -32,6 +32,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: PHONE_INVALID } // phone is not in system
 { code: EMAIL_INVALID } // email is not in system
+{ code: USER_DOES_NOT_EXIST } // User with this phone/email does not exist
 ```
 
 ### response (on success):

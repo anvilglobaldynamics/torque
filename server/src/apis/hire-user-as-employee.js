@@ -69,7 +69,7 @@ exports.HireUserAsEmployeeApi = class extends Api {
   _checkIfUserEmployed({ userId }, cbfn) {
     this.database.employment.getEmploymentsOfEmployee(userId, (err, employmentList) => {
       if (err) return this.fail(err);
-      if (employmentList.length > null) {
+      if (employmentList.length > 0) {
         err = new Error("User is already employed");
         err.code = "ALREADY_EMPLOYED"
         return this.fail(err);
