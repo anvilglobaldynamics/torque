@@ -210,18 +210,15 @@ class Program {
         server.registerPostApi('/api/get-aggregated-inventory-details', GetAggregatedInventoryDetailsApi);
         server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
         server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
-<<<<<<< HEAD
         server.registerPostApi('/api/get-designation-list', GetDesignationListApi);
         server.registerPostApi('/api/get-role-list', GetRoleListApi);
         server.registerPostApi('/api/get-privilege-list', GetPrivilegeListApi);
-=======
         server.registerPostApi('/api/add-sales', AddSalesApi);
         server.registerPostApi('/api/get-sales', GetSalesApi);
         server.registerPostApi('/api/get-sales-list', GetSalesListApi);
         server.registerPostApi('/api/add-sales-return', AddSalesReturnApi);
         server.registerPostApi('/api/get-sales-return', GetSalesReturnApi);
         server.registerPostApi('/api/get-sales-return-list', GetSalesReturnListApi);
->>>>>>> sales-apis
         return Promise.resolve();
       })
       .then(() => {
