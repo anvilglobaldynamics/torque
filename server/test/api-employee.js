@@ -7,7 +7,8 @@ let {
   registerUser,
   loginUser,
   addOrganization,
-  validateUserSchema
+  validateUserSchema,
+  validateEmploymentSchema
 } = require('./lib');
 
 const email = `t1${(new Date).getTime()}@gmail.com`;
@@ -457,6 +458,10 @@ describe('employee', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('employeeList');
 
+      body.employeeList.forEach(employee => {
+        validateEmploymentSchema(employee);
+      });
+
       testDoneFn();
     })
 
@@ -473,6 +478,11 @@ describe('employee', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('employee');
+
+      validateEmploymentSchema(body.employee);
+
+      employeeToBeEditedData = body.employee;
+      console.log("employeeToBeEditedData: ", employeeToBeEditedData);
 
       testDoneFn();
     })
