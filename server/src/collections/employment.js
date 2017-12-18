@@ -183,6 +183,15 @@ exports.EmploymentCollection = class extends Collection {
     this._findOne({ id: employmentId }, cbfn);
   }
 
+  update({ employmentId }, { isActive, role, designation, companyProvidedId, privileges }, cbfn) {
+    let modifications = {
+      $set: {
+        isActive, role, designation, companyProvidedId, privileges
+      }
+    }
+    this._update({ id: employmentId }, modifications, cbfn);
+  }
+
   listByOrganizationId({ organizationId }, cbfn) {
     this._find({ organizationId }, cbfn);
   }

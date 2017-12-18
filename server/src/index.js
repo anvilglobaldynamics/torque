@@ -66,6 +66,7 @@ let { FindUserApi } = require('./apis/find-user');
 let { AddNewEmployeeApi } = require('./apis/add-new-employee');
 let { GetEmployeeListApi } = require('./apis/get-employee-list');
 let { GetEmployeeApi } = require('./apis/get-employee');
+let { EditEmploymentApi } = require('./apis/edit-employment');
 
 let { InternalStatus } = require('./apis/internal--status');
 let { GetDesignationListApi } = require('./apis/get-designation-list');
@@ -230,6 +231,7 @@ class Program {
         server.registerPostApi('/api/add-new-employee', AddNewEmployeeApi);
         server.registerPostApi('/api/get-employee-list', GetEmployeeListApi);
         server.registerPostApi('/api/get-employee', GetEmployeeApi);
+        server.registerPostApi('/api/edit-employment', EditEmploymentApi);
         return Promise.resolve();
       })
       .then(() => {

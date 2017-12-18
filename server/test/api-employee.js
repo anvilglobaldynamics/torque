@@ -482,7 +482,6 @@ describe('employee', _ => {
       validateEmploymentSchema(body.employee);
 
       employeeToBeEditedData = body.employee;
-      console.log("employeeToBeEditedData: ", employeeToBeEditedData);
 
       testDoneFn();
     })
@@ -507,64 +506,79 @@ describe('employee', _ => {
 
   });
 
-  // it('api/edit-employment (Valid)', testDoneFn => {
+  it('api/edit-employment (Valid)', testDoneFn => {
 
-  //   callApi('api/edit-employment', {
-  //     json: {
-  //       apiKey,
+    callApi('api/edit-employment', {
+      json: {
+        apiKey,
 
-  //       employmentId: employeeToBeEditedId,
+        employmentId: employeeToBeEditedData.id,
 
-  //       isActive: false,
+        isActive: false,
 
-  //       role: "Joi.string().max(1024).required()",
-  //       designation: "Joi.string().max(1024).required()",
-  //       companyProvidedId: "abc123",
+        role: employeeToBeEditedData.role,
+        designation: employeeToBeEditedData.designation,
+        companyProvidedId: employeeToBeEditedData.companyProvidedId,
 
-  //       privileges: {
-  //         PRIV_VIEW_USERS: true,
-  //         PRIV_MODIFY_USERS: true,
-  //         PRIV_ADD_USER: true,
-  //         PRIV_MAKE_USER_AN_OWNER: true,
-  //         PRIV_MODIFY_USER_PRIVILEGES: true,
+        privileges: employeeToBeEditedData.privileges
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
 
-  //         PRIV_ACCESS_POS: true,
-  //         PRIV_VIEW_SALES: true,
-  //         PRIV_MODIFY_SALES: true,
-  //         PRIV_ALLOW_FLAT_DISCOUNT: true,
-  //         PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
-  //         PRIV_ALLOW_FOC: true,
+      testDoneFn();
+    })
 
-  //         PRIV_VIEW_ALL_INVENTORIES: true,
-  //         PRIV_MODIFY_ALL_INVENTORIES: true,
-  //         PRIV_TRANSFER_ALL_INVENTORIES: true,
-  //         PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+  });
 
-  //         PRIV_VIEW_ALL_OUTLETS: true,
-  //         PRIV_MODIFY_ALL_OUTLETS: true,
+  it('api/get-employee (Valid Modification check)', testDoneFn => {
 
-  //         PRIV_VIEW_ALL_WAREHOUSES: true,
-  //         PRIV_MODIFY_ALL_WAREHOUSES: true,
+    callApi('api/get-employee', {
+      json: {
+        apiKey,
+        employmentId: employeeToBeEditedData.id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('employee');
 
-  //         PRIV_VIEW_ORGANIZATION_STATISTICS: true,
-  //         PRIV_MODIFY_ORGANIZATION: true,
+      validateEmploymentSchema(body.employee);
 
-  //         PRIV_VIEW_CUSTOMER: true,
-  //         PRIV_ADD_CUSTOMER_DURING_SALES: true,
-  //         PRIV_MODIFY_CUSTOMER: true,
-  //         PRIV_MANAGE_CUSTOMER_DEBT: true
-  //       }
-  //     }
-  //   }, (err, response, body) => {
-  //     console.log(body);
-  //     expect(response.statusCode).to.equal(200);
-  //     expect(body).to.have.property('hasError').that.equals(false);
-  //     expect(body).to.have.property('status').that.equals('success');
+      expect(body.employee).to.have.property('isActive').that.equals(false);
 
-  //     testDoneFn();
-  //   })
+      testDoneFn();
+    })
 
-  // });
+  });
+
+  // FIXME:
+  it('api/edit-employment (Invalid)', testDoneFn => {
+
+    callApi('api/edit-employment', {
+      json: {
+        apiKey,
+
+        employmentId: -9999,
+
+        isActive: false,
+
+        role: employeeToBeEditedData.role,
+        designation: employeeToBeEditedData.designation,
+        companyProvidedId: employeeToBeEditedData.companyProvidedId,
+
+        privileges: employeeToBeEditedData.privileges
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+
+      testDoneFn();
+    })
+
+  });
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
