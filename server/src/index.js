@@ -18,9 +18,20 @@ let { VerifyEmailApi } = require('./apis/verify-email');
 let { UserChangePasswordApi } = require('./apis/user-change-password');
 let { UserEditProfileApi } = require('./apis/user-edit-profile');
 
+let { UserResetPasswordRequestApi } = require('./apis/user-reset-password--request');
+let { UserResetPasswordGetTokenInfoApi } = require('./apis/user-reset-password--get-token-info');
+let { UserResetPasswordConfirmApi } = require('./apis/user-reset-password--confirm');
+
 let { AddOrganizationApi } = require('./apis/add-organization');
 let { GetrganizationListApi } = require('./apis/get-organization-list');
 let { EditOrganizationApi } = require('./apis/edit-organization');
+
+let { AddNewEmployeeApi } = require('./apis/add-new-employee');
+let { FindUserApi } = require('./apis/find-user');
+let { HireUserAsEmployeeApi } = require('./apis/hire-user-as-employee');
+let { GetEmployeeListApi } = require('./apis/get-employee-list');
+let { GetEmployeeApi } = require('./apis/get-employee');
+let { EditEmploymentApi } = require('./apis/edit-employment');
 
 let { AddCustomerApi } = require('./apis/add-customer');
 let { GetCustomerApi } = require('./apis/get-customer');
@@ -28,9 +39,6 @@ let { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
 let { EditCustomerApi } = require('./apis/edit-customer');
 let { AdjustCustomerBalanceApi } = require('./apis/adjust-customer-balance');
 let { DeleteCustomerApi } = require('./apis/delete-customer');
-let { UserResetPasswordRequestApi } = require('./apis/user-reset-password--request');
-let { UserResetPasswordGetTokenInfoApi } = require('./apis/user-reset-password--get-token-info');
-let { UserResetPasswordConfirmApi } = require('./apis/user-reset-password--confirm');
 
 let { AddOutletApi } = require('./apis/add-outlet');
 let { GetOutletListApi } = require('./apis/get-outlet-list');
@@ -63,17 +71,11 @@ let { GetSalesReturnListApi } = require('./apis/get-sales-return-list');
 
 let { GetDashboardSummaryApi } = require('./apis/get-dashboard-summary');
 
-let { HireUserAsEmployeeApi } = require('./apis/hire-user-as-employee');
-let { FindUserApi } = require('./apis/find-user');
-let { AddNewEmployeeApi } = require('./apis/add-new-employee');
-let { GetEmployeeListApi } = require('./apis/get-employee-list');
-let { GetEmployeeApi } = require('./apis/get-employee');
-let { EditEmploymentApi } = require('./apis/edit-employment');
-
-let { InternalStatus } = require('./apis/internal--status');
 let { GetDesignationListApi } = require('./apis/get-designation-list');
 let { GetRoleListApi } = require('./apis/get-role-list');
 let { GetPrivilegeListApi } = require('./apis/get-privilege-list');
+
+let { InternalStatus } = require('./apis/internal--status');
 
 let { FixtureCollection } = require('./collections/fixture');
 let { UserCollection } = require('./collections/user');
@@ -229,7 +231,6 @@ class Program {
         server.registerPostApi('/api/get-sales-return', GetSalesReturnApi);
         server.registerPostApi('/api/get-sales-return-list', GetSalesReturnListApi);
         server.registerPostApi('/api/get-dashboard-summary', GetDashboardSummaryApi);
-
         server.registerPostApi('/api/hire-user-as-employee', HireUserAsEmployeeApi);
         server.registerPostApi('/api/find-user', FindUserApi);
         server.registerPostApi('/api/add-new-employee', AddNewEmployeeApi);
