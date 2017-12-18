@@ -38,6 +38,7 @@ const orgPhone = 'o1' + String((new Date).getTime()).split('').reverse().slice(0
 let apiKey = null;
 let organizationId = null;
 let employeeId = null;
+let employeeToBeEditedId = null;
 
 describe('employee', _ => {
 
@@ -314,6 +315,8 @@ describe('employee', _ => {
       expect(body).to.have.property('userId');
       expect(body).to.have.property('employmentId');
 
+      employeeToBeEditedId = body.employmentId;
+
       testDoneFn();
     })
 
@@ -440,6 +443,82 @@ describe('employee', _ => {
     })
 
   });
+
+  it('api/get-employee-list (Valid)', testDoneFn => {
+
+    callApi('api/get-employee-list', {
+      json: {
+        apiKey,
+        organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('employeeList');
+
+      testDoneFn();
+    })
+
+  });
+
+  // it('api/edit-employment (Valid)', testDoneFn => {
+
+  //   callApi('api/edit-employment', {
+  //     json: {
+  //       apiKey,
+
+  //       employmentId: employeeToBeEditedId,
+
+  //       isActive: false,
+
+  //       role: "Joi.string().max(1024).required()",
+  //       designation: "Joi.string().max(1024).required()",
+  //       companyProvidedId: "abc123",
+
+  //       privileges: {
+  //         PRIV_VIEW_USERS: true,
+  //         PRIV_MODIFY_USERS: true,
+  //         PRIV_ADD_USER: true,
+  //         PRIV_MAKE_USER_AN_OWNER: true,
+  //         PRIV_MODIFY_USER_PRIVILEGES: true,
+
+  //         PRIV_ACCESS_POS: true,
+  //         PRIV_VIEW_SALES: true,
+  //         PRIV_MODIFY_SALES: true,
+  //         PRIV_ALLOW_FLAT_DISCOUNT: true,
+  //         PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
+  //         PRIV_ALLOW_FOC: true,
+
+  //         PRIV_VIEW_ALL_INVENTORIES: true,
+  //         PRIV_MODIFY_ALL_INVENTORIES: true,
+  //         PRIV_TRANSFER_ALL_INVENTORIES: true,
+  //         PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+
+  //         PRIV_VIEW_ALL_OUTLETS: true,
+  //         PRIV_MODIFY_ALL_OUTLETS: true,
+
+  //         PRIV_VIEW_ALL_WAREHOUSES: true,
+  //         PRIV_MODIFY_ALL_WAREHOUSES: true,
+
+  //         PRIV_VIEW_ORGANIZATION_STATISTICS: true,
+  //         PRIV_MODIFY_ORGANIZATION: true,
+
+  //         PRIV_VIEW_CUSTOMER: true,
+  //         PRIV_ADD_CUSTOMER_DURING_SALES: true,
+  //         PRIV_MODIFY_CUSTOMER: true,
+  //         PRIV_MANAGE_CUSTOMER_DEBT: true
+  //       }
+  //     }
+  //   }, (err, response, body) => {
+  //     console.log(body);
+  //     expect(response.statusCode).to.equal(200);
+  //     expect(body).to.have.property('hasError').that.equals(false);
+  //     expect(body).to.have.property('status').that.equals('success');
+
+  //     testDoneFn();
+  //   })
+
+  // });
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
