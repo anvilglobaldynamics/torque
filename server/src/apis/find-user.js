@@ -33,7 +33,7 @@ exports.FindUserApi = class extends Api {
   handle({ body }) {
     let { emailOrPhone } = body;
     this._findUser({ emailOrPhone }, (user) => {
-      this.success({ user: user });
+      this.success({ user });
     });
   }
 

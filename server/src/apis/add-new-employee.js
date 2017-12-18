@@ -1,7 +1,7 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.HireUserAsEmployeeApi = class extends Api {
+exports.AddNewEmployeeApi = class extends Api {
 
   get autoValidates() { return true; }
 
@@ -11,12 +11,16 @@ exports.HireUserAsEmployeeApi = class extends Api {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),
 
-      userId: Joi.number().max(999999999999999).required(),
+      email: Joi.string().email().min(3).max(30).required(),
+      fullName: Joi.string().min(1).max(64).required(),
+      phone: Joi.string().alphanum().min(11).max(14).required(),
+      password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required(),
 
       organizationId: Joi.number().max(999999999999999).required(),
+
       role: Joi.string().max(1024).required(),
       designation: Joi.string().max(1024).required(),
-      companyProvidedId: Joi.string().alphanum().allow('').max(1024).required(),
+      companyProvidedId: Joi.string().alphanum().required(),
 
       privileges: Joi.object().keys({
         PRIV_VIEW_USERS: Joi.boolean().required(),
@@ -85,15 +89,14 @@ exports.HireUserAsEmployeeApi = class extends Api {
   }
 
   handle({ body }) {
-    let { userId, organizationId, role, designation, companyProvidedId, privileges } = body;
-    this._findUser({ userId }, () => {
-      this._checkIfUserEmployed({ userId }, () => {
-        this._hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {
-          this.success({ status: "success", employmentId });
-        });
-      });
-    });
+    let { email, fullName, phone, password, organizationId, role, designation, companyProvidedId, privileges } = body;
+    // this._findUser({ userId }, () => {
+      // this._checkIfUserEmployed({ userId }, () => {
+        // this._hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {
+          this.success({ status: "success" });
+        // });
+      // });
+    // });
   }
 
 }
-
