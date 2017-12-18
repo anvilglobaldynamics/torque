@@ -34,6 +34,10 @@ exports.UserRegisterApi = class extends userCommonMixin(emailVerificationRequest
           err = new Error("Provided email address is already in use");
           err.code = 'EMAIL_ALREADY_IN_USE';
         }
+        if ('code' in err && err.code === 'DUPLICATE_phone') {
+          err = new Error("Provided phone number is already in use");
+          err.code = 'PHONE_ALREADY_IN_USE';
+        }
         return this.fail(err);
       }
       return cbfn(userId);

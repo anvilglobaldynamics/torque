@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.AddNewEmployeeApi = class extends Api {
+let { userCommonMixin } = require('./mixins/user-common');
+
+exports.AddNewEmployeeApi = class extends userCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -58,28 +60,28 @@ exports.AddNewEmployeeApi = class extends Api {
     });
   }
 
-  _findUser({ userId }, cbfn) {
-    this.database.user.getById(userId, (err, user) => {
-      if (err) return this.fail(err);
-      if (user === null) {
-        err = new Error("Invalid User could not be found");
-        err.code = "USER_INVALID"
+  _createUser({ email, fullName, phone, password }, cbfn) {
+    let passwordHash = this._makeHash(password);
+    let user = {
+      email,
+      fullName,
+      phone,
+      passwordHash
+    }
+    this.database.user.create(user, (err, userId) => {
+      if (err) {
+        if ('code' in err && err.code === 'DUPLICATE_email') {
+          err = new Error("Provided email address is already in use");
+          err.code = 'EMAIL_ALREADY_IN_USE';
+        }
+        if ('code' in err && err.code === 'DUPLICATE_phone') {
+          err = new Error("Provided phone number is already in use");
+          err.code = 'PHONE_ALREADY_IN_USE';
+        }
         return this.fail(err);
       }
-      return cbfn();
-    })
-  }
-
-  _checkIfUserEmployed({ userId }, cbfn) {
-    this.database.employment.getEmploymentsOfEmployee(userId, (err, employmentList) => {
-      if (err) return this.fail(err);
-      if (employmentList.length > 0) {
-        err = new Error("User is already employed");
-        err.code = "ALREADY_EMPLOYED"
-        return this.fail(err);
-      }
-      return cbfn();
-    })
+      return cbfn(userId);
+    });
   }
 
   _hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, cbfn) {
@@ -90,13 +92,11 @@ exports.AddNewEmployeeApi = class extends Api {
 
   handle({ body }) {
     let { email, fullName, phone, password, organizationId, role, designation, companyProvidedId, privileges } = body;
-    // this._findUser({ userId }, () => {
-      // this._checkIfUserEmployed({ userId }, () => {
-        // this._hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {
-          this.success({ status: "success" });
-        // });
-      // });
-    // });
+    this._createUser({ email, fullName, phone, password }, (userId) => {
+      this._hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {
+        this.success({ status: "success", userId, employmentId });
+      });
+    });
   }
 
 }
