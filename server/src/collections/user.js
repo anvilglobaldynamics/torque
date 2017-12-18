@@ -56,9 +56,8 @@ exports.UserCollection = class extends Collection {
     })
   }
 
-  // TODO: make below param obj
-  getById(id, cbfn) {
-    this._findOne({ id }, cbfn);
+  findById({ userId }, cbfn) {
+    this._findOne({ id: userId }, cbfn);
   }
 
   findByEmailOrPhone({ emailOrPhone }, cbfn) {
@@ -80,46 +79,50 @@ exports.UserCollection = class extends Collection {
     }, cbfn);
   }
 
-  setEmailAsVerified(id, cbfn) {
+  // FIXME: Logical Separation
+  setEmailAsVerified({ userId }, cbfn) {
     let mod = {
       $set: {
         isEmailVerified: true
       }
     }
-    this._update({ id }, mod, (err, wasUpdated) => {
+    this._update({ id: userId }, mod, (err, wasUpdated) => {
       if (err) return cbfn(err);
       if (!wasUpdated) return cbfn(new Error("User Not Found"));
       return cbfn();
     });
   }
 
-  setEmailAsUnverified(id, cbfn) {
+  // FIXME: Logical Separation
+  setEmailAsUnverified({ userId }, cbfn) {
     let mod = {
       $set: {
         isEmailVerified: false
       }
     }
-    this._update({ id }, mod, (err, wasUpdated) => {
+    this._update({ id: userId }, mod, (err, wasUpdated) => {
       if (err) return cbfn(err);
       if (!wasUpdated) return cbfn(new Error("User Not Found"));
       return cbfn();
     });
   }
 
-  setPhoneAsVerified(id, cbfn) {
+  // FIXME: Logical Separation
+  setPhoneAsVerified({ userId }, cbfn) {
     let mod = {
       $set: {
         isValid: true
       }
     }
-    this._update({ id }, mod, (err, wasUpdated) => {
+    this._update({ id: userId }, mod, (err, wasUpdated) => {
       if (err) return cbfn(err);
       if (!wasUpdated) return cbfn(new Error("User Not Found"));
       return cbfn();
     });
   }
 
-  setPasswordHash({ userId, passwordHash }, cbfn) {
+  // FIXME: Logical Separation
+  setPasswordHash({ userId }, { passwordHash }, cbfn) {
     let mod = {
       $set: {
         passwordHash: passwordHash
@@ -132,8 +135,15 @@ exports.UserCollection = class extends Collection {
     });
   }
 
-  update(data, cbfn) {
-    let { userId, email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = data;
+  // FIXME: Logical Separation
+  /**
+   * 
+   * @param {any} { userId }
+   * @param {any} { email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup } 
+   * @param {any} cbfn 
+   */
+  update({ userId }, data, cbfn) {
+    let { email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = data;
     let mod = {
       $set: {
         email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup

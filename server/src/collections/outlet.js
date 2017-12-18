@@ -24,7 +24,15 @@ exports.OutletCollection = class extends Collection {
         additionalQueryFilters: {},
         uniqueKeyList: ['phone']
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'organization',
+        foreignKey: 'id',
+        referringKey: 'organizationId'
+      }
+    ];
   }
 
   create({ name, organizationId, physicalAddress, phone, contactPersonName }, cbfn) {
@@ -59,13 +67,11 @@ exports.OutletCollection = class extends Collection {
     this._update({ id: outletId }, modifications, cbfn);
   }
 
-  // TODO: make below params obj
-
-  listByOrganizationId(organizationId, cbfn) {
+  listByOrganizationId({ organizationId }, cbfn) {
     this._find({ organizationId }, cbfn);
   }
 
-  getByOutletId(outletId, cbfn) {
+  findById({ outletId }, cbfn) {
     this._findOne({ id: outletId }, cbfn)
   }
 

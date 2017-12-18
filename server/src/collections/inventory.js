@@ -30,7 +30,18 @@ exports.InventoryCollection = class extends Collection {
         additionalQueryFilters: {},
         uniqueKeyList: []
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'organization',
+        foreignKey: 'id',
+        referringKey: 'organizationId'
+      }
+    ];
+
+    // NOTES: inventoryContainerId is effectively a foreignKey. Since it may refer
+    // to two collections, it's not checked.
   }
 
   create({ inventoryContainerId, organizationId, type, name, allowManualTransfer }, cbfn) {
@@ -50,27 +61,27 @@ exports.InventoryCollection = class extends Collection {
     });
   }
 
-  addProduct({ inventoryId, productId, count }, cbfn) {
+  addProduct({ inventoryId }, { productId, count }, cbfn) {
     let modifications = {
       $push: { productList: { productId, count } }
     }
     this._update({ id: inventoryId }, modifications, cbfn);
   }
 
-  listByInventoryContainerId(inventoryContainerId, cbfn) {
+  listByInventoryContainerId({ inventoryContainerId }, cbfn) {
     this._find({ inventoryContainerId }, cbfn);
   }
 
-  updateProductList({ inventory }, cbfn) {
+  updateProductList({ inventoryId }, { productList }, cbfn) {
     let modifications = {
       $set: {
-        productList: inventory.productList
+        productList
       }
     }
-    this._update({ id: inventory.id }, modifications, cbfn);
+    this._update({ id: inventoryId }, modifications, cbfn);
   }
 
-  getById(inventoryId, cbfn) {
+  findById({ inventoryId }, cbfn) {
     this._findOne({ id: inventoryId }, cbfn)
   }
 

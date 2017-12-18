@@ -113,6 +113,7 @@ class Collection {
     });
   }
 
+  // FIXME: Inspect
   __updateOneSafe(query, modifications, cbfn) {
     this.database.findOne(this.collectionName, query, (err, originalDoc) => {
       if (err) return cbfn(err);

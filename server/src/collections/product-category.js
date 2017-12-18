@@ -35,10 +35,36 @@ exports.ProductCategoryCollection = class extends Collection {
         additionalQueryFilters: {},
         uniqueKeyList: []
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'organization',
+        foreignKey: 'id',
+        referringKey: 'organizationId'
+      }
+    ];
   }
 
-  create({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
+  /**
+   * 
+   * 
+   * @param {any} { organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } 
+   * @param {any} cbfn 
+   */
+  create(data, cbfn) {
+    let {
+     organizationId,
+      parentProductCategoryId,
+      name,
+      unit,
+      defaultDiscountType,
+      defaultDiscountValue,
+      defaultPurchasePrice,
+      defaultVat,
+      defaultSalePrice,
+      isReturnable
+    } = data;
     let doc = {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
@@ -59,15 +85,15 @@ exports.ProductCategoryCollection = class extends Collection {
     });
   }
 
-  listByOrganizationId(organizationId, cbfn) {
+  listByOrganizationId({ organizationId }, cbfn) {
     this._find({ organizationId }, cbfn);
   }
 
-  getById(productCategoryId, cbfn) {
+  findById({ productCategoryId }, cbfn) {
     this._findOne({ id: productCategoryId }, cbfn)
   }
 
-  getByIdList(productCategoryIdList, cbfn) {
+  listByIdList({ productCategoryIdList }, cbfn) {
     this._find({ id: { $in: productCategoryIdList } }, cbfn);
   }
 

@@ -34,7 +34,7 @@ exports.SessionCollection = class extends Collection {
     ];
   }
 
-  ensureApiKeyIsUnique(apiKey, cbfn) {
+  isApiKeyUnique({ apiKey }, cbfn) {
     let query = { apiKey }
     this._findOne(query, (err, doc) => {
       if (err) return cbfn(err);
@@ -54,37 +54,42 @@ exports.SessionCollection = class extends Collection {
       terminatedDatetimeStamp: null,
       terminatedBy: '',
       hasExpried: false
-    }
+    };
     this._insert(user, (err, id) => {
       return cbfn(err, id);
-    })
+    });
   }
 
-  getByApiKey(apiKey, cbfn) {
+  findByApiKey(apiKey, cbfn) {
     this._findOne({ apiKey }, cbfn);
   }
 
-  close(id, cbfn) {
+  // FIXME: Logical Separation
+  close({ sessionId }, cbfn) {
     let mod = {
       $set: {
         hasExpried: true,
+        terminatedBy: 'user',
         terminatedDatetimeStamp: (new Date).getTime()
       }
-    }
-    this._update({ id }, mod, (err, wasUpdated) => {
+    };
+    this._update({ id: sessionId }, mod, (err, wasUpdated) => {
       if (err) return cbfn(err);
       if (!wasUpdated) return cbfn(new Error("Session Not Found"));
       return cbfn();
     });
   }
 
-  makeExpired(id, cbfn) {
+  // FIXME: Logical Separation
+  expire({ sessionId }, cbfn) {
     let mod = {
       $set: {
-        hasExpried: true
+        hasExpried: true,
+        terminatedBy: 'system (expiry)',
+        terminatedDatetimeStamp: (new Date).getTime()
       }
-    }
-    this._update({ id }, mod, (err, wasUpdated) => {
+    };
+    this._update({ id: sessionId }, mod, (err, wasUpdated) => {
       if (err) return cbfn(err);
       if (!wasUpdated) return cbfn(new Error("Session Not Found"));
       return cbfn();

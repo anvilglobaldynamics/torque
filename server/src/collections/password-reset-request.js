@@ -11,10 +11,10 @@ exports.PasswordResetRequestCollection = class extends Collection {
 
     this.joiSchema = Joi.object().keys({
       forUserId: Joi.number().max(999999999999999).required(),
-      forEmail: Joi.string().email().min(3).max(30), 
+      forEmail: Joi.string().email().min(3).max(30),
       forPhone: Joi.string().alphanum().min(11).max(14),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
-      confirmedDatetimeStamp: Joi.number().max(999999999999999).required(),
+      confirmedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       origin: Joi.string().max(1024).required(),
       confirmationToken: Joi.string().min(64).max(64).required(),
       isPasswordResetComplete: Joi.boolean().required(),
@@ -32,6 +32,16 @@ exports.PasswordResetRequestCollection = class extends Collection {
         targetCollection: 'user',
         foreignKey: 'id',
         referringKey: 'forUserId'
+      },
+      {
+        targetCollection: 'user',
+        foreignKey: 'email',
+        referringKey: 'forEmail'
+      },
+      {
+        targetCollection: 'user',
+        foreignKey: 'phone',
+        referringKey: 'forPhone'
       }
     ];
   }
@@ -44,7 +54,7 @@ exports.PasswordResetRequestCollection = class extends Collection {
       origin,
       confirmationToken,
       createdDatetimeStamp: (new Date).getTime(),
-      confirmedDatetimeStamp: 0,
+      confirmedDatetimeStamp: null,
       isPasswordResetComplete: false
     }
     this._insert(user, (err, id) => {
@@ -52,7 +62,9 @@ exports.PasswordResetRequestCollection = class extends Collection {
     })
   }
 
-  applyConfirmationToken(confirmationToken, cbfn) {
+  // FIXME: better separation between logical and db layer.
+  // suggestions: split the process in three steps.
+  applyConfirmationToken({ confirmationToken }, cbfn) {
     let query = { confirmationToken, isPasswordResetComplete: false };
     this._findOne(query, (err, doc) => {
       if (err) return cbfn(err);
@@ -75,12 +87,14 @@ exports.PasswordResetRequestCollection = class extends Collection {
     });
   }
 
-  findByConfirmationToken(confirmationToken, cbfn) {
+  // FIXME: order by createdDatetime so that only the last request
+  // can be verified
+  findByConfirmationToken({ confirmationToken }, cbfn) {
     let query = { confirmationToken, isPasswordResetComplete: false }
     this._findOne(query, cbfn);
   }
 
-  ensureConfirmationTokenIsUnique(confirmationToken, cbfn) {
+  isConfirmationTokenUnique({ confirmationToken }, cbfn) {
     let query = { confirmationToken }
     this._findOne(query, (err, doc) => {
       if (err) return cbfn(err);

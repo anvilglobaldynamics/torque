@@ -21,7 +21,7 @@ exports.CustomerCollection = class extends Collection {
       additionalPaymentHistory: Joi.array().items(
         Joi.object().keys({
           creditedDatetimeStamp: Joi.number().max(999999999999999).required(),
-          acceptedByUserId: Joi.number().max(999999999999999).required(),
+          acceptedByUserId: Joi.number().max(999999999999999).allow(null).required(),
           amount: Joi.number().max(999999999999999).required()
         })
       )
@@ -53,7 +53,7 @@ exports.CustomerCollection = class extends Collection {
       balance: openingBalance,
       additionalPaymentHistory: [{
         creditedDatetimeStamp: (new Date).getTime(),
-        acceptedByUserId: 0, // FIXME:
+        acceptedByUserId: null,
         amount: openingBalance
       }],
       isDeleted: false
@@ -63,21 +63,21 @@ exports.CustomerCollection = class extends Collection {
     })
   }
 
-  update({ customerId, fullName, phone }, cbfn) {
+  update({ customerId }, { fullName, phone }, cbfn) {
     let modifications = {
       $set: { fullName, phone }
     }
     this._update({ id: customerId }, modifications, cbfn);
   }
 
-  updateBalance({ customerId, balance, additionalPaymentHistory }, cbfn) {
+  updateBalance({ customerId }, { balance, additionalPaymentHistory }, cbfn) {
     let modifications = {
       $set: { balance, additionalPaymentHistory }
     }
     this._update({ id: customerId }, modifications, cbfn);
   }
 
-  updateBalanceOnly({ customerId, balance }, cbfn) {
+  updateBalanceOnly({ customerId }, { balance }, cbfn) {
     let modifications = {
       $set: { balance }
     }
@@ -96,7 +96,7 @@ exports.CustomerCollection = class extends Collection {
   }
 
   findById({ customerId }, cbfn) {
-    this._findOne({ id: customerId }, cbfn);
+    this._findOne({ id: customerId, isDeleted: false }, cbfn);
   }
 
 }

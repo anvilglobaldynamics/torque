@@ -28,7 +28,15 @@ exports.SalesReturnCollection = class extends Collection {
         additionalQueryFilters: {},
         uniqueKeyList: []
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'sales',
+        foreignKey: 'id',
+        referringKey: 'salesId'
+      }
+    ];
   }
 
   create({ salesId, returnedProductList, creditedAmount }, cbfn) {
@@ -50,7 +58,7 @@ exports.SalesReturnCollection = class extends Collection {
     this._findOne({ id: salesReturnId }, cbfn);
   }
 
-  findBySalesIdList({ salesIdList }, cbfn) {
+  listBySalesIdList({ salesIdList }, cbfn) {
     let filter = {
       salesId: { $in: salesIdList }
     }

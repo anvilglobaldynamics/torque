@@ -19,7 +19,15 @@ exports.ProductCollection = class extends Collection {
         additionalQueryFilters: {},
         uniqueKeyList: []
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'product-category',
+        foreignKey: 'id',
+        referringKey: 'productCategoryId'
+      }
+    ];
   }
 
   create({ productCategoryId, purchasePrice, salePrice }, cbfn) {
@@ -31,8 +39,7 @@ exports.ProductCollection = class extends Collection {
     });
   }
 
-  // TODO: make below param obj
-  getByIdList(productIdList, cbfn) {
+  findByIdList({ productIdList }, cbfn) {
     this._find({ id: { $in: productIdList } }, cbfn);
   }
 

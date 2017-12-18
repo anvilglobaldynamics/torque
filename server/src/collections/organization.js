@@ -24,7 +24,7 @@ exports.OrganizationCollection = class extends Collection {
         filters: {},
         keyList: ['email', 'phone']
       }
-    ]
+    ];
   }
 
   create({ name, primaryBusinessAddress, phone, email, licenceExpiresOnDatetimeStamp }, cbfn) {
@@ -52,7 +52,7 @@ exports.OrganizationCollection = class extends Collection {
     this._update({ id: organizationId }, modifications, cbfn);
   }
 
-  listByIdList(idList, cbfn) {
+  listByIdList({ idList }, cbfn) {
     this._find({ id: { $in: idList } }, cbfn);
   }
 

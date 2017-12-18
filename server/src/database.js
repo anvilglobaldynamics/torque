@@ -33,6 +33,18 @@ class Database {
 
   // basic operations:
 
+  /**
+   * finds data in a collection
+   * 
+   * @param {any} collectionName 
+   * @param {any} query 
+   * @param {any} skip  (offset or item index to start from)
+   * @param {any} limit (limit number of items)
+   * @param {any} sort (mongodb style sort order)
+   * @param {any} cbfn
+   * @returns 
+   * array of data
+   */
   find(collectionName, query, ...args) {
     let [skip = 0, limit = null, sort = null, cbfn] = make(args, 4);
     try {
@@ -53,6 +65,17 @@ class Database {
     return;
   }
 
+  /**
+  * find data in a collection and return the first match
+  * 
+  * @param {any} collectionName 
+  * @param {any} query 
+  * @param {any} skip  (offset or item index to start from)
+  * @param {any} sort (mongodb style sort order)
+  * @param {any} cbfn
+  * @returns 
+  * array of data
+  */
   findOne(collectionName, query, ...args) {
     let [skip = 0, sort = null, cbfn] = make(args, 3);
     this.find(collectionName, query, skip, 1, sort, (err, docList) => {

@@ -13,7 +13,7 @@ exports.EmailVerificationRequestCollection = class extends Collection {
       forEmail: Joi.string().email().required().min(3).max(30),
       forUserId: Joi.number().max(999999999999999).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
-      verifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+      verifiedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       origin: Joi.string().max(1024).required(),
       verificationToken: Joi.string().min(64).max(64).required(),
       isVerificationComplete: Joi.boolean().required(),
@@ -31,6 +31,11 @@ exports.EmailVerificationRequestCollection = class extends Collection {
         targetCollection: 'user',
         foreignKey: 'id',
         referringKey: 'forUserId'
+      },
+      {
+        targetCollection: 'user',
+        foreignKey: 'email',
+        referringKey: 'forEmail'
       }
     ];
   }
@@ -42,7 +47,7 @@ exports.EmailVerificationRequestCollection = class extends Collection {
       origin,
       verificationToken,
       createdDatetimeStamp: (new Date).getTime(),
-      verifiedDatetimeStamp: 0,
+      verifiedDatetimeStamp: null,
       isVerificationComplete: false
     }
     this._insert(user, (err, id) => {
@@ -50,7 +55,9 @@ exports.EmailVerificationRequestCollection = class extends Collection {
     })
   }
 
-  applyVerificationToken(verificationToken, cbfn) {
+  // FIXME: better separation between logical and db layer.
+  // suggestions: split the process in three steps.
+  applyVerificationToken({ verificationToken }, cbfn) {
     let query = { verificationToken, isVerificationComplete: false };
     this._findOne(query, (err, doc) => {
       if (err) return cbfn(err);
@@ -73,18 +80,22 @@ exports.EmailVerificationRequestCollection = class extends Collection {
     });
   }
 
-  findByForUserId(userId, cbfn) {
-    let query = { forUserId: userId }
+  // FIXME: order by createdDatetime so that only the last request
+  // can be verified
+  findByForUserId({ userId }, cbfn) {
+    let query = { forUserId: userId, isVerificationComplete: false };
     this._findOne(query, cbfn);
   }
 
-  findByForEmail(forEmail, cbfn) {
-    let query = { forEmail: forEmail }
+  // FIXME: order by createdDatetime so that only the last request
+  // can be verified
+  findByForEmail({ forEmail }, cbfn) {
+    let query = { forEmail: forEmail, isVerificationComplete: false };
     this._findOne(query, cbfn);
   }
 
-  ensureVerificationTokenIsUnique(verificationToken, cbfn) {
-    let query = { verificationToken }
+  isVerificationTokenUnique({ verificationToken }, cbfn) {
+    let query = { verificationToken };
     this._findOne(query, (err, doc) => {
       if (err) return cbfn(err);
       if (doc) {

@@ -24,7 +24,15 @@ exports.WarehouseCollection = class extends Collection {
         additionalQueryFilters: {},
         uniqueKeyList: ['phone']
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'organization',
+        foreignKey: 'id',
+        referringKey: 'organizationId'
+      }
+    ];
   }
 
   create({ name, organizationId, physicalAddress, phone, contactPersonName }, cbfn) {
@@ -59,11 +67,11 @@ exports.WarehouseCollection = class extends Collection {
     this._update({ id: warehouseId }, modifications, cbfn);
   }
 
-  listByOrganizationId(organizationId, cbfn) {
+  listByOrganizationId({ organizationId }, cbfn) {
     this._find({ organizationId }, cbfn);
   }
 
-  getByWarehouseId(warehouseId, cbfn) {
+  findById({ warehouseId }, cbfn) {
     this._findOne({ id: warehouseId }, cbfn)
   }
 

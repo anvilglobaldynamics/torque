@@ -44,7 +44,20 @@ exports.SalesCollection = class extends Collection {
         additionalQueryFilters: {},
         uniqueKeyList: []
       }
-    ]
+    ];
+
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'outlet',
+        foreignKey: 'id',
+        referringKey: 'outletId'
+      },
+      {
+        targetCollection: 'customer',
+        foreignKey: 'id',
+        referringKey: 'customerId'
+      }
+    ];
   }
 
   create({ outletId, customerId, productList, payment }, cbfn) {
@@ -78,38 +91,38 @@ exports.SalesCollection = class extends Collection {
         },
         {
           createdDatetimeStamp: {
-            $gte:fromDate,
+            $gte: fromDate,
             $lte: toDate
           }
         }
       ]
-    }
+    };
 
-    if(shouldFilterByOutlet) {
+    if (shouldFilterByOutlet) {
       filters.$and.push({ outletId });
     }
 
-    if(shouldFilterByCustomer) {
+    if (shouldFilterByCustomer) {
       filters.$and.push({ customerId });
     }
 
     this._find(filters, cbfn);
   }
 
-  listByFiltersForSalesReturn({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, }, cbfn) {
+  listByFiltersForSalesReturn({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer }, cbfn) {
     let filters = {
       $and: [
         {
           outletId: { $in: outletIdList }
         }
       ]
-    }
+    };
 
-    if(shouldFilterByOutlet) {
+    if (shouldFilterByOutlet) {
       filters.$and.push({ outletId });
     }
 
-    if(shouldFilterByCustomer) {
+    if (shouldFilterByCustomer) {
       filters.$and.push({ customerId });
     }
 
