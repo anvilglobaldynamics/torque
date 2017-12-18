@@ -167,19 +167,33 @@ class Program {
         return Promise.resolve();
       })
       .then(() => {
-        logger.info('(server)> initializing fixtures.')
         return promisify(fixtureManager, fixtureManager.initialize, database);
       })
       .then(() => {
-        logger.info('(server)> fixtures initialized.')
+        logger.info('(server)> fixtures initialized.');
         return Promise.resolve();
       })
       .then(() => {
-        logger.info('(server)> initializing server.')
+        return promisify(templateManager, templateManager.initialize);
+      })
+      .then(() => {
+        logger.info('(server)> template manager initialized.');
+        server.setTemplateManager(templateManager);
+        return Promise.resolve();
+      })
+      .then(() => {
+        return promisify(emailService, emailService.initialize, logger);
+      })
+      .then(() => {
+        logger.info('(server)> email services initialized.');
+        server.setEmailService(emailService);
+        return Promise.resolve();
+      })
+      .then(() => {
         return promisify(server, server.initialize);
       })
       .then(() => {
-        logger.info('(server)> server initialized.')
+        logger.info('(server)> server initialized.');
         return Promise.resolve();
       })
       .then(() => {
@@ -240,21 +254,7 @@ class Program {
         return Promise.resolve();
       })
       .then(() => {
-        return promisify(templateManager, templateManager.initialize);
-      })
-      .then(() => {
-        logger.info('(server)> template manager initialized.')
-        server.setTemplateManager(templateManager);
-        return Promise.resolve();
-      })
-      .then(() => {
-        return promisify(emailService, emailService.initialize, logger);
-      })
-      .then(() => {
-        logger.info('(server)> email services initialized.')
-        server.setEmailService(emailService);
         callback();
-        return Promise.resolve();
       })
       .catch((err) => {
         console.error(err);
