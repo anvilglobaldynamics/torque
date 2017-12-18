@@ -58,8 +58,6 @@ exports.EditEmploymentApi = class extends Api {
     this.database.employment.update({ employmentId }, { isActive, role, designation, companyProvidedId, privileges }, (err, wasUpdated) => {
       if (err) return this.fail(err);
       if (!wasUpdated) return this.fail(new Error('Unable to find employment to update'));
-      console.log("err: ", err);
-      console.log("wasUpdated: ", wasUpdated);
       return cbfn();
     });
   }

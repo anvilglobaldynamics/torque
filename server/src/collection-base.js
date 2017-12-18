@@ -118,6 +118,7 @@ class Collection {
       if (err) return cbfn(err);
       this.database.updateOne(this.collectionName, query, modifications, (err, wasSuccessful) => {
         if (err) return cbfn(err);
+        if (!wasSuccessful) return cbfn(null, false);
         this.database.findOne(this.collectionName, query, (err, updatedDoc) => {
           if (err) return cbfn(err);
           this.__validateAgainstSchema(this.updatedDoc, (err) => {
@@ -158,8 +159,8 @@ class Collection {
   }
 
   _update(query, modifications, cbfn) {
-    return this.__updateOneSafe(query, modifications, cbfn);
-    // return this.database.updateOne(this.collectionName, query, modifications, cbfn);
+    // return this.__updateOneSafe(query, modifications, cbfn);
+    return this.database.updateOne(this.collectionName, query, modifications, cbfn);
   }
 
   _delete(query, cbfn) {
