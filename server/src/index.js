@@ -228,7 +228,7 @@ class Program {
         server.registerPostApi('/api/add-sales-return', AddSalesReturnApi);
         server.registerPostApi('/api/get-sales-return', GetSalesReturnApi);
         server.registerPostApi('/api/get-sales-return-list', GetSalesReturnListApi);
-        server.registerPostApi('/api/get-deshboard-summary', GetDashboardSummaryApi);
+        server.registerPostApi('/api/get-dashboard-summary', GetDashboardSummaryApi);
 
         server.registerPostApi('/api/hire-user-as-employee', HireUserAsEmployeeApi);
         server.registerPostApi('/api/find-user', FindUserApi);
