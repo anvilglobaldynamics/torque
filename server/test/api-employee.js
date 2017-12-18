@@ -38,7 +38,8 @@ const orgPhone = 'o1' + String((new Date).getTime()).split('').reverse().slice(0
 let apiKey = null;
 let organizationId = null;
 let employeeId = null;
-let employeeToBeEditedId = null;
+let employmentId = null;
+let employeeToBeEditedData = null;
 
 describe('employee', _ => {
 
@@ -315,7 +316,7 @@ describe('employee', _ => {
       expect(body).to.have.property('userId');
       expect(body).to.have.property('employmentId');
 
-      employeeToBeEditedId = body.employmentId;
+      employmentId = body.employmentId;
 
       testDoneFn();
     })
@@ -455,6 +456,41 @@ describe('employee', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('employeeList');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-employee (Valid)', testDoneFn => {
+
+    callApi('api/get-employee', {
+      json: {
+        apiKey,
+        employmentId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('employee');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-employee (Invalid)', testDoneFn => {
+
+    callApi('api/get-employee', {
+      json: {
+        apiKey,
+        employmentId: -999
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('EMPLOYEE_INVALID');
 
       testDoneFn();
     })

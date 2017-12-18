@@ -27,7 +27,7 @@ exports.GetrganizationListApi = class extends Api {
   }
 
   _getOrganizationsThatEmployedUser(userId, cbfn) {
-    this.database.employment.getEmploymentsOfEmployee({ userId }, (err, employmentList) => {
+    this.database.employment.getEmploymentsOfUser({ userId }, (err, employmentList) => {
       if (err) return this.fail(err);
       let list = employmentList.map((employment) => employment.organizationId);
       this.database.organization.listByIdList(list, (err, organizationList) => {

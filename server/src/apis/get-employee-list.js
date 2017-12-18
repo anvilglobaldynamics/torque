@@ -15,7 +15,7 @@ exports.GetEmployeeListApi = class extends Api {
     });
   }
 
-  _getEmployeeList(organizationId, cbfn) {
+  _getEmployeeList({ organizationId }, cbfn) {
     this.database.employment.listByOrganizationId({ organizationId }, (err, employeeList) => {
       if (err) return this.fail(err);
       cbfn(employeeList);
@@ -24,7 +24,7 @@ exports.GetEmployeeListApi = class extends Api {
 
   handle({ body }) {
     let { organizationId } =  body;
-    this._getEmployeeList(organizationId, (employeeList) => {
+    this._getEmployeeList({ organizationId }, (employeeList) => {
       this.success({ employeeList });
     });
   }
