@@ -134,6 +134,7 @@ describe('outlet', _ => {
         contactPersonName: "test contact person name"
       }
     }, (err, response, body) => {
+      console.log(body);
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');

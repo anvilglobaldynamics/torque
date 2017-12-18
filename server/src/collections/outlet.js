@@ -59,6 +59,8 @@ exports.OutletCollection = class extends Collection {
     this._update({ id: outletId }, modifications, cbfn);
   }
 
+  // TODO: make below params obj
+
   listByOrganizationId(organizationId, cbfn) {
     this._find({ organizationId }, cbfn);
   }

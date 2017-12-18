@@ -14,7 +14,7 @@ method: `POST`
   organizationId: Joi.number().max(999999999999999).required(),
   role: Joi.string().max(1024).required(),
   designation: Joi.string().max(1024).required(),
-  companyProvidedId: Joi.string().alphanum().required(),
+  companyProvidedId: Joi.string().alphanum().allow('').max(1024).required(),
   
   privileges: Joi.object().keys({
     [Look up privileges here](../server-db-docs/employment.md)
@@ -37,7 +37,7 @@ Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
-{ code: EMPLOYEE_INVALID } // could not be find employee
+{ code: USER_INVALID } // could not be find user
 { code: ALREADY_EMPLOYED } // the user exists and is already employed by another organization
 ```
 
@@ -45,7 +45,8 @@ Possible Error Codes:
 ```js
 {
   "hasError": false,
-  "status": "success"
+  "status": "success",
+  employmentId: Joi.number().max(999999999999999).required()
 }
 ```
 

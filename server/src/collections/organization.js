@@ -49,7 +49,7 @@ exports.OrganizationCollection = class extends Collection {
         name, primaryBusinessAddress, phone, email
       }
     }
-    this._update({ organizationId }, modifications, cbfn);
+    this._update({ id: organizationId }, modifications, cbfn);
   }
 
   listByIdList(idList, cbfn) {

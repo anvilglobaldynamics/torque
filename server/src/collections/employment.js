@@ -175,8 +175,42 @@ exports.EmploymentCollection = class extends Collection {
     })
   }
 
-  getEmploymentsOfEmployee(userId, cbfn) {
+  getEmploymentsOfUser({ userId }, cbfn) {
     this._find({ userId }, cbfn);
+  }
+
+  getEmploymentById({ employmentId }, cbfn) {
+    this._findOne({ id: employmentId }, cbfn);
+  }
+
+  update({ employmentId }, { isActive, role, designation, companyProvidedId, privileges }, cbfn) {
+    let modifications = {
+      $set: {
+        isActive, role, designation, companyProvidedId, privileges
+      }
+    }
+    this._update({ id: employmentId }, modifications, cbfn);
+  }
+
+  listByOrganizationId({ organizationId }, cbfn) {
+    this._find({ organizationId }, cbfn);
+  }
+
+  hireExistingUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, cbfn) {
+    let user = {
+      createdDatetimeStamp: (new Date).getTime(),
+      lastModifiedDatetimeStamp: (new Date).getTime(),
+      userId,
+      organizationId,
+      designation,
+      role,
+      companyProvidedId,
+      privileges,
+      isActive: true
+    }
+    this._insert(user, (err, id) => {
+      return cbfn(err, id);
+    })
   }
 
 }

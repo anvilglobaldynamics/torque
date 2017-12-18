@@ -63,6 +63,13 @@ let { GetSalesReturnListApi } = require('./apis/get-sales-return-list');
 
 let { GetDashboardSummaryApi } = require('./apis/get-dashboard-summary');
 
+let { HireUserAsEmployeeApi } = require('./apis/hire-user-as-employee');
+let { FindUserApi } = require('./apis/find-user');
+let { AddNewEmployeeApi } = require('./apis/add-new-employee');
+let { GetEmployeeListApi } = require('./apis/get-employee-list');
+let { GetEmployeeApi } = require('./apis/get-employee');
+let { EditEmploymentApi } = require('./apis/edit-employment');
+
 let { InternalStatus } = require('./apis/internal--status');
 let { GetDesignationListApi } = require('./apis/get-designation-list');
 let { GetRoleListApi } = require('./apis/get-role-list');
@@ -223,6 +230,12 @@ class Program {
         server.registerPostApi('/api/get-sales-return-list', GetSalesReturnListApi);
         server.registerPostApi('/api/get-deshboard-summary', GetDashboardSummaryApi);
 
+        server.registerPostApi('/api/hire-user-as-employee', HireUserAsEmployeeApi);
+        server.registerPostApi('/api/find-user', FindUserApi);
+        server.registerPostApi('/api/add-new-employee', AddNewEmployeeApi);
+        server.registerPostApi('/api/get-employee-list', GetEmployeeListApi);
+        server.registerPostApi('/api/get-employee', GetEmployeeApi);
+        server.registerPostApi('/api/edit-employment', EditEmploymentApi);
         return Promise.resolve();
       })
       .then(() => {

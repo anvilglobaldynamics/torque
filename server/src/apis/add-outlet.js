@@ -55,7 +55,7 @@ exports.AddOutletApi = class extends Api {
     })
   }
 
-  handle({ body, userId }) {
+  handle({ body }) {
     let { name, organizationId, physicalAddress, phone, contactPersonName } = body;
     this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName }, (outletId) => {
       this._createInventories({ outletId, organizationId }, () => {

@@ -10,6 +10,7 @@ method: `POST`
   apiKey: Joi.string().length(64).required(),
 
   email: Joi.string().email().min(3).max(30).required(),
+  fullName: Joi.string().min(1).max(64).required(),
   phone: Joi.string().alphanum().min(11).max(14).required(),
   password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required(),
 
@@ -22,12 +23,6 @@ method: `POST`
   privileges: Joi.object().keys({
     [Look up privileges here](../server-db-docs/employment.md)
   }),
-
-  fullName: Joi.string().min(1).max(64).required(),
-  nid: Joi.string().min(16).max(16).required(),
-  physicalAddress: Joi.string().min(1).max(128).required(),
-  emergencyContact: Joi.number().min(6).max(11).required(),
-  bloodGroup: Joi.alphanum().min(2).max(3).required()
 }
 ```
 
@@ -55,7 +50,9 @@ Possible Error Codes:
 ```js
 {
   "hasError": false,
-  "status": "success"
+  "status": "success",
+  userId: Joi.number().max(999999999999999).required(),
+  employmentId: Joi.number().max(999999999999999).required()
 }
 ```
 

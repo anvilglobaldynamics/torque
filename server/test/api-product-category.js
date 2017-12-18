@@ -240,7 +240,7 @@ describe('product-category', _ => {
         apiKey,
         organizationId,
 
-        parentProductCategoryId: 999,
+        parentProductCategoryId: -999,
         name: "first product category",
         unit: "kg",
         defaultDiscountType: "percent",
@@ -267,7 +267,7 @@ describe('product-category', _ => {
         apiKey,
         productCategoryId: productCategoryList[productCategoryList.length - 1].id,
 
-        parentProductCategoryId: 999,
+        parentProductCategoryId: -999,
         name: "new product category name", // modification
         unit: "kg",
         defaultDiscountType: "percent",
