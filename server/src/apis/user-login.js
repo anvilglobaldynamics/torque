@@ -40,8 +40,8 @@ exports.UserLoginApi = class extends Api {
         let err = new Error("No user matched the email and password combination");
         err.code = 'USER_NOT_FOUND';
         return this.fail(err);
-      } else if (!user.isValid) {
-        this.database.emailVerificationRequest.findByForEmail(user.email, (err, emailVerificationRequest) => {
+      } else if (!user.isEmailVerified) {
+        this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email }, (err, emailVerificationRequest) => {
           if (err) return this.fail(err);
           if (!emailVerificationRequest) {
             err = new Error("Email verification request not found.")
@@ -88,6 +88,7 @@ exports.UserLoginApi = class extends Api {
   handle({ body }) {
     let { emailOrPhone, password } = body;
     this._getUserIfValid({ emailOrPhone, password }, ({ user, warning }) => {
+      if (!warning) warning = '';
       this._createSession(user.id, ({ apiKey, sessionId }) => {
         let {
           fullName,
