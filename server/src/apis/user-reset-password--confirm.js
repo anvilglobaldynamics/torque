@@ -18,7 +18,7 @@ exports.UserResetPasswordConfirmApi = class extends userCommonMixin(Api) {
   }
 
   _getPasswordResetRequestIfValid({ uniqueToken: confirmationToken }, cbfn) {
-    this.database.passwordResetRequest.findByConfirmationToken(confirmationToken, (err, passwordResetRequest) => {
+    this.database.passwordResetRequest.findByConfirmationToken({ confirmationToken }, (err, passwordResetRequest) => {
       if (err) return this.fail(err);
       if (!passwordResetRequest) {
         let err = new Error("Invalid password reset token provided.");
@@ -43,7 +43,7 @@ exports.UserResetPasswordConfirmApi = class extends userCommonMixin(Api) {
   }
 
   _markPasswordResetRequestAsComplete({ uniqueToken: confirmationToken }, cbfn) {
-    this.database.passwordResetRequest.applyConfirmationToken(confirmationToken, (err) => {
+    this.database.passwordResetRequest.applyConfirmationToken({ confirmationToken }, (err) => {
       if (err) return this.fail(err);
       cbfn();
     });

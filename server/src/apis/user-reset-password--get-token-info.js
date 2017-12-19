@@ -15,7 +15,7 @@ exports.UserResetPasswordGetTokenInfoApi = class extends Api {
   }
 
   _getTokenInfoIfValid({ uniqueToken: confirmationToken }, cbfn) {
-    this.database.passwordResetRequest.findByConfirmationToken(confirmationToken, (err, passwordResetRequest) => {
+    this.database.passwordResetRequest.findByConfirmationToken({ confirmationToken }, (err, passwordResetRequest) => {
       if (err) return this.fail(err);
       if (!passwordResetRequest) {
         let err = new Error("Invalid password reset token provided.");

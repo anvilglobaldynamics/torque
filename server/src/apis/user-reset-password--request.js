@@ -39,7 +39,7 @@ exports.UserResetPasswordRequestApi = class extends Api {
 
   _createPasswordResetRequest({ userId, email, phone }, cbfn) {
     let confirmationToken = generateRandomString(64);
-    this.database.passwordResetRequest.ensureConfirmationTokenIsUnique(confirmationToken, (err, isUnique) => {
+    this.database.passwordResetRequest.isConfirmationTokenUnique(confirmationToken, (err, isUnique) => {
       if (err) return this.fail(err);
       if (!isUnique) return this._createPasswordResetRequest({ userId, email, phone }, cbfn);
       this.database.passwordResetRequest.create({ userId, email, phone, origin: 'password-reset-api', confirmationToken }, (err) => {
