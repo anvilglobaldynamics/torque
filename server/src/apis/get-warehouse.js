@@ -23,7 +23,7 @@ exports.GetWarehouseApi = class extends Api {
   }
 
   _getWarehouseInventories(warehouseId, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ warehouseId }, (err, inventoryList) => {
+    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: warehouseId }, (err, inventoryList) => {
       let defaultInventory, returnedInventory, damagedInventory;
       inventoryList.forEach(inventory => {
         if (inventory.type === 'default') {
