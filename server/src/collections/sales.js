@@ -52,11 +52,12 @@ exports.SalesCollection = class extends Collection {
         foreignKey: 'id',
         referringKey: 'outletId'
       },
-      {
-        targetCollection: 'customer',
-        foreignKey: 'id',
-        referringKey: 'customerId'
-      }
+      // NOTE: commented out because customerId can be null
+      // {
+      //   targetCollection: 'customer',
+      //   foreignKey: 'id',
+      //   referringKey: 'customerId'
+      // }
     ];
   }
 

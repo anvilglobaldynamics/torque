@@ -40,7 +40,7 @@ exports.AddSalesApi = class extends Api {
   }
 
   _getOutletDefaultInventory(outletId, cbfn) {
-    this.database.inventory.listByInventoryContainerId({outletId}, (err, inventoryList) => {
+    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
       if (err) return this.fail(err);
       if (inventoryList.length === 0) {
         err = new Error("Invalid Outlet Or Inventory could not be found");
@@ -96,7 +96,7 @@ exports.AddSalesApi = class extends Api {
     let balance = diff;
     let customerId = customer.id;
     this.database.customer.updateBalanceOnly({ customerId }, { balance }, (err) => {
-      if (err) return this.fail();
+      if (err) return this.fail(err);
       return cbfn();
     });
   }
@@ -105,13 +105,14 @@ exports.AddSalesApi = class extends Api {
     let inventoryId = outletDefaultInventory.id;
     let productList = outletDefaultInventory.productList;
     this.database.inventory.updateProductList({ inventoryId }, { productList }, (err) => {
-      if (err) return this.fail();
+      if (err) return this.fail(err);
       cbfn();
     });
   }
 
   _addSales(outletId, customerId, productList, payment, cbfn) {
     this.database.sales.create({ outletId, customerId, productList, payment }, (err, salesId) => {
+      if (err) return this.fail(err);
       cbfn(salesId);
     })
   }
