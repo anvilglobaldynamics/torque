@@ -68,8 +68,6 @@ describe('dashboard', _ => {
 
   });
 
-  // TODO: check after sales
-
   it.skip('api/get-dashboard-summary (Invalid)', testDoneFn => {
 
     callApi('api/get-dashboard-summary', {
@@ -86,6 +84,8 @@ describe('dashboard', _ => {
     })
 
   });
+
+  // TODO: check after sales
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
