@@ -32,7 +32,7 @@ exports.AddSalesReturnApi = class extends Api {
   }
 
   _getOutletReturnedInventory({ outletId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ outletId }, (err, inventoryList) => {
+    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
       if (err) return this.fail(err);
       if (inventoryList.length === 0) {
         err = new Error("Invalid Outlet Or Inventory could not be found");
