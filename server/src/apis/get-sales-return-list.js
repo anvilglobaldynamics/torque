@@ -24,7 +24,7 @@ exports.GetSalesReturnListApi = class extends Api {
   }
 
   _getSalesReturnList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, cbfn) {
-    this.database.outlet.listByOrganizationId(organizationId, (err, outletList) => {
+    this.database.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {
       if (err) return this.fail(err);
       let outletIdList = outletList.map(outlet => outlet.id);
       this.database.sales.listByFiltersForSalesReturn({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer }, (err, salesList) => {

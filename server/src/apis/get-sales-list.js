@@ -17,14 +17,14 @@ exports.GetSalesListApi = class extends Api {
 
       shouldFilterByOutlet: Joi.boolean().required(),
       shouldFilterByCustomer: Joi.boolean().required(),
-      
+
       fromDate: Joi.number().max(999999999999999).required(),
       toDate: Joi.number().max(999999999999999).required()
     });
   }
 
   _getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, cbfn) {
-    this.database.outlet.listByOrganizationId(organizationId, (err, outletList) => {
+    this.database.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {
       if (err) return this.fail(err);
       let outletIdList = outletList.map(outlet => outlet.id);
       this.database.sales.listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, (err, salesList) => {

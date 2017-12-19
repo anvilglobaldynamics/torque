@@ -16,7 +16,7 @@ exports.GetOutletApi = class extends Api {
   }
 
   _getOutlet(outletId, cbfn) {
-    this.database.outlet.getByOutletId(outletId, (err, outlet) => {
+    this.database.outlet.findById(outletId, (err, outlet) => {
       if (err) return this.fail(err);
       cbfn(outlet);
     })

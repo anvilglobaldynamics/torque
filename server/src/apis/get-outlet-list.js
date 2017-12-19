@@ -16,14 +16,14 @@ exports.GetOutletListApi = class extends Api {
   }
 
   _getOutletList(organizationId, cbfn) {
-    this.database.outlet.listByOrganizationId(organizationId, (err, outletList) => {
+    this.database.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {
       if (err) return this.fail(err);
       cbfn(outletList);
     })
   }
 
   handle({ body }) {
-    let { organizationId } =  body;
+    let { organizationId } = body;
     this._getOutletList(organizationId, (outletList) => {
       this.success({ outletList });
     });
