@@ -23,7 +23,7 @@ exports.GetOutletApi = class extends Api {
   }
 
   _getOutletInventories(outletId, cbfn) {
-    this.database.inventory.listByInventoryContainerId(outletId, (err, inventoryList) => {
+    this.database.inventory.listByInventoryContainerId({outletId}, (err, inventoryList) => {
       let defaultInventory, returnedInventory, damagedInventory;
       inventoryList.forEach(inventory => {
         if (inventory.type === 'default') {

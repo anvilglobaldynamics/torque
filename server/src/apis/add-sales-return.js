@@ -32,7 +32,7 @@ exports.AddSalesReturnApi = class extends Api {
   }
 
   _getOutletReturnedInventory({ outletId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId(outletId, (err, inventoryList) => {
+    this.database.inventory.listByInventoryContainerId({outletId}, (err, inventoryList) => {
       if (err) return this.fail(err);
       if (inventoryList.length === 0) {
         err = new Error("Invalid Outlet Or Inventory could not be found");
@@ -51,7 +51,7 @@ exports.AddSalesReturnApi = class extends Api {
     let promiseList = [];
     returnedProductList.forEach(product => {
       let promise = new Promise((accept, reject) => {
-        this.database.inventory.addProduct({ inventoryId: outletReturnedInventory.id, productId: product.productId, count: product.count }, (err) => {
+        this.database.inventory.addProduct({ inventoryId: outletReturnedInventory.id }, { productId: product.productId, count: product.count }, (err) => {
           if (err) return reject(err);
           accept();
         });
@@ -126,7 +126,7 @@ exports.AddSalesReturnApi = class extends Api {
   _adjustCustomerBalance(diff, customer, cbfn) {
     let balance = diff;
     let customerId = customer.id;
-    this.database.customer.updateBalanceOnly({ customerId, balance }, (err) => {
+    this.database.customer.updateBalanceOnly({ customerId }, { balance }, (err) => {
       if (err) return this.fail();
       return cbfn();
     });

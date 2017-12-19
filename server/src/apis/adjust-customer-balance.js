@@ -38,7 +38,7 @@ exports.AdjustCustomerBalanceApi = class extends Api {
   _updateAdditionalPaymentHistoryList({ customer, balance }, cbfn) {
     let paymentRecord = {
       creditedDatetimeStamp: (new Date).getTime(),
-      acceptedByUserId: 0, // FIXME:
+      acceptedByUserId: null,
       amount: balance
     }
     customer.additionalPaymentHistory.push(paymentRecord);
@@ -46,7 +46,7 @@ exports.AdjustCustomerBalanceApi = class extends Api {
   }
 
   _saveAdjustment({ customer }, cbfn) {
-    this.database.customer.updateBalance({ customerId: customer.id, balance: customer.balance, additionalPaymentHistory: customer.additionalPaymentHistory }, (err) => {
+    this.database.customer.updateBalance({ customerId: customer.id }, { balance: customer.balance, additionalPaymentHistory: customer.additionalPaymentHistory }, (err) => {
       if (err) return this.fail(err);
       return cbfn()
     });

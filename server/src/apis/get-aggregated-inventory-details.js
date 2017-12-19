@@ -16,7 +16,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
   }
 
   _getProductList(inventoryId, cbfn) {
-    this.database.inventory.getById(inventoryId, (err, inventory) => {
+    this.database.inventory.findById({ inventoryId }, (err, inventory) => {
       if (err) return this.fail(err);
       if (inventory === null) {
         err = new Error("inventory could not be found");

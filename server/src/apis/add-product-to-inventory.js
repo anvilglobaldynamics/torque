@@ -31,7 +31,7 @@ exports.AddProductToInventoryApi = class extends Api {
         let { productCategoryId, purchasePrice, salePrice, count } = product
         this.database.product.create({ productCategoryId, purchasePrice, salePrice }, (err, productId) => {
           if (err) return reject(err);
-          this.database.inventory.addProduct({ inventoryId, productId, count }, (err) => {
+          this.database.inventory.addProduct({ inventoryId }, { productId, count }, (err) => {
             if (err) return reject(err);
             accept();
           });

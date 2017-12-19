@@ -24,7 +24,7 @@ exports.TransferBetweenInventoriesApi = class extends Api {
   }
 
   _getInventoriesWithId(fromInventoryId, toInventoryId, cbfn) {
-    this.database.inventory.getById(fromInventoryId, (err, inventory) => {
+    this.database.inventory.findById({ inventoryId: fromInventoryId }, (err, inventory) => {
       if (err) return this.fail(err);
       if (inventory === null) {
         err = new Error("inventory could not be found");
@@ -32,7 +32,7 @@ exports.TransferBetweenInventoriesApi = class extends Api {
         return this.fail(err);
       }
       let fromInventory = inventory;
-      this.database.inventory.getById(toInventoryId, (err, inventory) => {
+      this.database.inventory.findById({ inventoryId: toInventoryId }, (err, inventory) => {
         if (err) return this.fail(err);
         if (inventory === null) {
           err = new Error("inventory could not be found");
@@ -48,12 +48,12 @@ exports.TransferBetweenInventoriesApi = class extends Api {
   _transfer(fromInventory, toInventory, productList, cbfn) {
     productList.forEach(product => {
       let foundProduct = fromInventory.productList.find(_product => _product.productId === product.productId);
-      if(!foundProduct) {
+      if (!foundProduct) {
         err = new Error("product could not be found in source inventory");
         err.code = "PRODUCT_INVALID"
         return this.fail(err);
       }
-      if(foundProduct.count < product.count) {
+      if (foundProduct.count < product.count) {
         err = new Error("not enough product(s) in source inventory");
         err.code = "PRODUCT_INSUFFICIENT"
         return this.fail(err);
@@ -61,7 +61,7 @@ exports.TransferBetweenInventoriesApi = class extends Api {
       foundProduct.count -= product.count;
 
       foundProduct = toInventory.productList.find(_product => _product.productId === product.productId);
-      if(!foundProduct) {
+      if (!foundProduct) {
         toInventory.productList.push(product);
       } else {
         foundProduct.count += product.count;
@@ -71,10 +71,14 @@ exports.TransferBetweenInventoriesApi = class extends Api {
   }
 
   _updateInventories(fromInventory, toInventory, cbfn) {
-    this.database.inventory.updateProductList({ inventory: fromInventory }, (err) => {
-      if(err) return this.fail();
-      this.database.inventory.updateProductList({ inventory: toInventory }, (err) => {
-        if(err) return this.fail();
+    let inventoryId = fromInventory.id;
+    let productList = fromInventory.productList;
+    this.database.inventory.updateProductList({ inventoryId }, { productList }, (err) => {
+      if (err) return this.fail();
+      inventoryId = toInventory.id;
+      productList = toInventory.productList;
+      this.database.inventory.updateProductList({ inventoryId }, { productList }, (err) => {
+        if (err) return this.fail();
         cbfn();
       });
     });
