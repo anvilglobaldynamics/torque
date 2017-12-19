@@ -16,14 +16,14 @@ exports.GetWarehouseListApi = class extends Api {
   }
 
   _getWarehouseList(organizationId, cbfn) {
-    this.database.warehouse.listByOrganizationId(organizationId, (err, warehouseList) => {
+    this.database.warehouse.listByOrganizationId({ organizationId }, (err, warehouseList) => {
       if (err) return this.fail(err);
       cbfn(warehouseList);
     })
   }
 
   handle({ body }) {
-    let { organizationId } =  body;
+    let { organizationId } = body;
     this._getWarehouseList(organizationId, (warehouseList) => {
       this.success({ warehouseList });
     });

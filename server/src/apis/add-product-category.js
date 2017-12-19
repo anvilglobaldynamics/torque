@@ -40,7 +40,7 @@ exports.AddProductCategoryApi = class extends Api {
     if (parentProductCategoryId === null) {
       this._createProductCategory(productCategory, cbfn);
     } else {
-      this.database.productCategory.getById(parentProductCategoryId, (err, parentProductCategory) => {
+      this.database.productCategory.findById({ productCategoryId: parentProductCategoryId }, (err, parentProductCategory) => {
         if (err) return this.fail(err);
         if (parentProductCategory === null) {
           err = new Error("parent product category not found");

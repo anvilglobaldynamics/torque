@@ -31,11 +31,11 @@ exports.UserResetPasswordConfirmApi = class extends userCommonMixin(Api) {
   }
 
   _setPasswordIfValid({ newPassword, userId }, cbfn) {
-    this.database.user.getById(userId, (err, user) => {
+    this.database.user.findById({ userId }, (err, user) => {
       if (err) return this.fail(err);
 
       let passwordHash = this._makeHash(newPassword);
-      this.database.user.setPasswordHash({ userId, passwordHash }, (err) => {
+      this.database.user.setPasswordHash({ userId }, { passwordHash }, (err) => {
         if (err) return this.fail(err);
         cbfn();
       });

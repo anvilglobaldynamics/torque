@@ -55,7 +55,7 @@ exports.HireUserAsEmployeeApi = class extends Api {
   }
 
   _findUser({ userId }, cbfn) {
-    this.database.user.getById(userId, (err, user) => {
+    this.database.user.findById({ userId }, (err, user) => {
       if (err) return this.fail(err);
       if (user === null) {
         err = new Error("Invalid User could not be found");

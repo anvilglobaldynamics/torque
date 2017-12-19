@@ -16,14 +16,14 @@ exports.GetWarehouseApi = class extends Api {
   }
 
   _getWarehouse(warehouseId, cbfn) {
-    this.database.warehouse.getByWarehouseId(warehouseId, (err, warehouse) => {
+    this.database.warehouse.findById({ warehouseId }, (err, warehouse) => {
       if (err) return this.fail(err);
       cbfn(warehouse);
     })
   }
 
   _getWarehouseInventories(warehouseId, cbfn) {
-    this.database.inventory.listByInventoryContainerId({warehouseId}, (err, inventoryList) => {
+    this.database.inventory.listByInventoryContainerId({ warehouseId }, (err, inventoryList) => {
       let defaultInventory, returnedInventory, damagedInventory;
       inventoryList.forEach(inventory => {
         if (inventory.type === 'default') {
@@ -42,7 +42,7 @@ exports.GetWarehouseApi = class extends Api {
   }
 
   handle({ body }) {
-    let { warehouseId } =  body;
+    let { warehouseId } = body;
     this._getWarehouse(warehouseId, (warehouse) => {
       this._getWarehouseInventories(warehouseId, (defaultInventory, returnedInventory, damagedInventory) => {
         this.success({ warehouse, defaultInventory, returnedInventory, damagedInventory });

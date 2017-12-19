@@ -60,7 +60,7 @@ exports.SessionCollection = class extends Collection {
     });
   }
 
-  findByApiKey(apiKey, cbfn) {
+  findByApiKey({ apiKey }, cbfn) {
     this._findOne({ apiKey }, cbfn);
   }
 

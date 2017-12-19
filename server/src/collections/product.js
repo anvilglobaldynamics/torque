@@ -39,8 +39,8 @@ exports.ProductCollection = class extends Collection {
     });
   }
 
-  findByIdList({ productIdList }, cbfn) {
-    this._find({ id: { $in: productIdList } }, cbfn);
+  findByIdList({ idList }, cbfn) {
+    this._find({ id: { $in: idList } }, cbfn);
   }
 
 }

@@ -30,14 +30,14 @@ exports.UserEditProfileApi = class extends userCommonMixin(emailVerificationRequ
     let { userId, email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = data;
     data = { userId, email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup };
 
-    this.database.user.getById(userId, (err, user) => {
+    this.database.user.findById({ userId }, (err, user) => {
       if (err) return this.fail(err);
 
-      this.database.user.update(data, (err) => {
+      this.database.user.update({ userId }, data, (err) => {
         if (err) return this.fail(err);
 
         if (user.email !== email) {
-          this.database.user.setEmailAsUnverified(userId, (err) => {
+          this.database.user.setEmailAsUnverified({ userId }, (err) => {
             if (err) return this.fail(err);
 
             this._createEmailVerificationRequest({ email, userId }, (verificationLink) => {

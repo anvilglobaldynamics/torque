@@ -75,7 +75,7 @@ exports.UserLoginApi = class extends Api {
 
   _createSession(userId, cbfn) {
     let apiKey = generateRandomString(64);
-    this.database.session.ensureApiKeyIsUnique(apiKey, (err, isUnique) => {
+    this.database.session.isApiKeyUnique({ apiKey }, (err, isUnique) => {
       if (err) return this.fail(err);
       if (!isUnique) return this._createSession({ userId }, cbfn);
       this.database.session.create({ userId, apiKey }, (err, sessionId) => {

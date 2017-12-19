@@ -8,7 +8,7 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
   _notifyPasswordChange({ userId }, cbfn) {
-    this.database.user.getById(userId, (err, user) => {
+    this.database.user.findById({ userId }, (err, user) => {
       if (err) return this.fail(err);
       let email = user.email;
       let model = { email, textContent: "Your password has changed." };

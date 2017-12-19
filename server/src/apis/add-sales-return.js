@@ -32,7 +32,7 @@ exports.AddSalesReturnApi = class extends Api {
   }
 
   _getOutletReturnedInventory({ outletId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({outletId}, (err, inventoryList) => {
+    this.database.inventory.listByInventoryContainerId({ outletId }, (err, inventoryList) => {
       if (err) return this.fail(err);
       if (inventoryList.length === 0) {
         err = new Error("Invalid Outlet Or Inventory could not be found");
@@ -80,7 +80,7 @@ exports.AddSalesReturnApi = class extends Api {
     let productIdList = returnedProductList.map(product => product.productId);
     let payment = 0;
 
-    this.database.product.getByIdList(productIdList, (err, productList) => {
+    this.database.product.findByIdList({ idList: productIdList }, (err, productList) => {
       productList.forEach(product => {
         let promise = new Promise((accept, reject) => {
           payment += product.salePrice;

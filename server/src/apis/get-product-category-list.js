@@ -16,7 +16,7 @@ exports.GetProductCategoryListApi = class extends Api {
   }
 
   _getProductCategoryList(organizationId, cbfn) {
-    this.database.productCategory.listByOrganizationId(organizationId, (err, productCategoryList) => {
+    this.database.productCategory.listByOrganizationId({organizationId}, (err, productCategoryList) => {
       if (err) return this.fail(err);
       cbfn(productCategoryList);
     })
