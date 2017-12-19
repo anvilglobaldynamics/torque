@@ -188,7 +188,7 @@ describe('customer', _ => {
 
   });
 
-  it('api/get-customer-summary-list (Valid): ', testDoneFn => {
+  it('api/get-customer-summary-list (Valid)', testDoneFn => {
 
     callApi('api/get-customer-summary-list', {
       json: {
@@ -226,7 +226,7 @@ describe('customer', _ => {
 
   });
 
-  it('api/edit-customer (Valid, Unique): ', testDoneFn => {
+  it('api/edit-customer (Valid, Unique)', testDoneFn => {
 
     callApi('api/edit-customer', {
       json: {
@@ -309,7 +309,7 @@ describe('customer', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('customer');
-      
+
       expect(body.customer).to.have.property('balance').that.equals(-80);
       expect(body.customer).to.have.property('additionalPaymentHistory').to.have.lengthOf(3);
 
@@ -344,8 +344,7 @@ describe('customer', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('customer');
-      expect(body.customer.isDeleted).to.equal(true);
+      expect(body).to.have.property('customer').that.equals(null);
       testDoneFn();
     })
 
