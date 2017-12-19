@@ -66,7 +66,7 @@ let salesData = null;
 let productToBeTransferredId = null;
 
 let fromDate = new Date();
-fromDate.setDate(fromDate.getDate()-1);
+fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
 describe('sales-return', _ => {
@@ -196,7 +196,7 @@ describe('sales-return', _ => {
       json: {
         apiKey,
         salesId,
-        returnedProductList: [ 
+        returnedProductList: [
           {
             productId: salesData.productList[0].productId,
             count: salesData.productList[0].count
