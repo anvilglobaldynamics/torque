@@ -70,7 +70,7 @@ describe('dashboard', _ => {
 
   // TODO: check after sales
 
-  it('api/get-dashboard-summary (Invalid)', testDoneFn => {
+  it.skip('api/get-dashboard-summary (Invalid)', testDoneFn => {
 
     callApi('api/get-dashboard-summary', {
       json: {

@@ -86,21 +86,21 @@ class Database {
   replaceOne(collectionName, query, doc, cbfn) {
     this._mongodbConnection.collection(collectionName).replaceOne(query, doc, (err, results) => {
       if (err) return cbfn(err);
-      return cbfn(null, (results.modifiedCount === 1));
+      return cbfn(null, (results.matchedCount === 1));
     });
   }
 
   updateOne(collectionName, query, modifications, cbfn) {
     this._mongodbConnection.collection(collectionName).updateOne(query, modifications, (err, results) => {
       if (err) return cbfn(err);
-      return cbfn(null, (results.modifiedCount === 1));
+      return cbfn(null, (results.matchedCount === 1));
     });
   }
 
   updateMany(collectionName, query, modifications, cbfn) {
     this._mongodbConnection.collection(collectionName).updateMany(query, modifications, (err, results) => {
       if (err) return cbfn(err);
-      return cbfn(null, results.modifiedCount);
+      return cbfn(null, results.matchedCount);
     });
   }
 
