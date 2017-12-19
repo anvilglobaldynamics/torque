@@ -16,14 +16,14 @@ exports.GetOutletApi = class extends Api {
   }
 
   _getOutlet(outletId, cbfn) {
-    this.database.outlet.findById(outletId, (err, outlet) => {
+    this.database.outlet.findById({ outletId }, (err, outlet) => {
       if (err) return this.fail(err);
       cbfn(outlet);
     })
   }
 
   _getOutletInventories(outletId, cbfn) {
-    this.database.inventory.listByInventoryContainerId({outletId}, (err, inventoryList) => {
+    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
       let defaultInventory, returnedInventory, damagedInventory;
       inventoryList.forEach(inventory => {
         if (inventory.type === 'default') {
@@ -42,7 +42,7 @@ exports.GetOutletApi = class extends Api {
   }
 
   handle({ body }) {
-    let { outletId } =  body;
+    let { outletId } = body;
     this._getOutlet(outletId, (outlet) => {
       this._getOutletInventories(outletId, (defaultInventory, returnedInventory, damagedInventory) => {
         this.success({ outlet, defaultInventory, returnedInventory, damagedInventory });
