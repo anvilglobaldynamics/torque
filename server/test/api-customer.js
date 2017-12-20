@@ -2,6 +2,7 @@ let expect = require('chai').expect;
 
 let { callApi } = require('./utils');
 let {
+  rnd,
   initializeServer,
   terminateServer,
   registerUser,
@@ -10,14 +11,17 @@ let {
   validateCustomerSchema
 } = require('./lib');
 
-const email = `t${(new Date).getTime()}@gmail.com`;
+const prefix = 's';
+
+const email = `${rnd(prefix)}@gmail.com`;
+const phone = rnd(prefix, 11);
 const password = "123545678";
 const fullName = "Test User";
-const phone = 't' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
-const orgEmail = `o${(new Date).getTime()}@gmail.com`;
-const orgPhone = 'o' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
-const customerPhone = 'o' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
-const updatedCustomerPhone = 'o' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+
+const orgEmail = 'o' + `${rnd(prefix)}@gmail.com`;
+const orgPhone = 'o' + rnd(prefix, 11);
+const customerPhone = 'c' + rnd(prefix, 11);
+const updatedCustomerPhone = 'c2' + rnd(prefix, 11);
 
 let apiKey = null;
 let customerList = null;
