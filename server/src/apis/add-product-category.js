@@ -32,6 +32,13 @@ exports.AddProductCategoryApi = class extends Api {
     });
   }
 
+  _createProductCategory(productCategory, cbfn) {
+    this.database.productCategory.create(productCategory, (err, productCategoryId) => {
+      if (err) return this.fail(err);
+      return cbfn(productCategoryId);
+    });
+  }
+
   _checkAndCreateProductCategory({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
     let productCategory = {
       organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
@@ -50,13 +57,6 @@ exports.AddProductCategoryApi = class extends Api {
         this._createProductCategory(productCategory, cbfn);
       })
     }
-  }
-
-  _createProductCategory(productCategory, cbfn) {
-    this.database.productCategory.create(productCategory, (err, productCategoryId) => {
-      if (err) return this.fail(err);
-      return cbfn(productCategoryId);
-    });
   }
 
   handle({ body }) {
