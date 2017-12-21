@@ -25,9 +25,8 @@ exports.AddProductToInventoryApi = class extends Api {
   }
 
   _addProductToInventory({ inventoryId, productList }, cbfn) {
-    let promiseList = [];
-    productList.forEach(product => {
-      let promise = new Promise((accept, reject) => {
+    Promise.all(productList.map(product => {
+      return new Promise((accept, reject) => {
         let { productCategoryId, purchasePrice, salePrice, count } = product
         this.database.product.create({ productCategoryId, purchasePrice, salePrice }, (err, productId) => {
           if (err) return reject(err);
@@ -37,16 +36,11 @@ exports.AddProductToInventoryApi = class extends Api {
           });
         });
       });
-      promiseList.push(promise);
+    })).then(_ => {
+      return cbfn();
+    }).catch(err => {
+      return this.fail(err);
     });
-
-    Promise.all(promiseList)
-      .then(_ => {
-        return cbfn();
-      })
-      .catch(err => {
-        return this.fail(err);
-      })
   }
 
   handle({ body, userId }) {
