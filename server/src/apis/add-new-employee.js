@@ -60,30 +60,6 @@ exports.AddNewEmployeeApi = class extends userCommonMixin(Api) {
     });
   }
 
-  _createUser({ email, fullName, phone, password }, cbfn) {
-    let passwordHash = this._makeHash(password);
-    let user = {
-      email,
-      fullName,
-      phone,
-      passwordHash
-    }
-    this.database.user.create(user, (err, userId) => {
-      if (err) {
-        if ('code' in err && err.code === 'DUPLICATE_email') {
-          err = new Error("Provided email address is already in use");
-          err.code = 'EMAIL_ALREADY_IN_USE';
-        }
-        if ('code' in err && err.code === 'DUPLICATE_phone') {
-          err = new Error("Provided phone number is already in use");
-          err.code = 'PHONE_ALREADY_IN_USE';
-        }
-        return this.fail(err);
-      }
-      return cbfn(userId);
-    });
-  }
-
   _hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, cbfn) {
     this.database.employment.hireExistingUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (err, employmentId) => {
       return cbfn(employmentId);
