@@ -6,11 +6,15 @@ let mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
 let hasStarted = false;
 let pendingTerminationRequest = false;
 
-// ===================================== Server
+// ===================================== Commons
 
 exports.rnd = (prefix, len = 14) => {
   return prefix + String((new Date).getTime()).split('').reverse().slice(0, len).join('');
 }
+
+exports.generateInvalidId = (min = 0, max = 999999999999999) => -1 * (Math.floor(Math.random() * (max - min)) + min);
+
+// ===================================== Server
 
 exports.getDatabase = () => { return mainProgram.exposeDatabaseForTesting(); }
 

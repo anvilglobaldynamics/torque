@@ -3,6 +3,7 @@ let expect = require('chai').expect;
 let { callApi } = require('./utils');
 let {
   rnd,
+  generateInvalidId,
   initializeServer,
   terminateServer,
   registerUser,
@@ -26,7 +27,7 @@ const updatedCustomerPhone = 'c2' + rnd(prefix, 11);
 let apiKey = null;
 let customerList = null;
 let organizationId = null;
-let invalidOrganizationId = 99999999999;
+let invalidOrganizationId = generateInvalidId();
 
 describe('customer', _ => {
 
