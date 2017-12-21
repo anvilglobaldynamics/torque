@@ -19,7 +19,6 @@ exports.AddSalesReturnApi = class extends Api {
           count: Joi.number().max(999999999999999).required()
         })
       ),
-
       creditedAmount: Joi.number().max(999999999999999).required()
     });
   }
