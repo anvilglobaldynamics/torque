@@ -2,6 +2,8 @@ let expect = require('chai').expect;
 
 let { callApi } = require('./utils');
 let {
+  rnd,
+  generateInvalidId,
   initializeServer,
   terminateServer,
   registerUser,
@@ -9,18 +11,21 @@ let {
   addOrganization
 } = require('./lib');
 
-const email = `t2${(new Date).getTime()}@gmail.com`;
+const prefix = 's';
+
+const email = `${rnd(prefix)}@gmail.com`;
+const phone = rnd(prefix, 11);
 const password = "123545678";
 const fullName = "Test User";
-const phone = 't2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
 
-const orgEmail = `o2${(new Date).getTime()}@gmail.com`;
+const orgEmail = 'o' + `${rnd(prefix)}@gmail.com`;
 const orgName = "Test Organization";
 const orgBusinessAddress = "My Address";
-const orgPhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const orgPhone = 'o' + rnd(prefix, 11);
 
 let apiKey = null;
 let organizationId = null;
+let invalidOrganizationId = generateInvalidId();
 
 describe('dashboard', _ => {
 
@@ -72,7 +77,7 @@ describe('dashboard', _ => {
 
     callApi('api/get-dashboard-summary', {
       json: {
-        apiKey, organizationId: -9999
+        apiKey, organizationId: invalidOrganizationId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

@@ -2,6 +2,8 @@ let expect = require('chai').expect;
 
 let { callApi } = require('./utils');
 let {
+  rnd,
+  generateInvalidId,
   initializeServer,
   terminateServer,
   registerUser,
@@ -23,17 +25,19 @@ let {
   validateSalesReturnSchema
 } = require('./lib');
 
-const email = `t2${(new Date).getTime()}@gmail.com`;
+const prefix = 's';
+
+const email = `${rnd(prefix)}@gmail.com`;
 const password = "123545678";
 const fullName = "Test User";
-const phone = 't2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const phone = rnd(prefix, 11);
 
-const orgEmail = `o2${(new Date).getTime()}@gmail.com`;
+const orgEmail = 'o' + `${rnd(prefix)}@gmail.com`;
 const orgName = "Test Organization";
 const orgBusinessAddress = "Test Org Address";
-const orgPhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const orgPhone = 'o' + rnd(prefix, 11);
 
-const outletPhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const outletPhone = 'o1' + rnd(prefix, 11);
 const outletName = "Test Outlet";
 const outletPhysicalAddress = "Test Outlet Address";
 const outletContactPersonName = "Test Outlet Person";
@@ -41,7 +45,7 @@ const outletContactPersonName = "Test Outlet Person";
 const productCategoryName = "test product category";
 
 const customerFullName = "A Test Customer";
-const customerPhone = 'o' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const customerPhone = 'o2' + rnd(prefix, 11);
 const openingBalance = '500';
 
 let apiKey = null;
@@ -64,6 +68,8 @@ let customerData = null;
 let salesData = null;
 
 let productToBeTransferredId = null;
+
+let invalidSalesReturnId = generateInvalidId();
 
 let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
@@ -269,7 +275,7 @@ describe('sales-return', _ => {
     callApi('api/get-sales-return', {
       json: {
         apiKey,
-        salesReturnId: -999,
+        salesReturnId: invalidSalesReturnId,
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

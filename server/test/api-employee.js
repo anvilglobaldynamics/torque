@@ -2,6 +2,8 @@ let expect = require('chai').expect;
 
 let { callApi } = require('./utils');
 let {
+  rnd,
+  generateInvalidId,
   initializeServer,
   terminateServer,
   registerUser,
@@ -11,36 +13,40 @@ let {
   validateEmploymentSchema
 } = require('./lib');
 
-const email = `t1${(new Date).getTime()}@gmail.com`;
+const prefix = 's';
+
+const email = `${rnd(prefix)}@gmail.com`;
 const password = "123545678";
 const fullName = "Test User";
-const phone = 't1' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const phone = rnd(prefix, 11);
 
-const firstEmpEmail = `t2${(new Date).getTime()}@gmail.com`;
+const firstEmpEmail = 'e1' + `${rnd(prefix)}@gmail.com`;
 const firstEmpPassword = "123545678";
 const firstEmpFullName = "Test Employee";
-const firstEmpPhone = 't2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const firstEmpPhone = 'e1' + rnd(prefix, 11);
 
-const secondEmpEmail = `t3${(new Date).getTime()}@gmail.com`;
+const secondEmpEmail = 'e2' + `${rnd(prefix)}@gmail.com`;
 const secondEmpPassword = "123545678";
 const secondEmpFullName = "Test Employee";
-const secondEmpPhone = 't3' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const secondEmpPhone = 'e2' + rnd(prefix, 11);
 
-const thirdEmpEmail = `t4${(new Date).getTime()}@gmail.com`;
+const thirdEmpEmail = 'e3' + `${rnd(prefix)}@gmail.com`;
 const thirdEmpPassword = "123545678";
 const thirdEmpFullName = "Test Employee";
-const thirdEmpPhone = 't4' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const thirdEmpPhone = 'e3' + rnd(prefix, 11);
 
-const orgEmail = `o1${(new Date).getTime()}@gmail.com`;
+const orgEmail = 'o1' + `${rnd(prefix)}@gmail.com`;
 const orgName = "Test Organization";
 const orgBusinessAddress = "My Address";
-const orgPhone = 'o1' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const orgPhone = 'o1' + rnd(prefix, 11);
 
 let apiKey = null;
 let organizationId = null;
 let employeeId = null;
 let employmentId = null;
 let employeeToBeEditedData = null;
+let invalidUserId = generateInvalidId();
+let invalidEmploymentId = generateInvalidId();
 
 describe('employee', _ => {
 
@@ -136,7 +142,7 @@ describe('employee', _ => {
     callApi('api/hire-user-as-employee', {
       json: {
         apiKey,
-        userId: -999,
+        userId: invalidUserId,
         organizationId,
         role: "Joi.string().max(1024).required()",
         designation: "Joi.string().max(1024).required()",
@@ -493,7 +499,7 @@ describe('employee', _ => {
     callApi('api/get-employee', {
       json: {
         apiKey,
-        employmentId: -999
+        employmentId: invalidEmploymentId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -559,7 +565,7 @@ describe('employee', _ => {
       json: {
         apiKey,
 
-        employmentId: -9999,
+        employmentId: invalidEmploymentId,
 
         isActive: false,
 

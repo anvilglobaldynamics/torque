@@ -3,6 +3,8 @@ let expect = require('chai').expect;
 
 let { callApi } = require('./utils');
 let {
+  rnd,
+  generateInvalidId,
   initializeServer,
   terminateServer,
   registerUser,
@@ -10,15 +12,18 @@ let {
   validateOrganizationSchema
 } = require('./lib');
 
-const email = `t2${(new Date).getTime()}@gmail.com`;
+const prefix = 's';
+
+const email = `${rnd(prefix)}@gmail.com`;
 const password = "123545678";
 const fullName = "Test User";
-const phone = 't2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
-const orgEmail = `o2${(new Date).getTime()}@gmail.com`;
-const orgPhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
-const orgEmail2 = `o2C${(new Date).getTime()}@gmail.com`;
-const org2Email = `o22${(new Date).getTime()}@gmail.com`;
-const org2Phone = 'o22' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const phone = rnd(prefix, 11);
+
+const orgEmail = 'o1' + `${rnd(prefix)}@gmail.com`;
+const orgPhone = 'o1' + rnd(prefix, 11);
+const orgEmail2 = 'o2' + `${rnd(prefix)}@gmail.com`;
+const org2Email = '2o' + `${rnd(prefix)}@gmail.com`;
+const org2Phone = 'o2' + rnd(prefix, 11);
 
 let apiKey = null;
 let organizationList = null;
