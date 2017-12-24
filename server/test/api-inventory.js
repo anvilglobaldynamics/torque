@@ -2,6 +2,8 @@ let expect = require('chai').expect;
 
 let { callApi } = require('./utils');
 let {
+  rnd,
+  generateInvalidId,
   initializeServer,
   terminateServer,
   registerUser,
@@ -17,22 +19,24 @@ let {
   validateProductSchema
 } = require('./lib');
 
-const email = `t2${(new Date).getTime()}@gmail.com`;
+const prefix = 's';
+
+const email = `${rnd(prefix)}@gmail.com`;
 const password = "123545678";
 const fullName = "Test User";
-const phone = 't2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const phone = rnd(prefix, 11);
 
-const orgEmail = `o2${(new Date).getTime()}@gmail.com`;
+const orgEmail = 'o1' + `${rnd(prefix)}@gmail.com`;
 const orgName = "Test Organization";
 const orgBusinessAddress = "Test Org Address";
-const orgPhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const orgPhone = 'o1' + rnd(prefix, 11);
 
-const warehousePhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const warehousePhone = 'w' + rnd(prefix, 11);
 const warehouseName = "Test Warehouse";
 const warehousePhysicalAddress = "Test Warehouse Address";
 const warehouseContactPersonName = "Test Warehouse Person";
 
-const outletPhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const outletPhone = 'o2' + rnd(prefix, 11);
 const outletName = "Test Outlet";
 const outletPhysicalAddress = "Test Outlet Address";
 const outletContactPersonName = "Test Outlet Person";

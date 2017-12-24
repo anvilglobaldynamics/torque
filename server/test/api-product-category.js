@@ -2,6 +2,8 @@ let expect = require('chai').expect;
 
 let { callApi } = require('./utils');
 let {
+  rnd,
+  generateInvalidId,
   initializeServer,
   terminateServer,
   registerUser,
@@ -10,20 +12,23 @@ let {
   validateProductCategorySchema
 } = require('./lib');
 
-const email = `t2${(new Date).getTime()}@gmail.com`;
+const prefix = 's';
+
+const email = `${rnd(prefix)}@gmail.com`;
 const password = "123545678";
 const fullName = "Test User";
-const phone = 't2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const phone = rnd(prefix, 11);
 
-const orgEmail = `o2${(new Date).getTime()}@gmail.com`;
+const orgEmail = 'o' + `${rnd(prefix)}@gmail.com`;
 const orgName = "Test Organization";
 const orgBusinessAddress = "My Address";
-const orgPhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const orgPhone = 'o' + rnd(prefix, 11);
 
 let apiKey = null;
 let organizationId = null;
 let productCategoryList = null;
 let productCategoryToBeModified = null;
+let invalidParentProductCategoryId = generateInvalidId();
 
 describe('product-category', _ => {
 
@@ -240,7 +245,7 @@ describe('product-category', _ => {
         apiKey,
         organizationId,
 
-        parentProductCategoryId: -999,
+        parentProductCategoryId: invalidParentProductCategoryId,
         name: "first product category",
         unit: "kg",
         defaultDiscountType: "percent",
@@ -267,7 +272,7 @@ describe('product-category', _ => {
         apiKey,
         productCategoryId: productCategoryList[productCategoryList.length - 1].id,
 
-        parentProductCategoryId: -999,
+        parentProductCategoryId: invalidParentProductCategoryId,
         name: "new product category name", // modification
         unit: "kg",
         defaultDiscountType: "percent",

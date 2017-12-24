@@ -1,18 +1,22 @@
 let expect = require('chai').expect;
 let { callApi } = require('./utils');
 let {
+  rnd,
+  generateInvalidId,
   getDatabase,
   initializeServer,
   terminateServer
 } = require('./lib');
 
-const email = `t1${(new Date).getTime()}@gmail.com`;
-const changedEmail = `t1t${(new Date).getTime()}@gmail.com`;
+const prefix = 's';
+
+const email = `${rnd(prefix)}@gmail.com`;
+const changedEmail = 'ce' + `${rnd(prefix)}@gmail.com`;
 const password = "123545678";
 const changedPassword = "1235456781";
 const changedPassword2 = "1235456782";
 const fullName = "Test User";
-const phone = 't1' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const phone = rnd(prefix, 11);
 
 let apiKey = null;
 

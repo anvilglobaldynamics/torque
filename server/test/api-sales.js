@@ -2,6 +2,8 @@ let expect = require('chai').expect;
 
 let { callApi } = require('./utils');
 let {
+  rnd,
+  generateInvalidId,
   initializeServer,
   terminateServer,
   registerUser,
@@ -19,17 +21,19 @@ let {
   validateSalesSchema
 } = require('./lib');
 
-const email = `t2${(new Date).getTime()}@gmail.com`;
+const prefix = 's';
+
+const email = `${rnd(prefix)}@gmail.com`;
 const password = "123545678";
 const fullName = "Test User";
-const phone = 't2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const phone = rnd(prefix, 11);
 
-const orgEmail = `o2${(new Date).getTime()}@gmail.com`;
+const orgEmail = 'o' + `${rnd(prefix)}@gmail.com`;
 const orgName = "Test Organization";
 const orgBusinessAddress = "Test Org Address";
-const orgPhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const orgPhone = 'o' + rnd(prefix, 11);
 
-const outletPhone = 'o2' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const outletPhone = 'o1' + rnd(prefix, 11);
 const outletName = "Test Outlet";
 const outletPhysicalAddress = "Test Outlet Address";
 const outletContactPersonName = "Test Outlet Person";
@@ -37,7 +41,7 @@ const outletContactPersonName = "Test Outlet Person";
 const productCategoryName = "test product category";
 
 const customerFullName = "A Test Customer";
-const customerPhone = 'o' + String((new Date).getTime()).split('').reverse().slice(0, 11).join('');
+const customerPhone = 'c' + rnd(prefix, 11);
 const openingBalance = '500';
 
 let apiKey = null;
