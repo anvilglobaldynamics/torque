@@ -15,7 +15,7 @@ exports.DeleteCustomerApi = class extends Api {
     });
   }
 
-  _editCustomer({ customerId }, cbfn) {
+  _deleteCustomer({ customerId }, cbfn) {
     this.database.customer.delete({ customerId }, (err) => {
       if (err) return this.fail(err);
       return cbfn()
@@ -24,7 +24,7 @@ exports.DeleteCustomerApi = class extends Api {
 
   handle({ body }) {
     let { customerId } = body;
-    this._editCustomer({ customerId }, () => {
+    this._deleteCustomer({ customerId }, () => {
       this.success({ status: "success" });
     });
   }
