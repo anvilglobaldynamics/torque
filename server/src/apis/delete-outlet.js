@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.DeleteOutletApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.DeleteOutletApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -15,11 +17,7 @@ exports.DeleteOutletApi = class extends Api {
   }
 
   _deleteOutlet({ outletId }, cbfn) {
-    this.database.outlet.delete({ outletId }, (err, wasUpdated) => {
-      if (err) return this.fail(err);
-      if (!wasUpdated) return this.fail(new Error('Unable to find outlet to update'));
-      return cbfn();
-    });
+    this._deleteDocById(this.database.outlet, { outletId }, cbfn);
   }
 
   handle({ body, userId }) {
