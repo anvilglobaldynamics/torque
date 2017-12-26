@@ -29,7 +29,7 @@ exports.EditWarehouseApi = class extends Api {
 
   handle({ body, userId }) {
     let { warehouseId, name, physicalAddress, phone, contactPersonName } = body;
-    this._updateWarehouse({ warehouseId, name, physicalAddress, phone, contactPersonName }, _ => {
+    this._updateWarehouse({ warehouseId, name, physicalAddress, phone, contactPersonName }, () => {
       this.success({ status: "success" });
     });
   }

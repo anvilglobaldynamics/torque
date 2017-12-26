@@ -18,7 +18,7 @@ exports.AdjustCustomerBalanceApi = class extends Api {
     });
   }
 
-  _getCustomerWithId({ customerId }, cbfn) {
+  _getCustomer({ customerId }, cbfn) {
     this.database.customer.findById({ customerId }, (err, customer) => {
       if (err) return this.fail(err);
       return cbfn(customer);
@@ -35,6 +35,7 @@ exports.AdjustCustomerBalanceApi = class extends Api {
     }
   }
 
+  // FIXME: This does not need to be async
   _updateAdditionalPaymentHistoryList({ customer, balance }, cbfn) {
     let paymentRecord = {
       creditedDatetimeStamp: (new Date).getTime(),
@@ -54,7 +55,7 @@ exports.AdjustCustomerBalanceApi = class extends Api {
 
   handle({ body }) {
     let { customerId, action, balance } = body;
-    this._getCustomerWithId({ customerId }, (customer) => {
+    this._getCustomer({ customerId }, (customer) => {
       this._adjustBalance({ customer, action, balance }, (customer) => {
         this._updateAdditionalPaymentHistoryList({ customer, balance }, (customer) => {
           this._saveAdjustment({ customer }, () => {

@@ -57,6 +57,7 @@ exports.GetDashboardSummaryApi = class extends Api {
       this._getSalesSummaryForDate({ organizationId, toDate, fromDate }, ({ totalCount, totalAmount }) => {
         let totalNumberOfSalesThisMonth = totalCount;
         let totalAmountSoldThisMonth = totalAmount;
+        
         cbfn({
           totalNumberOfSalesToday,
           totalAmountSoldToday,
