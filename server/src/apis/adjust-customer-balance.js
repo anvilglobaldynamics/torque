@@ -21,6 +21,11 @@ exports.AdjustCustomerBalanceApi = class extends Api {
   _getCustomerWithId({ customerId }, cbfn) {
     this.database.customer.findById({ customerId }, (err, customer) => {
       if (err) return this.fail(err);
+      if (customer == null) {
+        err = new Error("customer does not exist");
+        err.code = 'CUSTOMER_INVALID';
+        return this.fail(err);
+      }
       return cbfn(customer);
     });
   }
