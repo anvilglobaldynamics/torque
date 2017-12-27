@@ -15,7 +15,7 @@ exports.ProductCategoryCollection = class extends Collection {
       organizationId: Joi.number().max(999999999999999).required(),
       parentProductCategoryId: Joi.number().max(999999999999999).allow(null).required(),
       unit: Joi.string().max(1024).required(),
-      defaultDiscountType: Joi.string().max(1024).required(),
+      defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
       defaultDiscountValue: Joi.number().when(
         'defaultDiscountType', {
           is: 'percent',

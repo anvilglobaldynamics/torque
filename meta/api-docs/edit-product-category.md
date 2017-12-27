@@ -12,7 +12,7 @@ method: `POST`
   parentProductCategoryId: Joi.number().max(999999999999999).required(),
   name: Joi.string().min(1).max(64).required(),
   unit: Joi.string().max(1024).required(),
-  defaultDiscountType: Joi.string().max(1024).required(),
+  defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
   defaultDiscountValue: Joi.number().when(
     'defaultDiscountType', { 
       is: 'percent', 
