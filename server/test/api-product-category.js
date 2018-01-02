@@ -248,8 +248,7 @@ describe('product-category', _ => {
         validateProductCategorySchema(productCategory);
       });
       productCategoryList = body.productCategoryList;
-
-      console.log("productCategoryList: ", productCategoryList);
+      
       testDoneFn();
     });
 
