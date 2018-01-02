@@ -58,6 +58,11 @@ exports.AddSalesApi = class extends Api {
   _getCustomer(customerId, cbfn) {
     this.database.customer.findById({ customerId }, (err, customer) => {
       if (err) return this.fail(err);
+      // if (customer === null) {
+      //   err = new Error("customer could not be found");
+      //   err.code = "CUSTOMER_INVALID";
+      //   return this.fail(err);
+      // }
       return cbfn(customer);
     });
   }
@@ -67,12 +72,12 @@ exports.AddSalesApi = class extends Api {
       let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
       if (!foundProduct) {
         err = new Error("product could not be found in source inventory");
-        err.code = "PRODUCT_INVALID"
+        err.code = "PRODUCT_INVALID";
         return this.fail(err);
       }
       if (foundProduct.count < product.count) {
         err = new Error("not enough product(s) in source inventory");
-        err.code = "INSUFFICIENT_PRODUCT"
+        err.code = "INSUFFICIENT_PRODUCT";
         return this.fail(err);
       }
       foundProduct.count -= product.count;
