@@ -16,7 +16,7 @@ exports.EditProductCategoryApi = class extends Api {
 
       name: Joi.string().min(1).max(64).required(),
       unit: Joi.string().max(1024).required(),
-      defaultDiscountType: Joi.string().max(1024).required(),
+      defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
       defaultDiscountValue: Joi.number().when(
         'defaultDiscountType', {
           is: 'percent',

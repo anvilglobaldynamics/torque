@@ -63,6 +63,11 @@ let customerData = null;
 
 let productToBeTransferredId = null;
 
+let invalidOutletId = generateInvalidId();
+let invalidProductId = generateInvalidId();
+let invalidCustomerId = generateInvalidId();
+let invalidSalesId = generateInvalidId();
+
 let fromDate = new Date();
 fromDate.setDate(fromDate.getDate()-1);
 fromDate = fromDate.getTime();
@@ -180,6 +185,92 @@ describe('sales', _ => {
 
   });
 
+  it('api/add-sales (Invalid outletId)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId: invalidOutletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: outletInventoryProductList[0].productId,
+            count: 2,
+            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+          }
+        ],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          previousCustomerBalance: null,
+          paidAmount: 300,
+          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('OUTLET_INVENTORY_INVALID');
+
+      testDoneFn();
+    });
+
+  });
+
+  it.skip('api/add-sales (Invalid productList)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: invalidProductId,
+            count: 2,
+            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+          }
+        ],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          previousCustomerBalance: null,
+          paidAmount: 300,
+          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('PRODUCT_INVALID');
+
+      testDoneFn();
+    });
+
+  });
+
   it('api/add-sales (Valid, No Customer)', testDoneFn => {
 
     callApi('api/add-sales', {
@@ -217,6 +308,49 @@ describe('sales', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
       expect(body).to.have.property('salesId');
+      testDoneFn();
+    });
+
+  });
+
+  it.skip('api/add-sales (Invalid customer)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: invalidCustomerId,
+
+        productList: [
+          {
+            productId: outletInventoryProductList[0].productId,
+            count: 2,
+            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+          }
+        ],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          previousCustomerBalance: customerData.balance,
+          paidAmount: 300,
+          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('CUSTOMER_INVALID');
+
       testDoneFn();
     });
 
@@ -295,6 +429,24 @@ describe('sales', _ => {
 
   });
 
+  it('api/get-sales (Invalid)', testDoneFn => {
+
+    callApi('api/get-sales', {
+      json: {
+        apiKey,
+        salesId: invalidSalesId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('SALES_INVALID');
+
+      testDoneFn();
+    });
+
+  });
+
   it('api/get-sales (Valid)', testDoneFn => {
 
     callApi('api/get-sales', {
@@ -313,6 +465,8 @@ describe('sales', _ => {
     });
 
   });
+
+  // TODO: not sure how to invalid test belows
 
   it('api/get-sales-list (Valid only organization Id)', testDoneFn => {
 

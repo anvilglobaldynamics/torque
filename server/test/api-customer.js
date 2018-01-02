@@ -28,6 +28,7 @@ let apiKey = null;
 let customerList = null;
 let organizationId = null;
 let invalidOrganizationId = generateInvalidId();
+let invalidCustomerId = generateInvalidId();
 
 describe('customer', _ => {
 
@@ -249,6 +250,23 @@ describe('customer', _ => {
 
   });
 
+  it.skip('api/edit-customer (Invalid customerId)', testDoneFn => {
+
+    callApi('api/edit-customer', {
+      json: {
+        apiKey,
+        customerId: invalidCustomerId,
+        fullName: "A Test Customer",
+        phone: updatedCustomerPhone,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      testDoneFn();
+    })
+
+  });
+
   it('api/get-customer (Valid modification check): ', testDoneFn => {
 
     callApi('api/get-customer', {
@@ -323,6 +341,44 @@ describe('customer', _ => {
 
   });
 
+  it('api/adjust-customer-balance (Invalid customerId): ', testDoneFn => {
+
+    callApi('api/adjust-customer-balance', {
+      json: {
+        apiKey,
+        customerId: invalidCustomerId,
+        action: "payment",
+        balance: 20,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('CUSTOMER_INVALID');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/adjust-customer-balance (Invalid Action): ', testDoneFn => {
+
+    callApi('api/adjust-customer-balance', {
+      json: {
+        apiKey,
+        customerId: customerList[customerList.length - 1].id,
+        action: "invalid",
+        balance: 20,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
+      testDoneFn();
+    })
+
+  });
+
   it('api/delete-customer (Valid): ', testDoneFn => {
 
     callApi('api/delete-customer', {
@@ -350,6 +406,21 @@ describe('customer', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('customer').that.equals(null);
+      testDoneFn();
+    })
+
+  });
+
+  it.skip('api/delete-customer (Invalid): ', testDoneFn => {
+
+    callApi('api/delete-customer', {
+      json: {
+        apiKey,
+        customerId: invalidCustomerId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
       testDoneFn();
     })
 

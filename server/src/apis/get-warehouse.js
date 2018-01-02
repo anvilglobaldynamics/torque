@@ -18,6 +18,11 @@ exports.GetWarehouseApi = class extends Api {
   _getWarehouse(warehouseId, cbfn) {
     this.database.warehouse.findById({ warehouseId }, (err, warehouse) => {
       if (err) return this.fail(err);
+      if (warehouse === null) {
+        err = new Error("warehouse not found");
+        err.code = "WAREHOUSE_INVALID";
+        return this.fail(err);
+      }
       cbfn(warehouse);
     })
   }

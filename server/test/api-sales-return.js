@@ -70,6 +70,8 @@ let salesData = null;
 let productToBeTransferredId = null;
 
 let invalidSalesReturnId = generateInvalidId();
+let invalidSalesId = generateInvalidId();
+let invalidProductId = generateInvalidId();
 
 let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
@@ -194,6 +196,56 @@ describe('sales-return', _ => {
         });
       });
     });
+  });
+
+  it('api/add-sales-return (Invalid salesId)', testDoneFn => {
+
+    callApi('api/add-sales-return', {
+      json: {
+        apiKey,
+        salesId: invalidSalesId,
+        returnedProductList: [
+          {
+            productId: salesData.productList[0].productId,
+            count: salesData.productList[0].count
+          }
+        ],
+        creditedAmount: 100 // TODO: use data from salesData.payment
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('SALES_INVALID');
+
+      testDoneFn();
+    });
+
+  });
+
+  it.skip('api/add-sales-return (Invalid returnedProductList)', testDoneFn => {
+
+    callApi('api/add-sales-return', {
+      json: {
+        apiKey,
+        salesId,
+        returnedProductList: [
+          {
+            productId: invalidProductId,
+            count: 10
+          }
+        ],
+        creditedAmount: 100 // TODO: use data from salesData.payment
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('PORDUCT_INVALID');
+
+      testDoneFn();
+    });
+
   });
 
   it('api/add-sales-return (Valid)', testDoneFn => {
