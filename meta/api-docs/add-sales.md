@@ -51,7 +51,7 @@ Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
-{ code: OUTLET_INVALID } // outlet could not be found 
+{ code: OUTLET_INVENTORY_INVALID } // outlet or inventory could not be found 
 { code: CUSTOMER_INVALID } // customer could not be found
 { code: PRODUCT_INVALID } // product could not be found
 { code: INSUFFICIENT_PRODUCT } // not enough product in inventory

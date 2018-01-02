@@ -247,7 +247,6 @@ describe('inventory', _ => {
 
   });
 
-
   it('api/transfer-between-inventories (Valid Warehouse to Outlet)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {

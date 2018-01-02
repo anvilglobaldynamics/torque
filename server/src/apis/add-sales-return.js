@@ -26,6 +26,11 @@ exports.AddSalesReturnApi = class extends Api {
   _getSales({ salesId }, cbfn) {
     this.database.sales.findById({ salesId }, (err, sales) => {
       if (err) return this.fail(err);
+      if (sales === null) {
+        err = new Error("sales not found");
+        err.code = "SALES_INVALID";
+        return this.fail(err);
+      }
       return cbfn(sales);
     });
   }
