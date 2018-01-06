@@ -35,7 +35,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     })
   }
 
-  _getmatchingProductCategoryList(matchingProductList, cbfn) {
+  _getMatchingProductCategoryList(matchingProductList, cbfn) {
     let productCategoryIdList = matchingProductList.map(product => product.productCategoryId);
     this.database.productCategory.listByIdList({ idList: productCategoryIdList }, (err, matchingProductCategoryList) => {
       if (err) return this.fail(err);
@@ -47,7 +47,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     let { inventoryId } = body;
     this._getProductList(inventoryId, productList => {
       this._getMatchingProductList(productList, matchingProductList => {
-        this._getmatchingProductCategoryList(matchingProductList, matchingProductCategoryList => {
+        this._getMatchingProductCategoryList(matchingProductList, matchingProductCategoryList => {
           this.success({ productList, matchingProductList, matchingProductCategoryList });
         });
       });
