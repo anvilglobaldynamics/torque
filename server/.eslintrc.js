@@ -20,7 +20,7 @@ module.exports = {
         "getter-return": [
             "error"
         ],
-        curly: ["error", "multi-or-nest", "consistent"],
+        curly: ["error", "multi-line", "consistent"],
         eqeqeq: ["error", "always"],
         "no-floating-decimal": "error",
         "no-implicit-coercion": "error",
@@ -44,7 +44,7 @@ module.exports = {
         "wrap-iife": ["error", "outside"],
         "vars-on-top": "error",
         "radix": ["error", "as-needed"],
-        "prefer-promise-reject-errors": ["error", {"allowEmptyReject": true}],
+        "prefer-promise-reject-errors": ["error", { "allowEmptyReject": true }],
         "no-delete-var": "error",
         "no-undef": ["error", { "typeof": true }],
         "no-undef-init": "error",
@@ -58,6 +58,7 @@ module.exports = {
         "array-bracket-spacing": ["error", "never"],
         "block-spacing": "error",
         "brace-style": "error",
-        "camelcase": "error"
+        "camelcase": "error",
+        "no-unused-vars": ["error", { "vars": "all", "args": "none" }]
     }
 };

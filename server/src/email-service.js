@@ -4,7 +4,7 @@ let fslib = require('fs');
 let Handlebars = require('handlebars');
 let inlineCss = require('inline-css');
 let { AsyncCollector } = require('baselib');
-let pathlib = require('path')
+let pathlib = require('path');
 
 class EmailService {
 
@@ -20,7 +20,7 @@ class EmailService {
 
   _loadAndPrepareTemplates(cbfn) {
     let branding = this.config.branding;
-    let cssFilePath = './src/templates/email/common.css'
+    let cssFilePath = './src/templates/email/common.css';
     let css = fslib.readFileSync(cssFilePath, { encoding: 'utf8' });
     let templateList = [
       {
@@ -38,7 +38,7 @@ class EmailService {
         path: './src/templates/email/generic-message.html',
         subject: `Message from ${branding.name}`
       }
-    ]
+    ];
     let collector = new AsyncCollector(templateList.length);
     for (let template of templateList) {
       let html = fslib.readFileSync(template.path, { encoding: 'utf8' });
@@ -54,7 +54,7 @@ class EmailService {
     collector.finally((collection) => {
       this.templates = collection;
       cbfn();
-    })
+    });
   }
 
   generateHtml(templateName, model) {
@@ -64,14 +64,14 @@ class EmailService {
 
   initialize(logger, cbfn) {
     if (!this.privateKey) {
-      let error = new Error("No privateKey found in mailgun. Sending mail will not work.")
+      let error = new Error("No privateKey found in mailgun. Sending mail will not work.");
       logger.error(error);
     } else {
       this.mailgun = createMailgunInstance({ apiKey: this.privateKey, domain: this.domain });
     }
     this._loadAndPrepareTemplates(_ => {
       cbfn();
-    })
+    });
   }
 
   sendStoredMail(templateName, model, to, cbfn) {
@@ -90,11 +90,11 @@ class EmailService {
     };
     if (this.enabled) {
       this.mailgun.messages().send(data, function (error, body) {
-        cbfn(error, body);
+        return cbfn(error, body);
       });
     } else {
       let error = new Error("Email Sending Disabled By Developer");
-      cbfn(error);
+      return cbfn(error);
     }
 
   }

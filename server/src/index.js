@@ -1,3 +1,4 @@
+/* eslint no-console: 0 */
 
 let { promisify } = require('./utils/promisify');
 let { detectMode } = require('./utils/detect-mode.js');

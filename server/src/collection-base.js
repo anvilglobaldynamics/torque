@@ -126,10 +126,10 @@ class Collection {
           this.__validateAgainstSchema(this.updatedDoc, (err) => {
             if (err) {
               this.database.replaceOne(this.collectionName, { id: originalDoc.id }, originalDoc, (err, wasUpdated) => {
-                cbfn(err, false);
-              })
+                return cbfn(err, false);
+              });
             } else {
-              cbfn(null, true);
+              return cbfn(null, true);
             }
           });
         });
