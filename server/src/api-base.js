@@ -141,11 +141,20 @@ class Api {
 
   }
 
+  __processAccessControlQuery(body, queryObject, cbfn) {
+    let { from, query, select } = queryObject;
+    query = query(body);
+    this.database.findOne(from, query, (err, doc) => {
+      if (err) return cbfn(err);
+      cbfn(null, doc[select]);
+    });
+  }
+
   /*
     enforces Access Control Rules. Rules are specified using the accessControl property. Format - 
     {
       privileges: [ ...list of privileges ]
-      organizationBy: "keyName" or <function>
+      organizationBy: "keyName" or <function> or <object>
       guards: [<function>]
     }
 
@@ -174,11 +183,18 @@ class Api {
           organizationBy.call(this, userId, body, (err, organization) => {
             accept({ err, organization });
           });
-        } else {
+        } else if (typeof (organizationBy) === "string") {
           let organizationId = body[organizationBy];
           this.database.organization.findById({ organizationId }, (err, organization) => {
             accept({ err, organization });
           })
+        } else {
+          this.__processAccessControlQuery(body, organizationBy, (err, organizationId) => {
+            if (err) return accept({ err });
+            this.database.organization.findById({ organizationId }, (err, organization) => {
+              accept({ err, organization });
+            })
+          });
         }
       }).then(({ err, organization }) => {
         if (err) return reject(err);

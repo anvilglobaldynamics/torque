@@ -7,15 +7,6 @@ exports.AddCustomerApi = class extends Api {
 
   get requiresAuthentication() { return true; }
 
-  get accessControl(){
-    return {
-      organizationBy: "organizationId",
-      privileges: [
-        "PRIV_MODIFY_CUSTOMER"
-      ]
-    }
-  }
-
   get requestSchema() {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),
@@ -25,6 +16,15 @@ exports.AddCustomerApi = class extends Api {
       phone: Joi.string().alphanum().min(11).max(14).required(),
       openingBalance: Joi.number().max(999999999999999).required()
     });
+  }
+
+  get accessControl(){
+    return {
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_MODIFY_CUSTOMER"
+      ]
+    }
   }
 
   _createCustomer({ organizationId, fullName, phone, openingBalance }, cbfn) {
