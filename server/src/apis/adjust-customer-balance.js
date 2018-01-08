@@ -18,6 +18,7 @@ exports.AdjustCustomerBalanceApi = class extends Api {
     });
   }
 
+  // FIXME: move to customerCommonMixin
   _getCustomer({ customerId }, cbfn) {
     this.database.customer.findById({ customerId }, (err, customer) => {
       if (err) return this.fail(err);
@@ -30,6 +31,7 @@ exports.AdjustCustomerBalanceApi = class extends Api {
     });
   }
 
+  // FIXME: move to customerCommonMixin (Perhaps. Consider usage of same method elsewhere)
   _adjustBalance({ customer, action, balance }, cbfn) {
     if (action === 'payment') {
       customer.balance += balance;

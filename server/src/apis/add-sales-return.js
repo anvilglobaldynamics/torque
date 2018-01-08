@@ -23,6 +23,7 @@ exports.AddSalesReturnApi = class extends Api {
     });
   }
 
+  // FIXME: move to salesCommonMixin
   _getSales({ salesId }, cbfn) {
     this.database.sales.findById({ salesId }, (err, sales) => {
       if (err) return this.fail(err);
@@ -51,6 +52,7 @@ exports.AddSalesReturnApi = class extends Api {
     })
   }
 
+  // FIXME: Better Naming
   _return({ returnedProductList, outletReturnedInventory }, cbfn) {
     let promiseList = [];
     returnedProductList.forEach(product => {
@@ -72,6 +74,7 @@ exports.AddSalesReturnApi = class extends Api {
       })
   }
 
+  // FIXME: move to customerCommonMixin
   _getCustomer({ customerId }, cbfn) {
     this.database.customer.findById({ customerId }, (err, customer) => {
       if (err) return this.fail(err);

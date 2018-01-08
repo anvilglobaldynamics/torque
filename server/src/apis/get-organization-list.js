@@ -2,6 +2,7 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
+// FIXME: Consider naming it get-aggregated-organization-list
 exports.GetrganizationListApi = class extends Api {
 
   get autoValidates() { return true; }

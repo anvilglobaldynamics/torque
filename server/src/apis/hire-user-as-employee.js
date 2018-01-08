@@ -66,6 +66,8 @@ exports.HireUserAsEmployeeApi = class extends Api {
     })
   }
 
+  // FIXME: Check if the user is employed in THIS organization. User can be employed in other organizations
+  // without repercussions.
   _checkIfUserEmployed({ userId }, cbfn) {
     this.database.employment.getEmploymentsOfUser({ userId }, (err, employmentList) => {
       if (err) return this.fail(err);
