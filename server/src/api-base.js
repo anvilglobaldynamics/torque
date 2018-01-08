@@ -150,34 +150,10 @@ class Api {
     });
   }
 
-  /*
-    enforces Access Control Rules. Rules are specified using the accessControl property. Format - 
-    {
-      privileges: [ ...list of privileges ]
-      organizationBy: "keyName" or <function> or <object>
-      guards: [<function>]
-    }
-
-    NOTES: 
-      1. accessControl is only enforcible if both autoValidates and requiresAuthentication
-         is true.
-      2. do not specify accessControl if it is not required. Alternatively, you can return
-         null or an empty object.
-      3. if you do not specify "organizationBy" then your "privileges" array can not be 
-         verified.
-      4. If "organizationBy" is a string, that value is used to extract organizationId from
-         request body.
-      5. If "organizationBy" is a function, that function is called with (userId, body, (err, organization)=> ..)
-         and is expected to return the organization as callback. The execution context is always the api.
-      6. guards is an array of functions. the functions are called with (userId, body, (err)=> ..) and are expected
-         to return an err via callback if they fail. The execution context is always the api.
-  */
-  _enforceAccessControl(userId, body, cbfn) {
-    let rules = this.accessControl;
-    if (!rules) return cbfn();
+  __processAccessControlRule(userId, body, rule, cbfn) {
     let promise1 = new Promise((accept, reject) => {
-      if (!('organizationBy' in rules)) return accept();
-      let { privileges = [], organizationBy } = rules;
+      if (!('organizationBy' in rule)) return accept();
+      let { privileges = [], organizationBy } = rule;
       new Promise((accept, reject) => {
         if (typeof (organizationBy) === "function") {
           organizationBy.call(this, userId, body, (err, organization) => {
@@ -234,6 +210,45 @@ class Api {
     }).catch((err) => {
       cbfn(err);
     })
+  }
+
+  /*
+    enforces Access Control Rules. Rules are specified using the accessControl property. Format - 
+    [
+      {
+        privileges: [ ...list of privileges ]
+        organizationBy: "keyName" or <function> or <object>
+        guards: [<function>]
+      }
+    ]
+
+    NOTES: 
+      1. accessControl is only enforcible if both autoValidates and requiresAuthentication
+         is true.
+      2. do not specify accessControl if it is not required. Alternatively, you can return
+         null or an empty object.
+      3. if you do not specify "organizationBy" then your "privileges" array can not be 
+         verified.
+      4. If "organizationBy" is a string, that value is used to extract organizationId from
+         request body.
+      5. If "organizationBy" is a function, that function is called with (userId, body, (err, organization)=> ..)
+         and is expected to return the organization as callback. The execution context is always the api.
+      6. guards is an array of functions. the functions are called with (userId, body, (err)=> ..) and are expected
+         to return an err via callback if they fail. The execution context is always the api.
+  */
+  _enforceAccessControl(userId, body, cbfn) {
+    let rules = this.accessControl;
+    if (!rules) return cbfn();
+    Promise.all(rules.map((rule) => new Promise((accept, reject) => {
+      this.__processAccessControlRule(userId, body, rule, (err) => {
+        if (err) return reject(err);
+        return accept();
+      })
+    }))).then(() => {
+      cbfn();
+    }).catch(err => {
+      cbfn(err);
+    });
   }
 
   // region: template rendering ==========================

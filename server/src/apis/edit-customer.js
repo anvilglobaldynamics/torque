@@ -19,7 +19,7 @@ exports.EditCustomerApi = class extends Api {
   }
 
   get accessControl() {
-    return {
+    return [{
       organizationBy: {
         from: "customer",
         query: ({ customerId }) => ({ id: customerId }),
@@ -28,7 +28,7 @@ exports.EditCustomerApi = class extends Api {
       privileges: [
         "PRIV_MODIFY_CUSTOMER"
       ]
-    }
+    }];
   }
 
   _updateCustomer({ customerId, fullName, phone }, cbfn) {
