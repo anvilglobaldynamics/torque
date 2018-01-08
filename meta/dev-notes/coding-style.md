@@ -8,5 +8,5 @@ To install it -
 npm install -g eslint
 ```
 
-To use it wil vscode
+To use it with vscode
 install the `ESlint` module
