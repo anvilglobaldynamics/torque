@@ -178,6 +178,17 @@ class Api {
     return errorObject;
   }
 
+  _translateKnownError(err) {
+    if (!('code' in err)) return err;
+    if (err.code === "DUPLICATE_email") {
+      err = new Error("Provided email address is already in use");
+      err.code = 'EMAIL_ALREADY_IN_USE';
+    } else if (err.code === "DUPLICATE_phone") {
+      err = new Error("Provided phone number is already in use");
+      err.code = 'PHONE_ALREADY_IN_USE';
+    }
+  }
+
   failable(originalErrorObject, extraData) {
     let errorObject = this._stringifyErrorObject(originalErrorObject);
     errorObject = this._hideUnknownErrorsOnProduction(errorObject);
