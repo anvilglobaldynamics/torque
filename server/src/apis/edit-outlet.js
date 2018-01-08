@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.EditOutletApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.EditOutletApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -21,8 +23,7 @@ exports.EditOutletApi = class extends Api {
 
   _updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName }, cbfn) {
     this.database.outlet.update({ outletId }, { name, physicalAddress, phone, contactPersonName }, (err, wasUpdated) => {
-      if (err) return this.fail(err);
-      if (!wasUpdated) return this.fail(new Error('Unable to find outlet to update'));
+      if (!this._ensureUpdate(err, wasUpdated, collectionCommonMixin)) return;
       return cbfn();
     });
   }

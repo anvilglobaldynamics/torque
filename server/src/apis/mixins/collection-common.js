@@ -23,4 +23,19 @@ exports.collectionCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     return true
   }
 
+  _ensureUpdate(err, wasUpdated, collectionName) {
+    if (err) {
+      this.fail(err);
+      return false;
+    }
+    if (!wasUpdated) {
+      err = new Error(`Unable to find ${collectionName} to update`);
+      err.code = "GENERIC_UPDATE_FAILURE";
+      err.collectionName = collectionName;
+      this.fail(err);
+      return false;
+    }
+    return true
+  }
+
 }
