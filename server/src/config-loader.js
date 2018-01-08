@@ -1,8 +1,8 @@
+/* eslint no-console: 0 */
 
 let pathlib = require("path");
 let userHomeDir = require('user-home');
 let fslib = require('fs');
-let utillib = require('util');
 
 class ConfigLoader {
 
@@ -47,7 +47,7 @@ class ConfigLoader {
   }
 
   static get _defaultLocalFilePath() {
-    return "./config.json"
+    return "./config.json";
   }
 
   static get _defaultUserLevelFilePath() {
@@ -124,7 +124,7 @@ class ConfigLoader {
 
   static reportErrorAndConfig(nonFatalErrorList, _config, mode) {
     if (nonFatalErrorList.length > 0) {
-      console.log(`(config)> ${nonFatalErrorList.length} error(s) occurred during loading config. Default config will be applied.`)
+      console.log(`(config)> ${nonFatalErrorList.length} error(s) occurred during loading config. Default config will be applied.`);
       for (let nonFatalError of nonFatalErrorList) {
         console.error(nonFatalError);
       }
@@ -136,4 +136,4 @@ class ConfigLoader {
 
 }
 
-exports.ConfigLoader = ConfigLoader
+exports.ConfigLoader = ConfigLoader;

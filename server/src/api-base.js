@@ -42,7 +42,7 @@ class Api {
       let reponse = {
         requestUid: this._requestUid,
         message: data
-      }
+      };
       reponse = JSON.stringify(reponse);
       this._socket.send(reponse);
     } else {
@@ -60,7 +60,7 @@ class Api {
       if (this.requiresAuthentication) {
         schema = schema.keys({
           apiKey: Joi.string().length(64).required()
-        })
+        });
       }
       let { error, value } = this.validate(body, schema);
       if (error) {
@@ -81,7 +81,7 @@ class Api {
                 }
               });
             }
-          })
+          });
         } else {
           this.handle({ body });
         }
@@ -92,8 +92,7 @@ class Api {
   // region: interfaces (subclass needs to override these) ===========
 
   handle() {
-    this.fail(new Error("Api Not Handled"));
-    return
+    return this.fail(new Error("Api Not Handled"));
   }
 
   // region: network access ===============================
@@ -163,13 +162,13 @@ class Api {
           let organizationId = body[organizationBy];
           this.database.organization.findById({ organizationId }, (err, organization) => {
             accept({ err, organization });
-          })
+          });
         } else {
           this.__processAccessControlQuery(body, organizationBy, (err, organizationId) => {
             if (err) return accept({ err });
             this.database.organization.findById({ organizationId }, (err, organization) => {
               accept({ err, organization });
-            })
+            });
           });
         }
       }).then(({ err, organization }) => {
@@ -250,7 +249,7 @@ class Api {
     let model = {
       title,
       body
-    }
+    };
     if (errorObject && this.server.mode === 'development') {
       model.error = JSON.stringify(errorObject);
       model.error = model.error.replace(/\\n/g, '<br>');
@@ -271,7 +270,7 @@ class Api {
       code = errorObject.code;
     }
     if ('isJoi' in errorObject) {
-      code = "VALIDATION_ERROR"
+      code = "VALIDATION_ERROR";
     }
     let message = "Server error occurred. Admin has been notified.";
     if ('message' in errorObject) {
@@ -285,8 +284,8 @@ class Api {
     if (this.server.mode === 'production') {
       delete errorObject['stack'];
       if (_knownErrorCodeList.indexOf(errorObject.code) === -1) {
-        errorObject.code = 'GENERIC_SERVER_ERROR'
-        errorObject.message = 'Server error occurred. Admin has been notified.'
+        errorObject.code = 'GENERIC_SERVER_ERROR';
+        errorObject.message = 'Server error occurred. Admin has been notified.';
       }
     }
     return errorObject;

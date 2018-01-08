@@ -1,3 +1,4 @@
+/* eslint no-console: 0 */
 
 let fslib = require('fs');
 let pathlib = require('path');
@@ -17,13 +18,13 @@ class Logger {
       patchConsoleObject = false,
       dir = './temp-logs',
       format = 'json'
-    } = options
+    } = options;
 
-    let extension = 'txt'
+    let extension = 'txt';
     if (format === 'json') {
-      extension = 'json'
+      extension = 'json';
     } else if (format === 'yaml') {
-      extension = 'yaml'
+      extension = 'yaml';
     }
     let postfix = moment((new Date)).format('YYYY-MM-DD--HH.mm.ss.SSSS');
     let fileName = `log--${postfix}.${extension}`;
@@ -38,7 +39,7 @@ class Logger {
       dir,
       format,
       filePath
-    }
+    };
   }
 
   constructor(options, isMuted = false) {
@@ -88,14 +89,13 @@ class Logger {
                 throw new Error("Corrupted log");
               }
             }
-            fslib.close(fd, err => { 'pass' });
-            cbfn(null);
-            return
+            fslib.close(fd, () => null);
+            return cbfn(null);
           });
         });
       });
     } else {
-      cbfn(null);
+      return cbfn(null);
     }
   }
 
@@ -116,7 +116,7 @@ class Logger {
       unixDatetimeStamp: (new Date()).getTime(),
       type: 'log',
       data: args
-    }
+    };
     this._saveToDisk(entry);
   }
 
@@ -125,7 +125,7 @@ class Logger {
       unixDatetimeStamp: (new Date()).getTime(),
       type: 'log',
       data: args
-    }
+    };
     this._saveToDisk(entry);
     if (!this.isMuted) {
       console.log.apply(console, args);
@@ -137,7 +137,7 @@ class Logger {
       unixDatetimeStamp: (new Date()).getTime(),
       type: 'important',
       data: args
-    }
+    };
     this._saveToDisk(entry);
     if (!this.isMuted) {
       console.log.apply(console, args);
@@ -153,7 +153,7 @@ class Logger {
       unixDatetimeStamp: (new Date()).getTime(),
       type: 'info',
       data: args
-    }
+    };
     this._saveToDisk(entry);
     if (!this.isMuted) {
       console.log.apply(console, ['INFO'].concat(args));
@@ -168,7 +168,7 @@ class Logger {
       name: err.name,
       code: err.code,
       stack: err.stack
-    }
+    };
     this._saveToDisk(entry);
     if (!this.isMuted) {
       console.error(err);
@@ -177,4 +177,4 @@ class Logger {
 
 }
 
-exports.Logger = Logger
+exports.Logger = Logger;
