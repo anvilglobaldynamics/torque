@@ -187,10 +187,12 @@ class Api {
       err = new Error("Provided phone number is already in use");
       err.code = 'PHONE_ALREADY_IN_USE';
     }
+    return err;
   }
 
   failable(originalErrorObject, extraData) {
-    let errorObject = this._stringifyErrorObject(originalErrorObject);
+    let errorObject = this._translateKnownError(originalErrorObject);
+    errorObject = this._stringifyErrorObject(errorObject);
     errorObject = this._hideUnknownErrorsOnProduction(errorObject);
     this.logger.silent('error', originalErrorObject);
     this.logger.silent('error-response', errorObject);
