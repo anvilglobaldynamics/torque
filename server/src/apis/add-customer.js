@@ -18,6 +18,15 @@ exports.AddCustomerApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_MODIFY_CUSTOMER"
+      ]
+    }];
+  }
+
   _createCustomer({ organizationId, fullName, phone, openingBalance }, cbfn) {
     let customer = {
       organizationId, fullName, phone, openingBalance

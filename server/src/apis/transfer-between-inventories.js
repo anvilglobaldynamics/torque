@@ -23,6 +23,27 @@ exports.TransferBetweenInventoriesApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [
+      {
+        organizationBy: {
+          from: "inventory",
+          query: ({ fromInventoryId }) => ({ id: fromInventoryId }),
+          select: "organizationId"
+        },
+        privileges: ["PRIV_TRANSFER_ALL_INVENTORIES"]
+      },
+      {
+        organizationBy: {
+          from: "inventory",
+          query: ({ toInventoryId }) => ({ id: toInventoryId }),
+          select: "organizationId"
+        },
+        privileges: ["PRIV_TRANSFER_ALL_INVENTORIES"]
+      }
+    ];
+  }
+
   _getInventoriesWithId(fromInventoryId, toInventoryId, cbfn) {
     this.database.inventory.findById({ inventoryId: fromInventoryId }, (err, inventory) => {
       if (err) return this.fail(err);

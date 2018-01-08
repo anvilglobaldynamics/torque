@@ -175,6 +175,10 @@ exports.EmploymentCollection = class extends Collection {
     })
   }
 
+  getEmploymentOfUserInOrganization({ userId, organizationId }, cbfn) {
+    this._findOne({ userId, organizationId }, cbfn);
+  }
+
   getEmploymentsOfUser({ userId }, cbfn) {
     this._find({ userId }, cbfn);
   }

@@ -56,4 +56,8 @@ exports.OrganizationCollection = class extends Collection {
     this._find({ id: { $in: idList } }, cbfn);
   }
 
+  findById({ organizationId }, cbfn) {
+    this._findOne({ id: organizationId, isDeleted: false }, cbfn);
+  }
+
 }

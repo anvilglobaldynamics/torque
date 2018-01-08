@@ -18,6 +18,19 @@ exports.EditCustomerApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "customer",
+        query: ({ customerId }) => ({ id: customerId }),
+        select: "organizationId"
+      },
+      privileges: [
+        "PRIV_MODIFY_CUSTOMER"
+      ]
+    }];
+  }
+
   _updateCustomer({ customerId, fullName, phone }, cbfn) {
     this.database.customer.update({ customerId }, { fullName, phone }, (err) => {
       if (err) return this.fail(err);
