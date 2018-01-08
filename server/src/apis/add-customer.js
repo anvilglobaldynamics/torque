@@ -7,6 +7,15 @@ exports.AddCustomerApi = class extends Api {
 
   get requiresAuthentication() { return true; }
 
+  get accessControl(){
+    return {
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_MODIFY_CUSTOMER"
+      ]
+    }
+  }
+
   get requestSchema() {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),

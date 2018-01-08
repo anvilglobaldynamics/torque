@@ -30,6 +30,11 @@ class Api {
     return false;
   }
 
+  // NOTE: See `_enforceAccessControl` for details.
+  get accessControl() {
+    return null;
+  }
+
   // region: internals ==========
 
   _sendResponse(data) {
@@ -68,7 +73,13 @@ class Api {
             if (err) {
               this.fail(err);
             } else {
-              this.handle({ userId, body, apiKey });
+              this._enforceAccessControl(userId, body, (err) => {
+                if (err) {
+                  this.fail(err);
+                } else {
+                  this.handle({ userId, body, apiKey });
+                }
+              });
             }
           })
         } else {
@@ -128,6 +139,85 @@ class Api {
       cbfn(null, session.userId);
     });
 
+  }
+
+  /*
+    enforces Access Control Rules. Rules are specified using the accessControl property. Format - 
+    {
+      privileges: [ ...list of privileges ]
+      organizationBy: "keyName" or <function>
+      guards: [<function>]
+    }
+
+    NOTES: 
+      1. accessControl is only enforcible if both autoValidates and requiresAuthentication
+         is true.
+      2. do not specify accessControl if it is not required. Alternatively, you can return
+         null or an empty object.
+      3. if you do not specify "organizationBy" then your "privileges" array can not be 
+         verified.
+      4. If "organizationBy" is a string, that value is used to extract organizationId from
+         request body.
+      5. If "organizationBy" is a function, that function is called with (userId, body, (err, organization)=> ..)
+         and is expected to return the organization as callback. The execution context is always the api.
+      6. guards is an array of functions. the functions are called with (userId, body, (err)=> ..) and are expected
+         to return an err via callback if they fail. The execution context is always the api.
+  */
+  _enforceAccessControl(userId, body, cbfn) {
+    let rules = this.accessControl;
+    if (!rules) return cbfn();
+    let promise1 = new Promise((accept, reject) => {
+      if (!('organizationBy' in rules)) return accept();
+      let { privileges = [], organizationBy } = rules;
+      new Promise((accept, reject) => {
+        if (typeof (organizationBy) === "function") {
+          organizationBy.call(this, userId, body, (err, organization) => {
+            accept({ err, organization });
+          });
+        } else {
+          let organizationId = body[organizationBy];
+          this.database.organization.findById({ organizationId }, (err, organization) => {
+            accept({ err, organization });
+          })
+        }
+      }).then(({ err, organization }) => {
+        if (err) return reject(err);
+        if (!organization) {
+          err = new Error("Organization could not be found during access control.");
+          err.code = "ACCESS_CONTROL_INVALID_ORGANIZATION";
+          return reject(err);
+        }
+        let organizationId = organization.id;
+        this.database.employment.getEmploymentOfUserInOrganization({ userId, organizationId }, (err, employment) => {
+          if (err) return reject(err);
+          if (!employment) {
+            err = new Error("User does not belong to organization.");
+            err.code = "USER_NOT_EMPLOYED_BY_ORGANIZATION";
+            return reject(err);
+          }
+          let unmetPrivileges = [];
+          privileges.forEach((privilege) => {
+            if (!employment.privileges[privilege]) {
+              unmetPrivileges.push(privilege);
+            }
+          });
+          if (unmetPrivileges.length > 0) {
+            let message = "Unmet privileges. This action requires the following privileges - ";
+            message += unmetPrivileges.join(', ') + ".";
+            err = new Error(message);
+            err.code = "ACCESS_CONTROL_UNMET_PRIVILEGES";
+            err.privileges = unmetPrivileges;
+            return reject(err);
+          }
+          return accept();
+        });
+      });
+    });
+    promise1.then(() => {
+      cbfn(null);
+    }).catch((err) => {
+      cbfn(err);
+    })
   }
 
   // region: template rendering ==========================
