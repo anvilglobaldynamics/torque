@@ -9,4 +9,18 @@ exports.collectionCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     });
   }
 
+  _ensureDoc(err, doc, errorCode, errorMessage) {
+    if (err) {
+      this.fail(err);
+      return false;
+    }
+    if (!doc) {
+      err = new Error(errorMessage);
+      err.code = errorCode;
+      this.fail(err);
+      return false;
+    }
+    return true
+  }
+
 }

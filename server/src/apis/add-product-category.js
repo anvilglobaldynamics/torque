@@ -2,7 +2,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.AddProductCategoryApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.AddProductCategoryApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -48,12 +50,7 @@ exports.AddProductCategoryApi = class extends Api {
       this._createProductCategory(productCategory, cbfn);
     } else {
       this.database.productCategory.findById({ productCategoryId: parentProductCategoryId }, (err, parentProductCategory) => {
-        if (err) return this.fail(err);
-        if (parentProductCategory === null) {
-          err = new Error("parent product category not found");
-          err.code = "PARENT_PRODUCT_CATEGORY_INVALID";
-          return this.fail(err);
-        }
+        if (!this._ensureDoc(err, parentProductCategory, "PARENT_PRODUCT_CATEGORY_INVALID", "parent product category not found")) return;
         this._createProductCategory(productCategory, cbfn);
       })
     }
