@@ -18,16 +18,16 @@ exports.EditCustomerApi = class extends Api {
     });
   }
 
-  _editCustomer({ customerId, fullName, phone }, cbfn) {
+  _updateCustomer({ customerId, fullName, phone }, cbfn) {
     this.database.customer.update({ customerId }, { fullName, phone }, (err) => {
       if (err) return this.fail(err);
-      return cbfn()
+      return cbfn();
     });
   }
 
   handle({ body }) {
     let { customerId, fullName, phone } = body;
-    this._editCustomer({ customerId, fullName, phone }, () => {
+    this._updateCustomer({ customerId, fullName, phone }, () => {
       this.success({ status: "success" });
     });
   }

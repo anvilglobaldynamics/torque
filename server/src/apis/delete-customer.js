@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.DeleteCustomerApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.DeleteCustomerApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -10,21 +12,17 @@ exports.DeleteCustomerApi = class extends Api {
   get requestSchema() {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),
-
       customerId: Joi.number().max(999999999999999).required(),
     });
   }
 
-  _editCustomer({ customerId }, cbfn) {
-    this.database.customer.delete({ customerId }, (err) => {
-      if (err) return this.fail(err);
-      return cbfn()
-    });
+  _deleteCustomer({ customerId }, cbfn) {
+    this._deleteDocById(this.database.customer, { customerId }, cbfn);
   }
 
   handle({ body }) {
     let { customerId } = body;
-    this._editCustomer({ customerId }, () => {
+    this._deleteCustomer({ customerId }, () => {
       this.success({ status: "success" });
     });
   }

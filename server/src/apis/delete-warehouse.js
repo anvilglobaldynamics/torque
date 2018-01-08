@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.DeleteWarehouseApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.DeleteWarehouseApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -15,11 +17,7 @@ exports.DeleteWarehouseApi = class extends Api {
   }
 
   _deleteWarehouse({ warehouseId }, cbfn) {
-    this.database.warehouse.delete({ warehouseId }, (err, wasUpdated) => {
-      if (err) return this.fail(err);
-      if (!wasUpdated) return this.fail(new Error('Unable to find warehouse to update'));
-      return cbfn();
-    });
+    this._deleteDocById(this.database.warehouse, { warehouseId }, cbfn);
   }
 
   handle({ body, userId }) {

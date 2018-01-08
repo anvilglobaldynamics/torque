@@ -18,28 +18,22 @@ exports.AddOrganizationApi = class extends Api {
     });
   }
 
-  _createOrganization({ name, primaryBusinessAddress, phone, email }, cbfn) {
+  _computeDefaultLisenceExpirationDate() {
+    let date = (new Date);
     // NOTE: Because all new organizations get 1 day of free access
-    let date = (new Date)
     date.setHours((date.getHours() + 24));
-    let licenceExpiresOnDatetimeStamp = date.getTime();
+    return date.getTime();
+  }
+
+  _createOrganization({ name, primaryBusinessAddress, phone, email }, cbfn) {
+    let licenceExpiresOnDatetimeStamp = this._computeDefaultLisenceExpirationDate();
 
     let organization = {
       name, primaryBusinessAddress, phone, email,
       licenceExpiresOnDatetimeStamp
     }
     this.database.organization.create(organization, (err, organizationId) => {
-      if (err) {
-        if ('code' in err && err.code === 'DUPLICATE_email') {
-          err = new Error("Provided email address is already in use");
-          err.code = 'EMAIL_ALREADY_IN_USE';
-        }
-        if ('code' in err && err.code === 'DUPLICATE_phone') {
-          err = new Error("Provided phone number is already in use");
-          err.code = 'PHONE_ALREADY_IN_USE';
-        }
-        return this.fail(err);
-      }
+      if (err) return this.fail(err);
       return cbfn(organizationId);
     });
   }
@@ -54,7 +48,7 @@ exports.AddOrganizationApi = class extends Api {
   handle({ body, userId }) {
     let { name, primaryBusinessAddress, phone, email } = body;
     this._createOrganization({ name, primaryBusinessAddress, phone, email }, (organizationId) => {
-      this._setUserAsOwner({ userId, organizationId }, _ => {
+      this._setUserAsOwner({ userId, organizationId }, () => {
         this.success({ status: "success", organizationId });
       });
     });

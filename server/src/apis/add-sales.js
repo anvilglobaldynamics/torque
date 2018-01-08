@@ -39,6 +39,7 @@ exports.AddSalesApi = class extends Api {
     });
   }
 
+  // FIXME: use inventoryCommonMixin
   _getOutletDefaultInventory(outletId, cbfn) {
     this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
       if (err) return this.fail(err);
@@ -55,6 +56,7 @@ exports.AddSalesApi = class extends Api {
     })
   }
 
+  // FIXME: move to customerCommonMixin
   _getCustomer(customerId, cbfn) {
     this.database.customer.findById({ customerId }, (err, customer) => {
       if (err) return this.fail(err);
@@ -106,6 +108,7 @@ exports.AddSalesApi = class extends Api {
     });
   }
 
+  // FIXME: Move to inventoryCommonMixin
   _updateInventory(outletDefaultInventory, cbfn) {
     let inventoryId = outletDefaultInventory.id;
     let productList = outletDefaultInventory.productList;

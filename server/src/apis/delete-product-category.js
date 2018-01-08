@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.DeleteProductCategoryApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.DeleteProductCategoryApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -27,11 +29,7 @@ exports.DeleteProductCategoryApi = class extends Api {
   }
 
   _deleteProductCategory({ productCategoryId }, cbfn) {
-    this.database.productCategory.delete({ productCategoryId }, (err, wasUpdated) => {
-      if (err) return this.fail(err);
-      if (!wasUpdated) return this.fail(new Error('Unable to find product category to update'));
-      return cbfn();
-    });
+    this._deleteDocById(this.database.productCategory, { productCategoryId }, cbfn);
   }
 
   handle({ body, userId }) {
