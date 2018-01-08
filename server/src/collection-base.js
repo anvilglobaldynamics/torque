@@ -113,15 +113,16 @@ class Collection {
     });
   }
 
-  // FIXME: Inspect
   __updateOneSafe(query, modifications, cbfn) {
     this.database.findOne(this.collectionName, query, (err, originalDoc) => {
       if (err) return cbfn(err);
+      if (!originalDoc) return cbfn(null, false);
       this.database.updateOne(this.collectionName, query, modifications, (err, wasSuccessful) => {
         if (err) return cbfn(err);
         if (!wasSuccessful) return cbfn(null, false);
-        this.database.findOne(this.collectionName, query, (err, updatedDoc) => {
+        this.database.findByEmbeddedId(this.collectionName, originalDoc._id, (err, updatedDoc) => {
           if (err) return cbfn(err);
+          if (!updatedDoc) return cbfn(null, false);
           this.__validateAgainstSchema(this.updatedDoc, (err) => {
             if (err) {
               this.database.replaceOne(this.collectionName, { id: originalDoc.id }, originalDoc, (err, wasUpdated) => {
@@ -160,8 +161,8 @@ class Collection {
   }
 
   _update(query, modifications, cbfn) {
-    // return this.__updateOneSafe(query, modifications, cbfn);
-    return this.database.updateOne(this.collectionName, query, modifications, cbfn);
+    return this.__updateOneSafe(query, modifications, cbfn);
+    // return this.database.updateOne(this.collectionName, query, modifications, cbfn);
   }
 
   _delete(query, cbfn) {

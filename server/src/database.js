@@ -3,7 +3,8 @@ let { asyncIf } = require('baselib');
 
 const Joi = require('joi');
 
-MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectID;
 
 let make = (array, count) => {
   while (array.length < count) {
@@ -139,6 +140,10 @@ class Database {
       if (err) return cbfn(err);
       return cbfn(null, results.deletedCount);
     });
+  }
+
+  findByEmbeddedId(collectionName, _id, cbfn) {
+    this.findOne(collectionName, { _id: ObjectId(_id) }, cbfn);
   }
 
   // utils:
