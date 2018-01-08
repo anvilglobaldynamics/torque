@@ -218,7 +218,6 @@ class Api {
       {
         privileges: [ ...list of privileges ]
         organizationBy: "keyName" or <function> or <object>
-        guards: [<function>]
       }
     ]
 
@@ -233,8 +232,6 @@ class Api {
          request body.
       5. If "organizationBy" is a function, that function is called with (userId, body, (err, organization)=> ..)
          and is expected to return the organization as callback. The execution context is always the api.
-      6. guards is an array of functions. the functions are called with (userId, body, (err)=> ..) and are expected
-         to return an err via callback if they fail. The execution context is always the api.
   */
   _enforceAccessControl(userId, body, cbfn) {
     let rules = this.accessControl;
