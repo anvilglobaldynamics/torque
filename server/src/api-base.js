@@ -150,8 +150,8 @@ class Api {
     });
   }
 
-  __processAccessControlRule(userId, body, rule, cbfn) {
-    let promise1 = new Promise((accept, reject) => {
+  __processAccessControlRule(userId, body, rule) {
+    return new Promise((accept, reject) => {
       if (!('organizationBy' in rule)) return accept();
       let { privileges = [], organizationBy } = rule;
       new Promise((accept, reject) => {
@@ -205,11 +205,6 @@ class Api {
         });
       });
     });
-    promise1.then(() => {
-      cbfn(null);
-    }).catch((err) => {
-      cbfn(err);
-    })
   }
 
   /*
@@ -232,20 +227,21 @@ class Api {
          request body.
       5. If "organizationBy" is a function, that function is called with (userId, body, (err, organization)=> ..)
          and is expected to return the organization as callback. The execution context is always the api.
+      6. If "organizationBy" is an object, that object has the following properties - 
+         "from" - name of the mongodb collection (IN HYPHENATED FROM)
+         "query" - a function that received the request body as parameter and returns a query
+         "select" - the value to select to be used as "organizationId"
   */
   _enforceAccessControl(userId, body, cbfn) {
     let rules = this.accessControl;
     if (!rules) return cbfn();
-    Promise.all(rules.map((rule) => new Promise((accept, reject) => {
-      this.__processAccessControlRule(userId, body, rule, (err) => {
-        if (err) return reject(err);
-        return accept();
+    Promise.all(rules.map((rule) => this.__processAccessControlRule(userId, body, rule)))
+      .then(() => {
+        cbfn();
       })
-    }))).then(() => {
-      cbfn();
-    }).catch(err => {
-      cbfn(err);
-    });
+      .catch(err => {
+        cbfn(err);
+      });
   }
 
   // region: template rendering ==========================
