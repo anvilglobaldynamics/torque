@@ -1,7 +1,9 @@
 
 let _knownErrorCodeList = [];
 
-let Joi = require('joi');
+const Joi = require('joi');
+const Entities = require('html-entities').XmlEntities;
+const entities = new Entities();
 
 class Api {
 
@@ -66,7 +68,7 @@ class Api {
       if (error) {
         this.fail(error, error);
       } else {
-        body = value;
+        body = this.sanitize(value);
         if (this.requiresAuthentication) {
           let { apiKey } = body;
           this.authenticate(body, (err, userId) => {
@@ -102,10 +104,6 @@ class Api {
     this._sendResponse({ hasError: true, error: errorObject });
   }
 
-  validate(object, schema) {
-    return Joi.validate(object, schema);
-  }
-
   success(object = {}) {
     object.hasError = false;
     this._sendResponse(object);
@@ -116,6 +114,33 @@ class Api {
       return this._request.params;
     }
     return {};
+  }
+
+  // region: security ==========================
+
+  validate(object, schema) {
+    return Joi.validate(object, schema, {
+      abortEarly: true,
+      convert: true,
+      allowUnknown: false
+    });
+  }
+
+  sanitize(object) {
+    if (typeof (object) === "string") return entities.encode(object);
+    if (typeof (object) === "object" && object !== null) {
+      if (Array.isArray(object)) {
+        for (let i = 0; i < object.length; i++) {
+          object[i] = this.sanitize(object[i]);
+        }
+      } else {
+        let keys = Object.keys(object);
+        for (let i = 0; i < keys.length; i++) {
+          object[keys[i]] = this.sanitize(object[keys[i]]);
+        }
+      }
+    }
+    return object;
   }
 
   // region: access control ==========================
