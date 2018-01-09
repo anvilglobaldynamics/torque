@@ -72,22 +72,23 @@ class ConfigLoader {
     } catch (error) {
       return [error];
     }
-    // TODO: Further validation
-    return [null, config];
+    let error;
+    ({ error, config }) = Joi.validate(config, this._configSchema);
+    return [(error || null), config];
   }
 
-  static _assimilateConfig(primary, secondary) {
-    for (let key in secondary) {
-      if (secondary.hasOwnProperty(key)) {
-        if (!(key in primary)) {
-          primary[key] = secondary[key];
+  static _assimilateConfig(to, from) {
+    for (let key in from) {
+      if (from.hasOwnProperty(key)) {
+        if (!(key in to)) {
+          to[key] = from[key];
         }
-        if (typeof (primary[key]) === 'object' && typeof (secondary[key]) === 'object' && !Array.isArray(primary[key])) {
-          this._assimilateConfig(primary[key], secondary[key]);
+        if (typeof (to[key]) === 'object' && typeof (from[key]) === 'object' && !Array.isArray(to[key])) {
+          this._assimilateConfig(to[key], from[key]);
         }
       }
     }
-    return primary;
+    return to;
   }
 
   static getComputedConfig(cbfn) {
