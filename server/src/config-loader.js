@@ -6,46 +6,6 @@ let fslib = require('fs');
 
 class ConfigLoader {
 
-  static get _defaultConfig() {
-    return {
-      "branding": {
-        "name": "Torque",
-        "serverUrl": "http://localhost:8540",
-        "clientUrl": "http://localhost:8545",
-        "author": "Torque Team",
-        "supportPhone": "017XXXXXXXX",
-        "supportEmail": "support@mg.torque.live"
-      },
-      "baseName": "torque-server",
-      "port": 8540,
-      "websocketPort": 8541,
-      "hostname": "localhost",
-      "log": {
-        "logStandardOutputToFile": true,
-        "logErrorOutputToFile": true,
-        "logStandardOutputToConsole": true,
-        "logErrorOutputToConsole": true,
-        "patchConsoleObject": true,
-        "dir": "./logs",
-        "format": "json"
-      },
-      "db": {
-        "path": "mongodb://localhost:27017/torque"
-      },
-      "email": {
-        "enabled": true,
-        "publicKey": "pubkey-00000000000000000000000000000",
-        "privateKey": "key-00000000000000000000000000000",
-        "domain": "mg.torque.live",
-        "from": "Torque Team <postmaster@mg.torque.live>"
-      },
-      "sms": {
-        "enabled": true,
-        "from": "TORQUE TEAM"
-      }
-    };
-  }
-
   static get _defaultLocalFilePath() {
     return "./config.json";
   }
