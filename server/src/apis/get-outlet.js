@@ -15,6 +15,19 @@ exports.GetOutletApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "outlet",
+        query: ({ customerId }) => ({ id: outletId }),
+        select: "organizationId"
+      },
+      privileges: [
+        "PRIV_VIEW_ALL_OUTLETS"
+      ]
+    }];
+  }
+
   _getOutlet(outletId, cbfn) {
     this.database.outlet.findById({ outletId }, (err, outlet) => {
       if (err) return this.fail(err);

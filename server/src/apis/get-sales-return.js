@@ -15,6 +15,8 @@ exports.GetSalesReturnApi = class extends Api {
     });
   }
 
+  // TODO: accessControl()
+
   _getSalesReturn({ salesReturnId }, cbfn) {
     this.database.salesReturn.findById({ salesReturnId }, (err, salesReturn) => {
       if (err) return this.fail(err);

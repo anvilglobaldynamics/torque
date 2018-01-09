@@ -21,6 +21,19 @@ exports.EditOutletApi = class extends collectionCommonMixin(Api) {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "outlet",
+        query: ({ customerId }) => ({ id: outletId }),
+        select: "organizationId"
+      },
+      privileges: [
+        "PRIV_MODIFY_ALL_OUTLETS"
+      ]
+    }];
+  }
+
   _updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName }, cbfn) {
     this.database.outlet.update({ outletId }, { name, physicalAddress, phone, contactPersonName }, (err, wasUpdated) => {
       if (!this._ensureUpdate(err, wasUpdated, collectionCommonMixin)) return;

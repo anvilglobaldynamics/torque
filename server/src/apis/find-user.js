@@ -18,6 +18,8 @@ exports.FindUserApi = class extends Api {
     });
   }
 
+  // TODO: accessControl()
+
   _findUser({ emailOrPhone }, cbfn) {
     this.database.user.findByEmailOrPhone({ emailOrPhone }, (err, user) => {
       if (err) return this.fail(err);

@@ -39,6 +39,8 @@ exports.AddSalesApi = class extends Api {
     });
   }
 
+  // TODO: accessControl()
+
   // FIXME: use inventoryCommonMixin
   _getOutletDefaultInventory(outletId, cbfn) {
     this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {

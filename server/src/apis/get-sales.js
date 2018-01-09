@@ -15,6 +15,8 @@ exports.GetSalesApi = class extends Api {
     });
   }
 
+  // TODO: accessControl()
+
   _getSales({ salesId }, cbfn) {
     this.database.sales.findById({ salesId }, (err, sales) => {
       if (err) return this.fail(err);

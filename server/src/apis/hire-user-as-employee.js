@@ -54,6 +54,15 @@ exports.HireUserAsEmployeeApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_MODIFY_USERS"
+      ]
+    }];
+  }
+
   _findUser({ userId }, cbfn) {
     this.database.user.findById({ userId }, (err, user) => {
       if (err) return this.fail(err);

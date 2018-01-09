@@ -14,6 +14,15 @@ exports.GetCustomerSummaryListApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_VIEW_CUSTOMER"
+      ]
+    }];
+  }
+
   _getCustomerSummaryList({ organizationId }, cbfn) {
     this.database.customer.listByOrganizationId({ organizationId }, (err, customerList) => {
       if (err) return this.fail(err);

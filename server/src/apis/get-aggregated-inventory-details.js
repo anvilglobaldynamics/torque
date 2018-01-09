@@ -15,6 +15,19 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "inventory",
+        query: ({ customerId }) => ({ id: inventoryId }),
+        select: "organizationId"
+      },
+      privileges: [
+        "PRIV_VIEW_ALL_INVENTORIES"
+      ]
+    }];
+  }
+
   _getProductList(inventoryId, cbfn) {
     this.database.inventory.findById({ inventoryId }, (err, inventory) => {
       if (err) return this.fail(err);

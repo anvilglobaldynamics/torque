@@ -15,6 +15,15 @@ exports.GetOutletListApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_VIEW_ALL_OUTLETS"
+      ]
+    }];
+  }
+
   _getOutletList(organizationId, cbfn) {
     this.database.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {
       if (err) return this.fail(err);

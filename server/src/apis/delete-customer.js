@@ -16,6 +16,19 @@ exports.DeleteCustomerApi = class extends collectionCommonMixin(Api) {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "customer",
+        query: ({ customerId }) => ({ id: customerId }),
+        select: "organizationId"
+      },
+      privileges: [
+        "PRIV_MODIFY_CUSTOMER"
+      ]
+    }];
+  }
+
   _deleteCustomer({ customerId }, cbfn) {
     this._deleteDocById(this.database.customer, { customerId }, cbfn);
   }

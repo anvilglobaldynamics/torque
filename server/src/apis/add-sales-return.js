@@ -23,6 +23,8 @@ exports.AddSalesReturnApi = class extends Api {
     });
   }
 
+  // TODO: accessControl()
+
   // FIXME: move to salesCommonMixin
   _getSales({ salesId }, cbfn) {
     this.database.sales.findById({ salesId }, (err, sales) => {

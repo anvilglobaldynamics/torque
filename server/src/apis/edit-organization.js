@@ -20,6 +20,15 @@ exports.EditOrganizationApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_MODIFY_ORGANIZATION"
+      ]
+    }];
+  }
+
   _updateOrganization({ organizationId, name, primaryBusinessAddress, phone, email }, cbfn) {
     this.database.organization.update({ organizationId }, { name, primaryBusinessAddress, phone, email }, (err, wasUpdated) => {
       if (err) return this.fail(err);

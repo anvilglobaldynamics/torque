@@ -18,6 +18,19 @@ exports.AdjustCustomerBalanceApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "customer",
+        query: ({ customerId }) => ({ id: customerId }),
+        select: "organizationId"
+      },
+      privileges: [
+        "PRIV_MANAGE_CUSTOMER_DEBT"
+      ]
+    }];
+  }
+
   // FIXME: move to customerCommonMixin
   _getCustomer({ customerId }, cbfn) {
     this.database.customer.findById({ customerId }, (err, customer) => {

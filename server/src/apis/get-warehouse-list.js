@@ -15,6 +15,15 @@ exports.GetWarehouseListApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_VIEW_ALL_WAREHOUSES"
+      ]
+    }];
+  }
+
   _getWarehouseList(organizationId, cbfn) {
     this.database.warehouse.listByOrganizationId({ organizationId }, (err, warehouseList) => {
       if (err) return this.fail(err);

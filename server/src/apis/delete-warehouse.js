@@ -16,6 +16,19 @@ exports.DeleteWarehouseApi = class extends collectionCommonMixin(Api) {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "warehouse",
+        query: ({ customerId }) => ({ id: warehouseId }),
+        select: "organizationId"
+      },
+      privileges: [
+        "PRIV_MODIFY_ALL_WAREHOUSES"
+      ]
+    }];
+  }
+
   _deleteWarehouse({ warehouseId }, cbfn) {
     this._deleteDocById(this.database.warehouse, { warehouseId }, cbfn);
   }

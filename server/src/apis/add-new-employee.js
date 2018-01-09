@@ -60,6 +60,15 @@ exports.AddNewEmployeeApi = class extends userCommonMixin(Api) {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_ADD_USER"
+      ]
+    }];
+  }
+
   _hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, cbfn) {
     this.database.employment.hireExistingUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (err, employmentId) => {
       return cbfn(employmentId);

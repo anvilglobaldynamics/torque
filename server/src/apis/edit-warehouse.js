@@ -19,6 +19,19 @@ exports.EditWarehouseApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "warehouse",
+        query: ({ customerId }) => ({ id: warehouseId }),
+        select: "organizationId"
+      },
+      privileges: [
+        "PRIV_MODIFY_ALL_WAREHOUSES"
+      ]
+    }];
+  }
+
   _updateWarehouse({ warehouseId, name, physicalAddress, phone, contactPersonName }, cbfn) {
     this.database.warehouse.update({ warehouseId }, { name, physicalAddress, phone, contactPersonName }, (err, wasUpdated) => {
       if (err) return this.fail(err);

@@ -16,6 +16,19 @@ exports.DeleteOutletApi = class extends collectionCommonMixin(Api) {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "outlet",
+        query: ({ customerId }) => ({ id: outletId }),
+        select: "organizationId"
+      },
+      privileges: [
+        "PRIV_MODIFY_ALL_OUTLETS"
+      ]
+    }];
+  }
+
   _deleteOutlet({ outletId }, cbfn) {
     this._deleteDocById(this.database.outlet, { outletId }, cbfn);
   }

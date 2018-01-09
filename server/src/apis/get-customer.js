@@ -15,6 +15,19 @@ exports.GetCustomerApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "customer",
+        query: ({ customerId }) => ({ id: customerId }),
+        select: "organizationId"
+      },
+      privileges: [
+        "PRIV_VIEW_CUSTOMER"
+      ]
+    }];
+  }
+
   _getCustomer({ customerId }, cbfn) {
     this.database.customer.findById({ customerId }, (err, customer) => {
       if (err) return this.fail(err);

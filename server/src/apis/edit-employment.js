@@ -54,6 +54,20 @@ exports.EditEmploymentApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "employment",
+        query: ({ customerId }) => ({ id: employmentId }),
+        select: "organizationId"
+      },
+      privileges: [
+        "PRIV_MODIFY_USERS",
+        "PRIV_MODIFY_USER_PRIVILEGES"
+      ]
+    }];
+  }
+
   _updateEmployment({ employmentId, isActive, role, designation, companyProvidedId, privileges }, cbfn) {
     this.database.employment.update({ employmentId }, { isActive, role, designation, companyProvidedId, privileges }, (err, wasUpdated) => {
       if (err) return this.fail(err);

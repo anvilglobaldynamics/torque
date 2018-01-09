@@ -15,6 +15,15 @@ exports.GetDashboardSummaryApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_VIEW_ORGANIZATION_STATISTICS"
+      ]
+    }];
+  }
+
   _getSalesList({ organizationId, fromDate, toDate }, cbfn) {
     let outletId, customerId, shouldFilterByOutlet = false, shouldFilterByCustomer = false;
     this.database.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {

@@ -24,6 +24,19 @@ exports.AddProductToInventoryApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "inventory",
+        query: ({ inventoryId }) => ({ id: inventoryId }),
+        select: "organizationId"
+      },
+      privileges: [
+        "PRIV_MODIFY_ALL_INVENTORIES"
+      ]
+    }];
+  }
+
   _addProductToInventory({ inventoryId, productList }, cbfn) {
     Promise.all(productList.map(product => {
       return new Promise((accept, reject) => {
