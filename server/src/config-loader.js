@@ -77,20 +77,6 @@ class ConfigLoader {
     return [(error || null), config];
   }
 
-  static _assimilateConfig(to, from) {
-    for (let key in from) {
-      if (from.hasOwnProperty(key)) {
-        if (!(key in to)) {
-          to[key] = from[key];
-        }
-        if (typeof (to[key]) === 'object' && typeof (from[key]) === 'object' && !Array.isArray(to[key])) {
-          this._assimilateConfig(to[key], from[key]);
-        }
-      }
-    }
-    return to;
-  }
-
   static getComputedConfig(cbfn) {
     let config = {};
     let nonFatalErrorList = [];
