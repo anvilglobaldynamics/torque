@@ -1,3 +1,5 @@
+/* global it, describe */
+
 let expect = require('chai').expect;
 
 let { callApi } = require('./utils');
@@ -18,7 +20,7 @@ const phone = rnd(prefix, 11);
 const password = "123545678";
 const fullName = "Test User";
 
-const orgEmail = 'o' + `${rnd(prefix)}@gmail.com`;
+const orgEmail = `o${rnd(prefix)}@gmail.com`;
 const orgName = "Test Organization";
 const orgBusinessAddress = "My Address";
 const orgPhone = 'o' + rnd(prefix, 11);
@@ -69,7 +71,7 @@ describe('dashboard', _ => {
       expect(body.metrics).to.have.property('totalAmountSoldThisMonth');
 
       testDoneFn();
-    })
+    });
 
   });
 
@@ -86,7 +88,7 @@ describe('dashboard', _ => {
       expect(body.error).to.have.property('code').that.equals('ORGANIZATION_INVALID');
 
       testDoneFn();
-    })
+    });
 
   });
 
