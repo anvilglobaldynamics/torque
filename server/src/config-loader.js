@@ -6,6 +6,46 @@ let fslib = require('fs');
 
 class ConfigLoader {
 
+  static get _configSchema() {
+    return Joi.object().keys({
+      branding: Joi.object().keys({
+        name: Joi.string().max(1024).required(),
+        serverUrl: Joi.string().max(1024).required(),
+        clientUrl: Joi.string().max(1024).required(),
+        author: Joi.string().max(1024).required(),
+        supportPhone: Joi.string().max(1024).required(),
+        supportEmail: Joi.string().max(1024).required(),
+      }),
+      baseName: Joi.string().max(1024).required(),
+      hostname: Joi.string().max(1024).required(),
+      port: Joi.number().max(65535).required(),
+      websocketPort: Joi.number().max(65535).required(),
+      log: Joi.object().keys({
+        logStandardOutputToFile: Joi.boolean().required(),
+        logErrorOutputToFile: Joi.boolean().required(),
+        logStandardOutputToConsole: Joi.boolean().required(),
+        logErrorOutputToConsole: Joi.boolean().required(),
+        patchConsoleObject: Joi.boolean().required(),
+        dir: Joi.string().max(1024).required(),
+        format: Joi.string().max(1024).required(),
+      }),
+      db: Joi.object().keys({
+        path: Joi.boolean().required(),
+      }),
+      email: Joi.object().keys({
+        enabled: Joi.boolean().required(),
+        publicKey: Joi.string().max(1024).required(),
+        privateKey: Joi.string().max(1024).required(),
+        domain: Joi.string().max(1024).required(),
+        from: Joi.string().max(1024).required(),
+      }),
+      sms: Joi.object().keys({
+        enabled: Joi.boolean().required(),
+        from: Joi.string().max(1024).required(),
+      })
+    });
+  }
+
   static get _defaultLocalFilePath() {
     return "./config.json";
   }
