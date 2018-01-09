@@ -12,9 +12,9 @@ class Server {
   constructor(config, mode) {
     this.mode = mode;
     this.config = config;
-    this._hostname = config.hostname;
-    this._port = config.port;
-    this._websocketPort = config.websocketPort;
+    this._hostname = config.server.hostname;
+    this._port = config.server.port;
+    this._websocketPort = config.server.websocketPort;
     this._expressApp = express();
   }
 

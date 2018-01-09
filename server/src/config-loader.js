@@ -10,6 +10,7 @@ class ConfigLoader {
 
   static get _configSchema() {
     return Joi.object().keys({
+      baseName: Joi.string().max(1024).required(),
       branding: Joi.object().keys({
         name: Joi.string().max(1024).required(),
         serverUrl: Joi.string().max(1024).required(),
@@ -18,10 +19,11 @@ class ConfigLoader {
         supportPhone: Joi.string().max(1024).required(),
         supportEmail: Joi.string().max(1024).required(),
       }),
-      baseName: Joi.string().max(1024).required(),
-      hostname: Joi.string().max(1024).required(),
-      port: Joi.number().max(65535).required(),
-      websocketPort: Joi.number().max(65535).required(),
+      server: Joi.object().keys({
+        hostname: Joi.string().max(1024).required(),
+        port: Joi.number().max(65535).required(),
+        websocketPort: Joi.number().max(65535).required(),
+      }),
       log: Joi.object().keys({
         logStandardOutputToFile: Joi.boolean().required(),
         logErrorOutputToFile: Joi.boolean().required(),
@@ -91,7 +93,7 @@ class ConfigLoader {
       [err, config] = this._validateConfig(config);
       if (err) return cbfn(err);
       if (mode !== 'production' && !isMuted) {
-        console.log('(config)> Final config:\n', JSON.stringify(config, null, 2));
+        console.log('(config)> Final config:\n' + JSON.stringify(config, null, 2));
       }
       return cbfn(null, config);
     });

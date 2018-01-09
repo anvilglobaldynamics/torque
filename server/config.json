@@ -1,4 +1,5 @@
 {
+  "baseName": "torque-server",
   "branding": {
     "name": "Torque",
     "serverUrl": "http://localhost:8540",
@@ -7,10 +8,11 @@
     "supportPhone": "017XXXXXXXX",
     "supportEmail": "support@mg.torque.live"
   },
-  "baseName": "torque-server",
-  "port": 8540,
-  "websocketPort": 8541,
-  "hostname": "localhost",
+  "server": {
+    "port": 8540,
+    "websocketPort": 8541,
+    "hostname": "localhost"
+  },
   "log": {
     "logStandardOutputToFile": true,
     "logErrorOutputToFile": true,
