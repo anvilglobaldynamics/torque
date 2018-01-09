@@ -119,12 +119,9 @@ class Program {
   initiateServer(callback) {
     Promise.resolve()
       .then(() => {
-        return promisify(ConfigLoader, ConfigLoader.getComputedConfig);
+        return promisify(ConfigLoader, ConfigLoader.getComputedConfig, this.muteLogger, mode);
       })
-      .then(([nonFatalErrorList, _config]) => {
-        if (!this.muteLogger) {
-          ConfigLoader.reportErrorAndConfig(nonFatalErrorList, _config, mode);
-        }
+      .then((_config) => {
         config = _config;
         return Promise.resolve();
       })

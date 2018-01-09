@@ -4,6 +4,8 @@ let pathlib = require("path");
 let userHomeDir = require('user-home');
 let fslib = require('fs');
 
+const Joi = require('joi');
+
 class ConfigLoader {
 
   static get _configSchema() {
@@ -30,7 +32,7 @@ class ConfigLoader {
         format: Joi.string().max(1024).required(),
       }),
       db: Joi.object().keys({
-        path: Joi.boolean().required(),
+        path: Joi.string().max(1024).required(),
       }),
       email: Joi.object().keys({
         enabled: Joi.boolean().required(),
@@ -63,6 +65,13 @@ class ConfigLoader {
     });
   }
 
+  static _doesFileExist(file, cbfn) {
+    fslib.stat(file, (err, stats) => {
+      if (err) return cbfn(false);
+      return cbfn(true);
+    });
+  }
+
   static _validateConfig(config) {
     if (!config) {
       return [(new Error("No config found"))];
@@ -72,53 +81,33 @@ class ConfigLoader {
     } catch (error) {
       return [error];
     }
-    let error;
-    ({ error, config }) = Joi.validate(config, this._configSchema);
+    var { error, value: config } = Joi.validate(config, this._configSchema);
     return [(error || null), config];
   }
 
-  static getComputedConfig(cbfn) {
-    let config = {};
-    let nonFatalErrorList = [];
-    var validationError;
-    this._loadFromFile(this._defaultUserLevelFilePath, (err, content) => {
-      if (err) {
-        nonFatalErrorList.push(err);
-      } else {
-        [validationError, content] = this._validateConfig(content);
-        if (validationError) {
-          nonFatalErrorList.push(validationError);
-        } else {
-          config = this._assimilateConfig(content, config);
-        }
+  static _readConfig(path, isMuted, mode, cbfn) {
+    this._loadFromFile(path, (err, config) => {
+      if (err) return cbfn(err);
+      [err, config] = this._validateConfig(config);
+      if (err) return cbfn(err);
+      if (mode !== 'production' && !isMuted) {
+        console.log('(config)> Final config:\n', JSON.stringify(config, null, 2));
       }
-      this._loadFromFile(this._defaultLocalFilePath, (err, content) => {
-        if (err) {
-          nonFatalErrorList.push(err);
-        } else {
-          [validationError, content] = this._validateConfig(content);
-          if (validationError) {
-            nonFatalErrorList.push(validationError);
-          } else {
-            config = this._assimilateConfig(config, content);
-          }
-        }
-        config = this._assimilateConfig(config, this._defaultConfig);
-        cbfn(null, [nonFatalErrorList, config]);
-      });
+      return cbfn(null, config);
     });
   }
 
-  static reportErrorAndConfig(nonFatalErrorList, _config, mode) {
-    if (nonFatalErrorList.length > 0) {
-      console.log(`(config)> ${nonFatalErrorList.length} error(s) occurred during loading config. Default config will be applied.`);
-      for (let nonFatalError of nonFatalErrorList) {
-        console.error(nonFatalError);
+  static getComputedConfig(isMuted, mode, cbfn) {
+    this._doesFileExist(this._defaultUserLevelFilePath, (exists) => {
+      if (exists) {
+        this._readConfig(this._defaultUserLevelFilePath, isMuted, mode, cbfn);
+      } else {
+        if (!isMuted) {
+          console.log(`(config)> No user level config found at "${this._defaultUserLevelFilePath}". Falling back to default config.`);
+        }
+        this._readConfig(this._defaultLocalFilePath, isMuted, mode, cbfn);
       }
-    }
-    if (mode !== 'production') {
-      console.log('(config)> Final config:\n', JSON.stringify(_config, null, 2));
-    }
+    });
   }
 
 }
