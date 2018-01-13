@@ -11,11 +11,14 @@ exports.emailVerificationRequestMixin = (SuperApiClass) => class extends SuperAp
     let model = { email, verificationLink };
     this.server.emailService.sendStoredMail('email-verification', model, email, (err, response) => {
       if ((err) || response.message !== 'Queued. Thank you.') {
-        this.logger.error(err);
-        this.logger.log("Email service response:", response);
-        let message = 'Failed to send verification email. Please handle the case manually.'
+        if (err) {
+          this.logger.error(err);
+        } else {
+          this.logger.log("Unexpected emailService response:", response);
+        }
+        let message = 'Failed to send confirmation email. Please handle the case manually.'
         this.logger.important(message, model);
-      }
+      }      
     });
   }
 

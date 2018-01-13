@@ -7,15 +7,18 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     return cryptolib.createHash('sha256').update(string).digest("hex");
   }
 
-  _notifyPasswordChange({ userId }, cbfn) {
+  _notifyPasswordChange({ userId }) {
     this.database.user.findById({ userId }, (err, user) => {
       if (err) return this.fail(err);
       let email = user.email;
       let model = { email, textContent: "Your password has changed." };
       this.server.emailService.sendStoredMail('generic-message', model, email, (err, response) => {
         if ((err) || response.message !== 'Queued. Thank you.') {
-          this.logger.error(err);
-          this.logger.log("Email service response:", response);
+          if (err) {
+            this.logger.error(err);
+          } else {
+            this.logger.log("Unexpected emailService response:", response);
+          }
         }
       });
     });
