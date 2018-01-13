@@ -90,11 +90,11 @@ class EmailService {
     };
     if (this.enabled) {
       this.mailgun.messages().send(data, function (error, body) {
-        return cbfn(error, false, body);
+        return cbfn(error, false, body, data);
       });
     } else {
       let error = new Error("Email Sending Disabled By Developer");
-      return cbfn(error, true);
+      return cbfn(error, true, null, data);
     }
 
   }

@@ -27,7 +27,7 @@ exports.UserResetPasswordRequestApi = class extends Api {
 
   _sendPasswordResetEmail({ email, confirmationLink }) {
     let model = { email, confirmationLink };
-    this.server.emailService.sendStoredMail('password-reset', model, email, (err, isDeveloperError, response) => {
+    this.server.emailService.sendStoredMail('password-reset', model, email, (err, isDeveloperError, response, finalBody) => {
       if ((err) || response.message !== 'Queued. Thank you.') {
         if (err) {
           if (!isDeveloperError) this.logger.error(err);
@@ -44,6 +44,20 @@ exports.UserResetPasswordRequestApi = class extends Api {
     });
   }
 
+  _sendPasswordResetSms({ phone, confirmationLink }) {
+    let model = { phone, confirmationLink };
+    this.server.smsService.sendStoredSms('password-reset', model, phone, (err, isDeveloperError, response, finalBody) => {
+      if (err) {
+        if (!isDeveloperError) this.logger.error(err);
+        let message = 'Failed to send password reset SMS. Please handle the case manually.'
+        this.logger.important(message, {
+          type: 'password-reset',
+          finalBody
+        });
+      }
+    });
+  }
+
   _createPasswordResetRequest({ userId, email, phone }, cbfn) {
     let confirmationToken = generateRandomString(64);
     this.database.passwordResetRequest.isConfirmationTokenUnique(confirmationToken, (err, isUnique) => {
@@ -51,7 +65,7 @@ exports.UserResetPasswordRequestApi = class extends Api {
       if (!isUnique) return this._createPasswordResetRequest({ userId, email, phone }, cbfn);
       this.database.passwordResetRequest.create({ userId, email, phone, origin: 'password-reset-api', confirmationToken }, (err) => {
         let confirmationLink = this._generateConfirmationLink(confirmationToken);
-        return cbfn(confirmationLink);
+        return cbfn({ confirmationLink });
       });
     })
   }
@@ -75,6 +89,7 @@ exports.UserResetPasswordRequestApi = class extends Api {
       this._createPasswordResetRequest({ userId, email, phone }, ({ confirmationLink }) => {
         this.success({ status: "success" });
         this._sendPasswordResetEmail({ email, confirmationLink });
+        this._sendPasswordResetSms({ phone, confirmationLink });
       });
     });
   }

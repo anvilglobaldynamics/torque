@@ -10,7 +10,7 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   _sendPasswordChangeNotificationEmail({ user }) {
     let email = user.email;
     let model = { email, textContent: "Your password has changed." };
-    this.server.emailService.sendStoredMail('generic-message', model, email, (err, isDeveloperError, response) => {
+    this.server.emailService.sendStoredMail('generic-message', model, email, (err, isDeveloperError, response, finalBody) => {
       if ((err) || response.message !== 'Queued. Thank you.') {
         if (err) {
           if (!isDeveloperError) this.logger.error(err);
@@ -29,13 +29,13 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   _sendPasswordChangeNotificationSms({ user }) {
     let phone = user.phone;
     let model = { phone, textContent: "Your password has changed." };
-    this.server.smsService.sendStoredSms('generic-message', model, phone, (err, isDeveloperError, response) => {
+    this.server.smsService.sendStoredSms('generic-message', model, phone, (err, isDeveloperError, response, finalBody) => {
       if (err) {
         if (!isDeveloperError) this.logger.error(err);
         let message = 'Failed to send password change notification SMS. Please handle the case manually.'
         this.logger.important(message, {
           type: 'generic-message',
-          model
+          finalBody
         });
       }
     });

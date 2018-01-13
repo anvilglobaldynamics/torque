@@ -14,15 +14,15 @@ class SmsService {
     let templateList = [
       {
         name: 'phone-verification',
-        templateFn: ({ verificationCode }) => `Your ${branding.name} verification code is ${verificationCode}.`,
+        templateFn: ({ verificationCode }) => `Your ${branding.name} verification code is ${verificationCode}`,
       },
       {
         name: 'password-reset',
-        templateFn: () => `Your ${branding.name} password was recently changed.`,
+        templateFn: ({ confirmationLink }) => `Your password reset link for ${branding.name} is ${confirmationLink}`,
       },
       {
         name: 'generic-message',
-        templateFn: ({ content }) => content,
+        templateFn: ({ textContent }) => textContent,
       }
     ]
     this.templates = {};
@@ -54,10 +54,10 @@ class SmsService {
     };
     if (this.enabled) {
       let error = new Error("Sms sending failed. We are just using mock servers.");
-      cbfn(error, false);
+      cbfn(error, false, null, data);
     } else {
       let error = new Error("Sms sending disabled by developer.");
-      cbfn(error, true);
+      cbfn(error, true, null, data);
     }
   }
 
