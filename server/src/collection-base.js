@@ -52,7 +52,10 @@ class Collection {
           return reject(new Error(`unique key ${key} is missing from document.`));
         }
 
-        let query = { [key]: doc[key] };
+        let query = { 
+          [key]: doc[key], 
+          isDeleted: false 
+        };
         for (let fragment in filters) {
           query[fragment] = filters[fragment];
         }
@@ -94,7 +97,10 @@ class Collection {
     Promise.all(this.foreignKeyDefList.map(foreignKeyDef => {
       return new Promise((accept, reject) => {
         let { targetCollection, foreignKey, referringKey } = foreignKeyDef;
-        let query = { [foreignKey]: doc[referringKey] };
+        let query = { 
+          [foreignKey]: doc[referringKey], 
+          isDeleted: false 
+        };
         this.database.find(targetCollection, query, (err, docList) => {
           if (err) return reject(err);
           if (docList.length === 1) {

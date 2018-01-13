@@ -15,6 +15,7 @@ const changedEmail = 'ce' + `${rnd(prefix)}@gmail.com`;
 const password = "123545678";
 const changedPassword = "1235456781";
 const changedPassword2 = "1235456782";
+const changedPassword3 = "1235456783";
 const fullName = "Test User";
 const phone = rnd(prefix, 11);
 
@@ -248,7 +249,6 @@ describe('user apis (1)', _ => {
 
   });
 
-
   // ================================================== Password Reset - Request
 
   it('api/user-reset-password--request', testDoneFn => {
@@ -287,7 +287,7 @@ describe('user apis (1)', _ => {
       })
     });
   });
-  // ================================================== Password Reset - Get Token Info
+  // ================================================== Password Reset - Confirm
 
   it('api/user-reset-password--confirm', testDoneFn => {
 
@@ -391,6 +391,124 @@ describe('user apis (1)', _ => {
       apiKey = body.apiKey;
       testDoneFn();
     })
+
+  });
+
+  // ================================================== Logout
+
+  it('api/user-logout (Correct): ' + email, testDoneFn => {
+
+    callApi('api/user-logout', {
+      json: {
+        apiKey
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    });
+
+  });
+
+  // ================================================== Password Reset - Request
+
+  it('api/user-reset-password--request', testDoneFn => {
+
+    callApi('api/user-reset-password--request', {
+      json: {
+        emailOrPhone: changedEmail
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
+  // ================================================== Password Reset - Get Token Info
+
+  it('api/user-reset-password--get-token-info', testDoneFn => {
+
+    getDatabase().find('password-reset-request', { forEmail: changedEmail }, (err, docList) => {
+      if (err) throw err;
+      if (docList.length < 1) throw new Error('Expected doc');
+      let passwordResetRequest = docList.find(doc => doc.isPasswordResetComplete === false);
+
+      callApi('api/user-reset-password--get-token-info', {
+        json: {
+          uniqueToken: passwordResetRequest.confirmationToken
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.have.property('hasError').that.equals(false);
+        expect(body).to.have.property('status').that.equals('success');
+        testDoneFn();
+      })
+    });
+  });
+  // ================================================== Password Reset - Confirm
+
+  it('api/user-reset-password--confirm', testDoneFn => {
+
+    getDatabase().find('password-reset-request', { forEmail: changedEmail }, (err, docList) => {
+      if (err) throw err;
+      if (docList.length < 1) throw new Error('Expected doc');
+      let passwordResetRequest = docList.find(doc => doc.isPasswordResetComplete === false);
+
+      callApi('api/user-reset-password--confirm', {
+        json: {
+          uniqueToken: passwordResetRequest.confirmationToken,
+          newPassword: changedPassword3
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.have.property('hasError').that.equals(false);
+        expect(body).to.have.property('status').that.equals('success');
+        testDoneFn();
+      })
+    });
+
+  });
+
+  // ================================================== Login
+
+  it('api/user-login (Correct, Using Email and Changed Password): ' + email, testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: changedEmail,
+        password: changedPassword3
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string')
+      expect(body).to.have.property('sessionId').that.is.a('number')
+      expect(body).to.have.property('user').that.is.an('object')
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  // ================================================== Logout
+
+  it('api/user-logout (Correct): ' + email, testDoneFn => {
+
+    callApi('api/user-logout', {
+      json: {
+        apiKey
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    });
 
   });
 
