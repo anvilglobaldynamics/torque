@@ -4,18 +4,25 @@ let { generateRandomString } = require('./../../utils/random-string');
 exports.emailVerificationRequestMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _generateVerificationLink(verificationToken) {
-    return `https://server1.rewardables.life/verify-email/${verificationToken}`;
+    return `https://server1.torque.life/verify-email/${verificationToken}`;
   }
 
-  _sendVerificationMail({ email, verificationLink: verificationLink }) {
+  _sendEmailVerificationMail({ email, verificationLink: verificationLink }) {
     let model = { email, verificationLink };
-    this.server.emailService.sendStoredMail('email-verification', model, email, (err, response) => {
+    this.server.emailService.sendStoredMail('email-verification', model, email, (err, isDeveloperError, response, finalBody) => {
       if ((err) || response.message !== 'Queued. Thank you.') {
-        this.logger.error(err);
-        this.logger.log("Email service response:", response);
-        let message = 'Failed to send verification email. Please handle the case manually.'
-        this.logger.important(message, model);
-      }
+        if (err) {
+          if (!isDeveloperError) this.logger.error(err);
+        } else {
+          this.logger.log("Unexpected emailService response:", response);
+        }
+        let message = 'Failed to send email verification email. Please handle the case manually.'
+        this.logger.important(message, {
+          type: 'email-verification',
+          verificationLink,
+          model
+        });
+      }      
     });
   }
 

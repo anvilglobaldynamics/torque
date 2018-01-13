@@ -56,7 +56,7 @@ exports.UserResetPasswordConfirmApi = class extends userCommonMixin(Api) {
       this._setPasswordIfValid({ newPassword, userId }, () => {
         this._markPasswordResetRequestAsComplete({ uniqueToken }, () => {
           this.success({ status: "success" });
-          this._notifyPasswordChange({ userId }, () => null);
+          this._notifyPasswordChange({ userId });
         });
       });
     });

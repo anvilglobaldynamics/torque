@@ -97,6 +97,10 @@ class Server {
     this.emailService = emailService;
   }
 
+  setSmsService(smsService) {
+    this.smsService = smsService;
+  }
+
   setTemplateManager(templateManager) {
     this.templateManager = templateManager;
   }

@@ -3,9 +3,10 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { emailVerificationRequestMixin } = require('./mixins/email-verification-request-mixin');
+let { phoneVerificationRequestMixin } = require('./mixins/phone-verification-request-mixin');
 let { userCommonMixin } = require('./mixins/user-common');
 
-exports.UserRegisterApi = class extends userCommonMixin(emailVerificationRequestMixin(Api)) {
+exports.UserRegisterApi = class extends userCommonMixin(emailVerificationRequestMixin(phoneVerificationRequestMixin(Api))) {
 
   get autoValidates() { return true; }
 
@@ -24,8 +25,11 @@ exports.UserRegisterApi = class extends userCommonMixin(emailVerificationRequest
     let { email, fullName, phone, password } = body;
     this._createUser({ email, fullName, phone, password }, (userId) => {
       this._createEmailVerificationRequest({ email, userId }, (verificationLink) => {
-        this.success({ status: "success", userId });
-        this._sendVerificationMail({ email, verificationLink });
+        this._sendEmailVerificationMail({ email, verificationLink });
+        this._createPhoneVerificationRequest({ phone, userId }, (verificationLink) => {
+          this._sendPhoneVerificationSms({ phone, verificationLink });
+          this.success({ status: "success", userId });
+        });
       });
     });
   }

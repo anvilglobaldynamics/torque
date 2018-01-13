@@ -6,6 +6,7 @@ class Collection {
   constructor(database) {
     this.nonDeletableCollectionNameList = [
       'email-verification-request',
+      'phone-verification-request',
       'password-reset-request',
       'employment',
       'fixture',
