@@ -21,7 +21,7 @@ const phone = rnd(prefix, 11);
 
 let apiKey = null;
 
-describe('user apis (1)', _ => {
+describe.only('user apis (1)', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -114,9 +114,11 @@ describe('user apis (1)', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('apiKey').that.is.a('string')
-      expect(body).to.have.property('sessionId').that.is.a('number')
-      expect(body).to.have.property('warning').that.is.a('string').that.equals('You have less than 24 hours to verify your email address.')
+      expect(body).to.have.property('apiKey').that.is.a('string');
+      expect(body).to.have.property('sessionId').that.is.a('number');
+      expect(body).to.have.property('warning').that.is.an('array');
+      expect(body.warning).to.include('You have less than 24 hours to verify your email address.');
+      expect(body.warning).to.include('You have less than 24 hours to verify your phone number.');      
       expect(body).to.have.property('user').that.is.an('object')
 
       apiKey = body.apiKey;
@@ -176,7 +178,9 @@ describe('user apis (1)', _ => {
       expect(body).to.have.property('status').that.equals('success');
       expect(body).to.have.property('apiKey').that.is.a('string')
       expect(body).to.have.property('sessionId').that.is.a('number')
-      expect(body).to.have.property('warning').that.is.a('string').that.equals('You have less than 24 hours to verify your email address.')
+      expect(body).to.have.property('warning').that.is.an('array');
+      expect(body.warning).to.include('You have less than 24 hours to verify your email address.');
+      expect(body.warning).to.include('You have less than 24 hours to verify your phone number.'); 
       expect(body).to.have.property('user').that.is.an('object')
       apiKey = body.apiKey;
       testDoneFn();
@@ -326,7 +330,9 @@ describe('user apis (1)', _ => {
       expect(body).to.have.property('status').that.equals('success');
       expect(body).to.have.property('apiKey').that.is.a('string')
       expect(body).to.have.property('sessionId').that.is.a('number')
-      expect(body).to.have.property('warning').that.is.a('string').that.equals('You have less than 24 hours to verify your email address.')
+      expect(body).to.have.property('warning').that.is.an('array');
+      expect(body.warning).to.include('You have less than 24 hours to verify your email address.')
+      expect(body.warning).to.include('You have less than 24 hours to verify your phone number.'); 
       expect(body).to.have.property('user').that.is.an('object')
       apiKey = body.apiKey;
       testDoneFn();
@@ -385,8 +391,7 @@ describe('user apis (1)', _ => {
       expect(body).to.have.property('status').that.equals('success');
       expect(body).to.have.property('apiKey').that.is.a('string')
       expect(body).to.have.property('sessionId').that.is.a('number')
-      expect(body).to.have.property('warning').that.is.a('string').that.not.equals('You have less than 24 hours to verify your email address.')
-      expect(body).to.have.property('warning').that.is.a('string').that.equals('')
+      expect(body).to.have.property('warning').that.is.an('array').that.deep.equals(["You have less than 24 hours to verify your phone number."]);
       expect(body).to.have.property('user').that.is.an('object')
       apiKey = body.apiKey;
       testDoneFn();

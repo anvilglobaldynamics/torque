@@ -4,10 +4,10 @@ let { generateRandomString } = require('./../../utils/random-string');
 exports.emailVerificationRequestMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _generateVerificationLink(verificationToken) {
-    return `https://server1.rewardables.life/verify-email/${verificationToken}`;
+    return `https://server1.torque.life/verify-email/${verificationToken}`;
   }
 
-  _sendVerificationMail({ email, verificationLink: verificationLink }) {
+  _sendEmailVerificationMail({ email, verificationLink: verificationLink }) {
     let model = { email, verificationLink };
     this.server.emailService.sendStoredMail('email-verification', model, email, (err, isDeveloperError, response, finalBody) => {
       if ((err) || response.message !== 'Queued. Thank you.') {

@@ -81,6 +81,7 @@ let { InternalStatus } = require('./apis/internal--status');
 let { FixtureCollection } = require('./collections/fixture');
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
+let { PhoneVerificationRequestCollection } = require('./collections/phone-verification-request');
 let { SessionCollection } = require('./collections/session');
 let { OrganizationCollection } = require('./collections/organization');
 let { EmploymentCollection } = require('./collections/employment');
@@ -149,6 +150,7 @@ class Program {
         database.registerCollection('fixture', FixtureCollection);
         database.registerCollection('user', UserCollection);
         database.registerCollection('emailVerificationRequest', EmailVerificationRequestCollection);
+        database.registerCollection('phoneVerificationRequest', PhoneVerificationRequestCollection);
         database.registerCollection('session', SessionCollection);
         database.registerCollection('organization', OrganizationCollection);
         database.registerCollection('employment', EmploymentCollection);

@@ -14,7 +14,7 @@ class SmsService {
     let templateList = [
       {
         name: 'phone-verification',
-        templateFn: ({ verificationCode }) => `Your ${branding.name} verification code is ${verificationCode}`,
+        templateFn: ({ verificationLink }) => `Your ${branding.name} phone verification link is ${verificationLink}`,
       },
       {
         name: 'password-reset',
