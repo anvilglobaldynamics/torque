@@ -4,6 +4,15 @@ let Joi = require('joi');
 class Collection {
 
   constructor(database) {
+    this.nonDeletableCollectionNameList = [
+      'email-verification-request',
+      'password-reset-request',
+      'employment',
+      'fixture',
+      'product',
+      'session'
+    ];
+
     this.database = database;
 
     this.collectionName = null; // subclass needs to define this property
@@ -138,10 +147,20 @@ class Collection {
   }
 
   _find(query, ...args) {
+    if (this.nonDeletableCollectionNameList.indexOf(this.collectionName) === -1) {
+      if (!('isDeleted' in query)) {
+        query.isDeleted = false;
+      }
+    }
     return this.database.find(this.collectionName, query, ...args);
   }
 
   _findOne(query, ...args) {
+    if (this.nonDeletableCollectionNameList.indexOf(this.collectionName) === -1) {
+      if (!('isDeleted' in query)) {
+        query.isDeleted = false;
+      }
+    }
     return this.database.findOne(this.collectionName, query, ...args);
   }
 
