@@ -46,11 +46,11 @@ class SmsService {
     this.sendSms({ to, content }, cbfn);
   }
 
-  sendMail({ to, content } = {}, cbfn) {
+  sendSms({ to, content } = {}, cbfn) {
     let data = {
       from: this.from,
       // NOTE: Change to 'to' during production
-      to: '017XXXXXXXX',
+      to: '01706466808',
       content
     };
     if (this.enabled) {
