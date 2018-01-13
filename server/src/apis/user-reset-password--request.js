@@ -27,16 +27,16 @@ exports.UserResetPasswordRequestApi = class extends Api {
 
   _sendPasswordResetEmail({ email, confirmationLink }) {
     let model = { email, confirmationLink };
-    this.server.emailService.sendStoredMail('password-reset', model, email, (err, response) => {
+    this.server.emailService.sendStoredMail('password-reset', model, email, (err, isDeveloperError, response) => {
       if ((err) || response.message !== 'Queued. Thank you.') {
         if (err) {
-          this.logger.error(err);
+          if (!isDeveloperError) this.logger.error(err);
         } else {
           this.logger.log("Unexpected emailService response:", response);
         }
         let message = 'Failed to send password reset email. Please handle the case manually.'
         this.logger.important(message, {
-          type:'password-reset',
+          type: 'password-reset',
           confirmationLink,
           model
         });

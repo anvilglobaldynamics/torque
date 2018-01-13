@@ -188,6 +188,14 @@ class Program {
         return Promise.resolve();
       })
       .then(() => {
+        return promisify(smsService, smsService.initialize, logger);
+      })
+      .then(() => {
+        logger.info('(server)> sms services initialized.');
+        server.setSmsService(smsService);
+        return Promise.resolve();
+      })
+      .then(() => {
         return promisify(server, server.initialize);
       })
       .then(() => {

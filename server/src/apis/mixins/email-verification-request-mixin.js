@@ -9,10 +9,10 @@ exports.emailVerificationRequestMixin = (SuperApiClass) => class extends SuperAp
 
   _sendVerificationMail({ email, verificationLink: verificationLink }) {
     let model = { email, verificationLink };
-    this.server.emailService.sendStoredMail('email-verification', model, email, (err, response) => {
+    this.server.emailService.sendStoredMail('email-verification', model, email, (err, isDeveloperError, response) => {
       if ((err) || response.message !== 'Queued. Thank you.') {
         if (err) {
-          this.logger.error(err);
+          if (!isDeveloperError) this.logger.error(err);
         } else {
           this.logger.log("Unexpected emailService response:", response);
         }

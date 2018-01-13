@@ -41,8 +41,7 @@ class SmsService {
   }
 
   sendStoredSms(templateName, model, to, cbfn) {
-    let html = this.templates[templateName].templateFn(model);
-    let subject = this.templates[templateName].subject;
+    let content = this.templates[templateName].templateFn(model);
     this.sendSms({ to, content }, cbfn);
   }
 
@@ -55,10 +54,10 @@ class SmsService {
     };
     if (this.enabled) {
       let error = new Error("Sms sending failed. We are just using mock servers.");
-      cbfn(error);
+      cbfn(error, false);
     } else {
       let error = new Error("Sms sending disabled by developer.");
-      cbfn(error);
+      cbfn(error, true);
     }
   }
 
