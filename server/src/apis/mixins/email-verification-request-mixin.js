@@ -16,8 +16,12 @@ exports.emailVerificationRequestMixin = (SuperApiClass) => class extends SuperAp
         } else {
           this.logger.log("Unexpected emailService response:", response);
         }
-        let message = 'Failed to send confirmation email. Please handle the case manually.'
-        this.logger.important(message, model);
+        let message = 'Failed to send email verification email. Please handle the case manually.'
+        this.logger.important(message, {
+          type: 'email-verification',
+          verificationLink,
+          model
+        });
       }      
     });
   }

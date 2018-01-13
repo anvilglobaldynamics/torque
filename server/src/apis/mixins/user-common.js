@@ -20,6 +20,11 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
             this.logger.log("Unexpected emailService response:", response);
           }
         }
+        let message = 'Failed to send password change notification email. Please handle the case manually.'
+        this.logger.important(message, {
+          type:'generic-message',
+          model
+        });
       });
     });
   }
