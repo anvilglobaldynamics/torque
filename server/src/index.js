@@ -16,6 +16,7 @@ let { UserRegisterApi } = require('./apis/user-register');
 let { UserLoginApi } = require('./apis/user-login');
 let { UserLogoutApi } = require('./apis/user-logout');
 let { VerifyEmailApi } = require('./apis/verify-email');
+let { VerifyPhoneApi } = require('./apis/verify-phone');
 let { UserChangePasswordApi } = require('./apis/user-change-password');
 let { UserEditProfileApi } = require('./apis/user-edit-profile');
 
@@ -206,6 +207,8 @@ class Program {
       })
       .then(() => {
         logger.info('(server)> registering APIs');
+        
+        server.registerGetApi('/verify-phone/:link', VerifyPhoneApi);
         server.registerGetApi('/verify-email/:link', VerifyEmailApi);
         server.registerGetApi('/internal--status', InternalStatus);
 

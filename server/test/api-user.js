@@ -21,7 +21,7 @@ const phone = rnd(prefix, 11);
 
 let apiKey = null;
 
-describe.only('user apis (1)', _ => {
+describe('user apis (1)', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -118,7 +118,7 @@ describe.only('user apis (1)', _ => {
       expect(body).to.have.property('sessionId').that.is.a('number');
       expect(body).to.have.property('warning').that.is.an('array');
       expect(body.warning).to.include('You have less than 24 hours to verify your email address.');
-      expect(body.warning).to.include('You have less than 24 hours to verify your phone number.');      
+      expect(body.warning).to.include('You have less than 24 hours to verify your phone number.');
       expect(body).to.have.property('user').that.is.an('object')
 
       apiKey = body.apiKey;
@@ -180,7 +180,7 @@ describe.only('user apis (1)', _ => {
       expect(body).to.have.property('sessionId').that.is.a('number')
       expect(body).to.have.property('warning').that.is.an('array');
       expect(body.warning).to.include('You have less than 24 hours to verify your email address.');
-      expect(body.warning).to.include('You have less than 24 hours to verify your phone number.'); 
+      expect(body.warning).to.include('You have less than 24 hours to verify your phone number.');
       expect(body).to.have.property('user').that.is.an('object')
       apiKey = body.apiKey;
       testDoneFn();
@@ -332,7 +332,7 @@ describe.only('user apis (1)', _ => {
       expect(body).to.have.property('sessionId').that.is.a('number')
       expect(body).to.have.property('warning').that.is.an('array');
       expect(body.warning).to.include('You have less than 24 hours to verify your email address.')
-      expect(body.warning).to.include('You have less than 24 hours to verify your phone number.'); 
+      expect(body.warning).to.include('You have less than 24 hours to verify your phone number.');
       expect(body).to.have.property('user').that.is.an('object')
       apiKey = body.apiKey;
       testDoneFn();
@@ -493,6 +493,65 @@ describe.only('user apis (1)', _ => {
       expect(body).to.have.property('status').that.equals('success');
       expect(body).to.have.property('apiKey').that.is.a('string')
       expect(body).to.have.property('sessionId').that.is.a('number')
+      expect(body).to.have.property('user').that.is.an('object')
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  // ================================================== Logout
+
+  it('api/user-logout (Correct): ' + email, testDoneFn => {
+
+    callApi('api/user-logout', {
+      json: {
+        apiKey
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    });
+
+  });
+
+  // ================================================== Email Verification
+
+  it('api/verify-phone', testDoneFn => {
+
+    getDatabase().find('phone-verification-request', { forPhone: phone }, (err, docList) => {
+      if (err) throw err;
+      if (docList.length < 1) throw new Error('Expected doc');
+      let phoneVerificationRequest = docList[0];
+
+      require('./utils').callGetApi('verify-phone/' + phoneVerificationRequest.verificationToken, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.contain('Phone Verification Successful')
+        testDoneFn();
+      });
+
+    });
+
+  });
+
+  // ================================================== Login
+
+  it('api/user-login (Correct, Using Email and Changed Password): ' + email, testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: phone,
+        password: changedPassword3
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string')
+      expect(body).to.have.property('sessionId').that.is.a('number')
+      expect(body).to.have.property('warning').that.is.an('array').that.deep.equals([]);
       expect(body).to.have.property('user').that.is.an('object')
       apiKey = body.apiKey;
       testDoneFn();
