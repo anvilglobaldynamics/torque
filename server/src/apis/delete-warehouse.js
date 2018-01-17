@@ -20,7 +20,7 @@ exports.DeleteWarehouseApi = class extends collectionCommonMixin(Api) {
     return [{
       organizationBy: {
         from: "warehouse",
-        query: ({ customerId }) => ({ id: warehouseId }),
+        query: ({ warehouseId }) => ({ id: warehouseId }),
         select: "organizationId"
       },
       privileges: [
