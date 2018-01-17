@@ -15,7 +15,31 @@ exports.GetSalesReturnApi = class extends Api {
     });
   }
 
-  // TODO: accessControl()
+  get accessControl() {
+    return [{
+      organizationBy: [
+        {
+          from: "sales-return",
+          query: ({ salesReturnId }) => ({ id: salesReturnId }),
+          select: "salesId",
+          errorCode: "SALES_RETURN_INVALID"
+        },
+        {
+          from: "sales",
+          query: ({ salesId }) => ({ id: salesId }),
+          select: "outletId"
+        },
+        {
+          from: "outlet",
+          query: ({ outletId }) => ({ id: outletId }),
+          select: "organizationId"
+        }
+      ],
+      privileges: [
+        "PRIV_VIEW_SALES_RETURN"
+      ]
+    }];
+  }
 
   _getSalesReturn({ salesReturnId }, cbfn) {
     this.database.salesReturn.findById({ salesReturnId }, (err, salesReturn) => {

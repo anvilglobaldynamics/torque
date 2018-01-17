@@ -39,7 +39,21 @@ exports.AddSalesApi = class extends Api {
     });
   }
 
-  // TODO: accessControl()
+  get accessControl() {
+    return [{
+      organizationBy: [
+        {
+          from: "outlet",
+          query: ({ outletId }) => ({ id: outletId }),
+          select: "organizationId",
+          errorCode: "OUTLET_INVALID"
+        }
+      ],
+      privileges: [
+        "PRIV_ACCESS_POS"
+      ]
+    }];
+  }
 
   // FIXME: use inventoryCommonMixin
   _getOutletDefaultInventory(outletId, cbfn) {

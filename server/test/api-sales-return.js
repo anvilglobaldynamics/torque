@@ -104,6 +104,7 @@ describe('sales-return', _ => {
               phone: outletPhone,
               contactPersonName: outletContactPersonName
             }, (data) => {
+              // console.log(data);
               outletId = data.outletId;
               getOutlet({
                 apiKey, outletId

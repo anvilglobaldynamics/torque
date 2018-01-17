@@ -23,7 +23,26 @@ exports.AddSalesReturnApi = class extends Api {
     });
   }
 
-  // TODO: accessControl()
+  get accessControl() {
+    return [{
+      organizationBy: [
+        {
+          from: "sales",
+          query: ({ salesId }) => ({ id: salesId }),
+          select: "outletId",
+          errorCode: "SALES_INVALID"
+        },
+        {
+          from: "outlet",
+          query: ({ outletId }) => ({ id: outletId }),
+          select: "organizationId"
+        }
+      ],
+      privileges: [
+        "PRIV_ACCESS_POS"
+      ]
+    }];
+  }
 
   // FIXME: move to salesCommonMixin
   _getSales({ salesId }, cbfn) {
