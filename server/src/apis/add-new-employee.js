@@ -38,6 +38,9 @@ exports.AddNewEmployeeApi = class extends userCommonMixin(Api) {
         PRIV_ALLOW_INDIVIDUAL_DISCOUNT: Joi.boolean().required(),
         PRIV_ALLOW_FOC: Joi.boolean().required(),
 
+        PRIV_VIEW_SALES_RETURN: Joi.boolean().required(),
+        PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
+
         PRIV_VIEW_ALL_INVENTORIES: Joi.boolean().required(),
         PRIV_MODIFY_ALL_INVENTORIES: Joi.boolean().required(),
         PRIV_TRANSFER_ALL_INVENTORIES: Joi.boolean().required(),

@@ -31,6 +31,9 @@ exports.EditEmploymentApi = class extends Api {
         PRIV_ALLOW_FLAT_DISCOUNT: Joi.boolean().required(),
         PRIV_ALLOW_INDIVIDUAL_DISCOUNT: Joi.boolean().required(),
         PRIV_ALLOW_FOC: Joi.boolean().required(),
+
+        PRIV_VIEW_SALES_RETURN: Joi.boolean().required(),
+        PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
     
         PRIV_VIEW_ALL_INVENTORIES: Joi.boolean().required(),
         PRIV_MODIFY_ALL_INVENTORIES: Joi.boolean().required(),
@@ -58,8 +61,9 @@ exports.EditEmploymentApi = class extends Api {
     return [{
       organizationBy: {
         from: "employment",
-        query: ({ customerId }) => ({ id: employmentId }),
-        select: "organizationId"
+        query: ({ employmentId }) => ({ id: employmentId }),
+        select: "organizationId",
+        errorCode: "EMPLOYEE_INVALID"
       },
       privileges: [
         "PRIV_MODIFY_USERS",

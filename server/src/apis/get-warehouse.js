@@ -19,8 +19,9 @@ exports.GetWarehouseApi = class extends Api {
     return [{
       organizationBy: {
         from: "warehouse",
-        query: ({ customerId }) => ({ id: warehouseId }),
-        select: "organizationId"
+        query: ({ warehouseId }) => ({ id: warehouseId }),
+        select: "organizationId",
+        errorCode: "WAREHOUSE_INVALID"
       },
       privileges: [
         "PRIV_VIEW_ALL_WAREHOUSES"

@@ -31,6 +31,9 @@ exports.EmploymentCollection = class extends Collection {
         PRIV_ALLOW_INDIVIDUAL_DISCOUNT: Joi.boolean().required(),
         PRIV_ALLOW_FOC: Joi.boolean().required(),
 
+        PRIV_VIEW_SALES_RETURN: Joi.boolean().required(),
+        PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
+
         PRIV_VIEW_ALL_INVENTORIES: Joi.boolean().required(),
         PRIV_MODIFY_ALL_INVENTORIES: Joi.boolean().required(),
         PRIV_TRANSFER_ALL_INVENTORIES: Joi.boolean().required(),
@@ -89,6 +92,9 @@ exports.EmploymentCollection = class extends Collection {
       "PRIV_ALLOW_INDIVIDUAL_DISCOUNT",
       "PRIV_ALLOW_FOC",
 
+      "PRIV_VIEW_SALES_RETURN",
+      "PRIV_MODIFY_SALES_RETURN",
+
       "PRIV_VIEW_ALL_INVENTORIES",
       "PRIV_MODIFY_ALL_INVENTORIES",
       "PRIV_TRANSFER_ALL_INVENTORIES",
@@ -122,6 +128,9 @@ exports.EmploymentCollection = class extends Collection {
       "PRIV_ALLOW_FLAT_DISCOUNT",
       "PRIV_ALLOW_INDIVIDUAL_DISCOUNT",
       "PRIV_ALLOW_FOC",
+
+      "PRIV_VIEW_SALES_RETURN",
+      "PRIV_MODIFY_SALES_RETURN",
 
       "PRIV_VIEW_ALL_INVENTORIES",
       // "PRIV_MODIFY_ALL_INVENTORIES",

@@ -21,17 +21,17 @@ exports.GetSalesApi = class extends Api {
         {
           from: "sales",
           query: ({ salesId }) => ({ id: salesId }),
-          select: "customerId",
+          select: "outletId",
           errorCode: "SALES_INVALID"
         },
         {
-          from: "customer",
-          query: ({ customerId }) => ({ id: customerId }),
+          from: "outlet",
+          query: ({ outletId }) => ({ id: outletId }),
           select: "organizationId"
         }
       ],
       privileges: [
-        "PRIV_MODIFY_CUSTOMER"
+        "PRIV_VIEW_SALES"
       ]
     }];
   }

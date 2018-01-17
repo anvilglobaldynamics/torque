@@ -214,7 +214,7 @@ describe('customer', _ => {
 
   });
 
-  it('api/get-customer-summary-list (Invalid organizationId but no Foreign Key Error expected): ', testDoneFn => {
+  it('api/get-customer-summary-list (Invalid organizationId)', testDoneFn => {
     // NOTE: foreign key violations are not verified for find/findOne calls since
     // foreign key is validated during insert/update calls and so database actively
     // rejects records that could violate foreign key definitions.
@@ -225,8 +225,10 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('customerList').that.deep.equals([]);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('ACCESS_CONTROL_INVALID_ORGANIZATION');
+
       testDoneFn();
     })
 
