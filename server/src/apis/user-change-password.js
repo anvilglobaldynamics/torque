@@ -18,8 +18,6 @@ exports.UserChangePasswordApi = class extends userCommonMixin(Api) {
     });
   }
 
-  // TODO: accessControl()
-
   _changePassword({ userId, oldPassword, newPassword }, cbfn) {
     this.database.user.findById({ userId }, (err, user) => {
       if (err) return this.fail(err);

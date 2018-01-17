@@ -20,8 +20,6 @@ exports.UserRegisterApi = class extends userCommonMixin(emailVerificationRequest
     });
   }
 
-  // TODO: accessControl()
-
   handle({ body }) {
     let { email, fullName, phone, password } = body;
     this._createUser({ email, fullName, phone, password }, (userId) => {

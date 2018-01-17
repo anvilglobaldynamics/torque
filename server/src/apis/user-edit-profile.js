@@ -26,8 +26,6 @@ exports.UserEditProfileApi = class extends userCommonMixin(emailVerificationRequ
     });
   }
 
-  // TODO: accessControl()
-
   _updateProfile(data, cbfn) {
     let { userId, email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = data;
     data = { userId, email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup };
