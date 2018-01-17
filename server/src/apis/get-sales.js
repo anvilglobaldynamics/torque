@@ -15,6 +15,27 @@ exports.GetSalesApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: [
+        {
+          from: "sales",
+          query: ({ salesId }) => ({ id: salesId }),
+          select: "customerId",
+          errorCode: "SALES_INVALID"
+        },
+        {
+          from: "customer",
+          query: ({ customerId }) => ({ id: customerId }),
+          select: "organizationId"
+        }
+      ],
+      privileges: [
+        "PRIV_MODIFY_CUSTOMER"
+      ]
+    }];
+  }
+
   _getSales({ salesId }, cbfn) {
     this.database.sales.findById({ salesId }, (err, sales) => {
       if (err) return this.fail(err);
