@@ -14,15 +14,15 @@ class SmsService {
     let templateList = [
       {
         name: 'phone-verification',
-        templateFn: ({ verificationCode }) => `Your ${branding.name} verification code is ${verificationCode}.`,
+        templateFn: ({ verificationLink }) => `Your ${branding.name} phone verification link is ${verificationLink}`,
       },
       {
         name: 'password-reset',
-        templateFn: () => `Your ${branding.name} password was recently changed.`,
+        templateFn: ({ confirmationLink }) => `Your password reset link for ${branding.name} is ${confirmationLink}`,
       },
       {
         name: 'generic-message',
-        templateFn: ({ content }) => content,
+        templateFn: ({ textContent }) => textContent,
       }
     ]
     this.templates = {};
@@ -41,24 +41,23 @@ class SmsService {
   }
 
   sendStoredSms(templateName, model, to, cbfn) {
-    let html = this.templates[templateName].templateFn(model);
-    let subject = this.templates[templateName].subject;
+    let content = this.templates[templateName].templateFn(model);
     this.sendSms({ to, content }, cbfn);
   }
 
-  sendMail({ to, content } = {}, cbfn) {
+  sendSms({ to, content } = {}, cbfn) {
     let data = {
       from: this.from,
       // NOTE: Change to 'to' during production
-      to: '017XXXXXXXX',
+      to: '01706466808',
       content
     };
     if (this.enabled) {
       let error = new Error("Sms sending failed. We are just using mock servers.");
-      cbfn(error);
+      cbfn(error, false, null, data);
     } else {
       let error = new Error("Sms sending disabled by developer.");
-      cbfn(error);
+      cbfn(error, true, null, data);
     }
   }
 

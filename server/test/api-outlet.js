@@ -299,9 +299,11 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('outlet');
-      expect(body.outlet.isDeleted).to.equal(true);
+
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('OUTLET_INVALID');
+      
       testDoneFn();
     });
 

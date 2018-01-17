@@ -5,6 +5,7 @@ let cryptolib = require('crypto');
 let { generateRandomString } = require('./../utils/random-string');
 
 const EMAIL_VERIFICATION_WINDOW = 5 * 24 * 60 * 60 * 1000;
+const PHONE_VERIFICATION_WINDOW = 5 * 24 * 60 * 60 * 1000;
 
 exports.UserLoginApi = class extends Api {
 
@@ -40,7 +41,14 @@ exports.UserLoginApi = class extends Api {
         let err = new Error("No user matched the email and password combination");
         err.code = 'USER_NOT_FOUND';
         return this.fail(err);
-      } else if (!user.isEmailVerified) {
+      }
+      if (user.isBanned) {
+        let err = new Error("You have been banned from our system. Contact our adiminstrators if you believe it is a mistake.");
+        err.code = 'USER_BANNED';
+        return this.fail(err);
+      }
+      let warning = [];
+      if (!user.isEmailVerified) {
         this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email }, (err, emailVerificationRequest) => {
           if (err) return this.fail(err);
           if (!emailVerificationRequest) {
@@ -48,28 +56,41 @@ exports.UserLoginApi = class extends Api {
             return this.fail(err);
           }
           let { createdDatetimeStamp, isVerificationComplete } = emailVerificationRequest;
-          if (isVerificationComplete) {
-            let warning = ""
-            return cbfn({ user, warning });
-          }
-          let now = (new Date).getTime();
-          let diff = now - createdDatetimeStamp;
-          if (diff < EMAIL_VERIFICATION_WINDOW) {
-            let warning = "You have less than 24 hours to verify your email address."
-            return cbfn({ user, warning });
-          } else {
-            let err = new Error("You need to verify your email address");
-            err.code = 'USER_REQUIRES_EMAIL_VERIFICATION';
-            return this.fail(err);
+          if (!isVerificationComplete) {
+            let now = (new Date).getTime();
+            let diff = now - createdDatetimeStamp;
+            if (diff < EMAIL_VERIFICATION_WINDOW) {
+              warning.push("You have less than 24 hours to verify your email address.");
+            } else {
+              let err = new Error("You need to verify your email address");
+              err.code = 'USER_REQUIRES_EMAIL_VERIFICATION';
+              return this.fail(err);
+            }
           }
         });
-      } else if (user.isBanned) {
-        let err = new Error("You have been banned from our system. Contact our adiminstrators if you believe it is a mistake.");
-        err.code = 'USER_BANNED';
-        return this.fail(err);
-      } else {
-        return cbfn({ user });
       }
+      if (!user.isPhoneVerified) {
+        this.database.phoneVerificationRequest.findByForPhone({ forPhone: user.phone }, (err, phoneVerificationRequest) => {
+          if (err) return this.fail(err);
+          if (!phoneVerificationRequest) {
+            err = new Error("Phone verification request not found.")
+            return this.fail(err);
+          }
+          let { createdDatetimeStamp, isVerificationComplete } = phoneVerificationRequest;
+          if (!isVerificationComplete) {
+            let now = (new Date).getTime();
+            let diff = now - createdDatetimeStamp;
+            if (diff < PHONE_VERIFICATION_WINDOW) {
+              warning.push("You have less than 24 hours to verify your phone number.");
+            } else {
+              let err = new Error("You need to verify your phone number.");
+              err.code = 'USER_REQUIRES_PHONE_VERIFICATION';
+              return this.fail(err);
+            }
+          }
+        });
+      }
+      return cbfn({ user, warning });
     });
   }
 

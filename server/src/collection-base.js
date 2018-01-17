@@ -4,6 +4,16 @@ let Joi = require('joi');
 class Collection {
 
   constructor(database) {
+    this.nonDeletableCollectionNameList = [
+      'email-verification-request',
+      'phone-verification-request',
+      'password-reset-request',
+      'employment',
+      'fixture',
+      'product',
+      'session'
+    ];
+
     this.database = database;
 
     this.collectionName = null; // subclass needs to define this property
@@ -43,7 +53,10 @@ class Collection {
           return reject(new Error(`unique key ${key} is missing from document.`));
         }
 
-        let query = { [key]: doc[key] };
+        let query = { 
+          [key]: doc[key], 
+          isDeleted: false 
+        };
         for (let fragment in filters) {
           query[fragment] = filters[fragment];
         }
@@ -85,7 +98,10 @@ class Collection {
     Promise.all(this.foreignKeyDefList.map(foreignKeyDef => {
       return new Promise((accept, reject) => {
         let { targetCollection, foreignKey, referringKey } = foreignKeyDef;
-        let query = { [foreignKey]: doc[referringKey] };
+        let query = { 
+          [foreignKey]: doc[referringKey], 
+          isDeleted: false 
+        };
         this.database.find(targetCollection, query, (err, docList) => {
           if (err) return reject(err);
           if (docList.length === 1) {
@@ -138,10 +154,20 @@ class Collection {
   }
 
   _find(query, ...args) {
+    if (this.nonDeletableCollectionNameList.indexOf(this.collectionName) === -1) {
+      if (!('isDeleted' in query)) {
+        query.isDeleted = false;
+      }
+    }
     return this.database.find(this.collectionName, query, ...args);
   }
 
   _findOne(query, ...args) {
+    if (this.nonDeletableCollectionNameList.indexOf(this.collectionName) === -1) {
+      if (!('isDeleted' in query)) {
+        query.isDeleted = false;
+      }
+    }
     return this.database.findOne(this.collectionName, query, ...args);
   }
 

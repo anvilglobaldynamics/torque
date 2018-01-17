@@ -140,7 +140,7 @@ class Logger {
     };
     this._saveToDisk(entry);
     if (!this.isMuted) {
-      console.log.apply(console, args);
+      console.log.apply(console, ['IMPORTANT'].concat(args));
     }
   }
 

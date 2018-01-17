@@ -42,7 +42,7 @@ exports.UserEditProfileApi = class extends userCommonMixin(emailVerificationRequ
 
             this._createEmailVerificationRequest({ email, userId }, (verificationLink) => {
               cbfn();
-              this._sendVerificationMail({ email, verificationLink });
+              this._sendEmailVerificationMail({ email, verificationLink });
             });
           });
         } else {

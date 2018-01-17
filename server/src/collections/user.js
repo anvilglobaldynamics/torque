@@ -111,7 +111,7 @@ exports.UserCollection = class extends Collection {
   setPhoneAsVerified({ userId }, cbfn) {
     let mod = {
       $set: {
-        isValid: true
+        isPhoneVerified: true
       }
     }
     this._update({ id: userId }, mod, (err, wasUpdated) => {

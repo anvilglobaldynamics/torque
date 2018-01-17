@@ -345,9 +345,9 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('warehouse');
-      expect(body.warehouse.isDeleted).to.equal(true);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('WAREHOUSE_INVALID');
       testDoneFn();
     });
 
