@@ -4,46 +4,50 @@ let pathlib = require("path");
 let userHomeDir = require('user-home');
 let fslib = require('fs');
 
+const Joi = require('joi');
+
 class ConfigLoader {
 
-  static get _defaultConfig() {
-    return {
-      "branding": {
-        "name": "Torque",
-        "serverUrl": "http://localhost:8540",
-        "clientUrl": "http://localhost:8545",
-        "author": "Torque Team",
-        "supportPhone": "017XXXXXXXX",
-        "supportEmail": "support@mg.torque.live"
-      },
-      "baseName": "torque-server",
-      "port": 8540,
-      "websocketPort": 8541,
-      "hostname": "localhost",
-      "log": {
-        "logStandardOutputToFile": true,
-        "logErrorOutputToFile": true,
-        "logStandardOutputToConsole": true,
-        "logErrorOutputToConsole": true,
-        "patchConsoleObject": true,
-        "dir": "./logs",
-        "format": "json"
-      },
-      "db": {
-        "path": "mongodb://localhost:27017/torque"
-      },
-      "email": {
-        "enabled": true,
-        "publicKey": "pubkey-00000000000000000000000000000",
-        "privateKey": "key-00000000000000000000000000000",
-        "domain": "mg.torque.live",
-        "from": "Torque Team <postmaster@mg.torque.live>"
-      },
-      "sms": {
-        "enabled": true,
-        "from": "TORQUE TEAM"
-      }
-    };
+  static get _configSchema() {
+    return Joi.object().keys({
+      baseName: Joi.string().max(1024).required(),
+      branding: Joi.object().keys({
+        name: Joi.string().max(1024).required(),
+        serverUrl: Joi.string().max(1024).required(),
+        clientUrl: Joi.string().max(1024).required(),
+        author: Joi.string().max(1024).required(),
+        supportPhone: Joi.string().max(1024).required(),
+        supportEmail: Joi.string().max(1024).required(),
+      }),
+      server: Joi.object().keys({
+        hostname: Joi.string().max(1024).required(),
+        port: Joi.number().max(65535).required(),
+        websocketPort: Joi.number().max(65535).required(),
+      }),
+      log: Joi.object().keys({
+        logStandardOutputToFile: Joi.boolean().required(),
+        logErrorOutputToFile: Joi.boolean().required(),
+        logStandardOutputToConsole: Joi.boolean().required(),
+        logErrorOutputToConsole: Joi.boolean().required(),
+        patchConsoleObject: Joi.boolean().required(),
+        dir: Joi.string().max(1024).required(),
+        format: Joi.string().max(1024).required(),
+      }),
+      db: Joi.object().keys({
+        path: Joi.string().max(1024).required(),
+      }),
+      email: Joi.object().keys({
+        enabled: Joi.boolean().required(),
+        publicKey: Joi.string().max(1024).required(),
+        privateKey: Joi.string().max(1024).required(),
+        domain: Joi.string().max(1024).required(),
+        from: Joi.string().max(1024).required(),
+      }),
+      sms: Joi.object().keys({
+        enabled: Joi.boolean().required(),
+        from: Joi.string().max(1024).required(),
+      })
+    });
   }
 
   static get _defaultLocalFilePath() {
@@ -63,6 +67,13 @@ class ConfigLoader {
     });
   }
 
+  static _doesFileExist(file, cbfn) {
+    fslib.stat(file, (err, stats) => {
+      if (err) return cbfn(false);
+      return cbfn(true);
+    });
+  }
+
   static _validateConfig(config) {
     if (!config) {
       return [(new Error("No config found"))];
@@ -72,66 +83,33 @@ class ConfigLoader {
     } catch (error) {
       return [error];
     }
-    // TODO: Further validation
-    return [null, config];
+    var { error, value: config } = Joi.validate(config, this._configSchema);
+    return [(error || null), config];
   }
 
-  static _assimilateConfig(primary, secondary) {
-    for (let key in secondary) {
-      if (secondary.hasOwnProperty(key)) {
-        if (!(key in primary)) {
-          primary[key] = secondary[key];
-        }
-        if (typeof (primary[key]) === 'object' && typeof (secondary[key]) === 'object' && !Array.isArray(primary[key])) {
-          this._assimilateConfig(primary[key], secondary[key]);
-        }
+  static _readConfig(path, isMuted, mode, cbfn) {
+    this._loadFromFile(path, (err, config) => {
+      if (err) return cbfn(err);
+      [err, config] = this._validateConfig(config);
+      if (err) return cbfn(err);
+      if (mode !== 'production' && !isMuted) {
+        console.log('(config)> Final config:\n' + JSON.stringify(config, null, 2));
       }
-    }
-    return primary;
-  }
-
-  static getComputedConfig(cbfn) {
-    let config = {};
-    let nonFatalErrorList = [];
-    var validationError;
-    this._loadFromFile(this._defaultUserLevelFilePath, (err, content) => {
-      if (err) {
-        nonFatalErrorList.push(err);
-      } else {
-        [validationError, content] = this._validateConfig(content);
-        if (validationError) {
-          nonFatalErrorList.push(validationError);
-        } else {
-          config = this._assimilateConfig(content, config);
-        }
-      }
-      this._loadFromFile(this._defaultLocalFilePath, (err, content) => {
-        if (err) {
-          nonFatalErrorList.push(err);
-        } else {
-          [validationError, content] = this._validateConfig(content);
-          if (validationError) {
-            nonFatalErrorList.push(validationError);
-          } else {
-            config = this._assimilateConfig(config, content);
-          }
-        }
-        config = this._assimilateConfig(config, this._defaultConfig);
-        cbfn(null, [nonFatalErrorList, config]);
-      });
+      return cbfn(null, config);
     });
   }
 
-  static reportErrorAndConfig(nonFatalErrorList, _config, mode) {
-    if (nonFatalErrorList.length > 0) {
-      console.log(`(config)> ${nonFatalErrorList.length} error(s) occurred during loading config. Default config will be applied.`);
-      for (let nonFatalError of nonFatalErrorList) {
-        console.error(nonFatalError);
+  static getComputedConfig(isMuted, mode, cbfn) {
+    this._doesFileExist(this._defaultUserLevelFilePath, (exists) => {
+      if (exists) {
+        this._readConfig(this._defaultUserLevelFilePath, isMuted, mode, cbfn);
+      } else {
+        if (!isMuted) {
+          console.log(`(config)> No user level config found at "${this._defaultUserLevelFilePath}". Falling back to default config.`);
+        }
+        this._readConfig(this._defaultLocalFilePath, isMuted, mode, cbfn);
       }
-    }
-    if (mode !== 'production') {
-      console.log('(config)> Final config:\n', JSON.stringify(_config, null, 2));
-    }
+    });
   }
 
 }

@@ -243,12 +243,12 @@ describe('product-category', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('productCategoryList').that.is.an('array');
-      
+
       body.productCategoryList.forEach(productCategory => {
         validateProductCategorySchema(productCategory);
       });
       productCategoryList = body.productCategoryList;
-      
+
       testDoneFn();
     });
 
@@ -385,7 +385,7 @@ describe('product-category', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error.code).to.equal('PRODUCT_CATEGORY_INVALID');
-      
+
       testDoneFn();
     })
 
@@ -443,15 +443,18 @@ describe('product-category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
+
+
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('productCategoryList').that.is.an('array');
 
       body.productCategoryList.forEach(productCategory => {
         validateProductCategorySchema(productCategory);
       });
+      let oldList = productCategoryList;
       productCategoryList = body.productCategoryList;
 
-      expect(body.productCategoryList[productCategoryList.length - 1].isDeleted).to.equal(true);
+      expect(productCategoryList.length + 1).to.equal(oldList.length);
       testDoneFn();
     });
 

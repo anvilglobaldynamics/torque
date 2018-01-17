@@ -40,7 +40,7 @@ exports.UserChangePasswordApi = class extends userCommonMixin(Api) {
     let { oldPassword, newPassword } = body;
     this._changePassword({ userId, oldPassword, newPassword }, _ => {
       this.success({ status: "success" });
-      this._notifyPasswordChange({ userId }, _ => null);
+      this._notifyPasswordChange({ userId });
     });
   }
 

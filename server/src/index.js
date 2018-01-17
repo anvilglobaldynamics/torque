@@ -16,6 +16,7 @@ let { UserRegisterApi } = require('./apis/user-register');
 let { UserLoginApi } = require('./apis/user-login');
 let { UserLogoutApi } = require('./apis/user-logout');
 let { VerifyEmailApi } = require('./apis/verify-email');
+let { VerifyPhoneApi } = require('./apis/verify-phone');
 let { UserChangePasswordApi } = require('./apis/user-change-password');
 let { UserEditProfileApi } = require('./apis/user-edit-profile');
 
@@ -81,6 +82,7 @@ let { InternalStatus } = require('./apis/internal--status');
 let { FixtureCollection } = require('./collections/fixture');
 let { UserCollection } = require('./collections/user');
 let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
+let { PhoneVerificationRequestCollection } = require('./collections/phone-verification-request');
 let { SessionCollection } = require('./collections/session');
 let { OrganizationCollection } = require('./collections/organization');
 let { EmploymentCollection } = require('./collections/employment');
@@ -119,12 +121,9 @@ class Program {
   initiateServer(callback) {
     Promise.resolve()
       .then(() => {
-        return promisify(ConfigLoader, ConfigLoader.getComputedConfig);
+        return promisify(ConfigLoader, ConfigLoader.getComputedConfig, this.muteLogger, mode);
       })
-      .then(([nonFatalErrorList, _config]) => {
-        if (!this.muteLogger) {
-          ConfigLoader.reportErrorAndConfig(nonFatalErrorList, _config, mode);
-        }
+      .then((_config) => {
         config = _config;
         return Promise.resolve();
       })
@@ -152,6 +151,7 @@ class Program {
         database.registerCollection('fixture', FixtureCollection);
         database.registerCollection('user', UserCollection);
         database.registerCollection('emailVerificationRequest', EmailVerificationRequestCollection);
+        database.registerCollection('phoneVerificationRequest', PhoneVerificationRequestCollection);
         database.registerCollection('session', SessionCollection);
         database.registerCollection('organization', OrganizationCollection);
         database.registerCollection('employment', EmploymentCollection);
@@ -191,6 +191,14 @@ class Program {
         return Promise.resolve();
       })
       .then(() => {
+        return promisify(smsService, smsService.initialize, logger);
+      })
+      .then(() => {
+        logger.info('(server)> sms services initialized.');
+        server.setSmsService(smsService);
+        return Promise.resolve();
+      })
+      .then(() => {
         return promisify(server, server.initialize);
       })
       .then(() => {
@@ -199,6 +207,8 @@ class Program {
       })
       .then(() => {
         logger.info('(server)> registering APIs');
+        
+        server.registerGetApi('/verify-phone/:link', VerifyPhoneApi);
         server.registerGetApi('/verify-email/:link', VerifyEmailApi);
         server.registerGetApi('/internal--status', InternalStatus);
 

@@ -2,24 +2,24 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.VerifyEmailApi = class extends Api {
+exports.VerifyPhoneApi = class extends Api {
 
   _applyVerificationToken(verificationToken, cbfn) {
-    this.database.emailVerificationRequest.applyVerificationToken({ verificationToken }, (err, forUserId) => {
+    this.database.phoneVerificationRequest.applyVerificationToken({ verificationToken }, (err, forUserId) => {
       if (err) return cbfn(err);
-      this.database.user.setEmailAsVerified({ userId: forUserId }, cbfn);
+      this.database.user.setPhoneAsVerified({ userId: forUserId }, cbfn);
     })
   }
 
   _showFailed(message, err = new Error("Verification Failed")) {
     let errorObject = this.failable(err);
     let body = message;
-    this.sendGenericHtmlMessage("Email Verification Failed", body, errorObject);
+    this.sendGenericHtmlMessage("Phone Verification Failed", body, errorObject);
   }
 
   _showSuccess() {
-    let body = "Congratulations. You have successfully verified your email address for torque.life. You can close this window."
-    this.sendGenericHtmlMessage("Email Verification Successful", body);
+    let body = "Congratulations. You have successfully verified your phone number for torque.life. You can close this window."
+    this.sendGenericHtmlMessage("Phone Verification Successful", body);
   }
 
   handle() {

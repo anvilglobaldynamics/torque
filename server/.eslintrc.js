@@ -59,6 +59,7 @@ module.exports = {
         "block-spacing": "error",
         "brace-style": "error",
         "camelcase": "error",
-        "no-unused-vars": ["error", { "vars": "all", "args": "none" }]
+        "no-unused-vars": ["error", { "vars": "all", "args": "none" }],
+        "linebreak-style": [0, "windows"]
     }
 };

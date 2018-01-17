@@ -1,7 +1,10 @@
 
 let _knownErrorCodeList = [];
 
-let Joi = require('joi');
+const Joi = require('joi');
+const Entities = require('html-entities').XmlEntities;
+const entities = new Entities();
+const baselib = require('baselib');
 
 class Api {
 
@@ -66,7 +69,7 @@ class Api {
       if (error) {
         this.fail(error, error);
       } else {
-        body = value;
+        body = this.sanitize(value);
         if (this.requiresAuthentication) {
           let { apiKey } = body;
           this.authenticate(body, (err, userId) => {
@@ -102,10 +105,6 @@ class Api {
     this._sendResponse({ hasError: true, error: errorObject });
   }
 
-  validate(object, schema) {
-    return Joi.validate(object, schema);
-  }
-
   success(object = {}) {
     object.hasError = false;
     this._sendResponse(object);
@@ -116,6 +115,33 @@ class Api {
       return this._request.params;
     }
     return {};
+  }
+
+  // region: security ==========================
+
+  validate(object, schema) {
+    return Joi.validate(object, schema, {
+      abortEarly: true,
+      convert: true,
+      allowUnknown: false
+    });
+  }
+
+  sanitize(object) {
+    if (typeof (object) === "string") return entities.encode(object);
+    if (typeof (object) === "object" && object !== null) {
+      if (Array.isArray(object)) {
+        for (let i = 0; i < object.length; i++) {
+          object[i] = this.sanitize(object[i]);
+        }
+      } else {
+        let keys = Object.keys(object);
+        for (let i = 0; i < keys.length; i++) {
+          object[keys[i]] = this.sanitize(object[keys[i]]);
+        }
+      }
+    }
+    return object;
   }
 
   // region: access control ==========================
@@ -145,7 +171,27 @@ class Api {
     query = query(body);
     this.database.findOne(from, query, (err, doc) => {
       if (err) return cbfn(err);
-      cbfn(null, doc[select]);
+      cbfn(null, doc);
+    });
+  }
+
+  __processAccessControlQueryArray(body, queryObjectArray, cbfn) {
+    baselib.asyncForIn(queryObjectArray).forEach((next, queryObject, index) => {
+      this.__processAccessControlQuery(body, queryObject, (err, doc) => {
+        if (err) return cbfn(err);
+        if (!doc || !(queryObject.select in doc)) {
+          if ('errorCode' in queryObject) {
+            err = new Error(`Access Control Rejection. Unable to locate ${queryObject.select} from ${queryObject.from}`);
+            err.code = queryObject.errorCode;
+            return cbfn(err);
+          }
+          return cbfn(null, null);
+        }
+        body[queryObject.select] = doc[queryObject.select];
+        next();
+      })
+    }).finally(() => {
+      cbfn(null, body[queryObjectArray[queryObjectArray.length - 1].select]);
     });
   }
 
@@ -164,7 +210,10 @@ class Api {
             accept({ err, organization });
           });
         } else {
-          this.__processAccessControlQuery(body, organizationBy, (err, organizationId) => {
+          if (!Array.isArray(organizationBy)) {
+            organizationBy = [organizationBy];
+          }
+          this.__processAccessControlQueryArray(body, organizationBy, (err, organizationId) => {
             if (err) return accept({ err });
             this.database.organization.findById({ organizationId }, (err, organization) => {
               accept({ err, organization });
@@ -226,10 +275,14 @@ class Api {
          request body.
       5. If "organizationBy" is a function, that function is called with (userId, body, (err, organization)=> ..)
          and is expected to return the organization as callback. The execution context is always the api.
-      6. If "organizationBy" is an object, that object has the following properties - 
+      6. If "organizationBy" is an object, that object must have following properties - 
          "from" - name of the mongodb collection (IN HYPHENATED FROM)
-         "query" - a function that received the request body as parameter and returns a query
+         "query" - a sync function that received the request body as parameter and returns a query
          "select" - the value to select to be used as "organizationId"
+         "errorCode" - override the default error code "ACCESS_CONTROL_INVALID_ORGANIZATION" with another one. (optional)
+      7. If "organizationBy" is an array, it must contain objects mentioned in 6 in an array. Note that, the
+         objects are processed from top to bottom. And the resulting "select"ed values are pushed into the "body" object
+         passed to the "query" function.
   */
   _enforceAccessControl(userId, body, cbfn) {
     let rules = this.accessControl;
