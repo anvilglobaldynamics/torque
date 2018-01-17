@@ -19,7 +19,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     return [{
       organizationBy: {
         from: "inventory",
-        query: ({ customerId }) => ({ id: inventoryId }),
+        query: ({ inventoryId }) => ({ id: inventoryId }),
         select: "organizationId"
       },
       privileges: [
