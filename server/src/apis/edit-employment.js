@@ -58,8 +58,9 @@ exports.EditEmploymentApi = class extends Api {
     return [{
       organizationBy: {
         from: "employment",
-        query: ({ customerId }) => ({ id: employmentId }),
-        select: "organizationId"
+        query: ({ employmentId }) => ({ id: employmentId }),
+        select: "organizationId",
+        errorCode: "EMPLOYEE_INVALID"
       },
       privileges: [
         "PRIV_MODIFY_USERS",

@@ -49,7 +49,7 @@ let invalidUserId = generateInvalidId();
 let invalidEmploymentId = generateInvalidId();
 let invalidOrganizationId = generateInvalidId();
 
-describe('employee', _ => {
+describe.only('employee', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -769,7 +769,7 @@ describe('employee', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('GENERIC_SERVER_ERROR');
+      expect(body.error).to.have.property('code').that.equals('EMPLOYEE_INVALID');
 
       testDoneFn();
     })
