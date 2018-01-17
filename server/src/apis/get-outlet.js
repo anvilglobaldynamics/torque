@@ -20,7 +20,8 @@ exports.GetOutletApi = class extends Api {
       organizationBy: {
         from: "outlet",
         query: ({ outletId }) => ({ id: outletId }),
-        select: "organizationId"
+        select: "organizationId",
+        errorCode: "OUTLET_INVALID"
       },
       privileges: [
         "PRIV_VIEW_ALL_OUTLETS"
