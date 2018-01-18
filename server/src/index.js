@@ -25,7 +25,7 @@ let { UserResetPasswordGetTokenInfoApi } = require('./apis/user-reset-password--
 let { UserResetPasswordConfirmApi } = require('./apis/user-reset-password--confirm');
 
 let { AddOrganizationApi } = require('./apis/add-organization');
-let { GetrganizationListApi } = require('./apis/get-organization-list');
+let { GetOrganizationListApi } = require('./apis/get-organization-list');
 let { EditOrganizationApi } = require('./apis/edit-organization');
 
 let { AddNewEmployeeApi } = require('./apis/add-new-employee');
@@ -218,7 +218,7 @@ class Program {
         server.registerPostApi('/api/user-change-password', UserChangePasswordApi);
         server.registerPostApi('/api/user-edit-profile', UserEditProfileApi);
         server.registerPostApi('/api/add-organization', AddOrganizationApi);
-        server.registerPostApi('/api/get-organization-list', GetrganizationListApi);
+        server.registerPostApi('/api/get-organization-list', GetOrganizationListApi);
         server.registerPostApi('/api/edit-organization', EditOrganizationApi);
         server.registerPostApi('/api/add-customer', AddCustomerApi);
         server.registerPostApi('/api/get-customer', GetCustomerApi);
