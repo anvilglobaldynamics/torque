@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.EditCustomerApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.EditCustomerApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -32,8 +34,8 @@ exports.EditCustomerApi = class extends Api {
   }
 
   _updateCustomer({ customerId, fullName, phone }, cbfn) {
-    this.database.customer.update({ customerId }, { fullName, phone }, (err) => {
-      if (err) return this.fail(err);
+    this.database.customer.update({ customerId }, { fullName, phone }, (err, wasUpdated) => {
+      if (!this._ensureUpdate(err, wasUpdated, "customer")) return;
       return cbfn();
     });
   }
