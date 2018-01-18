@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.GetSalesReturnApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.GetSalesReturnApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -43,12 +45,7 @@ exports.GetSalesReturnApi = class extends Api {
 
   _getSalesReturn({ salesReturnId }, cbfn) {
     this.database.salesReturn.findById({ salesReturnId }, (err, salesReturn) => {
-      if (err) return this.fail(err);
-      if (salesReturn === null) {
-        err = new Error("sales return not found");
-        err.code = "SALES_RETURN_INVALID";
-        return this.fail(err);
-      }
+      if (!this._ensureDoc(err, salesReturn, "SALES_RETURN_INVALID", "Sales return not found")) return;
       return cbfn(salesReturn);
     });
   }
