@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.FindUserApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.FindUserApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -20,12 +22,7 @@ exports.FindUserApi = class extends Api {
 
   _findUser({ emailOrPhone }, cbfn) {
     this.database.user.findByEmailOrPhone({ emailOrPhone }, (err, user) => {
-      if (err) return this.fail(err);
-      if (user === null) {
-        err = new Error("User with this phone/email does not exist");
-        err.code = "USER_DOES_NOT_EXIST"
-        return this.fail(err);
-      }
+      if (!this._ensureDoc(err, user, "USER_DOES_NOT_EXIST", "User with this phone/email does not exist")) return;
       return cbfn(user);
     });
   }
