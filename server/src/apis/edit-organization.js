@@ -2,7 +2,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.EditOrganizationApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.EditOrganizationApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -31,8 +33,7 @@ exports.EditOrganizationApi = class extends Api {
 
   _updateOrganization({ organizationId, name, primaryBusinessAddress, phone, email }, cbfn) {
     this.database.organization.update({ organizationId }, { name, primaryBusinessAddress, phone, email }, (err, wasUpdated) => {
-      if (err) return this.fail(err);
-      if (!wasUpdated) return this.fail(new Error('Unable to find organization to update'));
+      if (!this._ensureUpdate(err, wasUpdated, "organization")) return;
       return cbfn();
     });
   }
