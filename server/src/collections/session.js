@@ -73,11 +73,7 @@ exports.SessionCollection = class extends Collection {
         terminatedDatetimeStamp: (new Date).getTime()
       }
     };
-    this._update({ id: sessionId }, mod, (err, wasUpdated) => {
-      if (err) return cbfn(err);
-      if (!wasUpdated) return cbfn(new Error("Session Not Found"));
-      return cbfn();
-    });
+    this._update({ id: sessionId }, mod, cbfn);
   }
 
   // FIXME: Logical Separation

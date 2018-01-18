@@ -2,7 +2,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.UserResetPasswordGetTokenInfoApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.UserResetPasswordGetTokenInfoApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -16,12 +18,7 @@ exports.UserResetPasswordGetTokenInfoApi = class extends Api {
 
   _getTokenInfoIfValid({ uniqueToken: confirmationToken }, cbfn) {
     this.database.passwordResetRequest.findByConfirmationToken({ confirmationToken }, (err, passwordResetRequest) => {
-      if (err) return this.fail(err);
-      if (!passwordResetRequest) {
-        let err = new Error("Invalid password reset token provided.");
-        err.code = 'PASSWORD_RESET_TOKEN_INVALID';
-        return this.fail(err);
-      }
+      if (!this._ensureDoc(err, passwordResetRequest, "PASSWORD_RESET_TOKEN_INVALID", "Invalid password reset token provided.")) return;
       let { forEmail, forUserId, forPhone } = passwordResetRequest;
       let tokenInfo = { forEmail, forPhone };
       cbfn(tokenInfo);

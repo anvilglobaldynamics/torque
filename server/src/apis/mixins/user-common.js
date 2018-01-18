@@ -58,17 +58,7 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
       passwordHash
     }
     this.database.user.create(user, (err, userId) => {
-      if (err) {
-        if ('code' in err && err.code === 'DUPLICATE_email') {
-          err = new Error("Provided email address is already in use");
-          err.code = 'EMAIL_ALREADY_IN_USE';
-        }
-        if ('code' in err && err.code === 'DUPLICATE_phone') {
-          err = new Error("Provided phone number is already in use");
-          err.code = 'PHONE_ALREADY_IN_USE';
-        }
-        return this.fail(err);
-      }
+      if (err) return this.fail(err);
       return cbfn(userId);
     });
   }

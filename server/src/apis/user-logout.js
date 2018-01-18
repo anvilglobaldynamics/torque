@@ -2,7 +2,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.UserLogoutApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.UserLogoutApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -16,8 +18,8 @@ exports.UserLogoutApi = class extends Api {
   handle({ body, userId, apiKey }) {
     this.database.session.findByApiKey({ apiKey }, (err, session) => {
       if (err) return this.fail(err);
-      this.database.session.close({ sessionId: session.id }, (err) => {
-        if (err) return this.fail(err);
+      this.database.session.close({ sessionId: session.id }, (err, wasUpdated) => {
+        if (!this._ensureUpdate(err, wasUpdated, "session")) return;
         this.success({ status: "success" });
       })
     })
