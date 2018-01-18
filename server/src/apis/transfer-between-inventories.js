@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.TransferBetweenInventoriesApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.TransferBetweenInventoriesApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -44,29 +46,19 @@ exports.TransferBetweenInventoriesApi = class extends Api {
     ];
   }
 
-  _getInventoriesWithId(fromInventoryId, toInventoryId, cbfn) {
+  _getInventoriesWithId({ fromInventoryId, toInventoryId }, cbfn) {
     this.database.inventory.findById({ inventoryId: fromInventoryId }, (err, inventory) => {
-      if (err) return this.fail(err);
-      if (inventory === null) {
-        err = new Error("inventory could not be found");
-        err.code = "FROM_INVENTORY_INVALID"
-        return this.fail(err);
-      }
+      if (!this._ensureDoc(err, inventory, "FROM_INVENTORY_INVALID", "Inventory could not be found")) return;
       let fromInventory = inventory;
       this.database.inventory.findById({ inventoryId: toInventoryId }, (err, inventory) => {
-        if (err) return this.fail(err);
-        if (inventory === null) {
-          err = new Error("inventory could not be found");
-          err.code = "TO_INVENTORY_INVALID"
-          return this.fail(err);
-        }
+        if (!this._ensureDoc(err, inventory, "TO_INVENTORY_INVALID", "Inventory could not be found")) return;
         let toInventory = inventory;
         cbfn(fromInventory, toInventory);
       })
     })
   }
 
-  _transfer(fromInventory, toInventory, productList, cbfn) {
+  _transfer({ fromInventory, toInventory, productList }, cbfn) {
     productList.forEach(product => {
       let foundProduct = fromInventory.productList.find(_product => _product.productId === product.productId);
       if (!foundProduct) {
@@ -74,6 +66,7 @@ exports.TransferBetweenInventoriesApi = class extends Api {
         err.code = "PRODUCT_INVALID"
         return this.fail(err);
       }
+      // TODO: if (!this._ensureDoc(err, foundProduct, "PRODUCT_INVALID", "Product could not be found in source inventory")) return;
       if (foundProduct.count < product.count) {
         err = new Error("not enough product(s) in source inventory");
         err.code = "PRODUCT_INSUFFICIENT"
@@ -91,7 +84,7 @@ exports.TransferBetweenInventoriesApi = class extends Api {
     cbfn();
   }
 
-  _updateInventories(fromInventory, toInventory, cbfn) {
+  _updateInventories({ fromInventory, toInventory }, cbfn) {
     let inventoryId = fromInventory.id;
     let productList = fromInventory.productList;
     this.database.inventory.updateProductList({ inventoryId }, { productList }, (err) => {
@@ -107,9 +100,9 @@ exports.TransferBetweenInventoriesApi = class extends Api {
 
   handle({ body }) {
     let { fromInventoryId, toInventoryId, productList } = body;
-    this._getInventoriesWithId(fromInventoryId, toInventoryId, (fromInventory, toInventory) => {
-      this._transfer(fromInventory, toInventory, productList, () => {
-        this._updateInventories(fromInventory, toInventory, () => {
+    this._getInventoriesWithId({ fromInventoryId, toInventoryId }, (fromInventory, toInventory) => {
+      this._transfer({ fromInventory, toInventory, productList }, () => {
+        this._updateInventories({ fromInventory, toInventory }, () => {
           this.success();
         });
       });
