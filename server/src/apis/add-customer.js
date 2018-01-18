@@ -32,13 +32,7 @@ exports.AddCustomerApi = class extends Api {
       organizationId, fullName, phone, openingBalance
     }
     this.database.customer.create(customer, (err, customerId) => {
-      if (err) {
-        if ('code' in err && err.code === 'DUPLICATE_phone') {
-          err = new Error("Provided phone number is already in use");
-          err.code = 'PHONE_ALREADY_IN_USE';
-        }
-        return this.fail(err);
-      }
+      if (err) return this.fail(err);
       return cbfn(customerId);
     });
   }

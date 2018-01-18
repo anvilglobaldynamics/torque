@@ -21,6 +21,15 @@ exports.AddWarehouseApi = class extends inventoryCommonMixin(Api) {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_MODIFY_ALL_WAREHOUSES"
+      ]
+    }];
+  }
+
   _createWarehouse({ name, organizationId, physicalAddress, phone, contactPersonName }, cbfn) {
     let warehouse = {
       name, organizationId, physicalAddress, phone, contactPersonName

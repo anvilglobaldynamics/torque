@@ -21,6 +21,15 @@ exports.AddOutletApi = class extends inventoryCommonMixin(Api) {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_MODIFY_ALL_OUTLETS"
+      ]
+    }];
+  }
+
   _createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName }, cbfn) {
     let outlet = {
       name, organizationId, physicalAddress, phone, contactPersonName
