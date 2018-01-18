@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.EditProductCategoryApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.EditProductCategoryApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -36,12 +38,7 @@ exports.EditProductCategoryApi = class extends Api {
       this._updateProductCategory({ productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn);
     } else {
       this.database.productCategory.findById({ productCategoryId: parentProductCategoryId }, (err, parentProductCategory) => {
-        if (err) return this.fail(err);
-        if (parentProductCategory === null) {
-          err = new Error("parent product category not found");
-          err.code = "PARENT_PRODUCT_CATEGORY_INVALID";
-          return this.fail(err);
-        }
+        if (!this._ensureDoc(err, parentProductCategory, "PARENT_PRODUCT_CATEGORY_INVALID", "parent product category not found")) return;
         this._updateProductCategory({ productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn);
       })
     }
@@ -49,8 +46,7 @@ exports.EditProductCategoryApi = class extends Api {
 
   _updateProductCategory({ productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
     this.database.productCategory.update({ productCategoryId }, { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, (err, wasUpdated) => {
-      if (err) return this.fail(err);
-      if (!wasUpdated) return this.fail(new Error('Unable to find product-category to update'));
+      if (!this._ensureUpdate(err, wasUpdated, "product-category")) return;
       return cbfn();
     });
   }
