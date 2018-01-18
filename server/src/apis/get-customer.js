@@ -20,7 +20,8 @@ exports.GetCustomerApi = class extends Api {
       organizationBy: {
         from: "customer",
         query: ({ customerId }) => ({ id: customerId }),
-        select: "organizationId"
+        select: "organizationId",
+        errorCode: "CUSTOMER_INVALID"
       },
       privileges: [
         "PRIV_VIEW_CUSTOMER"

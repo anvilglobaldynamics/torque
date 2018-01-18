@@ -428,6 +428,23 @@ describe('customer', _ => {
 
   });
 
+  it('api/get-customer (Invalid customerId): ', testDoneFn => {
+
+    callApi('api/get-customer', {
+      json: {
+        apiKey,
+        customerId: invalidCustomerId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('CUSTOMER_INVALID');
+      testDoneFn();
+    })
+
+  });
+
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
   });
