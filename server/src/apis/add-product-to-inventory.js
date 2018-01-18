@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.AddProductToInventoryApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.AddProductToInventoryApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -43,8 +45,8 @@ exports.AddProductToInventoryApi = class extends Api {
         let { productCategoryId, purchasePrice, salePrice, count } = product
         this.database.product.create({ productCategoryId, purchasePrice, salePrice }, (err, productId) => {
           if (err) return reject(err);
-          this.database.inventory.addProduct({ inventoryId }, { productId, count }, (err) => {
-            if (err) return reject(err);
+          this.database.inventory.addProduct({ inventoryId }, { productId, count }, (err, wasUpdated) => {
+            if (!this._ensureUpdate(err, wasUpdated, "inventory")) return;
             accept();
           });
         });

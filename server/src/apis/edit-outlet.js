@@ -36,7 +36,7 @@ exports.EditOutletApi = class extends collectionCommonMixin(Api) {
 
   _updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName }, cbfn) {
     this.database.outlet.update({ outletId }, { name, physicalAddress, phone, contactPersonName }, (err, wasUpdated) => {
-      if (!this._ensureUpdate(err, wasUpdated, collectionCommonMixin)) return;
+      if (!this._ensureUpdate(err, wasUpdated, "outlet")) return;
       return cbfn();
     });
   }
