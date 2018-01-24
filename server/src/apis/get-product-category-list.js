@@ -15,8 +15,8 @@ exports.GetProductCategoryListApi = class extends Api {
     });
   }
 
-  _getProductCategoryList(organizationId, cbfn) {
-    this.database.productCategory.listByOrganizationId({organizationId}, (err, productCategoryList) => {
+  _getProductCategoryList({ organizationId }, cbfn) {
+    this.database.productCategory.listByOrganizationId({ organizationId }, (err, productCategoryList) => {
       if (err) return this.fail(err);
       cbfn(productCategoryList);
     })
@@ -24,7 +24,7 @@ exports.GetProductCategoryListApi = class extends Api {
 
   handle({ body }) {
     let { organizationId } =  body;
-    this._getProductCategoryList(organizationId, (productCategoryList) => {
+    this._getProductCategoryList({ organizationId }, (productCategoryList) => {
       this.success({ productCategoryList });
     });
   }

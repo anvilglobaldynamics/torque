@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.GetAggregatedInventoryDetailsApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -28,19 +30,14 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     }];
   }
 
-  _getProductList(inventoryId, cbfn) {
+  _getProductList({ inventoryId }, cbfn) {
     this.database.inventory.findById({ inventoryId }, (err, inventory) => {
-      if (err) return this.fail(err);
-      if (inventory === null) {
-        err = new Error("inventory could not be found");
-        err.code = "INVENTORY_INVALID"
-        return this.fail(err);
-      }
+      if (!this._ensureDoc(err, inventory, "INVENTORY_INVALID", "inventory could not be found")) return;
       cbfn(inventory.productList)
     })
   }
 
-  _getMatchingProductList(productList, cbfn) {
+  _getMatchingProductList({ productList }, cbfn) {
     let productIdList = productList.map(product => product.productId);
     this.database.product.findByIdList({ idList: productIdList }, (err, matchingProductList) => {
       if (err) return this.fail(err);
@@ -48,7 +45,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     })
   }
 
-  _getMatchingProductCategoryList(matchingProductList, cbfn) {
+  _getMatchingProductCategoryList({ matchingProductList }, cbfn) {
     let productCategoryIdList = matchingProductList.map(product => product.productCategoryId);
     this.database.productCategory.listByIdList({ idList: productCategoryIdList }, (err, matchingProductCategoryList) => {
       if (err) return this.fail(err);
@@ -58,9 +55,9 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
 
   handle({ body }) {
     let { inventoryId } = body;
-    this._getProductList(inventoryId, productList => {
-      this._getMatchingProductList(productList, matchingProductList => {
-        this._getMatchingProductCategoryList(matchingProductList, matchingProductCategoryList => {
+    this._getProductList({ inventoryId }, (productList) => {
+      this._getMatchingProductList({ productList }, (matchingProductList) => {
+        this._getMatchingProductCategoryList({ matchingProductList }, (matchingProductCategoryList) => {
           this.success({ productList, matchingProductList, matchingProductCategoryList });
         });
       });

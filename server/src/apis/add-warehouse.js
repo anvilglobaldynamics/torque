@@ -21,18 +21,21 @@ exports.AddWarehouseApi = class extends inventoryCommonMixin(Api) {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_MODIFY_ALL_WAREHOUSES"
+      ]
+    }];
+  }
+
   _createWarehouse({ name, organizationId, physicalAddress, phone, contactPersonName }, cbfn) {
     let warehouse = {
       name, organizationId, physicalAddress, phone, contactPersonName
     }
     this.database.warehouse.create(warehouse, (err, warehouseId) => {
-      if (err) {
-        if ('code' in err && err.code === 'DUPLICATE_phone') {
-          err = new Error("Provided phone number is already in use");
-          err.code = 'PHONE_ALREADY_IN_USE';
-        }
-        return this.fail(err);
-      }
+      if (err) return this.fail(err);
       return cbfn(warehouseId);
     });
   }

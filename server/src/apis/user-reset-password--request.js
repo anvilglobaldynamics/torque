@@ -6,7 +6,9 @@ let { generateRandomString } = require('./../utils/random-string');
 
 let { userCommonMixin } = require('./mixins/user-common');
 
-exports.UserResetPasswordRequestApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -72,12 +74,7 @@ exports.UserResetPasswordRequestApi = class extends Api {
 
   _getUserIfValid({ emailOrPhone }, cbfn) {
     this.database.user.findByEmailOrPhone({ emailOrPhone }, (err, user) => {
-      if (err) return this.fail(err);
-      if (!user) {
-        let err = new Error("No user matched the email and password combination");
-        err.code = 'USER_NOT_FOUND';
-        return this.fail(err);
-      }
+      if (!this._ensureDoc(err, user, "USER_NOT_FOUND", "No user matched the email and password combination")) return;
       cbfn(user);
     });
   }

@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.EditEmploymentApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.EditEmploymentApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -74,8 +76,7 @@ exports.EditEmploymentApi = class extends Api {
 
   _updateEmployment({ employmentId, isActive, role, designation, companyProvidedId, privileges }, cbfn) {
     this.database.employment.update({ employmentId }, { isActive, role, designation, companyProvidedId, privileges }, (err, wasUpdated) => {
-      if (err) return this.fail(err);
-      if (!wasUpdated) return this.fail(new Error('Unable to find employment to update'));
+      if (!this._ensureUpdate(err, wasUpdated, "outlet")) return;
       return cbfn();
     });
   }

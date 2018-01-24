@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.GetEmployeeApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.GetEmployeeApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -31,12 +33,7 @@ exports.GetEmployeeApi = class extends Api {
 
   _getEmployee({ employmentId }, cbfn) {
     this.database.employment.getEmploymentById({ employmentId }, (err, employee) => {
-      if (err) return this.fail(err);
-      if (employee === null) {
-        err = new Error("Employee does not exist");
-        err.code = "EMPLOYEE_INVALID"
-        return this.fail(err);
-      }
+      if (!this._ensureDoc(err, employee, "EMPLOYEE_INVALID", "Employee does not exist")) return;
       return cbfn(employee);
     })
   }

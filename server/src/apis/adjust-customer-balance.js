@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.AdjustCustomerBalanceApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.AdjustCustomerBalanceApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -35,12 +37,7 @@ exports.AdjustCustomerBalanceApi = class extends Api {
   // FIXME: move to customerCommonMixin
   _getCustomer({ customerId }, cbfn) {
     this.database.customer.findById({ customerId }, (err, customer) => {
-      if (err) return this.fail(err);
-      if (customer == null) {
-        err = new Error("customer does not exist");
-        err.code = 'CUSTOMER_INVALID';
-        return this.fail(err);
-      }
+      if (!this._ensureDoc(err, customer, "CUSTOMER_INVALID", "customer does not exist")) return;
       return cbfn(customer);
     });
   }

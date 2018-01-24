@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.EditWarehouseApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.EditWarehouseApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -34,8 +36,7 @@ exports.EditWarehouseApi = class extends Api {
 
   _updateWarehouse({ warehouseId, name, physicalAddress, phone, contactPersonName }, cbfn) {
     this.database.warehouse.update({ warehouseId }, { name, physicalAddress, phone, contactPersonName }, (err, wasUpdated) => {
-      if (err) return this.fail(err);
-      if (!wasUpdated) return this.fail(new Error('Unable to find warehouse to update'));
+      if (!this._ensureUpdate(err, wasUpdated, "warehouse")) return;
       return cbfn();
     });
   }

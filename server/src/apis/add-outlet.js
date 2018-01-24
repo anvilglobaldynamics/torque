@@ -21,18 +21,21 @@ exports.AddOutletApi = class extends inventoryCommonMixin(Api) {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_MODIFY_ALL_OUTLETS"
+      ]
+    }];
+  }
+
   _createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName }, cbfn) {
     let outlet = {
       name, organizationId, physicalAddress, phone, contactPersonName
     }
     this.database.outlet.create(outlet, (err, outletId) => {
-      if (err) {
-        if ('code' in err && err.code === 'DUPLICATE_phone') {
-          err = new Error("Provided phone number is already in use");
-          err.code = 'PHONE_ALREADY_IN_USE';
-        }
-        return this.fail(err);
-      }
+      if (err) return this.fail(err);
       return cbfn(outletId);
     });
   }

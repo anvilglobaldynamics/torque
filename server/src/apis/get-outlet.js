@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.GetOutletApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.GetOutletApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -29,19 +31,14 @@ exports.GetOutletApi = class extends Api {
     }];
   }
 
-  _getOutlet(outletId, cbfn) {
+  _getOutlet({ outletId }, cbfn) {
     this.database.outlet.findById({ outletId }, (err, outlet) => {
-      if (err) return this.fail(err);
-      if (outlet === null) {
-        err = new Error("outlet not found");
-        err.code = "OUTLET_INVALID";
-        return this.fail(err);
-      }
+      if (!this._ensureDoc(err, outlet, "OUTLET_INVALID", "Outlet not found.")) return;
       cbfn(outlet);
     })
   }
 
-  _getOutletInventories(outletId, cbfn) {
+  _getOutletInventories({ outletId }, cbfn) {
     this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
       let defaultInventory, returnedInventory, damagedInventory;
       inventoryList.forEach(inventory => {
@@ -62,8 +59,8 @@ exports.GetOutletApi = class extends Api {
 
   handle({ body }) {
     let { outletId } = body;
-    this._getOutlet(outletId, (outlet) => {
-      this._getOutletInventories(outletId, (defaultInventory, returnedInventory, damagedInventory) => {
+    this._getOutlet({ outletId }, (outlet) => {
+      this._getOutletInventories({ outletId }, (defaultInventory, returnedInventory, damagedInventory) => {
         this.success({ outlet, defaultInventory, returnedInventory, damagedInventory });
       })
     });

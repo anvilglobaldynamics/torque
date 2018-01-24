@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.HireUserAsEmployeeApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.HireUserAsEmployeeApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -68,12 +70,7 @@ exports.HireUserAsEmployeeApi = class extends Api {
 
   _findUser({ userId }, cbfn) {
     this.database.user.findById({ userId }, (err, user) => {
-      if (err) return this.fail(err);
-      if (user === null) {
-        err = new Error("Invalid User could not be found");
-        err.code = "USER_INVALID"
-        return this.fail(err);
-      }
+      if (!this._ensureDoc(err, user, "USER_INVALID", "Invalid User could not be found")) return;
       return cbfn();
     })
   }

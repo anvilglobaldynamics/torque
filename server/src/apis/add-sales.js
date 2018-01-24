@@ -56,7 +56,7 @@ exports.AddSalesApi = class extends Api {
   }
 
   // FIXME: use inventoryCommonMixin
-  _getOutletDefaultInventory(outletId, cbfn) {
+  _getOutletDefaultInventory({ outletId }, cbfn) {
     this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
       if (err) return this.fail(err);
       if (inventoryList.length === 0) {
@@ -73,7 +73,7 @@ exports.AddSalesApi = class extends Api {
   }
 
   // FIXME: move to customerCommonMixin
-  _getCustomer(customerId, cbfn) {
+  _getCustomer({ customerId }, cbfn) {
     this.database.customer.findById({ customerId }, (err, customer) => {
       if (err) return this.fail(err);
       // if (customer === null) {
@@ -85,7 +85,7 @@ exports.AddSalesApi = class extends Api {
     });
   }
 
-  _sell(outletDefaultInventory, productList, cbfn) {
+  _sell({ outletDefaultInventory, productList }, cbfn) {
     productList.forEach(product => {
       let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
       if (!foundProduct) {
@@ -103,19 +103,19 @@ exports.AddSalesApi = class extends Api {
     cbfn();
   }
 
-  _handlePayment(payment, customer, cbfn) {
+  _handlePayment({ payment, customer }, cbfn) {
     let diff = (payment.paidAmount + payment.previousCustomerBalance) - payment.totalBilled;
     payment.changeAmount = diff;
     if (diff >= 0) {
       return cbfn(payment);
     } else {
-      this._adjustCustomerBalance(diff, customer, () => {
+      this._adjustCustomerBalance({ diff, customer }, () => {
         return cbfn(payment);
       });
     }
   }
 
-  _adjustCustomerBalance(diff, customer, cbfn) {
+  _adjustCustomerBalance({ diff, customer }, cbfn) {
     let balance = diff;
     let customerId = customer.id;
     this.database.customer.updateBalanceOnly({ customerId }, { balance }, (err) => {
@@ -125,7 +125,7 @@ exports.AddSalesApi = class extends Api {
   }
 
   // FIXME: Move to inventoryCommonMixin
-  _updateInventory(outletDefaultInventory, cbfn) {
+  _updateInventory({ outletDefaultInventory }, cbfn) {
     let inventoryId = outletDefaultInventory.id;
     let productList = outletDefaultInventory.productList;
     this.database.inventory.updateProductList({ inventoryId }, { productList }, (err) => {
@@ -134,7 +134,7 @@ exports.AddSalesApi = class extends Api {
     });
   }
 
-  _addSales(outletId, customerId, productList, payment, cbfn) {
+  _addSales({ outletId, customerId, productList, payment }, cbfn) {
     this.database.sales.create({ outletId, customerId, productList, payment }, (err, salesId) => {
       if (err) return this.fail(err);
       cbfn(salesId);
@@ -144,13 +144,12 @@ exports.AddSalesApi = class extends Api {
   handle({ body }) {
     let { salesId, outletId, customerId, productList, payment } = body;
 
-    // FIXME: make below all params obj
-    this._getOutletDefaultInventory(outletId, (outletDefaultInventory) => {
-      this._getCustomer(customerId, (customer) => {
-        this._sell(outletDefaultInventory, productList, () => {
-          this._handlePayment(payment, customer, () => {
-            this._updateInventory(outletDefaultInventory, () => {
-              this._addSales(outletId, customerId, productList, payment, (salesId) => {
+    this._getOutletDefaultInventory({ outletId }, (outletDefaultInventory) => {
+      this._getCustomer({ customerId }, (customer) => {
+        this._sell({ outletDefaultInventory, productList }, () => {
+          this._handlePayment({ payment, customer }, () => {
+            this._updateInventory({ outletDefaultInventory }, () => {
+              this._addSales({ outletId, customerId, productList, payment }, (salesId) => {
                 this.success({ status: "success", salesId });
               });
             });

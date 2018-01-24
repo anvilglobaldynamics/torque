@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.GetWarehouseApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.GetWarehouseApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -29,19 +31,14 @@ exports.GetWarehouseApi = class extends Api {
     }];
   }
 
-  _getWarehouse(warehouseId, cbfn) {
+  _getWarehouse({ warehouseId }, cbfn) {
     this.database.warehouse.findById({ warehouseId }, (err, warehouse) => {
-      if (err) return this.fail(err);
-      if (warehouse === null) {
-        err = new Error("warehouse not found");
-        err.code = "WAREHOUSE_INVALID";
-        return this.fail(err);
-      }
+      if (!this._ensureDoc(err, warehouse, "WAREHOUSE_INVALID", "Warehouse not found")) return;
       cbfn(warehouse);
     })
   }
 
-  _getWarehouseInventories(warehouseId, cbfn) {
+  _getWarehouseInventories({ warehouseId }, cbfn) {
     this.database.inventory.listByInventoryContainerId({ inventoryContainerId: warehouseId }, (err, inventoryList) => {
       let defaultInventory, returnedInventory, damagedInventory;
       inventoryList.forEach(inventory => {
@@ -62,8 +59,8 @@ exports.GetWarehouseApi = class extends Api {
 
   handle({ body }) {
     let { warehouseId } = body;
-    this._getWarehouse(warehouseId, (warehouse) => {
-      this._getWarehouseInventories(warehouseId, (defaultInventory, returnedInventory, damagedInventory) => {
+    this._getWarehouse({ warehouseId }, (warehouse) => {
+      this._getWarehouseInventories({ warehouseId }, (defaultInventory, returnedInventory, damagedInventory) => {
         this.success({ warehouse, defaultInventory, returnedInventory, damagedInventory });
       })
     });
