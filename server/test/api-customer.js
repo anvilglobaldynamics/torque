@@ -252,7 +252,7 @@ describe('customer', _ => {
 
   });
 
-  it.skip('api/edit-customer (Invalid customerId)', testDoneFn => {
+  it('api/edit-customer (Invalid customerId)', testDoneFn => {
 
     callApi('api/edit-customer', {
       json: {
@@ -264,6 +264,9 @@ describe('customer', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('CUSTOMER_INVALID');
+
       testDoneFn();
     })
 
@@ -413,7 +416,7 @@ describe('customer', _ => {
 
   });
 
-  it.skip('api/delete-customer (Invalid): ', testDoneFn => {
+  it('api/delete-customer (Invalid): ', testDoneFn => {
 
     callApi('api/delete-customer', {
       json: {
@@ -423,6 +426,9 @@ describe('customer', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('CUSTOMER_INVALID');
+
       testDoneFn();
     })
 
