@@ -15,6 +15,16 @@ exports.GetEmployeeListApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_VIEW_USERS"
+      ]
+    }];
+  }
+
+
   _getEmployeeList({ organizationId }, cbfn) {
     this.database.employment.listByOrganizationId({ organizationId }, (err, employeeList) => {
       if (err) return this.fail(err);
