@@ -37,7 +37,7 @@ let warehouseToBeModified = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidWarehouseId = generateInvalidId();
 
-describe('warehouse', _ => {
+describe.only('warehouse', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -63,7 +63,7 @@ describe('warehouse', _ => {
     });
   });
 
-  it.skip('api/add-warehouse (Invalid organizationId)', testDoneFn => {
+  it('api/add-warehouse (Invalid organizationId)', testDoneFn => {
 
     callApi('api/add-warehouse', {
       json: {
@@ -125,7 +125,7 @@ describe('warehouse', _ => {
 
   });
 
-  it.skip('api/get-warehouse-list (Invalid)', testDoneFn => {
+  it('api/get-warehouse-list (Invalid organizationId)', testDoneFn => {
 
     callApi('api/get-warehouse-list', {
       json: {
@@ -210,7 +210,7 @@ describe('warehouse', _ => {
 
   });
 
-  it.skip('api/edit-warehouse (Invalid)', testDoneFn => {
+  it('api/edit-warehouse (Invalid)', testDoneFn => {
 
     callApi('api/edit-warehouse', {
       json: {
@@ -233,7 +233,8 @@ describe('warehouse', _ => {
 
   });
 
-  it.skip('api/edit-warehouse (Invalid phone)', testDoneFn => {
+  // FIXME: below skipped NOT Respecting unique rule 
+  it.skip('api/edit-warehouse (copy phone)', testDoneFn => {
 
     callApi('api/edit-warehouse', {
       json: {
@@ -302,7 +303,7 @@ describe('warehouse', _ => {
 
   });
 
-  it.skip('api/delete-warehouse (Invalid)', testDoneFn => {
+  it('api/delete-warehouse (Invalid)', testDoneFn => {
 
     callApi('api/delete-warehouse', {
       json: {
