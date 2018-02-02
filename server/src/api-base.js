@@ -224,7 +224,8 @@ class Api {
         if (err) return reject(err);
         if (!organization) {
           err = new Error("Organization could not be found during access control.");
-          err.code = "ACCESS_CONTROL_INVALID_ORGANIZATION";
+          // err.code = "ACCESS_CONTROL_INVALID_ORGANIZATION";
+          err.code = "ORGANIZATION_INVALID";
           return reject(err);
         }
         let organizationId = organization.id;

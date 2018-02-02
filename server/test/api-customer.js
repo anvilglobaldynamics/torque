@@ -69,7 +69,7 @@ describe('customer', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
-      expect(body.error).to.have.property('code').that.equals('ACCESS_CONTROL_INVALID_ORGANIZATION');
+      expect(body.error).to.have.property('code').that.equals('ORGANIZATION_INVALID');
       testDoneFn();
     })
 
@@ -227,7 +227,7 @@ describe('customer', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('ACCESS_CONTROL_INVALID_ORGANIZATION');
+      expect(body.error).to.have.property('code').that.equals('ORGANIZATION_INVALID');
 
       testDoneFn();
     })
