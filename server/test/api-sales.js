@@ -313,7 +313,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/add-sales (Invalid customer)', testDoneFn => {
+  it('api/add-sales (Invalid customer)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {

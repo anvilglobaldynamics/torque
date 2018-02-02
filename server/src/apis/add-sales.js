@@ -74,15 +74,19 @@ exports.AddSalesApi = class extends Api {
 
   // FIXME: move to customerCommonMixin
   _getCustomer({ customerId }, cbfn) {
-    this.database.customer.findById({ customerId }, (err, customer) => {
-      if (err) return this.fail(err);
-      // if (customer === null) {
-      //   err = new Error("customer could not be found");
-      //   err.code = "CUSTOMER_INVALID";
-      //   return this.fail(err);
-      // }
-      return cbfn(customer);
-    });
+    if (customerId) {
+      this.database.customer.findById({ customerId }, (err, customer) => {
+        if (err) return this.fail(err);
+        if (customer === null) {
+          err = new Error("customer could not be found");
+          err.code = "CUSTOMER_INVALID";
+          return this.fail(err);
+        }
+        return cbfn(customer);
+      });
+    } else {
+      return cbfn(null);
+    }
   }
 
   _sell({ outletDefaultInventory, productList }, cbfn) {
