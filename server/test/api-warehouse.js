@@ -27,7 +27,7 @@ const orgPhone = 'o' + rnd(prefix, 11);
 
 const warehousePhone = 'w1' + rnd(prefix, 11);
 const warehousePhone2 = 'w2' + rnd(prefix, 11);
-const warehousePhone3 = 'w2' + rnd(prefix, 11);
+const warehousePhone3 = 'w3' + rnd(prefix, 11);
 
 let apiKey = null;
 let organizationId = null;
@@ -233,8 +233,7 @@ describe('warehouse', _ => {
 
   });
 
-  // FIXME: below skipped NOT Respecting unique rule 
-  it.skip('api/edit-warehouse (copy phone)', testDoneFn => {
+  it('api/edit-warehouse (copy phone)', testDoneFn => {
 
     callApi('api/edit-warehouse', {
       json: {
