@@ -38,8 +38,15 @@ class Collection {
     // ]
   }
 
-  __validateAgainstSchema(doc, cbfn) {
-    let { error: err, value } = Joi.validate(doc, this.joiSchema, {
+  __validateAgainstSchema(doc, isAlreadyInDb, cbfn) {
+    let joiSchema = this.joiSchema;
+    if (isAlreadyInDb) {
+      joiSchema = joiSchema.concat(Joi.object({
+        id: Joi.any(),
+        _id: Joi.any()
+      }));
+    }
+    let { error: err, value } = Joi.validate(doc, joiSchema, {
       convert: false
     });
     if (err) return cbfn(err);
@@ -53,9 +60,9 @@ class Collection {
           return reject(new Error(`unique key ${key} is missing from document.`));
         }
 
-        let query = { 
-          [key]: doc[key], 
-          isDeleted: false 
+        let query = {
+          [key]: doc[key],
+          isDeleted: false
         };
         for (let fragment in filters) {
           query[fragment] = filters[fragment];
@@ -98,9 +105,9 @@ class Collection {
     Promise.all(this.foreignKeyDefList.map(foreignKeyDef => {
       return new Promise((accept, reject) => {
         let { targetCollection, foreignKey, referringKey } = foreignKeyDef;
-        let query = { 
-          [foreignKey]: doc[referringKey], 
-          isDeleted: false 
+        let query = {
+          [foreignKey]: doc[referringKey],
+          isDeleted: false
         };
         this.database.find(targetCollection, query, (err, docList) => {
           if (err) return reject(err);
@@ -120,7 +127,7 @@ class Collection {
   }
 
   __validateDocument(doc, isAlreadyInDb, cbfn) {
-    this.__validateAgainstSchema(doc, (err, doc) => {
+    this.__validateAgainstSchema(doc, isAlreadyInDb, (err, doc) => {
       if (err) return cbfn(err);
       this.__validateAgainstUniqueKeyDefList(doc, isAlreadyInDb, (err) => {
         if (err) return cbfn(err);
@@ -139,9 +146,9 @@ class Collection {
         this.database.findByEmbeddedId(this.collectionName, originalDoc._id, (err, updatedDoc) => {
           if (err) return cbfn(err);
           if (!updatedDoc) return cbfn(null, false);
-          this.__validateAgainstSchema(this.updatedDoc, (err) => {
+          this.__validateDocument(updatedDoc, true, (err) => {
             if (err) {
-              this.database.replaceOne(this.collectionName, { id: originalDoc.id }, originalDoc, (err, wasUpdated) => {
+              this.database.replaceOne(this.collectionName, { id: originalDoc.id }, originalDoc, (_err, _wasUpdated) => {
                 return cbfn(err, false);
               });
             } else {
