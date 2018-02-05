@@ -15,6 +15,15 @@ exports.GetProductCategoryListApi = class extends Api {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_VIEW_ALL_INVENTORIES"
+      ]
+    }];
+  }
+
   _getProductCategoryList({ organizationId }, cbfn) {
     this.database.productCategory.listByOrganizationId({ organizationId }, (err, productCategoryList) => {
       if (err) return this.fail(err);

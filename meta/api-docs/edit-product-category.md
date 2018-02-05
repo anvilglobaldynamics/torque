@@ -43,7 +43,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: PRODUCT_CATEGORY_INVALID } // product category not found
-{ code: PARENT_PRODUCT_CATEGORY_INVALID } // the Parent Product Category is invalid
+{ code: PARENT_PRODUCT_CATEGORY_INVALID } // Product Category cannot be it's own parent
 ```
 
 ### response (on success):
