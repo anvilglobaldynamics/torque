@@ -93,12 +93,12 @@ exports.AddSalesApi = class extends Api {
     productList.forEach(product => {
       let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
       if (!foundProduct) {
-        err = new Error("product could not be found in source inventory");
+        let err = new Error("product could not be found in source inventory");
         err.code = "PRODUCT_INVALID";
         return this.fail(err);
       }
       if (foundProduct.count < product.count) {
-        err = new Error("not enough product(s) in source inventory");
+        let err = new Error("not enough product(s) in source inventory");
         err.code = "INSUFFICIENT_PRODUCT";
         return this.fail(err);
       }
