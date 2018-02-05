@@ -148,7 +148,6 @@ describe('organization', _ => {
 
   });
 
-  // FIXME: below skipped NOT Respecting unique rule 
   it('api/edit-organization (Invalid, copy phone)', testDoneFn => {
 
     callApi('api/edit-organization', {
