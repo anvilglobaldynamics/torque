@@ -62,7 +62,10 @@ class Collection {
 
         let query = {
           [key]: doc[key],
-          isDeleted: false
+          $or: [
+            { isDeleted: { $exists: false } },
+            { isDeleted: false }
+          ]
         };
         for (let fragment in filters) {
           query[fragment] = filters[fragment];
@@ -70,7 +73,7 @@ class Collection {
 
         this.database.find(this.collectionName, query, (err, docList) => {
           if (err) return reject(err);
-          if ((docList.length === 0 && !isAlreadyInDb) || (docList.length === 1 && isAlreadyInDb)) {
+          if ((docList.length === 0 && !isAlreadyInDb) || (docList.length < 2 && isAlreadyInDb)) {
             return accept();
           }
           err = new Error(`Duplicate value found for key ${key}`);
@@ -107,7 +110,10 @@ class Collection {
         let { targetCollection, foreignKey, referringKey } = foreignKeyDef;
         let query = {
           [foreignKey]: doc[referringKey],
-          isDeleted: false
+          $or: [
+            { isDeleted: { $exists: false } },
+            { isDeleted: false }
+          ]
         };
         this.database.find(targetCollection, query, (err, docList) => {
           if (err) return reject(err);
@@ -199,7 +205,7 @@ class Collection {
   }
 
   _delete(query, cbfn) {
-    return this.database.insertOne(this.collectionName, query, cbfn);
+    return this.database.deleteOne(this.collectionName, query, cbfn);
   }
 
 }

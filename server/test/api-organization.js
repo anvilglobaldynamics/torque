@@ -28,7 +28,7 @@ const org3Phone = 'o3' + rnd(prefix, 11);
 let apiKey = null;
 let organizationList = null;
 
-describe.only('organization', _ => {
+describe('organization', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
