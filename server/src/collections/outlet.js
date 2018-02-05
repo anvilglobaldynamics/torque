@@ -19,10 +19,10 @@ exports.OutletCollection = class extends Collection {
       isDeleted: Joi.boolean().required()
     });
 
-    this.uniqueDefList = [
+    this.uniqueKeyDefList = [
       {
-        additionalQueryFilters: {},
-        uniqueKeyList: ['phone']
+        filters: {},
+        keyList: ['phone']
       }
     ];
 

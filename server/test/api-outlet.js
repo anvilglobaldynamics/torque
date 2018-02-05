@@ -103,8 +103,7 @@ describe('outlet', _ => {
 
   });
 
-  // FIXME: below skipped NOT Respecting unique rule 
-  it.skip('api/add-outlet (Invalid, copy phone)', testDoneFn => {
+  it('api/add-outlet (Invalid, copy phone)', testDoneFn => {
 
     callApi('api/add-outlet', {
       json: {
