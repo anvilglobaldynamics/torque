@@ -82,7 +82,7 @@ describe('outlet', _ => {
 
   });
 
-  it.skip('api/add-outlet (Invalid organization)', testDoneFn => {
+  it('api/add-outlet (Invalid organization)', testDoneFn => {
 
     callApi('api/add-outlet', {
       json: {
@@ -103,7 +103,7 @@ describe('outlet', _ => {
 
   });
 
-  it.skip('api/add-outlet (Invalid, copy phone)', testDoneFn => {
+  it('api/add-outlet (Invalid, copy phone)', testDoneFn => {
 
     callApi('api/add-outlet', {
       json: {
@@ -144,7 +144,7 @@ describe('outlet', _ => {
 
   });
 
-  it.skip('api/get-outlet-list (Invalid organization)', testDoneFn => {
+  it('api/get-outlet-list (Invalid organization)', testDoneFn => {
 
     callApi('api/get-outlet-list', {
       json: {
@@ -226,7 +226,7 @@ describe('outlet', _ => {
 
   });
 
-  it.skip('api/edit-outlet (Invalid outlet)', testDoneFn => {
+  it('api/edit-outlet (Invalid outlet)', testDoneFn => {
 
     callApi('api/edit-outlet', {
       json: {

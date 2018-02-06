@@ -33,9 +33,27 @@ exports.EditProductCategoryApi = class extends collectionCommonMixin(Api) {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "product-category",
+        query: ({ productCategoryId }) => ({ id: productCategoryId }),
+        select: "organizationId",
+        errorCode: "PRODUCT_CATEGORY_INVALID"
+      },
+      privileges: [
+        "PRIV_MODIFY_ALL_INVENTORIES"
+      ]
+    }];
+  }
+
   _checkAndUpdateProductCategory({ productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
     if (parentProductCategoryId === null) {
       this._updateProductCategory({ productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn);
+    } else if (parentProductCategoryId === productCategoryId) {
+      let err = new Error("Product Category cannot be it's own parent");
+      err.code = "PARENT_PRODUCT_CATEGORY_INVALID";
+      return this.fail(err);
     } else {
       this.database.productCategory.findById({ productCategoryId: parentProductCategoryId }, (err, parentProductCategory) => {
         if (!this._ensureDoc(err, parentProductCategory, "PARENT_PRODUCT_CATEGORY_INVALID", "parent product category not found")) return;

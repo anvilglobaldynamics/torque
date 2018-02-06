@@ -27,7 +27,7 @@ const orgPhone = 'o' + rnd(prefix, 11);
 
 const warehousePhone = 'w1' + rnd(prefix, 11);
 const warehousePhone2 = 'w2' + rnd(prefix, 11);
-const warehousePhone3 = 'w2' + rnd(prefix, 11);
+const warehousePhone3 = 'w3' + rnd(prefix, 11);
 
 let apiKey = null;
 let organizationId = null;
@@ -63,7 +63,7 @@ describe('warehouse', _ => {
     });
   });
 
-  it.skip('api/add-warehouse (Invalid organizationId)', testDoneFn => {
+  it('api/add-warehouse (Invalid organizationId)', testDoneFn => {
 
     callApi('api/add-warehouse', {
       json: {
@@ -125,7 +125,7 @@ describe('warehouse', _ => {
 
   });
 
-  it.skip('api/get-warehouse-list (Invalid)', testDoneFn => {
+  it('api/get-warehouse-list (Invalid organizationId)', testDoneFn => {
 
     callApi('api/get-warehouse-list', {
       json: {
@@ -210,7 +210,7 @@ describe('warehouse', _ => {
 
   });
 
-  it.skip('api/edit-warehouse (Invalid)', testDoneFn => {
+  it('api/edit-warehouse (Invalid)', testDoneFn => {
 
     callApi('api/edit-warehouse', {
       json: {
@@ -233,7 +233,7 @@ describe('warehouse', _ => {
 
   });
 
-  it.skip('api/edit-warehouse (Invalid phone)', testDoneFn => {
+  it('api/edit-warehouse (copy phone)', testDoneFn => {
 
     callApi('api/edit-warehouse', {
       json: {
@@ -302,7 +302,7 @@ describe('warehouse', _ => {
 
   });
 
-  it.skip('api/delete-warehouse (Invalid)', testDoneFn => {
+  it('api/delete-warehouse (Invalid)', testDoneFn => {
 
     callApi('api/delete-warehouse', {
       json: {

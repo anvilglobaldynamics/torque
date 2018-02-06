@@ -59,7 +59,8 @@ describe('dashboard', _ => {
 
     callApi('api/get-dashboard-summary', {
       json: {
-        apiKey, organizationId
+        apiKey, 
+        organizationId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -75,11 +76,12 @@ describe('dashboard', _ => {
 
   });
 
-  it.skip('api/get-dashboard-summary (Invalid)', testDoneFn => {
+  it('api/get-dashboard-summary (Invalid)', testDoneFn => {
 
     callApi('api/get-dashboard-summary', {
       json: {
-        apiKey, organizationId: invalidOrganizationId
+        apiKey, 
+        organizationId: invalidOrganizationId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

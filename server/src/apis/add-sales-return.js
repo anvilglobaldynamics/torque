@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
+let { productCommonMixin } = require('./mixins/product-common');
 
-exports.AddSalesReturnApi = class extends collectionCommonMixin(Api) {
+exports.AddSalesReturnApi = class extends productCommonMixin(collectionCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -70,8 +71,7 @@ exports.AddSalesReturnApi = class extends collectionCommonMixin(Api) {
     })
   }
 
-  // FIXME: Better Naming
-  _return({ returnedProductList, outletReturnedInventory }, cbfn) {
+  _returnProducts({ returnedProductList, outletReturnedInventory }, cbfn) {
     let promiseList = [];
     returnedProductList.forEach(product => {
       let promise = new Promise((accept, reject) => {
@@ -161,16 +161,18 @@ exports.AddSalesReturnApi = class extends collectionCommonMixin(Api) {
     let { salesId, returnedProductList, creditedAmount } = body;
 
     this._getSales({ salesId }, (sales) => {
-      this._getOutletReturnedInventory({ outletId: sales.outletId }, (outletReturnedInventory) => {
-        this._return({ returnedProductList, outletReturnedInventory }, (outletReturnedInventory) => {
-          // this._getCustomer({ customerId: salesId.customerId }, (customer) => {
-          // this._calculatePayback({ returnedProductList }, (payment) => {
-          // this._handlePayback({ payment, customer }, () => {
-          this._addSalesReturn({ salesId, returnedProductList, creditedAmount }, (salesReturnId) => {
-            this.success({ status: "success", salesReturnId: salesReturnId });
+      this._verifyProductsExist(returnedProductList, () => {
+        this._getOutletReturnedInventory({ outletId: sales.outletId }, (outletReturnedInventory) => {
+          this._returnProducts({ returnedProductList, outletReturnedInventory }, (outletReturnedInventory) => {
+            // this._getCustomer({ customerId: salesId.customerId }, (customer) => {
+            // this._calculatePayback({ returnedProductList }, (payment) => {
+            // this._handlePayback({ payment, customer }, () => {
+            this._addSalesReturn({ salesId, returnedProductList, creditedAmount }, (salesReturnId) => {
+              this.success({ status: "success", salesReturnId: salesReturnId });
+            });
           });
         });
-      })
+      });
     });
   }
 

@@ -112,7 +112,7 @@ describe('product-category', _ => {
 
   });
 
-  it.skip('api/add-product-category (Invalid organization)', testDoneFn => {
+  it('api/add-product-category (Invalid organization)', testDoneFn => {
 
     callApi('api/add-product-category', {
       json: {
@@ -134,6 +134,7 @@ describe('product-category', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error.code).to.equal('ORGANIZATION_INVALID');
+
       testDoneFn();
     })
 
@@ -161,7 +162,7 @@ describe('product-category', _ => {
 
   });
 
-  it.skip('api/get-product-category-list (Invalid Organization)', testDoneFn => {
+  it('api/get-product-category-list (Invalid Organization)', testDoneFn => {
 
     callApi('api/get-product-category-list', {
       json: {
@@ -308,7 +309,7 @@ describe('product-category', _ => {
 
   });
 
-  it.skip('api/edit-product-category (Invalid own parent)', testDoneFn => {
+  it('api/edit-product-category (Invalid own parent)', testDoneFn => {
 
     callApi('api/edit-product-category', {
       json: {
@@ -363,7 +364,7 @@ describe('product-category', _ => {
 
   });
 
-  it.skip('api/edit-product-category (Invalid)', testDoneFn => {
+  it('api/edit-product-category (Invalid)', testDoneFn => {
 
     callApi('api/edit-product-category', {
       json: {

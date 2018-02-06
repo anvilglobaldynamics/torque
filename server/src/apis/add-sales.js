@@ -74,33 +74,37 @@ exports.AddSalesApi = class extends Api {
 
   // FIXME: move to customerCommonMixin
   _getCustomer({ customerId }, cbfn) {
-    this.database.customer.findById({ customerId }, (err, customer) => {
-      if (err) return this.fail(err);
-      // if (customer === null) {
-      //   err = new Error("customer could not be found");
-      //   err.code = "CUSTOMER_INVALID";
-      //   return this.fail(err);
-      // }
-      return cbfn(customer);
-    });
+    if (customerId) {
+      this.database.customer.findById({ customerId }, (err, customer) => {
+        if (err) return this.fail(err);
+        if (customer === null) {
+          err = new Error("customer could not be found");
+          err.code = "CUSTOMER_INVALID";
+          return this.fail(err);
+        }
+        return cbfn(customer);
+      });
+    } else {
+      return cbfn(null);
+    }
   }
 
   _sell({ outletDefaultInventory, productList }, cbfn) {
-    productList.forEach(product => {
+    for (let product of productList) {
       let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
       if (!foundProduct) {
-        err = new Error("product could not be found in source inventory");
+        let err = new Error("product could not be found in source inventory");
         err.code = "PRODUCT_INVALID";
         return this.fail(err);
       }
       if (foundProduct.count < product.count) {
-        err = new Error("not enough product(s) in source inventory");
+        let err = new Error("not enough product(s) in source inventory");
         err.code = "INSUFFICIENT_PRODUCT";
         return this.fail(err);
       }
       foundProduct.count -= product.count;
-    });
-    cbfn();
+    }
+    return cbfn();
   }
 
   _handlePayment({ payment, customer }, cbfn) {

@@ -26,7 +26,8 @@ exports.EditWarehouseApi = class extends collectionCommonMixin(Api) {
       organizationBy: {
         from: "warehouse",
         query: ({ warehouseId }) => ({ id: warehouseId }),
-        select: "organizationId"
+        select: "organizationId",
+        errorCode: "WAREHOUSE_INVALID"
       },
       privileges: [
         "PRIV_MODIFY_ALL_WAREHOUSES"

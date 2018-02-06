@@ -83,7 +83,7 @@ describe('employee', _ => {
     });
   });
 
-  it.skip('api/hire-user-as-employee (Invalid organization)', testDoneFn => {
+  it('api/hire-user-as-employee (Invalid organization)', testDoneFn => {
 
     callApi('api/hire-user-as-employee', {
       json: {
@@ -584,7 +584,7 @@ describe('employee', _ => {
 
   });
 
-  it.skip('api/add-new-employee (Invalid organization)', testDoneFn => {
+  it('api/add-new-employee (Invalid organization)', testDoneFn => {
 
     callApi('api/add-new-employee', {
       json: {
@@ -669,7 +669,7 @@ describe('employee', _ => {
 
   });
 
-  it.skip('api/get-employee-list (Invalid)', testDoneFn => {
+  it('api/get-employee-list (Invalid)', testDoneFn => {
 
     callApi('api/get-employee-list', {
       json: {

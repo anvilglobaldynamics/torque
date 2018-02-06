@@ -21,7 +21,8 @@ exports.DeleteCustomerApi = class extends collectionCommonMixin(Api) {
       organizationBy: {
         from: "customer",
         query: ({ customerId }) => ({ id: customerId }),
-        select: "organizationId"
+        select: "organizationId",
+        errorCode: "CUSTOMER_INVALID"
       },
       privileges: [
         "PRIV_MODIFY_CUSTOMER"

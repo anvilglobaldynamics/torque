@@ -34,6 +34,15 @@ exports.AddProductCategoryApi = class extends collectionCommonMixin(Api) {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_MODIFY_ALL_INVENTORIES"
+      ]
+    }];
+  }
+
   _createProductCategory(productCategory, cbfn) {
     this.database.productCategory.create(productCategory, (err, productCategoryId) => {
       if (err) return this.fail(err);

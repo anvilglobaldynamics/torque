@@ -148,7 +148,7 @@ describe('organization', _ => {
 
   });
 
-  it.skip('api/edit-organization (Invalid, copy phone)', testDoneFn => {
+  it('api/edit-organization (Invalid, copy phone)', testDoneFn => {
 
     callApi('api/edit-organization', {
       json: {
@@ -169,7 +169,7 @@ describe('organization', _ => {
 
   });
 
-  it.skip('api/edit-organization (Invalid, copy email)', testDoneFn => {
+  it('api/edit-organization (Invalid, copy email)', testDoneFn => {
 
     callApi('api/edit-organization', {
       json: {
@@ -184,7 +184,7 @@ describe('organization', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('PHONE_ALREADY_IN_USE');
+      expect(body.error).to.have.property('code').that.equals('EMAIL_ALREADY_IN_USE');
       testDoneFn();
     });
 
