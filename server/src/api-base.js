@@ -103,11 +103,13 @@ class Api {
   fail(originalErrorObject, extraData) {
     let errorObject = this.failable(originalErrorObject, extraData);
     this._sendResponse({ hasError: true, error: errorObject });
+    return false; // NOTE: This is necessary for Array.every to work
   }
 
   success(object = {}) {
     object.hasError = false;
     this._sendResponse(object);
+    return true; // NOTE: This is necessary for Array.some to work
   }
 
   getQueryParameters() {
