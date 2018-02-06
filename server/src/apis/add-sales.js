@@ -90,7 +90,7 @@ exports.AddSalesApi = class extends Api {
   }
 
   _sell({ outletDefaultInventory, productList }, cbfn) {
-    productList.forEach(product => {
+    for (let product of productList) {
       let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
       if (!foundProduct) {
         let err = new Error("product could not be found in source inventory");
@@ -103,8 +103,8 @@ exports.AddSalesApi = class extends Api {
         return this.fail(err);
       }
       foundProduct.count -= product.count;
-    });
-    cbfn();
+    }
+    return cbfn();
   }
 
   _handlePayment({ payment, customer }, cbfn) {
