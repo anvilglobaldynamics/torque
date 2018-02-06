@@ -224,7 +224,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/add-sales-return (Invalid returnedProductList)', testDoneFn => {
+  it('api/add-sales-return (Invalid returnedProductList)', testDoneFn => {
 
     callApi('api/add-sales-return', {
       json: {
