@@ -37,7 +37,11 @@
     "polymer": "^2.0.0-rc.3",
     "iron-iconset-svg": "1 - 2",
     "iron-icon": "1 - 2",
-    "paper-icon-button": "^2.0.0"
+    "paper-icon-button": "^2.0.0",
+    "iron-flex-layout": "1 - 2",
+    "iron-selector": "1 - 2",
+    "iron-meta": "1 - 2",
+    "iron-resizable-behavior": "1 - 2"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0-prerelease.7"
