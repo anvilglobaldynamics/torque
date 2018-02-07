@@ -28,14 +28,14 @@
 
     <div class="layout vertical std-small-page" id="wrapper">
 
-      <iron-form id="register-form">
+      <iron-form id="login-form">
         <form>
           <div class="card vertical layout">
             <div class="std-dialog-header">LOGIN</div>
             <paper-input value="{{loginForm.emailOrPhone}}" required minlength="3" error-message="Please enter your valid phone number or valid email address."
-              label="Your phone number or email address"></paper-input>
+              label="Your phone number or email address" class="loginForm--emailOrPhone"></paper-input>
             <paper-input value="{{loginForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long"
-              label="Your password" type="password"></paper-input>
+              label="Your password" type="password" class="loginForm--password"></paper-input>
             <div class="horizontal layout button-row end">
               <div class="link light" on-tap="forgotPasswordTapped">Forgot your password?</div>
               <div class="flex"></div>
@@ -103,7 +103,7 @@
         this.app.callUserLoginApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) {
-            this.app.showModalDialog("Sorry!", response.error.message);
+            this.onApiError(response.error, 'loginForm');
           } else {
             let { apiKey, warning, sessionId, user } = response;
             Object.assign(user, { apiKey, warning, sessionId });
@@ -115,6 +115,23 @@
 
       // region: ui =================================
 
+      onApiError(error, form) {
+        if (error.code === "VALIDATION_ERROR") {
+          let { details: errorList } = error;
+          for (let error of errorList) {
+            let { path, message } = error;
+            let key = `.${form}--${path}`;
+            let el = this.elem(key);
+            if (!el) continue;
+            el.autoValidate = true;
+            el.invalid = true;
+            el.errorMessage = message;
+          }
+        } else {
+          return this.app.showModalDialog("Sorry!", error.message);
+        }
+      }
+
       registerTapped() {
         this.app.navigateTo('/register')
       }
@@ -125,7 +142,7 @@
 
       loginTapped() {
         this.elemAll('#register-form paper-input').forEach(el => el.autoValidate = true);
-        if (!this.elem('#register-form').validate()) return;
+        if (!this.elem('#login-form').validate()) return;
 
         let { emailOrPhone, password } = this.loginForm;
         this._processUserLogin({ emailOrPhone, password });
