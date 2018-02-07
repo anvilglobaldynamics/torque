@@ -43,6 +43,7 @@ Possible Error Codes:
     organizationId: Joi.number().max(999999999999999).required(),
     balance: Joi.number().max(999999999999999).required(),
     organizationId: Joi.number().max(999999999999999).required(),
+    isDeleted: Joi.boolean().required(),
     
     additionalPaymentHistory: Joi.array().items(
       Joi.object().keys({
