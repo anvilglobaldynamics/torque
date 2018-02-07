@@ -1,4 +1,4 @@
-This API handles check of a phone number being in system or not
+This API handles search of an user with phone number or email
 
 url: `api/find-user`
 
@@ -30,9 +30,10 @@ method: `POST`
 Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: USER_DOES_NOT_EXIST } // User with this phone/email does not exist
+// TODO: below 2 are unused
 { code: PHONE_INVALID } // phone is not in system
 { code: EMAIL_INVALID } // email is not in system
-{ code: USER_DOES_NOT_EXIST } // User with this phone/email does not exist
 ```
 
 ### response (on success):
@@ -52,6 +53,7 @@ Possible Error Codes:
     bloodGroup: Joi.alphanum().min(2).max(3).required(),
     isPhoneVerified: Joi.boolean().required(),
     isEmailVerified: Joi.boolean().required(),
+    isDeleted: Joi.boolean().required(),
     isBanned: Joi.boolean().required()
   });
 }

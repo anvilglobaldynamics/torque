@@ -107,4 +107,3 @@ exports.HireUserAsEmployeeApi = class extends collectionCommonMixin(Api) {
   }
 
 }
-
