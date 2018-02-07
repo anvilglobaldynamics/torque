@@ -11,7 +11,7 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
 <link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
 
-<link rel="import" href="my-swipe-behavior.html">
+<link rel="import" href="torque-swipe-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -76,7 +76,7 @@
   </template>
 
   <script>
-    class PageSettings extends FxPage.mixin(MySwipeBehavior, FxCommonBehavior) {
+    class PageSettings extends FxPage.mixin(TorqueSwipeBehavior, FxCommonBehavior) {
       static get is() {
         return 'page-settings';
       }

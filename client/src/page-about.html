@@ -9,7 +9,7 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
 
 <link rel="import" href="shared-styles.html">
-<link rel="import" href="my-swipe-behavior.html">
+<link rel="import" href="torque-swipe-behavior.html">
 
 <dom-module id="page-about">
   <template>
@@ -74,7 +74,7 @@
           </div>
           <br>
           <div>
-            If you are a fellow developer/investor and want to come over to my office for a cup of espresso, feel free to drop a note
+            If you are a fellow developer/investor and want to come over to torque office for a cup of espresso, feel free to drop a note
             to [[contactEmail]] with your contact information and I'll get in touch.
           </div>
           <br>
@@ -84,7 +84,7 @@
   </template>
 
   <script>
-    class PageAbout extends MySwipeBehavior(FxCommonBehavior(FxPage)) {
+    class PageAbout extends TorqueSwipeBehavior(FxCommonBehavior(FxPage)) {
       static get is() {
         return 'page-about';
       }

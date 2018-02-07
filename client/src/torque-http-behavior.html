@@ -8,9 +8,9 @@
     const WEBSOCKET_DELAY_BEFORE_RETRYING = 30 * 1000;
     let lastWebsocketFailureTimestamp = 0;
 
-    if (!window.MyHttpBehavior) {
+    if (!window.TorqueHttpBehavior) {
       /* @polymerMixin */
-      window.MyHttpBehavior = (SuperClass) => class extends FxHttpBehavior(SuperClass) {
+      window.TorqueHttpBehavior = (SuperClass) => class extends FxHttpBehavior(SuperClass) {
 
         constructor(...args) {
           super(...args);

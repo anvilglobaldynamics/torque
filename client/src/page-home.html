@@ -13,7 +13,7 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
 <link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
 
-<link rel="import" href="my-db-behavior.html">
+<link rel="import" href="torque-db-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -35,7 +35,7 @@
   </template>
 
   <script>
-    class PageHome extends FxPage.mixin(MyDbBehavior) {
+    class PageHome extends FxPage.mixin(TorqueDbBehavior) {
       static get is() {
         return 'page-home';
       }

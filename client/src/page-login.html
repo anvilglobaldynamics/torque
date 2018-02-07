@@ -11,7 +11,7 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
 <link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
 
-<link rel="import" href="my-db-behavior.html">
+<link rel="import" href="torque-db-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -51,7 +51,7 @@
   </template>
 
   <script>
-    class PageLogin extends FxPage.mixin(MyDbBehavior, FxCommonBehavior) {
+    class PageLogin extends FxPage.mixin(TorqueDbBehavior, FxCommonBehavior) {
       static get is() {
         return 'page-login';
       }
