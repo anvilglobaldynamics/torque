@@ -8,6 +8,11 @@
         super(...args);
       }
 
+      removeUser(){
+        let db = this.db || this.app.db;
+        db.remove('user', (doc => true));
+      }
+
       loadUser() {
         let db = this.db || this.app.db;
         return db.find('user', (({ which }) => which === 'only'))[0] || null;

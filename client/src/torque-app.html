@@ -181,7 +181,10 @@
         super();
         this._initializeDatabase();
         this._fillDatabase();
-        this.db.observe('user', (...args) => this._reflectDatabaseChanges(...args));
+        this.db.observe('user', (...args) => {
+          this._reflectDatabaseChanges(...args);
+          this.onUserChange(this.loadUser());
+        });
         this._intializeServiceManager();
         this._reflectDatabaseChanges();
         this._manageProductionVariables();
@@ -253,7 +256,7 @@
 
       logoutTapped(e = null) {
         this.callUserLogoutApi({}, (err, response) => {
-          this.db.remove('user', (doc => true));
+          this.removeUser();
           this.navigateTo('/login');
         })
       }
@@ -269,6 +272,14 @@
       saveButtonOnTopBarPressed(e) {
         if ('saveButtonOnTopBarPressed' in this.activePageElement) {
           this.activePageElement.saveButtonOnTopBarPressed(e)
+        }
+      }
+
+      // ====================== delegated callbacks =============================
+
+      onUserChange(user) {
+        if ('onUserChange' in this.activePageElement) {
+          this.activePageElement.onUserChange(user);
         }
       }
 
