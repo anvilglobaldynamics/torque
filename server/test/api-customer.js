@@ -32,7 +32,7 @@ let organizationId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidCustomerId = generateInvalidId();
 
-describe.only('customer', _ => {
+describe('customer', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -83,7 +83,7 @@ describe.only('customer', _ => {
       json: {
         apiKey,
         organizationId: organizationId,
-        fullName: "A Test Customer",
+        fullName: "1st Test Customer",
         phone: customerPhone,
         openingBalance: '500',
       }
@@ -103,7 +103,7 @@ describe.only('customer', _ => {
       json: {
         apiKey,
         organizationId: organizationId,
-        fullName: "A Test Customer",
+        fullName: "2nd Test Customer",
         phone: customerPhone2,
         openingBalance: '500',
       }
@@ -231,7 +231,10 @@ describe.only('customer', _ => {
       body.customerList.forEach(customer => {
         validateCustomerSchema(customer)
       });
-      firstCustomer = body.customerList[body.customerList.length - 1];
+
+      firstCustomer = body.customerList[0];
+      secondCustomer = body.customerList[1];
+
       testDoneFn();
     })
 
@@ -267,9 +270,10 @@ describe.only('customer', _ => {
         phone: customerPhone2,
       }
     }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('PHONE_ALREADY_IN_USE');
+      
       testDoneFn();
     })
 
