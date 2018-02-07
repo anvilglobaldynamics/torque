@@ -233,7 +233,7 @@
       }
 
       _reflectDatabaseChanges() {
-        this.user = this.db.find('user', (({ which }) => which === 'only'))[0] || null;
+        this.user = this.loadUser();
       }
 
       // ====================== navigation =============================

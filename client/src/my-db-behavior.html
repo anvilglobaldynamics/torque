@@ -8,15 +8,16 @@
         super(...args);
       }
 
-      setCurrentUserToDb({ email, apiKey, warning, sessionId }) {
+      loadUser() {
         let db = this.db || this.app.db;
-        let user = {
-          which: 'only',
-          email,
-          apiKey,
-          warning,
-          sessionId
-        }
+        return db.find('user', (({ which }) => which === 'only'))[0] || null;
+      }
+
+      saveUser(user) {
+        let db = this.db || this.app.db;
+        Object.assign(user, {
+          which: 'only'
+        })
         db.upsert('user', (({ which }) => which === 'only'), (doc => user), user);
       }
 
