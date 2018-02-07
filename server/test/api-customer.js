@@ -89,6 +89,7 @@ describe('customer', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('customerId');
       testDoneFn();
     })
 
