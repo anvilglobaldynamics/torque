@@ -7,7 +7,7 @@ exports.productCommonMixin = (SuperApiClass) => class extends SuperApiClass {
       if (err) return this.fail(err);
       if (productList.length !== _productList.length) {
         err = new Error("Unable to find all products in productList");
-        err.code = "PORDUCT_INVALID";
+        err.code = "PRODUCT_INVALID";
         return this.fail(err);
       }
       return cbfn();

@@ -37,7 +37,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: SALES_INVALID } // sales not found
-{ code: PORDUCT_INVALID } // product not found
+{ code: PRODUCT_INVALID } // product not found
 { code: OUTLET_INVENTORY_INVALID } // outler returned inventory invalid
 ```
 

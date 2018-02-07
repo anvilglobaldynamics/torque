@@ -242,7 +242,7 @@ describe('sales-return', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('PORDUCT_INVALID');
+      expect(body.error.code).to.equal('PRODUCT_INVALID');
 
       testDoneFn();
     });
