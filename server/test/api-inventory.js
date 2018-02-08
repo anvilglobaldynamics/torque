@@ -59,7 +59,10 @@ let outletDamagedInventoryId = null;
 
 let productToBeTransferredId = null;
 
-describe('inventory', _ => {
+let invalidInventoryId = generateInvalidId();
+let invalidProductCategoryId = generateInvalidId();
+
+describe.only('inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -152,6 +155,55 @@ describe('inventory', _ => {
 
   });
 
+  it('api/add-product-to-inventory (Invalid inventoryId)', testDoneFn => {
+
+    callApi('api/add-product-to-inventory', {
+      json: {
+        apiKey,
+        inventoryId: invalidInventoryId,
+        productList: [
+          { productCategoryId, purchasePrice: 100, salePrice: 200, count: 10 }
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('INVENTORY_INVALID');
+      
+      testDoneFn();
+    });
+
+  });
+
+  it.skip('api/add-product-to-inventory (Invalid productCategoryId)', testDoneFn => {
+
+    callApi('api/add-product-to-inventory', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId,
+        productList: [
+          { 
+            productCategoryId: invalidProductCategoryId, 
+            purchasePrice: 100, 
+            salePrice: 200, 
+            count: 10 
+          }
+        ]
+      }
+    }, (err, response, body) => {
+      console.log(body);
+
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('PRODUCT_CATEGORY_INVALID');
+      
+      testDoneFn();
+    });
+
+  });
+
   it('api/get-aggregated-inventory-details (Valid warehouse)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
@@ -174,6 +226,24 @@ describe('inventory', _ => {
       body.matchingProductCategoryList.forEach(productCategory => {
         validateProductCategorySchema(productCategory);
       });
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-aggregated-inventory-details (Invalid inventoryId)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: invalidInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('INVENTORY_INVALID');
 
       testDoneFn();
     });

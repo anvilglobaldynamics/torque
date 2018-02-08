@@ -31,7 +31,8 @@ exports.AddProductToInventoryApi = class extends collectionCommonMixin(Api) {
       organizationBy: {
         from: "inventory",
         query: ({ inventoryId }) => ({ id: inventoryId }),
-        select: "organizationId"
+        select: "organizationId",
+        errorCode: "INVENTORY_INVALID"
       },
       privileges: [
         "PRIV_MODIFY_ALL_INVENTORIES"
