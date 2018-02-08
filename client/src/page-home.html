@@ -57,7 +57,8 @@
         this.app.currentPageIsModal = false;
         this.app.pushPageTitle('Home');
         this._reflectDatabaseChanges();
-        this._ensureAccess();
+        if (!this._ensureAccess()) return;
+        this._processOrganizationList();
       }
 
       onNavigateOut() {
@@ -71,11 +72,42 @@
 
       _ensureAccess() {
         if (!this.app.user) {
-          this.app.navigateTo('/login')
+          this.app.navigateTo('/login');
+          return false;
         }
+        return true;
       }
 
-      // region: ui consistency ===========================
+      _fetchOrganizationList(cbfn) {
+        let data = {};
+        this.app.callGetOrganizationListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.organizationList);
+        });
+      }
+
+      _processOrganizationList() {
+        this._fetchOrganizationList(newOrganizationList => {
+          if (newOrganizationList.length === 0) {
+            return this.app.navigateTo('/add-organization');
+          }
+          let { organizationList, selectedOrganizationIndex } = this.app.organizationSelectorData;
+          if (JSON.stringify(organizationList) !== JSON.stringify(newOrganizationList)) {
+            let selectedId = null;
+            if (selectedOrganizationIndex > 0) {
+              selectedId = organizationList[selectedOrganizationIndex].id;
+            }
+            selectedOrganizationIndex = newOrganizationList.findIndex(organization => organization.id === selectedId);
+            if (selectedOrganizationIndex === -1) selectedOrganizationIndex = 0;
+            organizationList = newOrganizationList;
+            this.app.saveOrganizationSelectorData({ organizationList, selectedOrganizationIndex });
+            this.app.saveOrganization(organizationList[selectedOrganizationIndex]);
+          }
+        });
+      }
+
+      // region: ui  ===========================
 
       // region: misc =================================
 

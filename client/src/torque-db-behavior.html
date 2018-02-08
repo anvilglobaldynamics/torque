@@ -8,7 +8,7 @@
         super(...args);
       }
 
-      removeUser(){
+      removeUser() {
         let db = this.db || this.app.db;
         db.remove('user', (doc => true));
       }
@@ -24,6 +24,36 @@
           which: 'only'
         })
         db.upsert('user', (({ which }) => which === 'only'), (doc => user), user);
+      }
+
+      loadOrganization() {
+        let db = this.db || this.app.db;
+        return db.find('organization', (({ which }) => which === 'only'))[0] || null;
+      }
+
+      saveOrganization(organization) {
+        let db = this.db || this.app.db;
+        Object.assign(organization, {
+          which: 'only'
+        })
+        db.upsert('organization', (({ which }) => which === 'only'), (doc => organization), organization);
+      }
+
+      loadOrganizationSelectorData() {
+        let db = this.db || this.app.db;
+        let data = {
+          organizationList: [],
+          selectedOrganizationIndex: -1
+        };
+        return db.find('organizationSelectorData', (({ which }) => which === 'only'))[0] || data;
+      }
+
+      saveOrganizationSelectorData(organizationSelectorData) {
+        let db = this.db || this.app.db;
+        Object.assign(organizationSelectorData, {
+          which: 'only'
+        })
+        db.upsert('organizationSelectorData', (({ which }) => which === 'only'), (doc => organizationSelectorData), organizationSelectorData);
       }
 
     }

@@ -82,6 +82,17 @@
           this.callCombinedJsonApi('user-logout', data, cbfn);
         }
 
+        callGetOrganizationListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-organization-list', data, cbfn);
+        }
+        
+        callAddOrganizationApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('add-organization', data, cbfn);
+        }
+        
+
       }
     }
   })();

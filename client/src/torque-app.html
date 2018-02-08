@@ -30,6 +30,7 @@
 <link rel="lazy-import" href="page-about.html">
 <link rel="lazy-import" href="page-login.html">
 <link rel="lazy-import" href="page-register.html">
+<link rel="lazy-import" href="page-add-organization.html">
 
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
@@ -129,6 +130,7 @@
           <page-about name="about"></page-about>
           <page-login name="login"></page-login>
           <page-register name="register"></page-register>
+          <page-add-organization name="add-organization"></page-add-organization>
         </iron-pages>
 
         <div class="footer">
@@ -185,6 +187,12 @@
           this._reflectDatabaseChanges(...args);
           this.onUserChange(this.loadUser());
         });
+        this.db.observe('organization', (...args) => {
+          this._reflectDatabaseChanges(...args);
+        });
+        this.db.observe('organizationSelectorData', (...args) => {
+          this._reflectDatabaseChanges(...args);
+        });
         this._intializeServiceManager();
         this._reflectDatabaseChanges();
         this._manageProductionVariables();
@@ -205,7 +213,7 @@
 
       _initializeDatabase() {
         this.db = new atomicdb.Atomicdb({
-          name: 'torque-main',
+          name: 'torqueMain',
           storageEngine: localStorage,
           serializationEngine: JSON,
           uniqueKey: 'idOnClient'
@@ -216,6 +224,12 @@
         });
         this.db.defineCollection({
           name: 'user'
+        });
+        this.db.defineCollection({
+          name: 'organization'
+        });
+        this.db.defineCollection({
+          name: 'organizationSelectorData'
         });
       }
 
@@ -237,6 +251,8 @@
 
       _reflectDatabaseChanges() {
         this.user = this.loadUser();
+        this.organization = this.loadOrganization();
+        this.organizationSelectorData = this.loadOrganizationSelectorData();
       }
 
       // ====================== navigation =============================
