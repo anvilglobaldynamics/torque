@@ -77,6 +77,8 @@ describe('outlet', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('outletId');
+
       testDoneFn();
     })
 
@@ -138,7 +140,9 @@ describe('outlet', _ => {
       body.outletList.forEach(outlet => {
         validateOutletSchema(outlet);
       });
+
       outletList = body.outletList;
+
       testDoneFn();
     });
 
