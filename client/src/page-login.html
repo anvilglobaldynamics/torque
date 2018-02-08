@@ -125,7 +125,7 @@
       }
 
       loginTapped() {
-        this.elemAll('#register-form paper-input').forEach(el => el.autoValidate = true);
+        this.elemAll('#login-form paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#login-form').validate()) return;
 
         let { emailOrPhone, password } = this.loginForm;
