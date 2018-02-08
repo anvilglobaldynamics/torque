@@ -93,7 +93,7 @@
 
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
-        this.app.currentPageIsModal = false;
+        this.app.currentPageIsModal = true;
         this.app.pushPageTitle('Add Organization');
         if (!this._ensureAccess()) return;
       }
@@ -121,16 +121,12 @@
           if (response.hasError) return this.onApiError(response.error, 'addOrganizationForm');
           let message = "Congratulations. Your new organization has been created."
           this.app.showModalDialog("Organization Created", message, _ => {
-            this.app.navigateTo('/home');
+            this.app.navigateTo(`/home/org:${response.organizationId}`);
           });
         });
       }
 
       // region: ui =================================
-
-      loginTapped() {
-        this.app.navigateTo('/login')
-      }
 
       addOrganizationTapped() {
         this.elemAll('#addOrganizationForm paper-input').forEach(el => el.autoValidate = true);

@@ -128,21 +128,29 @@
       }
 
       _processOrganizationList(cbfn) {
-        this._fetchOrganizationList(newOrganizationList => {
-          if (newOrganizationList.length === 0) {
+        this._fetchOrganizationList(organizationList => {
+          if (organizationList.length === 0) {
             return this.app.navigateTo('/add-organization');
           }
-          let { organizationList, selectedOrganizationIndex } = this.app.organizationSelectorData;
-          if (JSON.stringify(organizationList) !== JSON.stringify(newOrganizationList)) {
-            let selectedId = null;
-            if (selectedOrganizationIndex > 0) {
-              selectedId = organizationList[selectedOrganizationIndex].id;
+          if (organizationList.length === 1) {
+            let organization = organizationList[0];
+            this.app.saveOrganization(organization);
+          } else {
+            let index;
+            if ('org' in this.params) {
+              let organizationId = parseInt(this.params.org, 10);
+              index = organizationList.findIndex(organization => organization.id === organizationId);
+            } else {
+              if (!this.app.organization) {
+                return this.app.navigateTo('/select-organization');
+              }
+              index = organizationList.findIndex(organization => organization.id === this.organization.id);
             }
-            selectedOrganizationIndex = newOrganizationList.findIndex(organization => organization.id === selectedId);
-            if (selectedOrganizationIndex === -1) selectedOrganizationIndex = 0;
-            organizationList = newOrganizationList;
-            this.app.saveOrganizationSelectorData({ organizationList, selectedOrganizationIndex });
-            this.app.saveOrganization(organizationList[selectedOrganizationIndex]);
+            if (index === -1) {
+              return this.app.navigateTo('/select-organization');
+            }
+            let organization = organizationList[index];
+            this.app.saveOrganization(organization);
           }
           return cbfn();
         });

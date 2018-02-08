@@ -35,6 +35,7 @@
 <link rel="lazy-import" href="page-login.html">
 <link rel="lazy-import" href="page-register.html">
 <link rel="lazy-import" href="page-add-organization.html">
+<link rel="lazy-import" href="page-select-organization.html">
 
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
@@ -135,7 +136,7 @@
                 <!-- context-sensitive - end -->
                 <paper-item>POS List</paper-item>
                 <paper-item>Inventory List</paper-item>
-                <paper-item>Switch Organization</paper-item>
+                <paper-item  on-tap="switchOrganizationTapped">Switch Organization</paper-item>
               </paper-listbox>
             </paper-menu-button>
             <template is="dom-if" if="[[shouldShowSaveButton]]">
@@ -156,6 +157,7 @@
           <page-login name="login"></page-login>
           <page-register name="register"></page-register>
           <page-add-organization name="add-organization"></page-add-organization>
+          <page-select-organization name="select-organization"></page-select-organization>
         </iron-pages>
 
         <div class="footer">
@@ -243,9 +245,6 @@
         this.db.defineCollection({
           name: 'organization'
         });
-        this.db.defineCollection({
-          name: 'organizationSelectorData'
-        });
       }
 
       _fillDatabase() {
@@ -258,10 +257,8 @@
       _setUpDatabaseObservers() {
         this.db.observe('user', (...args) => this.onUserChange(...args));
         this.db.observe('organization', (...args) => this.onOrganizationChange(...args));
-        this.db.observe('organizationSelectorData', (...args) => this.onOrganizationSelectorDataChange(...args));
         this.onUserChange();
         this.onOrganizationChange();
-        this.onOrganizationSelectorDataChange();
       }
 
       _intializeServiceManager() {
@@ -299,7 +296,7 @@
 
       backButtonOnTopBarPressed(e) {
         if (this._proxyToActivePage('backButtonOnTopBarPressed', e)) return;
-        // TODO: go back using generic method
+        this.navigateToPreviousUrl('/home');
       }
 
       saveButtonOnTopBarPressed(e) {
@@ -318,9 +315,10 @@
         this._proxyToActivePage('onOrganizationChange', this.organization);
       }
 
-      onOrganizationSelectorDataChange() {
-        this.organizationSelectorData = this.loadOrganizationSelectorData();
-        this._proxyToActivePage('onOrganizationSelectorDataChange', this.organizationSelectorData);
+      // ====================== shortcuts =============================
+
+      switchOrganizationTapped(){
+        this.navigateTo('/select-organization')
       }
 
       // ====================== utilities =============================
