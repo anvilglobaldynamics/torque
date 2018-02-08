@@ -38,6 +38,8 @@ Possible Error Codes:
   "productCategoryList": Joi.array().items(
     Joi.object().keys({
       id: Joi.number().max(999999999999999).required(),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       name: Joi.string().min(1).max(64).required(),
       organizationId: Joi.number().max(999999999999999).required(),
       parentProductCategoryId: Joi.number().max(999999999999999).allow(null).required(),
@@ -53,6 +55,8 @@ Possible Error Codes:
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
+      isDeleted: Joi.boolean().required(),
+      isReturnable: Joi.boolean().required()
     });
   ),
 }

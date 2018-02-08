@@ -278,6 +278,24 @@ describe('outlet', _ => {
 
   });
 
+  it('api/delete-outlet (Inalid outletId)', testDoneFn => {
+
+    callApi('api/delete-outlet', {
+      json: {
+        apiKey,
+        outletId: invalidOutletId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('OUTLET_INVALID');
+
+      testDoneFn();
+    })
+
+  });
+
   it('api/delete-outlet (Valid)', testDoneFn => {
 
     callApi('api/delete-outlet', {

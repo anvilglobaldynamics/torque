@@ -26,7 +26,12 @@ const orgPhone = 'o' + rnd(prefix, 11);
 
 let apiKey = null;
 let organizationId = null;
+
 let productCategoryList = null;
+let productCategoryOne = null;
+let productCategoryTwo = null;
+let productCategoryThree = null;
+
 let productCategoryToBeModified = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidParentProductCategoryId = generateInvalidId();
@@ -81,6 +86,8 @@ describe('product-category', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('productCategoryId');
+      
       testDoneFn();
     })
 
@@ -101,12 +108,14 @@ describe('product-category', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
-        isReturnable: true
+        isReturnable: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('productCategoryId');
+
       testDoneFn();
     })
 
@@ -155,7 +164,8 @@ describe('product-category', _ => {
       body.productCategoryList.forEach(productCategory => {
         validateProductCategorySchema(productCategory);
       });
-      productCategoryList = body.productCategoryList;
+
+      productCategoryOne = body.productCategoryList[0];
 
       testDoneFn();
     });
@@ -187,8 +197,8 @@ describe('product-category', _ => {
         apiKey,
         organizationId,
 
-        parentProductCategoryId: productCategoryList[0].id,
-        name: "second product category",
+        parentProductCategoryId: productCategoryOne.id,
+        name: "3rd product category",
         unit: "kg",
         defaultDiscountType: "fixed",
         defaultDiscountValue: 101,
@@ -201,6 +211,8 @@ describe('product-category', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('productCategoryId');
+
       testDoneFn();
     })
 
@@ -248,7 +260,10 @@ describe('product-category', _ => {
       body.productCategoryList.forEach(productCategory => {
         validateProductCategorySchema(productCategory);
       });
-      productCategoryList = body.productCategoryList;
+      
+      productCategoryOne = body.productCategoryList[0];
+      productCategoryTwo = body.productCategoryList[1];
+      productCategoryThree = body.productCategoryList[2];
 
       testDoneFn();
     });
@@ -262,10 +277,10 @@ describe('product-category', _ => {
     callApi('api/edit-product-category', {
       json: {
         apiKey,
-        productCategoryId: productCategoryList[0].id,
+        productCategoryId: productCategoryOne.id,
 
         parentProductCategoryId: null,
-        name: "new product category name", // modification
+        name: "new 1st product category name", // modification
         unit: "kg",
         defaultDiscountType: "percent",
         defaultDiscountValue: 10,
@@ -288,9 +303,9 @@ describe('product-category', _ => {
     callApi('api/edit-product-category', {
       json: {
         apiKey,
-        productCategoryId: productCategoryList[1].id,
+        productCategoryId: productCategoryTwo.id,
 
-        parentProductCategoryId: productCategoryList[0].id,
+        parentProductCategoryId: productCategoryOne.id,
         name: "new product category name", // modification
         unit: "kg",
         defaultDiscountType: "percent",
@@ -314,9 +329,9 @@ describe('product-category', _ => {
     callApi('api/edit-product-category', {
       json: {
         apiKey,
-        productCategoryId: productCategoryList[1].id,
+        productCategoryId: productCategoryTwo.id,
 
-        parentProductCategoryId: productCategoryList[1].id,
+        parentProductCategoryId: productCategoryTwo.id,
         name: "new product category name", // modification
         unit: "kg",
         defaultDiscountType: "percent",
@@ -342,7 +357,7 @@ describe('product-category', _ => {
     callApi('api/edit-product-category', {
       json: {
         apiKey,
-        productCategoryId: productCategoryList[productCategoryList.length - 1].id,
+        productCategoryId: productCategoryTwo.id,
 
         parentProductCategoryId: invalidParentProductCategoryId,
         name: "new product category name", // modification
@@ -364,7 +379,7 @@ describe('product-category', _ => {
 
   });
 
-  it('api/edit-product-category (Invalid)', testDoneFn => {
+  it('api/edit-product-category (Invalid productCategoryId)', testDoneFn => {
 
     callApi('api/edit-product-category', {
       json: {
@@ -407,9 +422,10 @@ describe('product-category', _ => {
       body.productCategoryList.forEach(productCategory => {
         validateProductCategorySchema(productCategory);
       });
+
       productCategoryList = body.productCategoryList;
 
-      expect(body.productCategoryList[0].name).to.equal("new product category name");
+      expect(body.productCategoryList[0].name).to.equal("new 1st product category name");
       expect(body.productCategoryList[0].isReturnable).to.equal(false);
 
       testDoneFn();
@@ -419,12 +435,30 @@ describe('product-category', _ => {
 
   // DELETE
 
+  it('api/delete-product-category (Invalid productCategoryId)', testDoneFn => {
+
+    callApi('api/delete-product-category', {
+      json: {
+        apiKey,
+        productCategoryId: invalidProductCategoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('PRODUCT_CATEGORY_INVALID');
+
+      testDoneFn();
+    })
+
+  });
+
   it('api/delete-product-category (Valid)', testDoneFn => {
 
     callApi('api/delete-product-category', {
       json: {
         apiKey,
-        productCategoryId: productCategoryList[productCategoryList.length - 1].id
+        productCategoryId: productCategoryTwo.id
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -466,13 +500,14 @@ describe('product-category', _ => {
     callApi('api/delete-product-category', {
       json: {
         apiKey,
-        productCategoryId: productCategoryList[0].id
+        productCategoryId: productCategoryOne.id
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error.code).to.equal('PRODUCT_CATEGORY_NOT_CHILDLESS');
+
       testDoneFn();
     })
 

@@ -21,7 +21,8 @@ exports.DeleteOutletApi = class extends collectionCommonMixin(Api) {
       organizationBy: {
         from: "outlet",
         query: ({ outletId }) => ({ id: outletId }),
-        select: "organizationId"
+        select: "organizationId",
+        errorCode: "OUTLET_INVALID"
       },
       privileges: [
         "PRIV_MODIFY_ALL_OUTLETS"
