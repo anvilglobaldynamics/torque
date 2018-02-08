@@ -211,7 +211,7 @@ describe.only('inventory', _ => {
         apiKey,
         inventoryId: warehouseDefaultInventoryId
       }
-    }, (err, response, body) => {
+    }, (err, response, body) => {      
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('productList').that.is.an('array');
@@ -264,6 +264,73 @@ describe.only('inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      
+      testDoneFn();
+    });
+
+  });
+
+  it('api/transfer-between-inventories (Invalid product count)', testDoneFn => {
+
+    callApi('api/transfer-between-inventories', {
+      json: {
+        apiKey,
+        fromInventoryId: warehouseDefaultInventoryId,
+        toInventoryId: warehouseReturnedInventoryId,
+        productList: [
+          { productId: productToBeTransferredId, count: 99999999 }
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('PRODUCT_INSUFFICIENT');
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/transfer-between-inventories (Invalid fromInventoryId)', testDoneFn => {
+
+    callApi('api/transfer-between-inventories', {
+      json: {
+        apiKey,
+        fromInventoryId: invalidInventoryId,
+        toInventoryId: warehouseReturnedInventoryId,
+        productList: [
+          { productId: productToBeTransferredId, count: 1 }
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('FROM_INVENTORY_INVALID');
+      
+      testDoneFn();
+    });
+
+  });
+
+  it('api/transfer-between-inventories (Invalid toInventoryId)', testDoneFn => {
+
+    callApi('api/transfer-between-inventories', {
+      json: {
+        apiKey,
+        fromInventoryId: warehouseDefaultInventoryId,
+        toInventoryId: invalidInventoryId,
+        productList: [
+          { productId: productToBeTransferredId, count: 1 }
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('TO_INVENTORY_INVALID');
+      
       testDoneFn();
     });
 
