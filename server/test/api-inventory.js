@@ -62,7 +62,7 @@ let productToBeTransferredId = null;
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe.only('inventory', _ => {
+describe('inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
