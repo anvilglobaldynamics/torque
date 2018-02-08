@@ -176,7 +176,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/add-product-to-inventory (Invalid productCategoryId)', testDoneFn => {
+  it('api/add-product-to-inventory (Invalid productCategoryId)', testDoneFn => {
 
     callApi('api/add-product-to-inventory', {
       json: {
@@ -192,8 +192,6 @@ describe.only('inventory', _ => {
         ]
       }
     }, (err, response, body) => {
-      console.log(body);
-
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');

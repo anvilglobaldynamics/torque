@@ -161,7 +161,7 @@ exports.AddSalesReturnApi = class extends productCommonMixin(collectionCommonMix
     let { salesId, returnedProductList, creditedAmount } = body;
 
     this._getSales({ salesId }, (sales) => {
-      this._verifyProductsExist(returnedProductList, () => {
+      this._verifyProductsExist({ returnedProductList }, () => {
         this._getOutletReturnedInventory({ outletId: sales.outletId }, (outletReturnedInventory) => {
           this._returnProducts({ returnedProductList, outletReturnedInventory }, (outletReturnedInventory) => {
             // this._getCustomer({ customerId: salesId.customerId }, (customer) => {
