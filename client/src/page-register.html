@@ -12,6 +12,7 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
 
 <link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -32,12 +33,13 @@
         <form>
           <div class="card vertical layout">
             <div class="std-dialog-header">REGISTER</div>
-            <paper-input value="{{registerForm.fullName}}" required minlength="3" error-message="Please enter a valid name" label="Your full name"></paper-input>
-            <paper-input value="{{registerForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number"
+            <paper-input class="registerForm--fullName" value="{{registerForm.fullName}}" required minlength="3" error-message="Please enter a valid name"
+              label="Your full name"></paper-input>
+            <paper-input class="registerForm--phone" value="{{registerForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number"
               label="Your valid phone number"></paper-input>
-            <paper-input value="{{registerForm.email}}" required pattern="^.+@.+\..+$" minlength="3" error-message="Please enter a valid email"
+            <paper-input class="registerForm--email" value="{{registerForm.email}}" required pattern="^.+@.+\..+$" minlength="3" error-message="Please enter a valid email"
               label="Your valid email address"></paper-input>
-            <paper-input value="{{registerForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long"
+            <paper-input class="registerForm--password" value="{{registerForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long"
               label="A minimum 8 digit password" type="password"></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -53,7 +55,7 @@
   </template>
 
   <script>
-    class PageRegister extends FxPage.mixin(TorqueDbBehavior, FxCommonBehavior) {
+    class PageRegister extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
       static get is() {
         return 'page-register';
       }
@@ -108,14 +110,12 @@
         let data = { fullName, phone, email, password };
         this.app.callUserRegisterApi(data, (err, response) => {
           if (err) return;
-          if (response.hasError) {
-            this.app.showModalDialog("Sorry!", response.error.message);
-          } else {
-            let message = "Congratulations. You are now a user of Torque. You now may log in."
-            this.app.showModalDialog("Registration Successful", message, _ => {
-              this.app.navigateTo('/home');
-            });
-          }
+          if (response.hasError) return this.onApiError(response.error, 'registerForm');
+
+          let message = "Congratulations. You are now a user of Torque. You now may log in."
+          this.app.showModalDialog("Registration Successful", message, _ => {
+            this.app.navigateTo('/home');
+          });
         });
       }
 
