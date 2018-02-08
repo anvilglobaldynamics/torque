@@ -9,7 +9,7 @@
       }
 
       onApiError(error, form) {
-        if (error.code === "VALIDATION_ERROR") {
+        if ((error.code === "VALIDATION_ERROR") && form) {
           let { details: errorList } = error;
           for (let error of errorList) {
             let { path, message } = error;

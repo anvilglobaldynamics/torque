@@ -92,6 +92,10 @@
           this.callCombinedJsonApi('add-organization', data, cbfn);
         }
         
+        callGetDashboardSummaryApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-dashboard-summary', data, cbfn);
+        }
 
       }
     }

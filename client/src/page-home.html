@@ -14,6 +14,7 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
 
 <link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -26,16 +27,56 @@
           padding: 24px;
         }
       }
+
+      pre {
+        font-family: Arial, Helvetica, sans-serif !important;
+      }
+
+      .item-value {
+        font-size: 60px;
+      }
     </style>
 
     <div class="std-page layout vertical" id="wrapper">
-      <div>Hello!</div>
+      <div class="horizontal layout">
+        <div class="card vertical layout flex">
+          [[user.fullName]]
+          <br> [[user.email]]
+          <br> [[user.phone]]
+          <br>
+          <br> [[organization.employment.designation]] ([[organization.employment.role]])
+        </div>
+        <div class="card vertical layout flex" style="text-align: right">
+          [[organization.name]]
+          <br> [[organization.email]]
+          <br> [[organization.phone]]
+          <br>
+          <pre>[[organization.primaryBusinessAddress]]</pre>
+        </div>
+      </div>
+      <div class="horizontal layout">
+        <div class="card vertical layout flex center">
+          <div class="item-value">[[metrics.totalNumberOfSalesToday]]</div>
+          <div class="item-description">Today's Sales Count</div>
+        </div>
+        <div class="card vertical layout flex center">
+          <div class="item-value">[[metrics.totalAmountSoldToday]]</div>
+          <div class="item-description">Today's Sold Amount</div>
+        </div>
+        <div class="card vertical layout flex center">
+          <div class="item-value">[[metrics.totalNumberOfSalesThisMonth]]</div>
+          <div class="item-description">Month's Sales Count</div>
+        </div>
+        <div class="card vertical layout flex center">
+          <div class="item-value">[[metrics.totalAmountSoldThisMonth]]</div>
+          <div class="item-description">Months's Sales Count</div>
+        </div>
+      </div>
     </div>
-
   </template>
 
   <script>
-    class PageHome extends FxPage.mixin(TorqueDbBehavior) {
+    class PageHome extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
       static get is() {
         return 'page-home';
       }
@@ -57,7 +98,11 @@
         this.app.currentPageIsModal = false;
         this.app.pushPageTitle('Home');
         if (!this._ensureAccess()) return;
-        this._processOrganizationList();
+        this.onUserChange(this.app.user);
+        this.onOrganizationChange(this.app.organization);
+        this._processOrganizationList(_ => {
+          this._processDashboardSummary();
+        });
       }
 
       onNavigateOut() {
@@ -82,7 +127,7 @@
         });
       }
 
-      _processOrganizationList() {
+      _processOrganizationList(cbfn) {
         this._fetchOrganizationList(newOrganizationList => {
           if (newOrganizationList.length === 0) {
             return this.app.navigateTo('/add-organization');
@@ -99,7 +144,31 @@
             this.app.saveOrganizationSelectorData({ organizationList, selectedOrganizationIndex });
             this.app.saveOrganization(organizationList[selectedOrganizationIndex]);
           }
+          return cbfn();
         });
+      }
+
+      _fetchDashboardSummary(cbfn) {
+        let data = { organizationId: this.organization.id };
+        this.app.callGetDashboardSummaryApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _processDashboardSummary() {
+        this._fetchDashboardSummary(({ metrics }) => {
+          this.metrics = metrics;
+        });
+      }
+
+      onUserChange(user) {
+        this.user = user;
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
       }
 
       // region: ui  ===========================
