@@ -1,5 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
 
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
@@ -17,7 +17,6 @@
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
-
 
 <link rel="import" href="../bower_components/atomicdb/atomicdb.html">
 
@@ -92,6 +91,14 @@
         text-align: center;
         color: var(--app-text-lighter);
       }
+
+      .subtitle {
+        font-size: 14px;
+        margin: 0px;
+        padding: 0px;
+        line-height: 0px;
+        margin-top: 4px;
+      }
     </style>
 
     <app-drawer-layout fullbleed responsive-width="2560px">
@@ -117,20 +124,20 @@
             <template is="dom-if" if="[[currentPageIsModal]]">
               <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
             </template>
-            <div main-title class="flex">[[$getPageTitle(pageTitleList.length)]]</div>
-            <template is="dom-if" if="[[$equals(organizationSelectorData.selectedOrganizationIndex, -1)]]">
-              No Organization Selected.
-            </template>
-            <template is="dom-if" if="[[!$equals(organizationSelectorData.selectedOrganizationIndex, -1)]]">
-              <paper-menu-button>
-                <paper-icon-button icon="menu" slot="dropdown-trigger"></paper-icon-button>
-                <paper-listbox slot="dropdown-content">
-                  <paper-item>Share</paper-item>
-                  <paper-item>Settings</paper-item>
-                  <paper-item>Help</paper-item>
-                </paper-listbox>
-              </paper-menu-button>
-            </template>
+            <div main-title class="flex vertical layout">
+              <div>[[$getPageTitle(pageTitleList.length)]]</div>
+              <div class="subtitle">[[organization.name]]</div>
+            </div>
+            <paper-menu-button horizontal-align="right">
+              <paper-icon-button icon="icons:apps" slot="dropdown-trigger"></paper-icon-button>
+              <paper-listbox slot="dropdown-content" selected="-1">
+                <!-- context-sensitive - start -->
+                <!-- context-sensitive - end -->
+                <paper-item>POS List</paper-item>
+                <paper-item>Inventory List</paper-item>
+                <paper-item>Switch Organization</paper-item>
+              </paper-listbox>
+            </paper-menu-button>
             <template is="dom-if" if="[[shouldShowSaveButton]]">
               <paper-icon-button icon="save" on-click="saveButtonOnTopBarPressed"></paper-icon-button>
             </template>
