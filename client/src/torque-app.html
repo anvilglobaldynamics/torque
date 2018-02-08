@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../neon-animation/web-animations.html">
 
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
@@ -13,6 +14,10 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
 
 <link rel="import" href="../bower_components/atomicdb/atomicdb.html">
 
@@ -113,6 +118,19 @@
               <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
             </template>
             <div main-title class="flex">[[$getPageTitle(pageTitleList.length)]]</div>
+            <template is="dom-if" if="[[$equals(organizationSelectorData.selectedOrganizationIndex, -1)]]">
+              No Organization Selected.
+            </template>
+            <template is="dom-if" if="[[!$equals(organizationSelectorData.selectedOrganizationIndex, -1)]]">
+              <paper-menu-button>
+                <paper-icon-button icon="menu" slot="dropdown-trigger"></paper-icon-button>
+                <paper-listbox slot="dropdown-content">
+                  <paper-item>Share</paper-item>
+                  <paper-item>Settings</paper-item>
+                  <paper-item>Help</paper-item>
+                </paper-listbox>
+              </paper-menu-button>
+            </template>
             <template is="dom-if" if="[[shouldShowSaveButton]]">
               <paper-icon-button icon="save" on-click="saveButtonOnTopBarPressed"></paper-icon-button>
             </template>
@@ -183,18 +201,8 @@
         super();
         this._initializeDatabase();
         this._fillDatabase();
-        this.db.observe('user', (...args) => {
-          this._reflectDatabaseChanges(...args);
-          this.onUserChange(this.loadUser());
-        });
-        this.db.observe('organization', (...args) => {
-          this._reflectDatabaseChanges(...args);
-        });
-        this.db.observe('organizationSelectorData', (...args) => {
-          this._reflectDatabaseChanges(...args);
-        });
+        this._setUpDatabaseObservers();
         this._intializeServiceManager();
-        this._reflectDatabaseChanges();
         this._manageProductionVariables();
         this.pushPageTitle(this.brandName);
       }
@@ -240,6 +248,15 @@
         });
       }
 
+      _setUpDatabaseObservers() {
+        this.db.observe('user', (...args) => this.onUserChange(...args));
+        this.db.observe('organization', (...args) => this.onOrganizationChange(...args));
+        this.db.observe('organizationSelectorData', (...args) => this.onOrganizationSelectorDataChange(...args));
+        this.onUserChange();
+        this.onOrganizationChange();
+        this.onOrganizationSelectorDataChange();
+      }
+
       _intializeServiceManager() {
         this.serviceManager.on('service-change', (event) => {
           this.activeServiceCount = event.detail.activeCount;
@@ -247,12 +264,6 @@
         this.serviceManager.on('error', (event) => {
           this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
         });
-      }
-
-      _reflectDatabaseChanges() {
-        this.user = this.loadUser();
-        this.organization = this.loadOrganization();
-        this.organizationSelectorData = this.loadOrganizationSelectorData();
       }
 
       // ====================== navigation =============================
@@ -280,23 +291,29 @@
       // ====================== delegated events =============================
 
       backButtonOnTopBarPressed(e) {
-        if ('backButtonOnTopBarPressed' in this.activePageElement) {
-          this.activePageElement.backButtonOnTopBarPressed(e)
-        }
+        if (this._proxyToActivePage('backButtonOnTopBarPressed', e)) return;
+        // TODO: go back using generic method
       }
 
       saveButtonOnTopBarPressed(e) {
-        if ('saveButtonOnTopBarPressed' in this.activePageElement) {
-          this.activePageElement.saveButtonOnTopBarPressed(e)
-        }
+        this._proxyToActivePage('saveButtonOnTopBarPressed', e);
       }
 
       // ====================== delegated callbacks =============================
 
-      onUserChange(user) {
-        if ('onUserChange' in this.activePageElement) {
-          this.activePageElement.onUserChange(user);
-        }
+      onUserChange() {
+        this.user = this.loadUser();
+        this._proxyToActivePage('onUserChange', this.user);
+      }
+
+      onOrganizationChange() {
+        this.organization = this.loadOrganization();
+        this._proxyToActivePage('onOrganizationChange', this.organization);
+      }
+
+      onOrganizationSelectorDataChange() {
+        this.organizationSelectorData = this.loadOrganizationSelectorData();
+        this._proxyToActivePage('onOrganizationSelectorDataChange', this.organizationSelectorData);
       }
 
       // ====================== utilities =============================
@@ -311,6 +328,14 @@
         } else {
           return '';
         }
+      }
+
+      _proxyToActivePage(methodName, ...args) {
+        if (this.activePageElement && (methodName in this.activePageElement)) {
+          this.activePageElement[methodName](...args);
+          return true;
+        }
+        return false;
       }
 
     }

@@ -56,7 +56,6 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.app.pushPageTitle('Home');
-        this._reflectDatabaseChanges();
         if (!this._ensureAccess()) return;
         this._processOrganizationList();
       }
@@ -64,10 +63,6 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.app.popPageTitle();
-      }
-
-      _reflectDatabaseChanges() {
-
       }
 
       _ensureAccess() {
