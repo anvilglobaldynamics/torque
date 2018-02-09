@@ -37,6 +37,14 @@
       .item-value {
         font-size: 60px;
       }
+
+      .title {
+        font-size: 18px;
+      }
+
+      .description {
+        font-size: 14px;
+      }
     </style>
 
     <div class="std-page layout vertical" id="wrapper">
@@ -48,6 +56,7 @@
             <div class="horizontal layout std-list-item center">
               <div class="vertical layout flex">
                 <div class="title">[[organization.name]]</div>
+                <div class="description">[[organization.employment.designation]] ([[organization.employment.role]])</div>
               </div>
               <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
             </div>
