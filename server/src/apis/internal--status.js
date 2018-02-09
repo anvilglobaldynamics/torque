@@ -1,4 +1,3 @@
-
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
@@ -20,4 +19,3 @@ exports.InternalStatus = class extends Api {
   }
 
 }
-
