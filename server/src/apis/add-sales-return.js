@@ -72,6 +72,8 @@ exports.AddSalesReturnApi = class extends productCommonMixin(collectionCommonMix
   }
 
   _returnProducts({ returnedProductList, outletReturnedInventory }, cbfn) {
+    // console.log("returnedProductList: ", returnedProductList);
+
     let promiseList = [];
     returnedProductList.forEach(product => {
       let promise = new Promise((accept, reject) => {
@@ -162,6 +164,7 @@ exports.AddSalesReturnApi = class extends productCommonMixin(collectionCommonMix
 
     this._getSales({ salesId }, (sales) => {
       this._verifyProductsExist({ productList: returnedProductList }, () => {
+        this._verifyProductsAreReturnable({ productList: returnedProductList }, () => {
         this._getOutletReturnedInventory({ outletId: sales.outletId }, (outletReturnedInventory) => {
           this._returnProducts({ returnedProductList, outletReturnedInventory }, (outletReturnedInventory) => {
             // this._getCustomer({ customerId: salesId.customerId }, (customer) => {
@@ -171,6 +174,7 @@ exports.AddSalesReturnApi = class extends productCommonMixin(collectionCommonMix
               this.success({ status: "success", salesReturnId: salesReturnId });
             });
           });
+        });
         });
       });
     });
