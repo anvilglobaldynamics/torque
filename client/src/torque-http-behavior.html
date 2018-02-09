@@ -41,7 +41,6 @@
 
         callCombinedJsonApi(path, data, cbfn) {
           let now = (new Date).getTime();
-          console.log()
           if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
             this.callJsonPostApi(path, data, cbfn);
           } else {
