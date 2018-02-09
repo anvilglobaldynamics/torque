@@ -161,21 +161,22 @@ exports.AddSalesReturnApi = class extends productCommonMixin(collectionCommonMix
 
   handle({ body }) {
     let { salesId, returnedProductList, creditedAmount } = body;
+    console.log("returnedProductList: ", returnedProductList);
 
     this._getSales({ salesId }, (sales) => {
       this._verifyProductsExist({ productList: returnedProductList }, () => {
-        this._verifyProductsAreReturnable({ productList: returnedProductList }, () => {
-        this._getOutletReturnedInventory({ outletId: sales.outletId }, (outletReturnedInventory) => {
-          this._returnProducts({ returnedProductList, outletReturnedInventory }, (outletReturnedInventory) => {
-            // this._getCustomer({ customerId: salesId.customerId }, (customer) => {
-            // this._calculatePayback({ returnedProductList }, (payment) => {
-            // this._handlePayback({ payment, customer }, () => {
-            this._addSalesReturn({ salesId, returnedProductList, creditedAmount }, (salesReturnId) => {
-              this.success({ status: "success", salesReturnId: salesReturnId });
+        // this._verifyProductsAreReturnable({ productList: returnedProductList }, () => {
+          this._getOutletReturnedInventory({ outletId: sales.outletId }, (outletReturnedInventory) => {
+            this._returnProducts({ returnedProductList, outletReturnedInventory }, (outletReturnedInventory) => {
+              // this._getCustomer({ customerId: salesId.customerId }, (customer) => {
+              // this._calculatePayback({ returnedProductList }, (payment) => {
+              // this._handlePayback({ payment, customer }, () => {
+              this._addSalesReturn({ salesId, returnedProductList, creditedAmount }, (salesReturnId) => {
+                this.success({ status: "success", salesReturnId: salesReturnId });
+              });
             });
           });
-        });
-        });
+        // });
       });
     });
   }

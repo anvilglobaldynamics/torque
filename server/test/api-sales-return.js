@@ -53,6 +53,7 @@ let productCategoryId = null;
 let nonReturnableProductCategoryId = null;
 let customerId = null;
 let salesId = null;
+let sale2Id = null;
 let salesReturnId = null;
 
 let outletInventoryProductList = null;
@@ -65,6 +66,7 @@ let outletDamagedInventoryId = null;
 
 let customerData = null;
 let salesData = null;
+let sales2Data = null;
 
 let productToBeTransferredId = null;
 
@@ -76,7 +78,7 @@ let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
-describe.only('sales-return', _ => {
+describe('sales-return', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -103,7 +105,6 @@ describe.only('sales-return', _ => {
               phone: outletPhone,
               contactPersonName: outletContactPersonName
             }, (data) => {
-              console.log(data);
               outletId = data.outletId;
               getOutlet({
                 apiKey, outletId
@@ -163,7 +164,6 @@ describe.only('sales-return', _ => {
                             apiKey,
                             inventoryId: outletDefaultInventoryId
                           }, (data) => {
-                            // console.log(data);
                             outletInventoryProductList = data.productList;
                             outletInventoryMatchingProductList = data.matchingProductList;
                             outletInventoryMatchingProductCategoryList = data.matchingProductCategoryList;
@@ -194,11 +194,44 @@ describe.only('sales-return', _ => {
                               }
                             }, (data) => {
                               salesId = data.salesId;
-                              getSales({
-                                apiKey, salesId
+                              addSales({
+                                apiKey,
+                                outletId,
+                                customerId,
+                                productList: [
+                                  {
+                                    productId: outletInventoryProductList[1].productId,
+                                    count: 2,
+                                    discountType: outletInventoryMatchingProductCategoryList[1].defaultDiscountType,
+                                    discountValue: outletInventoryMatchingProductCategoryList[1].defaultDiscountValue,
+                                    salePrice: outletInventoryMatchingProductCategoryList[1].defaultSalePrice
+                                  }
+                                ],
+                                payment: {
+                                  totalAmount: (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2),
+                                  vatAmount: ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100)),
+                                  discountType: outletInventoryMatchingProductCategoryList[1].defaultDiscountType,
+                                  discountValue: outletInventoryMatchingProductCategoryList[1].defaultDiscountValue,
+                                  discountedAmount: ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[1].defaultDiscountValue / 100)),
+                                  serviceChargeAmount: 0,
+                                  totalBilled: (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[1].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100))),
+                                  previousCustomerBalance: customerData.balance,
+                                  paidAmount: 300,
+                                  changeAmount: (300 - (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[1].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100))))
+                                }
                               }, (data) => {
-                                salesData = data.sales;
-                                testDoneFn();
+                                sale2Id = data.salesId;
+                                getSales({
+                                  apiKey, salesId
+                                }, (data) => {
+                                  salesData = data.sales;
+                                  getSales({
+                                    apiKey, salesId: sale2Id
+                                  }, (data) => {
+                                    sales2Data = data.sales;
+                                    testDoneFn();
+                                  });
+                                });
                               });
                             });
                           });
@@ -265,7 +298,7 @@ describe.only('sales-return', _ => {
 
   });
 
-  it.skip('api/add-sales-return (Valid)', testDoneFn => {
+  it('api/add-sales-return (Valid)', testDoneFn => {
 
     callApi('api/add-sales-return', {
       json: {
@@ -279,7 +312,9 @@ describe.only('sales-return', _ => {
         ],
         creditedAmount: 100 // TODO: use data from salesData.payment
       }
-    }, (err, response, body) => {      
+    }, (err, response, body) => {
+      console.log(body);
+      
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
@@ -297,11 +332,11 @@ describe.only('sales-return', _ => {
     callApi('api/add-sales-return', {
       json: {
         apiKey,
-        salesId,
+        sales2Id,
         returnedProductList: [
           {
-            productId: salesData.productList[0].productId,
-            count: salesData.productList[0].count
+            productId: sales2Data.productList[0].productId,
+            count: sales2Data.productList[0].count
           }
         ],
         creditedAmount: 100 // TODO: use data from salesData.payment
