@@ -41,7 +41,8 @@
 
         callCombinedJsonApi(path, data, cbfn) {
           let now = (new Date).getTime();
-          if (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING) {
+          console.log()
+          if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
             this.callJsonPostApi(path, data, cbfn);
           } else {
             this.callJsonWebsocketApi(path, data, (err, message) => {
@@ -86,12 +87,12 @@
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('get-organization-list', data, cbfn);
         }
-        
+
         callAddOrganizationApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('add-organization', data, cbfn);
         }
-        
+
         callGetDashboardSummaryApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('get-dashboard-summary', data, cbfn);

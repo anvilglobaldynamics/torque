@@ -136,7 +136,7 @@
                 <!-- context-sensitive - end -->
                 <paper-item>POS List</paper-item>
                 <paper-item>Inventory List</paper-item>
-                <paper-item  on-tap="switchOrganizationTapped">Switch Organization</paper-item>
+                <paper-item on-tap="switchOrganizationTapped">Switch Organization</paper-item>
               </paper-listbox>
             </paper-menu-button>
             <template is="dom-if" if="[[shouldShowSaveButton]]">
@@ -250,15 +250,18 @@
       _fillDatabase() {
         this.db.upsert('settings', (({ which }) => which === 'only'), (doc => doc), {
           which: 'only',
-          shouldUseWebsockets: false
+          shouldUseWebsockets: true,
+          monetaryUnit: 'BDT'
         });
       }
 
       _setUpDatabaseObservers() {
         this.db.observe('user', (...args) => this.onUserChange(...args));
         this.db.observe('organization', (...args) => this.onOrganizationChange(...args));
+        this.db.observe('settings', (...args) => this.onSettingsChange(...args));
         this.onUserChange();
         this.onOrganizationChange();
+        this.onSettingsChange();
       }
 
       _intializeServiceManager() {
@@ -310,6 +313,11 @@
         this._proxyToActivePage('onUserChange', this.user);
       }
 
+      onSettingsChange() {
+        this.settings = this.loadSettings();
+        this._proxyToActivePage('onSettingsChange', this.settings);
+      }
+
       onOrganizationChange() {
         this.organization = this.loadOrganization();
         this._proxyToActivePage('onOrganizationChange', this.organization);
@@ -317,7 +325,7 @@
 
       // ====================== shortcuts =============================
 
-      switchOrganizationTapped(){
+      switchOrganizationTapped() {
         this.navigateTo('/select-organization')
       }
 

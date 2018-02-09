@@ -39,6 +39,11 @@
         db.upsert('organization', (({ which }) => which === 'only'), (doc => organization), organization);
       }
 
+      loadSettings() {
+        let db = this.db || this.app.db;
+        return db.find('settings', (({ which }) => which === 'only'))[0] || null;
+      }
+
     }
   }
 

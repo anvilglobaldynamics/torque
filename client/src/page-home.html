@@ -35,6 +35,11 @@
       .item-value {
         font-size: 60px;
       }
+
+      .item-unit {
+        font-size: 20px;
+        font-weight: bold;
+      }
     </style>
 
     <div class="std-page layout vertical" id="wrapper">
@@ -57,18 +62,22 @@
       <div class="horizontal layout">
         <div class="card vertical layout flex center">
           <div class="item-value">[[metrics.totalNumberOfSalesToday]]</div>
+          <div class="item-unit">Invoices</div>
           <div class="item-description">Today's Sales Count</div>
         </div>
         <div class="card vertical layout flex center">
           <div class="item-value">[[metrics.totalAmountSoldToday]]</div>
+          <div class="item-unit">[[settings.monetaryUnit]]</div>
           <div class="item-description">Today's Sold Amount</div>
         </div>
         <div class="card vertical layout flex center">
           <div class="item-value">[[metrics.totalNumberOfSalesThisMonth]]</div>
+          <div class="item-unit">Invoices</div>
           <div class="item-description">Month's Sales Count</div>
         </div>
         <div class="card vertical layout flex center">
           <div class="item-value">[[metrics.totalAmountSoldThisMonth]]</div>
+          <div class="item-unit">[[settings.monetaryUnit]]</div>
           <div class="item-description">Months's Sold Amount</div>
         </div>
       </div>
@@ -100,6 +109,7 @@
         if (!this._ensureAccess()) return;
         this.onUserChange(this.app.user);
         this.onOrganizationChange(this.app.organization);
+        this.onSettingsChange(this.app.settings);
         this._processOrganizationList(_ => {
           this._processDashboardSummary();
         });
@@ -173,6 +183,10 @@
 
       onUserChange(user) {
         this.user = user;
+      }
+
+      onSettingsChange(settings) {
+        this.settings = settings;
       }
 
       onOrganizationChange(organization) {
