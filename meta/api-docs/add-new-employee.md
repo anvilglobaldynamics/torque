@@ -50,8 +50,8 @@ Possible Error Codes:
 {
   "hasError": false,
   "status": "success",
-  userId: Joi.number().max(999999999999999).required(),
-  employmentId: Joi.number().max(999999999999999).required()
+  "userId": Joi.number().max(999999999999999).required(),
+  "employmentId": Joi.number().max(999999999999999).required()
 }
 ```
 

@@ -36,7 +36,7 @@ Possible Error Codes:
 {
   "hasError": false,
 
-  sales: Joi.object().keys({
+  "sales": Joi.object().keys({
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedByUserId: Joi.number().max(999999999999999).allow(null).required(),

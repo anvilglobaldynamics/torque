@@ -31,7 +31,6 @@ Possible Error Codes:
 {
   "hasError": false,
   "status": "success"
-  ...
 }
 ```
 

@@ -53,7 +53,7 @@ Possible Error Codes:
 {
   "hasError": false,
   "status": "success",
-  productCategoryId: Joi.number().max(999999999999999).required()
+  "productCategoryId": Joi.number().max(999999999999999).required()
 }
 ```
 
