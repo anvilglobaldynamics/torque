@@ -102,9 +102,19 @@
           this.callCombinedJsonApi('get-outlet-list', data, cbfn);
         }
 
+        callGetOutletApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-outlet', data, cbfn);
+        }
+
         callAddOutletApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('add-outlet', data, cbfn);
+        }
+
+        callEditOutletApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('edit-outlet', data, cbfn);
         }
 
       }

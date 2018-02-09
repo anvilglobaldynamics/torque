@@ -8,6 +8,15 @@
         super(...args);
       }
 
+      static get properties() {
+        return {
+          isReady: {
+            type: Boolean,
+            value: false
+          }
+        }
+      }
+
       onApiError(error, form) {
         if ((error.code === "VALIDATION_ERROR") && form) {
           let { details: errorList } = error;
