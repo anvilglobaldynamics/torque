@@ -246,6 +246,8 @@ describe.only('inventory', _ => {
         validateProductCategorySchema(productCategory);
       });
 
+      expect(body.productList[0].productId).to.not.equal(body.productList[1].productId);
+
       testDoneFn();
     });
 
