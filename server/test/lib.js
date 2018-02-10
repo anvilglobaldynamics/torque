@@ -6,6 +6,8 @@ let mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
 let hasStarted = false;
 let pendingTerminationRequest = false;
 
+let testStartDatetimeStamp = (new Date).getTime();
+
 // ===================================== Commons
 
 exports.rnd = (prefix, len = 14) => {
@@ -38,6 +40,9 @@ exports.terminateServer = (callback) => {
   pendingTerminationRequest = true;
   setTimeout(_ => {
     if (pendingTerminationRequest) {
+      let now = (new Date).getTime();
+      let diff = (now - testStartDatetimeStamp) / 1000;
+      console.log(`Test Ran for ${diff} seconds`);
       mainProgram.terminateServer();
     }
   }, 300);
