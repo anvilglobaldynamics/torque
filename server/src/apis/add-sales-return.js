@@ -161,11 +161,11 @@ exports.AddSalesReturnApi = class extends productCommonMixin(collectionCommonMix
 
   handle({ body }) {
     let { salesId, returnedProductList, creditedAmount } = body;
-    console.log("returnedProductList: ", returnedProductList);
+    // console.log("returnedProductList: ", returnedProductList);
 
     this._getSales({ salesId }, (sales) => {
       this._verifyProductsExist({ productList: returnedProductList }, () => {
-        // this._verifyProductsAreReturnable({ productList: returnedProductList }, () => {
+        this._verifyProductsAreReturnable({ productList: returnedProductList }, () => {
           this._getOutletReturnedInventory({ outletId: sales.outletId }, (outletReturnedInventory) => {
             this._returnProducts({ returnedProductList, outletReturnedInventory }, (outletReturnedInventory) => {
               // this._getCustomer({ customerId: salesId.customerId }, (customer) => {
@@ -176,7 +176,7 @@ exports.AddSalesReturnApi = class extends productCommonMixin(collectionCommonMix
               });
             });
           });
-        // });
+        });
       });
     });
   }

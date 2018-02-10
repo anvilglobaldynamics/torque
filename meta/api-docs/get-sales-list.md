@@ -48,7 +48,6 @@ Possible Error Codes:
 
   "salesList": Joi.array().items(
     Joi.object().keys({
-      salesId: Joi.number().max(999999999999999).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedByUserId: Joi.number().max(999999999999999).required(),
