@@ -23,7 +23,8 @@
     "format": "json"
   },
   "db": {
-    "path": "mongodb://localhost:27017/torque"
+    "path": "mongodb://localhost:27017",
+    "name": "torque"
   },
   "email": {
     "enabled": false,

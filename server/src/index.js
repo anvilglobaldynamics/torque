@@ -129,7 +129,7 @@ class Program {
       })
       .then(() => {
         server = new Server(config, mode);
-        database = new Database(config.db.path);
+        database = new Database(config.db);
         logger = new Logger(config.log, this.muteLogger);
         emailService = new EmailService(config);
         smsService = new SmsService(config);

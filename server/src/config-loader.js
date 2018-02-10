@@ -35,6 +35,7 @@ class ConfigLoader {
       }),
       db: Joi.object().keys({
         path: Joi.string().max(1024).required(),
+        name: Joi.string().max(1024).required(),
       }),
       email: Joi.object().keys({
         enabled: Joi.boolean().required(),
