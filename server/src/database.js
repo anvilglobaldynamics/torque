@@ -174,7 +174,11 @@ class Database {
     if (this.__autoGenerationMap[collectionName].isBusy) return;
     if (this.__autoGenerationMap[collectionName].queue.length === 0) return;
     let cbfn = this.__autoGenerationMap[collectionName].queue.shift();
+
+    this.__autoGenerationMap[collectionName].isBusy = true;
+    this.__autoGenerateKey(collectionName, (...args) => {
       this.__autoGenerationMap[collectionName].isBusy = false;
+      this.__autoGenerateNextInQueue(collectionName);
       cbfn(...args);
     });
   }
