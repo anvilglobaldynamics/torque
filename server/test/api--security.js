@@ -54,8 +54,7 @@ describe('Security', _ => {
         });
       });
     });
-  });
-
+  }).timeout(10000);
 
   it('SANITIZATION: api/add-customer (Valid, Unique): ', testDoneFn => {
 
