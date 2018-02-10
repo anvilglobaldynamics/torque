@@ -58,12 +58,12 @@ let outletDefaultInventoryId = null;
 let outletReturnedInventoryId = null;
 let outletDamagedInventoryId = null;
 
-let productToBeTransferredId = null;
+let productToBeTransferred = null;
 
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe.only('inventory', _ => {
+describe('inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -125,7 +125,6 @@ describe.only('inventory', _ => {
                       defaultSalePrice: 111,
                       isReturnable: true
                     }, (data) => {
-                      console.log(data);
                       productCategoryId = data.productCategoryId;
                       addProductCategory({
                         apiKey,
@@ -140,7 +139,6 @@ describe.only('inventory', _ => {
                         defaultSalePrice: 300,
                         isReturnable: false
                       }, (data) => {
-                        console.log(data);
                         productCategoryId2 = data.productCategoryId;
                         testDoneFn();
                       });
@@ -163,7 +161,7 @@ describe.only('inventory', _ => {
         inventoryId: warehouseDefaultInventoryId,
         productList: [
           { productCategoryId, purchasePrice: 100, salePrice: 200, count: 10 },
-          { productCategoryId: productCategoryId2, purchasePrice: 199, salePrice: 300, count: 20 }
+          { productCategoryId: productCategoryId2, purchasePrice: 199, salePrice: 300, count: 30 }
         ]
       }
     }, (err, response, body) => {
@@ -174,7 +172,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/add-product-to-inventory (Invalid inventoryId)', testDoneFn => {
+  it('api/add-product-to-inventory (Invalid inventoryId)', testDoneFn => {
 
     callApi('api/add-product-to-inventory', {
       json: {
@@ -195,7 +193,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/add-product-to-inventory (Invalid productCategoryId)', testDoneFn => {
+  it('api/add-product-to-inventory (Invalid productCategoryId)', testDoneFn => {
 
     callApi('api/add-product-to-inventory', {
       json: {
@@ -229,7 +227,7 @@ describe.only('inventory', _ => {
         inventoryId: warehouseDefaultInventoryId
       }
     }, (err, response, body) => {
-      console.log(body);
+      // console.log(body);
 
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
@@ -237,7 +235,7 @@ describe.only('inventory', _ => {
       expect(body).to.have.property('matchingProductList').that.is.an('array');
       expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
 
-      productToBeTransferredId = body.productList[0].productId;
+      productToBeTransferred = body.productList[0];
 
       body.matchingProductList.forEach(product => {
         validateProductSchema(product);
@@ -253,7 +251,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/get-aggregated-inventory-details (Invalid inventoryId)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Invalid inventoryId)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -271,7 +269,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/transfer-between-inventories (Valid)', testDoneFn => {
+  it('api/transfer-between-inventories (Valid)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -279,7 +277,7 @@ describe.only('inventory', _ => {
         fromInventoryId: warehouseDefaultInventoryId,
         toInventoryId: warehouseReturnedInventoryId,
         productList: [
-          { productId: productToBeTransferredId, count: 1 }
+          { productId: productToBeTransferred.productId, count: 1 }
         ]
       }
     }, (err, response, body) => {
@@ -291,7 +289,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/transfer-between-inventories (Invalid product count)', testDoneFn => {
+  it('api/transfer-between-inventories (Invalid product count)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -299,7 +297,7 @@ describe.only('inventory', _ => {
         fromInventoryId: warehouseDefaultInventoryId,
         toInventoryId: warehouseReturnedInventoryId,
         productList: [
-          { productId: productToBeTransferredId, count: 99999999 }
+          { productId: productToBeTransferred.productId, count: 99999999 }
         ]
       }
     }, (err, response, body) => {
@@ -313,7 +311,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/transfer-between-inventories (Invalid fromInventoryId)', testDoneFn => {
+  it('api/transfer-between-inventories (Invalid fromInventoryId)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -321,7 +319,7 @@ describe.only('inventory', _ => {
         fromInventoryId: invalidInventoryId,
         toInventoryId: warehouseReturnedInventoryId,
         productList: [
-          { productId: productToBeTransferredId, count: 1 }
+          { productId: productToBeTransferred.productId, count: 1 }
         ]
       }
     }, (err, response, body) => {
@@ -335,7 +333,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/transfer-between-inventories (Invalid toInventoryId)', testDoneFn => {
+  it('api/transfer-between-inventories (Invalid toInventoryId)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -343,7 +341,7 @@ describe.only('inventory', _ => {
         fromInventoryId: warehouseDefaultInventoryId,
         toInventoryId: invalidInventoryId,
         productList: [
-          { productId: productToBeTransferredId, count: 1 }
+          { productId: productToBeTransferred.productId, count: 1 }
         ]
       }
     }, (err, response, body) => {
@@ -357,7 +355,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/transfer-between-inventories (Valid duplicate)', testDoneFn => {
+  it('api/transfer-between-inventories (Valid duplicate)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -365,7 +363,7 @@ describe.only('inventory', _ => {
         fromInventoryId: warehouseDefaultInventoryId,
         toInventoryId: warehouseReturnedInventoryId,
         productList: [
-          { productId: productToBeTransferredId, count: 1 }
+          { productId: productToBeTransferred.productId, count: 1 }
         ]
       }
     }, (err, response, body) => {
@@ -376,7 +374,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/get-aggregated-inventory-details (Valid modification check)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid modification check)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -397,7 +395,7 @@ describe.only('inventory', _ => {
         validateProductCategorySchema(productCategory);
       });
 
-      expect(body.productList[0]).to.have.property('productId').that.equals(productToBeTransferredId);
+      expect(body.productList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
       expect(body.productList[0]).to.have.property('count').that.equals(2);
 
       testDoneFn();
@@ -405,7 +403,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/transfer-between-inventories (Valid Warehouse to Outlet)', testDoneFn => {
+  it('api/transfer-between-inventories (Valid Warehouse to Outlet)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -413,7 +411,7 @@ describe.only('inventory', _ => {
         fromInventoryId: warehouseDefaultInventoryId,
         toInventoryId: outletDefaultInventoryId,
         productList: [
-          { productId: productToBeTransferredId, count: 3 }
+          { productId: productToBeTransferred.productId, count: 3 }
         ]
       }
     }, (err, response, body) => {
@@ -424,7 +422,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/get-aggregated-inventory-details (Valid modification check, Outlet)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid modification check, Outlet)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -445,7 +443,7 @@ describe.only('inventory', _ => {
         validateProductCategorySchema(productCategory);
       });
 
-      expect(body.productList[0]).to.have.property('productId').that.equals(productToBeTransferredId);
+      expect(body.productList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
       expect(body.productList[0]).to.have.property('count').that.equals(3);
 
       testDoneFn();
@@ -453,7 +451,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/get-aggregated-inventory-details (Valid modification check, Warehouse)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid modification check, Warehouse)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -474,8 +472,8 @@ describe.only('inventory', _ => {
         validateProductCategorySchema(productCategory);
       });
 
-      expect(body.productList[0]).to.have.property('productId').that.equals(productToBeTransferredId);
-      expect(body.productList[0]).to.have.property('count').that.equals(5);
+      expect(body.productList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
+      expect(body.productList[0]).to.have.property('count').that.equals(productToBeTransferred.count - 5);
 
       testDoneFn();
     });
