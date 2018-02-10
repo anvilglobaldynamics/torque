@@ -37,7 +37,6 @@ Possible Error Codes:
 ```
 
 ### response (on success):
-Signup is successful
 ```js
 {
   "hasError": false,

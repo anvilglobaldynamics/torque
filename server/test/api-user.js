@@ -31,7 +31,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Register
 
-  it('api/user-register (Valid, Unique): ' + email, testDoneFn => {
+  it('api/user-register (Valid, Unique)', testDoneFn => {
 
     callApi('api/user-register', {
       json: {
@@ -50,7 +50,7 @@ describe('user apis (1)', _ => {
 
   });
 
-  it('api/user-register (Valid, Not Unique): ' + email, testDoneFn => {
+  it.skip('api/user-register (Valid, Not Unique email)', testDoneFn => {
 
     callApi('api/user-register', {
       json: {
@@ -60,14 +60,37 @@ describe('user apis (1)', _ => {
         fullName
       }
     }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200)
-      expect(body).to.have.property('hasError').that.equals(true)
-      testDoneFn()
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('EMAIL_ALREADY_IN_USE');
+
+      testDoneFn();
     })
 
   });
 
-  it('api/user-register (Invalid Email): ' + email + '%', testDoneFn => {
+  it.skip('api/user-register (Valid, Not Unique phone)', testDoneFn => {
+
+    callApi('api/user-register', {
+      json: {
+        email: changedEmail,
+        password,
+        phone,
+        fullName
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('PHONE_ALREADY_IN_USE');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/user-register (Invalid Email)', testDoneFn => {
 
     callApi('api/user-register', {
       json: {
@@ -77,14 +100,17 @@ describe('user apis (1)', _ => {
         fullName
       }
     }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200)
-      expect(body).to.have.property('hasError').that.equals(true)
-      testDoneFn()
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('VALIDATION_ERROR');
+
+      testDoneFn();
     })
 
   });
 
-  it('api/user-register (Invalid Password): ' + email, testDoneFn => {
+  it('api/user-register (Invalid Password)', testDoneFn => {
 
     callApi('api/user-register', {
       json: {
@@ -94,16 +120,19 @@ describe('user apis (1)', _ => {
         fullName
       }
     }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200)
-      expect(body).to.have.property('hasError').that.equals(true)
-      testDoneFn()
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('VALIDATION_ERROR');
+
+      testDoneFn();
     })
 
   });
 
   // ================================================== Login
 
-  it('api/user-login (Correct, Using Email): ' + email, testDoneFn => {
+  it('api/user-login (Correct, Using Email)', testDoneFn => {
 
     callApi('api/user-login', {
       json: {
@@ -129,7 +158,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Change Password
 
-  it('api/user-change-password (Correct): ' + email, testDoneFn => {
+  it('api/user-change-password (Correct)', testDoneFn => {
 
     callApi('api/user-change-password', {
       json: {
@@ -148,7 +177,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Logout
 
-  it('api/user-logout (Correct): ' + email, testDoneFn => {
+  it('api/user-logout (Correct)', testDoneFn => {
 
     callApi('api/user-logout', {
       json: {
@@ -165,7 +194,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Login
 
-  it('api/user-login (Correct, Using Email and Changed Password): ' + email, testDoneFn => {
+  it('api/user-login (Correct, Using Email and Changed Password)', testDoneFn => {
 
     callApi('api/user-login', {
       json: {
@@ -212,8 +241,6 @@ describe('user apis (1)', _ => {
 
   });
 
-  // ================================================== Edit Profile
-
   it('api/user-edit-profile', testDoneFn => {
 
     callApi('api/user-edit-profile', {
@@ -238,7 +265,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Logout
 
-  it('api/user-logout (Correct): ' + email, testDoneFn => {
+  it('api/user-logout (Correct)', testDoneFn => {
 
     callApi('api/user-logout', {
       json: {
@@ -253,7 +280,7 @@ describe('user apis (1)', _ => {
 
   });
 
-  // ================================================== Password Reset - Request
+  // ================================================== Password Reset-Request
 
   it('api/user-reset-password--request', testDoneFn => {
 
@@ -317,7 +344,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Login
 
-  it('api/user-login (Correct, Using Email and Changed Password): ' + email, testDoneFn => {
+  it('api/user-login (Correct, Using Email and Changed Password)', testDoneFn => {
 
     callApi('api/user-login', {
       json: {
@@ -342,7 +369,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Logout
 
-  it('api/user-logout (Correct): ' + email, testDoneFn => {
+  it('api/user-logout (Correct)', testDoneFn => {
 
     callApi('api/user-logout', {
       json: {
@@ -378,7 +405,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Login
 
-  it('api/user-login (Correct, Using Email and Changed Password): ' + email, testDoneFn => {
+  it('api/user-login (Correct, Using Email and Changed Password)', testDoneFn => {
 
     callApi('api/user-login', {
       json: {
@@ -401,7 +428,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Logout
 
-  it('api/user-logout (Correct): ' + email, testDoneFn => {
+  it('api/user-logout (Correct)', testDoneFn => {
 
     callApi('api/user-logout', {
       json: {
@@ -480,7 +507,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Login
 
-  it('api/user-login (Correct, Using Email and Changed Password): ' + email, testDoneFn => {
+  it('api/user-login (Correct, Using Email and Changed Password)', testDoneFn => {
 
     callApi('api/user-login', {
       json: {
@@ -502,7 +529,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Logout
 
-  it('api/user-logout (Correct): ' + email, testDoneFn => {
+  it('api/user-logout (Correct)', testDoneFn => {
 
     callApi('api/user-logout', {
       json: {
@@ -538,7 +565,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Login
 
-  it('api/user-login (Correct, Using Email and Changed Password): ' + email, testDoneFn => {
+  it('api/user-login (Correct, Using Email and Changed Password)', testDoneFn => {
 
     callApi('api/user-login', {
       json: {
@@ -561,7 +588,7 @@ describe('user apis (1)', _ => {
 
   // ================================================== Logout
 
-  it('api/user-logout (Correct): ' + email, testDoneFn => {
+  it('api/user-logout (Correct)', testDoneFn => {
 
     callApi('api/user-logout', {
       json: {
