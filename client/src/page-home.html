@@ -13,7 +13,8 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
 <link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
 
-<link rel="import" href="my-db-behavior.html">
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -26,16 +27,65 @@
           padding: 24px;
         }
       }
+
+      pre {
+        font-family: Arial, Helvetica, sans-serif !important;
+      }
+
+      .item-value {
+        font-size: 60px;
+      }
+
+      .item-unit {
+        font-size: 20px;
+        font-weight: bold;
+      }
     </style>
 
     <div class="std-page layout vertical" id="wrapper">
-      <div>Hello!</div>
+      <div class="horizontal layout">
+        <div class="card vertical layout flex">
+          [[user.fullName]]
+          <br> [[user.email]]
+          <br> [[user.phone]]
+          <br>
+          <br> [[organization.employment.designation]] ([[organization.employment.role]])
+        </div>
+        <div class="card vertical layout flex" style="text-align: right">
+          [[organization.name]]
+          <br> [[organization.email]]
+          <br> [[organization.phone]]
+          <br>
+          <pre>[[organization.primaryBusinessAddress]]</pre>
+        </div>
+      </div>
+      <div class="horizontal layout">
+        <div class="card vertical layout flex center">
+          <div class="item-value">[[metrics.totalNumberOfSalesToday]]</div>
+          <div class="item-unit">Invoices</div>
+          <div class="item-description">Today's Sales Count</div>
+        </div>
+        <div class="card vertical layout flex center">
+          <div class="item-value">[[metrics.totalAmountSoldToday]]</div>
+          <div class="item-unit">[[settings.monetaryUnit]]</div>
+          <div class="item-description">Today's Sold Amount</div>
+        </div>
+        <div class="card vertical layout flex center">
+          <div class="item-value">[[metrics.totalNumberOfSalesThisMonth]]</div>
+          <div class="item-unit">Invoices</div>
+          <div class="item-description">Month's Sales Count</div>
+        </div>
+        <div class="card vertical layout flex center">
+          <div class="item-value">[[metrics.totalAmountSoldThisMonth]]</div>
+          <div class="item-unit">[[settings.monetaryUnit]]</div>
+          <div class="item-description">Months's Sold Amount</div>
+        </div>
+      </div>
     </div>
-
   </template>
 
   <script>
-    class PageHome extends FxPage.mixin(MyDbBehavior) {
+    class PageHome extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
       static get is() {
         return 'page-home';
       }
@@ -56,8 +106,13 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.app.pushPageTitle('Home');
-        this._reflectDatabaseChanges();
-        this._ensureAccess();
+        if (!this._ensureAccess()) return;
+        this.onUserChange(this.app.user);
+        this.onOrganizationChange(this.app.organization);
+        this.onSettingsChange(this.app.settings);
+        this._processOrganizationList(_ => {
+          this._processDashboardSummary();
+        });
       }
 
       onNavigateOut() {
@@ -65,17 +120,80 @@
         this.app.popPageTitle();
       }
 
-      _reflectDatabaseChanges() {
-
-      }
-
       _ensureAccess() {
         if (!this.app.user) {
-          this.app.navigateTo('/login')
+          this.app.navigateTo('/login');
+          return false;
         }
+        return true;
       }
 
-      // region: ui consistency ===========================
+      _fetchOrganizationList(cbfn) {
+        let data = {};
+        this.app.callGetOrganizationListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.organizationList);
+        });
+      }
+
+      _processOrganizationList(cbfn) {
+        this._fetchOrganizationList(organizationList => {
+          if (organizationList.length === 0) {
+            return this.app.navigateTo('/add-organization');
+          }
+          if (organizationList.length === 1) {
+            let organization = organizationList[0];
+            this.app.saveOrganization(organization);
+          } else {
+            let index;
+            if ('org' in this.params) {
+              let organizationId = parseInt(this.params.org, 10);
+              index = organizationList.findIndex(organization => organization.id === organizationId);
+            } else {
+              if (!this.app.organization) {
+                return this.app.navigateTo('/select-organization');
+              }
+              index = organizationList.findIndex(organization => organization.id === this.organization.id);
+            }
+            if (index === -1) {
+              return this.app.navigateTo('/select-organization');
+            }
+            let organization = organizationList[index];
+            this.app.saveOrganization(organization);
+          }
+          return cbfn();
+        });
+      }
+
+      _fetchDashboardSummary(cbfn) {
+        let data = { organizationId: this.organization.id };
+        this.app.callGetDashboardSummaryApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _processDashboardSummary() {
+        this._fetchDashboardSummary(({ metrics }) => {
+          this.metrics = metrics;
+        });
+      }
+
+      onUserChange(user) {
+        this.user = user;
+      }
+
+      onSettingsChange(settings) {
+        this.settings = settings;
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
+
+      // region: ui  ===========================
 
       // region: misc =================================
 

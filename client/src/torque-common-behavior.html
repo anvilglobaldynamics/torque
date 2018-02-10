@@ -1,0 +1,40 @@
+<link rel="import" href="../bower_components/atomicdb/atomicdb.html">
+<script>
+  if (!window.TorqueCommonBehavior) {
+    /* @polymerMixin */
+    TorqueCommonBehavior = (SuperClass) => class extends SuperClass {
+
+      constructor(...args) {
+        super(...args);
+      }
+
+      static get properties() {
+        return {
+          isReady: {
+            type: Boolean,
+            value: false
+          }
+        }
+      }
+
+      onApiError(error, form) {
+        if ((error.code === "VALIDATION_ERROR") && form) {
+          let { details: errorList } = error;
+          for (let error of errorList) {
+            let { path, message } = error;
+            let key = `.${form}--${path}`;
+            let el = this.elem(key);
+            if (!el) continue;
+            el.autoValidate = true;
+            el.invalid = true;
+            el.errorMessage = message;
+          }
+        } else {
+          return this.app.showModalDialog("Sorry!", error.message);
+        }
+      }
+
+    }
+  }
+
+</script>

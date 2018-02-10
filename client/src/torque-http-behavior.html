@@ -8,9 +8,9 @@
     const WEBSOCKET_DELAY_BEFORE_RETRYING = 30 * 1000;
     let lastWebsocketFailureTimestamp = 0;
 
-    if (!window.MyHttpBehavior) {
+    if (!window.TorqueHttpBehavior) {
       /* @polymerMixin */
-      window.MyHttpBehavior = (SuperClass) => class extends FxHttpBehavior(SuperClass) {
+      window.TorqueHttpBehavior = (SuperClass) => class extends FxHttpBehavior(SuperClass) {
 
         constructor(...args) {
           super(...args);
@@ -41,7 +41,7 @@
 
         callCombinedJsonApi(path, data, cbfn) {
           let now = (new Date).getTime();
-          if (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING) {
+          if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
             this.callJsonPostApi(path, data, cbfn);
           } else {
             this.callJsonWebsocketApi(path, data, (err, message) => {
@@ -80,6 +80,41 @@
         callUserLogoutApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('user-logout', data, cbfn);
+        }
+
+        callGetOrganizationListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-organization-list', data, cbfn);
+        }
+
+        callAddOrganizationApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('add-organization', data, cbfn);
+        }
+
+        callGetDashboardSummaryApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-dashboard-summary', data, cbfn);
+        }
+
+        callGetOutletListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-outlet-list', data, cbfn);
+        }
+
+        callGetOutletApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-outlet', data, cbfn);
+        }
+
+        callAddOutletApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('add-outlet', data, cbfn);
+        }
+
+        callEditOutletApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('edit-outlet', data, cbfn);
         }
 
       }

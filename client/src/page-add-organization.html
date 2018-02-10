@@ -1,0 +1,140 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-add-organization">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding-top: 24px;
+        }
+      }
+    </style>
+
+    <div class="layout vertical std-page" id="wrapper">
+
+      <iron-form id="addOrganizationForm">
+        <form>
+          <div class="card vertical layout">
+            <paper-input class="addOrganizationForm--name" value="{{addOrganizationForm.name}}" required minlength="3" error-message="Please enter a valid name" label="Name of your organization."></paper-input>
+            <paper-input class="addOrganizationForm--phone" value="{{addOrganizationForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Your valid phone number"></paper-input>
+            <paper-input class="addOrganizationForm--email" value="{{addOrganizationForm.email}}" required pattern="^.+@.+\..+$" minlength="3" error-message="Please enter a valid email" label="Your valid email address"></paper-input>
+            <paper-textarea class="addOrganizationForm--primaryBusinessAddress" value="{{addOrganizationForm.primaryBusinessAddress}}" required minlength="8" error-message="Please enter an address at least 8 characters long" label="Your primary business address" rows="4"></paper-textarea>
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class="primary" on-tap="addOrganizationTapped">Create Organization</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+  </template>
+
+  <script>
+    class PageAddOrganization extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+      static get is() {
+        return 'page-add-organization';
+      }
+
+      static get properties() {
+        return {
+          addOrganizationForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  name: 'Johns Apparel',
+                  phone: '01700000011',
+                  email: 'johndoe@johnsapparel.com',
+                  primaryBusinessAddress: 'Road 50\nThis Town'
+                };
+              } else {
+                return {
+                  name: '',
+                  phone: '',
+                  email: '',
+                  primaryBusinessAddress: ''
+                };
+              }
+            }
+          }
+
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Add Organization');
+        if (!this._ensureAccess()) return;
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('addOrganizationForm');
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      // region: addOrganization =================================
+
+      _processUserAddOrganization({ name, phone, email, primaryBusinessAddress }) {
+        let data = { name, phone, email, primaryBusinessAddress };
+        this.app.callAddOrganizationApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'addOrganizationForm');
+          let message = "Congratulations. Your new organization has been created."
+          this.app.showModalDialog("Organization Created", message, _ => {
+            this.app.navigateTo(`/home/org:${response.organizationId}`);
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      addOrganizationTapped() {
+        this.elemAll('#addOrganizationForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#addOrganizationForm').validate()) return;
+
+        let { name, phone, email, primaryBusinessAddress } = this.addOrganizationForm;
+        this._processUserAddOrganization({ name, phone, email, primaryBusinessAddress });
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageAddOrganization.is, PageAddOrganization);
+  </script>
+</dom-module>

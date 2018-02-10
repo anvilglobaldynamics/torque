@@ -49,7 +49,10 @@ class Collection {
     let { error: err, value } = Joi.validate(doc, joiSchema, {
       convert: false
     });
-    if (err) return cbfn(err);
+    if (err) {
+      err.details.from = "db";
+      return cbfn(err);
+    }
     cbfn(null, value);
   }
 

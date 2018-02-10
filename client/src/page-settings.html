@@ -11,7 +11,7 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
 <link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
 
-<link rel="import" href="my-swipe-behavior.html">
+<link rel="import" href="torque-swipe-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -42,7 +42,6 @@
         font-size: smaller;
         color: #616161;
       }
-
     </style>
 
     <div class="std-page layout vertical" id="wrapper">
@@ -56,7 +55,7 @@
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 0)]]">
         <div class="card vertical layout">
           <div class="option">
-            <paper-checkbox on-change="shouldUseWebsocketsChanged" checked="{{shouldUseWebsockets}}">Use Websockets</paper-checkbox>
+            <paper-checkbox on-change="settingsChanged" checked="{{shouldUseWebsockets}}">Use Websockets</paper-checkbox>
             <div class="note">
               If checked, the app will try to use websockets.
             </div>
@@ -66,24 +65,36 @@
       </template>
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 1)]]">
-        Nothing so far
+        <div class="card vertical layout">
+          <div class="option">
+            <paper-input on-input="settingsChanged" value="{{monetaryUnit}}" label="Monetary Unit"></paper-input>
+            <div class="note">
+              Note: Changing the monetary unit does not affect your sales.
+            </div>
+          </div>
+        </div>
       </template>
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 2)]]">
-        Nothing so far, tab 3
+        <div class="card vertical layout">
+          More options are coming soon.
+        </div>
       </template>
 
   </template>
 
   <script>
-    class PageSettings extends FxPage.mixin(MySwipeBehavior, FxCommonBehavior) {
+    class PageSettings extends FxPage.mixin(TorqueSwipeBehavior, FxCommonBehavior) {
+
       static get is() {
         return 'page-settings';
       }
 
       static get properties() {
         return {
+          paperTabSelectedViewIndex: { type: Number, value: 0, observer: '_paperTabSelectedViewIndexChanged' },
           shouldUseWebsockets: { type: Boolean, value: false },
+          monetaryUnit: { type: String, value: 'BDT' },
         };
       }
 
@@ -129,6 +140,7 @@
         this.paperTabSelectedViewIndex = 0;
         let settings = this.app.db.find('settings', (({ which }) => which === 'only'))[0];
         this.shouldUseWebsockets = settings.shouldUseWebsockets
+        this.monetaryUnit = settings.monetaryUnit
         this._loadLastPaperTabSelectedViewIndex()
         this._ensureAccess();
       }
@@ -146,9 +158,10 @@
 
       // region: general settinggs =================================
 
-      shouldUseWebsocketsChanged(e) {
+      settingsChanged(e) {
         this.app.db.update('settings', ({ which }) => which === 'only', (doc) => {
           doc.shouldUseWebsockets = this.shouldUseWebsockets;
+          doc.monetaryUnit = this.monetaryUnit;
           return doc
         });
       }

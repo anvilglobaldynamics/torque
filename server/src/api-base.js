@@ -317,6 +317,7 @@ class Api {
   // region: error handling =========================================
 
   _stringifyErrorObject(errorObject) {
+    let details = {};
     if (!(errorObject instanceof Error)) {
       this.logger.important('DevError: Invalid Error Object', errorObject);
       throw new Error("expected errorObject to be an instanceof Error");
@@ -327,13 +328,17 @@ class Api {
     }
     if ('isJoi' in errorObject) {
       code = "VALIDATION_ERROR";
+      details = errorObject.details;
+      if (!('from' in details)) {
+        details.from = 'other';
+      }
     }
     let message = "Server error occurred. Admin has been notified.";
     if ('message' in errorObject) {
       message = errorObject.message;
     }
     let stack = errorObject.stack;
-    return { code, message, stack };
+    return { code, message, stack, details };
   }
 
   _hideUnknownErrorsOnProduction(errorObject) {

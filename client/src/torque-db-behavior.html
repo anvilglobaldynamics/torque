@@ -1,0 +1,50 @@
+<link rel="import" href="../bower_components/atomicdb/atomicdb.html">
+<script>
+  if (!window.TorqueDbBehavior) {
+    /* @polymerMixin */
+    TorqueDbBehavior = (SuperClass) => class extends SuperClass {
+
+      constructor(...args) {
+        super(...args);
+      }
+
+      removeUser() {
+        let db = this.db || this.app.db;
+        db.remove('user', (doc => true));
+      }
+
+      loadUser() {
+        let db = this.db || this.app.db;
+        return db.find('user', (({ which }) => which === 'only'))[0] || null;
+      }
+
+      saveUser(user) {
+        let db = this.db || this.app.db;
+        Object.assign(user, {
+          which: 'only'
+        })
+        db.upsert('user', (({ which }) => which === 'only'), (doc => user), user);
+      }
+
+      loadOrganization() {
+        let db = this.db || this.app.db;
+        return db.find('organization', (({ which }) => which === 'only'))[0] || null;
+      }
+
+      saveOrganization(organization) {
+        let db = this.db || this.app.db;
+        Object.assign(organization, {
+          which: 'only'
+        })
+        db.upsert('organization', (({ which }) => which === 'only'), (doc => organization), organization);
+      }
+
+      loadSettings() {
+        let db = this.db || this.app.db;
+        return db.find('settings', (({ which }) => which === 'only'))[0] || null;
+      }
+
+    }
+  }
+
+</script>
