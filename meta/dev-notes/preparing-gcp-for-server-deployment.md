@@ -6,6 +6,7 @@
 4. Get deployer password by contacting Torque's Owners
 5. Get mongodb regular user password by contacting Torque's Owners
 6. Get mongodb admin user password by contacting Torque's Owners
+7. Unlock `8540`, `8541`, `27017` ports in GCP
 
 # Tips
 
@@ -200,3 +201,33 @@ mongodb://torqueuser:PASSWORD@localhost:27017/torque?authSource=torque
 ```
 
 Test by running `npm start`.
+
+# Testing progress so far
+
+At this point, you should be able to go to http://server.torque.live:8540/ and see `Cannot GET /`
+
+# Install and run pm2
+
+Install pm2 by running `sudo npm install -g pm2`
+
+Navigate to server directory `cd ~/torque/server`
+
+Run `pm2 start start.js --name "torque-server"`
+
+
+Run `pm2 logs` to see the logs and confirm everything is running.
+
+Run `pm2 startup systemd`. It'll output a code similar to - `sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u deployer --hp /home/deployer`
+
+Run that code.
+
+Run `pm2 save`
+
+# Testing progress so far
+
+At this point, you should restart the server machine. Wait a while and then you should be able to go to http://server.torque.live:8540/ and see `Cannot GET /`
+
+Connect to terminal again and run `pm2 logs` to see the logs.
+
+If you see that mongodb is not running, it maybe an issue with db locks. Remove the lock file using `sudo rm -rf /var/lib/mongodb/mongod.lock`
+
