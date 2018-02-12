@@ -11,7 +11,13 @@
   "server": {
     "port": 8540,
     "websocketPort": 8541,
-    "hostname": "localhost"
+    "hostname": "localhost",
+    "ssl": {
+      "enabled": false,
+      "pkey": null,
+      "cert": null,
+      "caBundle": null
+    }
   },
   "log": {
     "logStandardOutputToFile": true,

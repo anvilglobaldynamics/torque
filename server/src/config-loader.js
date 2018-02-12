@@ -23,6 +23,12 @@ class ConfigLoader {
         hostname: Joi.string().max(1024).required(),
         port: Joi.number().max(65535).required(),
         websocketPort: Joi.number().max(65535).required(),
+        ssl: Joi.object().keys({
+          enabled: Joi.boolean().required(),
+          pkey: Joi.string().max(1024).allow(null).required(),
+          cert: Joi.string().max(1024).allow(null).required(),
+          caBundle: Joi.string().max(1024).allow(null).required(),
+        }),
       }),
       log: Joi.object().keys({
         logStandardOutputToFile: Joi.boolean().required(),
