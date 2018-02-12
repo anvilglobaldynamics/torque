@@ -18,7 +18,7 @@ exports.VerifyEmailApi = class extends Api {
   }
 
   _showSuccess() {
-    let body = "Congratulations. You have successfully verified your email address for torque.life. You can close this window."
+    let body = "Congratulations. You have successfully verified your email address for torque.live. You can close this window."
     this.sendGenericHtmlMessage("Email Verification Successful", body);
   }
 

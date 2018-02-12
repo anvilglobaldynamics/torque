@@ -4,7 +4,7 @@ let { generateRandomString } = require('./../../utils/random-string');
 exports.phoneVerificationRequestMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _generatePhoneVerificationLink(verificationToken) {
-    return `https://server.torque.life/verify-phone/${verificationToken}`;
+    return `https://server.torque.live/verify-phone/${verificationToken}`;
   }
 
   _sendPhoneVerificationSms({ phone, verificationLink }) {
