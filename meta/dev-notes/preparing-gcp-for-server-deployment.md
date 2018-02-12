@@ -229,5 +229,40 @@ At this point, you should restart the server machine. Wait a while and then you 
 
 Connect to terminal again and run `pm2 logs` to see the logs.
 
+# Alternative way to keep mongodb server running
+
+If after restarting your server, mongod does not start (or closes soon after starting) then you have encourtered a bug in mongodb's startup script. Currently there are no easy fixes for that. Best way to bypass that is to use pm2 to run mongodb instead of as a service.
+
+Run the following commands one by one - 
+
+```sh
+sudo chmod -R a+rwX /var/log/mongodb
+sudo chmod -R a+rwX /var/lib/mongodb
+sudo chmod -R a+rwX /media/dbdisk
+sudo chown -R deployer /media/dbdisk
+pm2 start mongod --name "mongodb-server" -x -- --config /etc/mongod.conf
+pm2 save
+```
+
+# Debugging and Common Commands
+
 If you see that mongodb is not running, it maybe an issue with db locks. Remove the lock file using `sudo rm -rf /var/lib/mongodb/mongod.lock`
+
+/usr/bin/mongod --config /etc/mongod.conf
+sudo nano /lib/systemd/system/mongod.service
+sudo nano /etc/mongod.conf
+cat /var/log/mongodb/mongod.log
+sudo systemctl daemon-reload
+sudo service mongod start
+processManagement: { fork: true, pidFilePath: "/var/run/mongodb/mongodb.pid" }
+sudo chmod a+rwx /var/log/mongodb
+sudo chmod -R a+rwX /var/log/mongodb
+sudo chmod -R a+rwX /var/lib/mongodb
+sudo chmod -R a+rwX /media/dbdisk
+sudo chown -R deployer /media/dbdisk
+cd /var/log/mongodb
+sudo chown -R mongodb:mongodb .
+cd /var/lib/mongodb
+sudo chown -R mongodb:mongodb .
+pm2 start mongod --name "mongodb-server" -x -- --config /etc/mongod.conf
 
