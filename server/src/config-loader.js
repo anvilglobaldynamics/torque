@@ -28,7 +28,7 @@ class ConfigLoader {
           key: Joi.string().max(1024).allow(null).required(),
           cert: Joi.string().max(1024).allow(null).required(),
           caBundle: Joi.string().max(1024).allow(null).required(),
-        }),
+        }).required(),
       }),
       log: Joi.object().keys({
         logStandardOutputToFile: Joi.boolean().required(),
