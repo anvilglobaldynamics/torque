@@ -8,6 +8,7 @@
 6. Get mongodb admin user password by contacting Torque's Owners
 7. Unlock `8540`, `8541`, `27017` ports in GCP
 8. Collect `torque-server.ca-bundle`, `torque-server.cert`, `torque-server.key` by contacting Torque's Owners
+9. Collect credentials for github account `to-bot` by contacting Torque's Owners
 
 # Tips
 
@@ -182,7 +183,7 @@ cd ~
 
 clone the remote repository's `production` branch. Use the credentials for to-bot
 ```
-git clone https://github.com/BDEMR/<name-of-repository>.git --branch production --single-branch
+git clone https://github.com/ishafayet/torque.git --branch production --single-branch
 ```
 
 Navigate to the server directory `cd torque/server`
