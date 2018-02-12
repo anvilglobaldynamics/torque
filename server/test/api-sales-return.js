@@ -485,7 +485,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/get-sales-return-list (Valid with organizationId and Invalid outletId)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId and Invalid outletId)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
       json: {
@@ -540,7 +540,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/get-sales-return-list (Valid with organizationId and Invalid customerId)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId and Invalid customerId)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
       json: {
@@ -566,7 +566,7 @@ describe('sales-return', _ => {
 
   });
 
-  it('api/get-sales-return-list (Valid with organizationId and customerId is null)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId and Invalid customerId is null)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
       json: {
@@ -583,12 +583,35 @@ describe('sales-return', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('salesReturnList');
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals("CUSTOMER_INVALID");
 
-      body.salesReturnList.forEach(salesReturn => {
-        validateSalesReturnSchema(salesReturn);
-      });
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales-return-list (Valid with organizationId and Invalid outletId is null)', testDoneFn => {
+
+    callApi('api/get-sales-return-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: false,
+
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals("OUTLET_INVALID");
 
       testDoneFn();
     });

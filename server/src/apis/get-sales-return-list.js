@@ -1,7 +1,11 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.GetSalesReturnListApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+let { outletCommonMixin } = require('./mixins/outlet-common');
+let { customerCommonMixin } = require('./mixins/customer-common');
+
+exports.GetSalesReturnListApi = class extends outletCommonMixin(customerCommonMixin(collectionCommonMixin(Api))) {
 
   get autoValidates() { return true; }
 
@@ -32,6 +36,16 @@ exports.GetSalesReturnListApi = class extends Api {
     }];
   }
 
+  _verifyOutletIfNeeded({ outletId, shouldFilterByOutlet }, cbfn) {
+    if (!shouldFilterByOutlet) return cbfn();
+    this._verifyOutletExist({ outletId }, cbfn);
+  }
+
+  _verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer }, cbfn) {
+    if (!shouldFilterByCustomer) return cbfn();
+    this._verifyCustomerExist({ customerId }, cbfn);
+  }
+
   _getSalesReturnList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, cbfn) {
     this.database.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {
       if (err) return this.fail(err);
@@ -48,8 +62,12 @@ exports.GetSalesReturnListApi = class extends Api {
 
   handle({ body }) {
     let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate } = body;
-    this._getSalesReturnList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, (salesReturnList) => {
-      this.success({ salesReturnList: salesReturnList });
+    this._verifyOutletIfNeeded({ outletId, shouldFilterByOutlet }, () => {
+      this._verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer }, () => {
+        this._getSalesReturnList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, (salesReturnList) => {
+          this.success({ salesReturnList: salesReturnList });
+        });
+      });
     });
   }
 

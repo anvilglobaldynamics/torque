@@ -606,7 +606,7 @@ describe('sales', _ => {
 
   });
 
-  it('api/get-sales-list (Valid with organizationId and customerId is null)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and Invalid customerId is null)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -632,7 +632,7 @@ describe('sales', _ => {
 
   });
 
-  it('api/get-sales-list (Valid with organizationId and outletId is null)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and Invalid outletId is null)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
