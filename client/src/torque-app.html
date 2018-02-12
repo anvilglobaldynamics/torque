@@ -225,10 +225,10 @@
       _manageProductionVariables() {
         if (mode === 'production') {
           this.jsonPostApiPathPrefix = 'https://server.torque.live/api/';
-          this.websocketHost = 'ws://server.torque.live:8541';
+          this.websocketHost = 'wss://server.torque.live';
         } else {
           this.jsonPostApiPathPrefix = 'http://localhost:8540/api/';
-          this.websocketHost = 'ws://localhost:8541';
+          this.websocketHost = 'ws://localhost:8540';
         }
       }
 

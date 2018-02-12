@@ -72,7 +72,7 @@ class Server {
   }
 
   _initializeWebsocket(cbfn) {
-    this._wsServer = new WebSocket.Server({ port: this._websocketPort });
+    this._wsServer = new WebSocket.Server({ server: this._webServer });
     this._wsApiList = [];
 
     this.logger.info("(server)> websocket server listening on port", this._websocketPort);
