@@ -25,7 +25,7 @@ class ConfigLoader {
         websocketPort: Joi.number().max(65535).required(),
         ssl: Joi.object().keys({
           enabled: Joi.boolean().required(),
-          pkey: Joi.string().max(1024).allow(null).required(),
+          key: Joi.string().max(1024).allow(null).required(),
           cert: Joi.string().max(1024).allow(null).required(),
           caBundle: Joi.string().max(1024).allow(null).required(),
         }),

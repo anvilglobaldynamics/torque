@@ -14,7 +14,7 @@
     "hostname": "localhost",
     "ssl": {
       "enabled": false,
-      "pkey": null,
+      "key": null,
       "cert": null,
       "caBundle": null
     }
