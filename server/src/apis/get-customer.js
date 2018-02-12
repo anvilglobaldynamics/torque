@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.GetCustomerApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+
+exports.GetCustomerApi = class extends collectionCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -31,8 +33,8 @@ exports.GetCustomerApi = class extends Api {
 
   _getCustomer({ customerId }, cbfn) {
     this.database.customer.findById({ customerId }, (err, customer) => {
-      if (err) return this.fail(err);
-      return cbfn(customer);
+      if (!this._ensureDoc(err, customer, "CUSTOMER_INVALID", "Customer not found.")) return;
+      cbfn(customer);
     });
   }
 

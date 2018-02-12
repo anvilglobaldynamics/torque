@@ -18,6 +18,7 @@ const changedPassword2 = "1235456782";
 const changedPassword3 = "1235456783";
 const fullName = "Test User";
 const phone = rnd(prefix, 11);
+const changedPhone = '9' + rnd(prefix, 11);
 
 let apiKey = null;
 
@@ -50,13 +51,13 @@ describe('user apis (1)', _ => {
 
   });
 
-  it.skip('api/user-register (Valid, Not Unique email)', testDoneFn => {
+  it('api/user-register (Valid, Not Unique email)', testDoneFn => {
 
     callApi('api/user-register', {
       json: {
         email,
         password,
-        phone,
+        phone: changedPhone,
         fullName
       }
     }, (err, response, body) => {
@@ -70,7 +71,7 @@ describe('user apis (1)', _ => {
 
   });
 
-  it.skip('api/user-register (Valid, Not Unique phone)', testDoneFn => {
+  it('api/user-register (Valid, Not Unique phone)', testDoneFn => {
 
     callApi('api/user-register', {
       json: {

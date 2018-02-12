@@ -525,7 +525,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and Invalid outletId)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and Invalid outletId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -580,7 +580,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and Invalid customerId)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and Invalid customerId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -623,12 +623,35 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('salesList');
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals("CUSTOMER_INVALID");
 
-      body.salesList.forEach(sales => {
-        validateSalesSchema(sales);
-      });
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales-list (Valid with organizationId and outletId is null)', testDoneFn => {
+
+    callApi('api/get-sales-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: false,
+
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals("OUTLET_INVALID");
 
       testDoneFn();
     });
