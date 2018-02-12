@@ -7,6 +7,7 @@
 5. Get mongodb regular user password by contacting Torque's Owners
 6. Get mongodb admin user password by contacting Torque's Owners
 7. Unlock `8540`, `8541`, `27017` ports in GCP
+8. Collect `torque-server.ca-bundle`, `torque-server.cert`, `torque-server.key` by contacting Torque's Owners
 
 # Tips
 
@@ -244,10 +245,47 @@ pm2 start mongod --name "mongodb-server" -x -- --config /etc/mongod.conf
 pm2 save
 ```
 
+# Setting up SSL
+
+Copy `torque-server.ca-bundle`, `torque-server.cert`, `torque-server.key` to `/home/deployer/ssl`.
+
+Add the following to the `server` key in `torque-config.json` - 
+```json
+"ssl": {
+  "enabled": true,
+  "key": "/home/deployer/ssl/torque-server.key",
+  "cert": "/home/deployer/ssl/torque-server.cert",
+  "caBundle": "/home/deployer/ssl/torque-server.ca-bundle"
+}
+```
+
+# Running server on port 443
+
+In UNIX-like systems, non-root users are unable to bind to ports lower than 1024. However, since kernel 2.6.24, you can use the setcap command to set specific capabilities to a program. To enable all node programs to bind on any port lower than 1024, issue the following command:
+
+```sh
+sudo setcap 'cap_net_bind_service=+ep' /usr/local/bin/node
+```
+
+# Branding settings
+
+```sh
+"branding": {
+  "name": "Torque",
+  "serverUrl": "https://server.torque.live",
+  "clientUrl": "https://torque.live",
+  "author": "Torque Team",
+  "supportPhone": "017XXXXXXXX",
+  "supportEmail": "support@mg.torque.live"
+}
+```
+
 # Debugging and Common Commands
 
 If you see that mongodb is not running, it maybe an issue with db locks. Remove the lock file using `sudo rm -rf /var/lib/mongodb/mongod.lock`
 
+Since dev ops are rather hard and challenging for developers not used to it, here are some commonly needed commands.
+```sh
 /usr/bin/mongod --config /etc/mongod.conf
 sudo nano /lib/systemd/system/mongod.service
 sudo nano /etc/mongod.conf
@@ -265,4 +303,5 @@ sudo chown -R mongodb:mongodb .
 cd /var/lib/mongodb
 sudo chown -R mongodb:mongodb .
 pm2 start mongod --name "mongodb-server" -x -- --config /etc/mongod.conf
+```
 
