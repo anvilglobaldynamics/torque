@@ -41,6 +41,11 @@
 
   <script>
     // Register the base URL
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      window.mode = 'development';
+    } else {
+      window.mode = 'production';
+    }
   </script>
 
   <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->

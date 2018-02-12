@@ -223,14 +223,10 @@
       }
 
       _manageProductionVariables() {
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-          window.mode = 'development';
-          this.jsonPostApiPathPrefix = 'http://localhost:8540/api/';
-          this.websocketHost = 'ws://localhost:8541';
+        if (mode === 'production') {
+          this.jsonPostApiPathPrefix = 'https://server.torque.live/api/';
+          this.websocketHost = 'ws://server.torque.live:8541';
         } else {
-          window.mode = 'production';
-          // this.jsonPostApiPathPrefix = `https://server.torque.com/api/`;
-          // this.websocketHost = 'ws://server.torque.com:8541';
           this.jsonPostApiPathPrefix = 'http://localhost:8540/api/';
           this.websocketHost = 'ws://localhost:8541';
         }
