@@ -1,4 +1,7 @@
 
+let fs = require('fs');
+let http = require('http');
+let https = require('https');
 let express = require('express');
 let bodyParser = require('body-parser');
 let WebSocket = require('ws');
@@ -26,16 +29,50 @@ class Server {
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
       next();
     });
-
-    this._expressApp.listen(this._port, () => {
-      this.logger.info("(server)> server listening on port", this._port);
-      this._initializeWebsocket(cbfn);
-      return;
+    this._initializeWebServer(() => {
+      this._initializeWebsocket(() => {
+        return cbfn();
+      });
     });
   }
 
+  _initializeWebServer(cbfn) {
+    if (this.config.server.ssl.enabled) {
+      this._getSslDetails(sslDetals => {
+        this._webServer = https.createServer(sslDetals, this._expressApp);
+        this._webServer.listen(this._port, () => {
+          this.logger.info("(server)> https server listening on port", this._port);
+          return cbfn();
+        });
+      })
+    } else {
+      this._webServer = http.createServer(this._expressApp);
+      this._webServer.listen(this._port, () => {
+        this.logger.info("(server)> http server listening on port", this._port);
+        return cbfn();
+      });
+    }
+  }
+
+  _getSslDetails(cbfn) {
+    let { key, cert, caBundle } = this.config.server.ssl;
+    key = fs.readFileSync(key, 'utf8');
+    cert = fs.readFileSync(cert, 'utf8');
+    caBundle = fs.readFileSync(caBundle, 'utf8');
+    let ca = [];
+    let buffer = [];
+    for (let line of caBundle.split('\n')) {
+      buffer.push(line);
+      if (line.indexOf('-END CERTIFICATE-') > -1) {
+        ca.push(buffer.join('\n'));
+        buffer = [];
+      }
+    }
+    return cbfn({ key, cert, ca });
+  }
+
   _initializeWebsocket(cbfn) {
-    this._wsServer = new WebSocket.Server({ port: this._websocketPort });
+    this._wsServer = new WebSocket.Server({ server: this._webServer });
     this._wsApiList = [];
 
     this.logger.info("(server)> websocket server listening on port", this._websocketPort);
@@ -82,7 +119,7 @@ class Server {
       });
     });
 
-    cbfn();
+    return cbfn();
   }
 
   setLogger(logger) {

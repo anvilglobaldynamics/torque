@@ -38,7 +38,16 @@
         return;
       }
 
-      var connection = new WebSocket(this.host, ['soap', 'xmpp']);
+      var connection = null;
+      let connectionError = null;
+      try {
+        connection = new WebSocket(this.host, ['soap', 'xmpp']);
+      } catch (error) {
+        connectionError = error;
+      }
+      if (connectionError) {
+        return cbfn(connectionError);
+      }
 
       connection.onopen = _ => {
         openConnectionMap[host] = {

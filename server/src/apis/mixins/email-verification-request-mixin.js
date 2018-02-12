@@ -4,7 +4,7 @@ let { generateRandomString } = require('./../../utils/random-string');
 exports.emailVerificationRequestMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _generateVerificationLink(verificationToken) {
-    return `https://server1.torque.life/verify-email/${verificationToken}`;
+    return `https://server.torque.live/verify-email/${verificationToken}`;
   }
 
   _sendEmailVerificationMail({ email, verificationLink: verificationLink }) {
