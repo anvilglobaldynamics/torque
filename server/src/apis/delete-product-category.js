@@ -16,6 +16,20 @@ exports.DeleteProductCategoryApi = class extends collectionCommonMixin(Api) {
     });
   }
 
+  get accessControl() {
+    return [{
+      organizationBy: {
+        from: "product-category",
+        query: ({ productCategoryId }) => ({ id: productCategoryId }),
+        select: "organizationId",
+        errorCode: "PRODUCT_CATEGORY_INVALID"
+      },
+      privileges: [
+        "PRIV_MODIFY_ALL_INVENTORIES"
+      ]
+    }];
+  }
+
   _checkAndDeleteProductCategory({ productCategoryId }, cbfn) {
     this.database.productCategory.listChildren({ productCategoryId }, (err, productCategoryChildList) => {
       if (err) return this.fail(err);

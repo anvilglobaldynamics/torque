@@ -23,9 +23,11 @@ const orgEmail = 'o' + `${rnd(prefix)}@gmail.com`;
 const orgPhone = 'o' + rnd(prefix, 11);
 const customerPhone = 'c' + rnd(prefix, 11);
 const updatedCustomerPhone = 'c2' + rnd(prefix, 11);
+const customerPhone2 = 'c3' + rnd(prefix, 11);
 
 let apiKey = null;
-let customerList = null;
+let firstCustomer = null;
+let secondCustomer = null;
 let organizationId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidCustomerId = generateInvalidId();
@@ -81,7 +83,7 @@ describe('customer', _ => {
       json: {
         apiKey,
         organizationId: organizationId,
-        fullName: "A Test Customer",
+        fullName: "1st Test Customer",
         phone: customerPhone,
         openingBalance: '500',
       }
@@ -89,6 +91,27 @@ describe('customer', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('customerId');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-customer (Valid, 2nd Unique): ', testDoneFn => {
+
+    callApi('api/add-customer', {
+      json: {
+        apiKey,
+        organizationId: organizationId,
+        fullName: "2nd Test Customer",
+        phone: customerPhone2,
+        openingBalance: '500',
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('customerId');
       testDoneFn();
     })
 
@@ -208,7 +231,10 @@ describe('customer', _ => {
       body.customerList.forEach(customer => {
         validateCustomerSchema(customer)
       });
-      customerList = body.customerList;
+
+      firstCustomer = body.customerList[0];
+      secondCustomer = body.customerList[1];
+
       testDoneFn();
     })
 
@@ -234,12 +260,31 @@ describe('customer', _ => {
 
   });
 
+  it('api/edit-customer (Invalid, copy phone)', testDoneFn => {
+
+    callApi('api/edit-customer', {
+      json: {
+        apiKey,
+        customerId: firstCustomer.id,
+        fullName: "A Test Customer",
+        phone: customerPhone2,
+      }
+    }, (err, response, body) => {
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('PHONE_ALREADY_IN_USE');
+      
+      testDoneFn();
+    })
+
+  });
+
   it('api/edit-customer (Valid, Unique)', testDoneFn => {
 
     callApi('api/edit-customer', {
       json: {
         apiKey,
-        customerId: customerList[customerList.length - 1].id,
+        customerId: firstCustomer.id,
         fullName: "A Test Customer",
         phone: updatedCustomerPhone,
       }
@@ -277,7 +322,7 @@ describe('customer', _ => {
     callApi('api/get-customer', {
       json: {
         apiKey,
-        customerId: customerList[customerList.length - 1].id
+        customerId: firstCustomer.id
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -295,7 +340,7 @@ describe('customer', _ => {
     callApi('api/adjust-customer-balance', {
       json: {
         apiKey,
-        customerId: customerList[customerList.length - 1].id,
+        customerId: firstCustomer.id,
         action: "payment",
         balance: 20,
       }
@@ -313,7 +358,7 @@ describe('customer', _ => {
     callApi('api/adjust-customer-balance', {
       json: {
         apiKey,
-        customerId: customerList[customerList.length - 1].id,
+        customerId: firstCustomer.id,
         action: "withdrawl",
         balance: 600,
       }
@@ -331,7 +376,7 @@ describe('customer', _ => {
     callApi('api/get-customer', {
       json: {
         apiKey,
-        customerId: customerList[customerList.length - 1].id
+        customerId: firstCustomer.id
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -370,7 +415,7 @@ describe('customer', _ => {
     callApi('api/adjust-customer-balance', {
       json: {
         apiKey,
-        customerId: customerList[customerList.length - 1].id,
+        customerId: firstCustomer.id,
         action: "invalid",
         balance: 20,
       }
@@ -389,7 +434,7 @@ describe('customer', _ => {
     callApi('api/delete-customer', {
       json: {
         apiKey,
-        customerId: customerList[customerList.length - 1].id
+        customerId: firstCustomer.id
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -405,12 +450,15 @@ describe('customer', _ => {
     callApi('api/get-customer', {
       json: {
         apiKey,
-        customerId: customerList[customerList.length - 1].id
+        customerId: firstCustomer.id
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('customer').that.equals(null);
+
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('CUSTOMER_INVALID');
+      
       testDoneFn();
     })
 

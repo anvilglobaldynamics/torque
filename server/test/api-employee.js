@@ -353,7 +353,26 @@ describe('employee', _ => {
 
   });
 
-  it('api/find-user (Invalid email)', testDoneFn => {
+  // TODO: below needs better validation
+  it('api/find-user (Invalid emailOrPhone)', testDoneFn => {
+
+    callApi('api/find-user', {
+      json: {
+        apiKey,
+        emailOrPhone: 'invalid emailOrPhone'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/find-user (Unused email)', testDoneFn => {
 
     callApi('api/find-user', {
       json: {
@@ -371,7 +390,7 @@ describe('employee', _ => {
 
   });
 
-  it('api/find-user (Invalid phone)', testDoneFn => {
+  it('api/find-user (Unused phone)', testDoneFn => {
 
     callApi('api/find-user', {
       json: {
@@ -456,7 +475,7 @@ describe('employee', _ => {
 
   });
 
-  it('api/add-new-employee (Invalid email)', testDoneFn => {
+  it('api/add-new-employee (Copy email)', testDoneFn => {
 
     callApi('api/add-new-employee', {
       json: {
@@ -520,7 +539,7 @@ describe('employee', _ => {
 
   });
 
-  it('api/add-new-employee (Invalid phone)', testDoneFn => {
+  it('api/add-new-employee (Copy phone)', testDoneFn => {
 
     callApi('api/add-new-employee', {
       json: {
@@ -669,7 +688,7 @@ describe('employee', _ => {
 
   });
 
-  it('api/get-employee-list (Invalid)', testDoneFn => {
+  it('api/get-employee-list (Invalid organizationId)', testDoneFn => {
 
     callApi('api/get-employee-list', {
       json: {

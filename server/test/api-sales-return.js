@@ -42,8 +42,6 @@ const outletName = "Test Outlet";
 const outletPhysicalAddress = "Test Outlet Address";
 const outletContactPersonName = "Test Outlet Person";
 
-const productCategoryName = "test product category";
-
 const customerFullName = "A Test Customer";
 const customerPhone = 'o2' + rnd(prefix, 11);
 const openingBalance = '500';
@@ -51,9 +49,11 @@ const openingBalance = '500';
 let apiKey = null;
 let organizationId = null;
 let outletId = null;
-let productCategoryId = null;
+let returnableProductCategoryId = null;
+let nonReturnableProductCategoryId = null;
 let customerId = null;
 let salesId = null;
+let sales2Id = null;
 let salesReturnId = null;
 
 let outletInventoryProductList = null;
@@ -66,9 +66,13 @@ let outletDamagedInventoryId = null;
 
 let customerData = null;
 let salesData = null;
+let sales2Data = null;
 
 let productToBeTransferredId = null;
 
+let invlidOrganizationId = generateInvalidId();
+let invalidOutletId = generateInvalidId();
+let invalidCustomerId = generateInvalidId();
 let invalidSalesReturnId = generateInvalidId();
 let invalidSalesId = generateInvalidId();
 let invalidProductId = generateInvalidId();
@@ -104,7 +108,6 @@ describe('sales-return', _ => {
               phone: outletPhone,
               contactPersonName: outletContactPersonName
             }, (data) => {
-              // console.log(data);
               outletId = data.outletId;
               getOutlet({
                 apiKey, outletId
@@ -116,7 +119,7 @@ describe('sales-return', _ => {
                   apiKey,
                   organizationId,
                   parentProductCategoryId: null,
-                  name: productCategoryName,
+                  name: "test product category",
                   unit: "box",
                   defaultDiscountType: "percent",
                   defaultDiscountValue: 10,
@@ -125,65 +128,121 @@ describe('sales-return', _ => {
                   defaultSalePrice: 111,
                   isReturnable: true
                 }, (data) => {
-                  productCategoryId = data.productCategoryId;
-                  addProductToInventory({
+                  returnableProductCategoryId = data.productCategoryId;
+                  addProductCategory({
                     apiKey,
-                    inventoryId: outletDefaultInventoryId,
-                    productList: [
-                      { productCategoryId, purchasePrice: 99, salePrice: 200, count: 100 }
-                    ]
+                    organizationId,
+                    parentProductCategoryId: null,
+                    name: "non returnable product category",
+                    unit: "box",
+                    defaultDiscountType: "percent",
+                    defaultDiscountValue: 10,
+                    defaultPurchasePrice: 99,
+                    defaultVat: 3,
+                    defaultSalePrice: 111,
+                    isReturnable: false
                   }, (data) => {
-                    addCustomer({
+                    nonReturnableProductCategoryId = data.productCategoryId;
+                    addProductToInventory({
                       apiKey,
-                      organizationId,
-                      fullName: customerFullName,
-                      phone: customerPhone,
-                      openingBalance
+                      inventoryId: outletDefaultInventoryId,
+                      productList: [
+                        { productCategoryId: returnableProductCategoryId, purchasePrice: 99, salePrice: 200, count: 100 }
+                      ]
                     }, (data) => {
-                      customerId = data.customerId;
-                      getCustomer({
-                        apiKey, customerId
+                      addProductToInventory({
+                        apiKey,
+                        inventoryId: outletDefaultInventoryId,
+                        productList: [
+                          { productCategoryId: nonReturnableProductCategoryId, purchasePrice: 199, salePrice: 300, count: 200 }
+                        ]
                       }, (data) => {
-                        customerData = data.customer;
-                        getAggregatedInventoryDetails({
+                        addCustomer({
                           apiKey,
-                          inventoryId: outletDefaultInventoryId
+                          organizationId,
+                          fullName: customerFullName,
+                          phone: customerPhone,
+                          openingBalance
                         }, (data) => {
-                          outletInventoryProductList = data.productList;
-                          outletInventoryMatchingProductList = data.matchingProductList;
-                          outletInventoryMatchingProductCategoryList = data.matchingProductCategoryList;
-                          addSales({
-                            apiKey,
-                            outletId,
-                            customerId,
-                            productList: [
-                              {
-                                productId: outletInventoryProductList[0].productId,
-                                count: 2,
-                                discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-                                discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-                                salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
-                              }
-                            ],
-                            payment: {
-                              totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-                              vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-                              discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-                              discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-                              discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
-                              serviceChargeAmount: 0,
-                              totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
-                              previousCustomerBalance: customerData.balance,
-                              paidAmount: 300,
-                              changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
-                            }
+                          customerId = data.customerId;
+                          getCustomer({
+                            apiKey, customerId
                           }, (data) => {
-                            salesId = data.salesId;
-                            getSales({
-                              apiKey, salesId
+                            customerData = data.customer;
+                            getAggregatedInventoryDetails({
+                              apiKey,
+                              inventoryId: outletDefaultInventoryId
                             }, (data) => {
-                              salesData = data.sales;
-                              testDoneFn();
+                              outletInventoryProductList = data.productList;
+                              outletInventoryMatchingProductList = data.matchingProductList;
+                              outletInventoryMatchingProductCategoryList = data.matchingProductCategoryList;
+                              addSales({
+                                apiKey,
+                                outletId,
+                                customerId,
+                                productList: [
+                                  {
+                                    productId: outletInventoryProductList[0].productId,
+                                    count: 2,
+                                    discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+                                    discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+                                    salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+                                  }
+                                ],
+                                payment: {
+                                  totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+                                  vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
+                                  discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+                                  discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+                                  discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+                                  serviceChargeAmount: 0,
+                                  totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+                                  previousCustomerBalance: customerData.balance,
+                                  paidAmount: 300,
+                                  changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+                                }
+                              }, (data) => {
+                                salesId = data.salesId;
+                                addSales({
+                                  apiKey,
+                                  outletId,
+                                  customerId,
+                                  productList: [
+                                    {
+                                      productId: outletInventoryProductList[1].productId,
+                                      count: 2,
+                                      discountType: outletInventoryMatchingProductCategoryList[1].defaultDiscountType,
+                                      discountValue: outletInventoryMatchingProductCategoryList[1].defaultDiscountValue,
+                                      salePrice: outletInventoryMatchingProductCategoryList[1].defaultSalePrice
+                                    }
+                                  ],
+                                  payment: {
+                                    totalAmount: (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2),
+                                    vatAmount: ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100)),
+                                    discountType: outletInventoryMatchingProductCategoryList[1].defaultDiscountType,
+                                    discountValue: outletInventoryMatchingProductCategoryList[1].defaultDiscountValue,
+                                    discountedAmount: ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[1].defaultDiscountValue / 100)),
+                                    serviceChargeAmount: 0,
+                                    totalBilled: (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[1].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100))),
+                                    previousCustomerBalance: customerData.balance,
+                                    paidAmount: 300,
+                                    changeAmount: (300 - (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[1].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100))))
+                                  }
+                                }, (data) => {
+                                  sales2Id = data.salesId;
+                                  getSales({
+                                    apiKey, salesId
+                                  }, (data) => {
+                                    salesData = data.sales;
+                                    getSales({
+                                      apiKey, salesId: sales2Id
+                                    }, (data) => {
+                                      sales2Data = data.sales;
+                                      testDoneFn();
+                                    });
+                                  });
+                                });
+                              });
                             });
                           });
                         });
@@ -242,7 +301,7 @@ describe('sales-return', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('PORDUCT_INVALID');
+      expect(body.error.code).to.equal('PRODUCT_INVALID');
 
       testDoneFn();
     });
@@ -264,12 +323,39 @@ describe('sales-return', _ => {
         creditedAmount: 100 // TODO: use data from salesData.payment
       }
     }, (err, response, body) => {
+      // console.log(body);
+
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
       expect(body).to.have.property('salesReturnId')
 
       salesReturnId = body.salesReturnId;
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales-return (Invalid non returnable)', testDoneFn => {
+
+    callApi('api/add-sales-return', {
+      json: {
+        apiKey,
+        salesId: sales2Id,
+        returnedProductList: [
+          {
+            productId: sales2Data.productList[0].productId,
+            count: sales2Data.productList[0].count
+          }
+        ],
+        creditedAmount: 300 // TODO: use data from salesData.payment
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('PRODUCT_CATEGORY_NON_RETURNABLE');
 
       testDoneFn();
     });
@@ -335,6 +421,7 @@ describe('sales-return', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error).to.have.property('code').that.equals("SALES_RETURN_INVALID");
+
       testDoneFn();
     });
 
@@ -398,6 +485,32 @@ describe('sales-return', _ => {
 
   });
 
+  it('api/get-sales-return-list (Valid with organizationId and Invalid outletId)', testDoneFn => {
+
+    callApi('api/get-sales-return-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: invalidOutletId,
+        customerId: null,
+
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: false,
+
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals("OUTLET_INVALID");
+
+      testDoneFn();
+    });
+
+  });
+
   it('api/get-sales-return-list (Valid with organizationId and customerId)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
@@ -427,7 +540,33 @@ describe('sales-return', _ => {
 
   });
 
-  it('api/get-sales-return-list (Valid with organizationId and customerId is null)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId and Invalid customerId)', testDoneFn => {
+
+    callApi('api/get-sales-return-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: invalidCustomerId,
+
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: true,
+
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals("CUSTOMER_INVALID");
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales-return-list (Valid with organizationId and Invalid customerId is null)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
       json: {
@@ -444,12 +583,35 @@ describe('sales-return', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('salesReturnList');
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals("CUSTOMER_INVALID");
 
-      body.salesReturnList.forEach(salesReturn => {
-        validateSalesReturnSchema(salesReturn);
-      });
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales-return-list (Valid with organizationId and Invalid outletId is null)', testDoneFn => {
+
+    callApi('api/get-sales-return-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: false,
+
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals("OUTLET_INVALID");
 
       testDoneFn();
     });
@@ -479,6 +641,32 @@ describe('sales-return', _ => {
       body.salesReturnList.forEach(salesReturn => {
         validateSalesReturnSchema(salesReturn);
       });
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales-return-list (Invalid organizationId, valid outletId and customerId)', testDoneFn => {
+
+    callApi('api/get-sales-return-list', {
+      json: {
+        apiKey,
+        organizationId: invlidOrganizationId,
+        outletId,
+        customerId,
+
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: true,
+
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals("ORGANIZATION_INVALID");
 
       testDoneFn();
     });

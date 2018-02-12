@@ -105,7 +105,29 @@ describe('warehouse', _ => {
 
   });
 
-  it('api/add-warehouse (Valid)', testDoneFn => {
+  it('api/add-warehouse (Invalid copy phone)', testDoneFn => {
+
+    callApi('api/add-warehouse', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "My Warehouse",
+        physicalAddress: "wayne manor address",
+        phone: warehousePhone,
+        contactPersonName: "test contact person name"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('PHONE_ALREADY_IN_USE');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-warehouse (Valid 2nd)', testDoneFn => {
 
     callApi('api/add-warehouse', {
       json: {
@@ -155,6 +177,7 @@ describe('warehouse', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
 
       expect(body).to.have.property('warehouseList').that.is.an('array');
+      expect(body.warehouseList.length).to.equals(2);
       body.warehouseList.forEach(warehouse => {
         validateWarehouseSchema(warehouse);
       });

@@ -1,7 +1,11 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.GetSalesListApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+let { outletCommonMixin } = require('./mixins/outlet-common');
+let { customerCommonMixin } = require('./mixins/customer-common');
+
+exports.GetSalesListApi = class extends outletCommonMixin(customerCommonMixin(collectionCommonMixin(Api))) {
 
   get autoValidates() { return true; }
 
@@ -32,6 +36,16 @@ exports.GetSalesListApi = class extends Api {
     }];
   }
 
+  _verifyOutletIfNeeded({ outletId, shouldFilterByOutlet }, cbfn) {
+    if (!shouldFilterByOutlet) return cbfn();
+    this._verifyOutletExist({ outletId }, cbfn);
+  }
+
+  _verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer }, cbfn) {
+    if (!shouldFilterByCustomer) return cbfn();
+    this._verifyCustomerExist({ customerId }, cbfn);
+  }
+
   _getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, cbfn) {
     this.database.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {
       if (err) return this.fail(err);
@@ -45,8 +59,12 @@ exports.GetSalesListApi = class extends Api {
 
   handle({ body }) {
     let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate } = body;
-    this._getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, (salesList) => {
-      this.success({ salesList: salesList });
+    this._verifyOutletIfNeeded({ outletId, shouldFilterByOutlet }, () => {
+      this._verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer }, () => {
+        this._getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, (salesList) => {
+          this.success({ salesList: salesList });
+        });
+      });
     });
   }
 

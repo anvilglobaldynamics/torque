@@ -37,8 +37,9 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: SALES_INVALID } // sales not found
-{ code: PORDUCT_INVALID } // product not found
+{ code: PRODUCT_INVALID } // product not found
 { code: OUTLET_INVENTORY_INVALID } // outler returned inventory invalid
+{ code: PRODUCT_CATEGORY_NON_RETURNABLE } // product in list is non-returnable
 ```
 
 ### response (on success):
@@ -46,7 +47,7 @@ Possible Error Codes:
 {
   "hasError": false,
   "status": "success",
-  salesReturnId: Joi.number().max(999999999999999).required()
+  "salesReturnId": Joi.number().max(999999999999999).required()
 }
 ```
 

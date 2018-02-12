@@ -31,7 +31,8 @@ exports.TransferBetweenInventoriesApi = class extends collectionCommonMixin(Api)
         organizationBy: {
           from: "inventory",
           query: ({ fromInventoryId }) => ({ id: fromInventoryId }),
-          select: "organizationId"
+          select: "organizationId",
+          errorCode: "FROM_INVENTORY_INVALID"
         },
         privileges: ["PRIV_TRANSFER_ALL_INVENTORIES"]
       },
@@ -39,7 +40,8 @@ exports.TransferBetweenInventoriesApi = class extends collectionCommonMixin(Api)
         organizationBy: {
           from: "inventory",
           query: ({ toInventoryId }) => ({ id: toInventoryId }),
-          select: "organizationId"
+          select: "organizationId",
+          errorCode: "TO_INVENTORY_INVALID"
         },
         privileges: ["PRIV_TRANSFER_ALL_INVENTORIES"]
       }
@@ -59,16 +61,16 @@ exports.TransferBetweenInventoriesApi = class extends collectionCommonMixin(Api)
   }
 
   _transfer({ fromInventory, toInventory, productList }, cbfn) {
-    productList.forEach(product => {
+    for (let product of productList) {
       let foundProduct = fromInventory.productList.find(_product => _product.productId === product.productId);
       if (!foundProduct) {
-        err = new Error("product could not be found in source inventory");
+        let err = new Error("product could not be found in source inventory");
         err.code = "PRODUCT_INVALID"
         return this.fail(err);
       }
       // TODO: if (!this._ensureDoc(err, foundProduct, "PRODUCT_INVALID", "Product could not be found in source inventory")) return;
       if (foundProduct.count < product.count) {
-        err = new Error("not enough product(s) in source inventory");
+        let err = new Error("not enough product(s) in source inventory");
         err.code = "PRODUCT_INSUFFICIENT"
         return this.fail(err);
       }
@@ -80,8 +82,8 @@ exports.TransferBetweenInventoriesApi = class extends collectionCommonMixin(Api)
       } else {
         foundProduct.count += product.count;
       }
-    });
-    cbfn();
+    }
+    return cbfn();
   }
 
   _updateInventories({ fromInventory, toInventory }, cbfn) {

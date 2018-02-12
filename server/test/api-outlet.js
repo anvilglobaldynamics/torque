@@ -77,6 +77,8 @@ describe('outlet', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('outletId');
+
       testDoneFn();
     })
 
@@ -138,7 +140,9 @@ describe('outlet', _ => {
       body.outletList.forEach(outlet => {
         validateOutletSchema(outlet);
       });
+
       outletList = body.outletList;
+
       testDoneFn();
     });
 
@@ -271,6 +275,24 @@ describe('outlet', _ => {
       validateEmbeddedInventorySchema(body.damagedInventory);
       testDoneFn();
     });
+
+  });
+
+  it('api/delete-outlet (Inalid outletId)', testDoneFn => {
+
+    callApi('api/delete-outlet', {
+      json: {
+        apiKey,
+        outletId: invalidOutletId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('OUTLET_INVALID');
+
+      testDoneFn();
+    })
 
   });
 

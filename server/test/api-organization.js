@@ -26,7 +26,7 @@ const org2Phone = 'o2' + rnd(prefix, 11);
 const org3Phone = 'o3' + rnd(prefix, 11);
 
 let apiKey = null;
-let organizationList = null;
+let organizationToBeEdited = null;
 
 describe('organization', _ => {
 
@@ -59,6 +59,7 @@ describe('organization', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('organizationId');
       testDoneFn();
     })
 
@@ -118,6 +119,7 @@ describe('organization', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('organizationId');
       testDoneFn();
     })
 
@@ -141,7 +143,7 @@ describe('organization', _ => {
       // expect(body.organizationList[0]).to.have.property('phone').that.equals(org2Phone);
       // expect(body.organizationList[0]).to.have.property('email').that.equals(org2Email);
 
-      organizationList = body.organizationList;
+      organizationToBeEdited = body.organizationList[0];
 
       testDoneFn();
     });
@@ -153,11 +155,11 @@ describe('organization', _ => {
     callApi('api/edit-organization', {
       json: {
         apiKey,
-        organizationId: organizationList[0].id,
-        name: organizationList[0].name,
-        primaryBusinessAddress: organizationList[0].primaryBusinessAddress,
+        organizationId: organizationToBeEdited.id,
+        name: organizationToBeEdited.name,
+        primaryBusinessAddress: organizationToBeEdited.primaryBusinessAddress,
         phone: org2Phone,
-        email: organizationList[0].email
+        email: organizationToBeEdited.email
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -174,10 +176,10 @@ describe('organization', _ => {
     callApi('api/edit-organization', {
       json: {
         apiKey,
-        organizationId: organizationList[0].id,
-        name: organizationList[0].name,
-        primaryBusinessAddress: organizationList[0].primaryBusinessAddress,
-        phone: organizationList[0].phone,
+        organizationId: organizationToBeEdited.id,
+        name: organizationToBeEdited.name,
+        primaryBusinessAddress: organizationToBeEdited.primaryBusinessAddress,
+        phone: organizationToBeEdited.phone,
         email: org2Email
       }
     }, (err, response, body) => {
@@ -195,11 +197,11 @@ describe('organization', _ => {
     callApi('api/edit-organization', {
       json: {
         apiKey,
-        organizationId: organizationList[0].id,
-        name: organizationList[0].name,
-        primaryBusinessAddress: organizationList[0].primaryBusinessAddress,
+        organizationId: organizationToBeEdited.id,
+        name: organizationToBeEdited.name,
+        primaryBusinessAddress: organizationToBeEdited.primaryBusinessAddress,
         phone: org3Phone,
-        email: organizationList[0].email
+        email: organizationToBeEdited.email
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

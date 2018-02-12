@@ -22,7 +22,8 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
       organizationBy: {
         from: "inventory",
         query: ({ inventoryId }) => ({ id: inventoryId }),
-        select: "organizationId"
+        select: "organizationId",
+        errorCode: "INVENTORY_INVALID"
       },
       privileges: [
         "PRIV_VIEW_ALL_INVENTORIES"

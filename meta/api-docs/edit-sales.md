@@ -65,7 +65,7 @@ Possible Error Codes:
 {
   "hasError": false,
   "status": "success",
-  salesId: Joi.number().max(999999999999999).allow(null).required()
+  "salesId": Joi.number().max(999999999999999).allow(null).required()
 }
 ```
 

@@ -93,6 +93,7 @@ exports.ProductCategoryCollection = class extends Collection {
     this._findOne({ id: productCategoryId }, cbfn)
   }
 
+  // FIXME: naming issue
   listByIdList({ idList }, cbfn) {
     this._find({ id: { $in: idList } }, cbfn);
   }

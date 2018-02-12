@@ -31,7 +31,6 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: CUSTOMER_INVALID } // customer does not exist
-{ code: ACTION_INVALID } // action is neither 'payment' nor 'withdrawl'
 ```
 
 ### response (on success):

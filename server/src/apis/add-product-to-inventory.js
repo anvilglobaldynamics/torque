@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
+let { productCommonMixin } = require('./mixins/product-common');
 
-exports.AddProductToInventoryApi = class extends collectionCommonMixin(Api) {
+exports.AddProductToInventoryApi = class extends productCommonMixin(collectionCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -31,7 +32,8 @@ exports.AddProductToInventoryApi = class extends collectionCommonMixin(Api) {
       organizationBy: {
         from: "inventory",
         query: ({ inventoryId }) => ({ id: inventoryId }),
-        select: "organizationId"
+        select: "organizationId",
+        errorCode: "INVENTORY_INVALID"
       },
       privileges: [
         "PRIV_MODIFY_ALL_INVENTORIES"
@@ -60,8 +62,10 @@ exports.AddProductToInventoryApi = class extends collectionCommonMixin(Api) {
 
   handle({ body, userId }) {
     let { inventoryId, productList } = body;
-    this._addProductToInventory({ inventoryId, productList }, () => {
-      this.success({ status: "success" });
+    this._verifyProductCategoriesExist({ productList }, () => {
+      this._addProductToInventory({ inventoryId, productList }, () => {
+        this.success({ status: "success" });
+      });
     });
   }
 
