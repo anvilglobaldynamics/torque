@@ -8,9 +8,9 @@ let pathlib = require('path');
 
 class EmailService {
 
-  constructor(config) {
+  constructor(config, mode) {
     this.config = config;
-
+    this.mode = mode;
     let { privateKey, domain, from, enabled } = config.email;
     this.privateKey = privateKey;
     this.domain = domain;
@@ -81,10 +81,13 @@ class EmailService {
   }
 
   sendMail({ to, subject, html } = {}, cbfn) {
+    let actualTo = to;
+    if (this.mode !== 'production') {
+      actualTo = 'shafayet.sayem@gmail.com';
+    }
     let data = {
       from: this.from,
-      // NOTE: Change to 'to' during production
-      to: 'shafayet.sayem@gmail.com',
+      to: actualTo,
       subject,
       html
     };
