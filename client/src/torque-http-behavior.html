@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-http-behavior.html">
 <script src="websocket-request-service.js"></script>
+
 <script>
 
   (_ => {
@@ -39,7 +40,12 @@
           return service;
         }
 
-        callCombinedJsonApi(path, data, cbfn) {
+        callCombinedJsonApi(path, data, _cbfn) {
+          let cbfn = (err, response) => {
+            if (err) return _cbfn(err);
+            response = TorqueUtils.desanitize(response);
+            _cbfn(null, response)
+          }
           let now = (new Date).getTime();
           if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
             this.callJsonPostApi(path, data, cbfn);

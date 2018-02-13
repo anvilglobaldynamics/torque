@@ -39,12 +39,22 @@
   <meta name="msapplication-TileColor" content="#9C27B0">
   <meta name="msapplication-tap-highlight" content="no">
 
+  <script src="src/torque-utils.js"></script>
   <script>
     // Register the base URL
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
       window.mode = 'development';
     } else {
       window.mode = 'production';
+    }
+    Polymer = {
+      sanitizeDOMValue: (value, name, type, node) => {
+        if (type === 'property' && typeof (value) === 'string') {
+          value = TorqueUtils.escapeHtmlEntities(value);
+          value = value.replace(/javascript\:/ig, 'return; 0/0');
+        }
+        return value;
+      }
     }
   </script>
 
