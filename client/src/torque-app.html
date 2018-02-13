@@ -168,7 +168,7 @@
 
         <div class="footer">
           &copy; 2017
-          <a href="https://ishafayet.me">TechOps Corp.</a> All Rights Reserved
+          <a href="[[authorWebsite]]">[[authorName]]</a> All Rights Reserved
         </div>
       </app-header-layout>
     </app-drawer-layout>
@@ -194,6 +194,14 @@
           brandName: {
             type: String,
             value: 'Torque'
+          },
+          authorName: {
+            type: String,
+            value: 'Torque Team'
+          },
+          authorWebsite: {
+            type: String,
+            value: 'https://torque.live'
           },
           currentPageIsModal: {
             type: Boolean,
