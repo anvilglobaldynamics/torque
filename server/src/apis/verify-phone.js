@@ -18,7 +18,8 @@ exports.VerifyPhoneApi = class extends Api {
   }
 
   _showSuccess() {
-    let body = "Congratulations. You have successfully verified your phone number for torque.live. You can close this window."
+    let { clientUrl } = this.server.config.branding;
+    let body = `Congratulations. You have successfully verified your phone number for ${clientUrl}. You can close this window.`
     this.sendGenericHtmlMessage("Phone Verification Successful", body);
   }
 
