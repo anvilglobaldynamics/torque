@@ -12,10 +12,12 @@ class ConfigLoader {
     return Joi.object().keys({
       baseName: Joi.string().max(1024).required(),
       branding: Joi.object().keys({
-        name: Joi.string().max(1024).required(),
+        shortName: Joi.string().max(1024).required(),
+        extendedName: Joi.string().max(1024).required(),
         serverUrl: Joi.string().max(1024).required(),
         clientUrl: Joi.string().max(1024).required(),
-        author: Joi.string().max(1024).required(),
+        authorName: Joi.string().max(1024).required(),
+        authorWebsite: Joi.string().max(1024).required(),
         supportPhone: Joi.string().max(1024).required(),
         supportEmail: Joi.string().max(1024).required(),
       }),
