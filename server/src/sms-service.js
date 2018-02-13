@@ -46,10 +46,13 @@ class SmsService {
   }
 
   sendSms({ to, content } = {}, cbfn) {
+    let actualTo = to;
+    if (this.mode !== 'production') {
+      actualTo = '01706466808';
+    }
     let data = {
       from: this.from,
-      // NOTE: Change to 'to' during production
-      to: '01706466808',
+      to: actualTo,
       content
     };
     if (this.enabled) {
