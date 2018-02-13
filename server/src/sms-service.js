@@ -14,11 +14,11 @@ class SmsService {
     let templateList = [
       {
         name: 'phone-verification',
-        templateFn: ({ verificationLink }) => `Your ${branding.name} phone verification link is ${verificationLink}`,
+        templateFn: ({ verificationLink }) => `Your ${branding.shortName} phone verification link is ${verificationLink}`,
       },
       {
         name: 'password-reset',
-        templateFn: ({ confirmationLink }) => `Your password reset link for ${branding.name} is ${confirmationLink}`,
+        templateFn: ({ confirmationLink }) => `Your password reset link for ${branding.shortName} is ${confirmationLink}`,
       },
       {
         name: 'generic-message',

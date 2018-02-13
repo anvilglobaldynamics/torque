@@ -26,17 +26,17 @@ class EmailService {
       {
         name: 'email-verification',
         path: './src/templates/email/email-verification.html',
-        subject: `Your email verification code for ${branding.name}`
+        subject: `Your email verification code for ${branding.shortName}`
       },
       {
         name: 'password-reset',
         path: './src/templates/email/password-reset.html',
-        subject: `Your password reset code for ${branding.name}`
+        subject: `Your password reset code for ${branding.shortName}`
       },
       {
         name: 'generic-message',
         path: './src/templates/email/generic-message.html',
-        subject: `Message from ${branding.name}`
+        subject: `Message from ${branding.shortName}`
       }
     ];
     let collector = new AsyncCollector(templateList.length);
