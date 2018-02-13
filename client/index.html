@@ -49,7 +49,7 @@
     }
     Polymer = {
       sanitizeDOMValue: (value, name, type, node) => {
-        if (type === 'property' && typeof (value) === 'string') {
+        if (type === 'property' && typeof (value) === 'string' && (['href', 'class'].indexOf(name) > -1)) {
           value = TorqueUtils.escapeHtmlEntities(value);
           value = value.replace(/javascript\:/ig, 'return; 0/0');
         }
