@@ -14,11 +14,11 @@ class SmsService {
     let templateList = [
       {
         name: 'phone-verification',
-        templateFn: ({ verificationLink }) => `Your ${branding.name} phone verification link is ${verificationLink}`,
+        templateFn: ({ verificationLink }) => `Your ${branding.shortName} phone verification link is ${verificationLink}`,
       },
       {
         name: 'password-reset',
-        templateFn: ({ confirmationLink }) => `Your password reset link for ${branding.name} is ${confirmationLink}`,
+        templateFn: ({ confirmationLink }) => `Your password reset link for ${branding.shortName} is ${confirmationLink}`,
       },
       {
         name: 'generic-message',
@@ -46,10 +46,13 @@ class SmsService {
   }
 
   sendSms({ to, content } = {}, cbfn) {
+    let actualTo = to;
+    if (this.mode !== 'production') {
+      actualTo = '01706466808';
+    }
     let data = {
       from: this.from,
-      // NOTE: Change to 'to' during production
-      to: '01706466808',
+      to: actualTo,
       content
     };
     if (this.enabled) {

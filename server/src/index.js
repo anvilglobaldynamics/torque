@@ -131,7 +131,7 @@ class Program {
         server = new Server(config, mode);
         database = new Database(config.db.path);
         logger = new Logger(config.log, this.muteLogger);
-        emailService = new EmailService(config);
+        emailService = new EmailService(config, mode);
         smsService = new SmsService(config);
         templateManager = new TemplateManager(config);
         fixtureManager = new FixtureManager(config);

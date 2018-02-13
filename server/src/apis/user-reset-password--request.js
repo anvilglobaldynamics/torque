@@ -24,7 +24,8 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Api) {
   }
 
   _generateConfirmationLink(confirmationToken) {
-    return `https://torque.com/#/confirm-password-reset/token:${confirmationToken}`;
+    let { clientUrl } = this.server.config.branding;
+    return `${clientUrl}/#/confirm-password-reset/token:${confirmationToken}`;
   }
 
   _sendPasswordResetEmail({ email, confirmationLink }) {

@@ -8,9 +8,9 @@ let pathlib = require('path');
 
 class EmailService {
 
-  constructor(config) {
+  constructor(config, mode) {
     this.config = config;
-
+    this.mode = mode;
     let { privateKey, domain, from, enabled } = config.email;
     this.privateKey = privateKey;
     this.domain = domain;
@@ -26,17 +26,17 @@ class EmailService {
       {
         name: 'email-verification',
         path: './src/templates/email/email-verification.html',
-        subject: `Your email verification code for ${branding.name}`
+        subject: `Your email verification code for ${branding.shortName}`
       },
       {
         name: 'password-reset',
         path: './src/templates/email/password-reset.html',
-        subject: `Your password reset code for ${branding.name}`
+        subject: `Your password reset code for ${branding.shortName}`
       },
       {
         name: 'generic-message',
         path: './src/templates/email/generic-message.html',
-        subject: `Message from ${branding.name}`
+        subject: `Message from ${branding.shortName}`
       }
     ];
     let collector = new AsyncCollector(templateList.length);
@@ -81,10 +81,13 @@ class EmailService {
   }
 
   sendMail({ to, subject, html } = {}, cbfn) {
+    let actualTo = to;
+    if (this.mode !== 'production') {
+      actualTo = 'shafayet.sayem@gmail.com';
+    }
     let data = {
       from: this.from,
-      // NOTE: Change to 'to' during production
-      to: 'shafayet.sayem@gmail.com',
+      to: actualTo,
       subject,
       html
     };

@@ -9,6 +9,7 @@
 7. Unlock `8540`, `8541`, `27017` ports in GCP
 8. Collect `torque-server.ca-bundle`, `torque-server.cert`, `torque-server.key` by contacting Torque's Owners
 9. Collect credentials for github account `to-bot` by contacting Torque's Owners
+10. Collect mailgun credentials, `publicKey` and `privateKey` by contacting Torque's Owners
 
 # Tips
 
@@ -280,6 +281,10 @@ sudo setcap 'cap_net_bind_service=+ep' /usr/local/bin/node
   "supportEmail": "support@mg.torque.live"
 }
 ```
+
+# Mailgun Settings
+
+In `torque-config.json` set the `enabled` property under `email` to `true`. Set the values of `publicKey` and `privateKey`.
 
 # Debugging and Common Commands
 
