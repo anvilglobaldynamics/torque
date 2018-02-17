@@ -44,7 +44,17 @@
           let cbfn = (err, response) => {
             if (err) return _cbfn(err);
             response = TorqueUtils.desanitize(response);
-            _cbfn(null, response)
+            if (response.hasError && response.error.code === "APIKEY_EXPIRED") {
+              if (path === 'user-logout') {
+                return _cbfn(null, { hasError: false });
+              }
+              let message = "Your session has expired. You will be automatically logged out. Please log in again.";
+              this.showModalDialog("Sorry!", message, _ => {
+                this.logoutTapped();
+              });
+              return;
+            }
+            return _cbfn(null, response);
           }
           let now = (new Date).getTime();
           if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
@@ -68,7 +78,7 @@
             data.apiKey = this.user.apiKey;
             return true;
           } else {
-            this.showAlertMessage("No Api Key");
+            this.showAlertMessage("No Api Key. Please restart the app and log in again.");
             return false;
           }
         }
