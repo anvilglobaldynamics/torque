@@ -44,7 +44,7 @@
           let cbfn = (err, response) => {
             if (err) return _cbfn(err);
             response = TorqueUtils.desanitize(response);
-            if (response.hasError && response.error.code === "APIKEY_EXPIRED") {
+            if (response.hasError && (response.error.code === "APIKEY_EXPIRED" || response.error.code === "APIKEY_INVALID")) {
               if (path === 'user-logout') {
                 return _cbfn(null, { hasError: false });
               }

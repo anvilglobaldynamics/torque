@@ -158,7 +158,11 @@ class Api {
     delete body['apiKey'];
     this.database.session.findByApiKey({ apiKey }, (err, session) => {
       if (err) return this.fail(err);
-      if (!session) return this.fail(new Error("Invalid apiKey Provided!"));
+      if (!session) {
+        err = new Error("Invalid apiKey Provided!");
+        err.code = "APIKEY_INVALID";
+        return this.fail(err);
+      }
       let hasExpired = session.hasExpired || (((new Date).getTime() - session.createdDatetimeStamp) > SESSION_DURATION_LIMIT);
       if (hasExpired) {
         err = new Error("Invalid apiKey Provided!");
