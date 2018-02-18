@@ -166,20 +166,42 @@
         });
       }
 
-      // region: ui  ===========================
-
-      createTapped(e = null) {
-        return this.app.navigateTo('/add-outlet');
+      _deleteOutlet(outletId, cbfn) {
+        outletId = parseInt(outletId);
+        let data = { outletId };
+        this.app.callDeleteOutletApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
       }
 
-      viewTapped(e) {
-        let { outlet } = e.model;
-        return this.app.navigateTo(`/view-outlet/outlet:${outlet}`);
+      // region: ui  ===========================
+
+      editTapped(e = null) {
+        return this.app.navigateTo(`/edit-outlet/outlet:${this.outlet.id}`);
+      }
+
+      deleteTapped(e = null) {
+        let message = `Are you sure you want to delete this outlet ${this.outlet.name}. Once deleted, you can not restore this outlet.`;
+        this.app.showModalConfirmation("Delete outlet?", message, (answer) => {
+          if (!answer) return;
+          this._deleteOutlet(this.outlet.id, () => {
+            this.app.showModalDialog("Successfully deleted.", "The outlet has been deleted", () => {
+              this.app.navigateTo(`/manage-outlets`);
+            });
+          });
+        });
+      }
+
+      viewInventoryTapped(e = null) {
+        let el = e.target;
+        let key = el.getAttribute('data-key');
+        return this.app.navigateTo(`/inventory/outlet:${this[key].id}`);
       }
 
       posTapped(e) {
-        let { outlet } = e.model;
-        return this.app.navigateTo(`/pos/outlet:${outlet}`);
+        return this.app.navigateTo(`/pos/outlet:${this.outlet.id}`);
       }
 
       // region: misc =================================

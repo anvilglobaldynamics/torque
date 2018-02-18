@@ -133,6 +133,11 @@
           this.callCombinedJsonApi('edit-outlet', data, cbfn);
         }
 
+        callDeleteOutletApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('delete-outlet', data, cbfn);
+        }
+
       }
     }
   })();
