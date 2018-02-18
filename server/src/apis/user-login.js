@@ -4,8 +4,8 @@ let Joi = require('joi');
 let cryptolib = require('crypto');
 let { generateRandomString } = require('./../utils/random-string');
 
-const EMAIL_VERIFICATION_WINDOW = 5 * 24 * 60 * 60 * 1000;
-const PHONE_VERIFICATION_WINDOW = 5 * 24 * 60 * 60 * 1000;
+const EMAIL_VERIFICATION_WINDOW = 15 * 24 * 60 * 60 * 1000;
+const PHONE_VERIFICATION_WINDOW = 15 * 24 * 60 * 60 * 1000;
 
 exports.UserLoginApi = class extends Api {
 
