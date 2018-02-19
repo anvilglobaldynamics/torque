@@ -17,6 +17,22 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     })
   }
 
+  _getOutletReturnedInventory({ outletId }, cbfn) {
+    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
+      if (err) return this.fail(err);
+      if (inventoryList.length === 0) {
+        err = new Error("Invalid Outlet Or Inventory could not be found");
+        err.code = "OUTLET_INVENTORY_INVALID"
+        return this.fail(err);
+      }
+      // let inventory = inventoryList.find(inventory => inventory.type === 'default');
+      // let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
+      // let outletReturnedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+      let outletReturnedInventory = inventoryList.find(inventory => inventory.type === 'returned');
+      return cbfn(outletReturnedInventory);
+    })
+  }
+
   _updateInventory({ outletDefaultInventory }, cbfn) {
     let inventoryId = outletDefaultInventory.id;
     let productList = outletDefaultInventory.productList;

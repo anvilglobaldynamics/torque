@@ -1,10 +1,11 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
+let { collectionCommonMixin } = require('./mixins/collection-common');
 let { inventoryCommonMixin } = require('./mixins/inventory-common');
 let { customerCommonMixin } = require('./mixins/customer-common');
 
-exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(Api)) {
+exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(collectionCommonMixin(Api))) {
 
   get autoValidates() { return true; }
 
