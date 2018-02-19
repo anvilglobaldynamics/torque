@@ -49,7 +49,11 @@ class Api {
         message: data
       };
       reponse = JSON.stringify(reponse);
-      this._socket.send(reponse);
+      try {
+        this._socket.send(reponse);
+      } catch (ex) {
+        this.logger.error(ex);
+      }
     } else {
       this._response.send(data);
     }
