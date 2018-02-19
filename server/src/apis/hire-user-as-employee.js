@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
+let { userCommonMixin } = require('./mixins/user-common');
 
-exports.HireUserAsEmployeeApi = class extends collectionCommonMixin(Api) {
+exports.HireUserAsEmployeeApi = class extends userCommonMixin(collectionCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -68,13 +69,6 @@ exports.HireUserAsEmployeeApi = class extends collectionCommonMixin(Api) {
     }];
   }
 
-  _findUser({ userId }, cbfn) {
-    this.database.user.findById({ userId }, (err, user) => {
-      if (!this._ensureDoc(err, user, "USER_INVALID", "Invalid User could not be found")) return;
-      return cbfn();
-    })
-  }
-
   // FIXME: Check if the user is employed in THIS organization. User can be employed in other organizations
   // without repercussions.
   _checkIfUserEmployed({ userId }, cbfn) {
@@ -97,7 +91,7 @@ exports.HireUserAsEmployeeApi = class extends collectionCommonMixin(Api) {
 
   handle({ body }) {
     let { userId, organizationId, role, designation, companyProvidedId, privileges } = body;
-    this._findUser({ userId }, () => {
+    this._findUserById({ userId }, () => {
       this._checkIfUserEmployed({ userId }, () => {
         this._hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {
           this.success({ status: "success", employmentId });
