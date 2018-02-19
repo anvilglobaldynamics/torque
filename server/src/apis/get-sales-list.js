@@ -4,8 +4,9 @@ let Joi = require('joi');
 let { collectionCommonMixin } = require('./mixins/collection-common');
 let { outletCommonMixin } = require('./mixins/outlet-common');
 let { customerCommonMixin } = require('./mixins/customer-common');
+let { salesCommonMixin } = require('./mixins/sales-common');
 
-exports.GetSalesListApi = class extends outletCommonMixin(customerCommonMixin(collectionCommonMixin(Api))) {
+exports.GetSalesListApi = class extends salesCommonMixin(outletCommonMixin(customerCommonMixin(collectionCommonMixin(Api)))) {
 
   get autoValidates() { return true; }
 
@@ -44,17 +45,6 @@ exports.GetSalesListApi = class extends outletCommonMixin(customerCommonMixin(co
   _verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer }, cbfn) {
     if (!shouldFilterByCustomer) return cbfn();
     this._verifyCustomerExist({ customerId }, cbfn);
-  }
-
-  _getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, cbfn) {
-    this.database.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {
-      if (err) return this.fail(err);
-      let outletIdList = outletList.map(outlet => outlet.id);
-      this.database.sales.listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, (err, salesList) => {
-        if (err) return this.fail(err);
-        return cbfn(salesList);
-      });
-    });
   }
 
   handle({ body }) {
