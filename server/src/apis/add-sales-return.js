@@ -50,14 +50,6 @@ exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(
     }];
   }
 
-  // FIXME: move to salesCommonMixin
-  // _getSales({ salesId }, cbfn) {
-  //   this.database.sales.findById({ salesId }, (err, sales) => {
-  //     if (!this._ensureDoc(err, sales, "SALES_INVALID", "Sales not found")) return;
-  //     return cbfn(sales);
-  //   });
-  // }
-
   _returnProducts({ returnedProductList, outletReturnedInventory }, cbfn) {
     // console.log("returnedProductList: ", returnedProductList);
 
