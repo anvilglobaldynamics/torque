@@ -63,4 +63,25 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     });
   }
 
+  _findUserByEmailOrPhone({ emailOrPhone }, cbfn) {
+    this.database.user.findByEmailOrPhone({ emailOrPhone }, (err, user) => {
+      if (!this._ensureDoc(err, user, "USER_DOES_NOT_EXIST", "User with this phone/email does not exist")) return;
+      return cbfn(user);
+    });
+  }
+
+  _findUserById({ userId }, cbfn) {
+    this.database.user.findById({ userId }, (err, user) => {
+      if (!this._ensureDoc(err, user, "USER_INVALID", "Invalid User could not be found")) return;
+      return cbfn();
+    })
+  }
+
+  _setUserAsOwner({ userId, organizationId }, cbfn) {
+    this.database.employment.employNewEmployeeAsOwner({ userId, organizationId }, (err) => {
+      if (err) return this.fail(err);
+      cbfn();
+    })
+  }
+
 }

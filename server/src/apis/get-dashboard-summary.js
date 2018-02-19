@@ -1,7 +1,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.GetDashboardSummaryApi = class extends Api {
+let { salesCommonMixin } = require('./mixins/sales-common');
+
+exports.GetDashboardSummaryApi = class extends salesCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -24,20 +26,8 @@ exports.GetDashboardSummaryApi = class extends Api {
     }];
   }
 
-  _getSalesList({ organizationId, fromDate, toDate }, cbfn) {
-    let outletId, customerId, shouldFilterByOutlet = false, shouldFilterByCustomer = false;
-    this.database.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {
-      if (err) return this.fail(err);
-      let outletIdList = outletList.map(outlet => outlet.id);
-      this.database.sales.listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, (err, salesList) => {
-        if (err) return this.fail(err);
-        return cbfn(salesList);
-      });
-    });
-  }
-
   _getSalesSummaryForDate({ organizationId, fromDate, toDate }, cbfn) {
-    this._getSalesList({ organizationId, fromDate, toDate }, (salesList) => {
+    this._getSalesList({ organizationId, fromDate, toDate, outletId: null, customerId: null, shouldFilterByOutlet: false, shouldFilterByCustomer: false }, (salesList) => {
       let totalCount = salesList.length;
       let totalAmount = 0;
       salesList.forEach((sales) => {

@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
+let { userCommonMixin } = require('./mixins/user-common');
 
-exports.FindUserApi = class extends collectionCommonMixin(Api) {
+exports.FindUserApi = class extends userCommonMixin(collectionCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -20,16 +21,9 @@ exports.FindUserApi = class extends collectionCommonMixin(Api) {
     });
   }
 
-  _findUser({ emailOrPhone }, cbfn) {
-    this.database.user.findByEmailOrPhone({ emailOrPhone }, (err, user) => {
-      if (!this._ensureDoc(err, user, "USER_DOES_NOT_EXIST", "User with this phone/email does not exist")) return;
-      return cbfn(user);
-    });
-  }
-
   handle({ body }) {
     let { emailOrPhone } = body;
-    this._findUser({ emailOrPhone }, (user) => {
+    this._findUserByEmailOrPhone({ emailOrPhone }, (user) => {
       this.success({ user });
     });
   }
