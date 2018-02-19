@@ -11,7 +11,7 @@ method: `POST`
   email: Joi.string().email().min(3).max(30).required(),
   fullName: Joi.string().min(1).max(64).required(),
   phone: Joi.string().alphanum().min(11).max(14).required(),
-  password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required()
+  password: Joi.string().min(8).max(30).required()
 }
 ```
 
