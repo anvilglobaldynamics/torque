@@ -83,7 +83,7 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
     if (diff >= 0) {
       return cbfn(payment);
     } else {
-      this._adjustCustomerBalance({ diff, customer }, () => {
+      this._updateCustomerBalance({ diff, customer }, () => {
         return cbfn(payment);
       });
     }
