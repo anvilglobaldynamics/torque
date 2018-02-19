@@ -35,13 +35,25 @@
     <div class$="layout vertical std-page [[$if(isReady, '', 'hidden')]]" id="wrapper">
       <iron-form id="editProductCategoryForm">
         <form>
+          <template is="dom-if" if="[[parentProductCategory]]">
+            <div class="card vertical layout">
+              The Product Category will be available under category "[[parentProductCategory.name]]"
+            </div>
+          </template>
+
           <div class="card vertical layout">
             <paper-input class="editProductCategoryForm--name" value="{{editProductCategoryForm.name}}" required minlength="3" error-message="Please enter a valid name" label="Name of your Product Category."></paper-input>
             <paper-input class="editProductCategoryForm--unit" value="{{editProductCategoryForm.unit}}" required minlength="3" error-message="Please enter a valid name" label="Specify unit (i.e. kg, pcs etc)"></paper-input>
 
-            <paper-input class="editProductCategoryForm--defaultPurchasePrice" value="{{editProductCategoryForm.defaultPurchasePrice}}" type="number" required min="0" error-message="Please enter a valid number" label="Default Purchase Price (the usual price you pay to buy this item)"></paper-input>
-            <paper-input class="editProductCategoryForm--defaultVat" value="{{editProductCategoryForm.defaultVat}}" type="number" required min="0" error-message="Please enter a valid number" label="Default VAT (the usual VAT/Tax you have to pay)"></paper-input>
-            <paper-input class="editProductCategoryForm--defaultSalePrice" value="{{editProductCategoryForm.defaultSalePrice}}" type="number" required min="0" error-message="Please enter a valid number" label="Default Sale Price (the amount you want to sell the item for)"></paper-input>
+            <paper-input class="editProductCategoryForm--defaultPurchasePrice" value="{{editProductCategoryForm.defaultPurchasePrice}}" type="number" required min="0" error-message="Please enter a valid number" label="Default Purchase Price (the usual price you pay to buy this item)">
+              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+            </paper-input>
+            <paper-input class="editProductCategoryForm--defaultVat" value="{{editProductCategoryForm.defaultVat}}" type="number" required min="0" error-message="Please enter a valid number" label="Default VAT (the usual VAT/Tax percentage you have to pay)">
+              <div slot="suffix">%</div>
+            </paper-input>
+            <paper-input class="editProductCategoryForm--defaultSalePrice" value="{{editProductCategoryForm.defaultSalePrice}}" type="number" required min="0" error-message="Please enter a valid number" label="Default Sale Price (the amount you want to sell the item for)">
+              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+            </paper-input>
             <paper-checkbox checked="{{editProductCategoryForm.isReturnable}}">Can customer return this product (i.e. if damanged)</paper-checkbox>
 
             <div class="horizontal layout">
@@ -51,7 +63,14 @@
                   <paper-item name="fixed">Fixed Value</paper-item>
                 </paper-listbox>
               </paper-dropdown-menu>
-              <paper-input class="editProductCategoryForm--defaultDiscountValue flex" value="{{editProductCategoryForm.defaultDiscountValue}}" type="number" required min="0" error-message="Please enter a valid number" label="Default Discount Value"></paper-input>
+              <paper-input class="editProductCategoryForm--defaultDiscountValue flex" value="{{editProductCategoryForm.defaultDiscountValue}}" type="number" required min="0" error-message="Please enter a valid number" label="Default Discount Value">
+                <template is="dom-if" if="[[$equals(editProductCategoryForm.defaultDiscountType, 'percent')]]">
+                  <div slot="suffix">%</div>
+                </template>
+                <template is="dom-if" if="[[$equals(editProductCategoryForm.defaultDiscountType, 'fixed')]]">
+                  <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                </template>
+              </paper-input>
             </div>
 
             <div class="horizontal layout button-row end">
@@ -143,11 +162,13 @@
           this.app.pushPageTitle('Add Product Category');
         }
         if (!this._ensureAccess()) return;
-        if (this.editMode) {
-          this._processGetProductCategory();
-        } else {
+        this._processGetProductCategoryList(() => {
+          this._processParentProductCategory();
+          if (this.editMode) {
+            this._processGetProductCategory();
+          }
           this.isReady = true;
-        }
+        });
       }
 
       onNavigateOut() {
@@ -166,19 +187,33 @@
 
       // region: editProductCategory =================================
 
-      _processGetProductCategory() {
-        let productCategoryId = parseInt(this.params.productCategory);
+      _processGetProductCategoryList(cbfn) {
         let data = {
-          productCategoryId
+          organizationId: this.app.organization.id
         };
-        this.app.callGetProductCategoryApi(data, (err, response) => {
+        this.app.callGetProductCategoryListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this.editingProductCategory = response.productCategory;
-          let { name, phone, contactPersonName, physicalAddress } = this.editingProductCategory;
-          this.editProductCategoryForm = { name, phone, contactPersonName, physicalAddress };
-          this.isReady = true;
+          this._productCategoryList = response.productCategoryList;
+          cbfn();
         });
+      }
+
+      _processParentProductCategory() {
+        if ('parent' in this.params) {
+          this.parentProductCategory = this._productCategoryList.find(productCategory => {
+            return productCategory.id === parseInt(this.params.parent);
+          });
+        }
+      }
+
+      _processGetProductCategory() {
+        let productCategory = this._productCategoryList.find(productCategory => {
+          return productCategory.id === parseInt(this.params['product-category']);
+        });
+        this.editingProductCategory = productCategory;
+        let { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productCategory;
+        this.editProductCategoryForm = { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
       }
 
       _processCreateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
@@ -187,6 +222,9 @@
           organizationId: this.app.organization.id,
           parentProductCategoryId
         };
+        if (this.parentProductCategory) {
+          data.parentProductCategoryId = this.parentProductCategory.id;
+        }
         this.app.callAddProductCategoryApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
@@ -197,11 +235,12 @@
         });
       }
 
-      _processUpdateProductCategory({ name, phone, contactPersonName, physicalAddress }) {
+      _processUpdateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
         let data = {
-          name, phone, contactPersonName, physicalAddress,
+          name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
           productCategoryId: this.editingProductCategory.id
         };
+        data.parentProductCategoryId = this.editingProductCategory.parentProductCategoryId;
         this.app.callEditProductCategoryApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
@@ -230,8 +269,8 @@
         this.elemAll('#editProductCategoryForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editProductCategoryForm').validate()) return;
 
-        let { name, phone, contactPersonName, physicalAddress } = this.editProductCategoryForm;
-        this._processUpdateProductCategory({ name, phone, contactPersonName, physicalAddress });
+        let { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
+        this._processUpdateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
       }
 
       // region: misc =================================

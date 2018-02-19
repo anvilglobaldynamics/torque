@@ -301,7 +301,12 @@
       mainIronPagesIronSelected(e, details) {
         if (e.target.nodeName !== 'IRON-PAGES') return;
         if (!details.item) return;
+        this._lastPageElementOpened = details.item;
         this._notifyPageSelect(details.item);
+      }
+
+      refreshCurrentPage() {
+        this._notifyPageSelect(this._lastPageElementOpened);
       }
 
       // ======================  events =============================
@@ -343,7 +348,7 @@
 
       // ====================== shortcuts =============================
 
-      homeAndReloadTapped(e = null){
+      homeAndReloadTapped(e = null) {
         this.navigateTo('/home');
         window.location.reload();
       }
