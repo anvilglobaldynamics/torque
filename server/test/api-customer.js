@@ -32,7 +32,7 @@ let organizationId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidCustomerId = generateInvalidId();
 
-describe('customer', _ => {
+describe.only('customer', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

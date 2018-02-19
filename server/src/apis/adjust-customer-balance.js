@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
+let { customerCommonMixin } = require('./mixins/customer-common');
 
-exports.AdjustCustomerBalanceApi = class extends collectionCommonMixin(Api) {
+exports.AdjustCustomerBalanceApi = class extends collectionCommonMixin(customerCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -32,25 +33,6 @@ exports.AdjustCustomerBalanceApi = class extends collectionCommonMixin(Api) {
         "PRIV_MANAGE_CUSTOMER_DEBT"
       ]
     }];
-  }
-
-  // FIXME: move to customerCommonMixin
-  _getCustomer({ customerId }, cbfn) {
-    this.database.customer.findById({ customerId }, (err, customer) => {
-      if (!this._ensureDoc(err, customer, "CUSTOMER_INVALID", "customer does not exist")) return;
-      return cbfn(customer);
-    });
-  }
-
-  // FIXME: move to customerCommonMixin (Perhaps. Consider usage of same method elsewhere)
-  _adjustBalance({ customer, action, balance }, cbfn) {
-    if (action === 'payment') {
-      customer.balance += balance;
-      return cbfn(customer);
-    } else if (action === 'withdrawl') {
-      customer.balance -= balance;
-      return cbfn(customer);
-    }
   }
 
   // FIXME: This does not need to be async

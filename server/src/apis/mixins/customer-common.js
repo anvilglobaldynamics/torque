@@ -9,13 +9,23 @@ exports.customerCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     });
   }
 
-  _adjustCustomerBalance({ diff, customer }, cbfn) {
+  _updateCustomerBalance({ diff, customer }, cbfn) {
     let balance = diff;
     let customerId = customer.id;
     this.database.customer.updateBalanceOnly({ customerId }, { balance }, (err) => {
       if (err) return this.fail(err);
       return cbfn();
     });
+  }
+
+  _adjustBalance({ customer, action, balance }, cbfn) {
+    if (action === 'payment') {
+      customer.balance += balance;
+      return cbfn(customer);
+    } else if (action === 'withdrawl') {
+      customer.balance -= balance;
+      return cbfn(customer);
+    }
   }
 
   _verifyCustomerExist({ customerId }, cbfn) {
