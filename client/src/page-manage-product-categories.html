@@ -34,7 +34,7 @@
       }
     </style>
 
-    <div class="layout vertical" id="wrapper" style$="margin-left: [[marginLeft]]px">
+    <div class$="layout vertical [[$hideIfBeingMoved(isBeingMoved)]]" id="wrapper" style$="margin-left: [[marginLeft]]px">
       <div class="vertical layout">
         <div class="horizontal layout std-list-item center">
           <div class="vertical layout flex">
@@ -42,10 +42,15 @@
             <div class="description">Buying Price: [[productCategory.defaultPurchasePrice]] [[app.settings.monetaryUnit]] per [[productCategory.unit]]</div>
             <div class="description">Selling Price: [[productCategory.defaultSalePrice]] [[app.settings.monetaryUnit]] per [[productCategory.unit]]</div>
           </div>
-          <paper-button raised class="primary" on-tap="moveTapped">Move</paper-button>
-          <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
-          <paper-button raised class="primary" on-tap="deleteTapped">Delete</paper-button>
-          <paper-button raised class="primary" on-tap="addSubcategoryTapped">Add Sub Category</paper-button>
+          <template is="dom-if" if="[[!isAMovingGoingOn]]">
+            <paper-button raised class="primary" on-tap="moveTapped">Move</paper-button>
+            <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
+            <paper-button raised class="primary" on-tap="deleteTapped">Delete</paper-button>
+            <paper-button raised class="primary" on-tap="addSubcategoryTapped">Add Sub Category</paper-button>
+          </template>
+          <template is="dom-if" if="[[isAMovingGoingOn]]">
+            <paper-button raised class="primary" on-tap="moveHereTapped">Move Here</paper-button>
+          </template>
         </div>
         <template is="dom-repeat" items="[[productCategory.childList]]" as="childProductCategory">
           <product-category product-category="[[childProductCategory]]" margin-left="[[$marginMore(marginLeft)]]" app="[[app]]"></product-category>
@@ -56,7 +61,7 @@
   </template>
 
   <script>
-    class ProductCategory extends Polymer.Element {
+    class ProductCategory extends FxElement {
 
       static get is() {
         return 'product-category';
@@ -64,6 +69,14 @@
 
       static get properties() {
         return {
+          isBeingMoved: {
+            type: Boolean,
+            value: false
+          },
+          isAMovingGoingOn: {
+            type: Boolean,
+            value: false
+          }
         };
       }
 
@@ -84,6 +97,11 @@
       }
 
       // region: ui  ===========================
+
+      $hideIfBeingMoved(isBeingMoved) {
+        if (isBeingMoved) return 'hidden';
+        return '';
+      }
 
       $marginMore(marginLeft) {
         return marginLeft + 12;
@@ -108,6 +126,30 @@
 
       addSubcategoryTapped(e = null) {
         return this.app.navigateTo(`/edit-product-category/parent:${this.productCategory.id}`);
+      }
+
+      _movingInitiated(productCategoryId) {
+        let domHost = Polymer.dom(this).getOwnerRoot().host;
+        domHost._movingInitiated(productCategoryId);
+      }
+
+      moveTapped(e) {
+        this._movingInitiated(this.productCategory.id);
+        this.isBeingMoved = true;
+      }
+
+      _informMoving() {
+        this.isAMovingGoingOn = true;
+        this.elemAll('product-category').forEach(el => el._informMoving());
+      }
+
+      _movingConfirmed(productCategoryId) {
+        let domHost = Polymer.dom(this).getOwnerRoot().host;
+        domHost._movingConfirmed(productCategoryId);
+      }
+
+      moveHereTapped(e) {
+        this._movingConfirmed(this.productCategory.id);
       }
 
       // region: misc =================================
@@ -140,7 +182,14 @@
       </div>
 
       <div class="transparent-card align-right">
-        <paper-button raised class="primary" on-tap="createTapped">Create New Product Category</paper-button>
+        <template is="dom-if" if="[[isAMovingGoingOn]]">
+          <paper-button raised class="primary" on-tap="moveToRootTapped">Move To Root</paper-button>
+          <paper-button raised class="primary" on-tap="cancelMovingTapped">Cancel</paper-button>
+        </template>
+        <template is="dom-if" if="[[!isAMovingGoingOn]]">
+          <paper-button raised class="primary" on-tap="createTapped">Create New Product Category</paper-button>
+        </template>
+
       </div>
 
     </div>
@@ -159,6 +208,10 @@
           marginLeft: {
             type: Number,
             value: 0
+          },
+          isAMovingGoingOn: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -173,7 +226,7 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
-        this.app.pushPageTitle('Manage ProductCategory');
+        this.app.pushPageTitle('Manage Product Categories');
         if (!this._ensureAccess()) return;
         this._processProductCategoryList(_ => { });
       }
@@ -206,16 +259,57 @@
       }
 
       _processProductCategoryList(cbfn) {
-        this._fetchProductCategoryList(newProductCategoryList => {
-          let productCategoryList = newProductCategoryList.filter(productCategory => productCategory.parentProductCategoryId === null);
-          productCategoryList.forEach(productCategory => this.__listChildren(newProductCategoryList, productCategory));
+        this._fetchProductCategoryList(rawProductCategoryList => {
+          this.rawProductCategoryList = rawProductCategoryList;
+          let productCategoryList = rawProductCategoryList.filter(productCategory => productCategory.parentProductCategoryId === null);
+          productCategoryList.forEach(productCategory => this.__listChildren(rawProductCategoryList, productCategory));
           this.productCategoryList = productCategoryList;
-          console.log(this.productCategoryList)
           return cbfn();
         });
       }
 
+      _moveProductCategory(productCategory, newParentProductCategoryId, cbfn) {
+        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productCategory;
+        let data = {
+          parentProductCategoryId: newParentProductCategoryId,
+          name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
+          productCategoryId: productCategory.id
+        };
+        this.app.callEditProductCategoryApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          let message = "Your product Category has been moved."
+          this.app.showModalDialog("Product Category Moved", message, _ => {
+            cbfn();
+          });
+        });
+      }
+
       // region: ui  ===========================
+
+      _movingInitiated(whichProductCategoryId) {
+        this.whichProductCategoryId = whichProductCategoryId;
+        this.isAMovingGoingOn = true;
+        this.elemAll('product-category').forEach(el => el._informMoving());
+      }
+
+      _movingConfirmed(targetProductCategoryId) {
+        let productCategory = this.rawProductCategoryList.find(({ id }) => id === this.whichProductCategoryId);
+        this._moveProductCategory(productCategory, targetProductCategoryId, () => {
+          this.app.refreshCurrentPage();
+        });
+      }
+
+      moveToRootTapped() {
+        let productCategory = this.rawProductCategoryList.find(({ id }) => id === this.whichProductCategoryId);
+        this._moveProductCategory(productCategory, null, () => {
+          this.app.refreshCurrentPage();
+        });
+      }
+
+      cancelMovingTapped(e = null) {
+        this.app.refreshCurrentPage();
+      }
 
       createTapped(e = null) {
         return this.app.navigateTo('/edit-product-category');
