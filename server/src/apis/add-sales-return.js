@@ -3,8 +3,11 @@ let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
 let { productCommonMixin } = require('./mixins/product-common');
+let { customerCommonMixin } = require('./mixins/customer-common');
+let { inventoryCommonMixin } = require('./mixins/inventory-common');
+let { salesCommonMixin } = require('./mixins/sales-common');
 
-exports.AddSalesReturnApi = class extends productCommonMixin(collectionCommonMixin(Api)) {
+exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(customerCommonMixin(productCommonMixin(collectionCommonMixin(Api))))) {
 
   get autoValidates() { return true; }
 
@@ -47,30 +50,6 @@ exports.AddSalesReturnApi = class extends productCommonMixin(collectionCommonMix
     }];
   }
 
-  // FIXME: move to salesCommonMixin
-  _getSales({ salesId }, cbfn) {
-    this.database.sales.findById({ salesId }, (err, sales) => {
-      if (!this._ensureDoc(err, sales, "SALES_INVALID", "Sales not found")) return;
-      return cbfn(sales);
-    });
-  }
-
-  _getOutletReturnedInventory({ outletId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
-      if (err) return this.fail(err);
-      if (inventoryList.length === 0) {
-        err = new Error("Invalid Outlet Or Inventory could not be found");
-        err.code = "OUTLET_INVENTORY_INVALID"
-        return this.fail(err);
-      }
-      // let inventory = inventoryList.find(inventory => inventory.type === 'default');
-      // let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-      // let outletReturnedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
-      let outletReturnedInventory = inventoryList.find(inventory => inventory.type === 'returned');
-      return cbfn(outletReturnedInventory);
-    })
-  }
-
   _returnProducts({ returnedProductList, outletReturnedInventory }, cbfn) {
     // console.log("returnedProductList: ", returnedProductList);
 
@@ -92,14 +71,6 @@ exports.AddSalesReturnApi = class extends productCommonMixin(collectionCommonMix
       .catch(err => {
         return this.fail(err);
       })
-  }
-
-  // FIXME: move to customerCommonMixin
-  _getCustomer({ customerId }, cbfn) {
-    this.database.customer.findById({ customerId }, (err, customer) => {
-      if (err) return this.fail(err);
-      return cbfn(customer);
-    });
   }
 
   _calculatePayback({ returnedProductList }, cbfn) {
@@ -148,15 +119,6 @@ exports.AddSalesReturnApi = class extends productCommonMixin(collectionCommonMix
         return cbfn(payment);
       });
     }
-  }
-
-  _adjustCustomerBalance(diff, customer, cbfn) {
-    let balance = diff;
-    let customerId = customer.id;
-    this.database.customer.updateBalanceOnly({ customerId }, { balance }, (err) => {
-      if (err) return this.fail();
-      return cbfn();
-    });
   }
 
   handle({ body }) {

@@ -1,7 +1,11 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.AddSalesApi = class extends Api {
+let { collectionCommonMixin } = require('./mixins/collection-common');
+let { inventoryCommonMixin } = require('./mixins/inventory-common');
+let { customerCommonMixin } = require('./mixins/customer-common');
+
+exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(collectionCommonMixin(Api))) {
 
   get autoValidates() { return true; }
 
@@ -55,40 +59,6 @@ exports.AddSalesApi = class extends Api {
     }];
   }
 
-  // FIXME: use inventoryCommonMixin
-  _getOutletDefaultInventory({ outletId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
-      if (err) return this.fail(err);
-      if (inventoryList.length === 0) {
-        err = new Error("Invalid Outlet Or Inventory could not be found");
-        err.code = "OUTLET_INVENTORY_INVALID"
-        return this.fail(err);
-      }
-      // let inventory = inventoryList.find(inventory => inventory.type === 'default');
-      // let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-      // let outletDefaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
-      let outletDefaultInventory = inventoryList.find(inventory => inventory.type === 'default');
-      return cbfn(outletDefaultInventory);
-    })
-  }
-
-  // FIXME: move to customerCommonMixin
-  _getCustomer({ customerId }, cbfn) {
-    if (customerId) {
-      this.database.customer.findById({ customerId }, (err, customer) => {
-        if (err) return this.fail(err);
-        if (customer === null) {
-          err = new Error("customer could not be found");
-          err.code = "CUSTOMER_INVALID";
-          return this.fail(err);
-        }
-        return cbfn(customer);
-      });
-    } else {
-      return cbfn(null);
-    }
-  }
-
   _sell({ outletDefaultInventory, productList }, cbfn) {
     for (let product of productList) {
       let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
@@ -117,25 +87,6 @@ exports.AddSalesApi = class extends Api {
         return cbfn(payment);
       });
     }
-  }
-
-  _adjustCustomerBalance({ diff, customer }, cbfn) {
-    let balance = diff;
-    let customerId = customer.id;
-    this.database.customer.updateBalanceOnly({ customerId }, { balance }, (err) => {
-      if (err) return this.fail(err);
-      return cbfn();
-    });
-  }
-
-  // FIXME: Move to inventoryCommonMixin
-  _updateInventory({ outletDefaultInventory }, cbfn) {
-    let inventoryId = outletDefaultInventory.id;
-    let productList = outletDefaultInventory.productList;
-    this.database.inventory.updateProductList({ inventoryId }, { productList }, (err) => {
-      if (err) return this.fail(err);
-      cbfn();
-    });
   }
 
   _addSales({ outletId, customerId, productList, payment }, cbfn) {
