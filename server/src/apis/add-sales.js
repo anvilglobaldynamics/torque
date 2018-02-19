@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { inventoryCommonMixin } = require('./mixins/inventory-common');
+let { customerCommonMixin } = require('./mixins/customer-common');
 
-exports.AddSalesApi = class extends inventoryCommonMixin(Api) {
+exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -57,23 +58,6 @@ exports.AddSalesApi = class extends inventoryCommonMixin(Api) {
     }];
   }
 
-  // FIXME: move to customerCommonMixin
-  _getCustomer({ customerId }, cbfn) {
-    if (customerId) {
-      this.database.customer.findById({ customerId }, (err, customer) => {
-        if (err) return this.fail(err);
-        if (customer === null) {
-          err = new Error("customer could not be found");
-          err.code = "CUSTOMER_INVALID";
-          return this.fail(err);
-        }
-        return cbfn(customer);
-      });
-    } else {
-      return cbfn(null);
-    }
-  }
-
   _sell({ outletDefaultInventory, productList }, cbfn) {
     for (let product of productList) {
       let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
@@ -102,15 +86,6 @@ exports.AddSalesApi = class extends inventoryCommonMixin(Api) {
         return cbfn(payment);
       });
     }
-  }
-
-  _adjustCustomerBalance({ diff, customer }, cbfn) {
-    let balance = diff;
-    let customerId = customer.id;
-    this.database.customer.updateBalanceOnly({ customerId }, { balance }, (err) => {
-      if (err) return this.fail(err);
-      return cbfn();
-    });
   }
 
   _addSales({ outletId, customerId, productList, payment }, cbfn) {
