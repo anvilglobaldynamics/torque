@@ -2,7 +2,9 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
-exports.AddOrganizationApi = class extends Api {
+let { userCommonMixin } = require('./mixins/user-common');
+
+exports.AddOrganizationApi = class extends userCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -36,13 +38,6 @@ exports.AddOrganizationApi = class extends Api {
       if (err) return this.fail(err);
       return cbfn(organizationId);
     });
-  }
-
-  _setUserAsOwner({ userId, organizationId }, cbfn) {
-    this.database.employment.employNewEmployeeAsOwner({ userId, organizationId }, (err) => {
-      if (err) return this.fail(err);
-      cbfn();
-    })
   }
 
   handle({ body, userId }) {

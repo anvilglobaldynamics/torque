@@ -77,4 +77,11 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     })
   }
 
+  _setUserAsOwner({ userId, organizationId }, cbfn) {
+    this.database.employment.employNewEmployeeAsOwner({ userId, organizationId }, (err) => {
+      if (err) return this.fail(err);
+      cbfn();
+    })
+  }
+
 }
