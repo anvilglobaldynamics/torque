@@ -306,7 +306,11 @@
       }
 
       refreshCurrentPage() {
-        this._notifyPageSelect(this._lastPageElementOpened);
+        // this._notifyPageSelect(this._lastPageElementOpened);
+        // FIXME: This is a quick hack to make reload work.
+        // However, it needs to be altered so that page can reload
+        // without reloading whole window.
+        window.location.reload();
       }
 
       // ======================  events =============================
