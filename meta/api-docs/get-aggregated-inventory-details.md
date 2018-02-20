@@ -39,7 +39,7 @@ Possible Error Codes:
   "hasError": false,
 
   "inventoryContainerDetails": Joi.object().keys({
-    inventoryContainerType: Joi.string().min(1).max(64).required(),
+    inventoryContainerType: Joi.string().valid('outlet', 'warehouse').required(),
     inventoryContainerId: Joi.number().max(999999999999999).required(),
     inventoryContainerName: Joi.string().min(1).max(64).required()
   }),

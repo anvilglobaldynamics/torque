@@ -227,10 +227,12 @@ describe.only('inventory', _ => {
         inventoryId: warehouseDefaultInventoryId
       }
     }, (err, response, body) => {
-      // console.log(body);
+      console.log("---");
+      console.log(body);
 
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      // expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
       expect(body).to.have.property('productList').that.is.an('array');
       expect(body).to.have.property('matchingProductList').that.is.an('array');
       expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
@@ -251,7 +253,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it('api/get-aggregated-inventory-details (Invalid inventoryId)', testDoneFn => {
+  it.skip('api/get-aggregated-inventory-details (Invalid inventoryId)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -269,7 +271,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it('api/transfer-between-inventories (Valid)', testDoneFn => {
+  it.skip('api/transfer-between-inventories (Valid)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -289,7 +291,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it('api/transfer-between-inventories (Invalid product count)', testDoneFn => {
+  it.skip('api/transfer-between-inventories (Invalid product count)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -311,7 +313,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it('api/transfer-between-inventories (Invalid fromInventoryId)', testDoneFn => {
+  it.skip('api/transfer-between-inventories (Invalid fromInventoryId)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -333,7 +335,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it('api/transfer-between-inventories (Invalid toInventoryId)', testDoneFn => {
+  it.skip('api/transfer-between-inventories (Invalid toInventoryId)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -355,7 +357,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it('api/transfer-between-inventories (Valid duplicate)', testDoneFn => {
+  it.skip('api/transfer-between-inventories (Valid duplicate)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -374,7 +376,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it('api/get-aggregated-inventory-details (Valid modification check)', testDoneFn => {
+  it.skip('api/get-aggregated-inventory-details (Valid modification check)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -403,7 +405,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it('api/transfer-between-inventories (Valid Warehouse to Outlet)', testDoneFn => {
+  it.skip('api/transfer-between-inventories (Valid Warehouse to Outlet)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -422,7 +424,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it('api/get-aggregated-inventory-details (Valid modification check, Outlet)', testDoneFn => {
+  it.skip('api/get-aggregated-inventory-details (Valid modification check, Outlet)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -451,7 +453,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it('api/get-aggregated-inventory-details (Valid modification check, Warehouse)', testDoneFn => {
+  it.skip('api/get-aggregated-inventory-details (Valid modification check, Warehouse)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {

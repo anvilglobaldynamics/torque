@@ -12,6 +12,7 @@ exports.InventoryCollection = class extends Collection {
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       inventoryContainerId: Joi.number().max(999999999999999).required(),
+      inventoryContainerType: Joi.string().valid('outlet', 'warehouse').required(),
       type: Joi.string().valid('default', 'returned', 'damaged').required(),
       name: Joi.string().min(1).max(64).required(),
       organizationId: Joi.number().max(999999999999999).required(),
@@ -44,13 +45,14 @@ exports.InventoryCollection = class extends Collection {
     // to two collections, it's not checked.
   }
 
-  create({ inventoryContainerId, organizationId, type, name, allowManualTransfer }, cbfn) {
+  create({ inventoryContainerId, inventoryContainerType, organizationId, type, name, allowManualTransfer }, cbfn) {
     let doc = {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       name,
       organizationId,
       inventoryContainerId,
+      inventoryContainerType,
       type,
       allowManualTransfer,
       productList: [],

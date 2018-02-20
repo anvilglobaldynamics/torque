@@ -31,13 +31,18 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
     }];
   }
 
-  _getProductList({ inventoryId }, cbfn) {
+  _getInventory({ inventoryId }, cbfn) {
     this.database.inventory.findById({ inventoryId }, (err, inventory) => {
       if (err) return this.fail(err);
       if (!this._ensureDoc(err, inventory, "INVENTORY_INVALID", "inventory could not be found")) return;
-      console.log("inventory", inventory);
-      cbfn(inventory.productList)
+      cbfn(inventory)
     })
+  }
+
+  _getInventoryContainerDetails({ inventory }, cbfn) {
+    console.log("inventory: ", inventory);
+    let inventoryContainerDetails = { inventoryContainerId: inventory.inventoryContainerId }
+    cbfn (inventoryContainerDetails); 
   }
 
   _getMatchingProductList({ productList }, cbfn) {
@@ -58,10 +63,12 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
 
   handle({ body }) {
     let { inventoryId } = body;
-    this._getProductList({ inventoryId }, (productList) => {
-      this._getMatchingProductList({ productList }, (matchingProductList) => {
-        this._getMatchingProductCategoryList({ matchingProductList }, (matchingProductCategoryList) => {
-          this.success({ productList, matchingProductList, matchingProductCategoryList });
+    this._getInventory({ inventoryId }, (inventory) => {
+      this._getInventoryContainerDetails({ inventory }, (inventoryContainerDetails) => {
+        this._getMatchingProductList({ productList: inventory.productList }, (matchingProductList) => {
+          this._getMatchingProductCategoryList({ matchingProductList }, (matchingProductCategoryList) => {
+            this.success({ inventoryContainerDetails, productList: inventory.productList, matchingProductList, matchingProductCategoryList });
+          });
         });
       });
     });

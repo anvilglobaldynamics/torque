@@ -43,7 +43,7 @@ exports.AddWarehouseApi = class extends inventoryCommonMixin(Api) {
   handle({ body }) {
     let { name, organizationId, physicalAddress, phone, contactPersonName } = body;
     this._createWarehouse({ name, organizationId, physicalAddress, phone, contactPersonName }, (warehouseId) => {
-      this._createStandardInventories({ inventoryContainerId: warehouseId, organizationId }, () => {
+      this._createStandardInventories({ inventoryContainerId: warehouseId, inventoryContainerType: "warehouse", organizationId }, () => {
         this.success({ status: "success", warehouseId });
       });
     });

@@ -43,7 +43,7 @@ exports.AddOutletApi = class extends inventoryCommonMixin(Api) {
   handle({ body }) {
     let { name, organizationId, physicalAddress, phone, contactPersonName } = body;
     this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName }, (outletId) => {
-      this._createStandardInventories({ inventoryContainerId: outletId, organizationId }, () => {
+      this._createStandardInventories({ inventoryContainerId: outletId, inventoryContainerType: "outlet", organizationId }, () => {
         this.success({ status: "success", outletId });
       });
     });
