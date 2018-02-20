@@ -59,6 +59,7 @@ let { GetProductCategoryListApi } = require('./apis/get-product-category-list');
 let { EditProductCategoryApi } = require('./apis/edit-product-category');
 let { DeleteProductCategoryApi } = require('./apis/delete-product-category');
 
+let { GetInventoryListApi } = require('./apis/get-inventory-list');
 let { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-inventory-details');
 let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
 let { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
@@ -243,6 +244,7 @@ class Program {
         server.registerPostApi('/api/user-reset-password--request', UserResetPasswordRequestApi);
         server.registerPostApi('/api/user-reset-password--get-token-info', UserResetPasswordGetTokenInfoApi);
         server.registerPostApi('/api/user-reset-password--confirm', UserResetPasswordConfirmApi);
+        server.registerPostApi('/api/get-inventory-list', GetInventoryListApi);
         server.registerPostApi('/api/get-aggregated-inventory-details', GetAggregatedInventoryDetailsApi);
         server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
         server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
