@@ -26,9 +26,18 @@ exports.GetInventoryListApi = class extends collectionCommonMixin(Api) {
     }];
   }
 
+  _getInventoryList({ organizationId }, cbfn) {
+    this.database.inventory.listByOrganizationId({ organizationId }, (err, inventoryList) => {
+      if (err) return this.fail(err);
+      cbfn(inventoryList);
+    })
+  }
+
   handle({ body }) {
     let { organizationId } = body;
-    this.success({ hasError: false });
+    this._getInventoryList({ organizationId }, (inventoryList) => {
+      this.success({ inventoryList });
+    });
   }
 
 }
