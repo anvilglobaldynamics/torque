@@ -27,25 +27,11 @@
           padding: 24px;
         }
       }
-
-      pre {
-        font-family: Arial, Helvetica, sans-serif !important;
-      }
-
-      .item-value {
-        font-size: 60px;
-      }
-
-      .title {
-        font-size: 18px;
-      }
-
-      .description {
-        font-size: 14px;
-      }
     </style>
 
-    <div class="std-page layout vertical" id="wrapper">
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
         <div>[[outlet.name]]</div>
@@ -131,7 +117,9 @@
           });
           return;
         }
-        this._processOutlet(_ => { });
+        this._processOutlet(_ => { 
+          this.isReady = true;
+        });
       }
 
       onNavigateOut() {
@@ -163,6 +151,7 @@
           this.defaultInventory = defaultInventory;
           this.returnedInventory = returnedInventory;
           this.damagedInventory = damagedInventory;
+          cbfn();
         });
       }
 

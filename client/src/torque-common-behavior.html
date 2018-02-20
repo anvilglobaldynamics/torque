@@ -36,6 +36,10 @@
         return elseValue;
       }
 
+      delay(ms, fn, ...args) {
+        window.setTimeout(fn, ms, ...args);
+      }
+
       onApiError(error, form) {
         if ((error.code === "VALIDATION_ERROR") && form) {
           let missingError = null;

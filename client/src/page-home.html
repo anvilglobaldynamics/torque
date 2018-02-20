@@ -28,10 +28,6 @@
         }
       }
 
-      pre {
-        font-family: Arial, Helvetica, sans-serif !important;
-      }
-
       .item-value {
         font-size: 60px;
       }
@@ -42,7 +38,9 @@
       }
     </style>
 
-    <div class="std-page layout vertical" id="wrapper">
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
       <div class="horizontal layout">
         <div class="card vertical layout flex">
           [[user.fullName]]
@@ -110,8 +108,10 @@
         this.onUserChange(this.app.user);
         this.onOrganizationChange(this.app.organization);
         this.onSettingsChange(this.app.settings);
-        this._processOrganizationList(_ => {
-          this._processDashboardSummary();
+        this._processOrganizationList(() => {
+          this._processDashboardSummary(() => {
+            this.isReady = true;
+          });
         });
       }
 
@@ -175,9 +175,10 @@
         });
       }
 
-      _processDashboardSummary() {
+      _processDashboardSummary(cbfn) {
         this._fetchDashboardSummary(({ metrics }) => {
           this.metrics = metrics;
+          cbfn();
         });
       }
 

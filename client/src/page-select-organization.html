@@ -45,7 +45,9 @@
       }
     </style>
 
-    <div class="std-page layout vertical" id="wrapper">
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
         <div class="std-list">
@@ -92,7 +94,9 @@
         this.app.currentPageIsModal = true;
         this.app.pushPageTitle('Select Organization');
         if (!this._ensureAccess()) return;
-        this._processOrganizationList(_ => { });
+        this._processOrganizationList(_ => { 
+          this.isReady = true;
+        });
       }
 
       onNavigateOut() {
@@ -123,6 +127,7 @@
             return this.app.navigateTo('/add-organization');
           }
           this.organizationList = newOrganizationList;
+          cbfn();
         });
       }
 

@@ -27,30 +27,11 @@
           padding: 24px;
         }
       }
-
-      pre {
-        font-family: Arial, Helvetica, sans-serif !important;
-      }
-
-      .item-value {
-        font-size: 60px;
-      }
-
-      .title {
-        font-size: 18px;
-      }
-
-      .description {
-        font-size: 14px;
-      }
-
-      .inp {
-        max-width: 160px;
-        margin-left: 12px;
-      }
     </style>
 
-    <div class="std-page layout vertical" id="wrapper">
+<elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+<div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
       <!-- 
       <div class="card vertical layout">
         <div>[[inventory.name]]</div>
@@ -110,7 +91,7 @@
                 <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
               </template>
               <template is="dom-if" if="[[product.isSelected]]">
-                <paper-input class="inp" value="{{product.selectedCount}}" type="number" min="0" label="Count">
+                <paper-input class="small-input" value="{{product.selectedCount}}" type="number" min="0" label="Count">
                   <div slot="prefix">Selected&nbsp;</div>
                   <div slot="suffix">&nbsp;[[product.unit]]</div>
                 </paper-input>
@@ -173,7 +154,9 @@
           });
           return;
         }
-        this._processInventory(_ => { });
+        this._processInventory(_ => {
+          this.isReady = true;
+         });
       }
 
       onNavigateOut() {
@@ -214,6 +197,7 @@
           })
           productList.sort((a, b) => b.count - a.count);
           this.productList = productList;
+          cbfn();
         });
 
       }
@@ -244,7 +228,7 @@
         e.model.set('product.isSelected', false);
       }
 
-      moveSelectedTapped(e = null){
+      moveSelectedTapped(e = null) {
         this._fetchOutletList(outletList => {
           console.log(outletList)
         });

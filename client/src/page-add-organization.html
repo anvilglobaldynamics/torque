@@ -28,7 +28,9 @@
       }
     </style>
 
-    <div class="layout vertical std-page" id="wrapper">
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <iron-form id="addOrganizationForm">
         <form>
@@ -91,6 +93,9 @@
         this.app.currentPageIsModal = true;
         this.app.pushPageTitle('Add Organization');
         if (!this._ensureAccess()) return;
+        this.delay(300, () => {
+          this.isReady = true;
+        });
       }
 
       onNavigateOut() {
