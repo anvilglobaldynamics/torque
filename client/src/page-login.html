@@ -27,7 +27,9 @@
       }
     </style>
 
-    <div class="layout vertical std-small-page" id="wrapper">
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-small-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <iron-form id="login-form">
         <form>
@@ -88,6 +90,9 @@
         this.app.removeUser();
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
+        this.delay(300, () =>{
+          this.isReady = true;
+        });
       }
 
       onNavigateOut() {
