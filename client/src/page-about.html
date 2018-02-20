@@ -13,6 +13,7 @@
 
 <dom-module id="page-about">
   <template>
+
     <style include="shared-styles">
       @media (min-width: 960px) {
         :host {
@@ -38,7 +39,6 @@
       </paper-tabs>
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 0)]]">
-
         <div class="card">
           <div>This project is created and maintained by
             <a href="[[authorWebsite]]">[[authorName]]</a>
@@ -51,7 +51,8 @@
           </div>
           <br>
           <div>
-            <br>&copy; 2017. <a href="[[authorWebsite]]">[[authorName]]</a>.
+            <br>&copy; 2017.
+            <a href="[[authorWebsite]]">[[authorName]]</a>.
             <br> All rights reserved.
             <br>
           </div>
@@ -145,6 +146,7 @@
           }
         }
       }
+
     }
 
     window.customElements.define(PageAbout.is, PageAbout);
