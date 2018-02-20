@@ -35,6 +35,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
     this.database.inventory.findById({ inventoryId }, (err, inventory) => {
       if (err) return this.fail(err);
       if (!this._ensureDoc(err, inventory, "INVENTORY_INVALID", "inventory could not be found")) return;
+      console.log("inventory", inventory);
       cbfn(inventory.productList)
     })
   }
