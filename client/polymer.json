@@ -2,6 +2,7 @@
   "entrypoint": "index.html",
   "shell": "src/torque-app.html",
   "fragments": [
+    "src/elem-not-ready.html",
     "src/page-home.html",
     "src/page-error404.html",
     "src/page-settings.html",
