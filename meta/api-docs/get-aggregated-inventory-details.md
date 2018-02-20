@@ -38,6 +38,15 @@ Possible Error Codes:
 {
   "hasError": false,
 
+  "inventoryDetails": Joi.object().keys({
+    inventoryName: Joi.string().min(1).max(64).required()
+  }),
+
+  "inventoryContainerDetails": Joi.object().keys({
+    inventoryContainerType: Joi.string().valid('outlet', 'warehouse').required(),
+    inventoryContainerId: Joi.number().max(999999999999999).required()
+  }),
+
   "productList": Joi.array().items(
     Joi.object().keys({
       productId: Joi.number().max(999999999999999).required(),

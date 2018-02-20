@@ -60,6 +60,7 @@ let outletDamagedInventoryId = null;
 
 let productToBeTransferred = null;
 
+let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
@@ -153,6 +154,44 @@ describe('inventory', _ => {
     });
   });
 
+  it('api/get-inventory-list (Valid organizationId)', testDoneFn => {
+
+    callApi('api/get-inventory-list', {
+      json: {
+        apiKey,
+        organizationId: organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('inventoryList').that.is.an('array');
+
+      body.inventoryList.forEach(inventory => {
+        validateInventorySchema(inventory);
+      });
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-inventory-list (Invalid organizationId)', testDoneFn => {
+
+    callApi('api/get-inventory-list', {
+      json: {
+        apiKey,
+        organizationId: invalidOrganizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('ORGANIZATION_INVALID');
+      testDoneFn();
+    });
+
+  });
+
   it('api/add-product-to-inventory (Valid warehouse)', testDoneFn => {
 
     callApi('api/add-product-to-inventory', {
@@ -227,10 +266,10 @@ describe('inventory', _ => {
         inventoryId: warehouseDefaultInventoryId
       }
     }, (err, response, body) => {
-      // console.log(body);
-
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('inventoryDetails').that.is.an('object');
+      expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
       expect(body).to.have.property('productList').that.is.an('array');
       expect(body).to.have.property('matchingProductList').that.is.an('array');
       expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
@@ -384,6 +423,8 @@ describe('inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('inventoryDetails').that.is.an('object');
+      expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
       expect(body).to.have.property('productList').that.is.an('array');
       expect(body).to.have.property('matchingProductList').that.is.an('array');
       expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
@@ -432,6 +473,8 @@ describe('inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('inventoryDetails').that.is.an('object');
+      expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
       expect(body).to.have.property('productList').that.is.an('array');
       expect(body).to.have.property('matchingProductList').that.is.an('array');
       expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
@@ -461,6 +504,8 @@ describe('inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('inventoryDetails').that.is.an('object');
+      expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
       expect(body).to.have.property('productList').that.is.an('array');
       expect(body).to.have.property('matchingProductList').that.is.an('array');
       expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');

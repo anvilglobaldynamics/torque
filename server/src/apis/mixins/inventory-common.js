@@ -42,9 +42,9 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     });
   }
 
-  _createInventory({ inventoryContainerId, organizationId, type, name }, cbfn) {
+  _createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type, name }, cbfn) {
     let inventory = {
-      inventoryContainerId, organizationId, type, name, allowManualTransfer: true
+      inventoryContainerId, inventoryContainerType, organizationId, type, name, allowManualTransfer: true
     }
     this.database.inventory.create(inventory, (err, inventoryId) => {
       if (err) return this.fail(err);
@@ -52,10 +52,10 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     })
   }
 
-  _createStandardInventories({ inventoryContainerId, organizationId }, cbfn) {
-    this._createInventory({ inventoryContainerId, organizationId, type: 'default', name: 'Default' }, () => {
-      this._createInventory({ inventoryContainerId, organizationId, type: 'returned', name: 'Returned' }, () => {
-        this._createInventory({ inventoryContainerId, organizationId, type: 'damaged', name: 'Damaged' }, () => {
+  _createStandardInventories({ inventoryContainerId, inventoryContainerType, organizationId }, cbfn) {
+    this._createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'default', name: 'Default' }, () => {
+      this._createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'returned', name: 'Returned' }, () => {
+        this._createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'damaged', name: 'Damaged' }, () => {
           cbfn();
         })
       })

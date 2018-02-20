@@ -315,6 +315,7 @@ exports.validateInventorySchema = (doc) => {
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
+    inventoryContainerType: Joi.string().valid('outlet', 'warehouse').required(),
     inventoryContainerId: Joi.number().max(999999999999999).required(),
     type: Joi.string().valid('default', 'returned', 'damaged').required(),
     name: Joi.string().min(1).max(64).required(),
