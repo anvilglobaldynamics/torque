@@ -40,9 +40,18 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
   }
 
   _getInventoryContainerDetails({ inventory }, cbfn) {
-    console.log("inventory: ", inventory);
-    let inventoryContainerDetails = { inventoryContainerId: inventory.inventoryContainerId }
-    cbfn (inventoryContainerDetails); 
+    let inventoryContainerDetails = {
+      inventoryContainerId: inventory.inventoryContainerId,
+      inventoryContainerType: inventory.inventoryContainerType,
+    }
+    cbfn(inventoryContainerDetails);
+  }
+
+  _getInventoryDetails({ inventory }, cbfn) {
+    let inventoryDetails = {
+      inventoryName: inventory.name
+    }
+    cbfn(inventoryDetails);
   }
 
   _getMatchingProductList({ productList }, cbfn) {
@@ -65,9 +74,11 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
     let { inventoryId } = body;
     this._getInventory({ inventoryId }, (inventory) => {
       this._getInventoryContainerDetails({ inventory }, (inventoryContainerDetails) => {
-        this._getMatchingProductList({ productList: inventory.productList }, (matchingProductList) => {
-          this._getMatchingProductCategoryList({ matchingProductList }, (matchingProductCategoryList) => {
-            this.success({ inventoryContainerDetails, productList: inventory.productList, matchingProductList, matchingProductCategoryList });
+        this._getInventoryDetails({ inventory }, (inventoryDetails) => {
+          this._getMatchingProductList({ productList: inventory.productList }, (matchingProductList) => {
+            this._getMatchingProductCategoryList({ matchingProductList }, (matchingProductCategoryList) => {
+              this.success({ inventoryDetails, inventoryContainerDetails, productList: inventory.productList, matchingProductList, matchingProductCategoryList });
+            });
           });
         });
       });

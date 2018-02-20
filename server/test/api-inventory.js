@@ -63,7 +63,7 @@ let productToBeTransferred = null;
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe.only('inventory', _ => {
+describe('inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -227,12 +227,10 @@ describe.only('inventory', _ => {
         inventoryId: warehouseDefaultInventoryId
       }
     }, (err, response, body) => {
-      console.log("---");
-      console.log(body);
-
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
-      // expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
+      expect(body).to.have.property('inventoryDetails').that.is.an('object');
+      expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
       expect(body).to.have.property('productList').that.is.an('array');
       expect(body).to.have.property('matchingProductList').that.is.an('array');
       expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
@@ -253,7 +251,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/get-aggregated-inventory-details (Invalid inventoryId)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Invalid inventoryId)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -271,7 +269,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/transfer-between-inventories (Valid)', testDoneFn => {
+  it('api/transfer-between-inventories (Valid)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -291,7 +289,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/transfer-between-inventories (Invalid product count)', testDoneFn => {
+  it('api/transfer-between-inventories (Invalid product count)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -313,7 +311,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/transfer-between-inventories (Invalid fromInventoryId)', testDoneFn => {
+  it('api/transfer-between-inventories (Invalid fromInventoryId)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -335,7 +333,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/transfer-between-inventories (Invalid toInventoryId)', testDoneFn => {
+  it('api/transfer-between-inventories (Invalid toInventoryId)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -357,7 +355,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/transfer-between-inventories (Valid duplicate)', testDoneFn => {
+  it('api/transfer-between-inventories (Valid duplicate)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -376,7 +374,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/get-aggregated-inventory-details (Valid modification check)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid modification check)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -386,6 +384,8 @@ describe.only('inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('inventoryDetails').that.is.an('object');
+      expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
       expect(body).to.have.property('productList').that.is.an('array');
       expect(body).to.have.property('matchingProductList').that.is.an('array');
       expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
@@ -405,7 +405,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/transfer-between-inventories (Valid Warehouse to Outlet)', testDoneFn => {
+  it('api/transfer-between-inventories (Valid Warehouse to Outlet)', testDoneFn => {
 
     callApi('api/transfer-between-inventories', {
       json: {
@@ -424,7 +424,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/get-aggregated-inventory-details (Valid modification check, Outlet)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid modification check, Outlet)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -434,6 +434,8 @@ describe.only('inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('inventoryDetails').that.is.an('object');
+      expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
       expect(body).to.have.property('productList').that.is.an('array');
       expect(body).to.have.property('matchingProductList').that.is.an('array');
       expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
@@ -453,7 +455,7 @@ describe.only('inventory', _ => {
 
   });
 
-  it.skip('api/get-aggregated-inventory-details (Valid modification check, Warehouse)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid modification check, Warehouse)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -463,6 +465,8 @@ describe.only('inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('inventoryDetails').that.is.an('object');
+      expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
       expect(body).to.have.property('productList').that.is.an('array');
       expect(body).to.have.property('matchingProductList').that.is.an('array');
       expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
