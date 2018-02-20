@@ -21,17 +21,6 @@
 <dom-module id="product-category">
   <template>
     <style include="shared-styles">
-      .item-value {
-        font-size: 60px;
-      }
-
-      .title {
-        font-size: 18px;
-      }
-
-      .description {
-        font-size: 14px;
-      }
     </style>
 
     <div class$="layout vertical [[$hideIfBeingMoved(isBeingMoved)]]" id="wrapper" style$="margin-left: [[marginLeft]]px">
@@ -117,7 +106,6 @@
           if (!answer) return;
           this._deleteProductCategory(this.productCategory.id, () => {
             this.app.showModalDialog("Successfully deleted.", "The product category has been deleted", () => {
-              // this.app.navigateTo(`/manage-product-categories`);
               this.app.refreshCurrentPage();
             });
           });
@@ -171,7 +159,9 @@
       }
     </style>
 
-    <div class="std-page layout vertical" id="wrapper">
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
         <div class="std-list">
@@ -227,7 +217,9 @@
         this.app.currentPageIsModal = false;
         this.app.pushPageTitle('Manage Product Categories');
         if (!this._ensureAccess()) return;
-        this._processProductCategoryList(_ => { });
+        this._processProductCategoryList(() => { 
+          this.isReady = true;
+        });
       }
 
       onNavigateOut() {

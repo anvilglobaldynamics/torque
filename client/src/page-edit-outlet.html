@@ -28,7 +28,10 @@
       }
     </style>
 
-    <div class$="layout vertical std-page [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
       <iron-form id="editOutletForm">
         <form>
           <div class="card vertical layout">
@@ -44,10 +47,6 @@
           </div>
         </form>
       </iron-form>
-    </div>
-
-    <div class$="layout vertical std-page [[$if(isReady, 'hidden', '')]]" id="wrapper">
-      <div>Preparing data...</div>
     </div>
 
   </template>
@@ -92,11 +91,6 @@
         };
       }
 
-      $if(condition, thenValue, elseValue) {
-        if (condition) return thenValue;
-        return elseValue;
-      }
-
       // region: core =================================
 
       constructor() {
@@ -116,9 +110,13 @@
         }
         if (!this._ensureAccess()) return;
         if (this.editMode) {
-          this._processGetOutlet();
+          this._processGetOutlet(() => {
+            this.isReady = true;
+          });
         } else {
-          this.isReady = true;
+          this.delay(300, () => {
+            this.isReady = true;
+          });
         }
       }
 
@@ -138,7 +136,7 @@
 
       // region: editOutlet =================================
 
-      _processGetOutlet() {
+      _processGetOutlet(cbfn) {
         let outletId = parseInt(this.params.outlet);
         let data = {
           outletId
@@ -149,7 +147,7 @@
           this.editingOutlet = response.outlet;
           let { name, phone, contactPersonName, physicalAddress } = this.editingOutlet;
           this.editOutletForm = { name, phone, contactPersonName, physicalAddress };
-          this.isReady = true;
+          cbfn();
         });
       }
 

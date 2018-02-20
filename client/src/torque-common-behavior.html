@@ -12,9 +12,32 @@
         return {
           isReady: {
             type: Boolean,
-            value: false
+            value: false,
+            observer: 'isReadyChanged'
           }
         }
+      }
+
+      isReadyChanged() {
+        if (this.isReady) {
+          this.app.topSpinnerEnabled = true;
+        } else {
+          this.app.topSpinnerEnabled = false;
+        }
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.isReady = false;
+      }
+
+      $if(condition, thenValue, elseValue) {
+        if (condition) return thenValue;
+        return elseValue;
+      }
+
+      delay(ms, fn, ...args) {
+        window.setTimeout(fn, ms, ...args);
       }
 
       onApiError(error, form) {
@@ -33,7 +56,7 @@
             el.invalid = true;
             el.errorMessage = message;
           }
-          if (missingError){
+          if (missingError) {
             return this.app.showModalDialog("Sorry!", missingError.message);
           }
         } else {

@@ -7,6 +7,7 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
 
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
@@ -20,23 +21,8 @@
 
 <dom-module id="product-category">
   <template>
+
     <style include="shared-styles">
-      .item-value {
-        font-size: 60px;
-      }
-
-      .title {
-        font-size: 18px;
-      }
-
-      .description {
-        font-size: 14px;
-      }
-
-      .inp {
-        max-width: 100px;
-        margin-left: 12px;
-      }
     </style>
 
     <div class$="layout vertical" id="wrapper" style$="margin-left: [[marginLeft]]px">
@@ -45,13 +31,13 @@
           <div class="vertical layout flex">
             <div class="title">[[productCategory.name]]</div>
           </div>
-          <paper-input class="inp" value="{{count}}" type="number" min="0" label="Count">
+          <paper-input class="small-input" value="{{count}}" type="number" min="0" label="Count">
             <div slot="suffix">[[productCategory.unit]]</div>
           </paper-input>
-          <paper-input disabled="[[$isDisabled(count)]]" class="inp" value="{{salePrice}}" type="number" label="Purchased For">
+          <paper-input disabled="[[$isDisabled(count)]]" class="small-input" value="{{salePrice}}" type="number" label="Purchased For">
             <div slot="suffix">[[app.settings.monetaryUnit]]</div>
           </paper-input>
-          <paper-input disabled="[[$isDisabled(count)]]" class="inp" value="{{purchasePrice}}" type="number" label="Sell For">
+          <paper-input disabled="[[$isDisabled(count)]]" class="small-input" value="{{purchasePrice}}" type="number" label="Sell For">
             <div slot="suffix">[[app.settings.monetaryUnit]]</div>
           </paper-input>
         </div>
@@ -143,7 +129,9 @@
       }
     </style>
 
-    <div class="std-page layout vertical" id="wrapper">
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
         <div class="std-list">
@@ -195,7 +183,9 @@
           });
           return;
         }
-        this._processProductCategoryList(_ => { });
+        this._processProductCategoryList(_ => {
+          this.isReady = true;
+        });
       }
 
       onNavigateOut() {
@@ -213,7 +203,9 @@
 
       _fetchProductCategoryList(cbfn) {
         let data = { organizationId: this.app.organization.id };
+        this.isBusy = true;
         this.app.callGetProductCategoryListApi(data, (err, response) => {
+          this.isBusy = false;
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           return cbfn(response.productCategoryList);

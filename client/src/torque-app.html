@@ -29,6 +29,8 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-http-behavior.html">
 
+<link rel="import" href="elem-not-ready.html">
+
 <link rel="lazy-import" href="page-home.html">
 <link rel="lazy-import" href="page-settings.html">
 <link rel="lazy-import" href="page-error404.html">
@@ -139,7 +141,7 @@
               <div>[[$getPageTitle(pageTitleList.length)]]</div>
               <div class="subtitle">[[organization.name]]</div>
             </div>
-            <template is="dom-if" if="[[activeServiceCount]]">
+            <template is="dom-if" if="[[$and(activeServiceCount, topSpinnerEnabled)]]">
               <paper-spinner-lite active class="top-nav-spinner"></paper-spinner-lite>
             </template>
             <paper-menu-button horizontal-align="right">
@@ -147,10 +149,11 @@
               <paper-listbox slot="dropdown-content" selected="-1">
                 <!-- context-sensitive - start -->
                 <!-- context-sensitive - end -->
-                <paper-item on-tap="homeAndReloadTapped">Home and Reload</paper-item>
+                <paper-item on-tap="homeTapped">Home</paper-item>
                 <paper-item>POS List</paper-item>
                 <paper-item>Inventory List</paper-item>
                 <paper-item on-tap="switchOrganizationTapped">Switch Organization</paper-item>
+                <paper-item on-tap="reloadTapped">Reload</paper-item>
               </paper-listbox>
             </paper-menu-button>
             <template is="dom-if" if="[[shouldShowSaveButton]]">
@@ -221,6 +224,10 @@
           activeServiceCount: {
             type: Number,
             value: 0
+          },
+          topSpinnerEnabled: {
+            type: Boolean,
+            value: true
           }
         };
       }
@@ -357,8 +364,11 @@
 
       // ====================== shortcuts =============================
 
-      homeAndReloadTapped(e = null) {
+      homeTapped(e = null) {
         this.navigateTo('/home');
+      }
+
+      reloadTapped(e = null) {
         window.location.reload();
       }
 

@@ -8,11 +8,14 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
 <link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
 
-<link rel="import" href="shared-styles.html">
 <link rel="import" href="torque-swipe-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
 
 <dom-module id="page-about">
   <template>
+
     <style include="shared-styles">
       @media (min-width: 960px) {
         :host {
@@ -29,7 +32,9 @@
       }
     </style>
 
-    <div class="std-page layout vertical" id="wrapper">
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <paper-tabs id="main-view-selector" class="view-selector" selected="{{paperTabSelectedViewIndex}}" fit-container>
         <paper-tab>About</paper-tab>
@@ -38,7 +43,6 @@
       </paper-tabs>
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 0)]]">
-
         <div class="card">
           <div>This project is created and maintained by
             <a href="[[authorWebsite]]">[[authorName]]</a>
@@ -51,7 +55,8 @@
           </div>
           <br>
           <div>
-            <br>&copy; 2017. <a href="[[authorWebsite]]">[[authorName]]</a>.
+            <br>&copy; 2017.
+            <a href="[[authorWebsite]]">[[authorName]]</a>.
             <br> All rights reserved.
             <br>
           </div>
@@ -82,7 +87,7 @@
   </template>
 
   <script>
-    class PageAbout extends FxPage.mixin(TorqueSwipeBehavior, FxCommonBehavior) {
+    class PageAbout extends FxPage.mixin(TorqueCommonBehavior, TorqueSwipeBehavior, FxCommonBehavior) {
 
       static get is() {
         return 'page-about';
@@ -119,7 +124,10 @@
       }
 
       onNavigateIn() {
-        this._ensureAccess();
+        if (!this._ensureAccess()) return;
+        this.delay(300, () => {
+          this.isReady = true;
+        });
       }
 
       onNavigateOut() {
@@ -128,8 +136,10 @@
 
       _ensureAccess() {
         if (!this.app.user) {
-          this.app.navigateTo('/login')
+          this.app.navigateTo('/login');
+          return false;
         }
+        return true;
       }
 
       // region: misc =================================      
@@ -145,6 +155,7 @@
           }
         }
       }
+
     }
 
     window.customElements.define(PageAbout.is, PageAbout);
