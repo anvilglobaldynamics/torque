@@ -1,0 +1,285 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-view-inventory">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding: 24px;
+        }
+      }
+
+      pre {
+        font-family: Arial, Helvetica, sans-serif !important;
+      }
+
+      .item-value {
+        font-size: 60px;
+      }
+
+      .title {
+        font-size: 18px;
+      }
+
+      .description {
+        font-size: 14px;
+      }
+
+      .inp {
+        max-width: 160px;
+        margin-left: 12px;
+      }
+    </style>
+
+    <div class="std-page layout vertical" id="wrapper">
+      <!-- 
+      <div class="card vertical layout">
+        <div>[[inventory.name]]</div>
+        <div>[[inventory.physicalAddress]]</div>
+        <div>Contact Person: [[inventory.contactPersonName]]</div>
+        <div>Contact Number: [[inventory.phone]]</div>
+      </div>
+
+      <div class="card">
+        <div class="mb-4">Go to POS (Point of Sale) to start selling from this organization.</div>
+        <paper-button raised class="primary m-0" on-tap="posTapped">Go to POS</paper-button>
+      </div>
+
+      <div class="card vertical layout">
+        <div class="mb-4">This inventory has the following inventories.</div>
+        <div class="std-list">
+          <div class="horizontal layout std-list-item center">
+            <div class="vertical layout flex">
+              <div class="title">[[defaultInventory.name]] Inventory</div>
+              <div class="description">This is the main inventory.</div>
+            </div>
+            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="defaultInventory">View</paper-button>
+          </div>
+          <div class="horizontal layout std-list-item center">
+            <div class="vertical layout flex">
+              <div class="title">[[returnedInventory.name]] Inventory</div>
+              <div class="description">Products that are returned by the customer go in here.</div>
+            </div>
+            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="returnedInventory">View</paper-button>
+          </div>
+          <div class="horizontal layout std-list-item center">
+            <div class="vertical layout flex">
+              <div class="title">[[damagedInventory.name]] Inventory</div>
+              <div class="description">Damaged products are kept here.</div>
+            </div>
+            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="damagedInventory">View</paper-button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="mb-4">Click here to edit the inventory.</div>
+        <paper-button raised class="primary m-0" on-tap="editTapped">Edit Inventory</paper-button>
+      </div> -->
+
+      <div class="card vertical layout">
+        <div class="std-list">
+          <template is="dom-repeat" items="[[productList]]" as="product">
+            <div class="horizontal layout std-list-item center">
+              <div class="vertical layout flex">
+                <div class="title">[[product.name]]
+                  <strong>[[product.count]][[product.unit]]</strong>
+                </div>
+                <div class="description">Purchase: [[product.purchasePrice]][[app.settings.monetaryUnit]], Sale: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+              </div>
+              <template is="dom-if" if="[[!product.isSelected]]">
+                <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
+              </template>
+              <template is="dom-if" if="[[product.isSelected]]">
+                <paper-input class="inp" value="{{product.selectedCount}}" type="number" min="0" label="Count">
+                  <div slot="prefix">Selected&nbsp;</div>
+                  <div slot="suffix">&nbsp;[[product.unit]]</div>
+                </paper-input>
+                <paper-button raised class="primary" on-tap="deselectTapped">Deselect</paper-button>
+              </template>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <template is="dom-if" if="[[selectedProductCount]]">
+        <div class="card">
+          <div class="mb-4">You have selected [[selectedProductCount]] products.</div>
+          <paper-button raised class="primary m-0" on-tap="moveSelectedTapped">Move Selected</paper-button>
+        </div>
+      </template>
+
+
+      <div class="card">
+        <div class="mb-4">Add products to this inventory in batch.</div>
+        <paper-button raised class="primary m-0" on-tap="addProductsTapped">Add Products</paper-button>
+      </div>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageViewInventory extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+
+      static get is() {
+        return 'page-view-inventory';
+      }
+
+      static get properties() {
+        return {
+          selectedProductCount: {
+            type: Number,
+            value: 0
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Inventory');
+        if (!this._ensureAccess()) return;
+        if (!('inventory' in this.params)) {
+          let message = "This page cannot be displayed at this moment. Please try again."
+          this.app.showModalDialog("Something went wrong!", message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processInventory(_ => { });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      _fetchInventory(cbfn) {
+        let inventoryId = parseInt(this.params.inventory);
+        this.inventoryId = inventoryId;
+        let data = { inventoryId };
+        this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _processInventory(cbfn) {
+        this._fetchInventory(({ productList, matchingProductList, matchingProductCategoryList }) => {
+          let productMap = {};
+          matchingProductList.forEach(product => productMap[String(product.id)] = product);
+          let productCategoryMap = {};
+          matchingProductCategoryList.forEach(productCategory => productCategoryMap[String(productCategory.id)] = productCategory);
+          productList.forEach(product => {
+            let { productCategoryId, purchasePrice, salePrice } = productMap[String(product.productId)];
+            let { name, unit } = productCategoryMap[String(productCategoryId)];
+            product.isSelected = false;
+            Object.assign(product, { name, unit, purchasePrice, salePrice });
+          })
+          productList.sort((a, b) => b.count - a.count);
+          this.productList = productList;
+        });
+
+      }
+
+      _fetchInventoryList(cbfn) {
+        // TODO
+        // let data = { organizationId: this.app.organization.id };
+        // this.app.callGetOutletListApi(data, (err, response) => {
+        //   if (err) return;
+        //   if (response.hasError) return this.onApiError(response.error);
+        //   return cbfn(response.outletList);
+        // });
+      }
+
+
+      // region: ui  ===========================
+
+      selectTapped(e) {
+        this.selectedProductCount += 1;
+        let { product } = e.model;
+        e.model.set('product.selectedCount', product.count);
+        e.model.set('product.isSelected', true);
+      }
+
+      deselectTapped(e) {
+        this.selectedProductCount -= 1;
+        let { product } = e.model;
+        e.model.set('product.isSelected', false);
+      }
+
+      moveSelectedTapped(e = null){
+        this._fetchOutletList(outletList => {
+          console.log(outletList)
+        });
+      }
+
+      // editTapped(e = null) {
+      //   return this.app.navigateTo(`/edit-inventory/inventory:${this.inventory.id}`);
+      // }
+
+      // deleteTapped(e = null) {
+      //   let message = `Are you sure you want to delete this inventory ${this.inventory.name}. Once deleted, you can not restore this inventory.`;
+      //   this.app.showModalConfirmation("Delete inventory?", message, (answer) => {
+      //     if (!answer) return;
+      //     this._deleteInventory(this.inventory.id, () => {
+      //       this.app.showModalDialog("Successfully deleted.", "The inventory has been deleted", () => {
+      //         this.app.navigateTo(`/manage-inventories`);
+      //       });
+      //     });
+      //   });
+      // }
+
+      // viewInventoryTapped(e = null) {
+      //   let el = e.target;
+      //   let key = el.getAttribute('data-key');
+      //   return this.app.navigateTo(`/view-inventory/inventory:${this[key].id}`);
+      // }
+
+      addProductsTapped(e) {
+        return this.app.navigateTo(`/add-products/inventory:${this.inventoryId}`);
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageViewInventory.is, PageViewInventory);
+  </script>
+</dom-module>
