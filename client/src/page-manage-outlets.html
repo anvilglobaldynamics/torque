@@ -123,6 +123,7 @@
       _processOutletList(cbfn) {
         this._fetchOutletList(newOutletList => {
           this.outletList = newOutletList;
+          cbfn();
         });
       }
 

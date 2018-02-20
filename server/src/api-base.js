@@ -6,6 +6,8 @@ const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 const baselib = require('baselib');
 
+const SESSION_DURATION_LIMIT = 15 * 24 * 60 * 60 * 1000;
+
 class Api {
 
   static addKnownErrorCode(code) {
@@ -47,7 +49,11 @@ class Api {
         message: data
       };
       reponse = JSON.stringify(reponse);
-      this._socket.send(reponse);
+      try {
+        this._socket.send(reponse);
+      } catch (ex) {
+        this.logger.error(ex);
+      }
     } else {
       this._response.send(data);
     }
@@ -156,8 +162,12 @@ class Api {
     delete body['apiKey'];
     this.database.session.findByApiKey({ apiKey }, (err, session) => {
       if (err) return this.fail(err);
-      if (!session) return this.fail(new Error("Invalid apiKey Provided!"));
-      let hasExpired = session.hasExpired || (((new Date).getTime() - session.createdDatetimeStamp) > 24 * 60 * 60 * 1000);
+      if (!session) {
+        err = new Error("Invalid apiKey Provided!");
+        err.code = "APIKEY_INVALID";
+        return this.fail(err);
+      }
+      let hasExpired = session.hasExpired || (((new Date).getTime() - session.createdDatetimeStamp) > SESSION_DURATION_LIMIT);
       if (hasExpired) {
         err = new Error("Invalid apiKey Provided!");
         err.code = "APIKEY_EXPIRED";

@@ -1,0 +1,271 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="product-category">
+  <template>
+    <style include="shared-styles">
+      .item-value {
+        font-size: 60px;
+      }
+
+      .title {
+        font-size: 18px;
+      }
+
+      .description {
+        font-size: 14px;
+      }
+
+      .inp {
+        max-width: 100px;
+        margin-left: 12px;
+      }
+    </style>
+
+    <div class$="layout vertical" id="wrapper" style$="margin-left: [[marginLeft]]px">
+      <div class="vertical layout">
+        <div class="horizontal layout std-list-item center">
+          <div class="vertical layout flex">
+            <div class="title">[[productCategory.name]]</div>
+          </div>
+          <paper-input class="inp" value="{{count}}" type="number" min="0" label="Count">
+            <div slot="suffix">[[productCategory.unit]]</div>
+          </paper-input>
+          <paper-input disabled="[[$isDisabled(count)]]" class="inp" value="{{salePrice}}" type="number" label="Purchased For">
+            <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+          </paper-input>
+          <paper-input disabled="[[$isDisabled(count)]]" class="inp" value="{{purchasePrice}}" type="number" label="Sell For">
+            <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+          </paper-input>
+        </div>
+        <template is="dom-repeat" items="[[productCategory.childList]]" as="childProductCategory">
+          <product-category product-category="[[childProductCategory]]" margin-left="[[$marginMore(marginLeft)]]" app="[[app]]"></product-category>
+        </template>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+    class ProductCategory extends FxElement {
+
+      static get is() {
+        return 'product-category';
+      }
+
+      static get properties() {
+        return {
+          productCategory: {
+            type: Object,
+            value: null,
+            observer: 'productCategoryChanged'
+          },
+          count: {
+            type: Number,
+            value: 0
+          },
+          salePrice: {
+            type: Number,
+            value: 0
+          },
+          purchasePrice: {
+            type: Number,
+            value: 0
+          }
+        };
+      }
+
+      productCategoryChanged() {
+        this.salePrice = this.productCategory.defaultSalePrice;
+        this.purchasePrice = this.productCategory.defaultPurchasePrice;
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+      }
+      // region: ui  ===========================
+
+      $isDisabled(count) {
+        return count <= 0;
+      }
+
+      $marginMore(marginLeft) {
+        return marginLeft + 12;
+      }
+
+      listProductsToAdd(productList) {
+        if (this.count > 0) {
+          productList.push({
+            productCategoryId: this.productCategory.id,
+            purchasePrice: parseInt(this.purchasePrice),
+            salePrice: parseInt(this.salePrice),
+            count: parseInt(this.count)
+          });
+        }
+        this.elemAll('product-category').forEach(el => el.listProductsToAdd(productList));
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(ProductCategory.is, ProductCategory);
+  </script>
+</dom-module>
+
+<dom-module id="page-add-products">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding: 24px;
+        }
+      }
+    </style>
+
+    <div class="std-page layout vertical" id="wrapper">
+
+      <div class="card vertical layout">
+        <div class="std-list">
+          <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
+            <product-category product-category="[[productCategory]]" margin-left="[[marginLeft]]" app="[[app]]"></product-category>
+          </template>
+        </div>
+      </div>
+      <div class="transparent-card align-right">
+        <paper-button raised class="primary m-0" on-tap="addProductsTapped">Add Products</paper-button>
+      </div>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageAddProducts extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+
+      static get is() {
+        return 'page-add-products';
+      }
+
+      static get properties() {
+        return {
+          marginLeft: {
+            type: Number,
+            value: 0
+          },
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Add Products');
+        if (!this._ensureAccess()) return;
+        if (!('inventory' in this.params)) {
+          let message = "This page cannot be displayed at this moment. Please try again."
+          this.app.showModalDialog("Something went wrong!", message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processProductCategoryList(_ => { });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      _fetchProductCategoryList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetProductCategoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.productCategoryList);
+        });
+      }
+
+      __listChildren(fullList, parentProductCategory) {
+        parentProductCategory.childList = fullList.filter(productCategory => productCategory.parentProductCategoryId === parentProductCategory.id);
+        parentProductCategory.childList.forEach(productCategory => this.__listChildren(fullList, productCategory));
+      }
+
+      _processProductCategoryList(cbfn) {
+        this._fetchProductCategoryList(rawProductCategoryList => {
+          this.rawProductCategoryList = rawProductCategoryList;
+          let productCategoryList = rawProductCategoryList.filter(productCategory => productCategory.parentProductCategoryId === null);
+          productCategoryList.forEach(productCategory => this.__listChildren(rawProductCategoryList, productCategory));
+          this.productCategoryList = productCategoryList;
+          return cbfn();
+        });
+      }
+
+      _addProductsToInventory({ productList, inventoryId }, cbfn) {
+        let data = { productList, inventoryId };
+        this.app.callAddProductToInventoryApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn();
+        });
+      }
+
+      // region: ui  ===========================
+
+      addProductsTapped(e = null) {
+        let productList = [];
+        this.elemAll('product-category').forEach(el => el.listProductsToAdd(productList));
+        let inventoryId = parseInt(this.params.inventory);
+        this._addProductsToInventory({ productList, inventoryId }, () => {
+          let message = "The products were successfully added to the inventory."
+          this.app.showModalDialog("Products Added", message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl(`/view-inventory/inventory:${this.params.inventory}`);
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageAddProducts.is, PageAddProducts);
+  </script>
+</dom-module>

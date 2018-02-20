@@ -17,6 +17,7 @@
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
 
 <link rel="import" href="../bower_components/atomicdb/atomicdb.html">
 
@@ -39,6 +40,10 @@
 <link rel="lazy-import" href="page-manage-outlets.html">
 <link rel="lazy-import" href="page-edit-outlet.html">
 <link rel="lazy-import" href="page-view-outlet.html">
+<link rel="lazy-import" href="page-manage-product-categories.html">
+<link rel="lazy-import" href="page-edit-product-category.html">
+<link rel="lazy-import" href="page-view-inventory.html">
+<link rel="lazy-import" href="page-add-products.html">
 
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
@@ -112,6 +117,7 @@
         <iron-selector selected="[[pageName]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="home" href="#/home">Home</a>
           <a name="manage-outlets" href="#/manage-outlets">Outlets</a>
+          <a name="manage-outlets" href="#/manage-product-categories">Product Categories</a>
           <a name="settings" href="#/settings">Settings</a>
           <a name="about" href="#/about">About</a>
         </iron-selector>
@@ -133,11 +139,15 @@
               <div>[[$getPageTitle(pageTitleList.length)]]</div>
               <div class="subtitle">[[organization.name]]</div>
             </div>
+            <template is="dom-if" if="[[activeServiceCount]]">
+              <paper-spinner-lite active class="top-nav-spinner"></paper-spinner-lite>
+            </template>
             <paper-menu-button horizontal-align="right">
               <paper-icon-button icon="icons:apps" slot="dropdown-trigger"></paper-icon-button>
               <paper-listbox slot="dropdown-content" selected="-1">
                 <!-- context-sensitive - start -->
                 <!-- context-sensitive - end -->
+                <paper-item on-tap="homeAndReloadTapped">Home and Reload</paper-item>
                 <paper-item>POS List</paper-item>
                 <paper-item>Inventory List</paper-item>
                 <paper-item on-tap="switchOrganizationTapped">Switch Organization</paper-item>
@@ -145,9 +155,6 @@
             </paper-menu-button>
             <template is="dom-if" if="[[shouldShowSaveButton]]">
               <paper-icon-button icon="save" on-click="saveButtonOnTopBarPressed"></paper-icon-button>
-            </template>
-            <template is="dom-if" if="[[activeServiceCount]]">
-              <paper-icon-button icon="swap-vert"></paper-icon-button>
             </template>
           </app-toolbar>
         </app-header>
@@ -164,6 +171,10 @@
           <page-manage-outlets name="manage-outlets"></page-manage-outlets>
           <page-edit-outlet name="edit-outlet"></page-edit-outlet>
           <page-view-outlet name="view-outlet"></page-view-outlet>
+          <page-manage-product-categories name="manage-product-categories"></page-manage-product-categories>
+          <page-edit-product-category name="edit-product-category"></page-edit-product-category>
+          <page-view-inventory name="view-inventory"></page-view-inventory>
+          <page-add-products name="add-products"></page-add-products>
         </iron-pages>
 
         <div class="footer">
@@ -295,7 +306,16 @@
       mainIronPagesIronSelected(e, details) {
         if (e.target.nodeName !== 'IRON-PAGES') return;
         if (!details.item) return;
+        this._lastPageElementOpened = details.item;
         this._notifyPageSelect(details.item);
+      }
+
+      refreshCurrentPage() {
+        // this._notifyPageSelect(this._lastPageElementOpened);
+        // FIXME: This is a quick hack to make reload work.
+        // However, it needs to be altered so that page can reload
+        // without reloading whole window.
+        window.location.reload();
       }
 
       // ======================  events =============================
@@ -337,7 +357,12 @@
 
       // ====================== shortcuts =============================
 
-      switchOrganizationTapped() {
+      homeAndReloadTapped(e = null) {
+        this.navigateTo('/home');
+        window.location.reload();
+      }
+
+      switchOrganizationTapped(e = null) {
         this.navigateTo('/select-organization')
       }
 

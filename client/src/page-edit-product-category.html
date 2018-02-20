@@ -1,0 +1,282 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-product-category">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding-top: 24px;
+        }
+      }
+    </style>
+
+    <div class$="layout vertical std-page [[$if(isReady, '', 'hidden')]]" id="wrapper">
+      <iron-form id="editProductCategoryForm">
+        <form>
+          <template is="dom-if" if="[[parentProductCategory]]">
+            <div class="card vertical layout">
+              The Product Category will be available under category "[[parentProductCategory.name]]"
+            </div>
+          </template>
+
+          <div class="card vertical layout">
+            <paper-input class="editProductCategoryForm--name" value="{{editProductCategoryForm.name}}" required minlength="3" error-message="Please enter a valid name" label="Name of your Product Category."></paper-input>
+            <paper-input class="editProductCategoryForm--unit" value="{{editProductCategoryForm.unit}}" required minlength="3" error-message="Please enter a valid name" label="Specify unit (i.e. kg, pcs etc)"></paper-input>
+
+            <paper-input class="editProductCategoryForm--defaultPurchasePrice" value="{{editProductCategoryForm.defaultPurchasePrice}}" type="number" required min="0" error-message="Please enter a valid number" label="Default Purchase Price (the usual price you pay to buy this item)">
+              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+            </paper-input>
+            <paper-input class="editProductCategoryForm--defaultVat" value="{{editProductCategoryForm.defaultVat}}" type="number" required min="0" error-message="Please enter a valid number" label="Default VAT (the usual VAT/Tax percentage you have to pay)">
+              <div slot="suffix">%</div>
+            </paper-input>
+            <paper-input class="editProductCategoryForm--defaultSalePrice" value="{{editProductCategoryForm.defaultSalePrice}}" type="number" required min="0" error-message="Please enter a valid number" label="Default Sale Price (the amount you want to sell the item for)">
+              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+            </paper-input>
+            <paper-checkbox checked="{{editProductCategoryForm.isReturnable}}">Can customer return this product (i.e. if damanged)</paper-checkbox>
+
+            <div class="horizontal layout">
+              <paper-dropdown-menu label="Default Discount Type" class="mr-4">
+                <paper-listbox slot="dropdown-content" selected="{{editProductCategoryForm.defaultDiscountType}}" attr-for-selected="name">
+                  <paper-item name="percent">Percentage</paper-item>
+                  <paper-item name="fixed">Fixed Value</paper-item>
+                </paper-listbox>
+              </paper-dropdown-menu>
+              <paper-input class="editProductCategoryForm--defaultDiscountValue flex" value="{{editProductCategoryForm.defaultDiscountValue}}" type="number" required min="0" error-message="Please enter a valid number" label="Default Discount Value">
+                <template is="dom-if" if="[[$equals(editProductCategoryForm.defaultDiscountType, 'percent')]]">
+                  <div slot="suffix">%</div>
+                </template>
+                <template is="dom-if" if="[[$equals(editProductCategoryForm.defaultDiscountType, 'fixed')]]">
+                  <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                </template>
+              </paper-input>
+            </div>
+
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]]" on-tap="createProductCategoryTapped">Create Product Category</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]]" on-tap="updateProductCategoryTapped">Update Product Category</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+    </div>
+
+    <div class$="layout vertical std-page [[$if(isReady, 'hidden', '')]]" id="wrapper">
+      <div>Preparing data...</div>
+    </div>
+
+  </template>
+
+  <script>
+    class PageEditProductCategory extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+
+      static get is() {
+        return 'page-edit-product-category';
+      }
+
+      static get properties() {
+        return {
+          editMode: {
+            type: Boolean,
+            value: false
+          },
+          editingProductCategory: {
+            type: Object,
+            value: null
+          },
+          editProductCategoryForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  parentProductCategoryId: null,
+                  name: "Bottoms",
+                  unit: "pcs",
+                  defaultDiscountType: "percent",
+                  defaultDiscountValue: 5,
+                  defaultPurchasePrice: 400,
+                  defaultVat: 15,
+                  defaultSalePrice: 500,
+                  isReturnable: true
+                };
+              } else {
+                return {
+                  parentProductCategoryId: null,
+                  name: "",
+                  unit: "",
+                  defaultDiscountType: "percent",
+                  defaultDiscountValue: 0,
+                  defaultPurchasePrice: 0,
+                  defaultVat: 15,
+                  defaultSalePrice: 0,
+                  isReturnable: false
+                };
+              }
+            }
+          }
+        };
+      }
+
+      $if(condition, thenValue, elseValue) {
+        if (condition) return thenValue;
+        return elseValue;
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        if ('product-category' in this.params) {
+          this.editMode = true;
+          this.app.pushPageTitle('Edit Product Category');
+        } else {
+          this.editMode = false;
+          this.app.pushPageTitle('Add Product Category');
+        }
+        if (!this._ensureAccess()) return;
+        this._processGetProductCategoryList(() => {
+          this._processParentProductCategory();
+          if (this.editMode) {
+            this._processGetProductCategory();
+          }
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editProductCategoryForm');
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      // region: editProductCategory =================================
+
+      _processGetProductCategoryList(cbfn) {
+        let data = {
+          organizationId: this.app.organization.id
+        };
+        this.app.callGetProductCategoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this._productCategoryList = response.productCategoryList;
+          cbfn();
+        });
+      }
+
+      _processParentProductCategory() {
+        if ('parent' in this.params) {
+          this.parentProductCategory = this._productCategoryList.find(productCategory => {
+            return productCategory.id === parseInt(this.params.parent);
+          });
+        }
+      }
+
+      _processGetProductCategory() {
+        let productCategory = this._productCategoryList.find(productCategory => {
+          return productCategory.id === parseInt(this.params['product-category']);
+        });
+        this.editingProductCategory = productCategory;
+        let { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productCategory;
+        this.editProductCategoryForm = { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
+      }
+
+      _processCreateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+        let data = {
+          name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
+          organizationId: this.app.organization.id,
+          parentProductCategoryId
+        };
+        if (this.parentProductCategory) {
+          data.parentProductCategoryId = this.parentProductCategory.id;
+        }
+        this.app.callAddProductCategoryApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
+          let message = "Congratulations. Your new product Category has been created."
+          this.app.showModalDialog("Product Category Created", message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      _processUpdateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+        let data = {
+          name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
+          productCategoryId: this.editingProductCategory.id
+        };
+        data.parentProductCategoryId = this.editingProductCategory.parentProductCategoryId;
+        this.app.callEditProductCategoryApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
+          let message = "Congratulations. Your product Category has been updated."
+          this.app.showModalDialog("Product Category Updated", message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-product-categorys');
+      }
+
+      createProductCategoryTapped(e = null) {
+        this.elemAll('#editProductCategoryForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editProductCategoryForm').validate()) return;
+
+        let { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
+        this._processCreateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+      }
+
+      updateProductCategoryTapped(e = null) {
+        this.elemAll('#editProductCategoryForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editProductCategoryForm').validate()) return;
+
+        let { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
+        this._processUpdateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageEditProductCategory.is, PageEditProductCategory);
+  </script>
+</dom-module>

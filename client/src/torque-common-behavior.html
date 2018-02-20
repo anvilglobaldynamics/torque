@@ -19,15 +19,22 @@
 
       onApiError(error, form) {
         if ((error.code === "VALIDATION_ERROR") && form) {
+          let missingError = null;
           let { details: errorList } = error;
           for (let error of errorList) {
             let { path, message } = error;
             let key = `.${form}--${path}`;
             let el = this.elem(key);
-            if (!el) continue;
+            if (!el) {
+              missingError = error;
+              continue;
+            }
             el.autoValidate = true;
             el.invalid = true;
             el.errorMessage = message;
+          }
+          if (missingError){
+            return this.app.showModalDialog("Sorry!", missingError.message);
           }
         } else {
           return this.app.showModalDialog("Sorry!", error.message);

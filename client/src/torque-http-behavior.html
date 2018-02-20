@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-http-behavior.html">
 <script src="websocket-request-service.js"></script>
+
 <script>
 
   (_ => {
@@ -39,7 +40,22 @@
           return service;
         }
 
-        callCombinedJsonApi(path, data, cbfn) {
+        callCombinedJsonApi(path, data, _cbfn) {
+          let cbfn = (err, response) => {
+            if (err) return _cbfn(err);
+            response = TorqueUtils.desanitize(response);
+            if (response.hasError && (response.error.code === "APIKEY_EXPIRED" || response.error.code === "APIKEY_INVALID")) {
+              if (path === 'user-logout') {
+                return _cbfn(null, { hasError: false });
+              }
+              let message = "Your session has expired. You will be automatically logged out. Please log in again.";
+              this.showModalDialog("Sorry!", message, _ => {
+                this.logoutTapped();
+              });
+              return;
+            }
+            return _cbfn(null, response);
+          }
           let now = (new Date).getTime();
           if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
             this.callJsonPostApi(path, data, cbfn);
@@ -62,7 +78,7 @@
             data.apiKey = this.user.apiKey;
             return true;
           } else {
-            this.showAlertMessage("No Api Key");
+            this.showAlertMessage("No Api Key. Please restart the app and log in again.");
             return false;
           }
         }
@@ -115,6 +131,41 @@
         callEditOutletApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('edit-outlet', data, cbfn);
+        }
+
+        callDeleteOutletApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('delete-outlet', data, cbfn);
+        }
+
+        callGetProductCategoryListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-product-category-list', data, cbfn);
+        }
+
+        callAddProductCategoryApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('add-product-category', data, cbfn);
+        }
+
+        callEditProductCategoryApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('edit-product-category', data, cbfn);
+        }
+
+        callDeleteProductCategoryApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('delete-product-category', data, cbfn);
+        }
+
+        callGetAggregatedInventoryDetailsApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-aggregated-inventory-details', data, cbfn);
+        }
+
+        callAddProductToInventoryApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('add-product-to-inventory', data, cbfn);
         }
 
       }
