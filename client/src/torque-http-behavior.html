@@ -158,6 +158,16 @@
           this.callCombinedJsonApi('delete-product-category', data, cbfn);
         }
 
+        callGetAggregatedInventoryDetailsApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-aggregated-inventory-details', data, cbfn);
+        }
+
+        callAddProductToInventoryApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('add-product-to-inventory', data, cbfn);
+        }
+
       }
     }
   })();
