@@ -17,6 +17,7 @@
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
 
 <link rel="import" href="../bower_components/atomicdb/atomicdb.html">
 
@@ -138,6 +139,9 @@
               <div>[[$getPageTitle(pageTitleList.length)]]</div>
               <div class="subtitle">[[organization.name]]</div>
             </div>
+            <template is="dom-if" if="[[activeServiceCount]]">
+              <paper-spinner-lite active class="top-nav-spinner"></paper-spinner-lite>
+            </template>
             <paper-menu-button horizontal-align="right">
               <paper-icon-button icon="icons:apps" slot="dropdown-trigger"></paper-icon-button>
               <paper-listbox slot="dropdown-content" selected="-1">
@@ -151,9 +155,6 @@
             </paper-menu-button>
             <template is="dom-if" if="[[shouldShowSaveButton]]">
               <paper-icon-button icon="save" on-click="saveButtonOnTopBarPressed"></paper-icon-button>
-            </template>
-            <template is="dom-if" if="[[activeServiceCount]]">
-              <paper-icon-button icon="swap-vert"></paper-icon-button>
             </template>
           </app-toolbar>
         </app-header>
