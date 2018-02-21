@@ -35,10 +35,10 @@ describe('Security', _ => {
   it('START', testDoneFn => {
     initializeServer(_ => {
       registerUser({
-        email, password, fullName, phone
+        password, fullName, phone
       }, _ => {
         loginUser({
-          emailOrPhone: email, password
+          emailOrPhone: phone, password
         }, (data) => {
           apiKey = data.apiKey;
           addOrganization({

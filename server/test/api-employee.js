@@ -7,7 +7,9 @@ let {
   initializeServer,
   terminateServer,
   registerUser,
+  editUser,
   loginUser,
+  loginOut,
   addOrganization,
   validateUserSchema,
   validateEmploymentSchema
@@ -54,10 +56,10 @@ describe('employee', _ => {
   it('START', testDoneFn => {
     initializeServer(_ => {
       registerUser({
-        email, password, fullName, phone
+        password, fullName, phone
       }, _ => {
         loginUser({
-          emailOrPhone: email, password
+          emailOrPhone: phone, password
         }, (data) => {
           apiKey = data.apiKey;
           addOrganization({
@@ -69,13 +71,41 @@ describe('employee', _ => {
           }, (data) => {
             organizationId = data.organizationId;
             registerUser({
-              email: firstEmpEmail,
               password: firstEmpPassword,
               fullName: firstEmpFullName,
               phone: firstEmpPhone
             }, (data) => {
               employeeId = data.userId;
-              testDoneFn();
+              loginOut({
+                apiKey
+              }, (data) => {
+                loginUser({
+                  emailOrPhone: firstEmpPhone, password: firstEmpPassword
+                }, (data) => {
+                  apiKey = data.apiKey;
+                  editUser({
+                    apiKey,
+                    fullName: firstEmpFullName,
+                    email: firstEmpEmail,
+                    phone: firstEmpPhone,
+                    nid: '',
+                    physicalAddress: '',
+                    emergencyContact: '',
+                    bloodGroup: ''
+                  }, (data) => {
+                    loginOut({
+                      apiKey
+                    }, (data) => {
+                      loginUser({
+                        emailOrPhone: phone, password
+                      }, (data) => {
+                        apiKey = data.apiKey;
+                        testDoneFn();
+                      });
+                    });
+                  });
+                });
+              });
             });
           });
         });
@@ -414,7 +444,6 @@ describe('employee', _ => {
       json: {
         apiKey,
 
-        email: secondEmpEmail,
         fullName: secondEmpFullName,
         phone: secondEmpPhone,
         password: secondEmpPassword,
@@ -475,77 +504,12 @@ describe('employee', _ => {
 
   });
 
-  it('api/add-new-employee (Copy email)', testDoneFn => {
-
-    callApi('api/add-new-employee', {
-      json: {
-        apiKey,
-
-        email: firstEmpEmail,
-        fullName: thirdEmpFullName,
-        phone: thirdEmpPhone,
-        password: thirdEmpPassword,
-
-        organizationId,
-        role: "Joi.string().max(1024).required()",
-        designation: "Joi.string().max(1024).required()",
-        companyProvidedId: "abc123",
-
-        privileges: {
-          PRIV_VIEW_USERS: true,
-          PRIV_MODIFY_USERS: true,
-          PRIV_ADD_USER: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
-
-          PRIV_ACCESS_POS: true,
-          PRIV_VIEW_SALES: true,
-          PRIV_MODIFY_SALES: true,
-          PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
-          PRIV_ALLOW_FOC: true,
-
-          PRIV_VIEW_SALES_RETURN: true,
-          PRIV_MODIFY_SALES_RETURN: true,
-
-          PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_INVENTORIES: true,
-          PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
-
-          PRIV_VIEW_ALL_OUTLETS: true,
-          PRIV_MODIFY_ALL_OUTLETS: true,
-
-          PRIV_VIEW_ALL_WAREHOUSES: true,
-          PRIV_MODIFY_ALL_WAREHOUSES: true,
-
-          PRIV_VIEW_ORGANIZATION_STATISTICS: true,
-          PRIV_MODIFY_ORGANIZATION: true,
-
-          PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
-          PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_DEBT: true
-        }
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('EMAIL_ALREADY_IN_USE');
-
-      testDoneFn();
-    })
-
-  });
-
   it('api/add-new-employee (Copy phone)', testDoneFn => {
 
     callApi('api/add-new-employee', {
       json: {
         apiKey,
 
-        email: thirdEmpEmail,
         fullName: thirdEmpFullName,
         phone: secondEmpPhone,
         password: thirdEmpPassword,
@@ -609,7 +573,6 @@ describe('employee', _ => {
       json: {
         apiKey,
 
-        email: thirdEmpEmail,
         fullName: thirdEmpFullName,
         phone: thirdEmpPhone,
         password: thirdEmpPassword,

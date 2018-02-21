@@ -8,7 +8,6 @@ method: `POST`
 ### request: 
 ```js
 {
-  email: Joi.string().email().min(3).max(30).required(),
   fullName: Joi.string().min(1).max(64).required(),
   phone: Joi.string().alphanum().min(11).max(14).required(),
   password: Joi.string().min(8).max(30).required()
@@ -29,7 +28,6 @@ method: `POST`
 Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
-{ code: EMAIL_ALREADY_IN_USE } // the email id is already associated with an user
 { code: PHONE_ALREADY_IN_USE } // the phone number is already associated
 ```
 
