@@ -49,10 +49,9 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     });
   }
 
-  _createUser({ email, fullName, phone, password }, cbfn) {
+  _createUser({ fullName, phone, password }, cbfn) {
     let passwordHash = this._makeHash(password);
     let user = {
-      email,
       fullName,
       phone,
       passwordHash

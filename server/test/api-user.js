@@ -22,9 +22,9 @@ const changedPhone = '9' + rnd(prefix, 11);
 
 let apiKey = null;
 
-describe('user apis (1)', _ => {
+describe.only('user apis (1)', _ => {
 
-  it('START', testDoneFn => {
+  it.only('START', testDoneFn => {
     initializeServer(_ => {
       testDoneFn();
     });
@@ -32,11 +32,10 @@ describe('user apis (1)', _ => {
 
   // ================================================== Register
 
-  it('api/user-register (Valid, Unique)', testDoneFn => {
+  it.only('api/user-register (Valid, Unique)', testDoneFn => {
 
     callApi('api/user-register', {
       json: {
-        email,
         password,
         phone,
         fullName
@@ -51,31 +50,10 @@ describe('user apis (1)', _ => {
 
   });
 
-  it('api/user-register (Valid, Not Unique email)', testDoneFn => {
-
-    callApi('api/user-register', {
-      json: {
-        email,
-        password,
-        phone: changedPhone,
-        fullName
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('EMAIL_ALREADY_IN_USE');
-
-      testDoneFn();
-    })
-
-  });
-
   it('api/user-register (Valid, Not Unique phone)', testDoneFn => {
 
     callApi('api/user-register', {
       json: {
-        email: changedEmail,
         password,
         phone,
         fullName
@@ -91,31 +69,10 @@ describe('user apis (1)', _ => {
 
   });
 
-  it('api/user-register (Invalid Email)', testDoneFn => {
-
-    callApi('api/user-register', {
-      json: {
-        email: (email + '%'),
-        password,
-        phone,
-        fullName
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('VALIDATION_ERROR');
-
-      testDoneFn();
-    })
-
-  });
-
   it('api/user-register (Invalid Password)', testDoneFn => {
 
     callApi('api/user-register', {
       json: {
-        email,
         password: 'short',
         phone,
         fullName
@@ -133,14 +90,15 @@ describe('user apis (1)', _ => {
 
   // ================================================== Login
 
-  it('api/user-login (Correct, Using Email)', testDoneFn => {
+  it('api/user-login (Correct, Using Phone)', testDoneFn => {
 
     callApi('api/user-login', {
       json: {
-        emailOrPhone: email,
+        emailOrPhone: phone,
         password
       }
     }, (err, response, body) => {
+      console.log(body);
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
@@ -604,7 +562,7 @@ describe('user apis (1)', _ => {
 
   });
 
-  it('END', testDoneFn => {
+  it.only('END', testDoneFn => {
     terminateServer(testDoneFn);
   });
 

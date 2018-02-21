@@ -15,7 +15,7 @@ exports.UserCollection = class extends Collection {
       fullName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().alphanum().min(11).max(14).required(),
       passwordHash: Joi.string().min(64).max(64).required(),
-      email: Joi.string().email().min(3).max(30).required(),
+      email: Joi.string().email().min(3).max(30).allow(null).required(),
       nid: Joi.string().min(16).max(16).allow('').required(),
       physicalAddress: Joi.string().min(1).max(128).allow('').required(),
       emergencyContact: Joi.string().min(6).max(11).allow('').required(),
@@ -29,17 +29,17 @@ exports.UserCollection = class extends Collection {
     this.uniqueKeyDefList = [
       {
         filters: {},
-        keyList: ['email', 'phone']
+        keyList: ['phone']
       }
     ]
   }
 
-  create({ email, phone, fullName, passwordHash }, cbfn) {
+  create({ phone, fullName, passwordHash }, cbfn) {
     let user = {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
-      email,
       passwordHash,
+      email: null,
       phone,
       fullName,
       nid: '',

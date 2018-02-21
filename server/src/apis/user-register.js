@@ -14,7 +14,6 @@ exports.UserRegisterApi = class extends userCommonMixin(emailVerificationRequest
 
   get requestSchema() {
     return Joi.object().keys({
-      email: Joi.string().email().min(3).max(30).required(),
       fullName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().alphanum().min(11).max(14).required(),
       password: Joi.string().min(8).max(30).required()
@@ -22,14 +21,11 @@ exports.UserRegisterApi = class extends userCommonMixin(emailVerificationRequest
   }
 
   handle({ body }) {
-    let { email, fullName, phone, password } = body;
-    this._createUser({ email, fullName, phone, password }, (userId) => {
-      this._createEmailVerificationRequest({ email, userId }, (verificationLink) => {
-        this._sendEmailVerificationMail({ email, verificationLink });
-        this._createPhoneVerificationRequest({ phone, userId }, (verificationLink) => {
-          this._sendPhoneVerificationSms({ phone, verificationLink });
-          this.success({ status: "success", userId });
-        });
+    let { fullName, phone, password } = body;
+    this._createUser({ fullName, phone, password }, (userId) => {
+      this._createPhoneVerificationRequest({ phone, userId }, (verificationLink) => {
+        this._sendPhoneVerificationSms({ phone, verificationLink });
+        this.success({ status: "success", userId });
       });
     });
   }
