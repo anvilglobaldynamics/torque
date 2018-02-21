@@ -48,27 +48,27 @@ exports.UserLoginApi = class extends Api {
         return this.fail(err);
       }
       let warning = [];
-      if (!user.isEmailVerified) {
-        this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email }, (err, emailVerificationRequest) => {
-          if (err) return this.fail(err);
-          if (!emailVerificationRequest) {
-            err = new Error("Email verification request not found.")
-            return this.fail(err);
-          }
-          let { createdDatetimeStamp, isVerificationComplete } = emailVerificationRequest;
-          if (!isVerificationComplete) {
-            let now = (new Date).getTime();
-            let diff = now - createdDatetimeStamp;
-            if (diff < EMAIL_VERIFICATION_WINDOW) {
-              warning.push("You have less than 24 hours to verify your email address.");
-            } else {
-              let err = new Error("You need to verify your email address");
-              err.code = 'USER_REQUIRES_EMAIL_VERIFICATION';
-              return this.fail(err);
-            }
-          }
-        });
-      }
+      // if (!user.isEmailVerified) {
+      //   this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email }, (err, emailVerificationRequest) => {
+      //     if (err) return this.fail(err);
+      //     if (!emailVerificationRequest) {
+      //       err = new Error("Email verification request not found.")
+      //       return this.fail(err);
+      //     }
+      //     let { createdDatetimeStamp, isVerificationComplete } = emailVerificationRequest;
+      //     if (!isVerificationComplete) {
+      //       let now = (new Date).getTime();
+      //       let diff = now - createdDatetimeStamp;
+      //       if (diff < EMAIL_VERIFICATION_WINDOW) {
+      //         warning.push("You have less than 24 hours to verify your email address.");
+      //       } else {
+      //         let err = new Error("You need to verify your email address");
+      //         err.code = 'USER_REQUIRES_EMAIL_VERIFICATION';
+      //         return this.fail(err);
+      //       }
+      //     }
+      //   });
+      // }
       if (!user.isPhoneVerified) {
         this.database.phoneVerificationRequest.findByForPhone({ forPhone: user.phone }, (err, phoneVerificationRequest) => {
           if (err) return this.fail(err);

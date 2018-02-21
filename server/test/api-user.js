@@ -24,7 +24,7 @@ let apiKey = null;
 
 describe.only('user apis (1)', _ => {
 
-  it.only('START', testDoneFn => {
+  it('START', testDoneFn => {
     initializeServer(_ => {
       testDoneFn();
     });
@@ -32,7 +32,7 @@ describe.only('user apis (1)', _ => {
 
   // ================================================== Register
 
-  it.only('api/user-register (Valid, Unique)', testDoneFn => {
+  it('api/user-register (Valid, Unique)', testDoneFn => {
 
     callApi('api/user-register', {
       json: {
@@ -98,14 +98,13 @@ describe.only('user apis (1)', _ => {
         password
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
       expect(body).to.have.property('apiKey').that.is.a('string');
       expect(body).to.have.property('sessionId').that.is.a('number');
       expect(body).to.have.property('warning').that.is.an('array');
-      expect(body.warning).to.include('You have less than 24 hours to verify your email address.');
+      // expect(body.warning).to.include('You have less than 24 hours to verify your email address.');
       expect(body.warning).to.include('You have less than 24 hours to verify your phone number.');
       expect(body).to.have.property('user').that.is.an('object')
 
@@ -148,31 +147,6 @@ describe.only('user apis (1)', _ => {
       expect(body).to.have.property('status').that.equals('success');
       testDoneFn();
     });
-
-  });
-
-  // ================================================== Login
-
-  it('api/user-login (Correct, Using Email and Changed Password)', testDoneFn => {
-
-    callApi('api/user-login', {
-      json: {
-        emailOrPhone: email,
-        password: changedPassword
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('apiKey').that.is.a('string')
-      expect(body).to.have.property('sessionId').that.is.a('number')
-      expect(body).to.have.property('warning').that.is.an('array');
-      expect(body.warning).to.include('You have less than 24 hours to verify your email address.');
-      expect(body.warning).to.include('You have less than 24 hours to verify your phone number.');
-      expect(body).to.have.property('user').that.is.an('object')
-      apiKey = body.apiKey;
-      testDoneFn();
-    })
 
   });
 
@@ -222,6 +196,31 @@ describe.only('user apis (1)', _ => {
 
   });
 
+  // ================================================== Login
+
+  it('api/user-login (Correct, Using Changed Email and Changed Password)', testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: changedEmail,
+        password: changedPassword
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string')
+      expect(body).to.have.property('sessionId').that.is.a('number')
+      expect(body).to.have.property('warning').that.is.an('array');
+      // expect(body.warning).to.include('You have less than 24 hours to verify your email address.');
+      expect(body.warning).to.include('You have less than 24 hours to verify your phone number.');
+      expect(body).to.have.property('user').that.is.an('object')
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
   // ================================================== Logout
 
   it('api/user-logout (Correct)', testDoneFn => {
@@ -239,7 +238,7 @@ describe.only('user apis (1)', _ => {
 
   });
 
-  // ================================================== Password Reset-Request
+  // ================================================== Password Reset-Request - Using Email
 
   it('api/user-reset-password--request', testDoneFn => {
 
@@ -256,7 +255,7 @@ describe.only('user apis (1)', _ => {
 
   });
 
-  // ================================================== Password Reset - Get Token Info
+  // ================================================== Password Reset - Get Token Info - Using Email
 
   it('api/user-reset-password--get-token-info', testDoneFn => {
 
@@ -277,7 +276,7 @@ describe.only('user apis (1)', _ => {
       })
     });
   });
-  // ================================================== Password Reset - Confirm
+  // ================================================== Password Reset - Confirm - Using Email
 
   it('api/user-reset-password--confirm', testDoneFn => {
 
@@ -317,7 +316,7 @@ describe.only('user apis (1)', _ => {
       expect(body).to.have.property('apiKey').that.is.a('string')
       expect(body).to.have.property('sessionId').that.is.a('number')
       expect(body).to.have.property('warning').that.is.an('array');
-      expect(body.warning).to.include('You have less than 24 hours to verify your email address.')
+      // expect(body.warning).to.include('You have less than 24 hours to verify your email address.')
       expect(body.warning).to.include('You have less than 24 hours to verify your phone number.');
       expect(body).to.have.property('user').that.is.an('object')
       apiKey = body.apiKey;
@@ -402,13 +401,13 @@ describe.only('user apis (1)', _ => {
 
   });
 
-  // ================================================== Password Reset - Request
+  // ================================================== Password Reset - Request - Using Phone
 
   it('api/user-reset-password--request', testDoneFn => {
 
     callApi('api/user-reset-password--request', {
       json: {
-        emailOrPhone: changedEmail
+        emailOrPhone: phone
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -419,11 +418,11 @@ describe.only('user apis (1)', _ => {
 
   });
 
-  // ================================================== Password Reset - Get Token Info
+  // ================================================== Password Reset - Get Token Info - Using Phone
 
   it('api/user-reset-password--get-token-info', testDoneFn => {
 
-    getDatabase().find('password-reset-request', { forEmail: changedEmail }, (err, docList) => {
+    getDatabase().find('password-reset-request', { forPhone: phone }, (err, docList) => {
       if (err) throw err;
       if (docList.length < 1) throw new Error('Expected doc');
       let passwordResetRequest = docList.find(doc => doc.isPasswordResetComplete === false);
@@ -440,11 +439,11 @@ describe.only('user apis (1)', _ => {
       })
     });
   });
-  // ================================================== Password Reset - Confirm
+  // ================================================== Password Reset - Confirm - Using Phone
 
   it('api/user-reset-password--confirm', testDoneFn => {
 
-    getDatabase().find('password-reset-request', { forEmail: changedEmail }, (err, docList) => {
+    getDatabase().find('password-reset-request', { forPhone: phone }, (err, docList) => {
       if (err) throw err;
       if (docList.length < 1) throw new Error('Expected doc');
       let passwordResetRequest = docList.find(doc => doc.isPasswordResetComplete === false);
@@ -466,11 +465,11 @@ describe.only('user apis (1)', _ => {
 
   // ================================================== Login
 
-  it('api/user-login (Correct, Using Email and Changed Password)', testDoneFn => {
+  it('api/user-login (Correct, Using Phone and Changed Password)', testDoneFn => {
 
     callApi('api/user-login', {
       json: {
-        emailOrPhone: changedEmail,
+        emailOrPhone: phone,
         password: changedPassword3
       }
     }, (err, response, body) => {
@@ -562,7 +561,7 @@ describe.only('user apis (1)', _ => {
 
   });
 
-  it.only('END', testDoneFn => {
+  it('END', testDoneFn => {
     terminateServer(testDoneFn);
   });
 
