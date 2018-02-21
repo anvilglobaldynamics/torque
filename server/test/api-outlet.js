@@ -105,7 +105,7 @@ describe('outlet', _ => {
 
   });
 
-  it('api/add-outlet (Invalid, copy phone)', testDoneFn => {
+  it.skip('api/add-outlet (Invalid, copy phone)', testDoneFn => {
 
     callApi('api/add-outlet', {
       json: {

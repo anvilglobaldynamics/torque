@@ -22,7 +22,7 @@ exports.OutletCollection = class extends Collection {
     this.uniqueKeyDefList = [
       {
         filters: {},
-        keyList: ['phone']
+        keyList: []
       }
     ];
 

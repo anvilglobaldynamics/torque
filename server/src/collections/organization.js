@@ -22,7 +22,7 @@ exports.OrganizationCollection = class extends Collection {
     this.uniqueKeyDefList = [
       {
         filters: {},
-        keyList: ['email', 'phone']
+        keyList: []
       }
     ];
   }
