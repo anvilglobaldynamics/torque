@@ -69,6 +69,14 @@ exports.loginUser = (data, callback) => {
   })
 }
 
+exports.loginOut = (data, callback) => {
+  callApi('api/user-logout', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
 exports.editUser = (data, callback) => {
   callApi('api/user-edit-profile', {
     json: data

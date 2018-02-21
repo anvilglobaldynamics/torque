@@ -13,7 +13,6 @@ exports.AddNewEmployeeApi = class extends userCommonMixin(Api) {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),
 
-      email: Joi.string().email().min(3).max(30).required(),
       fullName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().alphanum().min(11).max(14).required(),
       password: Joi.string().min(8).max(30).required(),
@@ -79,8 +78,8 @@ exports.AddNewEmployeeApi = class extends userCommonMixin(Api) {
   }
 
   handle({ body }) {
-    let { email, fullName, phone, password, organizationId, role, designation, companyProvidedId, privileges } = body;
-    this._createUser({ email, fullName, phone, password }, (userId) => {
+    let { fullName, phone, password, organizationId, role, designation, companyProvidedId, privileges } = body;
+    this._createUser({ fullName, phone, password }, (userId) => {
       this._hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {
         this.success({ status: "success", userId, employmentId });
       });

@@ -9,7 +9,6 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
 
-  email: Joi.string().email().min(3).max(30).required(),
   fullName: Joi.string().min(1).max(64).required(),
   phone: Joi.string().alphanum().min(11).max(14).required(),
   password: Joi.string().min(8).max(30).required(),
@@ -41,7 +40,6 @@ Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
-{ code: EMAIL_ALREADY_IN_USE } // the email id is already associated with an user
 { code: PHONE_ALREADY_IN_USE } // the phone number is already associated
 ```
 
