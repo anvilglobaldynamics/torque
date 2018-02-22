@@ -115,6 +115,8 @@ exports.UserLoginApi = class extends Api {
           physicalAddress,
           emergencyContact,
           bloodGroup,
+          isEmailVerified,
+          isPhoneVerified
         } = user;
         this.success({
           status: "success",
@@ -128,7 +130,9 @@ exports.UserLoginApi = class extends Api {
             nid,
             physicalAddress,
             emergencyContact,
-            bloodGroup
+            bloodGroup,
+            isEmailVerified,
+            isPhoneVerified
           }
         });
       });
