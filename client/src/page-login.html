@@ -107,7 +107,7 @@
         this.app.callUserLoginApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'loginForm');
-
+          console.log(response)
           let { apiKey, warning, sessionId, user } = response;
           Object.assign(user, { apiKey, warning, sessionId });
           this.app.saveUser(user);
