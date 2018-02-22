@@ -1,0 +1,52 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-warehouse">
+  <template>
+    <style include="shared-styles"></style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+  </template>
+
+  <script>
+    class PageEditWarehouse extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+      static get is() {
+        return 'page-edit-warehouse';
+      }
+
+      static get properties() {
+        return {};
+      }
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() { }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+      }
+    }
+
+    window.customElements.define(PageEditWarehouse.is, PageEditWarehouse);
+  </script>
+
+</dom-module>
