@@ -31,6 +31,10 @@
         this.isReady = false;
       }
 
+      $join(list, by){
+        return list.join(by);
+      }
+
       $if(condition, thenValue, elseValue) {
         if (condition) return thenValue;
         return elseValue;

@@ -176,6 +176,11 @@
           this.callCombinedJsonApi('add-product-to-inventory', data, cbfn);
         }
 
+        callUserSetEmailApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('user-set-email', data, cbfn);
+        }
+
       }
     }
   })();

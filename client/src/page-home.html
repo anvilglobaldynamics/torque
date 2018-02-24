@@ -36,11 +36,64 @@
         font-size: 20px;
         font-weight: bold;
       }
+
+      .warning-message {
+        font-weight: bold;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <template is="dom-if" if="[[user.warning]]">
+        <div class="card vertical layout">
+          <div class="warning-message">WARNING!</div>
+          <ul>
+            <template is="dom-repeat" items="[[user.warning]]" as="warningMessage">
+              <li>[[warningMessage]]</li>
+            </template>
+          </ul>
+        </div>
+      </template>
+
+      <template is="dom-if" if="[[user.phone]]">
+        <template is="dom-if" if="[[!user.isPhoneVerified]]">
+          <div class="card">
+            You have not yet verified your phone number. Your phone number (after the 1 hour grace period) is not active until you verify it. Either click the link in the sms we sent to
+            <b>[[user.phone]]</b> or use the button below.
+            <br>
+            <div class="button-row">
+              <paper-button raised class="primary m-0" on-tap="verifyPhoneTapped">Verify Phone Number Manually</paper-button>
+              <paper-button raised class="primary m-0" on-tap="resendSmsTapped">Resend SMS</paper-button>
+            </div>
+          </div>
+        </template>
+      </template>
+
+      <template is="dom-if" if="[[!user.email]]">
+        <div class="card">
+          By providing an email address, you can get receipts, login alerts and other important information delivered to you to your email.
+          <div class="button-row">
+            <paper-button raised class="primary m-0" on-tap="setEmailTapped">Set your email</paper-button>
+          </div>
+        </div>
+      </template>
+
+      <template is="dom-if" if="[[user.email]]">
+        <template is="dom-if" if="[[!user.isEmailVerified]]">
+          <div class="card">
+            You have not yet verified your email address. Your email address is not active until you verify it. Either click the link in the email we sent to
+            <b>[[user.email]]</b> or use the button below.
+            <br>
+            <div class="button-row">
+              <paper-button raised class="primary m-0" on-tap="verifyEmailTapped">Verify Email Manually</paper-button>
+              <paper-button raised class="primary m-0" on-tap="resendEmailTapped">Resend Email</paper-button>
+            </div>
+          </div>
+        </template>
+      </template>
+
       <div class="horizontal layout">
         <div class="card vertical layout flex">
           [[user.fullName]]
@@ -83,7 +136,7 @@
   </template>
 
   <script>
-    class PageHome extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+    class PageHome extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
       static get is() {
         return 'page-home';
       }
@@ -194,7 +247,28 @@
         this.organization = organization;
       }
 
+      _processSetEmailApi(data, cbfn) {
+        this.app.callUserSetEmailApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.status);
+        });
+      }
+
+
       // region: ui  ===========================
+
+      setEmailTapped(e = null) {
+        let message = "Please set your valid email."
+        this.app.showModalInput("Set your email.", message, 'john@example.com', email => {
+          this._processSetEmailApi({ email }, status => {
+            let message = `Your email "${email}" has been set. Please check your inbox for the verification link and log in again.`;
+            this.app.showModalDialog("Email is Set", message, () => {
+              this.app.logoutTapped();
+            });
+          })
+        });
+      }
 
       // region: misc =================================
 

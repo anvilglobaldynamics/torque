@@ -156,4 +156,25 @@ exports.UserCollection = class extends Collection {
     });
   }
 
+  // FIXME: Logical Separation
+  /**
+   * 
+   * @param {any} { userId }
+   * @param {any} { email } 
+   * @param {any} cbfn 
+   */
+  setEmail({ userId }, data, cbfn) {
+    let { email } = data;
+    let mod = {
+      $set: {
+        email
+      }
+    }
+    this._update({ id: userId }, mod, (err, wasUpdated) => {
+      if (err) return cbfn(err);
+      if (!wasUpdated) return cbfn(new Error("User Not Found"));
+      return cbfn();
+    });
+  }
+
 }
