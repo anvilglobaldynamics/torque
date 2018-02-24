@@ -38,9 +38,9 @@
           <template is="dom-repeat" items="[[customerList]]" as="customer">
             <div class="horizontal layout std-list-item center">
               <div class="vertical layout flex">
-                {{ $json(customer) }}
-                <!-- <div class="title">[[customer.name]]</div>
-                <div class="description">[[customer.phone]] ([[customer.physicalAddress]])</div> -->
+                <div class="title">[[customer.fullName]]</div>
+                <div class="description">[[customer.phone]]</div>
+                <div class="description">Balance: [[customer.balance]]</div>
               </div>
               <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
               <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>

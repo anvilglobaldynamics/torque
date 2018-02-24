@@ -203,6 +203,16 @@
           this.callCombinedJsonApi('add-customer', data, cbfn);
         }
 
+        callGetCustomerApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-customer', data, cbfn);
+        }
+
+        callDeleteCustomerApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('delete-customer', data, cbfn);
+        }
+
       }
     }
   })();
