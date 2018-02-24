@@ -45,7 +45,7 @@
                 <paper-item name="withdrawl">Withdrawl</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
-            <paper-input class="adjustCustomerBalanceForm--balance" value="{{adjustCustomerBalanceForm.balance}}" required minlength="3" maxlength="15" error-message="Please enter the balance" label="Balance"></paper-input>
+            <paper-input class="adjustCustomerBalanceForm--amount" value="{{adjustCustomerBalanceForm.amount}}" required minlength="3" maxlength="15" error-message="Please enter the amount" label="Amount"></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class$="primary" on-tap="adjustCustomerBalanceTapped">Adjust</paper-button>
@@ -75,14 +75,12 @@
               if (mode === 'development') {
                 return {
                   action: 'payment',
-                  balance: '100'
-                  // note: 'this should be added in future'
+                  amount: '100'
                 };
               } else {
                 return {
                   action: '',
-                  balance: ''
-                  // note: ''
+                  amount: ''
                 };
               }
             }
@@ -143,9 +141,9 @@
         });
       }
 
-      _processAdjustCustomerBalance({ action, balance }) {
+      _processAdjustCustomerBalance({ action, amount }) {
         let data = {
-          action, balance,
+          action, amount,
           customerId: this.editingCustomer.id
         };
         this.app.callAdjustCustomerBalanceApi(data, (err, response) => {
@@ -164,8 +162,8 @@
         this.elemAll('#adjustCustomerBalanceForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#adjustCustomerBalanceForm').validate()) return;
 
-        let { action, balance } = this.adjustCustomerBalanceForm;
-        this._processAdjustCustomerBalance({ action, balance });
+        let { action, amount } = this.adjustCustomerBalanceForm;
+        this._processAdjustCustomerBalance({ action, amount });
       }
 
       backButtonOnTopBarPressed(e = null) {

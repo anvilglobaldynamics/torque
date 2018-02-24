@@ -11,7 +11,7 @@ method: `POST`
   customerId: Joi.number().max(999999999999999).required(),
 
   action: Joi.string().valid('payment', 'withdrawl').required(), 
-  balance: Joi.number().max(999999999999999).required()
+  amount: Joi.number().max(999999999999999).required()
 }
 ```
 
