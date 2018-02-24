@@ -34,7 +34,6 @@ exports.UserSetEmailApi = class extends userCommonMixin(emailVerificationRequest
             if (err) return this.fail(err);
 
             this._createEmailVerificationRequest({ email, userId }, (verificationLink) => {
-              console.log(verificationLink)
               cbfn();
               this._sendEmailVerificationMail({ email, verificationLink });
             });

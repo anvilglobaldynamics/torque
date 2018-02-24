@@ -121,6 +121,20 @@ exports.UserCollection = class extends Collection {
     });
   }
 
+    // FIXME: Logical Separation
+    setPhoneAsUnverified({ userId }, cbfn) {
+      let mod = {
+        $set: {
+          isPhoneVerified: false
+        }
+      }
+      this._update({ id: userId }, mod, (err, wasUpdated) => {
+        if (err) return cbfn(err);
+        if (!wasUpdated) return cbfn(new Error("User Not Found"));
+        return cbfn();
+      });
+    }
+
   // FIXME: Logical Separation
   setPasswordHash({ userId }, { passwordHash }, cbfn) {
     let mod = {

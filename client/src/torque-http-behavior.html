@@ -79,6 +79,19 @@
           }
         }
 
+        callGetApi(uri, cbfn) {
+          let request = new XMLHttpRequest();
+          request.addEventListener("load", () => {
+            let { responseText } = request;
+            cbfn(null, responseText);
+          });
+          request.addEventListener("error", () => {
+            cbfn(request);
+          });
+          request.open("GET", uri);
+          request.send();
+        }
+
         // api call utls ===================================
 
         _applyApiKey(data) {
@@ -179,6 +192,26 @@
         callUserSetEmailApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('user-set-email', data, cbfn);
+        }
+
+        callUserResendVerificationSmsApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('user-resend-verification-sms', data, cbfn);
+        }
+
+        callVerifyPhoneApi(path, cbfn) {
+          let uri = `${this.serverHost}/verify-phone/${path}`
+          this.callGetApi(uri, cbfn);
+        }
+
+        callUserResendVerificationEmailApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('user-resend-verification-email', data, cbfn);
+        }
+
+        callVerifyEmailApi(path, cbfn) {
+          let uri = `${this.serverHost}/verify-email/${path}`
+          this.callGetApi(uri, cbfn);
         }
 
       }

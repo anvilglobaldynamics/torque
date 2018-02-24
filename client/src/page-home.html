@@ -46,11 +46,11 @@
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <template is="dom-if" if="[[user.warning]]">
+      <template is="dom-if" if="[[warning]]">
         <div class="card vertical layout">
           <div class="warning-message">WARNING!</div>
           <ul>
-            <template is="dom-repeat" items="[[user.warning]]" as="warningMessage">
+            <template is="dom-repeat" items="[[warning]]" as="warningMessage">
               <li>[[warningMessage]]</li>
             </template>
           </ul>
@@ -181,6 +181,13 @@
         return true;
       }
 
+      _computeWarnings() {
+        if (!user) return;
+        this.warning = user.warning.map(i => i).filter(str => {
+          return str.indexOf('You have less than 1 hour to verify') === -1;
+        });
+      }
+
       _fetchOrganizationList(cbfn) {
         let data = {};
         this.app.callGetOrganizationListApi(data, (err, response) => {
@@ -255,6 +262,45 @@
         });
       }
 
+      _processResendVerificationEmailApi(cbfn) {
+        this.app.callUserResendVerificationEmailApi({}, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.status);
+        });
+      }
+
+      _processVerifyEmailApi({ verificationToken }, cbfn) {
+        let path = `${verificationToken}`
+        this.app.callVerifyEmailApi(path, (err, text) => {
+          if (err) {
+            let message = "Unexpected error occurred. Make sure you are connected to the internet and try again.";
+            this.app.showModalDialog("Error", message, () => { 'pass' });
+            return;
+          }
+          return cbfn(String(text));
+        });
+      }
+
+      _processResendVerificationSmsApi(cbfn) {
+        this.app.callUserResendVerificationSmsApi({}, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.status);
+        });
+      }
+
+      _processVerifyPhoneApi({ verificationToken }, cbfn) {
+        let path = `${verificationToken}`
+        this.app.callVerifyPhoneApi(path, (err, text) => {
+          if (err) {
+            let message = "Unexpected error occurred. Make sure you are connected to the internet and try again.";
+            this.app.showModalDialog("Error", message, () => { 'pass' });
+            return;
+          }
+          return cbfn(String(text));
+        });
+      }
 
       // region: ui  ===========================
 
@@ -267,6 +313,64 @@
               this.app.logoutTapped();
             });
           })
+        });
+      }
+
+      resendEmailTapped(e = null) {
+        this._processResendVerificationEmailApi(status => {
+          let message = `Please check your inbox. We have sent you a verification email.`;
+          this.app.showModalDialog("Verification Email Sent", message, () => {
+            'pass'
+          });
+        })
+      }
+
+      verifyEmailTapped(e = null) {
+        let message = "Please the verification code we sent to your email."
+        this.app.showModalInput("Enter verification code.", message, '', verificationToken => {
+          if ((!verificationToken) || verificationToken.length === 0) return;
+          this._processVerifyEmailApi({ verificationToken }, html => {
+            if (html.indexOf('Email Verification Successful') > -1) {
+              this.app.showModalDialog("Thank you.", "Your email is now verified.", () => {
+                this.app.db.update('user', (({ which }) => which === 'only'), user => {
+                  user.isEmailVerified = true;
+                  return user;
+                });
+              });
+            } else {
+              let message = "Your email could not be verified. Make sure the verification code is correct.";
+              this.app.showModalDialog("Sorry.", message, () => { 'pass' });
+            }
+          });
+        });
+      }
+
+      resendSmsTapped(e = null) {
+        this._processResendVerificationSmsApi(status => {
+          let message = `Please check your phone. We have sent you a verification SMS.`;
+          this.app.showModalDialog("Verification SMS Sent", message, () => {
+            'pass'
+          });
+        })
+      }
+
+      verifyPhoneTapped(e = null) {
+        let message = "Please the verification code we sent to your phone."
+        this.app.showModalInput("Enter verification code.", message, '', verificationToken => {
+          if ((!verificationToken) || verificationToken.length === 0) return;
+          this._processVerifyPhoneApi({ verificationToken }, html => {
+            if (html.indexOf('Phone Verification Successful') > -1) {
+              this.app.showModalDialog("Thank you.", "Your phone is now verified.", () => {
+                this.app.db.update('user', (({ which }) => which === 'only'), user => {
+                  user.isPhoneVerified = true;
+                  return user;
+                });
+              });
+            } else {
+              let message = "Your phone could not be verified. Make sure the verification code is correct";
+              this.app.showModalDialog("Sorry.", message, () => { 'pass' });
+            }
+          });
         });
       }
 

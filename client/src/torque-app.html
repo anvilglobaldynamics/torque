@@ -250,9 +250,11 @@
 
       _manageProductionVariables() {
         if (mode === 'production') {
+          this.serverHost = 'https://server.torque.live'
           this.jsonPostApiPathPrefix = 'https://server.torque.live/api/';
           this.websocketHost = 'wss://server.torque.live';
         } else {
+          this.serverHost = 'http://localhost:8540'
           this.jsonPostApiPathPrefix = 'http://localhost:8540/api/';
           this.websocketHost = 'ws://localhost:8540';
         }
@@ -297,7 +299,7 @@
       _intializeServiceManager() {
         this.serviceManager.on('service-change', (event) => {
           this.activeServiceCount = event.detail.activeCount;
-        })
+        });
         this.serviceManager.on('error', (event) => {
           this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
         });
