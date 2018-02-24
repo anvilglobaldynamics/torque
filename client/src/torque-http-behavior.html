@@ -208,6 +208,11 @@
           this.callCombinedJsonApi('get-customer', data, cbfn);
         }
 
+        callEditCustomerApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('edit-customer', data, cbfn);
+        }
+
         callDeleteCustomerApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('delete-customer', data, cbfn);

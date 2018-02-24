@@ -37,8 +37,10 @@
           <div class="card vertical layout">
             <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message="Please enter a valid name" label="Name of your customer."></paper-input>
             <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number"></paper-input>
-            <paper-input class="editCustomerForm--openingBalance" value="{{editCustomerForm.openingBalance}}" required minlength="0" maxlength="8" error-message="Please enter an amount as opening balance" label="Opening Balance"></paper-input>
-            <div class="horizontal layout button-row end">
+            <template is="dom-if" if="{{!editMode}}">
+              <paper-input class$="editCustomerForm--openingBalance" value="{{editCustomerForm.openingBalance}}" required minlength="0" maxlength="8" error-message="Please enter an amount as opening balance" label="Opening Balance"></paper-input>
+            </template>
+              <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]]" on-tap="createCustomerTapped">Create Customer</paper-button>
               <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]]" on-tap="updateCustomerTapped">Update Customer</paper-button>
@@ -106,9 +108,9 @@
         }
         if (!this._ensureAccess()) return;
         if (this.editMode) {
-          // this._processGetCustomer(() => {
-          this.isReady = true;
-          // });
+          this._processGetCustomer(() => {
+            this.isReady = true;
+          });
         } else {
           this.delay(300, () => {
             this.isReady = true;
@@ -132,20 +134,20 @@
 
       // region: editCustomer =================================
 
-      // _processGetCustomer(cbfn) {
-      //   let customerId = parseInt(this.params.customer);
-      //   let data = {
-      //     customerId
-      //   };
-      //   this.app.callGetCustomerApi(data, (err, response) => {
-      //     if (err) return;
-      //     if (response.hasError) return this.onApiError(response.error);
-      //     this.editingCustomer = response.customer;
-      //     let { fullName, phone, contactPersonName, physicalAddress } = this.editingCustomer;
-      //     this.editCustomerForm = { fullName, phone, contactPersonName, physicalAddress };
-      //     cbfn();
-      //   });
-      // }
+      _processGetCustomer(cbfn) {
+        let customerId = parseInt(this.params.customer);
+        let data = {
+          customerId
+        };
+        this.app.callGetCustomerApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.editingCustomer = response.customer;
+          let { fullName, phone } = this.editingCustomer;
+          this.editCustomerForm = { fullName, phone };
+          cbfn();
+        });
+      }
 
       _processCreateCustomer({ fullName, phone, openingBalance }) {
         let data = {
@@ -162,20 +164,20 @@
         });
       }
 
-      // _processUpdateCustomer({ fullName, phone, contactPersonName, physicalAddress }) {
-      //   let data = {
-      //     fullName, phone, contactPersonName, physicalAddress,
-      //     customerId: this.editingCustomer.id
-      //   };
-      //   this.app.callEditCustomerApi(data, (err, response) => {
-      //     if (err) return;
-      //     if (response.hasError) return this.onApiError(response.error, 'editCustomerForm');
-      //     let message = "Congratulations. Your customer has been updated."
-      //     this.app.showModalDialog("Customer Updated", message, _ => {
-      //       this.backButtonOnTopBarPressed();
-      //     });
-      //   });
-      // }
+      _processUpdateCustomer({ fullName, phone }) {
+        let data = {
+          fullName, phone,
+          customerId: this.editingCustomer.id
+        };
+        this.app.callEditCustomerApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editCustomerForm');
+          let message = "Congratulations. Your customer has been updated."
+          this.app.showModalDialog("Customer Updated", message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
 
       // region: ui =================================
 
@@ -195,8 +197,8 @@
         this.elemAll('#editCustomerForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editCustomerForm').validate()) return;
 
-        let { fullName, phone, contactPersonName, physicalAddress } = this.editCustomerForm;
-        this._processUpdateCustomer({ fullName, phone, contactPersonName, physicalAddress });
+        let { fullName, phone } = this.editCustomerForm;
+        this._processUpdateCustomer({ fullName, phone });
       }
 
       // region: misc =================================
