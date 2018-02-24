@@ -193,6 +193,16 @@
           this.callCombinedJsonApi('add-product-to-inventory', data, cbfn);
         }
 
+        callGetCustomerListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-customer-summary-list', data, cbfn);
+        }
+
+        callAddCustomerApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('add-customer', data, cbfn);
+        }
+
       }
     }
   })();

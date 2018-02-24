@@ -1,0 +1,144 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-manage-customers">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding: 24px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card vertical layout">
+        <div class="std-list">
+          <template is="dom-repeat" items="[[customerList]]" as="customer">
+            <div class="horizontal layout std-list-item center">
+              <div class="vertical layout flex">
+                {{ $json(customer) }}
+                <!-- <div class="title">[[customer.name]]</div>
+                <div class="description">[[customer.phone]] ([[customer.physicalAddress]])</div> -->
+              </div>
+              <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
+              <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
+              <!-- <paper-button raised class="primary" on-tap="posTapped">POS</paper-button> -->
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <div class="transparent-card align-right">
+        <paper-button raised class="primary" on-tap="createTapped">Create New Customer</paper-button>
+      </div>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageManageCustomers extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+
+      static get is() {
+        return 'page-manage-customers';
+      }
+
+      static get properties() {
+        return {};
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.app.pushPageTitle('Manage Customer');
+        if (!this._ensureAccess()) return;
+        this._processCustomerList(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      _fetchCustomerList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetCustomerListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.customerList);
+        });
+      }
+
+      _processCustomerList(cbfn) {
+        this._fetchCustomerList(newCustomerList => {
+          this.customerList = newCustomerList;
+          cbfn();
+        });
+      }
+
+      // region: ui  ===========================
+
+      createTapped(e = null) {
+        return this.app.navigateTo('/edit-customer');
+      }
+
+      viewTapped(e) {
+        let { customer } = e.model;
+        return this.app.navigateTo(`/view-customer/customer:${customer.id}`);
+      }
+
+      editTapped(e) {
+        let { customer } = e.model;
+        return this.app.navigateTo(`/edit-customer/customer:${customer.id}`);
+      }
+
+      posTapped(e) {
+        let { customer } = e.model;
+        return this.app.navigateTo(`/pos/customer:${customer.id}`);
+      }
+
+      // region: misc =================================
+    }
+
+    window.customElements.define(PageManageCustomers.is, PageManageCustomers);
+  </script>
+</dom-module>
