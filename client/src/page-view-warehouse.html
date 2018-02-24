@@ -32,7 +32,55 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
-      This is warehouse view!
+
+      <div class="card vertical layout">
+        <div>[[warehouse.name]]</div>
+        <div>[[warehouse.physicalAddress]]</div>
+        <div>Contact Person: [[warehouse.contactPersonName]]</div>
+        <div>Contact Number: [[warehouse.phone]]</div>
+      </div>
+
+      <div class="card">
+        <div class="mb-4">Go to POS (Point of Sale) to start selling from this organization.</div>
+        <paper-button raised class="primary m-0" on-tap="posTapped">Go to POS</paper-button>
+      </div>
+
+      <div class="card vertical layout">
+        <div class="mb-4">This warehouse has the following inventories.</div>
+        <div class="std-list">
+          <div class="horizontal layout std-list-item center">
+            <div class="vertical layout flex">
+              <div class="title">[[defaultInventory.name]] Inventory</div>
+              <div class="description">This is the main inventory.</div>
+            </div>
+            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="defaultInventory">View</paper-button>
+          </div>
+          <div class="horizontal layout std-list-item center">
+            <div class="vertical layout flex">
+              <div class="title">[[returnedInventory.name]] Inventory</div>
+              <div class="description">Products that are returned by the customer go in here.</div>
+            </div>
+            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="returnedInventory">View</paper-button>
+          </div>
+          <div class="horizontal layout std-list-item center">
+            <div class="vertical layout flex">
+              <div class="title">[[damagedInventory.name]] Inventory</div>
+              <div class="description">Damaged products are kept here.</div>
+            </div>
+            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="damagedInventory">View</paper-button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="mb-4">Click here to edit the warehouse.</div>
+        <paper-button raised class="primary m-0" on-tap="editTapped">Edit Warehouse</paper-button>
+      </div>
+
+      <div class="card">
+        <div class="mb-4">Click here to delete the warehouse. Be warned that once deleted, an warehouse can not be restored.</div>
+        <paper-button raised class="primary m-0" on-tap="deleteTapped">Delete Warehouse</paper-button>
+      </div>
     </div>
   </template>
 
@@ -54,7 +102,22 @@
         this.confirmPageReady();
       }
 
-      onNavigateIn() { }
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Warehouse');
+        if (!this._ensureAccess()) return;
+        if (!('warehouse' in this.params)) {
+          let message = "This page cannot be displayed at this moment. Please try again."
+          this.app.showModalDialog("Something went wrong!", message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processWarehouse(_ => {
+          this.isReady = true;
+        });
+      }
 
       onNavigateOut() {
         super.onNavigateOut();
@@ -68,6 +131,66 @@
         }
         return true;
       }
+
+      _fetchWarehouse(cbfn) {
+        let warehouseId = parseInt(this.params.warehouse);
+        let data = { warehouseId };
+        this.app.callGetWarehouseApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _processWarehouse(cbfn) {
+        this._fetchWarehouse(({ warehouse, defaultInventory, returnedInventory, damagedInventory }) => {
+          this.warehouse = warehouse;
+          this.defaultInventory = defaultInventory;
+          this.returnedInventory = returnedInventory;
+          this.damagedInventory = damagedInventory;
+          cbfn();
+        });
+      }
+
+      _deleteWarehouse(warehouseId, cbfn) {
+        warehouseId = parseInt(warehouseId);
+        let data = { warehouseId };
+        this.app.callDeleteWarehouseApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      // region: ui  ===========================
+
+      editTapped(e = null) {
+        return this.app.navigateTo(`/edit-warehouse/warehouse:${this.warehouse.id}`);
+      }
+
+      deleteTapped(e = null) {
+        let message = `Are you sure you want to delete this warehouse ${this.warehouse.name}. Once deleted, you can not restore this warehouse.`;
+        this.app.showModalConfirmation("Delete warehouse?", message, (answer) => {
+          if (!answer) return;
+          this._deleteWarehouse(this.warehouse.id, () => {
+            this.app.showModalDialog("Successfully deleted.", "The warehouse has been deleted", () => {
+              this.app.navigateTo(`/manage-warehouses`);
+            });
+          });
+        });
+      }
+
+      viewInventoryTapped(e = null) {
+        let el = e.target;
+        let key = el.getAttribute('data-key');
+        return this.app.navigateTo(`/view-inventory/inventory:${this[key].id}`);
+      }
+
+      posTapped(e) {
+        return this.app.navigateTo(`/pos/warehouse:${this.warehouse.id}`);
+      }
+
+      // region: misc =================================
 
     }
 
