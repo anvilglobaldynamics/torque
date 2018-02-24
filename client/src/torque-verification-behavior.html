@@ -1,0 +1,59 @@
+<link rel="import" href="../bower_components/atomicdb/atomicdb.html">
+<script>
+  if (!window.TorqueVerificationBehavior) {
+    /* @polymerMixin */
+    TorqueVerificationBehavior = (SuperClass) => class extends SuperClass {
+
+      constructor(...args) {
+        super(...args);
+      }
+
+      static get properties() {
+        return {
+        }
+      }
+
+      _processResendVerificationEmailApi(cbfn) {
+        this.app.callUserResendVerificationEmailApi({}, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.status);
+        });
+      }
+
+      _processVerifyEmailApi({ verificationToken }, cbfn) {
+        let path = `${verificationToken}`
+        this.app.callVerifyEmailApi(path, (err, text) => {
+          if (err) {
+            let message = "Unexpected error occurred. Make sure you are connected to the internet and try again.";
+            this.app.showModalDialog("Error", message, () => { 'pass' });
+            return;
+          }
+          return cbfn(String(text));
+        });
+      }
+
+      _processResendVerificationSmsApi(cbfn) {
+        this.app.callUserResendVerificationSmsApi({}, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.status);
+        });
+      }
+
+      _processVerifyPhoneApi({ verificationToken }, cbfn) {
+        let path = `${verificationToken}`
+        this.app.callVerifyPhoneApi(path, (err, text) => {
+          if (err) {
+            let message = "Unexpected error occurred. Make sure you are connected to the internet and try again.";
+            this.app.showModalDialog("Error", message, () => { 'pass' });
+            return;
+          }
+          return cbfn(String(text));
+        });
+      }
+
+    }
+  }
+
+</script>
