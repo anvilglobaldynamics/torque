@@ -22,7 +22,8 @@ exports.CustomerCollection = class extends Collection {
         Joi.object().keys({
           creditedDatetimeStamp: Joi.number().max(999999999999999).required(),
           acceptedByUserId: Joi.number().max(999999999999999).allow(null).required(),
-          amount: Joi.number().max(999999999999999).required()
+          amount: Joi.number().max(999999999999999).required(),
+          action: Joi.string().valid('payment', 'withdrawl').required()
         })
       )
     });
@@ -54,7 +55,8 @@ exports.CustomerCollection = class extends Collection {
       additionalPaymentHistory: [{
         creditedDatetimeStamp: (new Date).getTime(),
         acceptedByUserId: null,
-        amount: openingBalance
+        amount: openingBalance,
+        action: 'payment'
       }],
       isDeleted: false
     }

@@ -1,0 +1,179 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+
+<dom-module id="page-adjust-customer-balance">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding-top: 24px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+      <iron-form id="adjustCustomerBalanceForm">
+        <form>
+          <div class="card vertical layout">
+            <paper-dropdown-menu label="Please select an action" class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{adjustCustomerBalanceForm.action}}" attr-for-selected="name">
+                <paper-item name="payment">Payment</paper-item>
+                <paper-item name="withdrawl">Withdrawl</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+            <paper-input class="adjustCustomerBalanceForm--balance" value="{{adjustCustomerBalanceForm.balance}}" required minlength="3" maxlength="15" error-message="Please enter the balance" label="Balance"></paper-input>
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary" on-tap="adjustCustomerBalanceTapped">Adjust</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+    </div>
+
+  </template>
+
+  <script>
+    class PageAdjustCustomerBalance extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+      static get is() {
+        return 'page-adjust-customer-balance';
+      }
+
+      static get properties() {
+        return {
+          editingCustomer: {
+            type: Object,
+            value: null
+          },
+          adjustCustomerBalanceForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  action: 'payment',
+                  balance: '100'
+                  // note: 'this should be added in future'
+                };
+              } else {
+                return {
+                  action: '',
+                  balance: ''
+                  // note: ''
+                };
+              }
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Adjust Customer Balance');
+        if (!this._ensureAccess()) return;
+        if (!('customer' in this.params)) {
+          let message = "This page cannot be displayed at this moment. Please try again."
+          this.app.showModalDialog("Something went wrong!", message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processGetCustomer(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('adjustCustomerBalanceForm');
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      // region: editCustomer =================================
+
+      _processGetCustomer(cbfn) {
+        let customerId = parseInt(this.params.customer);
+        let data = {
+          customerId
+        };
+        this.app.callGetCustomerApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.editingCustomer = response.customer;
+          cbfn();
+        });
+      }
+
+      _processAdjustCustomerBalance({ action, balance }) {
+        let data = {
+          action, balance,
+          customerId: this.editingCustomer.id
+        };
+        this.app.callAdjustCustomerBalanceApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'adjustCustomerBalanceForm');
+          let message = "Congratulations. Your customer's balance has been updated."
+          this.app.showModalDialog("Customer Updated", message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      adjustCustomerBalanceTapped(e = null) {
+        this.elemAll('#adjustCustomerBalanceForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#adjustCustomerBalanceForm').validate()) return;
+
+        let { action, balance } = this.adjustCustomerBalanceForm;
+        this._processAdjustCustomerBalance({ action, balance });
+      }
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl(`/view-customer/customer:${this.params.customer}`);
+      }
+
+    }
+
+    window.customElements.define(PageAdjustCustomerBalance.is, PageAdjustCustomerBalance);
+  </script>
+</dom-module>
