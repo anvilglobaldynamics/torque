@@ -2,25 +2,27 @@
 let { Api } = require('./../api-base');
 let Joi = require('joi');
 
+let { collectionCommonMixin } = require('./mixins/collection-common');
 let { phoneVerificationRequestMixin } = require('./mixins/phone-verification-request-mixin');
 let { userCommonMixin } = require('./mixins/user-common');
 
-exports.UserResendVerificationSmsApi = class extends userCommonMixin(phoneVerificationRequestMixin(Api)) {
+exports.UserResendVerificationSmsApi = class extends collectionCommonMixin(userCommonMixin(phoneVerificationRequestMixin(Api))) {
 
   get autoValidates() { return true; }
 
-  get requiresAuthentication() { return true; }
+  get requiresAuthentication() { return false; }
 
   get requestSchema() {
     return Joi.object().keys({
-      // apiKey: Joi.string().length(64).required(),
+      phone: Joi.string().alphanum().min(11).max(14).required(),
     });
   }
 
-  _resendVerificationSms({ userId }, cbfn) {
-    this.database.user.findById({ userId }, (err, user) => {
+  _resendVerificationSms({ phone }, cbfn) {
+    this.database.user.findByEmailOrPhone({ emailOrPhone: phone }, (err, user) => {
+      if (!this._ensureDoc(err, user, "USER_INVALID", "Sorry. We could not find any user with that phone number.")) return;
       if (err) return this.fail(err);
-      let { phone } = user;
+      let { phone, id: userId } = user;
       this.database.user.setPhoneAsUnverified({ userId }, (err) => {
         if (err) return this.fail(err);
         this._createPhoneVerificationRequest({ phone, userId }, (verificationLink) => {
@@ -31,8 +33,9 @@ exports.UserResendVerificationSmsApi = class extends userCommonMixin(phoneVerifi
     });
   }
 
-  handle({ body, userId, apiKey }) {
-    this._resendVerificationSms({ userId }, _ => {
+  handle({ body }) {
+    let { phone } = body;
+    this._resendVerificationSms({ phone }, _ => {
       this.success({ status: "success" });
     });
   }

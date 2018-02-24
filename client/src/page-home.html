@@ -278,7 +278,8 @@
       }
 
       resendEmailTapped(e = null) {
-        this._processResendVerificationEmailApi(status => {
+        let email = this.app.user.email;
+        this._processResendVerificationEmailApi({ email }, status => {
           let message = `Please check your inbox. We have sent you a verification email.`;
           this.app.showModalDialog("Verification Email Sent", message, () => {
             'pass'
@@ -307,7 +308,8 @@
       }
 
       resendSmsTapped(e = null) {
-        this._processResendVerificationSmsApi(status => {
+        let phone = this.app.user.phone;
+        this._processResendVerificationSmsApi({ phone }, status => {
           let message = `Please check your phone. We have sent you a verification SMS.`;
           this.app.showModalDialog("Verification SMS Sent", message, () => {
             'pass'

@@ -13,8 +13,8 @@
         }
       }
 
-      _processResendVerificationEmailApi(cbfn) {
-        this.app.callUserResendVerificationEmailApi({}, (err, response) => {
+      _processResendVerificationEmailApi({ email }, cbfn) {
+        this.app.callUserResendVerificationEmailApi({ email }, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           return cbfn(response.status);
@@ -33,8 +33,8 @@
         });
       }
 
-      _processResendVerificationSmsApi(cbfn) {
-        this.app.callUserResendVerificationSmsApi({}, (err, response) => {
+      _processResendVerificationSmsApi({ phone }, cbfn) {
+        this.app.callUserResendVerificationSmsApi({ phone }, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           return cbfn(response.status);

@@ -195,7 +195,6 @@
         }
 
         callUserResendVerificationSmsApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('user-resend-verification-sms', data, cbfn);
         }
 
@@ -205,7 +204,6 @@
         }
 
         callUserResendVerificationEmailApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('user-resend-verification-email', data, cbfn);
         }
 
