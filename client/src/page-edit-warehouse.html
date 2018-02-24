@@ -30,7 +30,29 @@
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper"></div>
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="editWarehouseForm">
+        <form>
+          <div class="card vertical layout">
+            <paper-input class="editWarehouseForm--name" value="{{editWarehouseForm.name}}" required minlength="3" error-message="Please enter a valid name"
+              label="Name of your warehouse."></paper-input>
+            <paper-textarea class="editWarehouseForm--physicalAddress" value="{{editWarehouseForm.physicalAddress}}" required minlength="8"
+              error-message="Please enter an address at least 8 characters long" label="Physical Address" rows="4"></paper-textarea>
+            <paper-input class="editWarehouseForm--contactPersonName" value="{{editWarehouseForm.contactPersonName}}" required minlength="3"
+              error-message="Please enter a valid name" label="Name of Manager/Contact Person"></paper-input>
+            <paper-input class="editWarehouseForm--phone" value="{{editWarehouseForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number"
+              label="Contact Number of Manager/Contact Person"></paper-input>
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]]" on-tap="createWarehouseTapped">Create Warehouse</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]]" on-tap="updateWarehouseTapped">Update Warehouse</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+    </div>
   </template>
 
   <script>
@@ -89,9 +111,9 @@
         }
         if (!this._ensureAccess()) return;
         if (this.editMode) {
-          // this._processGetWarehouse(() => {
-          this.isReady = true;
-          // });
+          this._processGetWarehouse(() => {
+            this.isReady = true;
+          });
         } else {
           this.delay(300, () => {
             this.isReady = true;
@@ -113,10 +135,73 @@
         return true;
       }
 
+      // region: editWarehouse =================================
+
+      _processGetWarehouse(cbfn) {
+        let warehouseId = parseInt(this.params.warehouse);
+        let data = {
+          warehouseId
+        };
+        this.app.callGetWarehouseApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.editingWarehouse = response.warehouse;
+          let { name, phone, contactPersonName, physicalAddress } = this.editingWarehouse;
+          this.editWarehouseForm = { name, phone, contactPersonName, physicalAddress };
+          cbfn();
+        });
+      }
+
+      _processCreateWarehouse({ name, phone, contactPersonName, physicalAddress }) {
+        let data = {
+          name, phone, contactPersonName, physicalAddress,
+          organizationId: this.app.organization.id
+        };
+        this.app.callAddWarehouseApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editWarehouseForm');
+          let message = "Congratulations. Your new warehouse has been created."
+          this.app.showModalDialog("Warehouse Created", message, _ => {
+            this.app.navigateTo(`/view-warehouse/warehouse:${response.warehouseId}`);
+          });
+        });
+      }
+
+      _processUpdateWarehouse({ name, phone, contactPersonName, physicalAddress }) {
+        let data = {
+          name, phone, contactPersonName, physicalAddress,
+          warehouseId: this.editingWarehouse.id
+        };
+        this.app.callEditWarehouseApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editWarehouseForm');
+          let message = "Congratulations. Your warehouse has been updated."
+          this.app.showModalDialog("Warehouse Updated", message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
       // region: ui =================================
 
       backButtonOnTopBarPressed(e = null) {
-        this.app.navigateToPreviousUrl('/manage-outlets');
+        this.app.navigateToPreviousUrl('/manage-warehouses');
+      }
+
+      createWarehouseTapped(e = null) {
+        this.elemAll('#editWarehouseForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editWarehouseForm').validate()) return;
+
+        let { name, phone, contactPersonName, physicalAddress } = this.editWarehouseForm;
+        this._processCreateWarehouse({ name, phone, contactPersonName, physicalAddress });
+      }
+
+      updateWarehouseTapped(e = null) {
+        this.elemAll('#editWarehouseForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editWarehouseForm').validate()) return;
+
+        let { name, phone, contactPersonName, physicalAddress } = this.editWarehouseForm;
+        this._processUpdateWarehouse({ name, phone, contactPersonName, physicalAddress });
       }
     }
 

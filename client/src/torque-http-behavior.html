@@ -143,6 +143,26 @@
           this.callCombinedJsonApi('get-warehouse-list', data, cbfn);
         }
 
+        callGetWarehouseApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-warehouse', data, cbfn);
+        }
+
+        callAddWarehouseApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('add-warehouse', data, cbfn);
+        }
+
+        callEditWarehouseApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('edit-warehouse', data, cbfn);
+        }
+
+        callDeleteWarehouseApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('delete-warehouse', data, cbfn);
+        }
+
         callGetProductCategoryListApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('get-product-category-list', data, cbfn);
