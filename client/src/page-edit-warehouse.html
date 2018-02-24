@@ -19,9 +19,18 @@
 
 <dom-module id="page-edit-warehouse">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding-top: 24px;
+        }
+      }
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper"></div>
   </template>
 
   <script>
@@ -31,7 +40,36 @@
       }
 
       static get properties() {
-        return {};
+        return {
+          editMode: {
+            type: Boolean,
+            value: false
+          },
+          editingWarehouse: {
+            type: Object,
+            value: null
+          },
+          editWarehouseForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  name: 'Badda Warehouse',
+                  phone: '01700000011',
+                  contactPersonName: 'Johns Apparel',
+                  physicalAddress: 'Road 50\nThis Town'
+                };
+              } else {
+                return {
+                  name: '',
+                  phone: '',
+                  contactPersonName: '',
+                  physicalAddress: ''
+                };
+              }
+            }
+          }
+        };
       }
 
       constructor() {
@@ -39,10 +77,46 @@
         this.confirmPageReady();
       }
 
-      onNavigateIn() { }
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        if ('warehouse' in this.params) {
+          this.editMode = true;
+          this.app.pushPageTitle('Edit Warehouse');
+        } else {
+          this.editMode = false;
+          this.app.pushPageTitle('Add Warehouse');
+        }
+        if (!this._ensureAccess()) return;
+        if (this.editMode) {
+          // this._processGetWarehouse(() => {
+          this.isReady = true;
+          // });
+        } else {
+          this.delay(300, () => {
+            this.isReady = true;
+          });
+        }
+      }
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editWarehouseForm');
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-outlets');
       }
     }
 

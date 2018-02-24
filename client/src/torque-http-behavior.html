@@ -138,6 +138,11 @@
           this.callCombinedJsonApi('delete-outlet', data, cbfn);
         }
 
+        callGetWarehouseListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-warehouse-list', data, cbfn);
+        }
+
         callGetProductCategoryListApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('get-product-category-list', data, cbfn);
