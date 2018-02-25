@@ -31,7 +31,7 @@
         this.isReady = false;
       }
 
-      $join(list, by){
+      $join(list, by) {
         return list.join(by);
       }
 
@@ -66,6 +66,35 @@
         } else {
           return this.app.showModalDialog("Sorry!", error.message);
         }
+      }
+
+      checkPrivilege(privilege) {
+        if (!(privilege in this.app.organization.employment.privileges)) {
+          throw new Error(`No such privilege ""${privilege}.`);
+        }
+        return this.app.organization.employment.privileges[privilege];
+      }
+
+      accessControl(type, privilegeList = []) {
+        const typeList = ['special', 'authenticated', 'privileged'];
+        if (typeList.indexOf(type) === -1) throw new Error("Invalid accessControl type.");
+        if (type === 'authenticated' || type === 'privileged') {
+          if (!this.app.user) {
+            this.app.navigateTo('/login');
+            return false;
+          }
+        }
+        if (type === 'privileged') {
+          if (!this.app.organization) {
+            this.app.navigateTo('/select-organization');
+            return false;
+          }
+          if (!privilegeList.every(privilege => this.checkPrivilege(privilege))) {
+            this.app.navigateTo('/error403');
+            return false;
+          }
+        }
+        return true;
       }
 
     }
