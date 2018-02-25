@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
@@ -13,10 +14,11 @@
 
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-verification-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="page-login">
+<dom-module id="page-verify">
   <template>
     <style include="shared-styles">
       @media (min-width: 960px) {
@@ -31,16 +33,17 @@
 
     <div class$="std-small-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <iron-form id="login-form">
+      <iron-form id="verify-form">
         <form>
           <div class="card vertical layout">
-            <div class="std-dialog-header">LOGIN</div>
-            <paper-input class="loginForm--emailOrPhone" value="{{loginForm.emailOrPhone}}" required minlength="3" error-message="Please enter your valid phone number or valid email address." label="Your phone number or email address"></paper-input>
-            <paper-input class="loginForm--password" value="{{loginForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long" label="Your password" type="password"></paper-input>
+            <template is="dom-if" if="[[$equals(what, 'phone')]]">
+              <div class="std-dialog-header">VERIFY PHONE NUMBER</div>
+              <paper-textarea class="verifyForm--verificationToken" value="{{verifyForm.verificationToken}}" required minlength="64" error-message="Enter the verification token we sent to your phone." label="Enter the verification token we sent to your phone." rows="3"></paper-textarea>
+            </template>
             <div class="horizontal layout button-row end">
-              <div class="link light" on-tap="forgotPasswordTapped">Forgot your password?</div>
+              <paper-button raised class="primary" on-tap="resendSmsTapped">RESEND SMS</paper-button>
               <div class="flex"></div>
-              <paper-button raised class="primary" on-tap="loginTapped">Login</paper-button>
+              <paper-button raised class="primary" on-tap="verifyTapped">Verify</paper-button>
             </div>
             <div class="horizontal layout button-row extended center-center">
               <div class="link light" on-tap="registerTapped">Don't have an account?</div>
@@ -52,30 +55,25 @@
   </template>
 
   <script>
-    class PageLogin extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageVerify extends FxPage.mixin(TorqueVerificationBehavior, TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
       static get is() {
-        return 'page-login';
+        return 'page-verify';
       }
 
       static get properties() {
         return {
-          loginForm: {
+          what: {
+            type: String,
+            value: ''
+          },
+          verifyForm: {
             type: Object,
             value: _ => {
-              if (mode === 'development') {
-                return {
-                  emailOrPhone: '01700000011',
-                  password: 'johndoe1pass'
-                };
-              } else {
-                return {
-                  emailOrPhone: '',
-                  password: ''
-                };
+              return {
+                verificationToken: ''
               }
             }
           }
-
         };
       }
 
@@ -83,34 +81,39 @@
 
       constructor() {
         super();
-        this.confirmPageReady()
+        this.confirmPageReady();
       }
 
       onNavigateIn() {
-        this.app.removeUser();
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.delay(300, () => {
+          if ('phone' in this.params) {
+            this.what = 'phone';
+            this.phone = this.params.phone;
+          } else {
+            return this.app.navigateTo('/home');
+          }
           this.isReady = true;
         });
       }
 
       onNavigateOut() {
         super.onNavigateOut();
-        this.resetProperties('loginForm');
+        this.resetProperties('verifyForm');
       }
 
-      // region: login =================================
+      // region: verify =================================
 
-      _processUserLogin({ emailOrPhone, password }) {
+      _processUserVerify({ emailOrPhone, password }) {
         let data = { emailOrPhone, password };
-        this.app.callUserLoginApi(data, (err, response) => {
+        this.app.callUserVerifyApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) {
             if (response.error.code === "USER_REQUIRES_PHONE_VERIFICATION") {
-              return this.app.navigateTo(`/verify/phone:${emailOrPhone}`);
+              return this.app.navigateTo(`/verify/what:phone/phone:${emailOrPhone}`);
             }
-            return this.onApiError(response.error, 'loginForm');
+            return this.onApiError(response.error, 'verifyForm');
           }
           let { apiKey, warning, sessionId, user } = response;
           Object.assign(user, { apiKey, warning, sessionId });
@@ -125,22 +128,37 @@
         this.app.navigateTo('/register')
       }
 
-      forgotPasswordTapped() {
-        this.app.showAlertMessage("Coming soon", "Feature under construction.")
+      resendSmsTapped(e = null) {
+        let phone = this.phone;
+        this._processResendVerificationSmsApi({ phone }, status => {
+          let message = `Please check your phone. We have sent you a verification SMS.`;
+          this.app.showModalDialog("Verification SMS Sent", message, () => {
+            'pass'
+          });
+        })
       }
 
-      loginTapped() {
-        this.elemAll('#login-form paper-input').forEach(el => el.autoValidate = true);
-        if (!this.elem('#login-form').validate()) return;
+      verifyTapped() {
+        this.elemAll('#verify-form paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#verify-form').validate()) return;
 
-        let { emailOrPhone, password } = this.loginForm;
-        this._processUserLogin({ emailOrPhone, password });
+        let { verificationToken } = this.verifyForm;
+        this._processVerifyPhoneApi({ verificationToken }, html => {
+          if (html.indexOf('Phone Verification Successful') > -1) {
+            this.app.showModalDialog("Thank you.", "Your phone is now verified.", () => {
+              return this.app.navigateTo('/login');
+            });
+          } else {
+            let message = "Your phone could not be verified. Make sure the verification code is correct.";
+            this.app.showModalDialog("Sorry.", message, () => { 'pass' });
+          }
+        });
       }
 
       // region: misc =================================
 
     }
 
-    window.customElements.define(PageLogin.is, PageLogin);
+    window.customElements.define(PageVerify.is, PageVerify);
   </script>
 </dom-module>

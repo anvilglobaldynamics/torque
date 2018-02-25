@@ -79,7 +79,7 @@
         const typeList = ['special', 'authenticated', 'privileged'];
         if (typeList.indexOf(type) === -1) throw new Error("Invalid accessControl type.");
         if (type === 'authenticated' || type === 'privileged') {
-          if (!this.app.user) {
+          if (!(this.app.user)) {
             this.app.navigateTo('/login');
             return false;
           }
