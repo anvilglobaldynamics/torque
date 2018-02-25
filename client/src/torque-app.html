@@ -39,6 +39,7 @@
 <link rel="lazy-import" href="page-register.html">
 <link rel="lazy-import" href="page-add-organization.html">
 <link rel="lazy-import" href="page-select-organization.html">
+<link rel="lazy-import" href="page-manage-employees.html">
 <link rel="lazy-import" href="page-manage-outlets.html">
 <link rel="lazy-import" href="page-edit-outlet.html">
 <link rel="lazy-import" href="page-view-outlet.html">
@@ -125,6 +126,7 @@
         <app-toolbar>Torque</app-toolbar>
         <iron-selector selected="[[pageName]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="home" href="#/home">Home</a>
+          <a name="manage-employees" href="#/manage-employees">Employees</a>
           <a name="manage-outlets" href="#/manage-outlets">Outlets</a>
           <a name="manage-warehouses" href="#/manage-warehouses">Warehouses</a>
           <a name="manage-product-categories" href="#/manage-product-categories">Product Categories</a>
@@ -180,6 +182,7 @@
           <page-register name="register"></page-register>
           <page-add-organization name="add-organization"></page-add-organization>
           <page-select-organization name="select-organization"></page-select-organization>
+          <page-manage-employees name="manage-employees"></page-manage-employees>
           <page-manage-outlets name="manage-outlets"></page-manage-outlets>
           <page-edit-outlet name="edit-outlet"></page-edit-outlet>
           <page-view-outlet name="view-outlet"></page-view-outlet>

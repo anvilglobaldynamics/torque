@@ -45,7 +45,7 @@
                 <paper-item name="withdrawl">Withdrawl</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
-            <paper-input class="adjustCustomerBalanceForm--amount" value="{{adjustCustomerBalanceForm.amount}}" required minlength="3" maxlength="15" error-message="Please enter the amount" label="Amount"></paper-input>
+            <paper-input class="adjustCustomerBalanceForm--amount" value="{{adjustCustomerBalanceForm.amount}}" required minlength="1" maxlength="10" error-message="Please enter the amount" label="Amount"></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary" on-tap="adjustCustomerBalanceTapped">Adjust</paper-button>
