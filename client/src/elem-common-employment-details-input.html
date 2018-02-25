@@ -1,0 +1,45 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="elem-common-employment-details-input">
+  <template>
+    <style include="shared-styles"></style>
+
+    <div class$="layout vertical center-center">
+      these are common inputs!
+    </div>
+  </template>
+
+  <script>
+    class ElemCommonEmploymentDetailsInput extends FxElement.mixin(TorqueDbBehavior, FxCommonBehavior) {
+
+      static get is() {
+        return 'elem-common-employment-details-input';
+      }
+
+      static get properties() {
+        return {};
+      }
+
+    }
+
+    window.customElements.define(ElemCommonEmploymentDetailsInput.is, ElemCommonEmploymentDetailsInput);
+  </script>
+</dom-module>

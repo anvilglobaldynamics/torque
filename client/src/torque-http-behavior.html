@@ -113,6 +113,21 @@
           this.callCombinedJsonApi('get-dashboard-summary', data, cbfn);
         }
 
+        callGetEmployeeListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-employee-list', data, cbfn);
+        }
+
+        callGetPrivilegeListApi(data, cbfn) {
+          // if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-privilege-list', data, cbfn);
+        }
+
+        callAddNewEmployeeApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('add-new-employee', data, cbfn);
+        }
+
         callGetOutletListApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('get-outlet-list', data, cbfn);

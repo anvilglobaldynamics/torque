@@ -10,7 +10,7 @@ Joi.object().keys({
   designation: Joi.string().max(1024).required(),
   role: Joi.string().max(1024).required(),
   companyProvidedId: Joi.string().alphanum().allow('').max(1024).required(),
-  privileges: Joi.object().keys({
+  privileges: Joi.object().required().keys({
     PRIV_VIEW_USERS: Joi.boolean().required(),
     PRIV_MODIFY_USERS: Joi.boolean().required(),
     PRIV_ADD_USER: Joi.boolean().required(),

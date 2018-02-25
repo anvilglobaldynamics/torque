@@ -6,9 +6,7 @@ method: `POST`
 
 ### request: 
 ```js
-{
-  apiKey: Joi.string().length(64).required()
-}
+{}
 ```
 
 ### response (on error):
