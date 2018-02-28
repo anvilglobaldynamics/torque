@@ -1,0 +1,142 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-view-employee">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding: 24px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+      <div class="card vertical layout">
+        <div>[[employee.name]]</div>
+        <div>Number: [[employee.phone]]</div>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+    class PageViewEmployee extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+
+      static get is() {
+        return 'page-view-employee';
+      }
+
+      static get properties() {
+        return {
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Employee');
+        if (!this._ensureAccess()) return;
+        if (!('employee' in this.params)) {
+          let message = "This page cannot be displayed at this moment. Please try again."
+          this.app.showModalDialog("Something went wrong!", message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processEmployee(_ => { 
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      _fetchEmployee(cbfn) {
+        let employeeId = parseInt(this.params.employee);
+        let data = { employeeId };
+        this.app.callGetEmployeeApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _processEmployee(cbfn) {
+        this._fetchEmployee(({ employee }) => {
+          this.employee = employee;
+          cbfn();
+        });
+      }
+
+      _deleteEmployee(employeeId, cbfn) {
+        employeeId = parseInt(employeeId);
+        let data = { employeeId };
+        this.app.callDeleteEmployeeApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      // region: ui  ===========================
+
+      editTapped(e = null) {
+        return this.app.navigateTo(`/edit-employee/employee:${this.employee.id}`);
+      }
+
+      deleteTapped(e = null) {
+        let message = `Are you sure you want to delete this employee ${this.employee.name}. Once deleted, you can not restore this employee.`;
+        this.app.showModalConfirmation("Delete employee?", message, (answer) => {
+          if (!answer) return;
+          this._deleteEmployee(this.employee.id, () => {
+            this.app.showModalDialog("Successfully deleted.", "The employee has been deleted", () => {
+              this.app.navigateTo(`/manage-employees`);
+            });
+          });
+        });
+      }
+
+      // region: misc =================================
+    }
+
+    window.customElements.define(PageViewEmployee.is, PageViewEmployee);
+    </script>
+</dom-module>

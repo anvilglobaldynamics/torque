@@ -44,7 +44,12 @@
             <paper-input class="addEmployeeForm--designation" value="{{addEmployeeForm.designation}}" required minlength="1" error-message="Please enter a valid designation" label="Designation of Employee."></paper-input>
             <paper-input class="addEmployeeForm--companyProvidedId" value="{{addEmployeeForm.companyProvidedId}}" required minlength="1" error-message="Please enter Company Provided Id" label="Designation of Company Provided Id."></paper-input>
 
-            <!-- privileges: -->
+            <h3>Privileges:</h3>
+            <template is="dom-repeat" items="[[privilegeList]]" as="privilege">
+              <paper-checkbox checked="[[$isChecked(privilege)]]" on-change="privilegeChanged">
+                [[privilege.name]]
+              </paper-checkbox>
+            </template>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -75,7 +80,8 @@
                   password: 'johndoe1pass',
                   role: 'pichi role',
                   designation: 'pichi desig',
-                  companyProvidedId: '007'
+                  companyProvidedId: '007',
+                  privileges: {}
                 };
               } else {
                 return {
@@ -84,7 +90,8 @@
                   password: '',
                   role: '',
                   designation: '',
-                  companyProvidedId: ''
+                  companyProvidedId: '',
+                  privileges: {}
                 };
               }
             }
@@ -135,16 +142,49 @@
       _processPrivilegeList(cbfn) {
         this._fetchPrivilegeList(newPrivilegeList => {
           this.privilegeList = newPrivilegeList;
-          console.log("privilegeList: ", this.privilegeList);
+          let defaultPrivilegeList = [
+            "PRIV_VIEW_USERS",
+
+            "PRIV_ACCESS_POS",
+            "PRIV_VIEW_SALES",
+            "PRIV_MODIFY_SALES",
+            "PRIV_ALLOW_FLAT_DISCOUNT",
+            "PRIV_ALLOW_INDIVIDUAL_DISCOUNT",
+            "PRIV_ALLOW_FOC",
+
+            "PRIV_VIEW_SALES_RETURN",
+            "PRIV_MODIFY_SALES_RETURN",
+
+            "PRIV_VIEW_ALL_INVENTORIES",
+            "PRIV_TRANSFER_ALL_INVENTORIES",
+            "PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES",
+
+            "PRIV_VIEW_ALL_OUTLETS",
+
+            "PRIV_VIEW_ALL_WAREHOUSES",
+
+            "PRIV_VIEW_ORGANIZATION_STATISTICS",
+
+            "PRIV_VIEW_CUSTOMER",
+            "PRIV_ADD_CUSTOMER_DURING_SALES",
+            "PRIV_MODIFY_CUSTOMER",
+            "PRIV_MANAGE_CUSTOMER_DEBT"
+          ]
+          for (let privilege of this.privilegeList) {
+            this.addEmployeeForm.privileges[privilege.code] = false;
+          }
+          for (let privilege of defaultPrivilegeList) {
+            this.addEmployeeForm.privileges[privilege] = true;
+          } 
           cbfn();
         });
       }
 
-      // region: editEmployee =================================
+      // region: createEmployee =================================
 
-      _processCreateEmployee({ fullName, password, phone, role ,designation, companyProvidedId }) {
+      _processCreateEmployee({ fullName, password, phone, role ,designation, companyProvidedId, privileges }) {
         let data = {
-          fullName, password, phone, role ,designation, companyProvidedId,
+          fullName, password, phone, role ,designation, companyProvidedId, privileges,
           organizationId: this.app.organization.id
         };
         this.app.callAddNewEmployeeApi(data, (err, response) => {
@@ -159,6 +199,14 @@
 
       // region: ui =================================
 
+      $isChecked(privilege) {
+        return this.addEmployeeForm.privileges[privilege.code];
+      }
+
+      privilegeChanged(e) {
+        this.addEmployeeForm.privileges[e.model.privilege.code] = e.target.checked;
+      }
+
       backButtonOnTopBarPressed(e = null) {
         this.app.navigateToPreviousUrl('/manage-employees');
       }
@@ -167,8 +215,8 @@
         this.elemAll('#addEmployeeForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#addEmployeeForm').validate()) return;
 
-        let { fullName, password, phone, role ,designation, companyProvidedId } = this.addEmployeeForm;
-        this._processCreateEmployee({ fullName, password, phone, role ,designation, companyProvidedId });
+        let { fullName, password, phone, role ,designation, companyProvidedId, privileges } = this.addEmployeeForm;
+        this._processCreateEmployee({ fullName, password, phone, role ,designation, companyProvidedId, privileges });
       }
 
       // region: misc =================================
