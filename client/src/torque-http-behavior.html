@@ -212,6 +212,18 @@
           this.callGetApi(uri, cbfn);
         }
 
+        callUserResetPasswordRequestApi(data, cbfn) {
+          this.callCombinedJsonApi('user-reset-password--request', data, cbfn);
+        }
+
+        callUserResetPasswordGetTokenInfoApi(data, cbfn) {
+          this.callCombinedJsonApi('user-reset-password--get-token-info', data, cbfn);
+        }
+
+        callUserResetPasswordConfirmApi(data, cbfn) {
+          this.callCombinedJsonApi('user-reset-password--confirm', data, cbfn);
+        }
+
       }
     }
   })();

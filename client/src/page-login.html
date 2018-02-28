@@ -119,14 +119,31 @@
         });
       }
 
+      _processForgotPasswordRequestApi({ emailOrPhone }, cbfn) {
+        let data = { emailOrPhone };
+        this.app.callUserResetPasswordRequestApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          let { type } = response;
+          cbfn(type);
+        });
+      }
+
       // region: ui =================================
 
       registerTapped() {
         this.app.navigateTo('/register')
       }
 
-      forgotPasswordTapped() {
-        this.app.showAlertMessage("Coming soon", "Feature under construction.")
+      forgotPasswordTapped(e = null) {
+        let message = "Please enter the phone/email you used to create your account.";
+        let defaultInput = this.loginForm.emailOrPhone;
+        this.app.showModalInput("Enter Phone or Email.", message, defaultInput, emailOrPhone => {
+          this._processForgotPasswordRequestApi({ emailOrPhone }, type => {
+            let message = `We have sent you a confirmation link on your ${type}. Please use the link to reset your password.`;
+            this.app.showModalDialog("Thank you.", message, () => 'pass');
+          });
+        });
       }
 
       loginTapped() {
