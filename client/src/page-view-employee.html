@@ -32,10 +32,24 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
       <div class="card vertical layout">
-        <div>[[employee.name]]</div>
-        <div>Number: [[employee.phone]]</div>
+        <div>Designation: [[employee.designation]]</div>
+        <div>Role: [[employee.role]]</div>
+        <div>Active: [[employee.isActive]]</div>
+        <div>Company Id: [[employee.companyProvidedId]]</div>
       </div>
+
+      <div class="card">
+        <div class="mb-4">Click here to edit the employee.</div>
+        <paper-button raised class="primary m-0" on-tap="editTapped">Edit Employee</paper-button>
+      </div>
+
+      <!-- <div class="card">
+        <div class="mb-4">Click here to delete the employee. Be warned that once deleted, an employee can not be restored.</div>
+        <paper-button raised class="primary m-0" on-tap="deleteTapped">Delete Employee</paper-button>
+      </div> -->
+
     </div>
 
   </template>
@@ -48,8 +62,7 @@
       }
 
       static get properties() {
-        return {
-        };
+        return {};
       }
 
       // region: core =================================
@@ -90,8 +103,8 @@
       }
 
       _fetchEmployee(cbfn) {
-        let employeeId = parseInt(this.params.employee);
-        let data = { employeeId };
+        let employmentId = parseInt(this.params.employee);
+        let data = { employmentId };
         this.app.callGetEmployeeApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -106,32 +119,10 @@
         });
       }
 
-      _deleteEmployee(employeeId, cbfn) {
-        employeeId = parseInt(employeeId);
-        let data = { employeeId };
-        this.app.callDeleteEmployeeApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response);
-        });
-      }
-
       // region: ui  ===========================
 
       editTapped(e = null) {
         return this.app.navigateTo(`/edit-employee/employee:${this.employee.id}`);
-      }
-
-      deleteTapped(e = null) {
-        let message = `Are you sure you want to delete this employee ${this.employee.name}. Once deleted, you can not restore this employee.`;
-        this.app.showModalConfirmation("Delete employee?", message, (answer) => {
-          if (!answer) return;
-          this._deleteEmployee(this.employee.id, () => {
-            this.app.showModalDialog("Successfully deleted.", "The employee has been deleted", () => {
-              this.app.navigateTo(`/manage-employees`);
-            });
-          });
-        });
       }
 
       // region: misc =================================

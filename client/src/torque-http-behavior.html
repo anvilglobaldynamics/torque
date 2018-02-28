@@ -128,6 +128,11 @@
           this.callCombinedJsonApi('add-new-employee', data, cbfn);
         }
 
+        callGetEmployeeApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-employee', data, cbfn);
+        }
+
         callGetOutletListApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('get-outlet-list', data, cbfn);
