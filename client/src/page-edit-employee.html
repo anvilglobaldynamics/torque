@@ -1,0 +1,174 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-employee">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding-top: 24px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+      <iron-form id="editEmployeeForm">
+          <form>
+            <div class="card vertical layout">
+
+              <paper-input class="editEmployeeForm--role" value="{{editEmployeeForm.role}}" required minlength="1" error-message="Please enter a valid role" label="Role of Employee."></paper-input>
+              <paper-input class="editEmployeeForm--designation" value="{{editEmployeeForm.designation}}" required minlength="1" error-message="Please enter a valid designation" label="Designation of Employee."></paper-input>
+              <paper-input class="editEmployeeForm--companyProvidedId" value="{{editEmployeeForm.companyProvidedId}}" required minlength="1" error-message="Please enter Company Provided Id" label="Designation of Company Provided Id."></paper-input>
+
+              <div class="horizontal layout button-row end">
+                <div class="flex"></div>
+                <paper-button raised class="primary" on-tap="updateEmployeeTapped">Update Employee</paper-button>
+              </div>
+
+            </div>
+          </form>
+      </iron-form>
+    </div>
+  </template>
+
+  <script>
+    class PageEditEmployee extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+
+      static get is() {
+        return 'page-edit-employee';
+      }
+
+      static get properties() {
+        return {
+          editingEmployee: {
+            type: Object,
+            value: null
+          },
+          editEmployeeForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  role: 'dev pichi role',
+                  designation: 'pichi desig',
+                  companyProvidedId: '007',
+                  privileges: {}
+                };
+              } else {
+                return {
+                  role: '',
+                  designation: '',
+                  companyProvidedId: '',
+                  privileges: {}
+                };
+              }
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Edit Employee')
+        if (!this._ensureAccess()) return;
+        this._processGetEmployee(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editEmployeeForm');
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      // region: editEmployee =================================
+
+      _processGetEmployee(cbfn) {
+        let employmentId = parseInt(this.params.employee);
+        let data = { employmentId };
+        this.app.callGetEmployeeApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.editingEmployee = response.employee;
+          console.log(this.editingEmployee);
+          let { companyProvidedId, designation, privileges, role } = this.editingEmployee;
+          this.editEmployeeForm = { companyProvidedId, designation, privileges, role };
+          cbfn();
+        });
+      }
+
+      _processUpdateEmployee({ companyProvidedId, designation, privileges, role }) {
+        let data = {
+          companyProvidedId, designation, privileges, role,
+          employmentId: this.editingEmployee.id
+        };
+
+        console.log(data); 
+        // return;
+
+        this.app.callEditEmployeeApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editEmployeeForm');
+          let message = "Congratulations. Your employee has been updated."
+          this.app.showModalDialog("Employee Updated", message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-employees');
+      }
+
+      updateEmployeeTapped(e = null) {
+        this.elemAll('#editEmployeeForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editEmployeeForm').validate()) return;
+
+        let { companyProvidedId, designation, privileges, role } = this.editEmployeeForm;
+        this._processUpdateEmployee({ companyProvidedId, designation, privileges, role });
+      }
+
+      // region: misc =================================
+    }
+
+    window.customElements.define(PageEditEmployee.is, PageEditEmployee);
+  </script>
+</dom-module>

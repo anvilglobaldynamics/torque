@@ -119,7 +119,6 @@
         }
 
         callGetPrivilegeListApi(data, cbfn) {
-          // if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('get-privilege-list', data, cbfn);
         }
 
@@ -131,6 +130,11 @@
         callGetEmployeeApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('get-employee', data, cbfn);
+        }
+
+        callEditEmployeeApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('edit-employee', data, cbfn);
         }
 
         callGetOutletListApi(data, cbfn) {
