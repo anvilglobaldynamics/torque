@@ -78,7 +78,7 @@ exports.UserLoginApi = class extends Api {
           }
           let { createdDatetimeStamp, isVerificationComplete } = emailVerificationRequest;
           if (!isVerificationComplete) {
-            let err = new Error(`You need to verify your email address "${user.phone}".`);
+            let err = new Error(`You need to verify your email address "${user.email}".`);
             err.code = 'USER_REQUIRES_EMAIL_VERIFICATION';
             return this.fail(err);
           }
