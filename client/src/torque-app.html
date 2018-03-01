@@ -1,4 +1,4 @@
-<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<html><head><link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
@@ -53,7 +53,7 @@
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="torque-app">
+</head><body><dom-module id="torque-app">
   <template>
     <style include="shared-styles">
       :host {
@@ -115,7 +115,7 @@
       }
     </style>
 
-    <app-drawer-layout fullbleed responsive-width="2560px">
+    <app-drawer-layout fullbleed="" responsive-width="2560px">
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer">
         <app-toolbar>Torque</app-toolbar>
@@ -131,22 +131,22 @@
       </app-drawer>
 
       <!-- Main content -->
-      <app-header-layout has-scrolling-region>
+      <app-header-layout has-scrolling-region="">
 
         <app-header slot="header" style$="[[$invisibleUnless(user)]]">
           <app-toolbar>
             <template is="dom-if" if="[[!currentPageIsModal]]">
-              <paper-icon-button icon="shared-icons:menu" drawer-toggle></paper-icon-button>
+              <paper-icon-button icon="shared-icons:menu" drawer-toggle=""></paper-icon-button>
             </template>
             <template is="dom-if" if="[[currentPageIsModal]]">
               <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
             </template>
-            <div main-title class="flex vertical layout">
+            <div main-title="" class="flex vertical layout">
               <div>[[$getPageTitle(pageTitleList.length)]]</div>
               <div class="subtitle">[[organization.name]]</div>
             </div>
             <template is="dom-if" if="[[$and(activeServiceCount, topSpinnerEnabled)]]">
-              <paper-spinner-lite active class="top-nav-spinner"></paper-spinner-lite>
+              <paper-spinner-lite active="" class="top-nav-spinner"></paper-spinner-lite>
             </template>
             <paper-menu-button horizontal-align="right">
               <paper-icon-button icon="icons:apps" slot="dropdown-trigger"></paper-icon-button>
@@ -188,8 +188,10 @@
         </iron-pages>
 
         <div class="footer">
-          &copy; 2017
-          <a href="[[authorWebsite]]">[[authorName]]</a> All Rights Reserved
+          &#xA9; 2017
+          <a href="[[authorWebsite]]">[[authorName]]</a> All Rights Reserved.
+          <br> build
+          <span id="build-number">1</span>
         </div>
       </app-header-layout>
     </app-drawer-layout>
@@ -411,4 +413,4 @@
 
     window.customElements.define(TorqueApp.is, TorqueApp);
   </script>
-</dom-module>
+</dom-module></body></html>

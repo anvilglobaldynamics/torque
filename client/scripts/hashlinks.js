@@ -1,13 +1,18 @@
 
 const fs = require('fs');
 const path = require('path');
-const cheerio = require('cheerio')
+const cheerio = require('cheerio');
+const hashFiles = require('hash-files');
 
-getHash = (absolutePath) => {
-  return fs.statSync(absolutePath).mtime.getTime();
+let getHash = (absolutePath) => {
+  // return fs.statSync(absolutePath).mtime.getTime();
+  return hashFiles.sync({
+    algorithm: 'sha1',
+    files: [absolutePath]
+  });
 }
 
-processFile = (absolutePath) => {
+let processFile = (absolutePath) => {
   console.log("PROCESSING:", absolutePath);
   let rootDir = path.dirname(absolutePath);
   let contents = fs.readFileSync(absolutePath, 'utf8');
@@ -46,7 +51,6 @@ processFile = (absolutePath) => {
 
   fs.writeFileSync(absolutePath, modifiedContents);
 }
-
 
 exports.hashLinks = (rootDir) => {
   processFile(path.join(rootDir, 'index.html'));
