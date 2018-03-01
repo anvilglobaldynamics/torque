@@ -31,7 +31,7 @@
 
     <div class$="std-small-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <iron-form id="login-form">
+      <iron-form id="loginForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
             <div class="std-dialog-header">LOGIN</div>
@@ -40,7 +40,7 @@
             <div class="horizontal layout button-row end">
               <div class="link light" on-tap="forgotPasswordTapped">Forgot your password?</div>
               <div class="flex"></div>
-              <paper-button raised class="primary" on-tap="loginTapped">Login</paper-button>
+              <paper-button raised class="primary loginForm--submit" on-tap="loginTapped">Login</paper-button>
             </div>
             <div class="horizontal layout button-row extended center-center">
               <div class="link light" on-tap="registerTapped">Don't have an account?</div>
@@ -147,8 +147,8 @@
       }
 
       loginTapped() {
-        this.elemAll('#login-form paper-input').forEach(el => el.autoValidate = true);
-        if (!this.elem('#login-form').validate()) return;
+        this.elemAll('#loginForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#loginForm').validate()) return;
 
         let { emailOrPhone, password } = this.loginForm;
         this._processUserLogin({ emailOrPhone, password });

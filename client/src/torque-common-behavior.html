@@ -8,6 +8,20 @@
         super(...args);
       }
 
+      genericFormSubmitionKeypress(e) {
+        if (e.which !== 13) return;
+        if (e.target.nodeName !== 'PAPER-INPUT') return;
+        let el = e.target;
+        while (el && el.nodeName !== 'IRON-FORM') {
+          el = el.parentNode;
+        }
+        if (!el) return;
+        let submitEl = el.querySelector(`.${el.id}--submit`);
+        if (submitEl) {
+          submitEl.click();
+        }
+      }
+
       static get properties() {
         return {
           isReady: {
