@@ -1,4 +1,4 @@
-<html><head><link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
 
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
@@ -53,7 +53,7 @@
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
 
-</head><body><dom-module id="torque-app">
+<dom-module id="torque-app">
   <template>
     <style include="shared-styles">
       :host {
@@ -200,6 +200,8 @@
   </template>
 
   <script>
+    let localDocument = document.currentScript.ownerDocument;
+
     class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior) {
 
       static get is() { return 'torque-app'; }
@@ -317,7 +319,14 @@
       // ====================== navigation =============================
 
       _pageNameChanged() {
-        var resolvedPageUrl = this.resolveUrl('page-' + this.pageName + '.html');
+        let qualifiedName = 'page-' + this.pageName + '.html';
+        let matchingEl = Array.from(localDocument.querySelectorAll('link[rel="lazy-import"]')).find(el => {
+          return el.href.indexOf(qualifiedName) > -1;
+        });
+        if (matchingEl){
+          qualifiedName = matchingEl.href;
+        }
+        var resolvedPageUrl = this.resolveUrl(qualifiedName);
         Polymer.importHref(resolvedPageUrl, null, (_ => this.pageName = 'error404'), true);
       }
 
@@ -413,4 +422,4 @@
 
     window.customElements.define(TorqueApp.is, TorqueApp);
   </script>
-</dom-module></body></html>
+</dom-module>
