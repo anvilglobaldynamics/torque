@@ -25,7 +25,8 @@
     "request": "^2.83.0"
   },
   "scripts": {
-    "start": "node start.js",
+    "start": "nodemon start.js",
+    "start-single": "node start.js",
     "test": "mocha"
   },
   "private": true
