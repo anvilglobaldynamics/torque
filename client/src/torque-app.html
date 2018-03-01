@@ -336,16 +336,12 @@
       mainIronPagesIronSelected(e, details) {
         if (e.target.nodeName !== 'IRON-PAGES') return;
         if (!details.item) return;
-        this._lastPageElementOpened = details.item;
         this._notifyPageSelect(details.item);
       }
 
       refreshCurrentPage() {
-        // this._notifyPageSelect(this._lastPageElementOpened);
-        // FIXME: This is a quick hack to make reload work.
-        // However, it needs to be altered so that page can reload
-        // without reloading whole window.
-        window.location.reload();
+        this.activePageElement.onNavigateOut();
+        this.activePageElement.onNavigateIn();       
       }
 
       // ======================  events =============================
