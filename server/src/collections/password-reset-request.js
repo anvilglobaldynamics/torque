@@ -11,7 +11,7 @@ exports.PasswordResetRequestCollection = class extends Collection {
 
     this.joiSchema = Joi.object().keys({
       forUserId: Joi.number().max(999999999999999).required(),
-      forEmail: Joi.string().email().min(3).max(30),
+      forEmail: Joi.string().email().min(3).max(30).allow(null).required(),
       forPhone: Joi.string().alphanum().min(11).max(14),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       confirmedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
@@ -47,7 +47,7 @@ exports.PasswordResetRequestCollection = class extends Collection {
   }
 
   create({ userId, email, phone, origin, confirmationToken }, cbfn) {
-    let user = {
+    let doc = {
       forEmail: email,
       forPhone: phone,
       forUserId: userId,
@@ -57,7 +57,7 @@ exports.PasswordResetRequestCollection = class extends Collection {
       confirmedDatetimeStamp: null,
       isPasswordResetComplete: false
     }
-    this._insert(user, (err, id) => {
+    this._insert(doc, (err, id) => {
       return cbfn(err, id);
     })
   }
@@ -90,7 +90,7 @@ exports.PasswordResetRequestCollection = class extends Collection {
   // FIXME: order by createdDatetime so that only the last request
   // can be verified
   findByConfirmationToken({ confirmationToken }, cbfn) {
-    let query = { confirmationToken, isPasswordResetComplete: false }
+    let query = { confirmationToken, isPasswordResetComplete: false };
     this._findOne(query, cbfn);
   }
 

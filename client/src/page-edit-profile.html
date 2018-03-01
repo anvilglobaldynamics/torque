@@ -1,0 +1,205 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-profile">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding-top: 24px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="changePasswordForm">
+        <form>
+          <div class="card vertical layout">
+            <paper-input class="changePasswordForm--oldPassword" value="{{changePasswordForm.oldPassword}}" required minlength="3" maxlength="15" error-message="Please enter a valid password" label="Your current password" type="password"></paper-input>
+            <paper-input class="changePasswordForm--newPassword" value="{{changePasswordForm.newPassword}}" required minlength="3" maxlength="15" error-message="Please enter a valid password" label="Your new password" type="password"></paper-input>
+            <paper-input class="changePasswordForm--repeatNewPassword" value="{{changePasswordForm.repeatNewPassword}}" required minlength="3" maxlength="15" error-message="Please enter a valid password" label="Retype your new current password" type="password"></paper-input>
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class="primary" on-tap="changePasswordTapped">Change Password</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+      <iron-form id="editProfileForm">
+        <form>
+          <div class="card vertical layout">
+            <paper-input class="editProfileForm--phone" value="{{editProfileForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Your valid phone number"></paper-input>
+            <paper-input class="editProfileForm--email" value="{{editProfileForm.email}}" required pattern="^.+@.+\..+$" minlength="3" error-message="Please enter a valid email" label="Your valid email address"></paper-input>
+
+            <paper-input class="editProfileForm--fullName" value="{{editProfileForm.fullName}}" required minlength="3" error-message="Please enter a valid name" label="Your Full Name."></paper-input>
+            <paper-input class="editProfileForm--nid" value="{{editProfileForm.nid}}" label="Your NID (National ID) (Optional)"></paper-input>
+            <paper-textarea class="editProfileForm--physicalAddress" value="{{editProfileForm.physicalAddress}}" label="Your current address (Optional)" rows="4"></paper-textarea>
+
+            <paper-input class="editProfileForm--emergencyContact" value="{{editProfileForm.emergencyContact}}" label="The person/number to contact in case of emergency (i.e. workplace accidents) (Optional)"></paper-input>
+            <paper-input class="editProfileForm--bloodGroup" value="{{editProfileForm.bloodGroup}}" label="Your Bloodgroup (Optional)"></paper-input>
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class="primary" on-tap="editProfileTapped">Save Changes</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+  </template>
+
+  <script>
+    class PageEditProfile extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+      static get is() {
+        return 'page-edit-profile';
+      }
+
+      static get properties() {
+        return {
+          editProfileForm: {
+            type: Object,
+            value: _ => {
+              return {
+                phone: '',
+                email: '',
+                fullName: '',
+                nid: '',
+                physicalAddress: '',
+                emergencyContact: '',
+                bloodGroup: ''
+              };
+            }
+          },
+          changePasswordForm: {
+            type: Object,
+            value: _ => {
+              return {
+                oldPassword: '',
+                newPassword: '',
+                repeatNewPassword: '',
+              };
+            }
+          }
+
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Edit Profile');
+        if (!this._ensureAccess()) return;
+        this.delay(300, () => {
+          this._processLoadProfile();
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editProfileForm');
+        this.resetProperties('changePasswordForm');
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      _processLoadProfile() {
+        let { phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = this.app.user;
+        this.editProfileForm = { phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup };
+      }
+
+      _processUserChangePassword({ oldPassword, newPassword, repeatNewPassword }) {
+        if (repeatNewPassword !== newPassword) {
+          let message = "You incorrectly typed your new password the second time. Please type it again and press confirm.";
+          return this.app.showModalDialog("Sorry.", message, () => 'pass');
+        }
+        let data = { oldPassword, newPassword };
+        this.app.callUserChangePasswordApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'changePasswordForm');
+          let message = "Your password has been changed..";
+          this.app.showModalDialog("Password Changed", message, _ => {
+            this.app.navigateTo(`/login`);
+          });
+        });
+      }
+
+      _processUserEditProfile({ phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
+        let data = { phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup };
+        this.app.callUserEditProfileApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editProfileForm');
+          let message = "Your changes have been saved.";
+          this.app.showModalDialog("Profile Updated", message, _ => {
+            if (response.doesRequireLogin) {
+              this.app.navigateTo(`/login`);
+            } else {
+              this.app.db.update('user', (({ which }) => which === 'only'), user => {
+                Object.assign(user, { fullName, nid, physicalAddress, emergencyContact, bloodGroup });
+                return user;
+              });
+              this.app.navigateTo(`/home`);
+            }
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      changePasswordTapped() {
+        this.elemAll('#changePasswordForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#changePasswordForm').validate()) return;
+
+        let { oldPassword, newPassword, repeatNewPassword } = this.changePasswordForm;
+        this._processUserChangePassword({ oldPassword, newPassword, repeatNewPassword });
+      }
+
+      editProfileTapped() {
+        this.elemAll('#editProfileForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editProfileForm').validate()) return;
+
+        let { phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = this.editProfileForm;
+        this._processUserEditProfile({ phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup });
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageEditProfile.is, PageEditProfile);
+  </script>
+</dom-module>

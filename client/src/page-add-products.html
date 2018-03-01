@@ -19,7 +19,7 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="product-category">
+<dom-module id="product-category-add-product">
   <template>
 
     <style include="shared-styles">
@@ -42,7 +42,7 @@
           </paper-input>
         </div>
         <template is="dom-repeat" items="[[productCategory.childList]]" as="childProductCategory">
-          <product-category product-category="[[childProductCategory]]" margin-left="[[$marginMore(marginLeft)]]" app="[[app]]"></product-category>
+          <product-category-add-product product-category="[[childProductCategory]]" margin-left="[[$marginMore(marginLeft)]]" app="[[app]]"></product-category-add-product>
         </template>
       </div>
     </div>
@@ -50,10 +50,10 @@
   </template>
 
   <script>
-    class ProductCategory extends FxElement {
+    class ProductCategoryAddProduct extends FxElement {
 
       static get is() {
-        return 'product-category';
+        return 'product-category-add-product';
       }
 
       static get properties() {
@@ -107,14 +107,14 @@
             count: parseInt(this.count)
           });
         }
-        this.elemAll('product-category').forEach(el => el.listProductsToAdd(productList));
+        this.elemAll('product-category-add-product').forEach(el => el.listProductsToAdd(productList));
       }
 
       // region: misc =================================
 
     }
 
-    window.customElements.define(ProductCategory.is, ProductCategory);
+    window.customElements.define(ProductCategoryAddProduct.is, ProductCategoryAddProduct);
   </script>
 </dom-module>
 
@@ -136,7 +136,7 @@
       <div class="card vertical layout">
         <div class="std-list">
           <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
-            <product-category product-category="[[productCategory]]" margin-left="[[marginLeft]]" app="[[app]]"></product-category>
+            <product-category-add-product product-category="[[productCategory]]" margin-left="[[marginLeft]]" app="[[app]]"></product-category-add-product>
           </template>
         </div>
       </div>
@@ -240,7 +240,7 @@
 
       addProductsTapped(e = null) {
         let productList = [];
-        this.elemAll('product-category').forEach(el => el.listProductsToAdd(productList));
+        this.elemAll('product-category-add-product').forEach(el => el.listProductsToAdd(productList));
         let inventoryId = parseInt(this.params.inventory);
         this._addProductsToInventory({ productList, inventoryId }, () => {
           let message = "The products were successfully added to the inventory."

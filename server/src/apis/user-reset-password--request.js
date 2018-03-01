@@ -67,6 +67,7 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Api) {
       if (err) return this.fail(err);
       if (!isUnique) return this._createPasswordResetRequest({ userId, email, phone }, cbfn);
       this.database.passwordResetRequest.create({ userId, email, phone, origin: 'password-reset-api', confirmationToken }, (err) => {
+        if (err) return this.fail(err);
         let confirmationLink = this._generateConfirmationLink(confirmationToken);
         return cbfn({ confirmationLink });
       });
@@ -85,9 +86,11 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Api) {
     this._getUserIfValid({ emailOrPhone }, (user) => {
       let { email, phone, id: userId } = user;
       this._createPasswordResetRequest({ userId, email, phone }, ({ confirmationLink }) => {
-        this.success({ status: "success" });
-        this._sendPasswordResetEmail({ email, confirmationLink });
-        this._sendPasswordResetSms({ phone, confirmationLink });
+        let type = 'phone';
+        if (emailOrPhone === email) type = 'email'
+        this.success({ status: "success", type });
+        if (type === 'email') this._sendPasswordResetEmail({ email, confirmationLink });
+        if (type === 'phone') this._sendPasswordResetSms({ phone, confirmationLink });
       });
     });
   }
