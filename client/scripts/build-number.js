@@ -12,7 +12,7 @@ exports.updateBuildNumber = (rootDir, filePath) => {
   let index1 = contents.indexOf(str);
   let index2 = contents.indexOf('</span>');
 
-  let left = contents.substr(index1, str.length);
+  let left = contents.substring(0, index1 + str.length);
   let middle = contents.substring(index1 + str.length, index2);
   let right = contents.substr(index2);
 

@@ -16,6 +16,5 @@ const buildDir = './build/custom-es5-bundled';
 const rootElementPath = 'src/torque-app.html'
 
 updateBuildNumber(srcDir, rootElementPath);
-return
 runPolymerBuild();
 hashLinks(buildDir);
