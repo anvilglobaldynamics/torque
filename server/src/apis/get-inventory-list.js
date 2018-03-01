@@ -29,7 +29,22 @@ exports.GetInventoryListApi = class extends collectionCommonMixin(Api) {
   _getInventoryList({ organizationId }, cbfn) {
     this.database.inventory.listByOrganizationId({ organizationId }, (err, inventoryList) => {
       if (err) return this.fail(err);
-      cbfn(inventoryList);
+      Promise.all(inventoryList.map(inventory => new Promise((accept, reject) => {
+        let _cbfn = (err, inventoryContainer) => {
+          if (err) return reject(err);
+          inventory.inventoryContainerName = inventoryContainer.name;
+          accept();
+        }
+        if (inventory.inventoryContainerType === "outlet") {
+          this.database.outlet.findById({ outletId: inventory.inventoryContainerId }, _cbfn);
+        } else {
+          this.database.warehouse.findById({ warehouseId: inventory.inventoryContainerId }, _cbfn);
+        }
+      }))).catch(ex => {
+        return this.fail(ex);
+      }).then(() => {
+        cbfn(inventoryList);
+      })
     })
   }
 

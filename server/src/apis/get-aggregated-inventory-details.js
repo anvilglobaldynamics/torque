@@ -35,7 +35,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
     this.database.inventory.findById({ inventoryId }, (err, inventory) => {
       if (err) return this.fail(err);
       if (!this._ensureDoc(err, inventory, "INVENTORY_INVALID", "inventory could not be found")) return;
-      cbfn(inventory)
+      cbfn(inventory);
     })
   }
 
@@ -43,8 +43,19 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
     let inventoryContainerDetails = {
       inventoryContainerId: inventory.inventoryContainerId,
       inventoryContainerType: inventory.inventoryContainerType,
+      inventoryContainerName: null
     }
-    cbfn(inventoryContainerDetails);
+    let _cbfn = (err, inventoryContainer) => {
+      if (err) return this.fail(err);
+      inventoryContainerDetails.inventoryContainerName = inventoryContainer.name;
+      cbfn(inventoryContainerDetails);
+    }
+    if (inventory.inventoryContainerType === "outlet") {
+      this.database.outlet.findById({ outletId: inventory.inventoryContainerId }, _cbfn);
+    } else {
+      this.database.warehouse.findById({ warehouseId: inventory.inventoryContainerId }, _cbfn);
+    }
+
   }
 
   _getInventoryDetails({ inventory }, cbfn) {

@@ -234,6 +234,16 @@
           this.callCombinedJsonApi('user-change-password', data, cbfn);
         }
 
+        callGetInventoryListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-inventory-list', data, cbfn);
+        }
+
+        callTransferBetweenInventoriesApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('transfer-between-inventories', data, cbfn);
+        }
+
       }
     }
   })();
