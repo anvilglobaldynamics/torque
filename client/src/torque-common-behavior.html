@@ -1,4 +1,4 @@
-<link rel="import" href="../bower_components/atomicdb/atomicdb.html">
+
 <script>
   if (!window.TorqueCommonBehavior) {
     /* @polymerMixin */
@@ -109,6 +109,17 @@
           }
         }
         return true;
+      }
+
+      /** $mkDate()
+       * Converts a date to a user friendly string
+       * See http://arshaw.com/xdate/ for formatting instruction
+       * @param {Date|timestamp} date
+       * @param {string} format 
+       * @returns 
+       */
+      $mkDate(date, format = 'MMM d, yyyy') {
+        return (new XDate(date)).toString(format);
       }
 
     }

@@ -191,9 +191,10 @@
         <div class="footer">
           &#xA9; 2017
           <a href="[[authorWebsite]]">[[authorName]]</a> All Rights Reserved.
-          <br> <span class="extra-small">build
-          <span id="build-number">4</span>
-        </span>
+          <br>
+          <span class="extra-small">build
+            <span id="build-number">4</span>
+          </span>
         </div>
       </app-header-layout>
     </app-drawer-layout>
@@ -325,7 +326,7 @@
         let matchingEl = Array.from(localDocument.querySelectorAll('link[rel="lazy-import"]')).find(el => {
           return el.href.indexOf(qualifiedName) > -1;
         });
-        if (matchingEl){
+        if (matchingEl) {
           qualifiedName = matchingEl.href;
         }
         var resolvedPageUrl = this.resolveUrl(qualifiedName);
