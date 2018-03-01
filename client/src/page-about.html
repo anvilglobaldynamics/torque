@@ -95,7 +95,8 @@
 
       static get properties() {
         return {
-          contactEmail: { type: String, value: 'support.mg.@torque.live' }
+          contactEmail: { type: String, value: 'support.mg.@torque.live' },
+          paperTabSelectedViewIndex: { type: Number, value: 0 }
         };
       }
 
@@ -103,28 +104,20 @@
 
       constructor() {
         super();
-        this.confirmPageReady()
+        this.confirmPageReady();
       }
 
       onFirstNavigation() {
         super.onFirstNavigation();
-        this.app.shouldShowSaveButton = false;
-        this.app.currentPageIsModal = false;
-        this.paperTabSelectedViewIndex = 0;
-        baselib.delay(50, _ => {
-          this.detectPageSwipe(this.$['wrapper'], (this.wrapperSwiped.bind(this)))
+        baselib.delay(50, () => {
+          this.detectPageSwipe(this.$['wrapper'], (this.wrapperSwiped.bind(this)));
         });
-      }
-
-      onNextNavigation() {
-        super.onNextNavigation();
-        this.app.shouldShowSaveButton = false;
-        this.app.currentPageIsModal = false;
-        this.paperTabSelectedViewIndex = 0;
       }
 
       onNavigateIn() {
         if (!this._ensureAccess()) return;
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
         this.delay(300, () => {
           this.isReady = true;
         });
