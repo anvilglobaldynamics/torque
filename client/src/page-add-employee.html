@@ -40,8 +40,8 @@
             <paper-input class="addEmployeeForm--fullName" value="{{addEmployeeForm.fullName}}" required minlength="3" error-message="Please enter a valid name" label="Name of Employee."></paper-input>
             <paper-input class="addEmployeeForm--password" value="{{addEmployeeForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long" label="A minimum 8 digit password" type="password"></paper-input>
             <paper-input class="addEmployeeForm--phone" value="{{addEmployeeForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number of Manager/Contact Person"></paper-input>
-            
-            <elem-common-employment-details-input employee-form="{{addEmployeeForm}}" page="{{page}}"></elem-common-employment-details-input>
+
+            <elem-common-employment-details-input name="employeeForm" employee-form="{{addEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -102,11 +102,12 @@
         this.app.currentPageIsModal = true;
         this.app.pushPageTitle('Add Employee');
         if (!this._ensureAccess()) return;
-        this.page = this;
-        let pl = this.elem("elem-common-employment-details-input");
-        console.log(pl);
-        this._processPrivilegeList (() => {
-          this.isReady = true;
+        this.self = this;
+        this.delay(0, () => {
+          this.subForm = this.elem("elem-common-employment-details-input");
+          this.subForm._processPrivilegeList(() => {
+            this.isReady = true;
+          });
         });
       }
 
@@ -126,9 +127,9 @@
 
       // region: createEmployee =================================
 
-      _processCreateEmployee({ fullName, password, phone, role ,designation, companyProvidedId, privileges }) {
+      _processCreateEmployee({ fullName, password, phone, role, designation, companyProvidedId, privileges }) {
         let data = {
-          fullName, password, phone, role ,designation, companyProvidedId, privileges,
+          fullName, password, phone, role, designation, companyProvidedId, privileges,
           organizationId: this.app.organization.id
         };
         this.app.callAddNewEmployeeApi(data, (err, response) => {
@@ -136,20 +137,12 @@
           if (response.hasError) return this.onApiError(response.error, 'addEmployeeForm');
           let message = "Congratulations. Your new employee has been created."
           this.app.showModalDialog("Employee Created", message, _ => {
-            this.app.navigateTo(`/view-employee/employee:${response.employeeId}`);
+            this.app.navigateTo(`/view-employee/employee:${response.employmentId}`);
           });
         });
       }
 
       // region: ui =================================
-
-      $isChecked(privilege) {
-        return this.addEmployeeForm.privileges[privilege.code];
-      }
-
-      privilegeChanged(e) {
-        this.addEmployeeForm.privileges[e.model.privilege.code] = e.target.checked;
-      }
 
       backButtonOnTopBarPressed(e = null) {
         this.app.navigateToPreviousUrl('/manage-employees');
@@ -159,8 +152,8 @@
         this.elemAll('#addEmployeeForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#addEmployeeForm').validate()) return;
 
-        let { fullName, password, phone, role ,designation, companyProvidedId, privileges } = this.addEmployeeForm;
-        this._processCreateEmployee({ fullName, password, phone, role ,designation, companyProvidedId, privileges });
+        let { fullName, password, phone, role, designation, companyProvidedId, privileges } = this.addEmployeeForm;
+        this._processCreateEmployee({ fullName, password, phone, role, designation, companyProvidedId, privileges });
       }
 
       // region: misc =================================
