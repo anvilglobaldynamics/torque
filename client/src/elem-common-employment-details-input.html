@@ -23,7 +23,16 @@
     <style include="shared-styles"></style>
 
     <div class$="layout vertical center-center">
-      these are common inputs!
+      <paper-input class="employeeForm--role" value="{{employeeForm.role}}" required minlength="1" error-message="Please enter a valid role" label="Role of Employee."></paper-input>
+      <paper-input class="employeeForm--designation" value="{{employeeForm.designation}}" required minlength="1" error-message="Please enter a valid designation" label="Designation of Employee."></paper-input>
+      <paper-input class="employeeForm--companyProvidedId" value="{{employeeForm.companyProvidedId}}" required minlength="1" error-message="Please enter Company Provided Id" label="Designation of Company Provided Id."></paper-input>
+
+      <h3>Privileges:</h3>
+      <template is="dom-repeat" items="[[privilegeList]]" as="privilege">
+        <paper-checkbox checked="[[$isChecked(privilege)]]" on-change="privilegeChanged">
+          [[privilege.name]]
+        </paper-checkbox>
+      </template>
     </div>
   </template>
 
@@ -36,6 +45,56 @@
 
       static get properties() {
         return {};
+      }
+
+      _fetchPrivilegeList(cbfn) {
+        let data = {};
+        this.page.app.callGetPrivilegeListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.page.onApiError(response.error);
+          return cbfn(response.privilegeList);
+        });
+      }
+
+      _processPrivilegeList(cbfn) {
+        this._fetchPrivilegeList(newPrivilegeList => {
+          this.privilegeList = newPrivilegeList;
+          let defaultPrivilegeList = [
+            "PRIV_VIEW_USERS",
+
+            "PRIV_ACCESS_POS",
+            "PRIV_VIEW_SALES",
+            "PRIV_MODIFY_SALES",
+            "PRIV_ALLOW_FLAT_DISCOUNT",
+            "PRIV_ALLOW_INDIVIDUAL_DISCOUNT",
+            "PRIV_ALLOW_FOC",
+
+            "PRIV_VIEW_SALES_RETURN",
+            "PRIV_MODIFY_SALES_RETURN",
+
+            "PRIV_VIEW_ALL_INVENTORIES",
+            "PRIV_TRANSFER_ALL_INVENTORIES",
+            "PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES",
+
+            "PRIV_VIEW_ALL_OUTLETS",
+
+            "PRIV_VIEW_ALL_WAREHOUSES",
+
+            "PRIV_VIEW_ORGANIZATION_STATISTICS",
+
+            "PRIV_VIEW_CUSTOMER",
+            "PRIV_ADD_CUSTOMER_DURING_SALES",
+            "PRIV_MODIFY_CUSTOMER",
+            "PRIV_MANAGE_CUSTOMER_DEBT"
+          ]
+          for (let privilege of this.privilegeList) {
+            this.employeeForm.privileges[privilege.code] = false;
+          }
+          for (let privilege of defaultPrivilegeList) {
+            this.employeeForm.privileges[privilege] = true;
+          } 
+          cbfn();
+        });
       }
 
     }

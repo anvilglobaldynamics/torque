@@ -33,6 +33,7 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
       <iron-form id="addEmployeeForm">
         <form>
           <div class="card vertical layout">
@@ -40,16 +41,7 @@
             <paper-input class="addEmployeeForm--password" value="{{addEmployeeForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long" label="A minimum 8 digit password" type="password"></paper-input>
             <paper-input class="addEmployeeForm--phone" value="{{addEmployeeForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number of Manager/Contact Person"></paper-input>
             
-            <paper-input class="addEmployeeForm--role" value="{{addEmployeeForm.role}}" required minlength="1" error-message="Please enter a valid role" label="Role of Employee."></paper-input>
-            <paper-input class="addEmployeeForm--designation" value="{{addEmployeeForm.designation}}" required minlength="1" error-message="Please enter a valid designation" label="Designation of Employee."></paper-input>
-            <paper-input class="addEmployeeForm--companyProvidedId" value="{{addEmployeeForm.companyProvidedId}}" required minlength="1" error-message="Please enter Company Provided Id" label="Designation of Company Provided Id."></paper-input>
-
-            <h3>Privileges:</h3>
-            <template is="dom-repeat" items="[[privilegeList]]" as="privilege">
-              <paper-checkbox checked="[[$isChecked(privilege)]]" on-change="privilegeChanged">
-                [[privilege.name]]
-              </paper-checkbox>
-            </template>
+            <elem-common-employment-details-input employee-form="{{addEmployeeForm}}" page="{{page}}"></elem-common-employment-details-input>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -59,7 +51,6 @@
         </form>
       </iron-form>
 
-      <elem-common-employment-details-input></elem-common-employment-details-input>
     </div>
   </template>
   <script>
@@ -111,6 +102,9 @@
         this.app.currentPageIsModal = true;
         this.app.pushPageTitle('Add Employee');
         if (!this._ensureAccess()) return;
+        this.page = this;
+        let pl = this.elem("elem-common-employment-details-input");
+        console.log(pl);
         this._processPrivilegeList (() => {
           this.isReady = true;
         });
@@ -128,56 +122,6 @@
           return false;
         }
         return true;
-      }
-
-      _fetchPrivilegeList(cbfn) {
-        let data = {};
-        this.app.callGetPrivilegeListApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.privilegeList);
-        });
-      }
-
-      _processPrivilegeList(cbfn) {
-        this._fetchPrivilegeList(newPrivilegeList => {
-          this.privilegeList = newPrivilegeList;
-          let defaultPrivilegeList = [
-            "PRIV_VIEW_USERS",
-
-            "PRIV_ACCESS_POS",
-            "PRIV_VIEW_SALES",
-            "PRIV_MODIFY_SALES",
-            "PRIV_ALLOW_FLAT_DISCOUNT",
-            "PRIV_ALLOW_INDIVIDUAL_DISCOUNT",
-            "PRIV_ALLOW_FOC",
-
-            "PRIV_VIEW_SALES_RETURN",
-            "PRIV_MODIFY_SALES_RETURN",
-
-            "PRIV_VIEW_ALL_INVENTORIES",
-            "PRIV_TRANSFER_ALL_INVENTORIES",
-            "PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES",
-
-            "PRIV_VIEW_ALL_OUTLETS",
-
-            "PRIV_VIEW_ALL_WAREHOUSES",
-
-            "PRIV_VIEW_ORGANIZATION_STATISTICS",
-
-            "PRIV_VIEW_CUSTOMER",
-            "PRIV_ADD_CUSTOMER_DURING_SALES",
-            "PRIV_MODIFY_CUSTOMER",
-            "PRIV_MANAGE_CUSTOMER_DEBT"
-          ]
-          for (let privilege of this.privilegeList) {
-            this.addEmployeeForm.privileges[privilege.code] = false;
-          }
-          for (let privilege of defaultPrivilegeList) {
-            this.addEmployeeForm.privileges[privilege] = true;
-          } 
-          cbfn();
-        });
       }
 
       // region: createEmployee =================================
