@@ -1,12 +1,14 @@
 
 let { Api } = require('./../api-base');
 let Joi = require('joi');
-let cryptolib = require('crypto');
+
 let { generateRandomString } = require('./../utils/random-string');
+
+let { userCommonMixin } = require('./mixins/user-common');
 
 const PHONE_VERIFICATION_WINDOW = 1 * 60 * 60 * 1000;
 
-exports.UserLoginApi = class extends Api {
+exports.UserLoginApi = class extends userCommonMixin(Api) {
 
   get autoValidates() { return true; }
 
@@ -20,10 +22,6 @@ exports.UserLoginApi = class extends Api {
       ]).required(),
       password: Joi.string().min(8).max(30).required()
     });
-  }
-
-  _makeHash(string) {
-    return cryptolib.createHash('sha256').update(string).digest("hex");
   }
 
   /*
