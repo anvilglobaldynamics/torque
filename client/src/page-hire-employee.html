@@ -31,23 +31,33 @@
       </style>
   
       <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
-        <!-- <template is="dom-repeat" items="{{!user}}"> -->
-          <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
-            <div class="card vertical layout">
-              NO USER!
-              <div class="horizontal layout button-row end">
-                <div class="flex"></div>
-                <paper-button raised class="primary" on-tap="searchUserTapped">Find User</paper-button>
-              </div>
+        <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+          <div class="card vertical layout">
+            <paper-input class="findUserField" value="{{findUserField.emailOrPhone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone/email" label="Email Or Phone"></paper-input>
+
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class="primary" on-tap="searchUserTapped">Find User</paper-button>
             </div>
           </div>
-        <!-- </template> -->
 
-        <template is="dom-repeat" items="{{user}}">
-          HAVE USER!
-          <!-- <elem-common-employment-details-input name="employeeForm" employee-form="{{addEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input> -->
-          <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper"></div>
-        </template>
+          <template is="dom-if" if="[[user]]">
+            <iron-form id="hireEmployeeForm">
+              <form>
+                <div class="card vertical layout">
+
+                  <elem-common-employment-details-input name="employeeForm" employee-form="{{hireEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input>
+
+                  <div class="horizontal layout button-row end">
+                    <div class="flex"></div>
+                    <paper-button raised class="primary" on-tap="hireUserTapped">Hire As Employee</paper-button>
+                  </div>
+                </div>
+              </form>
+            </iron-form>
+          </template>
+        </div>
   </template>
   <script>
     class PageHireEmployee extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
@@ -62,7 +72,7 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  emailOrPhone: 'pichi role',
+                  emailOrPhone: '01700000011',
                 };
               } else {
                 return {
@@ -107,12 +117,7 @@
         this.app.pushPageTitle('Hire Employee');
         if (!this._ensureAccess()) return;
         this.self = this;
-        // this.delay(0, () => {
-          // this.subForm = this.elem("elem-common-employment-details-input");
-          // this.subForm._processPrivilegeList({ shouldSetDefaultPrivileges: true }, () => {
-            this.isReady = true;
-          // });
-        // });
+        this.isReady = true;
       }
 
       onNavigateOut() {
@@ -132,19 +137,27 @@
       // region: proces =================================
 
       _processFindUser({ emailOrPhone }, cbfn) {
-        return cbfn({ user: "this is a user" });
+        let data = { emailOrPhone: this.findUserField.emailOrPhone };
+        this.app.callFindUserApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.user);
+        });
       }
 
-      _processHireEmployee({ fullName, password, phone, role, designation, companyProvidedId, privileges }) {
+      // TODO: _processHireEmployee
+
+      _processHireEmployee({ role, designation, companyProvidedId, privileges }) {
         let data = {
-          fullName, password, phone, role, designation, companyProvidedId, privileges,
+          userId: this.user.id,
+          role, designation, companyProvidedId, privileges,
           organizationId: this.app.organization.id
         };
-        this.app.callAddNewEmployeeApi(data, (err, response) => {
+        this.app.callHireUserAsEmployeeApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'hireEmployeeForm');
-          let message = "Congratulations. Your new employee has been created."
-          this.app.showModalDialog("Employee Created", message, _ => {
+          let message = "Congratulations. Your new employee has been hired."
+          this.app.showModalDialog("Employee Hired", message, _ => {
             this.app.navigateTo(`/view-employee/employee:${response.employmentId}`);
           });
         });
@@ -159,7 +172,15 @@
       searchUserTapped(e = null) {
         let emailOrPhone = null;
         this._processFindUser({ emailOrPhone }, (user) => {
-          console.log(user);
+          this.user = user;
+
+          this.delay(0, () => {
+            this.subForm = this.elem("elem-common-employment-details-input");
+            this.subForm._processPrivilegeList({ shouldSetDefaultPrivileges: true }, () => {
+              this.isReady = true;
+            });
+          });
+
         });
       }
 
@@ -167,8 +188,8 @@
         this.elemAll('#hireEmployeeForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#hireEmployeeForm').validate()) return;
 
-        let { fullName, password, phone, role, designation, companyProvidedId, privileges } = this.hireEmployeeForm;
-        this._processHireEmployee({ fullName, password, phone, role, designation, companyProvidedId, privileges });
+        let { role, designation, companyProvidedId, privileges } = this.hireEmployeeForm;
+        this._processHireEmployee({ role, designation, companyProvidedId, privileges });
       }
 
       // region: misc =================================

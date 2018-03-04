@@ -142,6 +142,16 @@
           this.callCombinedJsonApi('fire-employee', data, cbfn);
         }
 
+        callHireUserAsEmployeeApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('hire-user-as-employee', data, cbfn);
+        }
+
+        callFindUserApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('find-user', data, cbfn);
+        }
+
         callGetOutletListApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('get-outlet-list', data, cbfn);
