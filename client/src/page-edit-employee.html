@@ -17,6 +17,8 @@
 
 <link rel="import" href="shared-styles.html">
 
+<link rel="import" href="elem-common-employment-details-input.html">
+
 <dom-module id="page-edit-employee">
   <template>
     <style include="shared-styles">
@@ -34,10 +36,8 @@
       <iron-form id="editEmployeeForm">
           <form>
             <div class="card vertical layout">
-
-              <paper-input class="editEmployeeForm--role" value="{{editEmployeeForm.role}}" required minlength="1" error-message="Please enter a valid role" label="Role of Employee."></paper-input>
-              <paper-input class="editEmployeeForm--designation" value="{{editEmployeeForm.designation}}" required minlength="1" error-message="Please enter a valid designation" label="Designation of Employee."></paper-input>
-              <paper-input class="editEmployeeForm--companyProvidedId" value="{{editEmployeeForm.companyProvidedId}}" required minlength="1" error-message="Please enter Company Provided Id" label="Designation of Company Provided Id."></paper-input>
+              
+              <elem-common-employment-details-input name="employeeForm" employee-form="{{editEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input>
 
               <div class="horizontal layout button-row end">
                 <div class="flex"></div>
@@ -98,8 +98,12 @@
         this.app.currentPageIsModal = true;
         this.app.pushPageTitle('Edit Employee')
         if (!this._ensureAccess()) return;
+        this.self = this;
         this._processGetEmployee(() => {
-          this.isReady = true;
+          this.subForm = this.elem("elem-common-employment-details-input");
+          this.subForm._processPrivilegeList({shouldSetDefaultPrivileges: false}, () => {
+            this.isReady = true;
+          });
         });
       }
 
@@ -126,7 +130,6 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.editingEmployee = response.employee;
-          console.log(this.editingEmployee);
           let { companyProvidedId, designation, privileges, role } = this.editingEmployee;
           this.editEmployeeForm = { companyProvidedId, designation, privileges, role };
           cbfn();
@@ -135,14 +138,12 @@
 
       _processUpdateEmployee({ companyProvidedId, designation, privileges, role }) {
         let data = {
-          companyProvidedId, designation, privileges, role,
+          companyProvidedId, designation, privileges, role, 
+          isActive: this.editingEmployee.isActive,
           employmentId: this.editingEmployee.id
         };
 
-        console.log(data); 
-        // return;
-
-        this.app.callEditEmployeeApi(data, (err, response) => {
+        this.app.callEditEmploymentApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editEmployeeForm');
           let message = "Congratulations. Your employee has been updated."

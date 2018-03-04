@@ -105,7 +105,7 @@
         this.self = this;
         this.delay(0, () => {
           this.subForm = this.elem("elem-common-employment-details-input");
-          this.subForm._processPrivilegeList(() => {
+          this.subForm._processPrivilegeList({ shouldSetDefaultPrivileges: true }, () => {
             this.isReady = true;
           });
         });

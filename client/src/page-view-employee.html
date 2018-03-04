@@ -45,10 +45,12 @@
         <paper-button raised class="primary m-0" on-tap="editTapped">Edit Employee</paper-button>
       </div>
 
-      <!-- <div class="card">
-        <div class="mb-4">Click here to delete the employee. Be warned that once deleted, an employee can not be restored.</div>
-        <paper-button raised class="primary m-0" on-tap="deleteTapped">Delete Employee</paper-button>
-      </div> -->
+      <template is="dom-if" if="{{employee.isActive}}">
+        <div class="card">
+          <div class="mb-4">Click here to delete the employee. Be warned that once deleted, an employee can not be restored.</div>
+          <paper-button raised class="primary m-0" on-tap="fireTapped">Fire Employee</paper-button>
+        </div>
+      </template>
 
     </div>
 
@@ -119,10 +121,39 @@
         });
       }
 
+      _fireEmployee(employee, cbfn) {
+        let data = {
+          role: this.employee.role,
+          designation: this.employee.designation,
+          companyProvidedId: this.employee.companyProvidedId,
+          privileges: this.employee.privileges,
+          isActive: false,
+          employmentId: this.employee.id
+        };
+
+        this.app.callEditEmploymentApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
       // region: ui  ===========================
 
       editTapped(e = null) {
         return this.app.navigateTo(`/edit-employee/employee:${this.employee.id}`);
+      }
+
+      fireTapped(e = null) {
+        let message = `Are you sure you want to fire this employee ${this.employee.userId}.`;
+        this.app.showModalConfirmation("Fire employee?", message, (answer) => {
+          if (!answer) return;
+          this._fireEmployee(this.employee, () => {
+            this.app.showModalDialog("Successfully fired.", "The employee has been fired", () => {
+              this.app.navigateTo(`/manage-employees`);
+            });
+          });
+        });
       }
 
       // region: misc =================================
