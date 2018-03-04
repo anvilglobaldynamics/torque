@@ -123,15 +123,12 @@
 
       _fireEmployee(employee, cbfn) {
         let data = {
-          role: this.employee.role,
-          designation: this.employee.designation,
-          companyProvidedId: this.employee.companyProvidedId,
-          privileges: this.employee.privileges,
-          isActive: false,
           employmentId: this.employee.id
         };
 
-        this.app.callEditEmploymentApi(data, (err, response) => {
+        // callFireEmployeeApi
+
+        this.app.callFireEmployeeApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           return cbfn(response);
