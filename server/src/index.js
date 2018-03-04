@@ -84,6 +84,7 @@ let { GetPrivilegeListApi } = require('./apis/get-privilege-list');
 let { InternalStatus } = require('./apis/internal--status');
 
 let { AdminLoginApi } = require('./apis/admin-login');
+let { AdminGetOutgoingSmsListApi } = require('./apis/admin-get-outgoing-sms-list');
 
 let { FixtureCollection } = require('./collections/fixture');
 let { UserCollection } = require('./collections/user');
@@ -102,6 +103,7 @@ let { ProductCollection } = require('./collections/product');
 let { SalesCollection } = require('./collections/sales');
 let { SalesReturnCollection } = require('./collections/sales-return');
 let { AdminSessionCollection } = require('./collections/admin-session');
+let { OutgoingSmsCollection } = require('./collections/outgoing-sms');
 
 let config, logger, database, server, emailService, smsService, templateManager, fixtureManager;
 
@@ -139,7 +141,7 @@ class Program {
         database = new Database(config.db.path);
         logger = new Logger(config.log, this.muteLogger);
         emailService = new EmailService(config, mode);
-        smsService = new SmsService(config);
+        smsService = new SmsService(config, database);
         templateManager = new TemplateManager(config);
         fixtureManager = new FixtureManager(config);
         return promisify(logger, logger.initialize);
@@ -172,6 +174,7 @@ class Program {
         database.registerCollection('sales', SalesCollection);
         database.registerCollection('salesReturn', SalesReturnCollection);
         database.registerCollection('adminSession', AdminSessionCollection);
+        database.registerCollection('outgoingSms', OutgoingSmsCollection);
         server.setDatabase(database);
         return Promise.resolve();
       })
@@ -275,6 +278,7 @@ class Program {
         server.registerPostApi('/api/get-employee', GetEmployeeApi);
         server.registerPostApi('/api/edit-employment', EditEmploymentApi);
         server.registerPostApi('/api/admin-login', AdminLoginApi);
+        server.registerPostApi('/api/admin-get-outgoing-sms-list', AdminGetOutgoingSmsListApi);
         return Promise.resolve();
       })
       .then(() => {

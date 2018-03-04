@@ -5,13 +5,18 @@ let {
   generateInvalidId,
   getDatabase,
   initializeServer,
-  terminateServer
+  terminateServer,
+  registerUser
 } = require('./lib');
 
-const prefix = 's';
+const prefix = 'adm';
 
-const adminUsername = "default"
-const adminPassword = "johndoe1pass"
+const adminUsername = "default";
+const adminPassword = "johndoe1pass";
+
+const phone = rnd(prefix, 11);
+const password = "123545678";
+const fullName = "Test User";
 
 let apiKey = null;
 
@@ -60,6 +65,37 @@ describe.only('user apis (1)', _ => {
       expect(body).to.have.property('error').that.is.an('object');
       testDoneFn();
     })
+
+  });
+
+  it('intermittent (user creation)', testDoneFn => {
+    registerUser({
+      password, fullName, phone
+    }, _ => {
+      testDoneFn()
+    });
+  });
+
+  it('api/admin-get-outgoing-sms-list (Valid Date)', testDoneFn => {
+
+    let dateString = new Date().toISOString().slice(0, 10);
+    let date = new Date(dateString).getTime();
+
+    callApi('api/admin-get-outgoing-sms-list', {
+      json: {
+        apiKey,
+        date
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('outgoingSmsList').that.is.an('array');
+      expect(body.outgoingSmsList.length > 0).to.equal(true);
+      expect(body.outgoingSmsList.some(outgoingSms => {
+        return outgoingSms.to === phone;
+      })).to.equal(true);
+      testDoneFn();
+    });
 
   });
 
