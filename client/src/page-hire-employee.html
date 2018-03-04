@@ -1,0 +1,179 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="elem-common-employment-details-input.html">
+
+<dom-module id="page-hire-employee">
+  <template>
+    <style include="shared-styles">
+        @media (min-width: 960px) {
+          :host {
+            display: block;
+            padding-top: 24px;
+          }
+        }
+      </style>
+  
+      <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+        <!-- <template is="dom-repeat" items="{{!user}}"> -->
+          <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+            <div class="card vertical layout">
+              NO USER!
+              <div class="horizontal layout button-row end">
+                <div class="flex"></div>
+                <paper-button raised class="primary" on-tap="searchUserTapped">Find User</paper-button>
+              </div>
+            </div>
+          </div>
+        <!-- </template> -->
+
+        <template is="dom-repeat" items="{{user}}">
+          HAVE USER!
+          <!-- <elem-common-employment-details-input name="employeeForm" employee-form="{{addEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input> -->
+          <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper"></div>
+        </template>
+  </template>
+  <script>
+    class PageHireEmployee extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+      static get is() {
+        return 'page-hire-employee';
+      }
+
+      static get properties() {
+        return {
+          findUserField: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  emailOrPhone: 'pichi role',
+                };
+              } else {
+                return {
+                  emailOrPhone: '',
+                };
+              }
+            }
+          },
+          hireEmployeeForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  role: 'pichi role',
+                  designation: 'pichi desig',
+                  companyProvidedId: '007',
+                  privileges: {}
+                };
+              } else {
+                return {
+                  role: '',
+                  designation: '',
+                  companyProvidedId: '',
+                  privileges: {}
+                };
+              }
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Hire Employee');
+        if (!this._ensureAccess()) return;
+        this.self = this;
+        // this.delay(0, () => {
+          // this.subForm = this.elem("elem-common-employment-details-input");
+          // this.subForm._processPrivilegeList({ shouldSetDefaultPrivileges: true }, () => {
+            this.isReady = true;
+          // });
+        // });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('hireEmployeeForm');
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      // region: proces =================================
+
+      _processFindUser({ emailOrPhone }, cbfn) {
+        return cbfn({ user: "this is a user" });
+      }
+
+      _processHireEmployee({ fullName, password, phone, role, designation, companyProvidedId, privileges }) {
+        let data = {
+          fullName, password, phone, role, designation, companyProvidedId, privileges,
+          organizationId: this.app.organization.id
+        };
+        this.app.callAddNewEmployeeApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'hireEmployeeForm');
+          let message = "Congratulations. Your new employee has been created."
+          this.app.showModalDialog("Employee Created", message, _ => {
+            this.app.navigateTo(`/view-employee/employee:${response.employmentId}`);
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-employees');
+      }
+
+      searchUserTapped(e = null) {
+        let emailOrPhone = null;
+        this._processFindUser({ emailOrPhone }, (user) => {
+          console.log(user);
+        });
+      }
+
+      hireUserTapped(e = null) {
+        this.elemAll('#hireEmployeeForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#hireEmployeeForm').validate()) return;
+
+        let { fullName, password, phone, role, designation, companyProvidedId, privileges } = this.hireEmployeeForm;
+        this._processHireEmployee({ fullName, password, phone, role, designation, companyProvidedId, privileges });
+      }
+
+      // region: misc =================================
+    }
+
+    window.customElements.define(PageHireEmployee.is, PageHireEmployee);
+  </script>
+</dom-module>
