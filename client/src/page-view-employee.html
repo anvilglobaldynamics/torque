@@ -146,11 +146,18 @@
 
       fireTapped(e = null) {
         let message = `Are you sure you want to fire this employee ${this.employee.userId}.`;
+        if (this.employee.userId === this.app.user.id) {
+          message = `Are you sure you want to fire Yourself? You will loose all access to this organization.`;
+        }
         this.app.showModalConfirmation("Fire employee?", message, (answer) => {
           if (!answer) return;
           this._fireEmployee(this.employee, () => {
             this.app.showModalDialog("Successfully fired.", "The employee has been fired", () => {
-              this.app.navigateTo(`/manage-employees`);
+              if (this.employee.userId === this.app.user.id) {
+                this.app.navigateTo(`/login`);
+              } else {
+                this.app.navigateTo(`/manage-employees`);
+              }
             });
           });
         });
