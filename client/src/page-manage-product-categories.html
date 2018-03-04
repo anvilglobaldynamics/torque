@@ -93,7 +93,8 @@
       }
 
       $marginMore(marginLeft) {
-        return marginLeft + 12;
+        if (marginLeft > 0) return marginLeft;
+        return marginLeft + 24;
       }
 
       editTapped(e) {
@@ -217,13 +218,15 @@
         this.app.currentPageIsModal = false;
         this.app.pushPageTitle('Manage Product Categories');
         if (!this._ensureAccess()) return;
-        this._processProductCategoryList(() => { 
+        this._processProductCategoryList(() => {
           this.isReady = true;
         });
       }
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.isAMovingGoingOn = false;
+        this.productCategoryList = [];
         this.app.popPageTitle();
       }
 

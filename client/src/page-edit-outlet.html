@@ -161,7 +161,7 @@
           if (response.hasError) return this.onApiError(response.error, 'editOutletForm');
           let message = "Congratulations. Your new outlet has been created."
           this.app.showModalDialog("Outlet Created", message, _ => {
-            this.app.navigateTo(`/view-outlet/outlet:${response.outletId}`);
+            this.backButtonOnTopBarPressed();
           });
         });
       }
