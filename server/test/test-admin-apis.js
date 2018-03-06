@@ -193,14 +193,14 @@ describe.only('admin apis (1)', _ => {
     });
 
   });
-  
+
   it('api/admin-get-aggregated-user-list (phone)', testDoneFn => {
 
     callApi('api/admin-get-aggregated-user-list', {
       json: {
         apiKey: apiKey,
         userSearchString: phone
-        
+
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -251,7 +251,7 @@ describe.only('admin apis (1)', _ => {
     });
 
   });
-  
+
   it('api/admin-set-user-banning-status (Valid userId)', testDoneFn => {
 
     callApi('api/admin-set-user-banning-status', {
