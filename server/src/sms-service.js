@@ -1,9 +1,9 @@
 
 class SmsService {
 
-  constructor(config) {
+  constructor(config, database) {
     this.config = config;
-
+    this.database = database;
     let { from, enabled } = config.sms;
     this.from = from;
     this.enabled = enabled;
@@ -35,6 +35,7 @@ class SmsService {
   }
 
   initialize(logger, cbfn) {
+    this.logger = logger;
     this._loadAndPrepareTemplates(_ => {
       cbfn();
     })
@@ -50,18 +51,26 @@ class SmsService {
     if (this.mode !== 'production') {
       actualTo = '01706466808';
     }
+    let from = this.from;
     let data = {
-      from: this.from,
+      from,
       to: actualTo,
       content
     };
-    if (this.enabled) {
-      let error = new Error("Sms sending failed. We are just using mock servers.");
-      cbfn(error, false, null, data);
-    } else {
-      let error = new Error("Sms sending disabled by developer.");
-      cbfn(error, true, null, data);
-    }
+    this.database.outgoingSms.create({
+      from,
+      to,
+      content
+    }, (err, smsDoc) => {
+      if (err) this.logger.error(err);
+      if (this.enabled) {
+        let error = new Error("Sms sending failed. We are just using mock servers.");
+        cbfn(error, false, null, data);
+      } else {
+        let error = new Error("Sms sending disabled by developer.");
+        cbfn(error, true, null, data);
+      }
+    });
   }
 
 }

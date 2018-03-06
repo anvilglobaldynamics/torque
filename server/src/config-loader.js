@@ -54,7 +54,19 @@ class ConfigLoader {
       sms: Joi.object().keys({
         enabled: Joi.boolean().required(),
         from: Joi.string().max(1024).required(),
-      })
+      }),
+      admin: Joi.object().keys({
+        list: Joi.array().items({
+          username: Joi.string().max(1024).required(),
+          passwordHash: Joi.string().max(1024).required(),
+          rights: Joi.object().keys({
+            sendOutgoingSms: Joi.boolean().required(),
+            viewUsersAndOrganizations: Joi.boolean().required(),
+            banUsers: Joi.boolean().required(),
+          }).required(),
+        })
+      }),
+      "notes": Joi.array()
     });
   }
 

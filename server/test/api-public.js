@@ -49,7 +49,9 @@ describe('public apis', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('privilegeList').that.is.an('array');
-      expect(body.privilegeList).to.contain('PRIV_ACCESS_POS');
+      expect(body.privilegeList.some(privilege=>{
+        return privilege.code === 'PRIV_ACCESS_POS';
+      })).to.equal(true);
       testDoneFn();
     });
 
