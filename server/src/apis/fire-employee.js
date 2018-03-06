@@ -31,10 +31,17 @@ exports.FireEmployeeApi = class extends collectionCommonMixin(Api) {
   }
 
   _fireEmployee({ employmentId }, cbfn) {
-    this.database.employment.fire({ employmentId }, (err, wasUpdated) => {
-      if (err) return this.fail(err);
-      if (!wasUpdated) return this.fail(new Error(`Unable to find employee to fire.`));
-      return cbfn();
+    this.database.employment.getEmploymentById({ employmentId }, (err, employment) => {
+      if (!this._ensureDoc(err, employment, "EMPLOYMENT_INVALID", "Unable to find employee to fire.")) return;
+      this.database.session.expireByUserIdWhenFired({ userId: employment.userId }, (err) => {
+        if (err) return this.fail(err);
+        // FIXME: use ensureUpdate
+        this.database.employment.fire({ employmentId }, (err, wasUpdated) => {
+          if (err) return this.fail(err);
+          if (!wasUpdated) return this.fail(new Error(`Unable to find employee to fire.`));
+          return cbfn();
+        });
+      });
     });
   }
 

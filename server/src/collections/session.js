@@ -15,7 +15,7 @@ exports.SessionCollection = class extends Collection {
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       terminatedDatetimeStamp: Joi.number().max(999999999999999).required().allow(null),
       terminatedBy: Joi.string().allow('').max(1024).required(),
-      hasExpried: Joi.boolean().required()
+      hasExpired: Joi.boolean().required()
     });
 
     this.uniqueKeyDefList = [
@@ -53,7 +53,7 @@ exports.SessionCollection = class extends Collection {
       createdDatetimeStamp: (new Date).getTime(),
       terminatedDatetimeStamp: null,
       terminatedBy: '',
-      hasExpried: false
+      hasExpired: false
     };
     this._insert(user, (err, id) => {
       return cbfn(err, id);
@@ -68,7 +68,7 @@ exports.SessionCollection = class extends Collection {
   close({ sessionId }, cbfn) {
     let mod = {
       $set: {
-        hasExpried: true,
+        hasExpired: true,
         terminatedBy: 'user',
         terminatedDatetimeStamp: (new Date).getTime()
       }
@@ -80,12 +80,27 @@ exports.SessionCollection = class extends Collection {
   expire({ sessionId }, cbfn) {
     let mod = {
       $set: {
-        hasExpried: true,
+        hasExpired: true,
         terminatedBy: 'system (expiry)',
         terminatedDatetimeStamp: (new Date).getTime()
       }
     };
     this._update({ id: sessionId }, mod, (err, wasUpdated) => {
+      if (err) return cbfn(err);
+      if (!wasUpdated) return cbfn(new Error("Session Not Found"));
+      return cbfn();
+    });
+  }
+
+  expireByUserIdWhenFired({ userId }, cbfn) {
+    let mod = {
+      $set: {
+        hasExpired: true,
+        terminatedBy: 'system (fired)',
+        terminatedDatetimeStamp: (new Date).getTime()
+      }
+    };
+    this._updateMany({ userId, hasExpired: false }, mod, (err, wasUpdated) => {
       if (err) return cbfn(err);
       if (!wasUpdated) return cbfn(new Error("Session Not Found"));
       return cbfn();

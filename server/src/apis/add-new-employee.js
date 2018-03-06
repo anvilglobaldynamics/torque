@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { userCommonMixin } = require('./mixins/user-common');
+let { phoneVerificationRequestMixin } = require('./mixins/phone-verification-request-mixin');
 
-exports.AddNewEmployeeApi = class extends userCommonMixin(Api) {
+exports.AddNewEmployeeApi = class extends phoneVerificationRequestMixin(userCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -81,7 +82,10 @@ exports.AddNewEmployeeApi = class extends userCommonMixin(Api) {
     let { fullName, phone, password, organizationId, role, designation, companyProvidedId, privileges } = body;
     this._createUser({ fullName, phone, password }, (userId) => {
       this._hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {
-        this.success({ status: "success", userId, employmentId });
+        this._createPhoneVerificationRequest({ phone, userId }, (verificationLink) => {
+          this._sendPhoneVerificationSms({ phone, verificationLink });
+          this.success({ status: "success", userId, employmentId });
+        });        
       });
     });
   }
