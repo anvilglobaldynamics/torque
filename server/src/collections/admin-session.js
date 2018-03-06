@@ -15,7 +15,7 @@ exports.AdminSessionCollection = class extends Collection {
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       terminatedDatetimeStamp: Joi.number().max(999999999999999).required().allow(null),
       terminatedBy: Joi.string().allow('').max(1024).required(),
-      hasExpried: Joi.boolean().required()
+      hasExpired: Joi.boolean().required()
     });
 
     this.uniqueKeyDefList = [
@@ -46,7 +46,7 @@ exports.AdminSessionCollection = class extends Collection {
       createdDatetimeStamp: (new Date).getTime(),
       terminatedDatetimeStamp: null,
       terminatedBy: '',
-      hasExpried: false
+      hasExpired: false
     };
     this._insert(doc, (err, id) => {
       return cbfn(err, id);
@@ -61,7 +61,7 @@ exports.AdminSessionCollection = class extends Collection {
   close({ sessionId }, cbfn) {
     let mod = {
       $set: {
-        hasExpried: true,
+        hasExpired: true,
         terminatedBy: 'user',
         terminatedDatetimeStamp: (new Date).getTime()
       }
@@ -73,7 +73,7 @@ exports.AdminSessionCollection = class extends Collection {
   expire({ sessionId }, cbfn) {
     let mod = {
       $set: {
-        hasExpried: true,
+        hasExpired: true,
         terminatedBy: 'system (expiry)',
         terminatedDatetimeStamp: (new Date).getTime()
       }
