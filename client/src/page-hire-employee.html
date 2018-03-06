@@ -22,42 +22,42 @@
 <dom-module id="page-hire-employee">
   <template>
     <style include="shared-styles">
-        @media (min-width: 960px) {
-          :host {
-            display: block;
-            padding-top: 24px;
-          }
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding-top: 24px;
         }
-      </style>
-  
-      <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
-        <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+      }
+    </style>
 
-          <div class="card vertical layout">
-            <paper-input class="findUserField" value="{{findUserField.emailOrPhone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone/email" label="Email Or Phone"></paper-input>
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-            <div class="horizontal layout button-row end">
-              <div class="flex"></div>
-              <paper-button raised class="primary" on-tap="searchUserTapped">Find User</paper-button>
-            </div>
-          </div>
+      <div class="card vertical layout">
+        <paper-input class="findUserField" value="{{findUserField.emailOrPhone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone/email" label="Email Or Phone"></paper-input>
 
-          <template is="dom-if" if="[[user]]">
-            <iron-form id="hireEmployeeForm">
-              <form>
-                <div class="card vertical layout">
-
-                  <elem-common-employment-details-input name="employeeForm" employee-form="{{hireEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input>
-
-                  <div class="horizontal layout button-row end">
-                    <div class="flex"></div>
-                    <paper-button raised class="primary" on-tap="hireUserTapped">Hire As Employee</paper-button>
-                  </div>
-                </div>
-              </form>
-            </iron-form>
-          </template>
+        <div class="horizontal layout button-row end">
+          <div class="flex"></div>
+          <paper-button raised class="primary" on-tap="searchUserTapped">Find User</paper-button>
         </div>
+      </div>
+
+      <template is="dom-if" if="[[user]]">
+        <iron-form id="hireEmployeeForm">
+          <form>
+            <div class="card vertical layout">
+
+              <elem-common-employment-details-input name="employeeForm" employee-form="{{hireEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input>
+
+              <div class="horizontal layout button-row end">
+                <div class="flex"></div>
+                <paper-button raised class="primary" on-tap="hireUserTapped">Hire As Employee</paper-button>
+              </div>
+            </div>
+          </form>
+        </iron-form>
+      </template>
+    </div>
   </template>
   <script>
     class PageHireEmployee extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {

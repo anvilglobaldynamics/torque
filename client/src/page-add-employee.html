@@ -137,7 +137,7 @@
           if (response.hasError) return this.onApiError(response.error, 'addEmployeeForm');
           let message = "Congratulations. Your new employee has been created."
           this.app.showModalDialog("Employee Created", message, _ => {
-            this.app.navigateTo(`/view-employee/employee:${response.employmentId}`);
+            this.backButtonOnTopBarPressed();
           });
         });
       }

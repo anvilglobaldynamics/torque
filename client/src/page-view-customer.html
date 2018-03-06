@@ -42,11 +42,7 @@
       <div class="card vertical layout">
         Additional Payment History:
         <template is="dom-repeat" items="[[customer.additionalPaymentHistory]]" as="additionalPayment">
-          <br>
-          Date: [[additionalPayment.creditedDatetimeStamp]]
-          Amount: [[additionalPayment.amount]]
-          Action: [[additionalPayment.action]]
-          Accepted By: [[additionalPayment.acceptedByUserId]]
+          <br> Date: [[additionalPayment.creditedDatetimeStamp]] Amount: [[additionalPayment.amount]] Action: [[additionalPayment.action]] Accepted By: [[additionalPayment.acceptedByUserId]]
         </template>
       </div>
 

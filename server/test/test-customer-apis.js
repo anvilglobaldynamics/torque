@@ -273,7 +273,7 @@ describe('customer', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error).to.have.property('code').that.equals('PHONE_ALREADY_IN_USE');
-      
+
       testDoneFn();
     })
 
@@ -460,7 +460,7 @@ describe('customer', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error).to.have.property('code').that.equals('CUSTOMER_INVALID');
-      
+
       testDoneFn();
     })
 

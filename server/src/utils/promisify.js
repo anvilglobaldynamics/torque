@@ -1,10 +1,10 @@
 
-exports.promisify = (context, method, ...args)=> {
-  return new Promise((success, fail)=> {
-    args.push((err, ...res)=> {
+exports.promisify = (context, method, ...args) => {
+  return new Promise((success, fail) => {
+    args.push((err, ...res) => {
       if (err) {
         fail(err);
-        return 
+        return
       } else {
         success.apply(null, res);
       }

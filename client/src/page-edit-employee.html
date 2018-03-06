@@ -34,18 +34,18 @@
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
       <iron-form id="editEmployeeForm">
-          <form>
-            <div class="card vertical layout">
-              
-              <elem-common-employment-details-input name="employeeForm" employee-form="{{editEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input>
+        <form>
+          <div class="card vertical layout">
 
-              <div class="horizontal layout button-row end">
-                <div class="flex"></div>
-                <paper-button raised class="primary" on-tap="updateEmployeeTapped">Update Employee</paper-button>
-              </div>
+            <elem-common-employment-details-input name="employeeForm" employee-form="{{editEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input>
 
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class="primary" on-tap="updateEmployeeTapped">Update Employee</paper-button>
             </div>
-          </form>
+
+          </div>
+        </form>
       </iron-form>
     </div>
   </template>
@@ -101,7 +101,7 @@
         this.self = this;
         this._processGetEmployee(() => {
           this.subForm = this.elem("elem-common-employment-details-input");
-          this.subForm._processPrivilegeList({shouldSetDefaultPrivileges: false}, () => {
+          this.subForm._processPrivilegeList({ shouldSetDefaultPrivileges: false }, () => {
             this.isReady = true;
           });
         });
@@ -138,7 +138,7 @@
 
       _processUpdateEmployee({ companyProvidedId, designation, privileges, role }) {
         let data = {
-          companyProvidedId, designation, privileges, role, 
+          companyProvidedId, designation, privileges, role,
           isActive: this.editingEmployee.isActive,
           employmentId: this.editingEmployee.id
         };

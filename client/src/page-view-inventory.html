@@ -212,7 +212,7 @@
         });
         this._processMoveProducts({ fromInventoryId, toInventoryId, productList }, () => {
           let message = "Selected products have been moved.";
-          this.app.showModalDialog("Success", message, ()=>{
+          this.app.showModalDialog("Success", message, () => {
             this.app.refreshCurrentPage();
           });
         });
