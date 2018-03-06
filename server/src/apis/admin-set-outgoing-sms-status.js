@@ -14,7 +14,7 @@ exports.AdminSetOutgoingSmsStatusApi = class extends collectionCommonMixin(Api) 
   get requestSchema() {
     return Joi.object().keys({
       apiKey: Joi.string().length(64).required(),
-      status: Joi.string().valid('pending', 'sent', 'delivered', 'canceled'),
+      status: Joi.string().valid('pending', 'sent', 'delivered', 'canceled').required(),
       outgoingSmsId: Joi.number().max(999999999999999).required()
     });
   }

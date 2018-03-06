@@ -17,7 +17,9 @@ const adminPassword = "johndoe1pass";
 
 const phone = rnd(prefix, 11);
 const password = "123545678";
-const fullName = "Test User";
+const fullName = "Test " + rnd(prefix, 11);
+const fullName2 = "Test " + rnd(prefix, 11);
+const phone2 = rnd(prefix, 11);
 
 let apiKey = null;
 
@@ -73,8 +75,12 @@ describe.only('admin apis (1)', _ => {
     registerUser({
       password, fullName, phone
     }, _ => {
-      delay(200, _ => {
-        testDoneFn();
+      registerUser({
+        password, fullName: fullName2, phone: phone2
+      }, _ => {
+        delay(200, _ => {
+          testDoneFn();
+        });
       });
     });
   });
@@ -183,6 +189,61 @@ describe.only('admin apis (1)', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error).to.have.property('code').that.equals('APIKEY_INVALID');
+      testDoneFn();
+    });
+
+  });
+  
+  it('api/admin-get-aggregated-user-list (phone)', testDoneFn => {
+
+    callApi('api/admin-get-aggregated-user-list', {
+      json: {
+        apiKey: apiKey,
+        userSearchString: phone
+        
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('userList').that.is.an('array');
+      expect(body.userList.length).to.equal(1);
+      expect(body.userList[0].fullName).to.equal(fullName);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-get-aggregated-user-list (fullName)', testDoneFn => {
+
+    callApi('api/admin-get-aggregated-user-list', {
+      json: {
+        apiKey: apiKey,
+        userSearchString: fullName
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('userList').that.is.an('array');
+      expect(body.userList.length).to.equal(1);
+      expect(body.userList[0].phone).to.equal(phone);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-get-aggregated-user-list (No Query)', testDoneFn => {
+
+    callApi('api/admin-get-aggregated-user-list', {
+      json: {
+        apiKey: apiKey,
+        userSearchString: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('userList').that.is.an('array');
+      expect(body.userList.length).to.be.at.least(2);
+      expect(body.userList[0]).to.have.property('organizationList').that.is.an('array');
       testDoneFn();
     });
 

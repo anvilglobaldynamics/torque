@@ -60,6 +60,17 @@ exports.UserCollection = class extends Collection {
     this._findOne({ id: userId }, cbfn);
   }
 
+  findByCommonFields({ userSearchRegex }, cbfn) {
+    this._find({
+      $or: [
+        { fullName: userSearchRegex },
+        { email: userSearchRegex },
+        { phone: userSearchRegex },
+        { nid: userSearchRegex }
+      ],
+    }, cbfn);
+  }
+
   findByEmailOrPhone({ emailOrPhone }, cbfn) {
     this._findOne({
       $or: [

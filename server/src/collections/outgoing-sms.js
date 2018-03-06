@@ -14,7 +14,7 @@ exports.OutgoingSmsCollection = class extends Collection {
       from: Joi.string().min(1).max(15).required(),
       to: Joi.string().min(1).max(15).required(),
       content: Joi.string().min(1).max(512).required(),
-      status: Joi.string().valid('pending', 'sent', 'delivered', 'canceled'),
+      status: Joi.string().valid('pending', 'sent', 'delivered', 'canceled').required(),
       isDeleted: Joi.boolean().required()
     });
 
