@@ -158,7 +158,7 @@
           if (response.hasError) return this.onApiError(response.error, 'editWarehouseForm');
           let message = "Congratulations. Your new warehouse has been created."
           this.app.showModalDialog("Warehouse Created", message, _ => {
-            this.app.navigateTo(`/view-warehouse/warehouse:${response.warehouseId}`);
+            this.backButtonOnTopBarPressed();
           });
         });
       }
