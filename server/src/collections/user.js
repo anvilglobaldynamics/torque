@@ -121,6 +121,20 @@ exports.UserCollection = class extends Collection {
     });
   }
 
+    // FIXME: Logical Separation
+    setPhoneAsUnverified({ userId }, cbfn) {
+      let mod = {
+        $set: {
+          isPhoneVerified: false
+        }
+      }
+      this._update({ id: userId }, mod, (err, wasUpdated) => {
+        if (err) return cbfn(err);
+        if (!wasUpdated) return cbfn(new Error("User Not Found"));
+        return cbfn();
+      });
+    }
+
   // FIXME: Logical Separation
   setPasswordHash({ userId }, { passwordHash }, cbfn) {
     let mod = {
@@ -147,6 +161,27 @@ exports.UserCollection = class extends Collection {
     let mod = {
       $set: {
         email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup
+      }
+    }
+    this._update({ id: userId }, mod, (err, wasUpdated) => {
+      if (err) return cbfn(err);
+      if (!wasUpdated) return cbfn(new Error("User Not Found"));
+      return cbfn();
+    });
+  }
+
+  // FIXME: Logical Separation
+  /**
+   * 
+   * @param {any} { userId }
+   * @param {any} { email } 
+   * @param {any} cbfn 
+   */
+  setEmail({ userId }, data, cbfn) {
+    let { email } = data;
+    let mod = {
+      $set: {
+        email
       }
     }
     this._update({ id: userId }, mod, (err, wasUpdated) => {

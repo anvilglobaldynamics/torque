@@ -31,7 +31,7 @@
 
     <div class$="std-small-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <iron-form id="register-form">
+      <iron-form id="registerForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
             <div class="std-dialog-header">REGISTER</div>
@@ -40,7 +40,7 @@
             <paper-input class="registerForm--password" value="{{registerForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long" label="A minimum 8 digit password" type="password"></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class="primary" on-tap="registerTapped">Register</paper-button>
+              <paper-button raised class="primary registerForm--submit" on-tap="registerTapped">Register</paper-button>
             </div>
             <div class="horizontal layout button-row center-center">
               <div class="link light" on-tap="loginTapped">Already have an account?</div>
@@ -85,7 +85,7 @@
 
       constructor() {
         super();
-        this.confirmPageReady()
+        this.confirmPageReady();
       }
 
       onNavigateIn() {
@@ -124,8 +124,8 @@
       }
 
       registerTapped() {
-        this.elemAll('#register-form paper-input').forEach(el => el.autoValidate = true);
-        if (!this.elem('#register-form').validate()) return;
+        this.elemAll('#registerForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#registerForm').validate()) return;
 
         let { fullName, phone, password } = this.registerForm;
         this._processUserRegister({ fullName, phone, password });

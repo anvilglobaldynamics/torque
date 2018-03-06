@@ -1,4 +1,4 @@
-<link rel="import" href="../bower_components/atomicdb/atomicdb.html">
+
 <script>
   if (!window.TorqueCommonBehavior) {
     /* @polymerMixin */
@@ -6,6 +6,20 @@
 
       constructor(...args) {
         super(...args);
+      }
+
+      genericFormSubmitionKeypress(e) {
+        if (e.which !== 13) return;
+        if (e.target.nodeName !== 'PAPER-INPUT') return;
+        let el = e.target;
+        while (el && el.nodeName !== 'IRON-FORM') {
+          el = el.parentNode;
+        }
+        if (!el) return;
+        let submitEl = el.querySelector(`.${el.id}--submit`);
+        if (submitEl) {
+          submitEl.click();
+        }
       }
 
       static get properties() {
@@ -29,6 +43,10 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.isReady = false;
+      }
+
+      $join(list, by) {
+        return list.join(by);
       }
 
       $if(condition, thenValue, elseValue) {
@@ -73,6 +91,45 @@
 
       $json(obj) {
         return (JSON.stringify(obj));
+
+      checkPrivilege(privilege) {
+        if (!(privilege in this.app.organization.employment.privileges)) {
+          throw new Error(`No such privilege ""${privilege}.`);
+        }
+        return this.app.organization.employment.privileges[privilege];
+      }
+
+      accessControl(type, privilegeList = []) {
+        const typeList = ['special', 'authenticated', 'privileged'];
+        if (typeList.indexOf(type) === -1) throw new Error("Invalid accessControl type.");
+        if (type === 'authenticated' || type === 'privileged') {
+          if (!(this.app.user)) {
+            this.app.navigateTo('/login');
+            return false;
+          }
+        }
+        if (type === 'privileged') {
+          if (!this.app.organization) {
+            this.app.navigateTo('/select-organization');
+            return false;
+          }
+          if (!privilegeList.every(privilege => this.checkPrivilege(privilege))) {
+            this.app.navigateTo('/error403');
+            return false;
+          }
+        }
+        return true;
+      }
+
+      /** $mkDate()
+       * Converts a date to a user friendly string
+       * See http://arshaw.com/xdate/ for formatting instruction
+       * @param {Date|timestamp} date
+       * @param {string} format 
+       * @returns 
+       */
+      $mkDate(date, format = 'MMM d, yyyy') {
+        return (new XDate(date)).toString(format);
       }
 
     }

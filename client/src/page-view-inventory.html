@@ -8,6 +8,10 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
 
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
@@ -27,55 +31,15 @@
           padding: 24px;
         }
       }
+
+      paper-dropdown-menu {
+        width: 300px;
+      }
     </style>
 
-<elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-<div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
-      <!-- 
-      <div class="card vertical layout">
-        <div>[[inventory.name]]</div>
-        <div>[[inventory.physicalAddress]]</div>
-        <div>Contact Person: [[inventory.contactPersonName]]</div>
-        <div>Contact Number: [[inventory.phone]]</div>
-      </div>
-
-      <div class="card">
-        <div class="mb-4">Go to POS (Point of Sale) to start selling from this organization.</div>
-        <paper-button raised class="primary m-0" on-tap="posTapped">Go to POS</paper-button>
-      </div>
-
-      <div class="card vertical layout">
-        <div class="mb-4">This inventory has the following inventories.</div>
-        <div class="std-list">
-          <div class="horizontal layout std-list-item center">
-            <div class="vertical layout flex">
-              <div class="title">[[defaultInventory.name]] Inventory</div>
-              <div class="description">This is the main inventory.</div>
-            </div>
-            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="defaultInventory">View</paper-button>
-          </div>
-          <div class="horizontal layout std-list-item center">
-            <div class="vertical layout flex">
-              <div class="title">[[returnedInventory.name]] Inventory</div>
-              <div class="description">Products that are returned by the customer go in here.</div>
-            </div>
-            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="returnedInventory">View</paper-button>
-          </div>
-          <div class="horizontal layout std-list-item center">
-            <div class="vertical layout flex">
-              <div class="title">[[damagedInventory.name]] Inventory</div>
-              <div class="description">Damaged products are kept here.</div>
-            </div>
-            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="damagedInventory">View</paper-button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="mb-4">Click here to edit the inventory.</div>
-        <paper-button raised class="primary m-0" on-tap="editTapped">Edit Inventory</paper-button>
-      </div> -->
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
         <div class="std-list">
@@ -91,7 +55,7 @@
                 <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
               </template>
               <template is="dom-if" if="[[product.isSelected]]">
-                <paper-input class="small-input" value="{{product.selectedCount}}" type="number" min="0" label="Count">
+                <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="Count">
                   <div slot="prefix">Selected&nbsp;</div>
                   <div slot="suffix">&nbsp;[[product.unit]]</div>
                 </paper-input>
@@ -105,10 +69,16 @@
       <template is="dom-if" if="[[selectedProductCount]]">
         <div class="card">
           <div class="mb-4">You have selected [[selectedProductCount]] products.</div>
+          <paper-dropdown-menu label="Move to Inventory" class="mr-4">
+            <paper-listbox slot="dropdown-content" selected="{{targetInventoryIndex}}">
+              <template is="dom-repeat" items="[[inventoryList]]" as="inventory">
+                <paper-item data-id="[[inventory.id]]">[[inventory.inventoryContainerName]] - [[inventory.name]]</paper-item>
+              </template>
+            </paper-listbox>
+          </paper-dropdown-menu>
           <paper-button raised class="primary m-0" on-tap="moveSelectedTapped">Move Selected</paper-button>
         </div>
       </template>
-
 
       <div class="card">
         <div class="mb-4">Add products to this inventory in batch.</div>
@@ -129,6 +99,10 @@
       static get properties() {
         return {
           selectedProductCount: {
+            type: Number,
+            value: 0
+          },
+          targetInventoryIndex: {
             type: Number,
             value: 0
           }
@@ -154,9 +128,12 @@
           });
           return;
         }
-        this._processInventory(_ => {
+        this._processInventory(() => {
           this.isReady = true;
-         });
+        });
+        this._fetchInventoryList(() => {
+
+        });
       }
 
       onNavigateOut() {
@@ -184,7 +161,9 @@
       }
 
       _processInventory(cbfn) {
-        this._fetchInventory(({ productList, matchingProductList, matchingProductCategoryList }) => {
+        this._fetchInventory(({ productList, matchingProductList, matchingProductCategoryList, inventoryContainerDetails, inventoryDetails }) => {
+          this.app.popPageTitle();
+          this.app.pushPageTitle(`${inventoryContainerDetails.inventoryContainerName} - ${inventoryDetails.inventoryName}`);
           let productMap = {};
           matchingProductList.forEach(product => productMap[String(product.id)] = product);
           let productCategoryMap = {};
@@ -199,21 +178,45 @@
           this.productList = productList;
           cbfn();
         });
-
       }
 
       _fetchInventoryList(cbfn) {
-        // TODO
-        // let data = { organizationId: this.app.organization.id };
-        // this.app.callGetOutletListApi(data, (err, response) => {
-        //   if (err) return;
-        //   if (response.hasError) return this.onApiError(response.error);
-        //   return cbfn(response.outletList);
-        // });
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetInventoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.inventoryList = response.inventoryList;
+          return cbfn();
+        });
       }
 
+      _processMoveProducts({ fromInventoryId, toInventoryId, productList }, cbfn) {
+        let data = { fromInventoryId, toInventoryId, productList };
+        this.app.callTransferBetweenInventoriesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn();
+        });
+      }
 
       // region: ui  ===========================
+
+      moveSelectedTapped(e) {
+        let fromInventoryId = parseInt(this.params.inventory, 10);
+        let toInventoryId = this.inventoryList[this.targetInventoryIndex].id;
+        let productList = this.productList.filter(product => product.isSelected).map(product => {
+          if (!('selectedCount' in product)) product.selectedCount = '' + product.count;
+          let { productId, selectedCount } = product;
+          let count = parseInt(selectedCount, 10);
+          return { count, productId };
+        });
+        this._processMoveProducts({ fromInventoryId, toInventoryId, productList }, () => {
+          let message = "Selected products have been moved.";
+          this.app.showModalDialog("Success", message, ()=>{
+            this.app.refreshCurrentPage();
+          });
+        });
+      }
 
       selectTapped(e) {
         this.selectedProductCount += 1;
@@ -226,12 +229,6 @@
         this.selectedProductCount -= 1;
         let { product } = e.model;
         e.model.set('product.isSelected', false);
-      }
-
-      moveSelectedTapped(e = null) {
-        this._fetchOutletList(outletList => {
-          console.log(outletList)
-        });
       }
 
       // editTapped(e = null) {

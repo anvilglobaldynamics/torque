@@ -15,6 +15,7 @@
 
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-verification-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -36,11 +37,64 @@
         font-size: 20px;
         font-weight: bold;
       }
+
+      .warning-message {
+        font-weight: bold;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <template is="dom-if" if="[[warning]]">
+        <div class="card vertical layout">
+          <div class="warning-message">WARNING!</div>
+          <ul>
+            <template is="dom-repeat" items="[[warning]]" as="warningMessage">
+              <li>[[warningMessage]]</li>
+            </template>
+          </ul>
+        </div>
+      </template>
+
+      <template is="dom-if" if="[[user.phone]]">
+        <template is="dom-if" if="[[!user.isPhoneVerified]]">
+          <div class="card">
+            You have not yet verified your phone number. Your phone number (after the 1 hour grace period) is not active until you verify it. Either click the link in the sms we sent to
+            <b>[[user.phone]]</b> or use the button below.
+            <br>
+            <div class="button-row">
+              <paper-button raised class="primary m-0" on-tap="verifyPhoneTapped">Verify Phone Number Manually</paper-button>
+              <paper-button raised class="primary m-0" on-tap="resendSmsTapped">Resend SMS</paper-button>
+            </div>
+          </div>
+        </template>
+      </template>
+
+      <template is="dom-if" if="[[!user.email]]">
+        <div class="card">
+          By providing an email address, you can get receipts, login alerts and other important information delivered to you to your email.
+          <div class="button-row">
+            <paper-button raised class="primary m-0" on-tap="setEmailTapped">Set your email</paper-button>
+          </div>
+        </div>
+      </template>
+
+      <template is="dom-if" if="[[user.email]]">
+        <template is="dom-if" if="[[!user.isEmailVerified]]">
+          <div class="card">
+            You have not yet verified your email address. Your email address is not active until you verify it. Either click the link in the email we sent to
+            <b>[[user.email]]</b> or use the button below.
+            <br>
+            <div class="button-row">
+              <paper-button raised class="primary m-0" on-tap="verifyEmailTapped">Verify Email Manually</paper-button>
+              <paper-button raised class="primary m-0" on-tap="resendEmailTapped">Resend Email</paper-button>
+            </div>
+          </div>
+        </template>
+      </template>
+
       <div class="horizontal layout">
         <div class="card vertical layout flex">
           [[user.fullName]]
@@ -83,7 +137,7 @@
   </template>
 
   <script>
-    class PageHome extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+    class PageHome extends FxPage.mixin(TorqueVerificationBehavior, TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
       static get is() {
         return 'page-home';
       }
@@ -121,11 +175,14 @@
       }
 
       _ensureAccess() {
-        if (!this.app.user) {
-          this.app.navigateTo('/login');
-          return false;
-        }
-        return true;
+        return this.accessControl('privileged');
+      }
+
+      _computeWarnings() {
+        if (!user) return;
+        this.warning = user.warning.map(i => i).filter(str => {
+          return str.indexOf('You have less than 1 hour to verify') === -1;
+        });
       }
 
       _fetchOrganizationList(cbfn) {
@@ -194,7 +251,87 @@
         this.organization = organization;
       }
 
+      _processSetEmailApi(data, cbfn) {
+        this.app.callUserSetEmailApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.status);
+        });
+      }
+
       // region: ui  ===========================
+
+      setEmailTapped(e = null) {
+        let message = "Please set your valid email."
+        this.app.showModalInput("Set your email.", message, 'john@example.com', email => {
+          this._processSetEmailApi({ email }, status => {
+            let message = `Your email "${email}" has been set. Please check your inbox for the verification link and log in again.`;
+            this.app.showModalDialog("Email is Set", message, () => {
+              this.app.logoutTapped();
+            });
+          })
+        });
+      }
+
+      resendEmailTapped(e = null) {
+        let email = this.app.user.email;
+        this._processResendVerificationEmailApi({ email }, status => {
+          let message = `Please check your inbox. We have sent you a verification email.`;
+          this.app.showModalDialog("Verification Email Sent", message, () => {
+            'pass'
+          });
+        })
+      }
+
+      verifyEmailTapped(e = null) {
+        let message = "Please the verification code we sent to your email."
+        this.app.showModalInput("Enter verification code.", message, '', verificationToken => {
+          if ((!verificationToken) || verificationToken.length === 0) return;
+          this._processVerifyEmailApi({ verificationToken }, html => {
+            if (html.indexOf('Email Verification Successful') > -1) {
+              this.app.showModalDialog("Thank you.", "Your email is now verified.", () => {
+                this.app.db.update('user', (({ which }) => which === 'only'), user => {
+                  user.isEmailVerified = true;
+                  return user;
+                });
+              });
+            } else {
+              let message = "Your email could not be verified. Make sure the verification code is correct.";
+              this.app.showModalDialog("Sorry.", message, () => { 'pass' });
+            }
+          });
+        });
+      }
+
+      resendSmsTapped(e = null) {
+        let phone = this.app.user.phone;
+        this._processResendVerificationSmsApi({ phone }, status => {
+          let message = `Please check your phone. We have sent you a verification SMS.`;
+          this.app.showModalDialog("Verification SMS Sent", message, () => {
+            'pass'
+          });
+        })
+      }
+
+      verifyPhoneTapped(e = null) {
+        let message = "Please the verification code we sent to your phone."
+        this.app.showModalInput("Enter verification code.", message, '', verificationToken => {
+          if ((!verificationToken) || verificationToken.length === 0) return;
+          this._processVerifyPhoneApi({ verificationToken }, html => {
+            if (html.indexOf('Phone Verification Successful') > -1) {
+              this.app.showModalDialog("Thank you.", "Your phone is now verified.", () => {
+                this.app.db.update('user', (({ which }) => which === 'only'), user => {
+                  user.isPhoneVerified = true;
+                  return user;
+                });
+              });
+            } else {
+              let message = "Your phone could not be verified. Make sure the verification code is correct";
+              this.app.showModalDialog("Sorry.", message, () => { 'pass' });
+            }
+          });
+        });
+      }
 
       // region: misc =================================
 

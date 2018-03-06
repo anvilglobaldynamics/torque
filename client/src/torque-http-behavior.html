@@ -42,8 +42,16 @@
 
         callCombinedJsonApi(path, data, _cbfn) {
           let cbfn = (err, response) => {
-            if (err) return _cbfn(err);
+            if (err) {
+              if (mode === 'development') {
+                console.log(`NETWORK_ERROR/api=${path}`, { data, err });
+              }
+              return _cbfn(err);
+            }
             response = TorqueUtils.desanitize(response);
+            if (mode === 'development' && response.hasError) {
+              console.log(`API_ERROR/api=${path}`, { data, response });
+            }
             if (response.hasError && (response.error.code === "APIKEY_EXPIRED" || response.error.code === "APIKEY_INVALID")) {
               if (path === 'user-logout') {
                 return _cbfn(null, { hasError: false });
@@ -69,6 +77,19 @@
               }
             })
           }
+        }
+
+        callGetApi(uri, cbfn) {
+          let request = new XMLHttpRequest();
+          request.addEventListener("load", () => {
+            let { responseText } = request;
+            cbfn(null, responseText);
+          });
+          request.addEventListener("error", () => {
+            cbfn(request);
+          });
+          request.open("GET", uri);
+          request.send();
         }
 
         // api call utls ===================================
@@ -260,6 +281,60 @@
         callAdjustCustomerBalanceApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('adjust-customer-balance', data, cbfn);
+
+        callUserSetEmailApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('user-set-email', data, cbfn);
+        }
+
+        callUserResendVerificationSmsApi(data, cbfn) {
+          this.callCombinedJsonApi('user-resend-verification-sms', data, cbfn);
+        }
+
+        callVerifyPhoneApi(path, cbfn) {
+          let uri = `${this.serverHost}/verify-phone/${path}`
+          this.callGetApi(uri, cbfn);
+        }
+
+        callUserResendVerificationEmailApi(data, cbfn) {
+          this.callCombinedJsonApi('user-resend-verification-email', data, cbfn);
+        }
+
+        callVerifyEmailApi(path, cbfn) {
+          let uri = `${this.serverHost}/verify-email/${path}`
+          this.callGetApi(uri, cbfn);
+        }
+
+        callUserResetPasswordRequestApi(data, cbfn) {
+          this.callCombinedJsonApi('user-reset-password--request', data, cbfn);
+        }
+
+        callUserResetPasswordGetTokenInfoApi(data, cbfn) {
+          this.callCombinedJsonApi('user-reset-password--get-token-info', data, cbfn);
+        }
+
+        callUserResetPasswordConfirmApi(data, cbfn) {
+          this.callCombinedJsonApi('user-reset-password--confirm', data, cbfn);
+        }
+
+        callUserEditProfileApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('user-edit-profile', data, cbfn);
+        }
+
+        callUserChangePasswordApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('user-change-password', data, cbfn);
+        }
+
+        callGetInventoryListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-inventory-list', data, cbfn);
+        }
+
+        callTransferBetweenInventoriesApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('transfer-between-inventories', data, cbfn);
         }
 
       }

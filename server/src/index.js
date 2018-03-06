@@ -19,6 +19,9 @@ let { VerifyEmailApi } = require('./apis/verify-email');
 let { VerifyPhoneApi } = require('./apis/verify-phone');
 let { UserChangePasswordApi } = require('./apis/user-change-password');
 let { UserEditProfileApi } = require('./apis/user-edit-profile');
+let { UserSetEmailApi } = require('./apis/user-set-email');
+let { UserResendVerificationSmsApi } = require('./apis/user-resend-verification-sms');
+let { UserResendVerificationEmailApi } = require('./apis/user-resend-verification-email');
 
 let { UserResetPasswordRequestApi } = require('./apis/user-reset-password--request');
 let { UserResetPasswordGetTokenInfoApi } = require('./apis/user-reset-password--get-token-info');
@@ -209,7 +212,7 @@ class Program {
       })
       .then(() => {
         logger.info('(server)> registering APIs');
-        
+
         server.registerGetApi('/verify-phone/:link', VerifyPhoneApi);
         server.registerGetApi('/verify-email/:link', VerifyEmailApi);
         server.registerGetApi('/internal--status', InternalStatus);
@@ -219,6 +222,9 @@ class Program {
         server.registerPostApi('/api/user-logout', UserLogoutApi);
         server.registerPostApi('/api/user-change-password', UserChangePasswordApi);
         server.registerPostApi('/api/user-edit-profile', UserEditProfileApi);
+        server.registerPostApi('/api/user-set-email', UserSetEmailApi);
+        server.registerPostApi('/api/user-resend-verification-sms', UserResendVerificationSmsApi);
+        server.registerPostApi('/api/user-resend-verification-email', UserResendVerificationEmailApi);
         server.registerPostApi('/api/add-organization', AddOrganizationApi);
         server.registerPostApi('/api/get-organization-list', GetOrganizationListApi);
         server.registerPostApi('/api/edit-organization', EditOrganizationApi);

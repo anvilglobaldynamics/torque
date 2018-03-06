@@ -17,9 +17,9 @@
 # Running Projects
 1. run `mongod` on a terminal and keep it running.
 2. navigate to `torque/server` directory.
-3. run `npm start` or `nodemon start.js` on a separate terminal and keep it running. Server now should be running on `localhost:8540`.
+3. run `npm start` (recommended) or `nodemon start.js` or `node start.js` on a separate terminal and keep it running. Server now should be running on `localhost:8540`.
 4. navigate to `torque/client` directory.
-5. run `polymer serve --port 8545` on a separate terminal and keep it running. Client now should be running on `localhost:8545`.
+5. run `npm start` on a separate terminal and keep it running. Client now should be running on `localhost:8545`.
 
 # Testing server
 1. Make sure that server is **NOT** running.

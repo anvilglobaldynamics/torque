@@ -36,7 +36,10 @@
 <link rel="lazy-import" href="page-error404.html">
 <link rel="lazy-import" href="page-about.html">
 <link rel="lazy-import" href="page-login.html">
+<link rel="lazy-import" href="page-verify.html">
+<link rel="lazy-import" href="page-confirm-password-reset.html">
 <link rel="lazy-import" href="page-register.html">
+<link rel="lazy-import" href="page-edit-profile.html">
 <link rel="lazy-import" href="page-add-organization.html">
 <link rel="lazy-import" href="page-select-organization.html">
 <link rel="lazy-import" href="page-manage-employees.html">
@@ -113,6 +116,7 @@
         margin-bottom: 36px;
         text-align: center;
         color: var(--app-text-lighter);
+        line-height: 100%;
       }
 
       .subtitle {
@@ -124,7 +128,7 @@
       }
     </style>
 
-    <app-drawer-layout fullbleed responsive-width="2560px">
+    <app-drawer-layout fullbleed="" responsive-width="2560px">
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer">
         <app-toolbar>Torque</app-toolbar>
@@ -135,6 +139,7 @@
           <a name="manage-warehouses" href="#/manage-warehouses">Warehouses</a>
           <a name="manage-product-categories" href="#/manage-product-categories">Product Categories</a>
           <a name="manage-customers" href="#/manage-customers">Customers</a>
+          <a name="edit-profile" href="#/edit-profile">Profile</a>
           <a name="settings" href="#/settings">Settings</a>
           <a name="about" href="#/about">About</a>
         </iron-selector>
@@ -142,22 +147,22 @@
       </app-drawer>
 
       <!-- Main content -->
-      <app-header-layout has-scrolling-region>
+      <app-header-layout has-scrolling-region="">
 
         <app-header slot="header" style$="[[$invisibleUnless(user)]]">
           <app-toolbar>
             <template is="dom-if" if="[[!currentPageIsModal]]">
-              <paper-icon-button icon="shared-icons:menu" drawer-toggle></paper-icon-button>
+              <paper-icon-button icon="shared-icons:menu" drawer-toggle=""></paper-icon-button>
             </template>
             <template is="dom-if" if="[[currentPageIsModal]]">
               <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
             </template>
-            <div main-title class="flex vertical layout">
+            <div main-title="" class="flex vertical layout">
               <div>[[$getPageTitle(pageTitleList.length)]]</div>
               <div class="subtitle">[[organization.name]]</div>
             </div>
             <template is="dom-if" if="[[$and(activeServiceCount, topSpinnerEnabled)]]">
-              <paper-spinner-lite active class="top-nav-spinner"></paper-spinner-lite>
+              <paper-spinner-lite active="" class="top-nav-spinner"></paper-spinner-lite>
             </template>
             <paper-menu-button horizontal-align="right">
               <paper-icon-button icon="icons:apps" slot="dropdown-trigger"></paper-icon-button>
@@ -183,7 +188,10 @@
           <page-error404 name="error404"></page-error404>
           <page-about name="about"></page-about>
           <page-login name="login"></page-login>
+          <page-verify name="verify"></page-verify>
+          <page-confirm-password-reset name="confirm-password-reset"></page-confirm-password-reset>
           <page-register name="register"></page-register>
+          <page-edit-profile name="edit-profile"></page-edit-profile>
           <page-add-organization name="add-organization"></page-add-organization>
           <page-select-organization name="select-organization"></page-select-organization>
           <page-manage-employees name="manage-employees"></page-manage-employees>
@@ -208,8 +216,12 @@
         </iron-pages>
 
         <div class="footer">
-          &copy; 2017
-          <a href="[[authorWebsite]]">[[authorName]]</a> All Rights Reserved
+          &#xA9; 2017
+          <a href="[[authorWebsite]]">[[authorName]]</a> All Rights Reserved.
+          <br>
+          <span class="extra-small">build
+            <span id="build-number">4</span>
+          </span>
         </div>
       </app-header-layout>
     </app-drawer-layout>
@@ -218,6 +230,8 @@
   </template>
 
   <script>
+    let localDocument = document.currentScript.ownerDocument;
+
     class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior) {
 
       static get is() { return 'torque-app'; }
@@ -277,9 +291,11 @@
 
       _manageProductionVariables() {
         if (mode === 'production') {
+          this.serverHost = 'https://server.torque.live'
           this.jsonPostApiPathPrefix = 'https://server.torque.live/api/';
           this.websocketHost = 'wss://server.torque.live';
         } else {
+          this.serverHost = 'http://localhost:8540'
           this.jsonPostApiPathPrefix = 'http://localhost:8540/api/';
           this.websocketHost = 'ws://localhost:8540';
         }
@@ -324,7 +340,7 @@
       _intializeServiceManager() {
         this.serviceManager.on('service-change', (event) => {
           this.activeServiceCount = event.detail.activeCount;
-        })
+        });
         this.serviceManager.on('error', (event) => {
           this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
         });
@@ -333,23 +349,26 @@
       // ====================== navigation =============================
 
       _pageNameChanged() {
-        var resolvedPageUrl = this.resolveUrl('page-' + this.pageName + '.html');
+        let qualifiedName = 'page-' + this.pageName + '.html';
+        let matchingEl = Array.from(localDocument.querySelectorAll('link[rel="lazy-import"]')).find(el => {
+          return el.href.indexOf(qualifiedName) > -1;
+        });
+        if (matchingEl) {
+          qualifiedName = matchingEl.href;
+        }
+        var resolvedPageUrl = this.resolveUrl(qualifiedName);
         Polymer.importHref(resolvedPageUrl, null, (_ => this.pageName = 'error404'), true);
       }
 
       mainIronPagesIronSelected(e, details) {
         if (e.target.nodeName !== 'IRON-PAGES') return;
         if (!details.item) return;
-        this._lastPageElementOpened = details.item;
         this._notifyPageSelect(details.item);
       }
 
       refreshCurrentPage() {
-        // this._notifyPageSelect(this._lastPageElementOpened);
-        // FIXME: This is a quick hack to make reload work.
-        // However, it needs to be altered so that page can reload
-        // without reloading whole window.
-        window.location.reload();
+        this.activePageElement.onNavigateOut();
+        this.activePageElement.onNavigateIn();       
       }
 
       // ======================  events =============================
