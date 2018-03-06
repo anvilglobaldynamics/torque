@@ -17,7 +17,7 @@ exports.AdjustCustomerBalanceApi = class extends collectionCommonMixin(customerC
       customerId: Joi.number().max(999999999999999).required(),
 
       action: Joi.string().valid('payment', 'withdrawl').required(),
-      balance: Joi.number().max(999999999999999).required()
+      amount: Joi.number().max(999999999999999).required()
     });
   }
 
@@ -36,11 +36,12 @@ exports.AdjustCustomerBalanceApi = class extends collectionCommonMixin(customerC
   }
 
   // FIXME: This does not need to be async
-  _updateAdditionalPaymentHistoryList({ customer, balance }, cbfn) {
+  _updateAdditionalPaymentHistoryList({ customer, amount, action }, cbfn) {
     let paymentRecord = {
       creditedDatetimeStamp: (new Date).getTime(),
       acceptedByUserId: null,
-      amount: balance
+      amount,
+      action
     }
     customer.additionalPaymentHistory.push(paymentRecord);
     return cbfn(customer);
@@ -54,10 +55,10 @@ exports.AdjustCustomerBalanceApi = class extends collectionCommonMixin(customerC
   }
 
   handle({ body }) {
-    let { customerId, action, balance } = body;
+    let { customerId, action, amount } = body;
     this._getCustomer({ customerId }, (customer) => {
-      this._adjustBalance({ customer, action, balance }, (customer) => {
-        this._updateAdditionalPaymentHistoryList({ customer, balance }, (customer) => {
+      this._adjustBalance({ customer, action, amount }, (customer) => {
+        this._updateAdditionalPaymentHistoryList({ customer, amount, action }, (customer) => {
           this._saveAdjustment({ customer }, () => {
             this.success({ status: "success" });
           })

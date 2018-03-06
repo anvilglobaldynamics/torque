@@ -134,6 +134,45 @@
           this.callCombinedJsonApi('get-dashboard-summary', data, cbfn);
         }
 
+        callGetEmployeeListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-employee-list', data, cbfn);
+        }
+
+        callGetPrivilegeListApi(data, cbfn) {
+          this.callCombinedJsonApi('get-privilege-list', data, cbfn);
+        }
+
+        callAddNewEmployeeApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('add-new-employee', data, cbfn);
+        }
+
+        callGetEmployeeApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-employee', data, cbfn);
+        }
+
+        callEditEmploymentApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('edit-employment', data, cbfn);
+        }
+
+        callFireEmployeeApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('fire-employee', data, cbfn);
+        }
+
+        callHireUserAsEmployeeApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('hire-user-as-employee', data, cbfn);
+        }
+
+        callFindUserApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('find-user', data, cbfn);
+        }
+
         callGetOutletListApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('get-outlet-list', data, cbfn);
@@ -157,6 +196,31 @@
         callDeleteOutletApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('delete-outlet', data, cbfn);
+        }
+
+        callGetWarehouseListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-warehouse-list', data, cbfn);
+        }
+
+        callGetWarehouseApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-warehouse', data, cbfn);
+        }
+
+        callAddWarehouseApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('add-warehouse', data, cbfn);
+        }
+
+        callEditWarehouseApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('edit-warehouse', data, cbfn);
+        }
+
+        callDeleteWarehouseApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('delete-warehouse', data, cbfn);
         }
 
         callGetProductCategoryListApi(data, cbfn) {
@@ -188,6 +252,35 @@
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('add-product-to-inventory', data, cbfn);
         }
+
+        callGetCustomerListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-customer-summary-list', data, cbfn);
+        }
+
+        callAddCustomerApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('add-customer', data, cbfn);
+        }
+
+        callGetCustomerApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-customer', data, cbfn);
+        }
+
+        callEditCustomerApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('edit-customer', data, cbfn);
+        }
+
+        callDeleteCustomerApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('delete-customer', data, cbfn);
+        }
+
+        callAdjustCustomerBalanceApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('adjust-customer-balance', data, cbfn);
 
         callUserSetEmailApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;

@@ -66,6 +66,13 @@
             let { path, message } = error;
             let key = `.${form}--${path}`;
             let el = this.elem(key);
+            if (!el && this.subForm) {
+              let subFormName = this.subForm.getAttribute('name');
+              if (subFormName) {
+                let key = `.${subFormName}--${path}`;
+                el = this.subForm.elem(key);
+              }
+            }
             if (!el) {
               missingError = error;
               continue;
@@ -81,6 +88,9 @@
           return this.app.showModalDialog("Sorry!", error.message);
         }
       }
+
+      $json(obj) {
+        return (JSON.stringify(obj));
 
       checkPrivilege(privilege) {
         if (!(privilege in this.app.organization.employment.privileges)) {

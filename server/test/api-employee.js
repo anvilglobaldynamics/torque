@@ -716,11 +716,11 @@ describe('employee', _ => {
 
         employmentId: employeeToBeEditedData.id,
 
-        isActive: false,
+        isActive: employeeToBeEditedData.isActive,
 
         role: employeeToBeEditedData.role,
         designation: employeeToBeEditedData.designation,
-        companyProvidedId: employeeToBeEditedData.companyProvidedId,
+        companyProvidedId: "007",
 
         privileges: employeeToBeEditedData.privileges
       }
@@ -748,7 +748,7 @@ describe('employee', _ => {
 
       validateEmploymentSchema(body.employee);
 
-      expect(body.employee).to.have.property('isActive').that.equals(false);
+      expect(body.employee).to.have.property('companyProvidedId').that.equals("007");
 
       testDoneFn();
     })
@@ -770,6 +770,62 @@ describe('employee', _ => {
         companyProvidedId: employeeToBeEditedData.companyProvidedId,
 
         privileges: employeeToBeEditedData.privileges
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('EMPLOYEE_INVALID');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/fire-employee (Valid)', testDoneFn => {
+
+    callApi('api/fire-employee', {
+      json: {
+        apiKey,
+        employmentId: employeeToBeEditedData.id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-employee (Valid sack check)', testDoneFn => {
+
+    callApi('api/get-employee', {
+      json: {
+        apiKey,
+        employmentId: employeeToBeEditedData.id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('employee');
+
+      validateEmploymentSchema(body.employee);
+
+      expect(body.employee).to.have.property('isActive').that.equals(false);
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/fire-employee (Inalid)', testDoneFn => {
+
+    callApi('api/fire-employee', {
+      json: {
+        apiKey,
+        employmentId: invalidEmploymentId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

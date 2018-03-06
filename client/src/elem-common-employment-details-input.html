@@ -1,0 +1,114 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="elem-common-employment-details-input">
+  <template>
+    <style include="shared-styles"></style>
+
+    <div class="layout vertical">
+      <paper-input class="employeeForm--role" value="{{employeeForm.role}}" required minlength="1" error-message="Please enter a valid role" label="Role of Employee."></paper-input>
+      <paper-input class="employeeForm--designation" value="{{employeeForm.designation}}" required minlength="1" error-message="Please enter a valid designation" label="Designation of Employee."></paper-input>
+      <paper-input class="employeeForm--companyProvidedId" value="{{employeeForm.companyProvidedId}}" required minlength="1" error-message="Please enter Company Provided Id" label="Company Provided Id."></paper-input>
+
+      <h3>Privileges:</h3>
+      <template is="dom-repeat" items="[[privilegeList]]" as="privilege">
+        <paper-checkbox checked="[[$isChecked(privilege)]]" on-change="privilegeChanged">
+          [[privilege.name]]
+        </paper-checkbox>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    class ElemCommonEmploymentDetailsInput extends FxElement.mixin(TorqueDbBehavior, FxCommonBehavior) {
+
+      static get is() {
+        return 'elem-common-employment-details-input';
+      }
+
+      static get properties() {
+        return {};
+      }
+
+      $isChecked(privilege) {
+        return this.employeeForm.privileges[privilege.code];
+      }
+
+      privilegeChanged(e) {
+        this.employeeForm.privileges[e.model.privilege.code] = e.target.checked;
+      }
+
+      _fetchPrivilegeList(cbfn) {
+        let data = {};
+        this.page.app.callGetPrivilegeListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.page.onApiError(response.error);
+          return cbfn(response.privilegeList);
+        });
+      }
+
+      _processPrivilegeList({ shouldSetDefaultPrivileges }, cbfn) {
+        this._fetchPrivilegeList(newPrivilegeList => {
+          this.privilegeList = newPrivilegeList;
+          let defaultPrivilegeList = [
+            "PRIV_VIEW_USERS",
+
+            "PRIV_ACCESS_POS",
+            "PRIV_VIEW_SALES",
+            "PRIV_MODIFY_SALES",
+            "PRIV_ALLOW_FLAT_DISCOUNT",
+            "PRIV_ALLOW_INDIVIDUAL_DISCOUNT",
+            "PRIV_ALLOW_FOC",
+
+            "PRIV_VIEW_SALES_RETURN",
+            "PRIV_MODIFY_SALES_RETURN",
+
+            "PRIV_VIEW_ALL_INVENTORIES",
+            "PRIV_TRANSFER_ALL_INVENTORIES",
+            "PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES",
+
+            "PRIV_VIEW_ALL_OUTLETS",
+
+            "PRIV_VIEW_ALL_WAREHOUSES",
+
+            "PRIV_VIEW_ORGANIZATION_STATISTICS",
+
+            "PRIV_VIEW_CUSTOMER",
+            "PRIV_ADD_CUSTOMER_DURING_SALES",
+            "PRIV_MODIFY_CUSTOMER",
+            "PRIV_MANAGE_CUSTOMER_DEBT"
+          ]
+          if (shouldSetDefaultPrivileges) {
+            for (let privilege of this.privilegeList) {
+              this.employeeForm.privileges[privilege.code] = false;
+            }
+            for (let privilege of defaultPrivilegeList) {
+              this.employeeForm.privileges[privilege] = true;
+            }
+          }
+          return cbfn();
+        });
+      }
+
+    }
+
+    window.customElements.define(ElemCommonEmploymentDetailsInput.is, ElemCommonEmploymentDetailsInput);
+  </script>
+</dom-module>

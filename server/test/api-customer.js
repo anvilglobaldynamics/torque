@@ -342,7 +342,7 @@ describe('customer', _ => {
         apiKey,
         customerId: firstCustomer.id,
         action: "payment",
-        balance: 20,
+        amount: 20,
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -360,7 +360,7 @@ describe('customer', _ => {
         apiKey,
         customerId: firstCustomer.id,
         action: "withdrawl",
-        balance: 600,
+        amount: 600,
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -383,6 +383,8 @@ describe('customer', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('customer');
 
+      validateCustomerSchema(body.customer);
+
       expect(body.customer).to.have.property('balance').that.equals(-80);
       expect(body.customer).to.have.property('additionalPaymentHistory').to.have.lengthOf(3);
 
@@ -398,7 +400,7 @@ describe('customer', _ => {
         apiKey,
         customerId: invalidCustomerId,
         action: "payment",
-        balance: 20,
+        amount: 20,
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -417,7 +419,7 @@ describe('customer', _ => {
         apiKey,
         customerId: firstCustomer.id,
         action: "invalid",
-        balance: 20,
+        amount: 20,
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

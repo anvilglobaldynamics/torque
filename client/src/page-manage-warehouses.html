@@ -1,0 +1,140 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-manage-warehouses">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding: 24px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card vertical layout">
+        <div class="std-list">
+          <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
+            <div class="horizontal layout std-list-item center">
+              <div class="vertical layout flex">
+                <div class="title">[[warehouse.name]]</div>
+                <div class="description">[[warehouse.phone]] ([[warehouse.physicalAddress]])</div>
+              </div>
+              <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
+              <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
+              <paper-button raised class="primary" on-tap="posTapped">POS</paper-button>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <div class="transparent-card align-right">
+        <paper-button raised class="primary" on-tap="createTapped">Create New Warehouse</paper-button>
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+    class PageManageWarehouses extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+      static get is() {
+        return 'page-manage-warehouses';
+      }
+
+      static get properties() {
+        return {
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.app.pushPageTitle('Manage Warehouse');
+        if (!this._ensureAccess()) return;
+        this._processWarehouseList(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      _fetchWarehouseList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetWarehouseListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.warehouseList);
+        });
+      }
+
+      _processWarehouseList(cbfn) {
+        this._fetchWarehouseList(newWarehouseList => {
+          this.warehouseList = newWarehouseList;
+          cbfn();
+        });
+      }
+
+      // region: ui  ===========================
+
+      createTapped(e = null) {
+        return this.app.navigateTo('/edit-warehouse');
+      }
+
+      viewTapped(e) {
+        let { warehouse } = e.model;
+        return this.app.navigateTo(`/view-warehouse/warehouse:${warehouse.id}`);
+      }
+
+      editTapped(e) {
+        let { warehouse } = e.model;
+        return this.app.navigateTo(`/edit-warehouse/warehouse:${warehouse.id}`);
+      }
+
+      posTapped(e) {
+        let { warehouse } = e.model;
+        return this.app.navigateTo(`/pos/warehouse:${warehouse.id}`);
+      }
+    }
+
+    window.customElements.define(PageManageWarehouses.is, PageManageWarehouses);
+  </script>
+</dom-module>
