@@ -1,0 +1,148 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-verification-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-home">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding: 24px;
+        }
+      }
+
+      .item-value {
+        font-size: 60px;
+      }
+
+      .item-unit {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .warning-message {
+        font-weight: bold;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="horizontal layout">
+        <div class="card flex">
+          <div>
+            <b>User</b>
+          </div>
+          You are logged in as
+          <b>[[user.username]]</b>.
+        </div>
+        <div class="card vertical layout flex">
+          <div>
+            <b>Permissions</b>
+          </div>
+          <pre>[[$json(user.rights)]]</pre>
+        </div>
+      </div>
+      <div class="horizontal layout">
+        <div class="card horizontal layout flex center">
+          <paper-button class="primary flex" on-tap="usersTapped">Users</paper-button>
+        </div>
+        <div class="card horizontal layout flex center">
+          <paper-button class="primary flex" on-tap="outgoingSmsesTapped">Outgoing SMSes</paper-button>
+        </div>
+        <div class="card vertical layout flex center">
+
+        </div>
+        <div class="card vertical layout flex center">
+
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class PageHome extends FxPage.mixin(TorqueVerificationBehavior, TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+      static get is() {
+        return 'page-home';
+      }
+
+      static get properties() {
+        return {
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.app.pushPageTitle('Home');
+        if (!this._ensureAccess()) return;
+        this.onUserChange(this.app.user);
+        this.onSettingsChange(this.app.settings);
+        this.delay(300, () => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      onUserChange(user) {
+        this.user = user;
+      }
+
+      onSettingsChange(settings) {
+        this.settings = settings;
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      // region: ui  ===========================
+
+      usersTapped(e = null) {
+        this.app.navigateTo('/manage-users');
+      }
+
+      outgoingSmsesTapped(e = null) {
+        this.app.navigateTo('/outgoing-smses');
+      }
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageHome.is, PageHome);
+  </script>
+</dom-module>

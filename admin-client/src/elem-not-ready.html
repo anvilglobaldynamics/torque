@@ -1,0 +1,54 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-element.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="elem-not-ready">
+  <template>
+
+    <style include="shared-styles">
+      .spinner {
+        width: 120px;
+        height: 120px;
+        --paper-spinner-stroke-width: 12px;
+        --paper-spinner-color: #9C27B0;
+      }
+
+      .loading {
+        margin-top: 16px;
+
+      }
+    </style>
+    <div class$="layout vertical center-center std-page [[$if(isReady, 'hidden', '')]]">
+      <paper-spinner-lite active class="spinner"></paper-spinner-lite>
+      <!-- <div class="loading">LOADING...</div> -->
+    </div>
+
+  </template>
+
+  <script>
+    class ElemNotReady extends FxElement {
+
+      static get is() {
+        return 'elem-not-ready';
+      }
+
+      $if(condition, thenValue, elseValue) {
+        if (condition) return thenValue;
+        return elseValue;
+      }
+
+      static get properties() {
+        return {
+          isReady: {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+
+    }
+
+    window.customElements.define(ElemNotReady.is, ElemNotReady);
+  </script>
+</dom-module>

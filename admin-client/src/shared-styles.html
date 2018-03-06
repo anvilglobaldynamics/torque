@@ -1,0 +1,154 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<!-- shared styles for all views -->
+<dom-module id="shared-styles">
+  <template>
+    <style is="custom-style" include="iron-flex iron-flex-alignment">
+      .card {
+        margin: 8px;
+        padding: 16px;
+        color: #424242;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      }
+
+      .transparent-card {
+        margin: 8px;
+        padding: 16px;
+        border-radius: 5px;
+      }
+
+      h1 {
+        margin: 16px 0;
+        color: #212121;
+        font-size: 22px;
+      }
+
+      .std-small-page {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+
+      .std-page {
+        max-width: 960px;
+        margin: 0 auto;
+        min-height: 70vh;
+      }
+
+      .button-row {
+        margin-top: 12px;
+      }
+
+      .button-row.extended {
+        margin-top: 16px;
+      }
+
+      div.link {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      div.link.primary {
+        color: var(--app-primary-color-dark);
+      }
+
+      div.link.light {
+        color: var(--app-primary-color-light);
+      }
+
+      paper-icon-button {
+        min-width: 40px;
+        max-width: 40px;
+      }
+
+      paper-button.primary {
+        background: var(--app-primary-color);
+        color: white;
+      }
+
+      .std-dialog-header {
+        background: var(--app-primary-color);
+        color: white;
+        padding: 16px;
+        text-align: center;
+        font-size: 24px;
+        margin-bottom: 12px;
+      }
+
+      .std-list-item {
+        /* margin-top: 4px; */
+        min-height: 56px;
+        border-bottom: 1px dashed rgb(192, 198, 214);
+      }
+
+      .std-list-item .title {
+        font-size: 18px;
+      }
+
+      .std-list-item .description {
+        font-size: 14px;
+      }
+
+      .std-list-item paper-button {
+        max-height: 40px;
+      }
+
+      .align-right {
+        text-align: right;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .mb-4 {
+        margin-bottom: 4px;
+      }
+
+      .mt-4 {
+        margin-top: 4px;
+      }
+
+      .mr-4 {
+        margin-right: 4px;
+      }
+
+      .m-0 {
+        margin: 0px;
+      }
+
+      iron-form paper-checkbox {
+        margin-top: 12px;
+        margin-bottom: 12px;
+      }
+
+      .horizontal.layout paper-dropdown-menu {
+        margin-top: -1.5px;
+      }
+
+      .top-nav-spinner {
+        --paper-spinner-color: white;
+      }
+
+      .small-input {
+        max-width: 100px;
+        margin-left: 12px;
+      }
+
+      .medium-input {
+        max-width: 160px;
+        margin-left: 12px;
+      }
+
+      pre {
+        font-family: Arial, Helvetica, sans-serif !important;
+      }
+
+      .extra-small {
+        font-size: 8px;
+      }
+    </style>
+  </template>
+</dom-module>

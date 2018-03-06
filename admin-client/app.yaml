@@ -1,0 +1,52 @@
+runtime: python27
+api_version: 1
+service: "admin"
+threadsafe: yes
+default_expiration: "1m"
+skip_files:
+- node_modules/
+
+handlers:
+- url: /bower_components
+  static_dir: build/custom-es5-bundled/bower_components
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
+
+- url: /images
+  static_dir: build/custom-es5-bundled/images
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
+
+- url: /src
+  static_dir: build/custom-es5-bundled/src
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
+
+- url: /vendor-assets
+  static_dir: build/custom-es5-bundled/vendor-assets
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
+
+- url: /manifest.json
+  static_files: build/custom-es5-bundled/manifest.json
+  upload: build/custom-es5-bundled/manifest.json
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
+
+- url: /.*
+  static_files: build/custom-es5-bundled/index.html
+  upload: build/custom-es5-bundled/index.html
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
