@@ -14,8 +14,7 @@ exports.OutgoingSmsCollection = class extends Collection {
       from: Joi.string().min(1).max(15).required(),
       to: Joi.string().min(1).max(15).required(),
       content: Joi.string().min(1).max(512).required(),
-      isDelivered: Joi.boolean().required(),
-      isCanceled: Joi.boolean().required(),
+      status: Joi.string().valid('pending', 'sent', 'delivered', 'canceled'),
       isDeleted: Joi.boolean().required()
     });
 
@@ -35,8 +34,7 @@ exports.OutgoingSmsCollection = class extends Collection {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       from, to, content,
-      isDelivered: false,
-      isCanceled: false,
+      status: 'pending',
       isDeleted: false
     };
     this._insert(doc, (err, id) => {
@@ -44,16 +42,9 @@ exports.OutgoingSmsCollection = class extends Collection {
     });
   }
 
-  markAsDelivered({ outgoingSmsId }, cbfn) {
+  updateStatus({ outgoingSmsId }, { status }, cbfn) {
     let modifications = {
-      $set: { isDelivered: true }
-    };
-    this._update({ id: outgoingSmsId }, modifications, cbfn);
-  }
-
-  cancel({ outgoingSmsId }, cbfn) {
-    let modifications = {
-      $set: { isCanceled: true }
+      $set: { status }
     };
     this._update({ id: outgoingSmsId }, modifications, cbfn);
   }

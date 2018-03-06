@@ -5,7 +5,9 @@ exports.AdminGetOutgoingSmsListApi = class extends Api {
 
   get autoValidates() { return true; }
 
-  get requiresAuthentication() { return false; }
+  get requiresAuthentication() { return true; }
+
+  get authenticationLevel() { return 'admin'; }
 
   get requestSchema() {
     return Joi.object().keys({

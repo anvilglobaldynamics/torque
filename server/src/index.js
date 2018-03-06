@@ -86,6 +86,7 @@ let { InternalStatus } = require('./apis/internal--status');
 
 let { AdminLoginApi } = require('./apis/admin-login');
 let { AdminGetOutgoingSmsListApi } = require('./apis/admin-get-outgoing-sms-list');
+let { AdminSetOutgoingSmsStatusApi } = require('./apis/admin-set-outgoing-sms-status');
 
 let { FixtureCollection } = require('./collections/fixture');
 let { UserCollection } = require('./collections/user');
@@ -281,6 +282,7 @@ class Program {
         server.registerPostApi('/api/fire-employee', FireEmployeeApi);
         server.registerPostApi('/api/admin-login', AdminLoginApi);
         server.registerPostApi('/api/admin-get-outgoing-sms-list', AdminGetOutgoingSmsListApi);
+        server.registerPostApi('/api/admin-set-outgoing-sms-status', AdminSetOutgoingSmsStatusApi);
         return Promise.resolve();
       })
       .then(() => {
