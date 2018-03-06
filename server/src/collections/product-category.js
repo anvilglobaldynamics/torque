@@ -54,7 +54,7 @@ exports.ProductCategoryCollection = class extends Collection {
    */
   create(data, cbfn) {
     let {
-     organizationId,
+      organizationId,
       parentProductCategoryId,
       name,
       unit,

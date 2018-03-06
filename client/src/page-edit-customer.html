@@ -39,7 +39,7 @@
             <template is="dom-if" if="{{!editMode}}">
               <paper-input class$="editCustomerForm--openingBalance" value="{{editCustomerForm.openingBalance}}" required minlength="0" maxlength="8" error-message="Please enter an amount as opening balance" label="Opening Balance"></paper-input>
             </template>
-              <div class="horizontal layout button-row end">
+            <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]]" on-tap="createCustomerTapped">Create Customer</paper-button>
               <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]]" on-tap="updateCustomerTapped">Update Customer</paper-button>

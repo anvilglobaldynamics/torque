@@ -70,7 +70,7 @@ let invalidCustomerId = generateInvalidId();
 let invalidSalesId = generateInvalidId();
 
 let fromDate = new Date();
-fromDate.setDate(fromDate.getDate()-1);
+fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
 describe('sales', _ => {

@@ -59,7 +59,7 @@ describe('dashboard', _ => {
 
     callApi('api/get-dashboard-summary', {
       json: {
-        apiKey, 
+        apiKey,
         organizationId
       }
     }, (err, response, body) => {
@@ -80,7 +80,7 @@ describe('dashboard', _ => {
 
     callApi('api/get-dashboard-summary', {
       json: {
-        apiKey, 
+        apiKey,
         organizationId: invalidOrganizationId
       }
     }, (err, response, body) => {

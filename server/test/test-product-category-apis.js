@@ -87,7 +87,7 @@ describe('product-category', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
       expect(body).to.have.property('productCategoryId');
-      
+
       testDoneFn();
     })
 
@@ -260,7 +260,7 @@ describe('product-category', _ => {
       body.productCategoryList.forEach(productCategory => {
         validateProductCategorySchema(productCategory);
       });
-      
+
       productCategoryOne = body.productCategoryList[0];
       productCategoryTwo = body.productCategoryList[1];
       productCategoryThree = body.productCategoryList[2];

@@ -1,110 +1,110 @@
 [
-    {
-        "code": "PRIV_VIEW_USERS",
-        "name": "View users"
-    },
-    {
-        "code": "PRIV_MODIFY_USERS",
-        "name": "Modify users"
-    },
-    {
-        "code": "PRIV_ADD_USER",
-        "name": "Add user"
-    },
-    {
-        "code": "PRIV_MAKE_USER_AN_OWNER",
-        "name": "Make user an owner"
-    },
-    {
-        "code": "PRIV_MODIFY_USER_PRIVILEGES",
-        "name": "Modify user privileges"
-    },
-    {
-        "code": "PRIV_ACCESS_POS",
-        "name": "Access pos"
-    },
-    {
-        "code": "PRIV_VIEW_SALES",
-        "name": "View sales"
-    },
-    {
-        "code": "PRIV_MODIFY_SALES",
-        "name": "Modify sales"
-    },
-    {
-        "code": "PRIV_ALLOW_FLAT_DISCOUNT",
-        "name": "Allow flat discount"
-    },
-    {
-        "code": "PRIV_ALLOW_INDIVIDUAL_DISCOUNT",
-        "name": "Allow individual discount"
-    },
-    {
-        "code": "PRIV_ALLOW_FOC",
-        "name": "Allow foc"
-    },
-    {
-        "code": "PRIV_VIEW_SALES_RETURN",
-        "name": "View sales return"
-    },
-    {
-        "code": "PRIV_MODIFY_SALES_RETURN",
-        "name": "Modify sales return"
-    },
-    {
-        "code": "PRIV_VIEW_ALL_INVENTORIES",
-        "name": "View all inventories"
-    },
-    {
-        "code": "PRIV_MODIFY_ALL_INVENTORIES",
-        "name": "Modify all inventories"
-    },
-    {
-        "code": "PRIV_TRANSFER_ALL_INVENTORIES",
-        "name": "Transfer all inventories"
-    },
-    {
-        "code": "PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES",
-        "name": "Report damages in all inventories"
-    },
-    {
-        "code": "PRIV_VIEW_ALL_OUTLETS",
-        "name": "View all outlets"
-    },
-    {
-        "code": "PRIV_MODIFY_ALL_OUTLETS",
-        "name": "Modify all outlets"
-    },
-    {
-        "code": "PRIV_VIEW_ALL_WAREHOUSES",
-        "name": "View all warehouses"
-    },
-    {
-        "code": "PRIV_MODIFY_ALL_WAREHOUSES",
-        "name": "Modify all warehouses"
-    },
-    {
-        "code": "PRIV_VIEW_ORGANIZATION_STATISTICS",
-        "name": "View organization statistics"
-    },
-    {
-        "code": "PRIV_MODIFY_ORGANIZATION",
-        "name": "Modify organization"
-    },
-    {
-        "code": "PRIV_VIEW_CUSTOMER",
-        "name": "View customer"
-    },
-    {
-        "code": "PRIV_ADD_CUSTOMER_DURING_SALES",
-        "name": "Add customer during sales"
-    },
-    {
-        "code": "PRIV_MODIFY_CUSTOMER",
-        "name": "Modify customer"
-    },
-    {
-        "code": "PRIV_MANAGE_CUSTOMER_DEBT",
-        "name": "Manage customer deb"
-    }
+  {
+    "code": "PRIV_VIEW_USERS",
+    "name": "View users"
+  },
+  {
+    "code": "PRIV_MODIFY_USERS",
+    "name": "Modify users"
+  },
+  {
+    "code": "PRIV_ADD_USER",
+    "name": "Add user"
+  },
+  {
+    "code": "PRIV_MAKE_USER_AN_OWNER",
+    "name": "Make user an owner"
+  },
+  {
+    "code": "PRIV_MODIFY_USER_PRIVILEGES",
+    "name": "Modify user privileges"
+  },
+  {
+    "code": "PRIV_ACCESS_POS",
+    "name": "Access pos"
+  },
+  {
+    "code": "PRIV_VIEW_SALES",
+    "name": "View sales"
+  },
+  {
+    "code": "PRIV_MODIFY_SALES",
+    "name": "Modify sales"
+  },
+  {
+    "code": "PRIV_ALLOW_FLAT_DISCOUNT",
+    "name": "Allow flat discount"
+  },
+  {
+    "code": "PRIV_ALLOW_INDIVIDUAL_DISCOUNT",
+    "name": "Allow individual discount"
+  },
+  {
+    "code": "PRIV_ALLOW_FOC",
+    "name": "Allow foc"
+  },
+  {
+    "code": "PRIV_VIEW_SALES_RETURN",
+    "name": "View sales return"
+  },
+  {
+    "code": "PRIV_MODIFY_SALES_RETURN",
+    "name": "Modify sales return"
+  },
+  {
+    "code": "PRIV_VIEW_ALL_INVENTORIES",
+    "name": "View all inventories"
+  },
+  {
+    "code": "PRIV_MODIFY_ALL_INVENTORIES",
+    "name": "Modify all inventories"
+  },
+  {
+    "code": "PRIV_TRANSFER_ALL_INVENTORIES",
+    "name": "Transfer all inventories"
+  },
+  {
+    "code": "PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES",
+    "name": "Report damages in all inventories"
+  },
+  {
+    "code": "PRIV_VIEW_ALL_OUTLETS",
+    "name": "View all outlets"
+  },
+  {
+    "code": "PRIV_MODIFY_ALL_OUTLETS",
+    "name": "Modify all outlets"
+  },
+  {
+    "code": "PRIV_VIEW_ALL_WAREHOUSES",
+    "name": "View all warehouses"
+  },
+  {
+    "code": "PRIV_MODIFY_ALL_WAREHOUSES",
+    "name": "Modify all warehouses"
+  },
+  {
+    "code": "PRIV_VIEW_ORGANIZATION_STATISTICS",
+    "name": "View organization statistics"
+  },
+  {
+    "code": "PRIV_MODIFY_ORGANIZATION",
+    "name": "Modify organization"
+  },
+  {
+    "code": "PRIV_VIEW_CUSTOMER",
+    "name": "View customer"
+  },
+  {
+    "code": "PRIV_ADD_CUSTOMER_DURING_SALES",
+    "name": "Add customer during sales"
+  },
+  {
+    "code": "PRIV_MODIFY_CUSTOMER",
+    "name": "Modify customer"
+  },
+  {
+    "code": "PRIV_MANAGE_CUSTOMER_DEBT",
+    "name": "Manage customer deb"
+  }
 ]

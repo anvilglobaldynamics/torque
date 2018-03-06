@@ -247,7 +247,7 @@ describe('outlet', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error).to.have.property('code').that.equals('OUTLET_INVALID');
-      
+
       testDoneFn();
     })
 
@@ -325,7 +325,7 @@ describe('outlet', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error).to.have.property('code').that.equals('OUTLET_INVALID');
-      
+
       testDoneFn();
     });
 

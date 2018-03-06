@@ -94,7 +94,7 @@
         this.app.currentPageIsModal = true;
         this.app.pushPageTitle('Select Organization');
         if (!this._ensureAccess()) return;
-        this._processOrganizationList(_ => { 
+        this._processOrganizationList(_ => {
           this.isReady = true;
         });
       }

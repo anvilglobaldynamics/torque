@@ -21,26 +21,26 @@ exports.FixtureCollection = class extends Collection {
     this.foreignKeyDefList = [];
   }
 
-  _findByName( name , cbfn) {
+  _findByName(name, cbfn) {
     this._findOne({ name }, cbfn);
   }
 
   getDesignationList(cbfn) {
-    return this._findByName('designation-list', (err, doc)=>{
+    return this._findByName('designation-list', (err, doc) => {
       if (err) return cbfn(err);
       return cbfn(null, doc.data);
     });
   }
 
   getRoleList(cbfn) {
-    return this._findByName('role-list', (err, doc)=>{
+    return this._findByName('role-list', (err, doc) => {
       if (err) return cbfn(err);
       return cbfn(null, doc.data);
     });
   }
 
   getPrivilegeList(cbfn) {
-    return this._findByName('privilege-list', (err, doc)=>{
+    return this._findByName('privilege-list', (err, doc) => {
       if (err) return cbfn(err);
       return cbfn(null, doc.data);
     });
