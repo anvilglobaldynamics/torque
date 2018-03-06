@@ -98,7 +98,7 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
-        this.app.pushPageTitle('Manage User');
+        this.app.pushPageTitle('Manage Users');
         if (!this._ensureAccess()) return;
         this._processUserList(() => {
           this.isReady = true;
@@ -129,7 +129,6 @@
 
       _processUserList(cbfn) {
         this._fetchUserList(newUserList => {
-          console.log(newUserList)
           this.userList = newUserList;
           cbfn();
         });

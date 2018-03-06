@@ -18,7 +18,7 @@ exports.AdminGetOutgoingSmsListApi = class extends Api {
 
   _getOutgoingSmsList({ date }, cbfn) {
     let fromDate = new Date(date).getTime();
-    let toDate = new Date();
+    let toDate = new Date(date);
     toDate.setHours(toDate.getHours() + 24);
     toDate = toDate.getTime();
     this.database.outgoingSms.findByDateRange({ fromDate, toDate }, (err, outgoingSmsList) => {

@@ -124,6 +124,16 @@
           this.callCombinedJsonApi('admin-set-user-banning-status', data, cbfn);
         }
 
+        callAdminGetOutgoingSmsListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-get-outgoing-sms-list', data, cbfn);
+        }
+
+        callAdminSetOutgoingSmsStatusApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-set-outgoing-sms-status', data, cbfn);
+        }
+
       }
     }
 
