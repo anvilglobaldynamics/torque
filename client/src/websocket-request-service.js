@@ -19,6 +19,7 @@
       } = options;
       Object.assign(this, { host, url, responseType });
       this._hasErrorBeenNotified = false;
+      this.requestUidSeed = 0;
     }
 
     _serialize(content) {
@@ -101,9 +102,13 @@
       // NOTE: the type option is gracefully ignored.
 
       let now = '' + (new Date()).getTime();
+      if (this.requestUidSeed % 1000 === 0){
+        this.requestUidSeed = 0;
+      }
+      this.requestUidSeed += 1;
       let requestMessage = {
         path: this.url,
-        requestUid: ('0000000000000000'.substr(now.length) + now),
+        requestUid: ('0000000000000000'.substr(now.length) + String(this.requestUidSeed) + now),
         body: body
       }
       this._reuseOrEstablishConnection((err, connection) => {
