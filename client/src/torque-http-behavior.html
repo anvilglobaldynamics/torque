@@ -40,8 +40,8 @@
           return service;
         }
 
-        callCombinedJsonApi(path, data, _cbfn) {
-          let cbfn = (err, response) => {
+        _createGenericCallback(path, data, _cbfn) {
+          return (err, response) => {
             if (err) {
               if (mode === 'development') {
                 console.log(`NETWORK_ERROR/api=${path}`, { data, err });
@@ -64,6 +64,10 @@
             }
             return _cbfn(null, response);
           }
+        }
+
+        callCombinedJsonApi(path, data, _cbfn) {
+          let cbfn = this._createGenericCallback(path, data, _cbfn);
           let now = (new Date).getTime();
           if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
             this.callJsonPostApi(path, data, cbfn);
