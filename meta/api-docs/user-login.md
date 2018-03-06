@@ -45,6 +45,7 @@ Possible Error Codes:
   "sessionId": Number
   "warning": string (optional. This property is passed when the user needs to be notified of something)
   "user": { 
+    id: Number
     fullName: String
     email: String
     phone: String

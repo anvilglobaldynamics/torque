@@ -22,12 +22,12 @@ exports.customerCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     });
   }
 
-  _adjustBalance({ customer, action, balance }, cbfn) {
+  _adjustBalance({ customer, action, amount }, cbfn) {
     if (action === 'payment') {
-      customer.balance += balance;
+      customer.balance += amount;
       return cbfn(customer);
     } else if (action === 'withdrawl') {
-      customer.balance -= balance;
+      customer.balance -= amount;
       return cbfn(customer);
     }
   }

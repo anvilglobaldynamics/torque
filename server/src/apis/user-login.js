@@ -106,6 +106,7 @@ exports.UserLoginApi = class extends userCommonMixin(Api) {
       if (!warning) warning = '';
       this._createSession(user.id, ({ apiKey, sessionId }) => {
         let {
+          id,
           fullName,
           email,
           phone,
@@ -122,6 +123,7 @@ exports.UserLoginApi = class extends userCommonMixin(Api) {
           warning,
           sessionId,
           user: {
+            id,
             fullName,
             email,
             phone,

@@ -205,8 +205,17 @@ exports.EmploymentCollection = class extends Collection {
     this._update({ id: employmentId }, modifications, cbfn);
   }
 
+  fire({ employmentId }, cbfn) {
+    let modifications = {
+      $set: {
+        isActive: false
+      }
+    }
+    this._update({ id: employmentId }, modifications, cbfn);
+  }
+
   listByOrganizationId({ organizationId }, cbfn) {
-    this._find({ organizationId }, cbfn);
+    this._find({ organizationId, isActive: true }, cbfn);
   }
 
   hireExistingUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, cbfn) {

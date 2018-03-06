@@ -1,0 +1,171 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-view-customer">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding: 24px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card vertical layout">
+        <div>[[customer.fullName]]</div>
+        <div>Balance: [[customer.balance]]</div>
+        <div>Number: [[customer.phone]]</div>
+      </div>
+
+      <div class="card vertical layout">
+        Additional Payment History:
+        <template is="dom-repeat" items="[[customer.additionalPaymentHistory]]" as="additionalPayment">
+          <br>
+          Date: [[additionalPayment.creditedDatetimeStamp]]
+          Amount: [[additionalPayment.amount]]
+          Action: [[additionalPayment.action]]
+          Accepted By: [[additionalPayment.acceptedByUserId]]
+        </template>
+      </div>
+
+      <div class="card">
+        <div class="mb-4">Click here to edit the customer.</div>
+        <paper-button raised class="primary m-0" on-tap="editTapped">Edit Customer</paper-button>
+      </div>
+
+      <div class="card">
+        <div class="mb-4">Click here to adjust the customer's balance.</div>
+        <paper-button raised class="primary m-0" on-tap="adjustCustomerBalanceTapped">Adjust Customer Balance</paper-button>
+      </div>
+
+      <div class="card">
+        <div class="mb-4">Click here to delete the customer. Be warned that once deleted, an customer can not be restored.</div>
+        <paper-button raised class="primary m-0" on-tap="deleteTapped">Delete Customer</paper-button>
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+    class PageViewCustomer extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+
+      static get is() {
+        return 'page-view-customer';
+      }
+
+      static get properties() {
+        return {};
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Customer');
+        if (!this._ensureAccess()) return;
+        if (!('customer' in this.params)) {
+          let message = "This page cannot be displayed at this moment. Please try again."
+          this.app.showModalDialog("Something went wrong!", message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processCustomer(_ => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      _fetchCustomer(cbfn) {
+        let customerId = parseInt(this.params.customer);
+        let data = { customerId };
+        this.app.callGetCustomerApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _processCustomer(cbfn) {
+        this._fetchCustomer(({ customer }) => {
+          this.customer = customer;
+          cbfn();
+        });
+      }
+
+      _deleteCustomer(customerId, cbfn) {
+        customerId = parseInt(customerId);
+        let data = { customerId };
+        this.app.callDeleteCustomerApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      // region: ui  ===========================
+
+      editTapped(e = null) {
+        return this.app.navigateTo(`/edit-customer/customer:${this.customer.id}`);
+      }
+
+      adjustCustomerBalanceTapped(e = null) {
+        return this.app.navigateTo(`/adjust-customer-balance/customer:${this.customer.id}`);
+      }
+
+      deleteTapped(e = null) {
+        let message = `Are you sure you want to delete this customer ${this.customer.name}. Once deleted, you can not restore this customer.`;
+        this.app.showModalConfirmation("Delete customer?", message, (answer) => {
+          if (!answer) return;
+          this._deleteCustomer(this.customer.id, () => {
+            this.app.showModalDialog("Successfully deleted.", "The customer has been deleted", () => {
+              this.app.navigateTo(`/manage-customers`);
+            });
+          });
+        });
+      }
+    }
+
+    window.customElements.define(PageViewCustomer.is, PageViewCustomer);
+  </script>
+</dom-module>

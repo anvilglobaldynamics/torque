@@ -1,0 +1,168 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-view-employee">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding: 24px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card vertical layout">
+        <div>Designation: [[employee.designation]]</div>
+        <div>Role: [[employee.role]]</div>
+        <div>Active: [[employee.isActive]]</div>
+        <div>Company Id: [[employee.companyProvidedId]]</div>
+      </div>
+
+      <div class="card">
+        <div class="mb-4">Click here to edit the employee.</div>
+        <paper-button raised class="primary m-0" on-tap="editTapped">Edit Employee</paper-button>
+      </div>
+
+      <template is="dom-if" if="{{employee.isActive}}">
+        <div class="card">
+          <div class="mb-4">Click here to delete the employee. Be warned that once deleted, an employee can not be restored.</div>
+          <paper-button raised class="primary m-0" on-tap="fireTapped">Fire Employee</paper-button>
+        </div>
+      </template>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageViewEmployee extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+
+      static get is() {
+        return 'page-view-employee';
+      }
+
+      static get properties() {
+        return {};
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Employee');
+        if (!this._ensureAccess()) return;
+        if (!('employee' in this.params)) {
+          let message = "This page cannot be displayed at this moment. Please try again."
+          this.app.showModalDialog("Something went wrong!", message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processEmployee(_ => { 
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      _fetchEmployee(cbfn) {
+        let employmentId = parseInt(this.params.employee);
+        let data = { employmentId };
+        this.app.callGetEmployeeApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _processEmployee(cbfn) {
+        this._fetchEmployee(({ employee }) => {
+          this.employee = employee;
+          cbfn();
+        });
+      }
+
+      _fireEmployee(employee, cbfn) {
+        let data = {
+          employmentId: this.employee.id
+        };
+
+        // callFireEmployeeApi
+
+        this.app.callFireEmployeeApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      // region: ui  ===========================
+
+      editTapped(e = null) {
+        return this.app.navigateTo(`/edit-employee/employee:${this.employee.id}`);
+      }
+
+      fireTapped(e = null) {
+        let message = `Are you sure you want to fire this employee ${this.employee.userId}.`;
+        if (this.employee.userId === this.app.user.id) {
+          message = `Are you sure you want to fire Yourself? You will loose all access to this organization.`;
+        }
+        this.app.showModalConfirmation("Fire employee?", message, (answer) => {
+          if (!answer) return;
+          this._fireEmployee(this.employee, () => {
+            this.app.showModalDialog("Successfully fired.", "The employee has been fired", () => {
+              if (this.employee.userId === this.app.user.id) {
+                this.app.navigateTo(`/login`);
+              } else {
+                this.app.navigateTo(`/manage-employees`);
+              }
+            });
+          });
+        });
+      }
+
+      // region: misc =================================
+    }
+
+    window.customElements.define(PageViewEmployee.is, PageViewEmployee);
+    </script>
+</dom-module>

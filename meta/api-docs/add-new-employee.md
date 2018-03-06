@@ -19,7 +19,7 @@ method: `POST`
   designation: Joi.string().max(1024).required(),
   companyProvidedId: Joi.string().alphanum().required(),
 
-  privileges: Joi.object().keys({
+  privileges: Joi.object().required().keys({
     [Look up privileges here](../server-db-docs/employment.md)
   }),
 }
