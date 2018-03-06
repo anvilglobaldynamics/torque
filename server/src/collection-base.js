@@ -207,6 +207,22 @@ class Collection {
     // return this.database.updateOne(this.collectionName, query, modifications, cbfn);
   }
 
+  _updateMany(query, modifications, cbfn) {
+    this._find(query, (err, docList) => {
+      if (err) return cbfn(err);
+      Promise.all(docList.map(doc => new Promise((accept, reject) => {
+        this._update({id:doc.id}, modifications, (err, wasSuccessful)=>{
+          if (err) return reject(err);
+          return accept();
+        });
+      }))).then(() => {
+        return cbfn(null, true);
+      }).catch(err => {
+        return cbfn(err);
+      });
+    });
+  }
+
   _delete(query, cbfn) {
     return this.database.deleteOne(this.collectionName, query, cbfn);
   }
