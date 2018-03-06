@@ -18,8 +18,8 @@ const adminPassword = "johndoe1pass";
 const phone = rnd(prefix, 11);
 const password = "123545678";
 const fullName = "Test " + rnd(prefix, 11);
-const fullName2 = "Test " + rnd(prefix, 11);
-const phone2 = rnd(prefix, 11);
+const fullName2 = "Test " + rnd(prefix, 11).split('').reverse().join('');
+const phone2 = rnd(prefix, 11).split('').reverse().join('');
 
 let apiKey = null;
 
@@ -231,6 +231,8 @@ describe.only('admin apis (1)', _ => {
 
   });
 
+  let userId = null;
+
   it('api/admin-get-aggregated-user-list (No Query)', testDoneFn => {
 
     callApi('api/admin-get-aggregated-user-list', {
@@ -244,6 +246,24 @@ describe.only('admin apis (1)', _ => {
       expect(body).to.have.property('userList').that.is.an('array');
       expect(body.userList.length).to.be.at.least(2);
       expect(body.userList[0]).to.have.property('organizationList').that.is.an('array');
+      userId = body.userList[0].id;
+      testDoneFn();
+    });
+
+  });
+  
+  it('api/admin-set-user-banning-status (Valid userId)', testDoneFn => {
+
+    callApi('api/admin-set-user-banning-status', {
+      json: {
+        apiKey: apiKey,
+        isBanned: true,
+        userId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
       testDoneFn();
     });
 

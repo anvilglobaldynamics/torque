@@ -160,6 +160,15 @@ exports.UserCollection = class extends Collection {
     });
   }
 
+  updateBanningStatus({ userId }, {isBanned}, cbfn) {
+    let mod = {
+      $set: {
+        isBanned
+      }
+    }
+    this._update({ id: userId }, mod, cbfn);
+  }
+
   // FIXME: Logical Separation
   /**
    * 
