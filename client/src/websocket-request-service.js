@@ -102,7 +102,7 @@
       // NOTE: the type option is gracefully ignored.
 
       let now = '' + (new Date()).getTime();
-      if (this.requestUidSeed % 1000 === 0){
+      if (this.requestUidSeed % 1000 === 0) {
         this.requestUidSeed = 0;
       }
       this.requestUidSeed += 1;
