@@ -35,6 +35,10 @@ class Api {
     return false;
   }
 
+  get authenticationLevel() {
+    return 'user';
+  }
+
   // NOTE: See `_enforceAccessControl` for details.
   get accessControl() {
     return null;
@@ -73,26 +77,30 @@ class Api {
       }
       let { error, value } = this.validate(body, schema);
       if (error) {
-        this.fail(error, error);
+        return this.fail(error, error);
       } else {
         body = this.sanitize(value);
         if (this.requiresAuthentication) {
           let { apiKey } = body;
-          this.authenticate(body, (err, userId) => {
-            if (err) {
-              this.fail(err);
-            } else {
+          if (this.authenticationLevel === 'admin') {
+            this.authenticate(body, (err, username) => {
+              if (err) this.fail(err);
+              return this.handle({ username, body, apiKey });
+            });
+          } else {
+            this.authenticate(body, (err, userId) => {
+              if (err) this.fail(err);
               this._enforceAccessControl(userId, body, (err) => {
                 if (err) {
-                  this.fail(err);
+                  return this.fail(err);
                 } else {
-                  this.handle({ userId, body, apiKey });
+                  return this.handle({ userId, body, apiKey });
                 }
               });
-            }
-          });
+            });
+          }
         } else {
-          this.handle({ body });
+          return this.handle({ body });
         }
       }
     }
@@ -160,22 +168,33 @@ class Api {
     }
     let apiKey = body.apiKey;
     delete body['apiKey'];
-    this.database.session.findByApiKey({ apiKey }, (err, session) => {
-      if (err) return this.fail(err);
-      if (!session) {
-        err = new Error("Invalid apiKey Provided!");
-        err.code = "APIKEY_INVALID";
-        return this.fail(err);
-      }
-      let hasExpired = session.hasExpired || (((new Date).getTime() - session.createdDatetimeStamp) > SESSION_DURATION_LIMIT);
-      if (hasExpired) {
-        err = new Error("Invalid apiKey Provided!");
-        err.code = "APIKEY_EXPIRED";
-        return this.fail(err);
-      }
-      cbfn(null, session.userId);
-    });
-
+    if (this.authenticationLevel === 'admin') {
+      this.database.adminSession.findByApiKey({ apiKey }, (err, adminSession) => {
+        if (err) return this.fail(err);
+        if (!adminSession) {
+          err = new Error("Invalid apiKey Provided!");
+          err.code = "APIKEY_INVALID";
+          return this.fail(err);
+        }
+        cbfn(null, adminSession.username);
+      });
+    } else {
+      this.database.session.findByApiKey({ apiKey }, (err, session) => {
+        if (err) return this.fail(err);
+        if (!session) {
+          err = new Error("Invalid apiKey Provided!");
+          err.code = "APIKEY_INVALID";
+          return this.fail(err);
+        }
+        let hasExpired = session.hasExpired || (((new Date).getTime() - session.createdDatetimeStamp) > SESSION_DURATION_LIMIT);
+        if (hasExpired) {
+          err = new Error("Invalid apiKey Provided!");
+          err.code = "APIKEY_EXPIRED";
+          return this.fail(err);
+        }
+        cbfn(null, session.userId);
+      });
+    }
   }
 
   __processAccessControlQuery(body, queryObject, cbfn) {

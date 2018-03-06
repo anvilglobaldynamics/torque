@@ -11,7 +11,8 @@ class Collection {
       'employment',
       'fixture',
       'product',
-      'session'
+      'session',
+      'admin-session'
     ];
 
     this.database = database;

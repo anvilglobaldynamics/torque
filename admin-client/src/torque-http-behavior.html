@@ -1,0 +1,142 @@
+<link rel="import" href="../bower_components/polymer-fx/fx-http-behavior.html">
+<script src="websocket-request-service.js"></script>
+
+<script>
+
+  (_ => {
+    let { HttpRequestService, WebsocketRequestService, ServiceManager } = window.ServiceTree;
+
+    const WEBSOCKET_DELAY_BEFORE_RETRYING = 30 * 1000;
+    let lastWebsocketFailureTimestamp = 0;
+
+    if (!window.TorqueHttpBehavior) {
+      /* @polymerMixin */
+      window.TorqueHttpBehavior = (SuperClass) => class extends FxHttpBehavior(SuperClass) {
+
+        constructor(...args) {
+          super(...args);
+          this.websocketHost = 'ws://localhost:8000';
+          this.websocketApiPathPrefix = '/api/';
+        }
+
+        // internals ===================================
+
+        callJsonWebsocketApi(path, data, cbfn) {
+          let url = `${this.websocketApiPathPrefix}${path}`
+          let service = new WebsocketRequestService(this.websocketHost, url, { responseType: 'json' });
+          service.on('end', (event) => {
+            if (event.detail.resolution === 'success') {
+              cbfn(null, event.detail.body);
+            } else {
+              cbfn(event.detail);
+            }
+          });
+          service.on('error', (event) => {
+            // suppress the event so that it does not bubble to service manager
+            event.bubbles = false;
+          });
+          baselib.setImmediate(_ => service.request('json', data));
+          this.serviceManager.manage(service);
+          return service;
+        }
+
+        _createGenericCallback(path, data, _cbfn) {
+          return (err, response) => {
+            if (err) {
+              if (mode === 'development') {
+                console.log(`NETWORK_ERROR/api=${path}`, { data, err });
+              }
+              return _cbfn(err);
+            }
+            response = TorqueUtils.desanitize(response);
+            if (mode === 'development' && response.hasError) {
+              console.log(`API_ERROR/api=${path}`, { data, response });
+            }
+            if (response.hasError && (response.error.code === "APIKEY_EXPIRED" || response.error.code === "APIKEY_INVALID")) {
+              if (path === 'user-logout') {
+                return _cbfn(null, { hasError: false });
+              }
+              let message = "Your session has expired. You will be automatically logged out. Please log in again.";
+              this.showModalDialog("Sorry!", message, _ => {
+                this.logoutTapped();
+              });
+              return;
+            }
+            return _cbfn(null, response);
+          }
+        }
+
+        callCombinedJsonApi(path, data, _cbfn) {
+          let cbfn = this._createGenericCallback(path, data, _cbfn);
+          let now = (new Date).getTime();
+          if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
+            this.callJsonPostApi(path, data, cbfn);
+          } else {
+            this.callJsonWebsocketApi(path, data, (err, message) => {
+              if (err) {
+                lastWebsocketFailureTimestamp = (new Date).getTime();
+                this.callJsonPostApi(path, data, cbfn);
+              } else {
+                cbfn(null, message);
+              }
+            })
+          }
+        }
+
+        callGetApi(uri, cbfn) {
+          let request = new XMLHttpRequest();
+          request.addEventListener("load", () => {
+            let { responseText } = request;
+            cbfn(null, responseText);
+          });
+          request.addEventListener("error", () => {
+            cbfn(request);
+          });
+          request.open("GET", uri);
+          request.send();
+        }
+
+        // api call utls ===================================
+
+        _applyApiKey(data) {
+          if ('user' in this && 'apiKey' in this.user) {
+            data.apiKey = this.user.apiKey;
+            return true;
+          } else {
+            this.showAlertMessage("No Api Key. Please restart the app and log in again.");
+            return false;
+          }
+        }
+
+        // api calls ===================================
+
+        callAdminLoginApi(data, cbfn) {
+          this.callCombinedJsonApi('admin-login', data, cbfn);
+        }
+
+        callAdminGetAggregatedUserListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-get-aggregated-user-list', data, cbfn);
+        }
+
+        callAdminUserBanningStatusApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-set-user-banning-status', data, cbfn);
+        }
+
+        callAdminGetOutgoingSmsListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-get-outgoing-sms-list', data, cbfn);
+        }
+
+        callAdminSetOutgoingSmsStatusApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-set-outgoing-sms-status', data, cbfn);
+        }
+
+      }
+    }
+
+  })();
+
+</script>

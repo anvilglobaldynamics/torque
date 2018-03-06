@@ -1,0 +1,138 @@
+<script>
+  if (!window.TorqueCommonBehavior) {
+    /* @polymerMixin */
+    TorqueCommonBehavior = (SuperClass) => class extends SuperClass {
+
+      constructor(...args) {
+        super(...args);
+      }
+
+      genericFormSubmitionKeypress(e) {
+        if (e.which !== 13) return;
+        if (e.target.nodeName !== 'PAPER-INPUT') return;
+        let el = e.target;
+        while (el && el.nodeName !== 'IRON-FORM') {
+          el = el.parentNode;
+        }
+        if (!el) return;
+        let submitEl = el.querySelector(`.${el.id}--submit`);
+        if (submitEl) {
+          submitEl.click();
+        }
+      }
+
+      static get properties() {
+        return {
+          isReady: {
+            type: Boolean,
+            value: false,
+            observer: 'isReadyChanged'
+          }
+        }
+      }
+
+      isReadyChanged() {
+        if (this.isReady) {
+          this.app.topSpinnerEnabled = true;
+        } else {
+          this.app.topSpinnerEnabled = false;
+        }
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.isReady = false;
+      }
+
+      $join(list, by) {
+        return list.join(by);
+      }
+
+      $if(condition, thenValue, elseValue) {
+        if (condition) return thenValue;
+        return elseValue;
+      }
+
+      delay(ms, fn, ...args) {
+        window.setTimeout(fn, ms, ...args);
+      }
+
+      onApiError(error, form) {
+        if ((error.code === "VALIDATION_ERROR") && form) {
+          let missingError = null;
+          let { details: errorList } = error;
+          for (let error of errorList) {
+            let { path, message } = error;
+            let key = `.${form}--${path}`;
+            let el = this.elem(key);
+            if (!el && this.subForm) {
+              let subFormName = this.subForm.getAttribute('name');
+              if (subFormName) {
+                let key = `.${subFormName}--${path}`;
+                el = this.subForm.elem(key);
+              }
+            }
+            if (!el) {
+              missingError = error;
+              continue;
+            }
+            el.autoValidate = true;
+            el.invalid = true;
+            el.errorMessage = message;
+          }
+          if (missingError) {
+            return this.app.showModalDialog("Sorry!", missingError.message);
+          }
+        } else {
+          return this.app.showModalDialog("Sorry!", error.message);
+        }
+      }
+
+      $json(obj) {
+        return (JSON.stringify(obj, null, 2));
+      }
+
+      checkPrivilege(privilege) {
+        if (!(privilege in this.app.organization.employment.privileges)) {
+          throw new Error(`No such privilege ""${privilege}.`);
+        }
+        return this.app.organization.employment.privileges[privilege];
+      }
+
+      accessControl(type, privilegeList = []) {
+        const typeList = ['special', 'authenticated', 'privileged'];
+        if (typeList.indexOf(type) === -1) throw new Error("Invalid accessControl type.");
+        if (type === 'authenticated' || type === 'privileged') {
+          if (!(this.app.user)) {
+            this.app.navigateTo('/login');
+            return false;
+          }
+        }
+        if (type === 'privileged') {
+          if (!this.app.organization) {
+            this.app.navigateTo('/select-organization');
+            return false;
+          }
+          if (!privilegeList.every(privilege => this.checkPrivilege(privilege))) {
+            this.app.navigateTo('/error403');
+            return false;
+          }
+        }
+        return true;
+      }
+
+      /** $mkDate()
+       * Converts a date to a user friendly string
+       * See http://arshaw.com/xdate/ for formatting instruction
+       * @param {Date|timestamp} date
+       * @param {string} format 
+       * @returns 
+       */
+      $mkDate(date, format = 'MMM d, yyyy') {
+        return (new XDate(date)).toString(format);
+      }
+
+    }
+  }
+
+</script>

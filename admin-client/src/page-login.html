@@ -1,0 +1,129 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-login">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding-top: 24px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-small-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="loginForm" on-keypress="genericFormSubmitionKeypress">
+        <form>
+          <div class="card vertical layout">
+            <div class="std-dialog-header">ADMIN LOGIN</div>
+            <paper-input class="loginForm--username" value="{{loginForm.username}}" required minlength="3" error-message="Please enter your username." label="Your username"></paper-input>
+            <paper-input class="loginForm--password" value="{{loginForm.password}}" required minlength="8" error-message="Please enter your password that is least 8 characters long" label="Your password" type="password"></paper-input>
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class="primary loginForm--submit" on-tap="loginTapped">Login</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+  </template>
+
+  <script>
+    class PageLogin extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+      static get is() {
+        return 'page-login';
+      }
+
+      static get properties() {
+        return {
+          loginForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  username: 'default',
+                  password: 'johndoe1pass'
+                };
+              } else {
+                return {
+                  username: '',
+                  password: ''
+                };
+              }
+            }
+          }
+
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.removeUser();
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.delay(300, () => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.resetProperties('loginForm');
+      }
+
+      // region: login =================================
+
+      _processUserLogin({ username, password }) {
+        let data = { username, password };
+        this.app.callAdminLoginApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'loginForm');
+          let { apiKey,  sessionId, admin } = response;
+          Object.assign(admin, { apiKey, sessionId });
+          this.app.saveUser(admin);
+          this.app.navigateTo('/home');
+        });
+      }
+
+      // region: ui =================================
+
+      loginTapped() {
+        this.elemAll('#loginForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#loginForm').validate()) return;
+
+        let { username, password } = this.loginForm;
+        this._processUserLogin({ username, password });
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageLogin.is, PageLogin);
+  </script>
+</dom-module>

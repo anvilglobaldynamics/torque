@@ -8,6 +8,8 @@ let pendingTerminationRequest = false;
 
 let testStartDatetimeStamp = (new Date).getTime();
 
+exports.delay = (after, cbfn) => setTimeout(cbfn, after);
+
 // ===================================== Commons
 
 exports.rnd = (prefix, len = 14) => {

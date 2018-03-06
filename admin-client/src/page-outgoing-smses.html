@@ -1,0 +1,219 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-outgoing-smses">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding: 24px;
+        }
+
+        .phone-number {
+          font-size: 20px;
+          font-weight: bold;
+        }
+
+        .sms-body {
+          background: #ECEFF1;
+          font-size: 18px;
+          padding: 8px;
+        }
+
+        .status-pending {
+          border-radius: 4px;
+          background: #ffcdd2;
+          font-size: 18px;
+          padding: 4px 8px;
+        }
+
+        .status-sent {
+          border-radius: 4px;
+          background: #BBDEFB;
+          font-size: 18px;
+          padding: 4px 8px;
+        }
+
+        .status-delivered {
+          border-radius: 4px;
+          background: #C8E6C9;
+          font-size: 18px;
+          padding: 4px 8px;
+        }
+
+        .status-canceled {
+          border-radius: 4px;
+          background: #FF7043;
+          font-size: 18px;
+          padding: 4px 8px;
+        }
+
+        .std-list-item {
+          margin-bottom: 12px;
+          border: none;
+        }
+
+        .title {
+          margin-bottom: 12px;
+        }
+
+        .right-side paper-button {
+          margin-top: 12px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card horizontal layout center">
+        <paper-input type="date" class="flex" value="{{date}}" label="From Date"></paper-input>
+        <paper-button raised class="primary" on-tap="searchTapped">Search</paper-button>
+      </div>
+
+
+      <div class="std-list">
+        <template is="dom-repeat" items="[[outgoingSmsList]]" as="outgoingSms">
+          <div class="card vertical layout">
+            <div class="horizontal layout std-list-item start">
+              <div class="vertical layout flex">
+                <div class="title">
+                  <span class="phone-number">[[outgoingSms.from]]</span>
+                  to:
+                  <span class="phone-number">[[outgoingSms.to]]</span>
+                  <span class$="status-[[outgoingSms.status]]">[[outgoingSms.status]]</span>
+                </div>
+                <code class="sms-body">[[outgoingSms.content]]</code>
+                <div class="horizontal layout right-side">
+                  <paper-button raised class="primary" data-key="pending" on-tap="setStatusTapped">Pending</paper-button>
+                  <paper-button raised class="primary" data-key="sent" on-tap="setStatusTapped">Sent</paper-button>
+                  <paper-button raised class="primary" data-key="delivered" on-tap="setStatusTapped">Delivered</paper-button>
+                  <paper-button raised class="primary" data-key="canceled" on-tap="setStatusTapped">Canceled</paper-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageOutgoingSmses extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+
+      static get is() {
+        return 'page-outgoing-smses';
+      }
+
+      static get properties() {
+        return {
+          date: {
+            type: String,
+            value: () => new XDate().toString('yyyy-MM-dd')
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.app.pushPageTitle('Outgoing SMSes');
+        if (!this._ensureAccess()) return;
+        this._processOutgoingSmsList(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      _fetchOutgoingSmsList(cbfn) {
+        let { date } = this;
+        date = Date.parse(date);
+        let data = { date };
+        this.app.callAdminGetOutgoingSmsListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.outgoingSmsList);
+        });
+      }
+
+      _processOutgoingSmsList(cbfn) {
+        this._fetchOutgoingSmsList(outgoingSmsList => {
+          this.outgoingSmsList = outgoingSmsList;
+          cbfn();
+        });
+      }
+
+      _processSetBanStatus({ status, outgoingSmsId }, cbfn) {
+        let data = { status, outgoingSmsId };
+        this.app.callAdminSetOutgoingSmsStatusApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn();
+        });
+      }
+
+      // region: ui  ===========================
+
+      searchTapped(e = null) {
+        this.isReady = false;
+        this._processOutgoingSmsList(() => {
+          this.isReady = true;
+        });
+      }
+
+      setStatusTapped(e) {
+        let { outgoingSms } = e.model;
+        let status = e.target.getAttribute('data-key');
+        this._processSetBanStatus({ outgoingSmsId: outgoingSms.id, status }, () => {
+          this.searchTapped();
+        });
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageOutgoingSmses.is, PageOutgoingSmses);
+  </script>
+</dom-module>

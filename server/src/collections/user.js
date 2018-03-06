@@ -60,6 +60,17 @@ exports.UserCollection = class extends Collection {
     this._findOne({ id: userId }, cbfn);
   }
 
+  findByCommonFields({ userSearchRegex }, cbfn) {
+    this._find({
+      $or: [
+        { fullName: userSearchRegex },
+        { email: userSearchRegex },
+        { phone: userSearchRegex },
+        { nid: userSearchRegex }
+      ],
+    }, cbfn);
+  }
+
   findByEmailOrPhone({ emailOrPhone }, cbfn) {
     this._findOne({
       $or: [
@@ -147,6 +158,15 @@ exports.UserCollection = class extends Collection {
       if (!wasUpdated) return cbfn(new Error("User Not Found"));
       return cbfn();
     });
+  }
+
+  updateBanningStatus({ userId }, {isBanned}, cbfn) {
+    let mod = {
+      $set: {
+        isBanned
+      }
+    }
+    this._update({ id: userId }, mod, cbfn);
   }
 
   // FIXME: Logical Separation

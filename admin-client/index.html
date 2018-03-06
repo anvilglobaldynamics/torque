@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="iShafayet">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <title>Torque Admin</title>
+  <meta name="description" content="Admin panel for torque">
+
+  <!--
+      If deploying to a non-root path, replace href="/" with the full path to the project root.
+    -->
+  <base href="/">
+
+  <link rel="icon" href="images/favicon.ico">
+
+  <!-- See https://goo.gl/OOhYW5 -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- See https://goo.gl/qRE0vM -->
+  <meta name="theme-color" content="#9C27B0">
+
+  <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Torque Admin">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Torque">
+
+  <!-- Homescreen icons -->
+  <link rel="apple-touch-icon" sizes="192x192" href="images/manifest/icon-192x192.png">
+
+  <!-- Tile icon for Windows 8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="images/manifest/icon-144x144.png">
+  <meta name="msapplication-TileColor" content="#9C27B0">
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- Add any global styles for body, document, etc. -->
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', 'Noto', sans-serif;
+      line-height: 1.5;
+      min-height: 100vh;
+      background-color: #FAFAFA;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      margin: 40vh auto;
+      background-color: rgb(19, 4, 26);
+
+      border-radius: 100%;
+      -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
+      animation: sk-scaleout 1.0s infinite ease-in-out;
+    }
+
+    @-webkit-keyframes sk-scaleout {
+      0% {
+        -webkit-transform: scale(0)
+      }
+      100% {
+        -webkit-transform: scale(1.0);
+        opacity: 0;
+      }
+    }
+
+    @keyframes sk-scaleout {
+      0% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+      }
+      100% {
+        -webkit-transform: scale(1.0);
+        transform: scale(1.0);
+        opacity: 0.1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <torque-app>
+    <div class="spinner"></div>
+  </torque-app>
+
+  <script src="src/torque-utils.js"></script>
+  <script src="src/xdate.js"></script>
+  <script>
+    // Register the base URL
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      window.mode = 'development';
+    } else {
+      window.mode = 'production';
+    }
+    Polymer = {
+      sanitizeDOMValue: (value, name, type, node) => {
+        if (type === 'property' && typeof (value) === 'string' && (['href', 'class'].indexOf(name) > -1)) {
+          value = TorqueUtils.escapeHtmlEntities(value);
+          value = value.replace(/javascript\:/ig, 'return; 0/0');
+        }
+        return value;
+      }
+    }
+  </script>
+
+  <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
+  <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+
+  <!-- Load your application shell -->
+  <link rel="import" href="src/torque-app.html">
+
+  <noscript>
+    Please enable JavaScript to view this application.
+  </noscript>
+</body>
+
+</html>
