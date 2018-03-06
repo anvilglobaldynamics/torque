@@ -20,7 +20,7 @@ const fullName = "Test User";
 
 let apiKey = null;
 
-describe.only('user apis (1)', _ => {
+describe('user apis (1)', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
