@@ -10,7 +10,9 @@ exports.GetCustomerSummaryListApi = class extends Api {
   get requestSchema() {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),
-      organizationId: Joi.number().max(999999999999999).required()
+
+      organizationId: Joi.number().max(999999999999999).required(),
+      searchString: Joi.string().min(0).max(64).allow('').optional()
     });
   }
 
@@ -23,16 +25,16 @@ exports.GetCustomerSummaryListApi = class extends Api {
     }];
   }
 
-  _getCustomerSummaryList({ organizationId }, cbfn) {
-    this.database.customer.listByOrganizationId({ organizationId }, (err, customerList) => {
+  _getCustomerSummaryList({ organizationId, searchString }, cbfn) {
+    this.database.customer.listByOrganizationIdAndSearchString({ organizationId, searchString }, (err, customerList) => {
       if (err) return this.fail(err);
       return cbfn(customerList);
     });
   }
 
   handle({ body }) {
-    let { organizationId } = body;
-    this._getCustomerSummaryList({ organizationId }, (customerList) => {
+    let { organizationId, searchString = null } = body;
+    this._getCustomerSummaryList({ organizationId, searchString }, (customerList) => {
       this.success({ customerList: customerList });
     });
   }

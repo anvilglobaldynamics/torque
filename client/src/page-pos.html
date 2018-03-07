@@ -1,0 +1,243 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="customer-selector">
+  <template>
+    <style include="shared-styles">
+    </style>
+    <div class="card vertical layout">
+      <div class="horizontal layout center">
+        <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="Please enter a name or phone" label="Search customer by name or phone."></paper-input>
+        <paper-button raised class="primary" on-tap="searchTapped">Search</paper-button>
+        <paper-button raised class="primary" on-tap="cancelTapped">Cancel</paper-button>
+      </div>
+    </div>
+  </template>
+  <script>
+    class CustomerSelector extends FxElement {
+
+      static get is() { return 'customer-selector'; }
+
+      static get properties() {
+        return {
+          searchString: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+
+      cancelTapped(e = null) {
+        this.page.isSearchingCustomer = false;
+      }
+
+      searchTapped(e = null) {
+        let organizationId = parseInt(this.page.app.organization.id);
+        let data = {
+          organizationId,
+          searchString: this.searchString
+        };
+        this.page.app.callGetCustomerListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.page.onApiError(response.error);
+          console.log(response.customerList)
+        });
+      }
+
+    }
+    window.customElements.define(CustomerSelector.is, CustomerSelector);
+  </script>
+</dom-module>
+
+<dom-module id="page-pos">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding-top: 24px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <template is="dom-if" if="[[!isSearchingCustomer]]">
+        <div class="card vertical layout">
+          <div class="horizontal layout center">
+            <div class="flex">
+              <template is="dom-if" if="[[!customer]]">
+                No customer selected (Anonymous sale)
+              </template>
+              <template is="dom-if" if="[[customer]]">
+                Customer selected [[customer.name]] ([[customer.phone]]) [[customer.balance]]
+              </template>
+            </div>
+            <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
+            <paper-button raised class="primary" on-tap="createCustomerTapped">Create Customer</paper-button>
+          </div>
+        </div>
+      </template>
+      <customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></customer-selector>
+
+      <!-- <iron-form id="posForm">
+        <form>
+          <div class="card vertical layout">
+            <paper-input class="posForm--name" value="{{posForm.name}}" required minlength="3" error-message="Please enter a valid name" label="Name of your outlet."></paper-input>
+            <paper-textarea class="posForm--physicalAddress" value="{{posForm.physicalAddress}}" required minlength="8" error-message="Please enter an address at least 8 characters long" label="Physical Address" rows="4"></paper-textarea>
+            <paper-input class="posForm--contactPersonName" value="{{posForm.contactPersonName}}" required minlength="3" error-message="Please enter a valid name" label="Name of Manager/Contact Person"></paper-input>
+            <paper-input class="posForm--phone" value="{{posForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number of Manager/Contact Person"></paper-input>
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]]" on-tap="createOutletTapped">Create Outlet</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]]" on-tap="updateOutletTapped">Update Outlet</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+    </div> -->
+
+  </template>
+
+  <script>
+    class PagePos extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+
+      static get is() {
+        return 'page-pos';
+      }
+
+      static get properties() {
+        return {
+          editMode: {
+            type: Boolean,
+            value: false
+          },
+          editingOutlet: {
+            type: Object,
+            value: null
+          },
+          posForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  name: 'Gulshan Showroom',
+                  phone: '01700000011',
+                  contactPersonName: 'Johns Apparel',
+                  physicalAddress: 'Road 50\nThis Town'
+                };
+              } else {
+                return {
+                  name: '',
+                  phone: '',
+                  contactPersonName: '',
+                  physicalAddress: ''
+                };
+              }
+            }
+          },
+          isSearchingCustomer: {
+            type: Boolean,
+            value: false
+          },
+          customer: {
+            type: Object,
+            value: null
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('New Sales');
+        if (!'outlet' in this.params) {
+          return this.app.showModalDialog("Sorry!", "Something went wrong. We can't display this page right now.", () => {
+            return this.navigateTo('/home');
+          });
+        }
+        if (!this._ensureAccess()) return;
+        this.delay(0, () => {
+          this.self = this;
+        });
+        this.delay(300, () => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      // region: pos =================================
+
+      // _processGetOutlet(cbfn) {
+      //   let outletId = parseInt(this.params.outlet);
+      //   let data = {
+      //     outletId
+      //   };
+      //   this.app.callGetOutletApi(data, (err, response) => {
+      //     if (err) return;
+      //     if (response.hasError) return this.onApiError(response.error);
+      //     this.editingOutlet = response.outlet;
+      //     let { name, phone, contactPersonName, physicalAddress } = this.editingOutlet;
+      //     this.posForm = { name, phone, contactPersonName, physicalAddress };
+      //     cbfn();
+      //   });
+      // }
+
+      // region: ui =================================
+
+      changeCustomerTapped(e = null) {
+        this.isSearchingCustomer = true;
+      }
+
+      createCustomerTapped(e = null) {
+        this.app.navigateTo('/edit-customer');
+      }
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/home');
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PagePos.is, PagePos);
+  </script>
+</dom-module>
