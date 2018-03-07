@@ -424,6 +424,25 @@
         this.navigateTo('/select-organization')
       }
 
+      // ====================== sessionStorage =============================
+
+      storeInSession(key, value) {
+        window.sessionStorage.setItem(key, JSON.stringify(value));
+      }
+
+      getFromSession(key) {
+        let value = window.sessionStorage.getItem(key);
+        return JSON.parse(value);
+      }
+
+      extractFromSession(key) {
+        let value = window.sessionStorage.getItem(key);
+        if (value) {
+          window.sessionStorage.removeItem(key);
+        }
+        return JSON.parse(value);
+      }
+
       // ====================== utilities =============================
 
       showAlertMessage(...args) {

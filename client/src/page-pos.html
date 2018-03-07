@@ -23,10 +23,22 @@
     </style>
     <div class="card vertical layout">
       <div class="horizontal layout center">
-        <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="Please enter a name or phone" label="Search customer by name or phone."></paper-input>
+        <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="Please enter a name or phone" label="Search customer by name or phone." on-keypress="searchFieldKeypressed"></paper-input>
         <paper-button raised class="primary" on-tap="searchTapped">Search</paper-button>
         <paper-button raised class="primary" on-tap="cancelTapped">Cancel</paper-button>
       </div>
+
+      <template is="dom-repeat" items="[[customerList]]" as="customer" index-as="customerIndex">
+        <div class="horizontal layout std-list-item flex">
+          <div>
+            Customer:
+            <b>[[customer.fullName]]</b> ([[customer.phone]])
+            <br> Balance:
+            <b>[[customer.balance]] [[page.app.settings.monetaryUnit]]</b>
+          </div>
+          <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
+        </div>
+      </template>
     </div>
   </template>
   <script>
@@ -43,6 +55,10 @@
         };
       }
 
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
       cancelTapped(e = null) {
         this.page.isSearchingCustomer = false;
       }
@@ -56,8 +72,22 @@
         this.page.app.callGetCustomerListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.page.onApiError(response.error);
-          console.log(response.customerList)
+          this.customerList = response.customerList;
+          if (this.customerList.length === 1) {
+            this._selectCustomer(0);
+          }
         });
+      }
+
+      _selectCustomer(customerIndex) {
+        let customer = this.customerList[customerIndex];
+        this.page.customer = customer;
+        this.page.isSearchingCustomer = false;
+      }
+
+      selectTapped(e) {
+        let { customerIndex } = e.model;
+        this._selectCustomer(customerIndex);
       }
 
     }
@@ -88,7 +118,10 @@
                 No customer selected (Anonymous sale)
               </template>
               <template is="dom-if" if="[[customer]]">
-                Customer selected [[customer.name]] ([[customer.phone]]) [[customer.balance]]
+                Customer:
+                <b>[[customer.fullName]]</b> ([[customer.phone]])
+                <br> Balance:
+                <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
               </template>
             </div>
             <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
@@ -160,7 +193,8 @@
           },
           customer: {
             type: Object,
-            value: null
+            value: null,
+            observer: 'customerChanged'
           }
         };
       }
@@ -184,6 +218,17 @@
         if (!this._ensureAccess()) return;
         this.delay(0, () => {
           this.self = this;
+          let customerId = this.app.extractFromSession('last-created-customer');
+          if (customerId) {
+            this._processGetCustomer({ customerId }, (customer) => {
+              this.customer = customer;
+            });
+          } else {
+            let customer = this.app.getFromSession('last-selected-customer');
+            if (customer) {
+              this.customer = customer;
+            }
+          }
         });
         this.delay(300, () => {
           this.isReady = true;
@@ -204,6 +249,23 @@
       }
 
       // region: pos =================================
+
+      customerChanged() {
+        if (!this.customer) return;
+        this.app.storeInSession('last-selected-customer', this.customer);
+      }
+
+      _processGetCustomer({ customerId }, cbfn) {
+        let data = {
+          customerId
+        };
+        this.app.callGetCustomerApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          cbfn(response.customer);
+        });
+
+      }
 
       // _processGetOutlet(cbfn) {
       //   let outletId = parseInt(this.params.outlet);
