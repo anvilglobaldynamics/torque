@@ -124,6 +124,9 @@
                 <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
               </template>
             </div>
+            <template is="dom-if" if="[[customer]]">
+              <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>  
+            </template>
             <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
             <paper-button raised class="primary" on-tap="createCustomerTapped">Create Customer</paper-button>
           </div>
@@ -290,6 +293,11 @@
 
       createCustomerTapped(e = null) {
         this.app.navigateTo('/edit-customer');
+      }
+
+      removeCustomerTapped(e = null) {
+        this.customer = null;
+        this.app.storeInSession('last-selected-customer', null);
       }
 
       backButtonOnTopBarPressed(e = null) {
