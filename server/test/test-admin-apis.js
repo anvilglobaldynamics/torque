@@ -23,7 +23,7 @@ const phone2 = rnd(prefix, 11).split('').reverse().join('');
 
 let apiKey = null;
 
-describe.only('admin apis (1)', _ => {
+describe('admin apis (1)', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

@@ -97,6 +97,20 @@ exports.CustomerCollection = class extends Collection {
     this._find({ organizationId, isDeleted: false }, cbfn);
   }
 
+  listByOrganizationIdAndSearchString({ organizationId, searchString }, cbfn) {
+    let query = { organizationId, isDeleted: false };
+    if (searchString) {
+      let searchRegex = new RegExp(searchString, 'i');
+      query.$or = [
+        { fullName: searchRegex },
+        { email: searchRegex },
+        { phone: searchRegex },
+        { nid: searchRegex }
+      ];
+    }
+    this._find(query, cbfn);
+  }
+
   findById({ customerId }, cbfn) {
     this._findOne({ id: customerId, isDeleted: false }, cbfn);
   }

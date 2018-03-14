@@ -158,6 +158,7 @@
           if (response.hasError) return this.onApiError(response.error, 'editCustomerForm');
           let message = "Congratulations. Your new customer has been created."
           this.app.showModalDialog("Customer Created", message, _ => {
+            this.app.storeInSession('last-created-customer', response.customerId);
             this.backButtonOnTopBarPressed();
           });
         });
