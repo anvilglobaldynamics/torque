@@ -3,6 +3,14 @@ let cryptolib = require('crypto');
 
 exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
+  _expireUserWhenFired({ userId }, cbfn) {
+    this.database.session.expireByUserIdWhenFired({ userId }, (err) => {
+      if (err) return this.fail(err);
+      // FIXME: use ensureUpdate
+      return cbfn();
+    });
+  }
+
   _makeHash(string) {
     return cryptolib.createHash('sha256').update(string).digest("hex");
   }

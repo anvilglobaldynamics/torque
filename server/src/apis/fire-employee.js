@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
+let { userCommonMixin } = require('./mixins/user-common');
 
-exports.FireEmployeeApi = class extends collectionCommonMixin(Api) {
+exports.FireEmployeeApi = class extends userCommonMixin(collectionCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -33,9 +34,7 @@ exports.FireEmployeeApi = class extends collectionCommonMixin(Api) {
   _fireEmployee({ employmentId }, cbfn) {
     this.database.employment.getEmploymentById({ employmentId }, (err, employment) => {
       if (!this._ensureDoc(err, employment, "EMPLOYMENT_INVALID", "Unable to find employee to fire.")) return;
-      this.database.session.expireByUserIdWhenFired({ userId: employment.userId }, (err) => {
-        if (err) return this.fail(err);
-        // FIXME: use ensureUpdate
+      this._expireUserWhenFired({ userId: employment.userId }, () => {
         this.database.employment.fire({ employmentId }, (err, wasUpdated) => {
           if (err) return this.fail(err);
           if (!wasUpdated) return this.fail(new Error(`Unable to find employee to fire.`));

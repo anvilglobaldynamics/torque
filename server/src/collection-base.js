@@ -212,12 +212,12 @@ class Collection {
     this._find(query, (err, docList) => {
       if (err) return cbfn(err);
       Promise.all(docList.map(doc => new Promise((accept, reject) => {
-        this._update({id:doc.id}, modifications, (err, wasSuccessful)=>{
+        this._update({ id: doc.id }, modifications, (err, wasSuccessful) => {
           if (err) return reject(err);
           return accept();
         });
       }))).then(() => {
-        return cbfn(null, true);
+        return cbfn(null, (docList.length > 0));
       }).catch(err => {
         return cbfn(err);
       });

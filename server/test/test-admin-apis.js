@@ -7,7 +7,8 @@ let {
   getDatabase,
   initializeServer,
   terminateServer,
-  registerUser
+  registerUser,
+  loginUser
 } = require('./lib');
 
 const prefix = 'adm';
@@ -71,6 +72,7 @@ describe('admin apis (1)', _ => {
 
   });
 
+  let apiKeyOfUserToBan = null
   it('intermittent (user creation)', testDoneFn => {
     registerUser({
       password, fullName, phone
@@ -78,8 +80,13 @@ describe('admin apis (1)', _ => {
       registerUser({
         password, fullName: fullName2, phone: phone2
       }, _ => {
-        delay(200, _ => {
-          testDoneFn();
+        loginUser({
+          emailOrPhone: phone, password
+        }, (data) => {
+          apiKeyOfUserToBan = data.apiKey;
+          delay(200, _ => {
+            testDoneFn();
+          });
         });
       });
     });
@@ -246,7 +253,7 @@ describe('admin apis (1)', _ => {
       expect(body).to.have.property('userList').that.is.an('array');
       expect(body.userList.length).to.be.at.least(2);
       expect(body.userList[0]).to.have.property('organizationList').that.is.an('array');
-      userId = body.userList[0].id;
+      userId = body.userList.find(user => user.phone === phone).id;
       testDoneFn();
     });
 
@@ -254,17 +261,25 @@ describe('admin apis (1)', _ => {
 
   it('api/admin-set-user-banning-status (Valid userId)', testDoneFn => {
 
-    callApi('api/admin-set-user-banning-status', {
-      json: {
-        apiKey: apiKey,
-        isBanned: true,
-        userId
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      testDoneFn();
+    getDatabase().find('session', { apiKey: apiKeyOfUserToBan, hasExpired: false }, (err, docList) => {
+      if (err) throw err;
+      expect(docList.length).to.equal(1);
+      callApi('api/admin-set-user-banning-status', {
+        json: {
+          apiKey: apiKey,
+          isBanned: true,
+          userId
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.have.property('hasError').that.equals(false);
+        expect(body).to.have.property('status').that.equals('success');
+        getDatabase().find('session', { apiKey: apiKeyOfUserToBan, hasExpired: false }, (err, docList) => {
+          if (err) throw err;
+          expect(docList.length).to.equal(0);
+          testDoneFn();
+        });
+      });
     });
 
   });
