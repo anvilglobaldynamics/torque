@@ -141,9 +141,11 @@
           matchingProductCategoryList.forEach(productCategory => productCategoryMap[String(productCategory.id)] = productCategory);
           productList.forEach(product => {
             let { productCategoryId, purchasePrice, salePrice } = productMap[String(product.productId)];
-            let { name, unit } = productCategoryMap[String(productCategoryId)];
+            let { name, unit, defaultDiscountType, defaultDiscountValue } = productCategoryMap[String(productCategoryId)];
             product.isSelected = false;
-            Object.assign(product, { name, unit, purchasePrice, salePrice });
+            let discountType = defaultDiscountType;
+            let discountValue = defaultDiscountValue;
+            Object.assign(product, { name, unit, purchasePrice, salePrice, discountType, discountValue });
           })
           productList.sort((a, b) => b.count - a.count);
           this.productList = productList;
@@ -159,14 +161,13 @@
 
         let productList = this.productList.filter(product => product.isSelected).map(product => {
           if (!('selectedCount' in product)) product.selectedCount = '' + product.count;
-          console.log(product);
-          let { productId, selectedCount, salePrice } = product;
+          let { productId, name, selectedCount, salePrice, discountType, discountValue } = product;
           let count = parseInt(selectedCount, 10);
-          return { count, productId, salePrice };
+          return { productId, name, count, salePrice, discountType, discountValue };
         });
 
-        console.log(productList);
-        return;
+        this.app.storeInSession('pos-selected-product-list', productList);
+        this.backButtonOnTopBarPressed();
       }
 
       selectTapped(e) {

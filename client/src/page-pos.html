@@ -139,7 +139,8 @@
           <template is="dom-repeat" items="[[productList]]" as="product">
             <div class="horizontal layout std-list-item center">
               <div class="vertical layout flex">
-                <div class="title">[[product.item.name]]</div>
+                <div class="title">[[product.name]]</div>
+                <div class="description">Count:[[product.count]]</div>
               </div>
             </div>
           </template>
@@ -170,10 +171,12 @@
               if (mode === 'development') {
                 return [
                   {
-                    product: {
-                      name: "shei maal"
-                    },
-                    count: 2
+                    name: 'unfit horse',
+                    productId: -99999,
+                    count: 1,
+                    discountType: 'percent',
+                    discountValue: 15,
+                    salePrice: 200
                   }
                 ];
               } else {
@@ -223,6 +226,12 @@
               this.customer = customer;
             }
           }
+
+          let productList = this.app.getFromSession('pos-selected-product-list');
+          if (productList.length > 0) {
+            this.productList = productList;
+            console.log("productList: ", this.productList);
+          }
         });
         this.delay(300, () => {
           this.isReady = true;
@@ -267,6 +276,27 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           return cbfn(response.defaultInventory.id);
+        });
+      }
+
+      _processCreateSales({ customerId, productList, payment }) {
+        let customerId = null;
+        if (this.customer) {
+          customerId = this.customer.id;
+        }
+
+        let data = {
+          outletId: this.params.outlet,
+          customerId, productList, payment
+        };
+
+        this.app.callAddSalesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          let message = "Congratulations. Your new sales has been created."
+          this.app.showModalDialog("Sales Created", message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
         });
       }
 
