@@ -6,7 +6,7 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   _expireUserWhenFired({ userId }, cbfn) {
     this.database.session.expireByUserIdWhenFired({ userId }, (err) => {
       if (err) return this.fail(err);
-      // FIXME: use ensureUpdate
+      // FIXME: use ensureUpdate if required
       return cbfn();
     });
   }
