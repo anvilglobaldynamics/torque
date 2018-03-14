@@ -88,7 +88,15 @@
   <torque-app>
     <div class="spinner"></div>
   </torque-app>
-
+  <script>   
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('service-worker.js', {
+          scope: Polymer.rootPath,
+        });
+      });
+    }
+  </script>
   <script src="src/torque-utils.js"></script>
   <script src="src/xdate.js"></script>
   <script>
