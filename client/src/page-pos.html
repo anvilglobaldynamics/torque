@@ -134,22 +134,24 @@
       </template>
       <customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></customer-selector>
 
-      <!-- <iron-form id="posForm">
-        <form>
-          <div class="card vertical layout">
-            <paper-input class="posForm--name" value="{{posForm.name}}" required minlength="3" error-message="Please enter a valid name" label="Name of your outlet."></paper-input>
-            <paper-textarea class="posForm--physicalAddress" value="{{posForm.physicalAddress}}" required minlength="8" error-message="Please enter an address at least 8 characters long" label="Physical Address" rows="4"></paper-textarea>
-            <paper-input class="posForm--contactPersonName" value="{{posForm.contactPersonName}}" required minlength="3" error-message="Please enter a valid name" label="Name of Manager/Contact Person"></paper-input>
-            <paper-input class="posForm--phone" value="{{posForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number of Manager/Contact Person"></paper-input>
-            <div class="horizontal layout button-row end">
-              <div class="flex"></div>
-              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]]" on-tap="createOutletTapped">Create Outlet</paper-button>
-              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]]" on-tap="updateOutletTapped">Update Outlet</paper-button>
+      <div class="card vertical layout">
+        <div class="std-list">
+          <template is="dom-repeat" items="[[productList]]" as="product">
+            <div class="horizontal layout std-list-item center">
+              <div class="vertical layout flex">
+                <div class="title">[[product.item.name]]</div>
+              </div>
             </div>
+          </template>
+
+          <div class="transparent-card align-right">
+            <paper-button raised class="primary" on-tap="addProductTappedTapped">Select Product</paper-button>
           </div>
-        </form>
-      </iron-form>
-    </div> -->
+
+        </div>
+      </div>
+
+    </div>
 
   </template>
 
@@ -162,31 +164,20 @@
 
       static get properties() {
         return {
-          editMode: {
-            type: Boolean,
-            value: false
-          },
-          editingOutlet: {
-            type: Object,
-            value: null
-          },
-          posForm: {
-            type: Object,
+          productList: {
+            type: Array,
             value: _ => {
               if (mode === 'development') {
-                return {
-                  name: 'Gulshan Showroom',
-                  phone: '01700000011',
-                  contactPersonName: 'Johns Apparel',
-                  physicalAddress: 'Road 50\nThis Town'
-                };
+                return [
+                  {
+                    product: {
+                      name: "shei maal"
+                    },
+                    count: 2
+                  }
+                ];
               } else {
-                return {
-                  name: '',
-                  phone: '',
-                  contactPersonName: '',
-                  physicalAddress: ''
-                };
+                return [];
               }
             }
           },
@@ -270,20 +261,14 @@
 
       }
 
-      // _processGetOutlet(cbfn) {
-      //   let outletId = parseInt(this.params.outlet);
-      //   let data = {
-      //     outletId
-      //   };
-      //   this.app.callGetOutletApi(data, (err, response) => {
-      //     if (err) return;
-      //     if (response.hasError) return this.onApiError(response.error);
-      //     this.editingOutlet = response.outlet;
-      //     let { name, phone, contactPersonName, physicalAddress } = this.editingOutlet;
-      //     this.posForm = { name, phone, contactPersonName, physicalAddress };
-      //     cbfn();
-      //   });
-      // }
+      _processGetOutletDefaultInventoryId(cbfn) {
+        let data = { outletId: this.params.outlet };
+        this.app.callGetOutletApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.defaultInventory.id);
+        });
+      }
 
       // region: ui =================================
 
@@ -298,6 +283,12 @@
       removeCustomerTapped(e = null) {
         this.customer = null;
         this.app.storeInSession('last-selected-customer', null);
+      }
+
+      addProductTappedTapped(e = null) {
+        this._processGetOutletDefaultInventoryId(defaultInventoryId => {
+          return this.app.navigateTo(`/pos-select-products/inventory:${defaultInventoryId}`);
+        })
       }
 
       backButtonOnTopBarPressed(e = null) {

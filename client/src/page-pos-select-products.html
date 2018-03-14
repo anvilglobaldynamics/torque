@@ -1,0 +1,195 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-pos-select-products">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding: 24px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card vertical layout">
+        <div class="std-list">
+          <template is="dom-repeat" items="[[productList]]" as="product">
+            <div class="horizontal layout std-list-item center">
+              <div class="vertical layout flex">
+                <div class="title">[[product.name]]
+                  <strong>[[product.count]][[product.unit]]</strong>
+                </div>
+                <div class="description">Purchase: [[product.purchasePrice]][[app.settings.monetaryUnit]], Sale: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+              </div>
+              <template is="dom-if" if="[[!product.isSelected]]">
+                <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
+              </template>
+              <template is="dom-if" if="[[product.isSelected]]">
+                <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="Count">
+                  <div slot="prefix">Selected&nbsp;</div>
+                  <div slot="suffix">&nbsp;[[product.unit]]</div>
+                </paper-input>
+                <paper-button raised class="primary" on-tap="deselectTapped">Deselect</paper-button>
+              </template>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <div class="transparent-card align-right">
+        <paper-button raised class="primary m-0" on-tap="selectProductsTapped">Select Products</paper-button>
+      </div>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageSelectProducts extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+
+      static get is() {
+        return 'page-pos-select-products';
+      }
+
+      static get properties() {
+        return {
+          marginLeft: {
+            type: Number,
+            value: 0
+          },
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Select Products');
+        if (!this._ensureAccess()) return;
+        if (!('inventory' in this.params)) {
+          let message = "This page cannot be displayed at this moment. Please try again."
+          this.app.showModalDialog("Something went wrong!", message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processInventory(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      _fetchInventory(cbfn) {
+        let inventoryId = parseInt(this.params.inventory);
+        this.inventoryId = inventoryId;
+        let data = { inventoryId };
+        this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _processInventory(cbfn) {
+        this._fetchInventory(({ productList, matchingProductList, matchingProductCategoryList, inventoryContainerDetails, inventoryDetails }) => {
+          this.app.popPageTitle();
+          this.app.pushPageTitle(`${inventoryContainerDetails.inventoryContainerName} - ${inventoryDetails.inventoryName}`);
+          let productMap = {};
+          matchingProductList.forEach(product => productMap[String(product.id)] = product);
+          let productCategoryMap = {};
+          matchingProductCategoryList.forEach(productCategory => productCategoryMap[String(productCategory.id)] = productCategory);
+          productList.forEach(product => {
+            let { productCategoryId, purchasePrice, salePrice } = productMap[String(product.productId)];
+            let { name, unit } = productCategoryMap[String(productCategoryId)];
+            product.isSelected = false;
+            Object.assign(product, { name, unit, purchasePrice, salePrice });
+          })
+          productList.sort((a, b) => b.count - a.count);
+          this.productList = productList;
+          cbfn();
+        });
+      }
+
+      // region: ui  ===========================
+
+      selectProductsTapped(e = null) {
+        this.elemAll('pos-select-product').forEach(el => el.listProductsToAdd(productList));
+        let inventoryId = parseInt(this.params.inventory);
+
+        let productList = this.productList.filter(product => product.isSelected).map(product => {
+          if (!('selectedCount' in product)) product.selectedCount = '' + product.count;
+          console.log(product);
+          let { productId, selectedCount, salePrice } = product;
+          let count = parseInt(selectedCount, 10);
+          return { count, productId, salePrice };
+        });
+
+        console.log(productList);
+        return;
+      }
+
+      selectTapped(e) {
+        this.selectedProductCount += 1;
+        let { product } = e.model;
+        e.model.set('product.selectedCount', product.count);
+        e.model.set('product.isSelected', true);
+      }
+
+      deselectTapped(e) {
+        this.selectedProductCount -= 1;
+        let { product } = e.model;
+        e.model.set('product.isSelected', false);
+      }
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl(`/pos`);
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageSelectProducts.is, PageSelectProducts);
+  </script>
+</dom-module>
