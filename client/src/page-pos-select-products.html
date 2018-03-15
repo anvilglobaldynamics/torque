@@ -60,6 +60,9 @@
       </div>
 
       <div class="transparent-card align-right">
+        <template is="dom-if" if="[[selectedProductCount]]">
+          <paper-button raised class="primary m-0" on-tap="deselectAllTapped">Deselect All</paper-button>  
+        </template>
         <paper-button raised class="primary m-0" on-tap="selectProductsTapped">Select Products</paper-button>
       </div>
 
@@ -80,6 +83,10 @@
             type: Number,
             value: 0
           },
+          selectedProductCount: {
+            type: Number,
+            value: 0
+          }
         };
       }
 
@@ -148,6 +155,15 @@
             Object.assign(product, { name, unit, purchasePrice, salePrice, discountType, discountValue });
           })
           productList.sort((a, b) => b.count - a.count);
+
+          let previousProductList = this.app.getFromSession('pos-selected-product-list');
+          this.selectedProductCount = previousProductList.length;
+          previousProductList.forEach(previousProduct => {
+            let product = productList.find(product => product.productId === previousProduct.productId);
+            product.isSelected = true;
+            product.selectedCount = previousProduct.count;
+          })
+
           this.productList = productList;
           cbfn();
         });
@@ -173,7 +189,8 @@
       selectTapped(e) {
         this.selectedProductCount += 1;
         let { product } = e.model;
-        e.model.set('product.selectedCount', product.count);
+        // e.model.set('product.selectedCount', product.count);
+        e.model.set('product.selectedCount', 1);
         e.model.set('product.isSelected', true);
       }
 
@@ -181,6 +198,10 @@
         this.selectedProductCount -= 1;
         let { product } = e.model;
         e.model.set('product.isSelected', false);
+      }
+
+      deselectAllTapped(e) {
+        this.productList.forEach((product, index) => this.set(`productList.${index}.isSelected`, false));
       }
 
       backButtonOnTopBarPressed(e = null) {
