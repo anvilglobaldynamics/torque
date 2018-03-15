@@ -53,6 +53,7 @@ Possible Error Codes:
 { code: APIKEY_INVALID } // the api key is invalid
 { code: OUTLET_INVENTORY_INVALID } // outlet or inventory could not be found 
 { code: CUSTOMER_INVALID } // customer could not be found
+{ code: CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER }
 { code: PRODUCT_INVALID } // product could not be found
 { code: INSUFFICIENT_PRODUCT } // not enough product in inventory
 ```

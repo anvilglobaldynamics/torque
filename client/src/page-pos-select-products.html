@@ -158,12 +158,15 @@
           productList.sort((a, b) => b.count - a.count);
 
           let previousProductList = this.app.getFromSession('pos-selected-product-list');
-          this.selectedProductCount = previousProductList.length;
-          previousProductList.forEach(previousProduct => {
-            let product = productList.find(product => product.productId === previousProduct.productId);
-            product.isSelected = true;
-            product.selectedCount = previousProduct.count;
-          })
+
+          if (previousProductList) {
+            this.selectedProductCount = previousProductList.length;
+            previousProductList.forEach(previousProduct => {
+              let product = productList.find(product => product.productId === previousProduct.productId);
+              product.isSelected = true;
+              product.selectedCount = previousProduct.count;
+            })
+          }
 
           this.productList = productList;
           cbfn();

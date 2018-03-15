@@ -271,19 +271,19 @@
                 totalAmount: null,
                 vatAmount: null,
                 discountType: 'percent',
-                discountValue: null,
+                discountValue: 0,
                 discountedAmount: null,
-                serviceChargeAmount: null,
+                serviceChargeAmount: 0,
                 totalBilled: null,
                 previousCustomerBalance: null,
-                paidAmount: null,
+                paidAmount: 0,
                 changeAmount: null
               }
             }
           },
           vatValue: {
             type: Number,
-            value: null
+            value: 0
           },
           isSearchingCustomer: {
             type: Boolean,
@@ -329,9 +329,10 @@
           }
 
           let productList = this.app.getFromSession('pos-selected-product-list');
-          if (productList.length > 0) {
-            this.productList = productList;
-            console.log("productList in page-pos: ", this.productList);
+          if (productList) {
+            if (productList.length > 0) {
+              this.productList = productList;
+            }
           }
 
           this._calculatePayment();
@@ -404,8 +405,6 @@
       }
 
       _calculatePayment() {
-        console.log("IN _calculatePayment");
-
         let {
           totalAmount,
           vatAmount,
@@ -456,7 +455,11 @@
         }
 
         if (paidAmount) {
-
+          if (totalBilled > paidAmount) {
+            changeAmount = paidAmount - totalBilled;
+          } else {
+            changeAmount = paidAmount - totalBilled;
+          }
         }
 
         this.payment = {
@@ -471,6 +474,31 @@
           paidAmount,
           changeAmount
         };
+      }
+
+      _processAddSales({ outletId, payment }) {
+        let customerId = null;
+        if (this.customer) {
+          customerId = this.customer.id;
+        }
+
+        let productList = this.productList.map(product => {
+          let { productId, count, discountType, discountValue, salePrice } = product;
+          return { productId, count, discountType, discountValue, salePrice };
+        })
+
+        let data = {
+          customerId, outletId, productList, payment
+        };
+
+        this.app.callAddSalesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          let message = "Congratulations. Your new Sales has been added."
+          this.app.showModalDialog("Sales Added", message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
       }
 
       // region: ui =================================
@@ -500,6 +528,10 @@
 
       backButtonOnTopBarPressed(e = null) {
         this.app.navigateToPreviousUrl('/home');
+      }
+
+      saveSaleTapped(e = null) {
+        this._processAddSales({ outletId: this.params.outlet, payment: this.payment });
       }
 
       // region: misc =================================

@@ -83,6 +83,11 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
     if (diff >= 0) {
       return cbfn(payment);
     } else {
+      if (!customer) {
+        let err = new Error("credit sale is not allowed without registered cutomer");
+        err.code = "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER";
+        return this.fail(err);
+      }
       this._updateCustomerBalance({ diff, customer }, () => {
         return cbfn(payment);
       });
