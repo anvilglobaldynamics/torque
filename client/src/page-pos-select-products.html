@@ -148,6 +148,7 @@
           matchingProductCategoryList.forEach(productCategory => productCategoryMap[String(productCategory.id)] = productCategory);
           productList.forEach(product => {
             let { productCategoryId, purchasePrice, salePrice } = productMap[String(product.productId)];
+            // TODO: defaultVat skipped
             let { name, unit, defaultDiscountType, defaultDiscountValue } = productCategoryMap[String(productCategoryId)];
             product.isSelected = false;
             let discountType = defaultDiscountType;
