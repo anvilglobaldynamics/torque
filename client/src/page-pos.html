@@ -168,15 +168,6 @@
                 <br> Totol:
                 <b>{{payment.totalAmount}} [[app.settings.monetaryUnit]]</b>
 
-                <paper-input class="payment--vatValue" value="{{payment.vatValue}}" type="number" required min="0" error-message="Please enter a valid number" label="VAT">
-                  <div slot="suffix">%</div>
-                </paper-input>
-
-                <template is="dom-if" if="[[payment.vatValue]]">
-                  <br> Vat Amount:
-                  <b>{{payment.vatAmount}} [[app.settings.monetaryUnit]]</b>
-                </template>
-
                 <div class="horizontal layout">
                   <paper-dropdown-menu label="Discount Type" class="mr-4">
                     <paper-listbox slot="dropdown-content" selected="{{payment.discountType}}" attr-for-selected="name">
@@ -184,7 +175,7 @@
                       <paper-item name="fixed">Fixed Value</paper-item>
                     </paper-listbox>
                   </paper-dropdown-menu>
-                  <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" type="number" required min="0" error-message="Please enter a valid number" label="Discount Value">
+                  <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Discount Value">
                     <template is="dom-if" if="[[$equals(payment.discountType, 'percent')]]">
                       <div slot="suffix">%</div>
                     </template>
@@ -199,7 +190,16 @@
                   <b>{{payment.discountedAmount}} [[app.settings.monetaryUnit]]</b>
                 </template>
 
-                <paper-input class="payment--serviceChargeAmount" value="{{payment.serviceChargeAmount}}" type="number" required min="0" error-message="Please enter a valid number" label="Service Charge Amount">
+                <paper-input class="payment--vatValue" value="{{vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="VAT">
+                  <div slot="suffix">%</div>
+                </paper-input>
+
+                <template is="dom-if" if="[[vatValue]]">
+                  <br> Vat Amount:
+                  <b>{{payment.vatAmount}} [[app.settings.monetaryUnit]]</b>
+                </template>
+
+                <paper-input class="payment--serviceChargeAmount" value="{{payment.serviceChargeAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Service Charge Amount">
                   <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                 </paper-input>
 
@@ -211,7 +211,7 @@
                   <b>{{customer.balance}} [[app.settings.monetaryUnit]]</b>
                 </template>
 
-                <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" type="number" required min="0" error-message="Please enter a valid number" label="Paid Amount">
+                <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Paid Amount">
                   <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                 </paper-input>
 
@@ -226,7 +226,7 @@
             <div class="transparent-card align-right">
               <paper-button raised class="primary" on-tap="saveSaleTapped">Save Sale</paper-button>
             </div>
-            
+
           </template>
 
         </div>
@@ -269,7 +269,6 @@
             value: _ => {
               return {
                 totalAmount: null,
-                vatValue: null,
                 vatAmount: null,
                 discountType: 'percent',
                 discountValue: null,
@@ -281,6 +280,10 @@
                 changeAmount: null
               }
             }
+          },
+          vatValue: {
+            type: Number,
+            value: null
           },
           isSearchingCustomer: {
             type: Boolean,
@@ -401,9 +404,10 @@
       }
 
       _calculatePayment() {
+        console.log("IN _calculatePayment");
+
         let {
           totalAmount,
-          vatValue,
           vatAmount,
           discountType,
           discountValue,
@@ -438,13 +442,13 @@
           }
         }
 
-        if (vatValue) {
-          vatAmount = totalBilled * (vatValue/100);
+        if (this.vatValue) {
+          vatAmount = totalBilled * (this.vatValue/100);
           totalBilled += vatAmount;
         }
 
         if (serviceChargeAmount) {
-
+          totalBilled += parseInt(serviceChargeAmount);
         }
 
         if (this.customer) {
@@ -488,6 +492,10 @@
         this._processGetOutletDefaultInventoryId(defaultInventoryId => {
           return this.app.navigateTo(`/pos-select-products/inventory:${defaultInventoryId}`);
         })
+      }
+
+      genericPaymentInputChanged(e = null) {
+        this._calculatePayment();
       }
 
       backButtonOnTopBarPressed(e = null) {
