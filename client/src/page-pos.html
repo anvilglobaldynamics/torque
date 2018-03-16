@@ -424,6 +424,11 @@
         });
       }
 
+      _customerSelected(customer){
+        this.customer = customer;
+        this.isSearchingCustomer = false;
+      }
+
       // region: ui =================================
 
       changeCustomerTapped(e = null) {
@@ -455,11 +460,6 @@
 
       saveSaleTapped(e = null) {
         this._processAddSales({ outletId: this.params.outlet, payment: this.payment });
-      }
-
-      customerSelected(customer){
-        this.customer = customer;
-        this.isSearchingCustomer = false;
       }
 
       // region: misc =================================

@@ -21,6 +21,48 @@
 
 <link rel="import" href="shared-styles.html">
 
+<!-- required properties: 
+  isSearchingCustomer: {
+    type: Boolean,
+    value: false
+  },
+  customer: {
+    type: Object,
+    value: null,
+    observer: 'customerChanged'
+  }
+-->
+
+<!-- required assign:
+  this.self = this;
+-->
+
+<!-- required method:
+  customerChanged() {
+    if (!this.customer) return;
+    this.app.storeInSession('last-selected-customer', this.customer);
+  }
+
+  _customerSelected(customer){
+    this.customer = customer;
+    this.isSearchingCustomer = false;
+  }
+  
+  // optional
+  changeCustomerTapped(e = null) {
+    this.isSearchingCustomer = true;
+  }
+
+  createCustomerTapped(e = null) {
+    this.app.navigateTo('/edit-customer');
+  }
+
+  removeCustomerTapped(e = null) {
+    this.customer = null;
+    this.app.storeInSession('last-selected-customer', null);
+  }
+-->
+
 <dom-module id="elem-customer-selector">
   <template>
     <style include="shared-styles">
@@ -86,7 +128,7 @@
 
       _selectCustomer(customerIndex) {
         let customer = this.customerList[customerIndex];
-        this.page.customerSelected(customer);
+        this.page._customerSelected(customer);
       }
 
       selectTapped(e) {

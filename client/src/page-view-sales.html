@@ -37,6 +37,9 @@
         <div>ID: [[sales.id]]</div>
         <div>Dated: [[$mkDate(sales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
         <div>Outlet: [[sales.outletId]]</div>
+        <template is="dom-if" if="{{sales.customerId}}">
+          <div>Customer: [[sales.customerId]]</div>
+        </template>
       </div>
 
       <div class="card vertical layout">
@@ -123,7 +126,6 @@
       _processSales(cbfn) {
         this._fetchSales(({ sales, defaultInventory, returnedInventory, damagedInventory }) => {
           this.sales = sales;
-          console.log("sales: ", this.sales);
           cbfn();
         });
       }

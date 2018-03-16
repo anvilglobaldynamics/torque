@@ -18,6 +18,8 @@
 
 <link rel="import" href="shared-styles.html">
 
+<link rel="import" href="elem-customer-selector.html">
+
 <dom-module id="page-manage-sales">
   <template>
     <style include="shared-styles">
@@ -37,6 +39,29 @@
         <paper-input class="flex" value="{{fromDate}}" type="date" label="From Date"></paper-input>
         <paper-input class="flex" value="{{toDate}}" type="date" label="To Date"></paper-input>
       </div>
+
+      <template is="dom-if" if="[[!isSearchingCustomer]]">
+        <div class="card vertical layout">
+          <div class="horizontal layout center">
+            <div class="flex">
+              <template is="dom-if" if="[[!customer]]">
+                No customer selected (Anonymous sale)
+              </template>
+              <template is="dom-if" if="[[customer]]">
+                Customer:
+                <b>[[customer.fullName]]</b> ([[customer.phone]])
+                <br> Balance:
+                <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
+              </template>
+            </div>
+            <template is="dom-if" if="[[customer]]">
+              <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>
+            </template>
+            <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
+          </div>
+        </div>
+      </template>
+      <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
 
       <paper-button raised class="primary" on-tap="filterTapped">Filter</paper-button>
 
@@ -74,10 +99,6 @@
             type: Boolean,
             value: false
           },
-          customerId: {
-            type: String,
-            value: null
-          },
           shouldFilterByCustomer: {
             type: Boolean,
             value: false
@@ -100,6 +121,15 @@
               date = (new XDate(date)).toString('yyyy-MM-dd');
               return date;
             }
+          },
+          isSearchingCustomer: {
+            type: Boolean,
+            value: false
+          },
+          customer: {
+            type: Object,
+            value: null,
+            observer: 'customerChanged'
           }
         };
       }
@@ -117,6 +147,7 @@
         this.app.pushPageTitle('Manage Sales');
         if (!this._ensureAccess()) return;
         this._processSalesList(() => {
+          this.self = this;
           this.isReady = true;
         });
       }
@@ -137,11 +168,16 @@
       _fetchSalesList(cbfn) {
         let fromDate = new Date(this.fromDate).getTime();
         let toDate = new Date(this.toDate).getTime();
+        let customerId = null;
+        if (this.customer) {
+          customerId = this.customer.id;
+          this.shouldFilterByCustomer = true;
+        }
 
         let data = { 
           organizationId: this.app.organization.id,
           outletId: this.outletId, 
-          customerId: this.customerId, 
+          customerId, 
           shouldFilterByOutlet: this.shouldFilterByOutlet, 
           shouldFilterByCustomer: this.shouldFilterByCustomer, 
           fromDate, 
@@ -155,6 +191,11 @@
         });
       }
 
+      customerChanged() {
+        if (!this.customer) return;
+        this.app.storeInSession('last-selected-customer', this.customer);
+      }
+
       _processSalesList(cbfn) {
         this._fetchSalesList(newSalesList => {
           this.salesList = newSalesList;
@@ -162,7 +203,22 @@
         });
       }
 
+      _customerSelected(customer){
+        this.customer = customer;
+        this.isSearchingCustomer = false;
+      }
+
       // region: ui  ===========================
+
+
+      changeCustomerTapped(e = null) {
+        this.isSearchingCustomer = true;
+      }
+
+      removeCustomerTapped(e = null) {
+        this.customer = null;
+        this.app.storeInSession('last-selected-customer', null);
+      }
 
       createTapped(e = null) {
         return this.app.navigateTo('/edit-sale');
