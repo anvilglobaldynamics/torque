@@ -19,6 +19,7 @@
 <link rel="import" href="shared-styles.html">
 
 <link rel="import" href="elem-customer-selector.html">
+<link rel="import" href="elem-outlet-selector.html">
 
 <dom-module id="page-manage-sales">
   <template>
@@ -62,6 +63,29 @@
         </div>
       </template>
       <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+
+      <template is="dom-if" if="[[!isSearchingOutlet]]">
+        <div class="card vertical layout">
+          <div class="horizontal layout center">
+            <div class="flex">
+              <template is="dom-if" if="[[!outlet]]">
+                No outlet selected (Anonymous sale)
+              </template>
+              <template is="dom-if" if="[[outlet]]">
+                Outlet:
+                <b>[[outlet.name]]</b> ([[outlet.phone]])
+                <br> Address:
+                <b>[[outlet.physicalAddress]]</b>
+              </template>
+            </div>
+            <template is="dom-if" if="[[outlet]]">
+              <paper-button raised class="primary" on-tap="removeOutletTapped">Remove Outlet</paper-button>
+            </template>
+            <paper-button raised class="primary" on-tap="changeOutletTapped">Change Outlet</paper-button>
+          </div>
+        </div>
+      </template>
+      <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
       <paper-button raised class="primary" on-tap="filterTapped">Filter</paper-button>
 
@@ -130,6 +154,15 @@
             type: Object,
             value: null,
             observer: 'customerChanged'
+          },
+          isSearchingOutlet: {
+            type: Boolean,
+            value: false
+          },
+          outlet: {
+            type: Object,
+            value: null,
+            observer: 'outletChanged'
           }
         };
       }
@@ -172,11 +205,21 @@
         if (this.customer) {
           customerId = this.customer.id;
           this.shouldFilterByCustomer = true;
+        } else {
+          this.shouldFilterByCustomer = false;
+        }
+
+        let outletId = null;
+        if (this.outlet) {
+          outletId = this.outlet.id;
+          this.shouldFilterByOutlet = true;
+        } else {
+          this.shouldFilterByOutlet = false;
         }
 
         let data = { 
           organizationId: this.app.organization.id,
-          outletId: this.outletId, 
+          outletId, 
           customerId, 
           shouldFilterByOutlet: this.shouldFilterByOutlet, 
           shouldFilterByCustomer: this.shouldFilterByCustomer, 
@@ -196,6 +239,11 @@
         this.app.storeInSession('last-selected-customer', this.customer);
       }
 
+      outletChanged() {
+        if (!this.outlet) return;
+        this.app.storeInSession('last-selected-outlet', this.outlet);
+      }
+
       _processSalesList(cbfn) {
         this._fetchSalesList(newSalesList => {
           this.salesList = newSalesList;
@@ -208,6 +256,11 @@
         this.isSearchingCustomer = false;
       }
 
+      _outletSelected(outlet){
+        this.outlet = outlet;
+        this.isSearchingOutlet = false;
+      }
+
       // region: ui  ===========================
 
 
@@ -215,9 +268,18 @@
         this.isSearchingCustomer = true;
       }
 
+      changeOutletTapped(e = null) {
+        this.isSearchingOutlet = true;
+      }
+
       removeCustomerTapped(e = null) {
         this.customer = null;
         this.app.storeInSession('last-selected-customer', null);
+      }
+
+      removeOutletTapped(e = null) {
+        this.outlet = null;
+        this.app.storeInSession('last-selected-outlet', null);
       }
 
       createTapped(e = null) {

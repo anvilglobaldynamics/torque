@@ -11,7 +11,8 @@ exports.GetOutletListApi = class extends Api {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),
 
-      organizationId: Joi.number().max(999999999999999).required()
+      organizationId: Joi.number().max(999999999999999).required(),
+      searchString: Joi.string().min(0).max(64).allow('').optional()
     });
   }
 
@@ -24,16 +25,16 @@ exports.GetOutletListApi = class extends Api {
     }];
   }
 
-  _getOutletList({ organizationId }, cbfn) {
-    this.database.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {
+  _getOutletList({ organizationId, searchString }, cbfn) {
+    this.database.outlet.listByOrganizationIdAndSearchString({ organizationId, searchString }, (err, outletList) => {
       if (err) return this.fail(err);
-      cbfn(outletList);
+      return cbfn(outletList);
     })
   }
 
   handle({ body }) {
-    let { organizationId } = body;
-    this._getOutletList({ organizationId }, (outletList) => {
+    let { organizationId, searchString = null } = body;
+    this._getOutletList({ organizationId, searchString }, (outletList) => {
       this.success({ outletList });
     });
   }

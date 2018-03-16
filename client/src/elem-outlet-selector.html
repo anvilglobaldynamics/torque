@@ -1,0 +1,142 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<!-- required properties: 
+  isSearchingOutlet: {
+    type: Boolean,
+    value: false
+  },
+  outlet: {
+    type: Object,
+    value: null,
+    observer: 'outletChanged'
+  }
+-->
+
+<!-- required assign:
+  this.self = this;
+-->
+
+<!-- required method:
+  outletChanged() {
+    if (!this.outlet) return;
+    this.app.storeInSession('last-selected-outlet', this.outlet);
+  }
+
+  _outletSelected(outlet){
+    this.outlet = outlet;
+    this.isSearchingOutlet = false;
+  }
+  
+  // optional
+  changeOutletTapped(e = null) {
+    this.isSearchingOutlet = true;
+  }
+
+  createOutletTapped(e = null) {
+    this.app.navigateTo('/edit-outlet');
+  }
+
+  removeOutletTapped(e = null) {
+    this.outlet = null;
+    this.app.storeInSession('last-selected-outlet', null);
+  }
+-->
+
+<dom-module id="elem-outlet-selector">
+  <template>
+    <style include="shared-styles">
+    </style>
+    <div class="card vertical layout">
+      <div class="horizontal layout center">
+        <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="Please enter a name or phone" label="Search outlet by name or phone."
+          on-keypress="searchFieldKeypressed"></paper-input>
+        <paper-button raised class="primary" on-tap="searchTapped">Search</paper-button>
+        <paper-button raised class="primary" on-tap="cancelTapped">Cancel</paper-button>
+      </div>
+
+      <template is="dom-repeat" items="[[outletList]]" as="outlet" index-as="outletIndex">
+        <div class="horizontal layout std-list-item flex">
+          <div>
+            Outlet:
+            <b>[[outlet.fullName]]</b> ([[outlet.phone]])
+            <br> Address:
+            <b>[[outlet.physicalAddress]]</b>
+          </div>
+          <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
+        </div>
+      </template>
+    </div>
+  </template>
+  <script>
+    class ElemOutletSelector extends FxElement {
+
+      static get is() { return 'elem-outlet-selector'; }
+
+      static get properties() {
+        return {
+          searchString: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
+      cancelTapped(e = null) {
+        this.page.outletSelected(null);
+      }
+
+      searchTapped(e = null) {
+        let organizationId = parseInt(this.page.app.organization.id);
+        let data = {
+          organizationId,
+          searchString: this.searchString
+        };
+        this.page.app.callGetOutletListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.page.onApiError(response.error);
+          this.outletList = response.outletList;
+          if (this.outletList.length === 1) {
+            this._selectOutlet(0);
+          }
+        });
+      }
+
+      _selectOutlet(outletIndex) {
+        let outlet = this.outletList[outletIndex];
+        this.page._outletSelected(outlet);
+      }
+
+      selectTapped(e) {
+        let { outletIndex } = e.model;
+        this._selectOutlet(outletIndex);
+      }
+
+    }
+    window.customElements.define(ElemOutletSelector.is, ElemOutletSelector);
+  </script>
+</dom-module>
