@@ -347,6 +347,11 @@
           this.callCombinedJsonApi('add-sales', data, cbfn);
         }
 
+        callGetSalesListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-sales-list', data, cbfn);
+        }
+
       }
     }
 
