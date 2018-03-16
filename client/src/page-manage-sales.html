@@ -36,8 +36,9 @@
       <div class="card horizontal layout center">
         <paper-input class="flex" value="{{fromDate}}" type="date" label="From Date"></paper-input>
         <paper-input class="flex" value="{{toDate}}" type="date" label="To Date"></paper-input>
-        <paper-button raised class="primary" on-tap="filterByDateTapped">Filter by Date</paper-button>
       </div>
+
+      <paper-button raised class="primary" on-tap="filterTapped">Filter</paper-button>
 
       <div class="card vertical layout">
         <div class="std-list">
@@ -172,7 +173,7 @@
         return this.app.navigateTo(`/view-sales/sales:${sale.id}`);
       }
 
-      filterByDateTapped(e = null) {
+      filterTapped(e = null) {
         this.isReady = false;
         this._processSalesList(() => {
           this.isReady = true;
