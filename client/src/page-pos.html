@@ -21,84 +21,7 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="customer-selector">
-  <template>
-    <style include="shared-styles">
-    </style>
-    <div class="card vertical layout">
-      <div class="horizontal layout center">
-        <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="Please enter a name or phone" label="Search customer by name or phone."
-          on-keypress="searchFieldKeypressed"></paper-input>
-        <paper-button raised class="primary" on-tap="searchTapped">Search</paper-button>
-        <paper-button raised class="primary" on-tap="cancelTapped">Cancel</paper-button>
-      </div>
-
-      <template is="dom-repeat" items="[[customerList]]" as="customer" index-as="customerIndex">
-        <div class="horizontal layout std-list-item flex">
-          <div>
-            Customer:
-            <b>[[customer.fullName]]</b> ([[customer.phone]])
-            <br> Balance:
-            <b>[[customer.balance]] [[page.app.settings.monetaryUnit]]</b>
-          </div>
-          <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
-        </div>
-      </template>
-    </div>
-  </template>
-  <script>
-    class CustomerSelector extends FxElement {
-
-      static get is() { return 'customer-selector'; }
-
-      static get properties() {
-        return {
-          searchString: {
-            type: String,
-            value: ''
-          }
-        };
-      }
-
-      searchFieldKeypressed(e) {
-        if (e.which === 13) this.searchTapped(null);
-      }
-
-      cancelTapped(e = null) {
-        this.page.isSearchingCustomer = false;
-      }
-
-      searchTapped(e = null) {
-        let organizationId = parseInt(this.page.app.organization.id);
-        let data = {
-          organizationId,
-          searchString: this.searchString
-        };
-        this.page.app.callGetCustomerListApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.page.onApiError(response.error);
-          this.customerList = response.customerList;
-          if (this.customerList.length === 1) {
-            this._selectCustomer(0);
-          }
-        });
-      }
-
-      _selectCustomer(customerIndex) {
-        let customer = this.customerList[customerIndex];
-        this.page.customer = customer;
-        this.page.isSearchingCustomer = false;
-      }
-
-      selectTapped(e) {
-        let { customerIndex } = e.model;
-        this._selectCustomer(customerIndex);
-      }
-
-    }
-    window.customElements.define(CustomerSelector.is, CustomerSelector);
-  </script>
-</dom-module>
+<link rel="import" href="elem-customer-selector.html">
 
 <dom-module id="page-pos">
   <template>
@@ -137,7 +60,7 @@
           </div>
         </div>
       </template>
-      <customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></customer-selector>
+      <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
 
       <div class="card vertical layout">
         <div class="std-list">
@@ -532,6 +455,11 @@
 
       saveSaleTapped(e = null) {
         this._processAddSales({ outletId: this.params.outlet, payment: this.payment });
+      }
+
+      customerSelected(customer){
+        this.customer = customer;
+        this.isSearchingCustomer = false;
       }
 
       // region: misc =================================
