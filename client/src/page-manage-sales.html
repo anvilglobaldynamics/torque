@@ -32,26 +32,21 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
-
       <div class="card vertical layout">
         <div class="std-list">
-          <!-- <template is="dom-repeat" items="[[salesList]]" as="sale">
+          <template is="dom-repeat" items="[[salesList]]" as="sale">
             <div class="horizontal layout std-list-item center">
               <div class="vertical layout flex">
-                <div class="title">[[sale.name]]</div>
-                <div class="description">[[sale.phone]] ([[sale.physicalAddress]])</div>
+                <div class="title">[[sale.id]]</div>
+                <div class="description">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+                <div class="description">Billed [[sale.payment.totalBilled]] [[app.settings.monetaryUnit]] for [[sale.productList.length]] product(s)</div>
               </div>
               <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
               <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
-              <paper-button raised class="primary" on-tap="posTapped">POS</paper-button>
             </div>
-          </template> -->
+          </template>
         </div>
       </div>
-
-      <!-- <div class="transparent-card align-right">
-        <paper-button raised class="primary" on-tap="createTapped">Create New Sales</paper-button>
-      </div> -->
 
     </div>
   </template>
