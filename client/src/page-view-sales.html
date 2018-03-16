@@ -18,7 +18,7 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="page-manage-sales">
+<dom-module id="page-view-sales">
   <template>
     <style include="shared-styles">
       @media (min-width: 960px) {
@@ -32,28 +32,40 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
       <div class="card vertical layout">
-        <div class="std-list">
-          <template is="dom-repeat" items="[[salesList]]" as="sale">
-            <div class="horizontal layout std-list-item center">
-              <div class="vertical layout flex">
-                <div class="title">[[sale.id]]</div>
-                <div class="description">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                <div class="description">Billed [[sale.payment.totalBilled]] [[app.settings.monetaryUnit]] for [[sale.productList.length]] product(s)</div>
-              </div>
-              <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
-            </div>
-          </template>
-        </div>
+        <div>ID: [[sales.id]]</div>
+        <div>Dated: [[$mkDate(sales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+        <div>Outlet: [[sales.outletId]]</div>
+      </div>
+
+      <div class="card vertical layout">
+        <div class="title">Product List: ([[sales.productList.length]] products)</div>
+        <template is="dom-repeat" items="{{sales.productList}}" as="product">
+          <div>ID: [[product.productId]]</div>
+          <div>Count: [[product.count]]</div>
+          <div>Sale Price: [[product.salePrice]]</div>
+          <div>Discounted: [[product.discountValue]] by [[product.discountType]] </div>
+        </template>
+      </div>
+
+      <div class="card vertical layout">
+        <div class="title">Payment:</div>
+        <div>Total Billed: [[sales.payment.totalBilled]]</div>
+        <div>Discounted Amount: [[sales.payment.discountedAmount]]</div>
+        <div>Service Charge Amount: [[sales.payment.serviceChargeAmount]]</div>
+        <div>Vat: [[sales.payment.vatAmount]]</div>
       </div>
 
     </div>
+
   </template>
 
   <script>
-    class PageManageSales extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+    class PageViewSales extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+
       static get is() {
-        return 'page-manage-sales';
+        return 'page-view-sales';
       }
 
       static get properties() {
@@ -70,10 +82,17 @@
 
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
-        this.app.currentPageIsModal = false;
-        this.app.pushPageTitle('Manage Sales');
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Sales');
         if (!this._ensureAccess()) return;
-        this._processSalesList(() => {
+        if (!('sales' in this.params)) {
+          let message = "This page cannot be displayed at this moment. Please try again."
+          this.app.showModalDialog("Something went wrong!", message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processSales(_ => {
           this.isReady = true;
         });
       }
@@ -91,50 +110,30 @@
         return true;
       }
 
-      _fetchSalesList(cbfn) {
-        // TODO: below is for testing
-        let fromDate = new Date();
-        fromDate.setDate(fromDate.getDate() - 1);
-        fromDate = fromDate.getTime();
-
-        let data = { 
-          organizationId: this.app.organization.id ,
-          outletId: null,
-          customerId: null,
-
-          shouldFilterByOutlet: false,
-          shouldFilterByCustomer: false,
-
-          fromDate,
-          toDate: (new Date()).getTime(),
-        };
-
-        this.app.callGetSalesListApi(data, (err, response) => {
+      _fetchSales(cbfn) {
+        let salesId = parseInt(this.params.sales);
+        let data = { salesId };
+        this.app.callGetSalesApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.salesList);
+          return cbfn(response);
         });
       }
 
-      _processSalesList(cbfn) {
-        this._fetchSalesList(newSalesList => {
-          this.salesList = newSalesList;
+      _processSales(cbfn) {
+        this._fetchSales(({ sales, defaultInventory, returnedInventory, damagedInventory }) => {
+          this.sales = sales;
+          console.log("sales: ", this.sales);
           cbfn();
         });
       }
 
       // region: ui  ===========================
 
-      createTapped(e = null) {
-        return this.app.navigateTo('/edit-sale');
-      }
+      // region: misc =================================
 
-      viewTapped(e) {
-        let { sale } = e.model;
-        return this.app.navigateTo(`/view-sales/sales:${sale.id}`);
-      }
     }
 
-    window.customElements.define(PageManageSales.is, PageManageSales);
+    window.customElements.define(PageViewSales.is, PageViewSales);
   </script>
 </dom-module>
