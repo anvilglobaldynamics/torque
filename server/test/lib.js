@@ -404,7 +404,8 @@ exports.validateSalesSchema = (doc) => {
     }),
 
     isModified: Joi.boolean().required(),
-    isDeleted: Joi.boolean().required()
+    isDeleted: Joi.boolean().required(),
+    isDiscarded: Joi.boolean().required()
   });
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;

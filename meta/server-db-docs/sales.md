@@ -30,6 +30,7 @@ Joi.object().keys({
     changeAmount: Joi.number().max(999999999999999).required()
   }),
   isModified: Joi.boolean().required(),
-  isDeleted: Joi.boolean().required()
+  isDeleted: Joi.boolean().required(),
+  isDiscarded: Joi.boolean().required()
 });
 ```

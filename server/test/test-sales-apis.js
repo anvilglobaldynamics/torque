@@ -73,7 +73,7 @@ let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
-describe('sales', _ => {
+describe.only('sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -750,6 +750,44 @@ describe('sales', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error).to.have.property('code').that.equals("ORGANIZATION_INVALID");
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/discard-sales (Valid)', testDoneFn => {
+
+    callApi('api/discard-sales', {
+      json: {
+        apiKey,
+        salesId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales (Valid discard check)', testDoneFn => {
+
+    callApi('api/get-sales', {
+      json: {
+        apiKey,
+        salesId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('sales');
+
+      validateSalesSchema(body.sales);
+
+      expect(body.sales).to.have.property('isDiscarded').that.equals(true);
 
       testDoneFn();
     });

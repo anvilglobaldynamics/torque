@@ -44,6 +44,7 @@
               <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
               <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
               <paper-button raised class="primary" on-tap="posTapped">POS</paper-button>
+              <paper-button raised class="primary" on-tap="salesReturnTapped">Sales Return</paper-button>
             </div>
           </template>
         </div>
@@ -134,6 +135,11 @@
       posTapped(e) {
         let { outlet } = e.model;
         return this.app.navigateTo(`/pos/outlet:${outlet.id}`);
+      }
+
+      salesReturnTapped() {
+        let { outlet } = e.model;
+        return this.app.navigateTo(`/sales-return/outlet:${outlet.id}`);
       }
 
       // region: misc =================================
