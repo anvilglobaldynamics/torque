@@ -36,16 +36,16 @@
       <div class="card vertical layout">
         <div>ID: [[sales.id]]</div>
         <div>Dated: [[$mkDate(sales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-        <div>Outlet: [[sales.outletId]]</div>
+        <div>Outlet ID: [[sales.outletId]]</div>
         <template is="dom-if" if="{{sales.customerId}}">
-          <div>Customer: [[sales.customerId]]</div>
+          <div>Customer ID: [[sales.customerId]]</div>
         </template>
       </div>
 
       <div class="card vertical layout">
         <div class="title">Product List: ([[sales.productList.length]] products)</div>
         <template is="dom-repeat" items="{{sales.productList}}" as="product">
-          <div>ID: [[product.productId]]</div>
+          <div>Product ID: [[product.productId]]</div>
           <div>Count: [[product.count]]</div>
           <div>Sale Price: [[product.salePrice]]</div>
           <div>Discounted: [[product.discountValue]] by [[product.discountType]] </div>
