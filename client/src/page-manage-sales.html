@@ -200,16 +200,6 @@
 
       _fetchSalesList(cbfn) {
         let fromDate = new Date(this.fromDate).getTime();
-        if (!fromDate) {
-          let date = new Date();
-          date.setDate(date.getDate() - 1);
-          date = date.getTime();
-          fromDate = date;
-          // date = (new XDate(date)).toString('yyyy-MM-dd');
-          // fromDate = date;
-        }
-        console.log("fromDate: ", fromDate);
-
         let toDate = new Date(this.toDate).getTime();
         let customerId = null;
         if (this.customer) {
