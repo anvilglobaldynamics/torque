@@ -69,11 +69,14 @@
         callCombinedJsonApi(path, data, _cbfn) {
           let cbfn = this._createGenericCallback(path, data, _cbfn);
           let now = (new Date).getTime();
-          if (true || !this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
+          if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
             this.callJsonPostApi(path, data, cbfn);
           } else {
             this.callJsonWebsocketApi(path, data, (err, message) => {
               if (err) {
+                if (mode === 'development') {
+                  console.log(`WS_ERROR/api=${path}`, err);
+                }
                 lastWebsocketFailureTimestamp = (new Date).getTime();
                 this.callJsonPostApi(path, data, cbfn);
               } else {

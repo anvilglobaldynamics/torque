@@ -92,8 +92,8 @@ class Server {
         }
 
         let schema = Joi.object().keys({
-          requestUid: Joi.string().length(16).required(),
-          path: Joi.string().min(1).max(32).required(),
+          requestUid: Joi.string().length(20).required(),
+          path: Joi.string().min(1).max(128).required(),
           body: Joi.object().required()
         });
         let { error, value } = Joi.validate(message, schema);
