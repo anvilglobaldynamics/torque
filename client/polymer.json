@@ -17,8 +17,7 @@
   ],
   "extraDependencies": [
     "manifest.json",
-    "bower_components/webcomponentsjs/*.js",
-    "src/xdate.js"
+    "bower_components/webcomponentsjs/*.js"
   ],
   "lint": {
     "rules": [

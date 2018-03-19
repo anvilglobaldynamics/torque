@@ -3,3 +3,5 @@ dispatch:
     service: default
   - url: "admin.torque.live/*"
     service: admin
+  - url: "pwa.torque.live/*"
+    service: pwa
