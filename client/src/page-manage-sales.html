@@ -199,6 +199,13 @@
       }
 
       _fetchSalesList(cbfn) {
+        if (!this.fromDate) {
+          this.resetProperties('fromDate');
+        }
+        if (!this.toDate) {
+          this.resetProperties('toDate');
+        }
+
         let fromDate = new Date(this.fromDate).getTime();
         let toDate = new Date(this.toDate).getTime();
         let customerId = null;
