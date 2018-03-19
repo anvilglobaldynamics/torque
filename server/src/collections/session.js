@@ -102,7 +102,8 @@ exports.SessionCollection = class extends Collection {
     };
     this._updateMany({ userId, hasExpired: false }, mod, (err, wasUpdated) => {
       if (err) return cbfn(err);
-      if (!wasUpdated) return cbfn(new Error("Session Not Found"));
+      // NOTE: Willingly not checking if the sessions were actually updated or not.
+      // if (!wasUpdated) return cbfn(new Error("Unable to find session to expire"));
       return cbfn();
     });
   }

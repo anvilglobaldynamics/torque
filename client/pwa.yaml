@@ -1,0 +1,61 @@
+runtime: python27
+api_version: 1
+service: "pwa"
+threadsafe: yes
+default_expiration: "1m"
+skip_files:
+- node_modules/
+
+handlers:
+- url: /bower_components
+  static_dir: build/custom-es6-service-worker/bower_components
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
+
+- url: /images
+  static_dir: build/custom-es6-service-worker/images
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
+
+- url: /src
+  static_dir: build/custom-es6-service-worker/src
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
+
+- url: /vendor-assets
+  static_dir: build/custom-es6-service-worker/vendor-assets
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
+
+- url: /manifest.json
+  static_files: build/custom-es6-service-worker/manifest.json
+  upload: build/custom-es6-service-worker/manifest.json
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
+
+- url: /service-worker.js
+  static_files: build/custom-es6-service-worker/service-worker.js
+  upload: build/custom-es6-service-worker/service-worker.js
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
+    Content-Type: text/javascript
+
+- url: /.*
+  static_files: build/custom-es6-service-worker/index.html
+  upload: build/custom-es6-service-worker/index.html
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private

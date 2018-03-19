@@ -88,9 +88,15 @@
   <torque-app>
     <div class="spinner"></div>
   </torque-app>
-
-  <script src="src/torque-utils.js"></script>
-  <script src="src/xdate.js"></script>
+  <script>   
+    if ('serviceWorker' in navigator && window.location.href.indexOf('pwa.') > -1) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('service-worker.js', {
+          scope: Polymer.rootPath,
+        });
+      });
+    }
+  </script>
   <script>
     // Register the base URL
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {

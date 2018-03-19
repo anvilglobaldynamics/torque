@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
+let { userCommonMixin } = require('./mixins/user-common');
 
-exports.AdminSetUserBanningStatusApi = class extends collectionCommonMixin(Api) {
+exports.AdminSetUserBanningStatusApi = class extends userCommonMixin(collectionCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -22,7 +23,9 @@ exports.AdminSetUserBanningStatusApi = class extends collectionCommonMixin(Api) 
   _updateUserBanningStatus({ isBanned, userId }, cbfn) {
     this.database.user.updateBanningStatus({ userId }, { isBanned }, (err, wasUpdated) => {
       if (!this._ensureUpdate(err, wasUpdated, "user")) return;
-      return cbfn();
+      this._expireUserWhenFired({ userId }, () => {
+        return cbfn();
+      });
     });
   }
 
