@@ -71,6 +71,7 @@ let { TransferBetweenInventoriesApi } = require('./apis/transfer-between-invento
 let { AddSalesApi } = require('./apis/add-sales');
 let { GetSalesApi } = require('./apis/get-sales');
 let { GetSalesListApi } = require('./apis/get-sales-list');
+let { DiscardSalesApi } = require('./apis/discard-sales');
 
 let { AddSalesReturnApi } = require('./apis/add-sales-return');
 let { GetSalesReturnApi } = require('./apis/get-sales-return');
@@ -271,6 +272,7 @@ class Program {
         server.registerPostApi('/api/add-sales', AddSalesApi);
         server.registerPostApi('/api/get-sales', GetSalesApi);
         server.registerPostApi('/api/get-sales-list', GetSalesListApi);
+        server.registerPostApi('/api/discard-sales', DiscardSalesApi);
         server.registerPostApi('/api/add-sales-return', AddSalesReturnApi);
         server.registerPostApi('/api/get-sales-return', GetSalesReturnApi);
         server.registerPostApi('/api/get-sales-return-list', GetSalesReturnListApi);

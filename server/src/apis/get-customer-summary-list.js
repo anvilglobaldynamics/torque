@@ -35,7 +35,7 @@ exports.GetCustomerSummaryListApi = class extends Api {
   handle({ body }) {
     let { organizationId, searchString = null } = body;
     this._getCustomerSummaryList({ organizationId, searchString }, (customerList) => {
-      this.success({ customerList: customerList });
+      this.success({ customerList });
     });
   }
 

@@ -9,6 +9,14 @@ exports.collectionCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     });
   }
 
+  _discardDocById(collection, query, cbfn) {
+    collection.discard(query, (err, wasUpdated) => {
+      if (err) return this.fail(err);
+      if (!wasUpdated) return this.fail(new Error(`Unable to find ${collection.collectionName} to discard.`));
+      return cbfn();
+    });
+  }
+
   _ensureDoc(err, doc, errorCode, errorMessage) {
     if (err) {
       this.fail(err);

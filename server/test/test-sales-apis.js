@@ -73,7 +73,7 @@ let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
-describe('sales', _ => {
+describe.only('sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -309,6 +309,49 @@ describe('sales', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
       expect(body).to.have.property('salesId');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Invalid, No Customer credit sale)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: outletInventoryProductList[0].productId,
+            count: 2,
+            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+          }
+        ],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          previousCustomerBalance: null,
+          paidAmount: 0,
+          changeAmount: (0 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER');
+
       testDoneFn();
     });
 
@@ -707,6 +750,44 @@ describe('sales', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error).to.have.property('code').that.equals("ORGANIZATION_INVALID");
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/discard-sales (Valid)', testDoneFn => {
+
+    callApi('api/discard-sales', {
+      json: {
+        apiKey,
+        salesId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales (Valid discard check)', testDoneFn => {
+
+    callApi('api/get-sales', {
+      json: {
+        apiKey,
+        salesId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('sales');
+
+      validateSalesSchema(body.sales);
+
+      expect(body.sales).to.have.property('isDiscarded').that.equals(true);
 
       testDoneFn();
     });

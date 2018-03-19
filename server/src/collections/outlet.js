@@ -71,6 +71,20 @@ exports.OutletCollection = class extends Collection {
     this._find({ organizationId }, cbfn);
   }
 
+  listByOrganizationIdAndSearchString({ organizationId, searchString }, cbfn) {
+    let query = { organizationId, isDeleted: false };
+    if (searchString) {
+      let searchRegex = new RegExp(searchString, 'i');
+      query.$or = [
+        { name: searchRegex },
+        { physicalAddress: searchRegex },
+        { contactPersonName: searchRegex },
+        { phone: searchRegex }
+      ];
+    }
+    this._find(query, cbfn);
+  }
+
   findById({ outletId }, cbfn) {
     this._findOne({ id: outletId }, cbfn)
   }

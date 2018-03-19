@@ -7,6 +7,10 @@
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
@@ -17,83 +21,7 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="customer-selector">
-  <template>
-    <style include="shared-styles">
-    </style>
-    <div class="card vertical layout">
-      <div class="horizontal layout center">
-        <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="Please enter a name or phone" label="Search customer by name or phone." on-keypress="searchFieldKeypressed"></paper-input>
-        <paper-button raised class="primary" on-tap="searchTapped">Search</paper-button>
-        <paper-button raised class="primary" on-tap="cancelTapped">Cancel</paper-button>
-      </div>
-
-      <template is="dom-repeat" items="[[customerList]]" as="customer" index-as="customerIndex">
-        <div class="horizontal layout std-list-item flex">
-          <div>
-            Customer:
-            <b>[[customer.fullName]]</b> ([[customer.phone]])
-            <br> Balance:
-            <b>[[customer.balance]] [[page.app.settings.monetaryUnit]]</b>
-          </div>
-          <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
-        </div>
-      </template>
-    </div>
-  </template>
-  <script>
-    class CustomerSelector extends FxElement {
-
-      static get is() { return 'customer-selector'; }
-
-      static get properties() {
-        return {
-          searchString: {
-            type: String,
-            value: ''
-          }
-        };
-      }
-
-      searchFieldKeypressed(e) {
-        if (e.which === 13) this.searchTapped(null);
-      }
-
-      cancelTapped(e = null) {
-        this.page.isSearchingCustomer = false;
-      }
-
-      searchTapped(e = null) {
-        let organizationId = parseInt(this.page.app.organization.id);
-        let data = {
-          organizationId,
-          searchString: this.searchString
-        };
-        this.page.app.callGetCustomerListApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.page.onApiError(response.error);
-          this.customerList = response.customerList;
-          if (this.customerList.length === 1) {
-            this._selectCustomer(0);
-          }
-        });
-      }
-
-      _selectCustomer(customerIndex) {
-        let customer = this.customerList[customerIndex];
-        this.page.customer = customer;
-        this.page.isSearchingCustomer = false;
-      }
-
-      selectTapped(e) {
-        let { customerIndex } = e.model;
-        this._selectCustomer(customerIndex);
-      }
-
-    }
-    window.customElements.define(CustomerSelector.is, CustomerSelector);
-  </script>
-</dom-module>
+<link rel="import" href="elem-customer-selector.html">
 
 <dom-module id="page-pos">
   <template>
@@ -124,29 +52,110 @@
                 <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
               </template>
             </div>
+            <template is="dom-if" if="[[customer]]">
+              <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>
+            </template>
             <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
             <paper-button raised class="primary" on-tap="createCustomerTapped">Create Customer</paper-button>
           </div>
         </div>
       </template>
-      <customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></customer-selector>
+      <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
 
-      <!-- <iron-form id="posForm">
-        <form>
-          <div class="card vertical layout">
-            <paper-input class="posForm--name" value="{{posForm.name}}" required minlength="3" error-message="Please enter a valid name" label="Name of your outlet."></paper-input>
-            <paper-textarea class="posForm--physicalAddress" value="{{posForm.physicalAddress}}" required minlength="8" error-message="Please enter an address at least 8 characters long" label="Physical Address" rows="4"></paper-textarea>
-            <paper-input class="posForm--contactPersonName" value="{{posForm.contactPersonName}}" required minlength="3" error-message="Please enter a valid name" label="Name of Manager/Contact Person"></paper-input>
-            <paper-input class="posForm--phone" value="{{posForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number of Manager/Contact Person"></paper-input>
-            <div class="horizontal layout button-row end">
-              <div class="flex"></div>
-              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]]" on-tap="createOutletTapped">Create Outlet</paper-button>
-              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]]" on-tap="updateOutletTapped">Update Outlet</paper-button>
+      <div class="card vertical layout">
+        <div class="std-list">
+
+          <template is="dom-repeat" items="[[productList]]" as="product">
+            <div class="horizontal layout std-list-item center">
+              <div class="vertical layout flex">
+                <div class="title">[[product.name]]</div>
+                <div class="description">Count:[[product.count]]</div>
+              </div>
             </div>
+          </template>
+
+          <div class="transparent-card align-right">
+            <paper-button raised class="primary" on-tap="addProductTapped">Select Product</paper-button>
           </div>
-        </form>
-      </iron-form>
-    </div> -->
+
+        </div>
+      </div>
+
+      <div class="card vertical layout">
+        <div class="std-list">
+
+          <template is="dom-if" if="{{productList}}">
+            <div class="horizontal layout std-list-item center">
+              <div class="vertical layout flex">
+
+                <br> Totol:
+                <b>{{payment.totalAmount}} [[app.settings.monetaryUnit]]</b>
+
+                <div class="horizontal layout">
+                  <paper-dropdown-menu label="Discount Type" class="mr-4">
+                    <paper-listbox slot="dropdown-content" selected="{{payment.discountType}}" attr-for-selected="name">
+                      <paper-item name="percent">Percentage</paper-item>
+                      <paper-item name="fixed">Fixed Value</paper-item>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+                  <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Discount Value">
+                    <template is="dom-if" if="[[$equals(payment.discountType, 'percent')]]">
+                      <div slot="suffix">%</div>
+                    </template>
+                    <template is="dom-if" if="[[$equals(payment.discountType, 'fixed')]]">
+                      <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                    </template>
+                  </paper-input>
+                </div>
+
+                <template is="dom-if" if="[[payment.discountValue]]">
+                  <br> Discounted Amount:
+                  <b>{{payment.discountedAmount}} [[app.settings.monetaryUnit]]</b>
+                </template>
+
+                <paper-input class="payment--vatValue" value="{{vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="VAT">
+                  <div slot="suffix">%</div>
+                </paper-input>
+
+                <template is="dom-if" if="[[vatValue]]">
+                  <br> Vat Amount:
+                  <b>{{payment.vatAmount}} [[app.settings.monetaryUnit]]</b>
+                </template>
+
+                <paper-input class="payment--serviceChargeAmount" value="{{payment.serviceChargeAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Service Charge Amount">
+                  <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                </paper-input>
+
+                <br> Totol Billed:
+                <b>{{payment.totalBilled}} [[app.settings.monetaryUnit]]</b>
+
+                <template is="dom-if" if="[[customer]]">
+                  <br> Previous Customer Balance:
+                  <b>{{customer.balance}} [[app.settings.monetaryUnit]]</b>
+                </template>
+
+                <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Paid Amount">
+                  <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                </paper-input>
+
+                <template is="dom-if" if="[[payment.paidAmount]]">
+                  <br> Change Amount:
+                  <b>{{payment.changeAmount}} [[app.settings.monetaryUnit]]</b>
+                </template>
+
+              </div>
+            </div>
+
+            <div class="transparent-card align-right">
+              <paper-button raised class="primary" on-tap="saveSaleTapped">Save Sale</paper-button>
+            </div>
+
+          </template>
+
+        </div>
+      </div>
+
+    </div>
 
   </template>
 
@@ -159,33 +168,45 @@
 
       static get properties() {
         return {
-          editMode: {
-            type: Boolean,
-            value: false
-          },
-          editingOutlet: {
-            type: Object,
-            value: null
-          },
-          posForm: {
-            type: Object,
+          productList: {
+            type: Array,
             value: _ => {
               if (mode === 'development') {
-                return {
-                  name: 'Gulshan Showroom',
-                  phone: '01700000011',
-                  contactPersonName: 'Johns Apparel',
-                  physicalAddress: 'Road 50\nThis Town'
-                };
+                return [
+                  {
+                    name: 'unfit horse',
+                    productId: -99999,
+                    count: 1,
+                    discountType: 'percent',
+                    discountValue: 15,
+                    salePrice: 200
+                  }
+                ];
               } else {
-                return {
-                  name: '',
-                  phone: '',
-                  contactPersonName: '',
-                  physicalAddress: ''
-                };
+                return [];
               }
             }
+          },
+          payment: {
+            type: Object,
+            value: _ => {
+              return {
+                totalAmount: null,
+                vatAmount: null,
+                discountType: 'percent',
+                discountValue: 0,
+                discountedAmount: null,
+                serviceChargeAmount: 0,
+                totalBilled: null,
+                previousCustomerBalance: null,
+                paidAmount: 0,
+                changeAmount: null
+              }
+            }
+          },
+          vatValue: {
+            type: Number,
+            value: 0
           },
           isSearchingCustomer: {
             type: Boolean,
@@ -229,6 +250,15 @@
               this.customer = customer;
             }
           }
+
+          let productList = this.app.getFromSession('pos-selected-product-list');
+          if (productList) {
+            if (productList.length > 0) {
+              this.productList = productList;
+            }
+          }
+
+          this._calculatePayment();
         });
         this.delay(300, () => {
           this.isReady = true;
@@ -267,20 +297,137 @@
 
       }
 
-      // _processGetOutlet(cbfn) {
-      //   let outletId = parseInt(this.params.outlet);
-      //   let data = {
-      //     outletId
-      //   };
-      //   this.app.callGetOutletApi(data, (err, response) => {
-      //     if (err) return;
-      //     if (response.hasError) return this.onApiError(response.error);
-      //     this.editingOutlet = response.outlet;
-      //     let { name, phone, contactPersonName, physicalAddress } = this.editingOutlet;
-      //     this.posForm = { name, phone, contactPersonName, physicalAddress };
-      //     cbfn();
-      //   });
-      // }
+      _processGetOutletDefaultInventoryId(cbfn) {
+        let data = { outletId: this.params.outlet };
+        this.app.callGetOutletApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.defaultInventory.id);
+        });
+      }
+
+      _processCreateSales({ customerId, productList, payment }) {
+        let customerId = null;
+        if (this.customer) {
+          customerId = this.customer.id;
+        }
+
+        let data = {
+          outletId: this.params.outlet,
+          customerId, productList, payment
+        };
+
+        this.app.callAddSalesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          let message = "Congratulations. Your new sales has been created."
+          this.app.showModalDialog("Sales Created", message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      _calculatePayment() {
+        let {
+          totalAmount,
+          vatAmount,
+          discountType,
+          discountValue,
+          discountedAmount,
+          serviceChargeAmount,
+          totalBilled,
+          previousCustomerBalance,
+          paidAmount,
+          changeAmount,
+        } = this.payment;
+
+        totalAmount = this.productList.reduce((sum, product) => {
+          let { salePrice, count, discountType, discountValue } = product;
+
+          if (discountType === 'percent') {
+            salePrice -= salePrice * (discountValue/100);
+          } else if (discountType === 'fixed') {
+            salePrice -= discountValue;
+          }
+
+          return sum + (salePrice * count);
+        }, 0);
+
+        totalBilled = totalAmount;
+        if (discountValue) {
+          if (discountType === 'percent') {
+            discountedAmount = totalAmount * (discountValue/100)
+            totalBilled -= discountedAmount;
+          } else if (discountType === 'fixed') {
+            discountedAmount = discountValue;
+            totalBilled -= discountedAmount;
+          }
+        }
+
+        if (this.vatValue) {
+          vatAmount = totalBilled * (this.vatValue/100);
+          totalBilled += vatAmount;
+        }
+
+        if (serviceChargeAmount) {
+          totalBilled += parseInt(serviceChargeAmount);
+        }
+
+        if (this.customer) {
+          previousCustomerBalance = this.customer.balance;
+        }
+
+        if (paidAmount) {
+          if (totalBilled > paidAmount) {
+            changeAmount = paidAmount - totalBilled;
+          } else {
+            changeAmount = paidAmount - totalBilled;
+          }
+        }
+
+        this.payment = {
+          totalAmount,
+          vatAmount,
+          discountType,
+          discountValue,
+          discountedAmount,
+          serviceChargeAmount,
+          totalBilled,
+          previousCustomerBalance,
+          paidAmount,
+          changeAmount
+        };
+      }
+
+      _processAddSales({ outletId, payment }) {
+        let customerId = null;
+        if (this.customer) {
+          customerId = this.customer.id;
+        }
+
+        let productList = this.productList.map(product => {
+          let { productId, count, discountType, discountValue, salePrice } = product;
+          return { productId, count, discountType, discountValue, salePrice };
+        })
+
+        let data = {
+          customerId, outletId, productList, payment
+        };
+
+        this.app.callAddSalesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          let message = "Congratulations. Your new Sales has been added."
+          this.app.showModalDialog("Sales Added", message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      _customerSelected(customer){
+        this.customer = customer;
+        this.isSearchingCustomer = false;
+      }
 
       // region: ui =================================
 
@@ -292,8 +439,27 @@
         this.app.navigateTo('/edit-customer');
       }
 
+      removeCustomerTapped(e = null) {
+        this.customer = null;
+        this.app.storeInSession('last-selected-customer', null);
+      }
+
+      addProductTapped(e = null) {
+        this._processGetOutletDefaultInventoryId(defaultInventoryId => {
+          return this.app.navigateTo(`/pos-select-products/inventory:${defaultInventoryId}`);
+        })
+      }
+
+      genericPaymentInputChanged(e = null) {
+        this._calculatePayment();
+      }
+
       backButtonOnTopBarPressed(e = null) {
         this.app.navigateToPreviousUrl('/home');
+      }
+
+      saveSaleTapped(e = null) {
+        this._processAddSales({ outletId: this.params.outlet, payment: this.payment });
       }
 
       // region: misc =================================

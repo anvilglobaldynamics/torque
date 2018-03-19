@@ -18,7 +18,7 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="page-manage-outlets">
+<dom-module id="page-view-sales">
   <template>
     <style include="shared-styles">
       @media (min-width: 960px) {
@@ -34,24 +34,30 @@
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
-        <div class="std-list">
-          <template is="dom-repeat" items="[[outletList]]" as="outlet">
-            <div class="horizontal layout std-list-item center">
-              <div class="vertical layout flex">
-                <div class="title">[[outlet.name]]</div>
-                <div class="description">[[outlet.phone]] ([[outlet.physicalAddress]])</div>
-              </div>
-              <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
-              <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
-              <paper-button raised class="primary" on-tap="posTapped">POS</paper-button>
-              <paper-button raised class="primary" on-tap="salesReturnTapped">Sales Return</paper-button>
-            </div>
-          </template>
-        </div>
+        <div>ID: [[sales.id]]</div>
+        <div>Dated: [[$mkDate(sales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+        <div>Outlet ID: [[sales.outletId]]</div>
+        <template is="dom-if" if="{{sales.customerId}}">
+          <div>Customer ID: [[sales.customerId]]</div>
+        </template>
       </div>
 
-      <div class="transparent-card align-right">
-        <paper-button raised class="primary" on-tap="createTapped">Create New Outlet</paper-button>
+      <div class="card vertical layout">
+        <div class="title">Product List: ([[sales.productList.length]] products)</div>
+        <template is="dom-repeat" items="{{sales.productList}}" as="product">
+          <div>Product ID: [[product.productId]]</div>
+          <div>Count: [[product.count]]</div>
+          <div>Sale Price: [[product.salePrice]]</div>
+          <div>Discounted: [[product.discountValue]] by [[product.discountType]] </div>
+        </template>
+      </div>
+
+      <div class="card vertical layout">
+        <div class="title">Payment:</div>
+        <div>Total Billed: [[sales.payment.totalBilled]]</div>
+        <div>Discounted Amount: [[sales.payment.discountedAmount]]</div>
+        <div>Service Charge Amount: [[sales.payment.serviceChargeAmount]]</div>
+        <div>Vat: [[sales.payment.vatAmount]]</div>
       </div>
 
     </div>
@@ -59,10 +65,10 @@
   </template>
 
   <script>
-    class PageManageOutlets extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+    class PageViewSales extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
 
       static get is() {
-        return 'page-manage-outlets';
+        return 'page-view-sales';
       }
 
       static get properties() {
@@ -79,10 +85,17 @@
 
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
-        this.app.currentPageIsModal = false;
-        this.app.pushPageTitle('Manage Outlet');
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Sales');
         if (!this._ensureAccess()) return;
-        this._processOutletList(() => {
+        if (!('sales' in this.params)) {
+          let message = "This page cannot be displayed at this moment. Please try again."
+          this.app.showModalDialog("Something went wrong!", message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processSales(_ => {
           this.isReady = true;
         });
       }
@@ -100,52 +113,29 @@
         return true;
       }
 
-      _fetchOutletList(cbfn) {
-        let data = { organizationId: this.app.organization.id };
-        this.app.callGetOutletListApi(data, (err, response) => {
+      _fetchSales(cbfn) {
+        let salesId = parseInt(this.params.sales);
+        let data = { salesId };
+        this.app.callGetSalesApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.outletList);
+          return cbfn(response);
         });
       }
 
-      _processOutletList(cbfn) {
-        this._fetchOutletList(newOutletList => {
-          this.outletList = newOutletList;
+      _processSales(cbfn) {
+        this._fetchSales(({ sales, defaultInventory, returnedInventory, damagedInventory }) => {
+          this.sales = sales;
           cbfn();
         });
       }
 
       // region: ui  ===========================
 
-      createTapped(e = null) {
-        return this.app.navigateTo('/edit-outlet');
-      }
-
-      viewTapped(e) {
-        let { outlet } = e.model;
-        return this.app.navigateTo(`/view-outlet/outlet:${outlet.id}`);
-      }
-
-      editTapped(e) {
-        let { outlet } = e.model;
-        return this.app.navigateTo(`/edit-outlet/outlet:${outlet.id}`);
-      }
-
-      posTapped(e) {
-        let { outlet } = e.model;
-        return this.app.navigateTo(`/pos/outlet:${outlet.id}`);
-      }
-
-      salesReturnTapped() {
-        let { outlet } = e.model;
-        return this.app.navigateTo(`/sales-return/outlet:${outlet.id}`);
-      }
-
       // region: misc =================================
 
     }
 
-    window.customElements.define(PageManageOutlets.is, PageManageOutlets);
+    window.customElements.define(PageViewSales.is, PageViewSales);
   </script>
 </dom-module>

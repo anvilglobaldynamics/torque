@@ -36,7 +36,8 @@ exports.SalesCollection = class extends Collection {
         changeAmount: Joi.number().max(999999999999999).required()
       }),
       isModified: Joi.boolean().required(),
-      isDeleted: Joi.boolean().required()
+      isDeleted: Joi.boolean().required(),
+      isDiscarded: Joi.boolean().required()
     });
 
     this.uniqueDefList = [
@@ -73,7 +74,8 @@ exports.SalesCollection = class extends Collection {
       payment,
 
       isModified: false,
-      isDeleted: false
+      isDeleted: false,
+      isDiscarded: false
     }
     this._insert(doc, (err, id) => {
       return cbfn(err, id);
@@ -82,6 +84,13 @@ exports.SalesCollection = class extends Collection {
 
   findById({ salesId }, cbfn) {
     this._findOne({ id: salesId }, cbfn);
+  }
+
+  discard({ salesId }, cbfn) {
+    let modifications = {
+      $set: { isDiscarded: true }
+    }
+    this._update({ id: salesId }, modifications, cbfn);
   }
 
   listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, cbfn) {

@@ -1,0 +1,304 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="elem-customer-selector.html">
+<link rel="import" href="elem-outlet-selector.html">
+
+<dom-module id="page-manage-sales">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding: 24px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card horizontal layout center">
+        <paper-input class="flex" value="{{fromDate}}" type="date" label="From Date"></paper-input>
+        <paper-input class="flex" value="{{toDate}}" type="date" label="To Date"></paper-input>
+      </div>
+
+      <template is="dom-if" if="[[!isSearchingCustomer]]">
+        <div class="card vertical layout">
+          <div class="horizontal layout center">
+            <div class="flex">
+              <template is="dom-if" if="[[!customer]]">
+                No customer selected (Anonymous sale)
+              </template>
+              <template is="dom-if" if="[[customer]]">
+                Customer:
+                <b>[[customer.fullName]]</b> ([[customer.phone]])
+                <br> Balance:
+                <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
+              </template>
+            </div>
+            <template is="dom-if" if="[[customer]]">
+              <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>
+            </template>
+            <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
+          </div>
+        </div>
+      </template>
+      <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+
+      <template is="dom-if" if="[[!isSearchingOutlet]]">
+        <div class="card vertical layout">
+          <div class="horizontal layout center">
+            <div class="flex">
+              <template is="dom-if" if="[[!outlet]]">
+                No outlet selected (Anonymous sale)
+              </template>
+              <template is="dom-if" if="[[outlet]]">
+                Outlet:
+                <b>[[outlet.name]]</b> ([[outlet.phone]])
+                <br> Address:
+                <b>[[outlet.physicalAddress]]</b>
+              </template>
+            </div>
+            <template is="dom-if" if="[[outlet]]">
+              <paper-button raised class="primary" on-tap="removeOutletTapped">Remove Outlet</paper-button>
+            </template>
+            <paper-button raised class="primary" on-tap="changeOutletTapped">Change Outlet</paper-button>
+          </div>
+        </div>
+      </template>
+      <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
+
+      <paper-button raised class="primary" on-tap="filterTapped">Filter</paper-button>
+
+      <div class="card vertical layout">
+        <div class="std-list">
+          <template is="dom-repeat" items="[[salesList]]" as="sale">
+            <div class="horizontal layout std-list-item center">
+              <div class="vertical layout flex">
+                <div class="title">[[sale.id]]</div>
+                <div class="description">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+                <div class="description">Billed [[sale.payment.totalBilled]] [[app.settings.monetaryUnit]] for [[sale.productList.length]] product(s)</div>
+              </div>
+              <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
+            </div>
+          </template>
+        </div>
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+    class PageManageSales extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+      static get is() {
+        return 'page-manage-sales';
+      }
+
+      static get properties() {
+        return {
+          outletId: {
+            type: String,
+            value: null
+          },
+          shouldFilterByOutlet: {
+            type: Boolean,
+            value: false
+          },
+          shouldFilterByCustomer: {
+            type: Boolean,
+            value: false
+          },
+          fromDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date.setDate(date.getDate() - 1);
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          toDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          isSearchingCustomer: {
+            type: Boolean,
+            value: false
+          },
+          customer: {
+            type: Object,
+            value: null,
+            observer: 'customerChanged'
+          },
+          isSearchingOutlet: {
+            type: Boolean,
+            value: false
+          },
+          outlet: {
+            type: Object,
+            value: null,
+            observer: 'outletChanged'
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.app.pushPageTitle('Manage Sales');
+        if (!this._ensureAccess()) return;
+        this._processSalesList(() => {
+          this.self = this;
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      _fetchSalesList(cbfn) {
+        let fromDate = new Date(this.fromDate).getTime();
+        let toDate = new Date(this.toDate).getTime();
+        let customerId = null;
+        if (this.customer) {
+          customerId = this.customer.id;
+          this.shouldFilterByCustomer = true;
+        } else {
+          this.shouldFilterByCustomer = false;
+        }
+
+        let outletId = null;
+        if (this.outlet) {
+          outletId = this.outlet.id;
+          this.shouldFilterByOutlet = true;
+        } else {
+          this.shouldFilterByOutlet = false;
+        }
+
+        let data = { 
+          organizationId: this.app.organization.id,
+          outletId, 
+          customerId, 
+          shouldFilterByOutlet: this.shouldFilterByOutlet, 
+          shouldFilterByCustomer: this.shouldFilterByCustomer, 
+          fromDate, 
+          toDate
+        };
+
+        this.app.callGetSalesListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.salesList);
+        });
+      }
+
+      customerChanged() {
+        if (!this.customer) return;
+        this.app.storeInSession('last-selected-customer', this.customer);
+      }
+
+      outletChanged() {
+        if (!this.outlet) return;
+        this.app.storeInSession('last-selected-outlet', this.outlet);
+      }
+
+      _processSalesList(cbfn) {
+        this._fetchSalesList(newSalesList => {
+          this.salesList = newSalesList;
+          cbfn();
+        });
+      }
+
+      _customerSelected(customer){
+        this.customer = customer;
+        this.isSearchingCustomer = false;
+      }
+
+      _outletSelected(outlet){
+        this.outlet = outlet;
+        this.isSearchingOutlet = false;
+      }
+
+      // region: ui  ===========================
+
+
+      changeCustomerTapped(e = null) {
+        this.isSearchingCustomer = true;
+      }
+
+      changeOutletTapped(e = null) {
+        this.isSearchingOutlet = true;
+      }
+
+      removeCustomerTapped(e = null) {
+        this.customer = null;
+        this.app.storeInSession('last-selected-customer', null);
+      }
+
+      removeOutletTapped(e = null) {
+        this.outlet = null;
+        this.app.storeInSession('last-selected-outlet', null);
+      }
+
+      createTapped(e = null) {
+        return this.app.navigateTo('/edit-sale');
+      }
+
+      viewTapped(e) {
+        let { sale } = e.model;
+        return this.app.navigateTo(`/view-sales/sales:${sale.id}`);
+      }
+
+      filterTapped(e = null) {
+        this.isReady = false;
+        this._processSalesList(() => {
+          this.isReady = true;
+        });
+      }
+    }
+
+    window.customElements.define(PageManageSales.is, PageManageSales);
+  </script>
+</dom-module>
