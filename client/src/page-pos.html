@@ -170,7 +170,7 @@
         return {
           productList: {
             type: Array,
-            value: _ => {
+            value: () => {
               if (mode === 'development') {
                 return [
                   {
@@ -189,7 +189,7 @@
           },
           payment: {
             type: Object,
-            value: _ => {
+            value: () => {
               return {
                 totalAmount: null,
                 vatAmount: null,
@@ -345,7 +345,7 @@
           let { salePrice, count, discountType, discountValue } = product;
 
           if (discountType === 'percent') {
-            salePrice -= salePrice * (discountValue/100);
+            salePrice -= salePrice * (discountValue / 100);
           } else if (discountType === 'fixed') {
             salePrice -= discountValue;
           }
@@ -356,7 +356,7 @@
         totalBilled = totalAmount;
         if (discountValue) {
           if (discountType === 'percent') {
-            discountedAmount = totalAmount * (discountValue/100)
+            discountedAmount = totalAmount * (discountValue / 100)
             totalBilled -= discountedAmount;
           } else if (discountType === 'fixed') {
             discountedAmount = discountValue;
@@ -365,7 +365,7 @@
         }
 
         if (this.vatValue) {
-          vatAmount = totalBilled * (this.vatValue/100);
+          vatAmount = totalBilled * (this.vatValue / 100);
           totalBilled += vatAmount;
         }
 
@@ -419,12 +419,19 @@
           if (response.hasError) return this.onApiError(response.error);
           let message = "Congratulations. Your new Sales has been added."
           this.app.showModalDialog("Sales Added", message, _ => {
-            this.backButtonOnTopBarPressed();
+            this._resetSales();
           });
         });
       }
 
-      _customerSelected(customer){
+      _resetSales() {
+        this.app.extractFromSession('pos-selected-product-list');
+        this.app.extractFromSession('last-selected-customer');
+        this.resetProperties('payment', 'productList', 'customer');
+        this.app.refreshCurrentPage();
+      }
+
+      _customerSelected(customer) {
         this.customer = customer;
         this.isSearchingCustomer = false;
       }
