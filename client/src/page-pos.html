@@ -419,7 +419,16 @@
           if (response.hasError) return this.onApiError(response.error);
           let message = "Congratulations. Your new Sales has been added."
           this.app.showModalDialog("Sales Added", message, _ => {
-            this.backButtonOnTopBarPressed();
+            // this.app.extractFromSession('last-selected-customer');
+            // this.app.extractFromSession('pos-selected-product-list');
+
+            // this.resetProperties('productList');
+            // this.resetProperties('payment');
+            // this.resetProperties('vatValue');
+            // this.resetProperties('isSearchingCustomer');
+            // this.resetProperties('customer');
+
+            this.app.refreshCurrentPage();
           });
         });
       }
