@@ -21,7 +21,7 @@
 <link rel="import" href="elem-customer-selector.html">
 <link rel="import" href="elem-outlet-selector.html">
 
-<dom-module id="page-manage-sales">
+<dom-module id="page-manage-sales-return">
   <template>
     <style include="shared-styles">
       @media (min-width: 960px) {
@@ -46,7 +46,7 @@
           <div class="horizontal layout center">
             <div class="flex">
               <template is="dom-if" if="[[!customer]]">
-                No customer selected (Anonymous sale)
+                No customer selected (Anonymous saleReturn)
               </template>
               <template is="dom-if" if="[[customer]]">
                 Customer:
@@ -69,7 +69,7 @@
           <div class="horizontal layout center">
             <div class="flex">
               <template is="dom-if" if="[[!outlet]]">
-                No outlet selected (Anonymous sale)
+                No outlet selected (Anonymous saleReturn)
               </template>
               <template is="dom-if" if="[[outlet]]">
                 Outlet:
@@ -91,12 +91,12 @@
 
       <div class="card vertical layout">
         <div class="std-list">
-          <template is="dom-repeat" items="[[salesList]]" as="sale">
+          <template is="dom-repeat" items="[[salesReturnList]]" as="saleReturn">
             <div class="horizontal layout std-list-item center">
               <div class="vertical layout flex">
-                <div class="title">[[sale.id]]</div>
-                <div class="description">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                <div class="description">Billed [[sale.payment.totalBilled]] [[app.settings.monetaryUnit]] for [[sale.productList.length]] product(s)</div>
+                <div class="title">[[saleReturn.id]]</div>
+                <div class="description">[[$mkDate(saleReturn.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+                <div class="description">Billed [[saleReturn.payment.totalBilled]] [[app.settings.monetaryUnit]] for [[saleReturn.productList.length]] product(s)</div>
               </div>
               <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
             </div>
@@ -106,11 +106,10 @@
 
     </div>
   </template>
-
   <script>
-    class PageManageSales extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+    class PageManageSalesReturn extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
       static get is() {
-        return 'page-manage-sales';
+        return 'page-manage-sales-return';
       }
 
       static get properties() {
@@ -177,9 +176,9 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
-        this.app.pushPageTitle('Manage Sales');
+        this.app.pushPageTitle('Manage Sales Return');
         if (!this._ensureAccess()) return;
-        this._processSalesList(() => {
+        this._processSalesReturnList(() => {
           this.self = this;
           this.isReady = true;
         });
@@ -198,7 +197,7 @@
         return true;
       }
 
-      _fetchSalesList(cbfn) {
+      _fetchSalesReturnList(cbfn) {
         let fromDate = new Date(this.fromDate).getTime();
         let toDate = new Date(this.toDate).getTime();
         let customerId = null;
@@ -217,20 +216,20 @@
           this.shouldFilterByOutlet = false;
         }
 
-        let data = { 
+        let data = {
           organizationId: this.app.organization.id,
-          outletId, 
-          customerId, 
-          shouldFilterByOutlet: this.shouldFilterByOutlet, 
-          shouldFilterByCustomer: this.shouldFilterByCustomer, 
-          fromDate, 
+          outletId,
+          customerId,
+          shouldFilterByOutlet: this.shouldFilterByOutlet,
+          shouldFilterByCustomer: this.shouldFilterByCustomer,
+          fromDate,
           toDate
         };
 
-        this.app.callGetSalesListApi(data, (err, response) => {
+        this.app.callGetSalesReturnListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.salesList);
+          return cbfn(response.salesReturnList);
         });
       }
 
@@ -244,19 +243,20 @@
         this.app.storeInSession('last-selected-outlet', this.outlet);
       }
 
-      _processSalesList(cbfn) {
-        this._fetchSalesList(newSalesList => {
-          this.salesList = newSalesList;
+      _processSalesReturnList(cbfn) {
+        this._fetchSalesReturnList(newSalesReturnList => {
+          this.salesReturnList = newSalesReturnList;
+          console.log("salesReturnList: ", this.salesReturnList);
           cbfn();
         });
       }
 
-      _customerSelected(customer){
+      _customerSelected(customer) {
         this.customer = customer;
         this.isSearchingCustomer = false;
       }
 
-      _outletSelected(outlet){
+      _outletSelected(outlet) {
         this.outlet = outlet;
         this.isSearchingOutlet = false;
       }
@@ -282,19 +282,19 @@
       }
 
       viewTapped(e) {
-        let { sale } = e.model;
-        return this.app.navigateTo(`/view-sales/sales:${sale.id}`);
+        let { saleReturn } = e.model;
+        return this.app.navigateTo(`/view-sales-return/sales:${saleReturn.id}`);
       }
 
       filterTapped(e = null) {
         this.isReady = false;
-        this._processSalesList(() => {
+        this._processSalesReturnList(() => {
           this.isReady = true;
         });
       }
-      
+
     }
 
-    window.customElements.define(PageManageSales.is, PageManageSales);
+    window.customElements.define(PageManageSalesReturn.is, PageManageSalesReturn);
   </script>
 </dom-module>
