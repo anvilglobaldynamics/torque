@@ -480,6 +480,30 @@
         return false;
       }
 
+
+      // PATCH START
+      // NOTE: This is a patch for FxPage#getUrlParameters()
+      // In time, it will be moved to polymer-fx.
+      getUrlParameters(hash) {
+        if (hash.length === 0) {
+          return {};
+        }
+        // console.log(hash)
+        // hash = hash.replace('/', '');
+        let partArray = hash.split('/');
+        let params = {};
+        for (let part of Array.from(partArray)) {
+          if (part.indexOf(':') === -1) {
+            this.showAlertMessage('Routing Error', 'Malformatted Url Given')
+            break;
+          }
+          let [left, right] = Array.from(part.split(':'));
+          params[left] = right;
+        }
+        return params;
+      };
+            // PATCH END
+
     }
 
     window.customElements.define(TorqueApp.is, TorqueApp);
