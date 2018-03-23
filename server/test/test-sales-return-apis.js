@@ -323,8 +323,6 @@ describe('sales-return', _ => {
         creditedAmount: 100 // TODO: use data from salesData.payment
       }
     }, (err, response, body) => {
-      // console.log(body);
-
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');

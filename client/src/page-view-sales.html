@@ -171,8 +171,9 @@
         else return false;
       }
 
-      returnTapped(e = null) {
-
+      returnTapped(e) {
+        let { product } = e.model;
+        return this.app.navigateTo(`/sales-return/sales:${this.sales.id}/product:${product.id}`);
       }
 
       // region: misc =================================
