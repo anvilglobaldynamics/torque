@@ -49,6 +49,12 @@ exports.GetSalesListApi = class extends salesCommonMixin(outletCommonMixin(custo
 
   handle({ body }) {
     let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate } = body;
+    
+    toDate = new Date(toDate);
+    toDate.setHours(23);
+    toDate.setMinutes(59);
+    toDate = toDate.getTime();
+
     this._verifyOutletIfNeeded({ outletId, shouldFilterByOutlet }, () => {
       this._verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer }, () => {
         this._getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, (salesList) => {

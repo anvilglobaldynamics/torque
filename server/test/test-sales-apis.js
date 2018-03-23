@@ -539,7 +539,7 @@ describe('sales', _ => {
 
   });
 
-  it('api/get-sales-list (Valid with organizationId and outletId)', testDoneFn => {
+  it.skip('api/get-sales-list (Valid with organizationId and outletId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -568,7 +568,7 @@ describe('sales', _ => {
 
   });
 
-  it('api/get-sales-list (Valid with organizationId and Invalid outletId)', testDoneFn => {
+  it.skip('api/get-sales-list (Valid with organizationId and Invalid outletId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -594,7 +594,7 @@ describe('sales', _ => {
 
   });
 
-  it('api/get-sales-list (Valid with organizationId and customerId)', testDoneFn => {
+  it.skip('api/get-sales-list (Valid with organizationId and customerId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -623,7 +623,7 @@ describe('sales', _ => {
 
   });
 
-  it('api/get-sales-list (Valid with organizationId and Invalid customerId)', testDoneFn => {
+  it.skip('api/get-sales-list (Valid with organizationId and Invalid customerId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -649,7 +649,7 @@ describe('sales', _ => {
 
   });
 
-  it('api/get-sales-list (Valid with organizationId and Invalid customerId is null)', testDoneFn => {
+  it.skip('api/get-sales-list (Valid with organizationId and Invalid customerId is null)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -675,7 +675,7 @@ describe('sales', _ => {
 
   });
 
-  it('api/get-sales-list (Valid with organizationId and Invalid outletId is null)', testDoneFn => {
+  it.skip('api/get-sales-list (Valid with organizationId and Invalid outletId is null)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -701,7 +701,7 @@ describe('sales', _ => {
 
   });
 
-  it('api/get-sales-list (Valid with organizationId, outletId and customerId)', testDoneFn => {
+  it.skip('api/get-sales-list (Valid with organizationId, outletId and customerId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -730,7 +730,7 @@ describe('sales', _ => {
 
   });
 
-  it('api/get-sales-list (Invalid organizationId, with valid outletId and customerId)', testDoneFn => {
+  it.skip('api/get-sales-list (Invalid organizationId, with valid outletId and customerId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
