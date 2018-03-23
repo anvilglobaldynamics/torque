@@ -43,4 +43,8 @@ exports.ProductCollection = class extends Collection {
     this._find({ id: { $in: idList } }, cbfn);
   }
 
+  findById({ productId }, cbfn) {
+    this._findOne({ id: productId }, cbfn);
+  }
+
 }
