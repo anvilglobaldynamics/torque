@@ -45,6 +45,21 @@
             type: Boolean,
             value: false,
             observer: 'isReadyChanged'
+          },
+          paginate: {
+            type: Object,
+            value: () => {
+              return {
+                offset: 0,
+                limit: 10
+              }
+            }
+          },
+          pagination: {
+            type: Object,
+            value: () => {
+              return {}
+            }
           }
         }
       }
