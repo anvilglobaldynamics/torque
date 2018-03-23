@@ -45,6 +45,21 @@
             type: Boolean,
             value: false,
             observer: 'isReadyChanged'
+          },
+          paginate: {
+            type: Object,
+            value: () => {
+              return {
+                offset: 0,
+                limit: 10
+              }
+            }
+          },
+          pagination: {
+            type: Object,
+            value: () => {
+              return {}
+            }
           }
         }
       }
@@ -148,6 +163,18 @@
        */
       $mkDate(date, format = 'MMM d, yyyy') {
         return (new XDate(date)).toString(format);
+      }
+
+      $inc(number) {
+        return number + 1;
+      }
+
+      $hasMorePagination(totalCount, offset, limit) {
+        return (totalCount > (offset + limit));
+      }
+
+      $hasPreviousPagination(offset) {
+        return (offset > 0);
       }
 
     }
