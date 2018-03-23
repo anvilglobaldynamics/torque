@@ -139,9 +139,8 @@
       }
 
       _processSales(cbfn) {
-        this._fetchSales(({ sales, defaultInventory, returnedInventory, damagedInventory }) => {
+        this._fetchSales(({ sales }) => {
           this.sales = sales;
-          console.log("sales: ", this.sales);
           cbfn();
         });
       }
@@ -173,7 +172,7 @@
 
       returnTapped(e) {
         let { product } = e.model;
-        return this.app.navigateTo(`/sales-return/sales:${this.sales.id}/product:${product.id}`);
+        return this.app.navigateTo(`/sales-return/sales:${this.sales.id}/product:${product.productId}`);
       }
 
       // region: misc =================================

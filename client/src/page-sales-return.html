@@ -60,11 +60,7 @@
         this.app.currentPageIsModal = true;
         this.app.pushPageTitle('Return Sales');
         if (!this._ensureAccess()) return;
-        
-        console.log(this.params);
-        console.log(!('sales' in this.params));
-        console.log(!('product' in this.params));
-
+        console.log("params: ", this.params);
         if (!('sales' in this.params) || !('product' in this.params)) {
           let message = "This page cannot be displayed at this moment. Please try again."
           this.app.showModalDialog("Something went wrong!", message, _ => {
@@ -72,9 +68,9 @@
           });
           return;
         }
-        // this._processSales(_ => {
+        this._processSales(_ => {
           this.isReady = true;
-        // });
+        });
       }
 
       onNavigateOut() {
@@ -88,6 +84,24 @@
           return false;
         }
         return true;
+      }
+
+      _fetchSales(cbfn) {
+        let salesId = parseInt(this.params.sales);
+        let data = { salesId };
+        this.app.callGetSalesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _processSales(cbfn) {
+        this._fetchSales(({ sales }) => {
+          this.sales = sales;
+          console.log("sales: ", this.sales);
+          cbfn();
+        });
       }
     }
 
