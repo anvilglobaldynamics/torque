@@ -72,7 +72,6 @@ exports.GetSalesApi = class extends collectionCommonMixin(Api) {
 
   _fetchProductCategoryData({ sales }, cbfn) {
     let productIdList = sales.productList.map(product => product.productId);
-
     this.database.product.findByIdList({ idList: productIdList }, (err, productList) => {
       let productCategoryIdList = productList.map(product => product.productCategoryId);
       this.database.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
@@ -84,10 +83,9 @@ exports.GetSalesApi = class extends collectionCommonMixin(Api) {
           matchingProduct.productCategoryName = productCategory.name;
           matchingProduct.productCategoryIsReturnable = productCategory.isReturnable;
         });
+        return cbfn(sales);
       });
     });
-
-    return cbfn(sales); 
   }
 
   handle({ body }) {
