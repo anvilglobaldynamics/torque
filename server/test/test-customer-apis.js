@@ -9,7 +9,8 @@ let {
   registerUser,
   loginUser,
   addOrganization,
-  validateCustomerSchema
+  validateCustomerSchema,
+  addCustomer
 } = require('./lib');
 
 const prefix = 's';
@@ -499,6 +500,85 @@ describe('customer', _ => {
       testDoneFn();
     })
 
+  });
+
+
+  it('api/get-customer-summary-list (Valid, Pagination)', testDoneFn => {
+    let basePhone = 'cx' + rnd(prefix, 9);
+    Promise.all((new Array(50).fill(0)).map((item, index) => new Promise((accept, reject) => {
+      addCustomer({
+        apiKey,
+        organizationId,
+        fullName: 'Sample Customer' + index,
+        phone: (basePhone + index),
+        openingBalance: (50 + index)
+      }, (data) => {
+        return accept();
+      });
+    }))).then(() => {
+      callApi('api/get-customer-summary-list', {
+        json: {
+          apiKey,
+          organizationId
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.have.property('hasError').that.equals(false);
+        expect(body).to.have.property('customerList');
+        body.customerList.forEach(customer => {
+          validateCustomerSchema(customer);
+        });
+        expect(body.customerList.length).to.be.greaterThan(49);
+        let knownFullLength = body.customerList.length;
+        callApi('api/get-customer-summary-list', {
+          json: {
+            apiKey,
+            organizationId,
+            paginate: {
+              offset: 0,
+              limit: 30
+            }
+          }
+        }, (err, response, body) => {
+          expect(response.statusCode).to.equal(200);
+          expect(body).to.have.property('hasError').that.equals(false);
+          expect(body).to.have.property('pagination');
+          expect(body.pagination).to.have.property('offset').that.equals(0);
+          expect(body.pagination).to.have.property('limit').that.equals(30);
+          expect(body.pagination).to.have.property('totalCount').that.equals(knownFullLength);;
+          expect(body).to.have.property('customerList');
+          body.customerList.forEach(customer => {
+            validateCustomerSchema(customer);
+          });
+          expect(body.customerList.length).to.equal(30);
+          // next batch start
+          callApi('api/get-customer-summary-list', {
+            json: {
+              apiKey,
+              organizationId,
+              paginate: {
+                offset: 30,
+                limit: 30
+              }
+            }
+          }, (err, response, body) => {
+            expect(response.statusCode).to.equal(200);
+            expect(body).to.have.property('hasError').that.equals(false);
+            expect(body).to.have.property('pagination');
+            expect(body.pagination).to.have.property('offset').that.equals(30);
+            expect(body.pagination).to.have.property('limit').that.equals(Math.min(30, knownFullLength - 30));
+            expect(body.pagination).to.have.property('totalCount').that.equals(knownFullLength);;
+            expect(body).to.have.property('customerList');
+            body.customerList.forEach(customer => {
+              validateCustomerSchema(customer);
+            });
+            expect(body.customerList.length).to.equal(Math.min(30, knownFullLength - 30));
+            testDoneFn();
+          });
+          // next batch end
+        });
+      });
+    });
   });
 
   it('END', testDoneFn => {
