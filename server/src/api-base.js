@@ -23,6 +23,7 @@ class Api {
     this._socket = socket;
     this._channel = channel;
     this._requestUid = requestUid;
+    this.__paginationCache = null;
   }
 
   // region: properties (subclass needs to override) ==========
@@ -32,6 +33,10 @@ class Api {
   }
 
   get requiresAuthentication() {
+    return false;
+  }
+
+  get autoPaginates() {
     return false;
   }
 
@@ -75,11 +80,23 @@ class Api {
           apiKey: Joi.string().length(64).required()
         });
       }
+      if (this.autoPaginates) {
+        schema = schema.keys({
+          paginate: Joi.object().optional().keys({
+            offset: Joi.number().min(0).required(),
+            limit: Joi.number().max(100).required()
+          })
+        });
+      }
       let { error, value } = this.validate(body, schema);
       if (error) {
         return this.fail(error, error);
       } else {
         body = this.sanitize(value);
+        if ('paginate' in body) {
+          this.__paginationCache = body.paginate;
+          delete body['paginate']
+        }
         if (this.requiresAuthentication) {
           let { apiKey } = body;
           if (this.authenticationLevel === 'admin') {
@@ -106,6 +123,26 @@ class Api {
     }
   }
 
+  _applyPaginationToResponse(object) {
+    if (!this.autoPaginates) return;
+    if (!this.__paginationCache) return;
+    let { offset, limit } = this.__paginationCache;
+    this.autoPaginates.forEach(key => {
+      if (!(key in object)) {
+        throw new Error(`Developer Error: Expected key "${key}" in response to apply pagination`);
+      }
+      let list = object[key];
+      let totalCount = list.length;
+      list = list.slice(offset, (offset + limit));
+      object[key] = list;
+      object.pagination = {
+        offset,
+        limit: list.length,
+        totalCount
+      }
+    });
+  }
+
   // region: interfaces (subclass needs to override these) ===========
 
   handle() {
@@ -122,6 +159,7 @@ class Api {
 
   success(object = {}) {
     object.hasError = false;
+    this._applyPaginationToResponse(object);
     this._sendResponse(object);
     return true; // NOTE: This is necessary for Array.some to work
   }
