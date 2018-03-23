@@ -150,6 +150,18 @@
         return (new XDate(date)).toString(format);
       }
 
+      $inc(number) {
+        return number + 1;
+      }
+
+      $hasMorePagination(totalCount, offset, limit) {
+        return (totalCount > (offset + limit));
+      }
+
+      $hasPreviousPagination(offset) {
+        return (offset > 0);
+      }
+
     }
   }
 
