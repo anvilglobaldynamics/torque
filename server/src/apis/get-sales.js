@@ -45,10 +45,37 @@ exports.GetSalesApi = class extends collectionCommonMixin(Api) {
     });
   }
 
+  _addReturnedProductCountToSales({ sales }, cbfn) {
+    this.database.salesReturn.listBySalesId({ salesId: sales.id }, (err, salesReturnList) => {
+      if (salesReturnList.length > 0) {
+        salesReturnList.forEach(salesReturn => {
+          salesReturn.returnedProductList.forEach(returnedProduct => {
+            let matchingProduct = sales.productList.find(product => {
+              return product.productId === returnedProduct.productId;
+            });
+
+            if (!('returnedProductCount' in matchingProduct)) {
+              matchingProduct.returnedProductCount = 0;
+            }
+            matchingProduct.returnedProductCount += returnedProduct.count;
+          });
+        });
+        return cbfn(sales);
+      } else { 
+        sales.productList.forEach(product => {
+          product.returnedProductCount = 0;
+        });
+        return cbfn(sales); 
+      }
+    });
+  }
+
   handle({ body }) {
     let { salesId } = body;
     this._getSales({ salesId }, (sales) => {
-      this.success({ sales: sales });
+      this._addReturnedProductCountToSales({ sales }, (sales) => {
+        this.success({ sales: sales });
+      })
     });
   }
 

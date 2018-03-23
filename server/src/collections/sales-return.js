@@ -65,6 +65,10 @@ exports.SalesReturnCollection = class extends Collection {
     this._find(filter, cbfn);
   }
 
+  listBySalesId({ salesId }, cbfn) {
+    this._find({ salesId }, cbfn);
+  }
+
   listByFilters({ salesIdList, fromDate, toDate }, cbfn) {
     let filters = {
       $and: [
