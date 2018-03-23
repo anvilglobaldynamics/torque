@@ -53,11 +53,11 @@
           <template is="dom-repeat" items="{{sales.productList}}" as="product">
             <div class="horizontal layout std-list-item center">
               <div class="vertical layout flex">
-                <div>Product ID: [[product.productId]]</div>
+                <div>Product: [[product.productCategoryName]]</div>
                 <div>Count: [[product.count]]</div>
                 <div>Sale Price: [[product.salePrice]]</div>
                 <div>Discounted: [[product.discountValue]] by [[product.discountType]] </div>
-                <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count)}}">
+                <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}">
                   <paper-button raised class="primary" on-tap="returnTapped">Return</paper-button>
                 </template>
               </div>
@@ -166,8 +166,8 @@
         });
       }
 
-      checkIfProductReturnable(returnedProductCount, soldProductCount) {
-        if (returnedProductCount < soldProductCount) return true;
+      checkIfProductReturnable(returnedProductCount, soldProductCount, isReturnable) {
+        if (returnedProductCount < soldProductCount && isReturnable) return true;
         else return false;
       }
 
