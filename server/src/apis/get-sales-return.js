@@ -50,10 +50,30 @@ exports.GetSalesReturnApi = class extends collectionCommonMixin(Api) {
     });
   }
 
+  _fetchProductCategoryData({ salesReturn }, cbfn) {
+    let productIdList = salesReturn.returnedProductList.map(product => product.productId);
+    this.database.product.findByIdList({ idList: productIdList }, (err, productList) => {
+      let productCategoryIdList = productList.map(product => product.productCategoryId);
+      this.database.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
+        productList.forEach(product => {
+          let productCategory = productCategoryList.find(productCategory => productCategory.id === product.productCategoryId);
+          let matchingProduct = salesReturn.returnedProductList.find(salesReturnProduct => salesReturnProduct.productId === product.id);
+          
+          matchingProduct.productCategoryId = productCategory.id;
+          matchingProduct.productCategoryName = productCategory.name;
+          matchingProduct.productCategoryIsReturnable = productCategory.isReturnable;
+        });
+        return cbfn(salesReturn);
+      });
+    });
+  }
+
   handle({ body }) {
     let { salesReturnId } = body;
     this._getSalesReturn({ salesReturnId }, (salesReturn) => {
-      this.success({ salesReturn: salesReturn });
+      this._fetchProductCategoryData({ salesReturn }, (salesReturn) => {
+        this.success({ salesReturn });
+      });
     });
   }
 
