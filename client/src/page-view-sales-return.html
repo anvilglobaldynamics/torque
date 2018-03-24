@@ -35,41 +35,25 @@
 
       <div class="card vertical layout">
         <div class="std-list">
-          <div>ID: [[sales.id]]</div>
-          <div>Dated: [[$mkDate(sales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-          <div>Outlet ID: [[sales.outletId]]</div>
-          <template is="dom-if" if="{{sales.customerId}}">
-            <div>Customer ID: [[sales.customerId]]</div>
-          </template>
-          <!-- <template is="dom-if" if="{{!sales.isDiscarded}}">
-            <paper-button raised class="primary" on-tap="discardTapped">Discard</paper-button>
-          </template> -->
+          <div>ID: [[salesReturn.id]]</div>
+          <div>Sales Id: [[salesReturn.salesId]] </div>
+          <div>Dated: [[$mkDate(salesReturn.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+          <div>Credited Amount: [[salesReturn.creditedAmount]]</div>
         </div>
       </div>
 
       <div class="card vertical layout">
-        <div class="title">Product List: ([[sales.productList.length]] products)</div>
+        <div class="title">Product List: ([[salesReturn.returnedProductList.length]] products)</div>
         <div class="std-list">
-          <template is="dom-repeat" items="{{sales.productList}}" as="product">
+          <template is="dom-repeat" items="{{salesReturn.returnedProductList}}" as="returnedProduct">
             <div class="horizontal layout std-list-item center">
               <div class="vertical layout flex">
-                <div>Product: [[product.productCategoryName]]</div>
-                <div>Count: [[product.count]]</div>
-                <div>Sale Price: [[product.salePrice]]</div>
-                <div>Discounted: [[product.discountValue]] by [[product.discountType]] </div>
+                <div>Product: [[returnedProduct.productCategoryName]]</div>
+                <div>Count: [[returnedProduct.count]]</div>
               </div>
             </div>
           </template>
         </div>
-      </div>
-
-      <div class="card vertical layout">
-        <div class="title">Payment:</div>
-        <div>Total Billed: [[sales.payment.totalBilled]]</div>
-        <div>Discounted Amount: [[sales.payment.discountedAmount]]</div>
-        <div>Service Charge Amount: [[sales.payment.serviceChargeAmount]]</div>
-        <div>Vat: [[sales.payment.vatAmount]]</div>
-        <div>Paid Amount: [[sales.payment.paidAmount]]</div>
       </div>
 
     </div>
@@ -137,30 +121,11 @@
       _processSalesReturn(cbfn) {
         this._fetchSalesReturn(({ salesReturn }) => {
           this.salesReturn = salesReturn;
-          console.log("salesReturn: ", this.salesReturn);
           cbfn();
         });
       }
 
-      // _discardSales(salesId, cbfn) {
-      //   let data = { salesId };
-      //   this.app.callDiscardSalesApi(data, (err, response) => {
-      //     if (err) return;
-      //     if (response.hasError) return this.onApiError(response.error);
-      //     return cbfn(response);
-      //   });
-      // }
-
       // region: ui  ===========================
-
-      // discardTapped(e = null) {
-      //   this._discardSales(this.sales.id, () => {
-      //     this.app.showModalDialog("Successfully discarded.", "The sales has been discarded", () => {
-      //       this.app.reloadTapped();
-      //       this.app.refreshCurrentPage();
-      //     });
-      //   });
-      // }
 
       // region: misc =================================
 
