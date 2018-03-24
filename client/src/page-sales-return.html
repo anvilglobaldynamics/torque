@@ -60,7 +60,6 @@
         this.app.currentPageIsModal = true;
         this.app.pushPageTitle('Return Sales');
         if (!this._ensureAccess()) return;
-        console.log("params: ", this.params);
         if (!('sales' in this.params) || !('product' in this.params)) {
           let message = "This page cannot be displayed at this moment. Please try again."
           this.app.showModalDialog("Something went wrong!", message, _ => {
@@ -69,7 +68,9 @@
           return;
         }
         this._processSales(_ => {
-          this.isReady = true;
+          this._processProductToBeReturned(_ => {
+            this.isReady = true;
+          });
         });
       }
 
@@ -99,9 +100,13 @@
       _processSales(cbfn) {
         this._fetchSales(({ sales }) => {
           this.sales = sales;
-          console.log("sales: ", this.sales);
           cbfn();
         });
+      }
+
+      _processProductToBeReturned(cbfn) {
+        this.productToBeReturned = this.sales.productList.find(product => product.productId == this.params.product)
+        cbfn();
       }
     }
 
