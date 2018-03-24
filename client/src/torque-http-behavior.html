@@ -374,6 +374,11 @@
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('add-sales-return', data, cbfn);
         }
+
+        callGetSalesReturnApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-sales-return', data, cbfn);
+        }
       }
     }
 

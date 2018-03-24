@@ -62,6 +62,12 @@ exports.GetSalesReturnListApi = class extends outletCommonMixin(customerCommonMi
 
   handle({ body }) {
     let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate } = body;
+
+    toDate = new Date(toDate);
+    toDate.setHours(23);
+    toDate.setMinutes(59);
+    toDate = toDate.getTime();
+    
     this._verifyOutletIfNeeded({ outletId, shouldFilterByOutlet }, () => {
       this._verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer }, () => {
         this._getSalesReturnList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, (salesReturnList) => {
