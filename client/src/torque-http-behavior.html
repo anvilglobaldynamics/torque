@@ -360,17 +360,20 @@
           this.callCombinedJsonApi('get-sales', data, cbfn);
         }
 
-
-        callGetSalesReturnListApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-sales-return-list', data, cbfn);
-        }
-        
         callDiscardSalesApi(data, cbfn) {
           if (!this._applyApiKey(data)) return;
           this.callCombinedJsonApi('discard-sales', data, cbfn);
         }
 
+        callGetSalesReturnListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('get-sales-return-list', data, cbfn);
+        }
+
+        callAddSalesReturnApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('add-sales-returnt', data, cbfn);
+        }
       }
     }
 
