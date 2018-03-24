@@ -58,7 +58,7 @@ exports.GetSalesReturnApi = class extends collectionCommonMixin(Api) {
         productList.forEach(product => {
           let productCategory = productCategoryList.find(productCategory => productCategory.id === product.productCategoryId);
           let matchingProduct = salesReturn.returnedProductList.find(salesReturnProduct => salesReturnProduct.productId === product.id);
-          
+
           matchingProduct.productCategoryId = productCategory.id;
           matchingProduct.productCategoryName = productCategory.name;
           matchingProduct.productCategoryIsReturnable = productCategory.isReturnable;
