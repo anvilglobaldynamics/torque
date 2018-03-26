@@ -1,0 +1,191 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-sales-return">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding-top: 24px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="salesReturnForm">
+        <form>
+          <div class="card vertical layout">
+
+            <div>[[productToBeReturned.productCategoryName]]</div>
+            <div>Sold Count: [[productToBeReturned.count]]</div>
+            <paper-input class="salesReturnForm--productReturnCount" value="{{salesReturnForm.productReturnCount}}" type="number" required min="1" max="[[maxAllowedReturnCount(productToBeReturned.count, productToBeReturned.returnedProductCount)]]" error-message="Please enter a valid number" label="Product Return Count"></paper-input>
+            <paper-input class="salesReturnForm--creditedAmount" value="{{salesReturnForm.creditedAmount}}" type="number" required min="0" error-message="Please enter a valid number" label="Credited Amount (amount that has been returned to the customer)">
+              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+            </paper-input>
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class="primary" on-tap="addSalesReturnTapped">Add Sales Return</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+    </div>
+  </template>
+  <script>
+    class PageSalesReturn extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+      static get is() {
+        return 'page-sales-return';
+      }
+
+      static get properties() {
+        return {
+          salesReturnForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  productReturnCount: 1,
+                  creditedAmount: 100
+                };
+              } else {
+                return {
+                  productReturnCount: null,
+                  creditedAmount: 0,
+                };
+              }
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.pushPageTitle('Return Sales');
+        if (!this._ensureAccess()) return;
+        if (!('sales' in this.params) || !('product' in this.params)) {
+          let message = "This page cannot be displayed at this moment. Please try again."
+          this.app.showModalDialog("Something went wrong!", message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processSales(_ => {
+          this._processProductToBeReturned(_ => {
+            this.isReady = true;
+          });
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      _fetchSales(cbfn) {
+        let salesId = parseInt(this.params.sales);
+        let data = { salesId };
+        this.app.callGetSalesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _processSales(cbfn) {
+        this._fetchSales(({ sales }) => {
+          this.sales = sales;
+          cbfn();
+        });
+      }
+
+      _processProductToBeReturned(cbfn) {
+        this.productToBeReturned = this.sales.productList.find(product => product.productId == this.params.product);
+        cbfn();
+      }
+
+      _processAddSalesReturn({ productReturnCount, creditedAmount }) {
+        let returnedProductList = [
+          {
+            productId: this.params.product,
+            count: productReturnCount,
+          }
+        ];
+        
+        let data = {
+          salesId: this.params.sales,
+          returnedProductList, creditedAmount
+        };
+
+        this.app.callAddSalesReturnApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'salesReturnForm');
+          let message = "Congratulations. Your new sales return has been created."
+          this.app.showModalDialog("Sales Return Created", message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl(`/view-sales/sales:${this.params.sales}`);
+      }
+
+      maxAllowedReturnCount(soldCount, returnedCount) {
+        return (soldCount-returnedCount);
+      }
+
+      addSalesReturnTapped(e = null) {
+        this.elemAll('#salesReturnForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#salesReturnForm').validate()) return;
+
+        let { productReturnCount, creditedAmount } = this.salesReturnForm;
+        this._processAddSalesReturn({ productReturnCount, creditedAmount });
+      }
+    }
+
+    window.customElements.define(PageSalesReturn.is, PageSalesReturn);
+  </script>
+</dom-module>

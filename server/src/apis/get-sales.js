@@ -45,10 +45,57 @@ exports.GetSalesApi = class extends collectionCommonMixin(Api) {
     });
   }
 
+  _addReturnedProductCountToSales({ sales }, cbfn) {
+    this.database.salesReturn.listBySalesId({ salesId: sales.id }, (err, salesReturnList) => {
+      if (salesReturnList.length > 0) {
+        salesReturnList.forEach(salesReturn => {
+          salesReturn.returnedProductList.forEach(returnedProduct => {
+            let matchingProduct = sales.productList.find(product => {
+              return product.productId === returnedProduct.productId;
+            });
+
+            if (!('returnedProductCount' in matchingProduct)) {
+              matchingProduct.returnedProductCount = 0;
+            }
+            matchingProduct.returnedProductCount += returnedProduct.count;
+          });
+        });
+        return cbfn(sales);
+      } else { 
+        sales.productList.forEach(product => {
+          product.returnedProductCount = 0;
+        });
+        return cbfn(sales); 
+      }
+    });
+  }
+
+  _fetchProductCategoryData({ sales }, cbfn) {
+    let productIdList = sales.productList.map(product => product.productId);
+    this.database.product.findByIdList({ idList: productIdList }, (err, productList) => {
+      let productCategoryIdList = productList.map(product => product.productCategoryId);
+      this.database.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
+        productList.forEach(product => {
+          let productCategory = productCategoryList.find(productCategory => productCategory.id === product.productCategoryId);
+          let matchingProduct = sales.productList.find(salesProduct => salesProduct.productId === product.id);
+          
+          matchingProduct.productCategoryId = productCategory.id;
+          matchingProduct.productCategoryName = productCategory.name;
+          matchingProduct.productCategoryIsReturnable = productCategory.isReturnable;
+        });
+        return cbfn(sales);
+      });
+    });
+  }
+
   handle({ body }) {
     let { salesId } = body;
     this._getSales({ salesId }, (sales) => {
-      this.success({ sales: sales });
+      this._addReturnedProductCountToSales({ sales }, (sales) => {
+        this._fetchProductCategoryData({ sales }, (sales) => {
+          this.success({ sales: sales });
+        });
+      });
     });
   }
 

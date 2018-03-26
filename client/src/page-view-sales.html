@@ -49,12 +49,21 @@
 
       <div class="card vertical layout">
         <div class="title">Product List: ([[sales.productList.length]] products)</div>
-        <template is="dom-repeat" items="{{sales.productList}}" as="product">
-          <div>Product ID: [[product.productId]]</div>
-          <div>Count: [[product.count]]</div>
-          <div>Sale Price: [[product.salePrice]]</div>
-          <div>Discounted: [[product.discountValue]] by [[product.discountType]] </div>
-        </template>
+        <div class="std-list">
+          <template is="dom-repeat" items="{{sales.productList}}" as="product">
+            <div class="horizontal layout std-list-item center">
+              <div class="vertical layout flex">
+                <div>Product: [[product.productCategoryName]]</div>
+                <div>Count: [[product.count]]</div>
+                <div>Sale Price: [[product.salePrice]]</div>
+                <div>Discounted: [[product.discountValue]] by [[product.discountType]] </div>
+                <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}">
+                  <paper-button raised class="primary" on-tap="returnTapped">Return</paper-button>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
       </div>
 
       <div class="card vertical layout">
@@ -63,6 +72,7 @@
         <div>Discounted Amount: [[sales.payment.discountedAmount]]</div>
         <div>Service Charge Amount: [[sales.payment.serviceChargeAmount]]</div>
         <div>Vat: [[sales.payment.vatAmount]]</div>
+        <div>Paid Amount: [[sales.payment.paidAmount]]</div>
       </div>
 
     </div>
@@ -78,6 +88,7 @@
 
       static get properties() {
         return {
+
         };
       }
 
@@ -129,9 +140,8 @@
       }
 
       _processSales(cbfn) {
-        this._fetchSales(({ sales, defaultInventory, returnedInventory, damagedInventory }) => {
+        this._fetchSales(({ sales }) => {
           this.sales = sales;
-          console.log("sales: ", sales);
           cbfn();
         });
       }
@@ -154,6 +164,16 @@
             this.app.refreshCurrentPage();
           });
         });
+      }
+
+      checkIfProductReturnable(returnedProductCount, soldProductCount, isReturnable) {
+        if (returnedProductCount < soldProductCount && isReturnable) return true;
+        else return false;
+      }
+
+      returnTapped(e) {
+        let { product } = e.model;
+        return this.app.navigateTo(`/sales-return/sales:${this.sales.id}/product:${product.productId}`);
       }
 
       // region: misc =================================

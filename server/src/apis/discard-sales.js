@@ -16,20 +16,6 @@ exports.DiscardSalesApi = class extends collectionCommonMixin(Api) {
     });
   }
 
-  // get accessControl() {
-  //   return [{
-  //     organizationBy: {
-  //       from: "sales",
-  //       query: ({ salesId }) => ({ id: salesId }),
-  //       select: "organizationId",
-  //       errorCode: "SALES_INVALID"
-  //     },
-  //     privileges: [
-  //       "PRIV_MODIFY_ALL_OUTLETS"
-  //     ]
-  //   }];
-  // }
-
   get accessControl() {
     return [{
       organizationBy: [

@@ -69,6 +69,8 @@
 <link rel="lazy-import" href="page-manage-sales.html">
 <link rel="lazy-import" href="page-view-sales.html">
 <link rel="lazy-import" href="page-manage-sales-return.html">
+<link rel="lazy-import" href="page-sales-return.html">
+<link rel="lazy-import" href="page-view-sales-return.html">
 
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
@@ -228,6 +230,8 @@
           <page-manage-sales name="manage-sales"></page-manage-sales>
           <page-view-sales name="view-sales"></page-view-sales>
           <page-manage-sales-return name="manage-sales-return"></page-manage-sales-return>
+          <page-sales-return name="sales-return"></page-sales-return>
+          <page-view-sales-return name="view-sales-return"></page-view-sales-return>
         </iron-pages>
 
         <div class="footer">
@@ -477,6 +481,30 @@
         }
         return false;
       }
+
+
+      // PATCH START
+      // NOTE: This is a patch for FxPage#getUrlParameters()
+      // In time, it will be moved to polymer-fx.
+      getUrlParameters(hash) {
+        if (hash.length === 0) {
+          return {};
+        }
+        // console.log(hash)
+        // hash = hash.replace('/', '');
+        let partArray = hash.split('/');
+        let params = {};
+        for (let part of Array.from(partArray)) {
+          if (part.indexOf(':') === -1) {
+            this.showAlertMessage('Routing Error', 'Malformatted Url Given')
+            break;
+          }
+          let [left, right] = Array.from(part.split(':'));
+          params[left] = right;
+        }
+        return params;
+      };
+            // PATCH END
 
     }
 

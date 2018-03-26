@@ -94,9 +94,9 @@
           <template is="dom-repeat" items="[[salesReturnList]]" as="saleReturn">
             <div class="horizontal layout std-list-item center">
               <div class="vertical layout flex">
-                <div class="title">[[saleReturn.id]]</div>
+                <div class="title">Sales Id: [[saleReturn.salesId]]</div>
                 <div class="description">[[$mkDate(saleReturn.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                <div class="description">Billed [[saleReturn.payment.totalBilled]] [[app.settings.monetaryUnit]] for [[saleReturn.productList.length]] product(s)</div>
+                <div class="description">Credited [[saleReturn.creditedAmount]] [[app.settings.monetaryUnit]]</div>
               </div>
               <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
             </div>
@@ -283,7 +283,7 @@
 
       viewTapped(e) {
         let { saleReturn } = e.model;
-        return this.app.navigateTo(`/view-sales-return/sales:${saleReturn.id}`);
+        return this.app.navigateTo(`/view-sales-return/salesReturn:${saleReturn.id}`);
       }
 
       filterTapped(e = null) {

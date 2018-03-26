@@ -384,7 +384,11 @@ exports.validateSalesSchema = (doc) => {
     productList: Joi.array().items(
       Joi.object().keys({
         productId: Joi.number().max(999999999999999).required(),
+        productCategoryId: Joi.number().max(999999999999999).required(),
+        productCategoryName: Joi.string().min(1).max(64).required(),
+        productCategoryIsReturnable: Joi.boolean().required(),
         count: Joi.number().max(999999999999999).required(),
+        returnedProductCount: Joi.number().max(999999999999999).required(),
         discountType: Joi.string().max(1024).required(),
         discountValue: Joi.number().max(999999999999999).required(),
         salePrice: Joi.number().max(999999999999999).required()
@@ -422,7 +426,10 @@ exports.validateSalesReturnSchema = (doc) => {
     returnedProductList: Joi.array().items(
       Joi.object().keys({
         productId: Joi.number().max(999999999999999).required(),
-        count: Joi.number().max(999999999999999).required()
+        count: Joi.number().max(999999999999999).required(),
+        productCategoryId: Joi.number().max(999999999999999).required(),
+        productCategoryName: Joi.string().min(1).max(64).required(),
+        productCategoryIsReturnable: Joi.boolean().required()
       })
     ),
     creditedAmount: Joi.number().max(999999999999999).required(),
