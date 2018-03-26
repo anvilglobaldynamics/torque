@@ -34,9 +34,11 @@
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
+
         <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
           <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">Show Previous</paper-button>
         </template>
+
         <div class="std-list">
           <template is="dom-repeat" items="[[customerList]]" as="customer">
             <div class="horizontal layout std-list-item center">
@@ -50,6 +52,7 @@
             </div>
           </template>
         </div>
+
         <div class="pagination">
           Showing
           <span class="limit">[[pagination.limit]]</span>
@@ -60,6 +63,7 @@
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
           <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">Show More</paper-button>
         </template>
+        
       </div>
 
       <div class="transparent-card align-right">

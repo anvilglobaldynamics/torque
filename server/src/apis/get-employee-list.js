@@ -7,6 +7,8 @@ exports.GetEmployeeListApi = class extends Api {
 
   get requiresAuthentication() { return true; }
 
+  get autoPaginates() { return ['employeeList']; }
+
   get requestSchema() {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),
@@ -23,7 +25,6 @@ exports.GetEmployeeListApi = class extends Api {
       ]
     }];
   }
-
 
   _getEmployeeList({ organizationId }, cbfn) {
     this.database.employment.listByOrganizationId({ organizationId }, (err, employeeList) => {
