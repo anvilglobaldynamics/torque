@@ -11,6 +11,8 @@ exports.GetSalesReturnListApi = class extends outletCommonMixin(customerCommonMi
 
   get requiresAuthentication() { return true; }
 
+  get autoPaginates() { return ['salesReturnList']; }
+
   get requestSchema() {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),
@@ -71,7 +73,7 @@ exports.GetSalesReturnListApi = class extends outletCommonMixin(customerCommonMi
     this._verifyOutletIfNeeded({ outletId, shouldFilterByOutlet }, () => {
       this._verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer }, () => {
         this._getSalesReturnList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, (salesReturnList) => {
-          this.success({ salesReturnList: salesReturnList });
+          this.success({ salesReturnList });
         });
       });
     });
