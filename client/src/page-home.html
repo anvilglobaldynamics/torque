@@ -7,6 +7,9 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
@@ -16,6 +19,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-verification-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -41,11 +45,26 @@
       .warning-message {
         font-weight: bold;
       }
+
+      .language-selection {
+        margin-right: 8px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="horizontal layout">
+        <div class="flex"></div>
+        <paper-dropdown-menu label="Language" class="language-selection">
+          <paper-listbox slot="dropdown-content" selected="{{selectedLanguageIdentifier}}" attr-for-selected="data-identifier" on-selected-changed="languageDropdownSelected">
+            <template is="dom-repeat" items="[[knownLanguageList]]" as="knownLanguage">
+              <paper-item data-identifier="[[knownLanguage.identifier]]">[[knownLanguage.name]]</paper-item>
+            </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
+      </div>
 
       <template is="dom-if" if="[[warning]]">
         <div class="card vertical layout">
@@ -124,7 +143,7 @@
         </div>
         <div class="card vertical layout flex center">
           <div class="item-value">[[metrics.totalNumberOfSalesThisMonth]]</div>
-          <div class="item-unit">Invoices</div>
+          <div class="item-unit">[[verses.home.invoices]]</div>
           <div class="item-description">Month's Sales Count</div>
         </div>
         <div class="card vertical layout flex center">
@@ -137,7 +156,7 @@
   </template>
 
   <script>
-    class PageHome extends FxPage.mixin(TorqueVerificationBehavior, TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageHome extends FxPage.mixin(TorqueVerificationBehavior, TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-home';
       }
@@ -162,6 +181,7 @@
         this.onUserChange(this.app.user);
         this.onOrganizationChange(this.app.organization);
         this.onSettingsChange(this.app.settings);
+        this.useLanguageServices();
         this._processOrganizationList(() => {
           this._processDashboardSummary(() => {
             this.isReady = true;
@@ -331,6 +351,13 @@
             }
           });
         });
+      }
+
+      languageDropdownSelected(e) {
+        window.setTimeout(() => {
+          if (this.getLastLoadedLanguage() === this.selectedLanguageIdentifier) return;
+          this.initiateLanguageServices(this.selectedLanguageIdentifier);
+        }, 0);
       }
 
       // region: misc =================================

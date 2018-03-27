@@ -17,6 +17,7 @@
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
 
 <link rel="import" href="../bower_components/atomicdb/atomicdb.html">
@@ -28,6 +29,7 @@
 
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-http-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="elem-not-ready.html">
 
@@ -235,12 +237,23 @@
         </iron-pages>
 
         <div class="footer">
-          &#xA9; 2017
-          <a href="[[authorWebsite]]">[[authorName]]</a> All Rights Reserved.
-          <br>
+          <div>&#xA9; 2017
+            <a href="[[authorWebsite]]">[[authorName]]</a>
+          </div>
+          <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
           <span class="extra-small">build
             <span id="build-number">22</span>
           </span>
+          <br>
+          <paper-menu-button horizontal-align="center" vertical-align="bottom" vertical-offset="56">
+            <paper-icon-button icon="icons:language" slot="dropdown-trigger"></paper-icon-button>
+            <paper-listbox slot="dropdown-content" selected="{{selectedLanguageIdentifier}}" attr-for-selected="data-identifier" on-selected-changed="languageDropdownSelected">
+              <template is="dom-repeat" items="[[knownLanguageList]]" as="knownLanguage">
+                <paper-item data-identifier="[[knownLanguage.identifier]]">[[knownLanguage.name]]</paper-item>
+              </template>
+            </paper-listbox>
+          </paper-menu-button>
+          <br>
         </div>
       </app-header-layout>
     </app-drawer-layout>
@@ -251,7 +264,7 @@
   <script>
     let localDocument = document.currentScript.ownerDocument;
 
-    class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior) {
+    class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior, TorqueLanguageBehavior) {
 
       static get is() { return 'torque-app'; }
 
@@ -305,6 +318,8 @@
         this._setUpDatabaseObservers();
         this._intializeServiceManager();
         this._manageProductionVariables();
+        this.useLanguageServices();
+        this.initiateLanguageServices();
         this.pushPageTitle(this.brandName);
       }
 
@@ -397,6 +412,13 @@
           this.removeUser();
           this.navigateTo('/login');
         })
+      }
+
+      languageDropdownSelected(e) {
+        window.setTimeout(() => {
+          if (this.getLastLoadedLanguage() === this.selectedLanguageIdentifier) return;
+          this.initiateLanguageServices(this.selectedLanguageIdentifier);
+        }, 0);
       }
 
       // ====================== delegated events =============================
@@ -504,7 +526,7 @@
         }
         return params;
       };
-            // PATCH END
+      // PATCH END
 
     }
 

@@ -1,0 +1,14 @@
+{
+  "root": {
+    "rightsReserved": "All Rights Reserved."
+  },
+  "login": {
+    "forgotPassword": "Forgot your Password?",
+    "login": "Login",
+    "emailOrPhoneInput": "Your phone number or email address",
+    "emailOrPhoneInputError": "Please enter your valid phone number or valid email address."
+  },
+  "home": {
+    "invoices": "Invoices"
+  }
+}
