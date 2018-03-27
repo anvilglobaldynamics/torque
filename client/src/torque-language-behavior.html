@@ -1,0 +1,152 @@
+<script>
+  if (!window.TorqueLanguageBehavior) {
+
+    const _loadLanguageJson = (uri, cbfn) => {
+      let request = new XMLHttpRequest();
+      request.addEventListener("load", () => {
+        let { responseText } = request;
+        cbfn(null, responseText);
+      });
+      request.addEventListener("error", () => {
+        cbfn(request);
+      });
+      request.open("GET", uri);
+      request.send();
+    }
+
+    const _knownLanguageList = [
+      {
+        identifier: 'en-us',
+        name: "English (US)",
+        filePath: "src/lang-en-us.json",
+        numeralFn: (number => number)
+      },
+      {
+        identifier: 'bn-bd',
+        name: "Bengali / বাংলা",
+        filePath: "src/lang-bn-bd.json",
+        numeralFn: number => {
+          const map = {
+            '0': '০',
+            '1': '১',
+            '2': '২',
+            '3': '৩',
+            '4': '৪',
+            '5': '৫',
+            '6': '৬',
+            '7': '৭',
+            '8': '৮',
+            '9': '৯'
+          };
+          const digits = String(number).split('');
+          for (let i = 0; i < digits.length; i++) {
+            digits[i] = map[digits[i]];
+          }
+          return digits.join('');
+        }
+      }
+    ];
+
+    const _fallbackLanguage = 'en-us';
+
+    // shared cache
+    let _verses = {};
+    let _selectedLanguageIdentifier = null;
+
+    // internal variables
+    let _languageServiceUsingElementList = [];
+    let _languageLoadingStatus = 'idle'; // can be - 'idle', 'loading', 'loaded'
+
+    const _notifyElementOfLanguageLoad = (element) => {
+      element.verses = _verses;
+      element.selectedLanguageIdentifier = _selectedLanguageIdentifier;
+    }
+
+    const _loadLanguage = (identifier) => {
+      let def = _knownLanguageList.find(entry => entry.identifier === identifier);
+      if (!def) throw new Error(`Unkown Language "${identifier}"`);
+      _languageLoadingStatus = 'loading';
+      _loadLanguageJson(def.filePath, (err, data) => {
+        if (err) {
+          console.error(err);
+          return alert("Unable to Load Language. Please reload the page.");
+        }
+        try {
+          _verses = JSON.parse(data);
+        } catch (ex) {
+          console.error(ex);
+          return alert("Error Parsing Language File.");
+        }
+        _selectedLanguageIdentifier = identifier;
+        _languageLoadingStatus = 'loaded';
+        _languageServiceUsingElementList.forEach(entry => {
+          _notifyElementOfLanguageLoad(entry.element);
+          if (entry.cbfn) {
+            entry.cbfn();
+            entry.cbfn = null;
+          }
+        })
+      });
+    }
+
+    /* @polymerMixin */
+    TorqueLanguageBehavior = (SuperClass) => class extends SuperClass {
+
+      constructor(...args) {
+        super(...args);
+        this.verses = {};
+      }
+
+      static get properties() {
+        return {
+          verses: {
+            type: Object,
+            value: () => _verses
+          },
+          selectedLanguageIdentifier: {
+            type: String,
+            value: () => _selectedLanguageIdentifier
+          },
+          knownLanguageList: {
+            type: Array,
+            value: () => _knownLanguageList
+          }
+        }
+      }
+
+      getLastLoadedLanguage() {
+        return _selectedLanguageIdentifier;
+      }
+
+      // Every page/element needing translation should call this.
+      // Callback will not be called everytime. Only the first time.
+      useLanguageServices(cbfn = null) {
+        let element = this;
+        if (_languageLoadingStatus === 'loaded') {
+          _notifyElementOfLanguageLoad(element);
+          if (cbfn) cbfn();
+          cbfn = null;
+        }
+        if (!_languageServiceUsingElementList.find(entry => entry.element === element)) {
+          _languageServiceUsingElementList.push({
+            element,
+            cbfn
+          });
+        }
+      }
+
+      // Should be called only once and from the root element
+      initiateLanguageServices(identifier = null) {
+        if (!identifier) {
+          identifier = window.localStorage.getItem('lang/last-selected') || _fallbackLanguage;
+        } else {
+          window.localStorage.setItem('lang/last-selected', identifier);
+        }
+        _loadLanguage(identifier);
+      }
+
+    }
+
+  }
+
+</script>
