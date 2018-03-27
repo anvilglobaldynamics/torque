@@ -237,20 +237,23 @@
         </iron-pages>
 
         <div class="footer">
-          &#xA9; 2017
-          <a href="[[authorWebsite]]">[[authorName]]</a> [[verses.root.rightsReserved]]
-          <br>
+          <div>&#xA9; 2017
+            <a href="[[authorWebsite]]">[[authorName]]</a>
+          </div>
+          <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
           <span class="extra-small">build
             <span id="build-number">22</span>
           </span>
           <br>
-          <paper-dropdown-menu label="Language">
+          <paper-menu-button horizontal-align="center" vertical-align="bottom" vertical-offset="56">
+            <paper-icon-button icon="icons:language" slot="dropdown-trigger"></paper-icon-button>
             <paper-listbox slot="dropdown-content" selected="{{selectedLanguageIdentifier}}" attr-for-selected="data-identifier" on-selected-changed="languageDropdownSelected">
               <template is="dom-repeat" items="[[knownLanguageList]]" as="knownLanguage">
                 <paper-item data-identifier="[[knownLanguage.identifier]]">[[knownLanguage.name]]</paper-item>
               </template>
             </paper-listbox>
-          </paper-dropdown-menu>
+          </paper-menu-button>
+          <br>
         </div>
       </app-header-layout>
     </app-drawer-layout>

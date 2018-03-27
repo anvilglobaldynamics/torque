@@ -8,7 +8,7 @@
     "emailOrPhoneInput": "আপনার ফোন নম্বর বা ইমেল",
     "emailOrPhoneInputError": "দয়া করে আপনার বৈধ ফোন নম্বর অথবা বৈধ ইমেল ঠিকানা লিখুন।"
   },
-  "home":{
+  "home": {
     "invoices": "ইনভয়েস"
   }
 }

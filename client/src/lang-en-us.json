@@ -8,7 +8,7 @@
     "emailOrPhoneInput": "Your phone number or email address",
     "emailOrPhoneInputError": "Please enter your valid phone number or valid email address."
   },
-  "home":{
+  "home": {
     "invoices": "Invoices"
   }
 }
