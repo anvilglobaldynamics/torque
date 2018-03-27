@@ -13,6 +13,8 @@
 
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
 
 <link rel="import" href="shared-styles.html">
 
@@ -35,12 +37,12 @@
         <form>
           <div class="card vertical layout">
             <div class="std-dialog-header">LOGIN</div>
-            <paper-input class="loginForm--emailOrPhone" value="{{loginForm.emailOrPhone}}" required minlength="3" error-message="Please enter your valid phone number or valid email address." label="Your phone number or email address"></paper-input>
+            <paper-input class="loginForm--emailOrPhone" value="{{loginForm.emailOrPhone}}" required minlength="3" error-message="[[verses.login.emailOrPhoneInputError]]" label="[[verses.login.emailOrPhoneInput]]"></paper-input>
             <paper-input class="loginForm--password" value="{{loginForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long" label="Your password" type="password"></paper-input>
             <div class="horizontal layout button-row end">
-              <div class="link light" on-tap="forgotPasswordTapped">Forgot your password?</div>
+              <div class="link light" on-tap="forgotPasswordTapped">[[verses.login.forgotPassword]]</div>
               <div class="flex"></div>
-              <paper-button raised class="primary loginForm--submit" on-tap="loginTapped">Login</paper-button>
+              <paper-button raised class="primary loginForm--submit" on-tap="loginTapped">[[verses.login.login]]</paper-button>
             </div>
             <div class="horizontal layout button-row extended center-center">
               <div class="link light" on-tap="registerTapped">Don't have an account?</div>
@@ -52,7 +54,7 @@
   </template>
 
   <script>
-    class PageLogin extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageLogin extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-login';
       }
@@ -90,6 +92,7 @@
         this.app.removeUser();
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
+        this.useLanguageServices();
         this.delay(300, () => {
           this.isReady = true;
         });

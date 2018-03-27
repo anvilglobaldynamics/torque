@@ -1,0 +1,11 @@
+{
+  "root": {
+    "rightsReserved": "সর্বস্বত্ব সংরক্ষিত"
+  },
+  "login": {
+    "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
+    "login": "লগইন",
+    "emailOrPhoneInput": "আপনার ফোন নম্বর বা ইমেল",
+    "emailOrPhoneInputError": "দয়া করে আপনার বৈধ ফোন নম্বর অথবা বৈধ ইমেল ঠিকানা লিখুন।"
+  }
+}
