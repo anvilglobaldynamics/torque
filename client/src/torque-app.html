@@ -316,7 +316,7 @@
         this._intializeServiceManager();
         this._manageProductionVariables();
         this.useLanguageServices();
-        this.initiateLanguageServices('bn-bd');
+        this.initiateLanguageServices();
         this.pushPageTitle(this.brandName);
       }
 
@@ -416,7 +416,6 @@
           if (this.getLastLoadedLanguage() === this.selectedLanguageIdentifier) return;
           this.initiateLanguageServices(this.selectedLanguageIdentifier);
         }, 0);
-
       }
 
       // ====================== delegated events =============================
