@@ -7,6 +7,8 @@ exports.GetWarehouseListApi = class extends Api {
 
   get requiresAuthentication() { return true; }
 
+  get autoPaginates() { return ['warehouseList']; }
+
   get requestSchema() {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),

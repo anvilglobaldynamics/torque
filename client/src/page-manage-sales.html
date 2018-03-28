@@ -90,6 +90,11 @@
       <paper-button raised class="primary" on-tap="filterTapped">Filter</paper-button>
 
       <div class="card vertical layout">
+
+        <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+          <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">Show Previous</paper-button>
+        </template>
+
         <div class="std-list">
           <template is="dom-repeat" items="[[salesList]]" as="sale">
             <div class="horizontal layout std-list-item center">
@@ -102,6 +107,18 @@
             </div>
           </template>
         </div>
+
+        <div class="pagination">
+          Showing
+          <span class="limit">[[pagination.limit]]</span>
+          items out of
+          <span class="total-count">[[pagination.totalCount]]</span> starting from
+          <span class="offset">#[[$inc(pagination.offset)]]</span>.
+        </div>
+        <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+          <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">Show More</paper-button>
+        </template>
+
       </div>
 
     </div>
@@ -231,12 +248,14 @@
           shouldFilterByOutlet: this.shouldFilterByOutlet, 
           shouldFilterByCustomer: this.shouldFilterByCustomer, 
           fromDate, 
-          toDate
+          toDate,
+          paginate: this.paginate
         };
 
         this.app.callGetSalesListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
           return cbfn(response.salesList);
         });
       }
@@ -266,6 +285,18 @@
       _outletSelected(outlet){
         this.outlet = outlet;
         this.isSearchingOutlet = false;
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processCustomerList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processCustomerList(() => this.isReady = true);
       }
 
       // region: ui  ===========================

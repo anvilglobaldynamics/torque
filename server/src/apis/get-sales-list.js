@@ -12,6 +12,8 @@ exports.GetSalesListApi = class extends salesCommonMixin(outletCommonMixin(custo
 
   get requiresAuthentication() { return true; }
 
+  get autoPaginates() { return ['salesList']; }
+
   get requestSchema() {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),
@@ -58,7 +60,7 @@ exports.GetSalesListApi = class extends salesCommonMixin(outletCommonMixin(custo
     this._verifyOutletIfNeeded({ outletId, shouldFilterByOutlet }, () => {
       this._verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer }, () => {
         this._getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, (salesList) => {
-          this.success({ salesList: salesList });
+          this.success({ salesList });
         });
       });
     });
