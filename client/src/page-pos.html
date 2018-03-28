@@ -306,27 +306,6 @@
         });
       }
 
-      _processCreateSales({ customerId, productList, payment }) {
-        let customerId = null;
-        if (this.customer) {
-          customerId = this.customer.id;
-        }
-
-        let data = {
-          outletId: this.params.outlet,
-          customerId, productList, payment
-        };
-
-        this.app.callAddSalesApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          let message = "Congratulations. Your new sales has been created."
-          this.app.showModalDialog("Sales Created", message, _ => {
-            this.backButtonOnTopBarPressed();
-          });
-        });
-      }
-
       _calculatePayment() {
         let {
           totalAmount,
