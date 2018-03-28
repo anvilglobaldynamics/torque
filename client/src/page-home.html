@@ -142,8 +142,8 @@
           <div class="item-description">Today's Sold Amount</div>
         </div>
         <div class="card vertical layout flex center">
-          <div class="item-value">[[metrics.totalNumberOfSalesThisMonth]]</div>
-          <div class="item-unit">[[verses.home.invoices]]</div>
+          <div class="item-value">[[$translateNumber(metrics.totalNumberOfSalesThisMonth, selectedLanguageIdentifier)]]</div>
+          <div class="item-unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable', selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
           <div class="item-description">Month's Sales Count</div>
         </div>
         <div class="card vertical layout flex center">

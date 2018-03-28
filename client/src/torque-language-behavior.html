@@ -19,7 +19,11 @@
         identifier: 'en-us',
         name: "English (US)",
         filePath: "src/lang-en-us.json",
-        numeralFn: (number => number)
+        numeralFn: (number => number),
+        numeralPostfixFn: (number, group = null) => {
+          let postfix = '';
+          return postfix;
+        }
       },
       {
         identifier: 'bn-bd',
@@ -36,13 +40,21 @@
             '6': '৬',
             '7': '৭',
             '8': '৮',
-            '9': '৯'
+            '9': '৯',
+            '.': '.'
           };
           const digits = String(number).split('');
           for (let i = 0; i < digits.length; i++) {
             digits[i] = map[digits[i]];
           }
           return digits.join('');
+        },
+        numeralPostfixFn: (number, group = null) => {
+          let postfix = '';
+          if (group === 'countable') {
+            postfix = 'টি';
+          }
+          return postfix;
         }
       }
     ];
@@ -143,6 +155,18 @@
           window.localStorage.setItem('lang/last-selected', identifier);
         }
         _loadLanguage(identifier);
+      }
+
+      $translateNumber(number, selectedLanguageIdentifier) {
+        if (!selectedLanguageIdentifier) return number;
+        let def = _knownLanguageList.find(entry => entry.identifier === selectedLanguageIdentifier);
+        return def.numeralFn(number);
+      }
+
+      $translateNumeralPostfix(number, group, selectedLanguageIdentifier) {
+        if (!selectedLanguageIdentifier) return '';
+        let def = _knownLanguageList.find(entry => entry.identifier === selectedLanguageIdentifier);
+        return def.numeralPostfixFn(number, group);
       }
 
     }
