@@ -122,7 +122,7 @@ const readPolymerJson = (polymerJsonPath) => {
 }
 
 const writePolymerJson = (polymerJsonPath, data) => {
-  return (fslib.writeFileSync(polymerJsonPath, JSON.stringify(data), 'utf8'));
+  return (fslib.writeFileSync(polymerJsonPath, JSON.stringify(data, null, 2), 'utf8'));
 }
 
 // region: main =======
