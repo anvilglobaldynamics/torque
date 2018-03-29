@@ -139,9 +139,9 @@
       }
 
       forgotPasswordTapped(e = null) {
-        let message = "Please enter the phone/email you used to create your account.";
+        let message = this.app.verses.forgotPassword.emailOrPhoneInputMessage;
         let defaultInput = this.loginForm.emailOrPhone;
-        this.app.showModalInput("Enter Phone or Email.", message, defaultInput, emailOrPhone => {
+        this.app.showModalInput(this.app.verses.forgotPassword.emailOrPhoneInputTitle, message, defaultInput, emailOrPhone => {
           this._processForgotPasswordRequestApi({ emailOrPhone }, type => {
             let message = `We have sent you a confirmation link on your ${type}. Please use the link to reset your password.`;
             this.app.showModalDialog("Thank you.", message, () => 'pass');

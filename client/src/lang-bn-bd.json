@@ -11,6 +11,10 @@
     "passwordInput": "আপনার পাসওয়ার্ড",
     "passwordInputError": "দয়া করে কমপক্ষে 8 টি অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।"
   },
+  "forgotPassword": {
+    "emailOrPhoneInputTitle": "ফোন বা ইমেল লিখুন",
+    "emailOrPhoneInputMessage": "আপনি আপনার নিবন্ধন করতে ব্যবহৃত ফোন/ইমেল লিখুন।"
+  },
   "register": {
     "register": "নিবন্ধন",
     "fullnameInput": "আপনার পূর্ণ নাম",

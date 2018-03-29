@@ -11,6 +11,10 @@
     "passwordInput": "Your password",
     "passwordInputError": "Please enter a password at least 8 characters long."
   },
+  "forgotPassword": {
+    "emailOrPhoneInput": "Enter Phone or Email.",
+    "emailOrPhoneInputMessage": "Please enter the phone/email you used to create your account."
+  },
   "register": {
     "register": "REGISTER",
     "fullnameInput": "Your full name",
