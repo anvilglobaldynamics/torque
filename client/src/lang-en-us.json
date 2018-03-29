@@ -8,6 +8,20 @@
     "emailOrPhoneInput": "Your phone number or email address",
     "emailOrPhoneInputError": "Please enter your valid phone number or valid email address."
   },
+  "sidebar": {
+    "home": "Home",
+    "employees": "Employees", 
+    "outlets": "Outlets", 
+    "warehouses": "Warehouses", 
+    "productCategories": "Product Categories", 
+    "sales": "Sales", 
+    "salesReturn": "Sales Return", 
+    "customers": "Customers", 
+    "profile": "Profile", 
+    "settings": "Settings", 
+    "about": "About", 
+    "logout": "Logout"
+  },
   "home": {
     "invoices": "Invoices"
   }

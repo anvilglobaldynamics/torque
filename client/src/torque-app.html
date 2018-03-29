@@ -145,19 +145,19 @@
       <app-drawer id="drawer" slot="drawer">
         <app-toolbar>Torque</app-toolbar>
         <iron-selector selected="[[pageName]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="home" href="#/home">Home</a>
-          <a name="manage-employees" href="#/manage-employees">Employees</a>
-          <a name="manage-outlets" href="#/manage-outlets">Outlets</a>
-          <a name="manage-warehouses" href="#/manage-warehouses">Warehouses</a>
-          <a name="manage-product-categories" href="#/manage-product-categories">Product Categories</a>
-          <a name="manage-sales" href="#/manage-sales">Sales</a>
-          <a name="manage-sales-return" href="#/manage-sales-return">Sales Return</a>
-          <a name="manage-customers" href="#/manage-customers">Customers</a>
-          <a name="edit-profile" href="#/edit-profile">Profile</a>
-          <a name="settings" href="#/settings">Settings</a>
-          <a name="about" href="#/about">About</a>
+          <a name="home" href="#/home">[[verses.sidebar.home]]</a>
+          <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
+          <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
+          <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
+          <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.productCategories]]</a>
+          <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
+          <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
+          <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
+          <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
+          <a name="settings" href="#/settings">[[verses.sidebar.settings]]</a>
+          <a name="about" href="#/about">[[verses.sidebar.about]]</a>
         </iron-selector>
-        <div class="link primary logout-link" on-tap="logoutTapped">Logout</div>
+        <div class="link primary logout-link" on-tap="logoutTapped">[[verses.sidebar.logout]]</div>
       </app-drawer>
 
       <!-- Main content -->
