@@ -13,8 +13,8 @@
   },
   "register": {
     "register": "নিবন্ধন",
-    "fullnameInput": "",
-    "fullnameInputError": "",
+    "fullnameInput": "আপনার পূর্ণ নাম",
+    "fullnameInputError": "একটি বৈধ নাম লিখুন.",
     "phoneInput": "আপনার বৈধ ফোন নম্বর",
     "phoneInputError": "দয়া করে আপনার বৈধ ফোন নম্বর লিখুন।",
     "passwordInput": "সর্বনিম্ন 8 শব্দ পাসওয়ার্ড",

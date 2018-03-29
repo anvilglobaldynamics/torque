@@ -13,8 +13,8 @@
   },
   "register": {
     "register": "REGISTER",
-    "fullnameInput": "",
-    "fullnameInputError": "",
+    "fullnameInput": "Your full name",
+    "fullnameInputError": "Please enter a valid name.",
     "phoneInput": "Your valid phone number",
     "phoneInputError": "Please enter your valid phone number.",
     "passwordInput": "A minimum 8 digit password",
