@@ -16,7 +16,7 @@ const pathlib = require('path');
 const fslib = require('fs');
 
 const runPolymerBuild = () => {
-  let res = shell.exec('polymer build')
+  let res = shell.exec('polymer build --verbose')
   if (res.code !== 0) {
     shell.echo('Error: polymer build failed');
     shell.exit(1);
