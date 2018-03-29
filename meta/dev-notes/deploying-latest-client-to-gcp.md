@@ -6,7 +6,7 @@ Make sure you have downloaded and initated Google Cloud SDK. You can download it
 After installation, you *might* need to restart your computer/terminal to have the `gcloud` 
 command working.
 
-In a terminal, run `gcloud init`. Login using a google account that has access to the clooud console. After logging in, select `server-stations-3` when prompted
+In a terminal, run `gcloud init`. Login using a google account that has access to the clooud console. After logging in, select `server-stations-3` when prompted. If asked about region, select `asia-south1` (region a preferred.)
 
 ## Polymer CLI
 
@@ -14,13 +14,9 @@ See [dev-setup.md](dev-setup.md)
 
 # Deployment Process
 
-Run `npm run compile` inside `torque/client` dir.
+To deploy the regular version: Run `npm run deploy` inside `torque/client` dir.
 
-Run `gcloud app deploy`. If asked about region, select `asia-south1`
-
-Optional flags:
-
-Include the `--project` flag to specify an alternate GCP Console project ID to what you initialized as the default in the gcloud tool. Example: `--project [YOUR_PROJECT_ID]`
+To deploy the progressive web app: Run `npm run deploy-pwa` inside `torque/client` dir.
 
 # Notes
 
