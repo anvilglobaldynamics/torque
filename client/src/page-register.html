@@ -13,6 +13,7 @@
 
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -34,16 +35,16 @@
       <iron-form id="registerForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
-            <div class="std-dialog-header">REGISTER</div>
+            <div class="std-dialog-header">[[verses.register.register]]</div>
             <paper-input class="registerForm--fullName" value="{{registerForm.fullName}}" required minlength="3" error-message="Please enter a valid name" label="Your full name"></paper-input>
             <paper-input class="registerForm--phone" value="{{registerForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Your valid phone number"></paper-input>
             <paper-input class="registerForm--password" value="{{registerForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long" label="A minimum 8 digit password" type="password"></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class="primary registerForm--submit" on-tap="registerTapped">Register</paper-button>
+              <paper-button raised class="primary registerForm--submit" on-tap="registerTapped">[[verses.register.register]]</paper-button>
             </div>
             <div class="horizontal layout button-row center-center">
-              <div class="link light" on-tap="loginTapped">Already have an account?</div>
+              <div class="link light" on-tap="loginTapped">[[verses.register.alreadyHaveAccount]]</div>
             </div>
           </div>
         </form>
@@ -52,7 +53,7 @@
   </template>
 
   <script>
-    class PageRegister extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageRegister extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-register';
       }
@@ -92,6 +93,7 @@
         this.app.removeUser();
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
+        this.useLanguageServices();
         this.delay(300, () => {
           this.isReady = true;
         });

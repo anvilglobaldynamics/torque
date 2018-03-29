@@ -5,11 +5,21 @@
   "login": {
     "forgotPassword": "Forgot your Password?",
     "dontHaveAccount": "Don't have an account?",
-    "login": "Login",
+    "login": "LOGIN",
     "emailOrPhoneInput": "Your phone number or email address",
     "emailOrPhoneInputError": "Please enter your valid phone number or valid email address.",
     "passwordInput": "Your password",
     "passwordInputError": "Please enter a password at least 8 characters long."
+  },
+  "register": {
+    "register": "REGISTER",
+    "fullnameInput": "",
+    "fullnameInputError": "",
+    "phoneInput": "Your valid phone number",
+    "phoneInputError": "Please enter your valid phone number.",
+    "passwordInput": "A minimum 8 digit password",
+    "passwordInputError": "Please enter a password at least 8 characters long.",
+    "alreadyHaveAccount": "Already have an account?"
   },
   "sidebar": {
     "home": "Home",

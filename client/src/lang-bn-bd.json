@@ -11,6 +11,16 @@
     "passwordInput": "আপনার পাসওয়ার্ড",
     "passwordInputError": "দয়া করে কমপক্ষে 8 টি অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।"
   },
+  "register": {
+    "register": "নিবন্ধন",
+    "fullnameInput": "",
+    "fullnameInputError": "",
+    "phoneInput": "আপনার বৈধ ফোন নম্বর",
+    "phoneInputError": "দয়া করে আপনার বৈধ ফোন নম্বর লিখুন।",
+    "passwordInput": "সর্বনিম্ন 8 শব্দ পাসওয়ার্ড",
+    "passwordInputError": "দয়া করে কমপক্ষে 8 টি অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।.",
+    "alreadyHaveAccount": "আপনি নিবন্ধিত?"
+  },
   "sidebar": {
     "home": "হোম",
     "employees": "কর্মচারী", 
