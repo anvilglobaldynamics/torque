@@ -36,16 +36,16 @@
       <iron-form id="loginForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
-            <div class="std-dialog-header">LOGIN</div>
+            <div class="std-dialog-header">[[verses.login.login]]</div>
             <paper-input class="loginForm--emailOrPhone" value="{{loginForm.emailOrPhone}}" required minlength="3" error-message="[[verses.login.emailOrPhoneInputError]]" label="[[verses.login.emailOrPhoneInput]]"></paper-input>
-            <paper-input class="loginForm--password" value="{{loginForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long" label="Your password" type="password"></paper-input>
+            <paper-input class="loginForm--password" value="{{loginForm.password}}" required minlength="8" error-message="[[verses.login.passwordInputError]]" label="[[verses.login.passwordInput]]" type="password"></paper-input>
             <div class="horizontal layout button-row end">
               <div class="link light" on-tap="forgotPasswordTapped">[[verses.login.forgotPassword]]</div>
               <div class="flex"></div>
               <paper-button raised class="primary loginForm--submit" on-tap="loginTapped">[[verses.login.login]]</paper-button>
             </div>
             <div class="horizontal layout button-row extended center-center">
-              <div class="link light" on-tap="registerTapped">Don't have an account?</div>
+              <div class="link light" on-tap="registerTapped">[[verses.login.dontHaveAccount]]</div>
             </div>
           </div>
         </form>

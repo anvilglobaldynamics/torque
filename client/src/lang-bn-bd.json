@@ -4,9 +4,12 @@
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
+    "dontHaveAccount": "অ্যাকাউন্ট নেই?",
     "login": "লগইন",
     "emailOrPhoneInput": "আপনার ফোন নম্বর বা ইমেল",
-    "emailOrPhoneInputError": "দয়া করে আপনার বৈধ ফোন নম্বর অথবা বৈধ ইমেল ঠিকানা লিখুন।"
+    "emailOrPhoneInputError": "দয়া করে আপনার বৈধ ফোন নম্বর অথবা বৈধ ইমেল ঠিকানা লিখুন।",
+    "passwordInput": "আপনার পাসওয়ার্ড",
+    "passwordInputError": "দয়া করে কমপক্ষে 8 টি অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।"
   },
   "sidebar": {
     "home": "হোম",
