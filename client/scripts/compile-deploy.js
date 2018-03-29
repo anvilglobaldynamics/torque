@@ -128,6 +128,7 @@ const writePolymerJson = (polymerJsonPath, data) => {
 // region: main =======
 
 const cmdArgs = getCommandLineArguments();
+console.log("Arguments:", cmdArgs);
 
 const srcDir = './';
 const polymerJsonPath = './polymer.json';
@@ -140,21 +141,21 @@ let polymerJson = JSON.parse(JSON.stringify(originalPolymerJson));
 
 updateBuildNumber(srcDir, rootElementPath);
 
-if (this.android) {
+if (cmdArgs.android) {
   polymerJson.builds.push(polymerJsonBuildConfig["custom-es5-android"]);
 } else {
-  if (this.pwa) {
+  if (cmdArgs.pwa) {
     polymerJson.builds.push(polymerJsonBuildConfig["custom-es6-service-worker"]);
   } else {
     polymerJson.builds.push(polymerJsonBuildConfig["custom-es5-bundled"]);
   }
 }
-
+console.log(JSON.stringify(polymerJson, null, 2));
 writePolymerJson(polymerJsonPath, polymerJson);
 runPolymerBuild();
 writePolymerJson(polymerJsonPath, originalPolymerJson);
 
-if (!this.pwa && !this.android) {
+if (!cmdArgs.pwa && !cmdArgs.android) {
   hashLinks(traditionalBuildDir);
 }
 
