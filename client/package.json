@@ -16,7 +16,10 @@
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
     "test": "polymer test",
     "test:integration": "polymer build # test that psk builds without error with the CLI",
-    "compile": "node ./scripts/compile.js",
+    "compile": "node ./scripts/compile-deploy.js",
+    "compile-android": "node ./scripts/compile-deploy.js --android",
+    "deploy": "node ./scripts/compile-deploy.js --deploy",
+    "deploy-pwa": "node ./scripts/compile-deploy.js --deploy --pwa",
     "start": "polymer serve --port 8545"
   },
   "private": true

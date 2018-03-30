@@ -1,15 +1,7 @@
 {
   "entrypoint": "index.html",
   "shell": "src/torque-app.html",
-  "fragments": [
-    "src/elem-not-ready.html",
-    "src/page-home.html",
-    "src/page-error404.html",
-    "src/page-settings.html",
-    "src/page-register.html",
-    "src/page-login.html",
-    "src/page-about.html"
-  ],
+  "fragments": [],
   "sources": [
     "src/**/*",
     "images/**/*",
@@ -24,61 +16,5 @@
       "polymer-2"
     ]
   },
-  "builds": [
-    {
-      "name": "custom-es5-bundled",
-      "js": {
-        "minify": true,
-        "compile": true
-      },
-      "css": {
-        "minify": true
-      },
-      "html": {
-        "minify": true
-      },
-      "bundle": {
-        "excludes": [],
-        "stripComments": true,
-        "inlineCss": true,
-        "sourcemaps": false
-      },
-      "addServiceWorker": false,
-      "addPushManifest": false,
-      "preset": "es5-bundled"
-    },
-    {
-      "basePath": "/android_asset/www/",
-      "name": "custom-es5-android",
-      "js": {
-        "minify": false,
-        "compile": true
-      },
-      "css": {
-        "minify": false
-      },
-      "html": {
-        "minify": false
-      },
-      "bundle": false,
-      "addServiceWorker": false,
-      "addPushManifest": false
-    },
-    {
-      "name": "custom-es6-service-worker",
-      "js": {
-        "minify": true,
-        "compile": false
-      },
-      "css": {
-        "minify": true
-      },
-      "html": {
-        "minify": true
-      },
-      "addServiceWorker": true,
-      "addPushManifest": true,
-      "preset": "es6-unbundled"
-    }
-  ]
+  "builds": []
 }

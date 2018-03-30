@@ -12,7 +12,7 @@ cordova platform add android
 ```
 
 ### step 3
-Run `polymer build` in `torque/client` dir
+Run `npm run compile-android` inside `torque/client` dir.
 
 ## step 4
 Copy `torque/client/build/custom-es5-android` to `TorqueApp/www`
