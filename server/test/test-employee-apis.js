@@ -425,13 +425,39 @@ describe('employee', _ => {
     callApi('api/find-user', {
       json: {
         apiKey,
-        emailOrPhone: '01726404040'
+        emailOrPhone: '99999999999'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error).to.have.property('code').that.equals('USER_DOES_NOT_EXIST');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-new-employee (Invalid, no privileges)', testDoneFn => {
+
+    callApi('api/add-new-employee', {
+      json: {
+        apiKey,
+
+        fullName: secondEmpFullName,
+        phone: secondEmpPhone,
+        password: secondEmpPassword,
+
+        organizationId,
+        role: "Joi.string().max(1024).required()",
+        designation: "Joi.string().max(1024).required()",
+        companyProvidedId: "abc123",
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
 
       testDoneFn();
     })
