@@ -4,9 +4,40 @@
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
-    "login": "Login",
+    "dontHaveAccount": "Don't have an account?",
+    "login": "LOGIN",
     "emailOrPhoneInput": "Your phone number or email address",
-    "emailOrPhoneInputError": "Please enter your valid phone number or valid email address."
+    "emailOrPhoneInputError": "Please enter your valid phone number or valid email address.",
+    "passwordInput": "Your password",
+    "passwordInputError": "Please enter a password at least 8 characters long."
+  },
+  "forgotPassword": {
+    "emailOrPhoneInput": "Enter Phone or Email.",
+    "emailOrPhoneInputMessage": "Please enter the phone/email you used to create your account."
+  },
+  "register": {
+    "register": "REGISTER",
+    "fullnameInput": "Your full name",
+    "fullnameInputError": "Please enter a valid name.",
+    "phoneInput": "Your valid phone number",
+    "phoneInputError": "Please enter your valid phone number.",
+    "passwordInput": "A minimum 8 digit password",
+    "passwordInputError": "Please enter a password at least 8 characters long.",
+    "alreadyHaveAccount": "Already have an account?"
+  },
+  "sidebar": {
+    "home": "Home",
+    "employees": "Employees", 
+    "outlets": "Outlets", 
+    "warehouses": "Warehouses", 
+    "productCategories": "Product Categories", 
+    "sales": "Sales", 
+    "salesReturn": "Sales Return", 
+    "customers": "Customers", 
+    "profile": "Profile", 
+    "settings": "Settings", 
+    "about": "About", 
+    "logout": "Logout"
   },
   "home": {
     "invoices": "Invoices"
