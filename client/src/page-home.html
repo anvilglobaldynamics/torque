@@ -114,39 +114,38 @@
         </template>
       </template>
 
-      <div class="horizontal layout">
-        <div class="card vertical layout flex">
-          [[user.fullName]]
-          <br> [[user.email]]
-          <br> [[user.phone]]
-          <br>
-          <br> [[organization.employment.designation]] ([[organization.employment.role]])
+      <div class="horizontal layout wrap type">
+        <div class="card flex">
+          <div class="type title">[[user.fullName]]</div>
+          <div class="type body">[[user.email]]</div>
+          <div class="type body">[[user.phone]]</div>
+          <div class="type body">[[organization.employment.designation]] ([[organization.employment.role]])</div>
         </div>
-        <div class="card vertical layout flex" style="text-align: right">
-          [[organization.name]]
-          <br> [[organization.email]]
-          <br> [[organization.phone]]
-          <br>
-          <pre>[[organization.primaryBusinessAddress]]</pre>
+
+        <div class="card flex">
+          <div class="type title">[[organization.name]]</div>
+          <div class="type body">[[organization.email]]</div>
+          <div class="type body">[[organization.phone]]</div>
+          <div class="type body">[[organization.primaryBusinessAddress]]</div>
         </div>
       </div>
-      <div class="horizontal layout">
-        <div class="card vertical layout flex center">
+      <div class="horizontal layout wrap">
+        <div class="card flex one">
           <div class="item-value">[[metrics.totalNumberOfSalesToday]]</div>
           <div class="item-unit">Invoices</div>
           <div class="item-description">Today's Sales Count</div>
         </div>
-        <div class="card vertical layout flex center">
+        <div class="card layout flex one">
           <div class="item-value">[[metrics.totalAmountSoldToday]]</div>
           <div class="item-unit">[[settings.monetaryUnit]]</div>
           <div class="item-description">Today's Sold Amount</div>
         </div>
-        <div class="card vertical layout flex center">
+        <div class="card layout flex one">
           <div class="item-value">[[$translateNumber(metrics.totalNumberOfSalesThisMonth, selectedLanguageIdentifier)]]</div>
           <div class="item-unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable', selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
           <div class="item-description">Month's Sales Count</div>
         </div>
-        <div class="card vertical layout flex center">
+        <div class="card layout flex one">
           <div class="item-value">[[metrics.totalAmountSoldThisMonth]]</div>
           <div class="item-unit">[[settings.monetaryUnit]]</div>
           <div class="item-description">Months's Sold Amount</div>

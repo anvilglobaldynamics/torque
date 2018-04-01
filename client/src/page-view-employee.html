@@ -42,13 +42,13 @@
 
       <div class="card">
         <div class="mb-4">Click here to edit the employee.</div>
-        <paper-button raised class="primary m-0" on-tap="editTapped">Edit Employee</paper-button>
+        <paper-button raised class="btn primary" on-tap="editTapped">Edit Employee</paper-button>
       </div>
 
       <template is="dom-if" if="{{employee.isActive}}">
         <div class="card">
           <div class="mb-4">Click here to delete the employee. Be warned that once deleted, an employee can not be restored.</div>
-          <paper-button raised class="primary m-0" on-tap="fireTapped">Fire Employee</paper-button>
+          <paper-button raised class="btn primary" on-tap="fireTapped">Fire Employee</paper-button>
         </div>
       </template>
 

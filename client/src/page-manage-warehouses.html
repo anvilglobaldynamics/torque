@@ -42,12 +42,14 @@
           <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
             <div class="horizontal layout std-list-item center">
               <div class="vertical layout flex">
-                <div class="title">[[warehouse.name]]</div>
-                <div class="description">[[warehouse.phone]] ([[warehouse.physicalAddress]])</div>
+                <div class="title type capitalize">[[warehouse.name]]</div>
+                <div class="type body secondary">[[warehouse.phone]] ([[warehouse.physicalAddress]])</div>
               </div>
-              <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
-              <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
-              <paper-button raised class="primary" on-tap="posTapped">POS</paper-button>
+              <div class="horizontal layout wrap">
+                <paper-button raised class="btn primary" on-tap="viewTapped">View</paper-button>
+                <paper-button raised class="btn primary" on-tap="editTapped">Edit</paper-button>
+                <paper-button raised class="btn primary" on-tap="posTapped">POS</paper-button>
+              </div>
             </div>
           </template>
         </div>
@@ -63,8 +65,8 @@
         </template>
       </div>
 
-      <div class="transparent-card align-right">
-        <paper-button raised class="primary" on-tap="createTapped">Create New Warehouse</paper-button>
+      <div class="horizontal layout end-justified p-4">
+        <paper-button raised class="btn primary" on-tap="createTapped">Create New Warehouse</paper-button>
       </div>
 
     </div>

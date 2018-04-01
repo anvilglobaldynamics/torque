@@ -34,7 +34,7 @@
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
-        
+
         <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
           <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">Show Previous</paper-button>
         </template>
@@ -44,12 +44,15 @@
             <div class="horizontal layout std-list-item center">
               <div class="vertical layout flex">
                 <div class="title">[[outlet.name]]</div>
-                <div class="description">[[outlet.phone]] ([[outlet.physicalAddress]])</div>
+                <div class="description type secondary">[[outlet.phone]] ([[outlet.physicalAddress]])</div>
               </div>
-              <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
-              <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
-              <paper-button raised class="primary" on-tap="posTapped">POS</paper-button>
-              <paper-button raised class="primary" on-tap="salesReturnTapped">Sales Return</paper-button>
+              <div class="horizontal layout wrap">
+                <paper-button raised class="btn primary" on-tap="viewTapped">View</paper-button>
+                <paper-button raised class="btn primary" on-tap="editTapped">Edit</paper-button>
+                <paper-button raised class="btn primary" on-tap="posTapped">POS</paper-button>
+                <paper-button raised class="btn primary" on-tap="salesReturnTapped">Sales Return</paper-button>
+              </div>
+
             </div>
           </template>
         </div>
@@ -67,8 +70,8 @@
 
       </div>
 
-      <div class="transparent-card align-right">
-        <paper-button raised class="primary" on-tap="createTapped">Create New Outlet</paper-button>
+      <div class="horizontal layout end-justified p-4">
+        <paper-button raised class="btn primary" on-tap="createTapped">Create New Outlet</paper-button>
       </div>
 
     </div>
@@ -118,7 +121,7 @@
       }
 
       _fetchOutletList(cbfn) {
-        let data = { organizationId: this.app.organization.id, paginate: this.paginate  };
+        let data = { organizationId: this.app.organization.id, paginate: this.paginate };
         this.app.callGetOutletListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
