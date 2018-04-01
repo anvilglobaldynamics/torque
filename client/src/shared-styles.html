@@ -634,8 +634,18 @@
         background: #f7f7f7;
       }
 
-
-      .hide-on-mobile {}
+      @media screen and (max-width: 639px) {
+        .hide-on-mobile {
+          display: none;
+        }
+        .content-item {
+          width: calc(50% - 26px);
+          @apply(--layout-horozontal);
+          @apply(--layout-center);
+          @apply(--layout-wrap);
+          padding: 4px;
+        }
+      }
     </style>
   </template>
 </dom-module>
