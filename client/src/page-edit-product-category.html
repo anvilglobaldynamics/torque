@@ -46,7 +46,7 @@
 
           <div class="card vertical layout">
             <paper-input class="editProductCategoryForm--name" value="{{editProductCategoryForm.name}}" required minlength="3" error-message="Please enter a valid name" label="Name of your Product Category."></paper-input>
-            <paper-input class="editProductCategoryForm--unit" value="{{editProductCategoryForm.unit}}" required minlength="3" error-message="Please enter a valid name" label="Specify unit (i.e. kg, pcs etc)"></paper-input>
+            <paper-input class="editProductCategoryForm--unit" value="{{editProductCategoryForm.unit}}" required minlength="1" error-message="Please enter a valid name" label="Specify unit (i.e. kg, pcs etc)"></paper-input>
 
             <paper-input class="editProductCategoryForm--defaultPurchasePrice" value="{{editProductCategoryForm.defaultPurchasePrice}}" type="number" required min="0" error-message="Please enter a valid number" label="Default Purchase Price (the usual price you pay to buy this item)">
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>

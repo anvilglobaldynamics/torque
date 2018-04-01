@@ -12,7 +12,7 @@
     "passwordInputError": "Please enter a password at least 8 characters long."
   },
   "forgotPassword": {
-    "emailOrPhoneInput": "Enter Phone or Email.",
+    "emailOrPhoneInputTitle": "Enter Phone or Email.",
     "emailOrPhoneInputMessage": "Please enter the phone/email you used to create your account."
   },
   "register": {
