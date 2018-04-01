@@ -6,6 +6,9 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../bower_components/iron-icons/editor-icons.html">
 
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
@@ -67,24 +70,35 @@
   <template>
     <style include="shared-styles">
     </style>
-    <div class="card vertical layout">
-      <div class="horizontal layout center">
-        <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="Please enter a name or phone" label="Search customer by name or phone."
-          on-keypress="searchFieldKeypressed"></paper-input>
-        <paper-button raised class="primary" on-tap="searchTapped">Search</paper-button>
-        <paper-button raised class="primary" on-tap="cancelTapped">Cancel</paper-button>
+    <div class="card p-0 vertical layout">
+
+      <div class="p-16 horizontal layout center">
+        <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="Please enter a name or phone" label="Search customer by name or phone." on-keypress="searchFieldKeypressed"></paper-input>
+        <paper-icon-button icon="clear"></paper-icon-button>
+        <paper-button raised class="primary" on-tap="searchTapped">
+          <iron-icon icon="search" class="m-right-8"></iron-icon>Search</paper-button>
       </div>
 
-      <template is="dom-repeat" items="[[customerList]]" as="customer" index-as="customerIndex">
-        <div class="horizontal layout std-list-item flex">
-          <div>
-            Customer:
-            <b>[[customer.fullName]]</b> ([[customer.phone]])
-            <br> Balance:
-            <b>[[customer.balance]] [[page.app.settings.monetaryUnit]]</b>
-          </div>
-          <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
-        </div>
+
+      <paper-listbox>
+        <template is="dom-repeat" items="[[customerList]]" as="customer" index-as="customerIndex">
+          <paper-item class="custom layout horizontal center">
+            <div class="flex">
+              <div class="type body capitalize">[[customer.fullName]]</div>
+              <div class="horizontal layout wrap type secondary">
+                <div class="horizontal layout center m-right-8">
+                  <iron-icon icon="hardware:smartphone" class="icon small"></iron-icon>
+                  <div class="type caption-2">[[customer.phone]]</div>
+                </div>
+                <div class="horizontal layout center">
+                  <iron-icon icon="editor:attach-money" class="icon small"></iron-icon>
+                  <div class="type caption-2">[[customer.balance]] [[page.app.settings.monetaryUnit]]</div>
+                </div>
+              </div>
+            </div>
+            <paper-button raised class="btn btn-default" on-tap="selectTapped">Select</paper-button>
+          </paper-item>
+      </paper-listbox>
       </template>
     </div>
   </template>

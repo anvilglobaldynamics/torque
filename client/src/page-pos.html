@@ -7,6 +7,10 @@
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../bower_components/iron-icons/editor-icons.html">
+
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
@@ -43,20 +47,36 @@
           <div class="horizontal layout center">
             <div class="flex">
               <template is="dom-if" if="[[!customer]]">
-                No customer selected (Anonymous sale)
+                <div class="type secondary body">No customer selected (Anonymous sale)</div>
               </template>
               <template is="dom-if" if="[[customer]]">
-                Customer:
-                <b>[[customer.fullName]]</b> ([[customer.phone]])
-                <br> Balance:
-                <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
+                <div>
+                  <div class="type title capitalize">[[customer.fullName]]</div>
+                  <div class="horizontal layout wrap">
+                    <div class="horizontal layout center m-right-8">
+                      <iron-icon icon="hardware:smartphone" class="icon secondary small m-right-8"></iron-icon>
+                      <div class="type body secondary">[[customer.phone]]</div>
+                    </div>
+                    <div class="horizontal layout center">
+                      <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
+                      <div class="type body secondary">[[customer.balance]] [[page.app.settings.monetaryUnit]]</div>
+                    </div>
+                  </div>
+                </div>
               </template>
             </div>
+          </div>
+          <div class="horizontal layout wrap end-justified m-top-16">
             <template is="dom-if" if="[[customer]]">
-              <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>
+              <paper-button raised class="btn btn-danger vertical layout wrap center" on-tap="removeCustomerTapped">
+                <iron-icon icon="delete" class="m-bottom-4"></iron-icon>
+                <div>Remove Customer</div>
+              </paper-button>
             </template>
-            <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
-            <paper-button raised class="primary" on-tap="createCustomerTapped">Create Customer</paper-button>
+            <paper-button raised class="btn btn-default vertical layout wrap center" on-tap="changeCustomerTapped">
+              <iron-icon icon="create" class="m-bottom-4"></iron-icon>Change Customer</paper-button>
+            <paper-button raised class="btn primary vertical layout wrap center" on-tap="createCustomerTapped">
+              <iron-icon icon="icons:account-circle" class="m-bottom-4"></iron-icon>Create Customer</paper-button>
           </div>
         </div>
       </template>
@@ -74,8 +94,8 @@
             </div>
           </template>
 
-          <div class="transparent-card align-right">
-            <paper-button raised class="primary" on-tap="addProductTapped">Select Product</paper-button>
+          <div class="horizontal layout end-justified m-top-16">
+            <paper-button raised class="btn primary" on-tap="addProductTapped">Select Product</paper-button>
           </div>
 
         </div>
@@ -88,7 +108,7 @@
             <div class="horizontal layout std-list-item center">
               <div class="vertical layout flex">
 
-                <br> Totol:
+                <br> Total:
                 <b>{{payment.totalAmount}} [[app.settings.monetaryUnit]]</b>
 
                 <div class="horizontal layout">
@@ -146,8 +166,8 @@
               </div>
             </div>
 
-            <div class="transparent-card align-right">
-              <paper-button raised class="primary" on-tap="saveSaleTapped">Confirm Sales</paper-button>
+            <div class="horizontal layout m-top-16">
+              <paper-button raised class="primary flex" on-tap="saveSaleTapped">Confirm Sales</paper-button>
             </div>
 
           </template>

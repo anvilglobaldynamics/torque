@@ -7,6 +7,10 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
@@ -17,6 +21,7 @@
 <link rel="import" href="torque-common-behavior.html">
 
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="shared-icons.html">
 
 <dom-module id="page-view-outlet">
   <template>
@@ -27,60 +32,135 @@
           padding: 24px;
         }
       }
+
+      .card {
+        position: relative;
+      }
+
+      .pos-absolute {
+        position: fixed;
+        top: 8px;
+        right: 8px;
+      }
+
+      .content-item {
+        position: relative;
+        margin: 4px;
+        padding: 8px;
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        width: calc(20% - 26px);
+        text-align: center;
+      }
+      .content-item:hover, .content-item-2:hover  {
+        cursor: pointer;
+      }
+      .content-item .title {
+        font-weight: 300;
+        text-align: center;
+        margin: 0;
+        padding: 5px 0;
+        font-size: 16px;
+      }
+      .content-item .icon {
+        text-align: center;
+        padding: 16px;
+      }
+
+      iron-icon {
+        --iron-icon-height: 40px;
+        --iron-icon-width: 40px;
+      }
+      @media screen and (max-width: 639px) {
+        .hide-on-mobile {
+          display: none;
+        }
+        .content-item {
+          width: calc(50% - 26px);
+          @apply(--layout-horozontal);
+          @apply(--layout-center);
+          @apply(--layout-wrap);
+          padding: 4px;
+        }
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="card vertical layout">
-        <div>[[outlet.name]]</div>
-        <div>[[outlet.physicalAddress]]</div>
-        <div>Contact Person: [[outlet.contactPersonName]]</div>
-        <div>Contact Number: [[outlet.phone]]</div>
-      </div>
-
-      <div class="card">
-        <div class="mb-4">Go to POS (Point of Sale) to start selling from this organization.</div>
-        <paper-button raised class="primary m-0" on-tap="posTapped">Go to POS</paper-button>
-      </div>
-
-      <div class="card vertical layout">
-        <div class="mb-4">This outlet has the following inventories.</div>
-        <div class="std-list">
-          <div class="horizontal layout std-list-item center">
-            <div class="vertical layout flex">
-              <div class="title">[[defaultInventory.name]] Inventory</div>
-              <div class="description">This is the main inventory.</div>
-            </div>
-            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="defaultInventory">View</paper-button>
+      <div class="card p-0">
+        <div class="horizontal layout">
+          <div class="p-16 flex">
+            <div class="type headline">[[outlet.name]]</div>
+            <div class="type caption-2 secondary">[[outlet.physicalAddress]]</div>
+            <div class="type body">Contact Person: [[outlet.contactPersonName]] ([[outlet.phone]])</div>
           </div>
-          <div class="horizontal layout std-list-item center">
-            <div class="vertical layout flex">
-              <div class="title">[[returnedInventory.name]] Inventory</div>
-              <div class="description">Products that are returned by the customer go in here.</div>
-            </div>
-            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="returnedInventory">View</paper-button>
-          </div>
-          <div class="horizontal layout std-list-item center">
-            <div class="vertical layout flex">
-              <div class="title">[[damagedInventory.name]] Inventory</div>
-              <div class="description">Damaged products are kept here.</div>
-            </div>
-            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="damagedInventory">View</paper-button>
-          </div>
+  
+          <paper-menu-button horizontal-align="right">
+            <paper-icon-button icon="menu" slot="dropdown-trigger"></paper-icon-button>
+            <paper-listbox slot="dropdown-content">
+              <paper-item on-tap="editTapped"><iron-icon class="icon medium-small m-right-8" icon="create" class="m-right-8"></iron-icon> Edit Outlet</paper-item>
+              <paper-item class="type danger" on-tap="deleteTapped"><iron-icon class="icon medium-small m-right-8" icon="delete" class="m-right-8"></iron-icon> Delete Outlet</paper-item>
+            </paper-listbox>
+          </paper-menu-button>
         </div>
+        
+        
+        <div class="sp"></div>
+        <div class="p-16 layout horizontal wrap">
+
+          
+          <!-- content-item - start -->
+          <div class="content-item" on-tap="posTapped">
+            <div class="icon">
+              <iron-icon src="../../images/icons/point-of-service.png"></iron-icon>
+            </div>
+            <div class="type body uppercase">POS</div>
+            <div class="type caption secondary">Go to POS (Point of Sale) to start selling from this organization.</div>
+            <paper-ripple></paper-ripple>
+          </div>
+          <!-- content-item - end -->
+
+          <!-- content-item - start -->
+          <div class="content-item" on-tap="viewInventoryTapped" data-key="defaultInventory">
+            <div class="icon">
+              <iron-icon src="../../images/icons/package-right.png"></iron-icon>
+            </div>
+            <div class="type body uppercase">[[defaultInventory.name]] Inventory</div>
+            <div class="type caption secondary">This is the main inventory.</div>
+            <paper-ripple></paper-ripple>
+          </div>
+          <!-- content-item - end -->
+
+          <!-- content-item - start -->
+          <div class="content-item" on-tap="viewInventoryTapped" data-key="returnedInventory">
+            <div class="icon">
+              <iron-icon src="../../images/icons/package-down.png"></iron-icon>
+            </div>
+            <div class="type body uppercase">[[returnedInventory.name]] Inventory</div>
+            <div class="type caption secondary">Products that are returned by the customer go in here.</div>
+            <paper-ripple></paper-ripple>
+          </div>
+          <!-- content-item - end -->
+
+          <!-- content-item - start -->
+          <div class="content-item" on-tap="viewInventoryTapped" data-key="damagedInventory">
+            <div class="icon">
+              <iron-icon src="../../images/icons/package-wrapped.png"></iron-icon>
+            </div>
+            <div class="type body uppercase">[[damagedInventory.name]] Inventory</div>
+            <div class="type caption secondary">Products that are returned by the customer go in here.</div>
+            <paper-ripple></paper-ripple>
+          </div>
+          <!-- content-item - end -->
+          
+        </div>
+
+
       </div>
 
-      <div class="card">
-        <div class="mb-4">Click here to edit the outlet.</div>
-        <paper-button raised class="primary m-0" on-tap="editTapped">Edit Outlet</paper-button>
-      </div>
-
-      <div class="card">
-        <div class="mb-4">Click here to delete the outlet. Be warned that once deleted, an outlet can not be restored.</div>
-        <paper-button raised class="primary m-0" on-tap="deleteTapped">Delete Outlet</paper-button>
-      </div>
+     
 
     </div>
 

@@ -38,32 +38,34 @@
         <div class="std-list">
           <template is="dom-repeat" items="[[productList]]" as="product">
             <div class="horizontal layout std-list-item center">
-              <div class="vertical layout flex">
+              <div class="flex" style="min-width: 128px;">
                 <div class="title">[[product.name]]
                   <strong>[[product.count]][[product.unit]]</strong>
                 </div>
                 <div class="description">Purchase: [[product.purchasePrice]][[app.settings.monetaryUnit]], Sale: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
               </div>
-              <template is="dom-if" if="[[!product.isSelected]]">
-                <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
-              </template>
-              <template is="dom-if" if="[[product.isSelected]]">
-                <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="Count">
-                  <div slot="prefix">Selected&nbsp;</div>
-                  <div slot="suffix">&nbsp;[[product.unit]]</div>
-                </paper-input>
-                <paper-button raised class="primary" on-tap="deselectTapped">Deselect</paper-button>
-              </template>
+              <div class="horizontal layout wrap center">
+                <template is="dom-if" if="[[!product.isSelected]]">
+                  <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
+                </template>
+                <template is="dom-if" if="[[product.isSelected]]">
+                  <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="Count">
+                    <div slot="prefix">Selected&nbsp;</div>
+                    <div slot="suffix">&nbsp;[[product.unit]]</div>
+                  </paper-input>
+                  <paper-button raised class="primary" on-tap="deselectTapped">Deselect</paper-button>
+                </template>
+              </div>
             </div>
           </template>
         </div>
       </div>
 
-      <div class="transparent-card align-right">
+      <div class="horizontal layout end-justified p-4">
         <template is="dom-if" if="[[selectedProductCount]]">
-          <paper-button raised class="primary m-0" on-tap="deselectAllTapped">Deselect All Selected</paper-button>
+          <paper-button raised class="btn btn-default" on-tap="deselectAllTapped">Deselect All Selected</paper-button>
         </template>
-        <paper-button raised class="primary m-0" on-tap="selectProductsTapped">Confirm Selection</paper-button>
+        <paper-button raised class="btn primary" on-tap="selectProductsTapped">Confirm Selection</paper-button>
       </div>
 
     </div>

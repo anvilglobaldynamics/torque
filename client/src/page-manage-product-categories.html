@@ -24,22 +24,29 @@
     </style>
 
     <div class$="layout vertical [[$hideIfBeingMoved(isBeingMoved)]]" id="wrapper" style$="margin-left: [[marginLeft]]px">
-      <div class="vertical layout">
-        <div class="horizontal layout std-list-item center">
-          <div class="vertical layout flex">
-            <div class="title">[[productCategory.name]]</div>
-            <div class="description">Buying Price: [[productCategory.defaultPurchasePrice]] [[app.settings.monetaryUnit]] per [[productCategory.unit]]</div>
-            <div class="description">Selling Price: [[productCategory.defaultSalePrice]] [[app.settings.monetaryUnit]] per [[productCategory.unit]]</div>
+      <div>
+        <div class="horizontal layout std-list-item center wrap p-bottom-4">
+          <div class="flex">
+            <div class="type title capitalize">[[productCategory.name]]</div>
+            <div class="type body secondary">Buying Price: [[productCategory.defaultPurchasePrice]] [[app.settings.monetaryUnit]] per [[productCategory.unit]]</div>
+            <div class="type body secondary">Selling Price: [[productCategory.defaultSalePrice]] [[app.settings.monetaryUnit]] per [[productCategory.unit]]</div>
           </div>
-          <template is="dom-if" if="[[!isAMovingGoingOn]]">
-            <paper-button raised class="primary" on-tap="moveTapped">Move</paper-button>
-            <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
-            <paper-button raised class="primary" on-tap="deleteTapped">Delete</paper-button>
-            <paper-button raised class="primary" on-tap="addSubcategoryTapped">Add Sub Category</paper-button>
-          </template>
-          <template is="dom-if" if="[[isAMovingGoingOn]]">
-            <paper-button raised class="primary" on-tap="moveHereTapped">Move Here</paper-button>
-          </template>
+          <div class="horizontal layout wrap end-justified">
+            <template is="dom-if" if="[[!isAMovingGoingOn]]">
+              <paper-button class="btn btn-default type" on-tap="moveTapped">
+                <iron-icon icon="icons:open-with" class="icon medium-small m-right-8"></iron-icon>Move</paper-button>
+              <paper-button class="btn btn-default" on-tap="editTapped">
+                <iron-icon icon="create" class="icon medium-small m-right-8"></iron-icon>Edit</paper-button>
+              <paper-button class="btn btn-default" on-tap="deleteTapped">
+                <iron-icon icon="delete" class="icon medium-small m-right-8"></iron-icon>Delete</paper-button>
+              <paper-button raised class="btn primary" on-tap="addSubcategoryTapped">
+                <iron-icon icon="add" class="icon medium-small m-right-8"></iron-icon>Add Sub Category</paper-button>
+            </template>
+            <template is="dom-if" if="[[isAMovingGoingOn]]">
+              <paper-button raised class="primary" on-tap="moveHereTapped">Move Here</paper-button>
+            </template>
+          </div>
+
         </div>
         <template is="dom-repeat" items="[[productCategory.childList]]" as="childProductCategory">
           <product-category product-category="[[childProductCategory]]" margin-left="[[$marginMore(marginLeft)]]" app="[[app]]"></product-category>
@@ -172,13 +179,13 @@
         </div>
       </div>
 
-      <div class="transparent-card align-right">
+      <div class="horizontal layout end-justified p-4">
         <template is="dom-if" if="[[isAMovingGoingOn]]">
-          <paper-button raised class="primary" on-tap="moveToRootTapped">Move To Root</paper-button>
-          <paper-button raised class="primary" on-tap="cancelMovingTapped">Cancel</paper-button>
+          <paper-button raised class="btn primary" on-tap="moveToRootTapped">Move To Root</paper-button>
+          <paper-button raised class="btn primary" on-tap="cancelMovingTapped">Cancel</paper-button>
         </template>
         <template is="dom-if" if="[[!isAMovingGoingOn]]">
-          <paper-button raised class="primary" on-tap="createTapped">Create New Product Category</paper-button>
+          <paper-button raised class="btn primary" on-tap="createTapped">Create New Product Category</paper-button>
         </template>
       </div>
 
