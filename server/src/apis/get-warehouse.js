@@ -2,9 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
-let { warehouseCommonMixin } = require('./mixins/warehouse-common');
+let { inventoryCommonMixin } = require('./mixins/inventory-common');
 
-exports.GetWarehouseApi = class extends collectionCommonMixin(warehouseCommonMixin(Api)) {
+exports.GetWarehouseApi = class extends collectionCommonMixin(inventoryCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -42,7 +42,7 @@ exports.GetWarehouseApi = class extends collectionCommonMixin(warehouseCommonMix
   handle({ body }) {
     let { warehouseId } = body;
     this._getWarehouse({ warehouseId }, (warehouse) => {
-      this._getWarehouseInventories({ warehouseId }, (defaultInventory, returnedInventory, damagedInventory) => {
+      this._getInventoriesByInventoryContainer({ inventoryContainerId: warehouseId }, (defaultInventory, returnedInventory, damagedInventory) => {
         this.success({ warehouse, defaultInventory, returnedInventory, damagedInventory });
       })
     });
