@@ -37,9 +37,11 @@ exports.DeleteOutletApi = class extends collectionCommonMixin(inventoryCommonMix
 
   handle({ body, userId }) {
     let { outletId } = body;
-    this._deleteOutlet({ outletId }, _ => {
-      this._deleteByInventoryContainerId({ inventoryContainerId: outletId }, _ => {
-        this.success({ status: "success" });
+    this._checkIfInventoryContainerIsEmpty({ inventoryContainerId: outletId }, _ => {
+      this._deleteOutlet({ outletId }, _ => {
+        this._deleteByInventoryContainerId({ inventoryContainerId: outletId }, _ => {
+          this.success({ status: "success" });
+        });
       });
     });
   }

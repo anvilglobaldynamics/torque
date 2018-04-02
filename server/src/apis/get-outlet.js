@@ -44,7 +44,7 @@ exports.GetOutletApi = class extends collectionCommonMixin(inventoryCommonMixin(
     this._getOutlet({ outletId }, (outlet) => {
       this._getInventoriesByInventoryContainer({ inventoryContainerId: outletId }, (defaultInventory, returnedInventory, damagedInventory) => {
         this.success({ outlet, defaultInventory, returnedInventory, damagedInventory });
-      })
+      });
     });
   }
 

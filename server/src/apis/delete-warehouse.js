@@ -37,9 +37,11 @@ exports.DeleteWarehouseApi = class extends collectionCommonMixin(inventoryCommon
 
   handle({ body, userId }) {
     let { warehouseId } = body;
-    this._deleteWarehouse({ warehouseId }, _ => {
-      this._deleteByInventoryContainerId({ inventoryContainerId: warehouseId }, _ => {
-        this.success({ status: "success" });
+    this._checkIfInventoryContainerIsEmpty({ inventoryContainerId: warehouseId }, _ => {
+      this._deleteWarehouse({ warehouseId }, _ => {
+        this._deleteByInventoryContainerId({ inventoryContainerId: warehouseId }, _ => {
+          this.success({ status: "success" });
+        });
       });
     });
   }

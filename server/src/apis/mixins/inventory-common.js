@@ -69,6 +69,10 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     })
   }
 
+  _checkIfInventoryContainerIsEmpty({ inventoryContainerId }, cbfn) {
+    cbfn();
+  }
+
   _getInventoriesByInventoryContainer({ inventoryContainerId }, cbfn) {
     this.database.inventory.listByInventoryContainerId({ inventoryContainerId }, (err, inventoryList) => {
       let defaultInventory, returnedInventory, damagedInventory;
