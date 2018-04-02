@@ -60,6 +60,13 @@ exports.UserCollection = class extends Collection {
     this._findOne({ id: userId }, cbfn);
   }
 
+  listByIdList({ idList }, cbfn) {
+    let filter = {
+      id: { $in: idList }
+    }
+    this._find(filter, cbfn);
+  }
+
   findByCommonFields({ userSearchRegex }, cbfn) {
     this._find({
       $or: [
