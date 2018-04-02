@@ -51,7 +51,7 @@ let invalidUserId = generateInvalidId();
 let invalidEmploymentId = generateInvalidId();
 let invalidOrganizationId = generateInvalidId();
 
-describe('employee', _ => {
+describe.only('employee', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

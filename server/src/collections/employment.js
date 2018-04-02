@@ -192,6 +192,10 @@ exports.EmploymentCollection = class extends Collection {
     this._find({ userId }, cbfn);
   }
 
+  getActiveEmploymentsOfUser({ userId }, cbfn) {
+    this._find({ userId, isActive: true }, cbfn);
+  }
+
   getEmploymentById({ employmentId }, cbfn) {
     this._findOne({ id: employmentId }, cbfn);
   }
