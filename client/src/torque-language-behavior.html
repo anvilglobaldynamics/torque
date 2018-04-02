@@ -1,5 +1,6 @@
 <script>
-  if (!window.TorqueLanguageBehavior) {
+  (function () {
+    if (window.TorqueLanguageBehavior) return;
 
     const _loadLanguageJson = (uri, cbfn) => {
       let request = new XMLHttpRequest();
@@ -171,6 +172,6 @@
 
     }
 
-  }
+  })();
 
 </script>
