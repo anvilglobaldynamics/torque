@@ -88,14 +88,23 @@ class Api {
           })
         });
       }
+      schema = schema.keys({
+        clientLanguage: Joi.string().valid('en-us', 'bn-bd').optional()
+      });
       let { error, value } = this.validate(body, schema);
       if (error) {
         return this.fail(error, error);
       } else {
         body = this.sanitize(value);
+        if ('clientLanguage' in body) {
+          this.clientLanguage = body.clientLanguage;
+          delete body['clientLanguage'];
+        } else {
+          this.clientLanguage = 'en-us';
+        }
         if ('paginate' in body) {
           this.__paginationCache = body.paginate;
-          delete body['paginate']
+          delete body['paginate'];
         }
         if (this.requiresAuthentication) {
           let { apiKey } = body;

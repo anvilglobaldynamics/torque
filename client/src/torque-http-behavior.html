@@ -67,6 +67,11 @@
       }
 
       callCombinedJsonApi(path, data, _cbfn) {
+        if (this.selectedLanguageIdentifier) {
+          data.clientLanguage = this.selectedLanguageIdentifier;
+        } else {
+          data.clientLanguage = 'en-us';
+        }
         let cbfn = this._createGenericCallback(path, data, _cbfn);
         let now = (new Date).getTime();
         if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
