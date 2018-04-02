@@ -9,7 +9,8 @@
   ],
   "extraDependencies": [
     "manifest.json",
-    "bower_components/webcomponentsjs/*.js"
+    "bower_components/webcomponentsjs/*.js",
+    "bower_components/font-roboto/fonts/roboto/*"
   ],
   "lint": {
     "rules": [
