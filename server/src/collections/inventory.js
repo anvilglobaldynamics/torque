@@ -91,4 +91,11 @@ exports.InventoryCollection = class extends Collection {
     this._find({ organizationId }, cbfn);
   }
 
+  deleteByInventoryContainerId({ inventoryContainerId }, cbfn) {
+    let modifications = {
+      $set: { isDeleted: true }
+    }
+    this._update({ inventoryContainerId }, modifications, cbfn);
+  }
+
 }

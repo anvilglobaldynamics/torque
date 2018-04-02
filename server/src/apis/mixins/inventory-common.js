@@ -52,6 +52,13 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     })
   }
 
+  _deleteByInventoryContainerId({ inventoryContainerId }, cbfn) {
+    this.database.inventory.deleteByInventoryContainerId({ inventoryContainerId }, (err) => {
+      if (err) return this.fail(err);
+      cbfn();
+    })
+  }
+
   _createStandardInventories({ inventoryContainerId, inventoryContainerType, organizationId }, cbfn) {
     this._createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'default', name: 'Default' }, () => {
       this._createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'returned', name: 'Returned' }, () => {
