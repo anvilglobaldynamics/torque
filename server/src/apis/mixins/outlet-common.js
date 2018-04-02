@@ -1,4 +1,3 @@
-
 exports.outletCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _verifyOutletExist({ outletId }, cbfn) {

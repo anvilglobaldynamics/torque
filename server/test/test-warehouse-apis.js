@@ -37,7 +37,7 @@ let warehouseToBeModified = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidWarehouseId = generateInvalidId();
 
-describe('warehouse', _ => {
+describe.only('warehouse', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

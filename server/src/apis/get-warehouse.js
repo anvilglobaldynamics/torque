@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
+let { warehouseCommonMixin } = require('./mixins/warehouse-common');
 
-exports.GetWarehouseApi = class extends collectionCommonMixin(Api) {
+exports.GetWarehouseApi = class extends collectionCommonMixin(warehouseCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -35,25 +36,6 @@ exports.GetWarehouseApi = class extends collectionCommonMixin(Api) {
     this.database.warehouse.findById({ warehouseId }, (err, warehouse) => {
       if (!this._ensureDoc(err, warehouse, "WAREHOUSE_INVALID", "Warehouse not found")) return;
       cbfn(warehouse);
-    })
-  }
-
-  _getWarehouseInventories({ warehouseId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: warehouseId }, (err, inventoryList) => {
-      let defaultInventory, returnedInventory, damagedInventory;
-      inventoryList.forEach(inventory => {
-        if (inventory.type === 'default') {
-          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-          defaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
-        } else if (inventory.type === 'returned') {
-          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-          returnedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
-        } else if (inventory.type === 'damaged') {
-          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-          damagedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
-        }
-      });
-      cbfn(defaultInventory, returnedInventory, damagedInventory);
     })
   }
 
