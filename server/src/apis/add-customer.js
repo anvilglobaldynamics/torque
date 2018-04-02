@@ -27,9 +27,9 @@ exports.AddCustomerApi = class extends Api {
     }];
   }
 
-  _createCustomer({ organizationId, fullName, phone, openingBalance }, cbfn) {
+  _createCustomer({ organizationId, fullName, phone, openingBalance, acceptedByUserId }, cbfn) {
     let customer = {
-      organizationId, fullName, phone, openingBalance
+      organizationId, fullName, phone, openingBalance, acceptedByUserId
     }
     this.database.customer.create(customer, (err, customerId) => {
       if (err) return this.fail(err);
@@ -37,9 +37,9 @@ exports.AddCustomerApi = class extends Api {
     });
   }
 
-  handle({ body }) {
+  handle({ body, userId }) {
     let { organizationId, fullName, phone, openingBalance } = body;
-    this._createCustomer({ organizationId, fullName, phone, openingBalance }, (customerId) => {
+    this._createCustomer({ organizationId, fullName, phone, openingBalance, acceptedByUserId: userId }, (customerId) => {
       this.success({ status: "success", customerId });
     });
   }
