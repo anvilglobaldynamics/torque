@@ -40,6 +40,11 @@
         <div>Company Id: [[employee.companyProvidedId]]</div>
       </div>
 
+      <div class="card vertical layout">
+        <div>Name: [[employee.userDetails.fullName]]</div>
+        <div>Phone: [[employee.userDetails.phone]]</div>
+      </div>
+
       <div class="card">
         <div class="mb-4">Click here to edit the employee.</div>
         <paper-button raised class="btn primary" on-tap="editTapped">Edit Employee</paper-button>
