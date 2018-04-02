@@ -91,7 +91,7 @@ exports.HireUserAsEmployeeApi = class extends userCommonMixin(collectionCommonMi
 
   handle({ body }) {
     let { userId, organizationId, role, designation, companyProvidedId, privileges } = body;
-    this._findUserById({ userId }, () => {
+    this._findUserById({ userId }, (user) => {
       this._checkIfUserEmployed({ userId }, () => {
         this._hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {
           this.success({ status: "success", employmentId });

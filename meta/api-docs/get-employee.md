@@ -39,6 +39,16 @@ Possible Error Codes:
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
     
     userId: Joi.number().max(999999999999999).required(),
+    userDetails: Joi.object().required().keys({
+      fullName: Joi.string().min(1).max(64).required(),
+      phone: Joi.string().alphanum().min(11).max(14).required(),
+      email: Joi.string().email().min(3).max(30).allow(null).required(),
+      nid: Joi.string().min(16).max(16).allow('').required(),
+      physicalAddress: Joi.string().min(1).max(128).allow('').required(),
+      emergencyContact: Joi.string().min(6).max(11).allow('').required(),
+      bloodGroup: Joi.string().alphanum().min(2).max(3).allow('').required()
+    }),
+
     organizationId: Joi.number().max(999999999999999).required(),
     designation: Joi.string().max(1024).required(),
     role: Joi.string().max(1024).required(),
