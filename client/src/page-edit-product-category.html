@@ -36,7 +36,7 @@
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <iron-form id="editProductCategoryForm">
+      <iron-form id="editProductCategoryForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <template is="dom-if" if="[[parentProductCategory]]">
             <div class="card vertical layout">
@@ -78,8 +78,8 @@
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]]" on-tap="createProductCategoryTapped">Create Product Category</paper-button>
-              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]]" on-tap="updateProductCategoryTapped">Update Product Category</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editProductCategoryForm--submit" on-tap="createProductCategoryTapped">Create Product Category</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editProductCategoryForm--submit" on-tap="updateProductCategoryTapped">Update Product Category</paper-button>
             </div>
           </div>
         </form>

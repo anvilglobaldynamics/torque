@@ -36,7 +36,7 @@
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <iron-form id="salesReturnForm">
+      <iron-form id="salesReturnForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
 
@@ -48,7 +48,7 @@
             </paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class="primary" on-tap="addSalesReturnTapped">Add Sales Return</paper-button>
+              <paper-button raised class="primary salesReturnForm--submit" on-tap="addSalesReturnTapped">Add Sales Return</paper-button>
             </div>
           </div>
         </form>

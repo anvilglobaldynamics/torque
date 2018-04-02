@@ -33,7 +33,7 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
-      <iron-form id="editEmployeeForm">
+      <iron-form id="editEmployeeForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
 
@@ -41,7 +41,7 @@
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class="primary" on-tap="updateEmployeeTapped">Update Employee</paper-button>
+              <paper-button raised class="primary editEmployeeForm--submit" on-tap="updateEmployeeTapped">Update Employee</paper-button>
             </div>
 
           </div>

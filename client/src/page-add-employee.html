@@ -34,7 +34,7 @@
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <iron-form id="addEmployeeForm">
+      <iron-form id="addEmployeeForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
             <paper-input class="addEmployeeForm--fullName" value="{{addEmployeeForm.fullName}}" required minlength="3" error-message="Please enter a valid name" label="Name of Employee."></paper-input>
@@ -45,7 +45,7 @@
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class="primary" on-tap="addEmployeeTapped">Add Employee</paper-button>
+              <paper-button raised class="primary addEmployeeForm--submit" on-tap="addEmployeeTapped">Add Employee</paper-button>
             </div>
           </div>
         </form>
