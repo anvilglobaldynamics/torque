@@ -6,6 +6,11 @@ const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 const baselib = require('baselib');
 
+const languageCache = {
+  'en-us': require('./languages/en-us').verses,
+  'bn-bd': require('./languages/bn-bd').verses
+};
+
 const SESSION_DURATION_LIMIT = 15 * 24 * 60 * 60 * 1000;
 
 class Api {
@@ -102,6 +107,7 @@ class Api {
         } else {
           this.clientLanguage = 'en-us';
         }
+        this.verses = languageCache[this.clientLanguage];
         if ('paginate' in body) {
           this.__paginationCache = body.paginate;
           delete body['paginate'];
