@@ -264,6 +264,10 @@
   <script>
     let localDocument = document.currentScript.ownerDocument;
 
+    // PATCH: Move to PolymerFx->FxElement
+    FxElement.prototype.delay = (timeout, fn) => window.setTimeout(fn, timeout);
+    // PATCH-END
+
     class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior, TorqueLanguageBehavior) {
 
       static get is() { return 'torque-app'; }

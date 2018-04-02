@@ -81,6 +81,9 @@ exports.OutletCollection = class extends Collection {
         { contactPersonName: searchRegex },
         { phone: searchRegex }
       ];
+      if (String(parseInt(searchString)) === searchString) {
+        query.$or.push({ id: parseInt(searchString) });
+      }
     }
     this._find(query, cbfn);
   }
