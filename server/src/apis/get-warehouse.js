@@ -42,7 +42,7 @@ exports.GetWarehouseApi = class extends collectionCommonMixin(inventoryCommonMix
   handle({ body }) {
     let { warehouseId } = body;
     this._getWarehouse({ warehouseId }, (warehouse) => {
-      this._getInventoriesByInventoryContainer({ inventoryContainerId: warehouseId }, (defaultInventory, returnedInventory, damagedInventory) => {
+      this._getInventoriesByInventoryContainer({ inventoryContainerId: warehouseId, inventoryContainerType: "warehouse" }, (defaultInventory, returnedInventory, damagedInventory) => {
         this.success({ warehouse, defaultInventory, returnedInventory, damagedInventory });
       })
     });

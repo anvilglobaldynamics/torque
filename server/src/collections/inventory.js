@@ -70,8 +70,8 @@ exports.InventoryCollection = class extends Collection {
     this._update({ id: inventoryId }, modifications, cbfn);
   }
 
-  listByInventoryContainerId({ inventoryContainerId }, cbfn) {
-    this._find({ inventoryContainerId }, cbfn);
+  listByInventoryContainerId({ inventoryContainerId, inventoryContainerType }, cbfn) {
+    this._find({ inventoryContainerId, inventoryContainerType }, cbfn);
   }
 
   updateProductList({ inventoryId }, { productList }, cbfn) {

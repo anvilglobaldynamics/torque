@@ -73,8 +73,8 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     cbfn();
   }
 
-  _getInventoriesByInventoryContainer({ inventoryContainerId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ inventoryContainerId }, (err, inventoryList) => {
+  _getInventoriesByInventoryContainer({ inventoryContainerId, inventoryContainerType }, cbfn) {
+    this.database.inventory.listByInventoryContainerId({ inventoryContainerId, inventoryContainerType }, (err, inventoryList) => {
       let defaultInventory, returnedInventory, damagedInventory;
       inventoryList.forEach(inventory => {
         if (inventory.type === 'default') {

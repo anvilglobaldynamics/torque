@@ -35,6 +35,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
     this.database.inventory.findById({ inventoryId }, (err, inventory) => {
       if (err) return this.fail(err);
       if (!this._ensureDoc(err, inventory, "INVENTORY_INVALID", "inventory could not be found")) return;
+      // console.log("inventory: ", inventory);
       cbfn(inventory);
     })
   }
@@ -66,6 +67,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
   }
 
   _getMatchingProductList({ productList }, cbfn) {
+    // console.log("productList: ", productList);
     let productIdList = productList.map(product => product.productId);
     this.database.product.findByIdList({ idList: productIdList }, (err, matchingProductList) => {
       if (err) return this.fail(err);
