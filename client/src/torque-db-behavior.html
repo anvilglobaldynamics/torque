@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/atomicdb/atomicdb.html">
 <script>
-  if (!window.TorqueDbBehavior) {
+  (function () {
+    if (window.TorqueDbBehavior) return;
     /* @polymerMixin */
     TorqueDbBehavior = (SuperClass) => class extends SuperClass {
 
@@ -45,6 +46,6 @@
       }
 
     }
-  }
+  })();
 
 </script>

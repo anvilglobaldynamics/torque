@@ -1,5 +1,6 @@
 <script>
-  if (!window.TorqueSwipeBehavior) {
+  (function () {
+    if (window.TorqueSwipeBehavior) return;
     /* @polymerMixin */
     TorqueSwipeBehavior = (SuperClass) => class extends SuperClass {
 
@@ -51,6 +52,6 @@
 
     }
 
-  }
+  })();
 
 </script>

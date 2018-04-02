@@ -1,5 +1,6 @@
 <script>
-  if (!window.TorqueCommonBehavior) {
+  (function () {
+    if (window.TorqueCommonBehavior) return;
     /* @polymerMixin */
     TorqueCommonBehavior = (SuperClass) => class extends SuperClass {
 
@@ -178,6 +179,6 @@
       }
 
     }
-  }
+  })();
 
 </script>
