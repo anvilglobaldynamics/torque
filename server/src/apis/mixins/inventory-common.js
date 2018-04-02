@@ -2,7 +2,7 @@
 exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _getOutletDefaultInventory({ outletId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
+    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId, inventoryContainerType: "outlet" }, (err, inventoryList) => {
       if (err) return this.fail(err);
       if (inventoryList.length === 0) {
         err = new Error("Invalid Outlet Or Inventory could not be found");
@@ -18,7 +18,7 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
   _getOutletReturnedInventory({ outletId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
+    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId, inventoryContainerType: "outlet" }, (err, inventoryList) => {
       if (err) return this.fail(err);
       if (inventoryList.length === 0) {
         err = new Error("Invalid Outlet Or Inventory could not be found");
