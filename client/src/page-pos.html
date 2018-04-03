@@ -109,7 +109,7 @@
                 <div class="vertical layout flex">
 
                   <br> Total:
-                  <b>{{payment.totalAmount}} [[app.settings.monetaryUnit]]</b>
+                  <b>{{$round(payment.totalAmount)}} [[app.settings.monetaryUnit]]</b>
 
                   <div class="horizontal layout">
                     <paper-dropdown-menu label="Discount Type" class="mr-4">
@@ -130,7 +130,7 @@
 
                   <template is="dom-if" if="[[payment.discountValue]]">
                     <br> Discounted Amount:
-                    <b>{{payment.discountedAmount}} [[app.settings.monetaryUnit]]</b>
+                    <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
                   </template>
 
                   <paper-input class="payment--vatValue" value="{{vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="VAT">
@@ -139,7 +139,7 @@
 
                   <template is="dom-if" if="[[vatValue]]">
                     <br> Vat Amount:
-                    <b>{{payment.vatAmount}} [[app.settings.monetaryUnit]]</b>
+                    <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
                   </template>
 
                   <paper-input class="payment--serviceChargeAmount" value="{{payment.serviceChargeAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Service Charge Amount">
@@ -147,11 +147,11 @@
                   </paper-input>
 
                   <br> Totol Billed:
-                  <b>{{payment.totalBilled}} [[app.settings.monetaryUnit]]</b>
+                  <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
 
                   <template is="dom-if" if="[[customer]]">
                     <br> Previous Customer Balance:
-                    <b>{{customer.balance}} [[app.settings.monetaryUnit]]</b>
+                    <b>{{$round(customer.balance)}} [[app.settings.monetaryUnit]]</b>
                   </template>
 
                   <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Paid Amount">
@@ -160,7 +160,7 @@
 
                   <template is="dom-if" if="[[payment.paidAmount]]">
                     <br> Change Amount:
-                    <b>{{payment.changeAmount}} [[app.settings.monetaryUnit]]</b>
+                    <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
                   </template>
 
                 </div>
