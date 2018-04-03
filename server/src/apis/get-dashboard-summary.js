@@ -26,7 +26,7 @@ exports.GetDashboardSummaryApi = class extends salesCommonMixin(Api) {
     }];
   }
 
-  _getSalesSummaryForDate({ organizationId, fromDate, toDate }, cbfn) {
+  _getSalesSummaryForDateRange({ organizationId, fromDate, toDate }, cbfn) {
     this._getSalesList({ organizationId, fromDate, toDate, outletId: null, customerId: null, shouldFilterByOutlet: false, shouldFilterByCustomer: false }, (salesList) => {
       let totalCount = salesList.length;
       let totalAmount = 0;
@@ -37,26 +37,42 @@ exports.GetDashboardSummaryApi = class extends salesCommonMixin(Api) {
     });
   }
 
-  _getSalesSummary({ organizationId }, cbfn) {
-    let toDate = new Date();
+  _getSalesSummaryForDay(organizationId, cbfn) {
     let fromDate = new Date();
     fromDate.setHours(0);
     fromDate.setMinutes(0);
     fromDate.setSeconds(0);
-    this._getSalesSummaryForDate({ organizationId, toDate, fromDate }, ({ totalCount, totalAmount }) => {
+    fromDate = fromDate.getTime();
+    let toDate = new Date();
+    toDate.setHours(23);
+    toDate.setMinutes(59);
+    toDate = toDate.getTime();
+    this._getSalesSummaryForDateRange({ organizationId, toDate, fromDate }, cbfn);
+  }
+
+  _getSalesSummaryForMonth(organizationId, cbfn) {
+    let fromDate = new Date();
+    fromDate.setDate(0);
+    fromDate.setHours(0);
+    fromDate.setMinutes(0);
+    fromDate.setSeconds(0);
+    fromDate = fromDate.getTime();
+    let toDate = new Date();
+    toDate.setHours(23);
+    toDate.setMinutes(59);
+    toDate = toDate.getTime();
+    this._getSalesSummaryForDateRange({ organizationId, toDate, fromDate }, cbfn);
+  }
+
+  _getSalesSummary({ organizationId }, cbfn) {
+    this._getSalesSummaryForDay(organizationId, ({ totalCount, totalAmount }) => {
       let totalNumberOfSalesToday = totalCount;
       let totalAmountSoldToday = totalAmount;
 
-      let toDate = new Date();
-      let fromDate = new Date();
-      fromDate.setMonth(fromDate.getMonth() - 1);
-      fromDate.setHours(0);
-      fromDate.setMinutes(0);
-      fromDate.setSeconds(0);
-      this._getSalesSummaryForDate({ organizationId, toDate, fromDate }, ({ totalCount, totalAmount }) => {
+      this._getSalesSummaryForMonth(organizationId, ({ totalCount, totalAmount }) => {
         let totalNumberOfSalesThisMonth = totalCount;
         let totalAmountSoldThisMonth = totalAmount;
-        
+
         cbfn({
           totalNumberOfSalesToday,
           totalAmountSoldToday,
