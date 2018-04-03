@@ -325,6 +325,15 @@
         this.useLanguageServices();
         this.initiateLanguageServices();
         this.pushPageTitle(this.brandName);
+        // PATCH-START for PolymerFx#FxDialogBehavior
+        this.delay(0, () => {
+          this.elem('#generic-modal-input paper-input').addEventListener('keypress', (e) => {
+            if (e.which === 13) {
+              this.elem('#generic-modal-input paper-button[dialog-confirm]').click();
+            }
+          });
+        });
+        // PATCH-END
       }
 
       _manageProductionVariables() {
