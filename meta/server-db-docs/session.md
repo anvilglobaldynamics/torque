@@ -1,7 +1,7 @@
 This collection contains a session
 
 ## signature
-```
+```js
 Joi.object().keys({
   userId: Joi.number().max(999999999999999).required(),
   apiKey: Joi.string().length(64).required(),

@@ -1,7 +1,7 @@
 This collection contains an shipment
 
 ## signature
-```
+```js
 Joi.object().keys({
   createdDatetimeStamp: Joi.number().max(999999999999999).required(),
   inventoryId: Joi.number().max(999999999999999).required(),

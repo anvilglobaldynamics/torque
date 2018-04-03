@@ -1,7 +1,7 @@
 This collection contains a password-reset-request
 
 ## signature
-```
+```js
 Joi.object().keys({
   forUserId: Joi.number().max(999999999999999).required(),
   forEmail: Joi.string().email().min(3).max(30), 

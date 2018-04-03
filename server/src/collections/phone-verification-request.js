@@ -10,7 +10,7 @@ exports.PhoneVerificationRequestCollection = class extends Collection {
     this.collectionName = 'phone-verification-request';
 
     this.joiSchema = Joi.object().keys({
-      forPhone: Joi.string().alphanum().min(11).max(14).required(),
+      forPhone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       forUserId: Joi.number().max(999999999999999).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       verifiedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
