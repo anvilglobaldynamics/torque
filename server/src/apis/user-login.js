@@ -35,7 +35,7 @@ exports.UserLoginApi = class extends userCommonMixin(Api) {
     this.database.user.findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }, (err, user) => {
       if (err) return this.fail(err);
       if (!user) {
-        let err = new Error("No user matched the email and password combination");
+        let err = new Error(this.verses.UserLoginApi.userNotFound);
         err.code = 'USER_NOT_FOUND';
         return this.fail(err);
       }

@@ -79,7 +79,7 @@
         <div class="horizontal layout std-list-item flex">
           <div>
             Outlet:
-            <b>[[outlet.fullName]]</b> ([[outlet.phone]])
+            <b>[[outlet.name]]</b> ([[outlet.phone]])
             <br> Address:
             <b>[[outlet.physicalAddress]]</b>
           </div>
@@ -134,6 +134,13 @@
       selectTapped(e) {
         let { outletIndex } = e.model;
         this._selectOutlet(outletIndex);
+      }
+
+      forceSelect(outletId) {
+        this.delay(0, () => {
+          this.searchString = outletId;
+          this.searchTapped();
+        });
       }
 
     }

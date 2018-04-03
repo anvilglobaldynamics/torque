@@ -10,7 +10,8 @@ exports.emailVerificationRequestMixin = (SuperApiClass) => class extends SuperAp
 
   _sendEmailVerificationMail({ email, verificationLink: verificationLink }) {
     let model = { email, verificationLink };
-    this.server.emailService.sendStoredMail('email-verification', model, email, (err, isDeveloperError, response, finalBody) => {
+    let clientLanguage = (this.clientLanguage || 'en-us');
+    this.server.emailService.sendStoredMail(clientLanguage, 'email-verification', model, email, (err, isDeveloperError, response, finalBody) => {
       if ((err) || response.message !== 'Queued. Thank you.') {
         if (err) {
           if (!isDeveloperError) this.logger.error(err);
@@ -23,7 +24,7 @@ exports.emailVerificationRequestMixin = (SuperApiClass) => class extends SuperAp
           verificationLink,
           model
         });
-      }      
+      }
     });
   }
 

@@ -24,18 +24,33 @@ class EmailService {
     let css = fslib.readFileSync(cssFilePath, { encoding: 'utf8' });
     let templateList = [
       {
-        name: 'email-verification',
-        path: './src/templates/email/email-verification.html',
+        name: 'en-us--email-verification',
+        path: './src/templates/email/en-us--email-verification.html',
         subject: `Your email verification code for ${branding.shortName}`
       },
       {
-        name: 'password-reset',
-        path: './src/templates/email/password-reset.html',
+        name: 'en-us--password-reset',
+        path: './src/templates/email/en-us--password-reset.html',
         subject: `Your password reset code for ${branding.shortName}`
       },
       {
-        name: 'generic-message',
-        path: './src/templates/email/generic-message.html',
+        name: 'en-us--generic-message',
+        path: './src/templates/email/en-us--generic-message.html',
+        subject: `Message from ${branding.shortName}`
+      },
+      {
+        name: 'bn-bd--email-verification',
+        path: './src/templates/email/bn-bd--email-verification.html',
+        subject: `Your email verification code for ${branding.shortName}`
+      },
+      {
+        name: 'bn-bd--password-reset',
+        path: './src/templates/email/bn-bd--password-reset.html',
+        subject: `Your password reset code for ${branding.shortName}`
+      },
+      {
+        name: 'bn-bd--generic-message',
+        path: './src/templates/email/bn-bd--generic-message.html',
         subject: `Message from ${branding.shortName}`
       }
     ];
@@ -74,7 +89,8 @@ class EmailService {
     });
   }
 
-  sendStoredMail(templateName, model, to, cbfn) {
+  sendStoredMail(clientLanguage, templateName, model, to, cbfn) {
+    templateName = clientLanguage + '--' + templateName;
     let html = this.generateHtml(templateName, model);
     let subject = this.templates[templateName].subject;
     this.sendMail({ to, subject, html }, cbfn);

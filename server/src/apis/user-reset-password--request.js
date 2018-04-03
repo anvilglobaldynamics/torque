@@ -30,7 +30,8 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Api) {
 
   _sendPasswordResetEmail({ email, confirmationLink }) {
     let model = { email, confirmationLink };
-    this.server.emailService.sendStoredMail('password-reset', model, email, (err, isDeveloperError, response, finalBody) => {
+    let clientLanguage = (this.clientLanguage || 'en-us');
+    this.server.emailService.sendStoredMail(clientLanguage, 'password-reset', model, email, (err, isDeveloperError, response, finalBody) => {
       if ((err) || response.message !== 'Queued. Thank you.') {
         if (err) {
           if (!isDeveloperError) this.logger.error(err);

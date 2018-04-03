@@ -52,9 +52,12 @@
         width: calc(20% - 26px);
         text-align: center;
       }
-      .content-item:hover, .content-item-2:hover  {
+
+      .content-item:hover,
+      .content-item-2:hover {
         cursor: pointer;
       }
+
       .content-item .title {
         font-weight: 300;
         text-align: center;
@@ -62,6 +65,7 @@
         padding: 5px 0;
         font-size: 16px;
       }
+
       .content-item .icon {
         text-align: center;
         padding: 16px;
@@ -71,7 +75,6 @@
         --iron-icon-height: 40px;
         --iron-icon-width: 40px;
       }
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -85,21 +88,23 @@
             <div class="type caption-2 secondary">[[outlet.physicalAddress]]</div>
             <div class="type body">Contact Person: [[outlet.contactPersonName]] ([[outlet.phone]])</div>
           </div>
-  
+
           <paper-menu-button horizontal-align="right">
             <paper-icon-button icon="menu" slot="dropdown-trigger"></paper-icon-button>
             <paper-listbox slot="dropdown-content">
-              <paper-item on-tap="editTapped"><iron-icon class="icon medium-small m-right-8" icon="create" class="m-right-8"></iron-icon> Edit Outlet</paper-item>
-              <paper-item class="type danger" on-tap="deleteTapped"><iron-icon class="icon medium-small m-right-8" icon="delete" class="m-right-8"></iron-icon> Delete Outlet</paper-item>
+              <paper-item on-tap="editTapped">
+                <iron-icon class="icon medium-small m-right-8" icon="create" class="m-right-8"></iron-icon> Edit Outlet</paper-item>
+              <paper-item class="type danger" on-tap="deleteTapped">
+                <iron-icon class="icon medium-small m-right-8" icon="delete" class="m-right-8"></iron-icon> Delete Outlet</paper-item>
             </paper-listbox>
           </paper-menu-button>
         </div>
-        
-        
+
+
         <div class="sp"></div>
         <div class="p-16 layout horizontal wrap">
 
-          
+
           <!-- content-item - start -->
           <div class="content-item" on-tap="posTapped">
             <div class="icon">
@@ -143,13 +148,24 @@
             <paper-ripple></paper-ripple>
           </div>
           <!-- content-item - end -->
-          
+
+          <!-- content-item - start -->
+          <div class="content-item" on-tap="manageSalesTapped">
+            <div class="icon">
+              <iron-icon src="../../images/icons/package-wrapped.png"></iron-icon>
+            </div>
+            <div class="type body uppercase">Previous Sales</div>
+            <div class="type caption secondary">View/Return previous sales.</div>
+            <paper-ripple></paper-ripple>
+          </div>
+          <!-- content-item - end -->
+
         </div>
 
 
       </div>
 
-     
+
 
     </div>
 
@@ -186,7 +202,7 @@
           });
           return;
         }
-        this._processOutlet(_ => { 
+        this._processOutlet(_ => {
           this.isReady = true;
         });
       }
@@ -260,6 +276,10 @@
 
       posTapped(e) {
         return this.app.navigateTo(`/pos/outlet:${this.outlet.id}`);
+      }
+
+      manageSalesTapped(e) {
+        return this.app.navigateTo(`/manage-sales/outlet:${this.outlet.id}`);
       }
 
       // region: misc =================================

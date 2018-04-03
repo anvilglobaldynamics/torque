@@ -197,6 +197,10 @@
         this.app.pushPageTitle('Manage Sales');
         if (!this._ensureAccess()) return;
         this._processSalesList(() => {
+          if ('outlet' in this.params) {
+            this.isSearchingOutlet = true;
+            this.elem('elem-outlet-selector').forceSelect(this.params.outlet);
+          }
           this.self = this;
           this.isReady = true;
         });
@@ -241,13 +245,13 @@
           this.shouldFilterByOutlet = false;
         }
 
-        let data = { 
+        let data = {
           organizationId: this.app.organization.id,
-          outletId, 
-          customerId, 
-          shouldFilterByOutlet: this.shouldFilterByOutlet, 
-          shouldFilterByCustomer: this.shouldFilterByCustomer, 
-          fromDate, 
+          outletId,
+          customerId,
+          shouldFilterByOutlet: this.shouldFilterByOutlet,
+          shouldFilterByCustomer: this.shouldFilterByCustomer,
+          fromDate,
           toDate,
           paginate: this.paginate
         };
@@ -277,12 +281,12 @@
         });
       }
 
-      _customerSelected(customer){
+      _customerSelected(customer) {
         this.customer = customer;
         this.isSearchingCustomer = false;
       }
 
-      _outletSelected(outlet){
+      _outletSelected(outlet) {
         this.outlet = outlet;
         this.isSearchingOutlet = false;
       }
@@ -330,7 +334,7 @@
           this.isReady = true;
         });
       }
-      
+
     }
 
     window.customElements.define(PageManageSales.is, PageManageSales);

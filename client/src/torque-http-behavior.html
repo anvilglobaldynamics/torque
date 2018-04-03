@@ -2,385 +2,390 @@
 <script src="websocket-request-service.js"></script>
 
 <script>
+  (function () {
+    if (window.TorqueHttpBehavior) return;
 
-  (_ => {
     let { HttpRequestService, WebsocketRequestService, ServiceManager } = window.ServiceTree;
 
     const WEBSOCKET_DELAY_BEFORE_RETRYING = 30 * 1000;
     let lastWebsocketFailureTimestamp = 0;
 
-    if (!window.TorqueHttpBehavior) {
-      /* @polymerMixin */
-      window.TorqueHttpBehavior = (SuperClass) => class extends FxHttpBehavior(SuperClass) {
+    /* @polymerMixin */
+    window.TorqueHttpBehavior = (SuperClass) => class extends FxHttpBehavior(SuperClass) {
 
-        constructor(...args) {
-          super(...args);
-          this.websocketHost = 'ws://localhost:8000';
-          this.websocketApiPathPrefix = '/api/';
-        }
+      constructor(...args) {
+        super(...args);
+        this.websocketHost = 'ws://localhost:8000';
+        this.websocketApiPathPrefix = '/api/';
+      }
 
-        // internals ===================================
+      // internals ===================================
 
-        callJsonWebsocketApi(path, data, cbfn) {
-          let url = `${this.websocketApiPathPrefix}${path}`
-          let service = new WebsocketRequestService(this.websocketHost, url, { responseType: 'json' });
-          service.on('end', (event) => {
-            if (event.detail.resolution === 'success') {
-              cbfn(null, event.detail.body);
-            } else {
-              cbfn(event.detail);
-            }
-          });
-          service.on('error', (event) => {
-            // suppress the event so that it does not bubble to service manager
-            event.bubbles = false;
-          });
-          baselib.setImmediate(_ => service.request('json', data));
-          this.serviceManager.manage(service);
-          return service;
-        }
-
-        _createGenericCallback(path, data, _cbfn) {
-          return (err, response) => {
-            if (err) {
-              if (mode === 'development') {
-                console.log(`NETWORK_ERROR/api=${path}`, { data, err });
-              }
-              return _cbfn(err);
-            }
-            response = TorqueUtils.desanitize(response);
-            if (mode === 'development' && response.hasError) {
-              console.log(`API_ERROR/api=${path}`, { data, response });
-            }
-            if (response.hasError && (response.error.code === "APIKEY_EXPIRED" || response.error.code === "APIKEY_INVALID")) {
-              if (path === 'user-logout') {
-                return _cbfn(null, { hasError: false });
-              }
-              let message = "Your session has expired. You will be automatically logged out. Please log in again.";
-              this.showModalDialog("Sorry!", message, _ => {
-                this.logoutTapped();
-              });
-              return;
-            }
-            return _cbfn(null, response);
-          }
-        }
-
-        callCombinedJsonApi(path, data, _cbfn) {
-          let cbfn = this._createGenericCallback(path, data, _cbfn);
-          let now = (new Date).getTime();
-          if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
-            this.callJsonPostApi(path, data, cbfn);
+      callJsonWebsocketApi(path, data, cbfn) {
+        let url = `${this.websocketApiPathPrefix}${path}`
+        let service = new WebsocketRequestService(this.websocketHost, url, { responseType: 'json' });
+        service.on('end', (event) => {
+          if (event.detail.resolution === 'success') {
+            cbfn(null, event.detail.body);
           } else {
-            this.callJsonWebsocketApi(path, data, (err, message) => {
-              if (err) {
-                if (mode === 'development') {
-                  console.log(`WS_ERROR/api=${path}`, err);
-                }
-                lastWebsocketFailureTimestamp = (new Date).getTime();
-                this.callJsonPostApi(path, data, cbfn);
-              } else {
-                cbfn(null, message);
-              }
-            })
+            cbfn(event.detail);
           }
-        }
+        });
+        service.on('error', (event) => {
+          // suppress the event so that it does not bubble to service manager
+          event.bubbles = false;
+        });
+        baselib.setImmediate(_ => service.request('json', data));
+        this.serviceManager.manage(service);
+        return service;
+      }
 
-        callGetApi(uri, cbfn) {
-          let request = new XMLHttpRequest();
-          request.addEventListener("load", () => {
-            let { responseText } = request;
-            cbfn(null, responseText);
-          });
-          request.addEventListener("error", () => {
-            cbfn(request);
-          });
-          request.open("GET", uri);
-          request.send();
-        }
-
-        // api call utls ===================================
-
-        _applyApiKey(data) {
-          if ('user' in this && 'apiKey' in this.user) {
-            data.apiKey = this.user.apiKey;
-            return true;
-          } else {
-            this.showAlertMessage("No Api Key. Please restart the app and log in again.");
-            return false;
+      _createGenericCallback(path, data, _cbfn) {
+        return (err, response) => {
+          if (err) {
+            if (mode === 'development') {
+              console.log(`NETWORK_ERROR/api=${path}`, { data, err });
+            }
+            return _cbfn(err);
           }
-        }
-
-        // api calls ===================================
-
-        callUserRegisterApi(data, cbfn) {
-          this.callCombinedJsonApi('user-register', data, cbfn);
-        }
-
-        callUserLoginApi(data, cbfn) {
-          this.callCombinedJsonApi('user-login', data, cbfn);
-        }
-
-        callUserLogoutApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('user-logout', data, cbfn);
-        }
-
-        callGetOrganizationListApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-organization-list', data, cbfn);
-        }
-
-        callAddOrganizationApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('add-organization', data, cbfn);
-        }
-
-        callGetDashboardSummaryApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-dashboard-summary', data, cbfn);
-        }
-
-        callGetEmployeeListApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-employee-list', data, cbfn);
-        }
-
-        callGetPrivilegeListApi(data, cbfn) {
-          this.callCombinedJsonApi('get-privilege-list', data, cbfn);
-        }
-
-        callAddNewEmployeeApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('add-new-employee', data, cbfn);
-        }
-
-        callGetEmployeeApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-employee', data, cbfn);
-        }
-
-        callEditEmploymentApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('edit-employment', data, cbfn);
-        }
-
-        callFireEmployeeApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('fire-employee', data, cbfn);
-        }
-
-        callHireUserAsEmployeeApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('hire-user-as-employee', data, cbfn);
-        }
-
-        callFindUserApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('find-user', data, cbfn);
-        }
-
-        callGetOutletListApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-outlet-list', data, cbfn);
-        }
-
-        callGetOutletApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-outlet', data, cbfn);
-        }
-
-        callAddOutletApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('add-outlet', data, cbfn);
-        }
-
-        callEditOutletApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('edit-outlet', data, cbfn);
-        }
-
-        callDeleteOutletApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('delete-outlet', data, cbfn);
-        }
-
-        callGetWarehouseListApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-warehouse-list', data, cbfn);
-        }
-
-        callGetWarehouseApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-warehouse', data, cbfn);
-        }
-
-        callAddWarehouseApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('add-warehouse', data, cbfn);
-        }
-
-        callEditWarehouseApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('edit-warehouse', data, cbfn);
-        }
-
-        callDeleteWarehouseApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('delete-warehouse', data, cbfn);
-        }
-
-        callGetProductCategoryListApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-product-category-list', data, cbfn);
-        }
-
-        callAddProductCategoryApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('add-product-category', data, cbfn);
-        }
-
-        callEditProductCategoryApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('edit-product-category', data, cbfn);
-        }
-
-        callDeleteProductCategoryApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('delete-product-category', data, cbfn);
-        }
-
-        callGetAggregatedInventoryDetailsApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-aggregated-inventory-details', data, cbfn);
-        }
-
-        callAddProductToInventoryApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('add-product-to-inventory', data, cbfn);
-        }
-
-        callGetCustomerListApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-customer-summary-list', data, cbfn);
-        }
-
-        callAddCustomerApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('add-customer', data, cbfn);
-        }
-
-        callGetCustomerApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-customer', data, cbfn);
-        }
-
-        callEditCustomerApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('edit-customer', data, cbfn);
-        }
-
-        callDeleteCustomerApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('delete-customer', data, cbfn);
-        }
-
-        callAdjustCustomerBalanceApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('adjust-customer-balance', data, cbfn);
-        }
-
-        callUserSetEmailApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('user-set-email', data, cbfn);
-        }
-
-        callUserResendVerificationSmsApi(data, cbfn) {
-          this.callCombinedJsonApi('user-resend-verification-sms', data, cbfn);
-        }
-
-        callVerifyPhoneApi(path, cbfn) {
-          let uri = `${this.serverHost}/verify-phone/${path}`
-          this.callGetApi(uri, cbfn);
-        }
-
-        callUserResendVerificationEmailApi(data, cbfn) {
-          this.callCombinedJsonApi('user-resend-verification-email', data, cbfn);
-        }
-
-        callVerifyEmailApi(path, cbfn) {
-          let uri = `${this.serverHost}/verify-email/${path}`
-          this.callGetApi(uri, cbfn);
-        }
-
-        callUserResetPasswordRequestApi(data, cbfn) {
-          this.callCombinedJsonApi('user-reset-password--request', data, cbfn);
-        }
-
-        callUserResetPasswordGetTokenInfoApi(data, cbfn) {
-          this.callCombinedJsonApi('user-reset-password--get-token-info', data, cbfn);
-        }
-
-        callUserResetPasswordConfirmApi(data, cbfn) {
-          this.callCombinedJsonApi('user-reset-password--confirm', data, cbfn);
-        }
-
-        callUserEditProfileApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('user-edit-profile', data, cbfn);
-        }
-
-        callUserChangePasswordApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('user-change-password', data, cbfn);
-        }
-
-        callGetInventoryListApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-inventory-list', data, cbfn);
-        }
-
-        callTransferBetweenInventoriesApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('transfer-between-inventories', data, cbfn);
-        }
-
-        callAddSalesApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('add-sales', data, cbfn);
-        }
-
-        callGetSalesListApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-sales-list', data, cbfn);
-        }
-
-        callGetSalesApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-sales', data, cbfn);
-        }
-
-        callDiscardSalesApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('discard-sales', data, cbfn);
-        }
-
-        callGetSalesReturnListApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-sales-return-list', data, cbfn);
-        }
-
-        callAddSalesReturnApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('add-sales-return', data, cbfn);
-        }
-
-        callGetSalesReturnApi(data, cbfn) {
-          if (!this._applyApiKey(data)) return;
-          this.callCombinedJsonApi('get-sales-return', data, cbfn);
+          response = TorqueUtils.desanitize(response);
+          if (mode === 'development' && response.hasError) {
+            console.log(`API_ERROR/api=${path}`, { data, response });
+          }
+          if (response.hasError && (response.error.code === "APIKEY_EXPIRED" || response.error.code === "APIKEY_INVALID")) {
+            if (path === 'user-logout') {
+              return _cbfn(null, { hasError: false });
+            }
+            let message = "Your session has expired. You will be automatically logged out. Please log in again.";
+            this.showModalDialog("Sorry!", message, _ => {
+              this.logoutTapped();
+            });
+            return;
+          }
+          return _cbfn(null, response);
         }
       }
+
+      callCombinedJsonApi(path, data, _cbfn) {
+        if (this.selectedLanguageIdentifier) {
+          data.clientLanguage = this.selectedLanguageIdentifier;
+        } else {
+          data.clientLanguage = 'en-us';
+        }
+        let cbfn = this._createGenericCallback(path, data, _cbfn);
+        let now = (new Date).getTime();
+        if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
+          this.callJsonPostApi(path, data, cbfn);
+        } else {
+          this.callJsonWebsocketApi(path, data, (err, message) => {
+            if (err) {
+              if (mode === 'development') {
+                console.log(`WS_ERROR/api=${path}`, err);
+              }
+              lastWebsocketFailureTimestamp = (new Date).getTime();
+              this.callJsonPostApi(path, data, cbfn);
+            } else {
+              cbfn(null, message);
+            }
+          })
+        }
+      }
+
+      callGetApi(uri, cbfn) {
+        let request = new XMLHttpRequest();
+        request.addEventListener("load", () => {
+          let { responseText } = request;
+          cbfn(null, responseText);
+        });
+        request.addEventListener("error", () => {
+          cbfn(request);
+        });
+        request.open("GET", uri);
+        request.send();
+      }
+
+      // api call utls ===================================
+
+      _applyApiKey(data) {
+        if ('user' in this && 'apiKey' in this.user) {
+          data.apiKey = this.user.apiKey;
+          return true;
+        } else {
+          this.showAlertMessage("No Api Key. Please restart the app and log in again.");
+          return false;
+        }
+      }
+
+      // api calls ===================================
+
+      callUserRegisterApi(data, cbfn) {
+        this.callCombinedJsonApi('user-register', data, cbfn);
+      }
+
+      callUserLoginApi(data, cbfn) {
+        this.callCombinedJsonApi('user-login', data, cbfn);
+      }
+
+      callUserLogoutApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('user-logout', data, cbfn);
+      }
+
+      callGetOrganizationListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-organization-list', data, cbfn);
+      }
+
+      callAddOrganizationApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-organization', data, cbfn);
+      }
+
+      callGetDashboardSummaryApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-dashboard-summary', data, cbfn);
+      }
+
+      callGetEmployeeListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-employee-list', data, cbfn);
+      }
+
+      callGetPrivilegeListApi(data, cbfn) {
+        this.callCombinedJsonApi('get-privilege-list', data, cbfn);
+      }
+
+      callAddNewEmployeeApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-new-employee', data, cbfn);
+      }
+
+      callGetEmployeeApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-employee', data, cbfn);
+      }
+
+      callEditEmploymentApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-employment', data, cbfn);
+      }
+
+      callFireEmployeeApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('fire-employee', data, cbfn);
+      }
+
+      callHireUserAsEmployeeApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('hire-user-as-employee', data, cbfn);
+      }
+
+      callFindUserApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('find-user', data, cbfn);
+      }
+
+      callGetOutletListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-outlet-list', data, cbfn);
+      }
+
+      callGetOutletApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-outlet', data, cbfn);
+      }
+
+      callAddOutletApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-outlet', data, cbfn);
+      }
+
+      callEditOutletApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-outlet', data, cbfn);
+      }
+
+      callDeleteOutletApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('delete-outlet', data, cbfn);
+      }
+
+      callGetWarehouseListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-warehouse-list', data, cbfn);
+      }
+
+      callGetWarehouseApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-warehouse', data, cbfn);
+      }
+
+      callAddWarehouseApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-warehouse', data, cbfn);
+      }
+
+      callEditWarehouseApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-warehouse', data, cbfn);
+      }
+
+      callDeleteWarehouseApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('delete-warehouse', data, cbfn);
+      }
+
+      callGetProductCategoryListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-product-category-list', data, cbfn);
+      }
+
+      callAddProductCategoryApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-product-category', data, cbfn);
+      }
+
+      callEditProductCategoryApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-product-category', data, cbfn);
+      }
+
+      callDeleteProductCategoryApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('delete-product-category', data, cbfn);
+      }
+
+      callGetAggregatedInventoryDetailsApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-aggregated-inventory-details', data, cbfn);
+      }
+
+      callAddProductToInventoryApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-product-to-inventory', data, cbfn);
+      }
+
+      callGetCustomerListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-customer-summary-list', data, cbfn);
+      }
+
+      callAddCustomerApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-customer', data, cbfn);
+      }
+
+      callGetCustomerApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-customer', data, cbfn);
+      }
+
+      callEditCustomerApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-customer', data, cbfn);
+      }
+
+      callDeleteCustomerApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('delete-customer', data, cbfn);
+      }
+
+      callAdjustCustomerBalanceApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('adjust-customer-balance', data, cbfn);
+      }
+
+      callUserSetEmailApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('user-set-email', data, cbfn);
+      }
+
+      callUserResendVerificationSmsApi(data, cbfn) {
+        this.callCombinedJsonApi('user-resend-verification-sms', data, cbfn);
+      }
+
+      callVerifyPhoneApi(path, cbfn) {
+        let uri = `${this.serverHost}/verify-phone/${path}`
+        this.callGetApi(uri, cbfn);
+      }
+
+      callUserResendVerificationEmailApi(data, cbfn) {
+        this.callCombinedJsonApi('user-resend-verification-email', data, cbfn);
+      }
+
+      callVerifyEmailApi(path, cbfn) {
+        let uri = `${this.serverHost}/verify-email/${path}`
+        this.callGetApi(uri, cbfn);
+      }
+
+      callUserResetPasswordRequestApi(data, cbfn) {
+        this.callCombinedJsonApi('user-reset-password--request', data, cbfn);
+      }
+
+      callUserResetPasswordGetTokenInfoApi(data, cbfn) {
+        this.callCombinedJsonApi('user-reset-password--get-token-info', data, cbfn);
+      }
+
+      callUserResetPasswordConfirmApi(data, cbfn) {
+        this.callCombinedJsonApi('user-reset-password--confirm', data, cbfn);
+      }
+
+      callUserEditProfileApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('user-edit-profile', data, cbfn);
+      }
+
+      callUserChangePasswordApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('user-change-password', data, cbfn);
+      }
+
+      callGetInventoryListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-inventory-list', data, cbfn);
+      }
+
+      callTransferBetweenInventoriesApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('transfer-between-inventories', data, cbfn);
+      }
+
+      callAddSalesApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-sales', data, cbfn);
+      }
+
+      callGetSalesListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-sales-list', data, cbfn);
+      }
+
+      callGetSalesApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-sales', data, cbfn);
+      }
+
+      callDiscardSalesApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('discard-sales', data, cbfn);
+      }
+
+      callGetSalesReturnListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-sales-return-list', data, cbfn);
+      }
+
+      callAddSalesReturnApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-sales-return', data, cbfn);
+      }
+
+      callGetSalesReturnApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-sales-return', data, cbfn);
+      }
     }
+
 
   })();
 
