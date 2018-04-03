@@ -39,7 +39,7 @@
           <div class="card vertical layout">
             <paper-input class="addEmployeeForm--fullName" value="{{addEmployeeForm.fullName}}" required minlength="3" error-message="Please enter a valid name" label="Name of Employee."></paper-input>
             <paper-input class="addEmployeeForm--password" value="{{addEmployeeForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long" label="A minimum 8 digit password" type="password"></paper-input>
-            <paper-input class="addEmployeeForm--phone" value="{{addEmployeeForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number of Manager/Contact Person"></paper-input>
+            <paper-input class="addEmployeeForm--phone" value="{{addEmployeeForm.phone}}" required minlength="11" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number of Manager/Contact Person"></paper-input>
 
             <elem-common-employment-details-input name="employeeForm" employee-form="{{addEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input>
 
