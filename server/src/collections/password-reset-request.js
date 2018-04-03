@@ -12,7 +12,7 @@ exports.PasswordResetRequestCollection = class extends Collection {
     this.joiSchema = Joi.object().keys({
       forUserId: Joi.number().max(999999999999999).required(),
       forEmail: Joi.string().email().min(3).max(30).allow(null).required(),
-      forPhone: Joi.string().alphanum().min(11).max(14),
+      forPhone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       confirmedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       origin: Joi.string().max(1024).required(),
