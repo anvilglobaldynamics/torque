@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
+let { inventoryCommonMixin } = require('./mixins/inventory-common');
 
-exports.GetOutletApi = class extends collectionCommonMixin(Api) {
+exports.GetOutletApi = class extends collectionCommonMixin(inventoryCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -38,31 +39,12 @@ exports.GetOutletApi = class extends collectionCommonMixin(Api) {
     })
   }
 
-  _getOutletInventories({ outletId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
-      let defaultInventory, returnedInventory, damagedInventory;
-      inventoryList.forEach(inventory => {
-        if (inventory.type === 'default') {
-          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-          defaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
-        } else if (inventory.type === 'returned') {
-          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-          returnedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
-        } else if (inventory.type === 'damaged') {
-          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-          damagedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
-        }
-      });
-      cbfn(defaultInventory, returnedInventory, damagedInventory);
-    })
-  }
-
   handle({ body }) {
     let { outletId } = body;
     this._getOutlet({ outletId }, (outlet) => {
-      this._getOutletInventories({ outletId }, (defaultInventory, returnedInventory, damagedInventory) => {
+      this._getInventoriesByInventoryContainer({ inventoryContainerId: outletId, inventoryContainerType: "outlet" }, (defaultInventory, returnedInventory, damagedInventory) => {
         this.success({ outlet, defaultInventory, returnedInventory, damagedInventory });
-      })
+      });
     });
   }
 

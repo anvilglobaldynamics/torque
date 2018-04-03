@@ -44,7 +44,7 @@ exports.CustomerCollection = class extends Collection {
     ];
   }
 
-  create({ organizationId, fullName, phone, openingBalance }, cbfn) {
+  create({ organizationId, fullName, phone, openingBalance, acceptedByUserId }, cbfn) {
     let customer = {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
@@ -54,7 +54,7 @@ exports.CustomerCollection = class extends Collection {
       balance: openingBalance,
       additionalPaymentHistory: [{
         creditedDatetimeStamp: (new Date).getTime(),
-        acceptedByUserId: null,
+        acceptedByUserId,
         amount: openingBalance,
         action: 'payment'
       }],

@@ -2,7 +2,7 @@
 exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _getOutletDefaultInventory({ outletId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
+    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId, inventoryContainerType: "outlet" }, (err, inventoryList) => {
       if (err) return this.fail(err);
       if (inventoryList.length === 0) {
         err = new Error("Invalid Outlet Or Inventory could not be found");
@@ -18,7 +18,7 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
   _getOutletReturnedInventory({ outletId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId }, (err, inventoryList) => {
+    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId, inventoryContainerType: "outlet" }, (err, inventoryList) => {
       if (err) return this.fail(err);
       if (inventoryList.length === 0) {
         err = new Error("Invalid Outlet Or Inventory could not be found");
@@ -52,6 +52,13 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     })
   }
 
+  _deleteByInventoryContainerId({ inventoryContainerId }, cbfn) {
+    this.database.inventory.deleteByInventoryContainerId({ inventoryContainerId }, (err) => {
+      if (err) return this.fail(err);
+      cbfn();
+    })
+  }
+
   _createStandardInventories({ inventoryContainerId, inventoryContainerType, organizationId }, cbfn) {
     this._createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'default', name: 'Default' }, () => {
       this._createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'returned', name: 'Returned' }, () => {
@@ -59,6 +66,29 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
           cbfn();
         })
       })
+    })
+  }
+
+  _checkIfInventoryContainerIsEmpty({ inventoryContainerId }, cbfn) {
+    cbfn();
+  }
+
+  _getInventoriesByInventoryContainer({ inventoryContainerId, inventoryContainerType }, cbfn) {
+    this.database.inventory.listByInventoryContainerId({ inventoryContainerId, inventoryContainerType }, (err, inventoryList) => {
+      let defaultInventory, returnedInventory, damagedInventory;
+      inventoryList.forEach(inventory => {
+        if (inventory.type === 'default') {
+          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
+          defaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+        } else if (inventory.type === 'returned') {
+          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
+          returnedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+        } else if (inventory.type === 'damaged') {
+          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
+          damagedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+        }
+      });
+      cbfn(defaultInventory, returnedInventory, damagedInventory);
     })
   }
 

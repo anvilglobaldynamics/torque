@@ -47,6 +47,7 @@ let organizationId = null;
 let employeeId = null;
 let employmentId = null;
 let employeeToBeEditedData = null;
+let employeeToBeRehired = null;
 let invalidUserId = generateInvalidId();
 let invalidEmploymentId = generateInvalidId();
 let invalidOrganizationId = generateInvalidId();
@@ -841,6 +842,8 @@ describe('employee', _ => {
 
       expect(body.employee).to.have.property('isActive').that.equals(false);
 
+      employeeToBeRehired = body.employee;
+
       testDoneFn();
     })
 
@@ -858,6 +861,87 @@ describe('employee', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error).to.have.property('code').that.equals('EMPLOYEE_INVALID');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/hire-user-as-employee (Valid, rehire)', testDoneFn => {
+
+    callApi('api/hire-user-as-employee', {
+      json: {
+        apiKey,
+        userId: employeeToBeRehired.userId,
+        organizationId,
+        role: "Joi.string().max(1024).required()",
+        designation: "Joi.string().max(1024).required()",
+        companyProvidedId: "abc123",
+        privileges: {
+          PRIV_VIEW_USERS: true,
+          PRIV_MODIFY_USERS: true,
+          PRIV_ADD_USER: true,
+          PRIV_MAKE_USER_AN_OWNER: true,
+          PRIV_MODIFY_USER_PRIVILEGES: true,
+
+          PRIV_ACCESS_POS: true,
+          PRIV_VIEW_SALES: true,
+          PRIV_MODIFY_SALES: true,
+          PRIV_ALLOW_FLAT_DISCOUNT: true,
+          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
+          PRIV_ALLOW_FOC: true,
+
+          PRIV_VIEW_SALES_RETURN: true,
+          PRIV_MODIFY_SALES_RETURN: true,
+
+          PRIV_VIEW_ALL_INVENTORIES: true,
+          PRIV_MODIFY_ALL_INVENTORIES: true,
+          PRIV_TRANSFER_ALL_INVENTORIES: true,
+          PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+
+          PRIV_VIEW_ALL_OUTLETS: true,
+          PRIV_MODIFY_ALL_OUTLETS: true,
+
+          PRIV_VIEW_ALL_WAREHOUSES: true,
+          PRIV_MODIFY_ALL_WAREHOUSES: true,
+
+          PRIV_VIEW_ORGANIZATION_STATISTICS: true,
+          PRIV_MODIFY_ORGANIZATION: true,
+
+          PRIV_VIEW_CUSTOMER: true,
+          PRIV_ADD_CUSTOMER_DURING_SALES: true,
+          PRIV_MODIFY_CUSTOMER: true,
+          PRIV_MANAGE_CUSTOMER_DEBT: true
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('employmentId');
+
+      employmentId = body.employmentId;
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-employee (Valid rehire check)', testDoneFn => {
+
+    callApi('api/get-employee', {
+      json: {
+        apiKey,
+        employmentId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('employee');
+
+      validateEmploymentSchema(body.employee);
+
+      expect(body.employee).to.have.property('isActive').that.equals(true);
 
       testDoneFn();
     })

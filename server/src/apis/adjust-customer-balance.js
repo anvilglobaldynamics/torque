@@ -36,10 +36,10 @@ exports.AdjustCustomerBalanceApi = class extends collectionCommonMixin(customerC
   }
 
   // FIXME: This does not need to be async
-  _updateAdditionalPaymentHistoryList({ customer, amount, action }, cbfn) {
+  _updateAdditionalPaymentHistoryList({ customer, amount, action, acceptedByUserId }, cbfn) {
     let paymentRecord = {
       creditedDatetimeStamp: (new Date).getTime(),
-      acceptedByUserId: null,
+      acceptedByUserId,
       amount,
       action
     }
@@ -54,11 +54,11 @@ exports.AdjustCustomerBalanceApi = class extends collectionCommonMixin(customerC
     });
   }
 
-  handle({ body }) {
+  handle({ body, userId }) {
     let { customerId, action, amount } = body;
     this._getCustomer({ customerId }, (customer) => {
       this._adjustBalance({ customer, action, amount }, (customer) => {
-        this._updateAdditionalPaymentHistoryList({ customer, amount, action }, (customer) => {
+        this._updateAdditionalPaymentHistoryList({ customer, amount, action, acceptedByUserId: userId }, (customer) => {
           this._saveAdjustment({ customer }, () => {
             this.success({ status: "success" });
           })

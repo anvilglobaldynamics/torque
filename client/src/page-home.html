@@ -283,6 +283,7 @@
       setEmailTapped(e = null) {
         let message = "Please set your valid email."
         this.app.showModalInput("Set your email.", message, 'john@example.com', email => {
+          if (!email) return;
           this._processSetEmailApi({ email }, status => {
             let message = `Your email "${email}" has been set. Please check your inbox for the verification link and log in again.`;
             this.app.showModalDialog("Email is Set", message, () => {

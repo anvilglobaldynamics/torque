@@ -74,7 +74,7 @@
 
       <div class="p-16 horizontal layout center">
         <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="Please enter a name or phone" label="Search customer by name or phone." on-keypress="searchFieldKeypressed"></paper-input>
-        <paper-icon-button icon="clear"></paper-icon-button>
+        <paper-icon-button icon="clear" on-tap="cancelTapped"></paper-icon-button>
         <paper-button raised class="primary" on-tap="searchTapped">
           <iron-icon icon="search" class="m-right-8"></iron-icon>Search</paper-button>
       </div>
@@ -121,7 +121,7 @@
       }
 
       cancelTapped(e = null) {
-        this.page.customerSelected(null);
+        this.page._customerSelected(null);
       }
 
       searchTapped(e = null) {

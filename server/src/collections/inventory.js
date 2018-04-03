@@ -70,8 +70,8 @@ exports.InventoryCollection = class extends Collection {
     this._update({ id: inventoryId }, modifications, cbfn);
   }
 
-  listByInventoryContainerId({ inventoryContainerId }, cbfn) {
-    this._find({ inventoryContainerId }, cbfn);
+  listByInventoryContainerId({ inventoryContainerId, inventoryContainerType }, cbfn) {
+    this._find({ inventoryContainerId, inventoryContainerType }, cbfn);
   }
 
   updateProductList({ inventoryId }, { productList }, cbfn) {
@@ -89,6 +89,13 @@ exports.InventoryCollection = class extends Collection {
 
   listByOrganizationId({ organizationId }, cbfn) {
     this._find({ organizationId }, cbfn);
+  }
+
+  deleteByInventoryContainerId({ inventoryContainerId }, cbfn) {
+    let modifications = {
+      $set: { isDeleted: true }
+    }
+    this._update({ inventoryContainerId }, modifications, cbfn);
   }
 
 }

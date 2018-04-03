@@ -269,7 +269,7 @@
       }
 
       viewInventoryTapped(e = null) {
-        let el = e.target;
+        let el = e.currentTarget;
         let key = el.getAttribute('data-key');
         return this.app.navigateTo(`/view-inventory/inventory:${this[key].id}`);
       }

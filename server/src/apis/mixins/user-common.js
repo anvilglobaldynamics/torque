@@ -81,7 +81,7 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   _findUserById({ userId }, cbfn) {
     this.database.user.findById({ userId }, (err, user) => {
       if (!this._ensureDoc(err, user, "USER_INVALID", "Invalid User could not be found")) return;
-      return cbfn();
+      return cbfn(user);
     })
   }
 

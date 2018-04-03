@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
+let { inventoryCommonMixin } = require('./mixins/inventory-common');
 
-exports.GetWarehouseApi = class extends collectionCommonMixin(Api) {
+exports.GetWarehouseApi = class extends collectionCommonMixin(inventoryCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -38,31 +39,12 @@ exports.GetWarehouseApi = class extends collectionCommonMixin(Api) {
     })
   }
 
-  _getWarehouseInventories({ warehouseId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: warehouseId }, (err, inventoryList) => {
-      let defaultInventory, returnedInventory, damagedInventory;
-      inventoryList.forEach(inventory => {
-        if (inventory.type === 'default') {
-          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-          defaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
-        } else if (inventory.type === 'returned') {
-          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-          returnedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
-        } else if (inventory.type === 'damaged') {
-          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-          damagedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
-        }
-      });
-      cbfn(defaultInventory, returnedInventory, damagedInventory);
-    })
-  }
-
   handle({ body }) {
     let { warehouseId } = body;
     this._getWarehouse({ warehouseId }, (warehouse) => {
-      this._getWarehouseInventories({ warehouseId }, (defaultInventory, returnedInventory, damagedInventory) => {
+      this._getInventoriesByInventoryContainer({ inventoryContainerId: warehouseId, inventoryContainerType: "warehouse" }, (defaultInventory, returnedInventory, damagedInventory) => {
         this.success({ warehouse, defaultInventory, returnedInventory, damagedInventory });
-      })
+      });
     });
   }
 

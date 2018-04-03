@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
+let { inventoryCommonMixin } = require('./mixins/inventory-common');
 
-exports.DeleteWarehouseApi = class extends collectionCommonMixin(Api) {
+exports.DeleteWarehouseApi = class extends collectionCommonMixin(inventoryCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -36,8 +37,12 @@ exports.DeleteWarehouseApi = class extends collectionCommonMixin(Api) {
 
   handle({ body, userId }) {
     let { warehouseId } = body;
-    this._deleteWarehouse({ warehouseId }, _ => {
-      this.success({ status: "success" });
+    this._checkIfInventoryContainerIsEmpty({ inventoryContainerId: warehouseId }, _ => {
+      this._deleteWarehouse({ warehouseId }, _ => {
+        this._deleteByInventoryContainerId({ inventoryContainerId: warehouseId }, _ => {
+          this.success({ status: "success" });
+        });
+      });
     });
   }
 

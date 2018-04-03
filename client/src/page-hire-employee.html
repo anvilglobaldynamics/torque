@@ -43,7 +43,7 @@
       </div>
 
       <template is="dom-if" if="[[user]]">
-        <iron-form id="hireEmployeeForm">
+        <iron-form id="hireEmployeeForm" on-keypress="genericFormSubmitionKeypress">
           <form>
             <div class="card vertical layout">
 
@@ -51,7 +51,7 @@
 
               <div class="horizontal layout button-row end">
                 <div class="flex"></div>
-                <paper-button raised class="primary" on-tap="hireUserTapped">Hire As Employee</paper-button>
+                <paper-button raised class="primary hireEmployeeForm--submit" on-tap="hireUserTapped">Hire As Employee</paper-button>
               </div>
             </div>
           </form>

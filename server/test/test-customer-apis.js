@@ -372,7 +372,7 @@ describe('customer', _ => {
 
   });
 
-  it('api/get-customer (Adjusted Balance): ', testDoneFn => {
+  it('api/get-customer (Adjusted Balance check): ', testDoneFn => {
 
     callApi('api/get-customer', {
       json: {
@@ -501,7 +501,6 @@ describe('customer', _ => {
     })
 
   });
-
 
   it('api/get-customer-summary-list (Valid, Pagination)', testDoneFn => {
     let basePhone = 'cx' + rnd(prefix, 9);

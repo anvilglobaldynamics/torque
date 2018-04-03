@@ -34,10 +34,12 @@
           el = el.parentNode;
         }
         if (!el) return;
-        let submitEl = el.querySelector(`.${el.id}--submit`);
-        if (submitEl) {
-          submitEl.click();
-        }
+        el.querySelectorAll(`.${el.id}--submit`).forEach(submitEl => {
+          if (submitEl) {
+            if (submitEl.className.indexOf("hidden") > -1) return;
+            submitEl.click();
+          }
+        });
       }
 
       static get properties() {

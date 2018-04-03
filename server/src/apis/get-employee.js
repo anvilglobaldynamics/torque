@@ -2,8 +2,9 @@ let { Api } = require('./../api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
+let { userCommonMixin } = require('./mixins/user-common');
 
-exports.GetEmployeeApi = class extends collectionCommonMixin(Api) {
+exports.GetEmployeeApi = class extends collectionCommonMixin(userCommonMixin(Api)) {
 
   get autoValidates() { return true; }
 
@@ -38,10 +39,21 @@ exports.GetEmployeeApi = class extends collectionCommonMixin(Api) {
     })
   }
 
+  _insertUserDetailsInEmployee({ employee, user }, cbfn) {
+    let { fullName, phone, email, nid, physicalAddress, emergencyContact, bloodGroup } = user;
+    employee.userDetails = { fullName, phone, email, nid, physicalAddress, emergencyContact, bloodGroup };
+
+    cbfn(employee);
+  }
+
   handle({ body }) {
     let { employmentId } =  body;
     this._getEmployee({ employmentId }, (employee) => {
-      this.success({ employee });
+      this._findUserById({ userId: employee.userId }, (user) => {
+        this._insertUserDetailsInEmployee({ employee, user }, (employee) => {
+          this.success({ employee });
+        });
+      });
     });
   }
 

@@ -33,10 +33,33 @@ exports.GetEmployeeListApi = class extends Api {
     })
   }
 
+  _getUserList({ employeeList }, cbfn) {
+    let userIdList = employeeList.map(employee => employee.userId);
+    this.database.user.listByIdList({ idList: userIdList }, (err, userList) => {
+      if (err) return this.fail(err);
+      cbfn(userList);
+    })
+  }
+
+  _insertUserInfoInEmployeeList({ employeeList, userList }, cbfn) {
+    employeeList.forEach(employee => {
+      let matchingUser = userList.find(user => user.id === employee.userId);
+
+      let { fullName, phone, email, nid, physicalAddress, emergencyContact, bloodGroup } = matchingUser;
+      employee.userDetails = { fullName, phone, email, nid, physicalAddress, emergencyContact, bloodGroup };
+    });
+
+    cbfn(employeeList);
+  }
+
   handle({ body }) {
     let { organizationId } =  body;
     this._getEmployeeList({ organizationId }, (employeeList) => {
-      this.success({ employeeList });
+      this._getUserList({ employeeList }, (userList) => {
+        this._insertUserInfoInEmployeeList({ employeeList, userList }, (employeeList) => {
+          this.success({ employeeList });
+        });
+      });
     });
   }
 

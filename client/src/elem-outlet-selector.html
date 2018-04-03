@@ -70,8 +70,9 @@
     <div class="card vertical layout">
       <div class="horizontal layout center">
         <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="Please enter a name or phone" label="Search outlet by name or phone." on-keypress="searchFieldKeypressed"></paper-input>
-        <paper-button raised class="primary" on-tap="searchTapped">Search</paper-button>
-        <paper-button raised class="primary" on-tap="cancelTapped">Cancel</paper-button>
+        <paper-icon-button icon="clear" on-tap="cancelTapped"></paper-icon-button>
+        <paper-button raised class="primary" on-tap="searchTapped">
+          <iron-icon icon="search" class="m-right-8"></iron-icon>Search</paper-button>
       </div>
 
       <template is="dom-repeat" items="[[outletList]]" as="outlet" index-as="outletIndex">
@@ -106,7 +107,7 @@
       }
 
       cancelTapped(e = null) {
-        this.page.outletSelected(null);
+        this.page._outletSelected(null);
       }
 
       searchTapped(e = null) {

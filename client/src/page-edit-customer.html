@@ -31,7 +31,7 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
-      <iron-form id="editCustomerForm">
+      <iron-form id="editCustomerForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
             <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message="Please enter a valid name" label="Name of your customer."></paper-input>
@@ -41,8 +41,8 @@
             </template>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]]" on-tap="createCustomerTapped">Create Customer</paper-button>
-              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]]" on-tap="updateCustomerTapped">Update Customer</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editCustomerForm--submit" on-tap="createCustomerTapped">Create Customer</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editCustomerForm--submit" on-tap="updateCustomerTapped">Update Customer</paper-button>
             </div>
           </div>
         </form>

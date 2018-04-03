@@ -1,0 +1,1 @@
+exports.warehouseCommonMixin = (SuperApiClass) => class extends SuperApiClass {}

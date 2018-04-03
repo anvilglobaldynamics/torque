@@ -32,7 +32,7 @@
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <iron-form id="editOutletForm">
+      <iron-form id="editOutletForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
             <paper-input class="editOutletForm--name" value="{{editOutletForm.name}}" required minlength="3" error-message="Please enter a valid name" label="Name of your outlet."></paper-input>
@@ -41,8 +41,8 @@
             <paper-input class="editOutletForm--phone" value="{{editOutletForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number of Manager/Contact Person"></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]]" on-tap="createOutletTapped">Create Outlet</paper-button>
-              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]]" on-tap="updateOutletTapped">Update Outlet</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editOutletForm--submit" on-tap="createOutletTapped">Create Outlet</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editOutletForm--submit" on-tap="updateOutletTapped">Update Outlet</paper-button>
             </div>
           </div>
         </form>

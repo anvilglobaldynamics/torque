@@ -32,7 +32,7 @@
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <iron-form id="editWarehouseForm">
+      <iron-form id="editWarehouseForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
             <paper-input class="editWarehouseForm--name" value="{{editWarehouseForm.name}}" required minlength="3" error-message="Please enter a valid name" label="Name of your warehouse."></paper-input>
@@ -41,8 +41,8 @@
             <paper-input class="editWarehouseForm--phone" value="{{editWarehouseForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number of Manager/Contact Person"></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]]" on-tap="createWarehouseTapped">Create Warehouse</paper-button>
-              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]]" on-tap="updateWarehouseTapped">Update Warehouse</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editWarehouseForm--submit" on-tap="createWarehouseTapped">Create Warehouse</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editWarehouseForm--submit" on-tap="updateWarehouseTapped">Update Warehouse</paper-button>
             </div>
           </div>
         </form>

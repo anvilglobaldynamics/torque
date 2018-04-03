@@ -51,8 +51,6 @@ exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(
   }
 
   _returnProducts({ returnedProductList, outletReturnedInventory }, cbfn) {
-    // console.log("returnedProductList: ", returnedProductList);
-
     let promiseList = [];
     returnedProductList.forEach(product => {
       let promise = new Promise((accept, reject) => {
@@ -123,7 +121,6 @@ exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(
 
   handle({ body }) {
     let { salesId, returnedProductList, creditedAmount } = body;
-    // console.log("returnedProductList: ", returnedProductList);
 
     this._getSales({ salesId }, (sales) => {
       this._verifyProductsExist({ productList: returnedProductList }, () => {

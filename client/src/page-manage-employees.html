@@ -43,8 +43,10 @@
           <template is="dom-repeat" items="[[employeeList]]" as="employee">
             <div class="horizontal layout std-list-item center">
               <div class="vertical layout flex">
-                <div class="title">userId: [[employee.userId]]</div>
-                <div class="description">designation: [[employee.designation]], role: [[employee.role]], companyProvidedId: [[employee.companyProvidedId]]</div>
+                <div class="title">Name: [[employee.userDetails.fullName]]</div>
+                <div class="description">Phone: [[employee.userDetails.phone]]</div>
+                <div class="description">Company Provided Id: [[employee.companyProvidedId]]</div>
+                <div class="description">Designation: [[employee.designation]], role: [[employee.role]]</div>
               </div>
               <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
               <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
