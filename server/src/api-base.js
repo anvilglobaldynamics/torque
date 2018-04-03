@@ -6,6 +6,11 @@ const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 const baselib = require('baselib');
 
+const languageCache = {
+  'en-us': require('./languages/en-us').verses,
+  'bn-bd': require('./languages/bn-bd').verses
+};
+
 const SESSION_DURATION_LIMIT = 15 * 24 * 60 * 60 * 1000;
 
 class Api {
@@ -88,14 +93,24 @@ class Api {
           })
         });
       }
+      schema = schema.keys({
+        clientLanguage: Joi.string().valid('en-us', 'bn-bd').optional()
+      });
       let { error, value } = this.validate(body, schema);
       if (error) {
         return this.fail(error, error);
       } else {
         body = this.sanitize(value);
+        if ('clientLanguage' in body) {
+          this.clientLanguage = body.clientLanguage;
+          delete body['clientLanguage'];
+        } else {
+          this.clientLanguage = 'en-us';
+        }
+        this.verses = languageCache[this.clientLanguage];
         if ('paginate' in body) {
           this.__paginationCache = body.paginate;
-          delete body['paginate']
+          delete body['paginate'];
         }
         if (this.requiresAuthentication) {
           let { apiKey } = body;
