@@ -78,6 +78,10 @@
         .right-side paper-button {
           margin-top: 12px;
         }
+
+        .sms-date {
+          color: #696969;
+        }
       }
     </style>
 
@@ -90,17 +94,19 @@
         <paper-button raised class="primary" on-tap="searchTapped">Search</paper-button>
       </div>
 
-
       <div class="std-list">
         <template is="dom-repeat" items="[[outgoingSmsList]]" as="outgoingSms">
           <div class="card vertical layout">
             <div class="horizontal layout std-list-item start">
               <div class="vertical layout flex">
-                <div class="title">
-                  <span class="phone-number">[[outgoingSms.from]]</span>
-                  to:
-                  <span class="phone-number">[[outgoingSms.to]]</span>
-                  <span class$="status-[[outgoingSms.status]]">[[outgoingSms.status]]</span>
+                <div class="title layout horizontal">
+                  <div class="flex">
+                    <span class="phone-number">[[outgoingSms.from]]</span>
+                    to:
+                    <span class="phone-number">[[outgoingSms.to]]</span>
+                    <span class$="status-[[outgoingSms.status]]">[[outgoingSms.status]]</span>
+                  </div>
+                  <div class="sms-date">[[$mkDate(outgoingSms.createdDatetimeStamp, 'hh:mm:ss TT')]]</div>
                 </div>
                 <code class="sms-body">[[outgoingSms.content]]</code>
                 <div class="horizontal layout right-side">
@@ -114,7 +120,6 @@
           </div>
         </template>
       </div>
-
 
     </div>
 
