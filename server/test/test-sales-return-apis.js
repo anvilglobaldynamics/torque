@@ -22,7 +22,8 @@ let {
   validateProductCategorySchema,
   validateProductSchema,
   validateSalesSchema,
-  validateSalesReturnSchema
+  validateSalesReturnSchema,
+  validateSalesReturnSchemaWhenListObj
 } = require('./lib');
 
 const prefix = 's';
@@ -258,7 +259,7 @@ describe('sales-return', _ => {
     });
   });
 
-  it.skip('api/add-sales-return (Invalid salesId)', testDoneFn => {
+  it('api/add-sales-return (Invalid salesId)', testDoneFn => {
 
     callApi('api/add-sales-return', {
       json: {
@@ -283,7 +284,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/add-sales-return (Invalid returnedProductList)', testDoneFn => {
+  it('api/add-sales-return (Invalid returnedProductList)', testDoneFn => {
 
     callApi('api/add-sales-return', {
       json: {
@@ -335,7 +336,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/add-sales-return (Invalid non returnable)', testDoneFn => {
+  it('api/add-sales-return (Invalid non returnable)', testDoneFn => {
 
     callApi('api/add-sales-return', {
       json: {
@@ -360,7 +361,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/get-aggregated-inventory-details (Valid return check)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid return check)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -407,7 +408,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/get-sales-return (Invalid)', testDoneFn => {
+  it('api/get-sales-return (Invalid)', testDoneFn => {
 
     callApi('api/get-sales-return', {
       json: {
@@ -425,7 +426,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/get-sales-return-list (Valid only organization Id)', testDoneFn => {
+  it('api/get-sales-return-list (Valid only organization Id)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
       json: {
@@ -446,7 +447,7 @@ describe('sales-return', _ => {
       expect(body).to.have.property('salesReturnList');
 
       body.salesReturnList.forEach(salesReturn => {
-        validateSalesReturnSchema(salesReturn);
+        validateSalesReturnSchemaWhenListObj(salesReturn);
       });
 
       testDoneFn();
@@ -454,7 +455,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/get-sales-return-list (Valid with organizationId and outletId)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId and outletId)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
       json: {
@@ -475,7 +476,7 @@ describe('sales-return', _ => {
       expect(body).to.have.property('salesReturnList');
 
       body.salesReturnList.forEach(salesReturn => {
-        validateSalesReturnSchema(salesReturn);
+        validateSalesReturnSchemaWhenListObj(salesReturn);
       });
 
       testDoneFn();
@@ -483,7 +484,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/get-sales-return-list (Valid with organizationId and Invalid outletId)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId and Invalid outletId)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
       json: {
@@ -509,7 +510,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/get-sales-return-list (Valid with organizationId and customerId)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId and customerId)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
       json: {
@@ -530,7 +531,7 @@ describe('sales-return', _ => {
       expect(body).to.have.property('salesReturnList');
 
       body.salesReturnList.forEach(salesReturn => {
-        validateSalesReturnSchema(salesReturn);
+        validateSalesReturnSchemaWhenListObj(salesReturn);
       });
 
       testDoneFn();
@@ -538,7 +539,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/get-sales-return-list (Valid with organizationId and Invalid customerId)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId and Invalid customerId)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
       json: {
@@ -564,7 +565,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/get-sales-return-list (Valid with organizationId and Invalid customerId is null)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId and Invalid customerId is null)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
       json: {
@@ -590,7 +591,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/get-sales-return-list (Valid with organizationId and Invalid outletId is null)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId and Invalid outletId is null)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
       json: {
@@ -616,7 +617,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/get-sales-return-list (Valid with organizationId, outletId and customerId)', testDoneFn => {
+  it('api/get-sales-return-list (Valid with organizationId, outletId and customerId)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
       json: {
@@ -637,7 +638,7 @@ describe('sales-return', _ => {
       expect(body).to.have.property('salesReturnList');
 
       body.salesReturnList.forEach(salesReturn => {
-        validateSalesReturnSchema(salesReturn);
+        validateSalesReturnSchemaWhenListObj(salesReturn);
       });
 
       testDoneFn();
@@ -645,7 +646,7 @@ describe('sales-return', _ => {
 
   });
 
-  it.skip('api/get-sales-return-list (Invalid organizationId, valid outletId and customerId)', testDoneFn => {
+  it('api/get-sales-return-list (Invalid organizationId, valid outletId and customerId)', testDoneFn => {
 
     callApi('api/get-sales-return-list', {
       json: {
