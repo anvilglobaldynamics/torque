@@ -257,9 +257,7 @@
 
           let productList = this.app.getFromSession('pos-selected-product-list');
           if (productList) {
-            if (productList.length > 0) {
-              this.productList = productList;
-            }
+            this.productList = productList;
           }
 
           this._calculatePayment();
