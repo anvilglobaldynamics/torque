@@ -7,23 +7,23 @@
     "dontHaveAccount": "অ্যাকাউন্ট নেই?",
     "login": "লগইন",
     "emailOrPhoneInput": "আপনার ফোন নম্বর বা ইমেল",
-    "emailOrPhoneInputError": "দয়া করে আপনার বৈধ ফোন নম্বর অথবা বৈধ ইমেল ঠিকানা লিখুন।",
+    "emailOrPhoneInputError": "আপনার বৈধ ফোন নম্বর অথবা বৈধ ইমেল ঠিকানা লিখুন।",
     "passwordInput": "আপনার পাসওয়ার্ড",
-    "passwordInputError": "দয়া করে কমপক্ষে 8 টি অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।"
+    "passwordInputError": "কমপক্ষে ৮ টি অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।"
   },
   "forgotPassword": {
     "emailOrPhoneInputTitle": "ফোন বা ইমেল লিখুন",
     "emailOrPhoneInputMessage": "আপনি আপনার নিবন্ধন করতে ব্যবহৃত ফোন/ইমেল লিখুন।"
   },
   "register": {
-    "register": "নিবন্ধন",
+    "register": "অ্যাকাউন্ট খুলুন",
     "fullnameInput": "আপনার পূর্ণ নাম",
     "fullnameInputError": "একটি বৈধ নাম লিখুন.",
     "phoneInput": "আপনার বৈধ ফোন নম্বর",
     "phoneInputError": "দয়া করে আপনার বৈধ ফোন নম্বর লিখুন।",
-    "passwordInput": "সর্বনিম্ন 8 শব্দ পাসওয়ার্ড",
-    "passwordInputError": "দয়া করে কমপক্ষে 8 টি অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।.",
-    "alreadyHaveAccount": "আপনি নিবন্ধিত?"
+    "passwordInput": "সর্বনিম্ন ৮ অক্ষরের একটি পাসওয়ার্ড দিন।",
+    "passwordInputError": "আপনার সুরক্ষার জন্য দয়া করে কমপক্ষে ৮ অক্ষরের একটি পাসওয়ার্ড লিখুন।",
+    "alreadyHaveAccount": "আপনার কি অলরেডি একটা একাউন্ট আছে?"
   },
   "sidebar": {
     "home": "হোম",
@@ -31,8 +31,8 @@
     "outlets": "দোকান", 
     "warehouses": "গুদাম", 
     "productCategories": "পণ্যের ধরন", 
-    "sales": "বিক্রি", 
-    "salesReturn": "বিক্রি ফেরত", 
+    "sales": "বিক্রয়ের রেকর্ড", 
+    "salesReturn": "পণ্য ফেরত", 
     "customers": "ক্রেতা", 
     "profile": "প্রোফাইল", 
     "settings": "সেটিংস", 
