@@ -482,6 +482,28 @@ exports.validateSalesReturnSchema = (doc) => {
   if (error) throw error;
 }
 
+exports.validateSalesReturnSchemaWhenListObj = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    _id: Joi.string().required(),
+
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+
+    salesId: Joi.number().max(999999999999999).required(),
+    returnedProductList: Joi.array().items(
+      Joi.object().keys({
+        productId: Joi.number().max(999999999999999).required(),
+        count: Joi.number().max(999999999999999).required()
+      })
+    ),
+    creditedAmount: Joi.number().max(999999999999999).required(),
+
+    isDeleted: Joi.boolean().required()
+  });
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateUserSchema = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
