@@ -18,7 +18,8 @@ let {
   validateInventorySchema,
   validateProductCategorySchema,
   validateProductSchema,
-  validateSalesSchema
+  validateSalesSchema,
+  validateSalesSchemaWhenListObj
 } = require('./lib');
 
 const prefix = 's';
@@ -187,7 +188,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/add-sales (Invalid outletId)', testDoneFn => {
+  it('api/add-sales (Invalid outletId)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -230,7 +231,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/add-sales (Invalid productList)', testDoneFn => {
+  it('api/add-sales (Invalid productList)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -315,7 +316,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/add-sales (Invalid, No Customer credit sale)', testDoneFn => {
+  it('api/add-sales (Invalid, No Customer credit sale)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -358,7 +359,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/add-sales (Invalid customer)', testDoneFn => {
+  it('api/add-sales (Invalid customer)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -474,7 +475,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/get-sales (Invalid)', testDoneFn => {
+  it('api/get-sales (Invalid)', testDoneFn => {
 
     callApi('api/get-sales', {
       json: {
@@ -556,7 +557,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid only organization Id)', testDoneFn => {
+  it('api/get-sales-list (Valid only organization Id)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -572,12 +573,14 @@ describe('sales', _ => {
         toDate: (new Date()).getTime(),
       }
     }, (err, response, body) => {
+      // console.log(body);
+
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('salesList');
 
       body.salesList.forEach(sales => {
-        validateSalesSchema(sales);
+        validateSalesSchemaWhenListObj(sales);
       });
 
       testDoneFn();
@@ -585,7 +588,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and outletId)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and outletId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -606,7 +609,7 @@ describe('sales', _ => {
       expect(body).to.have.property('salesList');
 
       body.salesList.forEach(sales => {
-        validateSalesSchema(sales);
+        validateSalesSchemaWhenListObj(sales);
       });
 
       testDoneFn();
@@ -614,7 +617,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and Invalid outletId)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and Invalid outletId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -640,7 +643,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and customerId)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and customerId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -661,7 +664,7 @@ describe('sales', _ => {
       expect(body).to.have.property('salesList');
 
       body.salesList.forEach(sales => {
-        validateSalesSchema(sales);
+        validateSalesSchemaWhenListObj(sales);
       });
 
       testDoneFn();
@@ -669,7 +672,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and Invalid customerId)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and Invalid customerId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -695,7 +698,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and Invalid customerId is null)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and Invalid customerId is null)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -721,7 +724,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and Invalid outletId is null)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and Invalid outletId is null)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -747,7 +750,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId, outletId and customerId)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId, outletId and customerId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -768,7 +771,7 @@ describe('sales', _ => {
       expect(body).to.have.property('salesList');
 
       body.salesList.forEach(sales => {
-        validateSalesSchema(sales);
+        validateSalesSchemaWhenListObj(sales);
       });
 
       testDoneFn();
@@ -776,7 +779,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Invalid organizationId, with valid outletId and customerId)', testDoneFn => {
+  it('api/get-sales-list (Invalid organizationId, with valid outletId and customerId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -802,7 +805,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/discard-sales (Valid)', testDoneFn => {
+  it('api/discard-sales (Valid)', testDoneFn => {
 
     callApi('api/discard-sales', {
       json: {
@@ -819,7 +822,7 @@ describe('sales', _ => {
 
   });
 
-  it.skip('api/get-sales (Valid discard check)', testDoneFn => {
+  it('api/get-sales (Valid discard check)', testDoneFn => {
 
     callApi('api/get-sales', {
       json: {
