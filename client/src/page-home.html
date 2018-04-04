@@ -26,23 +26,37 @@
 <dom-module id="page-home">
   <template>
     <style include="shared-styles">
-
-
-      .item-value {
-        font-size: 60px;
-      }
-
-      .item-unit {
-        font-size: 20px;
-        font-weight: bold;
-      }
-
       .warning-message {
         font-weight: bold;
       }
 
       .language-selection {
         margin-right: 8px;
+      }
+
+      .info-panel .title {
+        font-size: 24px;
+      }
+
+      .metrics-box .value {
+        font-size: 60px;
+      }
+
+      @media (max-width: 960px) {
+        .metrics-box .value {
+          font-size: 48px;
+        }
+      }
+
+      .metrics-box .unit {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      @media (max-width: 960px) {
+        .card {
+          margin: 4px;
+        }
       }
     </style>
 
@@ -75,12 +89,12 @@
       <template is="dom-if" if="[[user.phone]]">
         <template is="dom-if" if="[[!user.isPhoneVerified]]">
           <div class="card">
-            You have not yet verified your phone number. Your phone number (after the 1 hour grace period) is not active until you verify it. Either click the link in the sms we sent to
+            You have not yet verified your phone number. Your account (after the 1 hour grace period) is not active until you verify it. Either click the link in the sms we sent to
             <b>[[user.phone]]</b> or use the button below.
             <br>
             <div class="button-row">
-              <paper-button raised class="primary m-0" on-tap="verifyPhoneTapped">Verify Phone Number Manually</paper-button>
-              <paper-button raised class="primary m-0" on-tap="resendSmsTapped">Resend SMS</paper-button>
+              <paper-button raised class="primary" on-tap="verifyPhoneTapped">Verify Phone Number Manually</paper-button>
+              <paper-button raised class="optional" on-tap="resendSmsTapped">Resend SMS</paper-button>
             </div>
           </div>
         </template>
@@ -102,47 +116,46 @@
             <b>[[user.email]]</b> or use the button below.
             <br>
             <div class="button-row">
-              <paper-button raised class="primary m-0" on-tap="verifyEmailTapped">Verify Email Manually</paper-button>
-              <paper-button raised class="primary m-0" on-tap="resendEmailTapped">Resend Email</paper-button>
+              <paper-button raised class="primary" on-tap="verifyEmailTapped">Verify Email Manually</paper-button>
+              <paper-button raised class="optional" on-tap="resendEmailTapped">Resend Email</paper-button>
             </div>
           </div>
         </template>
       </template>
 
-      <div class="horizontal layout wrap type">
-        <div class="card flex">
-          <div class="type title">[[user.fullName]]</div>
-          <div class="type body">[[user.email]]</div>
-          <div class="type body">[[user.phone]]</div>
-          <div class="type body">[[organization.employment.designation]] ([[organization.employment.role]])</div>
+      <div class="horizontal layout wrap">
+        <div class="card flex info-panel">
+          <div class="title">[[user.fullName]]</div>
+          <div class="">[[user.email]]</div>
+          <div class="">[[user.phone]]</div>
+          <div class="">[[organization.employment.designation]] ([[organization.employment.role]])</div>
         </div>
-
-        <div class="card flex">
-          <div class="type title">[[organization.name]]</div>
-          <div class="type body">[[organization.email]]</div>
-          <div class="type body">[[organization.phone]]</div>
-          <div class="type body">[[organization.primaryBusinessAddress]]</div>
+        <div class="card flex info-panel">
+          <div class="title">[[organization.name]]</div>
+          <div class="">[[organization.email]]</div>
+          <div class="">[[organization.phone]]</div>
+          <div class="">[[organization.primaryBusinessAddress]]</div>
         </div>
       </div>
       <div class="horizontal layout wrap">
-        <div class="card flex one">
-          <div class="item-value">[[metrics.totalNumberOfSalesToday]]</div>
-          <div class="item-unit">Invoices</div>
+        <div class="card flex metrics-box">
+          <div class="value">[[metrics.totalNumberOfSalesToday]]</div>
+          <div class="unit">Invoices</div>
           <div class="item-description">Today's Sales Count</div>
         </div>
-        <div class="card layout flex one">
-          <div class="item-value">[[metrics.totalAmountSoldToday]]</div>
-          <div class="item-unit">[[settings.monetaryUnit]]</div>
+        <div class="card flex metrics-box">
+          <div class="value">[[metrics.totalAmountSoldToday]]</div>
+          <div class="unit">[[settings.monetaryUnit]]</div>
           <div class="item-description">Today's Sold Amount</div>
         </div>
-        <div class="card layout flex one">
-          <div class="item-value">[[$translateNumber(metrics.totalNumberOfSalesThisMonth, selectedLanguageIdentifier)]]</div>
-          <div class="item-unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable', selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
+        <div class="card flex metrics-box">
+          <div class="value">[[$translateNumber(metrics.totalNumberOfSalesThisMonth, selectedLanguageIdentifier)]]</div>
+          <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable', selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
           <div class="item-description">Month's Sales Count</div>
         </div>
-        <div class="card layout flex one">
-          <div class="item-value">[[metrics.totalAmountSoldThisMonth]]</div>
-          <div class="item-unit">[[settings.monetaryUnit]]</div>
+        <div class="card flex metrics-box">
+          <div class="value">[[metrics.totalAmountSoldThisMonth]]</div>
+          <div class="unit">[[settings.monetaryUnit]]</div>
           <div class="item-description">Months's Sold Amount</div>
         </div>
       </div>
@@ -300,7 +313,7 @@
 
       verifyEmailTapped(e = null) {
         let message = "Please the verification code we sent to your email."
-        this.app.showModalInput("Enter verification code.", message, '', verificationToken => {
+        this.app.showModalInput("Enter verification code", message, '', verificationToken => {
           if ((!verificationToken) || verificationToken.length === 0) return;
           this._processVerifyEmailApi({ verificationToken }, html => {
             if (html.indexOf('Email Verification Successful') > -1) {
