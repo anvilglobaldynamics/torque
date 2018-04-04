@@ -40,7 +40,7 @@
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <template is="dom-if" if="[[!isSearchingCustomer]]">
         <div class="card vertical layout">

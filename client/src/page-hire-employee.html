@@ -31,7 +31,7 @@
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
-    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
         <paper-input class="findUserField" value="{{findUserField.emailOrPhone}}" required minlength="11" maxlength="15" error-message="Please enter a valid phone/email" label="Email Or Phone"></paper-input>
