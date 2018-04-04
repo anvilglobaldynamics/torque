@@ -25,7 +25,7 @@
     "paper-item": "PolymerElements/paper-item#^2.0.0",
     "paper-fab": "PolymerElements/paper-fab#^2.0.0",
     "paper-tabs": "PolymerElements/paper-tabs#^2.0.0",
-    "paper-toast": "PolymerElements/paper-toast#^2.0.0",
+    "paper-toast": "PolymerElements/paper-toast#^2.1.0",
     "iron-form": "PolymerElements/iron-form#^2.0.0",
     "baselib": "^0.1.0",
     "atomicdb": "^0.1.8",

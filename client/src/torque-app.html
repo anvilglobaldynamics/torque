@@ -19,6 +19,7 @@
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 
 <link rel="import" href="../bower_components/atomicdb/atomicdb.html">
 
@@ -257,7 +258,7 @@
         </div>
       </app-header-layout>
     </app-drawer-layout>
-
+    <paper-toast id="generic-toast" text="Done"></paper-toast>
     <div class="super-class-insertion-point"></div>
   </template>
 
@@ -394,6 +395,13 @@
         this.serviceManager.on('error', (event) => {
           this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
         });
+      }
+
+      showToast(message, cbfn) {
+        let el = this.elem('#generic-toast');
+        el.text = message;
+        el.open();
+        this.delay(0, cbfn);
       }
 
       // ====================== navigation =============================
