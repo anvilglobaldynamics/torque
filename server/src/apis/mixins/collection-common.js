@@ -1,10 +1,9 @@
-
 exports.collectionCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _deleteDocById(collection, query, cbfn) {
     collection.delete(query, (err, wasUpdated) => {
       if (err) return this.fail(err);
-      if (!wasUpdated) return this.fail(new Error(`Unable to find ${collection.collectionName} to delete.`));
+      if (!wasUpdated) return this.fail(this.verses.collectionCommon.genericDeleteFailureFn(collection.collectionName));
       return cbfn();
     });
   }
@@ -12,7 +11,7 @@ exports.collectionCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   _discardDocById(collection, query, cbfn) {
     collection.discard(query, (err, wasUpdated) => {
       if (err) return this.fail(err);
-      if (!wasUpdated) return this.fail(new Error(`Unable to find ${collection.collectionName} to discard.`));
+      if (!wasUpdated) return this.fail(this.verses.collectionCommon.genericDiscardFailureFn(collection.collectionName));
       return cbfn();
     });
   }
@@ -37,7 +36,7 @@ exports.collectionCommonMixin = (SuperApiClass) => class extends SuperApiClass {
       return false;
     }
     if (!wasUpdated) {
-      err = new Error(`Unable to find ${collectionName} to update`);
+      err = new Error(this.verses.collectionCommon.genericUpdateFailureFn(collectionName));
       err.code = "GENERIC_UPDATE_FAILURE";
       err.collectionName = collectionName;
       this.fail(err);

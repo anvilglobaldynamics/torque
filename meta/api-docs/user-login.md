@@ -34,6 +34,8 @@ Possible Error Codes:
 { code: USER_BANNED } // the user is banned
 { code: USER_REQUIRES_EMAIL_VERIFICATION } // the user requires email verification
 { code: USER_REQUIRES_PHONE_VERIFICATION } // the user requires phone verification
+{ code: PHONE_VERIFICATION_REQUEST_NOT_FOUND }
+{ code: EMAIL_VERIFICATION_REQUEST_NOT_FOUND }
 ```
 
 ### response (on success):
