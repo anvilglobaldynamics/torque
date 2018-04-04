@@ -17,7 +17,7 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _sendPasswordChangeNotificationEmail({ user }) {
     let email = user.email;
-    let model = { email, textContent: "Your password has changed." };
+    let model = { email, textContent: this.verses.userNotificationCommon.yourPasswordHasChanged };
     let clientLanguage = (this.clientLanguage || 'en-us');
     this.server.emailService.sendStoredMail(clientLanguage, 'generic-message', model, email, (err, isDeveloperError, response, finalBody) => {
       if ((err) || response.message !== 'Queued. Thank you.') {
@@ -37,7 +37,7 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _sendPasswordChangeNotificationSms({ user }) {
     let phone = user.phone;
-    let model = { phone, textContent: "Your password has changed." };
+    let model = { phone, textContent: this.verses.userNotificationCommon.yourPasswordHasChanged };
     this.server.smsService.sendStoredSms('generic-message', model, phone, (err, isDeveloperError, response, finalBody) => {
       if (err) {
         if (!isDeveloperError) this.logger.error(err);
@@ -73,14 +73,14 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _findUserByEmailOrPhone({ emailOrPhone }, cbfn) {
     this.database.user.findByEmailOrPhone({ emailOrPhone }, (err, user) => {
-      if (!this._ensureDoc(err, user, "USER_DOES_NOT_EXIST", "User with this phone/email does not exist")) return;
+      if (!this._ensureDoc(err, user, "USER_DOES_NOT_EXIST", this.verses.userCommon.userDoesNotExist)) return;
       return cbfn(user);
     });
   }
 
   _findUserById({ userId }, cbfn) {
     this.database.user.findById({ userId }, (err, user) => {
-      if (!this._ensureDoc(err, user, "USER_INVALID", "Invalid User could not be found")) return;
+      if (!this._ensureDoc(err, user, "USER_INVALID", this.verses.userCommon.userInvalid)) return;
       return cbfn(user);
     })
   }

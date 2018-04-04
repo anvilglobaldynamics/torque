@@ -161,7 +161,7 @@ class Api {
   // region: interfaces (subclass needs to override these) ===========
 
   handle() {
-    return this.fail(new Error("Api Not Handled"));
+    return this.fail(new Error(this.verses.apiCommon.apiNotHandled));
   }
 
   // region: network access ===============================
@@ -217,7 +217,7 @@ class Api {
 
   authenticate(body, cbfn) {
     if (!('apiKey' in body)) {
-      return this.fail(new Error("Developer Error: apiKey is missing from body."));
+      return this.fail(new Error(this.verses.apiCommon.apiKeyMissing));
     }
     let apiKey = body.apiKey;
     delete body['apiKey'];
@@ -225,7 +225,7 @@ class Api {
       this.database.adminSession.findByApiKey({ apiKey }, (err, adminSession) => {
         if (err) return this.fail(err);
         if (!adminSession) {
-          err = new Error("Invalid apiKey Provided!");
+          err = new Error(this.verses.apiCommon.apikeyInvalid);
           err.code = "APIKEY_INVALID";
           return this.fail(err);
         }
@@ -235,13 +235,13 @@ class Api {
       this.database.session.findByApiKey({ apiKey }, (err, session) => {
         if (err) return this.fail(err);
         if (!session) {
-          err = new Error("Invalid apiKey Provided!");
+          err = new Error(this.verses.apiCommon.apikeyInvalid);
           err.code = "APIKEY_INVALID";
           return this.fail(err);
         }
         let hasExpired = session.hasExpired || (((new Date).getTime() - session.createdDatetimeStamp) > SESSION_DURATION_LIMIT);
         if (hasExpired) {
-          err = new Error("Invalid apiKey Provided!");
+          err = new Error(this.verses.apiCommon.apikeyExpired);
           err.code = "APIKEY_EXPIRED";
           return this.fail(err);
         }
@@ -307,8 +307,7 @@ class Api {
       }).then(({ err, organization }) => {
         if (err) return reject(err);
         if (!organization) {
-          err = new Error("Organization could not be found during access control.");
-          // err.code = "ACCESS_CONTROL_INVALID_ORGANIZATION";
+          err = new Error(this.verses.organizationCommon.organizationInvalid);
           err.code = "ORGANIZATION_INVALID";
           return reject(err);
         }
@@ -316,7 +315,7 @@ class Api {
         this.database.employment.getEmploymentOfUserInOrganization({ userId, organizationId }, (err, employment) => {
           if (err) return reject(err);
           if (!employment) {
-            err = new Error("User does not belong to organization.");
+            err = new Error(this.verses.organizationCommon.userNotEmployedByOrganization);
             err.code = "USER_NOT_EMPLOYED_BY_ORGANIZATION";
             return reject(err);
           }
@@ -327,7 +326,7 @@ class Api {
             }
           });
           if (unmetPrivileges.length > 0) {
-            let message = "Unmet privileges. This action requires the following privileges - ";
+            let message = this.verses.accessControlCommon.accessControlUnmetPrivileges;
             message += unmetPrivileges.join(', ') + ".";
             err = new Error(message);
             err.code = "ACCESS_CONTROL_UNMET_PRIVILEGES";
@@ -428,7 +427,7 @@ class Api {
       delete errorObject['stack'];
       if (_knownErrorCodeList.indexOf(errorObject.code) === -1) {
         errorObject.code = 'GENERIC_SERVER_ERROR';
-        errorObject.message = 'Server error occurred. Admin has been notified.';
+        errorObject.message = this.verses.genericServerError;
       }
     }
     return errorObject;
@@ -437,10 +436,10 @@ class Api {
   _translateKnownError(err) {
     if (!('code' in err)) return err;
     if (err.code === "DUPLICATE_email") {
-      err = new Error("Provided email address is already in use");
+      err = new Error(this.verses.duplicationCommon.emailAlreadyInUse);
       err.code = 'EMAIL_ALREADY_IN_USE';
     } else if (err.code === "DUPLICATE_phone") {
-      err = new Error("Provided phone number is already in use");
+      err = new Error(this.verses.duplicationCommon.phoneAlreadyInUse);
       err.code = 'PHONE_ALREADY_IN_USE';
     }
     return err;

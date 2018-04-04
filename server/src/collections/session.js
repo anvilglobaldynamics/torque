@@ -87,7 +87,7 @@ exports.SessionCollection = class extends Collection {
     };
     this._update({ id: sessionId }, mod, (err, wasUpdated) => {
       if (err) return cbfn(err);
-      if (!wasUpdated) return cbfn(new Error("Session Not Found"));
+      if (!wasUpdated) return cbfn(new Error(this.verses.session.sessionNotFound));
       return cbfn();
     });
   }
