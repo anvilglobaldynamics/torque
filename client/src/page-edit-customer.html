@@ -156,8 +156,8 @@
         this.app.callAddCustomerApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editCustomerForm');
-          let message = "Congratulations. Your new customer has been created."
-          this.app.showModalDialog("Customer Created", message, _ => {
+          let message = "Your new customer has been created."
+          this.app.showToast(message, _ => {
             this.app.storeInSession('last-created-customer', response.customerId);
             this.backButtonOnTopBarPressed();
           });
