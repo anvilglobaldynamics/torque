@@ -45,9 +45,9 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
-        <div class="std-list">
+        <div class="list">
           <template is="dom-repeat" items="[[organizationList]]" as="organization">
-            <div class="horizontal layout std-list-item center">
+            <div class="horizontal layout item center">
               <div class="vertical layout flex">
                 <div class="title">[[organization.name]]</div>
                 <div class="description">[[organization.employment.designation]] ([[organization.employment.role]])</div>

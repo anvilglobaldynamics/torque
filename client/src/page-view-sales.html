@@ -29,7 +29,7 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
-        <div class="std-list">
+        <div class="list">
           <div>ID: [[sales.id]]</div>
           <div>Dated: [[$mkDate(sales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
           <div>Outlet ID: [[sales.outletId]]</div>
@@ -44,9 +44,9 @@
 
       <div class="card vertical layout">
         <div class="title">Product List: ([[sales.productList.length]] products)</div>
-        <div class="std-list">
+        <div class="list">
           <template is="dom-repeat" items="{{sales.productList}}" as="product">
-            <div class="horizontal layout std-list-item center">
+            <div class="horizontal layout item center">
               <div class="vertical layout flex">
                 <div>Product: [[product.productCategoryName]]</div>
                 <div>Count: [[product.count]]</div>

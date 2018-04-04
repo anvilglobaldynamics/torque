@@ -51,6 +51,77 @@
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
       }
 
+      /* ============= lists ============= */
+
+      .list .item {
+        border-bottom: 1px dashed rgb(192, 198, 214);
+        padding-bottom: 12px;
+      }
+
+      .list .item .content .title {
+        font-size: 20px;
+      }
+
+      .list .item .content .description {
+        font-size: 14px;
+      }
+
+      .list .item .control-buttons paper-button {
+        max-height: 48px;
+      }
+
+      @media (min-width: 481px) {
+        .list .item {
+          display: -ms-flexbox;
+          display: -webkit-flex;
+          display: flex;
+          -ms-flex-direction: row;
+          -webkit-flex-direction: row;
+          flex-direction: row;
+          -ms-flex-align: center;
+          -webkit-align-items: center;
+          align-items: center;
+        }
+        .list .item .content {
+          -ms-flex: 1 1 0.000000001px;
+          -webkit-flex: 1;
+          flex: 1;
+          -webkit-flex-basis: 0.000000001px;
+          flex-basis: 0.000000001px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .list .item .control-buttons paper-button {
+          margin-top: 8px;
+          margin-left: 0;
+        }
+      }
+
+      .pagination {
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+
+      .pagination .limit,
+      .pagination .total-count,
+      .pagination .offset {
+        font-weight: bold;
+      }
+
+      .pagination-show-more {
+        margin: 0 0;
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+      }
+
+      .pagination-show-previous {
+        margin: 0 0;
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        margin-bottom: 8px;
+      }
+
       /* ============= inputs, buttons, forms, links ============= */
 
       paper-button.primary {
@@ -76,6 +147,24 @@
       .hidden {
         display: none !important;
       }
+
+      /* .layout.adaptive {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -ms-flex-direction: row;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+
+      }
+
+      @media (max-width: 480px) {
+        .layout.adaptive {
+          -ms-flex-direction: initial;
+          -webkit-flex-direction: initial;
+          flex-direction: initial;
+        }
+      } */
 
       /* ============= helpers ============= */
 

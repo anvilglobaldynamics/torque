@@ -21,7 +21,6 @@
 <dom-module id="page-manage-customers">
   <template>
     <style include="shared-styles">
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -31,19 +30,23 @@
       <div class="card vertical layout">
 
         <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">Show Previous</paper-button>
+          <paper-button class="pagination-show-previous" on-tap="showPreviousTapped">Show
+            <iron-icon icon="icons:arrow-upward"></iron-icon>
+            Previous</paper-button>
         </template>
 
-        <div class="std-list">
+        <div class="list">
           <template is="dom-repeat" items="[[customerList]]" as="customer">
-            <div class="horizontal layout std-list-item center">
-              <div class="vertical layout flex">
+            <div class="item">
+              <div class="content">
                 <div class="title">[[customer.fullName]]</div>
                 <div class="description">[[customer.phone]]</div>
                 <div class="description">Balance: [[customer.balance]]</div>
               </div>
-              <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
-              <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
+              <div class="control-buttons">
+                <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
+                <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
+              </div>
             </div>
           </template>
         </div>
@@ -56,9 +59,11 @@
           <span class="offset">#[[$inc(pagination.offset)]]</span>.
         </div>
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">Show More</paper-button>
+          <paper-button class="pagination-show-more" on-tap="showMoreTapped">Show
+            <iron-icon icon="icons:arrow-downward"></iron-icon>
+            More</paper-button>
         </template>
-        
+
       </div>
 
       <div class="transparent-card align-right">

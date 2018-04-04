@@ -34,9 +34,9 @@
           <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">Show Previous</paper-button>
         </template>
 
-        <div class="std-list">
+        <div class="list">
           <template is="dom-repeat" items="[[outletList]]" as="outlet">
-            <div class="horizontal layout std-list-item center">
+            <div class="horizontal layout item center">
               <div class="vertical layout flex">
                 <div class="title">[[outlet.name]]</div>
                 <div class="description type secondary">[[outlet.phone]] ([[outlet.physicalAddress]])</div>

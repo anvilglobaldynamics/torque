@@ -42,22 +42,22 @@
 
       <div class="card vertical layout">
         <div class="mb-4">This warehouse has the following inventories.</div>
-        <div class="std-list">
-          <div class="horizontal layout std-list-item center">
+        <div class="list">
+          <div class="horizontal layout item center">
             <div class="vertical layout flex">
               <div class="title">[[defaultInventory.name]] Inventory</div>
               <div class="description">This is the main inventory.</div>
             </div>
             <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="defaultInventory">View</paper-button>
           </div>
-          <div class="horizontal layout std-list-item center">
+          <div class="horizontal layout item center">
             <div class="vertical layout flex">
               <div class="title">[[returnedInventory.name]] Inventory</div>
               <div class="description">Products that are returned by the customer go in here.</div>
             </div>
             <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="returnedInventory">View</paper-button>
           </div>
-          <div class="horizontal layout std-list-item center">
+          <div class="horizontal layout item center">
             <div class="vertical layout flex">
               <div class="title">[[damagedInventory.name]] Inventory</div>
               <div class="description">Damaged products are kept here.</div>
