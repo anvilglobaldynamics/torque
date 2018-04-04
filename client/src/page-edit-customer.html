@@ -35,7 +35,7 @@
         <form>
           <div class="card vertical layout">
             <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message="Please enter a valid name" label="Name of your customer."></paper-input>
-            <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number"></paper-input>
+            <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="11" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number"></paper-input>
             <template is="dom-if" if="{{!editMode}}">
               <paper-input class$="editCustomerForm--openingBalance" value="{{editCustomerForm.openingBalance}}" required minlength="0" maxlength="8" error-message="Please enter an amount as opening balance" label="Opening Balance"></paper-input>
             </template>

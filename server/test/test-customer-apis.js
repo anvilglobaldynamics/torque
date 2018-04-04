@@ -86,6 +86,7 @@ describe('customer', _ => {
         organizationId: organizationId,
         fullName: "1st Test Customer",
         phone: customerPhone,
+        // phone: "0a626404050",
         openingBalance: '500',
       }
     }, (err, response, body) => {
@@ -93,6 +94,7 @@ describe('customer', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
       expect(body).to.have.property('customerId');
+      
       testDoneFn();
     })
 

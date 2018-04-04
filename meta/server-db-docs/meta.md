@@ -1,7 +1,7 @@
 This collection contains meta data regarding our application
 
 ## signature
-```
+```js
 Joi.object().keys({
   roleList: Joi.array().items(Joi.string().max(1024).required()),
   privilegeList: Joi.array().items(Joi.string().max(1024).required()),

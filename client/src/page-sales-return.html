@@ -42,8 +42,9 @@
 
             <div>[[productToBeReturned.productCategoryName]]</div>
             <div>Sold Count: [[productToBeReturned.count]]</div>
+            <div>Return Count: [[productToBeReturned.returnedProductCount]]</div>
             <paper-input class="salesReturnForm--productReturnCount" value="{{salesReturnForm.productReturnCount}}" type="number" required min="1" max="[[maxAllowedReturnCount(productToBeReturned.count, productToBeReturned.returnedProductCount)]]" error-message="Please enter a valid number" label="Product Return Count"></paper-input>
-            <paper-input class="salesReturnForm--creditedAmount" value="{{salesReturnForm.creditedAmount}}" type="number" required min="0" error-message="Please enter a valid number" label="Credited Amount (amount that has been returned to the customer)">
+            <paper-input class="salesReturnForm--creditedAmount" value="{{salesReturnForm.creditedAmount}}" type="number" required min="0" max="[[maxAllowedCreditAmount(productToBeReturned.count, productToBeReturned.salePrice)]]" error-message="Please enter a valid number" label="Credited Amount (amount that has been returned to the customer)">
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
             <div class="horizontal layout button-row end">
@@ -141,8 +142,8 @@
 
       _processProductToBeReturned(cbfn) {
         this.productToBeReturned = this.sales.productList.find(product => product.productId == this.params.product);
-        this.set("salesReturnForm.creditedAmount", this.productToBeReturned.salePrice);
-        this.set("salesReturnForm.productReturnCoun", this.productToBeReturned.count);
+        this.set("salesReturnForm.creditedAmount", this.productToBeReturned.salePrice * (this.productToBeReturned.count - this.productToBeReturned.returnedProductCount));
+        this.set("salesReturnForm.productReturnCount", (this.productToBeReturned.count - this.productToBeReturned.returnedProductCount));
 
         cbfn();
       }
@@ -178,6 +179,10 @@
 
       maxAllowedReturnCount(soldCount, returnedCount) {
         return (soldCount-returnedCount);
+      }
+
+      maxAllowedCreditAmount(soldCount, salePrice) {
+        return (soldCount*salePrice)
       }
 
       addSalesReturnTapped(e = null) {

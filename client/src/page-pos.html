@@ -101,79 +101,78 @@
         </div>
       </div>
 
-      <div class="card vertical layout">
-        <div class="std-list">
+      <template is="dom-if" if="{{productList.length}}">
+        <div class="card vertical layout">
+          <div class="std-list">
 
-          <template is="dom-if" if="{{productList}}">
-            <div class="horizontal layout std-list-item center">
-              <div class="vertical layout flex">
+              <div class="horizontal layout std-list-item center">
+                <div class="vertical layout flex">
 
-                <br> Total:
-                <b>{{payment.totalAmount}} [[app.settings.monetaryUnit]]</b>
+                  <br> Total:
+                  <b>{{$round(payment.totalAmount)}} [[app.settings.monetaryUnit]]</b>
 
-                <div class="horizontal layout">
-                  <paper-dropdown-menu label="Discount Type" class="mr-4">
-                    <paper-listbox slot="dropdown-content" selected="{{payment.discountType}}" attr-for-selected="name">
-                      <paper-item name="percent">Percentage</paper-item>
-                      <paper-item name="fixed">Fixed Value</paper-item>
-                    </paper-listbox>
-                  </paper-dropdown-menu>
-                  <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Discount Value">
-                    <template is="dom-if" if="[[$equals(payment.discountType, 'percent')]]">
-                      <div slot="suffix">%</div>
-                    </template>
-                    <template is="dom-if" if="[[$equals(payment.discountType, 'fixed')]]">
-                      <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-                    </template>
+                  <div class="horizontal layout">
+                    <paper-dropdown-menu label="Discount Type" class="mr-4">
+                      <paper-listbox slot="dropdown-content" selected="{{payment.discountType}}" attr-for-selected="name">
+                        <paper-item name="percent">Percentage</paper-item>
+                        <paper-item name="fixed">Fixed Value</paper-item>
+                      </paper-listbox>
+                    </paper-dropdown-menu>
+                    <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Discount Value">
+                      <template is="dom-if" if="[[$equals(payment.discountType, 'percent')]]">
+                        <div slot="suffix">%</div>
+                      </template>
+                      <template is="dom-if" if="[[$equals(payment.discountType, 'fixed')]]">
+                        <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                      </template>
+                    </paper-input>
+                  </div>
+
+                  <template is="dom-if" if="[[payment.discountValue]]">
+                    <br> Discounted Amount:
+                    <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
+                  </template>
+
+                  <paper-input class="payment--vatValue" value="{{vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="VAT">
+                    <div slot="suffix">%</div>
                   </paper-input>
+
+                  <template is="dom-if" if="[[vatValue]]">
+                    <br> Vat Amount:
+                    <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
+                  </template>
+
+                  <paper-input class="payment--serviceChargeAmount" value="{{payment.serviceChargeAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Service Charge Amount">
+                    <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                  </paper-input>
+
+                  <br> Totol Billed:
+                  <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
+
+                  <template is="dom-if" if="[[customer]]">
+                    <br> Previous Customer Balance:
+                    <b>{{$round(customer.balance)}} [[app.settings.monetaryUnit]]</b>
+                  </template>
+
+                  <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Paid Amount">
+                    <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                  </paper-input>
+
+                  <template is="dom-if" if="[[payment.paidAmount]]">
+                    <br> Change Amount:
+                    <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
+                  </template>
+
                 </div>
-
-                <template is="dom-if" if="[[payment.discountValue]]">
-                  <br> Discounted Amount:
-                  <b>{{payment.discountedAmount}} [[app.settings.monetaryUnit]]</b>
-                </template>
-
-                <paper-input class="payment--vatValue" value="{{vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="VAT">
-                  <div slot="suffix">%</div>
-                </paper-input>
-
-                <template is="dom-if" if="[[vatValue]]">
-                  <br> Vat Amount:
-                  <b>{{payment.vatAmount}} [[app.settings.monetaryUnit]]</b>
-                </template>
-
-                <paper-input class="payment--serviceChargeAmount" value="{{payment.serviceChargeAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Service Charge Amount">
-                  <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-                </paper-input>
-
-                <br> Totol Billed:
-                <b>{{payment.totalBilled}} [[app.settings.monetaryUnit]]</b>
-
-                <template is="dom-if" if="[[customer]]">
-                  <br> Previous Customer Balance:
-                  <b>{{customer.balance}} [[app.settings.monetaryUnit]]</b>
-                </template>
-
-                <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Paid Amount">
-                  <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-                </paper-input>
-
-                <template is="dom-if" if="[[payment.paidAmount]]">
-                  <br> Change Amount:
-                  <b>{{payment.changeAmount}} [[app.settings.monetaryUnit]]</b>
-                </template>
-
               </div>
-            </div>
 
-            <div class="horizontal layout m-top-16">
-              <paper-button raised class="primary flex" on-tap="saveSaleTapped">Confirm Sales</paper-button>
-            </div>
+              <div class="horizontal layout m-top-16">
+                <paper-button raised class="primary flex" on-tap="saveSaleTapped">Confirm Sales</paper-button>
+              </div>
 
-          </template>
-
+          </div>
         </div>
-      </div>
+      </template>
 
     </div>
 
@@ -190,22 +189,7 @@
         return {
           productList: {
             type: Array,
-            value: () => {
-              if (mode === 'development') {
-                return [
-                  {
-                    name: 'unfit horse',
-                    productId: -99999,
-                    count: 1,
-                    discountType: 'percent',
-                    discountValue: 15,
-                    salePrice: 200
-                  }
-                ];
-              } else {
-                return [];
-              }
-            }
+            value: () => []
           },
           payment: {
             type: Object,
@@ -273,9 +257,7 @@
 
           let productList = this.app.getFromSession('pos-selected-product-list');
           if (productList) {
-            if (productList.length > 0) {
-              this.productList = productList;
-            }
+            this.productList = productList;
           }
 
           this._calculatePayment();
@@ -461,6 +443,7 @@
       }
 
       backButtonOnTopBarPressed(e = null) {
+        this._resetSales();
         this.app.navigateToPreviousUrl('/home');
       }
 

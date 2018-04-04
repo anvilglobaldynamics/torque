@@ -128,6 +128,13 @@
         return (JSON.stringify(obj));
       }
 
+      $round(number) {
+        if (!number) {
+          number = 0;
+        }
+        return (Math.round(number * 100)/100);
+      }
+
       checkPrivilege(privilege) {
         if (!(privilege in this.app.organization.employment.privileges)) {
           throw new Error(`No such privilege ""${privilege}.`);

@@ -56,7 +56,6 @@
                 <div>Product: [[product.productCategoryName]]</div>
                 <div>Count: [[product.count]]</div>
                 <div>Sale Price: [[product.salePrice]]</div>
-                <div>Discounted: [[product.discountValue]] by [[product.discountType]] </div>
                 <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}">
                   <paper-button raised class="primary" on-tap="returnTapped">Return</paper-button>
                 </template>
@@ -68,11 +67,11 @@
 
       <div class="card vertical layout">
         <div class="title">Payment:</div>
-        <div>Total Billed: [[sales.payment.totalBilled]]</div>
-        <div>Discounted Amount: [[sales.payment.discountedAmount]]</div>
-        <div>Service Charge Amount: [[sales.payment.serviceChargeAmount]]</div>
-        <div>Vat: [[sales.payment.vatAmount]]</div>
-        <div>Paid Amount: [[sales.payment.paidAmount]]</div>
+        <div>Total Billed: [[$round(sales.payment.totalBilled)]]</div>
+        <div>Discounted: [[$round(sales.payment.discountedAmount)]] by [[sales.payment.discountValue]] [[sales.payment.discountType]]</div>
+        <div>Service Charge Amount: [[$round(sales.payment.serviceChargeAmount)]]</div>
+        <div>Vat: [[$round(sales.payment.vatAmount)]]</div>
+        <div>Paid Amount: [[$round(sales.payment.paidAmount)]]</div>
       </div>
 
     </div>

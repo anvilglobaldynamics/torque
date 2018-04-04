@@ -273,7 +273,6 @@
       _processSalesReturnList(cbfn) {
         this._fetchSalesReturnList(newSalesReturnList => {
           this.salesReturnList = newSalesReturnList;
-          console.log("salesReturnList: ", this.salesReturnList);
           cbfn();
         });
       }

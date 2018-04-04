@@ -207,7 +207,7 @@ exports.validateCustomerSchema = (doc) => {
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
     fullName: Joi.string().min(1).max(64).required(),
-    phone: Joi.string().alphanum().min(11).max(14).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
     organizationId: Joi.number().max(999999999999999).required(),
     balance: Joi.number().max(999999999999999).required(),
     isDeleted: Joi.boolean().required(),
@@ -236,7 +236,7 @@ exports.validateOutletSchema = (doc) => {
     organizationId: Joi.number().max(999999999999999).required(),
     physicalAddress: Joi.string().min(1).max(128).required(),
     contactPersonName: Joi.string().min(1).max(64).required(),
-    phone: Joi.string().alphanum().min(11).max(14).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
 
     isDeleted: Joi.boolean().required()
   });
@@ -249,7 +249,7 @@ exports.validateOrganizationSchema = (doc) => {
     id: Joi.number().max(999999999999999).required(),
     name: Joi.string().min(1).max(64).required(),
     primaryBusinessAddress: Joi.string().min(1).max(128).required(),
-    phone: Joi.string().alphanum().min(11).max(14).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
     email: Joi.string().email().min(3).max(30).required(),
     employment: Joi.object().keys({
       designation: Joi.string().max(1024).required(),
@@ -274,7 +274,7 @@ exports.validateWarehouseSchema = (doc) => {
     organizationId: Joi.number().max(999999999999999).required(),
     physicalAddress: Joi.string().min(1).max(128).required(),
     contactPersonName: Joi.string().min(1).max(64).required(),
-    phone: Joi.string().alphanum().min(11).max(14).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
 
     isDeleted: Joi.boolean().required()
   });
@@ -512,7 +512,7 @@ exports.validateUserSchema = (doc) => {
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
     fullName: Joi.string().min(1).max(64).required(),
-    phone: Joi.string().alphanum().min(11).max(14).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
     passwordHash: Joi.string().min(64).max(64).required(),
     email: Joi.string().email().min(3).max(30).allow(null).required(),
     nid: Joi.string().min(16).max(16).allow('').required(),
@@ -539,7 +539,7 @@ exports.validateEmploymentSchema = (doc) => {
     userId: Joi.number().max(999999999999999).required(),
     userDetails: Joi.object().required().keys({
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().alphanum().min(11).max(14).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       email: Joi.string().email().min(3).max(30).allow(null).required(),
       nid: Joi.string().min(16).max(16).allow('').required(),
       physicalAddress: Joi.string().min(1).max(128).allow('').required(),

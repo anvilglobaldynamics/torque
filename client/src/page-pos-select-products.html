@@ -187,7 +187,7 @@
           let count = parseInt(selectedCount, 10);
           return { productId, name, count, salePrice, discountType, discountValue };
         });
-
+        
         this.app.storeInSession('pos-selected-product-list', productList);
         this.backButtonOnTopBarPressed();
       }

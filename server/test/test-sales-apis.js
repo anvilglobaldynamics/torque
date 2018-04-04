@@ -231,6 +231,41 @@ describe('sales', _ => {
 
   });
 
+  it('api/add-sales (Invalid empty productList)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          previousCustomerBalance: null,
+          paidAmount: 300,
+          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('VALIDATION_ERROR');
+
+      testDoneFn();
+    });
+
+  });
+
   it('api/add-sales (Invalid productList)', testDoneFn => {
 
     callApi('api/add-sales', {

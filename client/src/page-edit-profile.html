@@ -35,9 +35,9 @@
       <iron-form id="changePasswordForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
-            <paper-input class="changePasswordForm--oldPassword" value="{{changePasswordForm.oldPassword}}" required minlength="3" maxlength="15" error-message="Please enter a valid password" label="Your current password" type="password"></paper-input>
-            <paper-input class="changePasswordForm--newPassword" value="{{changePasswordForm.newPassword}}" required minlength="3" maxlength="15" error-message="Please enter a valid password" label="Your new password" type="password"></paper-input>
-            <paper-input class="changePasswordForm--repeatNewPassword" value="{{changePasswordForm.repeatNewPassword}}" required minlength="3" maxlength="15" error-message="Please enter a valid password" label="Retype your new current password" type="password"></paper-input>
+            <paper-input class="changePasswordForm--oldPassword" value="{{changePasswordForm.oldPassword}}" required minlength="11" maxlength="15" error-message="Please enter a valid password" label="Your current password" type="password"></paper-input>
+            <paper-input class="changePasswordForm--newPassword" value="{{changePasswordForm.newPassword}}" required minlength="11" maxlength="15" error-message="Please enter a valid password" label="Your new password" type="password"></paper-input>
+            <paper-input class="changePasswordForm--repeatNewPassword" value="{{changePasswordForm.repeatNewPassword}}" required minlength="11" maxlength="15" error-message="Please enter a valid password" label="Retype your new current password" type="password"></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary changePasswordForm--submit" on-tap="changePasswordTapped">Change Password</paper-button>
@@ -49,7 +49,7 @@
       <iron-form id="editProfileForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
-            <paper-input class="editProfileForm--phone" value="{{editProfileForm.phone}}" required minlength="3" maxlength="15" error-message="Please enter a valid phone number" label="Your valid phone number"></paper-input>
+            <paper-input class="editProfileForm--phone" value="{{editProfileForm.phone}}" required minlength="11" maxlength="15" error-message="Please enter a valid phone number" label="Your valid phone number"></paper-input>
             <paper-input class="editProfileForm--email" value="{{editProfileForm.email}}" required pattern="^.+@.+\..+$" minlength="3" error-message="Please enter a valid email" label="Your valid email address"></paper-input>
 
             <paper-input class="editProfileForm--fullName" value="{{editProfileForm.fullName}}" required minlength="3" error-message="Please enter a valid name" label="Your Full Name."></paper-input>
