@@ -43,7 +43,7 @@
 
       <template is="dom-if" if="[[!isSearchingCustomer]]">
         <div class="card vertical layout">
-          <div class="horizontal layout center">
+          <div class="horizontal layout center wrap">
             <div class="flex">
               <template is="dom-if" if="[[!customer]]">
                 No customer selected (Anonymous sale)
@@ -55,10 +55,12 @@
                 <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
               </template>
             </div>
-            <template is="dom-if" if="[[customer]]">
-              <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>
-            </template>
-            <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
+            <div class="horizontal layout center">
+              <template is="dom-if" if="[[customer]]">
+                <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>
+              </template>
+              <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
+            </div>
           </div>
         </div>
       </template>
