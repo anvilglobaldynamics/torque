@@ -242,7 +242,7 @@
           </div>
           <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
           <span class="extra-small">build
-            <span id="build-number">50</span>
+            <span id="build-number">51</span>
           </span>
           <br>
           <paper-menu-button horizontal-align="center" vertical-align="bottom" vertical-offset="56">
@@ -334,6 +334,9 @@
           });
         });
         // PATCH-END
+        this.delay(0, () => {
+          this.elem('app-header-layout').notifyResize();
+        });
       }
 
       _manageProductionVariables() {
