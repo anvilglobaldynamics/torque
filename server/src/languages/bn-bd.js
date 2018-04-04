@@ -1,5 +1,6 @@
 exports.verses = {
-  UserLoginApi: {
+  genericServerError: "সার্ভার এর ত্রুটি। পরিচালককে অবগত করা হয়েছে।",
+  userLoginApi: {
     userNotFound: "এই ইমেল/ফোন আর পাসওয়ার্ড দিয়ে কোনো একাউন্ট খুঁজে পাওয়া যায় নি।",
     userBanned: "আপনাকে আমাদের সিস্টেম থেকে বহিঃস্ক্রিত করা হয়েছে। পরিচালক এর সাথে যোগাযোগ করুন।",
     userRequiresPhoneVerification: "আপনাকে আপনার ফোন নম্বরটি যাচাই করতে হবে।",
@@ -7,19 +8,36 @@ exports.verses = {
     phoneVerificationRequestNotFound: "ফোন যাচাইকরণ অনুরোধ পাওয়া যায়নি।",
     emailVerificationRequestNotFound: "ইমেল যাচাইকরণ অনুরোধ পাওয়া যায় নি।"
   },
+  duplicationCommon: {
+    emailAlreadyInUse: "প্রদত্ত ইমেল ব্যবহৃত।",
+    phoneAlreadyInUse: "প্রদত্ত ফোন নম্বরটি ব্যবহৃত।"
+  },
   collectionCommon: {
     genericUpdateFailureFn: (collectionName => `পরিবর্তন এর জন্য পাওয়া যায়নি ${collectionName}.`),
     genericDeleteFailureFn: (collectionName => `অপসারণ এর জন্য পাওয়া যায়নি ${collectionName}.`),
     genericDiscardFailureFn: (collectionName => `বাতিল এর জন্য পাওয়া যায়নি ${collectionName}.`)
   },
-  session: {
+  sessionCommon: {
     sessionNotFound: "Session পাওয়া যায় নি।"
   },
   userCommon: {
     userDoesNotExist: "এই ইমেইল/ফোন এর সাথে সম্পৃক্ত ব্যাবহারকারী খুঁজে পাওয়া যায় নি।",
     userInvalid: "অবৈধ ব্যবহারকারী পাওয়া যায়নি।"
   },
+  organizationCommon: {
+    organizationInvalid: "প্রবেশাধিকার নিয়ন্ত্রণকালে প্রতিষ্ঠান খুঁজে পাওয়া যায়নি।",
+    userNotEmployedByOrganization: "ব্যবহারকারী প্রতিঠানের অন্তর্গত নয়।"
+  },
+  accessControlCommon: {
+    accessControlUnmetPrivileges: "যথেষ্ট বিশেষাধিকার নেই। এই কর্ম নিম্নলিখিত বিশেষাধিকার প্রয়োজন - "
+  },
+  apiCommon: {
+    apiNotHandled: "API ব্যবহার করা হয়নি।",
+    apiKeyMissing: "Developer Error: apiKey is missing from body.",
+    apikeyInvalid: "অবৈধ apiKey প্রদান!",
+    apikeyExpired: "মেয়াদউত্তীর্ণ apiKey প্রদান!"
+  },
   userNotificationCommon: {
-    yourPasswordHasChanged: "Your password has changed."
+    yourPasswordHasChanged: "আপনার পাসওয়ার্ড পরিবর্তন হয়েছে।"
   }
 }

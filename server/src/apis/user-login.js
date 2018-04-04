@@ -35,12 +35,12 @@ exports.UserLoginApi = class extends userCommonMixin(Api) {
     this.database.user.findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }, (err, user) => {
       if (err) return this.fail(err);
       if (!user) {
-        let err = new Error(this.verses.UserLoginApi.userNotFound);
+        let err = new Error(this.verses.userLoginApi.userNotFound);
         err.code = 'USER_NOT_FOUND';
         return this.fail(err);
       }
       if (user.isBanned) {
-        let err = new Error(this.verses.UserLoginApi.userBanned);
+        let err = new Error(this.verses.userLoginApi.userBanned);
         err.code = 'USER_BANNED';
         return this.fail(err);
       }
@@ -49,7 +49,7 @@ exports.UserLoginApi = class extends userCommonMixin(Api) {
         this.database.phoneVerificationRequest.findByForPhone({ forPhone: user.phone }, (err, phoneVerificationRequest) => {
           if (err) return this.fail(err);
           if (!phoneVerificationRequest) {
-            err = new Error(this.verses.UserLoginApi.phoneVerificationRequestNotFound);
+            err = new Error(this.verses.userLoginApi.phoneVerificationRequestNotFound);
             err.code = 'PHONE_VERIFICATION_REQUEST_NOT_FOUND';
             return this.fail(err);
           }
@@ -61,7 +61,7 @@ exports.UserLoginApi = class extends userCommonMixin(Api) {
               // TODO: Update warning to use PHONE_VERIFICATION_WINDOW instead of fixed value.
               warning.push(`You have less than 1 hour to verify your phone number "${user.phone}".`);
             } else {
-              let err = new Error(this.verses.UserLoginApi.userRequiresPhoneVerification);
+              let err = new Error(this.verses.userLoginApi.userRequiresPhoneVerification);
               err.code = 'USER_REQUIRES_PHONE_VERIFICATION';
               return this.fail(err);
             }
@@ -72,13 +72,13 @@ exports.UserLoginApi = class extends userCommonMixin(Api) {
         this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email }, (err, emailVerificationRequest) => {
           if (err) return this.fail(err);
           if (!emailVerificationRequest) {
-            err = new Error(this.verses.UserLoginApi.emailVerificationRequestNotFound);
+            err = new Error(this.verses.userLoginApi.emailVerificationRequestNotFound);
             err.code = 'EMAIL_VERIFICATION_REQUEST_NOT_FOUND';
             return this.fail(err);
           }
           let { createdDatetimeStamp, isVerificationComplete } = emailVerificationRequest;
           if (!isVerificationComplete) {
-            let err = new Error(this.verses.UserLoginApi.userRequiresEmailVerification);
+            let err = new Error(this.verses.userLoginApi.userRequiresEmailVerification);
             err.code = 'USER_REQUIRES_EMAIL_VERIFICATION';
             return this.fail(err);
           }
