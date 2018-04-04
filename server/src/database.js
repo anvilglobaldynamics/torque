@@ -70,6 +70,9 @@ class Database {
    */
   find(collectionName, query, ...args) {
     let [skip = 0, limit = null, sort = null, cbfn] = make(args, 4);
+    if (!sort) {
+      sort = { 'id': -1 };
+    }
     try {
       let cursor = this._mongodbConnection.collection(collectionName).find(query);
       if (skip) cursor.skip(skip);

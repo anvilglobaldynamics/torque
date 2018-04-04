@@ -233,6 +233,8 @@ describe('customer', _ => {
         validateCustomerSchema(customer)
       });
 
+      body.customerList.reverse();
+
       firstCustomer = body.customerList[0];
       secondCustomer = body.customerList[1];
 

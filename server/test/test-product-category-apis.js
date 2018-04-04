@@ -165,6 +165,8 @@ describe('product-category', _ => {
         validateProductCategorySchema(productCategory);
       });
 
+      body.productCategoryList.reverse();
+
       productCategoryOne = body.productCategoryList[0];
 
       testDoneFn();
@@ -260,6 +262,8 @@ describe('product-category', _ => {
       body.productCategoryList.forEach(productCategory => {
         validateProductCategorySchema(productCategory);
       });
+
+      body.productCategoryList.reverse();
 
       productCategoryOne = body.productCategoryList[0];
       productCategoryTwo = body.productCategoryList[1];
@@ -423,6 +427,7 @@ describe('product-category', _ => {
         validateProductCategorySchema(productCategory);
       });
 
+      body.productCategoryList.reverse();
       productCategoryList = body.productCategoryList;
 
       expect(body.productCategoryList[0].name).to.equal("new 1st product category name");
