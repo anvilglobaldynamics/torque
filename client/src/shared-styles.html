@@ -5,6 +5,14 @@
 <dom-module id="shared-styles">
   <template>
     <style is="custom-style" include="iron-flex iron-flex-alignment">
+      /* ============= notes ============= */
+
+      /* 
+        desktop document width = minimum 960px
+        mobile document width = maximum 480px
+        design for anything above mobile and below desktop and then optimize for mobile.
+       */
+
       /* ============= containers ============= */
 
       .page {
@@ -16,6 +24,13 @@
       .page-small {
         max-width: 760px;
         margin: 0 auto;
+      }
+
+      @media (min-width: 960px) {
+        .page,
+        .page-small {
+          padding: 24px 0;
+        }
       }
 
       .page-small--header {
