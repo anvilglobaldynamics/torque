@@ -22,7 +22,7 @@
   <template>
     <style include="shared-styles"></style>
 
-    <div class="layout vertical">
+    <div class="layout vertical" on-keypress="genericEmbeddedFormSubmitionKeypress">
       <paper-input class="employeeForm--role" value="{{employeeForm.role}}" required minlength="1" error-message="Please enter a valid role" label="Role of Employee."></paper-input>
       <paper-input class="employeeForm--designation" value="{{employeeForm.designation}}" required minlength="1" error-message="Please enter a valid designation" label="Designation of Employee."></paper-input>
       <paper-input class="employeeForm--companyProvidedId" value="{{employeeForm.companyProvidedId}}" required minlength="1" error-message="Please enter Company Provided Id" label="Company Provided Id."></paper-input>
@@ -37,7 +37,7 @@
   </template>
 
   <script>
-    class ElemCommonEmploymentDetailsInput extends FxElement.mixin(TorqueDbBehavior, FxCommonBehavior) {
+    class ElemCommonEmploymentDetailsInput extends FxElement.mixin(TorqueDbBehavior, FxCommonBehavior, TorqueCommonBehavior) {
 
       static get is() {
         return 'elem-common-employment-details-input';

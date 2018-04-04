@@ -1,4 +1,11 @@
 <script>
+  /* 
+  FIXME: This behavior got a bit too much multi purpose. It is being used by both pages and
+  embedded elements. But all the properties and methods are not compatible with both.
+  Better to split it into two behaviors - 
+  TorqueCommonBehavior = Something not page specific
+  TorquePageBehavior = Page Specific
+  */
   (function () {
     if (window.TorqueCommonBehavior) return;
     /* @polymerMixin */
@@ -25,6 +32,26 @@
         }
       }
       // PATCH END
+
+      genericEmbeddedFormSubmitionKeypress(e) {
+        if (e.which !== 13) return;
+        if (e.target.nodeName !== 'PAPER-INPUT') return;
+        let el = e.target;
+        while (el && el.parentNode) {
+          el = el.parentNode;
+        }
+        el = el.host;
+        while (el && el.nodeName !== 'IRON-FORM') {
+          el = el.parentNode;
+        }
+        if (!el) return;
+        el.querySelectorAll(`.${el.id}--submit`).forEach(submitEl => {
+          if (submitEl) {
+            if (submitEl.className.indexOf("hidden") > -1) return;
+            submitEl.click();
+          }
+        });
+      }
 
       genericFormSubmitionKeypress(e) {
         if (e.which !== 13) return;
@@ -68,10 +95,14 @@
       }
 
       isReadyChanged() {
-        if (this.isReady) {
-          this.app.topSpinnerEnabled = true;
-        } else {
-          this.app.topSpinnerEnabled = false;
+        try {
+          if (this.isReady) {
+            this.app.topSpinnerEnabled = true;
+          } else {
+            this.app.topSpinnerEnabled = false;
+          }
+        } catch (ex) {
+          null;
         }
       }
 

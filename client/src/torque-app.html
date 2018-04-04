@@ -19,6 +19,7 @@
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 
 <link rel="import" href="../bower_components/atomicdb/atomicdb.html">
 
@@ -242,7 +243,7 @@
           </div>
           <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
           <span class="extra-small">build
-            <span id="build-number">50</span>
+            <span id="build-number">51</span>
           </span>
           <br>
           <paper-menu-button horizontal-align="center" vertical-align="bottom" vertical-offset="56">
@@ -257,7 +258,7 @@
         </div>
       </app-header-layout>
     </app-drawer-layout>
-
+    <paper-toast id="generic-toast" text="Done"></paper-toast>
     <div class="super-class-insertion-point"></div>
   </template>
 
@@ -325,6 +326,18 @@
         this.useLanguageServices();
         this.initiateLanguageServices();
         this.pushPageTitle(this.brandName);
+        // PATCH-START for PolymerFx#FxDialogBehavior
+        this.delay(0, () => {
+          this.elem('#generic-modal-input paper-input').addEventListener('keypress', (e) => {
+            if (e.which === 13) {
+              this.elem('#generic-modal-input paper-button[dialog-confirm]').click();
+            }
+          });
+        });
+        // PATCH-END
+        this.delay(0, () => {
+          this.elem('app-header-layout').notifyResize();
+        });
       }
 
       _manageProductionVariables() {
@@ -382,6 +395,13 @@
         this.serviceManager.on('error', (event) => {
           this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
         });
+      }
+
+      showToast(message, cbfn) {
+        let el = this.elem('#generic-toast');
+        el.text = message;
+        el.open();
+        this.delay(0, cbfn);
       }
 
       // ====================== navigation =============================
