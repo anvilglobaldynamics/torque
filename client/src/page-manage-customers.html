@@ -30,9 +30,11 @@
       <div class="card vertical layout">
 
         <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button class="pagination-show-previous" on-tap="showPreviousTapped">Show
+          <paper-button class="pagination-show-previous" on-tap="showPreviousTapped">
+            Show
             <iron-icon icon="icons:arrow-upward"></iron-icon>
-            Previous</paper-button>
+            Previous
+          </paper-button>
         </template>
 
         <div class="list">
@@ -44,8 +46,14 @@
                 <div class="description">Balance: [[customer.balance]]</div>
               </div>
               <div class="control-buttons">
-                <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
-                <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
+                <paper-button raised class="primary" on-tap="viewTapped">
+                  <iron-icon class="button-icon" icon="icons:visibility"></iron-icon>
+                  View
+                </paper-button>
+                <paper-button raised class="secondary" on-tap="editTapped">
+                  <iron-icon class="button-icon" icon="icons:create"></iron-icon>
+                  Edit
+                </paper-button>
               </div>
             </div>
           </template>
@@ -59,15 +67,20 @@
           <span class="offset">#[[$inc(pagination.offset)]]</span>.
         </div>
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button class="pagination-show-more" on-tap="showMoreTapped">Show
+          <paper-button class="pagination-show-more" on-tap="showMoreTapped">
+            Show
             <iron-icon icon="icons:arrow-downward"></iron-icon>
-            More</paper-button>
+            More
+          </paper-button>
         </template>
 
       </div>
 
-      <div class="transparent-card align-right">
-        <paper-button raised class="primary" on-tap="createTapped">Create New Customer</paper-button>
+      <div class="lone-controls">
+        <paper-button raised class="primary" on-tap="createTapped">
+          <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
+          Create New Customer
+        </paper-button>
       </div>
 
     </div>
