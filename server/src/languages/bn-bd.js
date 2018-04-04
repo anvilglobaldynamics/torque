@@ -11,5 +11,15 @@ exports.verses = {
     genericUpdateFailureFn: (collectionName => `পরিবর্তন এর জন্য পাওয়া যায়নি ${collectionName}.`),
     genericDeleteFailureFn: (collectionName => `অপসারণ এর জন্য পাওয়া যায়নি ${collectionName}.`),
     genericDiscardFailureFn: (collectionName => `বাতিল এর জন্য পাওয়া যায়নি ${collectionName}.`)
+  },
+  session: {
+    sessionNotFound: "Session পাওয়া যায় নি।"
+  },
+  userCommon: {
+    userDoesNotExist: "এই ইমেইল/ফোন এর সাথে সম্পৃক্ত ব্যাবহারকারী খুঁজে পাওয়া যায় নি।",
+    userInvalid: "অবৈধ ব্যবহারকারী পাওয়া যায়নি।"
+  },
+  userNotificationCommon: {
+    yourPasswordHasChanged: "Your password has changed."
   }
 }

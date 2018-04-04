@@ -11,5 +11,15 @@ exports.verses = {
     genericUpdateFailureFn: (collectionName => `Unable to find ${collectionName} to update.`),
     genericDeleteFailureFn: (collectionName => `Unable to find ${collectionName} to delete.`),
     genericDiscardFailureFn: (collectionName => `Unable to find ${collectionName} to discard.`)
+  },
+  session: {
+    sessionNotFound: "Session Not Found."
+  },
+  userCommon: {
+    userDoesNotExist: "User with this phone/email does not exist.",
+    userInvalid: "Invalid User could not be found."
+  },
+  userNotificationCommon: {
+    yourPasswordHasChanged: "Your password has changed."
   }
 }
