@@ -64,7 +64,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('inventory', _ => {
+describe.only('inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -193,7 +193,6 @@ describe('inventory', _ => {
   });
 
   it('api/add-product-to-inventory (Valid warehouse)', testDoneFn => {
-
     callApi('api/add-product-to-inventory', {
       json: {
         apiKey,
@@ -208,7 +207,23 @@ describe('inventory', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       testDoneFn();
     });
+  });
 
+  it('api/add-product-to-inventory (Valid same product category)', testDoneFn => {
+    callApi('api/add-product-to-inventory', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId,
+        productList: [
+          { productCategoryId, purchasePrice: 100, salePrice: 200, count: 5 },
+          { productCategoryId: productCategoryId2, purchasePrice: 199, salePrice: 300, count: 5 }
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      testDoneFn();
+    });
   });
 
   it('api/add-product-to-inventory (Invalid inventoryId)', testDoneFn => {

@@ -1,4 +1,3 @@
-
 exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _getOutletDefaultInventory({ outletId }, cbfn) {
@@ -73,6 +72,13 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     cbfn();
   }
 
+  _getInventoryWithId({ inventoryId }, cbfn) {
+    this.database.inventory.findById({ inventoryId }, (err, inventory) => {
+      if (!this._ensureDoc(err, inventory, "FROM_INVENTORY_INVALID", "Inventory could not be found")) return;
+      cbfn(inventory);
+    });
+  }
+  
   _getInventoriesByInventoryContainer({ inventoryContainerId, inventoryContainerType }, cbfn) {
     this.database.inventory.listByInventoryContainerId({ inventoryContainerId, inventoryContainerType }, (err, inventoryList) => {
       let defaultInventory, returnedInventory, damagedInventory;
