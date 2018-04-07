@@ -72,6 +72,9 @@
         } else {
           data.clientLanguage = 'en-us';
         }
+        if (mode === 'development') {
+          console.log(`API/api=${path}`, data);
+        }
         let cbfn = this._createGenericCallback(path, data, _cbfn);
         let now = (new Date).getTime();
         if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
