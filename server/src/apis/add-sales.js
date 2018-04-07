@@ -79,6 +79,7 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
 
   _handlePayment({ payment, customer }, cbfn) {
     let diff = (payment.paidAmount + payment.previousCustomerBalance) - payment.totalBilled;
+
     if (diff >= 0) {
       return cbfn(payment);
     } else {
