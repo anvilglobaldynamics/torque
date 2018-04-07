@@ -128,19 +128,19 @@
                     </paper-input>
                   </div>
 
-                  <template is="dom-if" if="[[payment.discountValue]]">
+                  <!-- <template is="dom-if" if="[[payment.discountValue]]"> -->
                     <br> Discounted Amount:
                     <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
-                  </template>
+                  <!-- </template> -->
 
                   <paper-input class="payment--vatValue" value="{{vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="VAT">
                     <div slot="suffix">%</div>
                   </paper-input>
 
-                  <template is="dom-if" if="[[vatValue]]">
+                  <!-- <template is="dom-if" if="[[vatValue]]"> -->
                     <br> Vat Amount:
                     <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
-                  </template>
+                  <!-- </template> -->
 
                   <paper-input class="payment--serviceChargeAmount" value="{{payment.serviceChargeAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="Please enter a valid number" label="Service Charge Amount">
                     <div slot="suffix">[[app.settings.monetaryUnit]]</div>
@@ -196,15 +196,15 @@
             value: () => {
               return {
                 totalAmount: null,
-                vatAmount: null,
+                vatAmount: 0,
                 discountType: 'percent',
                 discountValue: 0,
-                discountedAmount: null,
+                discountedAmount: 0,
                 serviceChargeAmount: 0,
                 totalBilled: null,
                 previousCustomerBalance: null,
                 paidAmount: 0,
-                changeAmount: null
+                changeAmount: 0
               }
             }
           },
@@ -296,7 +296,6 @@
           if (response.hasError) return this.onApiError(response.error);
           cbfn(response.customer);
         });
-
       }
 
       _processGetOutletDefaultInventoryId(cbfn) {
