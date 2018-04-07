@@ -24,17 +24,12 @@
 <dom-module id="page-manage-sales">
   <template>
     <style include="shared-styles">
-      @media (min-width: 960px) {
-        :host {
-          display: block;
-          padding: 24px;
-        }
-      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card horizontal layout center">
         <paper-input class="flex" value="{{fromDate}}" type="date" label="From Date"></paper-input>
@@ -43,7 +38,7 @@
 
       <template is="dom-if" if="[[!isSearchingCustomer]]">
         <div class="card vertical layout">
-          <div class="horizontal layout center">
+          <div class="horizontal layout center wrap">
             <div class="flex">
               <template is="dom-if" if="[[!customer]]">
                 No customer selected (Anonymous sale)
@@ -55,10 +50,12 @@
                 <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
               </template>
             </div>
-            <template is="dom-if" if="[[customer]]">
-              <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>
-            </template>
-            <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
+            <div class="horizontal layout center">
+              <template is="dom-if" if="[[customer]]">
+                <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>
+              </template>
+              <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
+            </div>
           </div>
         </div>
       </template>
@@ -95,9 +92,9 @@
           <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">Show Previous</paper-button>
         </template>
 
-        <div class="std-list">
+        <div class="list">
           <template is="dom-repeat" items="[[salesList]]" as="sale">
-            <div class="horizontal layout std-list-item center">
+            <div class="horizontal layout item center">
               <div class="vertical layout flex">
                 <div class="title">[[sale.id]]</div>
                 <div class="description">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>

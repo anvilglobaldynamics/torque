@@ -21,22 +21,16 @@
 <dom-module id="page-login">
   <template>
     <style include="shared-styles">
-      @media (min-width: 960px) {
-        :host {
-          display: block;
-          padding-top: 24px;
-        }
-      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-small-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page-small layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <iron-form id="loginForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
-            <div class="std-dialog-header">[[verses.login.login]]</div>
+            <div class="page-small--header">[[verses.login.login]]</div>
             <paper-input class="loginForm--emailOrPhone" value="{{loginForm.emailOrPhone}}" required minlength="3" error-message="[[verses.login.emailOrPhoneInputError]]" label="[[verses.login.emailOrPhoneInput]]"></paper-input>
             <paper-input class="loginForm--password" value="{{loginForm.password}}" required minlength="8" error-message="[[verses.login.passwordInputError]]" label="[[verses.login.passwordInput]]" type="password"></paper-input>
             <div class="horizontal layout button-row end">

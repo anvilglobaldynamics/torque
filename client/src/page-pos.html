@@ -30,17 +30,12 @@
 <dom-module id="page-pos">
   <template>
     <style include="shared-styles">
-      @media (min-width: 960px) {
-        :host {
-          display: block;
-          padding-top: 24px;
-        }
-      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <template is="dom-if" if="[[!isSearchingCustomer]]">
         <div class="card vertical layout">
@@ -83,10 +78,10 @@
       <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
 
       <div class="card vertical layout">
-        <div class="std-list">
+        <div class="list">
 
           <template is="dom-repeat" items="[[productList]]" as="product">
-            <div class="horizontal layout std-list-item center">
+            <div class="horizontal layout item center">
               <div class="vertical layout flex">
                 <div class="title">[[product.name]]</div>
                 <div class="description">Count:[[product.count]]</div>
@@ -103,9 +98,9 @@
 
       <template is="dom-if" if="{{productList.length}}">
         <div class="card vertical layout">
-          <div class="std-list">
+          <div class="list">
 
-              <div class="horizontal layout std-list-item center">
+              <div class="horizontal layout item center">
                 <div class="vertical layout flex">
 
                   <br> Total:

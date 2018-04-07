@@ -21,23 +21,18 @@
 <dom-module id="page-verify">
   <template>
     <style include="shared-styles">
-      @media (min-width: 960px) {
-        :host {
-          display: block;
-          padding-top: 24px;
-        }
-      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-small-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page-small layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <iron-form id="verify-form">
         <form>
           <div class="card vertical layout">
             <template is="dom-if" if="[[$equals(what, 'phone')]]">
-              <div class="std-dialog-header">VERIFY PHONE NUMBER</div>
+              <div class="page-small--header">VERIFY PHONE NUMBER</div>
               <paper-textarea class="verifyForm--verificationToken" value="{{verifyForm.verificationToken}}" required minlength="64" error-message="Enter the verification token we sent to your phone." label="Enter the verification token we sent to your phone." rows="3"></paper-textarea>
             </template>
             <div class="horizontal layout button-row end">

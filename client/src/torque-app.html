@@ -81,6 +81,8 @@
 <dom-module id="torque-app">
   <template>
     <style include="shared-styles">
+      /* ============= variables ============= */
+
       :host {
         --app-primary-color: #9C27B0;
         --app-primary-color-dark: #4A148C;
@@ -92,6 +94,8 @@
         --app-text-invert: #ffffff;
         display: block;
       }
+
+      /* ============= styles ============= */
 
       app-drawer-layout:not([narrow]) [drawer-toggle] {
         display: none;
@@ -132,12 +136,16 @@
         line-height: 100%;
       }
 
-      .subtitle {
+      .title-line-2 {
         font-size: 14px;
         margin: 0px;
         padding: 0px;
         line-height: 0px;
         margin-top: 4px;
+      }
+
+      .top-nav-spinner {
+        --paper-spinner-color: white;
       }
     </style>
 
@@ -174,7 +182,7 @@
             </template>
             <div main-title="" class="flex vertical layout">
               <div>[[$getPageTitle(pageTitleList.length)]]</div>
-              <div class="subtitle">[[organization.name]]</div>
+              <div class="title-line-2">[[organization.name]]</div>
             </div>
             <template is="dom-if" if="[[$and(activeServiceCount, topSpinnerEnabled)]]">
               <paper-spinner-lite active="" class="top-nav-spinner"></paper-spinner-lite>

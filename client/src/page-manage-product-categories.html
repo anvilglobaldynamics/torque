@@ -25,7 +25,7 @@
 
     <div class$="layout vertical [[$hideIfBeingMoved(isBeingMoved)]]" id="wrapper" style$="margin-left: [[marginLeft]]px">
       <div>
-        <div class="horizontal layout std-list-item center wrap p-bottom-4">
+        <div class="horizontal layout item center wrap p-bottom-4">
           <div class="flex">
             <div class="type title capitalize">[[productCategory.name]]</div>
             <div class="type body secondary">Buying Price: [[productCategory.defaultPurchasePrice]] [[app.settings.monetaryUnit]] per [[productCategory.unit]]</div>
@@ -159,20 +159,15 @@
 <dom-module id="page-manage-product-categories">
   <template>
     <style include="shared-styles">
-      @media (min-width: 960px) {
-        :host {
-          display: block;
-          padding: 24px;
-        }
-      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
-        <div class="std-list">
+        <div class="list">
           <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
             <product-category product-category="[[productCategory]]" margin-left="[[marginLeft]]" app="[[app]]"></product-category>
           </template>

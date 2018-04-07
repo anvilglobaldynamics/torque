@@ -17,12 +17,7 @@
   <template>
 
     <style include="shared-styles">
-      @media (min-width: 960px) {
-        :host {
-          display: block;
-          padding-top: 24px;
-        }
-      }
+
 
       paper-tabs.view-selector {
         --paper-tabs: {
@@ -34,7 +29,7 @@
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <paper-tabs id="main-view-selector" class="view-selector" selected="{{paperTabSelectedViewIndex}}" fit-container>
         <paper-tab>About</paper-tab>
