@@ -30,10 +30,6 @@
         font-weight: bold;
       }
 
-      .language-selection {
-        margin-right: 8px;
-      }
-
       .info-panel .title {
         font-size: 24px;
       }
@@ -63,17 +59,6 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
-
-      <div class="horizontal layout">
-        <div class="flex"></div>
-        <paper-dropdown-menu label="Language" class="language-selection">
-          <paper-listbox slot="dropdown-content" selected="{{selectedLanguageIdentifier}}" attr-for-selected="data-identifier" on-selected-changed="languageDropdownSelected">
-            <template is="dom-repeat" items="[[knownLanguageList]]" as="knownLanguage">
-              <paper-item data-identifier="[[knownLanguage.identifier]]">[[knownLanguage.name]]</paper-item>
-            </template>
-          </paper-listbox>
-        </paper-dropdown-menu>
-      </div>
 
       <template is="dom-if" if="[[warning]]">
         <div class="card vertical layout">
@@ -359,13 +344,6 @@
             }
           });
         });
-      }
-
-      languageDropdownSelected(e) {
-        window.setTimeout(() => {
-          if (this.getLastLoadedLanguage() === this.selectedLanguageIdentifier) return;
-          this.initiateLanguageServices(this.selectedLanguageIdentifier);
-        }, 0);
       }
 
       // region: misc =================================
