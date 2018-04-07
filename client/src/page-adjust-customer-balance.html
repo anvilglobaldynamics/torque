@@ -25,17 +25,12 @@
 <dom-module id="page-adjust-customer-balance">
   <template>
     <style include="shared-styles">
-      @media (min-width: 960px) {
-        :host {
-          display: block;
-          padding-top: 24px;
-        }
-      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
       <iron-form id="adjustCustomerBalanceForm">
         <form>
           <div class="card vertical layout">

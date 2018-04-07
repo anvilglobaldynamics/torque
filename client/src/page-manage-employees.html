@@ -21,17 +21,12 @@
 <dom-module id="page-manage-employees">
   <template>
     <style include="shared-styles">
-      @media (min-width: 960px) {
-        :host {
-          display: block;
-          padding: 24px;
-        }
-      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
 
@@ -39,9 +34,9 @@
           <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">Show Previous</paper-button>
         </template>
 
-        <div class="std-list">
+        <div class="list">
           <template is="dom-repeat" items="[[employeeList]]" as="employee">
-            <div class="horizontal layout std-list-item center">
+            <div class="horizontal layout item center">
               <div class="vertical layout flex">
                 <div class="title">Name: [[employee.userDetails.fullName]]</div>
                 <div class="description">Phone: [[employee.userDetails.phone]]</div>

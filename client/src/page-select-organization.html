@@ -21,12 +21,7 @@
 <dom-module id="page-select-organization">
   <template>
     <style include="shared-styles">
-      @media (min-width: 960px) {
-        :host {
-          display: block;
-          padding: 24px;
-        }
-      }
+
 
       pre {
         font-family: Arial, Helvetica, sans-serif !important;
@@ -47,12 +42,12 @@
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
-        <div class="std-list">
+        <div class="list">
           <template is="dom-repeat" items="[[organizationList]]" as="organization">
-            <div class="horizontal layout std-list-item center">
+            <div class="horizontal layout item center">
               <div class="vertical layout flex">
                 <div class="title">[[organization.name]]</div>
                 <div class="description">[[organization.employment.designation]] ([[organization.employment.role]])</div>

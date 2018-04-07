@@ -1,3 +1,53 @@
+<!-- 
+  ========================================
+  =====    elem-customer-selector    =====
+  ========================================
+
+  Host Configuratio Details:=
+
+    required properties:=
+
+      isSearchingCustomer: {
+        type: Boolean,
+        value: false
+      },
+      customer: {
+        type: Object,
+        value: null,
+        observer: 'customerChanged'
+      }
+
+    required assign in construction/navigatedIn:= 
+
+      this.self = this;
+
+    required methods:=
+
+      customerChanged() {
+        if (!this.customer) return;
+        this.app.storeInSession('last-selected-customer', this.customer);
+      }
+
+      _customerSelected(customer){
+        this.customer = customer;
+        this.isSearchingCustomer = false;
+      }
+      
+      // optional
+      changeCustomerTapped(e = null) {
+        this.isSearchingCustomer = true;
+      }
+
+      createCustomerTapped(e = null) {
+        this.app.navigateTo('/edit-customer');
+      }
+
+      removeCustomerTapped(e = null) {
+        this.customer = null;
+        this.app.storeInSession('last-selected-customer', null);
+      }
+-->
+
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
@@ -24,48 +74,6 @@
 
 <link rel="import" href="shared-styles.html">
 
-<!-- required properties: 
-  isSearchingCustomer: {
-    type: Boolean,
-    value: false
-  },
-  customer: {
-    type: Object,
-    value: null,
-    observer: 'customerChanged'
-  }
--->
-
-<!-- required assign:
-  this.self = this;
--->
-
-<!-- required method:
-  customerChanged() {
-    if (!this.customer) return;
-    this.app.storeInSession('last-selected-customer', this.customer);
-  }
-
-  _customerSelected(customer){
-    this.customer = customer;
-    this.isSearchingCustomer = false;
-  }
-  
-  // optional
-  changeCustomerTapped(e = null) {
-    this.isSearchingCustomer = true;
-  }
-
-  createCustomerTapped(e = null) {
-    this.app.navigateTo('/edit-customer');
-  }
-
-  removeCustomerTapped(e = null) {
-    this.customer = null;
-    this.app.storeInSession('last-selected-customer', null);
-  }
--->
-
 <dom-module id="elem-customer-selector">
   <template>
     <style include="shared-styles">
@@ -78,7 +86,6 @@
         <paper-button raised class="primary" on-tap="searchTapped">
           <iron-icon icon="search" class="m-right-8"></iron-icon>Search</paper-button>
       </div>
-
 
       <paper-listbox>
         <template is="dom-repeat" items="[[customerList]]" as="customer" index-as="customerIndex">

@@ -20,17 +20,12 @@
 <dom-module id="page-edit-customer">
   <template>
     <style include="shared-styles">
-      @media (min-width: 960px) {
-        :host {
-          display: block;
-          padding-top: 24px;
-        }
-      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
       <iron-form id="editCustomerForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">

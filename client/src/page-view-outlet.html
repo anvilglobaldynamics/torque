@@ -26,12 +26,7 @@
 <dom-module id="page-view-outlet">
   <template>
     <style include="shared-styles">
-      @media (min-width: 960px) {
-        :host {
-          display: block;
-          padding: 24px;
-        }
-      }
+
 
       .card {
         position: relative;
@@ -79,7 +74,7 @@
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card p-0">
         <div class="horizontal layout">

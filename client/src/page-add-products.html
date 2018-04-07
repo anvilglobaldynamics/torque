@@ -27,7 +27,7 @@
 
     <div class$="layout vertical" id="wrapper" style$="margin-left: [[marginLeft]]px">
       <div class="vertical layout">
-        <div class="horizontal layout std-list-item center">
+        <div class="horizontal layout item center">
           <div class="vertical layout flex">
             <div class="title">[[productCategory.name]]</div>
           </div>
@@ -121,20 +121,15 @@
 <dom-module id="page-add-products">
   <template>
     <style include="shared-styles">
-      @media (min-width: 960px) {
-        :host {
-          display: block;
-          padding: 24px;
-        }
-      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
-        <div class="std-list">
+        <div class="list">
           <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
             <product-category-add-product product-category="[[productCategory]]" margin-left="[[marginLeft]]" app="[[app]]"></product-category-add-product>
           </template>

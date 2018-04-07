@@ -1,2 +1,3 @@
 ignored/*
 .DS_Store
+.vscode/workbench.json
