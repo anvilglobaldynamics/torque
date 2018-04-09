@@ -168,7 +168,7 @@
         this.app.showModalConfirmation("Delete warehouse?", message, (answer) => {
           if (!answer) return;
           this._deleteWarehouse(this.warehouse.id, () => {
-            this.app.showModalDialog("Successfully deleted.", "The warehouse has been deleted", () => {
+            this.app.showToast("Warehouse has been deleted", () => {
               this.app.navigateTo(`/manage-warehouses`);
             });
           });

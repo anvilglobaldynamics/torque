@@ -256,7 +256,7 @@
         this.app.showModalConfirmation("Delete outlet?", message, (answer) => {
           if (!answer) return;
           this._deleteOutlet(this.outlet.id, () => {
-            this.app.showModalDialog("Successfully deleted.", "The outlet has been deleted", () => {
+            this.app.showToast("Outlet has been deleted", () => {
               this.app.navigateTo(`/manage-outlets`);
             });
           });

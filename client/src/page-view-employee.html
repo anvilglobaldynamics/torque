@@ -149,7 +149,7 @@
         this.app.showModalConfirmation("Fire employee?", message, (answer) => {
           if (!answer) return;
           this._fireEmployee(this.employee, () => {
-            this.app.showModalDialog("Successfully fired.", "The employee has been fired", () => {
+            this.app.showToast("Employee has been fired", () => {
               if (this.employee.userId === this.app.user.id) {
                 this.app.navigateTo(`/login`);
               } else {

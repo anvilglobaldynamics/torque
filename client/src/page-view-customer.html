@@ -149,7 +149,7 @@
         this.app.showModalConfirmation("Delete customer?", message, (answer) => {
           if (!answer) return;
           this._deleteCustomer(this.customer.id, () => {
-            this.app.showModalDialog("Successfully deleted.", "The customer has been deleted", () => {
+            this.app.showToast("Customer has been deleted", () => {
               this.app.navigateTo(`/manage-customers`);
             });
           });

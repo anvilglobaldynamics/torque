@@ -113,7 +113,7 @@
         this.app.showModalConfirmation("Delete Product Category?", message, (answer) => {
           if (!answer) return;
           this._deleteProductCategory(this.productCategory.id, () => {
-            this.app.showModalDialog("Successfully deleted.", "The product category has been deleted", () => {
+            this.app.showToast("Product category has been deleted", () => {
               this.app.refreshCurrentPage();
             });
           });
@@ -274,8 +274,8 @@
         this.app.callEditProductCategoryApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          let message = "Your product Category has been moved."
-          this.app.showModalDialog("Product Category Moved", message, _ => {
+          let message = "Product Category has been moved."
+          this.app.showToast(message, _ => {
             cbfn();
           });
         });

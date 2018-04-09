@@ -162,7 +162,6 @@
               this.isReady = true;
             });
           }
-
         });
       }
 
@@ -223,8 +222,8 @@
         this.app.callAddProductCategoryApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
-          let message = "Congratulations. Your new product Category has been created."
-          this.app.showModalDialog("Product Category Created", message, _ => {
+          let message = "Product Category has been created."
+          this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
         });
@@ -239,8 +238,8 @@
         this.app.callEditProductCategoryApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
-          let message = "Congratulations. Your product Category has been updated."
-          this.app.showModalDialog("Product Category Updated", message, _ => {
+          let message = "Product Category has been updated."
+          this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
         });

@@ -159,8 +159,8 @@
         this.app.callAddSalesReturnApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'salesReturnForm');
-          let message = "Congratulations. Your new sales return has been created."
-          this.app.showModalDialog("Sales Return Created", message, _ => {
+          let message = "New sales return has been created."
+          this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
         });

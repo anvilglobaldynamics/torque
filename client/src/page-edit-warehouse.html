@@ -151,8 +151,8 @@
         this.app.callAddWarehouseApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editWarehouseForm');
-          let message = "Congratulations. Your new warehouse has been created."
-          this.app.showModalDialog("Warehouse Created", message, _ => {
+          let message = "New warehouse has been created."
+          this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
         });
@@ -166,8 +166,8 @@
         this.app.callEditWarehouseApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editWarehouseForm');
-          let message = "Congratulations. Your warehouse has been updated."
-          this.app.showModalDialog("Warehouse Updated", message, _ => {
+          let message = "Warehouse has been updated."
+          this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
         });

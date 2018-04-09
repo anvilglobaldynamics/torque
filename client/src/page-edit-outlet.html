@@ -154,8 +154,8 @@
         this.app.callAddOutletApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editOutletForm');
-          let message = "Congratulations. Your new outlet has been created."
-          this.app.showModalDialog("Outlet Created", message, _ => {
+          let message = "Outlet has been created."
+          this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
         });
@@ -169,8 +169,8 @@
         this.app.callEditOutletApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editOutletForm');
-          let message = "Congratulations. Your outlet has been updated."
-          this.app.showModalDialog("Outlet Updated", message, _ => {
+          let message = "Outlet has been updated."
+          this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
         });

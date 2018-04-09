@@ -238,8 +238,8 @@
         this.elemAll('product-category-add-product').forEach(el => el.listProductsToAdd(productList));
         let inventoryId = parseInt(this.params.inventory);
         this._addProductsToInventory({ productList, inventoryId }, () => {
-          let message = "The products were successfully added to the inventory."
-          this.app.showModalDialog("Products Added", message, _ => {
+          let message = "Product(s) were successfully added to the inventory."
+          this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
         });

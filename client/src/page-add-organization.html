@@ -114,8 +114,8 @@
         this.app.callAddOrganizationApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'addOrganizationForm');
-          let message = "Congratulations. Your new organization has been created."
-          this.app.showModalDialog("Organization Created", message, _ => {
+          let message = "New organization has been created."
+          this.app.showToast(message, _ => {
             this.app.navigateTo(`/home/org:${response.organizationId}`);
           });
         });

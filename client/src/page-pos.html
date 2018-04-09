@@ -392,8 +392,8 @@
         this.app.callAddSalesApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          let message = "Congratulations. Your new Sales has been added."
-          this.app.showModalDialog("Sales Added", message, _ => {
+          let message = "New Sales has been added."
+          this.app.showToast(message, _ => {
             this._resetSales();
           });
         });
