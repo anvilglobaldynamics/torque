@@ -46,9 +46,6 @@ exports.AddProductToInventoryApi = class extends productCommonMixin(collectionCo
     Promise.all(productList.map(product => {
       return new Promise((accept, reject) => {
         let { productCategoryId, purchasePrice, salePrice, count } = product;
-        this._getInventoryWithId({ inventoryId }, (inventory) => {
-          console.log("inventory: ", inventory);
-        });
         this.database.product.create({ productCategoryId, purchasePrice, salePrice }, (err, productId) => {
           if (err) return reject(err);
           this.database.inventory.addProduct({ inventoryId }, { productId, count }, (err, wasUpdated) => {

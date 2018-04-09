@@ -32,9 +32,7 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     })
   }
 
-  _updateInventory({ outletDefaultInventory }, cbfn) {
-    let inventoryId = outletDefaultInventory.id;
-    let productList = outletDefaultInventory.productList;
+  _updateInventory({ inventoryId, productList }, cbfn) {
     this.database.inventory.updateProductList({ inventoryId }, { productList }, (err) => {
       if (err) return this.fail(err);
       cbfn();
@@ -78,7 +76,7 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
       cbfn(inventory);
     });
   }
-  
+
   _getInventoriesByInventoryContainer({ inventoryContainerId, inventoryContainerType }, cbfn) {
     this.database.inventory.listByInventoryContainerId({ inventoryContainerId, inventoryContainerType }, (err, inventoryList) => {
       let defaultInventory, returnedInventory, damagedInventory;

@@ -98,6 +98,14 @@
 
       /* ============= styles ============= */
 
+      @media print {
+        app-drawer, app-header, .footer {
+          display: none;
+        }
+      }
+
+      /* ============= styles ============= */
+
       app-drawer-layout:not([narrow]) [drawer-toggle] {
         display: none;
       }
@@ -156,33 +164,41 @@
       .language-icon {
         cursor: pointer;
       }
+
+      .app-drawer-wrapper {
+        display: block;
+        height: 100vh;
+        overflow-y: auto;
+      }
     </style>
 
-    <app-drawer-layout fullbleed="" responsive-width="2560px">
+    <app-drawer-layout responsive-width="2560px" fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
-      <app-drawer id="drawer" slot="drawer">
-        <app-toolbar>Torque</app-toolbar>
-        <iron-selector selected="[[pageName]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="home" href="#/home">[[verses.sidebar.home]]</a>
-          <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
-          <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
-          <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
-          <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.productCategories]]</a>
-          <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
-          <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
-          <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
-          <a name="reports" href="#/reports">[[verses.sidebar.reports]]</a>
-          <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
-          <a name="settings" href="#/settings">[[verses.sidebar.settings]]</a>
-          <a name="about" href="#/about">[[verses.sidebar.about]]</a>
-        </iron-selector>
-        <div class="link primary logout-link" on-tap="logoutTapped">[[verses.sidebar.logout]]</div>
+      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
+        <div class="app-drawer-wrapper">
+          <app-toolbar>Torque</app-toolbar>
+          <iron-selector selected="[[pageName]]" attr-for-selected="name" class="drawer-list" role="navigation">
+            <a name="home" href="#/home">[[verses.sidebar.home]]</a>
+            <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
+            <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.productCategories]]</a>
+            <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
+            <a name="reports" href="#/reports">[[verses.sidebar.reports]]</a>
+            <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
+            <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
+            <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
+            <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
+            <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
+            <a name="settings" href="#/settings">[[verses.sidebar.settings]]</a>
+            <a name="about" href="#/about">[[verses.sidebar.about]]</a>
+          </iron-selector>
+          <div name="logout" class="link primary logout-link" on-tap="logoutTapped" style="margin-bottom: 200px">[[verses.sidebar.logout]]</div>
+        </div>
       </app-drawer>
 
       <!-- Main content -->
-      <app-header-layout has-scrolling-region="">
+      <app-header-layout has-scrolling-region>
 
-        <app-header slot="header" style$="[[$invisibleUnless(user)]]">
+        <app-header slot="header" style$="[[$invisibleUnless(user)]]" fixed>
           <app-toolbar>
             <template is="dom-if" if="[[!currentPageIsModal]]">
               <paper-icon-button icon="shared-icons:menu" drawer-toggle=""></paper-icon-button>
@@ -196,6 +212,9 @@
             </div>
             <template is="dom-if" if="[[$and(activeServiceCount, topSpinnerEnabled)]]">
               <paper-spinner-lite active="" class="top-nav-spinner"></paper-spinner-lite>
+            </template>
+            <template is="dom-if" if="[[shouldShowPrintButton]]">
+              <paper-icon-button icon="print" on-click="printButtonOnTopBarPressed"></paper-icon-button>
             </template>
             <paper-menu-button horizontal-align="right">
               <paper-icon-button icon="icons:apps" slot="dropdown-trigger"></paper-icon-button>
@@ -262,19 +281,10 @@
           </div>
           <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
           <span class="extra-small">build
-            <span id="build-number">53</span>
+            <span id="build-number">64</span>
           </span>
           <br>
           <br>
-          <!-- <paper-menu-button horizontal-align="center" vertical-align="bottom" vertical-offset="56">
-            <paper-icon-button icon="icons:language" slot="dropdown-trigger"></paper-icon-button>
-            <paper-listbox slot="dropdown-content" selected="{{selectedLanguageIdentifier}}" attr-for-selected="data-identifier" on-selected-changed="languageDropdownSelected">
-              <template is="dom-repeat" items="[[knownLanguageList]]" as="knownLanguage">
-                <paper-item data-identifier="[[knownLanguage.identifier]]">[[knownLanguage.name]]</paper-item>
-              </template>
-            </paper-listbox>
-          </paper-menu-button>
-          <br> -->
           <div>
             <img src="../images/icons/en-us.png" data-key="en-us" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'en-us')]]" on-tap="languageIconTapped">
             <img src="../images/icons/bn-bd.png" data-key="bn-bd" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'bn-bd')]]" on-tap="languageIconTapped">
@@ -330,6 +340,10 @@
           topSpinnerEnabled: {
             type: Boolean,
             value: true
+          },
+          shouldShowPrintButton: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -359,8 +373,13 @@
           });
         });
         // PATCH-END
-        this.delay(0, () => {
-          this.elem('app-header-layout').notifyResize();
+        this._notifyResizeHack();
+      }
+
+      _notifyResizeHack() {
+        // TODO: Find a better way of handling this issue.
+        [0, 100, 250, 500, 1000].forEach(timeout => {
+          this.delay(timeout, () => this.elem('app-header-layout').notifyResize());
         });
       }
 
@@ -479,6 +498,10 @@
 
       saveButtonOnTopBarPressed(e) {
         this._proxyToActivePage('saveButtonOnTopBarPressed', e);
+      }
+
+      printButtonOnTopBarPressed(e) {
+        this._proxyToActivePage('printButtonOnTopBarPressed', e);
       }
 
       // ====================== delegated callbacks =============================

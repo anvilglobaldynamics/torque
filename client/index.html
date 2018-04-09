@@ -41,6 +41,18 @@
 
   <!-- Add any global styles for body, document, etc. -->
   <style>
+    @media print {
+      @page {
+        size: A4;
+      }
+    }
+
+    @media print and (width: 21cm) and (height: 29.7cm) {
+      @page {
+        margin: 3cm;
+      }
+    }
+
     body {
       margin: 0;
       font-family: 'Roboto', 'Noto', sans-serif;
