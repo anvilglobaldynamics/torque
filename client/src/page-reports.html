@@ -7,6 +7,7 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
@@ -65,71 +66,86 @@
         padding-bottom: 8px;
         border-bottom: 1px dotted rgb(131, 131, 131);
       }
+
+      .filter-toggle-region {
+        text-align: right;
+        margin-right: 8px;
+        margin-bottom: 8px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="card horizontal layout center">
-        <paper-input class="flex" value="{{fromDate}}" type="date" label="From Date"></paper-input>
-        <paper-input class="flex" value="{{toDate}}" type="date" label="To Date"></paper-input>
+      <div class="filter-toggle-region horizontal layout center">
+        <div class="flex"></div>
+        <paper-toggle-button checked="{{shouldShowFilters}}">Show Filters</paper-toggle-button>
       </div>
 
-      <template is="dom-if" if="[[!isSearchingCustomer]]">
-        <div class="card vertical layout">
-          <div class="horizontal layout center wrap">
-            <div class="flex">
-              <template is="dom-if" if="[[!customer]]">
-                No customer selected (Anonymous sale)
-              </template>
-              <template is="dom-if" if="[[customer]]">
-                Customer:
-                <b>[[customer.fullName]]</b> ([[customer.phone]])
-                <br> Balance:
-                <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
-              </template>
+      <div hidden="[[!shouldShowFilters]]">
+
+        <div class="card horizontal layout center">
+          <paper-input class="flex" value="{{fromDate}}" type="date" label="From Date"></paper-input>
+          <paper-input class="flex" value="{{toDate}}" type="date" label="To Date"></paper-input>
+        </div>
+
+        <template is="dom-if" if="[[!isSearchingCustomer]]">
+          <div class="card vertical layout">
+            <div class="horizontal layout center wrap">
+              <div class="flex">
+                <template is="dom-if" if="[[!customer]]">
+                  No customer selected (Anonymous sale)
+                </template>
+                <template is="dom-if" if="[[customer]]">
+                  Customer:
+                  <b>[[customer.fullName]]</b> ([[customer.phone]])
+                  <br> Balance:
+                  <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
+                </template>
+              </div>
+              <div class="horizontal layout center">
+                <template is="dom-if" if="[[customer]]">
+                  <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>
+                </template>
+                <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
+              </div>
             </div>
+          </div>
+        </template>
+        <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+
+        <template is="dom-if" if="[[!isSearchingOutlet]]">
+          <div class="card vertical layout">
             <div class="horizontal layout center">
-              <template is="dom-if" if="[[customer]]">
-                <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>
-              </template>
-              <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
-            </div>
-          </div>
-        </div>
-      </template>
-      <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
-
-      <template is="dom-if" if="[[!isSearchingOutlet]]">
-        <div class="card vertical layout">
-          <div class="horizontal layout center">
-            <div class="flex">
-              <template is="dom-if" if="[[!outlet]]">
-                No outlet selected (Anonymous sale)
-              </template>
+              <div class="flex">
+                <template is="dom-if" if="[[!outlet]]">
+                  No outlet selected (Anonymous sale)
+                </template>
+                <template is="dom-if" if="[[outlet]]">
+                  Outlet:
+                  <b>[[outlet.name]]</b> ([[outlet.phone]])
+                  <br> Address:
+                  <b>[[outlet.physicalAddress]]</b>
+                </template>
+              </div>
               <template is="dom-if" if="[[outlet]]">
-                Outlet:
-                <b>[[outlet.name]]</b> ([[outlet.phone]])
-                <br> Address:
-                <b>[[outlet.physicalAddress]]</b>
+                <paper-button raised class="primary" on-tap="removeOutletTapped">Remove Outlet</paper-button>
               </template>
+              <paper-button raised class="primary" on-tap="changeOutletTapped">Change Outlet</paper-button>
             </div>
-            <template is="dom-if" if="[[outlet]]">
-              <paper-button raised class="primary" on-tap="removeOutletTapped">Remove Outlet</paper-button>
-            </template>
-            <paper-button raised class="primary" on-tap="changeOutletTapped">Change Outlet</paper-button>
           </div>
-        </div>
-      </template>
-      <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
+        </template>
+        <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
-      <div class="lone-controls">
-        <paper-checkbox checked="{{showProductDetails}}">Show Sales and Product Details</paper-checkbox>
-        <paper-button raised class="primary" on-tap="filterTapped">
-          <iron-icon class="button-icon" icon="icons:find-in-page"></iron-icon>
-          Filter
-        </paper-button>
+        <div class="lone-controls">
+          <paper-checkbox checked="{{showProductDetails}}">Show Sales and Product Details</paper-checkbox>
+          <paper-button raised class="primary" on-tap="filterTapped">
+            <iron-icon class="button-icon" icon="icons:find-in-page"></iron-icon>
+            Filter
+          </paper-button>
+        </div>
+
       </div>
 
       <div class="report">
@@ -224,6 +240,10 @@
 
       static get properties() {
         return {
+          shouldShowFilters: {
+            type: Boolean,
+            value: false
+          },
           outletId: {
             type: String,
             value: null
@@ -290,6 +310,7 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
+        this.app.shouldShowPrintButton = true;
         this.app.pushPageTitle('Sales Report');
         if (!this._ensureAccess()) return;
         this._processSalesList(() => {
@@ -304,6 +325,7 @@
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.app.shouldShowPrintButton = false;
         this.app.popPageTitle();
       }
 
@@ -443,6 +465,10 @@
           salePrice -= discountValue;
         }
         return salePrice;
+      }
+
+      printButtonOnTopBarPressed(e = null) {
+        window.print();
       }
 
     }

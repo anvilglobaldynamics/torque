@@ -197,6 +197,9 @@
             <template is="dom-if" if="[[$and(activeServiceCount, topSpinnerEnabled)]]">
               <paper-spinner-lite active="" class="top-nav-spinner"></paper-spinner-lite>
             </template>
+            <template is="dom-if" if="[[shouldShowPrintButton]]">
+              <paper-icon-button icon="print" on-click="printButtonOnTopBarPressed"></paper-icon-button>
+            </template>
             <paper-menu-button horizontal-align="right">
               <paper-icon-button icon="icons:apps" slot="dropdown-trigger"></paper-icon-button>
               <paper-listbox slot="dropdown-content" selected="-1">
@@ -330,6 +333,10 @@
           topSpinnerEnabled: {
             type: Boolean,
             value: true
+          },
+          shouldShowPrintButton: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -479,6 +486,10 @@
 
       saveButtonOnTopBarPressed(e) {
         this._proxyToActivePage('saveButtonOnTopBarPressed', e);
+      }
+
+      printButtonOnTopBarPressed(e) {
+        this._proxyToActivePage('printButtonOnTopBarPressed', e);
       }
 
       // ====================== delegated callbacks =============================

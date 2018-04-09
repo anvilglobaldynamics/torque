@@ -37,7 +37,8 @@
     "web-animations-js": "^2.3.1",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^2.0.2",
     "paper-spinner": "PolymerElements/paper-spinner#^2.1.0",
-    "font-roboto": "PolymerElements/font-roboto-local#^1.1.0"
+    "font-roboto": "PolymerElements/font-roboto-local#^1.1.0",
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.1.0"
   },
   "resolutions": {
     "polymer": "^2.0.0-rc.3",
