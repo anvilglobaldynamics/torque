@@ -31,6 +31,9 @@
           left: 0px;
           right: 0px;
           top: 0px;
+          /* bottom: 0px; */
+          scroll-behavior: auto;
+          overflow: visible;
         }
       }
 
@@ -122,13 +125,12 @@
       <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
       <div class="lone-controls">
-        <paper-checkbox checked="{{showProductDetails}}">Show product details</paper-checkbox>
+        <paper-checkbox checked="{{showProductDetails}}">Show Sales and Product Details</paper-checkbox>
         <paper-button raised class="primary" on-tap="filterTapped">
           <iron-icon class="button-icon" icon="icons:find-in-page"></iron-icon>
           Filter
         </paper-button>
       </div>
-
 
       <div class="report">
         <div class="header vertical layout">
@@ -150,11 +152,19 @@
           </div>
         </div>
         <div class="body">
+          <div class="horizontal layout center item wrap">
+            <div class="flex">
+              <strong>Particulars</strong>
+            </div>
+            <div>
+              <strong>Billed Amount</strong>
+            </div>
+          </div>
           <template is="dom-repeat" items="[[salesList]]" as="sales">
             <div class="horizontal layout center item wrap">
               <div class="flex">
                 <div class="id">
-                  <strong>Sales # [[sales.id]]</strong> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy hh:mm:tt')]]
+                  <strong>Sales # [[sales.id]]</strong> [[$mkDate(sales.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]
                 </div>
                 <template is="dom-if" if="[[sales.customer]]">
                   <div class="description">
@@ -165,58 +175,43 @@
                   <div class="description">[[sales.productList.length]] product(s)</div>
                 </template>
                 <template is="dom-if" if="[[showProductDetails]]">
-                    <div class="description">[[sales.productList.length]] product(s)</div>
+                  <template is="dom-repeat" items="[[sales.productList]]" as="product">
+                    <div class="description">[[product.productCategory.name]]: [[product.count]] [[product.productCategory.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]</div>
                   </template>
+                  <div class="description">
+                    <strong>Total:</strong> [[sales.productList.length]] product(s)
+                  </div>
+                  <template is="dom-if" if="[[sales.payment.discountedAmount]]">
+                    <div class="description">
+                      <strong>Discounted Amount: </strong>[[sales.payment.discountedAmount]] [[app.settings.monetaryUnit]]</div>
+                  </template>
+                  <template is="dom-if" if="[[sales.payment.vatAmount]]">
+                    <div class="description">
+                      <strong>VAT: </strong>[[sales.payment.vatAmount]] [[app.settings.monetaryUnit]]</div>
+                  </template>
+                  <template is="dom-if" if="[[sales.payment.serviceChargeAmount]]">
+                    <div class="description">
+                      <strong>Service Charge: </strong>[[sales.payment.serviceChargeAmount]]%</div>
+                  </template>
+                  <template is="dom-if" if="[[sales.payment.previousCustomerBalance]]">
+                    <div class="description">
+                      <strong>Previous Balance: </strong>[[sales.payment.previousCustomerBalance]] [[app.settings.monetaryUnit]]</div>
+                  </template>
+                </template>
               </div>
               <div class="description">[[sales.payment.totalBilled]] [[app.settings.monetaryUnit]]</div>
             </div>
           </template>
+          <div class="horizontal layout center item wrap">
+            <div class="flex">
+              <strong>Total</strong>
+            </div>
+            <div>
+              <strong>[[salesSummary.billedAmountSum]] [[app.settings.monetaryUnit]]</strong>
+            </div>
+          </div>
         </div>
       </div>
-
-
-
-
-
-
-
-
-
-
-
-      <!-- 
-      <div class="card vertical layout">
-
-        <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">Show Previous</paper-button>
-        </template>
-
-        <div class="list">
-          <template is="dom-repeat" items="[[salesList]]" as="sale">
-            <div class="horizontal layout item center">
-              <div class="vertical layout flex">
-                <div class="title">[[sale.id]]</div>
-                <div class="description">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                <div class="description">Billed [[sale.payment.totalBilled]] [[app.settings.monetaryUnit]] for [[sale.productList.length]] product(s)</div>
-              </div>
-              <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
-            </div>
-          </template>
-        </div>
-
-        <div class="pagination">
-          Showing
-          <span class="limit">[[pagination.limit]]</span>
-          items out of
-          <span class="total-count">[[pagination.totalCount]]</span> starting from
-          <span class="offset">#[[$inc(pagination.offset)]]</span>.
-        </div>
-        <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">Show More</paper-button>
-        </template>
-
-      </div> 
-      -->
 
     </div>
   </template>
@@ -295,7 +290,7 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
-        this.app.pushPageTitle('Manage Sales');
+        this.app.pushPageTitle('Sales Report');
         if (!this._ensureAccess()) return;
         this._processSalesList(() => {
           if ('outlet' in this.params) {
@@ -379,7 +374,9 @@
       _processSalesList(cbfn) {
         this._fetchSalesList(newSalesList => {
           this.salesList = newSalesList;
-          console.log(this.salesList)
+          this.salesSummary = {
+            billedAmountSum: (newSalesList.reduce((sum, sales) => (sum + sales.payment.totalBilled), 0))
+          }
           cbfn();
         });
       }
@@ -436,6 +433,16 @@
         this._processSalesList(() => {
           this.isReady = true;
         });
+      }
+
+      $calculateIndividuallyDiscountedSalePrice(product) {
+        let { salePrice, count, discountType, discountValue } = product;
+        if (discountType === 'percent') {
+          salePrice -= salePrice * (discountValue / 100);
+        } else if (discountType === 'fixed') {
+          salePrice -= discountValue;
+        }
+        return salePrice;
       }
 
     }

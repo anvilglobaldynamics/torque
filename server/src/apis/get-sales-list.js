@@ -74,16 +74,9 @@ exports.GetSalesListApi = class extends salesCommonMixin(outletCommonMixin(custo
             err.code = "PRODUCT_INVALID";
             return reject(err);
           }
-          let productCategoryIdList = productList.map(productCategory => productCategory.id);
+          let productCategoryIdList = productList.map(product => product.productCategoryId);
           this.database.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
             if (err) return reject(err);
-            for (let productCategory of productCategoryList) {
-              if (productCategory.isReturnable == false) {
-                err = new Error("product in list is non-returnable");
-                err.code = "PRODUCT_CATEGORY_NON_RETURNABLE";
-                return reject(err);
-              }
-            }
             productCategoryList.forEach(productCategory => {
               let _product = productList.find(product => product.productCategoryId === productCategory.id);
               let product = sales.productList.find(product => product.productId === _product.id);
