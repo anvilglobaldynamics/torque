@@ -297,20 +297,20 @@
       }
 
       verifyEmailTapped(e = null) {
-        let message = "Please enter the verification code we sent to your email."
-        this.app.showModalInput("Enter verification code", message, '', verificationToken => {
+        let message = this.app.verses.home.enterVerificationCodeSentToYourEmail;
+        this.app.showModalInput(this.app.verses.home.enterVerificationCode, message, '', verificationToken => {
           if ((!verificationToken) || verificationToken.length === 0) return;
           this._processVerifyEmailApi({ verificationToken }, html => {
-            if (html.indexOf('Email Verification Successful') > -1) {
-              this.app.showToast("Your email is now verified.", () => {
+            if (html.indexOf(this.app.verses.home.emailVerificationSuccessful) > -1) {
+              this.app.showToast(this.app.verses.home.emailIsNowVerified, () => {
                 this.app.db.update('user', (({ which }) => which === 'only'), user => {
                   user.isEmailVerified = true;
                   return user;
                 });
               });
             } else {
-              let message = "Your email could not be verified. Make sure the verification code is correct.";
-              this.app.showModalDialog("Sorry.", message, () => { 'pass' });
+              let message = this.app.verses.home.emailCouldNotBeVerified;
+              this.app.showModalDialog(this.app.verses.general.sorry, message, () => { 'pass' });
             }
           });
         });
@@ -319,28 +319,28 @@
       resendSmsTapped(e = null) {
         let phone = this.app.user.phone;
         this._processResendVerificationSmsApi({ phone }, status => {
-          let message = `Please check your phone. We have sent you a verification SMS.`;
-          this.app.showModalDialog("Verification SMS Sent", message, () => {
+          let message = this.app.verses.home.checkYourPhoneForVerification;
+          this.app.showModalDialog(this.app.verses.home.verificationSmsSent, message, () => {
             'pass'
           });
         })
       }
 
       verifyPhoneTapped(e = null) {
-        let message = "Please the verification code we sent to your phone."
-        this.app.showModalInput("Enter verification code.", message, '', verificationToken => {
+        let message = this.app.verses.home.enterVerificationCodeSentToYourPhone;
+        this.app.showModalInput(this.app.verses.home.enterVerificationCode, message, '', verificationToken => {
           if ((!verificationToken) || verificationToken.length === 0) return;
           this._processVerifyPhoneApi({ verificationToken }, html => {
-            if (html.indexOf('Phone Verification Successful') > -1) {
-              this.app.showToast("Your phone is now verified.", () => {
+            if (html.indexOf(this.app.verses.home.phoneVerificationSuccessful) > -1) {
+              this.app.showToast(this.app.verses.home.phoneIsNowVerified, () => {
                 this.app.db.update('user', (({ which }) => which === 'only'), user => {
                   user.isPhoneVerified = true;
                   return user;
                 });
               });
             } else {
-              let message = "Your phone could not be verified. Make sure the verification code is correct";
-              this.app.showModalDialog("Sorry.", message, () => { 'pass' });
+              let message = this.app.verses.home.phoneCouldNotBeVerified;
+              this.app.showModalDialog(this.app.verses.general.sorry, message, () => { 'pass' });
             }
           });
         });

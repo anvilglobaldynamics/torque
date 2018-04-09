@@ -145,7 +145,7 @@
             });
           } else {
             let message = "Your phone could not be verified. Make sure the verification code is correct.";
-            this.app.showModalDialog("Sorry.", message, () => { 'pass' });
+            this.app.showModalDialog(this.app.verses.general.sorry, message, () => { 'pass' });
           }
         });
       }
