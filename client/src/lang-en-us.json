@@ -2,6 +2,12 @@
   "root": {
     "rightsReserved": "All Rights Reserved."
   },
+  "general": {
+    "or": "or",
+    "and": "and",
+    "pressBelowButton": "press below button",
+    "pressAboveButton": "press above button"
+  },
   "login": {
     "forgotPassword": "Forgot your Password?",
     "dontHaveAccount": "Don't have an account?",
@@ -40,7 +46,20 @@
     "about": "About",
     "logout": "Logout"
   },
+  "titleBar": {
+    "home": "Home"
+  },
   "home": {
-    "invoices": "Invoices"
+    "invoices": "Invoices",
+    "soldToday": "Today's Sales Count",
+    "soldThisMonth": "Month's Sales Count",
+    "verifyPhoneNumberManually": "Verify Phone Number Manually",
+    "resendSms": "Resend SMS",
+    "setYourEmail": "Set your email",
+    "verifyEmailManually": "Verify Email Manually",
+    "resendEmail": "Resend Email",
+    "notYetVarifiedPhone": "You have not yet verified your phone number. Your account (after the 1 hour grace period) is not active until you verify it. Either click the link in the sms we sent to",
+    "notYetVarifiedEmail": "You have not yet verified your email address. Your email address is not active until you verify it. Either click the link in the email we sent to",
+    "whyProvideEmailAddress": "By providing an email address, you can get receipts, login alerts and other important information delivered to you to your email."
   }
 }
