@@ -3,8 +3,9 @@ let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
 let { productCommonMixin } = require('./mixins/product-common');
+let { inventoryCommonMixin } = require('./mixins/inventory-common');
 
-exports.AddProductToInventoryApi = class extends productCommonMixin(collectionCommonMixin(Api)) {
+exports.AddProductToInventoryApi = class extends productCommonMixin(collectionCommonMixin(inventoryCommonMixin(Api))) {
 
   get autoValidates() { return true; }
 
@@ -44,7 +45,10 @@ exports.AddProductToInventoryApi = class extends productCommonMixin(collectionCo
   _addProductToInventory({ inventoryId, productList }, cbfn) {
     Promise.all(productList.map(product => {
       return new Promise((accept, reject) => {
-        let { productCategoryId, purchasePrice, salePrice, count } = product
+        let { productCategoryId, purchasePrice, salePrice, count } = product;
+        this._getInventoryWithId({ inventoryId }, (inventory) => {
+          console.log("inventory: ", inventory);
+        });
         this.database.product.create({ productCategoryId, purchasePrice, salePrice }, (err, productId) => {
           if (err) return reject(err);
           this.database.inventory.addProduct({ inventoryId }, { productId, count }, (err, wasUpdated) => {

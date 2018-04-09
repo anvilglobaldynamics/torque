@@ -40,15 +40,17 @@
                 <div class="description">Purchase: [[product.purchasePrice]][[app.settings.monetaryUnit]], Sale: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
               </div>
               <div class="horizontal layout wrap center">
-                <template is="dom-if" if="[[!product.isSelected]]">
-                  <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
-                </template>
-                <template is="dom-if" if="[[product.isSelected]]">
-                  <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="Count">
-                    <div slot="prefix">Selected&nbsp;</div>
-                    <div slot="suffix">&nbsp;[[product.unit]]</div>
-                  </paper-input>
-                  <paper-button raised class="primary" on-tap="deselectTapped">Deselect</paper-button>
+                <template is="dom-if" if="[[product.count]]">
+                  <template is="dom-if" if="[[!product.isSelected]]">
+                    <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
+                  </template>
+                  <template is="dom-if" if="[[product.isSelected]]">
+                    <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="Count">
+                      <div slot="prefix">Selected&nbsp;</div>
+                      <div slot="suffix">&nbsp;[[product.unit]]</div>
+                    </paper-input>
+                    <paper-button raised class="primary" on-tap="deselectTapped">Deselect</paper-button>
+                  </template>
                 </template>
               </div>
             </div>
