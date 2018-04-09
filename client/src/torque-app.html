@@ -98,6 +98,14 @@
 
       /* ============= styles ============= */
 
+      @media print {
+        app-drawer, app-header, .footer {
+          display: none;
+        }
+      }
+
+      /* ============= styles ============= */
+
       app-drawer-layout:not([narrow]) [drawer-toggle] {
         display: none;
       }
@@ -164,9 +172,9 @@
       }
     </style>
 
-    <app-drawer-layout fullbleed="" responsive-width="2560px">
+    <app-drawer-layout responsive-width="2560px" fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
-      <app-drawer id="drawer" slot="drawer">
+      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <div class="app-drawer-wrapper">
           <app-toolbar>Torque</app-toolbar>
           <iron-selector selected="[[pageName]]" attr-for-selected="name" class="drawer-list" role="navigation">
@@ -188,9 +196,9 @@
       </app-drawer>
 
       <!-- Main content -->
-      <app-header-layout has-scrolling-region="">
+      <app-header-layout has-scrolling-region>
 
-        <app-header slot="header" style$="[[$invisibleUnless(user)]]">
+        <app-header slot="header" style$="[[$invisibleUnless(user)]]" fixed>
           <app-toolbar>
             <template is="dom-if" if="[[!currentPageIsModal]]">
               <paper-icon-button icon="shared-icons:menu" drawer-toggle=""></paper-icon-button>
@@ -273,7 +281,7 @@
           </div>
           <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
           <span class="extra-small">build
-            <span id="build-number">61</span>
+            <span id="build-number">64</span>
           </span>
           <br>
           <br>

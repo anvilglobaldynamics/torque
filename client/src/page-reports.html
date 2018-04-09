@@ -26,15 +26,14 @@
   <template>
     <style include="shared-styles">
       @media print {
+        .filter-toggle-region,
+        .filter-toggle-region paper-toggle-button,
+        .filter-region {
+          display: none;
+        }
+
         .report {
-          position: fixed;
-          z-index: 999999999999;
-          left: 0px;
-          right: 0px;
-          top: 0px;
-          /* bottom: 0px; */
-          scroll-behavior: auto;
-          overflow: visible;
+          margin-top: -48px;
         }
       }
 
@@ -83,7 +82,7 @@
         <paper-toggle-button checked="{{shouldShowFilters}}">Show Filters</paper-toggle-button>
       </div>
 
-      <div hidden="[[!shouldShowFilters]]">
+      <div class="filter-region" hidden="[[!shouldShowFilters]]">
 
         <div class="card horizontal layout center">
           <paper-input class="flex" value="{{fromDate}}" type="date" label="From Date"></paper-input>
