@@ -265,7 +265,7 @@
           </div>
           <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
           <span class="extra-small">build
-            <span id="build-number">53</span>
+            <span id="build-number">58</span>
           </span>
           <br>
           <br>
@@ -366,8 +366,13 @@
           });
         });
         // PATCH-END
-        this.delay(0, () => {
-          this.elem('app-header-layout').notifyResize();
+        this._notifyResizeHack();
+      }
+
+      _notifyResizeHack() {
+        // TODO: Find a better way of handling this issue.
+        [0, 100, 250, 500, 1000].forEach(timeout => {
+          this.delay(timeout, () => this.elem('app-header-layout').notifyResize());
         });
       }
 
