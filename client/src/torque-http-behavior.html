@@ -62,6 +62,9 @@
             });
             return;
           }
+          if (mode === 'development') {
+            console.log(`API/api=${path}`, data, response);
+          }
           return _cbfn(null, response);
         }
       }
@@ -71,9 +74,6 @@
           data.clientLanguage = this.selectedLanguageIdentifier;
         } else {
           data.clientLanguage = 'en-us';
-        }
-        if (mode === 'development') {
-          console.log(`API/api=${path}`, data);
         }
         let cbfn = this._createGenericCallback(path, data, _cbfn);
         let now = (new Date).getTime();

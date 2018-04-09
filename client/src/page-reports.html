@@ -1,0 +1,445 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="elem-customer-selector.html">
+<link rel="import" href="elem-outlet-selector.html">
+
+<dom-module id="page-reports">
+  <template>
+    <style include="shared-styles">
+      @media print {
+        .report {
+          position: fixed;
+          z-index: 999999999999;
+          left: 0px;
+          right: 0px;
+          top: 0px;
+        }
+      }
+
+      .report {
+        background-color: white;
+        padding: 12px;
+        width: calc(100% - 24px);
+      }
+
+      .report .header {
+        border-bottom: 1px solid black;
+      }
+
+      .report .header .name {
+        font-size: 36px;
+        text-align: center;
+      }
+
+      .report .header .date {
+        font-size: 18px;
+        text-align: center;
+      }
+
+      .report .body {}
+
+      .report .body .item {
+        margin-bottom: 8px;
+        margin-top: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px dotted rgb(131, 131, 131);
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card horizontal layout center">
+        <paper-input class="flex" value="{{fromDate}}" type="date" label="From Date"></paper-input>
+        <paper-input class="flex" value="{{toDate}}" type="date" label="To Date"></paper-input>
+      </div>
+
+      <template is="dom-if" if="[[!isSearchingCustomer]]">
+        <div class="card vertical layout">
+          <div class="horizontal layout center wrap">
+            <div class="flex">
+              <template is="dom-if" if="[[!customer]]">
+                No customer selected (Anonymous sale)
+              </template>
+              <template is="dom-if" if="[[customer]]">
+                Customer:
+                <b>[[customer.fullName]]</b> ([[customer.phone]])
+                <br> Balance:
+                <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
+              </template>
+            </div>
+            <div class="horizontal layout center">
+              <template is="dom-if" if="[[customer]]">
+                <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>
+              </template>
+              <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
+            </div>
+          </div>
+        </div>
+      </template>
+      <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+
+      <template is="dom-if" if="[[!isSearchingOutlet]]">
+        <div class="card vertical layout">
+          <div class="horizontal layout center">
+            <div class="flex">
+              <template is="dom-if" if="[[!outlet]]">
+                No outlet selected (Anonymous sale)
+              </template>
+              <template is="dom-if" if="[[outlet]]">
+                Outlet:
+                <b>[[outlet.name]]</b> ([[outlet.phone]])
+                <br> Address:
+                <b>[[outlet.physicalAddress]]</b>
+              </template>
+            </div>
+            <template is="dom-if" if="[[outlet]]">
+              <paper-button raised class="primary" on-tap="removeOutletTapped">Remove Outlet</paper-button>
+            </template>
+            <paper-button raised class="primary" on-tap="changeOutletTapped">Change Outlet</paper-button>
+          </div>
+        </div>
+      </template>
+      <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
+
+      <div class="lone-controls">
+        <paper-checkbox checked="{{showProductDetails}}">Show product details</paper-checkbox>
+        <paper-button raised class="primary" on-tap="filterTapped">
+          <iron-icon class="button-icon" icon="icons:find-in-page"></iron-icon>
+          Filter
+        </paper-button>
+      </div>
+
+
+      <div class="report">
+        <div class="header vertical layout">
+          <div class="name">Sales Report</div>
+          <div class="date">[[fromDate]] to [[toDate]]</div>
+          <div class="horizontal layout wrap">
+            <div>
+              <div>[[app.organization.name]]</div>
+              <div>[[app.organization.primaryBusinessAddress]]</div>
+              <div>[[app.organization.email]]</div>
+              <div>[[app.organization.phone]]</div>
+            </div>
+            <div class="flex"></div>
+            <div>
+              <div>Printed By: [[app.user.fullName]]</div>
+              <div>[[app.organization.employment.designation]]</div>
+              <div>[[app.organization.employment.companyProvidedId]]</div>
+            </div>
+          </div>
+        </div>
+        <div class="body">
+          <template is="dom-repeat" items="[[salesList]]" as="sales">
+            <div class="horizontal layout center item wrap">
+              <div class="flex">
+                <div class="id">
+                  <strong>Sales # [[sales.id]]</strong> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy hh:mm:tt')]]
+                </div>
+                <template is="dom-if" if="[[sales.customer]]">
+                  <div class="description">
+                    <strong>Sold To: </strong>[[sales.customer.fullName]] ([[sales.customer.phone]])
+                  </div>
+                </template>
+                <template is="dom-if" if="[[!showProductDetails]]">
+                  <div class="description">[[sales.productList.length]] product(s)</div>
+                </template>
+                <template is="dom-if" if="[[showProductDetails]]">
+                    <div class="description">[[sales.productList.length]] product(s)</div>
+                  </template>
+              </div>
+              <div class="description">[[sales.payment.totalBilled]] [[app.settings.monetaryUnit]]</div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+      <!-- 
+      <div class="card vertical layout">
+
+        <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+          <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">Show Previous</paper-button>
+        </template>
+
+        <div class="list">
+          <template is="dom-repeat" items="[[salesList]]" as="sale">
+            <div class="horizontal layout item center">
+              <div class="vertical layout flex">
+                <div class="title">[[sale.id]]</div>
+                <div class="description">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+                <div class="description">Billed [[sale.payment.totalBilled]] [[app.settings.monetaryUnit]] for [[sale.productList.length]] product(s)</div>
+              </div>
+              <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
+            </div>
+          </template>
+        </div>
+
+        <div class="pagination">
+          Showing
+          <span class="limit">[[pagination.limit]]</span>
+          items out of
+          <span class="total-count">[[pagination.totalCount]]</span> starting from
+          <span class="offset">#[[$inc(pagination.offset)]]</span>.
+        </div>
+        <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+          <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">Show More</paper-button>
+        </template>
+
+      </div> 
+      -->
+
+    </div>
+  </template>
+
+  <script>
+    class PageReports extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+      static get is() {
+        return 'page-reports';
+      }
+
+      static get properties() {
+        return {
+          outletId: {
+            type: String,
+            value: null
+          },
+          shouldFilterByOutlet: {
+            type: Boolean,
+            value: false
+          },
+          shouldFilterByCustomer: {
+            type: Boolean,
+            value: false
+          },
+          fromDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date.setMonth(date.getMonth() - 1);
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          toDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          isSearchingCustomer: {
+            type: Boolean,
+            value: false
+          },
+          customer: {
+            type: Object,
+            value: null,
+            observer: 'customerChanged'
+          },
+          isSearchingOutlet: {
+            type: Boolean,
+            value: false
+          },
+          outlet: {
+            type: Object,
+            value: null,
+            observer: 'outletChanged'
+          },
+          showProductDetails: {
+            type: Boolean,
+            value: true
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.app.pushPageTitle('Manage Sales');
+        if (!this._ensureAccess()) return;
+        this._processSalesList(() => {
+          if ('outlet' in this.params) {
+            this.isSearchingOutlet = true;
+            this.elem('elem-outlet-selector').forceSelect(this.params.outlet);
+          }
+          this.self = this;
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      _fetchSalesList(cbfn) {
+        if (!this.fromDate) {
+          this.resetProperties('fromDate');
+        }
+        if (!this.toDate) {
+          this.resetProperties('toDate');
+        }
+
+        let fromDate = new Date(this.fromDate).getTime();
+        let toDate = new Date(this.toDate).getTime();
+        let customerId = null;
+        if (this.customer) {
+          customerId = this.customer.id;
+          this.shouldFilterByCustomer = true;
+        } else {
+          this.shouldFilterByCustomer = false;
+        }
+
+        let outletId = null;
+        if (this.outlet) {
+          outletId = this.outlet.id;
+          this.shouldFilterByOutlet = true;
+        } else {
+          this.shouldFilterByOutlet = false;
+        }
+
+        let data = {
+          organizationId: this.app.organization.id,
+          outletId,
+          customerId,
+          shouldFilterByOutlet: this.shouldFilterByOutlet,
+          shouldFilterByCustomer: this.shouldFilterByCustomer,
+          fromDate,
+          toDate,
+          paginate: this.paginate,
+          includeExtendedInformation: true
+        };
+
+        this.app.callGetSalesListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.salesList);
+        });
+      }
+
+      customerChanged() {
+        if (!this.customer) return;
+        this.app.storeInSession('last-selected-customer', this.customer);
+      }
+
+      outletChanged() {
+        if (!this.outlet) return;
+        this.app.storeInSession('last-selected-outlet', this.outlet);
+      }
+
+      _processSalesList(cbfn) {
+        this._fetchSalesList(newSalesList => {
+          this.salesList = newSalesList;
+          console.log(this.salesList)
+          cbfn();
+        });
+      }
+
+      _customerSelected(customer) {
+        this.customer = customer;
+        this.isSearchingCustomer = false;
+      }
+
+      _outletSelected(outlet) {
+        this.outlet = outlet;
+        this.isSearchingOutlet = false;
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processCustomerList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processCustomerList(() => this.isReady = true);
+      }
+
+      // region: ui  ===========================
+
+      changeCustomerTapped(e = null) {
+        this.isSearchingCustomer = true;
+      }
+
+      changeOutletTapped(e = null) {
+        this.isSearchingOutlet = true;
+      }
+
+      removeCustomerTapped(e = null) {
+        this.customer = null;
+        this.app.storeInSession('last-selected-customer', null);
+      }
+
+      removeOutletTapped(e = null) {
+        this.outlet = null;
+        this.app.storeInSession('last-selected-outlet', null);
+      }
+
+      viewTapped(e) {
+        let { sale } = e.model;
+        return this.app.navigateTo(`/view-sales/sales:${sale.id}`);
+      }
+
+      filterTapped(e = null) {
+        this.isReady = false;
+        this._processSalesList(() => {
+          this.isReady = true;
+        });
+      }
+
+    }
+
+    window.customElements.define(PageReports.is, PageReports);
+  </script>
+</dom-module>
