@@ -60,7 +60,10 @@
       }
     ];
 
-    const _fallbackLanguage = 'en-us';
+    let _fallbackLanguage = 'en-us';
+    if (this.mode === 'production') {
+      _fallbackLanguage = 'bn-bd';
+    }
 
     // shared cache
     let _verses = {};

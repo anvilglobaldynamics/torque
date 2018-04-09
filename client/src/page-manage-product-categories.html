@@ -24,26 +24,36 @@
     </style>
 
     <div class$="layout vertical [[$hideIfBeingMoved(isBeingMoved)]]" id="wrapper" style$="margin-left: [[marginLeft]]px">
-      <div>
-        <div class="horizontal layout item center wrap p-bottom-4">
-          <div class="flex">
-            <div class="type title capitalize">[[productCategory.name]]</div>
-            <div class="type body secondary">Buying Price: [[productCategory.defaultPurchasePrice]] [[app.settings.monetaryUnit]] per [[productCategory.unit]]</div>
-            <div class="type body secondary">Selling Price: [[productCategory.defaultSalePrice]] [[app.settings.monetaryUnit]] per [[productCategory.unit]]</div>
+      <div class="list">
+        <div class="horizontal layout item center wrap">
+          <div class="content">
+            <div class="title">[[productCategory.name]]</div>
+            <div class="description">Buying Price: [[productCategory.defaultPurchasePrice]] [[app.settings.monetaryUnit]] per [[productCategory.unit]]</div>
+            <div class="description">Selling Price: [[productCategory.defaultSalePrice]] [[app.settings.monetaryUnit]] per [[productCategory.unit]]</div>
           </div>
-          <div class="horizontal layout wrap end-justified">
+          <div class="control-buttons">
             <template is="dom-if" if="[[!isAMovingGoingOn]]">
-              <paper-button class="btn btn-default type" on-tap="moveTapped">
-                <iron-icon icon="icons:open-with" class="icon medium-small m-right-8"></iron-icon>Move</paper-button>
-              <paper-button class="btn btn-default" on-tap="editTapped">
-                <iron-icon icon="create" class="icon medium-small m-right-8"></iron-icon>Edit</paper-button>
-              <paper-button class="btn btn-default" on-tap="deleteTapped">
-                <iron-icon icon="delete" class="icon medium-small m-right-8"></iron-icon>Delete</paper-button>
-              <paper-button raised class="btn primary" on-tap="addSubcategoryTapped">
-                <iron-icon icon="add" class="icon medium-small m-right-8"></iron-icon>Add Sub Category</paper-button>
+              <paper-button class="secondary" on-tap="moveTapped" raised>
+                <iron-icon icon="icons:open-with" class="button-icon"></iron-icon>
+                Move
+              </paper-button>
+              <paper-button class="secondary" on-tap="editTapped" raised>
+                <iron-icon icon="create" class="button-icon"></iron-icon>
+                Edit
+              </paper-button>
+              <paper-button class="secondary" on-tap="deleteTapped" raised>
+                <iron-icon icon="delete" class="button-iconx"></iron-icon>
+                Delete
+              </paper-button>
+              <paper-button class="primary" on-tap="addSubcategoryTapped" raised>
+                <iron-icon icon="add" class="button-icon"></iron-icon>
+                Sub Category
+              </paper-button>
             </template>
             <template is="dom-if" if="[[isAMovingGoingOn]]">
-              <paper-button raised class="primary" on-tap="moveHereTapped">Move Here</paper-button>
+              <paper-button class="primary" on-tap="moveHereTapped" raised>
+                Move Here
+              </paper-button>
             </template>
           </div>
 
@@ -159,28 +169,29 @@
 <dom-module id="page-manage-product-categories">
   <template>
     <style include="shared-styles">
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="card vertical layout">
-        <div class="list">
-          <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
-            <product-category product-category="[[productCategory]]" margin-left="[[marginLeft]]" app="[[app]]"></product-category>
-          </template>
-        </div>
+
+      <div class="card">
+        <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
+          <product-category product-category="[[productCategory]]" margin-left="[[marginLeft]]" app="[[app]]"></product-category>
+        </template>
       </div>
 
-      <div class="horizontal layout end-justified p-4">
+      <div class="lone-controls">
         <template is="dom-if" if="[[isAMovingGoingOn]]">
-          <paper-button raised class="btn primary" on-tap="moveToRootTapped">Move To Root</paper-button>
-          <paper-button raised class="btn primary" on-tap="cancelMovingTapped">Cancel</paper-button>
+          <paper-button raised class="primary" on-tap="moveToRootTapped">Move To Root</paper-button>
+          <paper-button raised class="secondary" on-tap="cancelMovingTapped">Cancel</paper-button>
         </template>
         <template is="dom-if" if="[[!isAMovingGoingOn]]">
-          <paper-button raised class="btn primary" on-tap="createTapped">Create New Product Category</paper-button>
+          <paper-button raised class="primary" on-tap="createTapped">
+            <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
+            Create New Product Category
+          </paper-button>
         </template>
       </div>
 

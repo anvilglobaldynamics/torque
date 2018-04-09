@@ -68,6 +68,7 @@
 <link rel="lazy-import" href="page-edit-customer.html">
 <link rel="lazy-import" href="page-adjust-customer-balance.html">
 <link rel="lazy-import" href="page-pos.html">
+<link rel="lazy-import" href="page-reports.html">
 <link rel="lazy-import" href="page-pos-select-products.html">
 <link rel="lazy-import" href="page-manage-sales.html">
 <link rel="lazy-import" href="page-view-sales.html">
@@ -147,6 +148,14 @@
       .top-nav-spinner {
         --paper-spinner-color: white;
       }
+
+      .language-active {
+        border-bottom: 2px solid #252fbe;
+      }
+
+      .language-icon {
+        cursor: pointer;
+      }
     </style>
 
     <app-drawer-layout fullbleed="" responsive-width="2560px">
@@ -162,6 +171,7 @@
           <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
           <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
           <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
+          <a name="reports" href="#/reports">[[verses.sidebar.reports]]</a>
           <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
           <a name="settings" href="#/settings">[[verses.sidebar.settings]]</a>
           <a name="about" href="#/about">[[verses.sidebar.about]]</a>
@@ -237,6 +247,7 @@
           <page-edit-customer name="edit-customer"></page-edit-customer>
           <page-adjust-customer-balance name="adjust-customer-balance"></page-adjust-customer-balance>
           <page-pos name="pos"></page-pos>
+          <page-reports name="reports"></page-reports>
           <page-pos-select-products name="pos-select-products"></page-pos-select-products>
           <page-manage-sales name="manage-sales"></page-manage-sales>
           <page-view-sales name="view-sales"></page-view-sales>
@@ -251,10 +262,11 @@
           </div>
           <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
           <span class="extra-small">build
-            <span id="build-number">52</span>
+            <span id="build-number">53</span>
           </span>
           <br>
-          <paper-menu-button horizontal-align="center" vertical-align="bottom" vertical-offset="56">
+          <br>
+          <!-- <paper-menu-button horizontal-align="center" vertical-align="bottom" vertical-offset="56">
             <paper-icon-button icon="icons:language" slot="dropdown-trigger"></paper-icon-button>
             <paper-listbox slot="dropdown-content" selected="{{selectedLanguageIdentifier}}" attr-for-selected="data-identifier" on-selected-changed="languageDropdownSelected">
               <template is="dom-repeat" items="[[knownLanguageList]]" as="knownLanguage">
@@ -262,7 +274,11 @@
               </template>
             </paper-listbox>
           </paper-menu-button>
-          <br>
+          <br> -->
+          <div>
+            <img src="../images/icons/en-us.png" data-key="en-us" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'en-us')]]" on-tap="languageIconTapped">
+            <img src="../images/icons/bn-bd.png" data-key="bn-bd" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'bn-bd')]]" on-tap="languageIconTapped">
+          </div>
         </div>
       </app-header-layout>
     </app-drawer-layout>
@@ -446,11 +462,12 @@
         })
       }
 
-      languageDropdownSelected(e) {
-        window.setTimeout(() => {
-          if (this.getLastLoadedLanguage() === this.selectedLanguageIdentifier) return;
-          this.initiateLanguageServices(this.selectedLanguageIdentifier);
-        }, 0);
+      languageIconTapped(e) {
+        let languageIdentifier = e.target.getAttribute('data-key');
+        this.delay(0, () => {
+          if (this.getLastLoadedLanguage() === languageIdentifier) return;
+          this.initiateLanguageServices(languageIdentifier);
+        });
       }
 
       // ====================== delegated events =============================
@@ -536,7 +553,6 @@
         return false;
       }
 
-
       // PATCH START
       // NOTE: This is a patch for FxPage#getUrlParameters()
       // In time, it will be moved to polymer-fx.
@@ -559,6 +575,13 @@
         return params;
       };
       // PATCH END
+
+      $getLanguageClass(selectedLanguageIdentifier, languageIdentifier) {
+        if (selectedLanguageIdentifier === languageIdentifier) {
+          return 'language-active';
+        }
+        return '';
+      }
 
     }
 

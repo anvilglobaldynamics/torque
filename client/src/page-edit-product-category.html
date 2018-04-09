@@ -24,7 +24,6 @@
 <dom-module id="page-edit-product-category">
   <template>
     <style include="shared-styles">
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -194,6 +193,7 @@
       }
 
       _processParentProductCategory() {
+        this.parentProductCategory = null;
         if ('parent' in this.params) {
           this.parentProductCategory = this._productCategoryList.find(productCategory => {
             return productCategory.id === parseInt(this.params.parent);
