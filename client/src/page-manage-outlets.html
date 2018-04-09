@@ -21,7 +21,6 @@
 <dom-module id="page-manage-outlets">
   <template>
     <style include="shared-styles">
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -43,8 +42,8 @@
               </div>
               <div class="horizontal layout wrap">
                 <paper-button raised class="btn primary" on-tap="viewTapped">View</paper-button>
-                <paper-button raised class="btn primary" on-tap="editTapped">Edit</paper-button>
-                <paper-button raised class="btn primary" on-tap="posTapped">POS</paper-button>
+                <!-- <paper-button raised class="btn primary" on-tap="editTapped">Edit</paper-button> -->
+                <!-- <paper-button raised class="btn primary" on-tap="posTapped">POS</paper-button> -->
               </div>
             </div>
           </template>
@@ -153,15 +152,15 @@
         return this.app.navigateTo(`/view-outlet/outlet:${outlet.id}`);
       }
 
-      editTapped(e) {
-        let { outlet } = e.model;
-        return this.app.navigateTo(`/edit-outlet/outlet:${outlet.id}`);
-      }
+      // editTapped(e) {
+      //   let { outlet } = e.model;
+      //   return this.app.navigateTo(`/edit-outlet/outlet:${outlet.id}`);
+      // }
 
-      posTapped(e) {
-        let { outlet } = e.model;
-        return this.app.navigateTo(`/pos/outlet:${outlet.id}`);
-      }
+      // posTapped(e) {
+      //   let { outlet } = e.model;
+      //   return this.app.navigateTo(`/pos/outlet:${outlet.id}`);
+      // }
 
       // region: misc =================================
     }
