@@ -274,12 +274,12 @@
       // region: ui  ===========================
 
       setEmailTapped(e = null) {
-        let message = "Please set your valid email."
-        this.app.showModalInput("Set your email.", message, 'john@example.com', email => {
+        let message = this.app.verses.home.pleaseSetYourEmail;
+        this.app.showModalInput(this.app.verses.home.setYourEmail, message, 'john@example.com', email => {
           if (!email) return;
           this._processSetEmailApi({ email }, status => {
-            let message = `Your email "${email}" has been set. Please check your inbox for the verification link and log in again.`;
-            this.app.showModalDialog("Email is Set", message, () => {
+            let message = email + " " + this.app.verses.home.emailHasBeenSet;
+            this.app.showModalDialog(this.app.verses.homeemailIsSet, message, () => {
               this.app.logoutTapped();
             });
           })
@@ -289,15 +289,15 @@
       resendEmailTapped(e = null) {
         let email = this.app.user.email;
         this._processResendVerificationEmailApi({ email }, status => {
-          let message = `Please check your inbox. We have sent you a verification email.`;
-          this.app.showModalDialog("Verification Email Sent", message, () => {
+          let message = this.app.verses.home.checkYourInboxForVarification;
+          this.app.showModalDialog(this.app.verses.home.verificationEmailSent, message, () => {
             'pass'
           });
         })
       }
 
       verifyEmailTapped(e = null) {
-        let message = "Please the verification code we sent to your email."
+        let message = "Please enter the verification code we sent to your email."
         this.app.showModalInput("Enter verification code", message, '', verificationToken => {
           if ((!verificationToken) || verificationToken.length === 0) return;
           this._processVerifyEmailApi({ verificationToken }, html => {

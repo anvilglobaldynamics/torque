@@ -55,11 +55,18 @@
     "soldThisMonth": "Month's Sales Count",
     "verifyPhoneNumberManually": "Verify Phone Number Manually",
     "resendSms": "Resend SMS",
+
     "setYourEmail": "Set your email",
+    "pleaseSetYourEmail": "Please set your valid email.",
+    "emailIsSet": "Email is Set",
     "verifyEmailManually": "Verify Email Manually",
+    "verificationEmailSent": "Verification Email Sent",
     "resendEmail": "Resend Email",
-    "notYetVarifiedPhone": "You have not yet verified your phone number. Your account (after the 1 hour grace period) is not active until you verify it. Either click the link in the sms we sent to",
     "notYetVarifiedEmail": "You have not yet verified your email address. Your email address is not active until you verify it. Either click the link in the email we sent to",
+    "emailHasBeenSet": "has been set as your email. Please check your inbox for the verification link and log in again.",
+    "checkYourInboxForVarification": "Please check your inbox. We have sent you a verification email",
+
+    "notYetVarifiedPhone": "You have not yet verified your phone number. Your account (after the 1 hour grace period) is not active until you verify it. Either click the link in the sms we sent to",
     "whyProvideEmailAddress": "By providing an email address, you can get receipts, login alerts and other important information delivered to you to your email."
   }
 }
