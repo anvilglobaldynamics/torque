@@ -108,7 +108,7 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
       this._getCustomer({ customerId }, (customer) => {
         this._sell({ outletDefaultInventory, productList }, () => {
           this._handlePayment({ payment, customer }, () => {
-            this._updateInventory({ outletDefaultInventory }, () => {
+            this._updateInventory({ inventoryId: outletDefaultInventory.id, productList: outletDefaultInventory.productList }, () => {
               this._addSales({ outletId, customerId, productList, payment }, (salesId) => {
                 this.success({ status: "success", salesId });
               });
