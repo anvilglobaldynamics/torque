@@ -149,6 +149,9 @@
         this.app.showModalConfirmation("Delete customer?", message, (answer) => {
           if (!answer) return;
           this._deleteCustomer(this.customer.id, () => {
+            if (this.customer.id === this.app.getFromSession('last-created-customer')) {
+              this.app.extractFromSession('last-created-customer')
+            }
             this.app.showToast("Customer has been deleted", () => {
               this.app.navigateTo(`/manage-customers`);
             });

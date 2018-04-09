@@ -154,7 +154,7 @@
         this.app.callAddOutletApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editOutletForm');
-          let message = "Outlet has been created."
+          let message = "New outlet has been created."
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
