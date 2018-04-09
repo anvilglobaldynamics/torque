@@ -126,8 +126,6 @@
           employmentId: this.employee.id
         };
 
-        // callFireEmployeeApi
-
         this.app.callFireEmployeeApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
