@@ -151,8 +151,8 @@
         this.app.callHireUserAsEmployeeApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'hireEmployeeForm');
-          let message = "Congratulations. Your new employee has been hired."
-          this.app.showModalDialog("Employee Hired", message, _ => {
+          let message = "New employee has been hired."
+          this.app.showToast(message, _ => {
             this.app.navigateTo(`/view-employee/employee:${response.employmentId}`);
           });
         });

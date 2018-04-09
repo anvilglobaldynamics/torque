@@ -141,8 +141,8 @@
         this.app.callEditEmploymentApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editEmployeeForm');
-          let message = "Congratulations. Your employee has been updated."
-          this.app.showModalDialog("Employee Updated", message, _ => {
+          let message = "Employee has been updated."
+          this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
         });

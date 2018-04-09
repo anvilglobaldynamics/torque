@@ -146,8 +146,8 @@
         this.app.callUserChangePasswordApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'changePasswordForm');
-          let message = "Your password has been changed..";
-          this.app.showModalDialog("Password Changed", message, _ => {
+          let message = "Password has been changed..";
+          this.app.showToast(message, _ => {
             this.app.navigateTo(`/login`);
           });
         });
@@ -158,8 +158,8 @@
         this.app.callUserEditProfileApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProfileForm');
-          let message = "Your changes have been saved.";
-          this.app.showModalDialog("Profile Updated", message, _ => {
+          let message = "Profile changes have been saved.";
+          this.app.showToast(message, _ => {
             if (response.doesRequireLogin) {
               this.app.navigateTo(`/login`);
             } else {

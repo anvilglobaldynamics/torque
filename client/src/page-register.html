@@ -107,8 +107,8 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'registerForm');
 
-          let message = "Congratulations. You are now a user of Torque. You now may log in."
-          this.app.showModalDialog("Registration Successful", message, _ => {
+          let message = "You are now a user of Torque. You now may log in."
+          this.app.showToast(message, _ => {
             this.app.navigateTo('/home');
           });
         });

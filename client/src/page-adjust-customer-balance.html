@@ -144,8 +144,8 @@
         this.app.callAdjustCustomerBalanceApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'adjustCustomerBalanceForm');
-          let message = "Congratulations. Your customer's balance has been updated."
-          this.app.showModalDialog("Customer Updated", message, _ => {
+          let message = "Customer's balance has been updated."
+          this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
         });

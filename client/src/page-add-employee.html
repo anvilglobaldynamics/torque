@@ -130,8 +130,8 @@
         this.app.callAddNewEmployeeApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'addEmployeeForm');
-          let message = "Congratulations. Your new employee has been created."
-          this.app.showModalDialog("Employee Created", message, _ => {
+          let message = "New employee has been created."
+          this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
         });

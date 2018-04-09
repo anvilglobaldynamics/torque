@@ -140,7 +140,7 @@
         let { verificationToken } = this.verifyForm;
         this._processVerifyPhoneApi({ verificationToken }, html => {
           if (html.indexOf('Phone Verification Successful') > -1) {
-            this.app.showModalDialog("Thank you.", "Your phone is now verified.", () => {
+            this.app.showToast("Your phone is now verified.", () => {
               return this.app.navigateTo('/login');
             });
           } else {

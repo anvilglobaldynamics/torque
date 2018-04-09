@@ -153,7 +153,7 @@
 
       discardTapped(e = null) {
         this._discardSales(this.sales.id, () => {
-          this.app.showModalDialog("Successfully discarded.", "The sales has been discarded", () => {
+          this.app.showToast("Sales has been discarded", () => {
             this.app.reloadTapped();
             this.app.refreshCurrentPage();
           });
