@@ -154,7 +154,10 @@
       }
 
       _processUserEditProfile({ phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
+        email = email.toLowerCase();
+
         let data = { phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup };
+        
         this.app.callUserEditProfileApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProfileForm');

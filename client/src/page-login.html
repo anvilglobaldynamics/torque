@@ -100,7 +100,10 @@
       // region: login =================================
 
       _processUserLogin({ emailOrPhone, password }) {
+        emailOrPhone = emailOrPhone.toLowerCase();
+
         let data = { emailOrPhone, password };
+        
         this.app.callUserLoginApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) {
@@ -117,7 +120,10 @@
       }
 
       _processForgotPasswordRequestApi({ emailOrPhone }, cbfn) {
+        emailOrPhone = emailOrPhone.toLowerCase();
+
         let data = { emailOrPhone };
+        
         this.app.callUserResetPasswordRequestApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -137,6 +143,7 @@
         let defaultInput = this.loginForm.emailOrPhone;
         this.app.showModalInput(this.app.verses.forgotPassword.emailOrPhoneInputTitle, message, defaultInput, emailOrPhone => {
           if (!emailOrPhone) return;
+          emailOrPhone = emailOrPhone.toLowerCase();
           this._processForgotPasswordRequestApi({ emailOrPhone }, type => {
             let message = `We have sent you a confirmation link on your ${type}. Please use the link to reset your password.`;
             this.app.showModalDialog("Thank you.", message, () => 'pass');
