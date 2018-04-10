@@ -34,7 +34,7 @@ Target is to reach a fully functional state with minimal features that closed be
 ## Feature table
 
 | Type | Particulars                  | Dev     | Design | Desktop  | Mobile  | Bengali  | English  |
-| ---- | ---------------------------- | ------- |:------:|:--------:|:-------:|:--------:|:--------:|
+| ---- | ---------------------------- |:-------:|:------:|:--------:|:-------:|:--------:|:--------:|
 | PAGE | PageError404                 | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageRegister                 | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageLogin                    | NO      | NO     | NO       | NO      | NO       | NO       |
@@ -56,13 +56,13 @@ Target is to reach a fully functional state with minimal features that closed be
 | PAGE | PageAddOrganization          | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageAddProducts              | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageAdjustCustoemrBalance    | NO      | NO     | NO       | NO      | NO       | NO       |
+| PAGE | PageHireEmployee             | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageEditCustomer             | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageEditEmployee             | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageEditOutlet               | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageEditProductCategory      | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageEditProfile              | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageEditWarehouse            | NO      | NO     | NO       | NO      | NO       | NO       |
-| PAGE | PageHireEmployee             | NO      | NO     | NO       | NO      | NO       | NO       |
 | ---- | ---------------------------- | ------- | ------ | -------- | ------- | -------- | -------- |
 | PAGE | PageViewCustomer             | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageViewEmployee             | NO      | NO     | NO       | NO      | NO       | NO       |
