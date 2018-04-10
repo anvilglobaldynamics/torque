@@ -84,7 +84,14 @@
     "whyProvideEmailAddress": "By providing an email address, you can get receipts, login alerts and other important information delivered to you to your email."
   },
   "organization": {
-    "isOneOutletOrg": "is it a 1 Outlet Organization?"
+    "isOneOutletOrg": "is it a 1 Outlet Organization?",
+    "nameOfYourOrganization": "Name of your organization.",
+    "pleaseEnterAValidName": "Please enter a valid name.",
+    "emailInput": "Your email address (Optional)",
+    "emailInputError": "Please enter a valid email",
+    "primaryBusinessAddressInput": "Your primary business address",
+    "primaryBusinessAddressInputError": "Please enter an address at least 8 characters long",
+    "createOrganization": "Create Organization"
   },
   "productCategory": {
     "noProductCategoryFound": "No product category found."

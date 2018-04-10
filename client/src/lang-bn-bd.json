@@ -84,7 +84,14 @@
     "whyProvideEmailAddress": "একটি ইমেইল ঠিকানা প্রদান করে, আপনি আপনার ইমেলে বিতরণ রশিদ, লগইন সতর্কতা এবং অন্যান্য গুরুত্বপূর্ণ তথ্য পেতে পারেন।"
   },
   "organization": {
-    "isOneOutletOrg": "এই সংস্হা এর দোকান কি একটি?"
+    "isOneOutletOrg": "এই সংস্হা এর দোকান কি একটি?",
+    "nameOfYourOrganization": "আপনার প্রতিষ্ঠানের নাম",
+    "pleaseEnterAValidName": "একটি বৈধ নাম লিখুন",
+    "emailInput": "আপনার ইমেইল ঠিকানা (ঐচ্ছিক)",
+    "emailInputError": "একটি বৈধ ইমেইল লিখুন।",
+    "primaryBusinessAddressInput": "আপনার প্রাথমিক ব্যবসা ঠিকানা",
+    "primaryBusinessAddressInputError": "অন্তত 8 টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
+    "createOrganization": "সংস্থা তৈরি করুন"
   },
   "productCategory": {
     "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি।"
