@@ -32,8 +32,14 @@ exports.GetInventoryListApi = class extends collectionCommonMixin(Api) {
       Promise.all(inventoryList.map(inventory => new Promise((accept, reject) => {
         let _cbfn = (err, inventoryContainer) => {
           if (err) return reject(err);
+          if (!inventoryContainer) {
+            let err = new Error("Could not find Inventory Container");
+            err.code = "INVENTORY_CONTAINER_NOT_FOUND";
+            this.logger.error(err);
+            return reject(err);
+          }
           inventory.inventoryContainerName = inventoryContainer.name;
-          accept();
+          return accept();
         }
         if (inventory.inventoryContainerType === "outlet") {
           this.database.outlet.findById({ outletId: inventory.inventoryContainerId }, _cbfn);
