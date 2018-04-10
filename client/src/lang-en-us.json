@@ -94,6 +94,16 @@
     "createOrganization": "Create Organization",
     "organizationCreatedToast": "New organization has been created."
   },
+  "outlet": {
+    "nameOfOutletInput": "Name of your outlet.",
+    "physicalAddressInput": "Physical Address",
+    "contactPersonNameInput": "Name of Manager/Contact Person",
+    "contactPhoneOfContactPerson": "Contact Number of Manager/Contact Person",
+    "createOutlet": "Create Outlet",
+    "updateOutlet": "Update Outlet",
+    "outletCreatedToast": "New outlet has been created.",
+    "outletUpdatedToast": "Outlet has been updated."
+  },
   "productCategory": {
     "noProductCategoryFound": "No product category found."
   }

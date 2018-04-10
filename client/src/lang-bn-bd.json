@@ -94,6 +94,16 @@
     "createOrganization": "সংস্থা তৈরি করুন",
     "organizationCreatedToast": "নতুন সংস্থা তৈরি করা হয়েছে।"
   },
+  "outlet": {
+    "nameOfOutletInput": "আপনার দোকান এর নাম ",
+    "physicalAddressInput": "ঠিকানা",
+    "contactPersonNameInput": "যোগাযোগ করার বেক্তির নাম",
+    "contactPhoneOfContactPerson": "যোগাযোগ করার বেক্তির ফোন",
+    "createOutlet": "দোকান তৈরী করুন",
+    "updateOutlet": "আপডেট দোকান",
+    "outletCreatedToast": "নতুন দোকান তৈরি করা হয়েছে।",
+    "outletUpdatedToast": "দোকান আপডেট করা হয়েছে।"
+  },
   "productCategory": {
     "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি।"
   }
