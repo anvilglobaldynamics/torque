@@ -35,11 +35,6 @@ exports.PasswordResetRequestCollection = class extends Collection {
       },
       {
         targetCollection: 'user',
-        foreignKey: 'email',
-        referringKey: 'forEmail'
-      },
-      {
-        targetCollection: 'user',
         foreignKey: 'phone',
         referringKey: 'forPhone'
       }
