@@ -100,6 +100,7 @@
       // region: login =================================
 
       _processUserLogin({ emailOrPhone, password }) {
+        emailOrPhone = emailOrPhone.trim();
         emailOrPhone = emailOrPhone.toLowerCase();
 
         let data = { emailOrPhone, password };
@@ -120,6 +121,7 @@
       }
 
       _processForgotPasswordRequestApi({ emailOrPhone }, cbfn) {
+        emailOrPhone = emailOrPhone.trim();
         emailOrPhone = emailOrPhone.toLowerCase();
 
         let data = { emailOrPhone };
