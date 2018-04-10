@@ -15,6 +15,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -34,6 +35,7 @@
             <paper-input class="addOrganizationForm--phone" value="{{addOrganizationForm.phone}}" required minlength="11" maxlength="15" error-message="Please enter a valid phone number" label="Your valid phone number"></paper-input>
             <paper-input class="addOrganizationForm--email" value="{{addOrganizationForm.email}}" pattern="^.+@.+\..+$" minlength="0" error-message="Please enter a valid email" label="Your email address (Optional)"></paper-input>
             <paper-textarea class="addOrganizationForm--primaryBusinessAddress" value="{{addOrganizationForm.primaryBusinessAddress}}" required minlength="8" error-message="Please enter an address at least 8 characters long" label="Your primary business address" rows="4"></paper-textarea>
+            <paper-checkbox class="addOrganizationForm--isOneOutletOrg" checked="{{addOrganizationForm.isOneOutletOrg}}">[[verses.organization.isOneOutletOrg]]</paper-checkbox>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary addOrganizationForm--submit" on-tap="addOrganizationTapped">Create Organization</paper-button>
@@ -45,7 +47,7 @@
   </template>
 
   <script>
-    class PageAddOrganization extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageAddOrganization extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-add-organization';
       }
@@ -60,14 +62,16 @@
                   name: 'Johns Apparel',
                   phone: '01700000011',
                   email: 'johndoe@johnsapparel.com',
-                  primaryBusinessAddress: 'Road 50\nThis Town'
+                  primaryBusinessAddress: 'Road 50\nThis Town',
+                  isOneOutletOrg: false
                 };
               } else {
                 return {
                   name: '',
                   phone: '',
                   email: '',
-                  primaryBusinessAddress: ''
+                  primaryBusinessAddress: '',
+                  isOneOutletOrg: false
                 };
               }
             }
@@ -88,6 +92,7 @@
         this.app.currentPageIsModal = true;
         this.app.pushPageTitle('Add Organization');
         if (!this._ensureAccess()) return;
+        this.useLanguageServices();
         this.delay(300, () => {
           this.isReady = true;
         });
@@ -109,7 +114,7 @@
 
       // region: addOrganization =================================
 
-      _processUserAddOrganization({ name, phone, email, primaryBusinessAddress }) {
+      _processUserAddOrganization({ name, phone, email, primaryBusinessAddress, isOneOutletOrg }) {
         email = email.toLowerCase();
 
         let data = { name, phone, email, primaryBusinessAddress };
@@ -119,7 +124,11 @@
           if (response.hasError) return this.onApiError(response.error, 'addOrganizationForm');
           let message = "New organization has been created."
           this.app.showToast(message, _ => {
-            this.app.navigateTo(`/home/org:${response.organizationId}`);
+            if (isOneOutletOrg) {
+              this.app.navigateTo(`/edit-outlet/fromOrganizationCreatePage:${response.organizationId}`);
+            } else {
+              this.app.navigateTo(`/home/org:${response.organizationId}`);
+            }
           });
         });
       }
@@ -127,12 +136,11 @@
       // region: ui =================================
 
       addOrganizationTapped() {
-        console.log("addOrganizationTapped");
         this.elemAll('#addOrganizationForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#addOrganizationForm').validate()) return;
 
-        let { name, phone, email, primaryBusinessAddress } = this.addOrganizationForm;
-        this._processUserAddOrganization({ name, phone, email, primaryBusinessAddress });
+        let { name, phone, email, primaryBusinessAddress, isOneOutletOrg } = this.addOrganizationForm;
+        this._processUserAddOrganization({ name, phone, email, primaryBusinessAddress, isOneOutletOrg });
       }
 
       // region: misc =================================
