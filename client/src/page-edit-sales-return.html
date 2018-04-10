@@ -21,7 +21,7 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="page-sales-return">
+<dom-module id="page-edit-sales-return">
   <template>
     <style include="shared-styles">
 
@@ -53,9 +53,9 @@
     </div>
   </template>
   <script>
-    class PageSalesReturn extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageEditSalesReturn extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
       static get is() {
-        return 'page-sales-return';
+        return 'page-edit-sales-return';
       }
 
       static get properties() {
@@ -189,6 +189,6 @@
       }
     }
 
-    window.customElements.define(PageSalesReturn.is, PageSalesReturn);
+    window.customElements.define(PageEditSalesReturn.is, PageEditSalesReturn);
   </script>
 </dom-module>
