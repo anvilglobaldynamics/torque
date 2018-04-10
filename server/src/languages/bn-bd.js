@@ -4,7 +4,7 @@ exports.verses = {
     userNotFound: "এই ইমেল/ফোন আর পাসওয়ার্ড দিয়ে কোনো একাউন্ট খুঁজে পাওয়া যায় নি।",
     userBanned: "আপনাকে আমাদের সিস্টেম থেকে বহিঃস্ক্রিত করা হয়েছে। পরিচালক এর সাথে যোগাযোগ করুন।",
     userRequiresPhoneVerification: "আপনাকে আপনার ফোন নম্বরটি যাচাই করতে হবে।",
-    userRequiresEmailVerification: "আপনাকে আপনার ফইমেলটি যাচাই করতে হবে।",
+    userRequiresEmailVerification: "আপনাকে আপনার ইমেলটি যাচাই করতে হবে। আপনার ফোন নম্বর দিয়ে লগ ইন করার চেষ্টা করুন এবং তারপরে আপনার ইমেল যাচাই করুন।",
     phoneVerificationRequestNotFound: "ফোন যাচাইকরণ অনুরোধ পাওয়া যায়নি।",
     emailVerificationRequestNotFound: "ইমেল যাচাইকরণ অনুরোধ পাওয়া যায় নি।"
   },
@@ -38,6 +38,6 @@ exports.verses = {
     apikeyExpired: "মেয়াদউত্তীর্ণ apiKey প্রদান!"
   },
   userNotificationCommon: {
-    yourPasswordHasChanged: "আপনার পাসওয়ার্ড পরিবর্তন হয়েছে।"
+    yourPasswordHasChanged: "আপনার পাসওয়ার্ড পরিবর্তন হয়েছে। আপনি লগইন সংক্রান্ত কোনো সমস্যার সম্মুখীন হলে আমাদের হটলাইনে যোগাযোগ করুন।"
   }
 }

@@ -4,7 +4,7 @@ exports.verses = {
     userNotFound: "No user matched the email and password combination.",
     userBanned: "You have been banned from our system. Contact our admin.",
     userRequiresPhoneVerification: "You need to verify your phone number.",
-    userRequiresEmailVerification: "You need to verify your email.",
+    userRequiresEmailVerification: "You need to verify your email. Try logging in with your phone number and then verify your email.",
     phoneVerificationRequestNotFound: "Phone verification request not found.",
     emailVerificationRequestNotFound: "Email verification request not found."
   },
@@ -38,6 +38,6 @@ exports.verses = {
     apikeyExpired: "Expired apiKey Provided!"
   },
   userNotificationCommon: {
-    yourPasswordHasChanged: "Your password has changed."
+    yourPasswordHasChanged: "Your password has changed. If you did not make this change, please contact our hotline below to recover your account."
   }
 }
