@@ -91,7 +91,8 @@
     "emailInputError": "Please enter a valid email",
     "primaryBusinessAddressInput": "Your primary business address",
     "primaryBusinessAddressInputError": "Please enter an address at least 8 characters long",
-    "createOrganization": "Create Organization"
+    "createOrganization": "Create Organization",
+    "organizationCreatedToast": "New organization has been created."
   },
   "productCategory": {
     "noProductCategoryFound": "No product category found."

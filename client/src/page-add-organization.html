@@ -122,7 +122,7 @@
         this.app.callAddOrganizationApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'addOrganizationForm');
-          let message = "New organization has been created."
+          let message = this.app.verses.organization.organizationCreatedToast;
           this.app.showToast(message, _ => {
             if (isOneOutletOrg) {
               this.app.navigateTo(`/edit-outlet/fromOrganizationCreatePage:${response.organizationId}`);
