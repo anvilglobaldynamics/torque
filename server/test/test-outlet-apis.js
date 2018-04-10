@@ -170,7 +170,7 @@ describe('outlet', _ => {
     callApi('api/get-outlet', {
       json: {
         apiKey,
-        outletId: outletList[0].id
+        outletId: outletList[outletList.length - 1].id
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
