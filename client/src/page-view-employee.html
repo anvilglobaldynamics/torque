@@ -15,6 +15,7 @@
 
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -57,7 +58,7 @@
   </template>
 
   <script>
-    class PageViewEmployee extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+    class PageViewEmployee extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
 
       static get is() {
         return 'page-view-employee';

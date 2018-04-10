@@ -18,6 +18,7 @@
 
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
 <link rel="import" href="torque-verification-behavior.html">
 <link rel="import" href="torque-language-behavior.html">
 
@@ -148,7 +149,7 @@
   </template>
 
   <script>
-    class PageHome extends FxPage.mixin(TorqueVerificationBehavior, TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+    class PageHome extends FxPage.mixin(TorqueVerificationBehavior, TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-home';
       }

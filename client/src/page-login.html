@@ -13,6 +13,7 @@
 
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
 <link rel="import" href="torque-language-behavior.html">
 
 
@@ -48,7 +49,7 @@
   </template>
 
   <script>
-    class PageLogin extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+    class PageLogin extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-login';
       }

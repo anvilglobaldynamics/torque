@@ -14,6 +14,7 @@
 
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -47,7 +48,7 @@
   </template>
 
   <script>
-    class PageEditWarehouse extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageEditWarehouse extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior) {
       static get is() {
         return 'page-edit-warehouse';
       }

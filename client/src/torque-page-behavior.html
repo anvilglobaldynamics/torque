@@ -1,0 +1,137 @@
+<script>
+  
+  (function () {
+    if (window.TorquePageBehavior) return;
+    /* @polymerMixin */
+    TorquePageBehavior = (SuperClass) => class extends SuperClass {
+
+      constructor(...args) {
+        super(...args);
+      }
+
+      genericFormSubmitionKeypress(e) {
+        if (e.which !== 13) return;
+        if (e.target.nodeName !== 'PAPER-INPUT') return;
+        let el = e.target;
+        while (el && el.nodeName !== 'IRON-FORM') {
+          el = el.parentNode;
+        }
+        if (!el) return;
+        el.querySelectorAll(`.${el.id}--submit`).forEach(submitEl => {
+          if (submitEl) {
+            if (submitEl.className.indexOf("hidden") > -1) return;
+            submitEl.click();
+          }
+        });
+      }
+
+      static get properties() {
+        return {
+          isReady: {
+            type: Boolean,
+            value: false,
+            observer: 'isReadyChanged'
+          },
+          paginate: {
+            type: Object,
+            value: () => {
+              return {
+                offset: 0,
+                limit: 6
+              }
+            }
+          },
+          pagination: {
+            type: Object,
+            value: () => {
+              return {}
+            }
+          }
+        }
+      }
+
+      isReadyChanged() {
+        if (this.isReady) {
+          this.app.topSpinnerEnabled = true;
+        } else {
+          this.app.topSpinnerEnabled = false;
+        }
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.isReady = false;
+      }
+
+      onApiError(error, form) {
+        if ((error.code === "VALIDATION_ERROR") && form) {
+          let missingError = null;
+          let { details: errorList } = error;
+          for (let error of errorList) {
+            let { path, message } = error;
+            let key = `.${form}--${path}`;
+            let el = this.elem(key);
+            if (!el && this.subForm) {
+              let subFormName = this.subForm.getAttribute('name');
+              if (subFormName) {
+                let key = `.${subFormName}--${path}`;
+                el = this.subForm.elem(key);
+              }
+            }
+            if (!el) {
+              missingError = error;
+              continue;
+            }
+            el.autoValidate = true;
+            el.invalid = true;
+            el.errorMessage = message;
+          }
+          if (missingError) {
+            return this.app.showModalDialog("Sorry!", missingError.message);
+          }
+        } else {
+          return this.app.showModalDialog("Sorry!", error.message);
+        }
+      }
+
+      checkPrivilege(privilege) {
+        if (!(privilege in this.app.organization.employment.privileges)) {
+          throw new Error(`No such privilege ""${privilege}.`);
+        }
+        return this.app.organization.employment.privileges[privilege];
+      }
+
+      accessControl(type, privilegeList = []) {
+        const typeList = ['special', 'authenticated', 'privileged'];
+        if (typeList.indexOf(type) === -1) throw new Error("Invalid accessControl type.");
+        if (type === 'authenticated' || type === 'privileged') {
+          if (!(this.app.user)) {
+            this.app.navigateTo('/login');
+            return false;
+          }
+        }
+        if (type === 'privileged') {
+          if (!this.app.organization) {
+            this.app.navigateTo('/manage-organizations');
+            return false;
+          }
+          if (!privilegeList.every(privilege => this.checkPrivilege(privilege))) {
+            this.app.navigateTo('/error403');
+            return false;
+          }
+        }
+        return true;
+      }
+
+      $hasMorePagination(totalCount, offset, limit) {
+        return (totalCount > (offset + limit));
+      }
+
+      $hasPreviousPagination(offset) {
+        return (offset > 0);
+      }
+
+    }
+  })();
+
+</script>
