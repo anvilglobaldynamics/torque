@@ -140,7 +140,7 @@
       _processUserChangePassword({ oldPassword, newPassword, repeatNewPassword }) {
         if (repeatNewPassword !== newPassword) {
           let message = "You incorrectly typed your new password the second time. Please type it again and press confirm.";
-          return this.app.showModalDialog("Sorry.", message, () => 'pass');
+          return this.app.showModalDialog(this.app.verses.general.sorry, message, () => 'pass');
         }
         let data = { oldPassword, newPassword };
         this.app.callUserChangePasswordApi(data, (err, response) => {
@@ -154,7 +154,10 @@
       }
 
       _processUserEditProfile({ phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
+        email = email.toLowerCase();
+
         let data = { phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup };
+        
         this.app.callUserEditProfileApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProfileForm');

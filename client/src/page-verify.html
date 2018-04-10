@@ -101,7 +101,10 @@
       // region: verify =================================
 
       _processUserVerify({ emailOrPhone, password }) {
+        emailOrPhone = emailOrPhone.toLowerCase();
+
         let data = { emailOrPhone, password };
+        
         this.app.callUserVerifyApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) {
@@ -145,7 +148,7 @@
             });
           } else {
             let message = "Your phone could not be verified. Make sure the verification code is correct.";
-            this.app.showModalDialog("Sorry.", message, () => { 'pass' });
+            this.app.showModalDialog(this.app.verses.general.sorry, message, () => { 'pass' });
           }
         });
       }

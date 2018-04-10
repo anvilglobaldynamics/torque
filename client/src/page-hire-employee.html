@@ -132,7 +132,10 @@
       // region: proces =================================
 
       _processFindUser({ emailOrPhone }, cbfn) {
-        let data = { emailOrPhone: this.findUserField.emailOrPhone };
+        emailOrPhone = emailOrPhone.toLowerCase();
+        
+        let data = { emailOrPhone };
+        
         this.app.callFindUserApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);

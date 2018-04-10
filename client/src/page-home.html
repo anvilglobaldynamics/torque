@@ -74,12 +74,12 @@
       <template is="dom-if" if="[[user.phone]]">
         <template is="dom-if" if="[[!user.isPhoneVerified]]">
           <div class="card">
-            You have not yet verified your phone number. Your account (after the 1 hour grace period) is not active until you verify it. Either click the link in the sms we sent to
-            <b>[[user.phone]]</b> or use the button below.
+            [[verses.general.notYetVarifiedPhone]]
+            <b>[[user.phone]]</b> [[verses.general.or]] [[verses.general.pressBelowButton]]
             <br>
             <div class="button-row">
-              <paper-button raised class="primary" on-tap="verifyPhoneTapped">Verify Phone Number Manually</paper-button>
-              <paper-button raised class="optional" on-tap="resendSmsTapped">Resend SMS</paper-button>
+              <paper-button raised class="primary" on-tap="verifyPhoneTapped">[[verses.home.verifyPhoneNumberManually]]</paper-button>
+              <paper-button raised class="optional" on-tap="resendSmsTapped">[[verses.home.resendSms]]</paper-button>
             </div>
           </div>
         </template>
@@ -87,9 +87,9 @@
 
       <template is="dom-if" if="[[!user.email]]">
         <div class="card">
-          By providing an email address, you can get receipts, login alerts and other important information delivered to you to your email.
+          [[verses.home.whyProvideEmailAddress]]
           <div class="button-row">
-            <paper-button raised class="primary m-0" on-tap="setEmailTapped">Set your email</paper-button>
+            <paper-button raised class="primary m-0" on-tap="setEmailTapped">[[verses.home.setYourEmail]]</paper-button>
           </div>
         </div>
       </template>
@@ -97,12 +97,12 @@
       <template is="dom-if" if="[[user.email]]">
         <template is="dom-if" if="[[!user.isEmailVerified]]">
           <div class="card">
-            You have not yet verified your email address. Your email address is not active until you verify it. Either click the link in the email we sent to
-            <b>[[user.email]]</b> or use the button below.
+            [[verses.home.notYetVarifiedEmail]]
+            <b>[[user.email]]</b> [[verses.general.or]] [[verses.general.pressBelowButton]]
             <br>
             <div class="button-row">
-              <paper-button raised class="primary" on-tap="verifyEmailTapped">Verify Email Manually</paper-button>
-              <paper-button raised class="optional" on-tap="resendEmailTapped">Resend Email</paper-button>
+              <paper-button raised class="primary" on-tap="verifyEmailTapped">[[verses.home.verifyEmailManually]]</paper-button>
+              <paper-button raised class="optional" on-tap="resendEmailTapped">[[verses.home.resendEmail]]</paper-button>
             </div>
           </div>
         </template>
@@ -124,24 +124,24 @@
       </div>
       <div class="horizontal layout wrap">
         <div class="card flex metrics-box">
-          <div class="value">[[metrics.totalNumberOfSalesToday]]</div>
-          <div class="unit">Invoices</div>
-          <div class="item-description">Today's Sales Count</div>
+          <div class="value">[[$translateNumber(metrics.totalNumberOfSalesToday, selectedLanguageIdentifier)]]</div>
+          <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesToday, 'countable', selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
+          <div class="item-description">[[verses.home.soldToday]]</div>
         </div>
         <div class="card flex metrics-box">
-          <div class="value">[[metrics.totalAmountSoldToday]]</div>
+          <div class="value">[[$translateNumber(metrics.totalAmountSoldToday, selectedLanguageIdentifier)]]</div>
           <div class="unit">[[settings.monetaryUnit]]</div>
-          <div class="item-description">Today's Sold Amount</div>
+          <div class="item-description">[[verses.home.soldToday]]</div>
         </div>
         <div class="card flex metrics-box">
           <div class="value">[[$translateNumber(metrics.totalNumberOfSalesThisMonth, selectedLanguageIdentifier)]]</div>
           <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable', selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
-          <div class="item-description">Month's Sales Count</div>
+          <div class="item-description">[[verses.home.soldThisMonth]]</div>
         </div>
         <div class="card flex metrics-box">
-          <div class="value">[[metrics.totalAmountSoldThisMonth]]</div>
+          <div class="value">[[$translateNumber(metrics.totalAmountSoldThisMonth, selectedLanguageIdentifier)]]</div>
           <div class="unit">[[settings.monetaryUnit]]</div>
-          <div class="item-description">Months's Sold Amount</div>
+          <div class="item-description">[[verses.home.soldThisMonth]]</div>
         </div>
       </div>
     </div>
@@ -168,7 +168,7 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
-        this.app.pushPageTitle('Home');
+        this.app.pushPageTitle(this.app.verses.titleBar.home);
         if (!this._ensureAccess()) return;
         this.onUserChange(this.app.user);
         this.onOrganizationChange(this.app.organization);
@@ -274,12 +274,13 @@
       // region: ui  ===========================
 
       setEmailTapped(e = null) {
-        let message = "Please set your valid email."
-        this.app.showModalInput("Set your email.", message, 'john@example.com', email => {
+        let message = this.app.verses.home.pleaseSetYourEmail;
+        this.app.showModalInput(this.app.verses.home.setYourEmail, message, 'john@example.com', email => {
           if (!email) return;
+          email = email.toLowerCase();
           this._processSetEmailApi({ email }, status => {
-            let message = `Your email "${email}" has been set. Please check your inbox for the verification link and log in again.`;
-            this.app.showModalDialog("Email is Set", message, () => {
+            let message = email + " " + this.app.verses.home.emailHasBeenSet;
+            this.app.showModalDialog(this.app.verses.homeemailIsSet, message, () => {
               this.app.logoutTapped();
             });
           })
@@ -288,29 +289,30 @@
 
       resendEmailTapped(e = null) {
         let email = this.app.user.email;
+        email = email.toLowerCase();
         this._processResendVerificationEmailApi({ email }, status => {
-          let message = `Please check your inbox. We have sent you a verification email.`;
-          this.app.showModalDialog("Verification Email Sent", message, () => {
+          let message = this.app.verses.home.checkYourInboxForVarification;
+          this.app.showModalDialog(this.app.verses.home.verificationEmailSent, message, () => {
             'pass'
           });
         })
       }
 
       verifyEmailTapped(e = null) {
-        let message = "Please the verification code we sent to your email."
-        this.app.showModalInput("Enter verification code", message, '', verificationToken => {
+        let message = this.app.verses.home.enterVerificationCodeSentToYourEmail;
+        this.app.showModalInput(this.app.verses.home.enterVerificationCode, message, '', verificationToken => {
           if ((!verificationToken) || verificationToken.length === 0) return;
           this._processVerifyEmailApi({ verificationToken }, html => {
-            if (html.indexOf('Email Verification Successful') > -1) {
-              this.app.showToast("Your email is now verified.", () => {
+            if (html.indexOf(this.app.verses.home.emailVerificationSuccessful) > -1) {
+              this.app.showToast(this.app.verses.home.emailIsNowVerified, () => {
                 this.app.db.update('user', (({ which }) => which === 'only'), user => {
                   user.isEmailVerified = true;
                   return user;
                 });
               });
             } else {
-              let message = "Your email could not be verified. Make sure the verification code is correct.";
-              this.app.showModalDialog("Sorry.", message, () => { 'pass' });
+              let message = this.app.verses.home.emailCouldNotBeVerified;
+              this.app.showModalDialog(this.app.verses.general.sorry, message, () => { 'pass' });
             }
           });
         });
@@ -319,28 +321,28 @@
       resendSmsTapped(e = null) {
         let phone = this.app.user.phone;
         this._processResendVerificationSmsApi({ phone }, status => {
-          let message = `Please check your phone. We have sent you a verification SMS.`;
-          this.app.showModalDialog("Verification SMS Sent", message, () => {
+          let message = this.app.verses.home.checkYourPhoneForVerification;
+          this.app.showModalDialog(this.app.verses.home.verificationSmsSent, message, () => {
             'pass'
           });
         })
       }
 
       verifyPhoneTapped(e = null) {
-        let message = "Please the verification code we sent to your phone."
-        this.app.showModalInput("Enter verification code.", message, '', verificationToken => {
+        let message = this.app.verses.home.enterVerificationCodeSentToYourPhone;
+        this.app.showModalInput(this.app.verses.home.enterVerificationCode, message, '', verificationToken => {
           if ((!verificationToken) || verificationToken.length === 0) return;
           this._processVerifyPhoneApi({ verificationToken }, html => {
-            if (html.indexOf('Phone Verification Successful') > -1) {
-              this.app.showToast("Your phone is now verified.", () => {
+            if (html.indexOf(this.app.verses.home.phoneVerificationSuccessful) > -1) {
+              this.app.showToast(this.app.verses.home.phoneIsNowVerified, () => {
                 this.app.db.update('user', (({ which }) => which === 'only'), user => {
                   user.isPhoneVerified = true;
                   return user;
                 });
               });
             } else {
-              let message = "Your phone could not be verified. Make sure the verification code is correct";
-              this.app.showModalDialog("Sorry.", message, () => { 'pass' });
+              let message = this.app.verses.home.phoneCouldNotBeVerified;
+              this.app.showModalDialog(this.app.verses.general.sorry, message, () => { 'pass' });
             }
           });
         });

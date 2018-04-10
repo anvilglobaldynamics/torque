@@ -109,7 +109,10 @@
       // region: addOrganization =================================
 
       _processUserAddOrganization({ name, phone, email, primaryBusinessAddress }) {
+        email = email.toLowerCase();
+
         let data = { name, phone, email, primaryBusinessAddress };
+        
         this.app.callAddOrganizationApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'addOrganizationForm');
