@@ -16,6 +16,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -176,12 +177,19 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <template is="dom-if" if="{{!productCategoryList.length}}">
+        <div class="card">
+          [[verses.productCategory.noProductCategoryFound]]
+        </div>
+      </template>
 
-      <div class="card">
-        <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
-          <product-category product-category="[[productCategory]]" margin-left="[[marginLeft]]" app="[[app]]"></product-category>
-        </template>
-      </div>
+      <template is="dom-if" if="{{productCategoryList.length}}">
+        <div class="card">
+          <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
+            <product-category product-category="[[productCategory]]" margin-left="[[marginLeft]]" app="[[app]]"></product-category>
+          </template>
+        </div>
+      </template>
 
       <div class="lone-controls">
         <template is="dom-if" if="[[isAMovingGoingOn]]">
@@ -201,7 +209,7 @@
   </template>
 
   <script>
-    class PageManageProductCategories extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageManageProductCategories extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-manage-product-categories';
@@ -232,6 +240,7 @@
         this.app.currentPageIsModal = false;
         this.app.pushPageTitle('Manage Product Categories');
         if (!this._ensureAccess()) return;
+        this.useLanguageServices();
         this._processProductCategoryList(() => {
           this.isReady = true;
         });

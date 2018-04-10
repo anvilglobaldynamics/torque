@@ -7,7 +7,8 @@
     "and": "and",
     "pressBelowButton": "press below button",
     "pressAboveButton": "press above button",
-    "sorry": "Sorry"
+    "sorry": "Sorry",
+    "listIsEmpty": "List is Empty."
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -84,5 +85,8 @@
   },
   "organization": {
     "isOneOutletOrg": "is it a 1 Outlet Organization?"
+  },
+  "productCategory": {
+    "noProductCategoryFound": "No product category found."
   }
 }

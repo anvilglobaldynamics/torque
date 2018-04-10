@@ -7,7 +7,8 @@
     "and": "এবং",
     "pressBelowButton": "নিচের বাটন চাপুন",
     "pressAboveButton": "উপরের বাটন চাপুন",
-    "sorry": "দুঃখিত"
+    "sorry": "দুঃখিত",
+    "listIsEmpty": "তালিকা খালি।"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -84,5 +85,8 @@
   },
   "organization": {
     "isOneOutletOrg": "এই সংস্হা এর দোকান কি একটি?"
+  },
+  "productCategory": {
+    "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি।"
   }
 }
