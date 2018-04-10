@@ -101,7 +101,10 @@
       // region: verify =================================
 
       _processUserVerify({ emailOrPhone, password }) {
+        emailOrPhone = emailOrPhone.toLowerCase();
+
         let data = { emailOrPhone, password };
+        
         this.app.callUserVerifyApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) {
