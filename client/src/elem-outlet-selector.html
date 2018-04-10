@@ -1,3 +1,53 @@
+<!-- 
+  ========================================
+  =====    elem-outlet-selector    =====
+  ========================================
+
+  Host Configuratio Details:=
+
+    required properties:=
+
+      isSearchingOutlet: {
+        type: Boolean,
+        value: false
+      },
+      outlet: {
+        type: Object,
+        value: null,
+        observer: 'outletChanged'
+      }
+
+    required assign in construction/navigatedIn:= 
+
+      this.self = this;
+
+    required methods:=
+
+      outletChanged() {
+        if (!this.outlet) return;
+        this.app.storeInSession('last-selected-outlet', this.outlet);
+      }
+
+      _outletSelected(outlet){
+        this.outlet = outlet;
+        this.isSearchingOutlet = false;
+      }
+      
+      // optional
+      changeOutletTapped(e = null) {
+        this.isSearchingOutlet = true;
+      }
+
+      createOutletTapped(e = null) {
+        this.app.navigateTo('/edit-outlet');
+      }
+
+      removeOutletTapped(e = null) {
+        this.outlet = null;
+        this.app.storeInSession('last-selected-outlet', null);
+      }
+-->
+
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
@@ -20,48 +70,6 @@
 <link rel="import" href="torque-common-behavior.html">
 
 <link rel="import" href="shared-styles.html">
-
-<!-- required properties: 
-  isSearchingOutlet: {
-    type: Boolean,
-    value: false
-  },
-  outlet: {
-    type: Object,
-    value: null,
-    observer: 'outletChanged'
-  }
--->
-
-<!-- required assign:
-  this.self = this;
--->
-
-<!-- required method:
-  outletChanged() {
-    if (!this.outlet) return;
-    this.app.storeInSession('last-selected-outlet', this.outlet);
-  }
-
-  _outletSelected(outlet){
-    this.outlet = outlet;
-    this.isSearchingOutlet = false;
-  }
-  
-  // optional
-  changeOutletTapped(e = null) {
-    this.isSearchingOutlet = true;
-  }
-
-  createOutletTapped(e = null) {
-    this.app.navigateTo('/edit-outlet');
-  }
-
-  removeOutletTapped(e = null) {
-    this.outlet = null;
-    this.app.storeInSession('last-selected-outlet', null);
-  }
--->
 
 <dom-module id="elem-outlet-selector">
   <template>
