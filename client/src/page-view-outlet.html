@@ -19,6 +19,7 @@
 
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="shared-icons.html">
@@ -163,7 +164,7 @@
   </template>
 
   <script>
-    class PageViewOutlet extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+    class PageViewOutlet extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
 
       static get is() {
         return 'page-view-outlet';
