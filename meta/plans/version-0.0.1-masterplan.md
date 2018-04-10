@@ -34,15 +34,15 @@ Target is to reach a fully functional state with minimal features that closed be
 ## Feature table
 
 | Type | Particulars                  | Dev     | Design | Desktop  | Mobile  | Bengali  | English  |
-| ---- | ---------------------------- | ------- | ------ | -------- | ------- | -------- | -------- |
+| ---- | ---------------------------- | ------- |:------:|:--------:|:-------:|:--------:|:--------:|
 | PAGE | PageError404                 | NO      | NO     | NO       | NO      | NO       | NO       |
+| PAGE | PageRegister                 | NO      | NO     | NO       | NO      | NO       | NO       |
+| PAGE | PageLogin                    | NO      | NO     | NO       | NO      | NO       | NO       |
+| PAGE | PageVerify                   | NO      | NO     | NO       | NO      | NO       | NO       |
+| PAGE | PageConfirmPasswordReset     | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageHome                     | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageAbout                    | NO      | NO     | NO       | NO      | NO       | NO       |
-| PAGE | PageLogin                    | NO      | NO     | NO       | NO      | NO       | NO       |
-| PAGE | PageConfirmPasswordReset     | NO      | NO     | NO       | NO      | NO       | NO       |
-| PAGE | PageRegister                 | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageSettings                 | NO      | NO     | NO       | NO      | NO       | NO       |
-| PAGE | PageVerify                   | NO      | NO     | NO       | NO      | NO       | NO       |
 | ---- | ---------------------------- | ------- | ------ | -------- | ------- | -------- | -------- |
 | PAGE | PageManageCustomers          | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageManageEmployees          | NO      | NO     | NO       | NO      | NO       | NO       |
@@ -79,3 +79,7 @@ Target is to reach a fully functional state with minimal features that closed be
 | ---- | ---------------------------- | ------- | ------ | -------- | ------- | -------- | -------- |
 | SYST | TorqueApp                    | NO      | NO     | NO       | NO      | NO       | NO       |
 
+**NOTES**
+1. Mentioning a page includes all the custom elements used in that element.
+2. For the "Dev" column, also remove unnecessary imports.
+3. For the "Dev" column, also prettify the file.
