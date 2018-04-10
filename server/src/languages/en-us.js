@@ -38,6 +38,6 @@ exports.verses = {
     apikeyExpired: "Expired apiKey Provided!"
   },
   userNotificationCommon: {
-    yourPasswordHasChanged: "Your password has changed."
+    yourPasswordHasChanged: "Your password has changed. If you did not make this change, please contact our hotline below to recover your account."
   }
 }

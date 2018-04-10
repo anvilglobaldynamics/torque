@@ -38,6 +38,6 @@ exports.verses = {
     apikeyExpired: "মেয়াদউত্তীর্ণ apiKey প্রদান!"
   },
   userNotificationCommon: {
-    yourPasswordHasChanged: "আপনার পাসওয়ার্ড পরিবর্তন হয়েছে।"
+    yourPasswordHasChanged: "আপনার পাসওয়ার্ড পরিবর্তন হয়েছে। আপনি লগইন সংক্রান্ত কোনো সমস্যার সম্মুখীন হলে আমাদের হটলাইনে যোগাযোগ করুন।"
   }
 }
