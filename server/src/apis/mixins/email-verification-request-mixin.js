@@ -33,7 +33,7 @@ exports.emailVerificationRequestMixin = (SuperApiClass) => class extends SuperAp
     this.database.emailVerificationRequest.isVerificationTokenUnique(verificationToken, (err, isUnique) => {
       if (err) return this.fail(err);
       if (!isUnique) return this._createEmailVerificationRequest({ email }, cbfn);
-      this.database.emailVerificationRequest.create({ userId, email, origin: 'user-register', verificationToken }, (err) => {
+      this.database.emailVerificationRequest.create({ userId, email, origin: 'resend-verification', verificationToken }, (err) => {
         let verificationLink = this._generateVerificationLink(verificationToken);
         return cbfn(verificationLink);
       });

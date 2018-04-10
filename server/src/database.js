@@ -101,6 +101,7 @@ class Database {
   */
   findOne(collectionName, query, ...args) {
     let [skip = 0, sort = null, cbfn] = make(args, 3);
+    console.log("SORT", sort)
     this.find(collectionName, query, skip, 1, sort, (err, docList) => {
       if (err) return cbfn(err);
       if (docList.length === 0) {

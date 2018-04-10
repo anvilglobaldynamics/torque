@@ -59,12 +59,12 @@ exports.EmailVerificationRequestCollection = class extends Collection {
   // suggestions: split the process in three steps.
   applyVerificationToken({ verificationToken }, cbfn) {
     let query = { verificationToken, isVerificationComplete: false };
-    this._findOne(query, (err, doc) => {
+    this._findOne(query, 0, { createdDatetimeStamp: -1 }, (err, doc) => {
       if (err) return cbfn(err);
       if (!doc) {
         let err = new Error('Invalid verification token');
         err.code = "INVALID_VERIFICATION_TOKEN";
-        return cbfn(null, err);
+        return cbfn(err);
       }
       let mod = {
         $set: {
