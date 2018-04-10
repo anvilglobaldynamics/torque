@@ -157,7 +157,11 @@
           if (response.hasError) return this.onApiError(response.error, 'editOutletForm');
           let message = "New outlet has been created."
           this.app.showToast(message, _ => {
-            this.backButtonOnTopBarPressed();
+            if ('fromOrganizationCreatePage' in this.params) {
+              this.app.navigateTo(`/home/org:${this.params.fromOrganizationCreatePage}`);
+            } else {
+              this.backButtonOnTopBarPressed();
+            }
           });
         });
       }
