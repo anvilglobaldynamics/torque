@@ -18,7 +18,7 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="page-select-organization">
+<dom-module id="page-manage-organizations">
   <template>
     <style include="shared-styles">
 
@@ -67,9 +67,9 @@
   </template>
 
   <script>
-    class PageSelectOrganization extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+    class PageManageOrganizations extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
       static get is() {
-        return 'page-select-organization';
+        return 'page-manage-organizations';
       }
 
       static get properties() {
@@ -87,7 +87,7 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Select Organization');
+        this.app.pushPageTitle('Organizations');
         if (!this._ensureAccess()) return;
         this._processOrganizationList(_ => {
           this.isReady = true;
@@ -142,6 +142,6 @@
 
     }
 
-    window.customElements.define(PageSelectOrganization.is, PageSelectOrganization);
+    window.customElements.define(PageManageOrganizations.is, PageManageOrganizations);
   </script>
 </dom-module>

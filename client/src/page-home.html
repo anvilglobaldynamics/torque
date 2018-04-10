@@ -221,12 +221,12 @@
               index = organizationList.findIndex(organization => organization.id === organizationId);
             } else {
               if (!this.app.organization) {
-                return this.app.navigateTo('/select-organization');
+                return this.app.navigateTo('/manage-organizations');
               }
               index = organizationList.findIndex(organization => organization.id === this.organization.id);
             }
             if (index === -1) {
-              return this.app.navigateTo('/select-organization');
+              return this.app.navigateTo('/manage-organizations');
             }
             let organization = organizationList[index];
             this.app.saveOrganization(organization);

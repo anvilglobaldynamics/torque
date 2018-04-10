@@ -47,7 +47,7 @@
 <link rel="lazy-import" href="page-register.html">
 <link rel="lazy-import" href="page-edit-profile.html">
 <link rel="lazy-import" href="page-add-organization.html">
-<link rel="lazy-import" href="page-select-organization.html">
+<link rel="lazy-import" href="page-manage-organizations.html">
 <link rel="lazy-import" href="page-manage-employees.html">
 <link rel="lazy-import" href="page-add-employee.html">
 <link rel="lazy-import" href="page-view-employee.html">
@@ -245,7 +245,7 @@
           <page-register name="register"></page-register>
           <page-edit-profile name="edit-profile"></page-edit-profile>
           <page-add-organization name="add-organization"></page-add-organization>
-          <page-select-organization name="select-organization"></page-select-organization>
+          <page-manage-organizations name="manage-organizations"></page-manage-organizations>
           <page-manage-employees name="manage-employees"></page-manage-employees>
           <page-add-employee name="add-employee"></page-add-employee>
           <page-view-employee name="view-employee"></page-view-employee>
@@ -532,7 +532,7 @@
       }
 
       switchOrganizationTapped(e = null) {
-        this.navigateTo('/select-organization')
+        this.navigateTo('/manage-organizations')
       }
 
       // ====================== sessionStorage =============================

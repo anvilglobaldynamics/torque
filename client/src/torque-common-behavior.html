@@ -184,7 +184,7 @@
         }
         if (type === 'privileged') {
           if (!this.app.organization) {
-            this.app.navigateTo('/select-organization');
+            this.app.navigateTo('/manage-organizations');
             return false;
           }
           if (!privilegeList.every(privilege => this.checkPrivilege(privilege))) {
