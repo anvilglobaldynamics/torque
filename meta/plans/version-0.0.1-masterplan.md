@@ -63,6 +63,7 @@ Target is to reach a fully functional state with minimal features that closed be
 | PAGE | PageEditProductCategory      | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageEditProfile              | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageEditWarehouse            | NO      | NO     | NO       | NO      | NO       | NO       |
+| PAGE | PageEditSalesReturn              | NO      | NO     | NO       | NO      | NO       | NO       |
 | ---- | ---------------------------- | ------- | ------ | -------- | ------- | -------- | -------- |
 | PAGE | PageViewCustomer             | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageViewEmployee             | NO      | NO     | NO       | NO      | NO       | NO       |
@@ -71,7 +72,6 @@ Target is to reach a fully functional state with minimal features that closed be
 | PAGE | PageViewSalesReturn          | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageViewSales                | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PageViewWarehouse            | NO      | NO     | NO       | NO      | NO       | NO       |
-| PAGE | PageSalesReturn              | NO      | NO     | NO       | NO      | NO       | NO       |
 | ---- | ---------------------------- | ------- | ------ | -------- | ------- | -------- | -------- |
 | PAGE | PageReports                  | NO      | NO     | NO       | NO      | NO       | NO       |
 | PAGE | PagePosSelectProducts        | NO      | NO     | NO       | NO      | NO       | NO       |
