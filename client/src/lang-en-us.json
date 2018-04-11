@@ -10,7 +10,8 @@
     "sorry": "Sorry",
     "listIsEmpty": "List is Empty.",
     "search": "Search",
-    "select": "Select"
+    "select": "Select",
+    "address": "Address"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -112,6 +113,10 @@
   "customerSelector": {
     "customerNameOrPhoneInput": "Search customer by name or phone.",
     "customerNameOrPhoneInputError": "Please enter a name or phone"
+  },
+  "outletSelector": {
+    "outletNameOrPhoneInput": "Search outlet by name or phone",
+    "outletNameOrPhoneInputError": "Please enter a name or phone"
   },
   "commonEmploymentDetails": {
     "privileges": "Privileges",
