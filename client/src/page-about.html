@@ -11,6 +11,7 @@
 <link rel="import" href="torque-swipe-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -33,27 +34,27 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <paper-tabs id="main-view-selector" class="view-selector" selected="{{paperTabSelectedViewIndex}}" fit-container>
-        <paper-tab>About</paper-tab>
-        <paper-tab>TOS/Privacy</paper-tab>
-        <paper-tab>Contact Us</paper-tab>
+        <paper-tab>[[verses.about.about]]</paper-tab>
+        <paper-tab>[[verses.about.tos]]</paper-tab>
+        <paper-tab>[[verses.about.contactUs]]</paper-tab>
       </paper-tabs>
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 0)]]">
         <div class="card">
-          <div>This project is created and maintained by
+          <div>[[verses.about.projectBy]]
             <a href="[[authorWebsite]]">[[authorName]]</a>
           </div>
           <br>
           <br>
           <div>
-            <span class="grey">logo and favicon icon made by
-              <a href="https://www.flaticon.com/authors/madebyoliver">Madebyoliver</a> from www.flaticon.com </span>
+            <span class="grey">[[verses.about.logoAndFaviconBy]]
+              <a href="https://www.flaticon.com/authors/madebyoliver">Madebyoliver</a> [[verses.general.from]] www.flaticon.com </span>
           </div>
           <br>
           <div>
             <br>&copy; 2017.
             <a href="[[authorWebsite]]">[[authorName]]</a>.
-            <br> All rights reserved.
+            <br> [[verses.root.rightsReserved]]
             <br>
           </div>
         </div>
@@ -62,28 +63,22 @@
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 1)]]">
         <div class="card">
-          <div>Coming Soon</div>
-          <br>
+          <div>[[verses.general.comingSoon]]</div>
         </div>
       </template>
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 2)]]">
         <div class="card">
           <div>
-            Send your questions, complaints and praises to [[contactEmail]].
+            [[verses.about.sendYourQuestionsTo]] [[contactEmail]].
           </div>
-          <br>
-          <div>
-            If you are a fellow developer/investor and want to come over to torque office for a cup of espresso, feel free to drop a note to [[contactEmail]] with your contact information and I'll get in touch.
-          </div>
-          <br>
         </div>
       </template>
 
   </template>
 
   <script>
-    class PageAbout extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueSwipeBehavior, FxCommonBehavior) {
+    class PageAbout extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueSwipeBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-about';
@@ -114,6 +109,7 @@
         if (!this._ensureAccess()) return;
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
+        this.useLanguageServices();
         this.delay(300, () => {
           this.isReady = true;
         });

@@ -5,13 +5,15 @@
   "general": {
     "or": "or",
     "and": "and",
+    "from": "from",
     "pressBelowButton": "press below button",
     "pressAboveButton": "press above button",
     "sorry": "Sorry",
     "listIsEmpty": "List is Empty.",
     "search": "Search",
     "select": "Select",
-    "address": "Address"
+    "address": "Address",
+    "comingSoon": "Coming Soon"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -126,5 +128,13 @@
     "designationOfEmployeeInputError": "Please enter a valid designation",
     "companyProvidedIdInput": "Company Provided Id.",
     "companyProvidedIdInputError": "Please enter Company Provided Id"
+  },
+  "about": {
+    "about": "About",
+    "tos": "TOS/Privacy",
+    "contactUs": "Contact Us",
+    "projectBy": "This project is created and maintained by",
+    "logoAndFaviconBy": "logo and favicon icon made by",
+    "sendYourQuestionsTo": "Send your questions, complaints and praises to"
   }
 }
