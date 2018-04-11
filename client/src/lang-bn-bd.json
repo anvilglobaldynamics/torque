@@ -112,5 +112,14 @@
   "customerSelector": {
     "customerNameOrPhoneInput": "নাম অথবা ফোন দিয়ে ক্রেতা খুজুন।",
     "customerNameOrPhoneInputError": "একটি নাম বা ফোন লিখুন"
+  },
+  "commonEmploymentDetails": {
+    "privileges": "বিশেষাধিকার",
+    "roleOfEmployeeInput": "কর্মচারীর ভূমিকা",
+    "roleOfEmployeeInputError": "একটি বৈধ ভূমিকা লিখুন",
+    "designationOfEmployeeInput": "কর্মচারী পদবী",
+    "designationOfEmployeeInputError": "একটি বৈধ পদবী লিখুন",
+    "companyProvidedIdInput": "কোম্পানী প্রদত্ত আইডি",
+    "companyProvidedIdInputError": "কোম্পানী প্রদত্ত আইডি লিখুন"
   }
 }

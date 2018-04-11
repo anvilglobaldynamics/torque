@@ -112,5 +112,14 @@
   "customerSelector": {
     "customerNameOrPhoneInput": "Search customer by name or phone.",
     "customerNameOrPhoneInputError": "Please enter a name or phone"
+  },
+  "commonEmploymentDetails": {
+    "privileges": "Privileges",
+    "roleOfEmployeeInput": "Role of Employee.",
+    "roleOfEmployeeInputError": "Please enter a valid role",
+    "designationOfEmployeeInput": "Designation of Employee.",
+    "designationOfEmployeeInputError": "Please enter a valid designation",
+    "companyProvidedIdInput": "Company Provided Id.",
+    "companyProvidedIdInputError": "Please enter Company Provided Id"
   }
 }
