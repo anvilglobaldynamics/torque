@@ -57,6 +57,9 @@
       }
     </style>
 
+    <div id="quagcam"></div>
+    <div id="quagcam-output"></div>
+
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
@@ -178,6 +181,57 @@
         this._processOrganizationList(() => {
           this._processDashboardSummary(() => {
             this.isReady = true;
+          });
+        });
+        this.delay(0, () => {
+          Quagga.init({
+            inputStream: {
+              name: "Live",
+              type: "LiveStream",
+              target: this.elem('#quagcam'),
+              constraints: {
+                width: 480,
+                height: 320,
+                facingMode: "environment"
+              },
+            },
+            decoder: {
+              readers: [
+                "code_128_reader",
+                "ean_reader",
+                "ean_8_reader",
+                "code_39_reader",
+                "code_39_vin_reader",
+                "codabar_reader",
+                "upc_reader",
+                "upc_e_reader",
+                "i2of5_reader",
+                "2of5_reader",
+                "code_93_reader"
+              ],
+              debug: {
+                showCanvas: true,
+                showPatches: true,
+                showFoundPatches: true,
+                showSkeleton: true,
+                showLabels: true,
+                showPatchLabels: true,
+                showRemainingPatchLabels: true,
+                boxFromPatches: {
+                  showTransformed: true,
+                  showTransformedBox: true,
+                  showBB: true
+                }
+              }
+            },
+            frequency: 900
+          }, function (err) {
+            if (err) {
+              console.log(err);
+              return
+            }
+            console.log("Initialization finished. Ready to start");
+            Quagga.start();
           });
         });
       }
