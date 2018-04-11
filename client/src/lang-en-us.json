@@ -8,7 +8,9 @@
     "pressBelowButton": "press below button",
     "pressAboveButton": "press above button",
     "sorry": "Sorry",
-    "listIsEmpty": "List is Empty."
+    "listIsEmpty": "List is Empty.",
+    "search": "Search",
+    "select": "Select"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -106,5 +108,9 @@
   },
   "productCategory": {
     "noProductCategoryFound": "No product category found."
+  },
+  "customerSelector": {
+    "customerNameOrPhoneInput": "Search customer by name or phone.",
+    "customerNameOrPhoneInputError": "Please enter a name or phone"
   }
 }
