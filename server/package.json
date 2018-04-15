@@ -8,6 +8,7 @@
     "baselib": "^0.1.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "fs-extra": "^5.0.0",
     "handlebars": "^4.0.10",
     "html-entities": "^1.2.1",
     "inline-css": "^2.2.2",

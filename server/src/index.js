@@ -144,7 +144,7 @@ class Program {
       templateManager = new TemplateManager(config);
       fixtureManager = new FixtureManager(config);
 
-      await promisify(logger, logger.initialize);
+      await logger.initialize();
       logger.info(`(server)> ${config.baseName} Started in ${mode} mode.`);
       logger.info('(server)> logger initialized.');
       server.setLogger(logger);
