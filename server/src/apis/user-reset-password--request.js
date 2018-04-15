@@ -50,7 +50,7 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Api) {
 
   _sendPasswordResetSms({ phone, confirmationLink }) {
     let model = { phone, confirmationLink };
-    this.server.smsService.sendStoredSms('password-reset', model, phone, (err, isDeveloperError, response, finalBody) => {
+    this.server.smsService.sendStoredSms('password-reset', model, phone).then(([err, isDeveloperError, response, finalBody]) => {
       if (err) {
         if (!isDeveloperError) this.logger.error(err);
         let message = 'Failed to send password reset SMS. Please handle the case manually.'

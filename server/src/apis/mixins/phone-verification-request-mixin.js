@@ -10,7 +10,7 @@ exports.phoneVerificationRequestMixin = (SuperApiClass) => class extends SuperAp
 
   _sendPhoneVerificationSms({ phone, verificationLink }) {
     let model = { phone, verificationLink };
-    this.server.smsService.sendStoredSms('phone-verification', model, phone, (err, isDeveloperError, response, finalBody) => {
+    this.server.smsService.sendStoredSms('phone-verification', model, phone).then(([err, isDeveloperError, response, finalBody]) => {
       if (err) {
         if (!isDeveloperError) this.logger.error(err);
         let message = 'Failed to send phone verification SMS. Please handle the case manually.'

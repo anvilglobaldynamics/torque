@@ -182,7 +182,7 @@ class Program {
       logger.info('(server)> email services initialized.');
       server.setEmailService(emailService);
 
-      await promisify(smsService, smsService.initialize, logger);
+      await smsService.initialize(logger);
       logger.info('(server)> sms services initialized.');
       server.setSmsService(smsService);
 

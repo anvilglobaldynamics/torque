@@ -38,7 +38,7 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   _sendPasswordChangeNotificationSms({ user }) {
     let phone = user.phone;
     let model = { phone, textContent: this.verses.userNotificationCommon.yourPasswordHasChanged };
-    this.server.smsService.sendStoredSms('generic-message', model, phone, (err, isDeveloperError, response, finalBody) => {
+    this.server.smsService.sendStoredSms('generic-message', model, phone).then(([err, isDeveloperError, response, finalBody]) => {
       if (err) {
         if (!isDeveloperError) this.logger.error(err);
         let message = 'Failed to send password change notification SMS. Please handle the case manually.'

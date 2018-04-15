@@ -9,7 +9,7 @@ class SmsService {
     this.enabled = enabled;
   }
 
-  _loadAndPrepareTemplates(cbfn) {
+  async _loadAndPrepareTemplates() {
     let branding = this.config.branding;
     let templateList = [
       {
@@ -31,22 +31,20 @@ class SmsService {
         templateFn: template.templateFn
       };
     });
-    cbfn();
+    return;
   }
 
-  initialize(logger, cbfn) {
+  initialize(logger) {
     this.logger = logger;
-    this._loadAndPrepareTemplates(_ => {
-      cbfn();
-    })
+    return this._loadAndPrepareTemplates();
   }
 
-  sendStoredSms(templateName, model, to, cbfn) {
+  async sendStoredSms(templateName, model, to) {
     let content = this.templates[templateName].templateFn(model);
-    this.sendSms({ to, content }, cbfn);
+    return this.sendSms({ to, content });
   }
 
-  sendSms({ to, content } = {}, cbfn) {
+  async sendSms({ to, content } = {}) {
     let actualTo = to;
     if (this.mode !== 'production') {
       actualTo = '01706466808';
@@ -57,19 +55,22 @@ class SmsService {
       to: actualTo,
       content
     };
-    this.database.outgoingSms.create({
-      from,
-      to,
-      content
-    }, (err, smsDoc) => {
-      if (err) this.logger.error(err);
-      if (this.enabled) {
-        let error = new Error("Sms sending failed. We are just using mock servers.");
-        cbfn(error, false, null, data);
-      } else {
-        let error = new Error("Sms sending disabled by developer.");
-        cbfn(error, true, null, data);
-      }
+    return await new Promise((accept, reject) => {
+      // CONVERSION: Use Async Collection when implemented
+      this.database.outgoingSms.create({
+        from,
+        to,
+        content
+      }, (err, smsDoc) => {
+        if (err) this.logger.error(err);
+        if (this.enabled) {
+          let error = new Error("Sms sending failed. We are just using mock servers.");
+          accept([error, false, null, data]);
+        } else {
+          let error = new Error("Sms sending disabled by developer.");
+          accept([error, true, null, data]);
+        }
+      });
     });
   }
 
