@@ -178,7 +178,7 @@ class Program {
       logger.info('(server)> template manager initialized.');
       server.setTemplateManager(templateManager);
 
-      await promisify(emailService, emailService.initialize, logger);
+      await emailService.initialize(logger);
       logger.info('(server)> email services initialized.');
       server.setEmailService(emailService);
 

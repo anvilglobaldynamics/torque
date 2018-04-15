@@ -19,7 +19,7 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     let email = user.email;
     let model = { email, textContent: this.verses.userNotificationCommon.yourPasswordHasChanged };
     let clientLanguage = (this.clientLanguage || 'en-us');
-    this.server.emailService.sendStoredMail(clientLanguage, 'generic-message', model, email, (err, isDeveloperError, response, finalBody) => {
+    this.server.emailService.sendStoredMail(clientLanguage, 'generic-message', model, email).then(([err, isDeveloperError, response, finalBody]) => {
       if ((err) || response.message !== 'Queued. Thank you.') {
         if (err) {
           if (!isDeveloperError) this.logger.error(err);

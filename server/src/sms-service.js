@@ -41,7 +41,7 @@ class SmsService {
 
   async sendStoredSms(templateName, model, to) {
     let content = this.templates[templateName].templateFn(model);
-    return this.sendSms({ to, content });
+    return await this.sendSms({ to, content });
   }
 
   async sendSms({ to, content } = {}) {
