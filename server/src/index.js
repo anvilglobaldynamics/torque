@@ -136,7 +136,7 @@ class Program {
     try {
       config = await promisify(ConfigLoader, ConfigLoader.getComputedConfig, this.muteLogger, mode);
       server = new Server(config, mode);
-      database = new Database(config.db.path);
+      database = new Database(config.db);
       logger = new Logger(config.log, this.muteLogger);
       emailService = new EmailService(config, mode);
       smsService = new SmsService(config, database);

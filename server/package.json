@@ -15,7 +15,7 @@
     "mailgun-js": "^0.12.1",
     "mkpath": "^1.0.0",
     "moment": "^2.18.1",
-    "mongodb": "^2.2.30",
+    "mongodb": "^3.0.6",
     "user-home": "^2.0.0",
     "ws": "^3.2.0",
     "yamljs": "^0.3.0"
@@ -27,7 +27,7 @@
   "scripts": {
     "start": "nodemon start.js",
     "start-single": "node start.js",
-    "test": "mocha"
+    "test": "mocha --timeout 10000"
   },
   "private": true
 }
