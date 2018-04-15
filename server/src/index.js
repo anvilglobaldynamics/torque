@@ -253,7 +253,6 @@ class Program {
       server.registerPostApi('/api/admin-set-outgoing-sms-status', AdminSetOutgoingSmsStatusApi);
       server.registerPostApi('/api/admin-get-aggregated-user-list', AdminGetAggregatedUserListApi);
       server.registerPostApi('/api/admin-set-user-banning-status', AdminSetUserBanningStatusApi);
-      callback();
     } catch (err) {
       console.error(err);
       process.exit(1);

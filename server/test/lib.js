@@ -22,7 +22,7 @@ exports.generateInvalidId = (min = 0, max = 999999999999999) => -1 * (Math.floor
 
 exports.getDatabase = () => { return mainProgram.exposeDatabaseForTesting(); }
 
-exports.initializeServer = (callback) => {
+exports.initializeServer = async (callback) => {
   pendingTerminationRequest = false;
   if (hasStarted) {
     setTimeout(_ => {
@@ -30,12 +30,11 @@ exports.initializeServer = (callback) => {
     }, 10);
     return;
   }
-  mainProgram.initiateServer(_ => {
-    hasStarted = true;
-    setTimeout(_ => {
-      callback();
-    }, 10);
-  });
+  await mainProgram.initiateServer();
+  hasStarted = true;
+  setTimeout(_ => {
+    callback();
+  }, 10);
 }
 
 exports.terminateServer = (callback) => {

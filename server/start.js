@@ -5,6 +5,8 @@ let mainProgram = new Program({
   muteLogger: false
 });
 
-mainProgram.initiateServer(_ => {
+(async () => {
+  await mainProgram.initiateServer();
   console.log('(program)> Server Initiated Completely.')
-});
+})();
+
