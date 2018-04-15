@@ -11,6 +11,7 @@ let { EmailService } = require('./email-service');
 let { SmsService } = require('./sms-service');
 let { TemplateManager } = require('./template-manager');
 let { FixtureManager } = require('./fixture-manager');
+const { DatabaseService } = require('./database-service');
 
 let { UserRegisterApi } = require('./apis/user-register');
 let { UserLoginApi } = require('./apis/user-login');
