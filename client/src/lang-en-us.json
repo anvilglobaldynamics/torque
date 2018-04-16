@@ -147,5 +147,13 @@
     "projectBy": "This project is created and maintained by",
     "logoAndFaviconBy": "logo and favicon icon made by",
     "sendYourQuestionsTo": "Send your questions, complaints and praises to"
+  },
+  "adjustCustomerBalance": {
+    "actionSelection": "Please select an action",
+    "payment": "Payment",
+    "withdrawl": "Withdrawl",
+    "amountInput": "Amount",
+    "amountInputError": "Please enter the amount",
+    "adjust": "Adjust"
   }
 }
