@@ -129,6 +129,11 @@
     "companyProvidedIdInput": "কোম্পানী প্রদত্ত আইডি",
     "companyProvidedIdInputError": "কোম্পানী প্রদত্ত আইডি লিখুন"
   },
+  "employee": {
+    "nameOfEmployeeInput": "কর্মচারীর নাম",
+    "nameOfEmployeeInputError": "একটি নাম লিখুন",
+    "addEmployee": "কর্মচারী যোগ করুন"
+  },
   "about": {
     "about": "বিষয়ে",
     "tos": "TOS/Privacy",

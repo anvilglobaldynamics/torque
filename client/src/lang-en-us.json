@@ -129,6 +129,11 @@
     "companyProvidedIdInput": "Company Provided Id.",
     "companyProvidedIdInputError": "Please enter Company Provided Id"
   },
+  "employee": {
+    "nameOfEmployeeInput": "Name of Employee.",
+    "nameOfEmployeeInputError": "Please enter a valid name",
+    "addEmployee": "Add Employee"
+  },
   "about": {
     "about": "About",
     "tos": "TOS/Privacy",
