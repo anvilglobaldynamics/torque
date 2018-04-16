@@ -137,6 +137,9 @@
     "findUser": "Find User",
     "hireAsEmployee": "Hire As Employee"
   },
+  "product": {
+    "addProducts": "Add Products"
+  },
   "about": {
     "about": "About",
     "tos": "TOS/Privacy",

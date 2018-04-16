@@ -137,6 +137,9 @@
     "findUser": "ব্যাবহারকারী খুজুন",
     "hireAsEmployee": "কর্মচারী হিসেবে নিয়োগ করুন"
   },
+  "product": {
+    "addProducts": "পণ্য যোগ করুন"
+  },
   "about": {
     "about": "বিষয়ে",
     "tos": "TOS/Privacy",

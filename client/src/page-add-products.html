@@ -17,6 +17,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -137,7 +138,7 @@
         </div>
       </div>
       <div class="transparent-card align-right">
-        <paper-button raised class="primary m-0" on-tap="addProductsTapped">Add Products</paper-button>
+        <paper-button raised class="primary m-0" on-tap="addProductsTapped">[[verses.product.addProducts]]</paper-button>
       </div>
 
     </div>
@@ -145,7 +146,7 @@
   </template>
 
   <script>
-    class PageAddProducts extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageAddProducts extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-add-products';
@@ -172,6 +173,7 @@
         this.app.currentPageIsModal = true;
         this.app.pushPageTitle('Add Products');
         if (!this._ensureAccess()) return;
+        this.useLanguageServices();
         if (!('inventory' in this.params)) {
           let message = "This page cannot be displayed at this moment. Please try again."
           this.app.showModalDialog("Something went wrong!", message, _ => {
