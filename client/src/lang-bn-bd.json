@@ -9,12 +9,15 @@
     "pressBelowButton": "নিচের বাটন চাপুন",
     "pressAboveButton": "উপরের বাটন চাপুন",
     "sorry": "দুঃখিত",
+    "thankYou": "ধন্যবাদ",
     "listIsEmpty": "তালিকা খালি।",
     "search": "খোঁজ",
     "select": "বাছাই",
     "address": "ঠিকানা",
     "comingSoon": "শীঘ্রই আসছে",
-    "confirm": "নিশ্চিত করুন"
+    "confirm": "নিশ্চিত করুন",
+    "somethingWentWrong": "কিছু সমস্যা হয়েছে!",
+    "pageCannotBeDisplayed": "এই পৃষ্ঠাটি এই মুহুর্তে প্রদর্শন করা যাচ্ছে না। অনুগ্রহ করে আবার চেষ্টা করুন।"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -136,10 +139,12 @@
     "addEmployee": "কর্মচারী নিয়োগ করুন",
     "emailOrPhoneInputError": "বৈধ ফোন/ইমেইল লিখুন",
     "findUser": "ব্যাবহারকারী খুজুন",
-    "hireAsEmployee": "কর্মচারী হিসেবে নিয়োগ করুন"
+    "hireAsEmployee": "কর্মচারী হিসেবে নিয়োগ করুন",
+    "newEmployeeCreated": "নতুন কর্মী তৈরি হয়েছে।"
   },
   "product": {
-    "addProducts": "পণ্য যোগ করুন"
+    "addProducts": "পণ্য যোগ করুন",
+    "productAddedToInventory": "পণ্য সফলভাবে তালিকাতে যোগ করা হয়েছে।"
   },
   "about": {
     "about": "বিষয়ে",
@@ -155,12 +160,15 @@
     "withdrawl": "বিয়োগ",
     "amountInput": "পরিমাণ",
     "amountInputError": "পরিমাণ লিখুন",
-    "adjust": "এডজাস্ট"
+    "adjust": "এডজাস্ট",
+    "customerBalanceUpdated": "ক্রেতার ব্যালান্স আপডেট হয়ে গিয়েছে।"
   },
   "confirmPasswordReset": {
     "setNewPassword": "নতুন পাসওয়ার্ড সেট করুন",
     "dontHaveAccount": "অ্যাকাউন্ট নেই?",
     "passwordInput": "আপনার নতুন পাসওয়ার্ড",
-    "retypePasswordInput": "আবার লিখুন আপনার নতুন পাসওয়ার্ড"
+    "retypePasswordInput": "আবার লিখুন আপনার নতুন পাসওয়ার্ড",
+    "newPasswordSet": "আপনি নতুন পাসওয়ার্ড সেট করা হয়েছে। আপনি এখন লগ ইন করতে পারেন।",
+    "retypeIncorrect": "আপনি ভুলভাবে আপনার নতুন পাসওয়ার্ডটি দ্বিতীয় বার লিখেছেন। আবার লিখুন এবং নিশ্চিত করুন।"
   }
 }
