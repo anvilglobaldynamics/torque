@@ -48,7 +48,7 @@ exports.AdjustCustomerBalanceApi = class extends collectionCommonMixin(customerC
   }
 
   _saveAdjustment({ customer }, cbfn) {
-    this.database.customer.updateBalance({ customerId: customer.id }, { balance: customer.balance, additionalPaymentHistory: customer.additionalPaymentHistory }, (err) => {
+    this.legacyDatabase.customer.updateBalance({ customerId: customer.id }, { balance: customer.balance, additionalPaymentHistory: customer.additionalPaymentHistory }, (err) => {
       if (err) return this.fail(err);
       return cbfn()
     });

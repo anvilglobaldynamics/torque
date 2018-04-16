@@ -32,7 +32,7 @@ exports.EditOrganizationApi = class extends collectionCommonMixin(Api) {
   }
 
   _updateOrganization({ organizationId, name, primaryBusinessAddress, phone, email }, cbfn) {
-    this.database.organization.update({ organizationId }, { name, primaryBusinessAddress, phone, email }, (err, wasUpdated) => {
+    this.legacyDatabase.organization.update({ organizationId }, { name, primaryBusinessAddress, phone, email }, (err, wasUpdated) => {
       if (!this._ensureUpdate(err, wasUpdated, "organization")) return;
       return cbfn();
     });

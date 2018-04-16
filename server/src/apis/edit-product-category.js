@@ -55,7 +55,7 @@ exports.EditProductCategoryApi = class extends collectionCommonMixin(Api) {
       err.code = "PARENT_PRODUCT_CATEGORY_INVALID";
       return this.fail(err);
     } else {
-      this.database.productCategory.findById({ productCategoryId: parentProductCategoryId }, (err, parentProductCategory) => {
+      this.legacyDatabase.productCategory.findById({ productCategoryId: parentProductCategoryId }, (err, parentProductCategory) => {
         if (!this._ensureDoc(err, parentProductCategory, "PARENT_PRODUCT_CATEGORY_INVALID", "parent product category not found")) return;
         this._updateProductCategory({ productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn);
       })
@@ -63,7 +63,7 @@ exports.EditProductCategoryApi = class extends collectionCommonMixin(Api) {
   }
 
   _updateProductCategory({ productCategoryId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
-    this.database.productCategory.update({ productCategoryId }, { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, (err, wasUpdated) => {
+    this.legacyDatabase.productCategory.update({ productCategoryId }, { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, (err, wasUpdated) => {
       if (!this._ensureUpdate(err, wasUpdated, "product-category")) return;
       return cbfn();
     });

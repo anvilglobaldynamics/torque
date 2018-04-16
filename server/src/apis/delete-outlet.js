@@ -32,7 +32,7 @@ exports.DeleteOutletApi = class extends collectionCommonMixin(inventoryCommonMix
   }
 
   _deleteOutlet({ outletId }, cbfn) {
-    this._deleteDocById(this.database.outlet, { outletId }, cbfn);
+    this._deleteDocById(this.legacyDatabase.outlet, { outletId }, cbfn);
   }
 
   handle({ body, userId }) {

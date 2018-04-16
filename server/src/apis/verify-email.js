@@ -5,9 +5,9 @@ let Joi = require('joi');
 exports.VerifyEmailApi = class extends Api {
 
   _applyVerificationToken(verificationToken, cbfn) {
-    this.database.emailVerificationRequest.applyVerificationToken({ verificationToken }, (err, forUserId) => {
+    this.legacyDatabase.emailVerificationRequest.applyVerificationToken({ verificationToken }, (err, forUserId) => {
       if (err) return cbfn(err);
-      this.database.user.setEmailAsVerified({ userId: forUserId }, cbfn);
+      this.legacyDatabase.user.setEmailAsVerified({ userId: forUserId }, cbfn);
     })
   }
 

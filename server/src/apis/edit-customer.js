@@ -35,7 +35,7 @@ exports.EditCustomerApi = class extends collectionCommonMixin(Api) {
   }
 
   _updateCustomer({ customerId, fullName, phone }, cbfn) {
-    this.database.customer.update({ customerId }, { fullName, phone }, (err, wasUpdated) => {
+    this.legacyDatabase.customer.update({ customerId }, { fullName, phone }, (err, wasUpdated) => {
       if (!this._ensureUpdate(err, wasUpdated, "customer")) return;
       return cbfn();
     });

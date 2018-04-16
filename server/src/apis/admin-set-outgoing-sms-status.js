@@ -20,7 +20,7 @@ exports.AdminSetOutgoingSmsStatusApi = class extends collectionCommonMixin(Api) 
   }
 
   _updateOutgoingSmsStatus({ status, outgoingSmsId }, cbfn) {
-    this.database.outgoingSms.updateStatus({ outgoingSmsId }, { status }, (err, wasUpdated) => {
+    this.legacyDatabase.outgoingSms.updateStatus({ outgoingSmsId }, { status }, (err, wasUpdated) => {
       if (!this._ensureUpdate(err, wasUpdated, "outgoingSms")) return;
       return cbfn();
     });

@@ -39,14 +39,14 @@ exports.GetSalesApi = class extends collectionCommonMixin(Api) {
   }
 
   _getSales({ salesId }, cbfn) {
-    this.database.sales.findById({ salesId }, (err, sales) => {
+    this.legacyDatabase.sales.findById({ salesId }, (err, sales) => {
       if (!this._ensureDoc(err, sales, "SALES_INVALID", "Sales not found")) return;
       return cbfn(sales);
     });
   }
 
   _addReturnedProductCountToSales({ sales }, cbfn) {
-    this.database.salesReturn.listBySalesId({ salesId: sales.id }, (err, salesReturnList) => {
+    this.legacyDatabase.salesReturn.listBySalesId({ salesId: sales.id }, (err, salesReturnList) => {
       if (salesReturnList.length > 0) {
         salesReturnList.forEach(salesReturn => {
           salesReturn.returnedProductList.forEach(returnedProduct => {
@@ -72,9 +72,9 @@ exports.GetSalesApi = class extends collectionCommonMixin(Api) {
 
   _fetchProductCategoryData({ sales }, cbfn) {
     let productIdList = sales.productList.map(product => product.productId);
-    this.database.product.findByIdList({ idList: productIdList }, (err, productList) => {
+    this.legacyDatabase.product.findByIdList({ idList: productIdList }, (err, productList) => {
       let productCategoryIdList = productList.map(product => product.productCategoryId);
-      this.database.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
+      this.legacyDatabase.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
         productList.forEach(product => {
           let productCategory = productCategoryList.find(productCategory => productCategory.id === product.productCategoryId);
           let matchingProduct = sales.productList.find(salesProduct => salesProduct.productId === product.id);

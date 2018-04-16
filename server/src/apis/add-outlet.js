@@ -34,7 +34,7 @@ exports.AddOutletApi = class extends inventoryCommonMixin(Api) {
     let outlet = {
       name, organizationId, physicalAddress, phone, contactPersonName
     }
-    this.database.outlet.create(outlet, (err, outletId) => {
+    this.legacyDatabase.outlet.create(outlet, (err, outletId) => {
       if (err) return this.fail(err);
       return cbfn(outletId);
     });

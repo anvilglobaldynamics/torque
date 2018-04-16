@@ -19,9 +19,9 @@ class Api {
     _knownErrorCodeList.push(code);
   }
 
-  constructor(server, database, logger, request, response, socket, channel, requestUid = null) {
+  constructor(server, legacyDatabase, logger, request, response, socket, channel, requestUid = null) {
     this.server = server;
-    this.database = database;
+    this.legacyDatabase = legacyDatabase;
     this.logger = logger;
     this._request = request;
     this._response = response;
@@ -222,7 +222,7 @@ class Api {
     let apiKey = body.apiKey;
     delete body['apiKey'];
     if (this.authenticationLevel === 'admin') {
-      this.database.adminSession.findByApiKey({ apiKey }, (err, adminSession) => {
+      this.legacyDatabase.adminSession.findByApiKey({ apiKey }, (err, adminSession) => {
         if (err) return this.fail(err);
         if (!adminSession) {
           err = new Error(this.verses.apiCommon.apikeyInvalid);
@@ -232,7 +232,7 @@ class Api {
         cbfn(null, adminSession.username);
       });
     } else {
-      this.database.session.findByApiKey({ apiKey }, (err, session) => {
+      this.legacyDatabase.session.findByApiKey({ apiKey }, (err, session) => {
         if (err) return this.fail(err);
         if (!session) {
           err = new Error(this.verses.apiCommon.apikeyInvalid);
@@ -253,7 +253,7 @@ class Api {
   __processAccessControlQuery(body, queryObject, cbfn) {
     let { from, query, select } = queryObject;
     query = query(body);
-    this.database.findOne(from, query, (err, doc) => {
+    this.legacyDatabase.findOne(from, query, (err, doc) => {
       if (err) return cbfn(err);
       cbfn(null, doc);
     });
@@ -290,7 +290,7 @@ class Api {
           });
         } else if (typeof (organizationBy) === "string") {
           let organizationId = body[organizationBy];
-          this.database.organization.findById({ organizationId }, (err, organization) => {
+          this.legacyDatabase.organization.findById({ organizationId }, (err, organization) => {
             accept({ err, organization });
           });
         } else {
@@ -299,7 +299,7 @@ class Api {
           }
           this.__processAccessControlQueryArray(body, organizationBy, (err, organizationId) => {
             if (err) return accept({ err });
-            this.database.organization.findById({ organizationId }, (err, organization) => {
+            this.legacyDatabase.organization.findById({ organizationId }, (err, organization) => {
               accept({ err, organization });
             });
           });
@@ -312,7 +312,7 @@ class Api {
           return reject(err);
         }
         let organizationId = organization.id;
-        this.database.employment.getEmploymentOfUserInOrganization({ userId, organizationId }, (err, employment) => {
+        this.legacyDatabase.employment.getEmploymentOfUserInOrganization({ userId, organizationId }, (err, employment) => {
           if (err) return reject(err);
           if (!employment) {
             err = new Error(this.verses.organizationCommon.userNotEmployedByOrganization);

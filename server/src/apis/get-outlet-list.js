@@ -28,7 +28,7 @@ exports.GetOutletListApi = class extends Api {
   }
 
   _getOutletList({ organizationId, searchString }, cbfn) {
-    this.database.outlet.listByOrganizationIdAndSearchString({ organizationId, searchString }, (err, outletList) => {
+    this.legacyDatabase.outlet.listByOrganizationIdAndSearchString({ organizationId, searchString }, (err, outletList) => {
       if (err) return this.fail(err);
       return cbfn(outletList);
     })

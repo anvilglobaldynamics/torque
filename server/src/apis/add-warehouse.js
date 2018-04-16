@@ -34,7 +34,7 @@ exports.AddWarehouseApi = class extends inventoryCommonMixin(Api) {
     let warehouse = {
       name, organizationId, physicalAddress, phone, contactPersonName
     }
-    this.database.warehouse.create(warehouse, (err, warehouseId) => {
+    this.legacyDatabase.warehouse.create(warehouse, (err, warehouseId) => {
       if (err) return this.fail(err);
       return cbfn(warehouseId);
     });

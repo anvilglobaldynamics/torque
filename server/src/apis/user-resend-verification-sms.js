@@ -19,11 +19,11 @@ exports.UserResendVerificationSmsApi = class extends collectionCommonMixin(userC
   }
 
   _resendVerificationSms({ phone }, cbfn) {
-    this.database.user.findByEmailOrPhone({ emailOrPhone: phone }, (err, user) => {
+    this.legacyDatabase.user.findByEmailOrPhone({ emailOrPhone: phone }, (err, user) => {
       if (!this._ensureDoc(err, user, "USER_INVALID", "Sorry. We could not find any user with that phone number.")) return;
       if (err) return this.fail(err);
       let { phone, id: userId } = user;
-      this.database.user.setPhoneAsUnverified({ userId }, (err) => {
+      this.legacyDatabase.user.setPhoneAsUnverified({ userId }, (err) => {
         if (err) return this.fail(err);
         this._createPhoneVerificationRequest({ phone, userId }, (verificationLink) => {
           cbfn();

@@ -3,7 +3,7 @@ exports.customerCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _getCustomer({ customerId }, cbfn) {
     if (customerId) {
-      this.database.customer.findById({ customerId }, (err, customer) => {
+      this.legacyDatabase.customer.findById({ customerId }, (err, customer) => {
         if (err) return this.fail(err);
         if (!this._ensureDoc(err, customer, "CUSTOMER_INVALID", "Customer not found.")) return;
         return cbfn(customer);
@@ -16,7 +16,7 @@ exports.customerCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   _updateCustomerBalance({ diff, customer }, cbfn) {
     let balance = diff;
     let customerId = customer.id;
-    this.database.customer.updateBalanceOnly({ customerId }, { balance }, (err) => {
+    this.legacyDatabase.customer.updateBalanceOnly({ customerId }, { balance }, (err) => {
       if (err) return this.fail(err);
       return cbfn();
     });
@@ -33,7 +33,7 @@ exports.customerCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
   _verifyCustomerExist({ customerId }, cbfn) {
-    this.database.customer.findById({ customerId }, (err, customer) => {
+    this.legacyDatabase.customer.findById({ customerId }, (err, customer) => {
       if (!this._ensureDoc(err, customer, "CUSTOMER_INVALID", "Customer not found.")) return;
       cbfn(customer);
     });

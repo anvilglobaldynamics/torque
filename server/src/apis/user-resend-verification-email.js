@@ -19,10 +19,10 @@ exports.UserResendVerificationEmailApi = class extends collectionCommonMixin(use
   }
 
   _resendVerificationEmail({ email }, cbfn) {
-    this.database.user.findByEmailOrPhone({ emailOrPhone: email }, (err, user) => {
+    this.legacyDatabase.user.findByEmailOrPhone({ emailOrPhone: email }, (err, user) => {
       if (!this._ensureDoc(err, user, "USER_INVALID", "Sorry. We could not find any user with that phone number.")) return;
       let { email, id: userId } = user;
-      this.database.user.setEmailAsUnverified({ userId }, (err) => {
+      this.legacyDatabase.user.setEmailAsUnverified({ userId }, (err) => {
         if (err) return this.fail(err);
         this._createEmailVerificationRequest({ email, userId }, (verificationLink) => {
           cbfn();

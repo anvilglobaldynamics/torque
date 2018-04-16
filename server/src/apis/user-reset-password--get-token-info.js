@@ -17,7 +17,7 @@ exports.UserResetPasswordGetTokenInfoApi = class extends collectionCommonMixin(A
   }
 
   _getTokenInfoIfValid({ uniqueToken: confirmationToken }, cbfn) {
-    this.database.passwordResetRequest.findByConfirmationToken({ confirmationToken }, (err, passwordResetRequest) => {
+    this.legacyDatabase.passwordResetRequest.findByConfirmationToken({ confirmationToken }, (err, passwordResetRequest) => {
       if (!this._ensureDoc(err, passwordResetRequest, "PASSWORD_RESET_TOKEN_INVALID", "Invalid password reset token provided.")) return;
       let { forEmail, forUserId, forPhone } = passwordResetRequest;
       let tokenInfo = { forEmail, forPhone };

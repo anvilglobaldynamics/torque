@@ -33,10 +33,10 @@ exports.AdminLoginApi = class extends userCommonMixin(Api) {
 
   _createSession({ username }, cbfn) {
     let apiKey = generateRandomString(64);
-    this.database.adminSession.isApiKeyUnique({ apiKey }, (err, isUnique) => {
+    this.legacyDatabase.adminSession.isApiKeyUnique({ apiKey }, (err, isUnique) => {
       if (err) return this.fail(err);
       if (!isUnique) return this._createSession({ username }, cbfn);
-      this.database.adminSession.create({ username, apiKey }, (err, sessionId) => {
+      this.legacyDatabase.adminSession.create({ username, apiKey }, (err, sessionId) => {
         if (err) return this.fail(err);
         return cbfn({ apiKey, sessionId });
       });

@@ -6,7 +6,7 @@ exports.InternalStatus = class extends Api {
   _showSuccess() {
     let body = "Server: Online<br>"
     body += "APIs: Active<br>"
-    body += "Database: Active<br>"
+    body += "LegacyDatabase: Active<br>"
     body += "Email System: Disabled<br>"
     body += "SMS System: Disabled<br>"
     body += "Requests Served: Not Exposed<br>"

@@ -54,7 +54,7 @@ exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(
     let promiseList = [];
     returnedProductList.forEach(product => {
       let promise = new Promise((accept, reject) => {
-        this.database.inventory.addProduct({ inventoryId: outletReturnedInventory.id }, { productId: product.productId, count: product.count }, (err) => {
+        this.legacyDatabase.inventory.addProduct({ inventoryId: outletReturnedInventory.id }, { productId: product.productId, count: product.count }, (err) => {
           if (err) return reject(err);
           accept();
         });
@@ -76,7 +76,7 @@ exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(
     let productIdList = returnedProductList.map(product => product.productId);
     let payment = 0;
 
-    this.database.product.findByIdList({ idList: productIdList }, (err, productList) => {
+    this.legacyDatabase.product.findByIdList({ idList: productIdList }, (err, productList) => {
       productList.forEach(product => {
         let promise = new Promise((accept, reject) => {
           payment += product.salePrice;
@@ -100,7 +100,7 @@ exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(
   }
 
   _addSalesReturn({ salesId, returnedProductList, creditedAmount }, cbfn) {
-    this.database.salesReturn.create({ salesId, returnedProductList, creditedAmount }, (err, salesReturnId) => {
+    this.legacyDatabase.salesReturn.create({ salesId, returnedProductList, creditedAmount }, (err, salesReturnId) => {
       return cbfn(salesReturnId);
     })
   }

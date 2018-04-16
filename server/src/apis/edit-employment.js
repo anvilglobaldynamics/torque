@@ -75,7 +75,7 @@ exports.EditEmploymentApi = class extends collectionCommonMixin(Api) {
   }
 
   _updateEmployment({ employmentId, isActive, role, designation, companyProvidedId, privileges }, cbfn) {
-    this.database.employment.update({ employmentId }, { isActive, role, designation, companyProvidedId, privileges }, (err, wasUpdated) => {
+    this.legacyDatabase.employment.update({ employmentId }, { isActive, role, designation, companyProvidedId, privileges }, (err, wasUpdated) => {
       if (!this._ensureUpdate(err, wasUpdated, "outlet")) return;
       return cbfn();
     });

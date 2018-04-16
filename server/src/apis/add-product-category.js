@@ -44,7 +44,7 @@ exports.AddProductCategoryApi = class extends collectionCommonMixin(Api) {
   }
 
   _createProductCategory(productCategory, cbfn) {
-    this.database.productCategory.create(productCategory, (err, productCategoryId) => {
+    this.legacyDatabase.productCategory.create(productCategory, (err, productCategoryId) => {
       if (err) return this.fail(err);
       return cbfn(productCategoryId);
     });
@@ -58,7 +58,7 @@ exports.AddProductCategoryApi = class extends collectionCommonMixin(Api) {
     if (parentProductCategoryId === null) {
       this._createProductCategory(productCategory, cbfn);
     } else {
-      this.database.productCategory.findById({ productCategoryId: parentProductCategoryId }, (err, parentProductCategory) => {
+      this.legacyDatabase.productCategory.findById({ productCategoryId: parentProductCategoryId }, (err, parentProductCategory) => {
         if (!this._ensureDoc(err, parentProductCategory, "PARENT_PRODUCT_CATEGORY_INVALID", "parent product category not found")) return;
         this._createProductCategory(productCategory, cbfn);
       })

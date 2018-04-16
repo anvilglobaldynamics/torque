@@ -113,7 +113,7 @@ class Server {
 
         let { ApiClass } = route;
         this.logger.info('WS', `${message.path} ${message.requestUid}`);
-        let api = new ApiClass(this, this.database, this.logger, null, null, ws, 'ws', message.requestUid);
+        let api = new ApiClass(this, this.legacyDatabase, this.logger, null, null, ws, 'ws', message.requestUid);
         api._prehandlePostOrWsApi(message.body);
 
       });
@@ -126,8 +126,8 @@ class Server {
     this.logger = logger;
   }
 
-  setDatabase(database) {
-    this.database = database;
+  setDatabase(legacyDatabase) {
+    this.legacyDatabase = legacyDatabase;
   }
 
   setEmailService(emailService) {
@@ -145,7 +145,7 @@ class Server {
   registerGetApi(path, ApiClass) {
     this._expressApp.get(path, jsonParser, (req, res) => {
       this.logger.info('GET', req.url);
-      let api = new ApiClass(this, this.database, this.logger, req, res, null, 'get');
+      let api = new ApiClass(this, this.legacyDatabase, this.logger, req, res, null, 'get');
       api._prehandleGetApi();
     });
   }
@@ -153,7 +153,7 @@ class Server {
   registerPostApi(path, ApiClass) {
     this._expressApp.post(path, jsonParser, (req, res) => {
       this.logger.info('POST', req.url);
-      let api = new ApiClass(this, this.database, this.logger, req, res, null, 'post');
+      let api = new ApiClass(this, this.legacyDatabase, this.logger, req, res, null, 'post');
       api._prehandlePostOrWsApi(req.body);
     });
     this._wsApiList.push({

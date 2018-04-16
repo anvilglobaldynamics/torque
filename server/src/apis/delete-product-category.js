@@ -31,7 +31,7 @@ exports.DeleteProductCategoryApi = class extends collectionCommonMixin(Api) {
   }
 
   _checkAndDeleteProductCategory({ productCategoryId }, cbfn) {
-    this.database.productCategory.listChildren({ productCategoryId }, (err, productCategoryChildList) => {
+    this.legacyDatabase.productCategory.listChildren({ productCategoryId }, (err, productCategoryChildList) => {
       if (err) return this.fail(err);
       if (productCategoryChildList.length > 0) {
         err = new Error("product category is parent of atleast one category");
@@ -43,7 +43,7 @@ exports.DeleteProductCategoryApi = class extends collectionCommonMixin(Api) {
   }
 
   _deleteProductCategory({ productCategoryId }, cbfn) {
-    this._deleteDocById(this.database.productCategory, { productCategoryId }, cbfn);
+    this._deleteDocById(this.legacyDatabase.productCategory, { productCategoryId }, cbfn);
   }
 
   handle({ body, userId }) {

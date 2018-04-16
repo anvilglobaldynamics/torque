@@ -32,7 +32,7 @@ exports.DeleteWarehouseApi = class extends collectionCommonMixin(inventoryCommon
   }
 
   _deleteWarehouse({ warehouseId }, cbfn) {
-    this._deleteDocById(this.database.warehouse, { warehouseId }, cbfn);
+    this._deleteDocById(this.legacyDatabase.warehouse, { warehouseId }, cbfn);
   }
 
   handle({ body, userId }) {

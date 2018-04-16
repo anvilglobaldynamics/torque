@@ -33,7 +33,7 @@ exports.GetWarehouseApi = class extends collectionCommonMixin(inventoryCommonMix
   }
 
   _getWarehouse({ warehouseId }, cbfn) {
-    this.database.warehouse.findById({ warehouseId }, (err, warehouse) => {
+    this.legacyDatabase.warehouse.findById({ warehouseId }, (err, warehouse) => {
       if (!this._ensureDoc(err, warehouse, "WAREHOUSE_INVALID", "Warehouse not found")) return;
       cbfn(warehouse);
     })

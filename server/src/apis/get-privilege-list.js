@@ -12,7 +12,7 @@ exports.GetPrivilegeListApi = class extends Api {
   }
 
   handle({ body }) {
-    this.database.fixture.getPrivilegeList((err, privilegeList) => {
+    this.legacyDatabase.fixture.getPrivilegeList((err, privilegeList) => {
       if (err) return this.fail(err);
       this.success({ privilegeList });
     });

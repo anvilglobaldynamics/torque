@@ -28,7 +28,7 @@ exports.GetCustomerSummaryListApi = class extends Api {
   }
 
   _getCustomerSummaryList({ organizationId, searchString }, cbfn) {
-    this.database.customer.listByOrganizationIdAndSearchString({ organizationId, searchString }, (err, customerList) => {
+    this.legacyDatabase.customer.listByOrganizationIdAndSearchString({ organizationId, searchString }, (err, customerList) => {
       if (err) return this.fail(err);
       return cbfn(customerList);
     });

@@ -11,7 +11,7 @@ let make = (array, count) => {
   return array;
 };
 
-class Database {
+class LegacyDatabase {
 
   constructor({ path, name }) {
     this._mongodbPath = path;
@@ -200,4 +200,4 @@ class Database {
 
 }
 
-exports.Database = Database;
+exports.LegacyDatabase = LegacyDatabase;

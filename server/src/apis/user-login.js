@@ -32,7 +32,7 @@ exports.UserLoginApi = class extends userCommonMixin(Api) {
   */
   _getUserIfValid({ emailOrPhone, password }, cbfn) {
     let passwordHash = this._makeHash(password);
-    this.database.user.findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }, (err, user) => {
+    this.legacyDatabase.user.findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }, (err, user) => {
       if (err) return this.fail(err);
       if (!user) {
         let err = new Error(this.verses.userLoginApi.userNotFound);
@@ -46,7 +46,7 @@ exports.UserLoginApi = class extends userCommonMixin(Api) {
       }
       let warning = [];
       if (emailOrPhone === user.phone && !user.isPhoneVerified) {
-        this.database.phoneVerificationRequest.findByForPhone({ forPhone: user.phone }, (err, phoneVerificationRequest) => {
+        this.legacyDatabase.phoneVerificationRequest.findByForPhone({ forPhone: user.phone }, (err, phoneVerificationRequest) => {
           if (err) return this.fail(err);
           if (!phoneVerificationRequest) {
             err = new Error(this.verses.userLoginApi.phoneVerificationRequestNotFound);
@@ -69,7 +69,7 @@ exports.UserLoginApi = class extends userCommonMixin(Api) {
           return cbfn({ user, warning });
         });
       } else if (emailOrPhone === user.email && !user.isEmailVerified) {
-        this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email }, (err, emailVerificationRequest) => {
+        this.legacyDatabase.emailVerificationRequest.findByForEmail({ forEmail: user.email }, (err, emailVerificationRequest) => {
           if (err) return this.fail(err);
           if (!emailVerificationRequest) {
             err = new Error(this.verses.userLoginApi.emailVerificationRequestNotFound);
@@ -92,10 +92,10 @@ exports.UserLoginApi = class extends userCommonMixin(Api) {
 
   _createSession(userId, cbfn) {
     let apiKey = generateRandomString(64);
-    this.database.session.isApiKeyUnique({ apiKey }, (err, isUnique) => {
+    this.legacyDatabase.session.isApiKeyUnique({ apiKey }, (err, isUnique) => {
       if (err) return this.fail(err);
       if (!isUnique) return this._createSession({ userId }, cbfn);
-      this.database.session.create({ userId, apiKey }, (err, sessionId) => {
+      this.legacyDatabase.session.create({ userId, apiKey }, (err, sessionId) => {
         if (err) return this.fail(err);
         return cbfn({ apiKey, sessionId });
       });

@@ -21,7 +21,7 @@ exports.AdminGetAggregatedUserListApi = class extends organizationCommonMixin(co
 
   _getAggregatedUserList({ userSearchString }, cbfn) {
     let userSearchRegex = new RegExp(userSearchString, 'i');
-    this.database.user.findByCommonFields({ userSearchRegex }, (err, userList) => {
+    this.legacyDatabase.user.findByCommonFields({ userSearchRegex }, (err, userList) => {
       if (err) return this.fail(err);
       Promise.all(userList.map(user => new Promise((accept, reject) => {
         this._getOrganizationsThatEmployedUser({ userId: user.id }, (organizationList) => {

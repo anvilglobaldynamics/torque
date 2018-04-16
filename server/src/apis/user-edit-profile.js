@@ -31,10 +31,10 @@ exports.UserEditProfileApi = class extends userCommonMixin(phoneVerificationRequ
     let { userId, email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = data;
     data = { userId, email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup };
 
-    this.database.user.findById({ userId }, (err, user) => {
+    this.legacyDatabase.user.findById({ userId }, (err, user) => {
       if (err) return this.fail(err);
 
-      this.database.user.update({ userId }, data, (err) => {
+      this.legacyDatabase.user.update({ userId }, data, (err) => {
         if (err) return this.fail(err);
 
         let doesRequireLogin = false;
@@ -43,7 +43,7 @@ exports.UserEditProfileApi = class extends userCommonMixin(phoneVerificationRequ
         if (user.email !== email) {
           doesRequireLogin = true;
           promiseList.push(new Promise((accept, reject) => {
-            this.database.user.setEmailAsUnverified({ userId }, (err) => {
+            this.legacyDatabase.user.setEmailAsUnverified({ userId }, (err) => {
               if (err) return reject(err);
               this._createEmailVerificationRequest({ email, userId }, (verificationLink) => {
                 accept();
@@ -56,7 +56,7 @@ exports.UserEditProfileApi = class extends userCommonMixin(phoneVerificationRequ
         if (user.phone !== phone) {
           doesRequireLogin = true;
           promiseList.push(new Promise((accept, reject) => {
-            this.database.user.setPhoneAsUnverified({ userId }, (err) => {
+            this.legacyDatabase.user.setPhoneAsUnverified({ userId }, (err) => {
               if (err) return reject(err);
               this._createPhoneVerificationRequest({ phone, userId }, (verificationLink) => {
                 accept();

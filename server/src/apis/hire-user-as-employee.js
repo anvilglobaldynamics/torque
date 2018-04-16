@@ -72,7 +72,7 @@ exports.HireUserAsEmployeeApi = class extends userCommonMixin(collectionCommonMi
   // FIXME: Check if the user is employed in THIS organization. User can be employed in other organizations
   // without repercussions.
   _checkIfUserEmployed({ userId }, cbfn) {
-    this.database.employment.getActiveEmploymentsOfUser({ userId }, (err, employmentList) => {
+    this.legacyDatabase.employment.getActiveEmploymentsOfUser({ userId }, (err, employmentList) => {
       if (err) return this.fail(err);
       if (employmentList.length > 0) {
         err = new Error("User is already employed");
@@ -84,7 +84,7 @@ exports.HireUserAsEmployeeApi = class extends userCommonMixin(collectionCommonMi
   }
 
   _hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, cbfn) {
-    this.database.employment.hireExistingUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (err, employmentId) => {
+    this.legacyDatabase.employment.hireExistingUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (err, employmentId) => {
       return cbfn(employmentId);
     })
   }

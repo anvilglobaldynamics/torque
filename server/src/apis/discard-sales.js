@@ -38,7 +38,7 @@ exports.DiscardSalesApi = class extends collectionCommonMixin(Api) {
   }
 
   _discardSales({ salesId }, cbfn) {
-    this._discardDocById(this.database.sales, { salesId }, cbfn);
+    this._discardDocById(this.legacyDatabase.sales, { salesId }, cbfn);
   }
 
   handle({ body, userId }) {

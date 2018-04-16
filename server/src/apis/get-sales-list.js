@@ -58,7 +58,7 @@ exports.GetSalesListApi = class extends salesCommonMixin(outletCommonMixin(custo
         if (!sales.customerId) {
           return accept();
         }
-        this.database.customer.findById({ customerId: sales.customerId }, (err, customer) => {
+        this.legacyDatabase.customer.findById({ customerId: sales.customerId }, (err, customer) => {
           if (err) return reject(err);
           if (!this._ensureDoc(err, customer, "CUSTOMER_INVALID", "Customer not found.")) return;
           sales.customer = customer;
@@ -67,7 +67,7 @@ exports.GetSalesListApi = class extends salesCommonMixin(outletCommonMixin(custo
       });
       let productCategoryPromise = new Promise((accept, reject) => {
         let productIdList = sales.productList.map(product => product.productId);
-        this.database.product.findByIdList({ idList: productIdList }, (err, productList) => {
+        this.legacyDatabase.product.findByIdList({ idList: productIdList }, (err, productList) => {
           if (err) return reject(err);
           if (productList.length !== productList.length) {
             err = new Error("Unable to find all products in productList");
@@ -75,7 +75,7 @@ exports.GetSalesListApi = class extends salesCommonMixin(outletCommonMixin(custo
             return reject(err);
           }
           let productCategoryIdList = productList.map(product => product.productCategoryId);
-          this.database.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
+          this.legacyDatabase.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
             if (err) return reject(err);
             productCategoryList.forEach(productCategory => {
               let _product = productList.find(product => product.productCategoryId === productCategory.id);

@@ -32,7 +32,7 @@ exports.GetCustomerApi = class extends collectionCommonMixin(Api) {
   }
 
   _getCustomer({ customerId }, cbfn) {
-    this.database.customer.findById({ customerId }, (err, customer) => {
+    this.legacyDatabase.customer.findById({ customerId }, (err, customer) => {
       if (!this._ensureDoc(err, customer, "CUSTOMER_INVALID", "Customer not found.")) return;
       cbfn(customer);
     });

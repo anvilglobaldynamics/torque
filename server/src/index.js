@@ -5,7 +5,7 @@ let { detectMode } = require('./utils/detect-mode.js');
 
 let { Server } = require('./server');
 let { Logger } = require('./logger');
-let { Database } = require('./database');
+let { LegacyDatabase } = require('./legacy-database');
 let { ConfigLoader } = require('./config-loader');
 const { EmailService } = require('./email-service');
 const { SmsService } = require('./sms-service');
@@ -111,7 +111,7 @@ let { SalesReturnCollection } = require('./legacy-collections/sales-return');
 let { AdminSessionCollection } = require('./legacy-collections/admin-session');
 let { OutgoingSmsCollection } = require('./legacy-collections/outgoing-sms');
 
-let config, logger, database, server, emailService, smsService, templateManager, fixtureManager;
+let config, logger, legacyDatabase, server, emailService, smsService, templateManager, fixtureManager;
 
 let mode = detectMode();
 
@@ -123,8 +123,8 @@ class Program {
   }
 
   // NOTE: Intended to be used during testing
-  exposeDatabaseForTesting() {
-    return database;
+  exposeLegacyDatabaseForTesting() {
+    return legacyDatabase;
   }
 
   // NOTE: Intended to be used during testing or by process manager
@@ -141,31 +141,31 @@ class Program {
   }
 
   async __initializeDatabase() {
-    await promisify(database, database.initialize);
-    logger.info('(server)> database initialized.');
-    database.registerCollection('fixture', FixtureCollection);
-    database.registerCollection('user', UserCollection);
-    database.registerCollection('emailVerificationRequest', EmailVerificationRequestCollection);
-    database.registerCollection('phoneVerificationRequest', PhoneVerificationRequestCollection);
-    database.registerCollection('session', SessionCollection);
-    database.registerCollection('organization', OrganizationCollection);
-    database.registerCollection('employment', EmploymentCollection);
-    database.registerCollection('customer', CustomerCollection);
-    database.registerCollection('outlet', OutletCollection);
-    database.registerCollection('warehouse', WarehouseCollection);
-    database.registerCollection('productCategory', ProductCategoryCollection);
-    database.registerCollection('passwordResetRequest', PasswordResetRequestCollection);
-    database.registerCollection('inventory', InventoryCollection);
-    database.registerCollection('product', ProductCollection);
-    database.registerCollection('sales', SalesCollection);
-    database.registerCollection('salesReturn', SalesReturnCollection);
-    database.registerCollection('adminSession', AdminSessionCollection);
-    database.registerCollection('outgoingSms', OutgoingSmsCollection);
-    server.setDatabase(database);
+    await promisify(legacyDatabase, legacyDatabase.initialize);
+    logger.info('(server)> legacyDatabase initialized.');
+    legacyDatabase.registerCollection('fixture', FixtureCollection);
+    legacyDatabase.registerCollection('user', UserCollection);
+    legacyDatabase.registerCollection('emailVerificationRequest', EmailVerificationRequestCollection);
+    legacyDatabase.registerCollection('phoneVerificationRequest', PhoneVerificationRequestCollection);
+    legacyDatabase.registerCollection('session', SessionCollection);
+    legacyDatabase.registerCollection('organization', OrganizationCollection);
+    legacyDatabase.registerCollection('employment', EmploymentCollection);
+    legacyDatabase.registerCollection('customer', CustomerCollection);
+    legacyDatabase.registerCollection('outlet', OutletCollection);
+    legacyDatabase.registerCollection('warehouse', WarehouseCollection);
+    legacyDatabase.registerCollection('productCategory', ProductCategoryCollection);
+    legacyDatabase.registerCollection('passwordResetRequest', PasswordResetRequestCollection);
+    legacyDatabase.registerCollection('inventory', InventoryCollection);
+    legacyDatabase.registerCollection('product', ProductCollection);
+    legacyDatabase.registerCollection('sales', SalesCollection);
+    legacyDatabase.registerCollection('salesReturn', SalesReturnCollection);
+    legacyDatabase.registerCollection('adminSession', AdminSessionCollection);
+    legacyDatabase.registerCollection('outgoingSms', OutgoingSmsCollection);
+    server.setDatabase(legacyDatabase);
   }
 
   async __initializeComponents() {
-    await promisify(fixtureManager, fixtureManager.initialize, database);
+    await promisify(fixtureManager, fixtureManager.initialize, legacyDatabase);
     logger.info('(server)> fixtures initialized.');
 
     await promisify(templateManager, templateManager.initialize);
@@ -258,10 +258,10 @@ class Program {
     try {
       config = await promisify(ConfigLoader, ConfigLoader.getComputedConfig, this.muteLogger, mode);
       server = new Server(config, mode);
-      database = new Database(config.db);
+      legacyDatabase = new LegacyDatabase(config.db);
       logger = new Logger(config.log, this.muteLogger);
       emailService = new EmailService(config, mode);
-      smsService = new SmsService(config, database);
+      smsService = new SmsService(config, legacyDatabase);
       templateManager = new TemplateManager(config);
       fixtureManager = new FixtureManager(config);
       await this.__initializeLogger();

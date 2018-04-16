@@ -31,7 +31,7 @@ exports.AddCustomerApi = class extends Api {
     let customer = {
       organizationId, fullName, phone, openingBalance, acceptedByUserId
     }
-    this.database.customer.create(customer, (err, customerId) => {
+    this.legacyDatabase.customer.create(customer, (err, customerId) => {
       if (err) return this.fail(err);
       return cbfn(customerId);
     });

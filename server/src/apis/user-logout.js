@@ -16,9 +16,9 @@ exports.UserLogoutApi = class extends collectionCommonMixin(Api) {
   }
 
   handle({ body, userId, apiKey }) {
-    this.database.session.findByApiKey({ apiKey }, (err, session) => {
+    this.legacyDatabase.session.findByApiKey({ apiKey }, (err, session) => {
       if (err) return this.fail(err);
-      this.database.session.close({ sessionId: session.id }, (err, wasUpdated) => {
+      this.legacyDatabase.session.close({ sessionId: session.id }, (err, wasUpdated) => {
         if (!this._ensureUpdate(err, wasUpdated, "session")) return;
         this.success({ status: "success" });
       })

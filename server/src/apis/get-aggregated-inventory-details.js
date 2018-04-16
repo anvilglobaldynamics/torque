@@ -32,7 +32,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
   }
 
   _getInventory({ inventoryId }, cbfn) {
-    this.database.inventory.findById({ inventoryId }, (err, inventory) => {
+    this.legacyDatabase.inventory.findById({ inventoryId }, (err, inventory) => {
       if (err) return this.fail(err);
       if (!this._ensureDoc(err, inventory, "INVENTORY_INVALID", "inventory could not be found")) return;
       cbfn(inventory);
@@ -51,9 +51,9 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
       cbfn(inventoryContainerDetails);
     }
     if (inventory.inventoryContainerType === "outlet") {
-      this.database.outlet.findById({ outletId: inventory.inventoryContainerId }, _cbfn);
+      this.legacyDatabase.outlet.findById({ outletId: inventory.inventoryContainerId }, _cbfn);
     } else {
-      this.database.warehouse.findById({ warehouseId: inventory.inventoryContainerId }, _cbfn);
+      this.legacyDatabase.warehouse.findById({ warehouseId: inventory.inventoryContainerId }, _cbfn);
     }
 
   }
@@ -67,7 +67,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
 
   _getMatchingProductList({ productList }, cbfn) {
     let productIdList = productList.map(product => product.productId);
-    this.database.product.findByIdList({ idList: productIdList }, (err, matchingProductList) => {
+    this.legacyDatabase.product.findByIdList({ idList: productIdList }, (err, matchingProductList) => {
       if (err) return this.fail(err);
       cbfn(matchingProductList)
     })
@@ -75,7 +75,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(A
 
   _getMatchingProductCategoryList({ matchingProductList }, cbfn) {
     let productCategoryIdList = matchingProductList.map(product => product.productCategoryId);
-    this.database.productCategory.listByIdList({ idList: productCategoryIdList }, (err, matchingProductCategoryList) => {
+    this.legacyDatabase.productCategory.listByIdList({ idList: productCategoryIdList }, (err, matchingProductCategoryList) => {
       if (err) return this.fail(err);
       cbfn(matchingProductCategoryList)
     })

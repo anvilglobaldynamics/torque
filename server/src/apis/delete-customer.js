@@ -31,7 +31,7 @@ exports.DeleteCustomerApi = class extends collectionCommonMixin(Api) {
   }
 
   _deleteCustomer({ customerId }, cbfn) {
-    this._deleteDocById(this.database.customer, { customerId }, cbfn);
+    this._deleteDocById(this.legacyDatabase.customer, { customerId }, cbfn);
   }
 
   handle({ body }) {

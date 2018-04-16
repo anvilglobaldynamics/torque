@@ -95,7 +95,7 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
   }
 
   _addSales({ outletId, customerId, productList, payment }, cbfn) {
-    this.database.sales.create({ outletId, customerId, productList, payment }, (err, salesId) => {
+    this.legacyDatabase.sales.create({ outletId, customerId, productList, payment }, (err, salesId) => {
       if (err) return this.fail(err);
       cbfn(salesId);
     })

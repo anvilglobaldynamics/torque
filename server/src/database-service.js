@@ -30,7 +30,7 @@ class DatabaseService {
 
   getDatabaseHandle() {
     if (!this._db) {
-      throw new Error("DeveloperError: Premature request for mongodb database handle.");
+      throw new Error("DeveloperError: Premature request for mongodb Database handle.");
     }
     return this._db;
   }

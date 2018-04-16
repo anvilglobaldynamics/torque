@@ -49,10 +49,10 @@ exports.TransferBetweenInventoriesApi = class extends collectionCommonMixin(Api)
   }
 
   _getInventoriesWithId({ fromInventoryId, toInventoryId }, cbfn) {
-    this.database.inventory.findById({ inventoryId: fromInventoryId }, (err, inventory) => {
+    this.legacyDatabase.inventory.findById({ inventoryId: fromInventoryId }, (err, inventory) => {
       if (!this._ensureDoc(err, inventory, "FROM_INVENTORY_INVALID", "Inventory could not be found")) return;
       let fromInventory = inventory;
-      this.database.inventory.findById({ inventoryId: toInventoryId }, (err, inventory) => {
+      this.legacyDatabase.inventory.findById({ inventoryId: toInventoryId }, (err, inventory) => {
         if (!this._ensureDoc(err, inventory, "TO_INVENTORY_INVALID", "Inventory could not be found")) return;
         let toInventory = inventory;
         cbfn(fromInventory, toInventory);
@@ -89,11 +89,11 @@ exports.TransferBetweenInventoriesApi = class extends collectionCommonMixin(Api)
   _updateInventories({ fromInventory, toInventory }, cbfn) {
     let inventoryId = fromInventory.id;
     let productList = fromInventory.productList;
-    this.database.inventory.updateProductList({ inventoryId }, { productList }, (err) => {
+    this.legacyDatabase.inventory.updateProductList({ inventoryId }, { productList }, (err) => {
       if (err) return this.fail();
       inventoryId = toInventory.id;
       productList = toInventory.productList;
-      this.database.inventory.updateProductList({ inventoryId }, { productList }, (err) => {
+      this.legacyDatabase.inventory.updateProductList({ inventoryId }, { productList }, (err) => {
         if (err) return this.fail();
         cbfn();
       });

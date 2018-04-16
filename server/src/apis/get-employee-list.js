@@ -27,7 +27,7 @@ exports.GetEmployeeListApi = class extends Api {
   }
 
   _getEmployeeList({ organizationId }, cbfn) {
-    this.database.employment.listByOrganizationId({ organizationId }, (err, employeeList) => {
+    this.legacyDatabase.employment.listByOrganizationId({ organizationId }, (err, employeeList) => {
       if (err) return this.fail(err);
       cbfn(employeeList);
     })
@@ -35,7 +35,7 @@ exports.GetEmployeeListApi = class extends Api {
 
   _getUserList({ employeeList }, cbfn) {
     let userIdList = employeeList.map(employee => employee.userId);
-    this.database.user.listByIdList({ idList: userIdList }, (err, userList) => {
+    this.legacyDatabase.user.listByIdList({ idList: userIdList }, (err, userList) => {
       if (err) return this.fail(err);
       cbfn(userList);
     })

@@ -34,7 +34,7 @@ exports.AddOrganizationApi = class extends userCommonMixin(Api) {
       name, primaryBusinessAddress, phone, email,
       licenceExpiresOnDatetimeStamp
     }
-    this.database.organization.create(organization, (err, organizationId) => {
+    this.legacyDatabase.organization.create(organization, (err, organizationId) => {
       if (err) return this.fail(err);
       return cbfn(organizationId);
     });

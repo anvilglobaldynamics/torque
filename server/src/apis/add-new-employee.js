@@ -73,7 +73,7 @@ exports.AddNewEmployeeApi = class extends phoneVerificationRequestMixin(userComm
   }
 
   _hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, cbfn) {
-    this.database.employment.hireExistingUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (err, employmentId) => {
+    this.legacyDatabase.employment.hireExistingUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (err, employmentId) => {
       return cbfn(employmentId);
     })
   }

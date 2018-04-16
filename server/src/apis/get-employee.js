@@ -33,7 +33,7 @@ exports.GetEmployeeApi = class extends collectionCommonMixin(userCommonMixin(Api
   }
 
   _getEmployee({ employmentId }, cbfn) {
-    this.database.employment.getEmploymentById({ employmentId }, (err, employee) => {
+    this.legacyDatabase.employment.getEmploymentById({ employmentId }, (err, employee) => {
       if (!this._ensureDoc(err, employee, "EMPLOYEE_INVALID", "Employee does not exist")) return;
       return cbfn(employee);
     })

@@ -49,13 +49,13 @@ exports.GetSalesReturnListApi = class extends outletCommonMixin(customerCommonMi
   }
 
   _getSalesReturnList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, cbfn) {
-    this.database.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {
+    this.legacyDatabase.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {
       if (err) return this.fail(err);
       let outletIdList = outletList.map(outlet => outlet.id);
-      this.database.sales.listByFiltersForSalesReturn({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer }, (err, salesList) => {
+      this.legacyDatabase.sales.listByFiltersForSalesReturn({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer }, (err, salesList) => {
         if (err) return this.fail(err);
         let salesIdList = salesList.map(sales => sales.id);
-        this.database.salesReturn.listByFilters({ salesIdList, fromDate, toDate }, (err, salesReturnList) => {
+        this.legacyDatabase.salesReturn.listByFilters({ salesIdList, fromDate, toDate }, (err, salesReturnList) => {
           return cbfn(salesReturnList);
         });
       });

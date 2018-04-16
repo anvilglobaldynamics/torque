@@ -5,9 +5,9 @@ let Joi = require('joi');
 exports.VerifyPhoneApi = class extends Api {
 
   _applyVerificationToken(verificationToken, cbfn) {
-    this.database.phoneVerificationRequest.applyVerificationToken({ verificationToken }, (err, forUserId) => {
+    this.legacyDatabase.phoneVerificationRequest.applyVerificationToken({ verificationToken }, (err, forUserId) => {
       if (err) return cbfn(err);
-      this.database.user.setPhoneAsVerified({ userId: forUserId }, cbfn);
+      this.legacyDatabase.user.setPhoneAsVerified({ userId: forUserId }, cbfn);
     })
   }
 

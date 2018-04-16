@@ -27,7 +27,7 @@ exports.GetWarehouseListApi = class extends Api {
   }
 
   _getWarehouseList({ organizationId }, cbfn) {
-    this.database.warehouse.listByOrganizationId({ organizationId }, (err, warehouseList) => {
+    this.legacyDatabase.warehouse.listByOrganizationId({ organizationId }, (err, warehouseList) => {
       if (err) return this.fail(err);
       cbfn(warehouseList);
     })

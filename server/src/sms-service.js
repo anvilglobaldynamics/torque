@@ -1,9 +1,9 @@
 
 class SmsService {
 
-  constructor(config, database) {
+  constructor(config, legacyDatabase) {
     this.config = config;
-    this.database = database;
+    this.legacyDatabase = legacyDatabase;
     let { from, enabled } = config.sms;
     this.from = from;
     this.enabled = enabled;
@@ -57,7 +57,7 @@ class SmsService {
     };
     return await new Promise((accept, reject) => {
       // CONVERSION: Use Async Collection when implemented
-      this.database.outgoingSms.create({
+      this.legacyDatabase.outgoingSms.create({
         from,
         to,
         content

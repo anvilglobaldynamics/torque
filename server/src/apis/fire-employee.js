@@ -32,10 +32,10 @@ exports.FireEmployeeApi = class extends userCommonMixin(collectionCommonMixin(Ap
   }
 
   _fireEmployee({ employmentId }, cbfn) {
-    this.database.employment.getEmploymentById({ employmentId }, (err, employment) => {
+    this.legacyDatabase.employment.getEmploymentById({ employmentId }, (err, employment) => {
       if (!this._ensureDoc(err, employment, "EMPLOYMENT_INVALID", "Unable to find employee to fire.")) return;
       this._expireUserWhenFired({ userId: employment.userId }, () => {
-        this.database.employment.fire({ employmentId }, (err, wasUpdated) => {
+        this.legacyDatabase.employment.fire({ employmentId }, (err, wasUpdated) => {
           if (err) return this.fail(err);
           if (!wasUpdated) return this.fail(new Error(`Unable to find employee to fire.`));
           return cbfn();

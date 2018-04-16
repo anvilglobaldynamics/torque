@@ -4,7 +4,7 @@ let cryptolib = require('crypto');
 exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _expireUserWhenFired({ userId }, cbfn) {
-    this.database.session.expireByUserIdWhenFired({ userId }, (err) => {
+    this.legacyDatabase.session.expireByUserIdWhenFired({ userId }, (err) => {
       if (err) return this.fail(err);
       // FIXME: use ensureUpdate if required
       return cbfn();
@@ -51,7 +51,7 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
   _notifyPasswordChange({ userId }) {
-    this.database.user.findById({ userId }, (err, user) => {
+    this.legacyDatabase.user.findById({ userId }, (err, user) => {
       if (err) return this.logger.error(err);
       this._sendPasswordChangeNotificationSms({ user });
       this._sendPasswordChangeNotificationEmail({ user });
@@ -65,28 +65,28 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
       phone,
       passwordHash
     }
-    this.database.user.create(user, (err, userId) => {
+    this.legacyDatabase.user.create(user, (err, userId) => {
       if (err) return this.fail(err);
       return cbfn(userId);
     });
   }
 
   _findUserByEmailOrPhone({ emailOrPhone }, cbfn) {
-    this.database.user.findByEmailOrPhone({ emailOrPhone }, (err, user) => {
+    this.legacyDatabase.user.findByEmailOrPhone({ emailOrPhone }, (err, user) => {
       if (!this._ensureDoc(err, user, "USER_DOES_NOT_EXIST", this.verses.userCommon.userDoesNotExist)) return;
       return cbfn(user);
     });
   }
 
   _findUserById({ userId }, cbfn) {
-    this.database.user.findById({ userId }, (err, user) => {
+    this.legacyDatabase.user.findById({ userId }, (err, user) => {
       if (!this._ensureDoc(err, user, "USER_INVALID", this.verses.userCommon.userInvalid)) return;
       return cbfn(user);
     })
   }
 
   _setUserAsOwner({ userId, organizationId }, cbfn) {
-    this.database.employment.employNewEmployeeAsOwner({ userId, organizationId }, (err) => {
+    this.legacyDatabase.employment.employNewEmployeeAsOwner({ userId, organizationId }, (err) => {
       if (err) return this.fail(err);
       cbfn();
     })

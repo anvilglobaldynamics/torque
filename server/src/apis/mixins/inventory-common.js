@@ -1,7 +1,7 @@
 exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _getOutletDefaultInventory({ outletId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId, inventoryContainerType: "outlet" }, (err, inventoryList) => {
+    this.legacyDatabase.inventory.listByInventoryContainerId({ inventoryContainerId: outletId, inventoryContainerType: "outlet" }, (err, inventoryList) => {
       if (err) return this.fail(err);
       if (inventoryList.length === 0) {
         err = new Error("Invalid Outlet Or Inventory could not be found");
@@ -17,7 +17,7 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
   _getOutletReturnedInventory({ outletId }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId, inventoryContainerType: "outlet" }, (err, inventoryList) => {
+    this.legacyDatabase.inventory.listByInventoryContainerId({ inventoryContainerId: outletId, inventoryContainerType: "outlet" }, (err, inventoryList) => {
       if (err) return this.fail(err);
       if (inventoryList.length === 0) {
         err = new Error("Invalid Outlet Or Inventory could not be found");
@@ -33,7 +33,7 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
   _updateInventory({ inventoryId, productList }, cbfn) {
-    this.database.inventory.updateProductList({ inventoryId }, { productList }, (err) => {
+    this.legacyDatabase.inventory.updateProductList({ inventoryId }, { productList }, (err) => {
       if (err) return this.fail(err);
       cbfn();
     });
@@ -43,14 +43,14 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     let inventory = {
       inventoryContainerId, inventoryContainerType, organizationId, type, name, allowManualTransfer: true
     }
-    this.database.inventory.create(inventory, (err, inventoryId) => {
+    this.legacyDatabase.inventory.create(inventory, (err, inventoryId) => {
       if (err) return this.fail(err);
       cbfn();
     })
   }
 
   _deleteByInventoryContainerId({ inventoryContainerId }, cbfn) {
-    this.database.inventory.deleteByInventoryContainerId({ inventoryContainerId }, (err) => {
+    this.legacyDatabase.inventory.deleteByInventoryContainerId({ inventoryContainerId }, (err) => {
       if (err) return this.fail(err);
       cbfn();
     })
@@ -71,14 +71,14 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
   _getInventoryWithId({ inventoryId }, cbfn) {
-    this.database.inventory.findById({ inventoryId }, (err, inventory) => {
+    this.legacyDatabase.inventory.findById({ inventoryId }, (err, inventory) => {
       if (!this._ensureDoc(err, inventory, "FROM_INVENTORY_INVALID", "Inventory could not be found")) return;
       cbfn(inventory);
     });
   }
 
   _getInventoriesByInventoryContainer({ inventoryContainerId, inventoryContainerType }, cbfn) {
-    this.database.inventory.listByInventoryContainerId({ inventoryContainerId, inventoryContainerType }, (err, inventoryList) => {
+    this.legacyDatabase.inventory.listByInventoryContainerId({ inventoryContainerId, inventoryContainerType }, (err, inventoryList) => {
       let defaultInventory, returnedInventory, damagedInventory;
       inventoryList.forEach(inventory => {
         if (inventory.type === 'default') {

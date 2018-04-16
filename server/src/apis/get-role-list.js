@@ -12,7 +12,7 @@ exports.GetRoleListApi = class extends Api {
   }
 
   handle({ body }) {
-    this.database.fixture.getRoleList((err, roleList) => {
+    this.legacyDatabase.fixture.getRoleList((err, roleList) => {
       if (err) return this.fail(err);
       this.success({ roleList });
     });

@@ -27,7 +27,7 @@ exports.GetInventoryListApi = class extends collectionCommonMixin(Api) {
   }
 
   _getInventoryList({ organizationId }, cbfn) {
-    this.database.inventory.listByOrganizationId({ organizationId }, (err, inventoryList) => {
+    this.legacyDatabase.inventory.listByOrganizationId({ organizationId }, (err, inventoryList) => {
       if (err) return this.fail(err);
       Promise.all(inventoryList.map(inventory => new Promise((accept, reject) => {
         let _cbfn = (err, inventoryContainer) => {
@@ -36,9 +36,9 @@ exports.GetInventoryListApi = class extends collectionCommonMixin(Api) {
           accept();
         }
         if (inventory.inventoryContainerType === "outlet") {
-          this.database.outlet.findById({ outletId: inventory.inventoryContainerId }, _cbfn);
+          this.legacyDatabase.outlet.findById({ outletId: inventory.inventoryContainerId }, _cbfn);
         } else {
-          this.database.warehouse.findById({ warehouseId: inventory.inventoryContainerId }, _cbfn);
+          this.legacyDatabase.warehouse.findById({ warehouseId: inventory.inventoryContainerId }, _cbfn);
         }
       }))).catch(ex => {
         return this.fail(ex);

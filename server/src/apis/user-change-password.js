@@ -19,7 +19,7 @@ exports.UserChangePasswordApi = class extends userCommonMixin(Api) {
   }
 
   _changePassword({ userId, oldPassword, newPassword }, cbfn) {
-    this.database.user.findById({ userId }, (err, user) => {
+    this.legacyDatabase.user.findById({ userId }, (err, user) => {
       if (err) return this.fail(err);
 
       let oldPasswordHash = this._makeHash(oldPassword);
@@ -29,7 +29,7 @@ exports.UserChangePasswordApi = class extends userCommonMixin(Api) {
       }
 
       let passwordHash = this._makeHash(newPassword);
-      this.database.user.setPasswordHash({ userId }, { passwordHash }, (err) => {
+      this.legacyDatabase.user.setPasswordHash({ userId }, { passwordHash }, (err) => {
         if (err) return this.fail(err);
         cbfn();
       });

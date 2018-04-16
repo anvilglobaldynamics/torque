@@ -23,14 +23,14 @@ exports.UserSetEmailApi = class extends userCommonMixin(emailVerificationRequest
     let { userId, email } = data;
     data = { userId, email };
 
-    this.database.user.findById({ userId }, (err, user) => {
+    this.legacyDatabase.user.findById({ userId }, (err, user) => {
       if (err) return this.fail(err);
 
-      this.database.user.setEmail({ userId }, data, (err) => {
+      this.legacyDatabase.user.setEmail({ userId }, data, (err) => {
         if (err) return this.fail(err);
 
         if (user.email !== email) {
-          this.database.user.setEmailAsUnverified({ userId }, (err) => {
+          this.legacyDatabase.user.setEmailAsUnverified({ userId }, (err) => {
             if (err) return this.fail(err);
 
             this._createEmailVerificationRequest({ email, userId }, (verificationLink) => {

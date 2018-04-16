@@ -20,7 +20,7 @@ exports.UserResetPasswordConfirmApi = class extends userCommonMixin(collectionCo
   }
 
   _getPasswordResetRequestIfValid({ uniqueToken: confirmationToken }, cbfn) {
-    this.database.passwordResetRequest.findByConfirmationToken({ confirmationToken }, (err, passwordResetRequest) => {
+    this.legacyDatabase.passwordResetRequest.findByConfirmationToken({ confirmationToken }, (err, passwordResetRequest) => {
       if (!this._ensureDoc(err, passwordResetRequest, "PASSWORD_RESET_TOKEN_INVALID", "Invalid password reset token provided.")) return;
       let { forEmail, forUserId, forPhone } = passwordResetRequest;
       cbfn(passwordResetRequest);
@@ -28,11 +28,11 @@ exports.UserResetPasswordConfirmApi = class extends userCommonMixin(collectionCo
   }
 
   _setPasswordIfValid({ newPassword, userId }, cbfn) {
-    this.database.user.findById({ userId }, (err, user) => {
+    this.legacyDatabase.user.findById({ userId }, (err, user) => {
       if (err) return this.fail(err);
 
       let passwordHash = this._makeHash(newPassword);
-      this.database.user.setPasswordHash({ userId }, { passwordHash }, (err) => {
+      this.legacyDatabase.user.setPasswordHash({ userId }, { passwordHash }, (err) => {
         if (err) return this.fail(err);
         cbfn();
       });
@@ -40,7 +40,7 @@ exports.UserResetPasswordConfirmApi = class extends userCommonMixin(collectionCo
   }
 
   _markPasswordResetRequestAsComplete({ uniqueToken: confirmationToken }, cbfn) {
-    this.database.passwordResetRequest.applyConfirmationToken({ confirmationToken }, (err) => {
+    this.legacyDatabase.passwordResetRequest.applyConfirmationToken({ confirmationToken }, (err) => {
       if (err) return this.fail(err);
       cbfn();
     });

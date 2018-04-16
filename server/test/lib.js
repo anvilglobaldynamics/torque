@@ -20,7 +20,7 @@ exports.generateInvalidId = (min = 0, max = 999999999999999) => -1 * (Math.floor
 
 // ===================================== Server
 
-exports.getDatabase = () => { return mainProgram.exposeDatabaseForTesting(); }
+exports.getDatabase = () => { return mainProgram.exposeLegacyDatabaseForTesting(); }
 
 exports.initializeServer = async (callback) => {
   pendingTerminationRequest = false;

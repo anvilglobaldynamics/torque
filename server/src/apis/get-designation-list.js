@@ -12,7 +12,7 @@ exports.GetDesignationListApi = class extends Api {
   }
 
   handle({ body }) {
-    this.database.fixture.getDesignationList((err, designationList) => {
+    this.legacyDatabase.fixture.getDesignationList((err, designationList) => {
       if (err) return this.fail(err);
       this.success({ designationList });
     });

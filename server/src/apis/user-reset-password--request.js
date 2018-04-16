@@ -64,10 +64,10 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Api) {
 
   _createPasswordResetRequest({ userId, email, phone }, cbfn) {
     let confirmationToken = generateRandomString(64);
-    this.database.passwordResetRequest.isConfirmationTokenUnique(confirmationToken, (err, isUnique) => {
+    this.legacyDatabase.passwordResetRequest.isConfirmationTokenUnique(confirmationToken, (err, isUnique) => {
       if (err) return this.fail(err);
       if (!isUnique) return this._createPasswordResetRequest({ userId, email, phone }, cbfn);
-      this.database.passwordResetRequest.create({ userId, email, phone, origin: 'password-reset-api', confirmationToken }, (err) => {
+      this.legacyDatabase.passwordResetRequest.create({ userId, email, phone, origin: 'password-reset-api', confirmationToken }, (err) => {
         if (err) return this.fail(err);
         let confirmationLink = this._generateConfirmationLink(confirmationToken);
         return cbfn({ confirmationLink });
@@ -76,7 +76,7 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Api) {
   }
 
   _getUserIfValid({ emailOrPhone }, cbfn) {
-    this.database.user.findByEmailOrPhone({ emailOrPhone }, (err, user) => {
+    this.legacyDatabase.user.findByEmailOrPhone({ emailOrPhone }, (err, user) => {
       if (!this._ensureDoc(err, user, "USER_NOT_FOUND", "No user matched the email and password combination")) return;
       cbfn(user);
     });

@@ -44,7 +44,7 @@ exports.GetSalesReturnApi = class extends collectionCommonMixin(Api) {
   }
 
   _getSalesReturn({ salesReturnId }, cbfn) {
-    this.database.salesReturn.findById({ salesReturnId }, (err, salesReturn) => {
+    this.legacyDatabase.salesReturn.findById({ salesReturnId }, (err, salesReturn) => {
       if (!this._ensureDoc(err, salesReturn, "SALES_RETURN_INVALID", "Sales return not found")) return;
       return cbfn(salesReturn);
     });
@@ -52,9 +52,9 @@ exports.GetSalesReturnApi = class extends collectionCommonMixin(Api) {
 
   _fetchProductCategoryData({ salesReturn }, cbfn) {
     let productIdList = salesReturn.returnedProductList.map(product => product.productId);
-    this.database.product.findByIdList({ idList: productIdList }, (err, productList) => {
+    this.legacyDatabase.product.findByIdList({ idList: productIdList }, (err, productList) => {
       let productCategoryIdList = productList.map(product => product.productCategoryId);
-      this.database.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
+      this.legacyDatabase.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
         productList.forEach(product => {
           let productCategory = productCategoryList.find(productCategory => productCategory.id === product.productCategoryId);
           let matchingProduct = salesReturn.returnedProductList.find(salesReturnProduct => salesReturnProduct.productId === product.id);

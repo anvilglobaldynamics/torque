@@ -36,7 +36,7 @@ exports.EditWarehouseApi = class extends collectionCommonMixin(Api) {
   }
 
   _updateWarehouse({ warehouseId, name, physicalAddress, phone, contactPersonName }, cbfn) {
-    this.database.warehouse.update({ warehouseId }, { name, physicalAddress, phone, contactPersonName }, (err, wasUpdated) => {
+    this.legacyDatabase.warehouse.update({ warehouseId }, { name, physicalAddress, phone, contactPersonName }, (err, wasUpdated) => {
       if (!this._ensureUpdate(err, wasUpdated, "warehouse")) return;
       return cbfn();
     });
