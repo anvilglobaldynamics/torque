@@ -1,8 +1,8 @@
 
-const { Collection } = require('./../collection-base');
+const { LegacyCollection } = require('./../legacy-collection-base');
 const Joi = require('joi');
 
-exports.FixtureCollection = class extends Collection {
+exports.FixtureCollection = class extends LegacyCollection {
 
   constructor(...args) {
     super(...args);

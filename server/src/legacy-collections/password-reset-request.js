@@ -1,8 +1,8 @@
 
-const { Collection } = require('./../collection-base');
+const { LegacyCollection } = require('./../legacy-collection-base');
 const Joi = require('joi');
 
-exports.PasswordResetRequestCollection = class extends Collection {
+exports.PasswordResetRequestCollection = class extends LegacyCollection {
 
   constructor(...args) {
     super(...args);

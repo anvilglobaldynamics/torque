@@ -1,16 +1,16 @@
 
-const { Collection } = require('./../collection-base');
+const { LegacyCollection } = require('./../legacy-collection-base');
 const Joi = require('joi');
 
-exports.AdminSessionCollection = class extends Collection {
+exports.SessionCollection = class extends LegacyCollection {
 
   constructor(...args) {
     super(...args);
 
-    this.collectionName = 'admin-session';
+    this.collectionName = 'session';
 
     this.joiSchema = Joi.object().keys({
-      username: Joi.string().max(1024).required(),
+      userId: Joi.number().max(999999999999999).required(),
       apiKey: Joi.string().length(64).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       terminatedDatetimeStamp: Joi.number().max(999999999999999).required().allow(null),
@@ -25,6 +25,13 @@ exports.AdminSessionCollection = class extends Collection {
       }
     ];
 
+    this.foreignKeyDefList = [
+      {
+        targetCollection: 'user',
+        foreignKey: 'id',
+        referringKey: 'userId'
+      }
+    ];
   }
 
   isApiKeyUnique({ apiKey }, cbfn) {
@@ -39,16 +46,16 @@ exports.AdminSessionCollection = class extends Collection {
     });
   }
 
-  create({ username, apiKey }, cbfn) {
-    let doc = {
-      username,
+  create({ userId, apiKey }, cbfn) {
+    let user = {
+      userId,
       apiKey,
       createdDatetimeStamp: (new Date).getTime(),
       terminatedDatetimeStamp: null,
       terminatedBy: '',
       hasExpired: false
     };
-    this._insert(doc, (err, id) => {
+    this._insert(user, (err, id) => {
       return cbfn(err, id);
     });
   }
@@ -80,7 +87,23 @@ exports.AdminSessionCollection = class extends Collection {
     };
     this._update({ id: sessionId }, mod, (err, wasUpdated) => {
       if (err) return cbfn(err);
-      if (!wasUpdated) return cbfn(new Error(this.verses.sessionCommon.sessionNotFound));
+      if (!wasUpdated) return cbfn(new Error(this.verses.session.sessionNotFound));
+      return cbfn();
+    });
+  }
+
+  expireByUserIdWhenFired({ userId }, cbfn) {
+    let mod = {
+      $set: {
+        hasExpired: true,
+        terminatedBy: 'system (fired)',
+        terminatedDatetimeStamp: (new Date).getTime()
+      }
+    };
+    this._updateMany({ userId, hasExpired: false }, mod, (err, wasUpdated) => {
+      if (err) return cbfn(err);
+      // NOTE: Willingly not checking if the sessions were actually updated or not.
+      // if (!wasUpdated) return cbfn(new Error("Unable to find session to expire"));
       return cbfn();
     });
   }

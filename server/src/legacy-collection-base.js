@@ -1,7 +1,8 @@
 
 let Joi = require('joi');
+const { Database } = require('./database'); // only for syntax highlighting
 
-class Collection {
+class LegacyCollection {
 
   constructor(database) {
     this.nonDeletableCollectionNameList = [
@@ -15,6 +16,7 @@ class Collection {
       'admin-session'
     ];
 
+    /** @type {Database} */
     this.database = database;
 
     this.collectionName = null; // subclass needs to define this property
@@ -230,4 +232,4 @@ class Collection {
 
 }
 
-exports.Collection = Collection;
+exports.LegacyCollection = LegacyCollection;

@@ -164,4 +164,4 @@ class Server {
 
 }
 
-exports.Server = Server
+exports.Server = Server;

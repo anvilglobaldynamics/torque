@@ -1,8 +1,8 @@
 
-const { Collection } = require('./../collection-base');
+const { LegacyCollection } = require('./../legacy-collection-base');
 const Joi = require('joi');
 
-exports.EmailVerificationRequestCollection = class extends Collection {
+exports.EmailVerificationRequestCollection = class extends LegacyCollection {
 
   constructor(...args) {
     super(...args);

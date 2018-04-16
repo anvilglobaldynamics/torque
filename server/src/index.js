@@ -92,24 +92,24 @@ let { AdminSetOutgoingSmsStatusApi } = require('./apis/admin-set-outgoing-sms-st
 let { AdminGetAggregatedUserListApi } = require('./apis/admin-get-aggregated-user-list');
 let { AdminSetUserBanningStatusApi } = require('./apis/admin-set-user-banning-status');
 
-let { FixtureCollection } = require('./collections/fixture');
-let { UserCollection } = require('./collections/user');
-let { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
-let { PhoneVerificationRequestCollection } = require('./collections/phone-verification-request');
-let { SessionCollection } = require('./collections/session');
-let { OrganizationCollection } = require('./collections/organization');
-let { EmploymentCollection } = require('./collections/employment');
-let { CustomerCollection } = require('./collections/customer');
-let { OutletCollection } = require('./collections/outlet');
-let { WarehouseCollection } = require('./collections/warehouse');
-let { ProductCategoryCollection } = require('./collections/product-category');
-let { PasswordResetRequestCollection } = require('./collections/password-reset-request');
-let { InventoryCollection } = require('./collections/inventory');
-let { ProductCollection } = require('./collections/product');
-let { SalesCollection } = require('./collections/sales');
-let { SalesReturnCollection } = require('./collections/sales-return');
-let { AdminSessionCollection } = require('./collections/admin-session');
-let { OutgoingSmsCollection } = require('./collections/outgoing-sms');
+let { FixtureCollection } = require('./legacy-collections/fixture');
+let { UserCollection } = require('./legacy-collections/user');
+let { EmailVerificationRequestCollection } = require('./legacy-collections/email-verification-request');
+let { PhoneVerificationRequestCollection } = require('./legacy-collections/phone-verification-request');
+let { SessionCollection } = require('./legacy-collections/session');
+let { OrganizationCollection } = require('./legacy-collections/organization');
+let { EmploymentCollection } = require('./legacy-collections/employment');
+let { CustomerCollection } = require('./legacy-collections/customer');
+let { OutletCollection } = require('./legacy-collections/outlet');
+let { WarehouseCollection } = require('./legacy-collections/warehouse');
+let { ProductCategoryCollection } = require('./legacy-collections/product-category');
+let { PasswordResetRequestCollection } = require('./legacy-collections/password-reset-request');
+let { InventoryCollection } = require('./legacy-collections/inventory');
+let { ProductCollection } = require('./legacy-collections/product');
+let { SalesCollection } = require('./legacy-collections/sales');
+let { SalesReturnCollection } = require('./legacy-collections/sales-return');
+let { AdminSessionCollection } = require('./legacy-collections/admin-session');
+let { OutgoingSmsCollection } = require('./legacy-collections/outgoing-sms');
 
 let config, logger, database, server, emailService, smsService, templateManager, fixtureManager;
 
