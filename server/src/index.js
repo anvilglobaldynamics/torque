@@ -7,8 +7,8 @@ let { Server } = require('./server');
 let { Logger } = require('./logger');
 let { Database } = require('./database');
 let { ConfigLoader } = require('./config-loader');
-let { EmailService } = require('./email-service');
-let { SmsService } = require('./sms-service');
+const { EmailService } = require('./email-service');
+const { SmsService } = require('./sms-service');
 let { TemplateManager } = require('./template-manager');
 let { FixtureManager } = require('./fixture-manager');
 const { DatabaseService } = require('./database-service');
@@ -133,6 +133,127 @@ class Program {
     process.exit(0);
   }
 
+  async __initializeLogger() {
+    await logger.initialize();
+    logger.info(`(server)> ${config.baseName} Started in ${mode} mode.`);
+    logger.info('(server)> logger initialized.');
+    server.setLogger(logger);
+  }
+
+  async __initializeDatabase() {
+    await promisify(database, database.initialize);
+    logger.info('(server)> database initialized.');
+    database.registerCollection('fixture', FixtureCollection);
+    database.registerCollection('user', UserCollection);
+    database.registerCollection('emailVerificationRequest', EmailVerificationRequestCollection);
+    database.registerCollection('phoneVerificationRequest', PhoneVerificationRequestCollection);
+    database.registerCollection('session', SessionCollection);
+    database.registerCollection('organization', OrganizationCollection);
+    database.registerCollection('employment', EmploymentCollection);
+    database.registerCollection('customer', CustomerCollection);
+    database.registerCollection('outlet', OutletCollection);
+    database.registerCollection('warehouse', WarehouseCollection);
+    database.registerCollection('productCategory', ProductCategoryCollection);
+    database.registerCollection('passwordResetRequest', PasswordResetRequestCollection);
+    database.registerCollection('inventory', InventoryCollection);
+    database.registerCollection('product', ProductCollection);
+    database.registerCollection('sales', SalesCollection);
+    database.registerCollection('salesReturn', SalesReturnCollection);
+    database.registerCollection('adminSession', AdminSessionCollection);
+    database.registerCollection('outgoingSms', OutgoingSmsCollection);
+    server.setDatabase(database);
+  }
+
+  async __initializeComponents() {
+    await promisify(fixtureManager, fixtureManager.initialize, database);
+    logger.info('(server)> fixtures initialized.');
+
+    await promisify(templateManager, templateManager.initialize);
+    logger.info('(server)> template manager initialized.');
+    server.setTemplateManager(templateManager);
+
+    await emailService.initialize(logger);
+    logger.info('(server)> email services initialized.');
+    server.setEmailService(emailService);
+
+    await smsService.initialize(logger);
+    logger.info('(server)> sms services initialized.');
+    server.setSmsService(smsService);
+  }
+
+  async __initializeServer() {
+    await promisify(server, server.initialize);
+    logger.info('(server)> server initialized.');
+  }
+
+  async __initializeApis() {
+    logger.info('(server)> registering APIs');
+    server.registerGetApi('/verify-phone/:link', VerifyPhoneApi);
+    server.registerGetApi('/verify-email/:link', VerifyEmailApi);
+    server.registerGetApi('/internal--status', InternalStatus);
+    server.registerPostApi('/api/user-register', UserRegisterApi);
+    server.registerPostApi('/api/user-login', UserLoginApi);
+    server.registerPostApi('/api/user-logout', UserLogoutApi);
+    server.registerPostApi('/api/user-change-password', UserChangePasswordApi);
+    server.registerPostApi('/api/user-edit-profile', UserEditProfileApi);
+    server.registerPostApi('/api/user-set-email', UserSetEmailApi);
+    server.registerPostApi('/api/user-resend-verification-sms', UserResendVerificationSmsApi);
+    server.registerPostApi('/api/user-resend-verification-email', UserResendVerificationEmailApi);
+    server.registerPostApi('/api/add-organization', AddOrganizationApi);
+    server.registerPostApi('/api/get-organization-list', GetOrganizationListApi);
+    server.registerPostApi('/api/edit-organization', EditOrganizationApi);
+    server.registerPostApi('/api/add-customer', AddCustomerApi);
+    server.registerPostApi('/api/get-customer', GetCustomerApi);
+    server.registerPostApi('/api/get-customer-summary-list', GetCustomerSummaryListApi);
+    server.registerPostApi('/api/edit-customer', EditCustomerApi);
+    server.registerPostApi('/api/adjust-customer-balance', AdjustCustomerBalanceApi);
+    server.registerPostApi('/api/delete-customer', DeleteCustomerApi);
+    server.registerPostApi('/api/add-outlet', AddOutletApi);
+    server.registerPostApi('/api/get-outlet-list', GetOutletListApi);
+    server.registerPostApi('/api/get-outlet', GetOutletApi);
+    server.registerPostApi('/api/edit-outlet', EditOutletApi);
+    server.registerPostApi('/api/delete-outlet', DeleteOutletApi);
+    server.registerPostApi('/api/add-warehouse', AddWarehouseApi);
+    server.registerPostApi('/api/get-warehouse-list', GetWarehouseListApi);
+    server.registerPostApi('/api/get-warehouse', GetWarehouseApi);
+    server.registerPostApi('/api/edit-warehouse', EditWarehouseApi);
+    server.registerPostApi('/api/delete-warehouse', DeleteWarehouseApi);
+    server.registerPostApi('/api/add-product-category', AddProductCategoryApi);
+    server.registerPostApi('/api/get-product-category-list', GetProductCategoryListApi);
+    server.registerPostApi('/api/edit-product-category', EditProductCategoryApi);
+    server.registerPostApi('/api/delete-product-category', DeleteProductCategoryApi);
+    server.registerPostApi('/api/user-reset-password--request', UserResetPasswordRequestApi);
+    server.registerPostApi('/api/user-reset-password--get-token-info', UserResetPasswordGetTokenInfoApi);
+    server.registerPostApi('/api/user-reset-password--confirm', UserResetPasswordConfirmApi);
+    server.registerPostApi('/api/get-inventory-list', GetInventoryListApi);
+    server.registerPostApi('/api/get-aggregated-inventory-details', GetAggregatedInventoryDetailsApi);
+    server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
+    server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
+    server.registerPostApi('/api/get-designation-list', GetDesignationListApi);
+    server.registerPostApi('/api/get-role-list', GetRoleListApi);
+    server.registerPostApi('/api/get-privilege-list', GetPrivilegeListApi);
+    server.registerPostApi('/api/add-sales', AddSalesApi);
+    server.registerPostApi('/api/get-sales', GetSalesApi);
+    server.registerPostApi('/api/get-sales-list', GetSalesListApi);
+    server.registerPostApi('/api/discard-sales', DiscardSalesApi);
+    server.registerPostApi('/api/add-sales-return', AddSalesReturnApi);
+    server.registerPostApi('/api/get-sales-return', GetSalesReturnApi);
+    server.registerPostApi('/api/get-sales-return-list', GetSalesReturnListApi);
+    server.registerPostApi('/api/get-dashboard-summary', GetDashboardSummaryApi);
+    server.registerPostApi('/api/hire-user-as-employee', HireUserAsEmployeeApi);
+    server.registerPostApi('/api/find-user', FindUserApi);
+    server.registerPostApi('/api/add-new-employee', AddNewEmployeeApi);
+    server.registerPostApi('/api/get-employee-list', GetEmployeeListApi);
+    server.registerPostApi('/api/get-employee', GetEmployeeApi);
+    server.registerPostApi('/api/edit-employment', EditEmploymentApi);
+    server.registerPostApi('/api/fire-employee', FireEmployeeApi);
+    server.registerPostApi('/api/admin-login', AdminLoginApi);
+    server.registerPostApi('/api/admin-get-outgoing-sms-list', AdminGetOutgoingSmsListApi);
+    server.registerPostApi('/api/admin-set-outgoing-sms-status', AdminSetOutgoingSmsStatusApi);
+    server.registerPostApi('/api/admin-get-aggregated-user-list', AdminGetAggregatedUserListApi);
+    server.registerPostApi('/api/admin-set-user-banning-status', AdminSetUserBanningStatusApi);
+  }
+
   async initiateServer(callback) {
     try {
       config = await promisify(ConfigLoader, ConfigLoader.getComputedConfig, this.muteLogger, mode);
@@ -143,117 +264,11 @@ class Program {
       smsService = new SmsService(config, database);
       templateManager = new TemplateManager(config);
       fixtureManager = new FixtureManager(config);
-
-      await logger.initialize();
-      logger.info(`(server)> ${config.baseName} Started in ${mode} mode.`);
-      logger.info('(server)> logger initialized.');
-      server.setLogger(logger);
-
-      await promisify(database, database.initialize);
-      logger.info('(server)> database initialized.');
-      database.registerCollection('fixture', FixtureCollection);
-      database.registerCollection('user', UserCollection);
-      database.registerCollection('emailVerificationRequest', EmailVerificationRequestCollection);
-      database.registerCollection('phoneVerificationRequest', PhoneVerificationRequestCollection);
-      database.registerCollection('session', SessionCollection);
-      database.registerCollection('organization', OrganizationCollection);
-      database.registerCollection('employment', EmploymentCollection);
-      database.registerCollection('customer', CustomerCollection);
-      database.registerCollection('outlet', OutletCollection);
-      database.registerCollection('warehouse', WarehouseCollection);
-      database.registerCollection('productCategory', ProductCategoryCollection);
-      database.registerCollection('passwordResetRequest', PasswordResetRequestCollection);
-      database.registerCollection('inventory', InventoryCollection);
-      database.registerCollection('product', ProductCollection);
-      database.registerCollection('sales', SalesCollection);
-      database.registerCollection('salesReturn', SalesReturnCollection);
-      database.registerCollection('adminSession', AdminSessionCollection);
-      database.registerCollection('outgoingSms', OutgoingSmsCollection);
-      server.setDatabase(database);
-
-      await promisify(fixtureManager, fixtureManager.initialize, database);
-      logger.info('(server)> fixtures initialized.');
-
-      await promisify(templateManager, templateManager.initialize);
-      logger.info('(server)> template manager initialized.');
-      server.setTemplateManager(templateManager);
-
-      await emailService.initialize(logger);
-      logger.info('(server)> email services initialized.');
-      server.setEmailService(emailService);
-
-      await smsService.initialize(logger);
-      logger.info('(server)> sms services initialized.');
-      server.setSmsService(smsService);
-
-      await promisify(server, server.initialize);
-      logger.info('(server)> server initialized.');
-
-      logger.info('(server)> registering APIs');
-      server.registerGetApi('/verify-phone/:link', VerifyPhoneApi);
-      server.registerGetApi('/verify-email/:link', VerifyEmailApi);
-      server.registerGetApi('/internal--status', InternalStatus);
-      server.registerPostApi('/api/user-register', UserRegisterApi);
-      server.registerPostApi('/api/user-login', UserLoginApi);
-      server.registerPostApi('/api/user-logout', UserLogoutApi);
-      server.registerPostApi('/api/user-change-password', UserChangePasswordApi);
-      server.registerPostApi('/api/user-edit-profile', UserEditProfileApi);
-      server.registerPostApi('/api/user-set-email', UserSetEmailApi);
-      server.registerPostApi('/api/user-resend-verification-sms', UserResendVerificationSmsApi);
-      server.registerPostApi('/api/user-resend-verification-email', UserResendVerificationEmailApi);
-      server.registerPostApi('/api/add-organization', AddOrganizationApi);
-      server.registerPostApi('/api/get-organization-list', GetOrganizationListApi);
-      server.registerPostApi('/api/edit-organization', EditOrganizationApi);
-      server.registerPostApi('/api/add-customer', AddCustomerApi);
-      server.registerPostApi('/api/get-customer', GetCustomerApi);
-      server.registerPostApi('/api/get-customer-summary-list', GetCustomerSummaryListApi);
-      server.registerPostApi('/api/edit-customer', EditCustomerApi);
-      server.registerPostApi('/api/adjust-customer-balance', AdjustCustomerBalanceApi);
-      server.registerPostApi('/api/delete-customer', DeleteCustomerApi);
-      server.registerPostApi('/api/add-outlet', AddOutletApi);
-      server.registerPostApi('/api/get-outlet-list', GetOutletListApi);
-      server.registerPostApi('/api/get-outlet', GetOutletApi);
-      server.registerPostApi('/api/edit-outlet', EditOutletApi);
-      server.registerPostApi('/api/delete-outlet', DeleteOutletApi);
-      server.registerPostApi('/api/add-warehouse', AddWarehouseApi);
-      server.registerPostApi('/api/get-warehouse-list', GetWarehouseListApi);
-      server.registerPostApi('/api/get-warehouse', GetWarehouseApi);
-      server.registerPostApi('/api/edit-warehouse', EditWarehouseApi);
-      server.registerPostApi('/api/delete-warehouse', DeleteWarehouseApi);
-      server.registerPostApi('/api/add-product-category', AddProductCategoryApi);
-      server.registerPostApi('/api/get-product-category-list', GetProductCategoryListApi);
-      server.registerPostApi('/api/edit-product-category', EditProductCategoryApi);
-      server.registerPostApi('/api/delete-product-category', DeleteProductCategoryApi);
-      server.registerPostApi('/api/user-reset-password--request', UserResetPasswordRequestApi);
-      server.registerPostApi('/api/user-reset-password--get-token-info', UserResetPasswordGetTokenInfoApi);
-      server.registerPostApi('/api/user-reset-password--confirm', UserResetPasswordConfirmApi);
-      server.registerPostApi('/api/get-inventory-list', GetInventoryListApi);
-      server.registerPostApi('/api/get-aggregated-inventory-details', GetAggregatedInventoryDetailsApi);
-      server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
-      server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
-      server.registerPostApi('/api/get-designation-list', GetDesignationListApi);
-      server.registerPostApi('/api/get-role-list', GetRoleListApi);
-      server.registerPostApi('/api/get-privilege-list', GetPrivilegeListApi);
-      server.registerPostApi('/api/add-sales', AddSalesApi);
-      server.registerPostApi('/api/get-sales', GetSalesApi);
-      server.registerPostApi('/api/get-sales-list', GetSalesListApi);
-      server.registerPostApi('/api/discard-sales', DiscardSalesApi);
-      server.registerPostApi('/api/add-sales-return', AddSalesReturnApi);
-      server.registerPostApi('/api/get-sales-return', GetSalesReturnApi);
-      server.registerPostApi('/api/get-sales-return-list', GetSalesReturnListApi);
-      server.registerPostApi('/api/get-dashboard-summary', GetDashboardSummaryApi);
-      server.registerPostApi('/api/hire-user-as-employee', HireUserAsEmployeeApi);
-      server.registerPostApi('/api/find-user', FindUserApi);
-      server.registerPostApi('/api/add-new-employee', AddNewEmployeeApi);
-      server.registerPostApi('/api/get-employee-list', GetEmployeeListApi);
-      server.registerPostApi('/api/get-employee', GetEmployeeApi);
-      server.registerPostApi('/api/edit-employment', EditEmploymentApi);
-      server.registerPostApi('/api/fire-employee', FireEmployeeApi);
-      server.registerPostApi('/api/admin-login', AdminLoginApi);
-      server.registerPostApi('/api/admin-get-outgoing-sms-list', AdminGetOutgoingSmsListApi);
-      server.registerPostApi('/api/admin-set-outgoing-sms-status', AdminSetOutgoingSmsStatusApi);
-      server.registerPostApi('/api/admin-get-aggregated-user-list', AdminGetAggregatedUserListApi);
-      server.registerPostApi('/api/admin-set-user-banning-status', AdminSetUserBanningStatusApi);
+      await this.__initializeLogger();
+      await this.__initializeDatabase();
+      await this.__initializeComponents();
+      await this.__initializeServer();
+      await this.__initializeApis();
     } catch (err) {
       console.error(err);
       process.exit(1);
