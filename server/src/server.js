@@ -161,7 +161,6 @@ class Server {
   registerPostApi(path, ApiClass) {
     this._expressApp.post(path, jsonParser, (req, res) => {
       this.logger.info('POST', req.url);
-      console.log()
       if (ApiClass.prototype instanceof LegacyApi) {
         let api = new ApiClass(this, this.legacyDatabase, this.logger, req, res, null, 'post');
         api._prehandlePostOrWsApi(req.body);
