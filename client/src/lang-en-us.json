@@ -9,6 +9,7 @@
     "pressBelowButton": "press below button",
     "pressAboveButton": "press above button",
     "sorry": "Sorry",
+    "thankYou": "Thank you.",
     "listIsEmpty": "List is Empty.",
     "search": "Search",
     "select": "Select",
@@ -166,6 +167,8 @@
     "setNewPassword": "SET NEW PASSWORD",
     "dontHaveAccount": "Don't have an account?",
     "passwordInput": "Your new password.",
-    "retypePasswordInput": "Retype Your new password."
+    "retypePasswordInput": "Retype Your new password.",
+    "newPasswordSet": "You new password has been set. You can log in now.",
+    "retypeIncorrect": "You incorrectly typed your new password the second time. Please type it again and press confirm."
   }
 }
