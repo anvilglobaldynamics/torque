@@ -13,7 +13,8 @@
     "search": "খোঁজ",
     "select": "বাছাই",
     "address": "ঠিকানা",
-    "comingSoon": "শীঘ্রই আসছে"
+    "comingSoon": "শীঘ্রই আসছে",
+    "confirm": "নিশ্চিত করুন"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -33,7 +34,7 @@
     "fullnameInput": "আপনার পূর্ণ নাম",
     "fullnameInputError": "একটি বৈধ নাম লিখুন.",
     "phoneInput": "আপনার বৈধ ফোন নম্বর",
-    "phoneInputError": "দয়া করে আপনার বৈধ ফোন নম্বর লিখুন।",
+    "phoneInputError": "আপনার বৈধ ফোন নম্বর লিখুন।",
     "passwordInput": "সর্বনিম্ন ৮ অক্ষরের একটি পাসওয়ার্ড দিন।",
     "passwordInputError": "আপনার সুরক্ষার জন্য দয়া করে কমপক্ষে ৮ অক্ষরের একটি পাসওয়ার্ড লিখুন।",
     "alreadyHaveAccount": "আপনার কি অলরেডি একটা একাউন্ট আছে?"
@@ -155,5 +156,11 @@
     "amountInput": "পরিমাণ",
     "amountInputError": "পরিমাণ লিখুন",
     "adjust": "এডজাস্ট"
+  },
+  "confirmPasswordReset": {
+    "setNewPassword": "নতুন পাসওয়ার্ড সেট করুন",
+    "dontHaveAccount": "অ্যাকাউন্ট নেই?",
+    "passwordInput": "আপনার নতুন পাসওয়ার্ড",
+    "retypePasswordInput": "আবার লিখুন আপনার নতুন পাসওয়ার্ড"
   }
 }

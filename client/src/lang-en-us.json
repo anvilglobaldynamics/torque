@@ -13,7 +13,8 @@
     "search": "Search",
     "select": "Select",
     "address": "Address",
-    "comingSoon": "Coming Soon"
+    "comingSoon": "Coming Soon",
+    "confirm": "Confirm"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -155,5 +156,11 @@
     "amountInput": "Amount",
     "amountInputError": "Please enter the amount",
     "adjust": "Adjust"
+  },
+  "confirmPasswordReset": {
+    "setNewPassword": "SET NEW PASSWORD",
+    "dontHaveAccount": "Don't have an account?",
+    "passwordInput": "Your new password.",
+    "retypePasswordInput": "Retype Your new password."
   }
 }
