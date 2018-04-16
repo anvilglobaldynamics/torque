@@ -13,84 +13,84 @@ let { TemplateManager } = require('./template-manager');
 let { FixtureManager } = require('./fixture-manager');
 const { DatabaseService } = require('./database-service');
 
-let { UserRegisterApi } = require('./apis/user-register');
-let { UserLoginApi } = require('./apis/user-login');
-let { UserLogoutApi } = require('./apis/user-logout');
-let { VerifyEmailApi } = require('./apis/verify-email');
-let { VerifyPhoneApi } = require('./apis/verify-phone');
-let { UserChangePasswordApi } = require('./apis/user-change-password');
-let { UserEditProfileApi } = require('./apis/user-edit-profile');
-let { UserSetEmailApi } = require('./apis/user-set-email');
-let { UserResendVerificationSmsApi } = require('./apis/user-resend-verification-sms');
-let { UserResendVerificationEmailApi } = require('./apis/user-resend-verification-email');
+let { UserRegisterApi } = require('./legacy-apis/user-register');
+let { UserLoginApi } = require('./legacy-apis/user-login');
+let { UserLogoutApi } = require('./legacy-apis/user-logout');
+let { VerifyEmailApi } = require('./legacy-apis/verify-email');
+let { VerifyPhoneApi } = require('./legacy-apis/verify-phone');
+let { UserChangePasswordApi } = require('./legacy-apis/user-change-password');
+let { UserEditProfileApi } = require('./legacy-apis/user-edit-profile');
+let { UserSetEmailApi } = require('./legacy-apis/user-set-email');
+let { UserResendVerificationSmsApi } = require('./legacy-apis/user-resend-verification-sms');
+let { UserResendVerificationEmailApi } = require('./legacy-apis/user-resend-verification-email');
 
-let { UserResetPasswordRequestApi } = require('./apis/user-reset-password--request');
-let { UserResetPasswordGetTokenInfoApi } = require('./apis/user-reset-password--get-token-info');
-let { UserResetPasswordConfirmApi } = require('./apis/user-reset-password--confirm');
+let { UserResetPasswordRequestApi } = require('./legacy-apis/user-reset-password--request');
+let { UserResetPasswordGetTokenInfoApi } = require('./legacy-apis/user-reset-password--get-token-info');
+let { UserResetPasswordConfirmApi } = require('./legacy-apis/user-reset-password--confirm');
 
-let { AddOrganizationApi } = require('./apis/add-organization');
-let { GetOrganizationListApi } = require('./apis/get-organization-list');
-let { EditOrganizationApi } = require('./apis/edit-organization');
+let { AddOrganizationApi } = require('./legacy-apis/add-organization');
+let { GetOrganizationListApi } = require('./legacy-apis/get-organization-list');
+let { EditOrganizationApi } = require('./legacy-apis/edit-organization');
 
-let { AddNewEmployeeApi } = require('./apis/add-new-employee');
-let { FindUserApi } = require('./apis/find-user');
-let { HireUserAsEmployeeApi } = require('./apis/hire-user-as-employee');
-let { GetEmployeeListApi } = require('./apis/get-employee-list');
-let { GetEmployeeApi } = require('./apis/get-employee');
-let { EditEmploymentApi } = require('./apis/edit-employment');
-let { FireEmployeeApi } = require('./apis/fire-employee');
+let { AddNewEmployeeApi } = require('./legacy-apis/add-new-employee');
+let { FindUserApi } = require('./legacy-apis/find-user');
+let { HireUserAsEmployeeApi } = require('./legacy-apis/hire-user-as-employee');
+let { GetEmployeeListApi } = require('./legacy-apis/get-employee-list');
+let { GetEmployeeApi } = require('./legacy-apis/get-employee');
+let { EditEmploymentApi } = require('./legacy-apis/edit-employment');
+let { FireEmployeeApi } = require('./legacy-apis/fire-employee');
 
-let { AddCustomerApi } = require('./apis/add-customer');
-let { GetCustomerApi } = require('./apis/get-customer');
-let { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
-let { EditCustomerApi } = require('./apis/edit-customer');
-let { AdjustCustomerBalanceApi } = require('./apis/adjust-customer-balance');
-let { DeleteCustomerApi } = require('./apis/delete-customer');
+let { AddCustomerApi } = require('./legacy-apis/add-customer');
+let { GetCustomerApi } = require('./legacy-apis/get-customer');
+let { GetCustomerSummaryListApi } = require('./legacy-apis/get-customer-summary-list');
+let { EditCustomerApi } = require('./legacy-apis/edit-customer');
+let { AdjustCustomerBalanceApi } = require('./legacy-apis/adjust-customer-balance');
+let { DeleteCustomerApi } = require('./legacy-apis/delete-customer');
 
-let { AddOutletApi } = require('./apis/add-outlet');
-let { GetOutletListApi } = require('./apis/get-outlet-list');
-let { GetOutletApi } = require('./apis/get-outlet');
-let { EditOutletApi } = require('./apis/edit-outlet');
-let { DeleteOutletApi } = require('./apis/delete-outlet');
+let { AddOutletApi } = require('./legacy-apis/add-outlet');
+let { GetOutletListApi } = require('./legacy-apis/get-outlet-list');
+let { GetOutletApi } = require('./legacy-apis/get-outlet');
+let { EditOutletApi } = require('./legacy-apis/edit-outlet');
+let { DeleteOutletApi } = require('./legacy-apis/delete-outlet');
 
-let { AddWarehouseApi } = require('./apis/add-warehouse');
-let { GetWarehouseListApi } = require('./apis/get-warehouse-list');
-let { GetWarehouseApi } = require('./apis/get-warehouse');
-let { EditWarehouseApi } = require('./apis/edit-warehouse');
-let { DeleteWarehouseApi } = require('./apis/delete-warehouse');
+let { AddWarehouseApi } = require('./legacy-apis/add-warehouse');
+let { GetWarehouseListApi } = require('./legacy-apis/get-warehouse-list');
+let { GetWarehouseApi } = require('./legacy-apis/get-warehouse');
+let { EditWarehouseApi } = require('./legacy-apis/edit-warehouse');
+let { DeleteWarehouseApi } = require('./legacy-apis/delete-warehouse');
 
-let { AddProductCategoryApi } = require('./apis/add-product-category');
-let { GetProductCategoryListApi } = require('./apis/get-product-category-list');
-let { EditProductCategoryApi } = require('./apis/edit-product-category');
-let { DeleteProductCategoryApi } = require('./apis/delete-product-category');
+let { AddProductCategoryApi } = require('./legacy-apis/add-product-category');
+let { GetProductCategoryListApi } = require('./legacy-apis/get-product-category-list');
+let { EditProductCategoryApi } = require('./legacy-apis/edit-product-category');
+let { DeleteProductCategoryApi } = require('./legacy-apis/delete-product-category');
 
-let { GetInventoryListApi } = require('./apis/get-inventory-list');
-let { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-inventory-details');
-let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
-let { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
+let { GetInventoryListApi } = require('./legacy-apis/get-inventory-list');
+let { GetAggregatedInventoryDetailsApi } = require('./legacy-apis/get-aggregated-inventory-details');
+let { AddProductToInventoryApi } = require('./legacy-apis/add-product-to-inventory');
+let { TransferBetweenInventoriesApi } = require('./legacy-apis/transfer-between-inventories');
 
-let { AddSalesApi } = require('./apis/add-sales');
-let { GetSalesApi } = require('./apis/get-sales');
-let { GetSalesListApi } = require('./apis/get-sales-list');
-let { DiscardSalesApi } = require('./apis/discard-sales');
+let { AddSalesApi } = require('./legacy-apis/add-sales');
+let { GetSalesApi } = require('./legacy-apis/get-sales');
+let { GetSalesListApi } = require('./legacy-apis/get-sales-list');
+let { DiscardSalesApi } = require('./legacy-apis/discard-sales');
 
-let { AddSalesReturnApi } = require('./apis/add-sales-return');
-let { GetSalesReturnApi } = require('./apis/get-sales-return');
-let { GetSalesReturnListApi } = require('./apis/get-sales-return-list');
+let { AddSalesReturnApi } = require('./legacy-apis/add-sales-return');
+let { GetSalesReturnApi } = require('./legacy-apis/get-sales-return');
+let { GetSalesReturnListApi } = require('./legacy-apis/get-sales-return-list');
 
-let { GetDashboardSummaryApi } = require('./apis/get-dashboard-summary');
+let { GetDashboardSummaryApi } = require('./legacy-apis/get-dashboard-summary');
 
-let { GetDesignationListApi } = require('./apis/get-designation-list');
-let { GetRoleListApi } = require('./apis/get-role-list');
-let { GetPrivilegeListApi } = require('./apis/get-privilege-list');
+let { GetDesignationListApi } = require('./legacy-apis/get-designation-list');
+let { GetRoleListApi } = require('./legacy-apis/get-role-list');
+let { GetPrivilegeListApi } = require('./legacy-apis/get-privilege-list');
 
-let { InternalStatus } = require('./apis/internal--status');
+let { InternalStatus } = require('./legacy-apis/internal--status');
 
-let { AdminLoginApi } = require('./apis/admin-login');
-let { AdminGetOutgoingSmsListApi } = require('./apis/admin-get-outgoing-sms-list');
-let { AdminSetOutgoingSmsStatusApi } = require('./apis/admin-set-outgoing-sms-status');
-let { AdminGetAggregatedUserListApi } = require('./apis/admin-get-aggregated-user-list');
-let { AdminSetUserBanningStatusApi } = require('./apis/admin-set-user-banning-status');
+let { AdminLoginApi } = require('./legacy-apis/admin-login');
+let { AdminGetOutgoingSmsListApi } = require('./legacy-apis/admin-get-outgoing-sms-list');
+let { AdminSetOutgoingSmsStatusApi } = require('./legacy-apis/admin-set-outgoing-sms-status');
+let { AdminGetAggregatedUserListApi } = require('./legacy-apis/admin-get-aggregated-user-list');
+let { AdminSetUserBanningStatusApi } = require('./legacy-apis/admin-set-user-banning-status');
 
 let { FixtureCollection } = require('./legacy-collections/fixture');
 let { UserCollection } = require('./legacy-collections/user');
