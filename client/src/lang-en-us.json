@@ -159,7 +159,8 @@
     "withdrawl": "Withdrawl",
     "amountInput": "Amount",
     "amountInputError": "Please enter the amount",
-    "adjust": "Adjust"
+    "adjust": "Adjust",
+    "customerBalanceUpdated": "Customer's balance has been updated."
   },
   "confirmPasswordReset": {
     "setNewPassword": "SET NEW PASSWORD",

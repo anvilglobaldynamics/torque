@@ -99,7 +99,7 @@
         if (!this._ensureAccess()) return;
         this.useLanguageServices();
         if (!('customer' in this.params)) {
-          let message = "This page cannot be displayed at this moment. Please try again."
+          let message = this.app.verses.general.pageCannotBeDisplayed;
           this.app.showModalDialog("Something went wrong!", message, _ => {
             this.app.navigateTo('/home');
           });
@@ -147,7 +147,7 @@
         this.app.callAdjustCustomerBalanceApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'adjustCustomerBalanceForm');
-          let message = "Customer's balance has been updated."
+          let message = this.app.verses.adjustCustomerBalance.customerBalanceUpdated;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
