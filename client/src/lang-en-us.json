@@ -138,7 +138,8 @@
     "addEmployee": "Add Employee",
     "emailOrPhoneInputError": "Please enter a valid phone/email",
     "findUser": "Find User",
-    "hireAsEmployee": "Hire As Employee"
+    "hireAsEmployee": "Hire As Employee",
+    "newEmployeeCreated": "New employee has been created."
   },
   "product": {
     "addProducts": "Add Products",

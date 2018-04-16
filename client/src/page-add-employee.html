@@ -130,10 +130,11 @@
           fullName, password, phone, role, designation, companyProvidedId, privileges,
           organizationId: this.app.organization.id
         };
+        
         this.app.callAddNewEmployeeApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'addEmployeeForm');
-          let message = "New employee has been created."
+          let message = this.app.verses.employee.newEmployeeCreated;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
