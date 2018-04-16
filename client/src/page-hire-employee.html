@@ -171,7 +171,7 @@
       }
 
       searchUserTapped(e = null) {
-        let emailOrPhone = null;
+        let { emailOrPhone } = this.findUserField;
         this._processFindUser({ emailOrPhone }, (user) => {
           this.user = user;
 
