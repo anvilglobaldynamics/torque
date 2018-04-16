@@ -14,7 +14,9 @@
     "select": "Select",
     "address": "Address",
     "comingSoon": "Coming Soon",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "somethingWentWrong": "Something went wrong!",
+    "pageCannotBeDisplayed": "This page cannot be displayed at this moment. Please try again."
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -139,7 +141,8 @@
     "hireAsEmployee": "Hire As Employee"
   },
   "product": {
-    "addProducts": "Add Products"
+    "addProducts": "Add Products",
+    "productAddedToInventory": "Product(s) were successfully added to the inventory."
   },
   "about": {
     "about": "About",

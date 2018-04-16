@@ -175,8 +175,8 @@
         if (!this._ensureAccess()) return;
         this.useLanguageServices();
         if (!('inventory' in this.params)) {
-          let message = "This page cannot be displayed at this moment. Please try again."
-          this.app.showModalDialog("Something went wrong!", message, _ => {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
             this.app.navigateTo('/home');
           });
           return;
@@ -241,7 +241,7 @@
         this.elemAll('product-category-add-product').forEach(el => el.listProductsToAdd(productList));
         let inventoryId = parseInt(this.params.inventory);
         this._addProductsToInventory({ productList, inventoryId }, () => {
-          let message = "Product(s) were successfully added to the inventory."
+          let message = this.app.verses.product.productAddedToInventory;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });

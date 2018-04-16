@@ -15,6 +15,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -47,7 +48,7 @@
   </template>
 
   <script>
-    class PageEditCustomer extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageEditCustomer extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-edit-customer';
@@ -102,6 +103,7 @@
           this.app.pushPageTitle('Add Customer');
         }
         if (!this._ensureAccess()) return;
+        this.useLanguageServices();
         if (this.editMode) {
           this._processGetCustomer(() => {
             this.isReady = true;
