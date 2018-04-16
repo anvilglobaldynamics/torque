@@ -132,7 +132,10 @@
   "employee": {
     "nameOfEmployeeInput": "Name of Employee.",
     "nameOfEmployeeInputError": "Please enter a valid name",
-    "addEmployee": "Add Employee"
+    "addEmployee": "Add Employee",
+    "emailOrPhoneInputError": "Please enter a valid phone/email",
+    "findUser": "Find User",
+    "hireAsEmployee": "Hire As Employee"
   },
   "about": {
     "about": "About",

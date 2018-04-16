@@ -132,7 +132,10 @@
   "employee": {
     "nameOfEmployeeInput": "কর্মচারীর নাম",
     "nameOfEmployeeInputError": "একটি নাম লিখুন",
-    "addEmployee": "কর্মচারী যোগ করুন"
+    "addEmployee": "কর্মচারী নিয়োগ করুন",
+    "emailOrPhoneInputError": "বৈধ ফোন/ইমেইল লিখুন",
+    "findUser": "ব্যাবহারকারী খুজুন",
+    "hireAsEmployee": "কর্মচারী হিসেবে নিয়োগ করুন"
   },
   "about": {
     "about": "বিষয়ে",
