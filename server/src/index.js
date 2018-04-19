@@ -113,6 +113,9 @@ let { OutgoingSmsCollection } = require('./legacy-collections/outgoing-sms');
 
 let config, logger, legacyDatabase, server, emailService, smsService, templateManager, fixtureManager;
 
+/** @type {DatabaseService} */
+let database;
+
 let mode = detectMode();
 
 class Program {
@@ -133,6 +136,29 @@ class Program {
     process.exit(0);
   }
 
+  async initiateServer(callback) {
+    try {
+      config = await promisify(ConfigLoader, ConfigLoader.getComputedConfig, this.muteLogger, mode);
+      server = new Server(config, mode);
+      database = new DatabaseService(config.db);
+      legacyDatabase = new LegacyDatabase(config.db);
+      logger = new Logger(config.log, this.muteLogger);
+      emailService = new EmailService(config, mode);
+      smsService = new SmsService(config, legacyDatabase);
+      templateManager = new TemplateManager(config);
+      fixtureManager = new FixtureManager(config);
+      await this.__initializeLogger();
+      await this.__initializeLegacyDatabase();
+      await this.__initializeDatabase();
+      await this.__initializeComponents();
+      await this.__initializeServer();
+      await this.__initializeApis();
+    } catch (err) {
+      console.error(err);
+      process.exit(1);
+    }
+  }
+
   async __initializeLogger() {
     await logger.initialize();
     logger.info(`(server)> ${config.baseName} Started in ${mode} mode.`);
@@ -141,6 +167,11 @@ class Program {
   }
 
   async __initializeDatabase() {
+    await database.initialize(config.db);
+    logger.info('(server)> database services initialized.');
+  }
+
+  async __initializeLegacyDatabase() {
     await promisify(legacyDatabase, legacyDatabase.initialize);
     logger.info('(server)> legacyDatabase initialized.');
     legacyDatabase.registerCollection('fixture', FixtureCollection);
@@ -254,26 +285,7 @@ class Program {
     server.registerPostApi('/api/admin-set-user-banning-status', AdminSetUserBanningStatusApi);
   }
 
-  async initiateServer(callback) {
-    try {
-      config = await promisify(ConfigLoader, ConfigLoader.getComputedConfig, this.muteLogger, mode);
-      server = new Server(config, mode);
-      legacyDatabase = new LegacyDatabase(config.db);
-      logger = new Logger(config.log, this.muteLogger);
-      emailService = new EmailService(config, mode);
-      smsService = new SmsService(config, legacyDatabase);
-      templateManager = new TemplateManager(config);
-      fixtureManager = new FixtureManager(config);
-      await this.__initializeLogger();
-      await this.__initializeDatabase();
-      await this.__initializeComponents();
-      await this.__initializeServer();
-      await this.__initializeApis();
-    } catch (err) {
-      console.error(err);
-      process.exit(1);
-    }
-  }
+
 
 }
 
