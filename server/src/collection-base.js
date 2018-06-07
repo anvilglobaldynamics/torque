@@ -138,7 +138,7 @@ class Collection {
   async _find(query, { skip, limit, sort } = {}) {
     if (this.deletionIndicatorKey) {
       if (!(this.deletionIndicatorKey in query)) {
-        query[this.deletionIndicatorKey] = true;
+        query[this.deletionIndicatorKey] = false;
       }
     }
     return await this._db.find(this.name, query, { skip, limit, sort });
@@ -147,7 +147,7 @@ class Collection {
   async _findOne(query, { skip, sort } = {}) {
     if (this.deletionIndicatorKey) {
       if (!(this.deletionIndicatorKey in query)) {
-        query[this.deletionIndicatorKey] = true;
+        query[this.deletionIndicatorKey] = false;
       }
     }
     return await this._db.findOne(this.name, query, { skip, sort });
