@@ -35,7 +35,7 @@ exports.UserCollection = class extends Collection {
   }
 
   async create({ phone, fullName, passwordHash }) {
-    let user = {
+    let doc = {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       passwordHash,
@@ -51,7 +51,7 @@ exports.UserCollection = class extends Collection {
       isEmailVerified: false,
       isBanned: false
     };
-    return await this._insert(user);
+    return await this._insert(doc);
   }
 
   async listByCommonFields({ userSearchRegex }) {
