@@ -25,7 +25,7 @@ exports.UserCollection = class extends Collection {
     });
   }
 
-  get joiSchema() {
+  get uniqueKeyDefList() {
     return [
       {
         filters: {},
@@ -153,7 +153,7 @@ exports.UserCollection = class extends Collection {
         email
       }
     };
-    this._update({ id }, mod);
+    return await this._update({ id }, mod);
   }
 
 }
