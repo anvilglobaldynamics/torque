@@ -2,10 +2,11 @@
 # Environment Setup
 1. Install nodejs (latest LTS version)
 2. Install mongodb and export `mongod` to PATH
-3. Make an empty directory called `/db/data` (unix) or `C:/db/data` (windows)
+3. Make an empty directory called `/data/db` (unix) or `C:/data/db` (windows)
 4. Install Polymer CLI `npm install -g polymer-cli` (v.1.4.1 or later)
 5. Install nodemon (optional) `npm install -g nodemon`
 5. Install mocha (required for testing) `npm install -g mocha`
+6. Install bower `npm install -g bower`
 
 # Project Setup
 1. Clone **torque** repository.
