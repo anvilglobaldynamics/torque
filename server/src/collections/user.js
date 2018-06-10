@@ -35,7 +35,7 @@ exports.UserCollection = class extends Collection {
   }
 
   async create({ phone, fullName, passwordHash }) {
-    let doc = {
+    return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       passwordHash,
@@ -50,8 +50,7 @@ exports.UserCollection = class extends Collection {
       isPhoneVerified: false,
       isEmailVerified: false,
       isBanned: false
-    };
-    return await this._insert(doc);
+    });
   }
 
   async listByCommonFields({ userSearchRegex }) {
@@ -84,13 +83,13 @@ exports.UserCollection = class extends Collection {
     });
   }
 
+  // TODO: convert to updateEmailVerificationStatus or setEmailVerificationStatus
   async setEmailAsVerified({ id }) {
-    let mod = {
+    return await this._update({ id }, {
       $set: {
         isEmailVerified: true
       }
-    };
-    return await this._update({ id }, mod);
+    });
   }
 
   async setEmailAsUnverified({ id }) {

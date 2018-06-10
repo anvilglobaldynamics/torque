@@ -44,16 +44,48 @@ exports.SesssionCollection = class extends Collection {
   }
 
   async create({ userId, apiKey }) {
-    let doc = {
+    return await this._insert({
       userId,
       apiKey,
       createdDatetimeStamp: (new Date).getTime(),
       terminatedDatetimeStamp: null,
       terminatedBy: '',
       hasExpired: false
-    };
-    return await this._insert(doc);
+    });
   }
 
+  async findByApiKey({ apiKey }) {
+    return await this._findOne({ apiKey });
+  }
+
+  async close({ sessionId }) {
+    return await this._update({ id: sessionId }, {
+      $set: {
+        hasExpired: true,
+        terminatedBy: 'user',
+        terminatedDatetimeStamp: (new Date).getTime()
+      }
+    });
+  }
+
+  async expire({ sessionId }, cbfn) {
+    return await this._update({ id: sessionId }, {
+      $set: {
+        hasExpired: true,
+        terminatedBy: 'system (expiry)',
+        terminatedDatetimeStamp: (new Date).getTime()
+      }
+    });
+  }
+
+  async expireByUserIdWhenFired({ userId }, cbfn) {
+    return await this._updateMany({ userId, hasExpired: false }, {
+      $set: {
+        hasExpired: true,
+        terminatedBy: 'system (fired)',
+        terminatedDatetimeStamp: (new Date).getTime()
+      }
+    });
+  }
 
 }
