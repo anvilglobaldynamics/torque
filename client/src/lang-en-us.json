@@ -121,7 +121,8 @@
     "customerNameOrPhoneInputError": "Please enter a name or phone"
   },
   "outletSelector": {
-    "outletNameOrPhoneInput": "Search outlet by name or phone",
+    "outlets": "Outlets",
+    "outletNameOrPhoneInput": "Search outlet by name or phone.",
     "outletNameOrPhoneInputError": "Please enter a name or phone"
   },
   "commonEmploymentDetails": {

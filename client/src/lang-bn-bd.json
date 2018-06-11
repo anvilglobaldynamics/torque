@@ -121,6 +121,7 @@
     "customerNameOrPhoneInputError": "একটি নাম বা ফোন লিখুন"
   },
   "outletSelector": {
+    "outlets": "দোকান",
     "outletNameOrPhoneInput": "নাম অথবা ফোন দিয়ে দোকান খুজুন।",
     "outletNameOrPhoneInputError": "একটি নাম বা ফোন লিখুন"
   },
