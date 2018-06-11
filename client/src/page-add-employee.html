@@ -35,8 +35,8 @@
         <form>
           <div class="card vertical layout">
             <paper-input class="addEmployeeForm--fullName" value="{{addEmployeeForm.fullName}}" required minlength="3" error-message=[[verses.employee.nameOfEmployeeInputError]] label=[[verses.employee.nameOfEmployeeInput]]></paper-input>
-            <paper-input class="addEmployeeForm--password" value="{{addEmployeeForm.password}}" required minlength="8" error-message=[[verses.login.passwordInputError]] label=[[verses.login.passwordInput]] type="password"></paper-input>
-            <paper-input class="addEmployeeForm--phone" value="{{addEmployeeForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.register.phoneInputError]] label=[[verses.outlet.contactPhoneOfContactPerson]]></paper-input>
+            <paper-input class="addEmployeeForm--password" value="{{addEmployeeForm.password}}" required minlength="8" error-message=[[verses.employee.passwordInputError]] label=[[verses.employee.passwordInput]] type="password"></paper-input>
+            <paper-input class="addEmployeeForm--phone" value="{{addEmployeeForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.employee.phoneInputError]] label=[[verses.employee.contactPhoneOfContactPerson]]></paper-input>
 
             <elem-common-employment-details-input name="employeeForm" employee-form="{{addEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input>
 

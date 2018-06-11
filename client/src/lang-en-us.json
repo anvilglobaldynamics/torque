@@ -141,7 +141,11 @@
     "emailOrPhoneInputError": "Please enter a valid phone/email",
     "findUser": "Find User",
     "hireAsEmployee": "Hire As Employee",
-    "newEmployeeCreated": "New employee has been created."
+    "newEmployeeCreated": "New employee has been created.",
+    "passwordInputError": "Please enter a password at least 8 characters long.",
+    "passwordInput": "Your password",
+    "phoneInputError": "Please enter your valid phone number.",
+    "contactPhoneOfContactPerson": "Contact Number of Manager/Contact Person"
   },
   "product": {
     "addProducts": "Add Products",

@@ -26,7 +26,7 @@
     "emailOrPhoneInput": "আপনার ফোন নম্বর বা ইমেল",
     "emailOrPhoneInputError": "আপনার বৈধ ফোন নম্বর অথবা বৈধ ইমেল ঠিকানা লিখুন।",
     "passwordInput": "আপনার পাসওয়ার্ড",
-    "passwordInputError": "কমপক্ষে ৮ টি অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।"
+    "passwordInputError": "কমপক্ষে ৮ অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।"
   },
   "forgotPassword": {
     "emailOrPhoneInputTitle": "ফোন বা ইমেল লিখুন",
@@ -39,7 +39,7 @@
     "phoneInput": "আপনার বৈধ ফোন নম্বর",
     "phoneInputError": "আপনার বৈধ ফোন নম্বর লিখুন।",
     "passwordInput": "সর্বনিম্ন ৮ অক্ষরের একটি পাসওয়ার্ড দিন।",
-    "passwordInputError": "আপনার সুরক্ষার জন্য দয়া করে কমপক্ষে ৮ অক্ষরের একটি পাসওয়ার্ড লিখুন।",
+    "passwordInputError": "কমপক্ষে ৮ অক্ষরের একটি পাসওয়ার্ড লিখুন।",
     "alreadyHaveAccount": "আপনার কি অলরেডি একটা একাউন্ট আছে?"
   },
   "sidebar": {
@@ -141,7 +141,11 @@
     "emailOrPhoneInputError": "বৈধ ফোন/ইমেইল লিখুন",
     "findUser": "ব্যাবহারকারী খুজুন",
     "hireAsEmployee": "কর্মচারী হিসেবে নিয়োগ করুন",
-    "newEmployeeCreated": "নতুন কর্মী তৈরি হয়েছে।"
+    "newEmployeeCreated": "নতুন কর্মী তৈরি হয়েছে।",
+    "passwordInputError": "কমপক্ষে ৮ অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।",
+    "passwordInput": "আপনার পাসওয়ার্ড",
+    "phoneInputError": "আপনার বৈধ ফোন নম্বর লিখুন।",
+    "contactPhoneOfContactPerson": "যোগাযোগ করার বেক্তির ফোন"
   },
   "product": {
     "addProducts": "পণ্য যোগ করুন",
