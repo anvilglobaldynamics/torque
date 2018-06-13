@@ -14,7 +14,7 @@
 1. All methods that return one document must start with `find`. i.e. `findByApiKey`.
 2. All methods that may list more than one document must start with `list`. i.e. `listByName`.
 3. Every collection has these inherited methods `findById`, `listByIdList` and `deleteById`.
-4. Every method that finds a document by id and updates it, must start with `set`. i.e. `setProfile`.
+4. Every method that finds a document by id and simply sets values without further calculation, must start with `set`. i.e. `setProfile`.
 5. Methods that do complex operations should have names that explain their action. i.e. `expireByUserIdWhenFired`.
 6. When referring to the id of the same collection, parameter must not be prefixed by collection name. i.e. use `User#setEmail({ id }, { email })` instead of `User#setEmail({ userId }, { email })`.
 

@@ -83,60 +83,6 @@ exports.UserCollection = class extends Collection {
     });
   }
 
-  // TODO: convert to updateEmailVerificationStatus or setEmailVerificationStatus
-  async setEmailAsVerified({ id }) {
-    return await this._update({ id }, {
-      $set: {
-        isEmailVerified: true
-      }
-    });
-  }
-
-  async setEmailAsUnverified({ id }) {
-    let mod = {
-      $set: {
-        isEmailVerified: false
-      }
-    };
-    return await this._update({ id }, mod);
-  }
-
-  async setPhoneAsVerified({ id }) {
-    let mod = {
-      $set: {
-        isPhoneVerified: true
-      }
-    };
-    return await this._update({ id }, mod);
-  }
-
-  async setPhoneAsUnverified({ id }) {
-    let mod = {
-      $set: {
-        isPhoneVerified: false
-      }
-    };
-    return await this._update({ id }, mod);
-  }
-
-  async setPasswordHash({ id }, { passwordHash }) {
-    let mod = {
-      $set: {
-        passwordHash: passwordHash
-      }
-    };
-    return await this._update({ id }, mod);
-  }
-
-  async updateBanningStatus({ id }, { isBanned }) {
-    let mod = {
-      $set: {
-        isBanned
-      }
-    };
-    return await this._update({ id }, mod);
-  }
-
   async setProfile({ id }, { email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
     let mod = {
       $set: {
@@ -153,6 +99,38 @@ exports.UserCollection = class extends Collection {
       }
     };
     return await this._update({ id }, mod);
+  }
+
+  async setEmailVerificationStatus({ id }, { isEmailVerified }) {
+    return await this._update({ id }, {
+      $set: {
+        isEmailVerified
+      }
+    });
+  }
+
+  async setPhoneVerificationStatus({ id }, { isPhoneVerified }) {
+    return await this._update({ id }, {
+      $set: {
+        isPhoneVerified
+      }
+    });
+  }
+
+  async setPasswordHash({ id }, { passwordHash }) {
+    return await this._update({ id }, {
+      $set: {
+        passwordHash: passwordHash
+      }
+    });
+  }
+
+  async setBanningStatus({ id }, { isBanned }) {
+    return await this._update({ id }, {
+      $set: {
+        isBanned
+      }
+    });
   }
 
 }

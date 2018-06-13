@@ -47,7 +47,7 @@ exports.SesssionCollection = class extends Collection {
     return await this._insert({
       userId,
       apiKey,
-      createdDatetimeStamp: (new Date).getTime(),
+      createdDatetimeStamp: (new Date()).getTime(),
       terminatedDatetimeStamp: null,
       terminatedBy: '',
       hasExpired: false
@@ -58,22 +58,22 @@ exports.SesssionCollection = class extends Collection {
     return await this._findOne({ apiKey });
   }
 
-  async close({ sessionId }) {
-    return await this._update({ id: sessionId }, {
+  async close({ id }) {
+    return await this._update({ id }, {
       $set: {
         hasExpired: true,
         terminatedBy: 'user',
-        terminatedDatetimeStamp: (new Date).getTime()
+        terminatedDatetimeStamp: (new Date()).getTime()
       }
     });
   }
 
-  async expire({ sessionId }, cbfn) {
-    return await this._update({ id: sessionId }, {
+  async expire({ id }, cbfn) {
+    return await this._update({ id }, {
       $set: {
         hasExpired: true,
         terminatedBy: 'system (expiry)',
-        terminatedDatetimeStamp: (new Date).getTime()
+        terminatedDatetimeStamp: (new Date()).getTime()
       }
     });
   }
@@ -83,7 +83,7 @@ exports.SesssionCollection = class extends Collection {
       $set: {
         hasExpired: true,
         terminatedBy: 'system (fired)',
-        terminatedDatetimeStamp: (new Date).getTime()
+        terminatedDatetimeStamp: (new Date()).getTime()
       }
     });
   }
