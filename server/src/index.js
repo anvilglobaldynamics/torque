@@ -285,10 +285,6 @@ class Program {
     server.registerPostApi('/api/admin-set-user-banning-status', AdminSetUserBanningStatusApi);
   }
 
-
-
 }
 
 exports.Program = Program;
-
-
