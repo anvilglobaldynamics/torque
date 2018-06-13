@@ -17,4 +17,4 @@
 4. Every method that finds a document by id and simply sets values without further calculation, must start with `set`. i.e. `setProfile`.
 5. Methods that do complex operations should have names that explain their action. i.e. `expireByUserIdWhenFired`.
 6. When referring to the id of the same collection, parameter must not be prefixed by collection name. i.e. use `User#setEmail({ id }, { email })` instead of `User#setEmail({ userId }, { email })`.
-
+7. The `fixture` collection is special and the above rules don't apply to it.
