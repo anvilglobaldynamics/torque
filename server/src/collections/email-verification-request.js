@@ -2,19 +2,19 @@
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
-exports.PhoneVerificationRequestCollection = class extends Collection {
+exports.EmailVerificationRequestCollection = class extends Collection {
 
-  get name() { return 'phone-verification-request'; }
+  get name() { return 'email-verification-request'; }
 
   get joiSchema() {
     return Joi.object().keys({
-      forPhone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      forEmail: Joi.string().email().required().min(3).max(30),
       forUserId: Joi.number().max(999999999999999).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       verifiedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       origin: Joi.string().max(1024).required(),
       verificationToken: Joi.string().min(64).max(64).required(),
-      isVerificationComplete: Joi.boolean().required()
+      isVerificationComplete: Joi.boolean().required(),
     });
   }
 
@@ -36,8 +36,8 @@ exports.PhoneVerificationRequestCollection = class extends Collection {
       },
       {
         targetCollection: 'user',
-        foreignKey: 'phone',
-        referringKey: 'forPhone'
+        foreignKey: 'email',
+        referringKey: 'forEmail'
       }
     ];
   }
@@ -49,9 +49,9 @@ exports.PhoneVerificationRequestCollection = class extends Collection {
     return true;
   }
 
-  async create({ userId, phone, origin, verificationToken }) {
+  async create({ userId, email, origin, verificationToken }) {
     return await this._insert({
-      forPhone: phone,
+      forEmail: email,
       forUserId: userId,
       origin,
       verificationToken,
@@ -65,8 +65,8 @@ exports.PhoneVerificationRequestCollection = class extends Collection {
     return await this._findOne({ forUserId: userId, isVerificationComplete: false });
   }
 
-  async findByForPhone({ forPhone }) {
-    return await this._findOne({ forPhone: forPhone, isVerificationComplete: false });
+  async findByForEmail({ forEmail }) {
+    return await this._findOne({ forEmail, isVerificationComplete: false });
   }
 
   // NOTE: Code using this method should check if it returns true or not.
