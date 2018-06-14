@@ -68,7 +68,7 @@ exports.SesssionCollection = class extends Collection {
     });
   }
 
-  async expire({ id }, cbfn) {
+  async expire({ id }) {
     return await this._update({ id }, {
       $set: {
         hasExpired: true,
@@ -78,7 +78,7 @@ exports.SesssionCollection = class extends Collection {
     });
   }
 
-  async expireByUserIdWhenFired({ userId }, cbfn) {
+  async expireByUserIdWhenFired({ userId }) {
     return await this._updateMany({ userId, hasExpired: false }, {
       $set: {
         hasExpired: true,
