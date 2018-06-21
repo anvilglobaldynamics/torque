@@ -107,9 +107,13 @@
   },
   "outlet": {
     "nameOfOutletInput": "আপনার দোকান এর নাম ",
+    "nameOfOutletInputError": "একটি বৈধ নাম লিখুন",
     "physicalAddressInput": "ঠিকানা",
+    "physicalAddressInputError": "অন্তত 8 টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
     "contactPersonNameInput": "যোগাযোগ করার বেক্তির নাম",
+    "contactPersonNameInputError": "একটি বৈধ নাম লিখুন",
     "contactPhoneOfContactPerson": "যোগাযোগ করার বেক্তির ফোন",
+    "contactPhoneOfContactPersonError": "বৈধ ফোন নম্বর লিখুন।",
     "createOutlet": "দোকান তৈরী করুন",
     "updateOutlet": "আপডেট দোকান",
     "outletCreatedToast": "নতুন দোকান তৈরি করা হয়েছে।",

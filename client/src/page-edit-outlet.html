@@ -32,10 +32,10 @@
       <iron-form id="editOutletForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
-            <paper-input class="editOutletForm--name" value="{{editOutletForm.name}}" required minlength="3" error-message=[[verses.organization.pleaseEnterAValidName]] label=[[verses.outlet.nameOfOutletInput]]></paper-input>
-            <paper-textarea class="editOutletForm--physicalAddress" value="{{editOutletForm.physicalAddress}}" required minlength="8" error-message=[[verses.organization.primaryBusinessAddressInputError]] label=[[verses.outlet.physicalAddressInput]] rows="4"></paper-textarea>
-            <paper-input class="editOutletForm--contactPersonName" value="{{editOutletForm.contactPersonName}}" required minlength="3" error-message=[[verses.organization.pleaseEnterAValidName]] label=[[verses.outlet.contactPersonNameInput]]></paper-input>
-            <paper-input class="editOutletForm--phone" value="{{editOutletForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.register.phoneInputError]] label=[[verses.outlet.contactPhoneOfContactPerson]]></paper-input>
+            <paper-input class="editOutletForm--name" value="{{editOutletForm.name}}" required minlength="3" error-message=[[verses.outlet.nameOfOutletInputError]] label=[[verses.outlet.nameOfOutletInput]]></paper-input>
+            <paper-textarea class="editOutletForm--physicalAddress" value="{{editOutletForm.physicalAddress}}" required minlength="8" error-message=[[verses.outlet.physicalAddressInputError]] label=[[verses.outlet.physicalAddressInput]] rows="4"></paper-textarea>
+            <paper-input class="editOutletForm--contactPersonName" value="{{editOutletForm.contactPersonName}}" required minlength="3" error-message=[[verses.outlet.contactPersonNameInputError]] label=[[verses.outlet.contactPersonNameInput]]></paper-input>
+            <paper-input class="editOutletForm--phone" value="{{editOutletForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.outlet.contactPhoneOfContactPersonError]] label=[[verses.outlet.contactPhoneOfContactPerson]]></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editOutletForm--submit" on-tap="createOutletTapped">[[verses.outlet.createOutlet]]</paper-button>

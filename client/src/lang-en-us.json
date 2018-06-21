@@ -107,9 +107,13 @@
   },
   "outlet": {
     "nameOfOutletInput": "Name of your outlet.",
+    "nameOfOutletInputError": "Please enter a valid name.",
     "physicalAddressInput": "Physical Address",
+    "physicalAddressInputError": "Please enter an address at least 8 characters long",
     "contactPersonNameInput": "Name of Manager/Contact Person",
+    "contactPersonNameInputError": "Please enter a valid name.",
     "contactPhoneOfContactPerson": "Contact Number of Manager/Contact Person",
+    "contactPhoneOfContactPersonError": "Please enter your valid phone number.",
     "createOutlet": "Create Outlet",
     "updateOutlet": "Update Outlet",
     "outletCreatedToast": "New outlet has been created.",
