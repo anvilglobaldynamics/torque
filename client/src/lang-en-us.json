@@ -17,7 +17,9 @@
     "comingSoon": "Coming Soon",
     "confirm": "Confirm",
     "somethingWentWrong": "Something went wrong!",
-    "pageCannotBeDisplayed": "This page cannot be displayed at this moment. Please try again."
+    "pageCannotBeDisplayed": "This page cannot be displayed at this moment. Please try again.",
+    "percentage": "Percentage",
+    "fixedValue": "Fixed Value"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -120,7 +122,26 @@
     "outletUpdatedToast": "Outlet has been updated."
   },
   "productCategory": {
-    "noProductCategoryFound": "No product category found."
+    "noProductCategoryFound": "No product category found.",
+    "parentNameNotifier": "The Product Category will be available under category",
+    "productCategoryNameInput": "Name of your Product Category",
+    "productCategoryNameInputError": "Please enter a valid name",
+    "productCategoryUnitInput": "Specify unit (i.e. kg, pcs etc)",
+    "productCategoryUnitInputError": "Please enter a valid name",
+    "defaultPurchasePriceInput": "Default Purchase Price",
+    "defaultPurchasePriceInputError": "Please enter a valid amount",
+    "defaultVatInput": "Default VAT",
+    "defaultVatInputError": "Please enter a valid number",
+    "productCategoryDefaultSalePriceInput": "Default Sale Price",
+    "productCategoryDefaultSalePriceInputError": "Please enter a valid number",
+    "isProductReturnable": "Customer can return this product",
+    "defaultDiscountType": "Default Discount Type",
+    "defaultDiscountValueInput": "Default Discount Value",
+    "defaultDiscountValueInputError": "Please enter a valid number",
+    "createProductCategory": "Create Product Category",
+    "updateProductCategory": "Update Product Category",
+    "productCategoryCreated": "New product Category has been created.",
+    "productCategoryUpdated": "Product Category has been updated."
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "Search customer by name or phone.",
