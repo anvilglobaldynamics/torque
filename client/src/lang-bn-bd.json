@@ -165,10 +165,10 @@
     "sendYourQuestionsTo": "আপনার প্রশ্ন, অভিযোগ এবং প্রশংসা পাঠান"
   },
   "adjustCustomerBalance": {
-    "actionSelection": "একটি কর্ম নির্বাচন করুন",
+    "actionSelection": "একটি কাজ নির্বাচন করুন",
     "payment": "যোগ",
     "withdrawl": "বিয়োগ",
-    "amountInput": "পরিমাণ",
+    "amountInput": "অর্থ",
     "amountInputError": "পরিমাণ লিখুন",
     "adjust": "এডজাস্ট",
     "customerBalanceUpdated": "ক্রেতার ব্যালান্স আপডেট হয়ে গিয়েছে।"
