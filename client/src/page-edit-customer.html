@@ -31,15 +31,15 @@
       <iron-form id="editCustomerForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
-            <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message="Please enter a valid name" label="Name of your customer."></paper-input>
-            <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="11" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number"></paper-input>
+            <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message=[[verses.customer.customerNameInputError]] label=[[verses.customer.customerNameInput]]></paper-input>
+            <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.customer.customerNumberInputError]] label=[[verses.customer.customerNumberInput]]></paper-input>
             <template is="dom-if" if="{{!editMode}}">
-              <paper-input class$="editCustomerForm--openingBalance" value="{{editCustomerForm.openingBalance}}" required minlength="0" maxlength="8" error-message="Please enter an amount as opening balance" label="Opening Balance"></paper-input>
+              <paper-input class$="editCustomerForm--openingBalance" value="{{editCustomerForm.openingBalance}}" required minlength="0" maxlength="8" error-message=[[verses.customer.openingBalanceError]] label=[[verses.customer.openingBalance]]></paper-input>
             </template>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editCustomerForm--submit" on-tap="createCustomerTapped">Create Customer</paper-button>
-              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editCustomerForm--submit" on-tap="updateCustomerTapped">Update Customer</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editCustomerForm--submit" on-tap="createCustomerTapped">[[verses.customer.createCustomer]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editCustomerForm--submit" on-tap="updateCustomerTapped">[[verses.customer.updateCustomer]]</paper-button>
             </div>
           </div>
         </form>
@@ -154,7 +154,7 @@
         this.app.callAddCustomerApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editCustomerForm');
-          let message = "New customer has been created."
+          let message = this.app.verses.customer.newCustomerCreated;
           this.app.showToast(message, _ => {
             this.app.storeInSession('last-created-customer', response.customerId);
             this.backButtonOnTopBarPressed();
@@ -170,7 +170,7 @@
         this.app.callEditCustomerApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editCustomerForm');
-          let message = "Customer has been updated."
+          let message = this.app.verses.customer.customerUpdated;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });

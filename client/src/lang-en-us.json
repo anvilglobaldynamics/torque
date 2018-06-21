@@ -180,5 +180,17 @@
     "retypePasswordInput": "Retype Your new password.",
     "newPasswordSet": "You new password has been set. You can log in now.",
     "retypeIncorrect": "You incorrectly typed your new password the second time. Please type it again and press confirm."
+  },
+  "customer": {
+    "customerNameInput": "Name of your customer.",
+    "customerNameInputError": "Please enter a valid name",
+    "customerNumberInput": "Contact Number",
+    "customerNumberInputError": "Please enter a valid phone number",
+    "openingBalance": "Opening Balance",
+    "openingBalanceError": "Please enter an amount as opening balance",
+    "createCustomer": "Create Customer",
+    "updateCustomer": "Update Customer",
+    "newCustomerCreated": "New customer has been created.",
+    "customerUpdated": "Customer has been updated."
   }
 }

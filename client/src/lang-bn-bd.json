@@ -180,5 +180,17 @@
     "retypePasswordInput": "আবার লিখুন আপনার নতুন পাসওয়ার্ড",
     "newPasswordSet": "আপনি নতুন পাসওয়ার্ড সেট করা হয়েছে। আপনি এখন লগ ইন করতে পারেন।",
     "retypeIncorrect": "আপনি ভুলভাবে আপনার নতুন পাসওয়ার্ডটি দ্বিতীয় বার লিখেছেন। আবার লিখুন এবং নিশ্চিত করুন।"
+  },
+  "customer": {
+    "customerNameInput": "গ্রাহকের নাম",
+    "customerNameInputError": "একটি বৈধ নাম লিখুন",
+    "customerNumberInput": "যোগাযোগের নম্বর",
+    "customerNumberInputError": "একটি বৈধ ফোন নম্বর লিখুন",
+    "openingBalance": "খোলা ব্যালেন্স",
+    "openingBalanceError": "খোলা ব্যালেন্স হিসাবে একটি পরিমাণ লিখুন",
+    "createCustomer": "গ্রাহক তৈরি করুন",
+    "updateCustomer": "গ্রাহক আপডেট করুন",
+    "newCustomerCreated": "নতুন গ্রাহক তৈরি করা হয়েছে।",
+    "customerUpdated": "গ্রাহক আপডেট করা হয়েছে।"
   }
 }
