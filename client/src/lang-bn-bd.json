@@ -151,7 +151,10 @@
   },
   "product": {
     "addProducts": "পণ্য যোগ করুন",
-    "productAddedToInventory": "পণ্য সফলভাবে তালিকাতে যোগ করা হয়েছে।"
+    "productAddedToInventory": "পণ্য সফলভাবে তালিকাতে যোগ করা হয়েছে।",
+    "count": "গণনা",
+    "sellFor": "বিক্রয় মূল্য",
+    "purchasedFor": "ক্রয় মূল্য"
   },
   "about": {
     "about": "বিষয়ে",
