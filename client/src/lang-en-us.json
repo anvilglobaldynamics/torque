@@ -219,5 +219,26 @@
     "updateCustomer": "Update Customer",
     "newCustomerCreated": "New customer has been created.",
     "customerUpdated": "Customer has been updated."
+  },
+  "editProfile": {
+    "currentPassword": "Your current password",
+    "newPassword": "Your new password",
+    "retypeNewPassword": "Retype your new current password",
+    "invalidPasswordError": "Please enter a valid password",
+    "changePassword": "Change Password",
+    "phoneNumberInput": "Your valid phone number",
+    "phoneNumberInputError": "Please enter a valid phone number",
+    "emailAddressInput": "Your valid email address",
+    "emailAddressInputError": "Please enter a valid email",
+    "fullNameInput": "Your Full Name.",
+    "fullNameInputError": "Please enter a valid name",
+    "NidInput": "Your NID (National ID) (Optional)",
+    "addressInput": "Your current address (Optional)",
+    "emergencyContactInput": "The person/number to contact in case of emergency",
+    "bloodgroupInput": "Your Bloodgroup (Optional)",
+    "saveChanges": "Save Changes",
+    "incorrectSecondPassword": "You incorrectly typed your new password the second time. Please type it again and press confirm.",
+    "passwordChanged": "Password has been changed.",
+    "profileChanged": "Profile changes have been saved."
   }
 }

@@ -15,6 +15,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -31,12 +32,12 @@
       <iron-form id="changePasswordForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
-            <paper-input class="changePasswordForm--oldPassword" value="{{changePasswordForm.oldPassword}}" required minlength="11" maxlength="15" error-message="Please enter a valid password" label="Your current password" type="password"></paper-input>
-            <paper-input class="changePasswordForm--newPassword" value="{{changePasswordForm.newPassword}}" required minlength="11" maxlength="15" error-message="Please enter a valid password" label="Your new password" type="password"></paper-input>
-            <paper-input class="changePasswordForm--repeatNewPassword" value="{{changePasswordForm.repeatNewPassword}}" required minlength="11" maxlength="15" error-message="Please enter a valid password" label="Retype your new current password" type="password"></paper-input>
+            <paper-input class="changePasswordForm--oldPassword" value="{{changePasswordForm.oldPassword}}" required minlength="11" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.currentPassword]] type="password"></paper-input>
+            <paper-input class="changePasswordForm--newPassword" value="{{changePasswordForm.newPassword}}" required minlength="11" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.newPassword]] type="password"></paper-input>
+            <paper-input class="changePasswordForm--repeatNewPassword" value="{{changePasswordForm.repeatNewPassword}}" required minlength="11" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.retypeNewPassword]] type="password"></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class="primary changePasswordForm--submit" on-tap="changePasswordTapped">Change Password</paper-button>
+              <paper-button raised class="primary changePasswordForm--submit" on-tap="changePasswordTapped">[[verses.editProfile.changePassword]]</paper-button>
             </div>
           </div>
         </form>
@@ -45,18 +46,18 @@
       <iron-form id="editProfileForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
-            <paper-input class="editProfileForm--phone" value="{{editProfileForm.phone}}" required minlength="11" maxlength="15" error-message="Please enter a valid phone number" label="Your valid phone number"></paper-input>
-            <paper-input class="editProfileForm--email" value="{{editProfileForm.email}}" required pattern="^.+@.+\..+$" minlength="3" error-message="Please enter a valid email" label="Your valid email address"></paper-input>
+            <paper-input class="editProfileForm--phone" value="{{editProfileForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.editProfile.phoneNumberInputError]] label=[[verses.editProfile.phoneNumberInput]]></paper-input>
+            <paper-input class="editProfileForm--email" value="{{editProfileForm.email}}" required pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.editProfile.emailAddressInputError]] label=[[verses.editProfile.emailAddressInput]]></paper-input>
 
-            <paper-input class="editProfileForm--fullName" value="{{editProfileForm.fullName}}" required minlength="3" error-message="Please enter a valid name" label="Your Full Name."></paper-input>
-            <paper-input class="editProfileForm--nid" value="{{editProfileForm.nid}}" label="Your NID (National ID) (Optional)"></paper-input>
-            <paper-textarea class="editProfileForm--physicalAddress" value="{{editProfileForm.physicalAddress}}" label="Your current address (Optional)" rows="4"></paper-textarea>
+            <paper-input class="editProfileForm--fullName" value="{{editProfileForm.fullName}}" required minlength="3" error-message=[[verses.editProfile.fullNameInputError]] label=[[verses.editProfile.fullNameInput]]></paper-input>
+            <paper-input class="editProfileForm--nid" value="{{editProfileForm.nid}}" label=[[verses.editProfile.NidInput]]></paper-input>
+            <paper-textarea class="editProfileForm--physicalAddress" value="{{editProfileForm.physicalAddress}}" label=[[verses.editProfile.addressInput]] rows="4"></paper-textarea>
 
-            <paper-input class="editProfileForm--emergencyContact" value="{{editProfileForm.emergencyContact}}" label="The person/number to contact in case of emergency (i.e. workplace accidents) (Optional)"></paper-input>
-            <paper-input class="editProfileForm--bloodGroup" value="{{editProfileForm.bloodGroup}}" label="Your Bloodgroup (Optional)"></paper-input>
+            <paper-input class="editProfileForm--emergencyContact" value="{{editProfileForm.emergencyContact}}" label=[[verses.editProfile.emergencyContactInput]]></paper-input>
+            <paper-input class="editProfileForm--bloodGroup" value="{{editProfileForm.bloodGroup}}" label=[[verses.editProfile.bloodgroupInput]]></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class="primary editProfileForm--submit" on-tap="editProfileTapped">Save Changes</paper-button>
+              <paper-button raised class="primary editProfileForm--submit" on-tap="editProfileTapped">[[verses.editProfile.saveChanges]]</paper-button>
             </div>
           </div>
         </form>
@@ -65,7 +66,7 @@
   </template>
 
   <script>
-    class PageEditProfile extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageEditProfile extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-edit-profile';
       }
@@ -110,6 +111,7 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
+        this.useLanguageServices();
         this.app.pushPageTitle('Edit Profile');
         if (!this._ensureAccess()) return;
         this.delay(300, () => {
@@ -140,14 +142,14 @@
 
       _processUserChangePassword({ oldPassword, newPassword, repeatNewPassword }) {
         if (repeatNewPassword !== newPassword) {
-          let message = "You incorrectly typed your new password the second time. Please type it again and press confirm.";
+          let message = this.app.verses.editProfile.incorrectSecondPassword;
           return this.app.showModalDialog(this.app.verses.general.sorry, message, () => 'pass');
         }
         let data = { oldPassword, newPassword };
         this.app.callUserChangePasswordApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'changePasswordForm');
-          let message = "Password has been changed..";
+          let message = this.app.verses.editProfile.passwordChanged;
           this.app.showToast(message, _ => {
             this.app.navigateTo(`/login`);
           });
@@ -162,7 +164,7 @@
         this.app.callUserEditProfileApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProfileForm');
-          let message = "Profile changes have been saved.";
+          let message = this.app.verses.editProfile.profileChanged;
           this.app.showToast(message, _ => {
             if (response.doesRequireLogin) {
               this.app.navigateTo(`/login`);
