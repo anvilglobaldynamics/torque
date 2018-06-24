@@ -240,5 +240,15 @@
     "incorrectSecondPassword": "You incorrectly typed your new password the second time. Please type it again and press confirm.",
     "passwordChanged": "Password has been changed.",
     "profileChanged": "Profile changes have been saved."
+  },
+  "salesReturn": {
+    "pageTitle": "Return Sales",
+    "soldCount": "Sold Count",
+    "returnCount": "Return Count",
+    "productReturnCountInput": "Product Return Count",
+    "productReturnCountInputError": "Please enter a valid number",
+    "creditedAmountInput": "Credited Amount (amount that has been returned to the customer)",
+    "creditedAmountInputError": "Please enter a valid number",
+    "addSalesReturn": "Add Sales Return"
   }
 }

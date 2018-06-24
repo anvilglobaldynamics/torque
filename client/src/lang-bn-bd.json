@@ -240,5 +240,15 @@
     "incorrectSecondPassword": "আপনি ভুলভাবে আপনার নতুন পাসওয়ার্ডটি দ্বিতীয় বার টাইপ করেছেন। আবার এটি টাইপ করুন।",
     "passwordChanged": "পাসওয়ার্ড পরিবর্তন করা হয়েছে।",
     "profileChanged": "প্রোফাইল পরিবর্তনগুলি সংরক্ষণ করা হয়েছে।"
+  },
+  "salesReturn": {
+    "pageTitle": "পণ্য ফেরত",
+    "soldCount": "বিক্রি গণনা",
+    "returnCount": "ফেরত গণনা",
+    "productReturnCountInput": "পণ্য ফেরত গণনা",
+    "productReturnCountInputError": "একটি বৈধ নম্বর লিখুন",
+    "creditedAmountInput": "ফেরতকৃত অর্থ (যে অর্থ গ্রাহককে ফেরত দেওয়া হয়েছে)",
+    "creditedAmountInputError": "একটি বৈধ নম্বর লিখুন",
+    "addSalesReturn": "পণ্য ফেরত যোগ করুন"
   }
 }
