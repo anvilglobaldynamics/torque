@@ -250,5 +250,21 @@
     "creditedAmountInput": "Credited Amount (amount that has been returned to the customer)",
     "creditedAmountInputError": "Please enter a valid number",
     "addSalesReturn": "Add Sales Return"
+  },
+  "warehouse": {
+    "editPageTitle": "Edit Warehouse",
+    "addPageTitle": "Add Warehouse",
+    "warehouseCreated": "New warehouse has been created.",
+    "warehouseUpdated": "Warehouse has been updated.",
+    "warehouseNameInput": "Name of your warehouse.",
+    "warehouseNameInputError": "Please enter a valid name",
+    "warehousePhysicalAddressInput": "Physical Address",
+    "warehousePhysicalAddressInputError": "Please enter an address at least 8 characters long",
+    "warehouseManagerNameInput": "Name of Manager/Contact Person",
+    "warehouseManagerNameInputError": "Please enter a valid name",
+    "warehouseManagerNumberInput": "Contact Number of Manager/Contact Person",
+    "warehouseManagerNumberInputError": "Please enter a valid phone number",
+    "createWarehouse": "Create Warehouse",
+    "updateWarehouse": "Update Warehouse"
   }
 }

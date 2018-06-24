@@ -117,7 +117,7 @@
     "contactPhoneOfContactPerson": "যোগাযোগ করার বেক্তির ফোন",
     "contactPhoneOfContactPersonError": "বৈধ ফোন নম্বর লিখুন।",
     "createOutlet": "দোকান তৈরী করুন",
-    "updateOutlet": "আপডেট দোকান",
+    "updateOutlet": "দোকান আপডেট করুন",
     "outletCreatedToast": "নতুন দোকান তৈরি করা হয়েছে।",
     "outletUpdatedToast": "দোকান আপডেট করা হয়েছে।"
   },
@@ -250,5 +250,21 @@
     "creditedAmountInput": "ফেরতকৃত অর্থ (যে অর্থ গ্রাহককে ফেরত দেওয়া হয়েছে)",
     "creditedAmountInputError": "একটি বৈধ নম্বর লিখুন",
     "addSalesReturn": "পণ্য ফেরত যোগ করুন"
+  },
+  "warehouse": {
+    "editPageTitle": "গুদাম আপডেট করুন",
+    "addPageTitle": "গুদাম যোগ করুন",
+    "warehouseCreated": "নতুন গুদাম তৈরি করা হয়েছে।",
+    "warehouseUpdated": "গুদাম আপডেট করা হয়েছে।",
+    "warehouseNameInput": "আপনার গুদামের নাম",
+    "warehouseNameInputError": "একটি বৈধ নাম লিখুন",
+    "warehousePhysicalAddressInput": "ঠিকানা",
+    "warehousePhysicalAddressInputError": "অন্তত 8 টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
+    "warehouseManagerNameInput": "যোগাযোগ করার বেক্তির নাম",
+    "warehouseManagerNameInputError": "একটি বৈধ নাম লিখুন",
+    "warehouseManagerNumberInput": "যোগাযোগ করার বেক্তির ফোন",
+    "warehouseManagerNumberInputError": "বৈধ ফোন নম্বর লিখুন।",
+    "createWarehouse": "গুদাম তৈরী করুন",
+    "updateWarehouse": "গুদাম আপডেট করুন"
   }
 }
