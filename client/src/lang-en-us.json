@@ -165,6 +165,7 @@
     "nameOfEmployeeInput": "Name of Employee.",
     "nameOfEmployeeInputError": "Please enter a valid name",
     "addEmployee": "Add Employee",
+    "emailOrPhoneInputTitle": "Enter Phone or Email.",
     "emailOrPhoneInputError": "Please enter a valid phone/email",
     "findUser": "Find User",
     "hireAsEmployee": "Hire As Employee",
@@ -174,7 +175,9 @@
     "phoneInputError": "Please enter your valid phone number.",
     "contactPhoneOfContactPerson": "Contact Number of Manager/Contact Person",
     "employeeUpdated": "Employee has been updated.",
-    "updateEmployee": "Update Employee"
+    "updateEmployee": "Update Employee",
+    "hireEmployeePageTitle": "Hire Employee",
+    "newEmployeeHired": "New employee has been hired."
   },
   "product": {
     "addProducts": "Add Products",
