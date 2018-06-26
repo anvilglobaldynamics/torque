@@ -16,6 +16,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -32,9 +33,9 @@
 
         <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
           <paper-button class="pagination-show-previous" on-tap="showPreviousTapped">
-            Show
+            [[verses.general.show]]
             <iron-icon icon="icons:arrow-upward"></iron-icon>
-            Previous
+            [[verses.general.previous]]
           </paper-button>
         </template>
 
@@ -44,16 +45,16 @@
               <div class="content">
                 <div class="title">[[customer.fullName]]</div>
                 <div class="description">[[customer.phone]]</div>
-                <div class="description">Balance: [[customer.balance]]</div>
+                <div class="description">[[verses.general.balance]]: [[customer.balance]]</div>
               </div>
               <div class="control-buttons">
                 <paper-button raised class="primary" on-tap="viewTapped">
                   <iron-icon class="button-icon" icon="icons:visibility"></iron-icon>
-                  View
+                  [[verses.general.view]]
                 </paper-button>
                 <paper-button raised class="secondary" on-tap="editTapped">
                   <iron-icon class="button-icon" icon="icons:create"></iron-icon>
-                  Edit
+                  [[verses.general.edit]]
                 </paper-button>
               </div>
             </div>
@@ -61,17 +62,17 @@
         </div>
 
         <div class="pagination">
-          Showing
+          [[verses.customer.showing]]
           <span class="limit">[[pagination.limit]]</span>
-          items out of
-          <span class="total-count">[[pagination.totalCount]]</span> starting from
+          [[verses.customer.itemsOutOf]]
+          <span class="total-count">[[pagination.totalCount]]</span> [[verses.customer.startingFrom]]
           <span class="offset">#[[$inc(pagination.offset)]]</span>.
         </div>
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
           <paper-button class="pagination-show-more" on-tap="showMoreTapped">
-            Show
+            [[verses.general.show]]
             <iron-icon icon="icons:arrow-downward"></iron-icon>
-            More
+            [[verses.general.more]]
           </paper-button>
         </template>
 
@@ -80,7 +81,7 @@
       <div class="lone-controls">
         <paper-button raised class="primary" on-tap="createTapped">
           <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
-          Create New Customer
+          [[verses.customer.createNewCustomer]]
         </paper-button>
       </div>
 
@@ -89,7 +90,7 @@
   </template>
 
   <script>
-    class PageManageCustomers extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageManageCustomers extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-manage-customers';
@@ -110,7 +111,8 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
-        this.app.pushPageTitle('Manage Customer');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.customer.manageCustomerPageTitle);
         if (!this._ensureAccess()) return;
         this._processCustomerList(() => {
           this.isReady = true;

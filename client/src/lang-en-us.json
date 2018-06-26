@@ -19,7 +19,13 @@
     "somethingWentWrong": "Something went wrong!",
     "pageCannotBeDisplayed": "This page cannot be displayed at this moment. Please try again.",
     "percentage": "Percentage",
-    "fixedValue": "Fixed Value"
+    "fixedValue": "Fixed Value",
+    "show": "Show",
+    "more": "More",
+    "previous": "Previous",
+    "balance": "Balance",
+    "view": "View",
+    "edit": "Edit"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -224,7 +230,13 @@
     "createCustomer": "Create Customer",
     "updateCustomer": "Update Customer",
     "newCustomerCreated": "New customer has been created.",
-    "customerUpdated": "Customer has been updated."
+    "customerUpdated": "Customer has been updated.",
+
+    "manageCustomerPageTitle": "Manage Customer",
+    "showing": "Showing",
+    "itemsOutOf": "items out of",
+    "startingFrom": "starting from",
+    "createNewCustomer": "Create New Customer"
   },
   "editProfile": {
     "currentPassword": "Your current password",
