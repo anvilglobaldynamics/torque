@@ -165,6 +165,7 @@
     "nameOfEmployeeInput": "কর্মচারীর নাম",
     "nameOfEmployeeInputError": "একটি নাম লিখুন",
     "addEmployee": "কর্মচারী নিয়োগ করুন",
+    "emailOrPhoneInputTitle": "ফোন বা ইমেল লিখুন",
     "emailOrPhoneInputError": "বৈধ ফোন/ইমেইল লিখুন",
     "findUser": "ব্যাবহারকারী খুজুন",
     "hireAsEmployee": "কর্মচারী হিসেবে নিয়োগ করুন",
@@ -174,7 +175,9 @@
     "phoneInputError": "আপনার বৈধ ফোন নম্বর লিখুন।",
     "contactPhoneOfContactPerson": "যোগাযোগ করার বেক্তির ফোন",
     "employeeUpdated": "কর্মচারী আপডেট করা হয়েছে।",
-    "updateEmployee": "কর্মচারী আপডেট"
+    "updateEmployee": "কর্মচারী আপডেট", 
+    "hireEmployeePageTitle": "কর্মচারী নিয়োগ", 
+    "newEmployeeHired": "নতুন কর্মচারী নিয়োগ করা হয়েছে।" 
   },
   "product": {
     "addProducts": "পণ্য যোগ করুন",
