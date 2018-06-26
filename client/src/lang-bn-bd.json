@@ -28,7 +28,10 @@
     "emailOrPhoneInput": "আপনার ফোন নম্বর বা ইমেল",
     "emailOrPhoneInputError": "আপনার বৈধ ফোন নম্বর অথবা বৈধ ইমেল ঠিকানা লিখুন।",
     "passwordInput": "আপনার পাসওয়ার্ড",
-    "passwordInputError": "কমপক্ষে ৮ অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।"
+    "passwordInputError": "কমপক্ষে ৮ অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।",
+
+    "confirmationLinkPartOne": "আমরা আপনার কাছে একটি নিশ্চিতকরণ লিঙ্ক পাঠিয়েছি আপনার  ",
+    "confirmationLinkPartTwo": ". আপনার পাসওয়ার্ড পুনরায় সেট করার জন্য লিঙ্কটি ব্যবহার করুন।"
   },
   "forgotPassword": {
     "emailOrPhoneInputTitle": "ফোন বা ইমেল লিখুন",

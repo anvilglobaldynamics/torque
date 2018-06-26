@@ -28,7 +28,10 @@
     "emailOrPhoneInput": "Your phone number or email address",
     "emailOrPhoneInputError": "Please enter your valid phone number or valid email address.",
     "passwordInput": "Your password",
-    "passwordInputError": "Please enter a password at least 8 characters long."
+    "passwordInputError": "Please enter a password at least 8 characters long.",
+
+    "confirmationLinkPartOne": "We have sent you a confirmation link on your ",
+    "confirmationLinkPartTwo": ". Please use the link to reset your password."
   },
   "forgotPassword": {
     "emailOrPhoneInputTitle": "Enter Phone or Email.",

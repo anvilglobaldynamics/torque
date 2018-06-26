@@ -147,7 +147,7 @@
           if (!emailOrPhone) return;
           emailOrPhone = emailOrPhone.toLowerCase();
           this._processForgotPasswordRequestApi({ emailOrPhone }, type => {
-            let message = `We have sent you a confirmation link on your ${type}. Please use the link to reset your password.`;
+            let message = this.app.verses.login.confirmationLinkPartOne + type + this.app.verses.login.confirmationLinkPartTwo;
             this.app.showModalDialog("Thank you.", message, () => 'pass');
           });
         });
