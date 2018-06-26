@@ -266,5 +266,11 @@
     "warehouseManagerNumberInputError": "Please enter a valid phone number",
     "createWarehouse": "Create Warehouse",
     "updateWarehouse": "Update Warehouse"
+  },
+  "error": {
+    "404": "404",
+    "contentNotFound": "Content not found.",
+    "contentCouldNotBeFound": "The requested content could not be found",
+    "backToDashboard": "Back to Dashboard."
   }
 }

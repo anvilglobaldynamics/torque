@@ -266,5 +266,11 @@
     "warehouseManagerNumberInputError": "বৈধ ফোন নম্বর লিখুন।",
     "createWarehouse": "গুদাম তৈরী করুন",
     "updateWarehouse": "গুদাম আপডেট করুন"
+  },
+  "error": {
+    "404": "404",
+    "contentNotFound": "বিষয়বস্তু খুঁজে পাওয়া যাচ্ছে না।",
+    "contentCouldNotBeFound": "অনুরোধকৃত সামগ্রী পাওয়া যায়নি",
+    "backToDashboard": "ড্যাশবোর্ডে ফিরে যান।"
   }
 }
