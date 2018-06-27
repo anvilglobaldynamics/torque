@@ -84,21 +84,19 @@ exports.UserCollection = class extends Collection {
   }
 
   async setProfile({ id }, { email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
-    let mod = {
+    return await this._update({ id }, {
       $set: {
         email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup
       }
-    };
-    return await this._update({ id }, mod);
+    });
   }
 
   async setEmail({ id }, { email }) {
-    let mod = {
+    return await this._update({ id }, {
       $set: {
         email
       }
-    };
-    return await this._update({ id }, mod);
+    });
   }
 
   async setEmailVerificationStatus({ id }, { isEmailVerified }) {
