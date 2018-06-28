@@ -186,7 +186,13 @@
     "employeeUpdated": "কর্মচারী আপডেট করা হয়েছে।",
     "updateEmployee": "কর্মচারী আপডেট", 
     "hireEmployeePageTitle": "কর্মচারী নিয়োগ", 
-    "newEmployeeHired": "নতুন কর্মচারী নিয়োগ করা হয়েছে।" 
+    "newEmployeeHired": "নতুন কর্মচারী নিয়োগ করা হয়েছে।",
+    "manageEmployeePageTitle": "Manage Employees",
+    "companyProvidedId": "Company Provided Id",
+    "designation": "Designation",
+    "role": "Role",
+    "hireUserEmployee": "Hire User Employee",
+    "addUserAsEmployee": "Add New User As Employee"
   },
   "product": {
     "addProducts": "পণ্য যোগ করুন",

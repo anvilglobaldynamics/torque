@@ -16,6 +16,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -32,20 +33,20 @@
       <div class="card vertical layout">
 
         <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">Show Previous</paper-button>
+          <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
         </template>
 
         <div class="list">
           <template is="dom-repeat" items="[[employeeList]]" as="employee">
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
-                <div class="title">Name: [[employee.userDetails.fullName]]</div>
-                <div class="description">Phone: [[employee.userDetails.phone]]</div>
-                <div class="description">Company Provided Id: [[employee.companyProvidedId]]</div>
-                <div class="description">Designation: [[employee.designation]], role: [[employee.role]]</div>
+                <div class="title">[[verses.general.name]]: [[employee.userDetails.fullName]]</div>
+                <div class="description">[[verses.general.phone]]: [[employee.userDetails.phone]]</div>
+                <div class="description">[[verses.employee.companyProvidedId]]: [[employee.companyProvidedId]]</div>
+                <div class="description">[[verses.employee.designation]] : [[employee.designation]], [[verses.employee.role]]: [[employee.role]]</div>
               </div>
-              <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
-              <paper-button raised class="primary" on-tap="editTapped">Edit</paper-button>
+              <paper-button raised class="primary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
+              <paper-button raised class="primary" on-tap="editTapped">[[verses.general.edit]]</paper-button>
             </div>
           </template>
         </div>
@@ -58,21 +59,21 @@
           <span class="offset">#[[$inc(pagination.offset)]]</span>.
         </div>
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">Show More</paper-button>
+          <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
         </template>
 
       </div>
 
       <div class="horizontal layout end-justified wrap p-4">
-        <paper-button raised class="btn btn-default" on-tap="hireEmployeeTapped">Hire User Employee</paper-button>
-        <paper-button raised class="btn primary" on-tap="addNewEmployeeTapped">Add New User As Employee</paper-button>
+        <paper-button raised class="btn btn-default" on-tap="hireEmployeeTapped">[[verses.employee.hireUserEmployee]]</paper-button>
+        <paper-button raised class="btn primary" on-tap="addNewEmployeeTapped">[[verses.employee.addUserAsEmployee]]</paper-button>
       </div>
 
     </div>
   </template>
 
   <script>
-    class PageManageEmployees extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageManageEmployees extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-manage-employees';
       }
@@ -92,7 +93,8 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
-        this.app.pushPageTitle('Manage Employees');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.employee.manageEmployeePageTitle);
         if (!this._ensureAccess()) return;
         this._processEmployeeList(() => {
           this.isReady = true;

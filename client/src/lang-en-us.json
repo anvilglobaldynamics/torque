@@ -23,6 +23,10 @@
     "show": "Show",
     "more": "More",
     "previous": "Previous",
+    "showPrevious": "Show Previous",
+    "showMore": "Show More",
+    "name": "Name",
+    "phone": "Phone",
     "balance": "Balance",
     "view": "View",
     "edit": "Edit"
@@ -186,7 +190,13 @@
     "employeeUpdated": "Employee has been updated.",
     "updateEmployee": "Update Employee",
     "hireEmployeePageTitle": "Hire Employee",
-    "newEmployeeHired": "New employee has been hired."
+    "newEmployeeHired": "New employee has been hired.",
+    "manageEmployeePageTitle": "Manage Employees",
+    "companyProvidedId": "Company Provided Id",
+    "designation": "Designation",
+    "role": "Role",
+    "hireUserEmployee": "Hire User Employee",
+    "addUserAsEmployee": "Add New User As Employee"
   },
   "product": {
     "addProducts": "Add Products",
