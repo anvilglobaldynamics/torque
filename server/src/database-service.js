@@ -4,6 +4,7 @@ const { UserCollection } = require('./collections/user');
 const { SesssionCollection } = require('./collections/session');
 const { PhoneVerificationRequestCollection } = require('./collections/phone-verification-request');
 const { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
+const { FixtureCollection } = require('./collections/fixture');
 
 class DatabaseService {
 
@@ -17,6 +18,7 @@ class DatabaseService {
     this.session = new SesssionCollection(this.engine, this);
     this.phoneVerificationRequest = new PhoneVerificationRequestCollection(this.engine, this);
     this.emailVerificationRequest = new EmailVerificationRequestCollection(this.engine, this);
+    this.fixture = new FixtureCollection(this.engine, this);
   }
 
 }
