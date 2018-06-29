@@ -29,7 +29,10 @@
     "phone": "Phone",
     "balance": "Balance",
     "view": "View",
-    "edit": "Edit"
+    "edit": "Edit",
+    "showing": "Showing",
+    "itemsOutOf": "items out of",
+    "startingFrom": "starting from"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -243,9 +246,6 @@
     "customerUpdated": "Customer has been updated.",
 
     "manageCustomerPageTitle": "Manage Customer",
-    "showing": "Showing",
-    "itemsOutOf": "items out of",
-    "startingFrom": "starting from",
     "createNewCustomer": "Create New Customer"
   },
   "editProfile": {

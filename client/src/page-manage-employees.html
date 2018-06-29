@@ -52,10 +52,10 @@
         </div>
 
         <div class="pagination">
-          Showing
+          [[verses.general.showing]]
           <span class="limit">[[pagination.limit]]</span>
-          items out of
-          <span class="total-count">[[pagination.totalCount]]</span> starting from
+          [[verses.general.itemsOutOf]]
+          <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
           <span class="offset">#[[$inc(pagination.offset)]]</span>.
         </div>
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">

@@ -23,9 +23,16 @@
     "show": "প্রদর্শনী",
     "more": "বেশী",
     "previous": "আগে",
+    "showPrevious": "আগের দেখাও",
+    "showMore": "আরও দেখাও",
+    "name": "নাম",
+    "phone": "ফোন",
     "balance": "ব্যালান্স",
     "view": "দেখুন",
-    "edit": "সম্পাদন করা"
+    "edit": "সম্পাদন করা",
+    "showing": "দেখাচ্ছে",
+    "itemsOutOf": "আইটেম গুলোর মধ্যে",
+    "startingFrom": "থেকে শুরু করে"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -187,12 +194,12 @@
     "updateEmployee": "কর্মচারী আপডেট", 
     "hireEmployeePageTitle": "কর্মচারী নিয়োগ", 
     "newEmployeeHired": "নতুন কর্মচারী নিয়োগ করা হয়েছে।",
-    "manageEmployeePageTitle": "Manage Employees",
-    "companyProvidedId": "Company Provided Id",
-    "designation": "Designation",
-    "role": "Role",
-    "hireUserEmployee": "Hire User Employee",
-    "addUserAsEmployee": "Add New User As Employee"
+    "manageEmployeePageTitle": "কর্মচারীদের পরিচালনা করুন",
+    "companyProvidedId": "কোম্পানী প্রদত্ত আইডি",
+    "designation": "উপাধি",
+    "role": "ভূমিকা",
+    "hireUserEmployee": "ব্যবহারকারীকে কর্মচারী হিসেবে নিয়োগ করুন",
+    "addUserAsEmployee": "কর্মচারী হিসাবে নতুন ব্যবহারকারী যোগ করুন"
   },
   "product": {
     "addProducts": "পণ্য যোগ করুন",
@@ -239,9 +246,6 @@
     "customerUpdated": "গ্রাহক আপডেট করা হয়েছে।",
 
     "manageCustomerPageTitle": "গ্রাহক পরিচালনা করুন",
-    "showing": "দেখাচ্ছে",
-    "itemsOutOf": "আইটেম গুলোর মধ্যে",
-    "startingFrom": "থেকে শুরু করে",
     "createNewCustomer": "নতুন গ্রাহক তৈরি করুন"
   },
   "editProfile": {
