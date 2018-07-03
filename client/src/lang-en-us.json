@@ -35,7 +35,12 @@
     "startingFrom": "starting from",
     "per": "per",
     "move": "Move",
-    "delete": "Delete"
+    "delete": "Delete",
+    "customer": "Customer",
+    "outlet": "Outlet",
+    "filter": "Filter",
+    "fromDate": "From Date",
+    "toDate": "To Date"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -290,7 +295,16 @@
     "productReturnCountInputError": "Please enter a valid number",
     "creditedAmountInput": "Credited Amount (amount that has been returned to the customer)",
     "creditedAmountInputError": "Please enter a valid number",
-    "addSalesReturn": "Add Sales Return"
+    "addSalesReturn": "Add Sales Return",
+
+    "manageSalesReturnTitle": "Manage Sales Return",
+    "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
+    "removeCustomer": "Remove Customer",
+    "changeCustomer": "Change Customer",
+    "noOutletSelected": "No outlet selected (Anonymous Sale Return)",
+    "removeOutlet": "Remove Outlet",
+    "changeOutlet": "Change Outlet",
+    "salesId": "Sales Id"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",

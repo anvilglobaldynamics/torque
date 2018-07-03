@@ -35,7 +35,12 @@
     "startingFrom": "থেকে শুরু করে",
     "per": "প্রতি",
     "move": "সরান",
-    "delete": "মুছে ফেলুন"
+    "delete": "মুছে ফেলুন",
+    "customer": "ক্রেতা",
+    "outlet": "দোকান",
+    "filter": "সংকীর্ণ",
+    "fromDate": "তারিখ হইতে",
+    "toDate": "তারিখ পর্যন্ত"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -290,7 +295,16 @@
     "productReturnCountInputError": "একটি বৈধ নম্বর লিখুন",
     "creditedAmountInput": "ফেরতকৃত অর্থ (যে অর্থ গ্রাহককে ফেরত দেওয়া হয়েছে)",
     "creditedAmountInputError": "একটি বৈধ নম্বর লিখুন",
-    "addSalesReturn": "পণ্য ফেরত যোগ করুন"
+    "addSalesReturn": "পণ্য ফেরত যোগ করুন",
+
+    "manageSalesReturnTitle": "পণ্য ফেরত পরিচালনা করুন",
+    "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি (নাবিহীন পণ্য ফেরত)",
+    "removeCustomer": "গ্রাহক সরান",
+    "changeCustomer": "গ্রাহক পরিবর্তন করুন",
+    "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি (নাবিহীন পণ্য ফেরত)",
+    "removeOutlet": "দোকান সরান",
+    "changeOutlet": "দোকান পরিবর্তন করুন",
+    "salesId": "বিক্রয় আইডি"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
