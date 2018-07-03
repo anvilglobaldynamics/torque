@@ -137,7 +137,10 @@
     "createOutlet": "Create Outlet",
     "updateOutlet": "Update Outlet",
     "outletCreatedToast": "New outlet has been created.",
-    "outletUpdatedToast": "Outlet has been updated."
+    "outletUpdatedToast": "Outlet has been updated.",
+
+    "manageOutletTitle": "Manage Outlet",
+    "createNewOutlet": "Create New Outlet"
   },
   "productCategory": {
     "noProductCategoryFound": "No product category found.",

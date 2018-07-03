@@ -137,7 +137,10 @@
     "createOutlet": "দোকান তৈরী করুন",
     "updateOutlet": "দোকান আপডেট করুন",
     "outletCreatedToast": "নতুন দোকান তৈরি করা হয়েছে।",
-    "outletUpdatedToast": "দোকান আপডেট করা হয়েছে।"
+    "outletUpdatedToast": "দোকান আপডেট করা হয়েছে।",
+
+    "manageOutletTitle": "দোকান পরিচালনা",
+    "createNewOutlet": "নতুন দোকান তৈরি করুন"
   },
   "productCategory": {
     "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি।",

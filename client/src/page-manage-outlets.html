@@ -16,6 +16,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -31,7 +32,7 @@
       <div class="card vertical layout">
 
         <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">Show Previous</paper-button>
+          <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
         </template>
 
         <div class="list">
@@ -51,20 +52,20 @@
         </div>
 
         <div class="pagination">
-          Showing
+          [[verses.general.showing]]
           <span class="limit">[[pagination.limit]]</span>
-          items out of
-          <span class="total-count">[[pagination.totalCount]]</span> starting from
+          [[verses.general.itemsOutOf]]
+          <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
           <span class="offset">#[[$inc(pagination.offset)]]</span>.
         </div>
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">Show More</paper-button>
+          <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
         </template>
 
       </div>
 
       <div class="horizontal layout end-justified p-4">
-        <paper-button raised class="btn primary" on-tap="createTapped">Create New Outlet</paper-button>
+        <paper-button raised class="btn primary" on-tap="createTapped">[[verses.outlet.createNewOutlet]]</paper-button>
       </div>
 
     </div>
@@ -72,7 +73,7 @@
   </template>
 
   <script>
-    class PageManageOutlets extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageManageOutlets extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-manage-outlets';
@@ -93,7 +94,8 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
-        this.app.pushPageTitle('Manage Outlet');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.outlet.manageOutletTitle);
         if (!this._ensureAccess()) return;
         this._processOutletList(() => {
           this.isReady = true;
