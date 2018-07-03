@@ -41,7 +41,8 @@
     "filter": "Filter",
     "fromDate": "From Date",
     "toDate": "To Date",
-    "for": "for"
+    "for": "for",
+    "pos": "POS"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -333,7 +334,10 @@
     "warehouseManagerNumberInput": "Contact Number of Manager/Contact Person",
     "warehouseManagerNumberInputError": "Please enter a valid phone number",
     "createWarehouse": "Create Warehouse",
-    "updateWarehouse": "Update Warehouse"
+    "updateWarehouse": "Update Warehouse",
+
+    "manageWarehouseTitle": "Manage Warehouse",
+    "createNewWarehouse": "Create New Warehouse"
   },
   "error": {
     "404": "404",

@@ -41,7 +41,8 @@
     "filter": "সংকীর্ণ",
     "fromDate": "তারিখ হইতে",
     "toDate": "তারিখ পর্যন্ত",
-    "for": "জন্য"
+    "for": "জন্য",
+    "pos": "বিক্রয় বিন্দু"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -333,7 +334,10 @@
     "warehouseManagerNumberInput": "যোগাযোগ করার বেক্তির ফোন",
     "warehouseManagerNumberInputError": "বৈধ ফোন নম্বর লিখুন।",
     "createWarehouse": "গুদাম তৈরী করুন",
-    "updateWarehouse": "গুদাম আপডেট করুন"
+    "updateWarehouse": "গুদাম আপডেট করুন",
+
+    "manageWarehouseTitle": "গুদাম পরিচালনা",
+    "createNewWarehouse": "নতুন গুদাম তৈরি করুন"
   },
   "error": {
     "404": "404",
