@@ -42,7 +42,8 @@
     "fromDate": "From Date",
     "toDate": "To Date",
     "for": "for",
-    "pos": "POS"
+    "pos": "POS",
+    "total": "Total"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -344,5 +345,30 @@
     "contentNotFound": "Content not found.",
     "contentCouldNotBeFound": "The requested content could not be found",
     "backToDashboard": "Back to Dashboard."
+  },
+  "pos": {
+    "posPageTitle": "New Sales",
+    "newSalesAdded": "New Sales has been added.",
+    "noCustomerSelected": "No customer selected (Anonymous Sale)",
+    "removeCustomer": "Remove Customer",
+    "changeCustomer": "Change Customer",
+    "createCustomer": "Create Customer",
+    "count": "Count",
+    "selectProduct": "Select Product",
+    "discountType": "Discount Type",
+    "discountValueInput": "Discount Value",
+    "discountValueInputError": "Please enter a valid number",
+    "discountedAmount": "Discounted Amount",
+    "vatInput": "VAT",
+    "vatInputError": "Please enter a valid number",
+    "vatAmount": "Vat Amount",
+    "serviceChargeInput": "Service Charge Amount",
+    "serviceChargeInputError": "Please enter a valid number",
+    "totolBilled": "Totol Billed",
+    "previousCustomerBalance": "Previous Customer Balance",
+    "paidAmountInput": "Paid Amount",
+    "paidAmountInputError": "Please enter a valid number",
+    "changeAmount": "Change Amount",
+    "confirmSales": "Confirm Sales"
   }
 }
