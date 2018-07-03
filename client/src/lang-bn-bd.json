@@ -32,7 +32,10 @@
     "edit": "সম্পাদন করা",
     "showing": "দেখাচ্ছে",
     "itemsOutOf": "আইটেম গুলোর মধ্যে",
-    "startingFrom": "থেকে শুরু করে"
+    "startingFrom": "থেকে শুরু করে",
+    "per": "প্রতি",
+    "move": "সরান",
+    "delete": "মুছে ফেলুন"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -162,7 +165,12 @@
     "createProductCategory": "পণ্যের ধরণ তৈরি করুন",
     "updateProductCategory": "পণ্যের ধরণ আপডেট করুন",
     "productCategoryCreated": "নতুন পণ্যের ধরণ তৈরি করা হয়েছে।",
-    "productCategoryUpdated": "পণ্যের ধরণ আপডেট করা হয়েছে।"
+    "productCategoryUpdated": "পণ্যের ধরণ আপডেট করা হয়েছে।",
+
+    "buyingPrice": "কেনা দাম",
+    "sellingPrice": "বিক্রি দাম",
+    "moveHere": "এখানে সরান",
+    "subCategory": "উপ বিভাগ"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "নাম অথবা ফোন দিয়ে ক্রেতা খুজুন।",

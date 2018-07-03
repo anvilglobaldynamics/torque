@@ -32,7 +32,10 @@
     "edit": "Edit",
     "showing": "Showing",
     "itemsOutOf": "items out of",
-    "startingFrom": "starting from"
+    "startingFrom": "starting from",
+    "per": "per",
+    "move": "Move",
+    "delete": "Delete"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -162,7 +165,12 @@
     "createProductCategory": "Create Product Category",
     "updateProductCategory": "Update Product Category",
     "productCategoryCreated": "New product Category has been created.",
-    "productCategoryUpdated": "Product Category has been updated."
+    "productCategoryUpdated": "Product Category has been updated.",
+
+    "buyingPrice": "Buying Price",
+    "sellingPrice": "Selling Price",
+    "moveHere": "Move Here",
+    "subCategory": "Sub Category"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "Search customer by name or phone.",
