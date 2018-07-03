@@ -43,7 +43,8 @@
     "toDate": "To Date",
     "for": "for",
     "pos": "POS",
-    "total": "Total"
+    "total": "Total",
+    "to": "to"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -370,5 +371,27 @@
     "paidAmountInputError": "Please enter a valid number",
     "changeAmount": "Change Amount",
     "confirmSales": "Confirm Sales"
+  },
+  "salesReport": {
+    "salesReportTitle": "Sales Report",
+    "showFilters": "Show Filters",
+    "noCustomerSelected": "No customer selected (Anonymous Sale)",
+    "removeCustomer": "Remove Customer",
+    "changeCustomer": "Change Customer",
+    "noOutletSelected": "No outlet selected (Anonymous Sale)",
+    "removeOutlet": "Remove Outlet",
+    "changeOutlet": "Change Outlet",
+    "showSalesProductDetails": "Show Sales and Product Details",
+    "printedBy": "Printed By",
+    "particulars": "Particulars",
+    "billedAmount": "Billed Amount",
+    "sales": "Sales",
+    "soldTo": "Sold To",
+    "products": "product(s)",
+    "total": "Total",
+    "discountedAmount": "Discounted Amount",
+    "vat": "VAT",
+    "serviceCharge": "Service Charge",
+    "previousBalance": "Previous Balance"
   }
 }

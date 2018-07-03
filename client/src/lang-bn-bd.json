@@ -43,7 +43,8 @@
     "toDate": "তারিখ পর্যন্ত",
     "for": "জন্য",
     "pos": "বিক্রয় বিন্দু",
-    "total": "মোট"
+    "total": "মোট",
+    "to": "থেকে"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -370,5 +371,27 @@
     "paidAmountInputError": "একটি বৈধ নম্বর লিখুন",
     "changeAmount": "ফেরত পরিমান",
     "confirmSales": "বিক্রয় নিশ্চিত করুন"
+  },
+  "salesReport": {
+    "salesReportTitle": "বিক্রয় বিবরণ",
+    "showFilters": "বশোধক দেখান",
+    "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি (নাবিহীন বিক্রয়)",
+    "removeCustomer": "গ্রাহক সরান",
+    "changeCustomer": "গ্রাহক পরিবর্তন করুন",
+    "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি (নাবিহীন বিক্রয়)",
+    "removeOutlet": "দোকান সরান",
+    "changeOutlet": "দোকান পরিবর্তন করুন",
+    "showSalesProductDetails": "বিক্রয় এবং পণ্যের বিবরণ দেখান",
+    "printedBy": "দ্বারা মুদ্রিত",
+    "particulars": "বিবরণ",
+    "billedAmount": "বিল পরিমাণ",
+    "sales": "বিক্রয়",
+    "soldTo": "ক্রেতা",
+    "products": "পণ্য",
+    "total": "মোট",
+    "discountedAmount": "ছাড়ের পরিমাণ",
+    "vat": "ভ্যাট",
+    "serviceCharge": "সেবা মূল্য",
+    "previousBalance": "পূর্বের হিসাব"
   }
 }
