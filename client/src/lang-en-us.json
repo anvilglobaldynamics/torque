@@ -121,7 +121,9 @@
     "createOrganization": "Create Organization",
     "organizationCreatedToast": "New organization has been created.",
     "phoneInputError": "Please enter your valid phone number.",
-    "phoneInput": "Your valid phone number"
+    "phoneInput": "Your valid phone number",
+
+    "manageOrganizationTitle": "Organizations"
   },
   "outlet": {
     "nameOfOutletInput": "Name of your outlet.",
