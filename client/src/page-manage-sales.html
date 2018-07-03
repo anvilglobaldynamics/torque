@@ -16,6 +16,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -33,8 +34,8 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card horizontal layout center">
-        <paper-input class="flex" value="{{fromDate}}" type="date" label="From Date"></paper-input>
-        <paper-input class="flex" value="{{toDate}}" type="date" label="To Date"></paper-input>
+        <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+        <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
       </div>
 
       <template is="dom-if" if="[[!isSearchingCustomer]]">
@@ -42,20 +43,20 @@
           <div class="horizontal layout center wrap">
             <div class="flex">
               <template is="dom-if" if="[[!customer]]">
-                No customer selected (Anonymous sale)
+                [[verses.sales.noCustomerSelected]]
               </template>
               <template is="dom-if" if="[[customer]]">
-                Customer:
+                [[verses.general.customer]]:
                 <b>[[customer.fullName]]</b> ([[customer.phone]])
-                <br> Balance:
+                <br>[[verses.general.balance]]:
                 <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
               </template>
             </div>
             <div class="horizontal layout center">
               <template is="dom-if" if="[[customer]]">
-                <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>
+                <paper-button raised class="primary" on-tap="removeCustomerTapped">[[verses.sales.removeCustomer]]</paper-button>
               </template>
-              <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
+              <paper-button raised class="primary" on-tap="changeCustomerTapped">[[verses.sales.changeCustomer]]</paper-button>
             </div>
           </div>
         </div>
@@ -67,30 +68,30 @@
           <div class="horizontal layout center">
             <div class="flex">
               <template is="dom-if" if="[[!outlet]]">
-                No outlet selected (Anonymous sale)
+                [[verses.sales.noOutletSelected]]
               </template>
               <template is="dom-if" if="[[outlet]]">
-                Outlet:
+                [[verses.general.outlet]]:
                 <b>[[outlet.name]]</b> ([[outlet.phone]])
-                <br> Address:
+                <br>[[verses.general.address]]:
                 <b>[[outlet.physicalAddress]]</b>
               </template>
             </div>
             <template is="dom-if" if="[[outlet]]">
-              <paper-button raised class="primary" on-tap="removeOutletTapped">Remove Outlet</paper-button>
+              <paper-button raised class="primary" on-tap="removeOutletTapped">[[verses.sales.removeOutlet]]</paper-button>
             </template>
-            <paper-button raised class="primary" on-tap="changeOutletTapped">Change Outlet</paper-button>
+            <paper-button raised class="primary" on-tap="changeOutletTapped">[[verses.sales.changeOutlet]]</paper-button>
           </div>
         </div>
       </template>
       <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
-      <paper-button raised class="primary" on-tap="filterTapped">Filter</paper-button>
+      <paper-button raised class="primary" on-tap="filterTapped">[[verses.general.filter]]</paper-button>
 
       <div class="card vertical layout">
 
         <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">Show Previous</paper-button>
+          <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
         </template>
 
         <div class="list">
@@ -99,22 +100,22 @@
               <div class="vertical layout flex">
                 <div class="title">[[sale.id]]</div>
                 <div class="description">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                <div class="description">Billed [[sale.payment.totalBilled]] [[app.settings.monetaryUnit]] for [[sale.productList.length]] product(s)</div>
+                <div class="description">[[verses.sales.billed]] [[sale.payment.totalBilled]] [[app.settings.monetaryUnit]] [[verses.general.for]] [[sale.productList.length]] [[verses.sales.products]]</div>
               </div>
-              <paper-button raised class="primary" on-tap="viewTapped">View</paper-button>
+              <paper-button raised class="primary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
             </div>
           </template>
         </div>
 
         <div class="pagination">
-          Showing
+          [[verses.general.showing]]
           <span class="limit">[[pagination.limit]]</span>
-          items out of
-          <span class="total-count">[[pagination.totalCount]]</span> starting from
+          [[verses.general.itemsOutOf]]
+          <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
           <span class="offset">#[[$inc(pagination.offset)]]</span>.
         </div>
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">Show More</paper-button>
+          <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
         </template>
 
       </div>
@@ -123,7 +124,7 @@
   </template>
 
   <script>
-    class PageManageSales extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageManageSales extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-manage-sales';
       }
@@ -192,7 +193,8 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
-        this.app.pushPageTitle('Manage Sales');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.sales.manageSalesTitle);
         if (!this._ensureAccess()) return;
         this._processSalesList(() => {
           if ('outlet' in this.params) {

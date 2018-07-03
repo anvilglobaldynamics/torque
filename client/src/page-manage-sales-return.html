@@ -48,7 +48,7 @@
               <template is="dom-if" if="[[customer]]">
                 [[verses.general.customer]]:
                 <b>[[customer.fullName]]</b> ([[customer.phone]])
-                <br> [[verses.general.balance]]:
+                <br>[[verses.general.balance]]:
                 <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
               </template>
             </div>
@@ -69,7 +69,7 @@
                 [[verses.salesReturn.noOutletSelected]]
               </template>
               <template is="dom-if" if="[[outlet]]">
-                [[verses.general.outlet]] :
+                [[verses.general.outlet]]:
                 <b>[[outlet.name]]</b> ([[outlet.phone]])
                 <br>[[verses.general.address]]:
                 <b>[[outlet.physicalAddress]]</b>
@@ -98,7 +98,7 @@
               <div class="vertical layout flex">
                 <div class="title">[[verses.salesReturn.salesId]]: [[saleReturn.salesId]]</div>
                 <div class="description">[[$mkDate(saleReturn.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                <div class="description">Credited [[saleReturn.creditedAmount]] [[app.settings.monetaryUnit]]</div>
+                <div class="description">[[verses.salesReturn.credited]] [[saleReturn.creditedAmount]] [[app.settings.monetaryUnit]]</div>
               </div>
               <paper-button raised class="primary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
             </div>

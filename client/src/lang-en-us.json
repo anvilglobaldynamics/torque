@@ -40,7 +40,8 @@
     "outlet": "Outlet",
     "filter": "Filter",
     "fromDate": "From Date",
-    "toDate": "To Date"
+    "toDate": "To Date",
+    "for": "for"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -304,7 +305,19 @@
     "noOutletSelected": "No outlet selected (Anonymous Sale Return)",
     "removeOutlet": "Remove Outlet",
     "changeOutlet": "Change Outlet",
-    "salesId": "Sales Id"
+    "salesId": "Sales Id",
+    "credited": "Credited"
+  },
+  "sales": {
+    "manageSalesTitle": "Manage Sales",
+    "billed": "Billed",
+    "products": "product(s)",
+    "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
+    "removeCustomer": "Remove Customer",
+    "changeCustomer": "Change Customer",
+    "noOutletSelected": "No outlet selected (Anonymous Sale Return)",
+    "removeOutlet": "Remove Outlet",
+    "changeOutlet": "Change Outlet"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",

@@ -40,7 +40,8 @@
     "outlet": "দোকান",
     "filter": "সংকীর্ণ",
     "fromDate": "তারিখ হইতে",
-    "toDate": "তারিখ পর্যন্ত"
+    "toDate": "তারিখ পর্যন্ত",
+    "for": "জন্য"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -304,7 +305,19 @@
     "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি (নাবিহীন পণ্য ফেরত)",
     "removeOutlet": "দোকান সরান",
     "changeOutlet": "দোকান পরিবর্তন করুন",
-    "salesId": "বিক্রয় আইডি"
+    "salesId": "বিক্রয় আইডি",
+    "credited": "জমা"
+  },
+  "sales": {
+    "manageSalesTitle": "বিক্রয় পরিচালনা",
+    "billed": "বিল করা",
+    "products": "পণ্য",
+    "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি (নাবিহীন পণ্য ফেরত)",
+    "removeCustomer": "গ্রাহক সরান",
+    "changeCustomer": "গ্রাহক পরিবর্তন করুন",
+    "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি (নাবিহীন পণ্য ফেরত)",
+    "removeOutlet": "দোকান সরান",
+    "changeOutlet": "দোকান পরিবর্তন করুন"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
