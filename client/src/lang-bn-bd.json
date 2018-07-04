@@ -13,6 +13,8 @@
     "listIsEmpty": "তালিকা খালি।",
     "search": "খোঁজ",
     "select": "বাছাই",
+    "selected": "বাছাইকৃত",
+    "deselect": "নির্বাচন সরিয়ে ফেলুন",
     "address": "ঠিকানা",
     "comingSoon": "শীঘ্রই আসছে",
     "confirm": "নিশ্চিত করুন",
@@ -393,5 +395,13 @@
     "vat": "ভ্যাট",
     "serviceCharge": "সেবা মূল্য",
     "previousBalance": "পূর্বের হিসাব"
+  },
+  "posSelectProduct": {
+    "posSelectProductTitle": "পণ্য নির্বাচন করুন",
+    "purchase": "ক্রয়",
+    "sale": "বিক্রয়",
+    "count": "গণনা",
+    "deselectAllSelected": "সকল নির্বাচন সরিয়ে ফেলুন",
+    "confirmSelection": "নির্বাচন নিশ্চিত করুন"
   }
 }

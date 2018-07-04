@@ -13,6 +13,8 @@
     "listIsEmpty": "List is Empty.",
     "search": "Search",
     "select": "Select",
+    "selected": "Selected",
+    "deselect": "Deselect",
     "address": "Address",
     "comingSoon": "Coming Soon",
     "confirm": "Confirm",
@@ -393,5 +395,13 @@
     "vat": "VAT",
     "serviceCharge": "Service Charge",
     "previousBalance": "Previous Balance"
+  },
+  "posSelectProduct": {
+    "posSelectProductTitle": "Select Products",
+    "purchase": "Purchase",
+    "sale": "Sale",
+    "count": "Count",
+    "deselectAllSelected": "Deselect All Selected",
+    "confirmSelection": "Confirm Selection"
   }
 }

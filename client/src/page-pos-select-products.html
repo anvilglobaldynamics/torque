@@ -17,8 +17,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
-
-<!-- TODO: resume lang work from here -->
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -40,19 +39,19 @@
                 <div class="title">[[product.name]]
                   <strong>[[product.count]][[product.unit]]</strong>
                 </div>
-                <div class="description">Purchase: [[product.purchasePrice]][[app.settings.monetaryUnit]], Sale: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                <div class="description">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]], [[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
               </div>
               <div class="horizontal layout wrap center">
                 <template is="dom-if" if="[[product.count]]">
                   <template is="dom-if" if="[[!product.isSelected]]">
-                    <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
+                    <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
                   </template>
                   <template is="dom-if" if="[[product.isSelected]]">
-                    <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="Count">
-                      <div slot="prefix">Selected&nbsp;</div>
+                    <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.posSelectProduct.count]]">
+                      <div slot="prefix">[[verses.general.selected]]&nbsp;</div>
                       <div slot="suffix">&nbsp;[[product.unit]]</div>
                     </paper-input>
-                    <paper-button raised class="primary" on-tap="deselectTapped">Deselect</paper-button>
+                    <paper-button raised class="primary" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
                   </template>
                 </template>
               </div>
@@ -63,9 +62,9 @@
 
       <div class="horizontal layout end-justified p-4">
         <template is="dom-if" if="[[selectedProductCount]]">
-          <paper-button raised class="btn btn-default" on-tap="deselectAllTapped">Deselect All Selected</paper-button>
+          <paper-button raised class="btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
         </template>
-        <paper-button raised class="btn primary" on-tap="selectProductsTapped">Confirm Selection</paper-button>
+        <paper-button raised class="btn primary" on-tap="selectProductsTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
       </div>
 
     </div>
@@ -73,7 +72,7 @@
   </template>
 
   <script>
-    class PageSelectProducts extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageSelectProducts extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-pos-select-products';
@@ -102,11 +101,12 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Select Products');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.posSelectProduct.posSelectProductTitle);
         if (!this._ensureAccess()) return;
         if (!('inventory' in this.params)) {
-          let message = "This page cannot be displayed at this moment. Please try again."
-          this.app.showModalDialog("Something went wrong!", message, _ => {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
             this.app.navigateTo('/home');
           });
           return;
