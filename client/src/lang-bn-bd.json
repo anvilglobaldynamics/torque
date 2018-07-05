@@ -403,5 +403,16 @@
     "count": "গণনা",
     "deselectAllSelected": "সকল নির্বাচন সরিয়ে ফেলুন",
     "confirmSelection": "নির্বাচন নিশ্চিত করুন"
+  },
+  "settings": {
+    "settingsTitle": "সেটিংস",
+    "app": "অ্যাপ",
+    "general": "সার্বজনীন",
+    "others": "অন্যান্য",
+    "useWebsockets": "ওয়েবসকেট ব্যবহার করুন",
+    "useWebsocketsDetail": "যদি চেক করা থাকে তবে অ্যাপ্লিকেশন ওয়েবসকেট ব্যবহার করার চেষ্টা করবে।",
+    "monetaryUnit": "মুদ্রা",
+    "monetaryUnitDetail": "নোট: আর্থিক মুদ্রা পরিবর্তন আপনার বিক্রয় প্রভাবিত করে না।",
+    "moreOptionsForthcoming": "আরো সেটিংস আসন্ন."
   }
 }

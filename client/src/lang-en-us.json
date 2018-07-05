@@ -404,5 +404,16 @@
     "count": "Count",
     "deselectAllSelected": "Deselect All Selected",
     "confirmSelection": "Confirm Selection"
+  },
+  "settings": {
+    "settingsTitle": "Settings",
+    "app": "App",
+    "general": "General",
+    "others": "Others",
+    "useWebsockets": "Use Websockets",
+    "useWebsocketsDetail": "If checked, the app will try to use websockets.",
+    "monetaryUnit": "Monetary Unit",
+    "monetaryUnitDetail": "Note: Changing the monetary unit does not affect your sales.",
+    "moreOptionsForthcoming": "More options are forthcoming."
   }
 }
