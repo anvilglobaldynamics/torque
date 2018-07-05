@@ -415,5 +415,17 @@
     "monetaryUnit": "Monetary Unit",
     "monetaryUnitDetail": "Note: Changing the monetary unit does not affect your sales.",
     "moreOptionsForthcoming": "More options are forthcoming."
+  },
+  "verify": {
+    "verificationModalTitle": "Verification SMS Sent",
+    "verificationModalBody": "Please check your phone. We have sent you a verification SMS.",
+    "phoneNowVerified": "Your phone is now verified.",
+    "phoneCouldNotBeVerified": "Your phone could not be verified. Make sure the verification code is correct.",
+    "verifyPhoneNumberHeader": "VERIFY PHONE NUMBER",
+    "verificationTokenInput": "Enter the verification token we sent to your phone.",
+    "verificationTokenInputError": "Enter the verification token we sent to your phone.",
+    "resendSms": "RESEND SMS",
+    "verify": "Verify",
+    "dontHaveAccount": "Don't have an account?"
   }
 }

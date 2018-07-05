@@ -16,6 +16,7 @@
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
 <link rel="import" href="torque-verification-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -33,16 +34,16 @@
         <form>
           <div class="card vertical layout">
             <template is="dom-if" if="[[$equals(what, 'phone')]]">
-              <div class="page-small--header">VERIFY PHONE NUMBER</div>
-              <paper-textarea class="verifyForm--verificationToken" value="{{verifyForm.verificationToken}}" required minlength="64" error-message="Enter the verification token we sent to your phone." label="Enter the verification token we sent to your phone." rows="3"></paper-textarea>
+              <div class="page-small--header">[[verses.verify.verifyPhoneNumberHeader]]</div>
+              <paper-textarea class="verifyForm--verificationToken" value="{{verifyForm.verificationToken}}" required minlength="64" error-message="[[verses.verify.verificationTokenInputError]]" label="[[verses.verify.verificationTokenInput]]" rows="3"></paper-textarea>
             </template>
             <div class="horizontal layout button-row end">
-              <paper-button raised class="primary" on-tap="resendSmsTapped">RESEND SMS</paper-button>
+              <paper-button raised class="primary" on-tap="resendSmsTapped">[[verses.verify.resendSms]]</paper-button>
               <div class="flex"></div>
-              <paper-button raised class="primary" on-tap="verifyTapped">Verify</paper-button>
+              <paper-button raised class="primary" on-tap="verifyTapped">[[verses.verify.verify]]</paper-button>
             </div>
             <div class="horizontal layout button-row extended center-center">
-              <div class="link light" on-tap="registerTapped">Don't have an account?</div>
+              <div class="link light" on-tap="registerTapped">[[verses.verify.dontHaveAccount]]</div>
             </div>
           </div>
         </form>
@@ -51,7 +52,7 @@
   </template>
 
   <script>
-    class PageVerify extends FxPage.mixin(TorqueVerificationBehavior, TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageVerify extends FxPage.mixin(TorqueVerificationBehavior, TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-verify';
       }
@@ -83,6 +84,7 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
+        this.useLanguageServices();
         this.delay(300, () => {
           if ('phone' in this.params) {
             this.what = 'phone';
@@ -130,8 +132,8 @@
       resendSmsTapped(e = null) {
         let phone = this.phone;
         this._processResendVerificationSmsApi({ phone }, status => {
-          let message = `Please check your phone. We have sent you a verification SMS.`;
-          this.app.showModalDialog("Verification SMS Sent", message, () => {
+          let message = this.app.verses.verify.verificationModalBody;
+          this.app.showModalDialog(this.app.verses.verify.verificationModalTitle, message, () => {
             'pass'
           });
         })
@@ -144,11 +146,11 @@
         let { verificationToken } = this.verifyForm;
         this._processVerifyPhoneApi({ verificationToken }, html => {
           if (html.indexOf('Phone Verification Successful') > -1) {
-            this.app.showToast("Your phone is now verified.", () => {
+            this.app.showToast(this.app.verses.verify.phoneNowVerified, () => {
               return this.app.navigateTo('/login');
             });
           } else {
-            let message = "Your phone could not be verified. Make sure the verification code is correct.";
+            let message = this.app.verses.verify.phoneCouldNotBeVerified;
             this.app.showModalDialog(this.app.verses.general.sorry, message, () => { 'pass' });
           }
         });

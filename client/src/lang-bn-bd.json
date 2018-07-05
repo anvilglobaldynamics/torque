@@ -414,5 +414,17 @@
     "monetaryUnit": "মুদ্রা",
     "monetaryUnitDetail": "নোট: আর্থিক মুদ্রা পরিবর্তন আপনার বিক্রয় প্রভাবিত করে না।",
     "moreOptionsForthcoming": "আরো সেটিংস আসন্ন."
+  },
+  "verify": {
+    "verificationModalTitle": "যাচাইকরণ এসএমএস পাঠানো হয়েছে",
+    "verificationModalBody": "আপনার ফোনটি দেখুন। আমরা আপনাকে একটি যাচাইকরণ এসএমএস পাঠিয়েছি।",
+    "phoneNowVerified": "আপনার ফোন যাচাই করা হয়েছে।",
+    "phoneCouldNotBeVerified": "আপনার ফোন যাচাই করা যায়নি। নিশ্চিতকরণ যাচাই কোডটি সঠিক।",
+    "verifyPhoneNumberHeader": "ফোন নম্বর যাচাইকরণ",
+    "verificationTokenInput": "আপনার ফোনে পাঠানো যাচাইকরণ টোকেনটি লিখুন।",
+    "verificationTokenInputError": "আপনার ফোনে পাঠানো যাচাইকরণ টোকেনটি লিখুন।",
+    "resendSms": "এস এম এস আবার পাঠান",
+    "verify": "যাচাই করুন",
+    "dontHaveAccount": "অ্যাকাউন্ট নেই?"
   }
 }
