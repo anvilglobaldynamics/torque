@@ -107,6 +107,13 @@
   "titleBar": {
     "home": "Home"
   },
+  "topMenu": {
+    "home": "Home",
+    "posList": "POS List",
+    "inventoryList": "Inventory List",
+    "switchOrganization": "Switch Organization",
+    "reload": "Reload"
+  },
   "home": {
     "invoices": "Invoices",
     "soldToday": "Today's Sales Count",
