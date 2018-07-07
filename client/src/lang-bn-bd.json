@@ -56,7 +56,11 @@
     "sale": "বিক্রয়",
     "purchase": "ক্রয়",
     "count": "গণনা",
-    "id": "আইডি"
+    "id": "আইডি",
+    "discard": "বাতিল",
+    "product": "পণ্য",
+    "return": "ফেরত",
+    "by": "দ্বারা"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -377,7 +381,20 @@
     "changeCustomer": "গ্রাহক পরিবর্তন করুন",
     "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি (নাবিহীন পণ্য ফেরত)",
     "removeOutlet": "দোকান সরান",
-    "changeOutlet": "দোকান পরিবর্তন করুন"
+    "changeOutlet": "দোকান পরিবর্তন করুন",
+
+    "salesTitle": "বিক্রয়",
+    "salesDiscarded": "বিক্রয় বাতিল করা হয়েছে",
+    "outletId": "দোকান আইডি",
+    "customerId": "গ্রাহক আইডি",
+    "productList": "পণ্য তালিকা",
+    "salePrice": "বিক্রয় মূল্য",
+    "payment": "টাকা প্রদান",
+    "totalBilled": "মোট বিল",
+    "discounted": "ছাড়",
+    "serviceChargeAmount": "সেবা মূল্য",
+    "vat": "ভ্যাট",
+    "paidAmount": "দত্ত"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",

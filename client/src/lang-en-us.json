@@ -56,7 +56,11 @@
     "sale": "Sale",
     "purchase": "Purchase",
     "count": "Count",
-    "id": "ID"
+    "id": "ID",
+    "discard": "Discard",
+    "product": "Product",
+    "return": "Return",
+    "by": "by"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -378,7 +382,20 @@
     "changeCustomer": "Change Customer",
     "noOutletSelected": "No outlet selected (Anonymous Sale Return)",
     "removeOutlet": "Remove Outlet",
-    "changeOutlet": "Change Outlet"
+    "changeOutlet": "Change Outlet",
+
+    "salesTitle": "Sales",
+    "salesDiscarded": "Sales has been discarded",
+    "outletId": "Outlet ID",
+    "customerId": "Customer ID",
+    "productList": "Product List",
+    "salePrice": "Sale Price",
+    "payment": "Payment",
+    "totalBilled": "Total Billed",
+    "discounted": "Discounted",
+    "serviceChargeAmount": "Service Charge Amount",
+    "vat": "Vat",
+    "paidAmount": "Paid Amount"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",
