@@ -51,7 +51,10 @@
     "pos": "POS",
     "total": "Total",
     "to": "to",
-    "active": "Active"
+    "active": "Active",
+    "sale": "Sale",
+    "purchase": "Purchase",
+    "count": "Count"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -456,5 +459,14 @@
     "resendSms": "RESEND SMS",
     "verify": "Verify",
     "dontHaveAccount": "Don't have an account?"
+  },
+  "inventory": {
+    "inventoryTitle": "Inventory",
+    "selectedProductsMoved": "Selected products have been moved.",
+    "totalSelectedProducts": "Total selected products",
+    "moveToInventory": "Move to Inventory",
+    "moveSelected": "Move Selected",
+    "addProductsBatchToInventory": "Add products to this inventory in batch.",
+    "addProducts": "Add Products"
   }
 }

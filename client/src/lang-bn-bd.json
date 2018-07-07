@@ -51,7 +51,10 @@
     "pos": "বিক্রয় বিন্দু",
     "total": "মোট",
     "to": "থেকে",
-    "active": "চালু"
+    "active": "চালু",
+    "sale": "বিক্রয়",
+    "purchase": "ক্রয়",
+    "count": "গণনা"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -455,5 +458,14 @@
     "resendSms": "এস এম এস আবার পাঠান",
     "verify": "যাচাই করুন",
     "dontHaveAccount": "অ্যাকাউন্ট নেই?"
+  },
+  "inventory": {
+    "inventoryTitle": "পণ্য তালিকা",
+    "selectedProductsMoved": "নির্বাচিত পণ্য সরানো হয়েছে।",
+    "totalSelectedProducts": "মোট নির্বাচিত পণ্য",
+    "moveToInventory": "পণ্য তালিকায় সরান",
+    "moveSelected": "নির্বাচিত সরান",
+    "addProductsBatchToInventory": "গোছাতে পণ্য তালিকায় যোগ করুন",
+    "addProducts": "পণ্য যোগ করুন"
   }
 }
