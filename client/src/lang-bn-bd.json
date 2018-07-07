@@ -413,7 +413,24 @@
     "updateWarehouse": "গুদাম আপডেট করুন",
 
     "manageWarehouseTitle": "গুদাম পরিচালনা",
-    "createNewWarehouse": "নতুন গুদাম তৈরি করুন"
+    "createNewWarehouse": "নতুন গুদাম তৈরি করুন",
+
+    "warehouseTitle": "গুদাম",
+    "deleteWarehouseQuestionPartOne": "আপনি কি এই গুদামটি মুছে ফেলতে চান?",
+    "deleteWarehouseQuestionPartTwo": "একবার মুছে ফেলা হলে, আপনি এই গুদামটি পুনরুদ্ধার করতে পারবেন না।",
+    "warehouseDeleted": "গুদাম মুছে ফেলা হয়েছে",
+    "contactPerson": "যোগাযোগের ব্যাক্তি",
+    "contactNumber": "যোগাযোগের ফোন",
+    "warehouseInventories": "এই গুদাম নিম্নলিখিত পণ্য তালিকা আছে।",
+    "inventory": "পণ্য তালিকা",
+    "goToDefaultInventory": "এটি প্রধান পণ্য তালিকা।",
+    "goToReturnedInventory": "ফেরত আসা পণ্য এখানে যায়।",
+    "goToDamagedInventory": "বাতিল পণ্য এখানে যায়।",
+    "editWarehouse": "গুদাম সম্পাদনা করুন",
+    "editWarehouseDetail": "গুদাম সম্পাদনা করতে এখানে ক্লিক করুন।",
+    "deleteWarehouse": "গুদাম মুছুন",
+    "deleteWarehouseDetail": "গুদাম মুছে ফেলার জন্য এখানে ক্লিক করুন। একবার মুছে ফেললে, গুদাম পুনরুদ্ধার করা যাবে না।",
+    "deleteWarehouseQuestion": "গুদাম মুছে ফেলবেন?"
   },
   "error": {
     "404": "404",
