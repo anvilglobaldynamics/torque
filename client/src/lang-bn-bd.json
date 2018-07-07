@@ -42,6 +42,7 @@
     "outlet": "দোকান",
     "filter": "সংকীর্ণ",
     "date": "তারিখ",
+    "dated": "তারিখ চিহ্নিত",
     "number": "নম্বর",
     "amount": "অর্থ",
     "action": "কর্ম",
@@ -54,7 +55,8 @@
     "active": "চালু",
     "sale": "বিক্রয়",
     "purchase": "ক্রয়",
-    "count": "গণনা"
+    "count": "গণনা",
+    "id": "আইডি"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -359,7 +361,12 @@
     "removeOutlet": "দোকান সরান",
     "changeOutlet": "দোকান পরিবর্তন করুন",
     "salesId": "বিক্রয় আইডি",
-    "credited": "জমা"
+    "credited": "জমা",
+
+    "salesReturnTitle": "বিক্রয় ফেরত",
+    "creditedAmount": "ফেরতকৃত অর্থ",
+    "productList": "পণ্য তালিকা",
+    "product": "পণ্য"
   },
   "sales": {
     "manageSalesTitle": "বিক্রয় পরিচালনা",

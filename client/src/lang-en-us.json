@@ -42,6 +42,7 @@
     "outlet": "Outlet",
     "filter": "Filter",
     "date": "Date",
+    "dated": "Dated",
     "number": "Number",
     "amount": "Amount",
     "action": "Action",
@@ -54,7 +55,8 @@
     "active": "Active",
     "sale": "Sale",
     "purchase": "Purchase",
-    "count": "Count"
+    "count": "Count",
+    "id": "ID"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -360,7 +362,12 @@
     "removeOutlet": "Remove Outlet",
     "changeOutlet": "Change Outlet",
     "salesId": "Sales Id",
-    "credited": "Credited"
+    "credited": "Credited",
+
+    "salesReturnTitle": "Sales Return",
+    "creditedAmount": "Credited Amount",
+    "productList": "Product List",
+    "product": "Product"
   },
   "sales": {
     "manageSalesTitle": "Manage Sales",

@@ -16,6 +16,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -31,21 +32,21 @@
 
       <div class="card vertical layout">
         <div class="list">
-          <div>ID: [[salesReturn.id]]</div>
-          <div>Sales Id: [[salesReturn.salesId]] </div>
-          <div>Dated: [[$mkDate(salesReturn.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-          <div>Credited Amount: [[salesReturn.creditedAmount]]</div>
+          <div>[[verses.general.id]]: [[salesReturn.id]]</div>
+          <div>[[verses.salesReturn.salesId]]: [[salesReturn.salesId]] </div>
+          <div>[[verses.general.dated]]: [[$mkDate(salesReturn.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+          <div>[[verses.salesReturn.creditedAmount]]: [[salesReturn.creditedAmount]]</div>
         </div>
       </div>
 
       <div class="card vertical layout">
-        <div class="title">Product List: ([[salesReturn.returnedProductList.length]] products)</div>
+        <div class="title">[[verses.salesReturn.productList]]: ([[salesReturn.returnedProductList.length]] products)</div>
         <div class="list">
           <template is="dom-repeat" items="{{salesReturn.returnedProductList}}" as="returnedProduct">
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
-                <div>Product: [[returnedProduct.productCategoryName]]</div>
-                <div>Count: [[returnedProduct.count]]</div>
+                <div>[[verses.salesReturn.product]]: [[returnedProduct.productCategoryName]]</div>
+                <div>[[verses.general.count]]: [[returnedProduct.count]]</div>
               </div>
             </div>
           </template>
@@ -57,7 +58,7 @@
   </template>
 
   <script>
-    class PageViewSalesReturn extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageViewSalesReturn extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-view-sales-return';
@@ -77,11 +78,12 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Sales Return');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.salesReturn.salesReturnTitle);
         if (!this._ensureAccess()) return;
         if (!('salesReturn' in this.params)) {
-          let message = "This page cannot be displayed at this moment. Please try again."
-          this.app.showModalDialog("Something went wrong!", message, _ => {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
             this.app.navigateTo('/home');
           });
           return;
