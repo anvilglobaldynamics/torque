@@ -50,7 +50,8 @@
     "for": "for",
     "pos": "POS",
     "total": "Total",
-    "to": "to"
+    "to": "to",
+    "active": "Active"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -228,7 +229,17 @@
     "designation": "Designation",
     "role": "Role",
     "hireUserEmployee": "Hire User Employee",
-    "addUserAsEmployee": "Add New User As Employee"
+    "addUserAsEmployee": "Add New User As Employee",
+
+    "viewEmployeeTitle": "Employee",
+    "companyId": "Company Id",
+    "clickToEditEmployee": "Click here to edit the employee.",
+    "editEmployee": "Edit Employee",
+    "clickToDeleteEmployee": "Click here to delete the employee. Be warned that once deleted, an employee can not be restored.",
+    "fireEmployee": "Fire Employee",
+    "fireEmployeeQuestion": "Fire employee?",
+    "sureFireThisEmployee": "Are you sure you want to fire this employee",
+    "sureFireYourself": "Are you sure you want to fire Yourself? You will loose all access to this organization."
   },
   "product": {
     "addProducts": "Add Products",
