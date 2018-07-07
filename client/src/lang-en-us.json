@@ -163,7 +163,23 @@
     "outletUpdatedToast": "Outlet has been updated.",
 
     "manageOutletTitle": "Manage Outlet",
-    "createNewOutlet": "Create New Outlet"
+    "createNewOutlet": "Create New Outlet",
+
+    "outletTitle": "Outlet",
+    "deleteOutletQuestion": "Delete outlet?",
+    "deleteOutletQuestionPartOne": "Are you sure you want to delete this outlet",
+    "deleteOutletQuestionPartTwo": "Once deleted, you can not restore this outlet.",
+    "outletDeleted": "Outlet has been deleted",
+    "contactPerson": "Contact Person",
+    "editOutlet": "Edit Outlet",
+    "deleteOutlet": "Delete Outlet",
+    "goToPos": "Go to POS (Point of Sale) to start selling from this organization.",
+    "inventory": "Inventory",
+    "goToDefaultInventory": "This is the main inventory.",
+    "goToReturnedInventory": "Products that are returned by the customer go in here.",
+    "goToDamagedInventory": "Products that are damaged by the customer go in here.",
+    "previousSales": "Previous Sales",
+    "goToPreviousSales": "View/Return previous sales."
   },
   "productCategory": {
     "noProductCategoryFound": "No product category found.",

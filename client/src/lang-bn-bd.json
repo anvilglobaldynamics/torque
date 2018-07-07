@@ -162,7 +162,23 @@
     "outletUpdatedToast": "দোকান আপডেট করা হয়েছে।",
 
     "manageOutletTitle": "দোকান পরিচালনা",
-    "createNewOutlet": "নতুন দোকান তৈরি করুন"
+    "createNewOutlet": "নতুন দোকান তৈরি করুন",
+
+    "outletTitle": "দোকান",
+    "deleteOutletQuestion": "দোকান মুছুন?",
+    "deleteOutletQuestionPartOne": "আপনি কি এই দোকানটি মুছে ফেলতে চান?",
+    "deleteOutletQuestionPartTwo": "একবার মুছে ফেলা হলে, আপনি এই দোকানটি পুনরুদ্ধার করতে পারবেন না।",
+    "outletDeleted": "দোকান মোছা হয়েছে",
+    "contactPerson": "যোগাযোগের ব্যাক্তি",
+    "editOutlet": "আউটলেট সম্পাদনা করুন",
+    "deleteOutlet": "আউটলেট মুছে ফেলুন",
+    "goToPos": "এই সংস্থা থেকে বিক্রি শুরু করার জন্য বিক্রয় বিন্দুতে যান।",
+    "inventory": "পণ্য তালিকা",
+    "goToDefaultInventory": "এটি প্রধান পণ্য তালিকা.",
+    "goToReturnedInventory": "ফেরত আসা পণ্য এখানে যায়।",
+    "goToDamagedInventory": "বাতিল পণ্য এখানে যায়।",
+    "previousSales": "পূর্ববর্তী বিক্রয়",
+    "goToPreviousSales": "পূর্ববর্তী বিক্রয় দেখুন।"
   },
   "productCategory": {
     "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি।",
