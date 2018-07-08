@@ -148,10 +148,10 @@
         this.useLanguageServices();
         if ('product-category' in this.params) {
           this.editMode = true;
-          this.app.pushPageTitle('Edit Product Category');
+          this.app.pushPageTitle(this.app.verses.productCategory.editProductCategoryTitle);
         } else {
           this.editMode = false;
-          this.app.pushPageTitle('Add Product Category');
+          this.app.pushPageTitle(this.app.verses.productCategory.addProductCategoryTitle);
         }
         if (!this._ensureAccess()) return;
         this._processGetProductCategoryList(() => {

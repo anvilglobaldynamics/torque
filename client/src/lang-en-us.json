@@ -147,6 +147,7 @@
     "whyProvideEmailAddress": "By providing an email address, you can get receipts, login alerts and other important information delivered to you to your email."
   },
   "organization": {
+    "addOrganizationTitle": "Add Organization",
     "isOneOutletOrg": "is it a 1 Outlet Organization?",
     "nameOfYourOrganization": "Name of your organization.",
     "pleaseEnterAValidName": "Please enter a valid name.",
@@ -162,6 +163,8 @@
     "manageOrganizationTitle": "Organizations"
   },
   "outlet": {
+    "editOutletTitle": "Edit Outlet",
+    "addOutletTitle": "Add Outlet",
     "nameOfOutletInput": "Name of your outlet.",
     "nameOfOutletInputError": "Please enter a valid name.",
     "physicalAddressInput": "Physical Address",
@@ -195,6 +198,9 @@
     "goToPreviousSales": "View/Return previous sales."
   },
   "productCategory": {
+    "manageProductCategoriesTitle": "Manage Product Categories",
+    "editProductCategoryTitle": "Edit Product Category",
+    "addProductCategoryTitle": "Add Product Category",
     "noProductCategoryFound": "No product category found.",
     "parentNameNotifier": "The Product Category will be available under category",
     "productCategoryNameInput": "Name of your Product Category",
@@ -240,6 +246,8 @@
     "companyProvidedIdInputError": "Please enter Company Provided Id"
   },
   "employee": {
+    "addEmployeeTitle": "Add Employee",
+    "editEmployeeTitle": "Edit Employee",
     "nameOfEmployeeInput": "Name of Employee.",
     "nameOfEmployeeInputError": "Please enter a valid name",
     "addEmployee": "Add Employee",
@@ -274,6 +282,7 @@
     "sureFireYourself": "Are you sure you want to fire Yourself? You will loose all access to this organization."
   },
   "product": {
+    "addProductsTitle": "Add Products",
     "addProducts": "Add Products",
     "productAddedToInventory": "Product(s) were successfully added to the inventory.",
     "count": "Count",
@@ -289,6 +298,7 @@
     "sendYourQuestionsTo": "Send your questions, complaints and praises to"
   },
   "adjustCustomerBalance": {
+    "adjustCustomerBalanceTitle": "Adjust Customer Balance",
     "actionSelection": "Please select an action",
     "payment": "Payment",
     "withdrawl": "Withdrawl",
@@ -306,6 +316,8 @@
     "retypeIncorrect": "You incorrectly typed your new password the second time. Please type it again and press confirm."
   },
   "customer": {
+    "editCustomerTitle": "Edit Customer",
+    "addCustomerTitle": "Add Customer",
     "customerNameInput": "Name of your customer.",
     "customerNameInputError": "Please enter a valid name",
     "customerNumberInput": "Contact Number",
@@ -335,6 +347,7 @@
     "deleteCustomer": "Delete Customer"
   },
   "editProfile": {
+    "editProfileTitle": "Edit Profile",
     "currentPassword": "Your current password",
     "newPassword": "Your new password",
     "retypeNewPassword": "Retype your new current password",

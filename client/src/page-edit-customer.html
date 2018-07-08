@@ -95,15 +95,15 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
+        this.useLanguageServices();
         if ('customer' in this.params) {
           this.editMode = true;
-          this.app.pushPageTitle('Edit Customer');
+          this.app.pushPageTitle(this.verses.customer.editCustomerTitle);
         } else {
           this.editMode = false;
-          this.app.pushPageTitle('Add Customer');
+          this.app.pushPageTitle(this.app.verses.customer.addCustomerTitle);
         }
         if (!this._ensureAccess()) return;
-        this.useLanguageServices();
         if (this.editMode) {
           this._processGetCustomer(() => {
             this.isReady = true;

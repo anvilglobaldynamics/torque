@@ -86,7 +86,8 @@
     "phoneInputError": "আপনার বৈধ ফোন নম্বর লিখুন।",
     "passwordInput": "সর্বনিম্ন ৮ অক্ষরের একটি পাসওয়ার্ড দিন।",
     "passwordInputError": "কমপক্ষে ৮ অক্ষরের একটি পাসওয়ার্ড লিখুন।",
-    "alreadyHaveAccount": "আপনার কি অলরেডি একটা একাউন্ট আছে?"
+    "alreadyHaveAccount": "আপনার কি অলরেডি একটা একাউন্ট আছে?",
+    "nowAUserOfTorque": "আপনি এখন টর্কের একটি ব্যবহারকারী। আপনি এখন লগ ইন করতে পারেন।"
   },
   "sidebar": {
     "home": "হোম",
@@ -146,6 +147,7 @@
     "whyProvideEmailAddress": "একটি ইমেইল ঠিকানা প্রদান করে, আপনি আপনার ইমেলে বিতরণ রশিদ, লগইন সতর্কতা এবং অন্যান্য গুরুত্বপূর্ণ তথ্য পেতে পারেন।"
   },
   "organization": {
+    "addOrganizationTitle": "সংস্থা যোগ করুন",
     "isOneOutletOrg": "এই সংস্হা এর দোকান কি একটি?",
     "nameOfYourOrganization": "আপনার প্রতিষ্ঠানের নাম",
     "pleaseEnterAValidName": "একটি বৈধ নাম লিখুন",
@@ -161,6 +163,8 @@
     "manageOrganizationTitle": "সংগঠন"
   },
   "outlet": {
+    "editOutletTitle": "দোকান সম্পাদনা",
+    "addOutletTitle": "দোকান যোগ",
     "nameOfOutletInput": "আপনার দোকান এর নাম ",
     "nameOfOutletInputError": "একটি বৈধ নাম লিখুন",
     "physicalAddressInput": "ঠিকানা",
@@ -194,6 +198,9 @@
     "goToPreviousSales": "পূর্ববর্তী বিক্রয় দেখুন।"
   },
   "productCategory": {
+    "manageProductCategoriesTitle": "পণ্যের ধরন পরিচালনা করুন",
+    "editProductCategoryTitle": "পণ্যের ধরন সম্পাদনা করুন",
+    "addProductCategoryTitle": "পণ্যের ধরন যোগ করুন",
     "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি।",
     "parentNameNotifier": "পণ্যের ধরণ এই পণ্যের ধরণের অধীনে পাওয়া যাবে",
     "productCategoryNameInput": "পণ্যের ধরণের নাম",
@@ -239,6 +246,8 @@
     "companyProvidedIdInputError": "কোম্পানী প্রদত্ত আইডি লিখুন"
   },
   "employee": {
+    "addEmployeeTitle": "কর্মচারী যোগ করুন",
+    "editEmployeeTitle": "কর্মচারী সম্পাদনা করুন",
     "nameOfEmployeeInput": "কর্মচারীর নাম",
     "nameOfEmployeeInputError": "একটি নাম লিখুন",
     "addEmployee": "কর্মচারী নিয়োগ করুন",
@@ -273,6 +282,7 @@
     "sureFireYourself": "আপনি কি নিজেকে চাকরিচ্যুত করতে চান? আপনি এই সংস্থার সমস্ত অধিকার হারাবেন।"
   },
   "product": {
+    "addProductsTitle": "পণ্য যোগ করুন",
     "addProducts": "পণ্য যোগ করুন",
     "productAddedToInventory": "পণ্য সফলভাবে তালিকাতে যোগ করা হয়েছে।",
     "count": "গণনা",
@@ -288,6 +298,7 @@
     "sendYourQuestionsTo": "আপনার প্রশ্ন, অভিযোগ এবং প্রশংসা পাঠান"
   },
   "adjustCustomerBalance": {
+    "adjustCustomerBalanceTitle": "ক্রেতার ব্যালেন্স এডজাস্ট",
     "actionSelection": "একটি কাজ নির্বাচন করুন",
     "payment": "যোগ",
     "withdrawl": "বিয়োগ",
@@ -305,6 +316,8 @@
     "retypeIncorrect": "আপনি ভুলভাবে আপনার নতুন পাসওয়ার্ডটি দ্বিতীয় বার লিখেছেন। আবার লিখুন এবং নিশ্চিত করুন।"
   },
   "customer": {
+    "editCustomerTitle": "গ্রাহক সম্পাদনা করুন",
+    "addCustomerTitle": "গ্রাহক যোগ করুন",
     "customerNameInput": "গ্রাহকের নাম",
     "customerNameInputError": "একটি বৈধ নাম লিখুন",
     "customerNumberInput": "যোগাযোগের নম্বর",
@@ -334,6 +347,7 @@
     "deleteCustomer": "গ্রাহক মুছুন"
   },
   "editProfile": {
+    "editProfileTitle": "পরিলেখ সম্পাদনা",
     "currentPassword": "আপনার বর্তমান পাসওয়ার্ড",
     "newPassword": "আপনার নতুন পাসওয়ার্ড",
     "retypeNewPassword": "আপনার নতুন পাসওয়ার্ড আবার লিখুন",

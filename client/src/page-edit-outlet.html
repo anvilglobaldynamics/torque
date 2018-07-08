@@ -101,10 +101,10 @@
         this.useLanguageServices();
         if ('outlet' in this.params) {
           this.editMode = true;
-          this.app.pushPageTitle('Edit Outlet');
+          this.app.pushPageTitle(this.app.verses.outlet.editOutletTitle);
         } else {
           this.editMode = false;
-          this.app.pushPageTitle('Add Outlet');
+          this.app.pushPageTitle(this.app.verses.outlet.addOutletTitle);
         }
         if (!this._ensureAccess()) return;
         if (this.editMode) {

@@ -112,7 +112,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.useLanguageServices();
-        this.app.pushPageTitle('Edit Profile');
+        this.app.pushPageTitle(this.app.verses.editProfile.editProfileTitle);
         if (!this._ensureAccess()) return;
         this.delay(300, () => {
           this._processLoadProfile();

@@ -95,9 +95,9 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Adjust Customer Balance');
-        if (!this._ensureAccess()) return;
         this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.adjustCustomerBalance.adjustCustomerBalanceTitle);
+        if (!this._ensureAccess()) return;
         if (!('customer' in this.params)) {
           let message = this.app.verses.general.pageCannotBeDisplayed;
           this.app.showModalDialog("Something went wrong!", message, _ => {

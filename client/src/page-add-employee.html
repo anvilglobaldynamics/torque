@@ -97,9 +97,9 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Add Employee');
-        if (!this._ensureAccess()) return;
         this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.employee.addEmployeeTitle);
+        if (!this._ensureAccess()) return;
         this.self = this;
         this.delay(0, () => {
           this.subForm = this.elem("elem-common-employment-details-input");
