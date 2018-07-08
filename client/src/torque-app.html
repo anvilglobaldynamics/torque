@@ -177,7 +177,7 @@
 
     <app-drawer-layout responsive-width="2560px" fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
-      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
+      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]" style$="[[$invisibleUnless(user)]]">
         <div class="app-drawer-wrapper">
           <app-toolbar>Torque</app-toolbar>
           <iron-selector selected="[[pageName]]" attr-for-selected="name" class="drawer-list" role="navigation">
