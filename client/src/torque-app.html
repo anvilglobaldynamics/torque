@@ -99,7 +99,9 @@
       /* ============= styles ============= */
 
       @media print {
-        app-drawer, app-header, .footer {
+        app-drawer,
+        app-header,
+        .footer {
           display: none;
         }
       }
@@ -222,8 +224,8 @@
                 <!-- context-sensitive - start -->
                 <!-- context-sensitive - end -->
                 <paper-item on-tap="homeTapped">Home</paper-item>
-                <paper-item>POS List</paper-item>
-                <paper-item>Inventory List</paper-item>
+                <!-- <paper-item>POS List</paper-item> -->
+                <!-- <paper-item>Inventory List</paper-item> -->
                 <paper-item on-tap="switchOrganizationTapped">Switch Organization</paper-item>
                 <paper-item on-tap="reloadTapped">Reload</paper-item>
               </paper-listbox>
@@ -281,7 +283,7 @@
           </div>
           <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
           <span class="extra-small">build
-            <span id="build-number">66</span>
+            <span id="build-number">67</span>
           </span>
           <br>
           <br>
