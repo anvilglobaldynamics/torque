@@ -30,31 +30,31 @@
         <div class="horizontal layout item center wrap">
           <div class="content">
             <div class="title">[[productCategory.name]]</div>
-            <div class="description">Buying Price: [[productCategory.defaultPurchasePrice]] [[app.settings.monetaryUnit]] per [[productCategory.unit]]</div>
-            <div class="description">Selling Price: [[productCategory.defaultSalePrice]] [[app.settings.monetaryUnit]] per [[productCategory.unit]]</div>
+            <div class="description">[[verses.productCategory.buyingPrice]]: [[productCategory.defaultPurchasePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productCategory.unit]]</div>
+            <div class="description">[[verses.productCategory.sellingPrice]]: [[productCategory.defaultSalePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productCategory.unit]]</div>
           </div>
           <div class="control-buttons">
             <template is="dom-if" if="[[!isAMovingGoingOn]]">
               <paper-button class="secondary" on-tap="moveTapped" raised>
                 <iron-icon icon="icons:open-with" class="button-icon"></iron-icon>
-                Move
+                [[verses.general.move]]
               </paper-button>
               <paper-button class="secondary" on-tap="editTapped" raised>
                 <iron-icon icon="create" class="button-icon"></iron-icon>
-                Edit
+                [[verses.general.edit]]
               </paper-button>
               <paper-button class="secondary" on-tap="deleteTapped" raised>
                 <iron-icon icon="delete" class="button-iconx"></iron-icon>
-                Delete
+                [[verses.general.delete]]
               </paper-button>
               <paper-button class="primary" on-tap="addSubcategoryTapped" raised>
                 <iron-icon icon="add" class="button-icon"></iron-icon>
-                Sub Category
+                [[verses.productCategory.subCategory]]
               </paper-button>
             </template>
             <template is="dom-if" if="[[isAMovingGoingOn]]">
               <paper-button class="primary" on-tap="moveHereTapped" raised>
-                Move Here
+                [[verses.productCategory.moveHere]]
               </paper-button>
             </template>
           </div>
@@ -69,7 +69,7 @@
   </template>
 
   <script>
-    class ProductCategory extends FxElement {
+    class ProductCategory extends FxElement.mixin(TorqueLanguageBehavior) {
 
       static get is() {
         return 'product-category';
@@ -84,8 +84,18 @@
           isAMovingGoingOn: {
             type: Boolean,
             value: false
+          },
+          page: {
+            type: Object,
+            value: null,
+            observer: 'pageChanged'
           }
         };
+      }
+
+      pageChanged() {
+        if (!this.page) return;
+        this.useLanguageServices();
       }
 
       // region: core =================================
@@ -193,13 +203,13 @@
 
       <div class="lone-controls">
         <template is="dom-if" if="[[isAMovingGoingOn]]">
-          <paper-button raised class="primary" on-tap="moveToRootTapped">Move To Root</paper-button>
-          <paper-button raised class="secondary" on-tap="cancelMovingTapped">Cancel</paper-button>
+          <paper-button raised class="primary" on-tap="moveToRootTapped">[[verses.productCategory.moveToRoot]]</paper-button>
+          <paper-button raised class="secondary" on-tap="cancelMovingTapped">[[verses.general.cancel]]</paper-button>
         </template>
         <template is="dom-if" if="[[!isAMovingGoingOn]]">
           <paper-button raised class="primary" on-tap="createTapped">
             <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
-            Create New Product Category
+            [[verses.productCategory.createNewProductCategory]]
           </paper-button>
         </template>
       </div>
@@ -238,9 +248,9 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
-        this.app.pushPageTitle('Manage Product Categories');
-        if (!this._ensureAccess()) return;
         this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.productCategory.manageProductCategoriesTitle);
+        if (!this._ensureAccess()) return;
         this._processProductCategoryList(() => {
           this.isReady = true;
         });

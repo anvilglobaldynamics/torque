@@ -17,6 +17,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -80,14 +81,14 @@
 
       <div class="filter-toggle-region horizontal layout center">
         <div class="flex"></div>
-        <paper-toggle-button checked="{{shouldShowFilters}}">Show Filters</paper-toggle-button>
+        <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.salesReport.showFilters]]</paper-toggle-button>
       </div>
 
       <div class="filter-region" hidden="[[!shouldShowFilters]]">
 
         <div class="card horizontal layout center">
-          <paper-input class="flex" value="{{fromDate}}" type="date" label="From Date"></paper-input>
-          <paper-input class="flex" value="{{toDate}}" type="date" label="To Date"></paper-input>
+          <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+          <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
         </div>
 
         <template is="dom-if" if="[[!isSearchingCustomer]]">
@@ -95,20 +96,20 @@
             <div class="horizontal layout center wrap">
               <div class="flex">
                 <template is="dom-if" if="[[!customer]]">
-                  No customer selected (Anonymous sale)
+                  [[verses.salesReport.noCustomerSelected]]
                 </template>
                 <template is="dom-if" if="[[customer]]">
-                  Customer:
+                  [[verses.general.customer]]:
                   <b>[[customer.fullName]]</b> ([[customer.phone]])
-                  <br> Balance:
+                  <br> [[verses.general.balance]]:
                   <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
                 </template>
               </div>
               <div class="horizontal layout center">
                 <template is="dom-if" if="[[customer]]">
-                  <paper-button raised class="primary" on-tap="removeCustomerTapped">Remove Customer</paper-button>
+                  <paper-button raised class="primary" on-tap="removeCustomerTapped">[[verses.salesReport.removeCustomer]]</paper-button>
                 </template>
-                <paper-button raised class="primary" on-tap="changeCustomerTapped">Change Customer</paper-button>
+                <paper-button raised class="primary" on-tap="changeCustomerTapped">[[verses.salesReport.changeCustomer]]</paper-button>
               </div>
             </div>
           </div>
@@ -120,29 +121,29 @@
             <div class="horizontal layout center">
               <div class="flex">
                 <template is="dom-if" if="[[!outlet]]">
-                  No outlet selected (Anonymous sale)
+                  [[verses.salesReport.noOutletSelected]]
                 </template>
                 <template is="dom-if" if="[[outlet]]">
-                  Outlet:
+                  [[verses.general.outlet]]:
                   <b>[[outlet.name]]</b> ([[outlet.phone]])
-                  <br> Address:
+                  <br> [[verses.general.address]]:
                   <b>[[outlet.physicalAddress]]</b>
                 </template>
               </div>
               <template is="dom-if" if="[[outlet]]">
-                <paper-button raised class="primary" on-tap="removeOutletTapped">Remove Outlet</paper-button>
+                <paper-button raised class="primary" on-tap="removeOutletTapped">[[verses.salesReport.removeOutlet]]</paper-button>
               </template>
-              <paper-button raised class="primary" on-tap="changeOutletTapped">Change Outlet</paper-button>
+              <paper-button raised class="primary" on-tap="changeOutletTapped">[[verses.salesReport.changeOutlet]]</paper-button>
             </div>
           </div>
         </template>
         <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
         <div class="lone-controls">
-          <paper-checkbox checked="{{showProductDetails}}">Show Sales and Product Details</paper-checkbox>
+          <paper-checkbox checked="{{showProductDetails}}">[[verses.salesReport.showSalesProductDetails]]</paper-checkbox>
           <paper-button raised class="primary" on-tap="filterTapped">
             <iron-icon class="button-icon" icon="icons:find-in-page"></iron-icon>
-            Filter
+            [[verses.general.filter]]
           </paper-button>
         </div>
 
@@ -150,8 +151,8 @@
 
       <div class="report">
         <div class="header vertical layout">
-          <div class="name">Sales Report</div>
-          <div class="date">[[fromDate]] to [[toDate]]</div>
+          <div class="name">[[verses.salesReport.salesReportTitle]]</div>
+          <div class="date">[[fromDate]] [[verses.general.to]] [[toDate]]</div>
           <div class="horizontal layout wrap">
             <div>
               <div>[[app.organization.name]]</div>
@@ -161,7 +162,7 @@
             </div>
             <div class="flex"></div>
             <div>
-              <div>Printed By: [[app.user.fullName]]</div>
+              <div>[[verses.salesReport.printedBy]]: [[app.user.fullName]]</div>
               <div>[[app.organization.employment.designation]]</div>
               <div>[[app.organization.employment.companyProvidedId]]</div>
             </div>
@@ -170,48 +171,48 @@
         <div class="body">
           <div class="horizontal layout center item wrap">
             <div class="flex">
-              <strong>Particulars</strong>
+              <strong>[[verses.salesReport.particulars]]</strong>
             </div>
             <div>
-              <strong>Billed Amount</strong>
+              <strong>[[verses.salesReport.billedAmount]]</strong>
             </div>
           </div>
           <template is="dom-repeat" items="[[salesList]]" as="sales">
             <div class="horizontal layout center item wrap">
               <div class="flex">
                 <div class="id">
-                  <strong>Sales # [[sales.id]]</strong> [[$mkDate(sales.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]
+                  <strong>[[verses.salesReport.sales]] # [[sales.id]]</strong> [[$mkDate(sales.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]
                 </div>
                 <template is="dom-if" if="[[sales.customer]]">
                   <div class="description">
-                    <strong>Sold To: </strong>[[sales.customer.fullName]] ([[sales.customer.phone]])
+                    <strong>[[verses.salesReport.soldTo]]: </strong>[[sales.customer.fullName]] ([[sales.customer.phone]])
                   </div>
                 </template>
                 <template is="dom-if" if="[[!showProductDetails]]">
-                  <div class="description">[[sales.productList.length]] product(s)</div>
+                  <div class="description">[[sales.productList.length]] [[verses.salesReport.products]]</div>
                 </template>
                 <template is="dom-if" if="[[showProductDetails]]">
                   <template is="dom-repeat" items="[[sales.productList]]" as="product">
                     <div class="description">[[product.productCategory.name]]: [[product.count]] [[product.productCategory.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]</div>
                   </template>
                   <div class="description">
-                    <strong>Total:</strong> [[sales.productList.length]] product(s)
+                    <strong>[[verses.salesReport.total]]:</strong> [[sales.productList.length]] [[verses.salesReport.products]]
                   </div>
                   <template is="dom-if" if="[[sales.payment.discountedAmount]]">
                     <div class="description">
-                      <strong>Discounted Amount: </strong>[[sales.payment.discountedAmount]] [[app.settings.monetaryUnit]]</div>
+                      <strong>[[verses.salesReport.discountedAmount]]: </strong>[[sales.payment.discountedAmount]] [[app.settings.monetaryUnit]]</div>
                   </template>
                   <template is="dom-if" if="[[sales.payment.vatAmount]]">
                     <div class="description">
-                      <strong>VAT: </strong>[[sales.payment.vatAmount]] [[app.settings.monetaryUnit]]</div>
+                      <strong>[[verses.salesReport.vat]]: </strong>[[sales.payment.vatAmount]] [[app.settings.monetaryUnit]]</div>
                   </template>
                   <template is="dom-if" if="[[sales.payment.serviceChargeAmount]]">
                     <div class="description">
-                      <strong>Service Charge: </strong>[[sales.payment.serviceChargeAmount]]%</div>
+                      <strong>[[verses.salesReport.serviceCharge]]: </strong>[[sales.payment.serviceChargeAmount]]%</div>
                   </template>
                   <template is="dom-if" if="[[sales.payment.previousCustomerBalance]]">
                     <div class="description">
-                      <strong>Previous Balance: </strong>[[sales.payment.previousCustomerBalance]] [[app.settings.monetaryUnit]]</div>
+                      <strong>[[verses.salesReport.previousBalance]]: </strong>[[sales.payment.previousCustomerBalance]] [[app.settings.monetaryUnit]]</div>
                   </template>
                 </template>
               </div>
@@ -220,7 +221,7 @@
           </template>
           <div class="horizontal layout center item wrap">
             <div class="flex">
-              <strong>Total</strong>
+              <strong>[[verses.salesReport.total]]</strong>
             </div>
             <div>
               <strong>[[salesSummary.billedAmountSum]] [[app.settings.monetaryUnit]]</strong>
@@ -233,7 +234,7 @@
   </template>
 
   <script>
-    class PageReports extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageReports extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-reports';
       }
@@ -311,7 +312,8 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.app.shouldShowPrintButton = true;
-        this.app.pushPageTitle('Sales Report');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.salesReport.salesReportTitle);
         if (!this._ensureAccess()) return;
         this._processSalesList(() => {
           if ('outlet' in this.params) {

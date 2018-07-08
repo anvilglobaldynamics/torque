@@ -19,6 +19,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -37,15 +38,15 @@
           <div class="card vertical layout">
 
             <div>[[productToBeReturned.productCategoryName]]</div>
-            <div>Sold Count: [[productToBeReturned.count]]</div>
-            <div>Return Count: [[productToBeReturned.returnedProductCount]]</div>
-            <paper-input class="salesReturnForm--productReturnCount" value="{{salesReturnForm.productReturnCount}}" type="number" required min="1" max="[[maxAllowedReturnCount(productToBeReturned.count, productToBeReturned.returnedProductCount)]]" error-message="Please enter a valid number" label="Product Return Count"></paper-input>
-            <paper-input class="salesReturnForm--creditedAmount" value="{{salesReturnForm.creditedAmount}}" type="number" required min="0" max="[[maxAllowedCreditAmount(productToBeReturned.count, productToBeReturned.salePrice)]]" error-message="Please enter a valid number" label="Credited Amount (amount that has been returned to the customer)">
+            <div>[[verses.salesReturn.soldCount]]: [[productToBeReturned.count]]</div>
+            <div>[[verses.salesReturn.returnCount]]: [[productToBeReturned.returnedProductCount]]</div>
+            <paper-input class="salesReturnForm--productReturnCount" value="{{salesReturnForm.productReturnCount}}" type="number" required min="1" max="[[maxAllowedReturnCount(productToBeReturned.count, productToBeReturned.returnedProductCount)]]" error-message=[[verses.salesReturn.productReturnCountInputError]] label=[[verses.salesReturn.productReturnCountInput]]></paper-input>
+            <paper-input class="salesReturnForm--creditedAmount" value="{{salesReturnForm.creditedAmount}}" type="number" required min="0" max="[[maxAllowedCreditAmount(productToBeReturned.count, productToBeReturned.salePrice)]]" error-message=[[verses.salesReturn.creditedAmountInputError]] label=[[verses.salesReturn.creditedAmountInput]]>
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class="primary salesReturnForm--submit" on-tap="addSalesReturnTapped">Add Sales Return</paper-button>
+              <paper-button raised class="primary salesReturnForm--submit" on-tap="addSalesReturnTapped">[[verses.salesReturn.addSalesReturn]]</paper-button>
             </div>
           </div>
         </form>
@@ -54,7 +55,7 @@
     </div>
   </template>
   <script>
-    class PageEditSalesReturn extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageEditSalesReturn extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-edit-sales-return';
       }
@@ -90,10 +91,11 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Return Sales');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.salesReturn.pageTitle);
         if (!this._ensureAccess()) return;
         if (!('sales' in this.params) || !('product' in this.params)) {
-          let message = "This page cannot be displayed at this moment. Please try again."
+          let message = this.app.verses.general.pageCannotBeDisplayed;
           this.app.showModalDialog("Something went wrong!", message, _ => {
             this.app.navigateTo('/home');
           });

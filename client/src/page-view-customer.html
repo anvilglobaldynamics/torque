@@ -16,6 +16,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -31,37 +32,37 @@
 
       <div class="card vertical layout">
         <div>[[customer.fullName]]</div>
-        <div>Balance: [[customer.balance]]</div>
-        <div>Number: [[customer.phone]]</div>
+        <div>[[verses.general.balance]]: [[customer.balance]]</div>
+        <div>[[verses.general.number]]: [[customer.phone]]</div>
       </div>
 
       <div class="card vertical layout">
-        Additional Payment History:
+        [[verses.customer.additionalPaymentHistory]]:
         <template is="dom-repeat" items="[[customer.additionalPaymentHistory]]" as="additionalPayment">
-          <br> Date: [[additionalPayment.creditedDatetimeStamp]] Amount: [[additionalPayment.amount]] Action: [[additionalPayment.action]] Accepted By: [[additionalPayment.acceptedByUserId]]
+          <br> [[verses.general.date]]: [[additionalPayment.creditedDatetimeStamp]] [[verses.general.amount]]: [[additionalPayment.amount]] [[verses.general.action]]: [[additionalPayment.action]] [[verses.general.acceptedBy]]: [[additionalPayment.acceptedByUserId]]
         </template>
       </div>
 
       <div class="card">
-        <div class="mb-4">Click here to edit the customer.</div>
-        <paper-button raised class="primary m-0" on-tap="editTapped">Edit Customer</paper-button>
+        <div class="mb-4">[[verses.customer.clickToEditCustomer]]</div>
+        <paper-button raised class="primary m-0" on-tap="editTapped">[[verses.customer.editCustomer]]</paper-button>
       </div>
 
       <div class="card">
-        <div class="mb-4">Click here to adjust the customer's balance.</div>
-        <paper-button raised class="primary m-0" on-tap="adjustCustomerBalanceTapped">Adjust Customer Balance</paper-button>
+        <div class="mb-4">[[verses.customer.clickAdjustCustomersBalance]]</div>
+        <paper-button raised class="primary m-0" on-tap="adjustCustomerBalanceTapped">[[verses.customer.adjustCustomerBalance]]</paper-button>
       </div>
 
       <div class="card">
-        <div class="mb-4">Click here to delete the customer. Be warned that once deleted, an customer can not be restored.</div>
-        <paper-button raised class="primary m-0" on-tap="deleteTapped">Delete Customer</paper-button>
+        <div class="mb-4">[[verses.customer.clickToDeleteCustomer]]</div>
+        <paper-button raised class="primary m-0" on-tap="deleteTapped">[[verses.customer.deleteCustomer]]</paper-button>
       </div>
 
     </div>
   </template>
 
   <script>
-    class PageViewCustomer extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageViewCustomer extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-view-customer';
@@ -81,11 +82,12 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Customer');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.customer.viewCustomerTitle);
         if (!this._ensureAccess()) return;
         if (!('customer' in this.params)) {
-          let message = "This page cannot be displayed at this moment. Please try again."
-          this.app.showModalDialog("Something went wrong!", message, _ => {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
             this.app.navigateTo('/home');
           });
           return;
@@ -146,14 +148,14 @@
       }
 
       deleteTapped(e = null) {
-        let message = `Are you sure you want to delete this customer ${this.customer.name}. Once deleted, you can not restore this customer.`;
-        this.app.showModalConfirmation("Delete customer?", message, (answer) => {
+        let message = this.app.verses.customer.deleteCustomerQuestionPartOne + this.customer.name + "." + this.app.verses.customer.deleteCustomerQuestionPartTwo;
+        this.app.showModalConfirmation(this.app.verses.customer.deleteCustomerQuestion, message, (answer) => {
           if (!answer) return;
           this._deleteCustomer(this.customer.id, () => {
             if (this.customer.id === this.app.getFromSession('last-created-customer')) {
               this.app.extractFromSession('last-created-customer')
             }
-            this.app.showToast("Customer has been deleted", () => {
+            this.app.showToast(this.app.verses.customer.customerDeleted, () => {
               this.app.navigateTo(`/manage-customers`);
             });
           });

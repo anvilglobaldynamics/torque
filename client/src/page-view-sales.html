@@ -31,29 +31,29 @@
 
       <div class="card vertical layout">
         <div class="list">
-          <div>ID: [[sales.id]]</div>
-          <div>Dated: [[$mkDate(sales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-          <div>Outlet ID: [[sales.outletId]]</div>
+          <div>[[verses.general.id]]: [[sales.id]]</div>
+          <div>[[verses.general.dated]]: [[$mkDate(sales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+          <div>[[verses.sales.outletId]]: [[sales.outletId]]</div>
           <template is="dom-if" if="{{sales.customerId}}">
-            <div>Customer ID: [[sales.customerId]]</div>
+            <div>[[verses.sales.customerId]]: [[sales.customerId]]</div>
           </template>
           <template is="dom-if" if="{{!sales.isDiscarded}}">
-            <paper-button raised class="primary" on-tap="discardTapped">Discard</paper-button>
+            <paper-button raised class="primary" on-tap="discardTapped">[[verses.general.discard]]</paper-button>
           </template>
         </div>
       </div>
 
       <div class="card vertical layout">
-        <div class="title">Product List: ([[sales.productList.length]] products)</div>
+        <div class="title">[[verses.sales.productList]]: ([[sales.productList.length]] products)</div>
         <div class="list">
           <template is="dom-repeat" items="{{sales.productList}}" as="product">
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
-                <div>Product: [[product.productCategoryName]]</div>
-                <div>Count: [[product.count]]</div>
-                <div>Sale Price: [[product.salePrice]]</div>
+                <div>[[verses.general.product]]: [[product.productCategoryName]]</div>
+                <div>[[verses.general.count]]: [[product.count]]</div>
+                <div>[[verses.sales.salePrice]]: [[product.salePrice]]</div>
                 <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}">
-                  <paper-button raised class="primary" on-tap="returnTapped">Return</paper-button>
+                  <paper-button raised class="primary" on-tap="returnTapped">[[verses.general.return]]</paper-button>
                 </template>
               </div>
             </div>
@@ -62,12 +62,12 @@
       </div>
 
       <div class="card vertical layout">
-        <div class="title">Payment:</div>
-        <div>Total Billed: [[$round(sales.payment.totalBilled)]]</div>
-        <div>Discounted: [[$round(sales.payment.discountedAmount)]] by [[sales.payment.discountValue]] [[sales.payment.discountType]]</div>
-        <div>Service Charge Amount: [[$round(sales.payment.serviceChargeAmount)]]</div>
-        <div>Vat: [[$round(sales.payment.vatAmount)]]</div>
-        <div>Paid Amount: [[$round(sales.payment.paidAmount)]]</div>
+        <div class="title">[[verses.sales.payment]]:</div>
+        <div>[[verses.sales.totalBilled]]: [[$round(sales.payment.totalBilled)]]</div>
+        <div>[[verses.sales.discounted]]: [[$round(sales.payment.discountedAmount)]] [[verses.general.by]] [[sales.payment.discountValue]] [[sales.payment.discountType]]</div>
+        <div>[[verses.sales.serviceChargeAmount]]: [[$round(sales.payment.serviceChargeAmount)]]</div>
+        <div>[[verses.sales.vat]]: [[$round(sales.payment.vatAmount)]]</div>
+        <div>[[verses.sales.paidAmount]]: [[$round(sales.payment.paidAmount)]]</div>
       </div>
 
     </div>
@@ -75,16 +75,14 @@
   </template>
 
   <script>
-    class PageViewSales extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageViewSales extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-view-sales';
       }
 
       static get properties() {
-        return {
-
-        };
+        return {};
       }
 
       // region: core =================================
@@ -97,11 +95,12 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Sales');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.sales.salesTitle);
         if (!this._ensureAccess()) return;
         if (!('sales' in this.params)) {
-          let message = "This page cannot be displayed at this moment. Please try again."
-          this.app.showModalDialog("Something went wrong!", message, _ => {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
             this.app.navigateTo('/home');
           });
           return;
@@ -154,7 +153,7 @@
 
       discardTapped(e = null) {
         this._discardSales(this.sales.id, () => {
-          this.app.showToast("Sales has been discarded", () => {
+          this.app.showToast(this.app.verses.sales.salesDiscarded, () => {
             this.app.reloadTapped();
             this.app.refreshCurrentPage();
           });

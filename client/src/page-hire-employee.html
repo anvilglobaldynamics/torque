@@ -15,6 +15,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -30,11 +31,11 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
-        <paper-input class="findUserField" value="{{findUserField.emailOrPhone}}" required minlength="11" maxlength="15" error-message="Please enter a valid phone/email" label="Email Or Phone"></paper-input>
+        <paper-input class="findUserField" value="{{findUserField.emailOrPhone}}" required minlength="11" maxlength="15" error-message=[[verses.employee.emailOrPhoneInputError]] label=[[verses.employee.emailOrPhoneInputTitle]]></paper-input>
 
         <div class="horizontal layout button-row end">
           <div class="flex"></div>
-          <paper-button raised class="primary" on-tap="searchUserTapped">Find User</paper-button>
+          <paper-button raised class="primary" on-tap="searchUserTapped">[[verses.employee.findUser]]</paper-button>
         </div>
       </div>
 
@@ -47,7 +48,7 @@
 
               <div class="horizontal layout button-row end">
                 <div class="flex"></div>
-                <paper-button raised class="primary hireEmployeeForm--submit" on-tap="hireUserTapped">Hire As Employee</paper-button>
+                <paper-button raised class="primary hireEmployeeForm--submit" on-tap="hireUserTapped">[[verses.employee.hireAsEmployee]]</paper-button>
               </div>
             </div>
           </form>
@@ -56,7 +57,7 @@
     </div>
   </template>
   <script>
-    class PageHireEmployee extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageHireEmployee extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-hire-employee';
       }
@@ -110,7 +111,8 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Hire Employee');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.employee.hireEmployeePageTitle);
         if (!this._ensureAccess()) return;
         this.self = this;
         this.isReady = true;
@@ -144,8 +146,6 @@
         });
       }
 
-      // TODO: _processHireEmployee
-
       _processHireEmployee({ role, designation, companyProvidedId, privileges }) {
         let data = {
           userId: this.user.id,
@@ -155,7 +155,7 @@
         this.app.callHireUserAsEmployeeApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'hireEmployeeForm');
-          let message = "New employee has been hired."
+          let message = this.app.verses.employee.newEmployeeHired;
           this.app.showToast(message, _ => {
             this.app.navigateTo(`/view-employee/employee:${response.employmentId}`);
           });
@@ -169,7 +169,7 @@
       }
 
       searchUserTapped(e = null) {
-        let emailOrPhone = null;
+        let { emailOrPhone } = this.findUserField;
         this._processFindUser({ emailOrPhone }, (user) => {
           this.user = user;
 

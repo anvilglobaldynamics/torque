@@ -16,6 +16,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -30,26 +31,26 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
-        <div>Designation: [[employee.designation]]</div>
-        <div>Role: [[employee.role]]</div>
-        <div>Active: [[employee.isActive]]</div>
-        <div>Company Id: [[employee.companyProvidedId]]</div>
+        <div>[[verses.employee.designation]]: [[employee.designation]]</div>
+        <div>[[verses.employee.role]]: [[employee.role]]</div>
+        <div>[[verses.general.active]]: [[employee.isActive]]</div>
+        <div>[[verses.employee.companyId]]: [[employee.companyProvidedId]]</div>
       </div>
 
       <div class="card vertical layout">
-        <div>Name: [[employee.userDetails.fullName]]</div>
-        <div>Phone: [[employee.userDetails.phone]]</div>
+        <div>[[verses.general.name]]: [[employee.userDetails.fullName]]</div>
+        <div>[[verses.general.phone]]: [[employee.userDetails.phone]]</div>
       </div>
 
       <div class="card">
-        <div class="mb-4">Click here to edit the employee.</div>
-        <paper-button raised class="btn primary" on-tap="editTapped">Edit Employee</paper-button>
+        <div class="mb-4">[[verses.employee.clickToEditEmployee]]</div>
+        <paper-button raised class="btn primary" on-tap="editTapped">[[verses.employee.editEmployee]]</paper-button>
       </div>
 
       <template is="dom-if" if="{{employee.isActive}}">
         <div class="card">
-          <div class="mb-4">Click here to delete the employee. Be warned that once deleted, an employee can not be restored.</div>
-          <paper-button raised class="btn primary" on-tap="fireTapped">Fire Employee</paper-button>
+          <div class="mb-4">[[verses.employee.clickToDeleteEmployee]]</div>
+          <paper-button raised class="btn primary" on-tap="fireTapped">[[verses.employee.fireEmployee]]</paper-button>
         </div>
       </template>
 
@@ -58,7 +59,7 @@
   </template>
 
   <script>
-    class PageViewEmployee extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageViewEmployee extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-view-employee';
@@ -78,11 +79,12 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Employee');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.employee.viewEmployeeTitle);
         if (!this._ensureAccess()) return;
         if (!('employee' in this.params)) {
-          let message = "This page cannot be displayed at this moment. Please try again."
-          this.app.showModalDialog("Something went wrong!", message, _ => {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
             this.app.navigateTo('/home');
           });
           return;
@@ -141,11 +143,11 @@
       }
 
       fireTapped(e = null) {
-        let message = `Are you sure you want to fire this employee ${this.employee.userId}.`;
+        let message = this.app.verses.employee.sureFireThisEmployee + " " + this.employee.userId;
         if (this.employee.userId === this.app.user.id) {
-          message = `Are you sure you want to fire Yourself? You will loose all access to this organization.`;
+          message = this.app.verses.employee.sureFireYourself;
         }
-        this.app.showModalConfirmation("Fire employee?", message, (answer) => {
+        this.app.showModalConfirmation(this.app.verses.employee.fireEmployeeQuestion, message, (answer) => {
           if (!answer) return;
           this._fireEmployee(this.employee, () => {
             this.app.showToast("Employee has been fired", () => {

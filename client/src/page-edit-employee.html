@@ -15,6 +15,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -37,7 +38,7 @@
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class="primary editEmployeeForm--submit" on-tap="updateEmployeeTapped">Update Employee</paper-button>
+              <paper-button raised class="primary editEmployeeForm--submit" on-tap="updateEmployeeTapped">[[verses.employee.updateEmployee]]</paper-button>
             </div>
 
           </div>
@@ -47,7 +48,7 @@
   </template>
 
   <script>
-    class PageEditEmployee extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageEditEmployee extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-edit-employee';
@@ -92,7 +93,8 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Edit Employee')
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.employee.editEmployeeTitle);
         if (!this._ensureAccess()) return;
         this.self = this;
         this._processGetEmployee(() => {
@@ -142,7 +144,7 @@
         this.app.callEditEmploymentApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editEmployeeForm');
-          let message = "Employee has been updated."
+          let message = this.app.verses.employee.employeeUpdated;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });

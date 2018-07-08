@@ -16,6 +16,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -53,14 +54,14 @@
                 <div class="title">[[organization.name]]</div>
                 <div class="description">[[organization.employment.designation]] ([[organization.employment.role]])</div>
               </div>
-              <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
+              <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
             </div>
           </template>
         </div>
       </div>
 
       <div class="transparent-card align-right">
-        <paper-button raised class="primary" on-tap="createTapped">Create New Organization</paper-button>
+        <paper-button raised class="primary" on-tap="createTapped"> [[verses.organization.createOrganization]] </paper-button>
       </div>
 
     </div>
@@ -68,7 +69,7 @@
   </template>
 
   <script>
-    class PageManageOrganizations extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageManageOrganizations extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-manage-organizations';
       }
@@ -88,7 +89,8 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Organizations');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.organization.manageOrganizationTitle);
         if (!this._ensureAccess()) return;
         this._processOrganizationList(_ => {
           this.isReady = true;

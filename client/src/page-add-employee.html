@@ -15,6 +15,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -33,15 +34,15 @@
       <iron-form id="addEmployeeForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
-            <paper-input class="addEmployeeForm--fullName" value="{{addEmployeeForm.fullName}}" required minlength="3" error-message="Please enter a valid name" label="Name of Employee."></paper-input>
-            <paper-input class="addEmployeeForm--password" value="{{addEmployeeForm.password}}" required minlength="8" error-message="Please enter a password at least 8 characters long" label="A minimum 8 digit password" type="password"></paper-input>
-            <paper-input class="addEmployeeForm--phone" value="{{addEmployeeForm.phone}}" required minlength="11" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number of Manager/Contact Person"></paper-input>
+            <paper-input class="addEmployeeForm--fullName" value="{{addEmployeeForm.fullName}}" required minlength="3" error-message=[[verses.employee.nameOfEmployeeInputError]] label=[[verses.employee.nameOfEmployeeInput]]></paper-input>
+            <paper-input class="addEmployeeForm--password" value="{{addEmployeeForm.password}}" required minlength="8" error-message=[[verses.employee.passwordInputError]] label=[[verses.employee.passwordInput]] type="password"></paper-input>
+            <paper-input class="addEmployeeForm--phone" value="{{addEmployeeForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.employee.phoneInputError]] label=[[verses.employee.contactPhoneOfContactPerson]]></paper-input>
 
             <elem-common-employment-details-input name="employeeForm" employee-form="{{addEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class="primary addEmployeeForm--submit" on-tap="addEmployeeTapped">Add Employee</paper-button>
+              <paper-button raised class="primary addEmployeeForm--submit" on-tap="addEmployeeTapped">[[verses.employee.addEmployee]]</paper-button>
             </div>
           </div>
         </form>
@@ -50,7 +51,7 @@
     </div>
   </template>
   <script>
-    class PageAddEmployee extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageAddEmployee extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-add-employee';
       }
@@ -96,7 +97,8 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Add Employee');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.employee.addEmployeeTitle);
         if (!this._ensureAccess()) return;
         this.self = this;
         this.delay(0, () => {
@@ -128,10 +130,11 @@
           fullName, password, phone, role, designation, companyProvidedId, privileges,
           organizationId: this.app.organization.id
         };
+        
         this.app.callAddNewEmployeeApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'addEmployeeForm');
-          let message = "New employee has been created."
+          let message = this.app.verses.employee.newEmployeeCreated;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });

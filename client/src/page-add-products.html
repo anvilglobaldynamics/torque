@@ -17,6 +17,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -32,13 +33,13 @@
           <div class="vertical layout flex">
             <div class="title">[[productCategory.name]]</div>
           </div>
-          <paper-input class="small-input" value="{{count}}" type="number" min="0" label="Count">
+          <paper-input class="small-input" value="{{count}}" type="number" min="0" label=[[verses.product.count]]>
             <div slot="suffix">[[productCategory.unit]]</div>
           </paper-input>
-          <paper-input disabled="[[$isDisabled(count)]]" class="small-input" value="{{salePrice}}" type="number" label="Sell For">
+          <paper-input disabled="[[$isDisabled(count)]]" class="small-input" value="{{salePrice}}" type="number" label=[[verses.product.sellFor]]>
             <div slot="suffix">[[app.settings.monetaryUnit]]</div>
           </paper-input>
-          <paper-input disabled="[[$isDisabled(count)]]" class="small-input" value="{{purchasePrice}}" type="number" label="Purchased For">
+          <paper-input disabled="[[$isDisabled(count)]]" class="small-input" value="{{purchasePrice}}" type="number" label=[[verses.product.purchasedFor]]>
             <div slot="suffix">[[app.settings.monetaryUnit]]</div>
           </paper-input>
         </div>
@@ -51,7 +52,7 @@
   </template>
 
   <script>
-    class ProductCategoryAddProduct extends FxElement {
+    class ProductCategoryAddProduct extends FxElement.mixin(TorqueLanguageBehavior) {
 
       static get is() {
         return 'product-category-add-product';
@@ -88,7 +89,9 @@
 
       constructor() {
         super();
+        this.useLanguageServices();
       }
+
       // region: ui  ===========================
 
       $isDisabled(count) {
@@ -137,7 +140,7 @@
         </div>
       </div>
       <div class="transparent-card align-right">
-        <paper-button raised class="primary m-0" on-tap="addProductsTapped">Add Products</paper-button>
+        <paper-button raised class="primary m-0" on-tap="addProductsTapped">[[verses.product.addProducts]]</paper-button>
       </div>
 
     </div>
@@ -145,7 +148,7 @@
   </template>
 
   <script>
-    class PageAddProducts extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageAddProducts extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-add-products';
@@ -170,11 +173,12 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Add Products');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.product.addProductsTitle);
         if (!this._ensureAccess()) return;
         if (!('inventory' in this.params)) {
-          let message = "This page cannot be displayed at this moment. Please try again."
-          this.app.showModalDialog("Something went wrong!", message, _ => {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
             this.app.navigateTo('/home');
           });
           return;
@@ -239,7 +243,7 @@
         this.elemAll('product-category-add-product').forEach(el => el.listProductsToAdd(productList));
         let inventoryId = parseInt(this.params.inventory);
         this._addProductsToInventory({ productList, inventoryId }, () => {
-          let message = "Product(s) were successfully added to the inventory."
+          let message = this.app.verses.product.productAddedToInventory;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });

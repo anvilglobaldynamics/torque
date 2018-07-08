@@ -32,7 +32,7 @@
         <form>
           <div class="card vertical layout">
             <paper-input class="addOrganizationForm--name" value="{{addOrganizationForm.name}}" required minlength="3" error-message=[[verses.organization.pleaseEnterAValidName]] label=[[verses.organization.nameOfYourOrganization]]></paper-input>
-            <paper-input class="addOrganizationForm--phone" value="{{addOrganizationForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.register.phoneInputError]] label=[[verses.register.phoneInput]]></paper-input>
+            <paper-input class="addOrganizationForm--phone" value="{{addOrganizationForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.organization.phoneInputError]] label=[[verses.organization.phoneInput]]></paper-input>
             <paper-input class="addOrganizationForm--email" value="{{addOrganizationForm.email}}" pattern="^.+@.+\..+$" minlength="0" error-message=[[verses.organization.emailInputError]] label=[[verses.organization.emailInput]]></paper-input>
             <paper-textarea class="addOrganizationForm--primaryBusinessAddress" value="{{addOrganizationForm.primaryBusinessAddress}}" required minlength="8" error-message=[[verses.organization.primaryBusinessAddressInputError]] label=[[verses.organization.primaryBusinessAddressInput]] rows="4"></paper-textarea>
             <paper-checkbox class="addOrganizationForm--isOneOutletOrg" checked="{{addOrganizationForm.isOneOutletOrg}}">[[verses.organization.isOneOutletOrg]]</paper-checkbox>
@@ -90,9 +90,9 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Add Organization');
-        if (!this._ensureAccess()) return;
         this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.organization.addOrganizationTitle);
+        if (!this._ensureAccess()) return;
         this.delay(300, () => {
           this.isReady = true;
         });

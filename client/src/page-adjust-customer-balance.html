@@ -19,6 +19,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -35,16 +36,16 @@
       <iron-form id="adjustCustomerBalanceForm">
         <form>
           <div class="card vertical layout">
-            <paper-dropdown-menu label="Please select an action" class="mr-4">
+            <paper-dropdown-menu label=[[verses.adjustCustomerBalance.actionSelection]] class="mr-4">
               <paper-listbox slot="dropdown-content" selected="{{adjustCustomerBalanceForm.action}}" attr-for-selected="name">
-                <paper-item name="payment">Payment</paper-item>
-                <paper-item name="withdrawl">Withdrawl</paper-item>
+                <paper-item name="payment">[[verses.adjustCustomerBalance.payment]]</paper-item>
+                <paper-item name="withdrawl">[[verses.adjustCustomerBalance.withdrawl]]</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
-            <paper-input class="adjustCustomerBalanceForm--amount" value="{{adjustCustomerBalanceForm.amount}}" required minlength="1" maxlength="10" error-message="Please enter the amount" label="Amount"></paper-input>
+            <paper-input class="adjustCustomerBalanceForm--amount" value="{{adjustCustomerBalanceForm.amount}}" required minlength="1" maxlength="10" error-message=[[verses.adjustCustomerBalance.amountInputError]] label=[[verses.adjustCustomerBalance.amountInput]]></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class="primary" on-tap="adjustCustomerBalanceTapped">Adjust</paper-button>
+              <paper-button raised class="primary" on-tap="adjustCustomerBalanceTapped">[[verses.adjustCustomerBalance.adjust]]</paper-button>
             </div>
           </div>
         </form>
@@ -54,7 +55,7 @@
   </template>
 
   <script>
-    class PageAdjustCustomerBalance extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageAdjustCustomerBalance extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-adjust-customer-balance';
       }
@@ -94,10 +95,11 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Adjust Customer Balance');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.adjustCustomerBalance.adjustCustomerBalanceTitle);
         if (!this._ensureAccess()) return;
         if (!('customer' in this.params)) {
-          let message = "This page cannot be displayed at this moment. Please try again."
+          let message = this.app.verses.general.pageCannotBeDisplayed;
           this.app.showModalDialog("Something went wrong!", message, _ => {
             this.app.navigateTo('/home');
           });
@@ -145,7 +147,7 @@
         this.app.callAdjustCustomerBalanceApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'adjustCustomerBalanceForm');
-          let message = "Customer's balance has been updated."
+          let message = this.app.verses.adjustCustomerBalance.customerBalanceUpdated;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });

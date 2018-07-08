@@ -16,6 +16,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -32,56 +33,56 @@
       <div class="card vertical layout">
         <div>[[warehouse.name]]</div>
         <div>[[warehouse.physicalAddress]]</div>
-        <div>Contact Person: [[warehouse.contactPersonName]]</div>
-        <div>Contact Number: [[warehouse.phone]]</div>
+        <div>[[verses.warehouse.contactPerson]]: [[warehouse.contactPersonName]]</div>
+        <div>[[verses.warehouse.contactNumber]]: [[warehouse.phone]]</div>
       </div>
 
-      <div class="card">
+      <!-- <div class="card">
         <div class="mb-4">Go to POS (Point of Sale) to start selling from this organization.</div>
         <paper-button raised class="primary m-0" on-tap="posTapped">Go to POS</paper-button>
-      </div>
+      </div> -->
 
       <div class="card vertical layout">
-        <div class="mb-4">This warehouse has the following inventories.</div>
+        <div class="mb-4">[[verses.warehouse.warehouseInventories]]</div>
         <div class="list">
           <div class="horizontal layout item center">
             <div class="vertical layout flex">
-              <div class="title">[[defaultInventory.name]] Inventory</div>
-              <div class="description">This is the main inventory.</div>
+              <div class="title">[[defaultInventory.name]] [[verses.warehouse.inventory]]</div>
+              <div class="description">[[verses.warehouse.goToDefaultInventory]]</div>
             </div>
-            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="defaultInventory">View</paper-button>
+            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="defaultInventory">[[verses.general.view]]</paper-button>
           </div>
           <div class="horizontal layout item center">
             <div class="vertical layout flex">
-              <div class="title">[[returnedInventory.name]] Inventory</div>
-              <div class="description">Products that are returned by the customer go in here.</div>
+              <div class="title">[[returnedInventory.name]] [[verses.warehouse.inventory]]</div>
+              <div class="description">[[verses.warehouse.goToReturnedInventory]]</div>
             </div>
-            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="returnedInventory">View</paper-button>
+            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="returnedInventory">[[verses.general.view]]</paper-button>
           </div>
           <div class="horizontal layout item center">
             <div class="vertical layout flex">
-              <div class="title">[[damagedInventory.name]] Inventory</div>
-              <div class="description">Damaged products are kept here.</div>
+              <div class="title">[[damagedInventory.name]] [[verses.warehouse.inventory]]</div>
+              <div class="description">[[verses.warehouse.goToDamagedInventory]]</div>
             </div>
-            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="damagedInventory">View</paper-button>
+            <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="damagedInventory">[[verses.general.view]]</paper-button>
           </div>
         </div>
       </div>
 
       <div class="card">
-        <div class="mb-4">Click here to edit the warehouse.</div>
-        <paper-button raised class="primary m-0" on-tap="editTapped">Edit Warehouse</paper-button>
+        <div class="mb-4">[[verses.warehouse.editWarehouseDetail]]</div>
+        <paper-button raised class="primary m-0" on-tap="editTapped">[[verses.warehouse.editWarehouse]]</paper-button>
       </div>
 
       <div class="card">
-        <div class="mb-4">Click here to delete the warehouse. Be warned that once deleted, an warehouse can not be restored.</div>
-        <paper-button raised class="primary m-0" on-tap="deleteTapped">Delete Warehouse</paper-button>
+        <div class="mb-4">[[verses.warehouse.deleteWarehouseDetail]]</div>
+        <paper-button raised class="primary m-0" on-tap="deleteTapped">[[verses.warehouse.deleteWarehouse]]</paper-button>
       </div>
     </div>
   </template>
 
   <script>
-    class PageViewWarehouse extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageViewWarehouse extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-view-warehouse';
@@ -101,11 +102,12 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Warehouse');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.warehouse.warehouseTitle);
         if (!this._ensureAccess()) return;
         if (!('warehouse' in this.params)) {
-          let message = "This page cannot be displayed at this moment. Please try again."
-          this.app.showModalDialog("Something went wrong!", message, _ => {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
             this.app.navigateTo('/home');
           });
           return;
@@ -165,11 +167,11 @@
       }
 
       deleteTapped(e = null) {
-        let message = `Are you sure you want to delete this warehouse ${this.warehouse.name}. Once deleted, you can not restore this warehouse.`;
-        this.app.showModalConfirmation("Delete warehouse?", message, (answer) => {
+        let message = this.app.verses.outlet.deleteWarehouseQuestionPartOne + " " + this.warehouse.name + " " + this.app.verses.outlet.deleteWarehouseQuestionPartTwo;
+        this.app.showModalConfirmation(this.app.verses.warehouse.deleteWarehouseQuestion, message, (answer) => {
           if (!answer) return;
           this._deleteWarehouse(this.warehouse.id, () => {
-            this.app.showToast("Warehouse has been deleted", () => {
+            this.app.showToast(this.app.verses.warehouse.warehouseDeleted, () => {
               this.app.navigateTo(`/manage-warehouses`);
             });
           });

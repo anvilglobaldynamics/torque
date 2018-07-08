@@ -15,6 +15,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -31,14 +32,14 @@
       <iron-form id="editWarehouseForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
-            <paper-input class="editWarehouseForm--name" value="{{editWarehouseForm.name}}" required minlength="3" error-message="Please enter a valid name" label="Name of your warehouse."></paper-input>
-            <paper-textarea class="editWarehouseForm--physicalAddress" value="{{editWarehouseForm.physicalAddress}}" required minlength="8" error-message="Please enter an address at least 8 characters long" label="Physical Address" rows="4"></paper-textarea>
-            <paper-input class="editWarehouseForm--contactPersonName" value="{{editWarehouseForm.contactPersonName}}" required minlength="3" error-message="Please enter a valid name" label="Name of Manager/Contact Person"></paper-input>
-            <paper-input class="editWarehouseForm--phone" value="{{editWarehouseForm.phone}}" required minlength="11" maxlength="15" error-message="Please enter a valid phone number" label="Contact Number of Manager/Contact Person"></paper-input>
+            <paper-input class="editWarehouseForm--name" value="{{editWarehouseForm.name}}" required minlength="3" error-message=[[verses.warehouse.warehouseNameInputError]] label=[[verses.warehouse.warehouseNameInput]]></paper-input>
+            <paper-textarea class="editWarehouseForm--physicalAddress" value="{{editWarehouseForm.physicalAddress}}" required minlength="8" error-message=[[verses.warehouse.warehousePhysicalAddressInputError]] label=[[verses.warehouse.warehousePhysicalAddressInput]] rows="4"></paper-textarea>
+            <paper-input class="editWarehouseForm--contactPersonName" value="{{editWarehouseForm.contactPersonName}}" required minlength="3" error-message=[[verses.warehouse.warehouseManagerNameInputError]] label=[[verses.warehouse.warehouseManagerNameInput]]></paper-input>
+            <paper-input class="editWarehouseForm--phone" value="{{editWarehouseForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.warehouse.warehouseManagerNumberInputError]] label=[[verses.warehouse.warehouseManagerNumberInput]]></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editWarehouseForm--submit" on-tap="createWarehouseTapped">Create Warehouse</paper-button>
-              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editWarehouseForm--submit" on-tap="updateWarehouseTapped">Update Warehouse</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editWarehouseForm--submit" on-tap="createWarehouseTapped">[[verses.warehouse.createWarehouse]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editWarehouseForm--submit" on-tap="updateWarehouseTapped">[[verses.warehouse.updateWarehouse]]</paper-button>
             </div>
           </div>
         </form>
@@ -48,7 +49,7 @@
   </template>
 
   <script>
-    class PageEditWarehouse extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior) {
+    class PageEditWarehouse extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-edit-warehouse';
       }
@@ -94,12 +95,13 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
+        this.useLanguageServices();
         if ('warehouse' in this.params) {
           this.editMode = true;
-          this.app.pushPageTitle('Edit Warehouse');
+          this.app.pushPageTitle(this.app.verses.warehouse.editPageTitle);
         } else {
           this.editMode = false;
-          this.app.pushPageTitle('Add Warehouse');
+          this.app.pushPageTitle(this.app.verses.warehouse.addPageTitle);
         }
         if (!this._ensureAccess()) return;
         if (this.editMode) {
@@ -152,7 +154,7 @@
         this.app.callAddWarehouseApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editWarehouseForm');
-          let message = "New warehouse has been created."
+          let message = this.app.verses.warehouse.warehouseCreated;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
@@ -167,7 +169,7 @@
         this.app.callEditWarehouseApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editWarehouseForm');
-          let message = "Warehouse has been updated."
+          let message = this.app.verses.warehouse.warehouseUpdated;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });

@@ -4,6 +4,8 @@
 
 <link rel="import" href="shared-styles.html">
 
+<link rel="import" href="torque-language-behavior.html">
+
 <dom-module id="page-error404">
   <template>
     <style include="shared-styles">
@@ -36,23 +38,33 @@
     </style>
 
     <div class="card">
-      <div class="circle">404</div>
-      <h1>Content not found.</h1>
-      <p>The requested content could not be found</p>
+      <div class="circle">[[verses.error.404]]</div>
+      <h1>[[verses.error.contentNotFound]]</h1>
+      <p>[[verses.error.contentCouldNotBeFound]]</p>
       <p>
-        <a href="[[rootPath]]">Back to Dashboard.</a>
+        <a href="[[rootPath]]">[[verses.error.backToDashboard]]</a>
       </p>
     </div>
 
   </template>
 
   <script>
-    class PageError404 extends FxPage {
+    class PageError404 extends FxPage.mixin(TorqueLanguageBehavior) {
       static get is() { return 'page-error404'; }
       static get properties() {
         return {
           rootPath: String,
+          page: {
+            type: Object,
+            value: null,
+            observer: 'pageChanged'
+          }
         };
+      }
+
+      pageChanged() {
+        if (!this.page) return;
+        this.useLanguageServices();
       }
     }
 

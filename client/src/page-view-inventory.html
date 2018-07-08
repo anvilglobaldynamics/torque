@@ -20,6 +20,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -45,17 +46,17 @@
                 <div class="title">[[product.name]]
                   <strong>[[product.count]][[product.unit]]</strong>
                 </div>
-                <div class="description">Purchase: [[product.purchasePrice]][[app.settings.monetaryUnit]], Sale: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                <div class="description">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]], [[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
               </div>
               <template is="dom-if" if="[[!product.isSelected]]">
-                <paper-button raised class="primary" on-tap="selectTapped">Select</paper-button>
+                <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
               </template>
               <template is="dom-if" if="[[product.isSelected]]">
-                <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="Count">
-                  <div slot="prefix">Selected&nbsp;</div>
+                <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.general.count]]">
+                  <div slot="prefix">[[verses.general.selected]]&nbsp;</div>
                   <div slot="suffix">&nbsp;[[product.unit]]</div>
                 </paper-input>
-                <paper-button raised class="primary" on-tap="deselectTapped">Deselect</paper-button>
+                <paper-button raised class="primary" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
               </template>
             </div>
           </template>
@@ -64,21 +65,21 @@
 
       <template is="dom-if" if="[[selectedProductCount]]">
         <div class="card">
-          <div class="mb-4">You have selected [[selectedProductCount]] products.</div>
-          <paper-dropdown-menu label="Move to Inventory" class="mr-4">
+          <div class="mb-4">[[verses.inventory.totalSelectedProducts]]: [[selectedProductCount]]</div>
+          <paper-dropdown-menu label="[[verses.inventory.moveToInventory]]" class="mr-4">
             <paper-listbox slot="dropdown-content" selected="{{targetInventoryIndex}}">
               <template is="dom-repeat" items="[[inventoryList]]" as="inventory">
                 <paper-item data-id="[[inventory.id]]">[[inventory.inventoryContainerName]] - [[inventory.name]]</paper-item>
               </template>
             </paper-listbox>
           </paper-dropdown-menu>
-          <paper-button raised class="primary m-0" on-tap="moveSelectedTapped">Move Selected</paper-button>
+          <paper-button raised class="primary m-0" on-tap="moveSelectedTapped">[[verses.inventory.moveSelected]]</paper-button>
         </div>
       </template>
 
       <div class="card">
-        <div class="mb-4">Add products to this inventory in batch.</div>
-        <paper-button raised class="primary m-0" on-tap="addProductsTapped">Add Products</paper-button>
+        <div class="mb-4">[[verses.inventory.addProductsBatchToInventory]]</div>
+        <paper-button raised class="primary m-0" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
       </div>
 
     </div>
@@ -86,7 +87,7 @@
   </template>
 
   <script>
-    class PageViewInventory extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior) {
+    class PageViewInventory extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-view-inventory';
@@ -115,11 +116,12 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
-        this.app.pushPageTitle('Inventory');
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.inventory.inventoryTitle);
         if (!this._ensureAccess()) return;
         if (!('inventory' in this.params)) {
-          let message = "This page cannot be displayed at this moment. Please try again."
-          this.app.showModalDialog("Something went wrong!", message, _ => {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
             this.app.navigateTo('/home');
           });
           return;
@@ -207,7 +209,7 @@
           return { count, productId };
         });
         this._processMoveProducts({ fromInventoryId, toInventoryId, productList }, () => {
-          let message = "Selected products have been moved.";
+          let message = this.app.verses.inventory.selectedProductsMoved ;
           this.app.showToast(message, () => {
             this.app.refreshCurrentPage();
           });
