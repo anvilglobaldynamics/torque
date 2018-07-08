@@ -196,7 +196,7 @@ class Program {
   }
 
   async __initializeComponents() {
-    await promisify(fixtureManager, fixtureManager.initialize, legacyDatabase);
+    await fixtureManager.initialize(database);
     logger.info('(server)> fixtures initialized.');
 
     await promisify(templateManager, templateManager.initialize);
