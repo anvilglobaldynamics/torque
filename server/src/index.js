@@ -199,7 +199,7 @@ class Program {
     await fixtureManager.initialize(database);
     logger.info('(server)> fixtures initialized.');
 
-    await promisify(templateManager, templateManager.initialize);
+    templateManager.initialize();
     logger.info('(server)> template manager initialized.');
     server.setTemplateManager(templateManager);
 
