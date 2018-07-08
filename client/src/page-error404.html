@@ -4,6 +4,9 @@
 
 <link rel="import" href="shared-styles.html">
 
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
 <link rel="import" href="torque-language-behavior.html">
 
 <dom-module id="page-error404">
@@ -49,7 +52,7 @@
   </template>
 
   <script>
-    class PageError404 extends FxPage.mixin(TorqueLanguageBehavior) {
+    class PageError404 extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() { return 'page-error404'; }
       static get properties() {
         return {
@@ -62,10 +65,18 @@
         };
       }
 
-      pageChanged() {
-        if (!this.page) return;
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
         this.useLanguageServices();
       }
+
+
     }
 
     window.customElements.define(PageError404.is, PageError404);
