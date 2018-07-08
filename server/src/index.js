@@ -138,7 +138,7 @@ class Program {
 
   async initiateServer(callback) {
     try {
-      config = await promisify(ConfigLoader, ConfigLoader.getComputedConfig, this.muteLogger, mode);
+      config = ConfigLoader.getComputedConfig();
       server = new Server(config, mode);
       database = new DatabaseService(config.db);
       legacyDatabase = new LegacyDatabase(config.db);
