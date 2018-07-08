@@ -203,13 +203,13 @@
 
       <div class="lone-controls">
         <template is="dom-if" if="[[isAMovingGoingOn]]">
-          <paper-button raised class="primary" on-tap="moveToRootTapped">Move To Root</paper-button>
-          <paper-button raised class="secondary" on-tap="cancelMovingTapped">Cancel</paper-button>
+          <paper-button raised class="primary" on-tap="moveToRootTapped">[[verses.productCategory.moveToRoot]]</paper-button>
+          <paper-button raised class="secondary" on-tap="cancelMovingTapped">[[verses.general.cancel]]</paper-button>
         </template>
         <template is="dom-if" if="[[!isAMovingGoingOn]]">
           <paper-button raised class="primary" on-tap="createTapped">
             <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
-            Create New Product Category
+            [[verses.productCategory.createNewProductCategory]]
           </paper-button>
         </template>
       </div>

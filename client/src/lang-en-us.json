@@ -60,7 +60,8 @@
     "discard": "Discard",
     "product": "Product",
     "return": "Return",
-    "by": "by"
+    "by": "by",
+    "cancel": "Cancel"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -225,7 +226,10 @@
     "buyingPrice": "Buying Price",
     "sellingPrice": "Selling Price",
     "moveHere": "Move Here",
-    "subCategory": "Sub Category"
+    "subCategory": "Sub Category",
+
+    "moveToRoot": "Move To Root",
+    "createNewProductCategory": "Create New Product Category"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "Search customer by name or phone.",

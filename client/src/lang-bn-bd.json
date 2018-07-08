@@ -60,7 +60,8 @@
     "discard": "বাতিল",
     "product": "পণ্য",
     "return": "ফেরত",
-    "by": "দ্বারা"
+    "by": "দ্বারা",
+    "cancel": "বাতিল"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -225,7 +226,10 @@
     "buyingPrice": "কেনা দাম",
     "sellingPrice": "বিক্রি দাম",
     "moveHere": "এখানে সরান",
-    "subCategory": "উপ বিভাগ"
+    "subCategory": "উপ বিভাগ",
+
+    "moveToRoot": "গোড়াতে সরান",
+    "createNewProductCategory": "নতুন পণ্য ধরণ তৈরি করুন"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "নাম অথবা ফোন দিয়ে ক্রেতা খুজুন।",
