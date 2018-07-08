@@ -5,10 +5,15 @@
   "general": {
     "or": "বা",
     "and": "এবং",
+    "from": "থেকে",
     "pressBelowButton": "নিচের বাটন চাপুন",
     "pressAboveButton": "উপরের বাটন চাপুন",
     "sorry": "দুঃখিত",
-    "listIsEmpty": "তালিকা খালি।"
+    "listIsEmpty": "তালিকা খালি।",
+    "search": "খোঁজ",
+    "select": "বাছাই",
+    "address": "ঠিকানা",
+    "comingSoon": "শীঘ্রই আসছে"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
@@ -84,9 +89,52 @@
     "whyProvideEmailAddress": "একটি ইমেইল ঠিকানা প্রদান করে, আপনি আপনার ইমেলে বিতরণ রশিদ, লগইন সতর্কতা এবং অন্যান্য গুরুত্বপূর্ণ তথ্য পেতে পারেন।"
   },
   "organization": {
-    "isOneOutletOrg": "এই সংস্হা এর দোকান কি একটি?"
+    "isOneOutletOrg": "এই সংস্হা এর দোকান কি একটি?",
+    "nameOfYourOrganization": "আপনার প্রতিষ্ঠানের নাম",
+    "pleaseEnterAValidName": "একটি বৈধ নাম লিখুন",
+    "emailInput": "আপনার ইমেইল ঠিকানা (ঐচ্ছিক)",
+    "emailInputError": "একটি বৈধ ইমেইল লিখুন।",
+    "primaryBusinessAddressInput": "আপনার প্রাথমিক ব্যবসা ঠিকানা",
+    "primaryBusinessAddressInputError": "অন্তত 8 টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
+    "createOrganization": "সংস্থা তৈরি করুন",
+    "organizationCreatedToast": "নতুন সংস্থা তৈরি করা হয়েছে।"
+  },
+  "outlet": {
+    "nameOfOutletInput": "আপনার দোকান এর নাম ",
+    "physicalAddressInput": "ঠিকানা",
+    "contactPersonNameInput": "যোগাযোগ করার বেক্তির নাম",
+    "contactPhoneOfContactPerson": "যোগাযোগ করার বেক্তির ফোন",
+    "createOutlet": "দোকান তৈরী করুন",
+    "updateOutlet": "আপডেট দোকান",
+    "outletCreatedToast": "নতুন দোকান তৈরি করা হয়েছে।",
+    "outletUpdatedToast": "দোকান আপডেট করা হয়েছে।"
   },
   "productCategory": {
     "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি।"
+  },
+  "customerSelector": {
+    "customerNameOrPhoneInput": "নাম অথবা ফোন দিয়ে ক্রেতা খুজুন।",
+    "customerNameOrPhoneInputError": "একটি নাম বা ফোন লিখুন"
+  },
+  "outletSelector": {
+    "outletNameOrPhoneInput": "নাম অথবা ফোন দিয়ে দোকান খুজুন।",
+    "outletNameOrPhoneInputError": "একটি নাম বা ফোন লিখুন"
+  },
+  "commonEmploymentDetails": {
+    "privileges": "বিশেষাধিকার",
+    "roleOfEmployeeInput": "কর্মচারীর ভূমিকা",
+    "roleOfEmployeeInputError": "একটি বৈধ ভূমিকা লিখুন",
+    "designationOfEmployeeInput": "কর্মচারী পদবী",
+    "designationOfEmployeeInputError": "একটি বৈধ পদবী লিখুন",
+    "companyProvidedIdInput": "কোম্পানী প্রদত্ত আইডি",
+    "companyProvidedIdInputError": "কোম্পানী প্রদত্ত আইডি লিখুন"
+  },
+  "about": {
+    "about": "বিষয়ে",
+    "tos": "TOS/Privacy",
+    "contactUs": "আমাদের যোগাযোগ করুন",
+    "projectBy": "এই প্রজেক্ট তৈরি এবং পরিচালিত হয়",
+    "logoAndFaviconBy": "লোগো নেয়া হয়েছে",
+    "sendYourQuestionsTo": "আপনার প্রশ্ন, অভিযোগ এবং প্রশংসা পাঠান"
   }
 }

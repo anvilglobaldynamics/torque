@@ -8,6 +8,7 @@
     "baselib": "^0.1.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "fs-extra": "^5.0.0",
     "handlebars": "^4.0.10",
     "html-entities": "^1.2.1",
     "inline-css": "^2.2.2",
@@ -15,7 +16,7 @@
     "mailgun-js": "^0.12.1",
     "mkpath": "^1.0.0",
     "moment": "^2.18.1",
-    "mongodb": "^2.2.30",
+    "mongodb": "^3.0.6",
     "user-home": "^2.0.0",
     "ws": "^3.2.0",
     "yamljs": "^0.3.0"
@@ -27,7 +28,7 @@
   "scripts": {
     "start": "nodemon start.js",
     "start-single": "node start.js",
-    "test": "mocha"
+    "test": "mocha --timeout 10000"
   },
   "private": true
 }

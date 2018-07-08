@@ -4,46 +4,35 @@ const Joi = require('joi');
 
 exports.FixtureCollection = class extends Collection {
 
-  constructor(...args) {
-    super(...args);
+  get name() { return 'fixture'; }
 
-    this.collectionName = 'fixture';
+  get joiSchema() {
+    return Joi.object().keys({});
+  }
 
-    this.joiSchema = Joi.object().keys({});
-
-    this.uniqueKeyDefList = [
+  get uniqueKeyDefList() {
+    return [
       {
         filters: {},
         keyList: ['name']
       }
     ];
-
-    this.foreignKeyDefList = [];
   }
 
-  _findByName(name, cbfn) {
-    this._findOne({ name }, cbfn);
+  get foreignKeyDefList() {
+    return [];
   }
 
-  getDesignationList(cbfn) {
-    return this._findByName('designation-list', (err, doc) => {
-      if (err) return cbfn(err);
-      return cbfn(null, doc.data);
-    });
+  async getDesignationList() {
+    return await this._findOne({ name: 'designation-list' });
   }
 
-  getRoleList(cbfn) {
-    return this._findByName('role-list', (err, doc) => {
-      if (err) return cbfn(err);
-      return cbfn(null, doc.data);
-    });
+  async getRoleList() {
+    return await this._findOne({ name: 'role-list' });
   }
-
-  getPrivilegeList(cbfn) {
-    return this._findByName('privilege-list', (err, doc) => {
-      if (err) return cbfn(err);
-      return cbfn(null, doc.data);
-    });
+  
+  async getPrivilegeList() {
+    return await this._findOne({ name: 'privilege-list' });
   }
 
 }

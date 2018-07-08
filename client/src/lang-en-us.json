@@ -5,10 +5,15 @@
   "general": {
     "or": "or",
     "and": "and",
+    "from": "from",
     "pressBelowButton": "press below button",
     "pressAboveButton": "press above button",
     "sorry": "Sorry",
-    "listIsEmpty": "List is Empty."
+    "listIsEmpty": "List is Empty.",
+    "search": "Search",
+    "select": "Select",
+    "address": "Address",
+    "comingSoon": "Coming Soon"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -84,9 +89,52 @@
     "whyProvideEmailAddress": "By providing an email address, you can get receipts, login alerts and other important information delivered to you to your email."
   },
   "organization": {
-    "isOneOutletOrg": "is it a 1 Outlet Organization?"
+    "isOneOutletOrg": "is it a 1 Outlet Organization?",
+    "nameOfYourOrganization": "Name of your organization.",
+    "pleaseEnterAValidName": "Please enter a valid name.",
+    "emailInput": "Your email address (Optional)",
+    "emailInputError": "Please enter a valid email",
+    "primaryBusinessAddressInput": "Your primary business address",
+    "primaryBusinessAddressInputError": "Please enter an address at least 8 characters long",
+    "createOrganization": "Create Organization",
+    "organizationCreatedToast": "New organization has been created."
+  },
+  "outlet": {
+    "nameOfOutletInput": "Name of your outlet.",
+    "physicalAddressInput": "Physical Address",
+    "contactPersonNameInput": "Name of Manager/Contact Person",
+    "contactPhoneOfContactPerson": "Contact Number of Manager/Contact Person",
+    "createOutlet": "Create Outlet",
+    "updateOutlet": "Update Outlet",
+    "outletCreatedToast": "New outlet has been created.",
+    "outletUpdatedToast": "Outlet has been updated."
   },
   "productCategory": {
     "noProductCategoryFound": "No product category found."
+  },
+  "customerSelector": {
+    "customerNameOrPhoneInput": "Search customer by name or phone.",
+    "customerNameOrPhoneInputError": "Please enter a name or phone"
+  },
+  "outletSelector": {
+    "outletNameOrPhoneInput": "Search outlet by name or phone",
+    "outletNameOrPhoneInputError": "Please enter a name or phone"
+  },
+  "commonEmploymentDetails": {
+    "privileges": "Privileges",
+    "roleOfEmployeeInput": "Role of Employee.",
+    "roleOfEmployeeInputError": "Please enter a valid role",
+    "designationOfEmployeeInput": "Designation of Employee.",
+    "designationOfEmployeeInputError": "Please enter a valid designation",
+    "companyProvidedIdInput": "Company Provided Id.",
+    "companyProvidedIdInputError": "Please enter Company Provided Id"
+  },
+  "about": {
+    "about": "About",
+    "tos": "TOS/Privacy",
+    "contactUs": "Contact Us",
+    "projectBy": "This project is created and maintained by",
+    "logoAndFaviconBy": "logo and favicon icon made by",
+    "sendYourQuestionsTo": "Send your questions, complaints and praises to"
   }
 }

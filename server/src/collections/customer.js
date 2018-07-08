@@ -4,12 +4,10 @@ const Joi = require('joi');
 
 exports.CustomerCollection = class extends Collection {
 
-  constructor(...args) {
-    super(...args);
+  get name() { return 'customer'; }
 
-    this.collectionName = 'customer';
-
-    this.joiSchema = Joi.object().keys({
+  get joiSchema() {
+    return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       fullName: Joi.string().min(1).max(64).required(),
@@ -27,15 +25,19 @@ exports.CustomerCollection = class extends Collection {
         })
       )
     });
+  }
 
-    this.uniqueKeyDefList = [
+  get uniqueKeyDefList() {
+    return [
       {
         filters: {},
         keyList: ['phone']
       }
     ];
+  }
 
-    this.foreignKeyDefList = [
+  get foreignKeyDefList() {
+    return [
       {
         targetCollection: 'organization',
         foreignKey: 'id',
@@ -44,8 +46,10 @@ exports.CustomerCollection = class extends Collection {
     ];
   }
 
-  create({ organizationId, fullName, phone, openingBalance, acceptedByUserId }, cbfn) {
-    let customer = {
+  get deletionIndicatorKey() { return 'isDeleted'; }
+
+  async create({ organizationId, fullName, phone, openingBalance, acceptedByUserId }) {
+    return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       fullName,
@@ -59,46 +63,39 @@ exports.CustomerCollection = class extends Collection {
         action: 'payment'
       }],
       isDeleted: false
-    }
-    this._insert(customer, (err, id) => {
-      return cbfn(err, id);
-    })
+    });
   }
 
-  update({ customerId }, { fullName, phone }, cbfn) {
-    let modifications = {
-      $set: { fullName, phone }
-    }
-    this._update({ id: customerId }, modifications, cbfn);
+  async setProfile({ id }, { fullName, phone }) {
+    return await this._update({ id }, {
+      $set: {
+        fullName, phone
+      }
+    });
   }
 
-  updateBalance({ customerId }, { balance, additionalPaymentHistory }, cbfn) {
-    let modifications = {
-      $set: { balance, additionalPaymentHistory }
-    }
-    this._update({ id: customerId }, modifications, cbfn);
+  async setAdditionalPaymentHistory({ id }, { additionalPaymentHistory }) {
+    return await this._update({ id }, {
+      $set: {
+        additionalPaymentHistory
+      }
+    });
   }
 
-  updateBalanceOnly({ customerId }, { balance }, cbfn) {
-    let modifications = {
-      $set: { balance }
-    }
-    this._update({ id: customerId }, modifications, cbfn);
+  async setBalance({ id }, { balance }) {
+    return await this._update({ id }, {
+      $set: {
+        balance
+      }
+    });
   }
 
-  delete({ customerId }, cbfn) {
-    let modifications = {
-      $set: { isDeleted: true }
-    }
-    this._update({ id: customerId }, modifications, cbfn);
+  async listByOrganizationId({ organizationId }) {
+    return await this._find({ organizationId });
   }
 
-  listByOrganizationId({ organizationId }, cbfn) {
-    this._find({ organizationId, isDeleted: false }, cbfn);
-  }
-
-  listByOrganizationIdAndSearchString({ organizationId, searchString }, cbfn) {
-    let query = { organizationId, isDeleted: false };
+  async listByOrganizationIdAndSearchString({ organizationId }) {
+    let query = { organizationId };
     if (searchString) {
       let searchRegex = new RegExp(searchString, 'i');
       query.$or = [
@@ -108,11 +105,7 @@ exports.CustomerCollection = class extends Collection {
         { nid: searchRegex }
       ];
     }
-    this._find(query, cbfn);
-  }
-
-  findById({ customerId }, cbfn) {
-    this._findOne({ id: customerId, isDeleted: false }, cbfn);
+    return await this._find(query);
   }
 
 }

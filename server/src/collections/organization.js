@@ -1,14 +1,13 @@
+
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
 exports.OrganizationCollection = class extends Collection {
 
-  constructor(...args) {
-    super(...args);
+  get name() { return 'organization'; }
 
-    this.collectionName = 'organization';
-
-    this.joiSchema = Joi.object().keys({
+  get joiSchema() {
+    return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       name: Joi.string().min(1).max(64).required(),
@@ -18,17 +17,18 @@ exports.OrganizationCollection = class extends Collection {
       licenceExpiresOnDatetimeStamp: Joi.number().max(999999999999999).required(),
       isDeleted: Joi.boolean().required()
     });
-
-    this.uniqueKeyDefList = [
-      {
-        filters: {},
-        keyList: []
-      }
-    ];
   }
 
-  create({ name, primaryBusinessAddress, phone, email, licenceExpiresOnDatetimeStamp }, cbfn) {
-    let user = {
+  get uniqueKeyDefList() {
+    return [];
+  }
+
+  get foreignKeyDefList() {
+    return [];
+  }
+
+  async create({ name, primaryBusinessAddress, phone, email, licenceExpiresOnDatetimeStamp }) {
+    return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       name,
@@ -37,27 +37,15 @@ exports.OrganizationCollection = class extends Collection {
       email,
       licenceExpiresOnDatetimeStamp,
       isDeleted: false
-    }
-    this._insert(user, (err, id) => {
-      return cbfn(err, id);
     });
   }
 
-  update({ organizationId }, { name, primaryBusinessAddress, phone, email }, cbfn) {
-    let modifications = {
+  async update({ id }, { name, primaryBusinessAddress, phone, email }) {
+    return await this._update({ id }, {
       $set: {
         name, primaryBusinessAddress, phone, email
       }
-    }
-    this._update({ id: organizationId }, modifications, cbfn);
-  }
-
-  listByIdList({ idList }, cbfn) {
-    this._find({ id: { $in: idList } }, cbfn);
-  }
-
-  findById({ organizationId }, cbfn) {
-    this._findOne({ id: organizationId, isDeleted: false }, cbfn);
+    });
   }
 
 }

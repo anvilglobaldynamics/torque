@@ -9,6 +9,7 @@ let Joi = require('joi');
 let jsonParser = bodyParser.json({
   limit: '100kb'
 });
+const { LegacyApi } = require('./legacy-api-base');
 
 class Server {
 
@@ -113,9 +114,12 @@ class Server {
 
         let { ApiClass } = route;
         this.logger.info('WS', `${message.path} ${message.requestUid}`);
-        let api = new ApiClass(this, this.database, this.logger, null, null, ws, 'ws', message.requestUid);
-        api._prehandlePostOrWsApi(message.body);
-
+        if (ApiClass.prototype instanceof LegacyApi) {
+          let api = new ApiClass(this, this.legacyDatabase, this.logger, null, null, ws, 'ws', message.requestUid);
+          api._prehandlePostOrWsApi(message.body);
+        } else {
+          throw new Error("Async APIs are not yet supported.");
+        }
       });
     });
 
@@ -126,8 +130,8 @@ class Server {
     this.logger = logger;
   }
 
-  setDatabase(database) {
-    this.database = database;
+  setDatabase(legacyDatabase) {
+    this.legacyDatabase = legacyDatabase;
   }
 
   setEmailService(emailService) {
@@ -145,16 +149,24 @@ class Server {
   registerGetApi(path, ApiClass) {
     this._expressApp.get(path, jsonParser, (req, res) => {
       this.logger.info('GET', req.url);
-      let api = new ApiClass(this, this.database, this.logger, req, res, null, 'get');
-      api._prehandleGetApi();
+      if (ApiClass.prototype instanceof LegacyApi) {
+        let api = new ApiClass(this, this.legacyDatabase, this.logger, req, res, null, 'get');
+        api._prehandleGetApi();
+      } else {
+        throw new Error("Async APIs are not yet supported.");
+      }
     });
   }
 
   registerPostApi(path, ApiClass) {
     this._expressApp.post(path, jsonParser, (req, res) => {
       this.logger.info('POST', req.url);
-      let api = new ApiClass(this, this.database, this.logger, req, res, null, 'post');
-      api._prehandlePostOrWsApi(req.body);
+      if (ApiClass.prototype instanceof LegacyApi) {
+        let api = new ApiClass(this, this.legacyDatabase, this.logger, req, res, null, 'post');
+        api._prehandlePostOrWsApi(req.body);
+      } else {
+        throw new Error("Async APIs are not yet supported.");
+      }
     });
     this._wsApiList.push({
       path,
@@ -164,4 +176,4 @@ class Server {
 
 }
 
-exports.Server = Server
+exports.Server = Server;

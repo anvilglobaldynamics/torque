@@ -1,4 +1,5 @@
 {
-  "verbose": true,
-  "ignore": ["logs/*", "test/*"]
+  "verbose": false,
+  "ignore": ["logs/*", "test/*"],
+  "delay": 1000
 }

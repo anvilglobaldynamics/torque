@@ -4,12 +4,10 @@ const Joi = require('joi');
 
 exports.UserCollection = class extends Collection {
 
-  constructor(...args) {
-    super(...args);
+  get name() { return 'user'; }
 
-    this.collectionName = 'user';
-
-    this.joiSchema = Joi.object().keys({
+  get joiSchema() {
+    return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       fullName: Joi.string().min(1).max(64).required(),
@@ -25,17 +23,19 @@ exports.UserCollection = class extends Collection {
       isEmailVerified: Joi.boolean().required(),
       isBanned: Joi.boolean().required()
     });
+  }
 
-    this.uniqueKeyDefList = [
+  get uniqueKeyDefList() {
+    return [
       {
         filters: {},
         keyList: ['phone']
       }
-    ]
+    ];
   }
 
-  create({ phone, fullName, passwordHash }, cbfn) {
-    let user = {
+  async create({ phone, fullName, passwordHash }) {
+    return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       passwordHash,
@@ -50,171 +50,84 @@ exports.UserCollection = class extends Collection {
       isPhoneVerified: false,
       isEmailVerified: false,
       isBanned: false
-    }
-    this._insert(user, (err, id) => {
-      return cbfn(err, id);
-    })
+    });
   }
 
-  findById({ userId }, cbfn) {
-    this._findOne({ id: userId }, cbfn);
-  }
-
-  listByIdList({ idList }, cbfn) {
-    let filter = {
-      id: { $in: idList }
-    }
-    this._find(filter, cbfn);
-  }
-
-  findByCommonFields({ userSearchRegex }, cbfn) {
-    this._find({
+  async listByCommonFields({ userSearchRegex }) {
+    return await this._find({
       $or: [
         { fullName: userSearchRegex },
         { email: userSearchRegex },
         { phone: userSearchRegex },
         { nid: userSearchRegex }
-      ],
-    }, cbfn);
+      ]
+    });
   }
 
-  findByEmailOrPhone({ emailOrPhone }, cbfn) {
-    this._findOne({
+  async findByEmailOrPhone({ emailOrPhone }) {
+    return await this._findOne({
       $or: [
         { email: emailOrPhone },
         { phone: emailOrPhone }
-      ],
-    }, cbfn);
+      ]
+    });
   }
 
-  findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }, cbfn) {
-    this._findOne({
+  async findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }) {
+    return await this._findOne({
       $or: [
         { email: emailOrPhone },
         { phone: emailOrPhone }
       ],
       passwordHash
-    }, cbfn);
-  }
-
-  // FIXME: Logical Separation
-  setEmailAsVerified({ userId }, cbfn) {
-    let mod = {
-      $set: {
-        isEmailVerified: true
-      }
-    }
-    this._update({ id: userId }, mod, (err, wasUpdated) => {
-      if (err) return cbfn(err);
-      if (!wasUpdated) return cbfn(new Error("User Not Found"));
-      return cbfn();
     });
   }
 
-  // FIXME: Logical Separation
-  setEmailAsUnverified({ userId }, cbfn) {
-    let mod = {
-      $set: {
-        isEmailVerified: false
-      }
-    }
-    this._update({ id: userId }, mod, (err, wasUpdated) => {
-      if (err) return cbfn(err);
-      if (!wasUpdated) return cbfn(new Error("User Not Found"));
-      return cbfn();
-    });
-  }
-
-  // FIXME: Logical Separation
-  setPhoneAsVerified({ userId }, cbfn) {
-    let mod = {
-      $set: {
-        isPhoneVerified: true
-      }
-    }
-    this._update({ id: userId }, mod, (err, wasUpdated) => {
-      if (err) return cbfn(err);
-      if (!wasUpdated) return cbfn(new Error("User Not Found"));
-      return cbfn();
-    });
-  }
-
-  // FIXME: Logical Separation
-  setPhoneAsUnverified({ userId }, cbfn) {
-    let mod = {
-      $set: {
-        isPhoneVerified: false
-      }
-    }
-    this._update({ id: userId }, mod, (err, wasUpdated) => {
-      if (err) return cbfn(err);
-      if (!wasUpdated) return cbfn(new Error("User Not Found"));
-      return cbfn();
-    });
-  }
-
-  // FIXME: Logical Separation
-  setPasswordHash({ userId }, { passwordHash }, cbfn) {
-    let mod = {
-      $set: {
-        passwordHash: passwordHash
-      }
-    }
-    this._update({ id: userId }, mod, (err, wasUpdated) => {
-      if (err) return cbfn(err);
-      if (!wasUpdated) return cbfn(new Error("User Not Found"));
-      return cbfn();
-    });
-  }
-
-  updateBanningStatus({ userId }, {isBanned}, cbfn) {
-    let mod = {
-      $set: {
-        isBanned
-      }
-    }
-    this._update({ id: userId }, mod, cbfn);
-  }
-
-  // FIXME: Logical Separation
-  /**
-   * 
-   * @param {any} { userId }
-   * @param {any} { email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup } 
-   * @param {any} cbfn 
-   */
-  update({ userId }, data, cbfn) {
-    let { email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = data;
-    let mod = {
+  async setProfile({ id }, { email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
+    return await this._update({ id }, {
       $set: {
         email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup
       }
-    }
-    this._update({ id: userId }, mod, (err, wasUpdated) => {
-      if (err) return cbfn(err);
-      if (!wasUpdated) return cbfn(new Error("User Not Found"));
-      return cbfn();
     });
   }
 
-  // FIXME: Logical Separation
-  /**
-   * 
-   * @param {any} { userId }
-   * @param {any} { email } 
-   * @param {any} cbfn 
-   */
-  setEmail({ userId }, data, cbfn) {
-    let { email } = data;
-    let mod = {
+  async setEmail({ id }, { email }) {
+    return await this._update({ id }, {
       $set: {
         email
       }
-    }
-    this._update({ id: userId }, mod, (err, wasUpdated) => {
-      if (err) return cbfn(err);
-      if (!wasUpdated) return cbfn(new Error("User Not Found"));
-      return cbfn();
+    });
+  }
+
+  async setEmailVerificationStatus({ id }, { isEmailVerified }) {
+    return await this._update({ id }, {
+      $set: {
+        isEmailVerified
+      }
+    });
+  }
+
+  async setPhoneVerificationStatus({ id }, { isPhoneVerified }) {
+    return await this._update({ id }, {
+      $set: {
+        isPhoneVerified
+      }
+    });
+  }
+
+  async setPasswordHash({ id }, { passwordHash }) {
+    return await this._update({ id }, {
+      $set: {
+        passwordHash: passwordHash
+      }
+    });
+  }
+
+  async setBanningStatus({ id }, { isBanned }) {
+    return await this._update({ id }, {
+      $set: {
+        isBanned
+      }
     });
   }
 

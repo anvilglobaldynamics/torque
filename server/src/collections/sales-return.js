@@ -1,14 +1,13 @@
+
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
 exports.SalesReturnCollection = class extends Collection {
 
-  constructor(...args) {
-    super(...args);
+  get name() { return 'sales-return'; }
 
-    this.collectionName = 'sales-return';
-
-    this.joiSchema = Joi.object().keys({
+  get joiSchema() {
+    return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
 
       salesId: Joi.number().max(999999999999999).required(),
@@ -22,15 +21,14 @@ exports.SalesReturnCollection = class extends Collection {
 
       isDeleted: Joi.boolean().required()
     });
+  }
 
-    this.uniqueDefList = [
-      {
-        additionalQueryFilters: {},
-        uniqueKeyList: []
-      }
-    ];
+  get uniqueKeyDefList() {
+    return [];
+  }
 
-    this.foreignKeyDefList = [
+  get foreignKeyDefList() {
+    return [
       {
         targetCollection: 'sales',
         foreignKey: 'id',
@@ -39,8 +37,11 @@ exports.SalesReturnCollection = class extends Collection {
     ];
   }
 
-  create({ salesId, returnedProductList, creditedAmount }, cbfn) {
-    let doc = {
+  // NOTE: commented out, because currently we don't support deleting sales return.
+  // get deletionIndicatorKey() { return 'isDeleted'; }
+
+  async create({ salesId, returnedProductList, creditedAmount }) {
+    return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
 
       salesId,
@@ -48,29 +49,23 @@ exports.SalesReturnCollection = class extends Collection {
       creditedAmount,
 
       isDeleted: false
-    }
-    this._insert(doc, (err, id) => {
-      return cbfn(err, id);
     });
   }
 
-  findById({ salesReturnId }, cbfn) {
-    this._findOne({ id: salesReturnId }, cbfn);
-  }
-
-  listBySalesIdList({ salesIdList }, cbfn) {
-    let filter = {
+  async listBySalesIdList({ salesIdList }) {
+    return await this._find({
       salesId: { $in: salesIdList }
-    }
-    this._find(filter, cbfn);
+    });
   }
 
-  listBySalesId({ salesId }, cbfn) {
-    this._find({ salesId }, cbfn);
+  async listBySalesId({ listBySalesIdList }) {
+    return await this._find({
+      salesId
+    });
   }
 
-  listByFilters({ salesIdList, fromDate, toDate }, cbfn) {
-    let filters = {
+  async listByFilters({ salesIdList, fromDate, toDate }) {
+    let query = {
       $and: [
         {
           salesId: { $in: salesIdList }
@@ -82,9 +77,9 @@ exports.SalesReturnCollection = class extends Collection {
           }
         }
       ]
-    }
+    };
 
-    this._find(filters, cbfn);
+    return await this._find(query);
   }
-
+  
 }

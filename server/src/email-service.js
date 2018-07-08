@@ -1,9 +1,8 @@
 
 let createMailgunInstance = require('mailgun-js');
-let fslib = require('fs');
+let fslib = require('fs-extra');
 let Handlebars = require('handlebars');
 let inlineCss = require('inline-css');
-let { AsyncCollector } = require('baselib');
 let pathlib = require('path');
 
 class EmailService {
@@ -18,7 +17,7 @@ class EmailService {
     this.enabled = enabled;
   }
 
-  _loadAndPrepareTemplates(cbfn) {
+  async _loadAndPrepareTemplates() {
     let branding = this.config.branding;
     let cssFilePath = './src/templates/email/common.css';
     let css = fslib.readFileSync(cssFilePath, { encoding: 'utf8' });
@@ -54,8 +53,9 @@ class EmailService {
         subject: `Message from ${branding.shortName}`
       }
     ];
-    let collector = new AsyncCollector(templateList.length);
-    for (let template of templateList) {
+
+    this.templates = {};
+    await Promise.all(templateList.map(template => new Promise((accept, reject) => {
       let html = fslib.readFileSync(template.path, { encoding: 'utf8' });
       let url = 'file://' + pathlib.join(__dirname, '../', template.path);
       inlineCss(html, {
@@ -63,13 +63,10 @@ class EmailService {
         extraCss: css
       }).then((html) => {
         let compiledTemplate = Handlebars.compile(html);
-        collector.collect(template.name, { compiledTemplate: compiledTemplate, subject: template.subject });
+        this.templates[template.name] = { compiledTemplate: compiledTemplate, subject: template.subject };
+        accept();
       });
-    }
-    collector.finally((collection) => {
-      this.templates = collection;
-      cbfn();
-    });
+    })));
   }
 
   generateHtml(templateName, model) {
@@ -77,26 +74,24 @@ class EmailService {
     return this.templates[templateName].compiledTemplate(model);
   }
 
-  initialize(logger, cbfn) {
+  async initialize(logger) {
     if (!this.privateKey) {
       let error = new Error("No privateKey found in mailgun. Sending mail will not work.");
       logger.error(error);
     } else {
       this.mailgun = createMailgunInstance({ apiKey: this.privateKey, domain: this.domain });
     }
-    this._loadAndPrepareTemplates(_ => {
-      cbfn();
-    });
+    return await this._loadAndPrepareTemplates();
   }
 
-  sendStoredMail(clientLanguage, templateName, model, to, cbfn) {
+  async sendStoredMail(clientLanguage, templateName, model, to) {
     templateName = clientLanguage + '--' + templateName;
     let html = this.generateHtml(templateName, model);
     let subject = this.templates[templateName].subject;
-    this.sendMail({ to, subject, html }, cbfn);
+    return await this.sendMail({ to, subject, html });
   }
 
-  sendMail({ to, subject, html } = {}, cbfn) {
+  async sendMail({ to, subject, html } = {}) {
     let actualTo = to;
     if (this.mode !== 'production') {
       actualTo = 'shafayet.sayem@gmail.com';
@@ -107,15 +102,16 @@ class EmailService {
       subject,
       html
     };
-    if (this.enabled) {
-      this.mailgun.messages().send(data, function (error, body) {
-        return cbfn(error, false, body, data);
-      });
-    } else {
-      let error = new Error("Email Sending Disabled By Developer");
-      return cbfn(error, true, null, data);
-    }
-
+    return await new Promise((accept, reject) => {
+      if (this.enabled) {
+        this.mailgun.messages().send(data, function (error, body) {
+          return accept([error, false, body, data]);
+        });
+      } else {
+        let error = new Error("Email Sending Disabled By Developer");
+        return accept([error, true, null, data]);
+      }
+    });
   }
 
 }

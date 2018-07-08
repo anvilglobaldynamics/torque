@@ -247,7 +247,7 @@ describe('customer', _ => {
 
   it('api/get-customer-summary-list (Invalid organizationId)', testDoneFn => {
     // NOTE: foreign key violations are not verified for find/findOne calls since
-    // foreign key is validated during insert/update calls and so database actively
+    // foreign key is validated during insert/update calls and so legacyDatabase actively
     // rejects records that could violate foreign key definitions.
     callApi('api/get-customer-summary-list', {
       json: {

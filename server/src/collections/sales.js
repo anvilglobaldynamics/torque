@@ -1,14 +1,13 @@
+
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
 exports.SalesCollection = class extends Collection {
 
-  constructor(...args) {
-    super(...args);
+  get name() { return 'sales'; }
 
-    this.collectionName = 'sales';
-
-    this.joiSchema = Joi.object().keys({
+  get joiSchema() {
+    return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedByUserId: Joi.number().max(999999999999999).allow(null).required(),
@@ -39,31 +38,33 @@ exports.SalesCollection = class extends Collection {
       isDeleted: Joi.boolean().required(),
       isDiscarded: Joi.boolean().required()
     });
+  }
 
-    this.uniqueDefList = [
-      {
-        additionalQueryFilters: {},
-        uniqueKeyList: []
-      }
-    ];
+  get uniqueKeyDefList() {
+    return [];
+  }
 
-    this.foreignKeyDefList = [
+  get foreignKeyDefList() {
+    return [
       {
         targetCollection: 'outlet',
         foreignKey: 'id',
         referringKey: 'outletId'
-      },
-      // NOTE: commented out because customerId can be null
-      // {
-      //   targetCollection: 'customer',
-      //   foreignKey: 'id',
-      //   referringKey: 'customerId'
-      // }
+      }
     ];
+    // NOTE: commented out because customerId can be null
+    // {
+    //   targetCollection: 'customer',
+    //   foreignKey: 'id',
+    //   referringKey: 'customerId'
+    // }
   }
 
-  create({ outletId, customerId, productList, payment }, cbfn) {
-    let doc = {
+  // NOTE: commented out, because currently we don't support deleting sales.
+  // get deletionIndicatorKey() { return 'isDeleted'; }
+
+  async create({ outletId, customerId, productList, payment }) {
+    return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
 
@@ -76,25 +77,19 @@ exports.SalesCollection = class extends Collection {
       isModified: false,
       isDeleted: false,
       isDiscarded: false
-    }
-    this._insert(doc, (err, id) => {
-      return cbfn(err, id);
     });
   }
 
-  findById({ salesId }, cbfn) {
-    this._findOne({ id: salesId }, cbfn);
+  async discard({ id }) {
+    return await this._update({ id }, {
+      $push: {
+        isDiscarded: true
+      }
+    });
   }
 
-  discard({ salesId }, cbfn) {
-    let modifications = {
-      $set: { isDiscarded: true }
-    }
-    this._update({ id: salesId }, modifications, cbfn);
-  }
-
-  listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }, cbfn) {
-    let filters = {
+  async listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }) {
+    let query = {
       $and: [
         {
           outletId: { $in: outletIdList }
@@ -109,18 +104,18 @@ exports.SalesCollection = class extends Collection {
     };
 
     if (shouldFilterByOutlet) {
-      filters.$and.push({ outletId });
+      query.$and.push({ outletId });
     }
 
     if (shouldFilterByCustomer) {
-      filters.$and.push({ customerId });
+      query.$and.push({ customerId });
     }
 
-    this._find(filters, cbfn);
+    return await this._find(query);
   }
 
-  listByFiltersForSalesReturn({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer }, cbfn) {
-    let filters = {
+  async listByFiltersForSalesReturn({outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer }) {
+    let query = {
       $and: [
         {
           outletId: { $in: outletIdList }
@@ -129,14 +124,14 @@ exports.SalesCollection = class extends Collection {
     };
 
     if (shouldFilterByOutlet) {
-      filters.$and.push({ outletId });
+      query.$and.push({ outletId });
     }
 
     if (shouldFilterByCustomer) {
-      filters.$and.push({ customerId });
+      query.$and.push({ customerId });
     }
-
-    this._find(filters, cbfn);
+    
+    return await this._find(query);
   }
 
 }

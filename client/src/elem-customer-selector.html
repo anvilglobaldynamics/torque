@@ -71,6 +71,7 @@
 
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -81,10 +82,10 @@
     <div class="card p-0 vertical layout">
 
       <div class="p-16 horizontal layout center">
-        <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="Please enter a name or phone" label="Search customer by name or phone." on-keypress="searchFieldKeypressed"></paper-input>
+        <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.customerSelector.customerNameOrPhoneInputError]] label=[[verses.customerSelector.customerNameOrPhoneInput]] on-keypress="searchFieldKeypressed"></paper-input>
         <paper-icon-button icon="clear" on-tap="cancelTapped"></paper-icon-button>
         <paper-button raised class="primary" on-tap="searchTapped">
-          <iron-icon icon="search" class="m-right-8"></iron-icon>Search</paper-button>
+          <iron-icon icon="search" class="m-right-8"></iron-icon>[[verses.general.search]]</paper-button>
       </div>
 
       <paper-listbox>
@@ -103,14 +104,14 @@
                 </div>
               </div>
             </div>
-            <paper-button raised class="btn btn-default" on-tap="selectTapped">Select</paper-button>
+            <paper-button raised class="btn btn-default" on-tap="selectTapped">[[verses.general.select]]</paper-button>
           </paper-item>
       </paper-listbox>
       </template>
     </div>
   </template>
   <script>
-    class ElemCustomerSelector extends FxElement {
+    class ElemCustomerSelector extends FxElement.mixin(TorqueLanguageBehavior) {
 
       static get is() { return 'elem-customer-selector'; }
 
@@ -119,8 +120,18 @@
           searchString: {
             type: String,
             value: ''
+          },
+          page: {
+            type: Object,
+            value: null,
+            observer: 'pageChanged'
           }
         };
+      }
+
+      pageChanged() {
+        if (!this.page) return;
+        this.useLanguageServices();
       }
 
       searchFieldKeypressed(e) {

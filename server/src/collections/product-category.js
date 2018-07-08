@@ -1,14 +1,13 @@
+
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
 exports.ProductCategoryCollection = class extends Collection {
 
-  constructor(...args) {
-    super(...args);
+  get name() { return 'product-category'; }
 
-    this.collectionName = 'product-category';
-
-    this.joiSchema = Joi.object().keys({
+  get joiSchema() {
+    return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       name: Joi.string().min(1).max(64).required(),
@@ -29,15 +28,14 @@ exports.ProductCategoryCollection = class extends Collection {
       isDeleted: Joi.boolean().required(),
       isReturnable: Joi.boolean().required()
     });
+  }
 
-    this.uniqueDefList = [
-      {
-        additionalQueryFilters: {},
-        uniqueKeyList: []
-      }
-    ];
+  get uniqueKeyDefList() {
+    return [];
+  }
 
-    this.foreignKeyDefList = [
+  get foreignKeyDefList() {
+    return [
       {
         targetCollection: 'organization',
         foreignKey: 'id',
@@ -46,26 +44,19 @@ exports.ProductCategoryCollection = class extends Collection {
     ];
   }
 
-  /**
-   * 
-   * 
-   * @param {any} { organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } 
-   * @param {any} cbfn 
-   */
-  create(data, cbfn) {
-    let {
-      organizationId,
-      parentProductCategoryId,
-      name,
-      unit,
-      defaultDiscountType,
-      defaultDiscountValue,
-      defaultPurchasePrice,
-      defaultVat,
-      defaultSalePrice,
-      isReturnable
-    } = data;
-    let doc = {
+  get deletionIndicatorKey() { return 'isDeleted'; }
+
+  async create({ organizationId,
+    parentProductCategoryId,
+    name,
+    unit,
+    defaultDiscountType,
+    defaultDiscountValue,
+    defaultPurchasePrice,
+    defaultVat,
+    defaultSalePrice,
+    isReturnable }) {
+    return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       organizationId,
@@ -79,42 +70,40 @@ exports.ProductCategoryCollection = class extends Collection {
       defaultSalePrice,
       isReturnable,
       isDeleted: false
-    }
-    this._insert(doc, (err, id) => {
-      return cbfn(err, id);
     });
   }
 
-  listByOrganizationId({ organizationId }, cbfn) {
-    this._find({ organizationId }, cbfn);
-  }
-
-  findById({ productCategoryId }, cbfn) {
-    this._findOne({ id: productCategoryId }, cbfn)
-  }
-
-  // FIXME: naming issue
-  listByIdList({ idList }, cbfn) {
-    this._find({ id: { $in: idList } }, cbfn);
-  }
-
-  listChildren({ productCategoryId }, cbfn) {
-    this._find({ parentProductCategoryId: productCategoryId }, cbfn)
-  }
-
-  update({ productCategoryId }, { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
-    let modifications = {
+  async setDetails({ id }, { arentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+    return await this._update({ id }, {
       $set: {
         parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
       }
-    }
-    this._update({ id: productCategoryId }, modifications, cbfn);
+    });
   }
 
-  delete({ productCategoryId }, cbfn) {
-    let modifications = {
-      $set: { isDeleted: true }
-    }
-    this._update({ id: productCategoryId }, modifications, cbfn);
+  async listByOrganizationId({ organizationId }) {
+    return await this._find({ organizationId });
   }
+
+  async listChildren({ id }) {
+    return await this._find({ parentProductCategoryId: id });
+  }
+
+  async listByOrganizationIdAndSearchString({ organizationId, searchString }) {
+    let query = { organizationId };
+    if (searchString) {
+      let searchRegex = new RegExp(searchString, 'i');
+      query.$or = [
+        { name: searchRegex },
+        { physicalAddress: searchRegex },
+        { contactPersonName: searchRegex },
+        { phone: searchRegex }
+      ];
+      if (String(parseInt(searchString)) === searchString) {
+        query.$or.push({ id: parseInt(searchString) });
+      }
+    }
+    return await this._find(query);
+  }
+
 }

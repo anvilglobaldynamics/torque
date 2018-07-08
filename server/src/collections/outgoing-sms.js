@@ -1,14 +1,13 @@
+
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
 exports.OutgoingSmsCollection = class extends Collection {
 
-  constructor(...args) {
-    super(...args);
+  get name() { return 'outgoing-sms'; }
 
-    this.collectionName = 'outgoing-sms';
-
-    this.joiSchema = Joi.object().keys({
+  get joiSchema() {
+    return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       from: Joi.string().min(1).max(15).required(),
@@ -17,56 +16,43 @@ exports.OutgoingSmsCollection = class extends Collection {
       status: Joi.string().valid('pending', 'sent', 'delivered', 'canceled').required(),
       isDeleted: Joi.boolean().required()
     });
-
-    this.uniqueKeyDefList = [
-      {
-        filters: {},
-        keyList: []
-      }
-    ];
-
-    this.foreignKeyDefList = [
-    ];
   }
 
-  create({ from, to, content }, cbfn) {
-    let doc = {
+  get uniqueKeyDefList() {
+    return [];
+  }
+
+  get foreignKeyDefList() {
+    return [];
+  }
+
+  get deletionIndicatorKey() { return 'isDeleted'; }
+
+  async create({ from, to, content }) {
+    return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       from, to, content,
       status: 'pending',
       isDeleted: false
-    };
-    this._insert(doc, (err, id) => {
-      return cbfn(err, id);
     });
   }
 
-  updateStatus({ outgoingSmsId }, { status }, cbfn) {
-    let modifications = {
-      $set: { status }
-    };
-    this._update({ id: outgoingSmsId }, modifications, cbfn);
-  }
-
-  delete({ outgoingSmsId }, cbfn) {
-    let modifications = {
-      $set: { isDeleted: true }
-    };
-    this._update({ id: outgoingSmsId }, modifications, cbfn);
-  }
-
-  findById({ outgoingSmsId }, cbfn) {
-    this._findOne({ id: outgoingSmsId }, cbfn);
-  }
-
-  findByDateRange({ fromDate, toDate }, cbfn) {
-    this._find({
+  async listByDateRange({ fromDate, toDate }) {
+    return await this._find({
       createdDatetimeStamp: {
         $gte: fromDate,
         $lte: toDate
       }
-    }, cbfn);
+    });
+  }
+
+  async updateStatus({ id }, { status }) {
+    return await this._update({ id }, {
+      $set: {
+        status
+      }
+    });
   }
 
 }

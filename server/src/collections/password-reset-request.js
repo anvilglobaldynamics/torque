@@ -4,12 +4,10 @@ const Joi = require('joi');
 
 exports.PasswordResetRequestCollection = class extends Collection {
 
-  constructor(...args) {
-    super(...args);
+  get name() { return 'password-reset-request'; }
 
-    this.collectionName = 'password-reset-request';
-
-    this.joiSchema = Joi.object().keys({
+  get joiSchema() {
+    return Joi.object().keys({
       forUserId: Joi.number().max(999999999999999).required(),
       forEmail: Joi.string().email().min(3).max(30).allow(null).required(),
       forPhone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
@@ -19,15 +17,19 @@ exports.PasswordResetRequestCollection = class extends Collection {
       confirmationToken: Joi.string().min(64).max(64).required(),
       isPasswordResetComplete: Joi.boolean().required(),
     });
+  }
 
-    this.uniqueKeyDefList = [
+  get uniqueKeyDefList() {
+    return [
       {
         filters: {},
         keyList: ['confirmationToken']
       }
     ];
+  }
 
-    this.foreignKeyDefList = [
+  get foreignKeyDefList() {
+    return [
       {
         targetCollection: 'user',
         foreignKey: 'id',
@@ -41,8 +43,15 @@ exports.PasswordResetRequestCollection = class extends Collection {
     ];
   }
 
-  create({ userId, email, phone, origin, confirmationToken }, cbfn) {
-    let doc = {
+  async isConfirmationTokenUnique({ confirmationToken }) {
+    let query = { confirmationToken };
+    let doc = await this._findOne(query);
+    if (doc) return false;
+    return true;
+  }
+
+  async create({ userId, email, phone, origin, confirmationToken }) {
+    return await this._insert({
       forEmail: email,
       forPhone: phone,
       forUserId: userId,
@@ -51,52 +60,24 @@ exports.PasswordResetRequestCollection = class extends Collection {
       createdDatetimeStamp: (new Date).getTime(),
       confirmedDatetimeStamp: null,
       isPasswordResetComplete: false
-    }
-    this._insert(doc, (err, id) => {
-      return cbfn(err, id);
-    })
-  }
-
-  // FIXME: better separation between logical and db layer.
-  // suggestions: split the process in three steps.
-  applyConfirmationToken({ confirmationToken }, cbfn) {
-    let query = { confirmationToken, isPasswordResetComplete: false };
-    this._findOne(query, (err, doc) => {
-      if (err) return cbfn(err);
-      if (!doc) {
-        let err = new Error('Invalid confirmation token');
-        err.code = "INVALID_CONFIRMATION_TOKEN";
-        return cbfn(null, err);
-      }
-      let mod = {
-        $set: {
-          isPasswordResetComplete: true,
-          confirmedDatetimeStamp: (new Date).getTime()
-        }
-      };
-      this._update(query, mod, (err, wasUpdated) => {
-        if (err) return cbfn(err);
-        if (!wasUpdated) return cbfn(new Error("Could not update password-reset-request for reasons unknown."));
-        return cbfn(null, doc.forUserId);
-      });
     });
   }
 
-  // FIXME: order by createdDatetime so that only the last request
-  // can be verified
-  findByConfirmationToken({ confirmationToken }, cbfn) {
-    let query = { confirmationToken, isPasswordResetComplete: false };
-    this._findOne(query, cbfn);
+  async findByConfirmationToken({ confirmationToken }) {
+    return await this._findOne({ confirmationToken, isPasswordResetComplete: false });
   }
 
-  isConfirmationTokenUnique({ confirmationToken }, cbfn) {
-    let query = { confirmationToken }
-    this._findOne(query, (err, doc) => {
-      if (err) return cbfn(err);
-      if (doc) {
-        return cbfn(null, false);
-      } else {
-        return cbfn(null, true);
+  // NOTE: Code using this method should check if it returns true or not.
+  // If untrue, it should - 
+  // let err = new Error('Invalid confirmation token');
+  // err.code = "INVALID_CONFIRMATION_TOKEN";
+  // throw above error
+  // TODO: Remove comment after implementing
+  async applyConfirmationToken({ confirmationToken }) {
+    return await this._update({ confirmationToken, isPasswordResetComplete: false }, {
+      $set: {
+        isPasswordResetComplete: true,
+        confirmedDatetimeStamp: (new Date()).getTime()
       }
     });
   }

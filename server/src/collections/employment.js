@@ -4,12 +4,10 @@ const Joi = require('joi');
 
 exports.EmploymentCollection = class extends Collection {
 
-  constructor(...args) {
-    super(...args);
+  get name() { return 'employment'; }
 
-    this.collectionName = 'employment';
-
-    this.joiSchema = Joi.object().keys({
+  get joiSchema() {
+    return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       userId: Joi.number().max(999999999999999).required(),
@@ -53,17 +51,16 @@ exports.EmploymentCollection = class extends Collection {
         PRIV_MODIFY_CUSTOMER: Joi.boolean().required(),
         PRIV_MANAGE_CUSTOMER_DEBT: Joi.boolean().required()
       }),
-      isActive: Joi.boolean().required(),
+      isActive: Joi.boolean().required()
     });
+  }
 
-    this.uniqueKeyDefList = [
-      {
-        filters: {},
-        keyList: []
-      }
-    ];
+  get uniqueKeyDefList() {
+    return [];
+  }
 
-    this.foreignKeyDefList = [
+  get foreignKeyDefList() {
+    return [
       {
         targetCollection: 'organization',
         foreignKey: 'id',
@@ -77,8 +74,8 @@ exports.EmploymentCollection = class extends Collection {
     ];
   }
 
-  __makePrivilegeModel(isForAnOwner) {
-    let privilegeList = [
+  get __fullPrivilegeList() {
+    return [
       "PRIV_VIEW_USERS",
       "PRIV_MODIFY_USERS",
       "PRIV_ADD_USER",
@@ -114,61 +111,21 @@ exports.EmploymentCollection = class extends Collection {
       "PRIV_MODIFY_CUSTOMER",
       "PRIV_MANAGE_CUSTOMER_DEBT"
     ];
-
-    let employeeDefaultPrivilegeList = [
-      "PRIV_VIEW_USERS",
-      // "PRIV_MODIFY_USERS",
-      // "PRIV_ADD_USER",
-      // "PRIV_MAKE_USER_AN_OWNER",
-      // "PRIV_MODIFY_USER_PRIVILEGES",
-
-      "PRIV_ACCESS_POS",
-      "PRIV_VIEW_SALES",
-      "PRIV_MODIFY_SALES",
-      "PRIV_ALLOW_FLAT_DISCOUNT",
-      "PRIV_ALLOW_INDIVIDUAL_DISCOUNT",
-      "PRIV_ALLOW_FOC",
-
-      "PRIV_VIEW_SALES_RETURN",
-      "PRIV_MODIFY_SALES_RETURN",
-
-      "PRIV_VIEW_ALL_INVENTORIES",
-      // "PRIV_MODIFY_ALL_INVENTORIES",
-      "PRIV_TRANSFER_ALL_INVENTORIES",
-      "PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES",
-
-      "PRIV_VIEW_ALL_OUTLETS",
-      // "PRIV_MODIFY_ALL_OUTLETS",
-
-      "PRIV_VIEW_ALL_WAREHOUSES",
-      // "PRIV_MODIFY_ALL_WAREHOUSES",
-
-      "PRIV_VIEW_ORGANIZATION_STATISTICS",
-      // "PRIV_MODIFY_ORGANIZATION",
-
-      "PRIV_VIEW_CUSTOMER",
-      "PRIV_ADD_CUSTOMER_DURING_SALES",
-      "PRIV_MODIFY_CUSTOMER",
-      "PRIV_MANAGE_CUSTOMER_DEBT"
-    ];
-
-    let privileges = {};
-    privilegeList.forEach(privilege => {
-      if (isForAnOwner) {
-        privileges[privilege] = true;
-      } else {
-        if (employeeDefaultPrivilegeList.indexOf(privilege) > -1) {
-          privileges[privilege] = true;
-        } else {
-          privileges[privilege] = false;
-        }
-      }
-    });
-    return privileges;
   }
 
-  employNewEmployeeAsOwner({ userId, organizationId }, cbfn) {
-    let user = {
+  __generatePrivilegeModel(allowedPrivilegeList) {
+    let privileges = {};
+    this.__fullPrivilegeList.forEach(privilege => {
+      if (allowedPrivilegeList.indexOf(privilege) > -1) {
+        privileges[privilege] = true;
+      } else {
+        privileges[privilege] = false;
+      }
+    })
+  }
+
+  async addOwner({ organizationId, userId }) {
+    return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       userId,
@@ -176,54 +133,13 @@ exports.EmploymentCollection = class extends Collection {
       designation: 'Owner',
       role: 'owner',
       companyProvidedId: '',
-      privileges: this.__makePrivilegeModel(true),
+      privileges: this.__generatePrivilegeModel(this.__fullPrivilegeList),
       isActive: true
-    }
-    this._insert(user, (err, id) => {
-      return cbfn(err, id);
-    })
+    });
   }
 
-  getEmploymentOfUserInOrganization({ userId, organizationId }, cbfn) {
-    this._findOne({ userId, organizationId }, cbfn);
-  }
-
-  getEmploymentsOfUser({ userId }, cbfn) {
-    this._find({ userId }, cbfn);
-  }
-
-  getActiveEmploymentsOfUser({ userId }, cbfn) {
-    this._find({ userId, isActive: true }, cbfn);
-  }
-
-  getEmploymentById({ employmentId }, cbfn) {
-    this._findOne({ id: employmentId }, cbfn);
-  }
-
-  update({ employmentId }, { isActive, role, designation, companyProvidedId, privileges }, cbfn) {
-    let modifications = {
-      $set: {
-        isActive, role, designation, companyProvidedId, privileges
-      }
-    }
-    this._update({ id: employmentId }, modifications, cbfn);
-  }
-
-  fire({ employmentId }, cbfn) {
-    let modifications = {
-      $set: {
-        isActive: false
-      }
-    }
-    this._update({ id: employmentId }, modifications, cbfn);
-  }
-
-  listByOrganizationId({ organizationId }, cbfn) {
-    this._find({ organizationId, isActive: true }, cbfn);
-  }
-
-  hireExistingUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, cbfn) {
-    let user = {
+  async addRegularEmployee({ userId, organizationId, role, designation, companyProvidedId, privileges }) {
+    return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       userId,
@@ -233,10 +149,39 @@ exports.EmploymentCollection = class extends Collection {
       companyProvidedId,
       privileges,
       isActive: true
-    }
-    this._insert(user, (err, id) => {
-      return cbfn(err, id);
-    })
+    });
+  }
+
+  async listByOrganizationId({ organizationId }) {
+    return await this._find({ organizationId });
+  }
+
+  async getEmploymentOfUserInOrganization({ userId, organizationId }) {
+    return await this._find({ userId, organizationId });
+  }
+
+  async getEmploymentsOfUser({ userId }) {
+    return await this._find({ userId });
+  }
+
+  async getActiveEmploymentsOfUser({ userId }) {
+    return await this._find({ userId, isActive: true });
+  }
+
+  async setActiveStatus({ id }, { isActive }) {
+    return await this._update({ id }, {
+      $set: {
+        isActive
+      }
+    });
+  }
+
+  async setDetails({ id }, { role, designation, companyProvidedId, privileges }) {
+    return await this._update({ id }, {
+      $set: {
+        role, designation, companyProvidedId, privileges
+      }
+    });
   }
 
 }

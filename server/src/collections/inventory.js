@@ -1,14 +1,13 @@
+
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
 exports.InventoryCollection = class extends Collection {
 
-  constructor(...args) {
-    super(...args);
+  get name() { return 'inventory'; }
 
-    this.collectionName = 'inventory';
-
-    this.joiSchema = Joi.object().keys({
+  get joiSchema() {
+    return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       inventoryContainerId: Joi.number().max(999999999999999).required(),
@@ -25,28 +24,28 @@ exports.InventoryCollection = class extends Collection {
       ).required(),
       isDeleted: Joi.boolean().required()
     });
+  }
 
-    this.uniqueDefList = [
-      {
-        additionalQueryFilters: {},
-        uniqueKeyList: []
-      }
-    ];
+  get uniqueKeyDefList() {
+    return [];
+  }
 
-    this.foreignKeyDefList = [
+  get foreignKeyDefList() {
+    return [
       {
         targetCollection: 'organization',
         foreignKey: 'id',
         referringKey: 'organizationId'
       }
     ];
-
     // NOTES: inventoryContainerId is effectively a foreignKey. Since it may refer
     // to two collections, it's not checked.
   }
 
-  create({ inventoryContainerId, inventoryContainerType, organizationId, type, name, allowManualTransfer }, cbfn) {
-    let doc = {
+  get deletionIndicatorKey() { return 'isDeleted'; }
+
+  async create({ inventoryContainerId, inventoryContainerType, organizationId, type, name, allowManualTransfer }) {
+    return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       name,
@@ -57,45 +56,35 @@ exports.InventoryCollection = class extends Collection {
       allowManualTransfer,
       productList: [],
       isDeleted: false
-    }
-    this._insert(doc, (err, id) => {
-      return cbfn(err, id);
     });
   }
 
-  addProduct({ inventoryId }, { productId, count }, cbfn) {
-    let modifications = {
-      $push: { productList: { productId, count } }
-    }
-    this._update({ id: inventoryId }, modifications, cbfn);
+  async addProduct({ id }, { productId, count }) {
+    return await this._update({ id }, {
+      $push: {
+        productList: { productId, count }
+      }
+    });
   }
 
-  listByInventoryContainerId({ inventoryContainerId, inventoryContainerType }, cbfn) {
-    this._find({ inventoryContainerId, inventoryContainerType }, cbfn);
+  async listByInventoryContainerId({ inventoryContainerId, inventoryContainerType }) {
+    return await this._find({ inventoryContainerId, inventoryContainerType });
   }
 
-  updateProductList({ inventoryId }, { productList }, cbfn) {
-    let modifications = {
+  async listByOrganizationId({ organizationId }) {
+    return await this._find({ organizationId });
+  }
+
+  async setProductList({ id }, { productList }) {
+    return await this._update({ id }, {
       $set: {
         productList
       }
-    }
-    this._update({ id: inventoryId }, modifications, cbfn);
+    });
   }
 
-  findById({ inventoryId }, cbfn) {
-    this._findOne({ id: inventoryId }, cbfn)
-  }
-
-  listByOrganizationId({ organizationId }, cbfn) {
-    this._find({ organizationId }, cbfn);
-  }
-
-  deleteByInventoryContainerId({ inventoryContainerId }, cbfn) {
-    let modifications = {
-      $set: { isDeleted: true }
-    }
-    this._update({ inventoryContainerId }, modifications, cbfn);
+  async deleteByInventoryContainerId({ inventoryContainerId }) {
+    return await this._delete({ inventoryContainerId });
   }
 
 }

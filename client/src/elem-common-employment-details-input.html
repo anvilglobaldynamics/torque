@@ -15,6 +15,7 @@
 
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -23,11 +24,11 @@
     <style include="shared-styles"></style>
 
     <div class="layout vertical" on-keypress="genericEmbeddedFormSubmitionKeypress">
-      <paper-input class="employeeForm--role" value="{{employeeForm.role}}" required minlength="1" error-message="Please enter a valid role" label="Role of Employee."></paper-input>
-      <paper-input class="employeeForm--designation" value="{{employeeForm.designation}}" required minlength="1" error-message="Please enter a valid designation" label="Designation of Employee."></paper-input>
-      <paper-input class="employeeForm--companyProvidedId" value="{{employeeForm.companyProvidedId}}" required minlength="1" error-message="Please enter Company Provided Id" label="Company Provided Id."></paper-input>
+      <paper-input class="employeeForm--role" value="{{employeeForm.role}}" required minlength="1" error-message=[[verses.commonEmploymentDetails.roleOfEmployeeInputError]] label=[[verses.commonEmploymentDetails.roleOfEmployeeInput]]></paper-input>
+      <paper-input class="employeeForm--designation" value="{{employeeForm.designation}}" required minlength="1" error-message=[[verses.commonEmploymentDetails.designationOfEmployeeInputError]] label=[[verses.commonEmploymentDetails.designationOfEmployeeInput]]></paper-input>
+      <paper-input class="employeeForm--companyProvidedId" value="{{employeeForm.companyProvidedId}}" required minlength="1" error-message=[[verses.commonEmploymentDetails.companyProvidedIdInputError]] label=[[verses.commonEmploymentDetails.companyProvidedIdInput]]></paper-input>
 
-      <h3>Privileges:</h3>
+      <h3>[[verses.commonEmploymentDetails.privileges]]:</h3>
       <template is="dom-repeat" items="[[privilegeList]]" as="privilege">
         <paper-checkbox checked="[[$isChecked(privilege)]]" on-change="privilegeChanged">
           [[privilege.name]]
@@ -37,14 +38,25 @@
   </template>
 
   <script>
-    class ElemCommonEmploymentDetailsInput extends FxElement.mixin(TorqueDbBehavior, FxCommonBehavior, TorqueCommonBehavior) {
+    class ElemCommonEmploymentDetailsInput extends FxElement.mixin(TorqueDbBehavior, FxCommonBehavior, TorqueCommonBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'elem-common-employment-details-input';
       }
 
       static get properties() {
-        return {};
+        return {
+          page: {
+            type: Object,
+            value: null,
+            observer: 'pageChanged'
+          }
+        };
+      }
+
+      pageChanged() {
+        if (!this.page) return;
+        this.useLanguageServices();
       }
 
       $isChecked(privilege) {

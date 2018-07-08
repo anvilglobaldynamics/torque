@@ -9,7 +9,7 @@ class FixtureManager {
     this.config = config;
   }
 
-  _loadAndPrepareFixtures(database, cbfn) {
+  _loadAndPrepareFixtures(legacyDatabase, cbfn) {
     let fixtureList = [
       {
         name: "designation-list",
@@ -30,7 +30,7 @@ class FixtureManager {
 
     Promise.all(fixtureList.map((fixture) => {
       return new Promise((accept, reject) => {
-        database.findOne('fixture', { name: fixture.name }, (err, content) => {
+        legacyDatabase.findOne('fixture', { name: fixture.name }, (err, content) => {
           if (err) return reject(err);
           if (content !== null && content.version >= fixture.version) return accept();
           fslib.readFile(fixture.path, { encoding: 'utf8' }, (err, json)=>{
@@ -41,14 +41,14 @@ class FixtureManager {
             } catch (ex){
               return reject(ex);
             }
-            database.deleteOne('fixture',  { name: fixture.name }, (err, wasSuccessful)=>{
+            legacyDatabase.deleteOne('fixture',  { name: fixture.name }, (err, wasSuccessful)=>{
               if (err) return reject(err);
               let doc = {
                 name: fixture.name,
                 version: fixture.version,
                 data
               };
-              database.insertOne('fixture', doc, (err, wasSuccessful)=>{
+              legacyDatabase.insertOne('fixture', doc, (err, wasSuccessful)=>{
                 if (err) return reject(err);
                 return accept();
               });
@@ -64,8 +64,8 @@ class FixtureManager {
     })
   }
 
-  initialize(database, cbfn) {
-    this._loadAndPrepareFixtures(database, cbfn);
+  initialize(legacyDatabase, cbfn) {
+    this._loadAndPrepareFixtures(legacyDatabase, cbfn);
   }
 }
 

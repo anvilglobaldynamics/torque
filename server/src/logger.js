@@ -1,11 +1,10 @@
 /* eslint no-console: 0 */
 
-let fslib = require('fs');
-let pathlib = require('path');
-let mkpath = require('mkpath');
-let YAML = require('yamljs');
-let moment = require('moment');
-let utillib = require('util');
+const fslib = require('fs-extra');
+const pathlib = require('path');
+const YAML = require('yamljs');
+const moment = require('moment');
+const utillib = require('util');
 
 class Logger {
 
@@ -44,7 +43,6 @@ class Logger {
 
   constructor(options, isMuted = false) {
     this.options = this._validateOptions(options);
-    this.inInCommit = false;
     this.isMuted = isMuted;
   }
 
@@ -66,37 +64,27 @@ class Logger {
     return content;
   }
 
-  initialize(cbfn) {
-    if (this.options.filePath) {
-      mkpath(this.options.dir, (err) => {
-        if (err) throw err;
-        fslib.open(this.options.filePath, 'a+', (err, fd) => {
-          if (err) throw err;
-          fslib.readFile(fd, { encoding: 'utf8' }, (err, content) => {
-            if (err) throw err;
-            if (content.length === 0) {
-              this.logBuffer = [];
-            } else {
-              try {
-                this.logBuffer = this._parse(content);
-              } catch (err) {
-                console.error("Corrupted log");
-                fslib.close(fd);
-                throw err;
-              }
-              if ((typeof (this.logBuffer) !== 'object') && Array.isArray(this.logBuffer)) {
-                fslib.close(fd);
-                throw new Error("Corrupted log");
-              }
-            }
-            fslib.close(fd, () => null);
-            return cbfn(null);
-          });
-        });
-      });
+  async initialize() {
+    if (!this.options.filePath) return;
+    await fslib.mkdirs(this.options.dir);
+    let fd = await fslib.open(this.options.filePath, 'a+');
+    let content = await fslib.readFile(fd, { encoding: 'utf8' });
+    if (content.length === 0) {
+      this.logBuffer = [];
     } else {
-      return cbfn(null);
+      try {
+        this.logBuffer = this._parse(content);
+      } catch (err) {
+        console.log("Corrupted Log");
+        await fslib.close(fd);
+        throw err;
+      }
+      if ((typeof (this.logBuffer) !== 'object') && Array.isArray(this.logBuffer)) {
+        throw new Error("Corrupted log");
+        await fslib.close(fd);
+      }
     }
+    await fslib.close(fd);
   }
 
   _saveToDisk(entry) {

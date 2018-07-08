@@ -1,14 +1,13 @@
+
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
 exports.OutletCollection = class extends Collection {
 
-  constructor(...args) {
-    super(...args);
+  get name() { return 'outlet'; }
 
-    this.collectionName = 'outlet';
-
-    this.joiSchema = Joi.object().keys({
+  get joiSchema() {
+    return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       name: Joi.string().min(1).max(64).required(),
@@ -18,15 +17,14 @@ exports.OutletCollection = class extends Collection {
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       isDeleted: Joi.boolean().required()
     });
+  }
 
-    this.uniqueKeyDefList = [
-      {
-        filters: {},
-        keyList: []
-      }
-    ];
+  get uniqueKeyDefList() {
+    return [];
+  }
 
-    this.foreignKeyDefList = [
+  get foreignKeyDefList() {
+    return [
       {
         targetCollection: 'organization',
         foreignKey: 'id',
@@ -35,8 +33,10 @@ exports.OutletCollection = class extends Collection {
     ];
   }
 
-  create({ name, organizationId, physicalAddress, phone, contactPersonName }, cbfn) {
-    let doc = {
+  get deletionIndicatorKey() { return 'isDeleted'; }
+
+  async create({ name, organizationId, physicalAddress, phone, contactPersonName }) {
+    return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       name,
@@ -45,34 +45,23 @@ exports.OutletCollection = class extends Collection {
       phone,
       contactPersonName,
       isDeleted: false
-    }
-    this._insert(doc, (err, id) => {
-      return cbfn(err, id);
     });
   }
 
-  update({ outletId }, { name, physicalAddress, phone, contactPersonName }, cbfn) {
-    let modifications = {
+  async setDetails({ id }, { name, physicalAddress, phone, contactPersonName }) {
+    return await this._update({ id }, {
       $set: {
         name, physicalAddress, phone, contactPersonName
       }
-    }
-    this._update({ id: outletId }, modifications, cbfn);
+    });
   }
 
-  delete({ outletId }, cbfn) {
-    let modifications = {
-      $set: { isDeleted: true }
-    }
-    this._update({ id: outletId }, modifications, cbfn);
+  async listByOrganizationId({ organizationId }) {
+    return await this._find({ organizationId });
   }
 
-  listByOrganizationId({ organizationId }, cbfn) {
-    this._find({ organizationId }, cbfn);
-  }
-
-  listByOrganizationIdAndSearchString({ organizationId, searchString }, cbfn) {
-    let query = { organizationId, isDeleted: false };
+  async listByOrganizationIdAndSearchString({ organizationId, searchString }) {
+    let query = { organizationId };
     if (searchString) {
       let searchRegex = new RegExp(searchString, 'i');
       query.$or = [
@@ -85,11 +74,7 @@ exports.OutletCollection = class extends Collection {
         query.$or.push({ id: parseInt(searchString) });
       }
     }
-    this._find(query, cbfn);
-  }
-
-  findById({ outletId }, cbfn) {
-    this._findOne({ id: outletId }, cbfn)
+    return await this._find(query);
   }
 
 }

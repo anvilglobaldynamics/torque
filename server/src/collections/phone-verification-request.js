@@ -4,29 +4,31 @@ const Joi = require('joi');
 
 exports.PhoneVerificationRequestCollection = class extends Collection {
 
-  constructor(...args) {
-    super(...args);
+  get name() { return 'phone-verification-request'; }
 
-    this.collectionName = 'phone-verification-request';
-
-    this.joiSchema = Joi.object().keys({
+  get joiSchema() {
+    return Joi.object().keys({
       forPhone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       forUserId: Joi.number().max(999999999999999).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       verifiedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       origin: Joi.string().max(1024).required(),
       verificationToken: Joi.string().min(64).max(64).required(),
-      isVerificationComplete: Joi.boolean().required(),
+      isVerificationComplete: Joi.boolean().required()
     });
+  }
 
-    this.uniqueKeyDefList = [
+  get uniqueKeyDefList() {
+    return [
       {
         filters: {},
         keyList: ['verificationToken']
       }
     ];
+  }
 
-    this.foreignKeyDefList = [
+  get foreignKeyDefList() {
+    return [
       {
         targetCollection: 'user',
         foreignKey: 'id',
@@ -40,68 +42,44 @@ exports.PhoneVerificationRequestCollection = class extends Collection {
     ];
   }
 
-  create({ userId, phone, origin, verificationToken }, cbfn) {
-    let user = {
+  async isVerificationTokenUnique({ verificationToken }) {
+    let query = { verificationToken };
+    let doc = await this._findOne(query);
+    if (doc) return false;
+    return true;
+  }
+
+  async create({ userId, phone, origin, verificationToken }) {
+    return await this._insert({
       forPhone: phone,
       forUserId: userId,
       origin,
       verificationToken,
-      createdDatetimeStamp: (new Date).getTime(),
+      createdDatetimeStamp: (new Date()).getTime(),
       verifiedDatetimeStamp: null,
       isVerificationComplete: false
-    }
-    this._insert(user, (err, id) => {
-      return cbfn(err, id);
-    })
-  }
-
-  // FIXME: better separation between logical and db layer.
-  // suggestions: split the process in three steps.
-  applyVerificationToken({ verificationToken }, cbfn) {
-    let query = { verificationToken, isVerificationComplete: false };
-    this._findOne(query, (err, doc) => {
-      if (err) return cbfn(err);
-      if (!doc) {
-        let err = new Error('Invalid verification token');
-        err.code = "INVALID_VERIFICATION_TOKEN";
-        return cbfn(null, err);
-      }
-      let mod = {
-        $set: {
-          isVerificationComplete: true,
-          verifiedDatetimeStamp: (new Date).getTime()
-        }
-      };
-      this._update(query, mod, (err, wasUpdated) => {
-        if (err) return cbfn(err);
-        if (!wasUpdated) return cbfn(new Error("Could not update phone-verification-request for reasons unknown."));
-        return cbfn(null, doc.forUserId);
-      });
     });
   }
 
-  // FIXME: order by createdDatetime so that only the last request
-  // can be verified
-  findByForUserId({ userId }, cbfn) {
-    let query = { forUserId: userId, isVerificationComplete: false };
-    this._findOne(query, cbfn);
+  async findByForUserId({ userId }) {
+    return await this._findOne({ forUserId: userId, isVerificationComplete: false });
   }
 
-  // FIXME: order by createdDatetime so that only the last request
-  // can be verified
-  findByForPhone({ forPhone }, cbfn) {
-    let query = { forPhone: forPhone, isVerificationComplete: false };
-    this._findOne(query, cbfn);
+  async findByForPhone({ forPhone }) {
+    return await this._findOne({ forPhone: forPhone, isVerificationComplete: false });
   }
 
-  isVerificationTokenUnique({ verificationToken }, cbfn) {
-    let query = { verificationToken };
-    this._findOne(query, (err, doc) => {
-      if (err) return cbfn(err);
-      if (doc) {
-        return cbfn(null, false);
-      } else {
-        return cbfn(null, true);
+  // NOTE: Code using this method should check if it returns true or not.
+  // If untrue, it should - 
+  // let err = new Error('Invalid verification token');
+  // err.code = "INVALID_VERIFICATION_TOKEN";
+  // throw above error
+  // TODO: Remove comment after implementing
+  async applyVerificationToken({ verificationToken }) {
+    return await this._update({ verificationToken, isVerificationComplete: false }, {
+      $set: {
+        isVerificationComplete: true,
+        verifiedDatetimeStamp: (new Date()).getTime()
       }
     });
   }
