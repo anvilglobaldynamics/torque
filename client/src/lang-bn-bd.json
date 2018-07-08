@@ -71,7 +71,6 @@
     "emailOrPhoneInputError": "আপনার বৈধ ফোন নম্বর অথবা বৈধ ইমেল ঠিকানা লিখুন।",
     "passwordInput": "আপনার পাসওয়ার্ড",
     "passwordInputError": "কমপক্ষে ৮ অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।",
-
     "confirmationLinkPartOne": "আমরা আপনার কাছে একটি নিশ্চিতকরণ লিঙ্ক পাঠিয়েছি আপনার  ",
     "confirmationLinkPartTwo": ". আপনার পাসওয়ার্ড পুনরায় সেট করার জন্য লিঙ্কটি ব্যবহার করুন।"
   },
@@ -121,7 +120,6 @@
     "soldThisMonth": "মাসের বিক্রি",
     "verifyPhoneNumberManually": "ফোন হাতে করে যাচাই করুন",
     "resendSms": "এস এম এস আবার পাঠানো হোক",
-
     "setYourEmail": "ইমেল সেট করুন",
     "pleaseSetYourEmail": "আপনার বৈধ ইমেল সেট করুন",
     "emailIsSet": "ইমেল সেট করা হয়েছে",
@@ -131,7 +129,6 @@
     "notYetVarifiedEmail": "আপনি এখনো আপনার ইমেল যাচাই করেন নি। আপনি যাচাই না করা পর্যন্ত আপনার ইমেল ঠিকানা সক্রিয় নয়। আমাদের পাঠানো ইমেল এর লিংক টি চাপুন।",
     "emailHasBeenSet": "আপনার ইমেল হিসাবে সেট করা হয়েছে। ইমেইল দেখুন যাচাইকরণ লিংক এর জন্য এবং আবার লগইন করুন।",
     "checkYourInboxForVarification": "আপনার ইমেইল দেখুন। আমরা আপনাকে যাচাইকরণ ইমেল পাঠানো হয়েছে।",
-
     "enterVerificationCode": "আপনার যাচাইকরণ কোড প্রবেশ করুন।",
     "enterVerificationCodeSentToYourEmail": "আপনার ইমেল পাঠানো যাচাইকরণ কোড লিখুন।",
     "enterVerificationCodeSentToYourPhone": "আপনার ফোন পাঠানো যাচাইকরণ কোড লিখুন।",
@@ -143,7 +140,6 @@
     "phoneCouldNotBeVerified": "আপনার ফোন যাচাইকরণ সফল হয়নি। নিশ্চিতকরণ যাচাইকরণ কোডটি সঠিক।",
     "checkYourPhoneForVerification": "আপনার ফোন দেখুন। আমরা আপনাকে যাচাইকরণ এস এম এস পাঠানো হয়েছে।",
     "verificationSmsSent": "যাচাইকরণ এস এম এস পাঠানো হয়েছে।",
-
     "notYetVarifiedPhone": "আপনি এখনো আপনার ফোন নম্বর যাচাই করেন নি। আপনার অ্যাকাউন্ট (নিবন্ধনের ১ ঘন্টা পর) আপনি এটি যাচাই না হওয়া পর্যন্ত সক্রিয় নয়। আমাদের পাঠানো এস এম এস এর লিংক টি চাপুন।",
     "whyProvideEmailAddress": "একটি ইমেইল ঠিকানা প্রদান করে, আপনি আপনার ইমেলে বিতরণ রশিদ, লগইন সতর্কতা এবং অন্যান্য গুরুত্বপূর্ণ তথ্য পেতে পারেন।"
   },
@@ -160,7 +156,6 @@
     "organizationCreatedToast": "নতুন সংস্থা তৈরি করা হয়েছে।",
     "phoneInputError": "বৈধ ফোন নম্বর লিখুন।",
     "phoneInput": "বৈধ ফোন নম্বর।",
-
     "manageOrganizationTitle": "সংগঠন"
   },
   "outlet": {
@@ -178,10 +173,8 @@
     "updateOutlet": "দোকান আপডেট করুন",
     "outletCreatedToast": "নতুন দোকান তৈরি করা হয়েছে।",
     "outletUpdatedToast": "দোকান আপডেট করা হয়েছে।",
-
     "manageOutletTitle": "দোকান পরিচালনা",
     "createNewOutlet": "নতুন দোকান তৈরি করুন",
-
     "outletTitle": "দোকান",
     "deleteOutletQuestion": "দোকান মুছুন?",
     "deleteOutletQuestionPartOne": "আপনি কি এই দোকানটি মুছে ফেলতে চান?",
@@ -222,12 +215,10 @@
     "updateProductCategory": "পণ্যের ধরণ আপডেট করুন",
     "productCategoryCreated": "নতুন পণ্যের ধরণ তৈরি করা হয়েছে।",
     "productCategoryUpdated": "পণ্যের ধরণ আপডেট করা হয়েছে।",
-
     "buyingPrice": "কেনা দাম",
     "sellingPrice": "বিক্রি দাম",
     "moveHere": "এখানে সরান",
     "subCategory": "উপ বিভাগ",
-
     "moveToRoot": "গোড়াতে সরান",
     "createNewProductCategory": "নতুন পণ্য ধরণ তৈরি করুন"
   },
@@ -265,8 +256,8 @@
     "phoneInputError": "আপনার বৈধ ফোন নম্বর লিখুন।",
     "contactPhoneOfContactPerson": "যোগাযোগ করার বেক্তির ফোন",
     "employeeUpdated": "কর্মচারী আপডেট করা হয়েছে।",
-    "updateEmployee": "কর্মচারী আপডেট", 
-    "hireEmployeePageTitle": "কর্মচারী নিয়োগ", 
+    "updateEmployee": "কর্মচারী আপডেট",
+    "hireEmployeePageTitle": "কর্মচারী নিয়োগ",
     "newEmployeeHired": "নতুন কর্মচারী নিয়োগ করা হয়েছে।",
     "manageEmployeePageTitle": "কর্মচারীদের পরিচালনা করুন",
     "companyProvidedId": "কোম্পানী প্রদত্ত আইডি",
@@ -274,7 +265,6 @@
     "role": "ভূমিকা",
     "hireUserEmployee": "ব্যবহারকারীকে কর্মচারী হিসেবে নিয়োগ করুন",
     "addUserAsEmployee": "কর্মচারী হিসাবে নতুন ব্যবহারকারী যোগ করুন",
-
     "viewEmployeeTitle": "কর্মচারী",
     "companyId": "কোম্পানি আইডি",
     "clickToEditEmployee": "কর্মচারী সম্পাদনা করতে এখানে ক্লিক করুন",
@@ -332,10 +322,8 @@
     "updateCustomer": "গ্রাহক আপডেট করুন",
     "newCustomerCreated": "নতুন গ্রাহক তৈরি করা হয়েছে।",
     "customerUpdated": "গ্রাহক আপডেট করা হয়েছে।",
-
     "manageCustomerPageTitle": "গ্রাহক পরিচালনা করুন",
     "createNewCustomer": "নতুন গ্রাহক তৈরি করুন",
-
     "viewCustomerTitle": "ক্রেতা",
     "deleteCustomerQuestion": "গ্রাহক মুছবেন?",
     "deleteCustomerQuestionPartOne": "আপনি কি এই গ্রাহকটি মুছে ফেলতে চান?",
@@ -381,7 +369,6 @@
     "creditedAmountInput": "ফেরতকৃত অর্থ (যে অর্থ গ্রাহককে ফেরত দেওয়া হয়েছে)",
     "creditedAmountInputError": "একটি বৈধ নম্বর লিখুন",
     "addSalesReturn": "পণ্য ফেরত যোগ করুন",
-
     "manageSalesReturnTitle": "পণ্য ফেরত পরিচালনা করুন",
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি (নাবিহীন পণ্য ফেরত)",
     "removeCustomer": "গ্রাহক সরান",
@@ -391,7 +378,6 @@
     "changeOutlet": "দোকান পরিবর্তন করুন",
     "salesId": "বিক্রয় আইডি",
     "credited": "জমা",
-
     "salesReturnTitle": "বিক্রয় ফেরত",
     "creditedAmount": "ফেরতকৃত অর্থ",
     "productList": "পণ্য তালিকা",
@@ -407,7 +393,6 @@
     "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি (নাবিহীন পণ্য ফেরত)",
     "removeOutlet": "দোকান সরান",
     "changeOutlet": "দোকান পরিবর্তন করুন",
-
     "salesTitle": "বিক্রয়",
     "salesDiscarded": "বিক্রয় বাতিল করা হয়েছে",
     "outletId": "দোকান আইডি",
@@ -436,10 +421,8 @@
     "warehouseManagerNumberInputError": "বৈধ ফোন নম্বর লিখুন।",
     "createWarehouse": "গুদাম তৈরী করুন",
     "updateWarehouse": "গুদাম আপডেট করুন",
-
     "manageWarehouseTitle": "গুদাম পরিচালনা",
     "createNewWarehouse": "নতুন গুদাম তৈরি করুন",
-
     "warehouseTitle": "গুদাম",
     "deleteWarehouseQuestionPartOne": "আপনি কি এই গুদামটি মুছে ফেলতে চান?",
     "deleteWarehouseQuestionPartTwo": "একবার মুছে ফেলা হলে, আপনি এই গুদামটি পুনরুদ্ধার করতে পারবেন না।",
@@ -462,9 +445,9 @@
     "contentNotFound": "বিষয়বস্তু খুঁজে পাওয়া যাচ্ছে না।",
     "contentCouldNotBeFound": "অনুরোধকৃত সামগ্রী পাওয়া যায়নি",
     "backToDashboard": "ড্যাশবোর্ডে ফিরে যান।",
-    "403":"৪০৩",
-    "accessDenied":"একসেস নেই",
-    "accessDeniedDescription":"আপনার অ্যাডমিন আপনাকে এই পেজটির একসেস দেন নাই। "
+    "403": "৪০৩",
+    "accessDenied": "একসেস নেই",
+    "accessDeniedDescription": "আপনার অ্যাডমিন আপনাকে এই পেজটির একসেস দেন নাই। "
   },
   "pos": {
     "posPageTitle": "নতুন বিক্রয়",

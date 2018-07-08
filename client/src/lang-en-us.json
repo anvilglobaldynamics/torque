@@ -71,7 +71,6 @@
     "emailOrPhoneInputError": "Please enter your valid phone number or valid email address.",
     "passwordInput": "Your password",
     "passwordInputError": "Please enter a password at least 8 characters long.",
-
     "confirmationLinkPartOne": "We have sent you a confirmation link on your ",
     "confirmationLinkPartTwo": ". Please use the link to reset your password."
   },
@@ -121,7 +120,6 @@
     "soldThisMonth": "Month's Sales Count",
     "verifyPhoneNumberManually": "Verify Phone Number Manually",
     "resendSms": "Resend SMS",
-
     "setYourEmail": "Set your email",
     "pleaseSetYourEmail": "Please set your valid email.",
     "emailIsSet": "Email is Set",
@@ -131,7 +129,6 @@
     "notYetVarifiedEmail": "You have not yet verified your email address. Your email address is not active until you verify it. Either click the link in the email we sent to",
     "emailHasBeenSet": "has been set as your email. Please check your inbox for the verification link and log in again.",
     "checkYourInboxForVarification": "Please check your inbox. We have sent you a verification email",
-
     "enterVerificationCode": "Enter verification code",
     "enterVerificationCodeSentToYourEmail": "Please enter the verification code we sent to your email.",
     "enterVerificationCodeSentToYourPhone": "Please enter the verification code we sent to your phone.",
@@ -143,7 +140,6 @@
     "phoneCouldNotBeVerified": "Your phone could not be verified. Make sure the verification code is correct",
     "checkYourPhoneForVerification": "Please check your phone. We have sent you a verification SMS.",
     "verificationSmsSent": "Verification SMS Sent",
-
     "notYetVarifiedPhone": "You have not yet verified your phone number. Your account (after the 1 hour grace period) is not active until you verify it. Either click the link in the sms we sent to",
     "whyProvideEmailAddress": "By providing an email address, you can get receipts, login alerts and other important information delivered to you to your email."
   },
@@ -160,7 +156,6 @@
     "organizationCreatedToast": "New organization has been created.",
     "phoneInputError": "Please enter your valid phone number.",
     "phoneInput": "Your valid phone number",
-
     "manageOrganizationTitle": "Organizations"
   },
   "outlet": {
@@ -178,10 +173,8 @@
     "updateOutlet": "Update Outlet",
     "outletCreatedToast": "New outlet has been created.",
     "outletUpdatedToast": "Outlet has been updated.",
-
     "manageOutletTitle": "Manage Outlet",
     "createNewOutlet": "Create New Outlet",
-
     "outletTitle": "Outlet",
     "deleteOutletQuestion": "Delete outlet?",
     "deleteOutletQuestionPartOne": "Are you sure you want to delete this outlet",
@@ -222,12 +215,10 @@
     "updateProductCategory": "Update Product Category",
     "productCategoryCreated": "New product Category has been created.",
     "productCategoryUpdated": "Product Category has been updated.",
-
     "buyingPrice": "Buying Price",
     "sellingPrice": "Selling Price",
     "moveHere": "Move Here",
     "subCategory": "Sub Category",
-
     "moveToRoot": "Move To Root",
     "createNewProductCategory": "Create New Product Category"
   },
@@ -274,7 +265,6 @@
     "role": "Role",
     "hireUserEmployee": "Hire User Employee",
     "addUserAsEmployee": "Add New User As Employee",
-
     "viewEmployeeTitle": "Employee",
     "companyId": "Company Id",
     "clickToEditEmployee": "Click here to edit the employee.",
@@ -332,10 +322,8 @@
     "updateCustomer": "Update Customer",
     "newCustomerCreated": "New customer has been created.",
     "customerUpdated": "Customer has been updated.",
-
     "manageCustomerPageTitle": "Manage Customer",
     "createNewCustomer": "Create New Customer",
-
     "viewCustomerTitle": "Customer",
     "deleteCustomerQuestion": "Delete customer?",
     "deleteCustomerQuestionPartOne": "Are you sure you want to delete this customer",
@@ -381,7 +369,6 @@
     "creditedAmountInput": "Credited Amount (amount that has been returned to the customer)",
     "creditedAmountInputError": "Please enter a valid number",
     "addSalesReturn": "Add Sales Return",
-
     "manageSalesReturnTitle": "Manage Sales Return",
     "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
     "removeCustomer": "Remove Customer",
@@ -391,7 +378,6 @@
     "changeOutlet": "Change Outlet",
     "salesId": "Sales Id",
     "credited": "Credited",
-
     "salesReturnTitle": "Sales Return",
     "creditedAmount": "Credited Amount",
     "productList": "Product List",
@@ -407,7 +393,6 @@
     "noOutletSelected": "No outlet selected (Anonymous Sale Return)",
     "removeOutlet": "Remove Outlet",
     "changeOutlet": "Change Outlet",
-
     "salesTitle": "Sales",
     "salesDiscarded": "Sales has been discarded",
     "outletId": "Outlet ID",
@@ -436,10 +421,8 @@
     "warehouseManagerNumberInputError": "Please enter a valid phone number",
     "createWarehouse": "Create Warehouse",
     "updateWarehouse": "Update Warehouse",
-
     "manageWarehouseTitle": "Manage Warehouse",
     "createNewWarehouse": "Create New Warehouse",
-
     "warehouseTitle": "Warehouse",
     "deleteWarehouseQuestionPartOne": "Are you sure you want to delete this warehouse",
     "deleteWarehouseQuestionPartTwo": "Once deleted, you can not restore this warehouse.",
@@ -462,9 +445,9 @@
     "contentNotFound": "Content not found.",
     "contentCouldNotBeFound": "The requested content could not be found",
     "backToDashboard": "Back to Dashboard.",
-    "403":"403",
-    "accessDenied":"Access Denied.",
-    "accessDeniedDescription":"You do not have access to this page/content."
+    "403": "403",
+    "accessDenied": "Access Denied.",
+    "accessDeniedDescription": "You do not have access to this page/content."
   },
   "pos": {
     "posPageTitle": "New Sales",
