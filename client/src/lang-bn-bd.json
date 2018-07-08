@@ -458,10 +458,13 @@
     "deleteWarehouseQuestion": "গুদাম মুছে ফেলবেন?"
   },
   "error": {
-    "404": "404",
+    "404": "৪০৪",
     "contentNotFound": "বিষয়বস্তু খুঁজে পাওয়া যাচ্ছে না।",
     "contentCouldNotBeFound": "অনুরোধকৃত সামগ্রী পাওয়া যায়নি",
-    "backToDashboard": "ড্যাশবোর্ডে ফিরে যান।"
+    "backToDashboard": "ড্যাশবোর্ডে ফিরে যান।",
+    "403":"৪০৩",
+    "accessDenied":"একসেস নেই",
+    "accessDeniedDescription":"আপনার অ্যাডমিন আপনাকে এই পেজটির একসেস দেন নাই। "
   },
   "pos": {
     "posPageTitle": "নতুন বিক্রয়",

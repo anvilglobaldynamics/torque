@@ -1,0 +1,92 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<dom-module id="page-error403">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+
+      .circle {
+        display: inline-block;
+        width: 48px;
+        height: 48px;
+        text-align: center;
+        color: #555;
+        border-radius: 50%;
+        background: #ddd;
+        font-size: 30px;
+        line-height: 48px;
+      }
+
+      .card {
+        text-align: center;
+      }
+
+      h1 {
+        margin: 16px 0;
+        color: #212121;
+        font-size: 22px;
+      }
+    </style>
+
+    <div class="card">
+      <div class="circle">[[verses.error.403]]</div>
+      <h1>[[verses.error.accessDenied]]</h1>
+      <p>[[verses.error.accessDeniedDescription]]</p>
+      <p>Reasons: [[detailedMessage]]</p>
+      <p>
+        <a href="[[rootPath]]">[[verses.error.backToDashboard]]</a>
+      </p>
+    </div>
+
+  </template>
+
+  <script>
+    class PageError403 extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+      static get is() { return 'page-error403'; }
+      static get properties() {
+        return {
+          rootPath: String,
+          page: {
+            type: Object,
+            value: null,
+            observer: 'pageChanged'
+          }
+        };
+      }
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.useLanguageServices();
+        this.prepareDetailedMessage();
+      }
+
+      prepareDetailedMessage() {
+        this.detailedMessage = "";
+        if ('unmet' in this.params) {
+          this.detailedMessage = this.params.unmet;
+        }
+      }
+
+    }
+
+    window.customElements.define(PageError403.is, PageError403);
+  </script>
+</dom-module>

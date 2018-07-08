@@ -461,7 +461,10 @@
     "404": "404",
     "contentNotFound": "Content not found.",
     "contentCouldNotBeFound": "The requested content could not be found",
-    "backToDashboard": "Back to Dashboard."
+    "backToDashboard": "Back to Dashboard.",
+    "403":"403",
+    "accessDenied":"Access Denied.",
+    "accessDeniedDescription":"You do not have access to this page/content."
   },
   "pos": {
     "posPageTitle": "New Sales",
