@@ -213,7 +213,7 @@ class Program {
   }
 
   async __initializeServer() {
-    await promisify(server, server.initialize);
+    await server.initialize();
     logger.info('(server)> server initialized.');
   }
 
