@@ -79,8 +79,7 @@
       }
 
       static get properties() {
-        return {
-        };
+        return {};
       }
 
       // region: core =================================
@@ -107,11 +106,7 @@
       }
 
       _ensureAccess() {
-        if (!this.app.user) {
-          this.app.navigateTo('/login');
-          return false;
-        }
-        return true;
+        return this.accessControl('privileged', ['PRIV_VIEW_USERS']);
       }
 
       _fetchEmployeeList(cbfn) {

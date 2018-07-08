@@ -125,11 +125,7 @@
       }
 
       _ensureAccess() {
-        if (!this.app.user) {
-          this.app.navigateTo('/login');
-          return false;
-        }
-        return true;
+        return this.accessControl('privileged', ['PRIV_MODIFY_ALL_OUTLETS']);
       }
 
       // region: editOutlet =================================

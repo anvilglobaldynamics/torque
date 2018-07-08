@@ -27,8 +27,6 @@
 <dom-module id="page-view-inventory">
   <template>
     <style include="shared-styles">
-
-
       paper-dropdown-menu {
         width: 300px;
       }
@@ -140,11 +138,7 @@
       }
 
       _ensureAccess() {
-        if (!this.app.user) {
-          this.app.navigateTo('/login');
-          return false;
-        }
-        return true;
+        return this.accessControl('privileged', ['PRIV_VIEW_ALL_INVENTORIES']);
       }
 
       _fetchInventory(cbfn) {

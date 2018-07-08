@@ -206,11 +206,7 @@
       }
 
       _ensureAccess() {
-        if (!this.app.user) {
-          this.app.navigateTo('/login');
-          return false;
-        }
-        return true;
+        return this.accessControl('privileged', ['PRIV_VIEW_ALL_OUTLETS']);
       }
 
       _fetchOutlet(cbfn) {
