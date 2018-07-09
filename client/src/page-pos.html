@@ -86,6 +86,15 @@
               <div class="vertical layout flex">
                 <div class="title">[[product.name]]</div>
                 <div class="description">[[verses.pos.count]]: [[product.count]]</div>
+
+                <div class="horizontal layout">
+                  <!-- TODO: show discounted price here rather than selling price, or both -->
+                  <div class="description">[[verses.pos.sellingPrice]]: [[product.salePrice]]</div>
+                  <template is="dom-if" if="{{product.discountValue}}">
+                    <div> , ([[verses.pos.hasDiscount]]) </div>
+                  </template>
+                </div>
+
               </div>
             </div>
           </template>
@@ -314,6 +323,8 @@
           changeAmount,
         } = this.payment;
 
+        console.log(this.productList);
+
         totalAmount = this.productList.reduce((sum, product) => {
           let { salePrice, count, discountType, discountValue } = product;
 
@@ -323,10 +334,12 @@
             salePrice -= discountValue;
           }
 
+          // individual vat is not being considered
           return sum + (salePrice * count);
         }, 0);
 
         totalBilled = totalAmount;
+
         if (discountValue) {
           if (discountType === 'percent') {
             discountedAmount = totalAmount * (discountValue / 100)
@@ -337,6 +350,7 @@
           }
         }
 
+        // overall vat calculation
         if (this.vatValue) {
           vatAmount = totalBilled * (this.vatValue / 100);
           totalBilled += vatAmount;

@@ -472,7 +472,9 @@
     "paidAmountInput": "Paid Amount",
     "paidAmountInputError": "Please enter a valid number",
     "changeAmount": "Change Amount",
-    "confirmSales": "Confirm Sales"
+    "confirmSales": "Confirm Sales",
+    "sellingPrice": "Selling Price",
+    "hasDiscount": "Has Discount"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
