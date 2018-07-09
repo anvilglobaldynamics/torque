@@ -4,7 +4,7 @@ const fslib = require('fs-extra');
 const pathlib = require('path');
 const moment = require('moment');
 const utillib = require('util');
-const YAML = require('yamljs')
+const YAML = require('js-yaml');
 
 class Logger {
 
@@ -27,7 +27,11 @@ class Logger {
   }
 
   _stringify(content) {
-    return YAML.stringify(content);
+    try {
+      return YAML.safeDump(content, { skipInvalid: true });
+    } catch (ex) {
+      return YAML.safeDump({ jsonFallback: JSON.stringify(content) });
+    }
   }
 
   constructor(options, isMuted = false) {
