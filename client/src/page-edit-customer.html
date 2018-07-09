@@ -98,7 +98,7 @@
         this.useLanguageServices();
         if ('customer' in this.params) {
           this.editMode = true;
-          this.app.pushPageTitle(this.verses.customer.editCustomerTitle);
+          this.app.pushPageTitle(this.app.verses.customer.editCustomerTitle);
         } else {
           this.editMode = false;
           this.app.pushPageTitle(this.app.verses.customer.addCustomerTitle);
@@ -122,11 +122,7 @@
       }
 
       _ensureAccess() {
-        if (!this.app.user) {
-          this.app.navigateTo('/login');
-          return false;
-        }
-        return true;
+        return this.accessControl('privileged', ['PRIV_MODIFY_CUSTOMER']);
       }
 
       // region: editCustomer =================================

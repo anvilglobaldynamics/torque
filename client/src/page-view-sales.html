@@ -21,9 +21,7 @@
 
 <dom-module id="page-view-sales">
   <template>
-    <style include="shared-styles">
-
-    </style>
+    <style include="shared-styles"></style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -116,11 +114,7 @@
       }
 
       _ensureAccess() {
-        if (!this.app.user) {
-          this.app.navigateTo('/login');
-          return false;
-        }
-        return true;
+        return this.accessControl('privileged', ['PRIV_VIEW_SALES']);
       }
 
       _fetchSales(cbfn) {

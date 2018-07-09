@@ -33,7 +33,7 @@ exports.GetSalesReturnListApi = class extends outletCommonMixin(customerCommonMi
     return [{
       organizationBy: "organizationId",
       privileges: [
-        "PRIV_VIEW_SALES"
+        "PRIV_VIEW_SALES_RETURN"
       ]
     }];
   }
