@@ -28,12 +28,6 @@ class DatabaseService {
 
   async initialize() {
     await this.engine.initialize();
-    this.user = new UserCollection(this.engine, this);
-    this.session = new SesssionCollection(this.engine, this);
-    this.phoneVerificationRequest = new PhoneVerificationRequestCollection(this.engine, this);
-    this.emailVerificationRequest = new EmailVerificationRequestCollection(this.engine, this);
-    this.fixture = new FixtureCollection(this.engine, this);
-
     this.adminSession = new AdminSessionCollection(this.engine, this);
     this.customer = new CustomerCollection(this.engine, this);
     this.emailVerificationRequest = new EmailVerificationRequestCollection(this.engine, this);

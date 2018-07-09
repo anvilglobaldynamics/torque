@@ -10,23 +10,19 @@ class TemplateManager {
     this.config = config;
   }
 
-  _loadAndPrepareTemplates(cbfn) {
+  _loadAndPrepareTemplates() {
     let templateList = [
       {
         name: 'generic-message',
         path: './src/templates/public/generic-message.html'
       }
     ]
-    let collector = new AsyncCollector(templateList.length);
+    this.templates = {};
     for (let template of templateList) {
       let html = fslib.readFileSync(template.path, { encoding: 'utf8' });
       let compiledTemplate = Handlebars.compile(html);
-      collector.collect(template.name, { compiledTemplate: compiledTemplate });
+      this.templates[template.name] = { compiledTemplate: compiledTemplate };
     }
-    collector.finally((collection) => {
-      this.templates = collection;
-      cbfn();
-    })
   }
 
   generateHtml(templateName, model) {
@@ -35,9 +31,7 @@ class TemplateManager {
   }
 
   initialize(cbfn) {
-    this._loadAndPrepareTemplates(_ => {
-      cbfn();
-    })
+    this._loadAndPrepareTemplates();
   }
 }
 

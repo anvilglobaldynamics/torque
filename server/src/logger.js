@@ -2,101 +2,71 @@
 
 const fslib = require('fs-extra');
 const pathlib = require('path');
-const YAML = require('yamljs');
 const moment = require('moment');
 const utillib = require('util');
+const YAML = require('yamljs')
 
 class Logger {
 
   _validateOptions(options) {
     let {
-      logStandardOutputToFile = true,
-      logErrorOutputToFile = true,
-      logStandardOutputToConsole = true,
-      logErrorOutputToConsole = true,
-      patchConsoleObject = false,
+      mirrorToFile = false,
       dir = './temp-logs',
-      format = 'json'
+      format = 'json' // ignored.
     } = options;
 
-    let extension = 'txt';
-    if (format === 'json') {
-      extension = 'json';
-    } else if (format === 'yaml') {
-      extension = 'yaml';
-    }
-    let postfix = moment((new Date)).format('YYYY-MM-DD--HH.mm.ss.SSSS');
-    let fileName = `log--${postfix}.${extension}`;
-    let filePath = pathlib.join(dir, fileName);
-
     return {
-      logStandardOutputToFile,
-      logErrorOutputToFile,
-      logStandardOutputToConsole,
-      logErrorOutputToConsole,
-      patchConsoleObject,
+      mirrorToFile,
       dir,
-      format,
-      filePath
+      format
     };
+  }
+
+  _parse(content) {
+    return YAML.parse(content);
+  }
+
+  _stringify(content) {
+    return YAML.stringify(content);
   }
 
   constructor(options, isMuted = false) {
     this.options = this._validateOptions(options);
     this.isMuted = isMuted;
+    this._mirrorFilePath = null;
   }
 
-  _parse(content) {
-    if (this.options.format === 'json') {
-      return JSON.parse(content);
-    } else if (this.options.format === 'yaml') {
-      return YAML.parse(content);
+  _initializeFile() {
+    let extension = 'yaml';
+    let postfix = moment((new Date)).format('YYYY-MM-DD--HH.mm.ss.SSSS');
+    let number = 0;
+    let fileName = pathlib.join(this.options.dir, `log--${postfix}.${number}.${extension}`);
+    while (fslib.existsSync(fileName)) {
+      number += 1;
+      fileName = pathlib.join(this.options.dir, `log--${postfix}.${number}.${extension}`);
     }
-    return content;
-  }
-
-  _stringify(content) {
-    if (this.options.format === 'json') {
-      return JSON.stringify(content);
-    } else if (this.options.format === 'yaml') {
-      return YAML.stringify(content);
-    }
-    return content;
-  }
-
-  async initialize() {
-    if (!this.options.filePath) return;
-    await fslib.mkdirs(this.options.dir);
-    let fd = await fslib.open(this.options.filePath, 'a+');
-    let content = await fslib.readFile(fd, { encoding: 'utf8' });
-    if (content.length === 0) {
-      this.logBuffer = [];
-    } else {
-      try {
-        this.logBuffer = this._parse(content);
-      } catch (err) {
-        console.log("Corrupted Log");
-        await fslib.close(fd);
-        throw err;
+    this._mirrorFilePath = fileName;
+    let header = {
+      unixDatetimeStamp: (new Date()).getTime(),
+      type: 'meta',
+      data: {
+        event: 'logging-started'
       }
-      if ((typeof (this.logBuffer) !== 'object') && Array.isArray(this.logBuffer)) {
-        throw new Error("Corrupted log");
-        await fslib.close(fd);
-      }
-    }
-    await fslib.close(fd);
+    };
+    fslib.writeFileSync(this._mirrorFilePath, this._stringify([header]), { encoding: 'utf8', flag: 'a' });
   }
 
-  _saveToDisk(entry) {
-    if (!this.options.filePath) return;
-    if (!this.options.logStandardOutputToFile) return;
-    this.logBuffer.unshift(entry);
-    let data = this._stringify(this.logBuffer, null, 2);
-    fslib.writeFileSync(this.options.filePath, data);
-    // TODO: Proper queuing and async commits
-    // fslib.writeFileSync(this.options.filePath, data, (err) => {
-    //   if (err) return console.error(err);
-    // });
+  initialize() {
+    if (this.options.mirrorToFile) {
+      this._initializeFile();
+    }
+  }
+
+  _commit(entry) {
+    // TODO: queing mechanism.
+    if (this._mirrorFilePath) {
+      fslib.writeFileSync(this._mirrorFilePath, this._stringify([entry]), { encoding: 'utf8', flag: 'a' });
+    }
   }
 
   silent(...args) {
@@ -105,7 +75,7 @@ class Logger {
       type: 'log',
       data: args
     };
-    this._saveToDisk(entry);
+    this._commit(entry);
   }
 
   log(...args) {
@@ -114,7 +84,7 @@ class Logger {
       type: 'log',
       data: args
     };
-    this._saveToDisk(entry);
+    this._commit(entry);
     if (!this.isMuted) {
       console.log.apply(console, args);
     }
@@ -126,7 +96,7 @@ class Logger {
       type: 'important',
       data: args
     };
-    this._saveToDisk(entry);
+    this._commit(entry);
     if (!this.isMuted) {
       console.log.apply(console, ['IMPORTANT'].concat(args));
     }
@@ -142,7 +112,7 @@ class Logger {
       type: 'info',
       data: args
     };
-    this._saveToDisk(entry);
+    this._commit(entry);
     if (!this.isMuted) {
       console.log.apply(console, ['INFO'].concat(args));
     }
@@ -157,7 +127,7 @@ class Logger {
       code: err.code,
       stack: err.stack
     };
-    this._saveToDisk(entry);
+    this._commit(entry);
     if (!this.isMuted) {
       console.error(err);
     }

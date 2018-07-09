@@ -33,11 +33,7 @@ class ConfigLoader {
         }).required(),
       }),
       log: Joi.object().keys({
-        logStandardOutputToFile: Joi.boolean().required(),
-        logErrorOutputToFile: Joi.boolean().required(),
-        logStandardOutputToConsole: Joi.boolean().required(),
-        logErrorOutputToConsole: Joi.boolean().required(),
-        patchConsoleObject: Joi.boolean().required(),
+        mirrorToFile: Joi.boolean().required(),
         dir: Joi.string().max(1024).required(),
         format: Joi.string().max(1024).required(),
       }),
@@ -81,18 +77,17 @@ class ConfigLoader {
     return pathlib.join(homeDirPath, "/torque-config.json");
   }
 
-  static _loadFromFile(file, cbfn) {
-    fslib.readFile((file || 'NONEXISTENT'), { encoding: 'utf8' }, (err, data) => {
-      if (err) return cbfn(err);
-      cbfn(null, data);
-    });
+  static _loadFromFile(file) {
+    return fslib.readFileSync((file || 'NONEXISTENT'), { encoding: 'utf8' })
   }
 
-  static _doesFileExist(file, cbfn) {
-    fslib.stat(file, (err, stats) => {
-      if (err) return cbfn(false);
-      return cbfn(true);
-    });
+  static _doesFileExist(file) {
+    try {
+      fslib.statSync((file || 'NONEXISTENT'));
+    } catch (ex) {
+      return false;
+    }
+    return true;
   }
 
   static _validateConfig(config) {
@@ -108,29 +103,26 @@ class ConfigLoader {
     return [(error || null), config];
   }
 
-  static _readConfig(path, isMuted, mode, cbfn) {
-    this._loadFromFile(path, (err, config) => {
-      if (err) return cbfn(err);
-      [err, config] = this._validateConfig(config);
-      if (err) return cbfn(err);
-      if (mode !== 'production' && !isMuted) {
-        console.log('(config)> Final config:\n' + JSON.stringify(config, null, 2));
-      }
-      return cbfn(null, config);
-    });
+  static _readConfig(path, isMuted, mode) {
+    let config = this._loadFromFile(path);
+    let err;
+    [err, config] = this._validateConfig(config);
+    if (err) throw err;
+    if (mode !== 'production' && !isMuted) {
+      console.log('(config)> Final config:\n' + JSON.stringify(config, null, 2));
+    }
+    return config;
   }
 
-  static getComputedConfig(isMuted, mode, cbfn) {
-    this._doesFileExist(this._defaultUserLevelFilePath, (exists) => {
-      if (exists) {
-        this._readConfig(this._defaultUserLevelFilePath, isMuted, mode, cbfn);
-      } else {
-        if (!isMuted) {
-          console.log(`(config)> No user level config found at "${this._defaultUserLevelFilePath}". Falling back to default config.`);
-        }
-        this._readConfig(this._defaultLocalFilePath, isMuted, mode, cbfn);
+  static getComputedConfig(isMuted, mode) {
+    if (this._doesFileExist(this._defaultUserLevelFilePath)) {
+      return this._readConfig(this._defaultUserLevelFilePath, isMuted, mode);
+    } else {
+      if (!isMuted) {
+        console.log(`(config)> No user level config found at "${this._defaultUserLevelFilePath}". Falling back to default config.`);
       }
-    });
+      return this._readConfig(this._defaultLocalFilePath, isMuted, mode);
+    }
   }
 
 }
