@@ -40,11 +40,11 @@
 
       .content-item {
         position: relative;
-        margin: 4px;
-        padding: 8px;
+        margin: 5px;
+        padding: 5px;
         border: 1px solid #eee;
         background-color: #f7f7f7;
-        width: calc(20% - 26px);
+        width: 40%;
         text-align: center;
       }
 
@@ -54,11 +54,14 @@
       }
 
       .content-item .title {
-        font-weight: 300;
         text-align: center;
         margin: 0;
-        padding: 5px 0;
-        font-size: 16px;
+        font-size: 18px;
+      }
+
+      .content-item .caption {
+        text-align: center;
+        font-size: 14px;
       }
 
       .content-item .icon {
@@ -103,7 +106,7 @@
             <div class="icon">
               <iron-icon src="../../images/icons/point-of-service.png"></iron-icon>
             </div>
-            <div class="type body uppercase">[[verses.general.pos]]</div>
+            <div class="type title uppercase">[[verses.general.pos]]</div>
             <div class="type caption secondary">[[verses.outlet.goToPos]]</div>
             <paper-ripple></paper-ripple>
           </div>
@@ -114,7 +117,7 @@
             <div class="icon">
               <iron-icon src="../../images/icons/package-right.png"></iron-icon>
             </div>
-            <div class="type body uppercase">[[defaultInventory.name]] [[verses.outlet.inventory]]</div>
+            <div class="type title uppercase">[[defaultInventory.name]] [[verses.outlet.inventory]]</div>
             <div class="type caption secondary">[[verses.outlet.goToDefaultInventory]]</div>
             <paper-ripple></paper-ripple>
           </div>
@@ -125,7 +128,7 @@
             <div class="icon">
               <iron-icon src="../../images/icons/package-down.png"></iron-icon>
             </div>
-            <div class="type body uppercase">[[returnedInventory.name]] [[verses.outlet.inventory]]</div>
+            <div class="type title uppercase">[[returnedInventory.name]] [[verses.outlet.inventory]]</div>
             <div class="type caption secondary">[[verses.outlet.goToReturnedInventory]]</div>
             <paper-ripple></paper-ripple>
           </div>
@@ -136,7 +139,7 @@
             <div class="icon">
               <iron-icon src="../../images/icons/package-wrapped.png"></iron-icon>
             </div>
-            <div class="type body uppercase">[[damagedInventory.name]] [[verses.outlet.inventory]]</div>
+            <div class="type title uppercase">[[damagedInventory.name]] [[verses.outlet.inventory]]</div>
             <div class="type caption secondary">[[verses.outlet.goToDamagedInventory]]</div>
             <paper-ripple></paper-ripple>
           </div>
@@ -147,7 +150,7 @@
             <div class="icon">
               <iron-icon src="../../images/icons/package-wrapped.png"></iron-icon>
             </div>
-            <div class="type body uppercase">[[verses.outlet.previousSales]]</div>
+            <div class="type title uppercase">[[verses.outlet.previousSales]]</div>
             <div class="type caption secondary">[[verses.outlet.goToPreviousSales]]</div>
             <paper-ripple></paper-ripple>
           </div>
