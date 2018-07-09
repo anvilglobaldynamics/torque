@@ -33,11 +33,7 @@ class ConfigLoader {
         }).required(),
       }),
       log: Joi.object().keys({
-        logStandardOutputToFile: Joi.boolean().required(),
-        logErrorOutputToFile: Joi.boolean().required(),
-        logStandardOutputToConsole: Joi.boolean().required(),
-        logErrorOutputToConsole: Joi.boolean().required(),
-        patchConsoleObject: Joi.boolean().required(),
+        mirrorToFile: Joi.boolean().required(),
         dir: Joi.string().max(1024).required(),
         format: Joi.string().max(1024).required(),
       }),

@@ -22,11 +22,7 @@
     }
   },
   "log": {
-    "logStandardOutputToFile": true,
-    "logErrorOutputToFile": true,
-    "logStandardOutputToConsole": true,
-    "logErrorOutputToConsole": true,
-    "patchConsoleObject": true,
+    "mirrorToFile": true,
     "dir": "./logs",
     "format": "json"
   },

@@ -160,7 +160,7 @@ class Program {
   }
 
   async __initializeLogger() {
-    await logger.initialize();
+    logger.initialize();
     logger.info(`(server)> ${config.baseName} Started in ${mode} mode.`);
     logger.info('(server)> logger initialized.');
     server.setLogger(logger);
