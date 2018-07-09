@@ -42,7 +42,7 @@
           <div class="horizontal layout center">
             <div class="flex">
               <template is="dom-if" if="[[!customer]]">
-                <div class="type secondary body">[[this.verses.pos.noCustomerSelected]]</div>
+                <div class="type secondary body">[[verses.pos.noCustomerSelected]]</div>
               </template>
               <template is="dom-if" if="[[customer]]">
                 <div>
@@ -61,17 +61,18 @@
               </template>
             </div>
           </div>
-          <div class="horizontal layout wrap end-justified m-top-16">
+          <div class="horizontal layout end-justified m-top-16">
             <template is="dom-if" if="[[customer]]">
-              <paper-button raised class="btn btn-danger vertical layout wrap center" on-tap="removeCustomerTapped">
-                <iron-icon icon="delete" class="m-bottom-4"></iron-icon>
-                <div>[[this.verses.pos.removeCustomer]]</div>
+              <paper-button raised class="btn btn-default" on-tap="removeCustomerTapped">
+                [[verses.pos.removeCustomer]]
               </paper-button>
             </template>
-            <paper-button raised class="btn btn-default vertical layout wrap center" on-tap="changeCustomerTapped">
-              <iron-icon icon="search" class="m-bottom-4"></iron-icon>[[this.verses.pos.changeCustomer]]</paper-button>
-            <paper-button raised class="btn primary vertical layout wrap center" on-tap="createCustomerTapped">
-              <iron-icon icon="add" class="m-bottom-4"></iron-icon>[[this.verses.pos.createCustomer]]</paper-button>
+            <paper-button raised class="btn btn-default" on-tap="changeCustomerTapped">
+              [[verses.pos.changeCustomer]]
+            </paper-button>
+            <paper-button raised class="btn primary" on-tap="createCustomerTapped">
+              [[verses.pos.createCustomer]]
+            </paper-button>
           </div>
         </div>
       </template>

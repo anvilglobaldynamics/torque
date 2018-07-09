@@ -85,7 +85,8 @@
         <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.customerSelector.customerNameOrPhoneInputError]] label=[[verses.customerSelector.customerNameOrPhoneInput]] on-keypress="searchFieldKeypressed"></paper-input>
         <paper-icon-button icon="clear" on-tap="cancelTapped"></paper-icon-button>
         <paper-button raised class="primary" on-tap="searchTapped">
-          <iron-icon icon="search" class="m-right-8"></iron-icon>[[verses.general.search]]</paper-button>
+          [[verses.general.search]]
+        </paper-button>
       </div>
 
       <paper-listbox>
