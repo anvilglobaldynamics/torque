@@ -138,7 +138,7 @@ class Program {
 
   async initiateServer(callback) {
     try {
-      config = await promisify(ConfigLoader, ConfigLoader.getComputedConfig, this.muteLogger, mode);
+      config = ConfigLoader.getComputedConfig();
       server = new Server(config, mode);
       database = new DatabaseService(config.db);
       legacyDatabase = new LegacyDatabase(config.db);
@@ -160,7 +160,7 @@ class Program {
   }
 
   async __initializeLogger() {
-    await logger.initialize();
+    logger.initialize();
     logger.info(`(server)> ${config.baseName} Started in ${mode} mode.`);
     logger.info('(server)> logger initialized.');
     server.setLogger(logger);
@@ -196,10 +196,10 @@ class Program {
   }
 
   async __initializeComponents() {
-    await promisify(fixtureManager, fixtureManager.initialize, legacyDatabase);
+    await fixtureManager.initialize(database);
     logger.info('(server)> fixtures initialized.');
 
-    await promisify(templateManager, templateManager.initialize);
+    templateManager.initialize();
     logger.info('(server)> template manager initialized.');
     server.setTemplateManager(templateManager);
 
@@ -213,7 +213,7 @@ class Program {
   }
 
   async __initializeServer() {
-    await promisify(server, server.initialize);
+    await server.initialize();
     logger.info('(server)> server initialized.');
   }
 

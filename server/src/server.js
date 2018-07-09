@@ -22,7 +22,7 @@ class Server {
     this._expressApp = express();
   }
 
-  initialize(cbfn) {
+  async initialize() {
     this._expressApp.settings['x-powered-by'] = false;
     this._expressApp.set('etag', false);
     this._expressApp.use(function (req, res, next) {
@@ -30,52 +30,32 @@ class Server {
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
       next();
     });
-    this._initializeWebServer(() => {
-      this._initializeWebsocket(() => {
-        return cbfn();
-      });
-    });
+    await this._initializeWebServer();
+    this._initializeWebsocket();
   }
 
-  _initializeWebServer(cbfn) {
-    if (this.config.server.ssl.enabled) {
-      this._getSslDetails(sslDetals => {
+  _initializeWebServer() {
+    return new Promise((accept, reject) => {
+      if (this.config.server.ssl.enabled) {
+        let sslDetals = this._getSslDetails();
         this._webServer = https.createServer(sslDetals, this._expressApp);
         this._webServer.listen(this._port, () => {
           this.logger.info("(server)> https server listening on port", this._port);
-          return cbfn();
+          return accept();
         });
-      })
-    } else {
-      this._webServer = http.createServer(this._expressApp);
-      this._webServer.listen(this._port, () => {
-        this.logger.info("(server)> http server listening on port", this._port);
-        return cbfn();
-      });
-    }
-  }
-
-  _getSslDetails(cbfn) {
-    let { key, cert, caBundle } = this.config.server.ssl;
-    key = fs.readFileSync(key, 'utf8');
-    cert = fs.readFileSync(cert, 'utf8');
-    caBundle = fs.readFileSync(caBundle, 'utf8');
-    let ca = [];
-    let buffer = [];
-    for (let line of caBundle.split('\n')) {
-      buffer.push(line);
-      if (line.indexOf('-END CERTIFICATE-') > -1) {
-        ca.push(buffer.join('\n'));
-        buffer = [];
+      } else {
+        this._webServer = http.createServer(this._expressApp);
+        this._webServer.listen(this._port, () => {
+          this.logger.info("(server)> http server listening on port", this._port);
+          return accept();
+        });
       }
-    }
-    return cbfn({ key, cert, ca });
+    });
   }
 
-  _initializeWebsocket(cbfn) {
+  _initializeWebsocket() {
     this._wsServer = new WebSocket.Server({ server: this._webServer });
     this._wsApiList = [];
-
     this.logger.info("(server)> websocket server listening on port", this._websocketPort);
 
     this._wsServer.on('connection', (ws, req) => {
@@ -122,8 +102,6 @@ class Server {
         }
       });
     });
-
-    return cbfn();
   }
 
   setLogger(logger) {
