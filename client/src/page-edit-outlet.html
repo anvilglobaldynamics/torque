@@ -22,7 +22,6 @@
 <dom-module id="page-edit-outlet">
   <template>
     <style include="shared-styles">
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -146,9 +145,15 @@
       }
 
       _processCreateOutlet({ name, phone, contactPersonName, physicalAddress }) {
+        let organizationId;
+        if ('fromOrganizationCreatePage' in this.params) {
+          organizationId = this.params.fromOrganizationCreatePage;
+        } else {
+          organizationId = this.app.organization.id;
+        }
         let data = {
           name, phone, contactPersonName, physicalAddress,
-          organizationId: this.app.organization.id
+          organizationId
         };
         this.app.callAddOutletApi(data, (err, response) => {
           if (err) return;
