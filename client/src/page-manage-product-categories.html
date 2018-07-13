@@ -89,6 +89,10 @@
             type: Object,
             value: null,
             observer: 'pageChanged'
+          },
+          productCategory: {
+            type: Object,
+            value: null
           }
         };
       }
@@ -159,6 +163,7 @@
 
       _informMoving(isMoving) {
         this.isAMovingGoingOn = isMoving;
+        if (!isMoving && this.isBeingMoved) this.isBeingMoved = false;
         this.elemAll('product-category').forEach(el => el._informMoving(isMoving));
       }
 
@@ -320,6 +325,10 @@
 
       _movingConfirmed(targetProductCategoryId) {
         let productCategory = this.rawProductCategoryList.find(({ id }) => id === this.whichProductCategoryId);
+        if (productCategory.parentProductCategoryId === targetProductCategoryId) {
+          this.app.refreshCurrentPage();
+          return;
+        }
         this._moveProductCategory(productCategory, targetProductCategoryId, () => {
           this.app.refreshCurrentPage();
         });
@@ -338,6 +347,10 @@
 
       createTapped(e = null) {
         return this.app.navigateTo('/edit-product-category');
+      }
+
+      _refresh() {
+
       }
 
       // region: misc =================================
