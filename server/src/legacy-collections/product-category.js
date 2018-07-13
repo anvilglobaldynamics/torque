@@ -1,4 +1,15 @@
 const { LegacyCollection } = require('./../legacy-collection-base');
+
+/* =================================================================
++++++++++++++                   WARNING                +++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++ This is a LegacyCollection. It uses async callbacks. New APIs  ++
+++ should not be using this. Even when using with legacy APIs, if ++
+++ you make a change, pleaase replicate the change in the         ++
+++ non-legacy Collection of the same name.                        ++
+++ Talk to @iShafayet if unsure.                                  ++
+================================================================= */
+
 const Joi = require('joi');
 
 exports.ProductCategoryCollection = class extends LegacyCollection {
