@@ -284,8 +284,8 @@
             <a href="[[authorWebsite]]">[[authorName]]</a>
           </div>
           <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
-          <span class="extra-small">build
-            <span id="build-number">71</span>
+          <span class="extra-small" on-click="buildNumberTapped">build
+            <span id="build-number">[[__deploy.build]]</span>
           </span>
           <br>
           <br>
@@ -313,6 +313,17 @@
 
       static get properties() {
         return {
+          __deploy: {
+            type: Object,
+            value: () => {
+              '%__deploy-start'
+              return {
+                build: 71,
+                datetimeStamp: 1531467818463,
+              }
+              '%__deploy-end'
+            }
+          },
           appVersion: {
             type: String,
             value: '0.0.0'
@@ -608,6 +619,10 @@
           return 'language-active';
         }
         return '';
+      }
+
+      buildNumberTapped(e = null) {
+        this.showAlertMessage("Build Details", "Released on: " + new Date(this.__deploy.datetimeStamp));
       }
 
     }
