@@ -61,7 +61,9 @@
     "product": "পণ্য",
     "return": "ফেরত",
     "by": "দ্বারা",
-    "cancel": "বাতিল"
+    "cancel": "বাতিল",
+    "organization": "সংস্থা",
+    "user": "ব্যাবহারকারি"
   },
   "login": {
     "forgotPassword": "আপনার পাসওয়ার্ড ভুলে গেছেন?",

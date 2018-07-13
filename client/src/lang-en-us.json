@@ -61,7 +61,9 @@
     "product": "Product",
     "return": "Return",
     "by": "by",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "organization": "Organization",
+    "user": "User"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
