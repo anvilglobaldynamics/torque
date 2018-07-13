@@ -472,7 +472,9 @@
     "paidAmountInput": "পরিশোধিত পরিমাণ",
     "paidAmountInputError": "একটি বৈধ নম্বর লিখুন",
     "changeAmount": "ফেরত পরিমান",
-    "confirmSales": "বিক্রয় নিশ্চিত করুন"
+    "confirmSales": "বিক্রয় নিশ্চিত করুন",
+    "sellingPrice": "বিক্রি দাম",
+    "hasDiscount": "ছাড় আছে"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",

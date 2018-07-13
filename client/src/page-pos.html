@@ -323,8 +323,6 @@
           changeAmount,
         } = this.payment;
 
-        console.log(this.productList);
-
         totalAmount = this.productList.reduce((sum, product) => {
           let { salePrice, count, discountType, discountValue } = product;
 
