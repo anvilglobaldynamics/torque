@@ -36,8 +36,17 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <p class="page-subtitle">
+        [[inventoryContainerName]] - [[inventoryName]]
+      </p>
+
       <div class="card vertical layout">
         <div class="list">
+
+          <template is="dom-if" if="[[!productList.length]]">
+            [[verses.inventory.noProductsInInventory]]
+          </template>
+
           <template is="dom-repeat" items="[[productList]]" as="product">
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
@@ -93,6 +102,14 @@
 
       static get properties() {
         return {
+          inventoryContainerName: {
+            type: String,
+            value: ''
+          },
+          inventoryName: {
+            type: String,
+            value: ''
+          },
           selectedProductCount: {
             type: Number,
             value: 0
@@ -134,6 +151,7 @@
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.selectedProductCount = 0;
         this.app.popPageTitle();
       }
 
@@ -154,8 +172,10 @@
 
       _processInventory(cbfn) {
         this._fetchInventory(({ productList, matchingProductList, matchingProductCategoryList, inventoryContainerDetails, inventoryDetails }) => {
-          this.app.popPageTitle();
-          this.app.pushPageTitle(`${inventoryContainerDetails.inventoryContainerName} - ${inventoryDetails.inventoryName}`);
+          
+          this.inventoryContainerName = inventoryContainerDetails.inventoryContainerName;
+          this.inventoryName = inventoryDetails.inventoryName;
+
           let productMap = {};
           matchingProductList.forEach(product => productMap[String(product.id)] = product);
           let productCategoryMap = {};

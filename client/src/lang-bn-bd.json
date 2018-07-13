@@ -538,6 +538,7 @@
     "moveToInventory": "পণ্য তালিকায় সরান",
     "moveSelected": "নির্বাচিত সরান",
     "addProductsBatchToInventory": "গোছাতে পণ্য তালিকায় যোগ করুন",
-    "addProducts": "পণ্য যোগ করুন"
+    "addProducts": "পণ্য যোগ করুন",
+    "noProductsInInventory": "এই পণ্য তালিকায় কোন পণ্য নেই।"
   }
 }

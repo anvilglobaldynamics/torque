@@ -536,6 +536,7 @@
     "moveToInventory": "Move to Inventory",
     "moveSelected": "Move Selected",
     "addProductsBatchToInventory": "Add products to this inventory in batch.",
-    "addProducts": "Add Products"
+    "addProducts": "Add Products",
+    "noProductsInInventory": "No products in this Inventory."
   }
 }
