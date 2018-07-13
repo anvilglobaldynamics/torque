@@ -97,8 +97,8 @@
     "outlets": "Outlets",
     "warehouses": "Warehouses",
     "productCategories": "Product Categories",
-    "sales": "Sales",
-    "salesReturn": "Sales Return",
+    "sales": "Sales Records",
+    "salesReturn": "Sales Return Records",
     "customers": "Customers",
     "profile": "Profile",
     "reports": "Reports",
@@ -371,7 +371,7 @@
     "creditedAmountInput": "Credited Amount (amount that has been returned to the customer)",
     "creditedAmountInputError": "Please enter a valid number",
     "addSalesReturn": "Add Sales Return",
-    "manageSalesReturnTitle": "Manage Sales Return",
+    "manageSalesReturnTitle": "Sales Return Record",
     "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
     "removeCustomer": "Remove Customer",
     "changeCustomer": "Change Customer",
@@ -386,7 +386,7 @@
     "product": "Product"
   },
   "sales": {
-    "manageSalesTitle": "Manage Sales",
+    "manageSalesTitle": "Sales Record",
     "billed": "Billed",
     "products": "product(s)",
     "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
