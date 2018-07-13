@@ -8,21 +8,30 @@ exports.updateBuildNumber = (rootDir, filePath) => {
 
   let contents = fs.readFileSync(absolutePath, 'utf8');
 
-  let str = '<span id="build-number">'
-  let index1 = contents.indexOf(str);
-  let index2 = contents.indexOf('</span>');
+  let str = '%__deploy-start';
+  let index0 = contents.indexOf(str);
+  let index1 = contents.indexOf('{', index0);
+  let index2 = contents.indexOf('}', index1);
 
-  let left = contents.substring(0, index1 + str.length);
-  let middle = contents.substring(index1 + str.length, index2);
-  let right = contents.substr(index2);
+  let left = contents.substring(0, index1);
+  let middle = contents.substring(index1, index2 + 1);
+  let right = contents.substr(index2 + 1);
 
-  let foundNumber = middle;
+  // console.log("|" + right + "|");
+  // process.exit();
+
+  let object = JSON.parse(middle);
+
+  let foundNumber = object.build;
   console.log("PREVIOUS BUILD NUMBER", foundNumber);
 
-  let newNumber = parseInt(foundNumber) + 1;
+  let newNumber = parseInt(String(foundNumber)) + 1;
   console.log("NEW BUILD NUMBER", newNumber);
 
-  let modifiedContents = left + newNumber + right;
+  object.build = newNumber;
+  object.datetimeStamp = (new Date).getTime();
+
+  let modifiedContents = left + JSON.stringify(object) + right;
 
   fs.writeFileSync(absolutePath, modifiedContents);
 }
