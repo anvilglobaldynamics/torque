@@ -62,7 +62,7 @@
             });
             return;
           }
-          if (mode === 'development') {
+          if (mode === 'development' && (!localStorage.getItem('nodebug'))) {
             console.log(`API/api=${path}`, data, response);
           }
           return _cbfn(null, response);

@@ -3,7 +3,7 @@ let cryptolib = require('crypto');
 
 exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
-  _expireUserWhenFired({ userId }, cbfn) {
+  _expireUserSessionRemotely({ userId }, cbfn) {
     this.legacyDatabase.session.expireByUserIdWhenFired({ userId }, (err) => {
       if (err) return this.fail(err);
       // FIXME: use ensureUpdate if required

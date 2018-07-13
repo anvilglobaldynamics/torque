@@ -34,6 +34,23 @@ class Server {
     this._initializeWebsocket();
   }
 
+  _getSslDetails() {
+    let { key, cert, caBundle } = this.config.server.ssl;
+    key = fs.readFileSync(key, 'utf8');
+    cert = fs.readFileSync(cert, 'utf8');
+    caBundle = fs.readFileSync(caBundle, 'utf8');
+    let ca = [];
+    let buffer = [];
+    for (let line of caBundle.split('\n')) {
+      buffer.push(line);
+      if (line.indexOf('-END CERTIFICATE-') > -1) {
+        ca.push(buffer.join('\n'));
+        buffer = [];
+      }
+    }
+    return { key, cert, ca };
+  }
+
   _initializeWebServer() {
     return new Promise((accept, reject) => {
       if (this.config.server.ssl.enabled) {

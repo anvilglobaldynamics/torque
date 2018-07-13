@@ -2,8 +2,9 @@ let { LegacyApi } = require('./../legacy-api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
+let { userCommonMixin } = require('./mixins/user-common');
 
-exports.EditEmploymentApi = class extends collectionCommonMixin(LegacyApi) {
+exports.EditEmploymentApi = class extends userCommonMixin(collectionCommonMixin(LegacyApi)) {
 
   get autoValidates() { return true; }
 
@@ -26,7 +27,7 @@ exports.EditEmploymentApi = class extends collectionCommonMixin(LegacyApi) {
         PRIV_ADD_USER: Joi.boolean().required(),
         PRIV_MAKE_USER_AN_OWNER: Joi.boolean().required(),
         PRIV_MODIFY_USER_PRIVILEGES: Joi.boolean().required(),
-    
+
         PRIV_ACCESS_POS: Joi.boolean().required(),
         PRIV_VIEW_SALES: Joi.boolean().required(),
         PRIV_MODIFY_SALES: Joi.boolean().required(),
@@ -36,21 +37,21 @@ exports.EditEmploymentApi = class extends collectionCommonMixin(LegacyApi) {
 
         PRIV_VIEW_SALES_RETURN: Joi.boolean().required(),
         PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
-    
+
         PRIV_VIEW_ALL_INVENTORIES: Joi.boolean().required(),
         PRIV_MODIFY_ALL_INVENTORIES: Joi.boolean().required(),
         PRIV_TRANSFER_ALL_INVENTORIES: Joi.boolean().required(),
         PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: Joi.boolean().required(),
-    
+
         PRIV_VIEW_ALL_OUTLETS: Joi.boolean().required(),
         PRIV_MODIFY_ALL_OUTLETS: Joi.boolean().required(),
-    
+
         PRIV_VIEW_ALL_WAREHOUSES: Joi.boolean().required(),
         PRIV_MODIFY_ALL_WAREHOUSES: Joi.boolean().required(),
-    
+
         PRIV_VIEW_ORGANIZATION_STATISTICS: Joi.boolean().required(),
         PRIV_MODIFY_ORGANIZATION: Joi.boolean().required(),
-    
+
         PRIV_VIEW_CUSTOMER: Joi.boolean().required(),
         PRIV_ADD_CUSTOMER_DURING_SALES: Joi.boolean().required(),
         PRIV_MODIFY_CUSTOMER: Joi.boolean().required(),
@@ -77,7 +78,11 @@ exports.EditEmploymentApi = class extends collectionCommonMixin(LegacyApi) {
   _updateEmployment({ employmentId, isActive, role, designation, companyProvidedId, privileges }, cbfn) {
     this.legacyDatabase.employment.update({ employmentId }, { isActive, role, designation, companyProvidedId, privileges }, (err, wasUpdated) => {
       if (!this._ensureUpdate(err, wasUpdated, "outlet")) return;
-      return cbfn();
+      this.legacyDatabase.employment.getEmploymentById({ employmentId }, (err, employment) => {
+        this._expireUserSessionRemotely({ userId: employment.userId }, () => {
+          return cbfn();
+        });
+      });
     });
   }
 

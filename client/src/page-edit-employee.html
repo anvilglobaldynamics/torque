@@ -24,7 +24,6 @@
 <dom-module id="page-edit-employee">
   <template>
     <style include="shared-styles">
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -143,14 +142,27 @@
           employmentId: this.editingEmployee.id
         };
 
-        this.app.callEditEmploymentApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error, 'editEmployeeForm');
-          let message = this.app.verses.employee.employeeUpdated;
-          this.app.showToast(message, _ => {
-            this.backButtonOnTopBarPressed();
+        const call = () => {
+          this.app.callEditEmploymentApi(data, (err, response) => {
+            if (err) return;
+            if (response.hasError) return this.onApiError(response.error, 'editEmployeeForm');
+            let message = this.app.verses.employee.employeeUpdated;
+            this.app.showToast(message, _ => {
+              this.backButtonOnTopBarPressed();
+            });
           });
-        });
+        }
+
+        if (this.editingEmployee.userId === this.app.user.id) {
+          // TODO: Translate
+          this.app.showModalConfirmation("Please confirm.", "Since you are editing yourself, you will be logged out after saving your changes. Do you wish to save?", (answer) => {
+            if (answer) call();
+          });
+        } else {
+          call();
+        }
+
+
       }
 
       // region: ui =================================

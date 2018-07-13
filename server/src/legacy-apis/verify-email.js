@@ -19,7 +19,8 @@ exports.VerifyEmailApi = class extends LegacyApi {
 
   _showSuccess() {
     let { clientUrl } = this.server.config.branding;
-    let body = `Congratulations. You have successfully verified your email address for ${clientUrl}. You can close this window.`
+    let body = `Congratulations. You have successfully verified your email address for <a href="${clientUrl}">${clientUrl}</a>. <br><br>\
+                You can safely close this window or click the link above to open the web app on this device.`
     this.sendGenericHtmlMessage("Email Verification Successful", body);
   }
 

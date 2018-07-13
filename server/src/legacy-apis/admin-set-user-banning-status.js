@@ -23,7 +23,7 @@ exports.AdminSetUserBanningStatusApi = class extends userCommonMixin(collectionC
   _updateUserBanningStatus({ isBanned, userId }, cbfn) {
     this.legacyDatabase.user.updateBanningStatus({ userId }, { isBanned }, (err, wasUpdated) => {
       if (!this._ensureUpdate(err, wasUpdated, "user")) return;
-      this._expireUserWhenFired({ userId }, () => {
+      this._expireUserSessionRemotely({ userId }, () => {
         return cbfn();
       });
     });
