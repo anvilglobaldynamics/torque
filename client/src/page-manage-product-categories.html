@@ -157,9 +157,9 @@
         this.isBeingMoved = true;
       }
 
-      _informMoving() {
-        this.isAMovingGoingOn = true;
-        this.elemAll('product-category').forEach(el => el._informMoving());
+      _informMoving(isMoving) {
+        this.isAMovingGoingOn = isMoving;
+        this.elemAll('product-category').forEach(el => el._informMoving(isMoving));
       }
 
       _movingConfirmed(productCategoryId) {
@@ -260,6 +260,7 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.isAMovingGoingOn = false;
+        this.elemAll('product-category').forEach(el => el._informMoving(false));
         this.productCategoryList = [];
         this.app.popPageTitle();
       }
@@ -314,7 +315,7 @@
       _movingInitiated(whichProductCategoryId) {
         this.whichProductCategoryId = whichProductCategoryId;
         this.isAMovingGoingOn = true;
-        this.elemAll('product-category').forEach(el => el._informMoving());
+        this.elemAll('product-category').forEach(el => el._informMoving(true));
       }
 
       _movingConfirmed(targetProductCategoryId) {
