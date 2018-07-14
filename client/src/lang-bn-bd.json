@@ -433,7 +433,7 @@
     "warehouseDeleted": "গুদাম মুছে ফেলা হয়েছে",
     "contactPerson": "যোগাযোগের ব্যাক্তি",
     "contactNumber": "যোগাযোগের ফোন",
-    "warehouseInventories": "এই গুদাম নিম্নলিখিত পণ্য তালিকা আছে।",
+    "warehouseInventories": "এই গুদাম নিম্নলিখিত পণ্য তালিকা আছে",
     "inventory": "পণ্য তালিকা",
     "goToDefaultInventory": "এটি প্রধান পণ্য তালিকা।",
     "goToReturnedInventory": "ফেরত আসা পণ্য এখানে যায়।",

@@ -431,7 +431,7 @@
     "warehouseDeleted": "Warehouse has been deleted",
     "contactPerson": "Contact Person",
     "contactNumber": "Contact Number",
-    "warehouseInventories": "This warehouse has the following inventories.",
+    "warehouseInventories": "This warehouse has the following inventories",
     "inventory": "Inventory",
     "goToDefaultInventory": "This is the main inventory.",
     "goToReturnedInventory": "Products that are returned by the customer go in here.",
