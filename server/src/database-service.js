@@ -1,6 +1,8 @@
 
 const { DatabaseEngine } = require('./database-engine');
 
+const { Collection } = require('./collection-base');
+
 const { AdminSessionCollection } = require('./collections/admin-session');
 const { CustomerCollection } = require('./collections/customer');
 const { EmailVerificationRequestCollection } = require('./collections/email-verification-request');
@@ -46,6 +48,22 @@ class DatabaseService {
     this.sesssion = new SesssionCollection(this.engine, this);
     this.user = new UserCollection(this.engine, this);
     this.warehouse = new WarehouseCollection(this.engine, this);
+    /** @type {[Collection]} */
+    this.collectionList = Object.keys(this).filter(key => this[key] instanceof Collection).map(key => this[key]);
+  }
+
+  async checkIntegrity(logger) {
+    logger.log("Database Integrity Check Started.");
+    for (let collection of this.collectionList) {
+      logger.log("Checking:", collection.name);
+      let { issues } = await collection.checkIntegrity(logger);
+      logger.log(`Found ${issues.length} issues.`);
+      issues.forEach(({ doc, ex }) => {
+        logger.log(doc);
+        logger.log(ex);
+      });
+    }
+    logger.log("Database Integrity Check Finished.");
   }
 
 }

@@ -28,7 +28,7 @@ class Logger {
 
   _stringify(content) {
     try {
-      return YAML.safeDump(content, { skipInvalid: true });
+      return YAML.safeDump(content, { skipInvalid: false });
     } catch (ex) {
       return YAML.safeDump({ jsonFallback: JSON.stringify(content) });
     }

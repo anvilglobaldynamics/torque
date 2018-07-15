@@ -103,10 +103,10 @@ class Collection {
       };
       let docList = await this._db.find(targetCollection, query);
       if (docList.length < 1) {
-        throw new CodedError('FOREIGN_KEY_VIOLATION', `FOREIGN_KEY_VIOLATION. No ${targetCollection}.${foreignKey} equals to ${doc[referringKey]} but is referred by ${this.collectionName}.${referringKey}`);
+        throw new CodedError('FOREIGN_KEY_VIOLATION', `FOREIGN_KEY_VIOLATION. No ${targetCollection}.${foreignKey} equals to ${doc[referringKey]} but is referred by ${this.name}.${referringKey}`);
       }
       if (docList.length > 1) {
-        throw new CodedError('FOREIGN_KEY_VIOLATION', `FOREIGN_KEY_VIOLATION. More than 1 ${targetCollection}.${foreignKey} equals to ${doc[referringKey]}. Referred by ${this.collectionName}.${referringKey}`);
+        throw new CodedError('FOREIGN_KEY_VIOLATION', `FOREIGN_KEY_VIOLATION. More than 1 ${targetCollection}.${foreignKey} equals to ${doc[referringKey]}. Referred by ${this.name}.${referringKey}`);
       }
       return true;
     }));
@@ -200,6 +200,27 @@ class Collection {
 
   async deleteById({ id }) {
     return await this._delete({ id });
+  }
+
+  // ================== Integrity Checking ================== //
+
+  async checkIntegrity(logger = console) {
+    let docList = await this._find({});
+    let issues = [];
+    let index = 0;
+    for (let doc of docList) {
+      // logger.log(`Checking ${index} out of ${docList.length}`);
+      index += 1;
+      try {
+        await this.__validateDocument(doc, true);
+      } catch (ex) {
+        // logger.log('Found Issue')
+        issues.push({ doc, ex });
+      } finally {
+        // logger.log("Finished");
+      }
+    }
+    return { issues };
   }
 
 }
