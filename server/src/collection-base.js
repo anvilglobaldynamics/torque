@@ -207,19 +207,13 @@ class Collection {
   async checkIntegrity(logger = console) {
     let docList = await this._find({});
     let issues = [];
-    let index = 0;
-    for (let doc of docList) {
-      // logger.log(`Checking ${index} out of ${docList.length}`);
-      index += 1;
+    await Promise.all(docList.map(async doc => {
       try {
         await this.__validateDocument(doc, true);
       } catch (ex) {
-        // logger.log('Found Issue')
         issues.push({ doc, ex });
-      } finally {
-        // logger.log("Finished");
       }
-    }
+    }));
     return { issues };
   }
 
