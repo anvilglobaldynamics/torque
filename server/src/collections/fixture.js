@@ -7,7 +7,11 @@ exports.FixtureCollection = class extends Collection {
   get name() { return 'fixture'; }
 
   get joiSchema() {
-    return Joi.object().keys({});
+    return Joi.object().keys({
+      name: Joi.string(),
+      version: Joi.number(),
+      data: Joi.any()
+    });
   }
 
   get uniqueKeyDefList() {
@@ -30,7 +34,7 @@ exports.FixtureCollection = class extends Collection {
   async getRoleList() {
     return await this._findOne({ name: 'role-list' });
   }
-  
+
   async getPrivilegeList() {
     return await this._findOne({ name: 'privilege-list' });
   }
