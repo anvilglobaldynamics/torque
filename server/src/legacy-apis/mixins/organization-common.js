@@ -14,7 +14,7 @@ exports.organizationCommonMixin = (SuperApiClass) => class extends SuperApiClass
   }
 
   _getOrganizationsThatEmployedUser({ userId }, cbfn, errorCallback) {
-    this.legacyDatabase.employment.getEmploymentsOfUser({ userId }, (err, employmentList) => {
+    this.legacyDatabase.employment.getActiveEmploymentsOfUser({ userId }, (err, employmentList) => {
       if (err) return errorCallback(err);
       let list = employmentList.map((employment) => employment.organizationId);
       this.legacyDatabase.organization.listByIdList({ idList: list }, (err, organizationList) => {

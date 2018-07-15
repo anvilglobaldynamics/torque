@@ -314,7 +314,7 @@ class LegacyApi {
         let organizationId = organization.id;
         this.legacyDatabase.employment.getEmploymentOfUserInOrganization({ userId, organizationId }, (err, employment) => {
           if (err) return reject(err);
-          if (!employment) {
+          if (!employment || !employment.isActive) {
             err = new Error(this.verses.organizationCommon.userNotEmployedByOrganization);
             err.code = "USER_NOT_EMPLOYED_BY_ORGANIZATION";
             return reject(err);
