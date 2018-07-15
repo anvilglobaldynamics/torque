@@ -1,7 +1,8 @@
 /* eslint no-console: 0 */
 
 let { promisify } = require('./utils/promisify');
-let { detectMode } = require('./utils/detect-mode.js');
+let { detectMode } = require('./utils/detect-mode');
+let { parseCommandLineParameters } = require('./utils/command-line');
 
 let { Server } = require('./server');
 let { Logger } = require('./logger');
@@ -117,6 +118,8 @@ let config, logger, legacyDatabase, server, emailService, smsService, templateMa
 let database;
 
 let mode = detectMode();
+let params = parseCommandLineParameters();
+console.log(params)
 
 class Program {
 
@@ -151,6 +154,13 @@ class Program {
       await this.__initializeLegacyDatabase();
       await this.__initializeDatabase();
       await this.__initializeComponents();
+      if (params.validate) {
+        await database.checkIntegrity(logger);
+      }
+      if (params.dryRun) {
+        logger.log("Terminating server as it is a dry run.");
+        process.exit(0);
+      }
       await this.__initializeServer();
       await this.__initializeApis();
     } catch (err) {
