@@ -111,40 +111,49 @@
 
       <div class="horizontal layout wrap">
         <div class="card flex info-panel">
-          <div class="title">[[user.fullName]]</div>
+          <div class="title">[[verses.general.user]]: [[user.fullName]]</div>
           <div class="">[[user.email]]</div>
           <div class="">[[user.phone]]</div>
           <div class="">[[organization.employment.designation]] ([[organization.employment.role]])</div>
         </div>
         <div class="card flex info-panel">
-          <div class="title">[[organization.name]]</div>
+          <div class="title">[[verses.general.organization]]: [[organization.name]]</div>
           <div class="">[[organization.email]]</div>
           <div class="">[[organization.phone]]</div>
           <div class="">[[organization.primaryBusinessAddress]]</div>
         </div>
       </div>
-      <div class="horizontal layout wrap">
-        <div class="card flex metrics-box">
-          <div class="value">[[$translateNumber(metrics.totalNumberOfSalesToday, selectedLanguageIdentifier)]]</div>
-          <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesToday, 'countable', selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
-          <div class="item-description">[[verses.home.soldToday]]</div>
+
+      <div class="vartical">
+
+        <div class="horizontal layout wrap">
+          <div class="card flex metrics-box">
+            <div class="value">[[$translateNumber(metrics.totalNumberOfSalesToday, selectedLanguageIdentifier)]]</div>
+            <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesToday, 'countable', selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
+            <div class="item-description">[[verses.home.soldToday]]</div>
+          </div>
+          <div class="card flex metrics-box">
+            <div class="value">[[$translateNumber(metrics.totalAmountSoldToday, selectedLanguageIdentifier)]]</div>
+            <div class="unit">[[settings.monetaryUnit]]</div>
+            <div class="item-description">[[verses.home.soldToday]]</div>
+          </div>
         </div>
-        <div class="card flex metrics-box">
-          <div class="value">[[$translateNumber(metrics.totalAmountSoldToday, selectedLanguageIdentifier)]]</div>
-          <div class="unit">[[settings.monetaryUnit]]</div>
-          <div class="item-description">[[verses.home.soldToday]]</div>
+
+        <div class="horizontal layout wrap">
+          <div class="card flex metrics-box">
+            <div class="value">[[$translateNumber(metrics.totalNumberOfSalesThisMonth, selectedLanguageIdentifier)]]</div>
+            <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable', selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
+            <div class="item-description">[[verses.home.soldThisMonth]]</div>
+          </div>
+          <div class="card flex metrics-box">
+            <div class="value">[[$translateNumber(metrics.totalAmountSoldThisMonth, selectedLanguageIdentifier)]]</div>
+            <div class="unit">[[settings.monetaryUnit]]</div>
+            <div class="item-description">[[verses.home.soldThisMonth]]</div>
+          </div>
         </div>
-        <div class="card flex metrics-box">
-          <div class="value">[[$translateNumber(metrics.totalNumberOfSalesThisMonth, selectedLanguageIdentifier)]]</div>
-          <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable', selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
-          <div class="item-description">[[verses.home.soldThisMonth]]</div>
-        </div>
-        <div class="card flex metrics-box">
-          <div class="value">[[$translateNumber(metrics.totalAmountSoldThisMonth, selectedLanguageIdentifier)]]</div>
-          <div class="unit">[[settings.monetaryUnit]]</div>
-          <div class="item-description">[[verses.home.soldThisMonth]]</div>
-        </div>
+
       </div>
+
     </div>
   </template>
 

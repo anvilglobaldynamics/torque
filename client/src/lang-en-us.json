@@ -61,7 +61,9 @@
     "product": "Product",
     "return": "Return",
     "by": "by",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "organization": "Organization",
+    "user": "User"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -95,8 +97,8 @@
     "outlets": "Outlets",
     "warehouses": "Warehouses",
     "productCategories": "Product Categories",
-    "sales": "Sales",
-    "salesReturn": "Sales Return",
+    "sales": "Sales Records",
+    "salesReturn": "Sales Return Records",
     "customers": "Customers",
     "profile": "Profile",
     "reports": "Reports",
@@ -369,7 +371,7 @@
     "creditedAmountInput": "Credited Amount (amount that has been returned to the customer)",
     "creditedAmountInputError": "Please enter a valid number",
     "addSalesReturn": "Add Sales Return",
-    "manageSalesReturnTitle": "Manage Sales Return",
+    "manageSalesReturnTitle": "Sales Return Record",
     "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
     "removeCustomer": "Remove Customer",
     "changeCustomer": "Change Customer",
@@ -384,7 +386,7 @@
     "product": "Product"
   },
   "sales": {
-    "manageSalesTitle": "Manage Sales",
+    "manageSalesTitle": "Sales Record",
     "billed": "Billed",
     "products": "product(s)",
     "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
@@ -429,7 +431,7 @@
     "warehouseDeleted": "Warehouse has been deleted",
     "contactPerson": "Contact Person",
     "contactNumber": "Contact Number",
-    "warehouseInventories": "This warehouse has the following inventories.",
+    "warehouseInventories": "This warehouse has the following inventories",
     "inventory": "Inventory",
     "goToDefaultInventory": "This is the main inventory.",
     "goToReturnedInventory": "Products that are returned by the customer go in here.",
@@ -472,7 +474,9 @@
     "paidAmountInput": "Paid Amount",
     "paidAmountInputError": "Please enter a valid number",
     "changeAmount": "Change Amount",
-    "confirmSales": "Confirm Sales"
+    "confirmSales": "Confirm Sales",
+    "sellingPrice": "Selling Price",
+    "hasDiscount": "Has Discount"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
@@ -534,6 +538,7 @@
     "moveToInventory": "Move to Inventory",
     "moveSelected": "Move Selected",
     "addProductsBatchToInventory": "Add products to this inventory in batch.",
-    "addProducts": "Add Products"
+    "addProducts": "Add Products",
+    "noProductsInInventory": "No products in this Inventory."
   }
 }

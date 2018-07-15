@@ -215,6 +215,7 @@
         this.app.callGetOutletApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
+          console.log(response);
           return cbfn(response);
         });
       }
