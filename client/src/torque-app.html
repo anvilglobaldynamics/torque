@@ -200,7 +200,7 @@
             <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
             <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
             <hr class="sidebar-divider">
-            
+
 
             <a name="reports" href="#/reports">[[verses.sidebar.reports]]</a>
             <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
@@ -383,6 +383,33 @@
         this.insertExternalTemplate(FxApp.template, '.super-class-insertion-point');
         this.insertExternalTemplate(FxDialogBehavior.template, '.super-class-insertion-point');
         return this.getOwnTemplate();
+      }
+
+      static get observers() {
+        return [
+          'selectedLanguageIdentifierChanged(selectedLanguageIdentifier)'
+        ]
+      }
+
+      selectedLanguageIdentifierChanged(selectedLanguageIdentifier) {
+        if (!selectedLanguageIdentifier) return;
+        // PATCH-START for PolymerFx#FxDialogBehavior
+        this.delay(0, () => {
+          if (selectedLanguageIdentifier === 'bn-bd') {
+            this.elem('#generic-modal-input [dialog-dismiss]').innerHTML = "বাতিল";
+            this.elem('#generic-modal-input [dialog-confirm]').innerHTML = "ঠিক আছে";
+            this.elem('#generic-modal-dialog [dialog-confirm]').innerHTML = "ঠিক আছে";
+            this.elem('#generic-modal-confirmation [dialog-dismiss]').innerHTML = "বাতিল";
+            this.elem('#generic-modal-confirmation [dialog-confirm]').innerHTML = "ঠিক আছে";
+          } else {
+            this.elem('#generic-modal-input [dialog-dismiss]').innerHTML = "Cancel";
+            this.elem('#generic-modal-input [dialog-confirm]').innerHTML = "Okay";
+            this.elem('#generic-modal-dialog [dialog-confirm]').innerHTML = "Okay";
+            this.elem('#generic-modal-confirmation [dialog-dismiss]').innerHTML = "Cancel";
+            this.elem('#generic-modal-confirmation [dialog-confirm]').innerHTML = "Okay";
+          }
+        });
+        // PATCH-END
       }
 
       constructor() {
