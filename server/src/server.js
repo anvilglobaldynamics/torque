@@ -115,7 +115,8 @@ class Server {
           let api = new ApiClass(this, this.legacyDatabase, this.logger, null, null, ws, 'ws', message.requestUid);
           api._prehandlePostOrWsApi(message.body);
         } else {
-          throw new Error("Async APIs are not yet supported.");
+          let api = new ApiClass(this, this.database, this.logger, null, null, ws, 'ws', message.requestUid);
+          api._prehandle(message.body);
         }
       });
     });
@@ -125,7 +126,11 @@ class Server {
     this.logger = logger;
   }
 
-  setDatabase(legacyDatabase) {
+  setDatabase(database) {
+    this.database = database;
+  }
+
+  setLegacyDatabase(legacyDatabase) {
     this.legacyDatabase = legacyDatabase;
   }
 
