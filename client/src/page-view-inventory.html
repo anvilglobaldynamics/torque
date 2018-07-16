@@ -27,9 +27,16 @@
 <dom-module id="page-view-inventory">
   <template>
     <style include="shared-styles">
+      
       paper-dropdown-menu {
         width: 300px;
       }
+
+      .manage-inventory-button {
+        width: 100%;
+        margin: 5px;
+      }
+      
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -55,16 +62,20 @@
                 </div>
                 <div class="description">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]], [[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
               </div>
-              <template is="dom-if" if="[[!product.isSelected]]">
-                <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+
+              <template is="dom-if" if="[[product.count]]">
+                <template is="dom-if" if="[[!product.isSelected]]">
+                  <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+                </template>
+                <template is="dom-if" if="[[product.isSelected]]">
+                  <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.general.count]]">
+                    <div slot="prefix">[[verses.general.selected]]&nbsp;</div>
+                    <div slot="suffix">&nbsp;[[product.unit]]</div>
+                  </paper-input>
+                  <paper-button raised class="primary" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                </template>
               </template>
-              <template is="dom-if" if="[[product.isSelected]]">
-                <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.general.count]]">
-                  <div slot="prefix">[[verses.general.selected]]&nbsp;</div>
-                  <div slot="suffix">&nbsp;[[product.unit]]</div>
-                </paper-input>
-                <paper-button raised class="primary" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
-              </template>
+              
             </div>
           </template>
         </div>
@@ -80,13 +91,13 @@
               </template>
             </paper-listbox>
           </paper-dropdown-menu>
-          <paper-button raised class="primary m-0" on-tap="moveSelectedTapped">[[verses.inventory.moveSelected]]</paper-button>
+          <paper-button raised class="primary m-0 manage-inventory-button" on-tap="moveSelectedTapped">[[verses.inventory.moveSelected]]</paper-button>
         </div>
       </template>
 
       <div class="card">
         <div class="mb-4">[[verses.inventory.addProductsBatchToInventory]]</div>
-        <paper-button raised class="primary m-0" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
+        <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
       </div>
 
     </div>

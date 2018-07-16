@@ -31,7 +31,14 @@
 
 <dom-module id="page-pos">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+    
+    .select-product-button-container paper-button {
+      width: 100%;
+      margin: 5px;
+    }
+    
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -99,7 +106,7 @@
             </div>
           </template>
 
-          <div class="horizontal layout end-justified m-top-16">
+          <div class="select-product-button-container">
             <paper-button raised class="btn primary" on-tap="addProductTapped">[[verses.pos.selectProduct]]</paper-button>
           </div>
 
