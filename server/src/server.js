@@ -165,7 +165,8 @@ class Server {
         let api = new ApiClass(this, this.legacyDatabase, this.logger, req, res, null, 'post');
         api._prehandlePostOrWsApi(req.body);
       } else {
-        throw new Error("Async APIs are not yet supported.");
+        let api = new ApiClass(this, this.database, this.logger, req, res, null, 'post');
+        api._prehandle(req.body);
       }
     });
     this._wsApiList.push({
