@@ -137,6 +137,18 @@ class Logger {
     }
   }
 
+  debug(...args) {
+    let entry = {
+      unixDatetimeStamp: (new Date()).getTime(),
+      type: 'log',
+      data: args
+    };
+    this._commit(entry);
+    if (!this.isMuted) {
+      console.log.apply(console, ['DEBUG'].concat(args));
+    }
+  }
+
 }
 
 exports.Logger = Logger;
