@@ -18,5 +18,17 @@ class CodedError extends ExtendableError {
   }
 }
 
+function throwOnFalsy(value, code, message) {
+  if (!value) {
+    throw new CodedError(code, message);
+  }
+}
+
+function throwOnTruthy(value, code, message) {
+  throwOnFalsy(!value, code, message);
+}
+
 exports.ExtendableError = ExtendableError;
 exports.CodedError = CodedError;
+exports.throwOnFalsy = throwOnFalsy;
+exports.throwOnTruthy = throwOnTruthy;
