@@ -126,6 +126,11 @@
   <template>
     <style include="shared-styles">
 
+      .add-product-button-container paper-button {
+        width: 100%;
+        margin: 5px;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -139,7 +144,7 @@
           </template>
         </div>
       </div>
-      <div class="transparent-card align-right">
+      <div class="add-product-button-container">
         <paper-button raised class="primary m-0" on-tap="addProductsTapped">[[verses.product.addProducts]]</paper-button>
       </div>
 
