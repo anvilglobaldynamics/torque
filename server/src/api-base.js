@@ -17,6 +17,14 @@ const SESSION_DURATION_LIMIT = 15 * 24 * 60 * 60 * 1000;
 
 class Api {
 
+  static mixin(...mixinList) {
+    let Class = Api;
+    for (let mixin of mixinList){
+      Class = mixin(Class);
+    }
+    return Class;
+  }
+
   /**
   * @param {Server} server
   * @param {DatabaseService} database
@@ -409,6 +417,8 @@ class Api {
     }
     return err;
   }
+
+  // region: utility ==========================
 
 }
 
