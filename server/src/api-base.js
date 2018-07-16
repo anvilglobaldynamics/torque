@@ -429,9 +429,9 @@ class Api {
   * @param {String} param.targetKey
   * @param {Function} param.targetKey
   */
-  crossmap({ source, sourceKey, target, onError = null } = {}) {
+  async crossmap({ source, sourceKey, target, onError = null } = {}) {
     let idList = source.map(sourceDoc => sourceDoc[sourceKey]);
-    let targetDocList = this.database[target].listByIdList({ idList });
+    let targetDocList = await this.database[target].listByIdList({ idList });
     if (targetDocList.length < idList.length) {
       idList.forEach(id => {
         if (!targetDocList.find(targetDoc => targetDoc.id === id)) {
@@ -440,7 +440,10 @@ class Api {
         }
       })
     }
-    
+    let map = new WeakMap();
+    source.forEach(sourceDoc => {
+      (!targetDocList.find(targetDoc => targetDoc.id === id))
+    });
   }
 
 }
