@@ -47,7 +47,7 @@
         <form>
           <div class="card vertical layout">
             <paper-input class="editProfileForm--phone" value="{{editProfileForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.editProfile.phoneNumberInputError]] label=[[verses.editProfile.phoneNumberInput]]></paper-input>
-            <paper-input class="editProfileForm--email" value="{{editProfileForm.email}}" required pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.editProfile.emailAddressInputError]] label=[[verses.editProfile.emailAddressInput]]></paper-input>
+            <paper-input class="editProfileForm--email" value="{{editProfileForm.email}}" pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.editProfile.emailAddressInputError]] label=[[verses.editProfile.emailAddressInput]]></paper-input>
 
             <paper-input class="editProfileForm--fullName" value="{{editProfileForm.fullName}}" required minlength="3" error-message=[[verses.editProfile.fullNameInputError]] label=[[verses.editProfile.fullNameInput]]></paper-input>
             <paper-input class="editProfileForm--nid" value="{{editProfileForm.nid}}" label=[[verses.editProfile.NidInput]]></paper-input>
@@ -153,7 +153,9 @@
       }
 
       _processUserEditProfile({ phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
-        email = email.toLowerCase();
+        if (email) {
+          email = email.toLowerCase();
+        }
 
         let data = { phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup };
         
