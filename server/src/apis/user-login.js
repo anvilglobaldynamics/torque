@@ -40,7 +40,7 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
         let diff = Date.now() - createdDatetimeStamp;
         throwOnTruthy(diff > PHONE_VERIFICATION_WINDOW, "USER_REQUIRES_PHONE_VERIFICATION", this.verses.userLoginApi.userRequiresPhoneVerification);
         diff = Math.round(diff / (1000 * 60))
-        warning.push(`You have around ${diff} minutes to verify your phone number "${user.phone}".`);
+        warning.push(`You have less than 1 hour to verify your phone number "${user.phone}".`);
       }
     } else if (emailOrPhone === user.email && !user.isEmailVerified) {
       let emailVerificationRequest = this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email });
