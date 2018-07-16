@@ -136,8 +136,11 @@
         let data = { emailOrPhone };
         
         this.app.callFindUserApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
+          if (err) return;          
+          if (response.hasError) {
+            this.user = null;
+            return this.onApiError(response.error);
+          }
           return cbfn(response.user);
         });
       }
