@@ -119,7 +119,6 @@ let database;
 
 let mode = detectMode();
 let params = parseCommandLineParameters();
-console.log(params)
 
 class Program {
 
