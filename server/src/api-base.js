@@ -19,7 +19,7 @@ class Api {
 
   static mixin(...mixinList) {
     let Class = Api;
-    for (let mixin of mixinList){
+    for (let mixin of mixinList) {
       Class = mixin(Class);
     }
     return Class;
@@ -419,6 +419,29 @@ class Api {
   }
 
   // region: utility ==========================
+
+
+  /**
+  * @param {Object} param
+  * @param {Array} param.source
+  * @param {String} param.sourceKey
+  * @param {Array} param.target
+  * @param {String} param.targetKey
+  * @param {Function} param.targetKey
+  */
+  crossmap({ source, sourceKey, target, onError = null } = {}) {
+    let idList = source.map(sourceDoc => sourceDoc[sourceKey]);
+    let targetDocList = this.database[target].listByIdList({ idList });
+    if (targetDocList.length < idList.length) {
+      idList.forEach(id => {
+        if (!targetDocList.find(targetDoc => targetDoc.id === id)) {
+          let sourceDoc = source.find(sourceDoc => sourceDoc[sourceKey] === id);
+          if (onError) onError(sourceDoc);
+        }
+      })
+    }
+    
+  }
 
 }
 
