@@ -1,21 +1,21 @@
 /* eslint no-console: 0 */
 
-let { promisify } = require('./utils/promisify');
-let { detectMode } = require('./utils/detect-mode');
-let { parseCommandLineParameters } = require('./utils/command-line');
+const { promisify } = require('./utils/promisify');
+const { detectMode } = require('./utils/detect-mode');
+const { parseCommandLineParameters } = require('./utils/command-line');
 
-let { Server } = require('./server');
-let { Logger } = require('./logger');
+const { Server } = require('./server');
+const { Logger } = require('./logger');
 let { LegacyDatabase } = require('./legacy-database');
-let { ConfigLoader } = require('./config-loader');
+const { ConfigLoader } = require('./config-loader');
 const { EmailService } = require('./email-service');
 const { SmsService } = require('./sms-service');
-let { TemplateManager } = require('./template-manager');
-let { FixtureManager } = require('./fixture-manager');
+const { TemplateManager } = require('./template-manager');
+const { FixtureManager } = require('./fixture-manager');
 const { DatabaseService } = require('./database-service');
 
 let { UserRegisterApi } = require('./legacy-apis/user-register');
-let { UserLoginApi } = require('./legacy-apis/user-login');
+const { UserLoginApi } = require('./apis/user-login');
 let { UserLogoutApi } = require('./legacy-apis/user-logout');
 let { VerifyEmailApi } = require('./legacy-apis/verify-email');
 let { VerifyPhoneApi } = require('./legacy-apis/verify-phone');
@@ -179,6 +179,7 @@ class Program {
   async __initializeDatabase() {
     await database.initialize(config.db);
     logger.info('(server)> database services initialized.');
+    server.setDatabase(database);
   }
 
   async __initializeLegacyDatabase() {
@@ -202,7 +203,7 @@ class Program {
     legacyDatabase.registerCollection('salesReturn', SalesReturnCollection);
     legacyDatabase.registerCollection('adminSession', AdminSessionCollection);
     legacyDatabase.registerCollection('outgoingSms', OutgoingSmsCollection);
-    server.setDatabase(legacyDatabase);
+    server.setLegacyDatabase(legacyDatabase);
   }
 
   async __initializeComponents() {
