@@ -17,30 +17,32 @@ exports.GetInventoryListApi = class extends Api {
     });
   }
 
-  get accessControl() {
-    return [{
-      organizationBy: "organizationId",
-      privileges: [
-        "PRIV_VIEW_ALL_INVENTORIES"
-      ]
-    }];
-  }
+  // get accessControl() {
+  //   return [{
+  //     organizationBy: "organizationId",
+  //     privileges: [
+  //       "PRIV_VIEW_ALL_INVENTORIES"
+  //     ]
+  //   }];
+  // }
 
   async __getInventoryList({ organizationId }) {
-    let combinedInventoryList = await this.database.inventory.listByOrganizationId(organizationId);
-    {
-      let inventoryList = combinedInventoryList.filter(inventory => inventory.inventoryContainerType === 'outlet');
-      let map = await this.crossmap({
-        source: inventoryList,
-        sourceKey: 'inventoryContainerId',
-        target: 'outlet',
-        onError: (inventory) => { throw new CodedError("INVENTORY_CONTAINER_NOT_FOUND", "Could not find Inventory Container"); }
-      });
-
-
-
-
-    }
+    let inventoryList = await this.database.inventory.listByOrganizationId({ organizationId });
+    let map = await this.crossmap({
+      source: inventoryList.filter(inventory => inventory.inventoryContainerType === 'outlet'),
+      sourceKey: 'inventoryContainerId',
+      target: 'outlet',
+      onError: (inventory) => { throw new CodedError("INVENTORY_CONTAINER_NOT_FOUND", "Could not find Inventory Container"); }
+    });
+    await this.crossmap({
+      source: inventoryList.filter(inventory => inventory.inventoryContainerType === 'warehouse'),
+      sourceKey: 'inventoryContainerId',
+      target: 'warehouse',
+      onError: (inventory) => { throw new CodedError("INVENTORY_CONTAINER_NOT_FOUND", "Could not find Inventory Container"); },
+      reuseMap: map
+    });
+    inventoryList.forEach(inventory => inventory.inventoryContainerName = map.get(inventory));
+    return inventoryList;
   }
 
   async handle({ body }) {
