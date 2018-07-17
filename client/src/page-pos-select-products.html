@@ -41,7 +41,8 @@
           <template is="dom-repeat" items="[[productList]]" as="product">
             <div class="horizontal layout item center">
               <div class="flex" style="min-width: 128px;">
-                <div class="title">[[product.name]]
+                <div class="title">[[product.name]]</div>
+                <div>
                   <strong>[[product.count]][[product.unit]]</strong>
                 </div>
                 <div class="description">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>

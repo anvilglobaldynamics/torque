@@ -57,10 +57,12 @@
           <template is="dom-repeat" items="[[productList]]" as="product">
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
-                <div class="title">[[product.name]]
+                <div class="title">[[product.name]]</div>
+                <div>
                   <strong>[[product.count]][[product.unit]]</strong>
                 </div>
-                <div class="description">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]], [[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                <div class="description">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                <div class="description">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
               </div>
 
               <template is="dom-if" if="[[product.count]]">
@@ -69,7 +71,7 @@
                 </template>
                 <template is="dom-if" if="[[product.isSelected]]">
                   <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.general.count]]">
-                    <div slot="prefix">[[verses.general.selected]]&nbsp;</div>
+                    <!-- <div slot="prefix">[[verses.general.selected]]&nbsp;</div> -->
                     <div slot="suffix">&nbsp;[[product.unit]]</div>
                   </paper-input>
                   <paper-button raised class="primary" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
