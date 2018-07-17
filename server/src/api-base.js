@@ -3,7 +3,7 @@ const Joi = require('joi');
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 const baselib = require('baselib');
-const { CodedError } = require('./utils/coded-error');
+const { CodedError, throwOnFalsy } = require('./utils/coded-error');
 const { Server } = require('./server');
 const { DatabaseService } = require('./database-service');
 const { Logger } = require('./logger');
@@ -19,7 +19,7 @@ class Api {
 
   static mixin(...mixinList) {
     let Class = Api;
-    for (let mixin of mixinList){
+    for (let mixin of mixinList) {
       Class = mixin(Class);
     }
     return Class;
@@ -178,7 +178,7 @@ class Api {
     }
   }
 
-  async __handleAuthentication() {
+  async __handleAuthentication(body) {
     let { apiKey } = body;
     if (this.authenticationLevel === 'admin') {
       let username = await this.authenticate(body);
@@ -272,99 +272,65 @@ class Api {
     }
   }
 
-  __processAccessControlQuery(body, queryObject, cbfn) {
-    let { from, query, select } = queryObject;
-    query = query(body);
-    this.legacyDatabase.findOne(from, query, (err, doc) => {
-      if (err) return cbfn(err);
-      cbfn(null, doc);
-    });
-  }
-
-  __processAccessControlQueryArray(body, queryObjectArray, cbfn) {
-    baselib.asyncForIn(queryObjectArray).forEach((next, queryObject, index) => {
-      this.__processAccessControlQuery(body, queryObject, (err, doc) => {
-        if (err) return cbfn(err);
-        if (!doc || !(queryObject.select in doc)) {
+  async __getOrganizationForAccessControlRule(userId, body, rule) {
+    if (!('organizationBy' in rule)) {
+      throw new CodedError("INVALID_RULE_IN_ACCESS_CONTROL", "Expecpted accessControl to have 'organizationBy'");
+    }
+    let { organizationBy } = rule;
+    let organization;
+    if (typeof (organizationBy) === "function") {
+      organization = await organizationBy(this, userId, body);
+      throwOnFalsy(organization, "ORGANIZATION_INVALID", "organizationBy function did not return valid organization.");
+    } else if (typeof (organizationBy) === "string") {
+      let id = body[organizationBy];
+      organization = await this.database.organization.findById({ id })
+      throwOnFalsy(organization, "ORGANIZATION_INVALID", "organizationBy string does not equal any organization id");
+    } else {
+      if (!Array.isArray(organizationBy)) {
+        organizationBy = [organizationBy];
+      }
+      let queryObjectArray = organizationBy;
+      for (let queryObject of queryObjectArray) {
+        let { from, query, select } = queryObject;
+        query = query(body);
+        let doc = await this.database.engine.findOne(from, query);
+        if (!doc || !(select in doc)) {
           if ('errorCode' in queryObject) {
-            err = new Error(`Access Control Rejection. Unable to locate ${queryObject.select} from ${queryObject.from}`);
-            err.code = queryObject.errorCode;
-            return cbfn(err);
+            let message = `Access Control Rejection. Unable to locate ${select} from ${from}`;
+            throw new CodedError(queryObject.errorCode, message);
           }
-          return cbfn(null, null);
         }
-        body[queryObject.select] = doc[queryObject.select];
-        next();
-      })
-    }).finally(() => {
-      cbfn(null, body[queryObjectArray[queryObjectArray.length - 1].select]);
-    });
+        body[select] = doc[select];
+      }
+      let id = body[queryObjectArray[queryObjectArray.length - 1].select];
+      organization = await this.database.organization.findById({ id });
+      throwOnFalsy(organization, "ORGANIZATION_INVALID", this.verses.organizationCommon.organizationInvalid);
+    }
+    return organization;
   }
 
-  __processAccessControlRule(userId, body, rule) {
-    return new Promise((accept, reject) => {
-      if (!('organizationBy' in rule)) return accept();
-      let { privileges = [], organizationBy } = rule;
-      new Promise((accept, reject) => {
-        if (typeof (organizationBy) === "function") {
-          organizationBy.call(this, userId, body, (err, organization) => {
-            accept({ err, organization });
-          });
-        } else if (typeof (organizationBy) === "string") {
-          let organizationId = body[organizationBy];
-          this.legacyDatabase.organization.findById({ organizationId }, (err, organization) => {
-            accept({ err, organization });
-          });
-        } else {
-          if (!Array.isArray(organizationBy)) {
-            organizationBy = [organizationBy];
-          }
-          this.__processAccessControlQueryArray(body, organizationBy, (err, organizationId) => {
-            if (err) return accept({ err });
-            this.legacyDatabase.organization.findById({ organizationId }, (err, organization) => {
-              accept({ err, organization });
-            });
-          });
-        }
-      }).then(({ err, organization }) => {
-        if (err) return reject(err);
-        if (!organization) {
-          err = new Error(this.verses.organizationCommon.organizationInvalid);
-          err.code = "ORGANIZATION_INVALID";
-          return reject(err);
-        }
-        let organizationId = organization.id;
-        this.legacyDatabase.employment.getEmploymentOfUserInOrganization({ userId, organizationId }, (err, employment) => {
-          if (err) return reject(err);
-          if (!employment || !employment.isActive) {
-            err = new Error(this.verses.organizationCommon.userNotEmployedByOrganization);
-            err.code = "USER_NOT_EMPLOYED_BY_ORGANIZATION";
-            return reject(err);
-          }
-          let unmetPrivileges = [];
-          privileges.forEach((privilege) => {
-            if (!employment.privileges[privilege]) {
-              unmetPrivileges.push(privilege);
-            }
-          });
-          if (unmetPrivileges.length > 0) {
-            let message = this.verses.accessControlCommon.accessControlUnmetPrivileges;
-            message += unmetPrivileges.join(', ') + ".";
-            err = new Error(message);
-            err.code = "ACCESS_CONTROL_UNMET_PRIVILEGES";
-            err.privileges = unmetPrivileges;
-            return reject(err);
-          }
-          return accept();
-        });
-      });
-    });
+  async __processAccessControlRule(userId, body, rule) {
+    let organization = await this.__getOrganizationForAccessControlRule(userId, body, rule);
+    let organizationId = organization.id;
+    let employment = await this.database.employment.getLatestActiveEmploymentOfUserInOrganization({ userId, organizationId });
+    if (!employment || !employment.isActive) {
+      throw new CodedError("USER_NOT_EMPLOYED_BY_ORGANIZATION", this.verses.organizationCommon.userNotEmployedByOrganization);
+    }
+    let { privileges = [] } = rule;
+    let unmetPrivileges = privileges.filter(privilege => !employment.privileges[privilege]);
+    if (unmetPrivileges.length > 0) {
+      let message = this.verses.accessControlCommon.accessControlUnmetPrivileges;
+      message += unmetPrivileges.join(', ') + ".";
+      err = new CodedError("ACCESS_CONTROL_UNMET_PRIVILEGES", message);
+      err.privileges = unmetPrivileges;
+      throw err;
+    }
   }
 
   async __enforceAccessControl(userId, body) {
     let rules = this.accessControl;
     if (!rules) return;
-    return await Promise.all(rules.map(rule => this.__processAccessControlRule(userId, body, rule)));
+    await Promise.all(rules.map(rule => this.__processAccessControlRule(userId, body, rule)));
   }
 
 
@@ -419,6 +385,42 @@ class Api {
   }
 
   // region: utility ==========================
+
+
+  /**
+  * @param {Object} param
+  * @param {Array} param.source
+  * @param {String} param.sourceKey
+  * @param {Array} param.target
+  * @param {String} param.targetKey
+  * @param {Function} param.targetKey
+  */
+  async crossmap({ source, sourceKey, target, onError = null, reuseMap = null } = {}) {
+    let idList = source.map(sourceDoc => sourceDoc[sourceKey]);
+    let targetDocList = await this.database[target].listByIdList({ idList });
+    if (targetDocList.length < idList.length) {
+      idList.forEach(id => {
+        if (!targetDocList.find(targetDoc => targetDoc.id === id)) {
+          let sourceDoc = source.find(sourceDoc => sourceDoc[sourceKey] === id);
+          if (onError) onError(sourceDoc);
+        }
+      })
+    }
+    let map = (reuseMap ? reuseMap : new Map());
+    source.forEach(sourceDoc => {
+      let targetDoc = targetDocList.find(targetDoc => targetDoc.id === sourceDoc[sourceKey]);
+      map.set(sourceDoc, targetDoc);
+    });
+    return map;
+  }
+
+  ensureUpdate(wasUpdated, collectionName) {
+    if (!wasUpdated) {
+      err = new CodedError("GENERIC_UPDATE_FAILURE", this.verses.collectionCommon.genericUpdateFailureFn(collectionName));
+      err.collectionName = collectionName;
+      throw err;
+    }
+  }
 
 }
 

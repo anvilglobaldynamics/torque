@@ -156,15 +156,19 @@ exports.EmploymentCollection = class extends Collection {
     return await this._find({ organizationId });
   }
 
-  async getEmploymentOfUserInOrganization({ userId, organizationId }) {
+  async listEmploymentOfUserInOrganization({ userId, organizationId }) {
     return await this._find({ userId, organizationId });
   }
 
-  async getEmploymentsOfUser({ userId }) {
+  async getLatestActiveEmploymentOfUserInOrganization({ userId, organizationId }) {
+    return await this._findOne({ userId, organizationId });
+  }
+
+  async listEmploymentsOfUser({ userId }) {
     return await this._find({ userId });
   }
 
-  async getActiveEmploymentsOfUser({ userId }) {
+  async listActiveEmploymentsOfUser({ userId }) {
     return await this._find({ userId, isActive: true });
   }
 
