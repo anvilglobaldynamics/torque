@@ -436,9 +436,22 @@
 
       _notifyResizeHack() {
         // TODO: Find a better way of handling this issue.
-        [0, 100, 250, 500, 1000].forEach(timeout => {
-          this.delay(timeout, () => this.elem('app-header-layout').notifyResize());
-        });
+        // [0, 100, 250, 500, 1000].forEach(timeout => {
+        //   this.delay(timeout, () => this.elem('app-header-layout').notifyResize());
+        // });
+        let timeoutList = [0, 100, 250, 500, 1000];
+        let counter = 10;
+        const fn = () => {
+          try {
+            this.elem('app-header-layout').notifyResize();
+          } catch (ex) {
+            'pass';
+          }
+          if (!(counter--)) return; // Comment out in case the back button issue persists.
+          let timeout = (timeoutList.length > 1) ? timeoutList.shift() : timeoutList[0];
+          this.delay(timeout, fn);
+        }
+        fn();
       }
 
       _manageProductionVariables() {
