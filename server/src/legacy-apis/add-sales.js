@@ -38,7 +38,9 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
         totalBilled: Joi.number().max(999999999999999).required(),
         previousCustomerBalance: Joi.number().max(999999999999999).allow(null).required(),
         paidAmount: Joi.number().max(999999999999999).required(),
-        changeAmount: Joi.number().max(999999999999999).required()
+        changeAmount: Joi.number().max(999999999999999).required(),
+        shouldSaveChangeInAccount: Joi.boolean().required(),
+        allowCreditSale: Joi.boolean().required()
       })
     });
   }

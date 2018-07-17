@@ -476,9 +476,14 @@
     "paidAmountInput": "Paid Amount",
     "paidAmountInputError": "Please enter a valid number",
     "changeAmount": "Change Amount",
+    "changeAmountIfNegative": "Additional Payment Required",
     "confirmSales": "Confirm Sales",
     "sellingPrice": "Selling Price",
-    "hasDiscount": "Has Discount"
+    "hasDiscount": "Has Discount",
+    "shouldSaveChangeInAccountStart": "Save this ",
+    "shouldSaveChangeInAccountEnd": " in this customer's account instead of paying cash now.",
+    "allowCreditSaleMessage": "Save this amount as due in customer's account.",
+    "creditSaleHint":" The paid amount is less than total amount billed. In order to do a credit sale, you need to select/create a customer and allow credit sale."
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",

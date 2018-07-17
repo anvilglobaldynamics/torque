@@ -136,9 +136,9 @@
     "enterVerificationCodeSentToYourEmail": "আপনার ইমেল পাঠানো যাচাইকরণ কোড লিখুন।",
     "enterVerificationCodeSentToYourPhone": "আপনার ফোন পাঠানো যাচাইকরণ কোড লিখুন।",
     "emailVerificationSuccessful": "Email Verification Successful",
-    "//NOTE":"DO NOT TRANSLATE ABOVE",
+    "//NOTE": "DO NOT TRANSLATE ABOVE",
     "phoneVerificationSuccessful": "Phone Verification Successful",
-    "//NOTE":"DO NOT TRANSLATE ABOVE",
+    "//NOTE": "DO NOT TRANSLATE ABOVE",
     "emailIsNowVerified": "আপনার ইমেল যাচাই করা হয়ে গিয়েছে।",
     "phoneIsNowVerified": "আপনার ফোন যাচাই করা হয়ে গিয়েছে।",
     "emailCouldNotBeVerified": "আপনার ইমেইল যাচাইকরণ সফল হয়নি। নিশ্চিতকরণ যাচাইকরণ কোডটি সঠিক।",
@@ -478,9 +478,14 @@
     "paidAmountInput": "পরিশোধিত পরিমাণ",
     "paidAmountInputError": "একটি বৈধ নম্বর লিখুন",
     "changeAmount": "ফেরত পরিমান",
+    "changeAmountIfNegative": "বকেয়া পরিমান",
     "confirmSales": "বিক্রয় নিশ্চিত করুন",
     "sellingPrice": "বিক্রি দাম",
-    "hasDiscount": "ছাড় আছে"
+    "hasDiscount": "ছাড় আছে",
+    "shouldSaveChangeInAccountStart": "এই",
+    "shouldSaveChangeInAccountEnd": "ফেরত না দিয়ে কাস্টমারের একাউন্টএ জমা রাখা হোক। ",
+    "allowCreditSaleMessage": "এই টাকা কাস্টমারের একাউন্টএ বকেয়া হিসাবে জমা রাখা হোক।",
+    "creditSaleHint":"প্রদত্ত পরিমাণ, মোট প্রদেয় পরিমাণের চেয়ে কম এন্ট্রি দেওয়া হয়েছে। একটি ক্রেডিট বিক্রয় করার জন্য, আপনাকে একটি গ্রাহক নির্বাচন অথবা তৈরি করতে হবে এবং ক্রেডিট বিক্রয় অনুমোদন করতে হবে। "
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",
