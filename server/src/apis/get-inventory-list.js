@@ -3,7 +3,6 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
-const { generateRandomString } = require('./../utils/random-string');
 
 exports.GetInventoryListApi = class extends Api {
 
