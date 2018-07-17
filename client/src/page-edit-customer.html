@@ -71,7 +71,10 @@
                 return {
                   fullName: 'Rahim Karim',
                   phone: '01700000011',
-                  openingBalance: '100'
+                  openingBalance: '100',
+                  fullName: '',
+                  phone: '',
+                  openingBalance: ''
                 };
               } else {
                 return {
@@ -119,6 +122,7 @@
         super.onNavigateOut();
         this.app.popPageTitle();
         this.resetProperties('editCustomerForm');
+        this.removeAutoValidation('#editCustomerForm paper-input');
       }
 
       _ensureAccess() {
