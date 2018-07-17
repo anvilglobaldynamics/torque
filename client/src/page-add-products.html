@@ -171,6 +171,10 @@
             type: Number,
             value: 0
           },
+          productCategoryList: {
+            type: Array,
+            value: () => []
+          }
         };
       }
 
@@ -202,6 +206,7 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.app.popPageTitle();
+        this.resetProperties('productCategoryList');
       }
 
       _ensureAccess() {
