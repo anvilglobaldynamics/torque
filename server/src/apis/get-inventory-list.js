@@ -17,14 +17,14 @@ exports.GetInventoryListApi = class extends Api {
     });
   }
 
-  // get accessControl() {
-  //   return [{
-  //     organizationBy: "organizationId",
-  //     privileges: [
-  //       "PRIV_VIEW_ALL_INVENTORIES"
-  //     ]
-  //   }];
-  // }
+  get accessControl() {
+    return [{
+      organizationBy: "organizationId",
+      privileges: [
+        "PRIV_VIEW_ALL_INVENTORIES"
+      ]
+    }];
+  }
 
   async __getInventoryList({ organizationId }) {
     let inventoryList = await this.database.inventory.listByOrganizationId({ organizationId });
@@ -41,7 +41,7 @@ exports.GetInventoryListApi = class extends Api {
       onError: (inventory) => { throw new CodedError("INVENTORY_CONTAINER_NOT_FOUND", "Could not find Inventory Container"); },
       reuseMap: map
     });
-    inventoryList.forEach(inventory => inventory.inventoryContainerName = map.get(inventory));
+    inventoryList.forEach(inventory => inventory.inventoryContainerName = map.get(inventory).name);
     return inventoryList;
   }
 
