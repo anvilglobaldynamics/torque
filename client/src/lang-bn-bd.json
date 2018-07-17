@@ -196,7 +196,7 @@
     "goToPreviousSales": "পূর্ববর্তী বিক্রয় দেখুন।"
   },
   "productCategory": {
-    "manageProductCategoriesTitle": "পণ্যের ধরন পরিচালনা করুন",
+    "manageProductCategoriesTitle": "পণ্যের ধরন পরিচালনা",
     "editProductCategoryTitle": "পণ্যের ধরন সম্পাদনা করুন",
     "addProductCategoryTitle": "পণ্যের ধরন যোগ করুন",
     "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি।",
@@ -263,7 +263,7 @@
     "updateEmployee": "কর্মচারী আপডেট",
     "hireEmployeePageTitle": "কর্মচারী নিয়োগ",
     "newEmployeeHired": "নতুন কর্মচারী নিয়োগ করা হয়েছে।",
-    "manageEmployeePageTitle": "কর্মচারীদের পরিচালনা করুন",
+    "manageEmployeePageTitle": "কর্মচারীদের পরিচালনা",
     "companyProvidedId": "কোম্পানী প্রদত্ত আইডি",
     "designation": "উপাধি",
     "role": "ভূমিকা",
@@ -326,7 +326,7 @@
     "updateCustomer": "গ্রাহক আপডেট করুন",
     "newCustomerCreated": "নতুন গ্রাহক তৈরি করা হয়েছে।",
     "customerUpdated": "গ্রাহক আপডেট করা হয়েছে।",
-    "manageCustomerPageTitle": "গ্রাহক পরিচালনা করুন",
+    "manageCustomerPageTitle": "গ্রাহক পরিচালনা",
     "createNewCustomer": "নতুন গ্রাহক তৈরি করুন",
     "viewCustomerTitle": "ক্রেতা",
     "deleteCustomerQuestion": "গ্রাহক মুছবেন?",
