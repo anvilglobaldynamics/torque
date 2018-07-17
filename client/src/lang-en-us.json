@@ -406,7 +406,8 @@
     "discounted": "Discounted",
     "serviceChargeAmount": "Service Charge Amount",
     "vat": "Vat",
-    "paidAmount": "Paid Amount"
+    "paidAmount": "Paid Amount",
+    "changeAmount": "Change Amount"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",

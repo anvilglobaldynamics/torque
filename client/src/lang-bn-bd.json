@@ -408,7 +408,8 @@
     "discounted": "ছাড়",
     "serviceChargeAmount": "সেবা মূল্য",
     "vat": "ভ্যাট",
-    "paidAmount": "পরিশোধিত"
+    "paidAmount": "পরিশোধিত",
+    "changeAmount": "ফেরত"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",

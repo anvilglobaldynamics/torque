@@ -38,7 +38,9 @@
       </div>
 
       <div class="card vertical layout">
-        <div class="title">[[verses.salesReturn.productList]]: ([[salesReturn.returnedProductList.length]] products)</div>
+        <div class="title">
+          <b>[[verses.salesReturn.productList]]: ([[salesReturn.returnedProductList.length]] products)</b>
+        </div>
         <div class="list">
           <template is="dom-repeat" items="{{salesReturn.returnedProductList}}" as="returnedProduct">
             <div class="horizontal layout item center">

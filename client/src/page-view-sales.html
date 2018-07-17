@@ -21,7 +21,14 @@
 
 <dom-module id="page-view-sales">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+    
+      .discard-button {
+        margin-top: 5px;
+        width: 100%;
+      }
+
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -36,13 +43,15 @@
             <div>[[verses.sales.customerId]]: [[sales.customerId]]</div>
           </template>
           <template is="dom-if" if="{{!sales.isDiscarded}}">
-            <paper-button raised class="primary" on-tap="discardTapped">[[verses.general.discard]]</paper-button>
+            <paper-button raised class="primary discard-button" on-tap="discardTapped">[[verses.general.discard]]</paper-button>
           </template>
         </div>
       </div>
 
       <div class="card vertical layout">
-        <div class="title">[[verses.sales.productList]]: ([[sales.productList.length]] products)</div>
+        <div class="title">
+          <b>[[verses.sales.productList]]: ([[sales.productList.length]] products)</b>
+        </div>
         <div class="list">
           <template is="dom-repeat" items="{{sales.productList}}" as="product">
             <div class="horizontal layout item center">
@@ -51,7 +60,7 @@
                 <div>[[verses.general.count]]: [[product.count]]</div>
                 <div>[[verses.sales.salePrice]]: [[product.salePrice]]</div>
                 <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}">
-                  <paper-button raised class="primary" on-tap="returnTapped">[[verses.general.return]]</paper-button>
+                  <paper-button raised class="primary discard-button" on-tap="returnTapped">[[verses.general.return]]</paper-button>
                 </template>
               </div>
             </div>
@@ -60,12 +69,15 @@
       </div>
 
       <div class="card vertical layout">
-        <div class="title">[[verses.sales.payment]]:</div>
+        <div class="title">
+          <b>[[verses.sales.payment]]:</b>
+        </div>
         <div>[[verses.sales.totalBilled]]: [[$round(sales.payment.totalBilled)]]</div>
         <div>[[verses.sales.discounted]]: [[$round(sales.payment.discountedAmount)]] [[verses.general.by]] [[sales.payment.discountValue]] [[sales.payment.discountType]]</div>
         <div>[[verses.sales.serviceChargeAmount]]: [[$round(sales.payment.serviceChargeAmount)]]</div>
         <div>[[verses.sales.vat]]: [[$round(sales.payment.vatAmount)]]</div>
         <div>[[verses.sales.paidAmount]]: [[$round(sales.payment.paidAmount)]]</div>
+        <div>[[verses.sales.changeAmount]]: [[$round(sales.payment.changeAmount)]]</div>
       </div>
 
     </div>
