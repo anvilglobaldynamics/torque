@@ -178,7 +178,7 @@ class Api {
     }
   }
 
-  async __handleAuthentication() {
+  async __handleAuthentication(body) {
     let { apiKey } = body;
     if (this.authenticationLevel === 'admin') {
       let username = await this.authenticate(body);
@@ -429,7 +429,7 @@ class Api {
   * @param {String} param.targetKey
   * @param {Function} param.targetKey
   */
-  async crossmap({ source, sourceKey, target, onError = null } = {}) {
+  async crossmap({ source, sourceKey, target, onError = null, reuseMap = null } = {}) {
     let idList = source.map(sourceDoc => sourceDoc[sourceKey]);
     let targetDocList = await this.database[target].listByIdList({ idList });
     if (targetDocList.length < idList.length) {
@@ -440,10 +440,12 @@ class Api {
         }
       })
     }
-    let map = new WeakMap();
+    let map = (reuseMap ? reuseMap : new Map());
     source.forEach(sourceDoc => {
-      (!targetDocList.find(targetDoc => targetDoc.id === id))
+      let targetDoc = targetDocList.find(targetDoc => targetDoc.id === sourceDoc[sourceKey]);
+      map.set(sourceDoc, targetDoc);
     });
+    return map;
   }
 
 }
