@@ -110,11 +110,12 @@
     "home": "হোম"
   },
   "topMenu": {
-    "home": "প্রথম পৃষ্ঠা",
+    "home": "হোম",
     "posList": "বিক্রয় বিন্দু তালিকা",
     "inventoryList": "পণ্যের তালিকার তালিকা",
-    "switchOrganization": "পাল্টান সুইচ করুন",
-    "reload": "পুনরায় চেষ্টা"
+    "switchOrganization": "সংস্থা পাল্টান",
+    "reload": "পুনরায় চেষ্টা",
+    "logout": "লগ আউট"
   },
   "home": {
     "invoices": "ইনভয়েস",

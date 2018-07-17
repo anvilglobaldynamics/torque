@@ -114,7 +114,8 @@
     "posList": "POS List",
     "inventoryList": "Inventory List",
     "switchOrganization": "Switch Organization",
-    "reload": "Reload"
+    "reload": "Reload",
+    "logout": "Logout"
   },
   "home": {
     "invoices": "Invoices",

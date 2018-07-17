@@ -210,10 +210,10 @@
             <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
             <a name="settings" href="#/settings">[[verses.sidebar.settings]]</a>
             <a name="about" href="#/about">[[verses.sidebar.about]]</a>
-            <hr class="sidebar-divider">
+            <!-- <hr class="sidebar-divider"> -->
 
           </iron-selector>
-          <div name="logout" class="link primary logout-link" on-tap="logoutTapped" style="margin-bottom: 200px">[[verses.sidebar.logout]]</div>
+          <!-- <div name="logout" class="link primary logout-link" on-tap="logoutTapped" style="margin-bottom: 200px">[[verses.sidebar.logout]]</div> -->
         </div>
       </app-drawer>
 
@@ -243,11 +243,12 @@
               <paper-listbox slot="dropdown-content" selected="-1">
                 <!-- context-sensitive - start -->
                 <!-- context-sensitive - end -->
-                <paper-item on-tap="homeTapped">Home</paper-item>
+                <!-- <paper-item on-tap="homeTapped">Home</paper-item> -->
                 <!-- <paper-item>POS List</paper-item> -->
                 <!-- <paper-item>Inventory List</paper-item> -->
-                <paper-item on-tap="switchOrganizationTapped">Switch Organization</paper-item>
-                <paper-item on-tap="reloadTapped">Reload</paper-item>
+                <paper-item on-tap="switchOrganizationTapped">[[verses.topMenu.switchOrganization]]</paper-item>
+                <paper-item on-tap="reloadTapped">[[verses.topMenu.reload]]</paper-item>
+                <paper-item on-tap="logoutTapped">[[verses.topMenu.logout]]</paper-item>
               </paper-listbox>
             </paper-menu-button>
             <template is="dom-if" if="[[shouldShowSaveButton]]">
