@@ -256,7 +256,7 @@
     "hireAsEmployee": "কর্মচারী হিসেবে নিয়োগ করুন",
     "newEmployeeCreated": "নতুন কর্মী তৈরি হয়েছে।",
     "passwordInputError": "কমপক্ষে ৮ অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।",
-    "passwordInput": "আপনার পাসওয়ার্ড",
+    "passwordInput": "কর্মচারী পাসওয়ার্ড",
     "phoneInputError": "আপনার বৈধ ফোন নম্বর লিখুন।",
     "contactPhoneOfContactPerson": "যোগাযোগ করার বেক্তির ফোন",
     "employeeUpdated": "কর্মচারী আপডেট করা হয়েছে।",

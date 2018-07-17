@@ -254,7 +254,7 @@
     "hireAsEmployee": "Hire As Employee",
     "newEmployeeCreated": "New employee has been created.",
     "passwordInputError": "Please enter a password at least 8 characters long.",
-    "passwordInput": "Your password",
+    "passwordInput": "Employee password",
     "phoneInputError": "Please enter your valid phone number.",
     "contactPhoneOfContactPerson": "Contact Number of Manager/Contact Person",
     "employeeUpdated": "Employee has been updated.",
