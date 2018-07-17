@@ -23,7 +23,14 @@
 
 <dom-module id="page-pos-select-products">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+    
+    .confirm-discard-button-group paper-button {
+      width: 100%;
+      margin: 5px;
+    }
+
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -34,7 +41,8 @@
           <template is="dom-repeat" items="[[productList]]" as="product">
             <div class="horizontal layout item center">
               <div class="flex" style="min-width: 128px;">
-                <div class="title">[[product.name]]
+                <div class="title">[[product.name]]</div>
+                <div>
                   <strong>[[product.count]][[product.unit]]</strong>
                 </div>
                 <div class="description">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
@@ -59,7 +67,7 @@
         </div>
       </div>
 
-      <div class="horizontal layout end-justified p-4">
+      <div class="vartical confirm-discard-button-group">
         <template is="dom-if" if="[[selectedProductCount]]">
           <paper-button raised class="btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
         </template>

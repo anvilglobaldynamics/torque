@@ -24,6 +24,11 @@
   <template>
     <style include="shared-styles">
 
+      .hire-button-group paper-button {
+        width: 100%;
+        margin: 5px;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -64,7 +69,7 @@
 
       </div>
 
-      <div class="horizontal layout end-justified wrap p-4">
+      <div class="vartical layout wrap hire-button-group">
         <paper-button raised class="btn btn-default" on-tap="hireEmployeeTapped">[[verses.employee.hireUserEmployee]]</paper-button>
         <paper-button raised class="btn primary" on-tap="addNewEmployeeTapped">[[verses.employee.addUserAsEmployee]]</paper-button>
       </div>

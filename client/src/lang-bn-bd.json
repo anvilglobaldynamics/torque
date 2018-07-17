@@ -110,11 +110,12 @@
     "home": "হোম"
   },
   "topMenu": {
-    "home": "প্রথম পৃষ্ঠা",
+    "home": "হোম",
     "posList": "বিক্রয় বিন্দু তালিকা",
     "inventoryList": "পণ্যের তালিকার তালিকা",
-    "switchOrganization": "পাল্টান সুইচ করুন",
-    "reload": "পুনরায় চেষ্টা"
+    "switchOrganization": "সংস্থা পাল্টান",
+    "reload": "পুনরায় চেষ্টা",
+    "logout": "লগ আউট"
   },
   "home": {
     "invoices": "ইনভয়েস",
@@ -196,7 +197,7 @@
     "goToPreviousSales": "পূর্ববর্তী বিক্রয় দেখুন।"
   },
   "productCategory": {
-    "manageProductCategoriesTitle": "পণ্যের ধরন পরিচালনা করুন",
+    "manageProductCategoriesTitle": "পণ্যের ধরন পরিচালনা",
     "editProductCategoryTitle": "পণ্যের ধরন সম্পাদনা করুন",
     "addProductCategoryTitle": "পণ্যের ধরন যোগ করুন",
     "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি।",
@@ -256,14 +257,14 @@
     "hireAsEmployee": "কর্মচারী হিসেবে নিয়োগ করুন",
     "newEmployeeCreated": "নতুন কর্মী তৈরি হয়েছে।",
     "passwordInputError": "কমপক্ষে ৮ অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।",
-    "passwordInput": "আপনার পাসওয়ার্ড",
+    "passwordInput": "কর্মচারী পাসওয়ার্ড",
     "phoneInputError": "আপনার বৈধ ফোন নম্বর লিখুন।",
     "contactPhoneOfContactPerson": "যোগাযোগ করার বেক্তির ফোন",
     "employeeUpdated": "কর্মচারী আপডেট করা হয়েছে।",
     "updateEmployee": "কর্মচারী আপডেট",
     "hireEmployeePageTitle": "কর্মচারী নিয়োগ",
     "newEmployeeHired": "নতুন কর্মচারী নিয়োগ করা হয়েছে।",
-    "manageEmployeePageTitle": "কর্মচারীদের পরিচালনা করুন",
+    "manageEmployeePageTitle": "কর্মচারীদের পরিচালনা",
     "companyProvidedId": "কোম্পানী প্রদত্ত আইডি",
     "designation": "উপাধি",
     "role": "ভূমিকা",
@@ -326,7 +327,7 @@
     "updateCustomer": "গ্রাহক আপডেট করুন",
     "newCustomerCreated": "নতুন গ্রাহক তৈরি করা হয়েছে।",
     "customerUpdated": "গ্রাহক আপডেট করা হয়েছে।",
-    "manageCustomerPageTitle": "গ্রাহক পরিচালনা করুন",
+    "manageCustomerPageTitle": "গ্রাহক পরিচালনা",
     "createNewCustomer": "নতুন গ্রাহক তৈরি করুন",
     "viewCustomerTitle": "ক্রেতা",
     "deleteCustomerQuestion": "গ্রাহক মুছবেন?",
@@ -408,7 +409,8 @@
     "discounted": "ছাড়",
     "serviceChargeAmount": "সেবা মূল্য",
     "vat": "ভ্যাট",
-    "paidAmount": "দত্ত"
+    "paidAmount": "পরিশোধিত",
+    "changeAmount": "ফেরত"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",

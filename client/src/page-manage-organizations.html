@@ -40,6 +40,11 @@
       .description {
         font-size: 14px;
       }
+
+      .create-organization-container paper-button {
+        width: 100%;
+        margin: 5px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -60,8 +65,8 @@
         </div>
       </div>
 
-      <div class="transparent-card align-right">
-        <paper-button raised class="primary" on-tap="createTapped"> [[verses.organization.createOrganization]] </paper-button>
+      <div class="create-organization-container">
+        <paper-button raised class="primary" on-tap="createTapped">[[verses.organization.createOrganization]]</paper-button>
       </div>
 
     </div>

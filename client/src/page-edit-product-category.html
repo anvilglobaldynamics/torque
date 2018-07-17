@@ -53,10 +53,9 @@
             <paper-input class="editProductCategoryForm--defaultSalePrice" value="{{editProductCategoryForm.defaultSalePrice}}" type="number" required min="0" error-message=[[verses.productCategory.productCategoryDefaultSalePriceInputError]] label=[[verses.productCategory.productCategoryDefaultSalePriceInput]]>
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
-            <paper-checkbox checked="{{editProductCategoryForm.isReturnable}}">[[verses.productCategory.isProductReturnable]]</paper-checkbox>
 
-            <div class="horizontal layout">
-              <paper-dropdown-menu label=[[verses.productCategory.defaultDiscountType]] class="mr-4">
+            <div class="vartical layout">
+              <paper-dropdown-menu label=[[verses.productCategory.defaultDiscountType]] class="mr-4" style="width: 100%">
                 <paper-listbox slot="dropdown-content" selected="{{editProductCategoryForm.defaultDiscountType}}" attr-for-selected="name">
                   <paper-item name="percent">[[verses.general.percentage]]</paper-item>
                   <paper-item name="fixed">[[verses.general.fixedValue]]</paper-item>
@@ -72,9 +71,11 @@
               </paper-input>
             </div>
 
+            <paper-checkbox checked="{{editProductCategoryForm.isReturnable}}">[[verses.productCategory.isProductReturnable]]</paper-checkbox>
+
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editProductCategoryForm--submit" on-tap="createProductCategoryTapped">[[verses.productCategory.createProductCategory]] </paper-button>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editProductCategoryForm--submit" on-tap="createProductCategoryTapped">[[verses.productCategory.createProductCategory]]</paper-button>
               <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editProductCategoryForm--submit" on-tap="updateProductCategoryTapped">[[verses.productCategory.updateProductCategory]]</paper-button>
             </div>
           </div>

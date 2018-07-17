@@ -34,7 +34,7 @@
             <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message=[[verses.customer.customerNameInputError]] label=[[verses.customer.customerNameInput]]></paper-input>
             <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.customer.customerNumberInputError]] label=[[verses.customer.customerNumberInput]]></paper-input>
             <template is="dom-if" if="{{!editMode}}">
-              <paper-input class$="editCustomerForm--openingBalance" value="{{editCustomerForm.openingBalance}}" required minlength="0" maxlength="8" error-message=[[verses.customer.openingBalanceError]] label=[[verses.customer.openingBalance]]></paper-input>
+              <paper-input class$="editCustomerForm--openingBalance" value="{{editCustomerForm.openingBalance}}" type="number" required minlength="0" maxlength="8" error-message=[[verses.customer.openingBalanceError]] label=[[verses.customer.openingBalance]]></paper-input>
             </template>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>

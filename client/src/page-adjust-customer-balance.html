@@ -42,7 +42,7 @@
                 <paper-item name="withdrawl">[[verses.adjustCustomerBalance.withdrawl]]</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
-            <paper-input class="adjustCustomerBalanceForm--amount" value="{{adjustCustomerBalanceForm.amount}}" required minlength="1" maxlength="10" error-message=[[verses.adjustCustomerBalance.amountInputError]] label=[[verses.adjustCustomerBalance.amountInput]]></paper-input>
+            <paper-input class="adjustCustomerBalanceForm--amount" value="{{adjustCustomerBalanceForm.amount}}" type="number" required minlength="1" maxlength="10" error-message=[[verses.adjustCustomerBalance.amountInputError]] label=[[verses.adjustCustomerBalance.amountInput]]></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary" on-tap="adjustCustomerBalanceTapped">[[verses.adjustCustomerBalance.adjust]]</paper-button>
