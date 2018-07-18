@@ -36,9 +36,11 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
         discountedAmount: Joi.number().max(999999999999999).required(),
         serviceChargeAmount: Joi.number().max(999999999999999).required(),
         totalBilled: Joi.number().max(999999999999999).required(),
+        paidAmount: Joi.number().max(999999999999999).required(),
         previousCustomerBalance: Joi.number().max(999999999999999).allow(null).required(),
         paidAmount: Joi.number().max(999999999999999).required(),
-        changeAmount: Joi.number().max(999999999999999).required()
+        changeAmount: Joi.number().max(999999999999999).required(),
+        shouldSaveChangeInAccount: Joi.boolean().required()
       })
     });
   }
@@ -78,19 +80,28 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
   }
 
   _handlePayment({ payment, customer }, cbfn) {
-    let diff = (payment.paidAmount + payment.previousCustomerBalance) - payment.totalBilled;
-
-    if (diff >= 0) {
-      return cbfn(payment);
-    } else {
-      if (!customer) {
+    if (payment.totalBilled > payment.paidAmount) {
+      if (customer) {
+        this._adjustCustomerBalanceAndSave({ customer, action: 'withdrawl', amount: (payment.totalBilled - payment.paidAmount) }, () => {
+          return cbfn(payment);
+        });
+      } else {
         let err = new Error("credit sale is not allowed without registered cutomer");
         err.code = "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER";
         return this.fail(err);
       }
-      this._updateCustomerBalance({ diff, customer }, () => {
+    }
+    if (payment.totalBilled == payment.paidAmount) {
+      return cbfn(payment);
+    }
+    if (payment.totalBilled < payment.paidAmount) {
+      if (customer && payment.shouldSaveChangeInAccount) {
+        this._adjustCustomerBalanceAndSave({ customer, action: 'payment', amount: (payment.paidAmount - payment.totalBilled) }, () => {
+          return cbfn(payment);
+        });
+      } else {
         return cbfn(payment);
-      });
+      }
     }
   }
 

@@ -113,6 +113,7 @@
         super.onNavigateOut();
         this.app.popPageTitle();
         this.resetProperties('addEmployeeForm');
+        this.removeAutoValidation('#addEmployeeForm paper-input');
       }
 
       _ensureAccess() {
@@ -126,7 +127,7 @@
           fullName, password, phone, role, designation, companyProvidedId, privileges,
           organizationId: this.app.organization.id
         };
-        
+
         this.app.callAddNewEmployeeApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'addEmployeeForm');

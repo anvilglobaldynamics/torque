@@ -117,7 +117,7 @@
           }
           let unmetPrivilegeList = privilegeList.filter(privilege => !this.checkPrivilege(privilege));
           if (unmetPrivilegeList.length > 0) {
-            this.app.navigateTo('/error403/unmet:'+unmetPrivilegeList.join(','));
+            this.app.navigateTo('/error403/unmet:' + unmetPrivilegeList.join(','));
             return false;
           }
         }
@@ -130,6 +130,13 @@
 
       $hasPreviousPagination(offset) {
         return (offset > 0);
+      }
+
+      removeAutoValidation(query) {
+        this.elemAll(query).forEach(el => {
+          el.autoValidate = false;
+          el.invalid = false;
+        });
       }
 
     }

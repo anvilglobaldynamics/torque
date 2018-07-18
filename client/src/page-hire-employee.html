@@ -122,6 +122,7 @@
         super.onNavigateOut();
         this.app.popPageTitle();
         this.resetProperties('hireEmployeeForm');
+        this.removeAutoValidation('#hireEmployeeForm paper-input');
       }
 
       _ensureAccess() {
@@ -132,11 +133,11 @@
 
       _processFindUser({ emailOrPhone }, cbfn) {
         emailOrPhone = emailOrPhone.toLowerCase();
-        
+
         let data = { emailOrPhone };
-        
+
         this.app.callFindUserApi(data, (err, response) => {
-          if (err) return;          
+          if (err) return;
           if (response.hasError) {
             this.user = null;
             return this.onApiError(response.error);

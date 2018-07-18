@@ -239,6 +239,7 @@
             <paper-menu-button horizontal-align="right">
               <paper-icon-button icon="icons:apps" slot="dropdown-trigger"></paper-icon-button>
               <paper-listbox slot="dropdown-content" selected="-1">
+                <paper-item on-tap="homeTapped">[[verses.topMenu.home]]</paper-item>
                 <paper-item on-tap="switchOrganizationTapped">[[verses.topMenu.switchOrganization]]</paper-item>
                 <paper-item on-tap="reloadTapped">[[verses.topMenu.reload]]</paper-item>
                 <paper-item on-tap="logoutTapped">[[verses.topMenu.logout]]</paper-item>

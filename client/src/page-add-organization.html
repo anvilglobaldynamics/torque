@@ -102,6 +102,7 @@
         super.onNavigateOut();
         this.app.popPageTitle();
         this.resetProperties('addOrganizationForm');
+        this.removeAutoValidation('#addOrganizationForm paper-input');
       }
 
       _ensureAccess() {
@@ -114,7 +115,7 @@
         email = email.toLowerCase();
 
         let data = { name, phone, email, primaryBusinessAddress };
-        
+
         this.app.callAddOrganizationApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'addOrganizationForm');

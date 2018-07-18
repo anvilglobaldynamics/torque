@@ -108,6 +108,7 @@
         super.onNavigateOut();
         this.app.popPageTitle();
         this.resetProperties('editEmployeeForm');
+        this.removeAutoValidation('#editEmployeeForm paper-input');
       }
 
       _ensureAccess() {

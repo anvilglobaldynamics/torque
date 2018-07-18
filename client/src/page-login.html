@@ -95,6 +95,7 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.resetProperties('loginForm');
+        this.removeAutoValidation('#loginForm paper-input');
       }
 
       // region: login =================================
@@ -104,7 +105,7 @@
         emailOrPhone = emailOrPhone.toLowerCase();
 
         let data = { emailOrPhone, password };
-        
+
         this.app.callUserLoginApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) {
@@ -125,7 +126,7 @@
         emailOrPhone = emailOrPhone.toLowerCase();
 
         let data = { emailOrPhone };
-        
+
         this.app.callUserResetPasswordRequestApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);

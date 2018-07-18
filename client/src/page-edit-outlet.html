@@ -121,6 +121,7 @@
         super.onNavigateOut();
         this.app.popPageTitle();
         this.resetProperties('editOutletForm');
+        this.removeAutoValidation('#editOutletForm paper-input');
       }
 
       _ensureAccess() {

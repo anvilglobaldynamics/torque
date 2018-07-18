@@ -32,6 +32,20 @@ exports.customerCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     }
   }
 
+
+  _adjustCustomerBalanceAndSave({ customer, action, amount }, cbfn) {
+    if (action === 'payment') {
+      customer.balance += amount;
+    } else if (action === 'withdrawl') {
+      customer.balance -= amount;
+    }
+
+    this.legacyDatabase.customer.updateBalanceOnly({ customerId: customer.id }, { balance: customer.balance }, (err) => {
+      if (err) return this.fail(err);
+      return cbfn();
+    });
+  }
+
   _verifyCustomerExist({ customerId }, cbfn) {
     this.legacyDatabase.customer.findById({ customerId }, (err, customer) => {
       if (!this._ensureDoc(err, customer, "CUSTOMER_INVALID", "Customer not found.")) return;
