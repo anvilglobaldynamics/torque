@@ -480,6 +480,7 @@
     "confirmSales": "Confirm Sales",
     "sellingPrice": "Selling Price",
     "hasDiscount": "Has Discount",
+    "shouldSaveChangeInAccount": "Save in customer's account instead of paying cash.",
     "shouldSaveChangeInAccountStart": "Save this ",
     "shouldSaveChangeInAccountEnd": " in this customer's account instead of paying cash now.",
     "allowCreditSaleMessage": "Save this amount as due in customer's account.",

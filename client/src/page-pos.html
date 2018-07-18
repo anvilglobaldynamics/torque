@@ -204,8 +204,10 @@
                     <br> [[verses.pos.changeAmount]]:
                     <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
 
-                    <template is="dom-if" if="[[payment.changeAmount]]">
-                      <!-- TODO: shouldSaveChangeInAccount  -->
+                    <template is="dom-if" if="[[isChangeAmountPositive(payment.changeAmount)]]">
+                      <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
+                        [[verses.pos.shouldSaveChangeInAccount]]
+                      </paper-checkbox>
                     </template>
                   </template>
 
@@ -499,6 +501,10 @@
 
       saveSaleTapped(e = null) {
         this._processAddSales({ outletId: this.params.outlet, payment: this.payment });
+      }
+
+      isChangeAmountPositive(changeAmount) {
+        return changeAmount > 0;
       }
 
       // region: misc =================================

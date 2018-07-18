@@ -482,6 +482,7 @@
     "confirmSales": "বিক্রয় নিশ্চিত করুন",
     "sellingPrice": "বিক্রি দাম",
     "hasDiscount": "ছাড় আছে",
+    "shouldSaveChangeInAccount": "অর্থ প্রদানের পরিবর্তে গ্রাহকের অ্যাকাউন্ট সংরক্ষণ করুন",
     "shouldSaveChangeInAccountStart": "এই",
     "shouldSaveChangeInAccountEnd": "ফেরত না দিয়ে কাস্টমারের একাউন্টএ জমা রাখা হোক। ",
     "allowCreditSaleMessage": "এই টাকা কাস্টমারের একাউন্টএ বকেয়া হিসাবে জমা রাখা হোক।",
