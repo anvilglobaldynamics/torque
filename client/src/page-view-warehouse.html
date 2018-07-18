@@ -168,7 +168,7 @@
       }
 
       deleteTapped(e = null) {
-        let message = this.app.verses.outlet.deleteWarehouseQuestionPartOne + " " + this.warehouse.name + " " + this.app.verses.outlet.deleteWarehouseQuestionPartTwo;
+        let message = this.app.verses.warehouse.deleteWarehouseQuestionPartOne + " " + this.warehouse.name + " " + this.app.verses.warehouse.deleteWarehouseQuestionPartTwo;
         this.app.showModalConfirmation(this.app.verses.warehouse.deleteWarehouseQuestion, message, (answer) => {
           if (!answer) return;
           this._deleteWarehouse(this.warehouse.id, () => {
