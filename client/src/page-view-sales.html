@@ -78,6 +78,9 @@
         <div>[[verses.sales.vat]]: [[$round(sales.payment.vatAmount)]]</div>
         <div>[[verses.sales.paidAmount]]: [[$round(sales.payment.paidAmount)]]</div>
         <div>[[verses.sales.changeAmount]]: [[$round(sales.payment.changeAmount)]]</div>
+        <template is="dom-if" if="[[sales.payment.shouldSaveChangeInAccount]]">
+          <div>([[sales.payment.changeAmount]] [[verses.sales.wasDebitedToUser]])</div>
+        </template>
       </div>
 
     </div>
@@ -142,6 +145,7 @@
       _processSales(cbfn) {
         this._fetchSales(({ sales }) => {
           this.sales = sales;
+          console.log(this.sales);
           cbfn();
         });
       }

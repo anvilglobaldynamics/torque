@@ -22,7 +22,14 @@
 
 <dom-module id="page-view-customer">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+    
+    .action-button-container paper-button {
+      width: 100%;
+      margin: 5px;
+    }
+
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -37,21 +44,29 @@
       <div class="card vertical layout">
         [[verses.customer.additionalPaymentHistory]]:
         <template is="dom-repeat" items="[[customer.additionalPaymentHistory]]" as="additionalPayment">
-          <br> [[verses.general.date]]: [[additionalPayment.creditedDatetimeStamp]] [[verses.general.amount]]: [[additionalPayment.amount]] [[verses.general.action]]: [[additionalPayment.action]] [[verses.general.acceptedBy]]: [[additionalPayment.acceptedByUserId]]
+          <div>
+            <b>#[[index]]</b> [[verses.general.date]]: [[additionalPayment.creditedDatetimeStamp]]
+          </div>
+          <div>
+            [[verses.general.amount]]: [[additionalPayment.amount]]
+          </div>
+          <div>
+            [[verses.general.action]]: [[additionalPayment.action]]
+          </div>
         </template>
       </div>
 
-      <div class="card">
+      <div class="card action-button-container">
         <div class="mb-4">[[verses.customer.clickToEditCustomer]]</div>
         <paper-button raised class="primary m-0" on-tap="editTapped">[[verses.customer.editCustomer]]</paper-button>
       </div>
 
-      <div class="card">
+      <div class="card action-button-container">
         <div class="mb-4">[[verses.customer.clickAdjustCustomersBalance]]</div>
         <paper-button raised class="primary m-0" on-tap="adjustCustomerBalanceTapped">[[verses.customer.adjustCustomerBalance]]</paper-button>
       </div>
 
-      <div class="card">
+      <div class="card action-button-container">
         <div class="mb-4">[[verses.customer.clickToDeleteCustomer]]</div>
         <paper-button raised class="primary m-0" on-tap="deleteTapped">[[verses.customer.deleteCustomer]]</paper-button>
       </div>

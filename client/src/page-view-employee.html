@@ -22,7 +22,14 @@
 
 <dom-module id="page-view-employee">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+    
+    .action-button-container paper-button {
+      width: 100%;
+      margin: 5px;
+    }
+
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -40,13 +47,13 @@
         <div>[[verses.general.phone]]: [[employee.userDetails.phone]]</div>
       </div>
 
-      <div class="card">
+      <div class="card action-button-container">
         <div class="mb-4">[[verses.employee.clickToEditEmployee]]</div>
         <paper-button raised class="btn primary" on-tap="editTapped">[[verses.employee.editEmployee]]</paper-button>
       </div>
 
       <template is="dom-if" if="{{employee.isActive}}">
-        <div class="card">
+        <div class="card action-button-container">
           <div class="mb-4">[[verses.employee.clickToDeleteEmployee]]</div>
           <paper-button raised class="btn primary" on-tap="fireTapped">[[verses.employee.fireEmployee]]</paper-button>
         </div>

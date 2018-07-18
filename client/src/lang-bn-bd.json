@@ -410,7 +410,8 @@
     "serviceChargeAmount": "সেবা মূল্য",
     "vat": "ভ্যাট",
     "paidAmount": "পরিশোধিত",
-    "changeAmount": "ফেরত"
+    "changeAmount": "ফেরত",
+    "wasDebitedToUser": "ক্রেতাকে ডেবিট করা হয়েছিল।"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",

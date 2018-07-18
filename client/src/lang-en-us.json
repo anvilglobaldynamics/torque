@@ -408,7 +408,8 @@
     "serviceChargeAmount": "Service Charge Amount",
     "vat": "Vat",
     "paidAmount": "Paid Amount",
-    "changeAmount": "Change Amount"
+    "changeAmount": "Change Amount",
+    "wasDebitedToUser": "was debited to user."
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",
