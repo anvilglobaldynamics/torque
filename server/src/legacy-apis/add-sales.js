@@ -82,7 +82,7 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
   _handlePayment({ payment, customer }, cbfn) {
     if (payment.totalBilled > payment.paidAmount) {
       if (customer) {
-        this._adjustBalanceAndSave({ customer, action: 'withdrawl', amount: (payment.totalBilled - payment.paidAmount) }, () => {
+        this._adjustCustomerBalanceAndSave({ customer, action: 'withdrawl', amount: (payment.totalBilled - payment.paidAmount) }, () => {
           return cbfn(payment);
         });
       } else {
@@ -96,7 +96,7 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
     }
     if (payment.totalBilled < payment.paidAmount) {
       if (customer && payment.shouldSaveChangeInAccount) {
-        this._adjustBalanceAndSave({ customer, action: 'payment', amount: (payment.paidAmount - payment.totalBilled) }, () => {
+        this._adjustCustomerBalanceAndSave({ customer, action: 'payment', amount: (payment.paidAmount - payment.totalBilled) }, () => {
           return cbfn(payment);
         });
       } else {

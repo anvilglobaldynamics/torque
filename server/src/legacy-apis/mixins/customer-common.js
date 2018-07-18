@@ -33,7 +33,7 @@ exports.customerCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
 
-  _adjustBalanceAndSave({ customer, action, amount }, cbfn) {
+  _adjustCustomerBalanceAndSave({ customer, action, amount }, cbfn) {
     if (action === 'payment') {
       customer.balance += amount;
     } else if (action === 'withdrawl') {
