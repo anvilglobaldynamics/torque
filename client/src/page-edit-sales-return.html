@@ -111,6 +111,7 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.app.popPageTitle();
+        this.removeAutoValidation('#salesReturnForm paper-input');
       }
 
       _ensureAccess() {
@@ -149,7 +150,7 @@
             count: productReturnCount,
           }
         ];
-        
+
         let data = {
           salesId: this.params.sales,
           returnedProductList, creditedAmount

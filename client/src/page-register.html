@@ -96,6 +96,7 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.resetProperties('registerForm');
+        this.removeAutoValidation('#registerForm paper-input');
       }
 
       // region: register =================================

@@ -172,6 +172,7 @@
         super.onNavigateOut();
         this.app.popPageTitle();
         this.resetProperties('editProductCategoryForm');
+        this.removeAutoValidation('#editProductCategoryForm paper-input');
       }
 
       _ensureAccess() {

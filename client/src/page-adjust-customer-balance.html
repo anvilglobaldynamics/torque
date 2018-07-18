@@ -114,6 +114,7 @@
         super.onNavigateOut();
         this.app.popPageTitle();
         this.resetProperties('adjustCustomerBalanceForm');
+        this.removeAutoValidation('#adjustCustomerBalanceForm paper-input');
       }
 
       _ensureAccess() {

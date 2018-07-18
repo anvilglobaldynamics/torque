@@ -97,6 +97,7 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.resetProperties('verifyForm');
+        this.removeAutoValidation('#verify-form paper-input');
       }
 
       // region: verify =================================
@@ -105,7 +106,7 @@
         emailOrPhone = emailOrPhone.toLowerCase();
 
         let data = { emailOrPhone, password };
-        
+
         this.app.callUserVerifyApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) {
