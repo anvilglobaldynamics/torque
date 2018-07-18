@@ -411,7 +411,8 @@
     "vat": "ভ্যাট",
     "paidAmount": "পরিশোধিত",
     "changeAmount": "ফেরত",
-    "wasDebitedToUser": "ক্রেতাকে ডেবিট করা হয়েছিল।"
+    "wasDebitedToUser": "ক্রেতাকে ডেবিট করা হয়েছিল।",
+    "allReturned": "সব ফেরত"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",

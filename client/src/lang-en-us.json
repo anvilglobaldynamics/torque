@@ -409,7 +409,8 @@
     "vat": "Vat",
     "paidAmount": "Paid Amount",
     "changeAmount": "Change Amount",
-    "wasDebitedToUser": "was debited to user."
+    "wasDebitedToUser": "was debited to user.",
+    "allReturned": "all returned"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",
