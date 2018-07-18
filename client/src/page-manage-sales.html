@@ -49,7 +49,7 @@
                 [[verses.general.customer]]:
                 <b>[[customer.fullName]]</b> ([[customer.phone]])
                 <br>[[verses.general.balance]]:
-                <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
+                <b>[[$round(customer.balance)]] [[app.settings.monetaryUnit]]</b>
               </template>
             </div>
             <div class="horizontal layout center">
@@ -100,7 +100,7 @@
               <div class="vertical layout flex">
                 <div class="title">[[sale.id]]</div>
                 <div class="description">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                <div class="description">[[verses.sales.billed]] [[sale.payment.totalBilled]] [[app.settings.monetaryUnit]] [[verses.general.for]] [[sale.productList.length]] [[verses.sales.products]]</div>
+                <div class="description">[[verses.sales.billed]] [[$round(sale.payment.totalBilled)]] [[app.settings.monetaryUnit]] [[verses.general.for]] [[sale.productList.length]] [[verses.sales.products]]</div>
               </div>
               <paper-button raised class="primary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
             </div>

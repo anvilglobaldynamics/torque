@@ -163,7 +163,7 @@
 
                 <div class="individual-calculation-field-container">
 
-                  <paper-input class="payment--vatValue" value="{{vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.vatInputError]]" label="[[verses.pos.vatInput]]">
+                  <paper-input class="payment--vatValue" value="{{payment.vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.vatInputError]]" label="[[verses.pos.vatInput]]">
                     <div slot="suffix">%</div>
                   </paper-input>
 
@@ -248,6 +248,7 @@
             value: () => {
               return {
                 totalAmount: null,
+                vatValue: 0,
                 vatAmount: 0,
                 discountType: 'percent',
                 discountValue: 0,
@@ -260,10 +261,6 @@
                 changeAmount: 0
               }
             }
-          },
-          vatValue: {
-            type: Number,
-            value: 0
           },
           isSearchingCustomer: {
             type: Boolean,
@@ -360,6 +357,7 @@
       _calculatePayment() {
         let {
           totalAmount,
+          vatValue,
           vatAmount,
           discountType,
           discountValue,
@@ -398,8 +396,9 @@
         }
 
         // overall vat calculation
-        if (this.vatValue) {
-          vatAmount = totalBilled * (this.vatValue / 100);
+        if (vatValue) {
+          vatValue = parseInt(vatValue);
+          vatAmount = totalBilled * (vatValue / 100);
           totalBilled += vatAmount;
         }
 
@@ -421,6 +420,7 @@
 
         this.payment = {
           totalAmount,
+          vatValue,
           vatAmount,
           discountType,
           discountValue,

@@ -37,7 +37,8 @@
 
       <div class="card vertical layout">
         <div>[[customer.fullName]]</div>
-        <div>[[verses.general.balance]]: [[customer.balance]]</div>
+        <div>[[verses.general.balance]]: [[$round(customer.balance)]] [[app.settings.monetaryUnit]]</div>
+        <!-- <div>[[verses.general.balance]]: [[$round(customer.balance)]]</div> -->
         <div>[[verses.general.number]]: [[customer.phone]]</div>
       </div>
 
@@ -48,7 +49,7 @@
             <b>#[[index]]</b> [[verses.general.date]]: [[additionalPayment.creditedDatetimeStamp]]
           </div>
           <div>
-            [[verses.general.amount]]: [[additionalPayment.amount]]
+            [[verses.general.amount]]: [[$round(additionalPayment.amount)]] [[app.settings.monetaryUnit]]
           </div>
           <div>
             [[verses.general.action]]: [[additionalPayment.action]]

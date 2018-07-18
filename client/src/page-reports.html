@@ -102,7 +102,7 @@
                   [[verses.general.customer]]:
                   <b>[[customer.fullName]]</b> ([[customer.phone]])
                   <br> [[verses.general.balance]]:
-                  <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
+                  <b>[[$round(customer.balance)]] [[app.settings.monetaryUnit]]</b>
                 </template>
               </div>
               <div class="horizontal layout center">
@@ -200,23 +200,23 @@
                   </div>
                   <template is="dom-if" if="[[sales.payment.discountedAmount]]">
                     <div class="description">
-                      <strong>[[verses.salesReport.discountedAmount]]: </strong>[[sales.payment.discountedAmount]] [[app.settings.monetaryUnit]]</div>
+                      <strong>[[verses.salesReport.discountedAmount]]: </strong>[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</div>
                   </template>
                   <template is="dom-if" if="[[sales.payment.vatAmount]]">
                     <div class="description">
-                      <strong>[[verses.salesReport.vat]]: </strong>[[sales.payment.vatAmount]] [[app.settings.monetaryUnit]]</div>
+                      <strong>[[verses.salesReport.vat]]: </strong>[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</div>
                   </template>
                   <template is="dom-if" if="[[sales.payment.serviceChargeAmount]]">
                     <div class="description">
-                      <strong>[[verses.salesReport.serviceCharge]]: </strong>[[sales.payment.serviceChargeAmount]]%</div>
+                      <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]]%</div>
                   </template>
                   <template is="dom-if" if="[[sales.payment.previousCustomerBalance]]">
                     <div class="description">
-                      <strong>[[verses.salesReport.previousBalance]]: </strong>[[sales.payment.previousCustomerBalance]] [[app.settings.monetaryUnit]]</div>
+                      <strong>[[verses.salesReport.previousBalance]]: </strong>[[$round(sales.payment.previousCustomerBalance)]] [[app.settings.monetaryUnit]]</div>
                   </template>
                 </template>
               </div>
-              <div class="description">[[sales.payment.totalBilled]] [[app.settings.monetaryUnit]]</div>
+              <div class="description">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</div>
             </div>
           </template>
           <div class="horizontal layout center item wrap">

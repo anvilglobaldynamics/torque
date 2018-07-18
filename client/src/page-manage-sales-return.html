@@ -47,7 +47,7 @@
                 [[verses.general.customer]]:
                 <b>[[customer.fullName]]</b> ([[customer.phone]])
                 <br>[[verses.general.balance]]:
-                <b>[[customer.balance]] [[app.settings.monetaryUnit]]</b>
+                <b>[[$round(customer.balance)]] [[app.settings.monetaryUnit]]</b>
               </template>
             </div>
             <template is="dom-if" if="[[customer]]">
@@ -96,7 +96,7 @@
               <div class="vertical layout flex">
                 <div class="title">[[verses.salesReturn.salesId]]: [[saleReturn.salesId]]</div>
                 <div class="description">[[$mkDate(saleReturn.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                <div class="description">[[verses.salesReturn.credited]] [[saleReturn.creditedAmount]] [[app.settings.monetaryUnit]]</div>
+                <div class="description">[[verses.salesReturn.credited]] [[$round(saleReturn.creditedAmount)]] [[app.settings.monetaryUnit]]</div>
               </div>
               <paper-button raised class="primary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
             </div>

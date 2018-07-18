@@ -45,7 +45,7 @@
               <div class="content">
                 <div class="title">[[customer.fullName]]</div>
                 <div class="description">[[customer.phone]]</div>
-                <div class="description">[[verses.general.balance]]: [[customer.balance]]</div>
+                <div class="description">[[verses.general.balance]]: [[$round(customer.balance)]] [[app.settings.monetaryUnit]]</div>
               </div>
               <div class="control-buttons">
                 <paper-button raised class="primary" on-tap="viewTapped">

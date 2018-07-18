@@ -19,6 +19,7 @@ Joi.object().keys({
   ),
   payment: Joi.object().keys({
     totalAmount: Joi.number().max(999999999999999).required(),
+    vatValue: Joi.number().max(999999999999999).required(),
     vatAmount: Joi.number().max(999999999999999).required(),
     discountType: Joi.string().max(1024).required(),
     discountValue: Joi.number().max(999999999999999).required(),
