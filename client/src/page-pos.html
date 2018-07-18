@@ -200,32 +200,9 @@
                     <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                   </paper-input>
 
-                  <template is="dom-if" if="[[$exists(payment.changeAmount)]]">
-                    <template is="dom-if" if="[[$gte(payment.changeAmount, 0)]]">
-                      <br> [[verses.pos.changeAmount]]:
-                      <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
-                      <br>
-                      <template is="dom-if" if="[[!$eq(payment.changeAmount, 0)]]">
-                        <template is="dom-if" if="[[customer]]">
-                          <br>
-                          <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
-                            <span>[[verses.pos.shouldSaveChangeInAccountStart]] {{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]] [[verses.pos.shouldSaveChangeInAccountEnd]]</span>
-                          </paper-checkbox>
-                          <br>
-                        </template>
-                      </template>
-                    </template>
-                    <template is="dom-if" if="[[!$gte(payment.changeAmount, 0)]]">
-                      <br> [[verses.pos.changeAmountIfNegative]]:
-                      <b>{{$absRound(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
-                      <br>
-                      <template is="dom-if" if="[[customer]]">
-                        <paper-checkbox checked="{{payment.allowCreditSale}}">
-                          <span>[[verses.pos.allowCreditSaleMessage]]</span>
-                        </paper-checkbox>
-                        <br>
-                      </template>
-                    </template>
+                  <template is="dom-if" if="[[payment.paidAmount]]">
+                    <br> [[verses.pos.changeAmount]]:
+                    <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
                   </template>
 
                 </div>
@@ -234,12 +211,7 @@
             </div>
 
             <div class="horizontal layout m-top-16">
-              <template is="dom-if" if="[[$isSaleAllowed(payment.changeAmount, payment.allowCreditSale)]]">
-                <paper-button raised class="primary flex" on-tap="saveSaleTapped">[[verses.pos.confirmSales]]</paper-button>
-              </template>
-              <template is="dom-if" if="[[!$isSaleAllowed(payment.changeAmount, payment.allowCreditSale)]]">
-                <br>[[verses.pos.creditSaleHint]]
-              </template>
+              <paper-button raised class="primary flex" on-tap="saveSaleTapped">[[verses.pos.confirmSales]]</paper-button>
             </div>
 
           </div>
@@ -276,9 +248,7 @@
                 totalBilled: null,
                 previousCustomerBalance: null,
                 paidAmount: 0,
-                changeAmount: 0,
-                shouldSaveChangeInAccount: false,
-                allowCreditSale: false,
+                changeAmount: 0
               }
             }
           },
@@ -387,11 +357,9 @@
           discountedAmount,
           serviceChargeAmount,
           totalBilled,
-          previousCustomerBalance = 0,
-          paidAmount = 0,
-          changeAmount = 0,
-          shouldSaveChangeInAccount,
-          allowCreditSale
+          previousCustomerBalance,
+          paidAmount,
+          changeAmount,
         } = this.payment;
 
         totalAmount = this.productList.reduce((sum, product) => {
@@ -426,18 +394,20 @@
         }
 
         if (serviceChargeAmount) {
-          totalBilled += parseFloat(serviceChargeAmount);
+          totalBilled += parseInt(serviceChargeAmount);
         }
 
         if (this.customer) {
           previousCustomerBalance = this.customer.balance;
-        } else {
-          previousCustomerBalance = 0;
         }
 
-        paidAmount = parseFloat(String(paidAmount || 0));
-        previousCustomerBalance = parseFloat(String(previousCustomerBalance || 0));
-        changeAmount = (previousCustomerBalance + paidAmount) - totalBilled;
+        if (paidAmount) {
+          if (totalBilled > paidAmount) {
+            changeAmount = paidAmount - totalBilled;
+          } else {
+            changeAmount = paidAmount - totalBilled;
+          }
+        }
 
         this.payment = {
           totalAmount,
@@ -449,9 +419,7 @@
           totalBilled,
           previousCustomerBalance,
           paidAmount,
-          changeAmount,
-          shouldSaveChangeInAccount,
-          allowCreditSale
+          changeAmount
         };
       }
 
@@ -490,25 +458,21 @@
       _customerSelected(customer) {
         this.customer = customer;
         this.isSearchingCustomer = false;
-        this._calculatePayment();
       }
 
       // region: ui =================================
 
       changeCustomerTapped(e = null) {
         this.isSearchingCustomer = true;
-        this._calculatePayment();
       }
 
       createCustomerTapped(e = null) {
         this.app.navigateTo('/edit-customer');
-        this._calculatePayment();
       }
 
       removeCustomerTapped(e = null) {
         this.customer = null;
         this.app.storeInSession('last-selected-customer', null);
-        this._calculatePayment();
       }
 
       addProductTapped(e = null) {
@@ -518,7 +482,6 @@
       }
 
       genericPaymentInputChanged(e = null) {
-        if (!this.payment.paidAmount) this.payment.paidAmount = 0;
         this._calculatePayment();
       }
 
@@ -532,20 +495,6 @@
       }
 
       // region: misc =================================
-
-      $gte(a, b) { return a >= b; }
-
-      $eq(a, b) { return a === b; }
-
-      $exists(a) { return (typeof (a) !== "undefined"); }
-
-      $absRound(a) { return this.$round(Math.abs(parseFloat(String(a)))); }
-
-      $isSaleAllowed(changeAmount, allowCreditSale) {
-        if (changeAmount >= 0) return true;
-        if (allowCreditSale) return true;
-        return false;
-      }
 
     }
 
