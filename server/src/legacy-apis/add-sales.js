@@ -38,9 +38,7 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
         totalBilled: Joi.number().max(999999999999999).required(),
         previousCustomerBalance: Joi.number().max(999999999999999).allow(null).required(),
         paidAmount: Joi.number().max(999999999999999).required(),
-        changeAmount: Joi.number().max(999999999999999).required(),
-        shouldSaveChangeInAccount: Joi.boolean().required(),
-        allowCreditSale: Joi.boolean().required()
+        changeAmount: Joi.number().max(999999999999999).required()
       })
     });
   }
@@ -81,22 +79,19 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
 
   _handlePayment({ payment, customer }, cbfn) {
     let diff = (payment.paidAmount + payment.previousCustomerBalance) - payment.totalBilled;
-    if (diff < 0 && !customer) {
-      let err = new Error("credit sale is not allowed without registered cutomer");
-      err.code = "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER";
-      return this.fail(err);
-    }
-    if (diff < 0 && !payment.allowCreditSale) {
-      let err = new Error("You have not permitted credit sales.");
-      err.code = "CREDIT_SALE_NOT_PERMITTED_BY_SALES_PERSON";
-      return this.fail(err);
-    }
-    if (diff > 0 && !payment.shouldSaveChangeInAccount) {
-      diff = 0; // because the change amount is not saved to user's account any more.
-    }
-    this._updateCustomerBalance({ diff, customer }, () => {
+
+    if (diff >= 0) {
       return cbfn(payment);
-    });
+    } else {
+      if (!customer) {
+        let err = new Error("credit sale is not allowed without registered cutomer");
+        err.code = "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER";
+        return this.fail(err);
+      }
+      this._updateCustomerBalance({ diff, customer }, () => {
+        return cbfn(payment);
+      });
+    }
   }
 
   _addSales({ outletId, customerId, productList, payment }, cbfn) {
