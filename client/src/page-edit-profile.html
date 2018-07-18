@@ -32,9 +32,9 @@
       <iron-form id="changePasswordForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
-            <paper-input class="changePasswordForm--oldPassword" value="{{changePasswordForm.oldPassword}}" required minlength="11" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.currentPassword]] type="password"></paper-input>
-            <paper-input class="changePasswordForm--newPassword" value="{{changePasswordForm.newPassword}}" required minlength="11" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.newPassword]] type="password"></paper-input>
-            <paper-input class="changePasswordForm--repeatNewPassword" value="{{changePasswordForm.repeatNewPassword}}" required minlength="11" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.retypeNewPassword]] type="password"></paper-input>
+            <paper-input class="changePasswordForm--oldPassword" value="{{changePasswordForm.oldPassword}}" required minlength="8" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.currentPassword]] type="password"></paper-input>
+            <paper-input class="changePasswordForm--newPassword" value="{{changePasswordForm.newPassword}}" required minlength="8" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.newPassword]] type="password"></paper-input>
+            <paper-input class="changePasswordForm--repeatNewPassword" value="{{changePasswordForm.repeatNewPassword}}" required minlength="8" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.retypeNewPassword]] type="password"></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary changePasswordForm--submit" on-tap="changePasswordTapped">[[verses.editProfile.changePassword]]</paper-button>

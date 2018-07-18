@@ -58,7 +58,7 @@
               <div class="vertical layout flex">
                 <div>[[verses.general.product]]: [[product.productCategoryName]]</div>
                 <div>[[verses.general.count]]: [[product.count]]</div>
-                <div>[[verses.sales.salePrice]]: [[product.salePrice]]</div>
+                <div>[[verses.sales.salePrice]]: [[product.salePrice]] [[app.settings.monetaryUnit]]</div>
                 <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}">
                   <paper-button raised class="primary discard-button" on-tap="returnTapped">[[verses.general.return]]</paper-button>
                 </template>
@@ -72,14 +72,14 @@
         <div class="title">
           <b>[[verses.sales.payment]]:</b>
         </div>
-        <div>[[verses.sales.totalBilled]]: [[$round(sales.payment.totalBilled)]]</div>
-        <div>[[verses.sales.discounted]]: [[$round(sales.payment.discountedAmount)]] [[verses.general.by]] [[sales.payment.discountValue]] [[sales.payment.discountType]]</div>
-        <div>[[verses.sales.serviceChargeAmount]]: [[$round(sales.payment.serviceChargeAmount)]]</div>
-        <div>[[verses.sales.vat]]: [[$round(sales.payment.vatAmount)]]</div>
-        <div>[[verses.sales.paidAmount]]: [[$round(sales.payment.paidAmount)]]</div>
-        <div>[[verses.sales.changeAmount]]: [[$round(sales.payment.changeAmount)]]</div>
+        <div>[[verses.sales.totalBilled]]: [[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</div>
+        <div>[[verses.sales.discounted]]: [[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]] [[verses.general.by]] [[sales.payment.discountValue]] [[sales.payment.discountType]]</div>
+        <div>[[verses.sales.serviceChargeAmount]]: [[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</div>
+        <div>[[verses.sales.vat]]: [[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</div>
+        <div>[[verses.sales.paidAmount]]: [[$round(sales.payment.paidAmount)]] [[app.settings.monetaryUnit]]</div>
+        <div>[[verses.sales.changeAmount]]: [[$round(sales.payment.changeAmount)]] [[app.settings.monetaryUnit]]</div>
         <template is="dom-if" if="[[sales.payment.shouldSaveChangeInAccount]]">
-          <div>([[sales.payment.changeAmount]] [[verses.sales.wasDebitedToUser]])</div>
+          <div>([[sales.payment.changeAmount]] [[app.settings.monetaryUnit]] [[verses.sales.wasDebitedToUser]])</div>
         </template>
       </div>
 
