@@ -203,6 +203,10 @@
                   <template is="dom-if" if="[[payment.paidAmount]]">
                     <br> [[verses.pos.changeAmount]]:
                     <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
+
+                    <template is="dom-if" if="[[payment.changeAmount]]">
+                      <!-- TODO: shouldSaveChangeInAccount  -->
+                    </template>
                   </template>
 
                 </div>
@@ -247,6 +251,7 @@
                 serviceChargeAmount: 0,
                 totalBilled: null,
                 previousCustomerBalance: null,
+                shouldSaveChangeInAccount: false,
                 paidAmount: 0,
                 changeAmount: 0
               }
@@ -358,6 +363,7 @@
           serviceChargeAmount,
           totalBilled,
           previousCustomerBalance,
+          shouldSaveChangeInAccount,
           paidAmount,
           changeAmount,
         } = this.payment;
@@ -419,7 +425,8 @@
           totalBilled,
           previousCustomerBalance,
           paidAmount,
-          changeAmount
+          changeAmount,
+          shouldSaveChangeInAccount
         };
       }
 
