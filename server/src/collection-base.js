@@ -123,14 +123,13 @@ class Collection {
     if (!originalDoc) return false;
     let updatedDoc = await this._db.updateAndReturnNew(this.name, query, modifications);
     if (!updatedDoc) return false;
-    let wasUpdated = false;
     try {
-      wasUpdated = await this.__validateDocument(updatedDoc, true);
+      await this.__validateDocument(updatedDoc, true);
     } catch (err) {
       await this._db.replaceOne(this.name, { id: originalDoc.id }, originalDoc);
       throw err;
     }
-    return wasUpdated;
+    return true;
   }
 
   // ================== Higher Level Database abstraction ================== //
