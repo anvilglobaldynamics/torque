@@ -162,6 +162,7 @@
       _selectCustomer(customerIndex) {
         let customer = this.customerList[customerIndex];
         this.page._customerSelected(customer);
+        this.customerList = [];
       }
 
       selectTapped(e) {

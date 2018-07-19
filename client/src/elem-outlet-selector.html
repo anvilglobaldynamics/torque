@@ -148,6 +148,7 @@
       _selectOutlet(outletIndex) {
         let outlet = this.outletList[outletIndex];
         this.page._outletSelected(outlet);
+        this.outletList = [];
       }
 
       selectTapped(e) {
