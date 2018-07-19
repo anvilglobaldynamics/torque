@@ -53,8 +53,8 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
   }
 
   async __createSession({ userId }) {
-    let apiKey = generateRandomString(64);
     do {
+      var apiKey = generateRandomString(64);
       var isUnique = await this.database.sesssion.isApiKeyUnique({ apiKey });
     } while (!isUnique);
     let sessionId = await this.database.sesssion.create({ userId, apiKey });
