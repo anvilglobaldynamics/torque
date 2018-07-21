@@ -31,7 +31,7 @@ exports.CustomerCollection = class extends Collection {
     return [
       {
         filters: {},
-        keyList: ['phone']
+        keyList: []
       }
     ];
   }
