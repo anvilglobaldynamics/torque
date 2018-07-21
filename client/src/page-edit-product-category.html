@@ -47,7 +47,7 @@
             <paper-input class="editProductCategoryForm--defaultPurchasePrice" value="{{editProductCategoryForm.defaultPurchasePrice}}" type="number" required min="0" error-message=[[verses.productCategory.defaultPurchasePriceInputError]] label=[[verses.productCategory.defaultPurchasePriceInput]]>
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
-            <paper-input class="editProductCategoryForm--defaultVat" value="{{editProductCategoryForm.defaultVat}}" type="number" required min="0" error-message=[[verses.productCategory.defaultVatInputError]] label=[[verses.productCategory.defaultVatInput]]>
+            <paper-input class="editProductCategoryForm--defaultVat" value="{{editProductCategoryForm.defaultVat}}" type="number" required min="0" max="100" error-message=[[verses.productCategory.defaultVatInputError]] label=[[verses.productCategory.defaultVatInput]]>
               <div slot="suffix">%</div>
             </paper-input>
             <paper-input class="editProductCategoryForm--defaultSalePrice" value="{{editProductCategoryForm.defaultSalePrice}}" type="number" required min="0" error-message=[[verses.productCategory.productCategoryDefaultSalePriceInputError]] label=[[verses.productCategory.productCategoryDefaultSalePriceInput]]>
@@ -126,7 +126,7 @@
                   defaultDiscountType: "percent",
                   defaultDiscountValue: 0,
                   defaultPurchasePrice: 0,
-                  defaultVat: 15,
+                  defaultVat: 0,
                   defaultSalePrice: 0,
                   isReturnable: false
                 };
