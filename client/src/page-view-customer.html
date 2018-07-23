@@ -46,7 +46,7 @@
         [[verses.customer.additionalPaymentHistory]]:
         <template is="dom-repeat" items="[[customer.additionalPaymentHistory]]" as="additionalPayment">
           <div>
-            <b>#[[index]]</b> [[verses.general.date]]: [[$mkDate(additionalPayment.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
+            <b>#[[index]]</b> [[verses.general.date]]: [[$mkDate(additionalPayment.creditedDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
           </div>
           <div>
             [[verses.general.amount]]: [[$round(additionalPayment.amount)]] [[app.settings.monetaryUnit]]
