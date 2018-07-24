@@ -159,7 +159,7 @@ class Collection {
 
   async _insertMany(docList) {
     await Promise.all(docList.map(doc => this.__validateDocument(doc, false)));
-    return await this._db.insertOne(this.name, doc);
+    return await this._db.insertMany(this.name, doc);
   }
 
   async _update(query, modifications) {
