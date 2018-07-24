@@ -41,6 +41,9 @@ class Logger {
   }
 
   _initializeFile() {
+    if (!fslib.existsSync(this.options.dir)) {
+      fslib.mkdirSync(this.options.dir);
+    }
     let extension = 'yaml';
     let postfix = moment((new Date)).format('YYYY-MM-DD--HH.mm.ss.SSSS');
     let number = 0;
