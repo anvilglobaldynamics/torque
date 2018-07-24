@@ -205,6 +205,9 @@ class Api {
         apiArgs.body = body;
       }
       let response = await this.handle(apiArgs);
+      if (typeof (response) !== 'object' || response === null) {
+        throw new CodedError("DEVELOPER_ERROR", "Expected response to be an object.");
+      }
       response.hasError = false;
       this.__applyPaginationToResponse(response);
       this._sendResponse(response);

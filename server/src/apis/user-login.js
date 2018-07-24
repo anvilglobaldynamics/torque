@@ -29,7 +29,7 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
     let passwordHash = this._makeHash(password);
     let user = await this.database.user.findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash });
     throwOnFalsy(user, "USER_NOT_FOUND", this.verses.userLoginApi.userNotFound);
-    throwOnTruthy(user.isBanner, "USER_BANNED", this.verses.userLoginApi.userBanned);
+    throwOnTruthy(user.isBanned, "USER_BANNED", this.verses.userLoginApi.userBanned);
 
     let warning = [];
     if (emailOrPhone === user.phone && !user.isPhoneVerified) {
