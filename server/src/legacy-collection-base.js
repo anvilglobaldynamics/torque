@@ -62,17 +62,28 @@ class LegacyCollection {
   __ensureKeysAreUnique(doc, isAlreadyInDb, filters, keyList, cbfn) {
     Promise.all(keyList.map((key) => {
       return new Promise((accept, reject) => {
-        if (!(key in doc)) {
-          return reject(new Error(`unique key ${key} is missing from document.`));
-        }
-
         let query = {
-          [key]: doc[key],
           $or: [
             { isDeleted: { $exists: false } },
             { isDeleted: false }
           ]
         };
+
+        if (key.indexOf('+') > -1) {
+          let innerKeyList = key.split('+');
+          innerKeyList.forEach(key => {
+            if (!(key in doc)) {
+              return reject(new Error(`unique key ${key} is missing from document.`));
+            }
+            query[key] = doc[key];
+          });
+        } else {
+          if (!(key in doc)) {
+            return reject(new Error(`unique key ${key} is missing from document.`));
+          }
+          query[key] = doc[key];
+        }
+
         for (let fragment in filters) {
           query[fragment] = filters[fragment];
         }

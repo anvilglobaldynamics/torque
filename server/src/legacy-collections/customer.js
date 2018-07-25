@@ -42,7 +42,7 @@ exports.CustomerCollection = class extends LegacyCollection {
     this.uniqueKeyDefList = [
       {
         filters: {},
-        keyList: []
+        keyList: ['organizationId+phone']
       }
     ];
 

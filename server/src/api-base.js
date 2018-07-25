@@ -383,6 +383,9 @@ class Api {
     } else if (err.code === "DUPLICATE_phone") {
       err = new Error(this.verses.duplicationCommon.phoneAlreadyInUse);
       err.code = 'PHONE_ALREADY_IN_USE';
+    } else if (err.code === "DUPLICATE_organizationId+phone") {
+      err = new Error(this.verses.duplicationCommon.phoneAlreadyInUse);
+      err.code = 'PHONE_ALREADY_IN_USE';
     }
     return err;
   }
