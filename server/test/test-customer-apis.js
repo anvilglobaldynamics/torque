@@ -33,7 +33,7 @@ let organizationId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidCustomerId = generateInvalidId();
 
-describe('customer', _ => {
+describe.only('customer', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -236,6 +236,8 @@ describe('customer', _ => {
       });
 
       body.customerList.reverse();
+
+      console.log(body.customerList);
 
       firstCustomer = body.customerList[0];
       secondCustomer = body.customerList[1];
