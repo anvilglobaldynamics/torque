@@ -192,6 +192,7 @@ describe('sales-return', _ => {
                                 ],
                                 payment: {
                                   totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+                                  vatValue: 5,
                                   vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
                                   discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
                                   discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -200,7 +201,8 @@ describe('sales-return', _ => {
                                   totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
                                   previousCustomerBalance: customerData.balance,
                                   paidAmount: 300,
-                                  changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+                                  changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+                                  shouldSaveChangeInAccount: false
                                 }
                               }, (data) => {
                                 salesId = data.salesId;
@@ -219,6 +221,7 @@ describe('sales-return', _ => {
                                   ],
                                   payment: {
                                     totalAmount: (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2),
+                                    vatValue: 5,
                                     vatAmount: ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100)),
                                     discountType: outletInventoryMatchingProductCategoryList[1].defaultDiscountType,
                                     discountValue: outletInventoryMatchingProductCategoryList[1].defaultDiscountValue,
@@ -227,7 +230,8 @@ describe('sales-return', _ => {
                                     totalBilled: (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[1].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100))),
                                     previousCustomerBalance: customerData.balance,
                                     paidAmount: 300,
-                                    changeAmount: (300 - (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[1].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100))))
+                                    changeAmount: (300 - (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[1].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100)))),
+                                    shouldSaveChangeInAccount: false
                                   }
                                 }, (data) => {
                                   sales2Id = data.salesId;
