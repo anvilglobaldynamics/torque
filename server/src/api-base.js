@@ -205,6 +205,9 @@ class Api {
         apiArgs.body = body;
       }
       let response = await this.handle(apiArgs);
+      if (typeof (response) !== 'object' || response === null) {
+        throw new CodedError("DEVELOPER_ERROR", "Expected response to be an object.");
+      }
       response.hasError = false;
       this.__applyPaginationToResponse(response);
       this._sendResponse(response);
@@ -378,6 +381,9 @@ class Api {
       err = new Error(this.verses.duplicationCommon.emailAlreadyInUse);
       err.code = 'EMAIL_ALREADY_IN_USE';
     } else if (err.code === "DUPLICATE_phone") {
+      err = new Error(this.verses.duplicationCommon.phoneAlreadyInUse);
+      err.code = 'PHONE_ALREADY_IN_USE';
+    } else if (err.code === "DUPLICATE_organizationId+phone") {
       err = new Error(this.verses.duplicationCommon.phoneAlreadyInUse);
       err.code = 'PHONE_ALREADY_IN_USE';
     }

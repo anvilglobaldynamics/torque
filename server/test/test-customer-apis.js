@@ -22,6 +22,8 @@ const fullName = "Test User";
 
 const orgEmail = 'o' + `${rnd(prefix)}@gmail.com`;
 const orgPhone = 'o' + rnd(prefix, 11);
+const orgEmail2 = 'o2' + `${rnd(prefix)}@gmail.com`;
+const orgPhone2 = 'o2' + rnd(prefix, 11);
 const customerPhone = 'c' + rnd(prefix, 11);
 const updatedCustomerPhone = 'c2' + rnd(prefix, 11);
 const customerPhone2 = 'c3' + rnd(prefix, 11);
@@ -30,6 +32,7 @@ let apiKey = null;
 let firstCustomer = null;
 let secondCustomer = null;
 let organizationId = null;
+let secondOrganizationId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidCustomerId = generateInvalidId();
 
@@ -52,7 +55,16 @@ describe('customer', _ => {
             email: orgEmail
           }, (data) => {
             organizationId = data.organizationId
-            testDoneFn();
+            addOrganization({
+              apiKey,
+              name: "My 2nd Organization",
+              primaryBusinessAddress: "My Address",
+              phone: orgPhone2,
+              email: orgEmail2
+            }, (data) => {
+              secondOrganizationId = data.organizationId;
+              testDoneFn();
+            });
           });
         });
       });
@@ -109,6 +121,26 @@ describe('customer', _ => {
         fullName: "2nd Test Customer",
         phone: customerPhone2,
         openingBalance: '500',
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('customerId');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-customer (Valid, 2nd Organization, same customer phone): ', testDoneFn => {
+
+    callApi('api/add-customer', {
+      json: {
+        apiKey,
+        organizationId: secondOrganizationId,
+        fullName: "2nd Test Customer",
+        phone: customerPhone2,
+        openingBalance: '0',
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
