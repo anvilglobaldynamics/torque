@@ -209,6 +209,7 @@ describe('sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -217,7 +218,8 @@ describe('sales', _ => {
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
           previousCustomerBalance: null,
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false
         }
       }
     }, (err, response, body) => {
@@ -244,6 +246,7 @@ describe('sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -252,7 +255,8 @@ describe('sales', _ => {
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
           previousCustomerBalance: null,
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false
         }
       }
     }, (err, response, body) => {
@@ -287,6 +291,7 @@ describe('sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -295,7 +300,8 @@ describe('sales', _ => {
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
           previousCustomerBalance: null,
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false
         }
       }
     }, (err, response, body) => {
@@ -330,6 +336,7 @@ describe('sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -338,7 +345,8 @@ describe('sales', _ => {
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
           previousCustomerBalance: null,
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false
         }
       }
     }, (err, response, body) => {
@@ -372,6 +380,7 @@ describe('sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -380,7 +389,8 @@ describe('sales', _ => {
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
           previousCustomerBalance: null,
           paidAmount: 0,
-          changeAmount: (0 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+          changeAmount: (0 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false
         }
       }
     }, (err, response, body) => {
@@ -415,6 +425,7 @@ describe('sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -423,7 +434,8 @@ describe('sales', _ => {
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
           previousCustomerBalance: customerData.balance,
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false
         }
       }
     }, (err, response, body) => {
@@ -458,6 +470,7 @@ describe('sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -466,7 +479,8 @@ describe('sales', _ => {
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
           previousCustomerBalance: customerData.balance,
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))))
+          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false
         }
       }
     }, (err, response, body) => {
