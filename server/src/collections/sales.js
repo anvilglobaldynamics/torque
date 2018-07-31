@@ -34,7 +34,8 @@ exports.SalesCollection = class extends Collection {
         previousCustomerBalance: Joi.number().max(999999999999999).allow(null).required(),
         paidAmount: Joi.number().max(999999999999999).required(),
         changeAmount: Joi.number().max(999999999999999).required(),
-        shouldSaveChangeInAccount: Joi.boolean().required()
+        shouldSaveChangeInAccount: Joi.boolean().required(),
+        paymentMethod: Joi.string().valid('cash', 'card', 'digital').required()
       }),
       isModified: Joi.boolean().required(),
       isDeleted: Joi.boolean().required(),
