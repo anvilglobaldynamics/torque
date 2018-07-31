@@ -43,6 +43,10 @@
         padding: 5px;
         margin: 5px 0px 5px 0px;
       }
+
+      .full-width-paper-dropdown {
+        width: 100%;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -136,7 +140,7 @@
 
                   <div class="vertical layout">
 
-                    <paper-dropdown-menu label="[[verses.pos.discountType]]" class="mr-4">
+                    <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discountType]]" class="mr-4">
                       <paper-listbox slot="dropdown-content" selected="{{payment.discountType}}" attr-for-selected="name">
                         <paper-item name="percent">[[verses.general.percentage]]</paper-item>
                         <paper-item name="fixed">[[verses.general.fixedValue]]</paper-item>
@@ -200,6 +204,14 @@
                     <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                   </paper-input>
 
+                  <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4">
+                    <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
+                      <paper-item name="cash">[[verses.general.cash]]</paper-item>
+                      <paper-item name="card">[[verses.general.card]]</paper-item>
+                      <paper-item name="digital">[[verses.general.digital]]</paper-item>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+
                   <template is="dom-if" if="[[payment.paidAmount]]">
                     <br> [[verses.pos.changeAmount]]:
                     <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
@@ -257,6 +269,7 @@
                 totalBilled: null,
                 previousCustomerBalance: null,
                 shouldSaveChangeInAccount: false,
+                paymentMethod: 'cash',
                 paidAmount: 0,
                 changeAmount: 0
               }
@@ -366,6 +379,7 @@
           totalBilled,
           previousCustomerBalance,
           shouldSaveChangeInAccount,
+          paymentMethod,
           paidAmount,
           changeAmount,
         } = this.payment;
@@ -430,7 +444,8 @@
           previousCustomerBalance,
           paidAmount,
           changeAmount,
-          shouldSaveChangeInAccount
+          shouldSaveChangeInAccount,
+          paymentMethod
         };
       }
 
