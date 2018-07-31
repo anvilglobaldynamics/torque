@@ -63,7 +63,10 @@
     "by": "by",
     "cancel": "Cancel",
     "organization": "Organization",
-    "user": "User"
+    "user": "User",
+    "cash": "cash",
+    "card": "card",
+    "digital": "digital"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -408,6 +411,7 @@
     "serviceChargeAmount": "Service Charge Amount",
     "vat": "Vat",
     "paidAmount": "Paid Amount",
+    "paymentMethod": "Payment Method",
     "changeAmount": "Change Amount",
     "wasDebitedToUser": "was debited to user.",
     "allReturned": "all returned"
@@ -486,7 +490,8 @@
     "shouldSaveChangeInAccountStart": "Save this ",
     "shouldSaveChangeInAccountEnd": " in this customer's account instead of paying cash now.",
     "allowCreditSaleMessage": "Save this amount as due in customer's account.",
-    "creditSaleHint":" The paid amount is less than total amount billed. In order to do a credit sale, you need to select/create a customer and allow credit sale."
+    "creditSaleHint":" The paid amount is less than total amount billed. In order to do a credit sale, you need to select/create a customer and allow credit sale.",
+    "paymentMethod": "Payment Method"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",

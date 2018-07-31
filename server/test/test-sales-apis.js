@@ -219,7 +219,8 @@ describe('sales', _ => {
           previousCustomerBalance: null,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
@@ -256,7 +257,8 @@ describe('sales', _ => {
           previousCustomerBalance: null,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
@@ -301,7 +303,8 @@ describe('sales', _ => {
           previousCustomerBalance: null,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
@@ -346,7 +349,8 @@ describe('sales', _ => {
           previousCustomerBalance: null,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
@@ -390,7 +394,8 @@ describe('sales', _ => {
           previousCustomerBalance: null,
           paidAmount: 0,
           changeAmount: (0 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
@@ -435,7 +440,8 @@ describe('sales', _ => {
           previousCustomerBalance: customerData.balance,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
@@ -480,7 +486,8 @@ describe('sales', _ => {
           previousCustomerBalance: customerData.balance,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
