@@ -202,7 +202,8 @@ describe('sales-return', _ => {
                                   previousCustomerBalance: customerData.balance,
                                   paidAmount: 300,
                                   changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-                                  shouldSaveChangeInAccount: false
+                                  shouldSaveChangeInAccount: false,
+                                  paymentMethod: 'cash'
                                 }
                               }, (data) => {
                                 salesId = data.salesId;
@@ -231,7 +232,8 @@ describe('sales-return', _ => {
                                     previousCustomerBalance: customerData.balance,
                                     paidAmount: 300,
                                     changeAmount: (300 - (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[1].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100)))),
-                                    shouldSaveChangeInAccount: false
+                                    shouldSaveChangeInAccount: false,
+                                    paymentMethod: 'cash'
                                   }
                                 }, (data) => {
                                   sales2Id = data.salesId;
