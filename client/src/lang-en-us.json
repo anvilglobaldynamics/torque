@@ -411,6 +411,7 @@
     "serviceChargeAmount": "Service Charge Amount",
     "vat": "Vat",
     "paidAmount": "Paid Amount",
+    "paymentMethod": "Payment Method",
     "changeAmount": "Change Amount",
     "wasDebitedToUser": "was debited to user.",
     "allReturned": "all returned"
