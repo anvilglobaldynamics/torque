@@ -188,7 +188,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/add-sales (Invalid outletId)', testDoneFn => {
+  it('api/add-sales (Invalid outletId)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -219,7 +219,8 @@ describe.only('sales', _ => {
           previousCustomerBalance: null,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
@@ -233,7 +234,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/add-sales (Invalid empty productList)', testDoneFn => {
+  it('api/add-sales (Invalid empty productList)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -256,7 +257,8 @@ describe.only('sales', _ => {
           previousCustomerBalance: null,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
@@ -270,7 +272,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/add-sales (Invalid productList)', testDoneFn => {
+  it('api/add-sales (Invalid productList)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -301,7 +303,8 @@ describe.only('sales', _ => {
           previousCustomerBalance: null,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
@@ -360,7 +363,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/add-sales (Invalid, No Customer credit sale)', testDoneFn => {
+  it('api/add-sales (Invalid, No Customer credit sale)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -391,7 +394,8 @@ describe.only('sales', _ => {
           previousCustomerBalance: null,
           paidAmount: 0,
           changeAmount: (0 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
@@ -405,7 +409,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/add-sales (Invalid customer)', testDoneFn => {
+  it('api/add-sales (Invalid customer)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -436,7 +440,8 @@ describe.only('sales', _ => {
           previousCustomerBalance: customerData.balance,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
@@ -450,7 +455,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/add-sales (Valid, registered Customer)', testDoneFn => {
+  it('api/add-sales (Valid, registered Customer)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -481,7 +486,8 @@ describe.only('sales', _ => {
           previousCustomerBalance: customerData.balance,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
@@ -518,15 +524,14 @@ describe.only('sales', _ => {
         validateProductCategorySchema(productCategory);
       });
 
-      // TODO: remove below test and decrese count
-      // expect(body.productList[0]).to.have.property('count').that.equals(96);
+      expect(body.productList[0]).to.have.property('count').that.equals(96);
 
       testDoneFn();
     });
 
   });
 
-  it.skip('api/get-sales (Invalid)', testDoneFn => {
+  it('api/get-sales (Invalid)', testDoneFn => {
 
     callApi('api/get-sales', {
       json: {
@@ -544,7 +549,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/get-sales (Valid)', testDoneFn => {
+  it('api/get-sales (Valid)', testDoneFn => {
 
     callApi('api/get-sales', {
       json: {
@@ -564,7 +569,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/add-sales-return (Valid test purpose)', testDoneFn => {
+  it('api/add-sales-return (Valid test purpose)', testDoneFn => {
 
     callApi('api/add-sales-return', {
       json: {
@@ -589,7 +594,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/get-sales (Valid)', testDoneFn => {
+  it('api/get-sales (Valid)', testDoneFn => {
 
     callApi('api/get-sales', {
       json: {
@@ -608,7 +613,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid only organization Id)', testDoneFn => {
+  it('api/get-sales-list (Valid only organization Id)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -639,7 +644,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and outletId)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and outletId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -668,7 +673,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and Invalid outletId)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and Invalid outletId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -694,7 +699,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and customerId)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and customerId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -723,7 +728,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and Invalid customerId)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and Invalid customerId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -749,7 +754,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and Invalid customerId is null)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and Invalid customerId is null)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -775,7 +780,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId and Invalid outletId is null)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId and Invalid outletId is null)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -801,7 +806,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Valid with organizationId, outletId and customerId)', testDoneFn => {
+  it('api/get-sales-list (Valid with organizationId, outletId and customerId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -830,7 +835,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/get-sales-list (Invalid organizationId, with valid outletId and customerId)', testDoneFn => {
+  it('api/get-sales-list (Invalid organizationId, with valid outletId and customerId)', testDoneFn => {
 
     callApi('api/get-sales-list', {
       json: {
@@ -856,7 +861,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/discard-sales (Valid)', testDoneFn => {
+  it('api/discard-sales (Valid)', testDoneFn => {
 
     callApi('api/discard-sales', {
       json: {
@@ -873,7 +878,7 @@ describe.only('sales', _ => {
 
   });
 
-  it.skip('api/get-sales (Valid discard check)', testDoneFn => {
+  it('api/get-sales (Valid discard check)', testDoneFn => {
 
     callApi('api/get-sales', {
       json: {
