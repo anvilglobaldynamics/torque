@@ -56,6 +56,11 @@ class Api {
     return false;
   }
 
+  // Set it to false to temporarily disable the API for everyone.
+  get isEnabled() {
+    return true;
+  }
+
   // This can either be 'user' or 'admin'
   get authenticationLevel() {
     return 'user';
@@ -192,6 +197,9 @@ class Api {
 
   async _prehandle(originalBody) {
     try {
+      if (!this.isEnabled) {
+        throw new CodedError("API_DISABLED", "This action has been disabled by the developers. Please contact our call center for more information.");
+      }
       let apiArgs = {};
       if (this.autoValidates) {
         let body = this.__composeAndValidateSchema(originalBody);
