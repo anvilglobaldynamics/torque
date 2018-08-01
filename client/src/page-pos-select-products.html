@@ -30,6 +30,10 @@
       margin: 5px;
     }
 
+    .low-product-count-div {
+      color: red;
+    }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -42,7 +46,7 @@
             <div class="horizontal layout item center">
               <div class="flex" style="min-width: 128px;">
                 <div class="title">[[product.name]]</div>
-                <div>
+                <div class$="[[$isProductCountLow(product.count)]]">
                   <strong>[[product.count]][[product.unit]]</strong>
                 </div>
                 <div class="description">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
@@ -214,6 +218,14 @@
 
       backButtonOnTopBarPressed(e = null) {
         this.app.navigateToPreviousUrl(`/pos`);
+      }
+
+      $isProductCountLow(count) {
+        if (count <= 5) {
+          return 'low-product-count-div'
+        } else {
+          return '';
+        }
       }
 
       // region: misc =================================
