@@ -227,7 +227,7 @@
               <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
             </template>
             <div main-title="" class="flex vertical layout">
-              <div>[[$getPageTitle(pageTitleList.length)]]</div>
+              <div style$="[[$computePageTitleFontSize(pageTitleList.length)]]">[[$getPageTitle(pageTitleList.length)]]</div>
               <div class="title-line-2">[[organization.name]]</div>
             </div>
             <template is="dom-if" if="[[$and(activeServiceCount, topSpinnerEnabled)]]">
@@ -674,6 +674,15 @@
 
       buildNumberTapped(e = null) {
         this.showAlertMessage("Build Details", "Released on: " + new Date(this.__deploy.datetimeStamp));
+      }
+
+      $computePageTitleFontSize(length) {
+        let title = this.$getPageTitle(length);
+        let size;
+        if (title.length < 20) size = 20;
+        else if (title.length < 30) size = 14;
+        else size = 12;
+        return `font-size: ${size}px`;
       }
 
     }
