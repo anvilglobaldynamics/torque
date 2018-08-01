@@ -36,6 +36,10 @@
         width: 100%;
         margin: 5px;
       }
+
+      .low-product-count-div {
+        color: red;
+      }
       
     </style>
 
@@ -58,7 +62,7 @@
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
                 <div class="title">[[product.name]]</div>
-                <div>
+                <div class$="[[$isProductCountLow(product.count)]]">
                   <strong>[[product.count]][[product.unit]]</strong>
                 </div>
                 <div class="description">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
@@ -280,6 +284,14 @@
 
       addProductsTapped(e) {
         return this.app.navigateTo(`/add-products/inventory:${this.inventoryId}`);
+      }
+
+      $isProductCountLow(count) {
+        if (count <= 5) {
+          return 'low-product-count-div'
+        } else {
+          return '';
+        }
       }
 
       // region: misc =================================
