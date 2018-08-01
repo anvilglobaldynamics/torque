@@ -678,10 +678,13 @@
 
       $computePageTitleFontSize(length) {
         let title = this.$getPageTitle(length);
-        let size;
-        if (title.length < 20) size = 20;
-        else if (title.length < 30) size = 14;
-        else size = 12;
+        let size = 20;
+        let windowWidth = window.document.body.clientWidth;
+        if (windowWidth <= 496) {
+          if (title.length < 20) size = 20;
+          else if (title.length < 30) size = 14;
+          else size = 12;
+        }
         return `font-size: ${size}px`;
       }
 
