@@ -532,7 +532,9 @@
     "useWebsocketsDetail": "If checked, the app will try to use websockets.",
     "monetaryUnit": "Monetary Unit",
     "monetaryUnitDetail": "Note: Changing the monetary unit does not affect your sales.",
-    "moreOptionsForthcoming": "More options are forthcoming."
+    "moreOptionsForthcoming": "More options are forthcoming.",
+    "minimumProductQuantity": "Minimum Product Quantity",
+    "minimumProductQuantityDetail": "Product Quantity will be colored red below this number."
   },
   "verify": {
     "verificationModalTitle": "Verification SMS Sent",

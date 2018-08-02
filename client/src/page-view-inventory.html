@@ -287,7 +287,7 @@
       }
 
       $isProductCountLow(count) {
-        if (count <= 5) {
+        if (count <= parseInt(this.app.settings.minimumProductQuantity)) {
           return 'low-product-count-div'
         } else {
           return '';
