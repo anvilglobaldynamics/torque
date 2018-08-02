@@ -72,7 +72,7 @@ let { TransferBetweenInventoriesApi } = require('./legacy-apis/transfer-between-
 
 let { AddSalesApi } = require('./legacy-apis/add-sales');
 let { GetSalesApi } = require('./legacy-apis/get-sales');
-let { GetSalesListApi } = require('./legacy-apis/get-sales-list');
+const { GetSalesListApi } = require('./apis/get-sales-list');
 let { DiscardSalesApi } = require('./legacy-apis/discard-sales');
 
 let { AddSalesReturnApi } = require('./legacy-apis/add-sales-return');
