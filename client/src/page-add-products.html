@@ -110,9 +110,9 @@
         if (this.count > 0) {
           productList.push({
             productCategoryId: this.productCategory.id,
-            purchasePrice: parseInt(this.purchasePrice),
-            salePrice: parseInt(this.salePrice),
-            count: parseFloat(String(this.count))
+            purchasePrice: parseFloat(this.purchasePrice),
+            salePrice: parseFloat(this.salePrice),
+            count: parseInt(String(this.count))
           });
         }
         this.elemAll('product-category-add-product').forEach(el => el.listProductsToAdd(productList));
