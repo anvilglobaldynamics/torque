@@ -16,6 +16,7 @@ const { DatabaseService } = require('./database-service');
 
 let { UserRegisterApi } = require('./legacy-apis/user-register');
 const { UserLoginApi } = require('./apis/user-login');
+const { UserAssertApiKeyApi } = require('./apis/user-assert-api-key');
 let { UserLogoutApi } = require('./legacy-apis/user-logout');
 let { VerifyEmailApi } = require('./legacy-apis/verify-email');
 let { VerifyPhoneApi } = require('./legacy-apis/verify-phone');
@@ -72,7 +73,7 @@ let { TransferBetweenInventoriesApi } = require('./legacy-apis/transfer-between-
 
 let { AddSalesApi } = require('./legacy-apis/add-sales');
 let { GetSalesApi } = require('./legacy-apis/get-sales');
-let { GetSalesListApi } = require('./legacy-apis/get-sales-list');
+const { GetSalesListApi } = require('./apis/get-sales-list');
 let { DiscardSalesApi } = require('./legacy-apis/discard-sales');
 
 let { AddSalesReturnApi } = require('./legacy-apis/add-sales-return');
@@ -234,6 +235,7 @@ class Program {
     server.registerGetApi('/internal--status', InternalStatus);
     server.registerPostApi('/api/user-register', UserRegisterApi);
     server.registerPostApi('/api/user-login', UserLoginApi);
+    server.registerPostApi('/api/user-assert-api-key', UserAssertApiKeyApi);
     server.registerPostApi('/api/user-logout', UserLogoutApi);
     server.registerPostApi('/api/user-change-password', UserChangePasswordApi);
     server.registerPostApi('/api/user-edit-profile', UserEditProfileApi);

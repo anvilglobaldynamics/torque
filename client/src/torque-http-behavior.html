@@ -62,7 +62,7 @@
             });
             return;
           }
-          if (mode === 'development' && (!localStorage.getItem('nodebug'))) {
+          if (mode === 'development' && (!localStorage.getItem('nodebug')) && (path !== 'user-assert-api-key')) {
             console.log(`API/api=${path}`, data, response);
           }
           return _cbfn(null, response);
@@ -127,6 +127,11 @@
 
       callUserLoginApi(data, cbfn) {
         this.callCombinedJsonApi('user-login', data, cbfn);
+      }
+
+      callUserAssertApiKeyApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('user-assert-api-key', data, cbfn);
       }
 
       callUserLogoutApi(data, cbfn) {
