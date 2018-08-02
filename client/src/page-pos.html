@@ -51,6 +51,10 @@
       .height-adjusted {
         margin-top: -14px;
       }
+
+      .product-title {
+        font-weight: bold;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -104,9 +108,10 @@
           <template is="dom-repeat" items="[[productList]]" as="product">
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
-                <div class="title">[[product.name]]
+                <div>
+                  <span class="product-title">[[product.name]]</span>
                   <template is="dom-if" if="{{product.discountValue}}">
-                    <span>([[verses.pos.hasDiscount]]) </span>
+                    <span>([[verses.pos.hasDiscount]])</span>
                   </template>
                 </div>
                 <div class="horizontal layout center">
