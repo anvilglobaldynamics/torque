@@ -25,12 +25,10 @@
   <template>
 
     <style include="shared-styles">
-
       .title {
         /* font-weight: bold; */
         padding-right: 5px;
       }
-
     </style>
 
     <div class$="layout vertical" id="wrapper" style$="margin-left: [[marginLeft]]px">
@@ -114,7 +112,7 @@
             productCategoryId: this.productCategory.id,
             purchasePrice: parseInt(this.purchasePrice),
             salePrice: parseInt(this.salePrice),
-            count: parseInt(this.count)
+            count: parseFloat(String(this.count))
           });
         }
         this.elemAll('product-category-add-product').forEach(el => el.listProductsToAdd(productList));
@@ -131,12 +129,10 @@
 <dom-module id="page-add-products">
   <template>
     <style include="shared-styles">
-
       .add-product-button-container paper-button {
         width: 100%;
         margin: 5px;
       }
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
