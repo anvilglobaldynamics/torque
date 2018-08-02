@@ -52,6 +52,8 @@
         <paper-tab>[[verses.settings.others]]</paper-tab>
       </paper-tabs>
 
+      <!-- View Index 0 Start -->
+
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 0)]]">
         <div class="card vertical layout">
           <div class="option">
@@ -64,6 +66,9 @@
         </div>
       </template>
 
+      <!-- View Index 0 End -->
+      <!-- View Index 1 Start -->
+
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 1)]]">
         <div class="card vertical layout">
           <div class="option">
@@ -72,14 +77,26 @@
               [[verses.settings.monetaryUnitDetail]]
             </div>
           </div>
+
+          <div class="option">
+            <paper-input on-input="settingsChanged" type="number" min="0" max="100" value="{{minimumProductQuantity}}" label="[[verses.settings.minimumProductQuantity]]"></paper-input>
+            <div class="note">
+              [[verses.settings.minimumProductQuantityDetail]]
+            </div>
+          </div>
         </div>
       </template>
+
+      <!-- View Index 1 End -->
+      <!-- View Index 2 Start -->
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 2)]]">
         <div class="card vertical layout">
           [[verses.settings.moreOptionsForthcoming]]
         </div>
       </template>
+
+      <!-- View Index 2 End -->
 
   </template>
 
@@ -95,6 +112,7 @@
           paperTabSelectedViewIndex: { type: Number, value: 0, observer: '_paperTabSelectedViewIndexChanged' },
           shouldUseWebsockets: { type: Boolean, value: false },
           monetaryUnit: { type: String, value: 'BDT' },
+          minimumProductQuantity: { type: Number, value: 5 }
         };
       }
 
@@ -140,6 +158,7 @@
         let settings = this.app.db.find('settings', (({ which }) => which === 'only'))[0];
         this.shouldUseWebsockets = settings.shouldUseWebsockets;
         this.monetaryUnit = settings.monetaryUnit;
+        this.minimumProductQuantity = settings.minimumProductQuantity;
         this._loadLastPaperTabSelectedViewIndex();
         if (!this._ensureAccess()) return;
         this.delay(300, () => {
@@ -166,6 +185,7 @@
         this.app.db.update('settings', ({ which }) => which === 'only', (doc) => {
           doc.shouldUseWebsockets = this.shouldUseWebsockets;
           doc.monetaryUnit = this.monetaryUnit;
+          doc.minimumProductQuantity = this.minimumProductQuantity;
           return doc
         });
       }
