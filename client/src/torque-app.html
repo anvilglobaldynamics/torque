@@ -414,7 +414,7 @@
         this.initiateLanguageServices();
         this.pushPageTitle(this.brandName);
         this._notifyResizeHack();
-        this.delay(1000, () => this._assertApiKey());
+        this.delay(5000, () => this._assertApiKey());
       }
 
       _assertApiKey() {
@@ -503,7 +503,12 @@
           this.activeServiceCount = event.detail.activeCount;
         });
         this.serviceManager.on('error', (event) => {
-          this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
+          try {
+            if (event.path[0].url.indexOf('user-assert-api-key') > -1) return;
+            this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
+          } catch (ex) {
+            this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
+          }
         });
       }
 
