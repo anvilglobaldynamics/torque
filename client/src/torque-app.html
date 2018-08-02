@@ -317,10 +317,6 @@
   <script>
     let localDocument = document.currentScript.ownerDocument;
 
-    // PATCH: Move to PolymerFx->FxElement
-    FxElement.prototype.delay = (timeout, fn) => window.setTimeout(fn, timeout);
-    // PATCH-END
-
     class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior, TorqueLanguageBehavior) {
 
       static get is() { return 'torque-app'; }
@@ -417,15 +413,6 @@
         this.useLanguageServices();
         this.initiateLanguageServices();
         this.pushPageTitle(this.brandName);
-        // PATCH-START for PolymerFx#FxDialogBehavior
-        this.delay(0, () => {
-          this.elem('#generic-modal-input paper-input').addEventListener('keypress', (e) => {
-            if (e.which === 13) {
-              this.elem('#generic-modal-input paper-button[dialog-confirm]').click();
-            }
-          });
-        });
-        // PATCH-END
         this._notifyResizeHack();
       }
 
@@ -641,29 +628,6 @@
         }
         return false;
       }
-
-      // PATCH START
-      // NOTE: This is a patch for FxPage#getUrlParameters()
-      // In time, it will be moved to polymer-fx.
-      getUrlParameters(hash) {
-        if (hash.length === 0) {
-          return {};
-        }
-        // console.log(hash)
-        // hash = hash.replace('/', '');
-        let partArray = hash.split('/');
-        let params = {};
-        for (let part of Array.from(partArray)) {
-          if (part.indexOf(':') === -1) {
-            this.showAlertMessage('Routing Error', 'Malformatted Url Given')
-            break;
-          }
-          let [left, right] = Array.from(part.split(':'));
-          params[left] = right;
-        }
-        return params;
-      };
-      // PATCH END
 
       $getLanguageClass(selectedLanguageIdentifier, languageIdentifier) {
         if (selectedLanguageIdentifier === languageIdentifier) {
