@@ -15,6 +15,8 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
 
   get requiresAuthentication() { return false; }
 
+  get isEnabled() { return true; }
+
   get requestSchema() {
     return Joi.object().keys({
       emailOrPhone: Joi.alternatives([

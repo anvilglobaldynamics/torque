@@ -6,6 +6,8 @@ const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 const baselib = require('baselib');
 
+const { CodedError } = require('./utils/coded-error');
+
 const languageCache = {
   'en-us': require('./languages/en-us').verses,
   'bn-bd': require('./languages/bn-bd').verses
@@ -49,6 +51,11 @@ class LegacyApi {
     return 'user';
   }
 
+  // Set it to false to temporarily disable the API for everyone.
+  get isEnabled() {
+    return true;
+  }
+
   // NOTE: See `_enforceAccessControl` for details.
   get accessControl() {
     return null;
@@ -75,9 +82,17 @@ class LegacyApi {
 
   _prehandleGetApi() {
     this.handle();
+    if (!this.isEnabled) {
+      let err = new CodedError("API_DISABLED", "This action has been disabled by the developers. Please contact our call center for more information.");
+      return this.fail(err);
+    }
   }
 
   _prehandlePostOrWsApi(body) {
+    if (!this.isEnabled) {
+      let err = new CodedError("API_DISABLED", "This action has been disabled by the developers. Please contact our call center for more information.");
+      return this.fail(err);
+    }
     if (this.autoValidates) {
       let schema = this.requestSchema;
       if (this.requiresAuthentication) {
