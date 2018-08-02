@@ -47,6 +47,10 @@
       .full-width-paper-dropdown {
         width: 100%;
       }
+
+      .height-adjusted {
+        margin-top: -14px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -100,17 +104,16 @@
           <template is="dom-repeat" items="[[productList]]" as="product">
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
-                <div class="title">[[product.name]]</div>
-                <div class="description">[[verses.pos.count]]: [[product.count]]</div>
-
-                <div class="horizontal layout">
-                  <!-- TODO: show discounted price here rather than selling price, or both -->
-                  <div class="description">[[verses.pos.sellingPrice]]: [[product.salePrice]]</div>
+                <div class="title">[[product.name]]
                   <template is="dom-if" if="{{product.discountValue}}">
-                    <div> , ([[verses.pos.hasDiscount]]) </div>
+                    <span>([[verses.pos.hasDiscount]]) </span>
                   </template>
                 </div>
-
+                <div class="horizontal layout center">
+                  <div class="description">[[product.count]] [[product.unit]] @&nbsp;</div>
+                  <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" min="[[product.minSalePrice]]"></paper-input>
+                  <div class="description">[[app.settings.monetaryUnit]]</div>
+                </div>
               </div>
             </div>
           </template>

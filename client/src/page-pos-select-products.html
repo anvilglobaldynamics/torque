@@ -24,12 +24,10 @@
 <dom-module id="page-pos-select-products">
   <template>
     <style include="shared-styles">
-    
-    .confirm-discard-button-group paper-button {
-      width: 100%;
-      margin: 5px;
-    }
-
+      .confirm-discard-button-group paper-button {
+        width: 100%;
+        margin: 5px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -186,11 +184,12 @@
 
         let productList = this.productList.filter(product => product.isSelected).map(product => {
           if (!('selectedCount' in product)) product.selectedCount = '' + product.count;
-          let { productId, name, selectedCount, salePrice, discountType, discountValue } = product;
-          let count = parseInt(selectedCount, 10);
-          return { productId, name, count, salePrice, discountType, discountValue };
+          let { productId, name, selectedCount, salePrice, discountType, discountValue, unit } = product;
+          let count = parseFloat(String(selectedCount));
+          let minSalePrice = salePrice;
+          return { productId, name, count, salePrice, discountType, discountValue, minSalePrice, unit };
         });
-        
+
         this.app.storeInSession('pos-selected-product-list', productList);
         this.backButtonOnTopBarPressed();
       }
