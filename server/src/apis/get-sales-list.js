@@ -37,25 +37,6 @@ exports.GetSalesListApi = class extends Api {
     }];
   }
 
-  async __getInventoryList({ organizationId }) {
-    let inventoryList = await this.database.inventory.listByOrganizationId({ organizationId });
-    let map = await this.crossmap({
-      source: inventoryList.filter(inventory => inventory.inventoryContainerType === 'outlet'),
-      sourceKey: 'inventoryContainerId',
-      target: 'outlet',
-      onError: (inventory) => { throw new CodedError("INVENTORY_CONTAINER_NOT_FOUND", "Could not find Inventory Container"); }
-    });
-    await this.crossmap({
-      source: inventoryList.filter(inventory => inventory.inventoryContainerType === 'warehouse'),
-      sourceKey: 'inventoryContainerId',
-      target: 'warehouse',
-      onError: (inventory) => { throw new CodedError("INVENTORY_CONTAINER_NOT_FOUND", "Could not find Inventory Container"); },
-      reuseMap: map
-    });
-    inventoryList.forEach(inventory => inventory.inventoryContainerName = map.get(inventory).name);
-    return inventoryList;
-  }
-
   __getExtendedToDate(toDate) {
     toDate = new Date(toDate);
     toDate.setHours(23);
@@ -94,7 +75,7 @@ exports.GetSalesListApi = class extends Api {
     return salesList;
   }
 
-  async  __includeExtendedInformationIfNeeded({ salesList, includeExtendedInformation }) {
+  async __includeExtendedInformationIfNeeded({ salesList, includeExtendedInformation }) {
     if (!includeExtendedInformation) return;
     let map = await this.crossmap({
       source: salesList,
