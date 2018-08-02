@@ -414,13 +414,13 @@
 
         // overall vat calculation
         if (vatValue) {
-          vatValue = parseInt(vatValue);
+          vatValue = parseFloat(vatValue);
           vatAmount = totalBilled * (vatValue / 100);
           totalBilled += vatAmount;
         }
 
         if (serviceChargeAmount) {
-          totalBilled += parseInt(serviceChargeAmount);
+          totalBilled += parseFloat(serviceChargeAmount);
         }
 
         if (this.customer) {
