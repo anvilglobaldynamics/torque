@@ -414,6 +414,20 @@
         this.initiateLanguageServices();
         this.pushPageTitle(this.brandName);
         this._notifyResizeHack();
+        this.delay(1000, () => this._assertApiKey());
+      }
+
+      _assertApiKey() {
+        if ('user' in this && 'apiKey' in this.user) {
+          this.callUserAssertApiKeyApi({}, (err, response) => {
+            if (err) return;
+            if (response.hasError) return this.logoutTapped();
+            let { apiKey, warning, sessionId, user } = response;
+            Object.assign(user, { apiKey, warning, sessionId });
+            this.saveUser(user);
+          });
+        }
+        this.delay(30000, () => this._assertApiKey());
       }
 
       _notifyResizeHack() {
