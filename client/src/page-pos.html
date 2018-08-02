@@ -101,11 +101,16 @@
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
                 <div class="title">[[product.name]]</div>
+                
+
+
                 <div class="description">[[verses.pos.count]]: [[product.count]]</div>
 
                 <div class="horizontal layout">
                   <!-- TODO: show discounted price here rather than selling price, or both -->
-                  <div class="description">[[verses.pos.sellingPrice]]: [[product.salePrice]]</div>
+                  <div class="description">[[verses.pos.sellingPrice]]:
+                    <paper-input value="{{product.salePrice}}" on-input="genericPaymentInputChanged" type="number" min="[[product.minSalePrice]]"></paper-input>
+                  </div>
                   <template is="dom-if" if="{{product.discountValue}}">
                     <div> , ([[verses.pos.hasDiscount]]) </div>
                   </template>

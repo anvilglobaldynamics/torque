@@ -186,7 +186,8 @@
           if (!('selectedCount' in product)) product.selectedCount = '' + product.count;
           let { productId, name, selectedCount, salePrice, discountType, discountValue } = product;
           let count = parseFloat(String(selectedCount));
-          return { productId, name, count, salePrice, discountType, discountValue };
+          let minSalePrice = salePrice;
+          return { productId, name, count, salePrice, discountType, discountValue, minSalePrice };
         });
 
         this.app.storeInSession('pos-selected-product-list', productList);
