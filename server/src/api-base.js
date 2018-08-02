@@ -409,20 +409,28 @@ class Api {
   * @param {String} param.targetKey
   * @param {Function} param.targetKey
   */
-  async crossmap({ source, sourceKey, target, onError = null, reuseMap = null } = {}) {
-    let idList = source.map(sourceDoc => sourceDoc[sourceKey]);
+  async crossmap({ source, sourceKey, sourceKeyFn = null, target, onError = null, reuseMap = null } = {}) {
+    const getSourceKeyValue = (sourceDoc) => {
+      if (sourceKey) {
+        return sourceDoc[sourceKey];
+      } else {
+        return sourceKeyFn(sourceDoc);
+      }
+    }
+    let idList = source.map(sourceDoc => getSourceKeyValue(sourceDoc));
     let targetDocList = await this.database[target].listByIdList({ idList });
     if (targetDocList.length < idList.length) {
       idList.forEach(id => {
         if (!targetDocList.find(targetDoc => targetDoc.id === id)) {
-          let sourceDoc = source.find(sourceDoc => sourceDoc[sourceKey] === id);
+          let sourceDoc = source.find(sourceDoc => getSourceKeyValue(sourceDoc) === id);
           if (onError) onError(sourceDoc);
         }
       })
     }
+    /** @type {Map} */
     let map = (reuseMap ? reuseMap : new Map());
     source.forEach(sourceDoc => {
-      let targetDoc = targetDocList.find(targetDoc => targetDoc.id === sourceDoc[sourceKey]);
+      let targetDoc = targetDocList.find(targetDoc => targetDoc.id === getSourceKeyValue(sourceDoc));
       map.set(sourceDoc, targetDoc);
     });
     return map;
