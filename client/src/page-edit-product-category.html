@@ -44,13 +44,13 @@
             <paper-input class="editProductCategoryForm--name" value="{{editProductCategoryForm.name}}" required minlength="3" error-message=[[verses.productCategory.productCategoryNameInputError]] label=[[verses.productCategory.productCategoryNameInput]]></paper-input>
             <paper-input class="editProductCategoryForm--unit" value="{{editProductCategoryForm.unit}}" required minlength="1" error-message=[[verses.productCategory.productCategoryUnitInputError]] label=[[verses.productCategory.productCategoryUnitInput]]></paper-input>
 
-            <paper-input class="editProductCategoryForm--defaultPurchasePrice" value="{{editProductCategoryForm.defaultPurchasePrice}}" type="number" required min="0" error-message=[[verses.productCategory.defaultPurchasePriceInputError]] label=[[verses.productCategory.defaultPurchasePriceInput]]>
+            <paper-input class="editProductCategoryForm--defaultPurchasePrice" step="0.01" value="{{editProductCategoryForm.defaultPurchasePrice}}" type="number" required min="0" error-message=[[verses.productCategory.defaultPurchasePriceInputError]] label=[[verses.productCategory.defaultPurchasePriceInput]]>
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
             <paper-input class="editProductCategoryForm--defaultVat" value="{{editProductCategoryForm.defaultVat}}" type="number" required min="0" max="100" error-message=[[verses.productCategory.defaultVatInputError]] label=[[verses.productCategory.defaultVatInput]]>
               <div slot="suffix">%</div>
             </paper-input>
-            <paper-input class="editProductCategoryForm--defaultSalePrice" value="{{editProductCategoryForm.defaultSalePrice}}" type="number" required min="0" error-message=[[verses.productCategory.productCategoryDefaultSalePriceInputError]] label=[[verses.productCategory.productCategoryDefaultSalePriceInput]]>
+            <paper-input class="editProductCategoryForm--defaultSalePrice" step="0.01" value="{{editProductCategoryForm.defaultSalePrice}}" type="number" required min="0" error-message=[[verses.productCategory.productCategoryDefaultSalePriceInputError]] label=[[verses.productCategory.productCategoryDefaultSalePriceInput]]>
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
 
