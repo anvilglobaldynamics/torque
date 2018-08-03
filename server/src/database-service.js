@@ -22,6 +22,7 @@ const { SesssionCollection } = require('./collections/session');
 const { UserCollection } = require('./collections/user');
 const { WarehouseCollection } = require('./collections/warehouse');
 const { ProductAcquisitionCollection } = require('./collections/product-acquisition');
+const { ProductTransferCollection } = require('./collections/product-transfer');
 
 class DatabaseService {
 
@@ -50,6 +51,7 @@ class DatabaseService {
     this.user = new UserCollection(this.engine, this);
     this.warehouse = new WarehouseCollection(this.engine, this);
     this.productAcquisition = new ProductAcquisitionCollection(this.engine, this);
+    this.productTransfer = new ProductTransferCollection(this.engine, this);
     /** @type {[Collection]} */
     this.collectionList = Object.keys(this).filter(key => this[key] instanceof Collection).map(key => this[key]);
   }
