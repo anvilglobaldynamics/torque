@@ -30,11 +30,11 @@ exports.ProductAcquisitionCollection = class extends Collection {
 
   get foreignKeyDefList() {
     return [
-      // {
-      //   targetCollection: 'user',
-      //   foreignKey: 'id',
-      //   referringKey: 'createdByUserId'
-      // }
+      {
+        targetCollection: 'user',
+        foreignKey: 'id',
+        referringKey: 'createdByUserId'
+      }
     ];
   }
 

@@ -60,11 +60,11 @@ exports.AddProductToInventoryApi = class extends Api {
     await this.database.productAcquisition.create({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList: newProductList });
   }
 
-  async handle({ body }) {
+  async handle({ body, userId }) {
     let { inventoryId, productList } = body;
     await this._verifyProductCategoriesExist({ productList });
     await this._addProductToInventory({ inventoryId, productList });
-    await this._addAcquisitionRecord({ createdByUserId: 696969, acquiredDatetimeStamp: (new Date).getTime(), partyType: "unspecified", partyName: null, productList });
+    await this._addAcquisitionRecord({ createdByUserId: userId, acquiredDatetimeStamp: (new Date).getTime(), partyType: "unspecified", partyName: null, productList });
     return { status: "success" };
   }
 
