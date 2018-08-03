@@ -55,10 +55,16 @@ exports.AddProductToInventoryApi = class extends Api {
     }));
   }
 
+  async _addAcquisitionRecord({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList }) {
+    let newProductList = productList.map(product => ({ productCategoryId: product.productCategoryId, count: product.count }));
+    await this.database.productAcquisition.create({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList: newProductList });
+  }
+
   async handle({ body }) {
     let { inventoryId, productList } = body;
     await this._verifyProductCategoriesExist({ productList });
     await this._addProductToInventory({ inventoryId, productList });
+    await this._addAcquisitionRecord({ createdByUserId: 696969, acquiredDatetimeStamp: (new Date).getTime(), partyType: "unspecified", partyName: null, productList });
     return { status: "success" };
   }
 
