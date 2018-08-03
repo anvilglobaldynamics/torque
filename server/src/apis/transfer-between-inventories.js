@@ -84,8 +84,7 @@ exports.TransferBetweenInventoriesApi = class extends Api {
   }
 
   async _addTransferRecord({ createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList }) {
-    console.log("productList: ", productList);
-    // await this.database.productAcquisition.create({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList: newProductList });
+    await this.database.productTransfer.create({ createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList });
   }
 
   async handle({ body, userId }) {
