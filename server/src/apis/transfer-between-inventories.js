@@ -5,6 +5,7 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-er
 const { extract } = require('./../utils/extract');
 
 exports.TransferBetweenInventoriesApi = class extends Api {
+  
   get autoValidates() { return true; }
 
   get requiresAuthentication() { return true; }
