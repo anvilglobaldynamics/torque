@@ -83,11 +83,17 @@ exports.TransferBetweenInventoriesApi = class extends Api {
     this.ensureUpdate('inventory', result);
   }
 
-  async handle({ body }) {
+  async _addTransferRecord({ createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList }) {
+    console.log("productList: ", productList);
+    // await this.database.productAcquisition.create({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList: newProductList });
+  }
+
+  async handle({ body, userId }) {
     let { fromInventoryId, toInventoryId, productList } = body;
     let { fromInventory, toInventory } = await this._getInventoriesWithId({ fromInventoryId, toInventoryId });
     this._transfer({ fromInventory, toInventory, productList });
     await this._updateInventories({ fromInventory, toInventory });
+    await this._addTransferRecord({ createdByUserId: userId, transferredDatetimeStamp: (new Date).getTime(), fromInventoryId, toInventoryId, productList })
     return { status: "success" };
   }
 
