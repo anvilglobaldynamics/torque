@@ -51,17 +51,6 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     }
   }
 
-  // async __getMatchingProductList({ productList }) {
-  //   (await this.crossmap({
-  //     source: productList,
-  //     sourceKey: 'productId',
-  //     target: 'product',
-  //     onError: (product) => { throw new CodedError("PRODUCT_INVALID", "Invalid Product"); }
-  //   })).forEach((product, _product) => {
-  //     _product.product = product;
-  //   });
-  // }
-
   async __getMatchingProductList({ productList }) {
     let productIdList = productList.map(product => product.productId);
     return await this.database.product.listByIdList({ idList: productIdList });
@@ -72,6 +61,26 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     return await this.database.productCategory.listByIdList({ idList: productCategoryIdList });
   }
 
+  async __getAggregatedProductList({ productList }) {
+    (await this.crossmap({
+      source: productList,
+      sourceKey: 'productId',
+      target: 'product',
+      onError: (product) => { throw new CodedError("PRODUCT_INVALID", "Invalid Product"); }
+    })).forEach((product, _product) => {
+      _product.product = product;
+    });
+    (await this.crossmap({
+      source: productList,
+      sourceKeyFn: (doc => doc.product.productCategoryId),
+      target: 'productCategory',
+      onError: (product) => { throw new CodedError("PRODUCT_CATEGORY_INVALID", "Invalid ProductCategory"); }
+    })).forEach((productCategory, _product) => {
+      _product.product.productCategory = productCategory;
+    });
+    return productList;
+  }
+
   async handle({ body }) {
     let { inventoryId } = body;
     let inventory = await this.__getInventory({ inventoryId });
@@ -79,6 +88,9 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     let productList = inventory.productList;
     let matchingProductList = await this.__getMatchingProductList({ productList });
     let matchingProductCategoryList = await this.__getMatchingProductCategoryList({ matchingProductList });
+
+    let clonedProductList = JSON.parse(JSON.stringify(productList));
+    let aggregatedProductList = await this.__getAggregatedProductList({ productList: clonedProductList });
 
     return {
       status: "success",
@@ -88,7 +100,8 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
       inventoryContainerDetails,
       productList,
       matchingProductList,
-      matchingProductCategoryList
+      matchingProductCategoryList,
+      aggregatedProductList
     };
   }
 
