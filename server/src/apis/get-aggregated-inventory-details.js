@@ -68,6 +68,17 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     })).forEach((productCategory, _product) => {
       _product.product.productCategory = productCategory;
     });
+    let productAcquisitionList = await this.database.productAcquisition.listByProductIdList({ productIdList: productList.map(product => product.productId) });
+    productList.forEach(product => {
+      let productAcquisition = productAcquisitionList.find(productAcquisition =>
+        productAcquisition.productList.find(_product => _product.productId === product.productId)
+      );
+      if (productAcquisition) {
+        product.acquiredDatetimeStamp = productAcquisition.acquiredDatetimeStamp;
+      } else {
+        product.acquiredDatetimeStamp = 1533396523681;
+      }
+    });
     return productList;
   }
 
