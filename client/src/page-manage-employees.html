@@ -38,7 +38,7 @@
       <div class="card vertical layout">
 
         <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
         </template>
 
         <div class="list">
@@ -50,7 +50,7 @@
                 <div class="description">[[verses.employee.companyProvidedId]]: [[employee.companyProvidedId]]</div>
                 <div class="description">[[verses.employee.designation]] : [[employee.designation]], [[verses.employee.role]]: [[employee.role]]</div>
               </div>
-              <paper-button raised class="primary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
+              <paper-button raised class="secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
               <!-- <paper-button raised class="primary" on-tap="editTapped">[[verses.general.edit]]</paper-button> -->
             </div>
           </template>
@@ -64,13 +64,13 @@
           <span class="offset">#[[$inc(pagination.offset)]]</span>.
         </div>
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
         </template>
 
       </div>
 
       <div class="vartical layout wrap hire-button-group">
-        <paper-button raised class="btn btn-default" on-tap="hireEmployeeTapped">[[verses.employee.hireUserEmployee]]</paper-button>
+        <paper-button raised class="btn primary" on-tap="hireEmployeeTapped">[[verses.employee.hireUserEmployee]]</paper-button>
         <paper-button raised class="btn primary" on-tap="addNewEmployeeTapped">[[verses.employee.addUserAsEmployee]]</paper-button>
       </div>
 

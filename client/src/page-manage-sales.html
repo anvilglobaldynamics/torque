@@ -54,9 +54,9 @@
             </div>
             <div class="horizontal layout center">
               <template is="dom-if" if="[[customer]]">
-                <paper-button raised class="primary" on-tap="removeCustomerTapped">[[verses.sales.removeCustomer]]</paper-button>
+                <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.sales.removeCustomer]]</paper-button>
               </template>
-              <paper-button raised class="primary" on-tap="changeCustomerTapped">[[verses.sales.changeCustomer]]</paper-button>
+              <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.sales.changeCustomer]]</paper-button>
             </div>
           </div>
         </div>
@@ -78,9 +78,9 @@
               </template>
             </div>
             <template is="dom-if" if="[[outlet]]">
-              <paper-button raised class="primary" on-tap="removeOutletTapped">[[verses.sales.removeOutlet]]</paper-button>
+              <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.sales.removeOutlet]]</paper-button>
             </template>
-            <paper-button raised class="primary" on-tap="changeOutletTapped">[[verses.sales.changeOutlet]]</paper-button>
+            <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.sales.changeOutlet]]</paper-button>
           </div>
         </div>
       </template>
@@ -91,7 +91,7 @@
       <div class="card vertical layout">
 
         <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
         </template>
 
         <div class="list">
@@ -102,7 +102,7 @@
                 <div class="description">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
                 <div class="description">[[verses.sales.billed]] [[$round(sale.payment.totalBilled)]] [[app.settings.monetaryUnit]] [[verses.general.for]] [[sale.productList.length]] [[verses.sales.products]]</div>
               </div>
-              <paper-button raised class="primary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
+              <paper-button raised class="secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
             </div>
           </template>
         </div>
@@ -115,7 +115,7 @@
           <span class="offset">#[[$inc(pagination.offset)]]</span>.
         </div>
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
         </template>
 
       </div>

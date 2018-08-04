@@ -48,7 +48,7 @@
                 <div class="description">[[verses.general.balance]]: [[$round(customer.balance)]] [[app.settings.monetaryUnit]]</div>
               </div>
               <div class="control-buttons">
-                <paper-button raised class="primary" on-tap="viewTapped">
+                <paper-button raised class="secondary" on-tap="viewTapped">
                   <iron-icon class="button-icon" icon="icons:visibility"></iron-icon>
                   [[verses.general.view]]
                 </paper-button>
@@ -69,7 +69,7 @@
           <span class="offset">#[[$inc(pagination.offset)]]</span>.
         </div>
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button class="pagination-show-more" on-tap="showMoreTapped">
+          <paper-button class="pagination-show-more neutral" on-tap="showMoreTapped">
             [[verses.general.show]]
             <iron-icon icon="icons:arrow-downward"></iron-icon>
             [[verses.general.more]]
