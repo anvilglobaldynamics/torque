@@ -51,16 +51,6 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     }
   }
 
-  async __getMatchingProductList({ productList }) {
-    let productIdList = productList.map(product => product.productId);
-    return await this.database.product.listByIdList({ idList: productIdList });
-  }
-
-  async __getMatchingProductCategoryList({ matchingProductList }) {
-    let productCategoryIdList = matchingProductList.map(product => product.productCategoryId);
-    return await this.database.productCategory.listByIdList({ idList: productCategoryIdList });
-  }
-
   async __getAggregatedProductList({ productList }) {
     (await this.crossmap({
       source: productList,
@@ -86,8 +76,6 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     let inventory = await this.__getInventory({ inventoryId });
     let inventoryContainerDetails = await this.__getInventoryContainerDetails({ inventory });
     let productList = inventory.productList;
-    let matchingProductList = await this.__getMatchingProductList({ productList });
-    let matchingProductCategoryList = await this.__getMatchingProductCategoryList({ matchingProductList });
 
     let clonedProductList = JSON.parse(JSON.stringify(productList));
     let aggregatedProductList = await this.__getAggregatedProductList({ productList: clonedProductList });
@@ -98,9 +86,6 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
         inventoryName: inventory.name
       },
       inventoryContainerDetails,
-      productList,
-      matchingProductList,
-      matchingProductCategoryList,
       aggregatedProductList
     };
   }

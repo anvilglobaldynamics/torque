@@ -285,21 +285,10 @@ describe('inventory', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('inventoryDetails').that.is.an('object');
       expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
-      expect(body).to.have.property('productList').that.is.an('array');
-      expect(body).to.have.property('matchingProductList').that.is.an('array');
-      expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
-
-      productToBeTransferred = body.productList[0];
-
-      body.matchingProductList.forEach(product => {
-        validateProductSchema(product);
-      });
-      body.matchingProductCategoryList.forEach(productCategory => {
-        validateProductCategorySchema(productCategory);
-      });
-
-      expect(body.productList[0].productId).to.not.equal(body.productList[1].productId);
-
+      expect(body).to.have.property('aggregatedProductList').that.is.an('array');
+      productToBeTransferred = body.aggregatedProductList[0];
+      // TODO: Schema Validate aggregatedProductList
+      expect(body.aggregatedProductList[0].productId).to.not.equal(body.aggregatedProductList[1].productId);
       testDoneFn();
     });
 
@@ -440,19 +429,10 @@ describe('inventory', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('inventoryDetails').that.is.an('object');
       expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
-      expect(body).to.have.property('productList').that.is.an('array');
-      expect(body).to.have.property('matchingProductList').that.is.an('array');
-      expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
+      expect(body).to.have.property('aggregatedProductList').that.is.an('array');
 
-      body.matchingProductList.forEach(product => {
-        validateProductSchema(product);
-      });
-      body.matchingProductCategoryList.forEach(productCategory => {
-        validateProductCategorySchema(productCategory);
-      });
-
-      expect(body.productList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
-      expect(body.productList[0]).to.have.property('count').that.equals(2);
+      expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(2);
 
       testDoneFn();
     });
@@ -490,19 +470,10 @@ describe('inventory', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('inventoryDetails').that.is.an('object');
       expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
-      expect(body).to.have.property('productList').that.is.an('array');
-      expect(body).to.have.property('matchingProductList').that.is.an('array');
-      expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
+      expect(body).to.have.property('aggregatedProductList').that.is.an('array');
 
-      body.matchingProductList.forEach(product => {
-        validateProductSchema(product);
-      });
-      body.matchingProductCategoryList.forEach(productCategory => {
-        validateProductCategorySchema(productCategory);
-      });
-
-      expect(body.productList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
-      expect(body.productList[0]).to.have.property('count').that.equals(3);
+      expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(3);
 
       testDoneFn();
     });
@@ -521,19 +492,10 @@ describe('inventory', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('inventoryDetails').that.is.an('object');
       expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
-      expect(body).to.have.property('productList').that.is.an('array');
-      expect(body).to.have.property('matchingProductList').that.is.an('array');
-      expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
+      expect(body).to.have.property('aggregatedProductList').that.is.an('array');
 
-      body.matchingProductList.forEach(product => {
-        validateProductSchema(product);
-      });
-      body.matchingProductCategoryList.forEach(productCategory => {
-        validateProductCategorySchema(productCategory);
-      });
-
-      expect(body.productList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
-      expect(body.productList[0]).to.have.property('count').that.equals(productToBeTransferred.count - 5);
+      expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(productToBeTransferred.count - 5);
 
       testDoneFn();
     });
