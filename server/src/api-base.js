@@ -432,16 +432,22 @@ class Api {
     }
     let idList = source.map(sourceDoc => getSourceKeyValue(sourceDoc));
     let targetDocList = await this.database[target].listByIdList({ idList });
+
+    /** @type {Map} */
+    let map = (reuseMap ? reuseMap : new Map());
+
     if (targetDocList.length < idList.length) {
       idList.forEach(id => {
         if (!targetDocList.find(targetDoc => targetDoc.id === id)) {
           let sourceDoc = source.find(sourceDoc => getSourceKeyValue(sourceDoc) === id);
-          if (onError) onError(sourceDoc);
+          if (onError) {
+            let fallBack = onError(sourceDoc);
+            map.set(sourceDoc, fallBack);
+          }
         }
       })
     }
-    /** @type {Map} */
-    let map = (reuseMap ? reuseMap : new Map());
+
     source.forEach(sourceDoc => {
       let targetDoc = targetDocList.find(targetDoc => targetDoc.id === getSourceKeyValue(sourceDoc));
       map.set(sourceDoc, targetDoc);
