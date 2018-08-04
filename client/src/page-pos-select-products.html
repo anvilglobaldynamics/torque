@@ -49,6 +49,9 @@
                 </div>
                 <div class="description">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
                 <div class="description">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                <!-- TODO TRANSLATE -->
+                <div class="description">Acquired On: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
+                <div class="description">Added On: [[$mkDate(product.addedDatetimeStamp)]]</div>
               </div>
               <div class="horizontal layout wrap center">
                 <template is="dom-if" if="[[product.count]]">

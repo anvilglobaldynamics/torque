@@ -52,4 +52,8 @@ exports.ProductAcquisitionCollection = class extends Collection {
     });
   }
 
+  async listByProductIdList({ productIdList }) {
+    return await this._find({ 'productList': { $elemMatch: { 'productId': { $in: productIdList } } } });
+  }
+
 }
