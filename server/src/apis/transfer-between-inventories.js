@@ -5,7 +5,7 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-er
 const { extract } = require('./../utils/extract');
 
 exports.TransferBetweenInventoriesApi = class extends Api {
-  
+
   get autoValidates() { return true; }
 
   get requiresAuthentication() { return true; }
@@ -61,7 +61,6 @@ exports.TransferBetweenInventoriesApi = class extends Api {
       if (!foundProduct) {
         throw new CodedError("PRODUCT_INVALID", "product could not be found in source inventory");
       }
-      // TODO: if (!this._ensureDoc(err, foundProduct, "PRODUCT_INVALID", "Product could not be found in source inventory")) return;
       if (foundProduct.count < product.count) {
         throw new CodedError("PRODUCT_INSUFFICIENT", "not enough product(s) in source inventory");
       }

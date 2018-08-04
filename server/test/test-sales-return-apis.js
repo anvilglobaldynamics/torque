@@ -174,9 +174,8 @@ describe('sales-return', _ => {
                               apiKey,
                               inventoryId: outletDefaultInventoryId
                             }, (data) => {
-                              outletInventoryProductList = data.productList;
-                              outletInventoryMatchingProductList = data.matchingProductList;
-                              outletInventoryMatchingProductCategoryList = data.matchingProductCategoryList;
+                              outletInventoryProductList = data.aggregatedProductList;
+                              outletInventoryMatchingProductCategoryList = outletInventoryProductList.map(_product => _product.product.productCategory);
                               addSales({
                                 apiKey,
                                 outletId,
@@ -377,18 +376,9 @@ describe('sales-return', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('productList').that.is.an('array');
-      expect(body).to.have.property('matchingProductList').that.is.an('array');
-      expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
+      expect(body).to.have.property('aggregatedProductList').that.is.an('array');
 
-      body.matchingProductList.forEach(product => {
-        validateProductSchema(product);
-      });
-      body.matchingProductCategoryList.forEach(productCategory => {
-        validateProductCategorySchema(productCategory);
-      });
-
-      expect(body.productList[0]).to.have.property('count').that.equals(2);
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(2);
 
       testDoneFn();
     });

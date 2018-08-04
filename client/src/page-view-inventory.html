@@ -27,7 +27,6 @@
 <dom-module id="page-view-inventory">
   <template>
     <style include="shared-styles">
-      
       paper-dropdown-menu {
         width: 300px;
       }
@@ -40,7 +39,6 @@
       .low-product-count-div {
         color: red;
       }
-      
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -81,7 +79,7 @@
                   <paper-button raised class="primary" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
                 </template>
               </template>
-              
+
             </div>
           </template>
         </div>
@@ -176,7 +174,7 @@
         return this.accessControl('privileged', ['PRIV_VIEW_ALL_INVENTORIES']);
       }
 
-      _fetchInventory(cbfn) {
+      _fetchInventoryDetails(cbfn) {
         let inventoryId = parseInt(this.params.inventory);
         this.inventoryId = inventoryId;
         let data = { inventoryId };
@@ -188,21 +186,16 @@
       }
 
       _processInventory(cbfn) {
-        this._fetchInventory(({ productList, matchingProductList, matchingProductCategoryList, inventoryContainerDetails, inventoryDetails }) => {
-          
+        this._fetchInventoryDetails(({ aggregatedProductList, matchingProductList, matchingProductCategoryList, inventoryContainerDetails, inventoryDetails }) => {
           this.inventoryContainerName = inventoryContainerDetails.inventoryContainerName;
           this.inventoryName = inventoryDetails.inventoryName;
-
-          let productMap = {};
-          matchingProductList.forEach(product => productMap[String(product.id)] = product);
-          let productCategoryMap = {};
-          matchingProductCategoryList.forEach(productCategory => productCategoryMap[String(productCategory.id)] = productCategory);
-          productList.forEach(product => {
-            let { productCategoryId, purchasePrice, salePrice } = productMap[String(product.productId)];
-            let { name, unit } = productCategoryMap[String(productCategoryId)];
+          let productList = aggregatedProductList.map(product => {
+            let { purchasePrice, salePrice } = product.product;
+            let { name, unit } = product.product.productCategory;
             product.isSelected = false;
             Object.assign(product, { name, unit, purchasePrice, salePrice });
-          })
+            return product;
+          });
           productList.sort((a, b) => b.count - a.count);
           this.productList = productList;
           cbfn();
@@ -240,7 +233,7 @@
           return { count, productId };
         });
         this._processMoveProducts({ fromInventoryId, toInventoryId, productList }, () => {
-          let message = this.app.verses.inventory.selectedProductsMoved ;
+          let message = this.app.verses.inventory.selectedProductsMoved;
           this.app.showToast(message, () => {
             this.app.refreshCurrentPage();
           });

@@ -165,23 +165,13 @@ describe('sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('productList').that.is.an('array');
-      expect(body).to.have.property('matchingProductList').that.is.an('array');
-      expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
+      expect(body).to.have.property('aggregatedProductList').that.is.an('array');
 
-      body.matchingProductList.forEach(product => {
-        validateProductSchema(product);
-      });
-      body.matchingProductCategoryList.forEach(productCategory => {
-        validateProductCategorySchema(productCategory);
-      });
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(100);
+      expect(body.aggregatedProductList[0]).to.have.property('productId');
 
-      expect(body.productList[0]).to.have.property('count').that.equals(100);
-      expect(body.productList[0]).to.have.property('productId');
-
-      outletInventoryProductList = body.productList;
-      outletInventoryMatchingProductList = body.matchingProductList;
-      outletInventoryMatchingProductCategoryList = body.matchingProductCategoryList;
+      outletInventoryProductList = body.aggregatedProductList;
+      outletInventoryMatchingProductCategoryList = outletInventoryProductList.map(_product => _product.product.productCategory);
 
       testDoneFn();
     });
@@ -513,18 +503,9 @@ describe('sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('productList').that.is.an('array');
-      expect(body).to.have.property('matchingProductList').that.is.an('array');
-      expect(body).to.have.property('matchingProductCategoryList').that.is.an('array');
+      expect(body).to.have.property('aggregatedProductList').that.is.an('array');
 
-      body.matchingProductList.forEach(product => {
-        validateProductSchema(product);
-      });
-      body.matchingProductCategoryList.forEach(productCategory => {
-        validateProductCategorySchema(productCategory);
-      });
-
-      expect(body.productList[0]).to.have.property('count').that.equals(96);
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
 
       testDoneFn();
     });

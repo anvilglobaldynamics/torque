@@ -106,6 +106,7 @@ class Api {
 
   // region: internals ==========
 
+  /** @private */
   _sendResponse(data) {
     if (this._channel === 'ws') {
       let reponse = {
@@ -123,6 +124,7 @@ class Api {
     }
   }
 
+  /** @private */
   __applyPaginationToResponse(object) {
     if (!this.autoPaginates) return;
     if (!this.__paginationCache) return;
@@ -143,6 +145,7 @@ class Api {
     });
   }
 
+  /** @private */
   __composeAndValidateSchema(body) {
     let schema = this.requestSchema;
     if (this.requiresAuthentication) {
@@ -166,6 +169,7 @@ class Api {
     return value;
   }
 
+  /** @private */
   __detectLanguage(body) {
     if ('clientLanguage' in body) {
       this.clientLanguage = body.clientLanguage;
@@ -176,6 +180,7 @@ class Api {
     this.verses = languageCache[this.clientLanguage];
   }
 
+  /** @private */
   __detectPagination(body) {
     if ('paginate' in body) {
       this.__paginationCache = body.paginate;
@@ -183,18 +188,20 @@ class Api {
     }
   }
 
+  /** @private */
   async __handleAuthentication(body) {
     let { apiKey } = body;
     if (this.authenticationLevel === 'admin') {
-      let username = await this.authenticate(body);
+      let username = await this.__authenticate(body);
       return { username, apiKey };
     } else {
-      let userId = await this.authenticate(body);
+      let userId = await this.__authenticate(body);
       await this.__enforceAccessControl(userId, body);
       return { userId, apiKey };
     }
   }
 
+  /** @private */
   async _prehandle(originalBody) {
     try {
       if (!this.isEnabled) {
@@ -255,10 +262,10 @@ class Api {
     return object;
   }
 
-
   // region: access control ==========================
 
-  async authenticate(body) {
+  /** @private */
+  async __authenticate(body) {
     if (!('apiKey' in body)) {
       return this.fail(new Error(this.verses.apiCommon.apiKeyMissing));
     }
@@ -283,6 +290,7 @@ class Api {
     }
   }
 
+  /** @private */
   async __getOrganizationForAccessControlRule(userId, body, rule) {
     if (!('organizationBy' in rule)) {
       throw new CodedError("INVALID_RULE_IN_ACCESS_CONTROL", "Expecpted accessControl to have 'organizationBy'");
@@ -320,6 +328,7 @@ class Api {
     return organization;
   }
 
+  /** @private */
   async __processAccessControlRule(userId, body, rule) {
     let organization = await this.__getOrganizationForAccessControlRule(userId, body, rule);
     let organizationId = organization.id;
@@ -338,6 +347,7 @@ class Api {
     }
   }
 
+  /** @private */
   async __enforceAccessControl(userId, body) {
     let rules = this.accessControl;
     if (!rules) return;
@@ -347,6 +357,7 @@ class Api {
 
   // region: error handling =========================================
 
+  /** @private */
   _stringifyErrorObject(errorObject) {
     let details = {};
     if (!(errorObject instanceof Error)) {
@@ -372,6 +383,7 @@ class Api {
     return { code, message, stack, details };
   }
 
+  /** @private */
   _hideUnknownErrorsOnProduction(errorObject) {
     if (this.server.mode === 'production') {
       delete errorObject['stack'];
@@ -383,6 +395,7 @@ class Api {
     return errorObject;
   }
 
+  /** @private */
   _translateKnownError(err) {
     if (!('code' in err)) return err;
     if (err.code === "DUPLICATE_email") {
@@ -419,16 +432,22 @@ class Api {
     }
     let idList = source.map(sourceDoc => getSourceKeyValue(sourceDoc));
     let targetDocList = await this.database[target].listByIdList({ idList });
+
+    /** @type {Map} */
+    let map = (reuseMap ? reuseMap : new Map());
+
     if (targetDocList.length < idList.length) {
       idList.forEach(id => {
         if (!targetDocList.find(targetDoc => targetDoc.id === id)) {
           let sourceDoc = source.find(sourceDoc => getSourceKeyValue(sourceDoc) === id);
-          if (onError) onError(sourceDoc);
+          if (onError) {
+            let fallBack = onError(sourceDoc);
+            map.set(sourceDoc, fallBack);
+          }
         }
       })
     }
-    /** @type {Map} */
-    let map = (reuseMap ? reuseMap : new Map());
+
     source.forEach(sourceDoc => {
       let targetDoc = targetDocList.find(targetDoc => targetDoc.id === getSourceKeyValue(sourceDoc));
       map.set(sourceDoc, targetDoc);
