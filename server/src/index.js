@@ -67,7 +67,7 @@ let { EditProductCategoryApi } = require('./legacy-apis/edit-product-category');
 let { DeleteProductCategoryApi } = require('./legacy-apis/delete-product-category');
 
 const { GetInventoryListApi } = require('./apis/get-inventory-list');
-let { GetAggregatedInventoryDetailsApi } = require('./legacy-apis/get-aggregated-inventory-details');
+const { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-inventory-details');
 let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
 const { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
 
