@@ -48,23 +48,26 @@ exports.AddProductToInventoryApi = class extends Api {
   }
 
   async _addProductToInventory({ inventoryId, productList }) {
+    let insertedProductList = [];
     await Promise.all(productList.map(async product => {
       let { productCategoryId, purchasePrice, salePrice, count } = product;
       let productId = await this.database.product.create({ productCategoryId, purchasePrice, salePrice });
+      insertedProductList.push({ productId, count });
       this.ensureUpdate('inventory', await this.database.inventory.addProduct({ id: inventoryId }, { productId, count }));
     }));
+    return insertedProductList;
   }
 
   async _addAcquisitionRecord({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList }) {
-    let newProductList = productList.map(product => ({ productCategoryId: product.productCategoryId, count: product.count }));
-    await this.database.productAcquisition.create({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList: newProductList });
+    // let newProductList = productList.map(product => ({ productCategoryId: product.productCategoryId, count: product.count }));
+    await this.database.productAcquisition.create({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList: productList });
   }
 
   async handle({ body, userId }) {
     let { inventoryId, productList } = body;
     await this._verifyProductCategoriesExist({ productList });
-    await this._addProductToInventory({ inventoryId, productList });
-    await this._addAcquisitionRecord({ createdByUserId: userId, acquiredDatetimeStamp: (new Date).getTime(), partyType: "unspecified", partyName: null, productList });
+    let insertedProductList = await this._addProductToInventory({ inventoryId, productList });
+    await this._addAcquisitionRecord({ createdByUserId: userId, acquiredDatetimeStamp: (new Date).getTime(), partyType: "unspecified", partyName: null, productList: insertedProductList });
     return { status: "success" };
   }
 

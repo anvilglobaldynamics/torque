@@ -17,7 +17,7 @@ exports.ProductAcquisitionCollection = class extends Collection {
 
       productList: Joi.array().items(
         Joi.object().keys({
-          productCategoryId: Joi.number().max(999999999999999).required(),
+          productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required()
         })
       )
