@@ -75,8 +75,19 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
       );
       if (productAcquisition) {
         product.acquiredDatetimeStamp = productAcquisition.acquiredDatetimeStamp;
+        product.addedDatetimeStamp = productAcquisition.acquiredDatetimeStamp; // because if not transferred, acquired date is date added
       } else {
-        product.acquiredDatetimeStamp = 1533396523681;
+        product.acquiredDatetimeStamp = 1514821590000;
+        product.addedDatetimeStamp = 1514821590000;
+      }
+    });
+    let productTransferList = await this.database.productTransfer.listByProductIdList({ productIdList: productList.map(product => product.productId) });
+    productList.forEach(product => {
+      let productTransfer = productTransferList.find(productTransfer =>
+        productTransfer.productList.find(_product => _product.productId === product.productId)
+      );
+      if (productTransfer) {
+        product.addedDatetimeStamp = productTransfer.transferredDatetimeStamp;
       }
     });
     return productList;
