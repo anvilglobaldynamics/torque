@@ -59,7 +59,6 @@ exports.AddProductToInventoryApi = class extends Api {
   }
 
   async _addAcquisitionRecord({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList }) {
-    // let newProductList = productList.map(product => ({ productCategoryId: product.productCategoryId, count: product.count }));
     await this.database.productAcquisition.create({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList: productList });
   }
 
