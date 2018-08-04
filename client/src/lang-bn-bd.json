@@ -524,7 +524,9 @@
     "sale": "বিক্রয়",
     "count": "গণনা",
     "deselectAllSelected": "সকল নির্বাচন সরিয়ে ফেলুন",
-    "confirmSelection": "নির্বাচন নিশ্চিত করুন"
+    "confirmSelection": "নির্বাচন নিশ্চিত করুন",
+    "acquiredOn": "খরিদ হয়েছে",
+    "addedOn": "যোগ হয়েছে"
   },
   "settings": {
     "settingsTitle": "সেটিংস",
@@ -559,6 +561,8 @@
     "moveSelected": "নির্বাচিত সরান",
     "addProductsBatchToInventory": "গোছাতে পণ্য তালিকায় যোগ করুন",
     "addProducts": "পণ্য যোগ করুন",
-    "noProductsInInventory": "এই পণ্য তালিকায় কোন পণ্য নেই।"
+    "noProductsInInventory": "এই পণ্য তালিকায় কোন পণ্য নেই।",
+    "acquiredOn": "খরিদ হয়েছে",
+    "addedOn": "যোগ হয়েছে"
   }
 }

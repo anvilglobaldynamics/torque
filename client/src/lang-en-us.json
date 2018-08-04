@@ -522,7 +522,9 @@
     "sale": "Sale",
     "count": "Count",
     "deselectAllSelected": "Deselect All Selected",
-    "confirmSelection": "Confirm Selection"
+    "confirmSelection": "Confirm Selection",
+    "acquiredOn": "Acquired On",
+    "addedOn": "Added On"
   },
   "settings": {
     "settingsTitle": "Settings",
@@ -557,6 +559,8 @@
     "moveSelected": "Move Selected",
     "addProductsBatchToInventory": "Add products to this inventory in batch.",
     "addProducts": "Add Products",
-    "noProductsInInventory": "No products in this Inventory."
+    "noProductsInInventory": "No products in this Inventory.",
+    "acquiredOn": "Acquired On",
+    "addedOn": "Added On"
   }
 }
