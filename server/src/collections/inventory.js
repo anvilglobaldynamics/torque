@@ -83,8 +83,8 @@ exports.InventoryCollection = class extends Collection {
     });
   }
 
-  async deleteByInventoryContainerId({ inventoryContainerId }) {
-    return await this._delete({ inventoryContainerId });
+  async deleteAllByInventoryContainerId({ inventoryContainerId, inventoryContainerType }) {
+    return await this._deleteMany({ inventoryContainerId, inventoryContainerType });
   }
 
 }
