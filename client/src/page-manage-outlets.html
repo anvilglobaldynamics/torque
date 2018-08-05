@@ -22,8 +22,7 @@
 
 <dom-module id="page-manage-outlets">
   <template>
-    <style include="shared-styles">
-    </style>
+    <style include="shared-styles"></style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -39,8 +38,9 @@
           <template is="dom-repeat" items="[[outletList]]" as="outlet">
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
-                <div class="title">[[outlet.name]]</div>
-                <div class="description type secondary">[[outlet.phone]] ([[outlet.physicalAddress]])</div>
+                <div class="place-name-container">[[outlet.name]]</div>
+                <div class="place-phone-container">[[outlet.phone]]</div>
+                <div class="place-detail-container">[[outlet.physicalAddress]]</div>
               </div>
               <div class="horizontal layout wrap">
                 <paper-button raised class="btn secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>

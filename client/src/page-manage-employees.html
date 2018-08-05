@@ -45,10 +45,10 @@
           <template is="dom-repeat" items="[[employeeList]]" as="employee">
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
-                <div class="title">[[verses.general.name]]: [[employee.userDetails.fullName]]</div>
-                <div class="description">[[verses.general.phone]]: [[employee.userDetails.phone]]</div>
-                <div class="description">[[verses.employee.companyProvidedId]]: [[employee.companyProvidedId]]</div>
-                <div class="description">[[verses.employee.designation]] : [[employee.designation]], [[verses.employee.role]]: [[employee.role]]</div>
+                <div class="person-name-container">[[verses.general.name]]: [[employee.userDetails.fullName]]</div>
+                <div class="person-phone-container">[[verses.general.phone]]: [[employee.userDetails.phone]]</div>
+                <div class="person-detail-container">[[verses.employee.companyProvidedId]]: [[employee.companyProvidedId]]</div>
+                <div class="person-detail-container">[[verses.employee.designation]] : [[employee.designation]], [[verses.employee.role]]: [[employee.role]]</div>
               </div>
               <paper-button raised class="secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
               <!-- <paper-button raised class="primary" on-tap="editTapped">[[verses.general.edit]]</paper-button> -->

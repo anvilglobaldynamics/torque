@@ -38,8 +38,9 @@
           <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
-                <div class="title type capitalize">[[warehouse.name]]</div>
-                <div class="type body secondary">[[warehouse.phone]] ([[warehouse.physicalAddress]])</div>
+                <div class="place-name-container">[[warehouse.name]]</div>
+                <div class="place-phone-container">[[warehouse.phone]]</div>
+                <div class="place-detail-container">[[warehouse.physicalAddress]]</div>
               </div>
               <div class="horizontal layout wrap">
                 <paper-button raised class="btn secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>

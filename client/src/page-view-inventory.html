@@ -59,15 +59,15 @@
           <template is="dom-repeat" items="[[productList]]" as="product">
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
-                <div class="title">[[product.name]]</div>
-                <div class$="[[$isProductCountLow(product.count)]]">
-                  <strong>[[product.count]][[product.unit]]</strong>
+                <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
+                  [[product.count]][[product.unit]]
                 </div>
-                <div class="description">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
-                <div class="description">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                 <!-- TODO TRANSLATE -->
-                <div class="description">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
-                <div class="description">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
+                <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
+                <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
               </div>
 
               <template is="dom-if" if="[[product.count]]">
