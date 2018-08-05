@@ -191,9 +191,25 @@ class Collection {
         which will delete the collection directly from database for ever.");
     }
     let modifications = {
-      [this.deletionIndicatorKey]: true
+      $set: {
+        [this.deletionIndicatorKey]: true
+      }
     };
     return await this._update(query, modifications);
+  }
+
+  async _deleteMany(query) {
+    if (!this.deletionIndicatorKey) {
+      throw new CodedError("DEVELOPER_ERROR", "This collection does not support controlled deletion. \
+        Either introduce it by specifying deletionIndicatorKey property or directly call this._db.delete \
+        which will delete the collection directly from database for ever.");
+    }
+    let modifications = {
+      $set: {
+        [this.deletionIndicatorKey]: true
+      }
+    };
+    return await this._updateMany(query, modifications);
   }
 
   // ================== Commonly used by all collections ================== //
