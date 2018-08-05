@@ -63,7 +63,7 @@
                       <!-- <div slot="prefix">[[verses.general.selected]]&nbsp;</div> -->
                       <div slot="suffix">&nbsp;[[product.unit]]</div>
                     </paper-input>
-                    <paper-button raised class="primary" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                    <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
                   </template>
                 </template>
               </div>
@@ -74,7 +74,7 @@
 
       <div class="vartical confirm-discard-button-group">
         <template is="dom-if" if="[[selectedProductCount]]">
-          <paper-button raised class="btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
+          <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
         </template>
         <paper-button raised class="btn primary" on-tap="selectProductsTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
       </div>
@@ -212,6 +212,7 @@
 
       deselectAllTapped(e) {
         this.productList.forEach((product, index) => this.set(`productList.${index}.isSelected`, false));
+        this.selectedProductCount = 0;
       }
 
       backButtonOnTopBarPressed(e = null) {

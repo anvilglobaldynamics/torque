@@ -31,7 +31,7 @@
 
       <div class="card vertical layout">
         <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button raised class="primary pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
         </template>
 
         <div class="list">
@@ -42,7 +42,7 @@
                 <div class="type body secondary">[[warehouse.phone]] ([[warehouse.physicalAddress]])</div>
               </div>
               <div class="horizontal layout wrap">
-                <paper-button raised class="btn primary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
+                <paper-button raised class="btn secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
                 <!-- <paper-button raised class="btn primary" on-tap="editTapped">[[verses.general.edit]]</paper-button> -->
                 <!-- <paper-button raised class="btn primary" on-tap="posTapped">[[verses.general.pos]]</paper-button> -->
               </div>
@@ -57,7 +57,7 @@
           <span class="offset">#[[$inc(pagination.offset)]]</span>.
         </div>
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button raised class="primary pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
         </template>
       </div>
 

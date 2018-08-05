@@ -72,14 +72,14 @@
 
               <template is="dom-if" if="[[product.count]]">
                 <template is="dom-if" if="[[!product.isSelected]]">
-                  <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+                  <paper-button raised class="secondary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
                 </template>
                 <template is="dom-if" if="[[product.isSelected]]">
                   <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.general.count]]">
                     <!-- <div slot="prefix">[[verses.general.selected]]&nbsp;</div> -->
                     <div slot="suffix">&nbsp;[[product.unit]]</div>
                   </paper-input>
-                  <paper-button raised class="primary" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                  <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
                 </template>
               </template>
 
