@@ -33,7 +33,7 @@ exports.DeleteOutletApi = class extends Api {
   async __ensureOutletIsEmpty({ outletId }) {
     let inventoryList = await this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId, inventoryContainerType: 'outlet' });
     let isEmpty = inventoryList.every(inventory => inventory.productList.length === 0);
-    throwOnFalsy(isEmpty, "UNABLE_TO_DELETE_OUTLET", "Unable to delete outlet. The outlet is not empty.");
+    throwOnFalsy(isEmpty, "OUTLET_NOT_EMPTY", "Unable to delete outlet. The outlet is not empty.");
   }
 
   async handle({ body }) {
