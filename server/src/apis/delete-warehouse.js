@@ -33,7 +33,7 @@ exports.DeleteWarehouseApi = class extends Api {
   async __ensureWarehouseIsEmpty({ warehouseId }) {
     let inventoryList = await this.database.inventory.listByInventoryContainerId({ inventoryContainerId: warehouseId, inventoryContainerType: 'warehouse' });
     let isEmpty = inventoryList.every(inventory => inventory.productList.length === 0);
-    throwOnFalsy(isEmpty, "UNABLE_TO_DELETE_WAREHOUSE", "Unable to delete warehouse. The warehouse is not empty.");
+    throwOnFalsy(isEmpty, "WAREHOUSE_NOT_EMPTY", "Unable to delete warehouse. The warehouse is not empty.");
   }
 
   async handle({ body }) {
