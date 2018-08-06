@@ -53,13 +53,13 @@ let { AddOutletApi } = require('./legacy-apis/add-outlet');
 let { GetOutletListApi } = require('./legacy-apis/get-outlet-list');
 let { GetOutletApi } = require('./legacy-apis/get-outlet');
 let { EditOutletApi } = require('./legacy-apis/edit-outlet');
-let { DeleteOutletApi } = require('./legacy-apis/delete-outlet');
+const { DeleteOutletApi } = require('./apis/delete-outlet');
 
 let { AddWarehouseApi } = require('./legacy-apis/add-warehouse');
 let { GetWarehouseListApi } = require('./legacy-apis/get-warehouse-list');
 let { GetWarehouseApi } = require('./legacy-apis/get-warehouse');
 let { EditWarehouseApi } = require('./legacy-apis/edit-warehouse');
-let { DeleteWarehouseApi } = require('./legacy-apis/delete-warehouse');
+const { DeleteWarehouseApi } = require('./apis/delete-warehouse');
 
 let { AddProductCategoryApi } = require('./legacy-apis/add-product-category');
 let { GetProductCategoryListApi } = require('./legacy-apis/get-product-category-list');

@@ -9,6 +9,7 @@ let {
   registerUser,
   loginUser,
   addOrganization,
+  addProductCategory,
   validateOutletSchema,
   validateEmbeddedInventorySchema
 } = require('./lib');
@@ -25,13 +26,18 @@ const orgName = "Test Organization";
 const orgBusinessAddress = "My Address";
 const orgPhone = 'o' + rnd(prefix, 11);
 
+let productCategoryId = null;
+let outletDefaultInventoryId = null;
+
 const outletPhone = 'o1' + rnd(prefix, 11);
 const outletPhone2 = 'o2' + rnd(prefix, 11);
+const outletPhone3 = 'o3' + rnd(prefix, 11);
 
 let apiKey = null;
 let organizationId = null;
 let outletList = null;
 let outletToBeModified = null;
+let outletToBeFilledId = null;
 
 let invalidOrganizationId = generateInvalidId();
 let invalidOutletId = generateInvalidId();
@@ -55,8 +61,23 @@ describe('outlet', _ => {
             email: orgEmail
           }, (data) => {
             organizationId = data.organizationId;
-            testDoneFn();
-          })
+            addProductCategory({
+              apiKey,
+              organizationId,
+              parentProductCategoryId: null,
+              name: "test product category",
+              unit: "box",
+              defaultDiscountType: "percent",
+              defaultDiscountValue: 10,
+              defaultPurchasePrice: 99,
+              defaultVat: 3,
+              defaultSalePrice: 111,
+              isReturnable: true
+            }, (data) => {
+              productCategoryId = data.productCategoryId;
+              testDoneFn();
+            });
+          });
         });
       });
     });
@@ -78,6 +99,30 @@ describe('outlet', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
       expect(body).to.have.property('outletId');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-outlet (2nd Valid)', testDoneFn => {
+
+    callApi('api/add-outlet', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "My Outlet 2",
+        physicalAddress: "batcave address new",
+        phone: outletPhone3,
+        contactPersonName: "test contact person name"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('outletId');
+
+      outletToBeFilledId = body.outletId;
 
       testDoneFn();
     })
@@ -278,6 +323,49 @@ describe('outlet', _ => {
 
   });
 
+  it('api/get-outlet (2nd Valid)', testDoneFn => {
+
+    callApi('api/get-outlet', {
+      json: {
+        apiKey,
+        outletId: outletToBeFilledId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('outlet');
+      expect(body).to.have.property('defaultInventory');
+      expect(body).to.have.property('returnedInventory');
+      expect(body).to.have.property('damagedInventory');
+
+      validateOutletSchema(body.outlet);
+      validateEmbeddedInventorySchema(body.defaultInventory);
+      validateEmbeddedInventorySchema(body.returnedInventory);
+      validateEmbeddedInventorySchema(body.damagedInventory);
+
+      outletDefaultInventoryId = body.defaultInventory.id;
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-product-to-inventory (Valid outlet)', testDoneFn => {
+    callApi('api/add-product-to-inventory', {
+      json: {
+        apiKey,
+        inventoryId: outletDefaultInventoryId,
+        productList: [
+          { productCategoryId, purchasePrice: 100, salePrice: 200, count: 10 }
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      testDoneFn();
+    });
+  });
+
   it('api/delete-outlet (Inalid outletId)', testDoneFn => {
 
     callApi('api/delete-outlet', {
@@ -290,6 +378,24 @@ describe('outlet', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error).to.have.property('code').that.equals('OUTLET_INVALID');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/delete-outlet (Inalid filled outlet)', testDoneFn => {
+
+    callApi('api/delete-outlet', {
+      json: {
+        apiKey,
+        outletId: outletToBeFilledId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('OUTLET_NOT_EMPTY');
 
       testDoneFn();
     })
