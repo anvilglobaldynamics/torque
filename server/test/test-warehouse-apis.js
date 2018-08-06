@@ -9,6 +9,7 @@ let {
   registerUser,
   loginUser,
   addOrganization,
+  addProductCategory,
   validateWarehouseSchema,
   validateEmbeddedInventorySchema
 } = require('./lib');
@@ -28,11 +29,15 @@ const orgPhone = 'o' + rnd(prefix, 11);
 const warehousePhone = 'w1' + rnd(prefix, 11);
 const warehousePhone2 = 'w2' + rnd(prefix, 11);
 const warehousePhone3 = 'w3' + rnd(prefix, 11);
+const warehousePhone4 = 'w4' + rnd(prefix, 11);
 
 let apiKey = null;
 let organizationId = null;
+let productCategoryId = null;
 let warehouseList = null;
 let warehouseToBeModified = null;
+let warehouseToBeFilledId = null;
+let warehouseDefaultInventoryId = null;
 
 let invalidOrganizationId = generateInvalidId();
 let invalidWarehouseId = generateInvalidId();
@@ -56,8 +61,23 @@ describe('warehouse', _ => {
             email: orgEmail
           }, (data) => {
             organizationId = data.organizationId;
-            testDoneFn();
-          })
+            addProductCategory({
+              apiKey,
+              organizationId,
+              parentProductCategoryId: null,
+              name: "test product category",
+              unit: "box",
+              defaultDiscountType: "percent",
+              defaultDiscountValue: 10,
+              defaultPurchasePrice: 99,
+              defaultVat: 3,
+              defaultSalePrice: 111,
+              isReturnable: true
+            }, (data) => {
+              productCategoryId = data.productCategoryId;
+              testDoneFn();
+            });
+          });
         });
       });
     });
@@ -147,6 +167,28 @@ describe('warehouse', _ => {
 
   });
 
+  it('api/add-warehouse (Valid 3rd)', testDoneFn => {
+
+    callApi('api/add-warehouse', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "My Warehouse tobefilled",
+        physicalAddress: "wayne manor address new",
+        phone: warehousePhone4,
+        contactPersonName: "test contact person name"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+
+      warehouseToBeFilledId = body.warehouseId;
+      testDoneFn();
+    })
+
+  });
+
   it('api/get-warehouse-list (Invalid organizationId)', testDoneFn => {
 
     callApi('api/get-warehouse-list', {
@@ -177,7 +219,7 @@ describe('warehouse', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
 
       expect(body).to.have.property('warehouseList').that.is.an('array');
-      expect(body.warehouseList.length).to.equals(2);
+      expect(body.warehouseList.length).to.equals(3);
       body.warehouseList.forEach(warehouse => {
         validateWarehouseSchema(warehouse);
       });
@@ -212,7 +254,7 @@ describe('warehouse', _ => {
     callApi('api/get-warehouse', {
       json: {
         apiKey,
-        warehouseId: warehouseList[0].id
+        warehouseId: warehouseList[warehouseList.length - 1].id
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -228,6 +270,34 @@ describe('warehouse', _ => {
       validateEmbeddedInventorySchema(body.damagedInventory);
 
       warehouseToBeModified = body.warehouse;
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-warehouse (Valid 2nd)', testDoneFn => {
+
+    callApi('api/get-warehouse', {
+      json: {
+        apiKey,
+        warehouseId: warehouseToBeFilledId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('warehouse');
+      expect(body).to.have.property('defaultInventory');
+      expect(body).to.have.property('returnedInventory');
+      expect(body).to.have.property('damagedInventory');
+
+      validateWarehouseSchema(body.warehouse);
+      validateEmbeddedInventorySchema(body.defaultInventory);
+      validateEmbeddedInventorySchema(body.returnedInventory);
+      validateEmbeddedInventorySchema(body.damagedInventory);
+
+      warehouseDefaultInventoryId = body.defaultInventory.id;
+
       testDoneFn();
     });
 
@@ -325,6 +395,22 @@ describe('warehouse', _ => {
 
   });
 
+  it('api/add-product-to-inventory (Valid warehouse)', testDoneFn => {
+    callApi('api/add-product-to-inventory', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId,
+        productList: [
+          { productCategoryId, purchasePrice: 100, salePrice: 200, count: 10 }
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      testDoneFn();
+    });
+  });
+
   it('api/delete-warehouse (Invalid)', testDoneFn => {
 
     callApi('api/delete-warehouse', {
@@ -337,6 +423,24 @@ describe('warehouse', _ => {
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
       expect(body.error.code).to.equal('WAREHOUSE_INVALID');
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/delete-warehouse (Invalid filled)', testDoneFn => {
+
+    callApi('api/delete-warehouse', {
+      json: {
+        apiKey,
+        warehouseId: warehouseToBeFilledId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('WAREHOUSE_NOT_EMPTY');
 
       testDoneFn();
     })

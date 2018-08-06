@@ -28,7 +28,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: OUTLET_INVALID } // outlet does not exist
-{ code: INVENTORY_NOT_EMPTY } // the inventory contained in this inventory container is not empty
+{ code: OUTLET_NOT_EMPTY } // the inventory contained in this inventory container is not empty
 ```
 
 ### response (on success):
