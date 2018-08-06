@@ -43,7 +43,7 @@
             <div>[[verses.sales.customerId]]: [[sales.customerId]]</div>
           </template>
           <template is="dom-if" if="{{!sales.isDiscarded}}">
-            <paper-button raised class="primary discard-button" on-tap="discardTapped">[[verses.general.discard]]</paper-button>
+            <paper-button raised class="danger discard-button" on-tap="discardTapped">[[verses.general.discard]]</paper-button>
           </template>
         </div>
       </div>
@@ -63,7 +63,7 @@
                   *[[verses.sales.allReturned]]
                 </template>
                 <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}">
-                  <paper-button raised class="primary discard-button" on-tap="returnTapped">[[verses.general.return]]</paper-button>
+                  <paper-button raised class="danger discard-button" on-tap="returnTapped">[[verses.general.return]]</paper-button>
                 </template>
               </div>
             </div>

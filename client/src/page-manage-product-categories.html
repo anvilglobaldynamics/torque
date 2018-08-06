@@ -29,9 +29,9 @@
       <div class="list">
         <div class="horizontal layout item center wrap">
           <div class="content">
-            <div class="title">[[productCategory.name]]</div>
-            <div class="description">[[verses.productCategory.buyingPrice]]: [[productCategory.defaultPurchasePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productCategory.unit]]</div>
-            <div class="description">[[verses.productCategory.sellingPrice]]: [[productCategory.defaultSalePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productCategory.unit]]</div>
+            <div class="inventory-product-important-detail-container">[[productCategory.name]]</div>
+            <div class="inventory-product-price-container">[[verses.productCategory.buyingPrice]]: [[productCategory.defaultPurchasePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productCategory.unit]]</div>
+            <div class="inventory-product-price-container">[[verses.productCategory.sellingPrice]]: [[productCategory.defaultSalePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productCategory.unit]]</div>
           </div>
           <div class="control-buttons">
             <template is="dom-if" if="[[!isAMovingGoingOn]]">

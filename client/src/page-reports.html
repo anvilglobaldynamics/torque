@@ -107,9 +107,9 @@
               </div>
               <div class="horizontal layout center">
                 <template is="dom-if" if="[[customer]]">
-                  <paper-button raised class="primary" on-tap="removeCustomerTapped">[[verses.salesReport.removeCustomer]]</paper-button>
+                  <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.salesReport.removeCustomer]]</paper-button>
                 </template>
-                <paper-button raised class="primary" on-tap="changeCustomerTapped">[[verses.salesReport.changeCustomer]]</paper-button>
+                <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.salesReport.changeCustomer]]</paper-button>
               </div>
             </div>
           </div>
@@ -131,9 +131,9 @@
                 </template>
               </div>
               <template is="dom-if" if="[[outlet]]">
-                <paper-button raised class="primary" on-tap="removeOutletTapped">[[verses.salesReport.removeOutlet]]</paper-button>
+                <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.salesReport.removeOutlet]]</paper-button>
               </template>
-              <paper-button raised class="primary" on-tap="changeOutletTapped">[[verses.salesReport.changeOutlet]]</paper-button>
+              <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.salesReport.changeOutlet]]</paper-button>
             </div>
           </div>
         </template>

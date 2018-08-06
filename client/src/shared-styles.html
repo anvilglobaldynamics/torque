@@ -179,8 +179,23 @@
       }
 
       paper-button.primary {
-        background: var(--app-primary-color);
-        color: white;
+        color: var(--app-button-label-primary);
+        background-color: var(--app-button-primary);
+      }
+
+      paper-button.secondary {
+        color: var(--app-button-label-secondary);
+        background-color: var(--app-button-secondary);
+      }
+
+      paper-button.danger {
+        color: var(--app-button-label-danger);
+        background-color: var(--app-button-danger);
+      }
+
+      paper-button.neutral {
+        color: var(--app-button-label-neutral);
+        background-color: var(--app-button-neutral);
       }
 
       paper-button .button-icon {
@@ -198,6 +213,49 @@
 
       .link.light {
         color: var(--app-primary-color-light);
+      }
+
+      /* reused container divs */
+
+      .inventory-product-important-detail-container {
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .inventory-product-price-container {
+        font-size: 16px;
+      }
+
+      .inventory-product-added-date-container {
+        color: gray;
+        font-size: 13px;
+      }
+      
+      .person-name-container {
+        font-size: 16px;
+      }
+
+      .person-phone-container {
+        font-size: 14px;
+      }
+
+      .person-detail-container {
+        font-size: 13px;
+        color: gray;
+      }
+
+      .place-name-container {
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .place-phone-container {
+        font-size: 14px;
+      }
+
+      .place-detail-container {
+        font-size: 13px;
+        color: gray;
       }
 
       /* ============= meta ============= */

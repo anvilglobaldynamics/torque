@@ -32,7 +32,7 @@
       <div class="card vertical layout">
 
         <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button class="pagination-show-previous" on-tap="showPreviousTapped">
+          <paper-button class="pagination-show-previous neutral" on-tap="showPreviousTapped">
             [[verses.general.show]]
             <iron-icon icon="icons:arrow-upward"></iron-icon>
             [[verses.general.previous]]
@@ -43,12 +43,12 @@
           <template is="dom-repeat" items="[[customerList]]" as="customer">
             <div class="item">
               <div class="content">
-                <div class="title">[[customer.fullName]]</div>
-                <div class="description">[[customer.phone]]</div>
-                <div class="description">[[verses.general.balance]]: [[$round(customer.balance)]] [[app.settings.monetaryUnit]]</div>
+                <div class="person-name-container">[[verses.general.name]]: [[customer.fullName]]</div>
+                <div class="person-phone-container">[[verses.general.phone]]: [[customer.phone]]</div>
+                <div class="person-detail-container">[[verses.general.balance]]: [[$round(customer.balance)]] [[app.settings.monetaryUnit]]</div>
               </div>
               <div class="control-buttons">
-                <paper-button raised class="primary" on-tap="viewTapped">
+                <paper-button raised class="secondary" on-tap="viewTapped">
                   <iron-icon class="button-icon" icon="icons:visibility"></iron-icon>
                   [[verses.general.view]]
                 </paper-button>
@@ -69,7 +69,7 @@
           <span class="offset">#[[$inc(pagination.offset)]]</span>.
         </div>
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button class="pagination-show-more" on-tap="showMoreTapped">
+          <paper-button class="pagination-show-more neutral" on-tap="showMoreTapped">
             [[verses.general.show]]
             <iron-icon icon="icons:arrow-downward"></iron-icon>
             [[verses.general.more]]

@@ -87,14 +87,14 @@
           </div>
           <div class="horizontal layout end-justified m-top-16">
             <template is="dom-if" if="[[customer]]">
-              <paper-button raised class="btn btn-default" on-tap="removeCustomerTapped">
+              <paper-button raised class="danger btn btn-default" on-tap="removeCustomerTapped">
                 [[verses.pos.removeCustomer]]
               </paper-button>
             </template>
-            <paper-button raised class="btn btn-default" on-tap="changeCustomerTapped">
+            <paper-button raised class="secondary btn btn-default" on-tap="changeCustomerTapped">
               [[verses.pos.changeCustomer]]
             </paper-button>
-            <paper-button raised class="btn primary" on-tap="createCustomerTapped">
+            <paper-button raised class="btn secondary" on-tap="createCustomerTapped">
               [[verses.pos.createCustomer]]
             </paper-button>
           </div>
