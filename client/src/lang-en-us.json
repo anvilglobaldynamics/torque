@@ -187,6 +187,7 @@
     "deleteOutletQuestionPartTwo": "Once deleted, you can not restore this outlet.",
     "outletDeleted": "Outlet has been deleted",
     "contactPerson": "Contact Person",
+    "contactNumber": "Contact Number",
     "editOutlet": "Edit Outlet",
     "deleteOutlet": "Delete Outlet",
     "goToPos": "Go to POS (Point of Sale) to start selling from this organization.",
