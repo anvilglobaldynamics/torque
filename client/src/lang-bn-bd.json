@@ -197,7 +197,10 @@
     "goToReturnedInventory": "ফেরত আসা পণ্য এখানে যায়।",
     "goToDamagedInventory": "বাতিল পণ্য এখানে যায়।",
     "previousSales": "পূর্ববর্তী বিক্রয়",
-    "goToPreviousSales": "পূর্ববর্তী বিক্রয় দেখুন।"
+    "goToPreviousSales": "পূর্ববর্তী বিক্রয় দেখুন।",
+    "defaultInventoryName": "প্রধান",
+    "returnedInventoryName": "ফেরৎ",
+    "damagedInventoryName": "ক্ষতিগ্রস্ত"
   },
   "productCategory": {
     "manageProductCategoriesTitle": "পণ্যের ধরন পরিচালনা",
@@ -451,7 +454,10 @@
     "editWarehouseDetail": "গুদাম সম্পাদনা করতে এখানে ক্লিক করুন।",
     "deleteWarehouse": "গুদাম মুছুন",
     "deleteWarehouseDetail": "গুদাম মুছে ফেলার জন্য এখানে ক্লিক করুন। একবার মুছে ফেললে, গুদাম পুনরুদ্ধার করা যাবে না।",
-    "deleteWarehouseQuestion": "গুদাম মুছে ফেলবেন?"
+    "deleteWarehouseQuestion": "গুদাম মুছে ফেলবেন?",
+    "defaultInventoryName": "প্রধান",
+    "returnedInventoryName": "ফেরৎ",
+    "damagedInventoryName": "ক্ষতিগ্রস্ত"
   },
   "error": {
     "404": "৪০৪",

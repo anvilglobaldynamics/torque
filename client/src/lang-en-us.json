@@ -195,7 +195,10 @@
     "goToReturnedInventory": "Products that are returned by the customer go in here.",
     "goToDamagedInventory": "Products that are damaged by the customer go in here.",
     "previousSales": "Previous Sales",
-    "goToPreviousSales": "View/Return previous sales."
+    "goToPreviousSales": "View/Return previous sales.",
+    "defaultInventoryName": "Default",
+    "returnedInventoryName": "Returned",
+    "damagedInventoryName": "Damaged"
   },
   "productCategory": {
     "manageProductCategoriesTitle": "Manage Product Categories",
@@ -449,7 +452,10 @@
     "editWarehouseDetail": "Click here to edit the warehouse.",
     "deleteWarehouse": "Delete Warehouse",
     "deleteWarehouseDetail": "Click here to delete the warehouse. Be warned that once deleted, an warehouse can not be restored.",
-    "deleteWarehouseQuestion": "Delete warehouse?"
+    "deleteWarehouseQuestion": "Delete warehouse?",
+    "defaultInventoryName": "Default",
+    "returnedInventoryName": "Returned",
+    "damagedInventoryName": "Damaged"
   },
   "error": {
     "404": "404",
