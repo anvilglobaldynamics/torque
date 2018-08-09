@@ -1,0 +1,11 @@
+{
+  "ssl": {
+    "enabled": false,
+    "cert": "/path/to/cert.pem",
+    "key": "/path/to/key.pem"
+  },
+  "port": 8410,
+  "db": {
+    "path": ""
+  }
+}
