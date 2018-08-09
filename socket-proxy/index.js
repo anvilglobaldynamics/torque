@@ -6,6 +6,8 @@ const WebSocket = require('ws');
 const pathlib = require("path");
 const userHomeDir = require('user-home');
 const { ProducerManager } = require('./producer-manager');
+const { ConsumerManager } = require('./consumer-manager');
+
 
 let producerManager = new ProducerManager();
 
@@ -32,10 +34,51 @@ const wss = new WebSocket.Server({
   server: webServer
 });
 
+
 wss.on('connection', (ws) => {
 
+  let sendMessage = (message) => {
+    try {
+      if (typeof (message) !== "string") message = JSON.stringify(message);
+      ws.send(message, (err) => {
+        console.error(err);
+      });
+    } catch (ex) {
+      console.error(ex);
+    }
+  }
+
   ws.on('message', (message) => {
-    if (message)
+
+    if (message === config.producerPssk) {
+      producerManager.addProducer(ws);
+      return;
+    }
+
+    if (ws.isProducer) {
+      let uid, consumerId, path, response;
+      try {
+        message = JSON.parse(message);
+      } catch (ex) {
+        console.err(ex);
+        return;
+      }
+    } else {
+      try {
+        message = JSON.parse(message);
+      } catch (ex) {
+        console.err(ex);
+        return;
+      }
+      let producer = producerManager.getNextProducer();
+      if (!producer) {
+        sendMessage({ operation: 'response', uid: null, consumerId, hasError: true, error: { code: "NO_SOCKET_PRODUCER", message: "Can not serve your reques at this time. No socket producer is present." } });
+      }
+    }
+
+
+
+
     try {
       message = JSON.parse(message);
     } catch (ex) {
@@ -51,12 +94,15 @@ wss.on('connection', (ws) => {
     }
   });
 
-  ws.on('close', (code) => {
-
+  ws.on('close', (code, reason) => {
+    console.log("INFO (socket:close)>", code, reason);
+    producerManager.removeProducer(ws);
   });
 
   ws.on('error', (err) => {
-    console.log(`ERR (socket)>`, err);
+    console.log(`ERR (socket)>>`);
+    console.error(err);
+    producerManager.removeProducer(ws);
   });
 
 });

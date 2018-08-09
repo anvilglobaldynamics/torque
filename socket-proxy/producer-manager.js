@@ -7,7 +7,7 @@ class ProducerManager {
   }
 
   addProducer(ws) {
-    ws.__isContentProducer = true;
+    ws.isProducer = true;
     this.__producerList.push(ws);
   }
 
