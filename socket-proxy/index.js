@@ -112,30 +112,6 @@ wss.on('connection', (ws) => {
         consumerId: ws.consumerId
       });
     }
-
-
-
-
-    // try {
-    //   message = JSON.parse(message);
-    // } catch (ex) {
-    //   console.error(ex);
-    //   return;
-    // }
-    // if (message.type === 'request-proxy--request') {
-    //   let { uid, request } = message;
-    //   let { path, data } = request;
-    //   proxier.proxyRequest(ws, { path, data, uid });
-    // } else {
-    //   console.log('received uknown: %s', message);
-    // }
-    // body: {
-    //   hasError: true,
-    //   error: {
-    //     code: "NO_SOCKET_PRODUCER",
-    //     message: "Can not serve your reques at this time. No socket producer is present."
-    //   }
-    // }
   });
 
   ws.on('close', (code, reason) => {
