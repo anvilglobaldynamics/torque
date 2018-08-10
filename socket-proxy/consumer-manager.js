@@ -14,6 +14,7 @@ class ConsumerManager {
   }
 
   removeConsumer(ws) {
+    if (!ws.isConsumer) return;
     delete this.__consumerMap[ws.consumerId];
   }
 

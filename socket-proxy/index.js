@@ -10,6 +10,7 @@ const { ConsumerManager } = require('./consumer-manager');
 
 
 let producerManager = new ProducerManager();
+let consumerManager = new ConsumerManager();
 
 const config = (() => {
   try {
@@ -34,14 +35,14 @@ const wss = new WebSocket.Server({
   server: webServer
 });
 
-
 wss.on('connection', (ws) => {
 
   let sendMessage = (message) => {
+    console.info("(sending)>", message)
     try {
       if (typeof (message) !== "string") message = JSON.stringify(message);
       ws.send(message, (err) => {
-        console.error(err);
+        if (err) console.error(err);
       });
     } catch (ex) {
       console.error(ex);
@@ -49,60 +50,87 @@ wss.on('connection', (ws) => {
   }
 
   ws.on('message', (message) => {
+    console.info("(received)>", message)
 
-    if (message === config.producerPssk) {
+    if (message === config.producerPssk && !ws.isProducer) {
       producerManager.addProducer(ws);
       return;
     }
 
     if (ws.isProducer) {
-      let uid, consumerId, path, response;
+      let requestUid, consumerId, path, body;
       try {
         message = JSON.parse(message);
       } catch (ex) {
-        console.err(ex);
+        console.error(ex);
         return;
       }
     } else {
+      let requestUid, path, body;
       try {
         message = JSON.parse(message);
+        ({ requestUid, path, body } = message);
+        // TODO: Validate
       } catch (ex) {
-        console.err(ex);
+        console.error(ex);
         return;
       }
       let producer = producerManager.getNextProducer();
       if (!producer) {
-        sendMessage({ operation: 'response', uid: null, consumerId, hasError: true, error: { code: "NO_SOCKET_PRODUCER", message: "Can not serve your reques at this time. No socket producer is present." } });
+        sendMessage({
+          operation: 'response',
+          requestUid,
+          body: {
+            hasError: true,
+            error: {
+              code: "NO_SOCKET_PRODUCER",
+              message: "Can not serve your reques at this time. No socket producer is present."
+            }
+          }
+        });
+        return;
+      }
+      if (!ws.isConsumer) {
+        consumerManager.addConsumer(ws);
       }
     }
 
 
 
 
-    try {
-      message = JSON.parse(message);
-    } catch (ex) {
-      console.err(ex);
-      return;
-    }
-    if (message.type === 'request-proxy--request') {
-      let { uid, request } = message;
-      let { path, data } = request;
-      proxier.proxyRequest(ws, { path, data, uid });
-    } else {
-      console.log('received uknown: %s', message);
-    }
+    // try {
+    //   message = JSON.parse(message);
+    // } catch (ex) {
+    //   console.error(ex);
+    //   return;
+    // }
+    // if (message.type === 'request-proxy--request') {
+    //   let { uid, request } = message;
+    //   let { path, data } = request;
+    //   proxier.proxyRequest(ws, { path, data, uid });
+    // } else {
+    //   console.log('received uknown: %s', message);
+    // }
+    // body: {
+    //   hasError: true,
+    //   error: {
+    //     code: "NO_SOCKET_PRODUCER",
+    //     message: "Can not serve your reques at this time. No socket producer is present."
+    //   }
+    // }
   });
 
   ws.on('close', (code, reason) => {
     console.log("INFO (socket:close)>", code, reason);
     producerManager.removeProducer(ws);
+    consumerManager.removeConsumer(ws);
   });
 
   ws.on('error', (err) => {
     console.log(`ERR (socket)>>`);
     console.error(err);
     producerManager.removeProducer(ws);
+    consumerManager.removeConsumer(ws);
   });
 
 });
