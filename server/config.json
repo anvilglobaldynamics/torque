@@ -54,6 +54,11 @@
       }
     ]
   },
+  "socketProxy": {
+    "enabled": true,
+    "url": "ws://localhost:8410",
+    "pssk": "ARANDOMSECURITYKEYTHATWILLBEUSEDASAMESSAGE"
+  },
   "notes": [
     "default admin password is johndoe1pass"
   ]

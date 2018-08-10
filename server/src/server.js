@@ -18,7 +18,6 @@ class Server {
     this.config = config;
     this._hostname = config.server.hostname;
     this._port = config.server.port;
-    this._websocketPort = config.server.websocketPort;
     this._expressApp = express();
   }
 
@@ -71,11 +70,18 @@ class Server {
   }
 
   _initializeWebsocket() {
-    this._wsServer = new WebSocket.Server({ server: this._webServer });
     this._wsApiList = [];
-    this.logger.info("(server)> websocket server listening on port", this._websocketPort);
+    if (!this.config.socketProxy.enabled) {
+      this.logger.info("(server)> websocket server is not enabled.");
+      return;
+    }
+    this._wsServer = new WebSocket(this.config.socketProxy.url);
+    this.logger.info("(server)> websocket socket-proxy is", this.config.socketProxy.url);
 
-    this._wsServer.on('connection', (ws, req) => {
+    this._wsServer.on('open', () => {
+      let ws = this._wsServer;
+      ws.send(this.config.socketProxy.pssk);
+
       ws.on('message', (message) => {
         try {
           message = JSON.parse(message);
@@ -91,6 +97,8 @@ class Server {
 
         let schema = Joi.object().keys({
           requestUid: Joi.string().length(20).required(),
+          operation: Joi.string().min(1).max(128).required(),
+          consumerId: Joi.number().required(),
           path: Joi.string().min(1).max(128).required(),
           body: Joi.object().required()
         });
@@ -112,10 +120,10 @@ class Server {
         let { ApiClass } = route;
         this.logger.info('WS', `${message.path} ${message.requestUid}`);
         if (ApiClass.prototype instanceof LegacyApi) {
-          let api = new ApiClass(this, this.legacyDatabase, this.logger, null, null, ws, 'ws', message.requestUid);
+          let api = new ApiClass(this, this.legacyDatabase, this.logger, null, null, ws, 'ws', message.requestUid, message.consumerId);
           api._prehandlePostOrWsApi(message.body);
         } else {
-          let api = new ApiClass(this, this.database, this.logger, null, null, ws, 'ws', message.requestUid);
+          let api = new ApiClass(this, this.database, this.logger, null, null, ws, 'ws', message.requestUid, message.consumerId);
           api._prehandle(message.body);
         }
       });

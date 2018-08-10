@@ -8,7 +8,6 @@ const userHomeDir = require('user-home');
 const { ProducerManager } = require('./producer-manager');
 const { ConsumerManager } = require('./consumer-manager');
 
-
 let producerManager = new ProducerManager();
 let consumerManager = new ConsumerManager();
 
@@ -37,7 +36,7 @@ const wss = new WebSocket.Server({
 
 wss.on('connection', (ws) => {
 
-  let sendMessage = (message) => {
+  let sendMessage = (ws, message) => {
     console.info("(sending)>", message)
     try {
       if (typeof (message) !== "string") message = JSON.stringify(message);
@@ -58,13 +57,25 @@ wss.on('connection', (ws) => {
     }
 
     if (ws.isProducer) {
-      let requestUid, consumerId, path, body;
+      let operation, requestUid, consumerId, body;
       try {
         message = JSON.parse(message);
+        ({ operation, consumerId, requestUid, body } = message);
+        // TODO: Validate
       } catch (ex) {
         console.error(ex);
         return;
       }
+      let consumer = consumerManager.getConsumer(consumerId);
+      if (!consumer) {
+        console.log("consumer does not exist:", consumer);
+        return;
+      }
+      sendMessage(consumer, {
+        operation: 'response',
+        requestUid,
+        body,
+      });
     } else {
       let requestUid, path, body;
       try {
@@ -77,7 +88,7 @@ wss.on('connection', (ws) => {
       }
       let producer = producerManager.getNextProducer();
       if (!producer) {
-        sendMessage({
+        sendMessage(ws, {
           operation: 'response',
           requestUid,
           body: {
@@ -93,6 +104,13 @@ wss.on('connection', (ws) => {
       if (!ws.isConsumer) {
         consumerManager.addConsumer(ws);
       }
+      sendMessage(producer, {
+        operation: 'request-proxy',
+        requestUid,
+        path,
+        body,
+        consumerId: ws.consumerId
+      });
     }
 
 
