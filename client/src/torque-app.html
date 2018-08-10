@@ -428,7 +428,7 @@
       }
 
       _assertApiKey() {
-        if ('user' in this && 'apiKey' in this.user) {
+        if ('user' in this && this.user && 'apiKey' in this.user) {
           this.callUserAssertApiKeyApi({}, (err, response) => {
             if (err) return;
             if (response.hasError) return this.logoutTapped();
@@ -462,13 +462,13 @@
 
       _manageProductionVariables() {
         if (mode === 'production') {
-          this.serverHost = 'https://server.torque.live'
-          this.jsonPostApiPathPrefix = 'https://server.torque.live/api/';
-          this.websocketHost = 'wss://server.torque.live';
+          this.serverHost = 'https://server.lipi.live'
+          this.jsonPostApiPathPrefix = 'https://server.lipi.live/api/';
+          this.websocketHost = 'wss://socket-proxy.lipi.live';
         } else {
           this.serverHost = 'http://localhost:8540'
           this.jsonPostApiPathPrefix = 'http://localhost:8540/api/';
-          this.websocketHost = 'ws://localhost:8540';
+          this.websocketHost = 'ws://localhost:8410';
         }
       }
 

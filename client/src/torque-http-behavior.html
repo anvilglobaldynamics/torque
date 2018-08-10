@@ -25,6 +25,10 @@
         let url = `${this.websocketApiPathPrefix}${path}`
         let service = new WebsocketRequestService(this.websocketHost, url, { responseType: 'json' });
         service.on('end', (event) => {
+          // Convert no socket producer errors to network error
+          if (event.detail.resolution === 'success' && event.detail.body.hasError && event.detail.body.error.code === 'NO_SOCKET_PRODUCER') {
+            event.detail.resolution = 'coerced-failure';
+          }
           if (event.detail.resolution === 'success') {
             cbfn(null, event.detail.body);
           } else {
