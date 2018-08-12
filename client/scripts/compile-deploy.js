@@ -42,9 +42,9 @@ const publishMain = () => {
 const getCommandLineArguments = () => {
   let deploy = false;
   let android = false;
-  let pwa = false;
-  if (process.argv.indexOf('--pwa') > -1) {
-    pwa = true;
+  let pwa = true;
+  if (process.argv.indexOf('--fallback') > -1) {
+    pwa = false;
   }
   if (process.argv.indexOf('--android') > -1) {
     android = true;
