@@ -1,6 +1,6 @@
 
 runtime: nodejs8
-service: 'server'
+service: 'lipi-server'
 
 automatic_scaling: 
   min_instances: 1
