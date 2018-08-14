@@ -1,6 +1,6 @@
 {
-  "name": "Torque",
-  "short_name": "Torque",
+  "name": "লিপি (Lipi)",
+  "short_name": "লিপি (Lipi)",
   "start_url": "./?homescreen=1",
   "display": "standalone",
   "theme_color": "#E65100",
