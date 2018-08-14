@@ -78,6 +78,10 @@ class Server {
     this._wsServer = new WebSocket(this.config.socketProxy.url);
     this.logger.info("(server)> websocket socket-proxy is", this.config.socketProxy.url);
 
+    this._wsServer.on('error', (err) => {
+      console.error(err);
+    });
+
     this._wsServer.on('open', () => {
       let ws = this._wsServer;
       ws.send(this.config.socketProxy.pssk);
