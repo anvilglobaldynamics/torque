@@ -17,7 +17,7 @@ class Server {
     this.mode = mode;
     this.config = config;
     this._hostname = config.server.hostname;
-    this._port = config.server.port;
+    this._port = config.server.port || process.env.PORT || 8080;
     this._expressApp = express();
   }
 

@@ -19,6 +19,7 @@
     "mkpath": "^1.0.0",
     "moment": "^2.18.1",
     "mongodb": "^3.0.6",
+    "shelljs": "^0.8.2",
     "user-home": "^2.0.0",
     "ws": "^3.2.0"
   },
@@ -27,7 +28,8 @@
     "request": "^2.83.0"
   },
   "scripts": {
-    "start": "nodemon start.js",
+    "deploy": "node ./scripts/deploy.js",
+    "start": "node start.js",
     "start-single": "node start.js",
     "test": "mocha --timeout 10000"
   },

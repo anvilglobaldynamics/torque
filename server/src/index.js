@@ -225,7 +225,7 @@ class Program {
 
   async __initializeServer() {
     await server.initialize();
-    logger.info('(server)> server initialized.');
+    logger.info(`(server)> server initialized on port ${server._port}`);
   }
 
   async __initializeApis() {
