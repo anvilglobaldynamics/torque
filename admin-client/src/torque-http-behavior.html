@@ -69,6 +69,9 @@
         callCombinedJsonApi(path, data, _cbfn) {
           let cbfn = this._createGenericCallback(path, data, _cbfn);
           let now = (new Date).getTime();
+          // HACK - for testing during conversion from torque.live -> lipi.live
+          this.settings.shouldUseWebsockets = false;
+          // HACK - END
           if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
             this.callJsonPostApi(path, data, cbfn);
           } else {
