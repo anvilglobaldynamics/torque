@@ -70,8 +70,15 @@
       </div>
 
       <div class="vartical layout wrap hire-button-group">
-        <paper-button raised class="btn primary" on-tap="hireEmployeeTapped">[[verses.employee.hireUserEmployee]]</paper-button>
-        <paper-button raised class="btn primary" on-tap="addNewEmployeeTapped">[[verses.employee.addUserAsEmployee]]</paper-button>
+        <div class="card action-button-container">
+          <div class="mb-4">[[verses.employee.hireUserEmployeeDetail]]</div>
+          <paper-button raised class="btn primary" on-tap="hireEmployeeTapped">[[verses.employee.hireUserEmployee]]</paper-button>
+        </div>
+
+        <div class="card action-button-container">
+          <div class="mb-4">[[verses.employee.addUserAsEmployeeDetail]]</div>
+          <paper-button raised class="btn primary" on-tap="addNewEmployeeTapped">[[verses.employee.addUserAsEmployee]]</paper-button>
+        </div>
       </div>
 
     </div>
