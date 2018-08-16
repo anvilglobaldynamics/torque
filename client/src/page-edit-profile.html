@@ -32,6 +32,8 @@
       <iron-form id="changePasswordForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
+            <p class="card-form-title">[[verses.editProfile.passwordChangeForm]]</p>
+
             <paper-input class="changePasswordForm--oldPassword" value="{{changePasswordForm.oldPassword}}" required minlength="8" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.currentPassword]] type="password"></paper-input>
             <paper-input class="changePasswordForm--newPassword" value="{{changePasswordForm.newPassword}}" required minlength="8" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.newPassword]] type="password"></paper-input>
             <paper-input class="changePasswordForm--repeatNewPassword" value="{{changePasswordForm.repeatNewPassword}}" required minlength="8" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.retypeNewPassword]] type="password"></paper-input>
@@ -46,6 +48,8 @@
       <iron-form id="editProfileForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
+            <p class="card-form-title">[[verses.editProfile.profileEditForm]]</p>
+
             <paper-input class="editProfileForm--phone" value="{{editProfileForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.editProfile.phoneNumberInputError]] label=[[verses.editProfile.phoneNumberInput]]></paper-input>
             <paper-input class="editProfileForm--email" value="{{editProfileForm.email}}" pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.editProfile.emailAddressInputError]] label=[[verses.editProfile.emailAddressInput]]></paper-input>
 

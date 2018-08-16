@@ -351,11 +351,13 @@
   },
   "editProfile": {
     "editProfileTitle": "Edit Profile",
+    "passwordChangeForm": "Password Change Form",
     "currentPassword": "Your current password",
     "newPassword": "Your new password",
     "retypeNewPassword": "Retype your new current password",
     "invalidPasswordError": "Please enter a valid password",
     "changePassword": "Change Password",
+    "profileEditForm": "Profile Edit Form",
     "phoneNumberInput": "Your valid phone number",
     "phoneNumberInputError": "Please enter a valid phone number",
     "emailAddressInput": "Your valid email address",

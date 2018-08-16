@@ -352,12 +352,14 @@
     "deleteCustomer": "গ্রাহক মুছুন"
   },
   "editProfile": {
-    "editProfileTitle": "পরিলেখ সম্পাদনা",
+    "editProfileTitle": "প্রোফাইল সম্পাদনা",
+    "passwordChangeForm": "পাসওয়ার্ড পরিবর্তন ফর্ম",
     "currentPassword": "আপনার বর্তমান পাসওয়ার্ড",
     "newPassword": "আপনার নতুন পাসওয়ার্ড",
     "retypeNewPassword": "আপনার নতুন পাসওয়ার্ড আবার লিখুন",
     "invalidPasswordError": "একটি বৈধ পাসওয়ার্ড দিন",
     "changePassword": "পাসওয়ার্ড পরিবর্তন করুন",
+    "profileEditForm": "প্রোফাইল সম্পাদনা ফর্ম",
     "phoneNumberInput": "আপনার বৈধ ফোন নম্বর",
     "phoneNumberInputError": "একটি বৈধ ফোন নম্বর লিখুন",
     "emailAddressInput": "আপনার বৈধ ইমেল ঠিকানা",
