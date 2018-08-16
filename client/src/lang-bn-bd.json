@@ -73,7 +73,7 @@
     "dontHaveAccount": "অ্যাকাউন্ট নেই?",
     "login": "লগইন",
     "emailOrPhoneInput": "আপনার ফোন নম্বর বা ইমেল",
-    "emailOrPhoneInputError": "আপনার বৈধ ফোন নম্বর অথবা বৈধ ইমেল ঠিকানা লিখুন।",
+    "emailOrPhoneInputError": "আপনার বৈধ ফোন নম্বর বা বৈধ ইমেল লিখুন।",
     "passwordInput": "আপনার পাসওয়ার্ড",
     "passwordInputError": "কমপক্ষে ৮ অক্ষর দীর্ঘ পাসওয়ার্ড লিখুন।",
     "confirmationLinkPartOne": "আমরা আপনার কাছে একটি নিশ্চিতকরণ লিঙ্ক পাঠিয়েছি আপনার  ",
@@ -81,7 +81,7 @@
   },
   "forgotPassword": {
     "emailOrPhoneInputTitle": "ফোন বা ইমেল লিখুন",
-    "emailOrPhoneInputMessage": "আপনি আপনার নিবন্ধন করতে ব্যবহৃত ফোন/ইমেল লিখুন।"
+    "emailOrPhoneInputMessage": "আপনি আপনার অ্যাকাউন্ট খুলতে ব্যবহৃত ফোন/ইমেল লিখুন।"
   },
   "register": {
     "register": "অ্যাকাউন্ট খুলুন",
@@ -91,8 +91,8 @@
     "phoneInputError": "আপনার বৈধ ফোন নম্বর লিখুন।",
     "passwordInput": "সর্বনিম্ন ৮ অক্ষরের একটি পাসওয়ার্ড দিন।",
     "passwordInputError": "কমপক্ষে ৮ অক্ষরের একটি পাসওয়ার্ড লিখুন।",
-    "alreadyHaveAccount": "আপনার কি অলরেডি একটা একাউন্ট আছে?",
-    "nowAUserOfTorque": "আপনি এখন টর্কের একটি ব্যবহারকারী। আপনি এখন লগ ইন করতে পারেন।"
+    "alreadyHaveAccount": "আপনার কি ইতিমধ্যে একটা একাউন্ট আছে?",
+    "nowAUserOfTorque": "আপনি এখন লিপির একটি ব্যবহারকারী। আপনি এখন লগ ইন করতে পারেন।"
   },
   "sidebar": {
     "home": "হোম",
@@ -144,9 +144,9 @@
     "//NOTE": "DO NOT TRANSLATE ABOVE",
     "emailIsNowVerified": "আপনার ইমেল যাচাই করা হয়ে গিয়েছে।",
     "phoneIsNowVerified": "আপনার ফোন যাচাই করা হয়ে গিয়েছে।",
-    "emailCouldNotBeVerified": "আপনার ইমেইল যাচাইকরণ সফল হয়নি। নিশ্চিতকরণ যাচাইকরণ কোডটি সঠিক।",
-    "phoneCouldNotBeVerified": "আপনার ফোন যাচাইকরণ সফল হয়নি। নিশ্চিতকরণ যাচাইকরণ কোডটি সঠিক।",
-    "checkYourPhoneForVerification": "আপনার ফোন দেখুন। আমরা আপনাকে যাচাইকরণ এস এম এস পাঠানো হয়েছে।",
+    "emailCouldNotBeVerified": "আপনার ইমেইল যাচাইকরণ সফল হয়নি। নিশ্চিত হন যাচাইকরণ কোডটি সঠিক।",
+    "phoneCouldNotBeVerified": "আপনার ফোন যাচাইকরণ সফল হয়নি। নিশ্চিত হন যাচাইকরণ কোডটি সঠিক।",
+    "checkYourPhoneForVerification": "আপনার ফোনে যাচাইকরণ এস এম এস পাঠানো হয়েছে।",
     "verificationSmsSent": "যাচাইকরণ এস এম এস পাঠানো হয়েছে।",
     "notYetVarifiedPhone": "আপনি এখনো আপনার ফোন নম্বর যাচাই করেন নি। আপনার অ্যাকাউন্ট (নিবন্ধনের ১ ঘন্টা পর) আপনি এটি যাচাই না হওয়া পর্যন্ত সক্রিয় নয়। আমাদের পাঠানো এস এম এস এর লিংক টি চাপুন।",
     "whyProvideEmailAddress": "একটি ইমেইল ঠিকানা প্রদান করে, আপনি আপনার ইমেলে বিতরণ রশিদ, লগইন সতর্কতা এবং অন্যান্য গুরুত্বপূর্ণ তথ্য পেতে পারেন।"
@@ -159,7 +159,7 @@
     "emailInput": "আপনার ইমেইল ঠিকানা (ঐচ্ছিক)",
     "emailInputError": "একটি বৈধ ইমেইল লিখুন।",
     "primaryBusinessAddressInput": "আপনার প্রাথমিক ব্যবসা ঠিকানা",
-    "primaryBusinessAddressInputError": "অন্তত 8 টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
+    "primaryBusinessAddressInputError": "অন্তত ৮ টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
     "createOrganization": "সংস্থা তৈরি করুন",
     "organizationCreatedToast": "নতুন সংস্থা তৈরি করা হয়েছে।",
     "phoneInputError": "বৈধ ফোন নম্বর লিখুন।",
@@ -169,10 +169,10 @@
   "outlet": {
     "editOutletTitle": "দোকান সম্পাদনা",
     "addOutletTitle": "দোকান যোগ",
-    "nameOfOutletInput": "আপনার দোকান এর নাম ",
+    "nameOfOutletInput": "আপনার দোকান এর নাম",
     "nameOfOutletInputError": "একটি বৈধ নাম লিখুন",
     "physicalAddressInput": "ঠিকানা",
-    "physicalAddressInputError": "অন্তত 8 টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
+    "physicalAddressInputError": "অন্তত ৮ টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
     "contactPersonNameInput": "যোগাযোগ করার বেক্তির নাম",
     "contactPersonNameInputError": "একটি বৈধ নাম লিখুন",
     "contactPhoneOfContactPerson": "যোগাযোগ করার বেক্তির ফোন",
@@ -189,6 +189,7 @@
     "deleteOutletQuestionPartTwo": "একবার মুছে ফেলা হলে, আপনি এই দোকানটি পুনরুদ্ধার করতে পারবেন না।",
     "outletDeleted": "দোকান মোছা হয়েছে",
     "contactPerson": "যোগাযোগের ব্যাক্তি",
+    "contactNumber": "যোগাযোগের ফোন",
     "editOutlet": "আউটলেট সম্পাদনা করুন",
     "deleteOutlet": "আউটলেট মুছে ফেলুন",
     "goToPos": "এই সংস্থা থেকে বিক্রি শুরু করার জন্য বিক্রয়কেন্দ্রে যান।",
@@ -235,12 +236,12 @@
     "createNewProductCategory": "নতুন পণ্য ধরণ তৈরি করুন"
   },
   "customerSelector": {
-    "customerNameOrPhoneInput": "নাম অথবা ফোন দিয়ে ক্রেতা খুজুন।",
+    "customerNameOrPhoneInput": "নাম বা ফোন দিয়ে ক্রেতা খুজুন।",
     "customerNameOrPhoneInputError": "একটি নাম বা ফোন লিখুন"
   },
   "outletSelector": {
     "outlets": "দোকান",
-    "outletNameOrPhoneInput": "নাম অথবা ফোন দিয়ে দোকান খুজুন।",
+    "outletNameOrPhoneInput": "নাম বা ফোন দিয়ে দোকান খুজুন।",
     "outletNameOrPhoneInputError": "একটি নাম বা ফোন লিখুন"
   },
   "commonEmploymentDetails": {
@@ -283,8 +284,8 @@
     "editEmployee": "কর্মচারী সম্পাদনা করুন",
     "clickToDeleteEmployee": "কর্মচারী মুছে ফেলতে এখানে ক্লিক করুন। একবার মুছে ফেলা, একটি কর্মী পুনরুদ্ধার করা যাবে না।",
     "fireEmployee": "কর্মচারীকে চাকরিচ্যুত করুন",
-    "fireEmployeeQuestion": "কর্মচারীকে চাকরিচ্যুত?",
-    "sureFireThisEmployee": "আপনি কি নিশ্চিত এই কর্মচারীটি আগুন লাগাতে চান?",
+    "fireEmployeeQuestion": "চাকরিচ্যুত করা হোক?",
+    "sureFireThisEmployee": "আপনি কি নিশ্চিত এই কর্মচারীকে চাকরিচ্যুত করতে চান?",
     "sureFireYourself": "আপনি কি নিজেকে চাকরিচ্যুত করতে চান? আপনি এই সংস্থার সমস্ত অধিকার হারাবেন।"
   },
   "product": {
@@ -318,7 +319,7 @@
     "dontHaveAccount": "অ্যাকাউন্ট নেই?",
     "passwordInput": "আপনার নতুন পাসওয়ার্ড",
     "retypePasswordInput": "আবার লিখুন আপনার নতুন পাসওয়ার্ড",
-    "newPasswordSet": "আপনি নতুন পাসওয়ার্ড সেট করা হয়েছে। আপনি এখন লগ ইন করতে পারেন।",
+    "newPasswordSet": "আপনার নতুন পাসওয়ার্ড সেট করা হয়েছে। আপনি এখন লগ ইন করতে পারেন।",
     "retypeIncorrect": "আপনি ভুলভাবে আপনার নতুন পাসওয়ার্ডটি দ্বিতীয় বার লিখেছেন। আবার লিখুন এবং নিশ্চিত করুন।"
   },
   "customer": {
@@ -328,8 +329,8 @@
     "customerNameInputError": "একটি বৈধ নাম লিখুন",
     "customerNumberInput": "যোগাযোগের নম্বর",
     "customerNumberInputError": "একটি বৈধ ফোন নম্বর লিখুন",
-    "openingBalance": "খোলা ব্যালেন্স",
-    "openingBalanceError": "খোলা ব্যালেন্স হিসাবে একটি পরিমাণ লিখুন",
+    "openingBalance": "প্রার্থমিক ব্যালেন্স",
+    "openingBalanceError": "প্রার্থমিক ব্যালেন্স হিসাবে একটি পরিমাণ লিখুন",
     "createCustomer": "গ্রাহক তৈরি করুন",
     "updateCustomer": "গ্রাহক আপডেট করুন",
     "newCustomerCreated": "নতুন গ্রাহক তৈরি করা হয়েছে।",
@@ -365,7 +366,7 @@
     "fullNameInputError": "একটি বৈধ নাম লিখুন",
     "NidInput": "আপনার জাতীয় পরিচয়পত্র নম্বর (ঐচ্ছিক)",
     "addressInput": "আপনার বর্তমান ঠিকানা (ঐচ্ছিক)",
-    "emergencyContactInput": "জরুরী যোগাযোগ (নম্বর / নাম)",
+    "emergencyContactInput": "জরুরী যোগাযোগ (নম্বর/নাম)",
     "bloodgroupInput": "রক্তের গ্রুপ (ঐচ্ছিক)",
     "saveChanges": "পরিবর্তনগুলো সংরক্ষণ করুন",
     "incorrectSecondPassword": "আপনি ভুলভাবে আপনার নতুন পাসওয়ার্ডটি দ্বিতীয় বার টাইপ করেছেন। আবার এটি টাইপ করুন।",
@@ -430,7 +431,7 @@
     "warehouseNameInput": "আপনার গুদামের নাম",
     "warehouseNameInputError": "একটি বৈধ নাম লিখুন",
     "warehousePhysicalAddressInput": "ঠিকানা",
-    "warehousePhysicalAddressInputError": "অন্তত 8 টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
+    "warehousePhysicalAddressInputError": "অন্তত ৮ টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
     "warehouseManagerNameInput": "যোগাযোগ করার বেক্তির নাম",
     "warehouseManagerNameInputError": "একটি বৈধ নাম লিখুন",
     "warehouseManagerNumberInput": "যোগাযোগ করার বেক্তির ফোন",
@@ -497,14 +498,14 @@
     "hasDiscount": "ছাড় আছে",
     "shouldSaveChangeInAccount": "অর্থ প্রদানের পরিবর্তে গ্রাহকের অ্যাকাউন্ট সংরক্ষণ করুন",
     "shouldSaveChangeInAccountStart": "এই",
-    "shouldSaveChangeInAccountEnd": "ফেরত না দিয়ে কাস্টমারের একাউন্টএ জমা রাখা হোক। ",
-    "allowCreditSaleMessage": "এই টাকা কাস্টমারের একাউন্টএ বকেয়া হিসাবে জমা রাখা হোক।",
-    "creditSaleHint":"প্রদত্ত পরিমাণ, মোট প্রদেয় পরিমাণের চেয়ে কম এন্ট্রি দেওয়া হয়েছে। একটি ক্রেডিট বিক্রয় করার জন্য, আপনাকে একটি গ্রাহক নির্বাচন অথবা তৈরি করতে হবে এবং ক্রেডিট বিক্রয় অনুমোদন করতে হবে। ",
+    "shouldSaveChangeInAccountEnd": "ফেরত না দিয়ে গ্রাহকের একাউন্টএ জমা রাখা হোক। ",
+    "allowCreditSaleMessage": "এই টাকা গ্রাহকের একাউন্টএ বকেয়া হিসাবে জমা রাখা হোক।",
+    "creditSaleHint":"প্রদত্ত পরিমাণ, মোট প্রদেয় পরিমাণের চেয়ে কম এন্ট্রি দেওয়া হয়েছে। একটি ক্রেডিট বিক্রয় করার জন্য, আপনাকে একটি গ্রাহক নির্বাচন বা তৈরি করতে হবে এবং ক্রেডিট বিক্রয় অনুমোদন করতে হবে। ",
     "paymentMethod": "মূল্যপরিশোধ পদ্ধতি"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",
-    "showFilters": "বশোধক দেখান",
+    "showFilters": "সংকীর্ণকারক দেখান",
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
     "removeCustomer": "গ্রাহক সরান",
     "changeCustomer": "গ্রাহক পরিবর্তন করুন",
@@ -549,7 +550,7 @@
   },
   "verify": {
     "verificationModalTitle": "যাচাইকরণ এসএমএস পাঠানো হয়েছে",
-    "verificationModalBody": "আপনার ফোনটি দেখুন। আমরা আপনাকে একটি যাচাইকরণ এসএমএস পাঠিয়েছি।",
+    "verificationModalBody": "আমরা আপনাকে একটি যাচাইকরণ এসএমএস পাঠিয়েছি।",
     "phoneNowVerified": "আপনার ফোন যাচাই করা হয়েছে।",
     "phoneCouldNotBeVerified": "আপনার ফোন যাচাই করা যায়নি। নিশ্চিতকরণ যাচাই কোডটি সঠিক।",
     "verifyPhoneNumberHeader": "ফোন নম্বর যাচাইকরণ",

@@ -36,10 +36,10 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
-        <div>[[warehouse.name]]</div>
-        <div>[[warehouse.physicalAddress]]</div>
-        <div>[[verses.warehouse.contactPerson]]: [[warehouse.contactPersonName]]</div>
-        <div>[[verses.warehouse.contactNumber]]: [[warehouse.phone]]</div>
+        <div class="inventory-container-view-name">[[warehouse.name]]</div>
+        <div class="inventory-container-view-details">[[warehouse.physicalAddress]]</div>
+        <div class="inventory-container-view-details">[[verses.warehouse.contactPerson]]: [[warehouse.contactPersonName]]</div>
+        <div class="inventory-container-view-details">[[verses.warehouse.contactNumber]]: [[warehouse.phone]]</div>
       </div>
 
       <!-- <div class="card">
