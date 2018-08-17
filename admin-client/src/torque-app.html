@@ -164,7 +164,7 @@
           <a href="[[authorWebsite]]">[[authorName]]</a> All Rights Reserved.
           <br>
           <span class="extra-small">admin build
-            <span id="build-number">2</span>
+            <span id="build-number">7</span>
           </span>
         </div>
       </app-header-layout>
@@ -192,15 +192,15 @@
           },
           brandName: {
             type: String,
-            value: 'Torque'
+            value: 'Lipi Admin'
           },
           authorName: {
             type: String,
-            value: 'Torque Team'
+            value: 'Anvil Global Dynamics'
           },
           authorWebsite: {
             type: String,
-            value: 'https://torque.live'
+            value: 'https://anvil.live'
           },
           currentPageIsModal: {
             type: Boolean,
@@ -235,9 +235,9 @@
 
       _manageProductionVariables() {
         if (mode === 'production') {
-          this.serverHost = 'https://server.torque.live'
-          this.jsonPostApiPathPrefix = 'https://server.torque.live/api/';
-          this.websocketHost = 'wss://server.torque.live';
+          this.serverHost = 'https://server.lipi.live'
+          this.jsonPostApiPathPrefix = 'https://server.lipi.live/api/';
+          this.websocketHost = 'wss://socket.lipi.live';
         } else {
           this.serverHost = 'http://localhost:8540'
           this.jsonPostApiPathPrefix = 'http://localhost:8540/api/';

@@ -30,7 +30,7 @@ class Api {
   * @param {DatabaseService} database
   * @param {Logger} logger
   */
-  constructor(server, database, logger, request, response, socket, channel, requestUid = null) {
+  constructor(server, database, logger, request, response, socket, channel, requestUid = null, consumerId = null) {
     this.server = server;
     this.database = database;
     this.logger = logger;
@@ -40,6 +40,7 @@ class Api {
     this._channel = channel;
     this._requestUid = requestUid;
     this.__paginationCache = null;
+    this._consumerId = consumerId;
   }
 
   // region: properties (subclass needs to override) ==========
@@ -110,8 +111,10 @@ class Api {
   _sendResponse(data) {
     if (this._channel === 'ws') {
       let reponse = {
+        operation: 'response-proxy',
         requestUid: this._requestUid,
-        message: data
+        consumerId: this._consumerId,
+        body: data
       };
       reponse = JSON.stringify(reponse);
       try {

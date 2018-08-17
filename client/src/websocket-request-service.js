@@ -165,7 +165,7 @@
               detail: {
                 resolution: 'success',
                 statusCode: 200,
-                body: responseMessage.message
+                body: responseMessage.body
               }
             }));
             this._serviceEnd();

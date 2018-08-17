@@ -63,6 +63,11 @@ class ConfigLoader {
           }).required(),
         })
       }),
+      socketProxy: Joi.object().keys({
+        enabled: Joi.boolean().required(),
+        url: Joi.string().max(1024).required(),
+        pssk: Joi.string().max(1024).required(),
+      }),
       "notes": Joi.array()
     });
   }

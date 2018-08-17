@@ -1,14 +1,14 @@
 {
   "baseName": "torque-server",
   "branding": {
-    "shortName": "Torque",
-    "extendedName": "Torque Software",
+    "shortName": "Lipi",
+    "extendedName": "Lipi by Anvil",
     "serverUrl": "http://localhost:8540",
     "clientUrl": "http://localhost:8545",
-    "authorName": "Torque Team",
-    "authorWebsite": "https://torque.live/author",
+    "authorName": "Anvil Global Dynamics",
+    "authorWebsite": "https://anvil.live",
     "supportPhone": "017XXXXXXXX",
-    "supportEmail": "support@mg.torque.live"
+    "supportEmail": "care@anvil.live"
   },
   "server": {
     "port": 8540,
@@ -53,6 +53,11 @@
         }
       }
     ]
+  },
+  "socketProxy": {
+    "enabled": true,
+    "url": "ws://localhost:8410",
+    "pssk": "ARANDOMSECURITYKEYTHATWILLBEUSEDASAMESSAGE"
   },
   "notes": [
     "default admin password is johndoe1pass"

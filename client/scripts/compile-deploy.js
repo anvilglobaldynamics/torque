@@ -24,17 +24,17 @@ const runPolymerBuild = () => {
 }
 
 const publishPwa = () => {
-  let res = shell.exec('gcloud app deploy pwa.yaml --quiet --project server-stations-3');
+  let res = shell.exec('gcloud app deploy pwa.yaml --quiet --project anvil-primary');
   if (res.code !== 0) {
-    shell.echo('Error: gcloud app deploy pwa.yaml --quiet --project server-stations-3 failed');
+    shell.echo('Error: gcloud app deploy pwa.yaml --quiet --project anvil-primary failed');
     shell.exit(1);
   }
 }
 
 const publishMain = () => {
-  let res = shell.exec('gcloud app deploy app.yaml --quiet --project server-stations-3');
+  let res = shell.exec('gcloud app deploy app.yaml --quiet --project anvil-primary');
   if (res.code !== 0) {
-    shell.echo('Error: gcloud app deploy app.yaml --quiet --project server-stations-3 failed');
+    shell.echo('Error: gcloud app deploy app.yaml --quiet --project anvil-primary failed');
     shell.exit(1);
   }
 }
@@ -42,9 +42,9 @@ const publishMain = () => {
 const getCommandLineArguments = () => {
   let deploy = false;
   let android = false;
-  let pwa = false;
-  if (process.argv.indexOf('--pwa') > -1) {
-    pwa = true;
+  let pwa = true;
+  if (process.argv.indexOf('--fallback') > -1) {
+    pwa = false;
   }
   if (process.argv.indexOf('--android') > -1) {
     android = true;
@@ -166,6 +166,3 @@ if (cmdArgs.deploy && !cmdArgs.pwa) {
 if (cmdArgs.deploy && cmdArgs.pwa) {
   publishPwa();
 }
-
-
-

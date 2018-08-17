@@ -337,7 +337,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":94,"datetimeStamp":1533560722181}');
+              return JSON.parse('{"build":105,"datetimeStamp":1534269628642}');
               '%__deploy-end'
             }
           },
@@ -351,15 +351,15 @@
           },
           brandName: {
             type: String,
-            value: 'Torque'
+            value: 'Lipi'
           },
           authorName: {
             type: String,
-            value: 'Torque Team'
+            value: 'Anvil Global Dynamics'
           },
           authorWebsite: {
             type: String,
-            value: 'https://torque.live'
+            value: 'https://anvil.live'
           },
           currentPageIsModal: {
             type: Boolean,
@@ -428,7 +428,7 @@
       }
 
       _assertApiKey() {
-        if ('user' in this && 'apiKey' in this.user) {
+        if ('user' in this && this.user && 'apiKey' in this.user) {
           this.callUserAssertApiKeyApi({}, (err, response) => {
             if (err) return;
             if (response.hasError) return this.logoutTapped();
@@ -462,13 +462,13 @@
 
       _manageProductionVariables() {
         if (mode === 'production') {
-          this.serverHost = 'https://server.torque.live'
-          this.jsonPostApiPathPrefix = 'https://server.torque.live/api/';
-          this.websocketHost = 'wss://server.torque.live';
+          this.serverHost = 'https://server.lipi.live'
+          this.jsonPostApiPathPrefix = 'https://server.lipi.live/api/';
+          this.websocketHost = 'wss://socket.lipi.live';
         } else {
           this.serverHost = 'http://localhost:8540'
           this.jsonPostApiPathPrefix = 'http://localhost:8540/api/';
-          this.websocketHost = 'ws://localhost:8540';
+          this.websocketHost = 'ws://localhost:8410';
         }
       }
 

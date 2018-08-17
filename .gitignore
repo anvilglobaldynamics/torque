@@ -1,3 +1,4 @@
 ignored/*
 .DS_Store
 .vscode/workbench.json
+server/config-production.json

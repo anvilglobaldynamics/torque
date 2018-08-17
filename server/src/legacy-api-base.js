@@ -21,7 +21,7 @@ class LegacyApi {
     _knownErrorCodeList.push(code);
   }
 
-  constructor(server, legacyDatabase, logger, request, response, socket, channel, requestUid = null) {
+  constructor(server, legacyDatabase, logger, request, response, socket, channel, requestUid = null, consumerId = null) {
     this.server = server;
     this.legacyDatabase = legacyDatabase;
     this.logger = logger;
@@ -31,6 +31,7 @@ class LegacyApi {
     this._channel = channel;
     this._requestUid = requestUid;
     this.__paginationCache = null;
+    this._consumerId = consumerId;
   }
 
   // region: properties (subclass needs to override) ==========
@@ -66,8 +67,10 @@ class LegacyApi {
   _sendResponse(data) {
     if (this._channel === 'ws') {
       let reponse = {
+        operation: 'response-proxy',
         requestUid: this._requestUid,
-        message: data
+        consumerId: this._consumerId,
+        body: data
       };
       reponse = JSON.stringify(reponse);
       try {
