@@ -231,6 +231,21 @@ exports.validateGetCustomerApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateGetDashboardSummaryApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    metrics: Joi.object().keys({
+      totalNumberOfSalesToday: Joi.number().max(999999999999999).required(),
+      totalAmountSoldToday: Joi.number().max(999999999999999).required(),
+      totalNumberOfSalesThisMonth: Joi.number().max(999999999999999).required(),
+      totalAmountSoldThisMonth: Joi.number().max(999999999999999).required()
+    })
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateGenericApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
