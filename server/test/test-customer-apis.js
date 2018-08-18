@@ -9,6 +9,11 @@ let {
   registerUser,
   loginUser,
   addOrganization,
+  validateAddCustomerApiSuccessResponse,
+  validateGetCustomerSummaryListApiSuccessResponse,
+  validateGetCustomerApiSuccessResponse,
+  validateGenericApiSuccessResponse,
+  validateGenericApiFailureResponse,
   validateCustomerSchema,
   addCustomer
 } = require('./lib');
@@ -36,7 +41,7 @@ let secondOrganizationId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidCustomerId = generateInvalidId();
 
-describe('customer', _ => {
+describe('Customer', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -83,8 +88,8 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body.error).to.have.property('code').that.equals('ORGANIZATION_INVALID');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('ORGANIZATION_INVALID');
       testDoneFn();
     })
 
@@ -98,15 +103,11 @@ describe('customer', _ => {
         organizationId: organizationId,
         fullName: "1st Test Customer",
         phone: customerPhone,
-        // phone: "0a626404050",
         openingBalance: '500',
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('customerId');
-      
+      validateAddCustomerApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -124,9 +125,7 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('customerId');
+      validateAddCustomerApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -144,9 +143,7 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('customerId');
+      validateAddCustomerApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -164,9 +161,8 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('PHONE_ALREADY_IN_USE');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('PHONE_ALREADY_IN_USE');
       testDoneFn();
     })
 
@@ -184,9 +180,8 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VALIDATION_ERROR');
       testDoneFn();
     })
 
@@ -204,9 +199,8 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VALIDATION_ERROR');
       testDoneFn();
     })
 
@@ -224,9 +218,8 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VALIDATION_ERROR');
       testDoneFn();
     })
 
@@ -244,9 +237,8 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VALIDATION_ERROR');
       testDoneFn();
     })
 
@@ -261,8 +253,9 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('customerList');
+
+      validateGetCustomerSummaryListApiSuccessResponse(body);
+
       body.customerList.forEach(customer => {
         validateCustomerSchema(customer)
       });
@@ -288,10 +281,8 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('ORGANIZATION_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('ORGANIZATION_INVALID');
       testDoneFn();
     })
 
@@ -307,10 +298,9 @@ describe('customer', _ => {
         phone: customerPhone2,
       }
     }, (err, response, body) => {
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('PHONE_ALREADY_IN_USE');
-
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('PHONE_ALREADY_IN_USE');
       testDoneFn();
     })
 
@@ -327,8 +317,7 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -345,10 +334,8 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('CUSTOMER_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('CUSTOMER_INVALID');
       testDoneFn();
     })
 
@@ -363,8 +350,7 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('customer');
+      validateGetCustomerApiSuccessResponse(body);
       expect(body.customer.phone).to.equal(updatedCustomerPhone);
       validateCustomerSchema(body.customer)
       testDoneFn();
@@ -383,8 +369,7 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -401,8 +386,7 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -417,9 +401,7 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('customer');
-
+      validateGetCustomerApiSuccessResponse(body);
       validateCustomerSchema(body.customer);
 
       expect(body.customer).to.have.property('balance').that.equals(-80);
@@ -441,9 +423,8 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('CUSTOMER_INVALID');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('CUSTOMER_INVALID');
       testDoneFn();
     })
 
@@ -460,9 +441,8 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VALIDATION_ERROR');
       testDoneFn();
     })
 
@@ -477,8 +457,7 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -493,11 +472,8 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('CUSTOMER_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('CUSTOMER_INVALID');
       testDoneFn();
     })
 
@@ -512,10 +488,8 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('CUSTOMER_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('CUSTOMER_INVALID');
       testDoneFn();
     })
 
@@ -530,9 +504,8 @@ describe('customer', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('CUSTOMER_INVALID');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('CUSTOMER_INVALID');
       testDoneFn();
     })
 

@@ -24,7 +24,7 @@ const phone2 = rnd(prefix, 11).split('').reverse().join('');
 
 let apiKey = null;
 
-describe('admin apis (1)', _ => {
+describe('Admin', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -73,6 +73,7 @@ describe('admin apis (1)', _ => {
   });
 
   let apiKeyOfUserToBan = null
+
   it('intermittent (user creation)', testDoneFn => {
     registerUser({
       password, fullName, phone
