@@ -198,13 +198,13 @@ exports.getSales = (data, callback) => {
 
 // ===================================== Validation
 
-// Response Validation Start
+// --- Response Validation Start
 
 exports.validateAddCustomerApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
-    customerId: Joi.number().max(999999999999999).required(),
+    customerId: Joi.number().max(999999999999999).required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -214,7 +214,7 @@ exports.validateAddCustomerApiSuccessResponse = (doc) => {
 exports.validateGetCustomerSummaryListApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
-    customerList: Joi.array().required(),
+    customerList: Joi.array().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -246,6 +246,61 @@ exports.validateGetDashboardSummaryApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateHireUserAsEmployeeApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    employmentId: Joi.number().max(999999999999999).required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateFindUserApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    user: Joi.object().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateAddNewEmployeeApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    userId: Joi.number().max(999999999999999).required(),
+    employmentId: Joi.number().max(999999999999999).required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetEmployeeListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    employeeList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetEmployeeApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    employee: Joi.object().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+// Generic
+
 exports.validateGenericApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
@@ -272,7 +327,7 @@ exports.validateGenericApiFailureResponse = (doc) => {
   if (error) throw error;
 }
 
-// Response Validation End
+// --- Response Validation End
 
 exports.validateCustomerSchema = (doc) => {
   let schema = Joi.object().keys({
