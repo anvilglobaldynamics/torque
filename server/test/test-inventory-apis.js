@@ -280,12 +280,6 @@ describe('Inventory', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
-      // TODO: remove below
-      // expect(body).to.have.property('hasError').that.equals(false);
-      // expect(body).to.have.property('inventoryDetails').that.is.an('object');
-      // expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
-      // expect(body).to.have.property('aggregatedProductList').that.is.an('array');
-
       productToBeTransferred = body.aggregatedProductList[0];
       // TODO: Schema Validate aggregatedProductList
       expect(body.aggregatedProductList[0].productId).to.not.equal(body.aggregatedProductList[1].productId);
