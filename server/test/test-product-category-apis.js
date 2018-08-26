@@ -9,7 +9,9 @@ let {
   registerUser,
   loginUser,
   addOrganization,
-  validateProductCategorySchema
+  validateProductCategorySchema,
+  validateAddProductCategoryApiSuccessResponse,
+  validateGenericApiFailureResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -37,7 +39,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidParentProductCategoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('product-category', _ => {
+describe.only('Product Category', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -84,10 +86,7 @@ describe('product-category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('productCategoryId');
-
+      validateAddProductCategoryApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -112,10 +111,7 @@ describe('product-category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('productCategoryId');
-
+      validateAddProductCategoryApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -140,10 +136,8 @@ describe('product-category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('ORGANIZATION_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('ORGANIZATION_INVALID');
       testDoneFn();
     })
 
