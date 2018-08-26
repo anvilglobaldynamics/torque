@@ -356,6 +356,40 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateAddOrganizationApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    organizationId: Joi.number().max(999999999999999).required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetOrganizationListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    organizationList: Joi.array().required().items({
+      id: Joi.number().required(),
+      name: Joi.string().required(),
+      primaryBusinessAddress: Joi.string().required(),
+      phone: Joi.string().required(),
+      email: Joi.string().email().required(),
+      employment: Joi.object().keys({ 
+        designation: Joi.string().required(), 
+        role: Joi.string().required(), 
+        companyProvidedId: Joi.string().alphanum().allow('').required(), 
+        isActive: Joi.boolean().required(),
+        privileges: Joi.object().required()
+      })
+    })
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 // Generic
 
 exports.validateGenericApiSuccessResponse = (doc) => {
