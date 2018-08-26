@@ -315,36 +315,36 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
     inventoryDetails: Joi.object().required(),
     inventoryContainerDetails: Joi.object().required(),
     aggregatedProductList: Joi.array().required().items({
-      productId: Joi.number().max(999999999999999).required(),
-      count: Joi.number().max(999999999999999).required(),
-      acquiredDatetimeStamp: Joi.number().max(999999999999999).required(),
-      addedDatetimeStamp:  Joi.number().max(999999999999999).required(),
+      productId: Joi.number().required(),
+      count: Joi.number().required(),
+      acquiredDatetimeStamp: Joi.number().required(),
+      addedDatetimeStamp:  Joi.number().required(),
       "product": Joi.object().keys({
         _id: Joi.any().required(),
-        id: Joi.number().max(999999999999999).required(),
-        productCategoryId: Joi.number().max(999999999999999).required(),
-        purchasePrice: Joi.number().max(999999999999999).required(),
-        salePrice: Joi.number().max(999999999999999).required(),
+        id: Joi.number().required(),
+        productCategoryId: Joi.number().required(),
+        purchasePrice: Joi.number().required(),
+        salePrice: Joi.number().required(),
         "productCategory": Joi.object().keys({
           _id: Joi.any().required(),
-          id: Joi.number().max(999999999999999).required(),
-          createdDatetimeStamp: Joi.number().max(999999999999999).required(),
-          lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-          name: Joi.string().min(1).max(64).required(),
-          organizationId: Joi.number().max(999999999999999).required(),
-          parentProductCategoryId: Joi.number().max(999999999999999).allow(null).required(),
-          unit: Joi.string().max(1024).required(),
-          defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
+          id: Joi.number().required(),
+          createdDatetimeStamp: Joi.number().required(),
+          lastModifiedDatetimeStamp: Joi.number().required(),
+          name: Joi.string().required(),
+          organizationId: Joi.number().required(),
+          parentProductCategoryId: Joi.any().required(),
+          unit: Joi.string().required(),
+          defaultDiscountType: Joi.string().required(),
           defaultDiscountValue: Joi.number().when(
             'defaultDiscountType', { 
               is: 'percent', 
-              then: Joi.number().min(0).max(100).required(), 
-              otherwise: Joi.number().max(999999999999999).required() 
+              then: Joi.number().required(), 
+              otherwise: Joi.number().required() 
             }
           ),
-          defaultPurchasePrice: Joi.number().max(999999999999999).required(),
-          defaultVat: Joi.number().max(999999999999999).required(),
-          defaultSalePrice: Joi.number().max(999999999999999).required(),
+          defaultPurchasePrice: Joi.number().required(),
+          defaultVat: Joi.number().required(),
+          defaultSalePrice: Joi.number().required(),
           isDeleted: Joi.boolean().required(),
           isReturnable: Joi.boolean().required()
         })
