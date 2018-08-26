@@ -103,7 +103,6 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     let aggregatedProductList = await this.__getAggregatedProductList({ productList: clonedProductList });
 
     return {
-      status: "success",
       inventoryDetails: {
         inventoryName: inventory.name
       },

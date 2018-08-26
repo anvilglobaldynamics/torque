@@ -15,6 +15,10 @@ let {
   addOutlet,
   addProductCategory,
   validateInventorySchema,
+  validateGetInventoryListApiSuccessResponse,
+  validateGenericApiFailureResponse,
+  validateGenericApiSuccessResponse,
+  validateGetAggregatedInventoryDetailsApiSuccessResponse,
   validateProductCategorySchema,
   validateProductSchema
 } = require('./lib');
@@ -64,7 +68,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('inventory', _ => {
+describe('Inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -163,13 +167,10 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('inventoryList').that.is.an('array');
-
+      validateGetInventoryListApiSuccessResponse(body);
       body.inventoryList.forEach(inventory => {
         validateInventorySchema(inventory);
       });
-
       testDoneFn();
     });
 
@@ -184,9 +185,8 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('ORGANIZATION_INVALID');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('ORGANIZATION_INVALID');
       testDoneFn();
     });
 
@@ -204,7 +204,7 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
   });
@@ -221,7 +221,7 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
   });
@@ -238,10 +238,8 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('INVENTORY_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('INVENTORY_INVALID');
       testDoneFn();
     });
 
@@ -264,10 +262,8 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('PRODUCT_CATEGORY_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('PRODUCT_CATEGORY_INVALID');
       testDoneFn();
     });
 
@@ -282,10 +278,14 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('inventoryDetails').that.is.an('object');
-      expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
-      expect(body).to.have.property('aggregatedProductList').that.is.an('array');
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+
+      // TODO: remove below
+      // expect(body).to.have.property('hasError').that.equals(false);
+      // expect(body).to.have.property('inventoryDetails').that.is.an('object');
+      // expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
+      // expect(body).to.have.property('aggregatedProductList').that.is.an('array');
+
       productToBeTransferred = body.aggregatedProductList[0];
       // TODO: Schema Validate aggregatedProductList
       expect(body.aggregatedProductList[0].productId).to.not.equal(body.aggregatedProductList[1].productId);
@@ -303,10 +303,8 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('INVENTORY_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('INVENTORY_INVALID');
       testDoneFn();
     });
 
@@ -325,8 +323,7 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
 
@@ -345,10 +342,8 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('PRODUCT_INSUFFICIENT');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('PRODUCT_INSUFFICIENT');
       testDoneFn();
     });
 
@@ -367,10 +362,8 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('FROM_INVENTORY_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('FROM_INVENTORY_INVALID');
       testDoneFn();
     });
 
@@ -389,10 +382,8 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('TO_INVENTORY_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('TO_INVENTORY_INVALID');
       testDoneFn();
     });
 
@@ -411,7 +402,7 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
 
@@ -426,14 +417,9 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('inventoryDetails').that.is.an('object');
-      expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
-      expect(body).to.have.property('aggregatedProductList').that.is.an('array');
-
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(2);
-
       testDoneFn();
     });
 
@@ -452,7 +438,7 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
 
@@ -467,14 +453,9 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('inventoryDetails').that.is.an('object');
-      expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
-      expect(body).to.have.property('aggregatedProductList').that.is.an('array');
-
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(3);
-
       testDoneFn();
     });
 
@@ -489,14 +470,9 @@ describe('inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('inventoryDetails').that.is.an('object');
-      expect(body).to.have.property('inventoryContainerDetails').that.is.an('object');
-      expect(body).to.have.property('aggregatedProductList').that.is.an('array');
-
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(productToBeTransferred.count - 5);
-
       testDoneFn();
     });
 

@@ -33,6 +33,7 @@ Possible Error Codes:
 { code: INVENTORY_INVALID } // inventory could not be found
 ```
 
+<!-- FIXME: below response is incorrect -->
 ### response (on success):
 ```js
 {

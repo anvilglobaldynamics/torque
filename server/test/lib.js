@@ -299,6 +299,30 @@ exports.validateGetEmployeeApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateGetInventoryListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    inventoryList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    inventoryDetails: Joi.object().required(),
+    inventoryContainerDetails: Joi.object().required(),
+    aggregatedProductList: Joi.array().required()
+    // matchingProductList: Joi.array().required(),
+    // matchingProductCategoryList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 // Generic
 
 exports.validateGenericApiSuccessResponse = (doc) => {
