@@ -314,18 +314,21 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
     hasError: Joi.boolean().required().equal(false),
     inventoryDetails: Joi.object().required(),
     inventoryContainerDetails: Joi.object().required(),
+
     aggregatedProductList: Joi.array().required().items({
       productId: Joi.number().required(),
       count: Joi.number().required(),
       acquiredDatetimeStamp: Joi.number().required(),
       addedDatetimeStamp:  Joi.number().required(),
-      "product": Joi.object().keys({
+
+      product: Joi.object().keys({
         _id: Joi.any().required(),
         id: Joi.number().required(),
         productCategoryId: Joi.number().required(),
         purchasePrice: Joi.number().required(),
         salePrice: Joi.number().required(),
-        "productCategory": Joi.object().keys({
+
+        productCategory: Joi.object().keys({
           _id: Joi.any().required(),
           id: Joi.number().required(),
           createdDatetimeStamp: Joi.number().required(),
@@ -383,6 +386,78 @@ exports.validateGetOrganizationListApiSuccessResponse = (doc) => {
         isActive: Joi.boolean().required(),
         privileges: Joi.object().required()
       })
+    })
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateAddOutletApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    outletId: Joi.number().max(999999999999999).required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetOutletListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    outletList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetOutletApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    
+    outlet: Joi.object().keys({
+      id: Joi.number().required(),
+      _id: Joi.any().required(),
+
+      createdDatetimeStamp: Joi.number().required(),
+      lastModifiedDatetimeStamp: Joi.number().required(),
+  
+      name: Joi.string().required(),
+      organizationId: Joi.number().required(),
+      physicalAddress: Joi.string().required(),
+      contactPersonName: Joi.string().required(),
+      phone: Joi.string().required(),
+      isDeleted: Joi.boolean().required()
+    }),
+  
+    defaultInventory: Joi.object().keys({
+      createdDatetimeStamp: Joi.number().required(),
+      lastModifiedDatetimeStamp: Joi.number().required(),
+      
+      id: Joi.number().required(),
+      name: Joi.string().required(),
+      allowManualTransfer: Joi.boolean().required(),
+    }),
+  
+    returnedInventory: Joi.object().keys({
+      createdDatetimeStamp: Joi.number().required(),
+      lastModifiedDatetimeStamp: Joi.number().required(),
+      
+      id: Joi.number().required(),
+      name: Joi.string().required(),
+      allowManualTransfer: Joi.boolean().required(),
+    }),
+    
+    damagedInventory: Joi.object().keys({
+      createdDatetimeStamp: Joi.number().required(),
+      lastModifiedDatetimeStamp: Joi.number().required(),
+      
+      id: Joi.number().required(),
+      name: Joi.string().required(),
+      allowManualTransfer: Joi.boolean().required(),
     })
   });
 

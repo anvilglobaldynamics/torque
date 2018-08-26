@@ -11,7 +11,12 @@ let {
   addOrganization,
   addProductCategory,
   validateOutletSchema,
-  validateEmbeddedInventorySchema
+  validateEmbeddedInventorySchema,
+  validateAddOutletApiSuccessResponse,
+  validateGenericApiFailureResponse,
+  validateGetOutletListApiSuccessResponse,
+  validateGetOutletApiSuccessResponse,
+  validateGenericApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -42,7 +47,7 @@ let outletToBeFilledId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidOutletId = generateInvalidId();
 
-describe('outlet', _ => {
+describe('Outlet', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -96,10 +101,7 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('outletId');
-
+      validateAddOutletApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -118,12 +120,8 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('outletId');
-
+      validateAddOutletApiSuccessResponse(body);
       outletToBeFilledId = body.outletId;
-
       testDoneFn();
     })
 
@@ -142,9 +140,8 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('ORGANIZATION_INVALID');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('ORGANIZATION_INVALID');
       testDoneFn();
     })
 
@@ -180,12 +177,11 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('outletList').that.is.an('array');
+      validateGetOutletListApiSuccessResponse(body);
+
       body.outletList.forEach(outlet => {
         validateOutletSchema(outlet);
       });
-
       outletList = body.outletList;
 
       testDoneFn();
@@ -202,9 +198,8 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('ORGANIZATION_INVALID');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('ORGANIZATION_INVALID');
       testDoneFn();
     });
 
@@ -219,12 +214,7 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('outlet');
-      expect(body).to.have.property('defaultInventory');
-      expect(body).to.have.property('returnedInventory');
-      expect(body).to.have.property('damagedInventory');
-
+      validateGetOutletApiSuccessResponse(body);
       validateOutletSchema(body.outlet);
       validateEmbeddedInventorySchema(body.defaultInventory);
       validateEmbeddedInventorySchema(body.returnedInventory);
@@ -245,10 +235,8 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('OUTLET_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('OUTLET_INVALID');
       testDoneFn();
     });
 
@@ -268,8 +256,7 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -289,10 +276,8 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('OUTLET_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('OUTLET_INVALID');
       testDoneFn();
     })
 
@@ -307,17 +292,13 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('outlet');
-      expect(body).to.have.property('defaultInventory');
-      expect(body).to.have.property('returnedInventory');
-      expect(body).to.have.property('damagedInventory');
-      expect(body.outlet.phone).to.equal(outletPhone2);
-
+      validateGetOutletApiSuccessResponse(body);
       validateOutletSchema(body.outlet);
       validateEmbeddedInventorySchema(body.defaultInventory);
       validateEmbeddedInventorySchema(body.returnedInventory);
       validateEmbeddedInventorySchema(body.damagedInventory);
+
+      expect(body.outlet.phone).to.equal(outletPhone2);
       testDoneFn();
     });
 
@@ -332,19 +313,13 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('outlet');
-      expect(body).to.have.property('defaultInventory');
-      expect(body).to.have.property('returnedInventory');
-      expect(body).to.have.property('damagedInventory');
-
+      validateGetOutletApiSuccessResponse(body);
       validateOutletSchema(body.outlet);
       validateEmbeddedInventorySchema(body.defaultInventory);
       validateEmbeddedInventorySchema(body.returnedInventory);
       validateEmbeddedInventorySchema(body.damagedInventory);
 
       outletDefaultInventoryId = body.defaultInventory.id;
-
       testDoneFn();
     });
 
@@ -361,12 +336,12 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
   });
 
-  it('api/delete-outlet (Inalid outletId)', testDoneFn => {
+  it('api/delete-outlet (Invalid outletId)', testDoneFn => {
 
     callApi('api/delete-outlet', {
       json: {
@@ -375,16 +350,14 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('OUTLET_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('OUTLET_INVALID');
       testDoneFn();
     })
 
   });
 
-  it('api/delete-outlet (Inalid filled outlet)', testDoneFn => {
+  it('api/delete-outlet (Invalid filled outlet)', testDoneFn => {
 
     callApi('api/delete-outlet', {
       json: {
@@ -393,10 +366,8 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('OUTLET_NOT_EMPTY');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('OUTLET_NOT_EMPTY');
       testDoneFn();
     })
 
@@ -411,8 +382,7 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -427,11 +397,8 @@ describe('outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('OUTLET_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('OUTLET_INVALID');
       testDoneFn();
     });
 
