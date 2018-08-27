@@ -88,7 +88,7 @@
             <div class="inventory-container-view-details">[[verses.outlet.contactNumber]]: [[outlet.phone]]</div>
           </div>
 
-          <paper-menu-button horizontal-align="right">
+          <paper-menu-button horizontal-align="right" ignore-select id="top-menu">
             <paper-icon-button icon="menu" slot="dropdown-trigger"></paper-icon-button>
             <paper-listbox slot="dropdown-content">
               <paper-item on-tap="editTapped">
@@ -96,7 +96,7 @@
               </paper-item>
               <paper-item on-tap="deleteTapped">
                 <iron-icon class="icon medium-small m-right-8" icon="delete" class="m-right-8"></iron-icon>[[verses.outlet.deleteOutlet]]
-              </paper-item>              
+              </paper-item>
             </paper-listbox>
           </paper-menu-button>
         </div>
@@ -245,10 +245,12 @@
       // region: ui  ===========================
 
       editTapped(e = null) {
+        this.$['top-menu'].close();
         return this.app.navigateTo(`/edit-outlet/outlet:${this.outlet.id}`);
       }
 
       deleteTapped(e = null) {
+        this.$['top-menu'].close();
         let message = this.app.verses.outlet.deleteOutletQuestionPartOne + " " + this.outlet.name + " " + this.app.verses.outlet.deleteOutletQuestionPartTwo;
         this.app.showModalConfirmation(this.app.verses.outlet.deleteOutletQuestion, message, (answer) => {
           if (!answer) return;

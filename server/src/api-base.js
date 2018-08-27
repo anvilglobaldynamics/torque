@@ -230,7 +230,7 @@ class Api {
       this.__applyPaginationToResponse(response);
       this._sendResponse(response);
     } catch (originalErrorObject) {
-      console.log("ERROR (TODO: REMOVE)", originalErrorObject);
+      this.logger.error(originalErrorObject);
       let errorObject = this._translateKnownError(originalErrorObject);
       errorObject = this._stringifyErrorObject(errorObject);
       errorObject = this._hideUnknownErrorsOnProduction(errorObject);

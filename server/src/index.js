@@ -142,6 +142,9 @@ class Program {
   async initiateServer(callback) {
     try {
       config = ConfigLoader.getComputedConfig();
+      if (params.db) {
+        config.db.name = params.db;
+      }
       server = new Server(config, mode);
       database = new DatabaseService(config.db);
       legacyDatabase = new LegacyDatabase(config.db);
