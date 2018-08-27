@@ -83,6 +83,9 @@ class Logger {
       data: args
     };
     this._commit(entry);
+    if (!this._mirrorFilePath) {
+      console.info.apply(console, ['SILENT'].concat(args));
+    }
   }
 
   log(...args) {
@@ -93,7 +96,7 @@ class Logger {
     };
     this._commit(entry);
     if (!this.isMuted) {
-      console.log.apply(console, args);
+      console.log.apply(console, ['LOG'].concat(args));
     }
   }
 
@@ -110,7 +113,7 @@ class Logger {
   }
 
   inspect(object) {
-    console.log(utillib.inspect(object, { showHidden: true, depth: null }));
+    console.log('INSPECT', utillib.inspect(object, { showHidden: true, depth: null }));
   }
 
   info(...args) {
@@ -121,7 +124,7 @@ class Logger {
     };
     this._commit(entry);
     if (!this.isMuted) {
-      console.log.apply(console, ['INFO'].concat(args));
+      console.info.apply(console, ['INFO'].concat(args));
     }
   }
 
@@ -136,7 +139,7 @@ class Logger {
     };
     this._commit(entry);
     if (!this.isMuted) {
-      console.error(err);
+      console.warn(err);
     }
   }
 
@@ -148,7 +151,7 @@ class Logger {
     };
     this._commit(entry);
     if (!this.isMuted) {
-      console.log.apply(console, ['DEBUG'].concat(args));
+      console.debug.apply(console, ['DEBUG'].concat(args));
     }
   }
 
