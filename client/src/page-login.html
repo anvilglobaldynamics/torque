@@ -148,6 +148,7 @@
           if (!emailOrPhone) return;
           emailOrPhone = emailOrPhone.toLowerCase();
           this._processForgotPasswordRequestApi({ emailOrPhone }, type => {
+            // TODO: type should be in Bengali or English depending on the language selected.
             let message = this.app.verses.login.confirmationLinkPartOne + type + this.app.verses.login.confirmationLinkPartTwo;
             this.app.showModalDialog("Thank you.", message, () => 'pass');
           });

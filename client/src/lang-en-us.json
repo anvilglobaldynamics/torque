@@ -146,7 +146,8 @@
     "phoneCouldNotBeVerified": "Your phone could not be verified. Make sure the verification code is correct",
     "checkYourPhoneForVerification": "Please check your phone. We have sent you a verification SMS.",
     "verificationSmsSent": "Verification SMS Sent",
-    "notYetVarifiedPhone": "You have not yet verified your phone number. Your account (after the 1 hour grace period) is not active until you verify it. Either click the link in the sms we sent to",
+    "notYetVerifiedPhonePart1": "You need to verify your account. Either click the link in the sms we sent to",
+    "notYetVerifiedPhonePart2": "or press the button below.",
     "whyProvideEmailAddress": "By providing an email address, you can get receipts, login alerts and other important information delivered to you to your email."
   },
   "organization": {

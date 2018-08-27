@@ -75,8 +75,8 @@
       <template is="dom-if" if="[[user.phone]]">
         <template is="dom-if" if="[[!user.isPhoneVerified]]">
           <div class="card">
-            [[verses.general.notYetVarifiedPhone]]
-            <b>[[user.phone]]</b> [[verses.general.or]] [[verses.general.pressBelowButton]]
+            [[verses.home.notYetVerifiedPhonePart1]]
+            <b>[[user.phone]]</b> [[verses.home.notYetVerifiedPhonePart2]]
             <br>
             <div class="button-row">
               <paper-button raised class="primary" on-tap="verifyPhoneTapped">[[verses.home.verifyPhoneNumberManually]]</paper-button>
