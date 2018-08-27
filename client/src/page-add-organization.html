@@ -35,7 +35,7 @@
             <paper-input class="addOrganizationForm--phone" value="{{addOrganizationForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.organization.phoneInputError]] label=[[verses.organization.phoneInput]]></paper-input>
             <paper-input class="addOrganizationForm--email" value="{{addOrganizationForm.email}}" pattern="^.+@.+\..+$" minlength="0" error-message=[[verses.organization.emailInputError]] label=[[verses.organization.emailInput]]></paper-input>
             <paper-textarea class="addOrganizationForm--primaryBusinessAddress" value="{{addOrganizationForm.primaryBusinessAddress}}" required minlength="8" error-message=[[verses.organization.primaryBusinessAddressInputError]] label=[[verses.organization.primaryBusinessAddressInput]] rows="4"></paper-textarea>
-            <paper-checkbox class="addOrganizationForm--isOneOutletOrg" checked="{{addOrganizationForm.isOneOutletOrg}}">[[verses.organization.isOneOutletOrg]]</paper-checkbox>
+            <paper-checkbox class="addOrganizationForm--isNotOneOutletOrg" checked="{{addOrganizationForm.isNotOneOutletOrg}}">[[verses.organization.isNotOneOutletOrg]]</paper-checkbox>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary addOrganizationForm--submit" on-tap="addOrganizationTapped">[[verses.organization.createOrganization]]</paper-button>
@@ -63,7 +63,7 @@
                   phone: '01700000011',
                   email: 'johndoe@johnsapparel.com',
                   primaryBusinessAddress: 'Road 50\nThis Town',
-                  isOneOutletOrg: false
+                  isNotOneOutletOrg: false
                 };
               } else {
                 return {
@@ -71,7 +71,7 @@
                   phone: '',
                   email: '',
                   primaryBusinessAddress: '',
-                  isOneOutletOrg: false
+                  isNotOneOutletOrg: false
                 };
               }
             }
@@ -111,7 +111,7 @@
 
       // region: addOrganization =================================
 
-      _processUserAddOrganization({ name, phone, email, primaryBusinessAddress, isOneOutletOrg }) {
+      _processUserAddOrganization({ name, phone, email, primaryBusinessAddress, isNotOneOutletOrg }) {
         email = email.toLowerCase();
 
         let data = { name, phone, email, primaryBusinessAddress };
@@ -121,10 +121,10 @@
           if (response.hasError) return this.onApiError(response.error, 'addOrganizationForm');
           let message = this.app.verses.organization.organizationCreatedToast;
           this.app.showToast(message, _ => {
-            if (isOneOutletOrg) {
-              this.app.navigateTo(`/edit-outlet/fromOrganizationCreatePage:${response.organizationId}`);
-            } else {
+            if (isNotOneOutletOrg) {
               this.app.navigateTo(`/home/org:${response.organizationId}`);
+            } else {
+              this.app.navigateTo(`/edit-outlet/fromOrganizationCreatePage:${response.organizationId}`);
             }
           });
         });
@@ -136,8 +136,10 @@
         this.elemAll('#addOrganizationForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#addOrganizationForm').validate()) return;
 
-        let { name, phone, email, primaryBusinessAddress, isOneOutletOrg } = this.addOrganizationForm;
-        this._processUserAddOrganization({ name, phone, email, primaryBusinessAddress, isOneOutletOrg });
+
+
+        let { name, phone, email, primaryBusinessAddress, isNotOneOutletOrg } = this.addOrganizationForm;
+        this._processUserAddOrganization({ name, phone, email, primaryBusinessAddress, isNotOneOutletOrg });
       }
 
       // region: misc =================================

@@ -152,7 +152,7 @@
   },
   "organization": {
     "addOrganizationTitle": "Add Organization",
-    "isOneOutletOrg": "is it a 1 Outlet Organization?",
+    "isNotOneOutletOrg": "This organization has more than one outlets.",
     "nameOfYourOrganization": "Name of your organization.",
     "pleaseEnterAValidName": "Please enter a valid name.",
     "emailInput": "Your email address (Optional)",
