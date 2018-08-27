@@ -25,12 +25,15 @@
   },
   "devDependencies": {
     "chai": "^3.2.0",
+    "readline-sync": "^1.4.9",
     "request": "^2.88.0"
   },
   "scripts": {
     "deploy": "node ./scripts/deploy.js",
+    "import": "node ./scripts/import.js",
     "start": "node start.js",
-    "start-single": "node start.js",
+    "dev": "nodemon start.js",
+    "dev-imported": "nodemon start.js --db torque-imported",
     "test": "mocha --timeout 10000"
   },
   "private": true
