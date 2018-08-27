@@ -9,7 +9,10 @@ let Joi = require('joi');
 let jsonParser = bodyParser.json({
   limit: '100kb'
 });
+const { Logger } = require('./logger');
 const { LegacyApi } = require('./legacy-api-base');
+
+const WEBSOCKET_CLIENT_POOL_MAX_COUNT = 10;
 
 class Server {
 
@@ -69,24 +72,39 @@ class Server {
     });
   }
 
-  _initializeWebsocket() {
-    this._wsApiList = [];
-    if (!this.config.socketProxy.enabled) {
-      this.logger.info("(server)> websocket server is not enabled.");
-      return;
+  __createWebsocketClient() {
+    let ws = new WebSocket(this.config.socketProxy.url);
+    let listener = (err) => {
+      if (!this.__hasReportedAnySocketFailure) {
+        this.__hasReportedAnySocketFailure = true;
+        this.logger.error(err);
+      }
     }
-    this._wsServer = new WebSocket(this.config.socketProxy.url);
-    this.logger.info("(server)> websocket socket-proxy is", this.config.socketProxy.url);
+    if (!this.__socketClientSerialSeed) {
+      this.__socketClientSerialSeed = 0;
+    }
+    let serial = this.__socketClientSerialSeed;
+    this.__socketClientSerialSeed += 1;
 
-    this._wsServer.on('error', (err) => {
-      console.error(err);
-    });
+    ws.once('error', listener);
 
-    this._wsServer.on('open', () => {
-      let ws = this._wsServer;
+    ws.on('open', () => {
+      // this.logger.debug(`Websocket added to socket-pool: #${serial}`);
+
+      ws.on('close', (code) => {
+        // this.logger.debug('Websocket closed:', `#${serial}`);
+      });
+
+      ws.on('error', (err) => {
+        this.logger.error(err);
+      });
+      ws.removeListener('error', listener);
+
       ws.send(this.config.socketProxy.pssk);
 
       ws.on('message', (message) => {
+        // this.logger.debug('Websocket message on', `#${serial}`);
+
         try {
           message = JSON.parse(message);
         } catch (err) {
@@ -134,7 +152,21 @@ class Server {
     });
   }
 
+  _initializeWebsocket() {
+    this._wsApiList = [];
+    if (!this.config.socketProxy.enabled) {
+      this.logger.info("(server)> websocket server is not enabled.");
+      return;
+    }
+    this.logger.info("(server)> websocket socket-proxy is", this.config.socketProxy.url);
+
+    for (let i = 0; i < WEBSOCKET_CLIENT_POOL_MAX_COUNT; i++) {
+      this.__createWebsocketClient();
+    }
+  }
+
   setLogger(logger) {
+    /** @type Logger */
     this.logger = logger;
   }
 
