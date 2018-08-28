@@ -22,13 +22,11 @@ let {
   validateProductCategorySchema,
   validateProductSchema,
   validateSalesSchema,
-
   validateGenericApiFailureResponse,
   validateAddSalesReturnApiSuccessResponse,
   validateGetAggregatedInventoryDetailsApiSuccessResponse,
   validateGetSalesReturnApiSuccessResponse,
   validateGetSalesReturnListApiSuccessResponse,
-
   validateSalesReturnSchema,
   validateSalesReturnSchemaWhenListObj
 } = require('./lib');
