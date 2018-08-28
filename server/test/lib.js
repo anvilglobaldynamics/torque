@@ -528,6 +528,26 @@ exports.validateGetSalesListApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateGetSalesReturnApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    salesReturn: Joi.object().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetSalesReturnListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    salesReturnList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 // Generic
 
 exports.validateGenericApiSuccessResponse = (doc) => {
