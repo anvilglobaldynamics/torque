@@ -476,6 +476,16 @@ exports.validateAddProductCategoryApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateGetProductCategoryListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    productCategoryList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 // Generic
 
 exports.validateGenericApiSuccessResponse = (doc) => {

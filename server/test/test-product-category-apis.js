@@ -11,7 +11,9 @@ let {
   addOrganization,
   validateProductCategorySchema,
   validateAddProductCategoryApiSuccessResponse,
-  validateGenericApiFailureResponse
+  validateGenericApiFailureResponse,
+  validateGetProductCategoryListApiSuccessResponse,
+  validateGenericApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -39,7 +41,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidParentProductCategoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe.only('Product Category', _ => {
+describe('Product Category', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -152,15 +154,13 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('productCategoryList').that.is.an('array');
+      validateGetProductCategoryListApiSuccessResponse(body);
 
       body.productCategoryList.forEach(productCategory => {
         validateProductCategorySchema(productCategory);
       });
 
       body.productCategoryList.reverse();
-
       productCategoryOne = body.productCategoryList[0];
 
       testDoneFn();
@@ -177,10 +177,8 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('ORGANIZATION_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('ORGANIZATION_INVALID');
       testDoneFn();
     });
 
@@ -205,10 +203,7 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('productCategoryId');
-
+      validateAddProductCategoryApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -233,9 +228,8 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('PARENT_PRODUCT_CATEGORY_INVALID');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PARENT_PRODUCT_CATEGORY_INVALID');
       testDoneFn();
     })
 
@@ -250,15 +244,12 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('productCategoryList').that.is.an('array');
-
+      validateGetProductCategoryListApiSuccessResponse(body);
       body.productCategoryList.forEach(productCategory => {
         validateProductCategorySchema(productCategory);
       });
 
       body.productCategoryList.reverse();
-
       productCategoryOne = body.productCategoryList[0];
       productCategoryTwo = body.productCategoryList[1];
       productCategoryThree = body.productCategoryList[2];
@@ -289,8 +280,7 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -315,8 +305,7 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -341,10 +330,8 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('PARENT_PRODUCT_CATEGORY_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PARENT_PRODUCT_CATEGORY_INVALID');
       testDoneFn();
     })
 
@@ -369,9 +356,8 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('PARENT_PRODUCT_CATEGORY_INVALID');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PARENT_PRODUCT_CATEGORY_INVALID');
       testDoneFn();
     })
 
@@ -396,10 +382,8 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('PRODUCT_CATEGORY_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PRODUCT_CATEGORY_INVALID');
       testDoneFn();
     })
 
@@ -414,16 +398,13 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('productCategoryList').that.is.an('array');
-
+      validateGetProductCategoryListApiSuccessResponse(body);
       body.productCategoryList.forEach(productCategory => {
         validateProductCategorySchema(productCategory);
       });
 
       body.productCategoryList.reverse();
       productCategoryList = body.productCategoryList;
-
       expect(body.productCategoryList[0].name).to.equal("new 1st product category name");
       expect(body.productCategoryList[0].isReturnable).to.equal(false);
 
@@ -443,10 +424,8 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('PRODUCT_CATEGORY_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PRODUCT_CATEGORY_INVALID');
       testDoneFn();
     })
 
@@ -461,8 +440,7 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -477,18 +455,15 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-
-
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('productCategoryList').that.is.an('array');
-
+      validateGetProductCategoryListApiSuccessResponse(body);
       body.productCategoryList.forEach(productCategory => {
         validateProductCategorySchema(productCategory);
       });
+
       let oldList = productCategoryList;
       productCategoryList = body.productCategoryList;
-
       expect(productCategoryList.length + 1).to.equal(oldList.length);
+
       testDoneFn();
     });
 
@@ -503,10 +478,8 @@ describe.only('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('PRODUCT_CATEGORY_NOT_CHILDLESS');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PRODUCT_CATEGORY_NOT_CHILDLESS');
       testDoneFn();
     })
 
