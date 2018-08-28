@@ -204,7 +204,7 @@ exports.validateAddCustomerApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
-    customerId: Joi.number().max(999999999999999).required()
+    customerId: Joi.number().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -235,10 +235,10 @@ exports.validateGetDashboardSummaryApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     metrics: Joi.object().keys({
-      totalNumberOfSalesToday: Joi.number().max(999999999999999).required(),
-      totalAmountSoldToday: Joi.number().max(999999999999999).required(),
-      totalNumberOfSalesThisMonth: Joi.number().max(999999999999999).required(),
-      totalAmountSoldThisMonth: Joi.number().max(999999999999999).required()
+      totalNumberOfSalesToday: Joi.number().required(),
+      totalAmountSoldToday: Joi.number().required(),
+      totalNumberOfSalesThisMonth: Joi.number().required(),
+      totalAmountSoldThisMonth: Joi.number().required()
     })
   });
 
@@ -250,7 +250,7 @@ exports.validateHireUserAsEmployeeApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
-    employmentId: Joi.number().max(999999999999999).required()
+    employmentId: Joi.number().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -271,8 +271,8 @@ exports.validateAddNewEmployeeApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
-    userId: Joi.number().max(999999999999999).required(),
-    employmentId: Joi.number().max(999999999999999).required()
+    userId: Joi.number().required(),
+    employmentId: Joi.number().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -363,7 +363,7 @@ exports.validateAddOrganizationApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
-    organizationId: Joi.number().max(999999999999999).required()
+    organizationId: Joi.number().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -397,7 +397,7 @@ exports.validateAddOutletApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
-    outletId: Joi.number().max(999999999999999).required()
+    outletId: Joi.number().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -520,7 +520,7 @@ exports.validateAddProductCategoryApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
-    productCategoryId: Joi.number().max(999999999999999).required()
+    productCategoryId: Joi.number().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -541,7 +541,7 @@ exports.validateAddSalesApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
-    salesId: Joi.number().max(999999999999999).required()
+    salesId: Joi.number().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -562,7 +562,7 @@ exports.validateAddSalesReturnApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
-    salesReturnId: Joi.number().max(999999999999999).required()
+    salesReturnId: Joi.number().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -603,7 +603,7 @@ exports.validateAddWarehouseApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
-    warehouseId: Joi.number().max(999999999999999).required()
+    warehouseId: Joi.number().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
