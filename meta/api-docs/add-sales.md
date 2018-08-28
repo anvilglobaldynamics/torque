@@ -21,6 +21,7 @@ method: `POST`
       salePrice: Joi.number().max(999999999999999).required()
     })
   ),
+  
   payment: Joi.object().keys({
     totalAmount: Joi.number().max(999999999999999).required(),
     vatValue: Joi.number().max(999999999999999).required(),

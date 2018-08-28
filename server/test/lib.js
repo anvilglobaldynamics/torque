@@ -198,6 +198,458 @@ exports.getSales = (data, callback) => {
 
 // ===================================== Validation
 
+// --- Response Validation Start
+
+exports.validateAddCustomerApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    customerId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetCustomerSummaryListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    customerList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetCustomerApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    customer: Joi.object().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetDashboardSummaryApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    metrics: Joi.object().keys({
+      totalNumberOfSalesToday: Joi.number().required(),
+      totalAmountSoldToday: Joi.number().required(),
+      totalNumberOfSalesThisMonth: Joi.number().required(),
+      totalAmountSoldThisMonth: Joi.number().required()
+    })
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateHireUserAsEmployeeApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    employmentId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateFindUserApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    user: Joi.object().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateAddNewEmployeeApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    userId: Joi.number().required(),
+    employmentId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetEmployeeListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    employeeList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetEmployeeApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    employee: Joi.object().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetInventoryListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    inventoryList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    inventoryDetails: Joi.object().required(),
+    inventoryContainerDetails: Joi.object().required(),
+
+    aggregatedProductList: Joi.array().required().items({
+      productId: Joi.number().required(),
+      count: Joi.number().required(),
+      acquiredDatetimeStamp: Joi.number().required(),
+      addedDatetimeStamp:  Joi.number().required(),
+
+      product: Joi.object().keys({
+        _id: Joi.any().required(),
+        id: Joi.number().required(),
+        productCategoryId: Joi.number().required(),
+        purchasePrice: Joi.number().required(),
+        salePrice: Joi.number().required(),
+
+        productCategory: Joi.object().keys({
+          _id: Joi.any().required(),
+          id: Joi.number().required(),
+          createdDatetimeStamp: Joi.number().required(),
+          lastModifiedDatetimeStamp: Joi.number().required(),
+          name: Joi.string().required(),
+          organizationId: Joi.number().required(),
+          parentProductCategoryId: Joi.any().required(),
+          unit: Joi.string().required(),
+          defaultDiscountType: Joi.string().required(),
+          defaultDiscountValue: Joi.number().when(
+            'defaultDiscountType', { 
+              is: 'percent', 
+              then: Joi.number().required(), 
+              otherwise: Joi.number().required() 
+            }
+          ),
+          defaultPurchasePrice: Joi.number().required(),
+          defaultVat: Joi.number().required(),
+          defaultSalePrice: Joi.number().required(),
+          isDeleted: Joi.boolean().required(),
+          isReturnable: Joi.boolean().required()
+        })
+      })
+    })
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateAddOrganizationApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    organizationId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetOrganizationListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    organizationList: Joi.array().required().items({
+      id: Joi.number().required(),
+      name: Joi.string().required(),
+      primaryBusinessAddress: Joi.string().required(),
+      phone: Joi.string().required(),
+      email: Joi.string().email().required(),
+      employment: Joi.object().keys({ 
+        designation: Joi.string().required(), 
+        role: Joi.string().required(), 
+        companyProvidedId: Joi.string().alphanum().allow('').required(), 
+        isActive: Joi.boolean().required(),
+        privileges: Joi.object().required()
+      })
+    })
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateAddOutletApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    outletId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetOutletListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    outletList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetOutletApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    
+    outlet: Joi.object().keys({
+      id: Joi.number().required(),
+      _id: Joi.any().required(),
+
+      createdDatetimeStamp: Joi.number().required(),
+      lastModifiedDatetimeStamp: Joi.number().required(),
+  
+      name: Joi.string().required(),
+      organizationId: Joi.number().required(),
+      physicalAddress: Joi.string().required(),
+      contactPersonName: Joi.string().required(),
+      phone: Joi.string().required(),
+      isDeleted: Joi.boolean().required()
+    }),
+  
+    defaultInventory: Joi.object().keys({
+      createdDatetimeStamp: Joi.number().required(),
+      lastModifiedDatetimeStamp: Joi.number().required(),
+      
+      id: Joi.number().required(),
+      name: Joi.string().required(),
+      allowManualTransfer: Joi.boolean().required(),
+    }),
+  
+    returnedInventory: Joi.object().keys({
+      createdDatetimeStamp: Joi.number().required(),
+      lastModifiedDatetimeStamp: Joi.number().required(),
+      
+      id: Joi.number().required(),
+      name: Joi.string().required(),
+      allowManualTransfer: Joi.boolean().required(),
+    }),
+    
+    damagedInventory: Joi.object().keys({
+      createdDatetimeStamp: Joi.number().required(),
+      lastModifiedDatetimeStamp: Joi.number().required(),
+      
+      id: Joi.number().required(),
+      name: Joi.string().required(),
+      allowManualTransfer: Joi.boolean().required(),
+    })
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetWarehouseApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    
+    warehouse: Joi.object().keys({
+      id: Joi.number().required(),
+      _id: Joi.any().required(),
+
+      createdDatetimeStamp: Joi.number().required(),
+      lastModifiedDatetimeStamp: Joi.number().required(),
+  
+      name: Joi.string().required(),
+      organizationId: Joi.number().required(),
+      physicalAddress: Joi.string().required(),
+      contactPersonName: Joi.string().required(),
+      phone: Joi.string().required(),
+      isDeleted: Joi.boolean().required()
+    }),
+  
+    defaultInventory: Joi.object().keys({
+      createdDatetimeStamp: Joi.number().required(),
+      lastModifiedDatetimeStamp: Joi.number().required(),
+      
+      id: Joi.number().required(),
+      name: Joi.string().required(),
+      allowManualTransfer: Joi.boolean().required(),
+    }),
+  
+    returnedInventory: Joi.object().keys({
+      createdDatetimeStamp: Joi.number().required(),
+      lastModifiedDatetimeStamp: Joi.number().required(),
+      
+      id: Joi.number().required(),
+      name: Joi.string().required(),
+      allowManualTransfer: Joi.boolean().required(),
+    }),
+    
+    damagedInventory: Joi.object().keys({
+      createdDatetimeStamp: Joi.number().required(),
+      lastModifiedDatetimeStamp: Joi.number().required(),
+      
+      id: Joi.number().required(),
+      name: Joi.string().required(),
+      allowManualTransfer: Joi.boolean().required(),
+    })
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateAddProductCategoryApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    productCategoryId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetProductCategoryListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    productCategoryList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateAddSalesApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    salesId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetSalesApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    sales: Joi.object().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateAddSalesReturnApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    salesReturnId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetSalesListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    salesList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetSalesReturnApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    salesReturn: Joi.object().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetSalesReturnListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    salesReturnList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateAddWarehouseApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    warehouseId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetWarehouseListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    warehouseList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+// Generic
+
+exports.validateGenericApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success')
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGenericApiFailureResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(true),
+    error: Joi.object().required().keys({
+      code: Joi.string().required(),
+      message: Joi.string().required(),
+      // check if stack and details are required 
+      stack: Joi.required(),
+      details: Joi.required()
+    })
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+// --- Response Validation End
+
 exports.validateCustomerSchema = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),

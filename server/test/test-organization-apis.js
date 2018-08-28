@@ -9,7 +9,10 @@ let {
   terminateServer,
   registerUser,
   loginUser,
-  validateOrganizationSchema
+  validateOrganizationSchema,
+  validateAddOrganizationApiSuccessResponse,
+  validateGetOrganizationListApiSuccessResponse,
+  validateGenericApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -28,7 +31,7 @@ const org3Phone = 'o3' + rnd(prefix, 11);
 let apiKey = null;
 let organizationToBeEdited = null;
 
-describe('organization', _ => {
+describe('Organization', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -57,9 +60,7 @@ describe('organization', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('organizationId');
+      validateAddOrganizationApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -117,9 +118,7 @@ describe('organization', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('organizationId');
+      validateAddOrganizationApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -133,16 +132,11 @@ describe('organization', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('organizationList').that.is.an('array');
+      validateGetOrganizationListApiSuccessResponse(body);
 
       body.organizationList.forEach(organization => {
         validateOrganizationSchema(organization);
       });
-
-      // expect(body.organizationList[0]).to.have.property('phone').that.equals(org2Phone);
-      // expect(body.organizationList[0]).to.have.property('email').that.equals(org2Email);
-
       organizationToBeEdited = body.organizationList[0];
 
       testDoneFn();
@@ -205,8 +199,7 @@ describe('organization', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
 
@@ -220,8 +213,7 @@ describe('organization', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('organizationList').that.is.an('array');
+      validateGetOrganizationListApiSuccessResponse(body);
 
       body.organizationList.forEach(organization => {
         validateOrganizationSchema(organization);

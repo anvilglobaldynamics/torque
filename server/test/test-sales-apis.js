@@ -18,6 +18,13 @@ let {
   validateInventorySchema,
   validateProductCategorySchema,
   validateProductSchema,
+  validateGenericApiFailureResponse,
+  validateGenericApiSuccessResponse,
+  validateGetAggregatedInventoryDetailsApiSuccessResponse,
+  validateAddSalesApiSuccessResponse,
+  validateGetSalesApiSuccessResponse,
+  validateGetSalesListApiSuccessResponse,
+  validateAddSalesReturnApiSuccessResponse,
   validateSalesSchema,
   validateSalesSchemaWhenListObj
 } = require('./lib');
@@ -75,7 +82,7 @@ let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
-describe('sales', _ => {
+describe('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -164,8 +171,7 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('aggregatedProductList').that.is.an('array');
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(100);
       expect(body.aggregatedProductList[0]).to.have.property('productId');
@@ -215,10 +221,8 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
+      validateGenericApiFailureResponse(body);
       expect(body.error.code).to.equal('OUTLET_INVALID');
-
       testDoneFn();
     });
 
@@ -253,10 +257,8 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
+      validateGenericApiFailureResponse(body);
       expect(body.error.code).to.equal('VALIDATION_ERROR');
-
       testDoneFn();
     });
 
@@ -299,10 +301,8 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
+      validateGenericApiFailureResponse(body);
       expect(body.error.code).to.equal('PRODUCT_INVALID');
-
       testDoneFn();
     });
 
@@ -345,9 +345,7 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('salesId');
+      validateAddSalesApiSuccessResponse(body);
       testDoneFn();
     });
 
@@ -390,10 +388,8 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER');
       testDoneFn();
     });
 
@@ -436,10 +432,8 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('CUSTOMER_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('CUSTOMER_INVALID');
       testDoneFn();
     });
 
@@ -482,12 +476,9 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('salesId');
+      validateAddSalesApiSuccessResponse(body);
 
       salesId = body.salesId;
-
       testDoneFn();
     });
 
@@ -502,11 +493,9 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('aggregatedProductList').that.is.an('array');
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
-
       testDoneFn();
     });
 
@@ -521,10 +510,8 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('SALES_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('SALES_INVALID');
       testDoneFn();
     });
 
@@ -539,12 +526,10 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('sales');
-
+      validateGetSalesApiSuccessResponse(body);
       validateSalesSchema(body.sales);
-      salesData = body.sales;
 
+      salesData = body.sales;
       testDoneFn();
     });
 
@@ -566,10 +551,7 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('salesReturnId')
-
+      validateAddSalesReturnApiSuccessResponse(body);
       testDoneFn();
     });
 
@@ -584,11 +566,8 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('sales');
-
+      validateGetSalesApiSuccessResponse(body);
       validateSalesSchema(body.sales);
-
       testDoneFn();
     });
 
@@ -610,16 +589,11 @@ describe('sales', _ => {
         toDate: (new Date()).getTime(),
       }
     }, (err, response, body) => {
-      // console.log(body);
-
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('salesList');
-
+      validateGetSalesListApiSuccessResponse(body);
       body.salesList.forEach(sales => {
         validateSalesSchemaWhenListObj(sales);
       });
-
       testDoneFn();
     });
 
@@ -642,13 +616,10 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('salesList');
-
+      validateGetSalesListApiSuccessResponse(body);
       body.salesList.forEach(sales => {
         validateSalesSchemaWhenListObj(sales);
       });
-
       testDoneFn();
     });
 
@@ -671,10 +642,8 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals("OUTLET_INVALID");
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('OUTLET_INVALID');
       testDoneFn();
     });
 
@@ -697,13 +666,10 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('salesList');
-
+      validateGetSalesListApiSuccessResponse(body);
       body.salesList.forEach(sales => {
         validateSalesSchemaWhenListObj(sales);
       });
-
       testDoneFn();
     });
 
@@ -726,10 +692,8 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals("CUSTOMER_INVALID");
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('CUSTOMER_INVALID');
       testDoneFn();
     });
 
@@ -752,10 +716,8 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals("CUSTOMER_INVALID");
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('CUSTOMER_INVALID');
       testDoneFn();
     });
 
@@ -778,10 +740,8 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals("OUTLET_INVALID");
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('OUTLET_INVALID');
       testDoneFn();
     });
 
@@ -804,13 +764,10 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('salesList');
-
+      validateGetSalesListApiSuccessResponse(body);
       body.salesList.forEach(sales => {
         validateSalesSchemaWhenListObj(sales);
       });
-
       testDoneFn();
     });
 
@@ -833,10 +790,8 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals("ORGANIZATION_INVALID");
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('ORGANIZATION_INVALID');
       testDoneFn();
     });
 
@@ -851,9 +806,7 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
 
@@ -868,13 +821,10 @@ describe('sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('sales');
-
+      validateGetSalesApiSuccessResponse(body);
       validateSalesSchema(body.sales);
 
       expect(body.sales).to.have.property('isDiscarded').that.equals(true);
-
       testDoneFn();
     });
 

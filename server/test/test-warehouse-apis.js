@@ -11,7 +11,13 @@ let {
   addOrganization,
   addProductCategory,
   validateWarehouseSchema,
-  validateEmbeddedInventorySchema
+  validateEmbeddedInventorySchema,
+
+  validateGenericApiFailureResponse,
+  validateAddWarehouseApiSuccessResponse,
+  validateGetWarehouseListApiSuccessResponse,
+  validateGetWarehouseApiSuccessResponse,
+  validateGenericApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -42,7 +48,7 @@ let warehouseDefaultInventoryId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidWarehouseId = generateInvalidId();
 
-describe('warehouse', _ => {
+describe('Warehouse', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -96,10 +102,8 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('ORGANIZATION_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('ORGANIZATION_INVALID');
       testDoneFn();
     })
 
@@ -118,8 +122,7 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateAddWarehouseApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -160,8 +163,7 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateAddWarehouseApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -180,9 +182,7 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-
+      validateAddWarehouseApiSuccessResponse(body);
       warehouseToBeFilledId = body.warehouseId;
       testDoneFn();
     })
@@ -198,10 +198,8 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('ORGANIZATION_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('ORGANIZATION_INVALID');
       testDoneFn();
     });
 
@@ -216,16 +214,13 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-
-      expect(body).to.have.property('warehouseList').that.is.an('array');
+      validateGetWarehouseListApiSuccessResponse(body);
       expect(body.warehouseList.length).to.equals(3);
       body.warehouseList.forEach(warehouse => {
         validateWarehouseSchema(warehouse);
       });
 
       warehouseList = body.warehouseList;
-
       testDoneFn();
     });
 
@@ -240,10 +235,8 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('WAREHOUSE_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('WAREHOUSE_INVALID');
       testDoneFn();
     });
 
@@ -258,19 +251,13 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('warehouse');
-      expect(body).to.have.property('defaultInventory');
-      expect(body).to.have.property('returnedInventory');
-      expect(body).to.have.property('damagedInventory');
-
+      validateGetWarehouseApiSuccessResponse(body);
       validateWarehouseSchema(body.warehouse);
       validateEmbeddedInventorySchema(body.defaultInventory);
       validateEmbeddedInventorySchema(body.returnedInventory);
       validateEmbeddedInventorySchema(body.damagedInventory);
 
       warehouseToBeModified = body.warehouse;
-
       testDoneFn();
     });
 
@@ -285,19 +272,13 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('warehouse');
-      expect(body).to.have.property('defaultInventory');
-      expect(body).to.have.property('returnedInventory');
-      expect(body).to.have.property('damagedInventory');
-
+      validateGetWarehouseApiSuccessResponse(body);
       validateWarehouseSchema(body.warehouse);
       validateEmbeddedInventorySchema(body.defaultInventory);
       validateEmbeddedInventorySchema(body.returnedInventory);
       validateEmbeddedInventorySchema(body.damagedInventory);
 
       warehouseDefaultInventoryId = body.defaultInventory.id;
-
       testDoneFn();
     });
 
@@ -317,10 +298,8 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('WAREHOUSE_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('WAREHOUSE_INVALID');
       testDoneFn();
     })
 
@@ -340,10 +319,8 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('PHONE_ALREADY_IN_USE');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PHONE_ALREADY_IN_USE');
       testDoneFn();
     })
 
@@ -363,8 +340,7 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -379,11 +355,7 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('warehouse');
-      expect(body).to.have.property('defaultInventory');
-      expect(body).to.have.property('returnedInventory');
-      expect(body).to.have.property('damagedInventory');
+      validateGetWarehouseApiSuccessResponse(body);
       expect(body.warehouse.phone).to.equal(warehousePhone3);
 
       validateWarehouseSchema(body.warehouse);
@@ -406,7 +378,7 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
   });
@@ -420,10 +392,8 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('WAREHOUSE_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('WAREHOUSE_INVALID');
       testDoneFn();
     })
 
@@ -438,10 +408,8 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('WAREHOUSE_NOT_EMPTY');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('WAREHOUSE_NOT_EMPTY');
       testDoneFn();
     })
 
@@ -456,8 +424,7 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -472,9 +439,8 @@ describe('warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('WAREHOUSE_INVALID');
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('WAREHOUSE_INVALID');
       testDoneFn();
     });
 

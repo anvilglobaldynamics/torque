@@ -41,7 +41,7 @@ exports.GetCustomerApi = class extends collectionCommonMixin(LegacyApi) {
   handle({ body }) {
     let { customerId } = body;
     this._getCustomer({ customerId }, (customer) => {
-      this.success({ customer: customer });
+      this.success({ customer });
     });
   }
 

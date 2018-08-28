@@ -10,7 +10,9 @@ let {
   terminateServer,
   registerUser,
   loginUser,
-  addOrganization
+  addOrganization,
+  validateGenericApiFailureResponse,
+  validateGetDashboardSummaryApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -29,7 +31,7 @@ let apiKey = null;
 let organizationId = null;
 let invalidOrganizationId = generateInvalidId();
 
-describe('dashboard', _ => {
+describe('Dashboard', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -64,13 +66,7 @@ describe('dashboard', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('metrics');
-      expect(body.metrics).to.have.property('totalNumberOfSalesToday');
-      expect(body.metrics).to.have.property('totalAmountSoldToday');
-      expect(body.metrics).to.have.property('totalNumberOfSalesThisMonth');
-      expect(body.metrics).to.have.property('totalAmountSoldThisMonth');
-
+      validateGetDashboardSummaryApiSuccessResponse(body);
       testDoneFn();
     });
 
@@ -85,10 +81,8 @@ describe('dashboard', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('ORGANIZATION_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('ORGANIZATION_INVALID');
       testDoneFn();
     });
 

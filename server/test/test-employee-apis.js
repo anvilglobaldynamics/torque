@@ -12,7 +12,14 @@ let {
   loginOut,
   addOrganization,
   validateUserSchema,
-  validateEmploymentSchema
+  validateEmploymentSchema,
+  validateHireUserAsEmployeeApiSuccessResponse,
+  validateGenericApiFailureResponse,
+  validateFindUserApiSuccessResponse,
+  validateAddNewEmployeeApiSuccessResponse,
+  validateGetEmployeeListApiSuccessResponse,
+  validateGetEmployeeApiSuccessResponse,
+  validateGenericApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -52,7 +59,7 @@ let invalidUserId = generateInvalidId();
 let invalidEmploymentId = generateInvalidId();
 let invalidOrganizationId = generateInvalidId();
 
-describe('employee', _ => {
+describe('Employee', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -163,10 +170,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('ORGANIZATION_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('ORGANIZATION_INVALID');
       testDoneFn();
     })
 
@@ -221,10 +226,7 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('employmentId');
-
+      validateHireUserAsEmployeeApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -279,10 +281,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('ALREADY_EMPLOYED');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('ALREADY_EMPLOYED');
       testDoneFn();
     })
 
@@ -337,10 +337,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('USER_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('USER_INVALID');
       testDoneFn();
     })
 
@@ -355,11 +353,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('user');
-
+      validateFindUserApiSuccessResponse(body);
       validateUserSchema(body.user);
-
       testDoneFn();
     })
 
@@ -374,11 +369,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('user');
-
+      validateFindUserApiSuccessResponse(body);
       validateUserSchema(body.user);
-
       testDoneFn();
     })
 
@@ -394,10 +386,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VALIDATION_ERROR');
       testDoneFn();
     })
 
@@ -412,10 +402,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('USER_DOES_NOT_EXIST');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('USER_DOES_NOT_EXIST');
       testDoneFn();
     })
 
@@ -430,10 +418,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('USER_DOES_NOT_EXIST');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('USER_DOES_NOT_EXIST');
       testDoneFn();
     })
 
@@ -456,10 +442,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VALIDATION_ERROR');
       testDoneFn();
     })
 
@@ -519,13 +503,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('userId');
-      expect(body).to.have.property('employmentId');
-
+      validateAddNewEmployeeApiSuccessResponse(body);
       employmentId = body.employmentId;
-
       testDoneFn();
     })
 
@@ -585,10 +564,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('PHONE_ALREADY_IN_USE');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('PHONE_ALREADY_IN_USE');
       testDoneFn();
     })
 
@@ -648,10 +625,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('ORGANIZATION_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('ORGANIZATION_INVALID');
       testDoneFn();
     })
 
@@ -666,13 +641,10 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('employeeList');
-
+      validateGetEmployeeListApiSuccessResponse(body);
       body.employeeList.forEach(employee => {
         validateEmploymentSchema(employee);
       });
-
       testDoneFn();
     })
 
@@ -687,10 +659,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('ORGANIZATION_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('ORGANIZATION_INVALID');
       testDoneFn();
     })
 
@@ -705,13 +675,9 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('employee');
-
+      validateGetEmployeeApiSuccessResponse(body);
       validateEmploymentSchema(body.employee);
-
       employeeToBeEditedData = body.employee;
-
       testDoneFn();
     })
 
@@ -726,10 +692,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('EMPLOYEE_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('EMPLOYEE_INVALID');
       testDoneFn();
     })
 
@@ -753,9 +717,7 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -770,13 +732,9 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('employee');
-
+      validateGetEmployeeApiSuccessResponse(body);
       validateEmploymentSchema(body.employee);
-
       expect(body.employee).to.have.property('companyProvidedId').that.equals("007");
-
       testDoneFn();
     })
 
@@ -800,10 +758,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('EMPLOYEE_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('EMPLOYEE_INVALID');
       testDoneFn();
     })
 
@@ -818,9 +774,7 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
@@ -835,15 +789,10 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('employee');
-
+      validateGetEmployeeApiSuccessResponse(body);
       validateEmploymentSchema(body.employee);
-
       expect(body.employee).to.have.property('isActive').that.equals(false);
-
       employeeToBeRehired = body.employee;
-
       testDoneFn();
     })
 
@@ -858,10 +807,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('EMPLOYEE_INVALID');
-
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('EMPLOYEE_INVALID');
       testDoneFn();
     })
 
@@ -916,12 +863,8 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('employmentId');
-
+      validateHireUserAsEmployeeApiSuccessResponse(body);
       employmentId = body.employmentId;
-
       testDoneFn();
     })
 
@@ -936,13 +879,9 @@ describe('employee', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('employee');
-
+      validateGetEmployeeApiSuccessResponse(body);
       validateEmploymentSchema(body.employee);
-
       expect(body.employee).to.have.property('isActive').that.equals(true);
-
       testDoneFn();
     })
 
