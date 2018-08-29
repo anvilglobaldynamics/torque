@@ -24,7 +24,7 @@ const phone2 = rnd(prefix, 11).split('').reverse().join('');
 
 let apiKey = null;
 
-describe('Admin', _ => {
+describe.only('Admin', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -284,6 +284,12 @@ describe('Admin', _ => {
     });
 
   });
+
+  // --- Payment System - start
+
+  
+
+  // --- Payment System - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
