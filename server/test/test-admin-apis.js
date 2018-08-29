@@ -9,7 +9,10 @@ let {
   terminateServer,
   registerUser,
   loginUser,
-  addOrganization
+  addOrganization,
+  validateAdminFindOrganizationApiSuccessResponse,
+  validateOrganizationSchema,
+  validateGenericApiFailureResponse
 } = require('./lib');
 
 const prefix = 'adm';
@@ -23,7 +26,12 @@ const fullName = "Test " + rnd(prefix, 11);
 const fullName2 = "Test " + rnd(prefix, 11).split('').reverse().join('');
 const phone2 = rnd(prefix, 11).split('').reverse().join('');
 const newOrgOwnerPhone = 'o' + rnd(prefix, 11);
-const newOrgOwnerEmail = 'o' + `${rnd(prefix)}@gmail.com`;
+const newOrg1Phone = '1' + rnd(prefix, 11);
+const newOrg2Phone = '2' + rnd(prefix, 11);
+const newOrg1Email = '1' + `${rnd(prefix)}@gmail.com`;
+const newOrg2Email = '2' + `${rnd(prefix)}@gmail.com`;
+const unusedPhone = 'x' + rnd(prefix, 11);
+const unusedEmail = 'x' + `${rnd(prefix)}@gmail.com`;
 
 let apiKey = null;
 let orgApiKey = null;
@@ -291,7 +299,7 @@ describe.only('Admin', _ => {
 
   // --- Payment System - start
 
-  it('Organization Creation', testDoneFn => {
+  it('Organizations Creation', testDoneFn => {
     registerUser({
       password, fullName, phone: newOrgOwnerPhone
     }, _ => {
@@ -301,13 +309,20 @@ describe.only('Admin', _ => {
         orgApiKey = data.apiKey;
         addOrganization({
           apiKey: orgApiKey,
-          name: "Org Name",
-          primaryBusinessAddress: "Dhak,a Bangladesh",
-          phone: newOrgOwnerPhone,
-          email: newOrgOwnerEmail
+          name: "Org Name 1",
+          primaryBusinessAddress: "Dhaka, Bangladesh",
+          phone: newOrg1Phone,
+          email: newOrg1Email
         }, (data) => {
-          console.log(data);
-          testDoneFn();
+          addOrganization({
+            apiKey: orgApiKey,
+            name: "Org Name 2",
+            primaryBusinessAddress: "Dhaka, Bangladesh",
+            phone: newOrg2Phone,
+            email: newOrg2Email
+          }, (data) => {
+            testDoneFn();
+          });
         });
       });
     });
@@ -317,15 +332,61 @@ describe.only('Admin', _ => {
 
     callApi('api/admin-find-organization', {
       json: {
-        apiKey: apiKey,
-        emailOrPhone: phone
+        apiKey,
+        emailOrPhone: newOrg1Phone
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      console.log(body);
+      validateAdminFindOrganizationApiSuccessResponse(body);
+      validateOrganizationSchema(body.organization);
+      testDoneFn();
+    });
 
-      expect(body).to.have.property('hasError').that.equals(false);
+  });
 
+  it('api/admin-find-organization (email)', testDoneFn => {
+
+    callApi('api/admin-find-organization', {
+      json: {
+        apiKey,
+        emailOrPhone: newOrg1Email
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminFindOrganizationApiSuccessResponse(body);
+      validateOrganizationSchema(body.organization);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-find-organization (Invalid Unused Phone)', testDoneFn => {
+
+    callApi('api/admin-find-organization', {
+      json: {
+        apiKey,
+        emailOrPhone: unusedPhone
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('ORGANIZATION_DOES_NOT_EXIST');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-find-organization (Invalid Unused Email)', testDoneFn => {
+
+    callApi('api/admin-find-organization', {
+      json: {
+        apiKey,
+        emailOrPhone: unusedEmail
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('ORGANIZATION_DOES_NOT_EXIST');
       testDoneFn();
     });
 

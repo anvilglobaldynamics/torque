@@ -48,4 +48,13 @@ exports.OrganizationCollection = class extends Collection {
     });
   }
 
+  async findByEmailOrPhone({ emailOrPhone }) {
+    return await this._findOne({
+      $or: [
+        { email: emailOrPhone },
+        { phone: emailOrPhone }
+      ]
+    });
+  }
+
 }

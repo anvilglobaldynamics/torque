@@ -620,6 +620,18 @@ exports.validateGetWarehouseListApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+// Admin
+
+exports.validateAdminFindOrganizationApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    organization: Joi.object().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 // Generic
 
 exports.validateGenericApiSuccessResponse = (doc) => {
@@ -695,7 +707,7 @@ exports.validateOutletSchema = (doc) => {
   if (error) throw error;
 }
 
-exports.validateOrganizationSchema = (doc) => {
+exports.validateResponseOrganizationSchema = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
     name: Joi.string().min(1).max(64).required(),
@@ -710,6 +722,25 @@ exports.validateOrganizationSchema = (doc) => {
       privileges: Joi.object()
     })
   });
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateOrganizationSchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    _id: Joi.string().required(),
+
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+    name: Joi.string().min(1).max(64).required(),
+    primaryBusinessAddress: Joi.string().min(1).max(128).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    email: Joi.string().email().min(3).max(30).required(),
+    packageActivationId: Joi.number().max(999999999999999).allow(null).required(),
+    isDeleted: Joi.boolean().required()
+  });
+
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
 }

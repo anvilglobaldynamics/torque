@@ -3,8 +3,9 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const { OrganizationCommonMixin } = require('./mixins/organization-common');
 
-exports.AdminFindOrganizationApi = class extends Api {
+exports.AdminFindOrganizationApi = class extends Api.mixin(OrganizationCommonMixin) {
 
   get autoValidates() { return true; }
 
@@ -22,30 +23,10 @@ exports.AdminFindOrganizationApi = class extends Api {
     });
   }
 
-  async __getInventoryList({ organizationId }) {
-    let inventoryList = await this.database.inventory.listByOrganizationId({ organizationId });
-    let map = await this.crossmap({
-      source: inventoryList.filter(inventory => inventory.inventoryContainerType === 'outlet'),
-      sourceKey: 'inventoryContainerId',
-      target: 'outlet',
-      onError: (inventory) => { throw new CodedError("INVENTORY_CONTAINER_NOT_FOUND", "Could not find Inventory Container"); }
-    });
-    await this.crossmap({
-      source: inventoryList.filter(inventory => inventory.inventoryContainerType === 'warehouse'),
-      sourceKey: 'inventoryContainerId',
-      target: 'warehouse',
-      onError: (inventory) => { throw new CodedError("INVENTORY_CONTAINER_NOT_FOUND", "Could not find Inventory Container"); },
-      reuseMap: map
-    });
-    inventoryList.forEach(inventory => inventory.inventoryContainerName = map.get(inventory).name);
-    return inventoryList;
-  }
-
   async handle({ body }) {
-    console.log("in handle with: ", body);
-    let { organizationId } = body;
-    // let inventoryList = await this.__getInventoryList({ organizationId });
-    return { "flag": true };
+    let organization = await this._findOrganizationByEmailOrPhone({ emailOrPhone: body.emailOrPhone });
+    throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.userLoginApi.userNotFound);
+    return { organization };
   }
 
 }

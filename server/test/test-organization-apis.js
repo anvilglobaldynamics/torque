@@ -9,7 +9,7 @@ let {
   terminateServer,
   registerUser,
   loginUser,
-  validateOrganizationSchema,
+  validateResponseOrganizationSchema,
   validateAddOrganizationApiSuccessResponse,
   validateGetOrganizationListApiSuccessResponse,
   validateGenericApiSuccessResponse
@@ -135,7 +135,7 @@ describe('Organization', _ => {
       validateGetOrganizationListApiSuccessResponse(body);
 
       body.organizationList.forEach(organization => {
-        validateOrganizationSchema(organization);
+        validateResponseOrganizationSchema(organization);
       });
       organizationToBeEdited = body.organizationList[0];
 
@@ -216,7 +216,7 @@ describe('Organization', _ => {
       validateGetOrganizationListApiSuccessResponse(body);
 
       body.organizationList.forEach(organization => {
-        validateOrganizationSchema(organization);
+        validateResponseOrganizationSchema(organization);
       });
 
       expect(body.organizationList[0]).to.have.property('phone').that.equals(org3Phone);
