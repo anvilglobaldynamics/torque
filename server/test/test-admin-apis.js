@@ -349,7 +349,7 @@ describe.only('Admin', _ => {
     callApi('api/admin-find-organization', {
       json: {
         apiKey,
-        emailOrPhone: newOrg1Email
+        emailOrPhone: newOrg2Email
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -387,6 +387,21 @@ describe.only('Admin', _ => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equal('ORGANIZATION_DOES_NOT_EXIST');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-get-package-list', testDoneFn => {
+
+    callApi('api/admin-get-package-list', {
+      json: {
+        apiKey
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('packageList').that.is.an('array');
       testDoneFn();
     });
 

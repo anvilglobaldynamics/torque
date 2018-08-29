@@ -85,6 +85,7 @@ let { GetDashboardSummaryApi } = require('./legacy-apis/get-dashboard-summary');
 let { GetDesignationListApi } = require('./legacy-apis/get-designation-list');
 let { GetRoleListApi } = require('./legacy-apis/get-role-list');
 let { GetPrivilegeListApi } = require('./legacy-apis/get-privilege-list');
+const { AdminGetPackageListApi } = require('./apis/admin-get-package-list');
 
 let { InternalStatus } = require('./legacy-apis/internal--status');
 
@@ -300,6 +301,7 @@ class Program {
     server.registerPostApi('/api/admin-get-aggregated-user-list', AdminGetAggregatedUserListApi);
     server.registerPostApi('/api/admin-set-user-banning-status', AdminSetUserBanningStatusApi);
     server.registerPostApi('/api/admin-find-organization', AdminFindOrganizationApi);
+    server.registerPostApi('/api/admin-get-package-list', AdminGetPackageListApi);
   }
 
 }

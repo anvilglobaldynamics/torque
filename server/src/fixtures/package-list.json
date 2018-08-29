@@ -1,0 +1,94 @@
+[
+  {
+    "code": "SE03",
+    "name": "SE 3 month package",
+    "duration": "3 month",
+    "limits": {
+      "maximum-number-outlet": 2,
+      "maximum-number-warehouse": 2,
+      "maximum-number-employee": 5
+    }
+  },
+  {
+    "code": "SE06",
+    "name": "SE 6 month package",
+    "duration": "6 month",
+    "limits": {
+      "maximum-number-outlet": 2,
+      "maximum-number-warehouse": 2,
+      "maximum-number-employee": 5
+    }
+  },
+  {
+    "code": "SE12",
+    "name": "SE 12 month package",
+    "duration": "12 month",
+    "limits": {
+      "maximum-number-outlet": 2,
+      "maximum-number-warehouse": 2,
+      "maximum-number-employee": 5
+    }
+  },
+
+  {
+    "code": "ME03",
+    "name": "ME 3 month package",
+    "duration": "3 month",
+    "limits": {
+      "maximum-number-outlet": 10,
+      "maximum-number-warehouse": 5,
+      "maximum-number-employee": 100
+    }
+  },
+  {
+    "code": "ME06",
+    "name": "ME 6 month package",
+    "duration": "6 month",
+    "limits": {
+      "maximum-number-outlet": 10,
+      "maximum-number-warehouse": 5,
+      "maximum-number-employee": 100
+    }
+  },
+  {
+    "code": "ME12",
+    "name": "ME 12 month package",
+    "duration": "12 month",
+    "limits": {
+      "maximum-number-outlet": 10,
+      "maximum-number-warehouse": 5,
+      "maximum-number-employee": 100
+    }
+  },
+  
+  {
+    "code": "LE03",
+    "name": "LE 3 month package",
+    "duration": "3 month",
+    "limits": {
+      "maximum-number-outlet": 40,
+      "maximum-number-warehouse": 20,
+      "maximum-number-employee": 500
+    }
+  },
+  {
+    "code": "LE06",
+    "name": "LE 6 month package",
+    "duration": "6 month",
+    "limits": {
+      "maximum-number-outlet": 40,
+      "maximum-number-warehouse": 20,
+      "maximum-number-employee": 500
+    }
+  },
+  {
+    "code": "LE12",
+    "name": "LE 12 month package",
+    "duration": "12 month",
+    "limits": {
+      "maximum-number-outlet": 40,
+      "maximum-number-warehouse": 20,
+      "maximum-number-employee": 500
+    }
+  }
+]

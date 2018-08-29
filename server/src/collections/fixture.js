@@ -39,4 +39,8 @@ exports.FixtureCollection = class extends Collection {
     return await this._findOne({ name: 'privilege-list' });
   }
 
+  async getPackageList() {
+    return await this._findOne({ name: 'package-list' });
+  }
+
 }
