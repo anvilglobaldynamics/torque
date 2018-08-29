@@ -632,6 +632,17 @@ exports.validateAdminFindOrganizationApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateAdminAssignPackageToOrganizationApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    packageActivationId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 // Generic
 
 exports.validateGenericApiSuccessResponse = (doc) => {

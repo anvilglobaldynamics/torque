@@ -3,9 +3,7 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 
-const { OrganizationCommonMixin } = require('./mixins/organization-common');
-
-exports.AdminAssignPackageToOrganizationApi = class extends Api.mixin(OrganizationCommonMixin) {
+exports.AdminAssignPackageToOrganizationApi = class extends Api {
 
   get autoValidates() { return true; }
 
@@ -30,9 +28,10 @@ exports.AdminAssignPackageToOrganizationApi = class extends Api.mixin(Organizati
     let { organizationId, packageCode } = body;
     let organization = await this.database.organization.findById({ organizationId });
     throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.organizationCommon.organizationDoesNotExist);
-    let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId });
+    let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId });   
     await this._updateOrganizationPackageActivationId({ organizationId, packageActivationId });
-    return { packageActivationId };
+
+    return { status: "success", packageActivationId };
   }
 
 }

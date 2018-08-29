@@ -12,7 +12,8 @@ let {
   addOrganization,
   validateAdminFindOrganizationApiSuccessResponse,
   validateOrganizationSchema,
-  validateGenericApiFailureResponse
+  validateGenericApiFailureResponse,
+  validateAdminAssignPackageToOrganizationApiSuccessResponse
 } = require('./lib');
 
 const prefix = 'adm';
@@ -32,6 +33,8 @@ const newOrg1Email = '1' + `${rnd(prefix)}@gmail.com`;
 const newOrg2Email = '2' + `${rnd(prefix)}@gmail.com`;
 const unusedPhone = 'x' + rnd(prefix, 11);
 const unusedEmail = 'x' + `${rnd(prefix)}@gmail.com`;
+
+let invalidOrganizationId = generateInvalidId();
 
 let apiKey = null;
 let orgApiKey = null;
@@ -422,9 +425,25 @@ describe.only('Admin', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('packageActivationId');
+      validateAdminAssignPackageToOrganizationApiSuccessResponse(body);
       packageActivationId = body.packageActivationId;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-assign-package-to-organization (Invalid organizationId)', testDoneFn => {
+
+    callApi('api/admin-assign-package-to-organization', {
+      json: {
+        apiKey,
+        organizationId: invalidOrganizationId,
+        packageCode: "SE03"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('ORGANIZATION_DOES_NOT_EXIST');
       testDoneFn();
     });
 
