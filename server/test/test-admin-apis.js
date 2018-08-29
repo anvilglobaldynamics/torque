@@ -37,6 +37,7 @@ let apiKey = null;
 let orgApiKey = null;
 let org1id = null;
 let org2id = null;
+let packageActivationId = null;
 
 describe.only('Admin', _ => {
 
@@ -411,9 +412,7 @@ describe.only('Admin', _ => {
 
   });
 
-  // TODO: admin-assign-package-to-organization
-
-  it('api/admin-assign-package-to-organization', testDoneFn => {
+  it('api/admin-assign-package-to-organization (Valid)', testDoneFn => {
 
     callApi('api/admin-assign-package-to-organization', {
       json: {
@@ -423,8 +422,26 @@ describe.only('Admin', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      console.log(body);
       expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('packageActivationId');
+      packageActivationId = body.packageActivationId;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-find-organization (valid assign package check)', testDoneFn => {
+
+    callApi('api/admin-find-organization', {
+      json: {
+        apiKey,
+        emailOrPhone: newOrg1Phone
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminFindOrganizationApiSuccessResponse(body);
+      validateOrganizationSchema(body.organization);
+      expect(body.organization.packageActivationId).equal(packageActivationId);
       testDoneFn();
     });
 

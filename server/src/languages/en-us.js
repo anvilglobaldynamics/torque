@@ -26,6 +26,7 @@ exports.verses = {
   },
   organizationCommon: {
     organizationInvalid: "Organization could not be found during access control.",
+    organizationDoesNotExist: "Organization does not exist",
     userNotEmployedByOrganization: "User does not belong to organization."
   },
   accessControlCommon: {

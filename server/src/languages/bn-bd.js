@@ -26,6 +26,7 @@ exports.verses = {
   },
   organizationCommon: {
     organizationInvalid: "প্রবেশাধিকার নিয়ন্ত্রণকালে প্রতিষ্ঠান খুঁজে পাওয়া যায়নি।",
+    organizationDoesNotExist: "সংস্থার অস্তিত্ব নেই",
     userNotEmployedByOrganization: "ব্যবহারকারী প্রতিঠানের অন্তর্গত নয়।"
   },
   accessControlCommon: {

@@ -24,7 +24,7 @@ exports.AdminFindOrganizationApi = class extends Api.mixin(OrganizationCommonMix
 
   async handle({ body }) {
     let organization = await this._findOrganizationByEmailOrPhone({ emailOrPhone: body.emailOrPhone });
-    throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.userLoginApi.userNotFound);
+    throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.organizationCommon.organizationDoesNotExist);
     return { organization };
   }
 
