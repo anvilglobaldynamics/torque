@@ -10,7 +10,7 @@ exports.PackageActivationCollection = class extends Collection {
     return Joi.object().keys({
 
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
-      packageCode: Joi.alphanum().required(),
+      packageCode: Joi.string().required(),
       isDiscarded: Joi.boolean().required()
 
     });

@@ -95,6 +95,7 @@ let { AdminSetOutgoingSmsStatusApi } = require('./legacy-apis/admin-set-outgoing
 let { AdminGetAggregatedUserListApi } = require('./legacy-apis/admin-get-aggregated-user-list');
 let { AdminSetUserBanningStatusApi } = require('./legacy-apis/admin-set-user-banning-status');
 const { AdminFindOrganizationApi } = require('./apis/admin-find-organization');
+const { AdminAssignPackageToOrganizationApi } = require('./apis/admin-assign-package-to-organization');
 
 let { FixtureCollection } = require('./legacy-collections/fixture');
 let { UserCollection } = require('./legacy-collections/user');
@@ -302,6 +303,7 @@ class Program {
     server.registerPostApi('/api/admin-set-user-banning-status', AdminSetUserBanningStatusApi);
     server.registerPostApi('/api/admin-find-organization', AdminFindOrganizationApi);
     server.registerPostApi('/api/admin-get-package-list', AdminGetPackageListApi);
+    server.registerPostApi('/api/admin-assign-package-to-organization', AdminAssignPackageToOrganizationApi);
   }
 
 }

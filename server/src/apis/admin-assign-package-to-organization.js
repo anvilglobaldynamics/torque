@@ -2,9 +2,10 @@
 const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
+
 const { OrganizationCommonMixin } = require('./mixins/organization-common');
 
-exports.AdminFindOrganizationApi = class extends Api.mixin(OrganizationCommonMixin) {
+exports.AdminAssignPackageToOrganizationApi = class extends Api.mixin(OrganizationCommonMixin) {
 
   get autoValidates() { return true; }
 
@@ -15,17 +16,15 @@ exports.AdminFindOrganizationApi = class extends Api.mixin(OrganizationCommonMix
   get requestSchema() {
     return Joi.object().keys({
       apiKey: Joi.string().length(64).required(),
-      emailOrPhone: Joi.alternatives([
-        Joi.string().email().min(3).max(30), // if email
-        Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15) // if phone
-      ]).required()
+      organizationId: Joi.number().max(999999999999999).required(),
+      packageCode: Joi.string().required()
     });
   }
 
   async handle({ body }) {
-    let organization = await this._findOrganizationByEmailOrPhone({ emailOrPhone: body.emailOrPhone });
-    throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.userLoginApi.userNotFound);
-    return { organization };
+    // let organization = await this._findOrganizationByEmailOrPhone({ emailOrPhone: body.emailOrPhone });
+    // throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.userLoginApi.userNotFound);
+    return {};
   }
 
 }

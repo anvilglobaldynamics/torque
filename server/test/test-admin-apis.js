@@ -35,6 +35,8 @@ const unusedEmail = 'x' + `${rnd(prefix)}@gmail.com`;
 
 let apiKey = null;
 let orgApiKey = null;
+let org1id = null;
+let org2id = null;
 
 describe.only('Admin', _ => {
 
@@ -314,6 +316,7 @@ describe.only('Admin', _ => {
           phone: newOrg1Phone,
           email: newOrg1Email
         }, (data) => {
+          org1id = data.organizationId;
           addOrganization({
             apiKey: orgApiKey,
             name: "Org Name 2",
@@ -321,6 +324,7 @@ describe.only('Admin', _ => {
             phone: newOrg2Phone,
             email: newOrg2Email
           }, (data) => {
+            org2id = data.organizationId;
             testDoneFn();
           });
         });
@@ -402,6 +406,25 @@ describe.only('Admin', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('packageList').that.is.an('array');
+      testDoneFn();
+    });
+
+  });
+
+  // TODO: admin-assign-package-to-organization
+
+  it('api/admin-assign-package-to-organization', testDoneFn => {
+
+    callApi('api/admin-assign-package-to-organization', {
+      json: {
+        apiKey,
+        organizationId: org1id,
+        packageCode: "SE03"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      console.log(body);
+      expect(body).to.have.property('hasError').that.equals(false);
       testDoneFn();
     });
 
