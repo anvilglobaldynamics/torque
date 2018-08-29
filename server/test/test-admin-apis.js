@@ -8,7 +8,8 @@ let {
   initializeServer,
   terminateServer,
   registerUser,
-  loginUser
+  loginUser,
+  addOrganization
 } = require('./lib');
 
 const prefix = 'adm';
@@ -21,10 +22,13 @@ const password = "123545678";
 const fullName = "Test " + rnd(prefix, 11);
 const fullName2 = "Test " + rnd(prefix, 11).split('').reverse().join('');
 const phone2 = rnd(prefix, 11).split('').reverse().join('');
+const newOrgOwnerPhone = 'o' + rnd(prefix, 11);
+const newOrgOwnerEmail = 'o' + `${rnd(prefix)}@gmail.com`;
 
 let apiKey = null;
+let orgApiKey = null;
 
-describe('Admin', _ => {
+describe.only('Admin', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -287,7 +291,45 @@ describe('Admin', _ => {
 
   // --- Payment System - start
 
+  it('Organization Creation', testDoneFn => {
+    registerUser({
+      password, fullName, phone: newOrgOwnerPhone
+    }, _ => {
+      loginUser({
+        emailOrPhone: newOrgOwnerPhone, password
+      }, (data) => {
+        orgApiKey = data.apiKey;
+        addOrganization({
+          apiKey: orgApiKey,
+          name: "Org Name",
+          primaryBusinessAddress: "Dhak,a Bangladesh",
+          phone: newOrgOwnerPhone,
+          email: newOrgOwnerEmail
+        }, (data) => {
+          console.log(data);
+          testDoneFn();
+        });
+      });
+    });
+  });
 
+  it('api/admin-find-organization (phone)', testDoneFn => {
+
+    callApi('api/admin-find-organization', {
+      json: {
+        apiKey: apiKey,
+        emailOrPhone: phone
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      console.log(body);
+
+      expect(body).to.have.property('hasError').that.equals(false);
+
+      testDoneFn();
+    });
+
+  });
 
   // --- Payment System - end
 

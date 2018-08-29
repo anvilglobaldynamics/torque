@@ -93,6 +93,7 @@ let { AdminGetOutgoingSmsListApi } = require('./legacy-apis/admin-get-outgoing-s
 let { AdminSetOutgoingSmsStatusApi } = require('./legacy-apis/admin-set-outgoing-sms-status');
 let { AdminGetAggregatedUserListApi } = require('./legacy-apis/admin-get-aggregated-user-list');
 let { AdminSetUserBanningStatusApi } = require('./legacy-apis/admin-set-user-banning-status');
+const { AdminFindOrganizationApi } = require('./apis/admin-find-organization');
 
 let { FixtureCollection } = require('./legacy-collections/fixture');
 let { UserCollection } = require('./legacy-collections/user');
@@ -298,6 +299,7 @@ class Program {
     server.registerPostApi('/api/admin-set-outgoing-sms-status', AdminSetOutgoingSmsStatusApi);
     server.registerPostApi('/api/admin-get-aggregated-user-list', AdminGetAggregatedUserListApi);
     server.registerPostApi('/api/admin-set-user-banning-status', AdminSetUserBanningStatusApi);
+    server.registerPostApi('/api/admin-find-organization', AdminFindOrganizationApi);
   }
 
 }
