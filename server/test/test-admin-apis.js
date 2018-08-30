@@ -466,6 +466,37 @@ describe.only('Admin', _ => {
 
   });
 
+  it('api/admin-assign-package-to-organization (Valid update)', testDoneFn => {
+
+    callApi('api/admin-assign-package-to-organization', {
+      json: {
+        apiKey,
+        organizationId: org1id,
+        packageCode: "SE12"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminAssignPackageToOrganizationApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-list-organization-packages (Valid)', testDoneFn => {
+
+    callApi('api/admin-list-organization-packages', {
+      json: {
+        apiKey,
+        organizationId: org1id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      console.log(body);
+      testDoneFn();
+    });
+
+  });
+
   // --- Payment System - end
 
   it('END', testDoneFn => {

@@ -34,6 +34,10 @@ exports.PackageActivationCollection = class extends Collection {
     });
   }
 
+  async listByOrganizationId({ organizationId }) {
+    return await this._find({ organizationId });
+  }
+
   async discard({ id }) {
     return await this._update({ id }, {
       $push: {

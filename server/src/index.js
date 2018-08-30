@@ -96,6 +96,7 @@ let { AdminGetAggregatedUserListApi } = require('./legacy-apis/admin-get-aggrega
 let { AdminSetUserBanningStatusApi } = require('./legacy-apis/admin-set-user-banning-status');
 const { AdminFindOrganizationApi } = require('./apis/admin-find-organization');
 const { AdminAssignPackageToOrganizationApi } = require('./apis/admin-assign-package-to-organization');
+const { AdminListOrganizationPackagesApi } = require('./apis/admin-list-organization-packages');
 
 let { FixtureCollection } = require('./legacy-collections/fixture');
 let { UserCollection } = require('./legacy-collections/user');
@@ -304,6 +305,7 @@ class Program {
     server.registerPostApi('/api/admin-find-organization', AdminFindOrganizationApi);
     server.registerPostApi('/api/admin-get-package-list', AdminGetPackageListApi);
     server.registerPostApi('/api/admin-assign-package-to-organization', AdminAssignPackageToOrganizationApi);
+    server.registerPostApi('/api/admin-list-organization-packages', AdminListOrganizationPackagesApi);
   }
 
 }
