@@ -82,6 +82,7 @@ let { GetSalesReturnApi } = require('./legacy-apis/get-sales-return');
 let { GetSalesReturnListApi } = require('./legacy-apis/get-sales-return-list');
 
 let { GetDashboardSummaryApi } = require('./legacy-apis/get-dashboard-summary');
+// const { GetDashboardSummaryApi } = require('./apis/get-dashboard-summary');
 
 let { GetDesignationListApi } = require('./legacy-apis/get-designation-list');
 let { GetRoleListApi } = require('./legacy-apis/get-role-list');

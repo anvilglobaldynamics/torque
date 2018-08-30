@@ -40,7 +40,7 @@ let adminApiKey = null;
 const adminUsername = "default";
 const adminPassword = "johndoe1pass";
 
-describe.only('Organization', _ => {
+describe('Organization', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

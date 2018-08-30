@@ -31,7 +31,7 @@ let apiKey = null;
 let organizationId = null;
 let invalidOrganizationId = generateInvalidId();
 
-describe('Dashboard', _ => {
+describe.only('Dashboard', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -66,6 +66,8 @@ describe('Dashboard', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
+      console.log(body);
+      
       validateGetDashboardSummaryApiSuccessResponse(body);
       testDoneFn();
     });
