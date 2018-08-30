@@ -13,7 +13,9 @@ let {
   validateAdminFindOrganizationApiSuccessResponse,
   validateOrganizationSchema,
   validateGenericApiFailureResponse,
-  validateAdminAssignPackageToOrganizationApiSuccessResponse
+  validateAdminAssignPackageToOrganizationApiSuccessResponse,
+  validateListOrganizationPackagesApiSuccessResponse,
+  validatePackageActivationSchema
 } = require('./lib');
 
 const prefix = 'adm';
@@ -491,7 +493,10 @@ describe.only('Admin', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      console.log(body);
+      validateListOrganizationPackagesApiSuccessResponse(body);
+      body.packageActivationList.forEach(packageActivation => {
+        validatePackageActivationSchema(packageActivation);
+      });
       testDoneFn();
     });
 

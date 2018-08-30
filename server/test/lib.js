@@ -643,6 +643,17 @@ exports.validateAdminAssignPackageToOrganizationApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+// TODO: reuse below
+exports.validateListOrganizationPackagesApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    packageActivationList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 // Generic
 
 exports.validateGenericApiSuccessResponse = (doc) => {
@@ -714,6 +725,22 @@ exports.validateOutletSchema = (doc) => {
 
     isDeleted: Joi.boolean().required()
   });
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+// TODO: reuse
+exports.validatePackageActivationSchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    _id: Joi.string().required(),
+
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    packageCode: Joi.string().required(),
+    organizationId: Joi.number().max(999999999999999).required(),
+    isDiscarded: Joi.boolean().required()
+  });
+
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
 }
