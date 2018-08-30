@@ -12,7 +12,10 @@ let {
   validateResponseOrganizationSchema,
   validateAddOrganizationApiSuccessResponse,
   validateGetOrganizationListApiSuccessResponse,
-  validateGenericApiSuccessResponse
+  validateGenericApiSuccessResponse,
+  validateAdminAssignPackageToOrganizationApiSuccessResponse,
+  validateListOrganizationPackagesApiSuccessResponse,
+  validatePackageActivationSchema
 } = require('./lib');
 
 const prefix = 's';
@@ -30,8 +33,14 @@ const org3Phone = 'o3' + rnd(prefix, 11);
 
 let apiKey = null;
 let organizationToBeEdited = null;
+let org1id = null;
+let org2id = null;
+let adminApiKey = null;
 
-describe('Organization', _ => {
+const adminUsername = "default";
+const adminPassword = "johndoe1pass";
+
+describe.only('Organization', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -61,6 +70,7 @@ describe('Organization', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateAddOrganizationApiSuccessResponse(body);
+      org1id = body.organizationId;
       testDoneFn();
     })
 
@@ -119,6 +129,7 @@ describe('Organization', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateAddOrganizationApiSuccessResponse(body);
+      org2id = body.organizationId;
       testDoneFn();
     })
 
@@ -225,6 +236,76 @@ describe('Organization', _ => {
     });
 
   });
+
+  // --- Package Section - start
+
+  it('api/admin-login', testDoneFn => {
+
+    callApi('api/admin-login', {
+      json: {
+        username: adminUsername,
+        password: adminPassword
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      adminApiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/admin-assign-package-to-organization (Valid)', testDoneFn => {
+
+    callApi('api/admin-assign-package-to-organization', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: org1id,
+        packageCode: "SE03"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminAssignPackageToOrganizationApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-assign-package-to-organization (Valid update)', testDoneFn => {
+
+    callApi('api/admin-assign-package-to-organization', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: org1id,
+        packageCode: "SE12"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminAssignPackageToOrganizationApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-activated-package-list (Valid)', testDoneFn => {
+
+    callApi('api/get-activated-package-list', {
+      json: {
+        apiKey,
+        organizationId: org1id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateListOrganizationPackagesApiSuccessResponse(body);
+      body.packageActivationList.forEach(packageActivation => {
+        validatePackageActivationSchema(packageActivation);
+      });
+      testDoneFn();
+    });
+
+  });
+
+  // --- Package Section - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

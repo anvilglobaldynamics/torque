@@ -33,6 +33,7 @@ let { UserResetPasswordConfirmApi } = require('./legacy-apis/user-reset-password
 let { AddOrganizationApi } = require('./legacy-apis/add-organization');
 let { GetOrganizationListApi } = require('./legacy-apis/get-organization-list');
 let { EditOrganizationApi } = require('./legacy-apis/edit-organization');
+const { GetActivatedPackageListApi } = require('./apis/get-activated-package-list');
 
 let { AddNewEmployeeApi } = require('./legacy-apis/add-new-employee');
 let { FindUserApi } = require('./legacy-apis/find-user');
@@ -252,6 +253,7 @@ class Program {
     server.registerPostApi('/api/add-organization', AddOrganizationApi);
     server.registerPostApi('/api/get-organization-list', GetOrganizationListApi);
     server.registerPostApi('/api/edit-organization', EditOrganizationApi);
+    server.registerPostApi('/api/get-activated-package-list', GetActivatedPackageListApi);
     server.registerPostApi('/api/add-customer', AddCustomerApi);
     server.registerPostApi('/api/get-customer', GetCustomerApi);
     server.registerPostApi('/api/get-customer-summary-list', GetCustomerSummaryListApi);
