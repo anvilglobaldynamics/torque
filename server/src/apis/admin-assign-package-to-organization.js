@@ -24,10 +24,21 @@ exports.AdminAssignPackageToOrganizationApi = class extends Api {
     this.ensureUpdate('organization', result);
   }
 
+  async _discardOldPackageActivation({ organization }) {
+    let result = await this.database.packageActivation.discard({ id: organization.packageActivationId });
+    this.ensureUpdate('packageActivation', result);
+  }
+
   async handle({ body }) {
     let { organizationId, packageCode } = body;
     let organization = await this.database.organization.findById({ organizationId });
     throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.organizationCommon.organizationDoesNotExist);
+
+    // TODO: check if organization has package activation, discard if it does
+    // if (organization.packageActivationId) {
+    //   await this._discardOldPackageActivation({ organization });
+    // }
+
     let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId });   
     await this._updateOrganizationPackageActivationId({ organizationId, packageActivationId });
 

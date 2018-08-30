@@ -39,11 +39,7 @@ exports.PackageActivationCollection = class extends Collection {
   }
 
   async discard({ id }) {
-    return await this._update({ id }, {
-      $push: {
-        isDiscarded: true
-      }
-    });
+    return await this._update({ id }, { isDiscarded: true });
   }
 
 }
