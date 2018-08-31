@@ -74,7 +74,7 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(salesCommonMixin) {
     let totalNumberOfSalesToday = totalCount;
     let totalAmountSoldToday = totalAmount;
 
-    let { totalCount, totalAmount } = await this._getSalesSummaryForMonth(organizationId);
+    ({ totalCount, totalAmount } = await this._getSalesSummaryForMonth(organizationId));
     let totalNumberOfSalesThisMonth = totalCount;
     let totalAmountSoldThisMonth = totalAmount;
 

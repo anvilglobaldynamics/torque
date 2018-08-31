@@ -31,7 +31,7 @@ let apiKey = null;
 let organizationId = null;
 let invalidOrganizationId = generateInvalidId();
 
-describe('Dashboard', _ => {
+describe.only('Dashboard', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
