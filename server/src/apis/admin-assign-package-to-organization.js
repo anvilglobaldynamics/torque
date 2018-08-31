@@ -31,7 +31,7 @@ exports.AdminAssignPackageToOrganizationApi = class extends Api {
 
   async handle({ body }) {
     let { organizationId, packageCode } = body;
-    let organization = await this.database.organization.findById({ organizationId });
+    let organization = await this.database.organization.findById({ id: organizationId });
     throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.organizationCommon.organizationDoesNotExist);
 
     // TODO: check if organization has package activation, discard if it does

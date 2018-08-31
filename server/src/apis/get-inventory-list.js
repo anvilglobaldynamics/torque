@@ -46,7 +46,6 @@ exports.GetInventoryListApi = class extends Api {
 
   async handle({ body }) {
     let { organizationId } = body;
-    console.log("in handle with: ", body);
     let inventoryList = await this.__getInventoryList({ organizationId });
     return { inventoryList };
   }

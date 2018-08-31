@@ -305,7 +305,7 @@ class Api {
       throwOnFalsy(organization, "ORGANIZATION_INVALID", "organizationBy function did not return valid organization.");
     } else if (typeof (organizationBy) === "string") {
       let id = body[organizationBy];
-      organization = await this.database.organization.findById({ id })
+      organization = await this.database.organization.findById({ id });
       throwOnFalsy(organization, "ORGANIZATION_INVALID", "organizationBy string does not equal any organization id");
     } else {
       if (!Array.isArray(organizationBy)) {

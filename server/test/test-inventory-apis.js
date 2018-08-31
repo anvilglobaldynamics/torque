@@ -20,7 +20,7 @@ let {
   validateGenericApiSuccessResponse,
   validateGetAggregatedInventoryDetailsApiSuccessResponse,
   validateProductCategorySchema,
-  validateProductSchema
+  validateProductSchema,
 } = require('./lib');
 
 const prefix = 's';
@@ -86,7 +86,6 @@ describe('Inventory', _ => {
             phone: orgPhone,
             email: orgEmail
           }, (data) => {
-            console.log("addOrganization res:", data);
             organizationId = data.organizationId;
             addWarehouse({
               apiKey,
@@ -159,26 +158,6 @@ describe('Inventory', _ => {
     });
   });
 
-  // below is here for testing, to be removed
-  it('api/get-organization-list (Valid)', testDoneFn => {
-
-    callApi('api/get-organization-list', {
-      json: {
-        apiKey,
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      console.log(body);
-      validateGetOrganizationListApiSuccessResponse(body);
-      body.organizationList.forEach(organization => {
-        validateResponseOrganizationSchema(organization);
-      });
-      testDoneFn();
-    });
-
-  });
-  // above is here for testing, to be removed
-
   it('api/get-inventory-list (Valid organizationId)', testDoneFn => {
 
     callApi('api/get-inventory-list', {
@@ -188,7 +167,6 @@ describe('Inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      console.log(body);
       validateGetInventoryListApiSuccessResponse(body);
       body.inventoryList.forEach(inventory => {
         validateInventorySchema(inventory);

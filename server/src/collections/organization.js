@@ -57,10 +57,6 @@ exports.OrganizationCollection = class extends Collection {
     });
   }
 
-  async findById({ organizationId }) {
-    return await this._findOne({ id: organizationId });
-  }
-
   async setPackageActivationId({ id }, { packageActivationId }) {
     return await this._update({ id }, {
       $set: {
