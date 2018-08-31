@@ -83,13 +83,37 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(salesCommonMixin) {
       totalAmountSoldToday,
       totalNumberOfSalesThisMonth,
       totalAmountSoldThisMonth
-    })
+    });
+  }
+
+  async _getActivatedPackageDetails({ organizationId }) {
+    let organization = await this.database.organization.findById({ id: organizationId });
+
+    if (organization.packageActivationId) {
+      let packageActivation = await this.database.packageActivation.findById({ id: organization.packageActivationId });
+
+      let packageDetail;
+      let packageList = await this.database.fixture.getPackageList();
+      packageList.data.forEach(aPackage => {
+        if (aPackage.code == packageActivation.packageCode) {
+          packageDetail = aPackage;
+        }
+      });
+      
+      return({
+        packageActivation,
+        packageDetail
+      });
+    } else {
+      return null;
+    }
   }
 
   async handle({ body }) {
     let { organizationId } = body;
     let metrics = await this._getSalesSummary({ organizationId });
-    return { metrics };
+    let organizationPackageDetails = await this._getActivatedPackageDetails({ organizationId });
+    return { metrics, organizationPackageDetails };
   }
 
 }

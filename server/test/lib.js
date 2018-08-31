@@ -239,6 +239,10 @@ exports.validateGetDashboardSummaryApiSuccessResponse = (doc) => {
       totalAmountSoldToday: Joi.number().required(),
       totalNumberOfSalesThisMonth: Joi.number().required(),
       totalAmountSoldThisMonth: Joi.number().required()
+    }),
+    organizationPackageDetails: Joi.object().allow(null).keys({
+      packageActivation: Joi.object(),
+      packageDetail: Joi.object()
     })
   });
 

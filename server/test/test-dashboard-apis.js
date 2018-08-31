@@ -12,10 +12,14 @@ let {
   loginUser,
   addOrganization,
   validateGenericApiFailureResponse,
-  validateGetDashboardSummaryApiSuccessResponse
+  validateGetDashboardSummaryApiSuccessResponse,
+  validateAdminAssignPackageToOrganizationApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
+
+const adminUsername = "default";
+const adminPassword = "johndoe1pass";
 
 const email = `${rnd(prefix)}@gmail.com`;
 const phone = rnd(prefix, 11);
@@ -31,7 +35,7 @@ let apiKey = null;
 let organizationId = null;
 let invalidOrganizationId = generateInvalidId();
 
-describe('Dashboard', _ => {
+describe.only('Dashboard', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -57,6 +61,46 @@ describe('Dashboard', _ => {
     });
   });
 
+  // prerequisite - start
+
+  it('api/admin-login', testDoneFn => {
+
+    callApi('api/admin-login', {
+      json: {
+        username: adminUsername,
+        password: adminPassword
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string');
+      expect(body).to.have.property('sessionId').that.is.a('number');
+      expect(body).to.have.property('admin').that.is.an('object');
+      adminApiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/admin-assign-package-to-organization (Valid)', testDoneFn => {
+
+    callApi('api/admin-assign-package-to-organization', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId,
+        packageCode: "SE03"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminAssignPackageToOrganizationApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  // prerequisite - end
+
   it('api/get-dashboard-summary (Valid)', testDoneFn => {
 
     callApi('api/get-dashboard-summary', {
@@ -66,8 +110,6 @@ describe('Dashboard', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      console.log(body);
-      
       validateGetDashboardSummaryApiSuccessResponse(body);
       testDoneFn();
     });

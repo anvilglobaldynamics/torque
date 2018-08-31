@@ -33,12 +33,25 @@ Possible Error Codes:
 ```js
 {
   "hasError": false,
+
   "metrics": Joi.object().keys({
     totalNumberOfSalesToday: Joi.number().max(999999999999999).required(),
     totalAmountSoldToday: Joi.number().max(999999999999999).required(),
     totalNumberOfSalesThisMonth: Joi.number().max(999999999999999).required(),
     totalAmountSoldThisMonth: Joi.number().max(999999999999999).required()
-  });
+  }),
+
+  "organizationPackageDetails": Joi.object().allow(null).keys({
+    packageActivation: Joi.object().keys({
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      packageCode: Joi.string().required(),
+      organizationId: Joi.number().max(999999999999999).required(),
+      isDiscarded: Joi.boolean().required()
+    }),
+    packageDetail: Joi.object().keys({
+      // TODO: to be finalized
+    })
+  })
 }
 ```
 
