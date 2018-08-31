@@ -1,4 +1,4 @@
-let { LegacyApi } = require('./../legacy-api-base');
+let { LegacyApi } = require('../legacy-api-base');
 let Joi = require('joi');
 
 let { salesCommonMixin } = require('./mixins/sales-common');

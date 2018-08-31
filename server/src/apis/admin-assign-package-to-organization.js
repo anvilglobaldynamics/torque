@@ -29,6 +29,17 @@ exports.AdminAssignPackageToOrganizationApi = class extends Api {
     this.ensureUpdate('packageActivation', result);
   }
 
+  async _checkIfPackageExists({ packageCode }) {
+    let packageList = await this.database.fixture.getPackageList();
+    let flag = false;
+    packageList.data.forEach(aPackage => {
+      if (aPackage.code == packageCode) {
+        flag = true;
+      }
+    });
+    return flag;
+  }
+
   async handle({ body }) {
     let { organizationId, packageCode } = body;
     let organization = await this.database.organization.findById({ id: organizationId });
@@ -38,6 +49,9 @@ exports.AdminAssignPackageToOrganizationApi = class extends Api {
     // if (organization.packageActivationId) {
     //   await this._discardOldPackageActivation({ organization });
     // }
+
+    let packageExists = await this._checkIfPackageExists({ packageCode });
+    throwOnFalsy(packageExists, "PACKAGE_INVALID", this.verses.adminCommon.packageInvalid);
 
     let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId });   
     await this._updateOrganizationPackageActivationId({ organizationId, packageActivationId });

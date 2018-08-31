@@ -24,6 +24,9 @@ exports.verses = {
     userDoesNotExist: "User with this phone/email does not exist.",
     userInvalid: "Invalid User could not be found."
   },
+  adminCommon: {
+    packageInvalid: "Invalid Package could not be found."
+  },
   organizationCommon: {
     organizationInvalid: "Organization could not be found during access control.",
     organizationDoesNotExist: "Organization does not exist",

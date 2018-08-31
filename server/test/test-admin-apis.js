@@ -44,7 +44,7 @@ let org1id = null;
 let org2id = null;
 let packageActivationId = null;
 
-describe('Admin', _ => {
+describe.only('Admin', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -434,6 +434,23 @@ describe('Admin', _ => {
 
   });
 
+  it('api/admin-assign-package-to-organization (Invalid packageCode)', testDoneFn => {
+
+    callApi('api/admin-assign-package-to-organization', {
+      json: {
+        apiKey,
+        organizationId: org1id,
+        packageCode: "Invalid"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PACKAGE_INVALID');
+      testDoneFn();
+    });
+
+  });
+
   it('api/admin-assign-package-to-organization (Invalid organizationId)', testDoneFn => {
 
     callApi('api/admin-assign-package-to-organization', {
@@ -501,8 +518,6 @@ describe('Admin', _ => {
     });
 
   });
-
-  // Organization
 
   // --- Payment System - end
 
