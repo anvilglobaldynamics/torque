@@ -15,8 +15,8 @@ method: `POST`
 ### response (on error):
 ```js
 {
-  "hasError": true,
-  "error": {
+  hasError: true,
+  error: {
     code,
     message
   }
@@ -32,16 +32,16 @@ Possible Error Codes:
 ### response (on success):
 ```js
 {
-  "hasError": false,
+  hasError: false,
 
-  "metrics": Joi.object().keys({
+  metrics: Joi.object().keys({
     totalNumberOfSalesToday: Joi.number().max(999999999999999).required(),
     totalAmountSoldToday: Joi.number().max(999999999999999).required(),
     totalNumberOfSalesThisMonth: Joi.number().max(999999999999999).required(),
     totalAmountSoldThisMonth: Joi.number().max(999999999999999).required()
   }),
 
-  "organizationPackageDetails": Joi.object().allow(null).keys({
+  organizationPackageDetails: Joi.object().allow(null).keys({
     packageActivation: Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       packageCode: Joi.string().required(),
