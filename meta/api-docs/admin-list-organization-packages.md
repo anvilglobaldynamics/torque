@@ -15,8 +15,8 @@ method: `POST`
 ### response (on error):
 ```js
 {
-  "hasError": true,
-  "error": {
+  hasError: true,
+  error: {
     code,
     message
   }
@@ -33,14 +33,21 @@ Possible Error Codes:
 ### response (on success):
 ```js
 {
-  "hasError": false,
-  "packageActivationList": Joi.array().items(
+  hasError: false,
+
+  packageActivationList: Joi.array().items(
+
     Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       packageCode: Joi.string()required(),
       organizationId: Joi.number().max(999999999999999).required(),
-      isDiscarded: Joi.boolean().required()
+      isDiscarded: Joi.boolean().required(),
+
+      packageDetail: Joi.object().required().keys({
+        // TODO: to be finalized
+      })
     });
+    
   )
 }
 ```

@@ -18,11 +18,26 @@ exports.AdminListOrganizationPackagesApi = class extends Api {
     });
   }
 
+  async _insertPackageDetailsInPackageActivationList({ packageActivationList }) {
+    let packageList = await this.database.fixture.getPackageList();
+    packageActivationList.forEach(element => {
+      packageList.data.forEach(aPackage => {
+        if (aPackage.code == element.packageCode) {
+          element.packageDetail = aPackage;
+        }
+      });
+    });
+
+    return packageActivationList;
+  }
+
   async handle({ body }) {
     let { organizationId } = body;
     let organization = await this.database.organization.findById({ id: organizationId });
     throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.organizationCommon.organizationDoesNotExist);
+    
     let packageActivationList = await this.database.packageActivation.listByOrganizationId({ organizationId });
+    packageActivationList = await this._insertPackageDetailsInPackageActivationList({ packageActivationList });
 
     return { packageActivationList };
   }

@@ -241,8 +241,8 @@ exports.validateGetDashboardSummaryApiSuccessResponse = (doc) => {
       totalAmountSoldThisMonth: Joi.number().required()
     }),
     organizationPackageDetails: Joi.object().allow(null).keys({
-      packageActivation: Joi.object(),
-      packageDetail: Joi.object()
+      packageActivation: Joi.object().required(),
+      packageDetail: Joi.object().required()
     })
   });
 
@@ -647,7 +647,6 @@ exports.validateAdminAssignPackageToOrganizationApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
-// TODO: reuse below
 exports.validateListOrganizationPackagesApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
@@ -733,7 +732,6 @@ exports.validateOutletSchema = (doc) => {
   if (error) throw error;
 }
 
-// TODO: reuse
 exports.validatePackageActivationSchema = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
@@ -742,7 +740,9 @@ exports.validatePackageActivationSchema = (doc) => {
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     packageCode: Joi.string().required(),
     organizationId: Joi.number().max(999999999999999).required(),
-    isDiscarded: Joi.boolean().required()
+    isDiscarded: Joi.boolean().required(),
+
+    packageDetail: Joi.object().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);

@@ -44,7 +44,7 @@ let org1id = null;
 let org2id = null;
 let packageActivationId = null;
 
-describe('Admin', _ => {
+describe.only('Admin', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

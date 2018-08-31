@@ -42,13 +42,13 @@ Possible Error Codes:
   }),
 
   organizationPackageDetails: Joi.object().allow(null).keys({
-    packageActivation: Joi.object().keys({
+    packageActivation: Joi.object().required().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       packageCode: Joi.string().required(),
       organizationId: Joi.number().max(999999999999999).required(),
       isDiscarded: Joi.boolean().required()
     }),
-    packageDetail: Joi.object().keys({
+    packageDetail: Joi.object().required().keys({
       // TODO: to be finalized
     })
   })
