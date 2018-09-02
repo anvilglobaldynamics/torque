@@ -1,8 +1,24 @@
 [
   {
+    "code": "DEMO",
+    "name": "Enterprise demp package",
+    "duration": {
+      "months": 0,
+      "days": 14
+    },
+    "limits": {
+      "maximum-number-outlet": 2,
+      "maximum-number-warehouse": 2,
+      "maximum-number-employee": 5
+    }
+  },
+  {
     "code": "SE03",
     "name": "SE 3 month package",
-    "duration": "3 month",
+    "duration": {
+      "months": 3,
+      "days": 0
+    },
     "limits": {
       "maximum-number-outlet": 2,
       "maximum-number-warehouse": 2,
@@ -12,7 +28,10 @@
   {
     "code": "SE06",
     "name": "SE 6 month package",
-    "duration": "6 month",
+    "duration": {
+      "months": 6,
+      "days": 0
+    },
     "limits": {
       "maximum-number-outlet": 2,
       "maximum-number-warehouse": 2,
@@ -22,7 +41,10 @@
   {
     "code": "SE12",
     "name": "SE 12 month package",
-    "duration": "12 month",
+    "duration": {
+      "months": 12,
+      "days": 0
+    },
     "limits": {
       "maximum-number-outlet": 2,
       "maximum-number-warehouse": 2,
@@ -33,7 +55,10 @@
   {
     "code": "ME03",
     "name": "ME 3 month package",
-    "duration": "3 month",
+    "duration": {
+      "months": 3,
+      "days": 0
+    },
     "limits": {
       "maximum-number-outlet": 10,
       "maximum-number-warehouse": 5,
@@ -43,7 +68,10 @@
   {
     "code": "ME06",
     "name": "ME 6 month package",
-    "duration": "6 month",
+    "duration": {
+      "months": 6,
+      "days": 0
+    },
     "limits": {
       "maximum-number-outlet": 10,
       "maximum-number-warehouse": 5,
@@ -53,7 +81,10 @@
   {
     "code": "ME12",
     "name": "ME 12 month package",
-    "duration": "12 month",
+    "duration": {
+      "months": 12,
+      "days": 0
+    },
     "limits": {
       "maximum-number-outlet": 10,
       "maximum-number-warehouse": 5,
@@ -64,7 +95,10 @@
   {
     "code": "LE03",
     "name": "LE 3 month package",
-    "duration": "3 month",
+    "duration": {
+      "months": 3,
+      "days": 0
+    },
     "limits": {
       "maximum-number-outlet": 40,
       "maximum-number-warehouse": 20,
@@ -74,7 +108,10 @@
   {
     "code": "LE06",
     "name": "LE 6 month package",
-    "duration": "6 month",
+    "duration": {
+      "months": 6,
+      "days": 0
+    },
     "limits": {
       "maximum-number-outlet": 40,
       "maximum-number-warehouse": 20,
@@ -84,7 +121,10 @@
   {
     "code": "LE12",
     "name": "LE 12 month package",
-    "duration": "12 month",
+    "duration": {
+      "months": 12,
+      "days": 0
+    },
     "limits": {
       "maximum-number-outlet": 40,
       "maximum-number-warehouse": 20,
