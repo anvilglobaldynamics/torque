@@ -26,7 +26,12 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div> Ready! </div>
+      <div class="card vertical layout">
+        <div class="inventory-container-view-name">[[organization.name]]</div>
+        <div class="inventory-container-view-details">Address: [[organization.physicalAddress]]</div>
+        <div class="inventory-container-view-details">Email: [[organization.email]]</div>
+        <div class="inventory-container-view-details">Phone: [[organization.phone]]</div>
+      </div>
 
     </div>
   </template>
@@ -80,9 +85,9 @@
       }
 
       _fetchOrganization(cbfn) {
-        let warehouseId = parseInt(this.params.warehouse);
-        let data = { warehouseId };
-        this.app.callGetWarehouseApi(data, (err, response) => {
+        let organizationId = parseInt(this.params.organization);
+        let data = { organizationId };
+        this.app.callGetOrganizationApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           return cbfn(response);
@@ -90,14 +95,11 @@
       }
 
       _processOrganization(cbfn) {
-        cbfn();
-        // this._fetchOrganization(({ warehouse, defaultInventory, returnedInventory, damagedInventory }) => {
-        //   this.warehouse = warehouse;
-        //   this.defaultInventory = defaultInventory;
-        //   this.returnedInventory = returnedInventory;
-        //   this.damagedInventory = damagedInventory;
-        //   cbfn();
-        // });
+        this._fetchOrganization(({ organization }) => {
+          this.organization = organization;
+          console.log("organization: ", this.organization);
+          cbfn();
+        });
       }
 
       // region: ui  ===========================
