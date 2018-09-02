@@ -32,7 +32,7 @@ exports.AdminAssignPackageToOrganizationApi = class extends Api {
   async _checkIfPackageExists({ packageCode }) {
     let packageList = await this.database.fixture.getPackageList();
     let flag = false;
-    packageList.data.forEach(aPackage => {
+    packageList.forEach(aPackage => {
       if (aPackage.code == packageCode) {
         flag = true;
       }

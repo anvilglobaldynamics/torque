@@ -19,7 +19,7 @@ exports.AdminGetPackageListApi = class extends Api {
 
   async handle({ body }) {
     let packageList = await this.database.fixture.getPackageList();
-    return { packageList: packageList.data };
+    return { packageList: packageList };
   }
 
 }

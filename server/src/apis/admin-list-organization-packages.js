@@ -21,7 +21,7 @@ exports.AdminListOrganizationPackagesApi = class extends Api {
   async _insertPackageDetailsInPackageActivationList({ packageActivationList }) {
     let packageList = await this.database.fixture.getPackageList();
     packageActivationList.forEach(element => {
-      packageList.data.forEach(aPackage => {
+      packageList.forEach(aPackage => {
         if (aPackage.code == element.packageCode) {
           element.packageDetail = aPackage;
         }

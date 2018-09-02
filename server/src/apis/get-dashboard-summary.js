@@ -94,7 +94,7 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(salesCommonMixin) {
 
       let packageDetail;
       let packageList = await this.database.fixture.getPackageList();
-      packageList.data.forEach(aPackage => {
+      packageList.forEach(aPackage => {
         if (aPackage.code == packageActivation.packageCode) {
           packageDetail = aPackage;
         }

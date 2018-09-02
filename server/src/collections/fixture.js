@@ -28,19 +28,19 @@ exports.FixtureCollection = class extends Collection {
   }
 
   async getDesignationList() {
-    return await this._findOne({ name: 'designation-list' });
+    return (await this._findOne({ name: 'designation-list' })).data;
   }
 
   async getRoleList() {
-    return await this._findOne({ name: 'role-list' });
+    return (await this._findOne({ name: 'role-list' })).data;
   }
 
   async getPrivilegeList() {
-    return await this._findOne({ name: 'privilege-list' });
+    return (await this._findOne({ name: 'privilege-list' })).data;
   }
 
   async getPackageList() {
-    return await this._findOne({ name: 'package-list' });
+    return (await this._findOne({ name: 'package-list' })).data;
   }
 
 }
