@@ -8,6 +8,10 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
 
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
@@ -20,7 +24,23 @@
 
 <dom-module id="page-manage-organization">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+    
+      .full-width-paper-dropdown {
+        width: 100%;
+      }
+
+      .package-activation {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 5px;
+      }
+
+      .package-activation-title {
+        font-weight: bold;
+      }
+
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -31,6 +51,33 @@
         <div class="inventory-container-view-details">Address: [[organization.physicalAddress]]</div>
         <div class="inventory-container-view-details">Email: [[organization.email]]</div>
         <div class="inventory-container-view-details">Phone: [[organization.phone]]</div>
+      </div>
+
+      <template is="dom-if" if="[[packageActivationList.length]]">
+        <div class="card vertical layout package-activation-list-container">
+          <div class="package-activation-title">Package Activation List:</div>
+          <template is="dom-repeat" items="[[packageActivationList]]" as="packageActivation">
+            <div class="package-activation">
+              <div>Code: [[packageActivation.packageCode]]</div>
+              <div>Package Name: [[packageActivation.packageDetail.name]] </div>
+              <div>Activation Date: [[$mkDate(packageActivation.createdDatetimeStamp, 'hh:mm:ss TT')]]</div>
+            </div>
+          </template>
+        </div>
+      </template>
+
+      <div class="card vertical layout">
+        <div class="package-activation-title">Package Activation:</div>
+
+        <paper-dropdown-menu class="full-width-paper-dropdown" label="select package" class="mr-4">
+          <paper-listbox slot="dropdown-content" selected="{{packageCode}}" attr-for-selected="code">
+            <template is="dom-repeat" items="[[packageList]]" as="package">
+              <paper-item code="[[package.code]]">[[package.name]]</paper-item>
+            </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
+
+        <paper-button raised class="primary flex" on-tap="assignPackageTapped">Assign Package</paper-button>
       </div>
 
     </div>
@@ -44,7 +91,12 @@
       }
 
       static get properties() {
-        return {};
+        return {
+          packageCode: {
+            type: String,
+            value: null
+          }
+        };
       }
 
       // region: core =================================
@@ -67,7 +119,9 @@
           return;
         }
         this._processOrganization(() => {
-          this.isReady = true;
+          this._processPackageList(() => {
+            this.isReady = true;
+          });
         });
       }
 
@@ -94,15 +148,59 @@
         });
       }
 
+      _fetchOrganizationPackageActivationHistory(cbfn) {
+        let organizationId = parseInt(this.params.organization);
+        let data = { organizationId };
+        this.app.callListOrganizationPackagesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _fetchPackageList(cbfn) {
+        this.app.callGetPackageListApi({}, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
       _processOrganization(cbfn) {
         this._fetchOrganization(({ organization }) => {
           this.organization = organization;
           console.log("organization: ", this.organization);
+          this._fetchOrganizationPackageActivationHistory(({packageActivationList}) => {
+            this.packageActivationList = packageActivationList;
+            console.log("packageActivationList: ", this.packageActivationList);
+            cbfn();
+          });
+        });
+      }
+
+      _processPackageList(cbfn) {
+        this._fetchPackageList(({ packageList }) => {
+          this.packageList = packageList;
           cbfn();
         });
       }
 
+      _assignPackage(organizationId, packageCode, cbfn) {
+        let data = { organizationId, packageCode };
+        this.app.callAssignPackageToOrganizationApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
       // region: ui  ===========================
+
+      assignPackageTapped(e) {
+        this._assignPackage(parseInt(this.params.organization), this.packageCode, () => {
+          console.log("package assigned!");
+        });
+      }
 
       // region: misc =================================
 

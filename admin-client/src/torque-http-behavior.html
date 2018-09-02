@@ -142,6 +142,21 @@
           this.callCombinedJsonApi('admin-get-organization', data, cbfn);
         }
 
+        callListOrganizationPackagesApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-list-organization-packages', data, cbfn);
+        }
+
+        callGetPackageListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-get-package-list', data, cbfn);
+        }
+
+        callAssignPackageToOrganizationApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-assign-package-to-organization', data, cbfn);
+        }
+
       }
     }
 
