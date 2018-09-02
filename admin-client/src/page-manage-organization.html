@@ -40,6 +40,16 @@
         font-weight: bold;
       }
 
+      .a-package {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 5px;
+      }
+
+      .a-package-detail {
+        font-size: 12px;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -47,6 +57,7 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
+        <div class="package-activation-title">Organization Detail:</div>
         <div class="inventory-container-view-name">[[organization.name]]</div>
         <div class="inventory-container-view-details">Address: [[organization.physicalAddress]]</div>
         <div class="inventory-container-view-details">Email: [[organization.email]]</div>
@@ -78,6 +89,24 @@
         </paper-dropdown-menu>
 
         <paper-button raised class="primary flex" on-tap="assignPackageTapped">Assign Package</paper-button>
+      </div>
+
+      <div class="card vertical layout">
+        <div class="package-activation-title">Packages Detail</div>
+
+        <template is="dom-repeat" items="[[packageList]]" as="package">
+          <div class="a-package">
+            <div>[[package.name]] (Code: [[package.code]])</div>
+            <div class="a-package-detail">[[package.name]]</div>
+            <div class="a-package-detail">Price: [[package.price]]</div>
+            <div class="a-package-detail">Duration: [[package.duration.days]] days, [[package.duration.months]] months</div>
+            <div class="a-package-detail">Limits:
+              [[package.limits.maximum-number-employee]] employees, 
+              [[package.limits.maximum-number-outlet]] outlets,
+              [[package.limits.maximum-number-warehouse]] warehouses
+            </div>
+          </div>
+        </template>
       </div>
 
     </div>
@@ -181,6 +210,7 @@
       _processPackageList(cbfn) {
         this._fetchPackageList(({ packageList }) => {
           this.packageList = packageList;
+          console.log("packageList: ", this.packageList);
           cbfn();
         });
       }
