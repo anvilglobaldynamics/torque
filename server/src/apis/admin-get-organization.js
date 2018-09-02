@@ -3,7 +3,7 @@ const { Api } = require('../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
 
-exports.AdminGetOrganizationApi = class extends Api.mixin(OrganizationCommonMixin) {
+exports.AdminGetOrganizationApi = class extends Api {
 
   get autoValidates() { return true; }
 
