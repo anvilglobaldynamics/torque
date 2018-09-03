@@ -30,7 +30,7 @@ let { UserResetPasswordRequestApi } = require('./legacy-apis/user-reset-password
 let { UserResetPasswordGetTokenInfoApi } = require('./legacy-apis/user-reset-password--get-token-info');
 let { UserResetPasswordConfirmApi } = require('./legacy-apis/user-reset-password--confirm');
 
-let { AddOrganizationApi } = require('./legacy-apis/add-organization');
+const { AddOrganizationApi } = require('./apis/add-organization');
 let { GetOrganizationListApi } = require('./legacy-apis/get-organization-list');
 let { EditOrganizationApi } = require('./legacy-apis/edit-organization');
 const { GetActivatedPackageListApi } = require('./apis/get-activated-package-list');
