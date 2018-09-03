@@ -90,11 +90,11 @@ exports.HireUserAsEmployeeApi = class extends userCommonMixin(collectionCommonMi
 
   _checkOrganizationPackageEmployeeLimit({ organizationId, aPackage }, cbfn) {
     this.legacyDatabase.employment.listByOrganizationId({ organizationId }, (err, employmentList) => {
-      if (err) return reject(err);
+      if (err) return this.fail(err);
       if (employmentList.length == aPackage.limits.maximumEmployees) {
         err = new Error("Organization activated package max employee limit reached");
         err.code = "ORGANIZATION_PACKAGE_MAX_EMPLOYEE_LIMIT_REACHED";
-        return reject(err);
+        return this.fail(err);
       }
       return cbfn();
     });

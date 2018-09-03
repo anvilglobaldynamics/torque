@@ -24,29 +24,19 @@ exports.AdminAssignPackageToOrganizationApi = class extends Api {
     this.ensureUpdate('organization', result);
   }
 
-  async _discardOldPackageActivation({ organization }) {
-    let result = await this.database.packageActivation.discard({ id: organization.packageActivationId });
-    this.ensureUpdate('packageActivation', result);
-  }
-
   async _checkIfPackageExists({ packageCode }) {
     return await this.database.fixture.findPackageByCode({ packageCode });
   }
 
-  async handle({ body }) {
+  async handle({ body, username }) {
     let { organizationId, packageCode } = body;
     let organization = await this.database.organization.findById({ id: organizationId });
     throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.organizationCommon.organizationDoesNotExist);
 
-    // TODO: check if organization has package activation, discard if it does
-    // if (organization.packageActivationId) {
-    //   await this._discardOldPackageActivation({ organization });
-    // }
-
     let packageExists = await this._checkIfPackageExists({ packageCode });
     throwOnFalsy(packageExists, "PACKAGE_INVALID", this.verses.adminCommon.packageInvalid);
 
-    let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId });
+    let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId, createdByAdminName: username });
     await this._updateOrganizationPackageActivationId({ organizationId, packageActivationId });
 
     return { status: "success", packageActivationId };

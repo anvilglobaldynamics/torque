@@ -12,6 +12,7 @@ exports.PackageActivationCollection = class extends Collection {
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       packageCode: Joi.string().required(),
       organizationId: Joi.number().max(999999999999999).required(),
+      createdByAdminName: Joi.string().min(1).max(64).required(),
       isDiscarded: Joi.boolean().required()
 
     });
@@ -25,11 +26,12 @@ exports.PackageActivationCollection = class extends Collection {
     return [];
   }
 
-  async create({ packageCode, organizationId }) {
+  async create({ packageCode, organizationId, createdByAdminName }) {
     return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       packageCode,
       organizationId,
+      createdByAdminName,
       isDiscarded: false
     });
   }
