@@ -71,7 +71,7 @@
             <div class="package-activation">
               <div>Code: [[packageActivation.packageCode]]</div>
               <div>Package Name: [[packageActivation.packageDetail.name]] </div>
-              <div>Activation Date: [[$mkDate(packageActivation.createdDatetimeStamp, 'hh:mm:ss TT')]]</div>
+              <div>Activation Date: [[$mkDate(packageActivation.createdDatetimeStamp, 'dd/MM/yyyy hh:mm:ss TT')]]</div>
             </div>
           </template>
         </div>
@@ -198,10 +198,8 @@
       _processOrganization(cbfn) {
         this._fetchOrganization(({ organization }) => {
           this.organization = organization;
-          console.log("organization: ", this.organization);
           this._fetchOrganizationPackageActivationHistory(({packageActivationList}) => {
             this.packageActivationList = packageActivationList;
-            console.log("packageActivationList: ", this.packageActivationList);
             cbfn();
           });
         });
@@ -210,7 +208,6 @@
       _processPackageList(cbfn) {
         this._fetchPackageList(({ packageList }) => {
           this.packageList = packageList;
-          console.log("packageList: ", this.packageList);
           cbfn();
         });
       }
@@ -228,7 +225,8 @@
 
       assignPackageTapped(e) {
         this._assignPackage(parseInt(this.params.organization), this.packageCode, () => {
-          console.log("package assigned!");
+          this.app.refreshCurrentPage();
+          this.app.showToast("Package Successfully Assigned", _ => {});
         });
       }
 
