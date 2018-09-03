@@ -42,11 +42,11 @@ exports.AddWarehouseApi = class extends inventoryCommonMixin(LegacyApi) {
 
   _checkOrganizationPackageWarehouseLimit({ organizationId, aPackage }, cbfn) {
     this.legacyDatabase.warehouse.listByOrganizationId({ organizationId }, (err, warehouseList) => {
-      if (err) return reject(err);
+      if (err) return this.fail(err);
       if (warehouseList.length == aPackage.limits.maximumWarehouses) {
         err = new Error("Organization activated package max warehouse limit reached");
         err.code = "ORGANIZATION_PACKAGE_MAX_WAREHOUSE_LIMIT_REACHED";
-        return reject(err);
+        return this.fail(err);
       }
       return cbfn();
     });

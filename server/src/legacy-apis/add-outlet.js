@@ -42,11 +42,11 @@ exports.AddOutletApi = class extends inventoryCommonMixin(LegacyApi) {
 
   _checkOrganizationPackageOutletLimit({ organizationId, aPackage }, cbfn) {
     this.legacyDatabase.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {
-      if (err) return reject(err);
+      if (err) return this.fail(err);
       if (outletList.length == aPackage.limits.maximumOutlets) {
         err = new Error("Organization activated package max outlet limit reached");
         err.code = "ORGANIZATION_PACKAGE_MAX_OUTLET_LIMIT_REACHED";
-        return reject(err);
+        return this.fail(err);
       }
       return cbfn();
     });
