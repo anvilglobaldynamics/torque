@@ -45,21 +45,22 @@ class Api {
 
   // region: properties (subclass needs to override) ==========
 
+  // Set it to false to temporarily disable the API for everyone.
+  get isEnabled() {
+    return true;
+  }
+
+  // This is a Joi Schema
+  get requestSchema() {
+    return null;
+  }
+
   get autoValidates() {
     return false;
   }
 
   get requiresAuthentication() {
     return false;
-  }
-
-  get autoPaginates() {
-    return false;
-  }
-
-  // Set it to false to temporarily disable the API for everyone.
-  get isEnabled() {
-    return true;
   }
 
   // This can either be 'user' or 'admin'
@@ -100,9 +101,13 @@ class Api {
     return null;
   }
 
-  // This is a Joi Schema
-  get requestSchema() {
-    return null;
+  // Makes sure the organization has purchased a subscription. Works only if accessControl is provided and functional.
+  get requiresSubscription() {
+    return true;
+  }
+
+  get autoPaginates() {
+    return false;
   }
 
   // region: internals ==========
@@ -200,7 +205,40 @@ class Api {
     } else {
       let userId = await this.__authenticate(body);
       await this.__enforceAccessControl(userId, body);
+      await this.__handleSubscriptionVerification(body);
       return { userId, apiKey };
+    }
+  }
+
+  /** @private */
+  async __handleSubscriptionVerification(body) {
+    // WARNING: Take extra care in modifying this function. It is reused by legacyApi using <Function>.call()
+    if (!this.requiresSubscription) return;
+    if (!('organizationId' in body)) {
+      // NOTE: The following error should not be required. Since, every API call that does not take or infer organizationId
+      // is essentially unable to use this.requiresSubscription = true and so, just returning should suffice.
+      // Still, it is here in case it is needed.
+      // throw new CodedError("DEV_ERROR", "api requires subscription but organizationId could not be looked up.");
+      return;
+    }
+    let organization = await this.database.organization.findById({ id: body.organizationId });
+    if (!organization.packageActivationId) {
+      throw new CodedError("SUBSCRIPTION_EXPIRED", "Your subscription has expired. (Never Assigned)");
+    }
+    let packageActivation = await this.database.packageActivation.findById({ id: organization.packageActivationId });
+    throwOnFalsy(packageActivation, "DEV_ERROR", "packageActivation is missing");
+    let aPackage = await this.database.fixture.findPackageByCode({ packageCode: packageActivation.packageCode });
+    throwOnFalsy(aPackage, "DEV_ERROR", "package is missing");
+    // Below is for future references, useful when limiting number of employees, etc.
+    body.aPackage = aPackage;
+    let { createdDatetimeStamp } = packageActivation;
+    let { duration } = aPackage;
+    let date = new Date(createdDatetimeStamp);
+    date.setMonth(date.getMonth() + duration.months);
+    date.setDate(date.getDate() + duration.days);
+    let expirationDatetimeStamp = date.getTime();
+    if (Date.now() > expirationDatetimeStamp) {
+      throw new CodedError("SUBSCRIPTION_EXPIRED", "Your subscription has expired.");
     }
   }
 
@@ -357,7 +395,6 @@ class Api {
     await Promise.all(rules.map(rule => this.__processAccessControlRule(userId, body, rule)));
   }
 
-
   // region: error handling =========================================
 
   /** @private */
@@ -415,7 +452,6 @@ class Api {
   }
 
   // region: utility ==========================
-
 
   /**
   * @param {Object} param

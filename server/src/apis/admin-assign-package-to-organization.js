@@ -30,14 +30,7 @@ exports.AdminAssignPackageToOrganizationApi = class extends Api {
   }
 
   async _checkIfPackageExists({ packageCode }) {
-    let packageList = await this.database.fixture.getPackageList();
-    let flag = false;
-    packageList.forEach(aPackage => {
-      if (aPackage.code == packageCode) {
-        flag = true;
-      }
-    });
-    return flag;
+    return await this.database.fixture.findPackageByCode({ packageCode });
   }
 
   async handle({ body }) {
@@ -53,7 +46,7 @@ exports.AdminAssignPackageToOrganizationApi = class extends Api {
     let packageExists = await this._checkIfPackageExists({ packageCode });
     throwOnFalsy(packageExists, "PACKAGE_INVALID", this.verses.adminCommon.packageInvalid);
 
-    let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId });   
+    let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId });
     await this._updateOrganizationPackageActivationId({ organizationId, packageActivationId });
 
     return { status: "success", packageActivationId };

@@ -35,7 +35,7 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(salesCommonMixin) {
       totalAmount += sales.payment.totalBilled;
     });
 
-    return({ totalAmount, totalCount });
+    return ({ totalAmount, totalCount });
   }
 
   async _getSalesSummaryForDay(organizationId) {
@@ -50,7 +50,7 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(salesCommonMixin) {
     toDate = toDate.getTime();
 
     let { totalAmount, totalCount } = await this._getSalesSummaryForDateRange({ organizationId, toDate, fromDate });
-    return({ totalAmount, totalCount });
+    return ({ totalAmount, totalCount });
   }
 
   async _getSalesSummaryForMonth(organizationId) {
@@ -66,7 +66,7 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(salesCommonMixin) {
     toDate = toDate.getTime();
 
     let { totalAmount, totalCount } = await this._getSalesSummaryForDateRange({ organizationId, toDate, fromDate });
-    return({ totalAmount, totalCount });
+    return ({ totalAmount, totalCount });
   }
 
   async _getSalesSummary({ organizationId }) {
@@ -78,7 +78,7 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(salesCommonMixin) {
     let totalNumberOfSalesThisMonth = totalCount;
     let totalAmountSoldThisMonth = totalAmount;
 
-    return({
+    return ({
       totalNumberOfSalesToday,
       totalAmountSoldToday,
       totalNumberOfSalesThisMonth,
@@ -92,15 +92,9 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(salesCommonMixin) {
     if (organization.packageActivationId) {
       let packageActivation = await this.database.packageActivation.findById({ id: organization.packageActivationId });
 
-      let packageDetail;
-      let packageList = await this.database.fixture.getPackageList();
-      packageList.forEach(aPackage => {
-        if (aPackage.code == packageActivation.packageCode) {
-          packageDetail = aPackage;
-        }
-      });
-      
-      return({
+      let packageDetail = await this.database.fixture.findPackageByCode({ packageCode: packageActivation.packageCode });
+
+      return ({
         packageActivation,
         packageDetail
       });

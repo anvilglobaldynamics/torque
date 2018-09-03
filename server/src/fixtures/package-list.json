@@ -1,6 +1,20 @@
 [
   {
-    "code": "DEMO",
+    "code": "T1",
+    "name": "Enterprise Trial Package",
+    "price": "0",
+    "duration": {
+      "months": 0,
+      "days": 1
+    },
+    "limits": {
+      "maximum-number-outlet": 2,
+      "maximum-number-warehouse": 2,
+      "maximum-number-employee": 5
+    }
+  },
+  {
+    "code": "D1",
     "name": "Enterprise demo package",
     "price": "0",
     "duration": {
