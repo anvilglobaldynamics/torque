@@ -48,7 +48,7 @@ let warehouseDefaultInventoryId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidWarehouseId = generateInvalidId();
 
-describe('Warehouse', _ => {
+describe.only('Warehouse', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -164,12 +164,13 @@ describe('Warehouse', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateAddWarehouseApiSuccessResponse(body);
+      warehouseToBeFilledId = body.warehouseId;
       testDoneFn();
     })
 
   });
 
-  it('api/add-warehouse (Valid 3rd)', testDoneFn => {
+  it('api/add-warehouse (Invalid default enterprise package outlet limit)', testDoneFn => {
 
     callApi('api/add-warehouse', {
       json: {
@@ -182,8 +183,8 @@ describe('Warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      validateAddWarehouseApiSuccessResponse(body);
-      warehouseToBeFilledId = body.warehouseId;
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('ORGANIZATION_PACKAGE_MAX_OUTLET_LIMIT_REACHED');
       testDoneFn();
     })
 
@@ -215,7 +216,7 @@ describe('Warehouse', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetWarehouseListApiSuccessResponse(body);
-      expect(body.warehouseList.length).to.equals(3);
+      expect(body.warehouseList.length).to.equals(2);
       body.warehouseList.forEach(warehouse => {
         validateWarehouseSchema(warehouse);
       });

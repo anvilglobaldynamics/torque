@@ -40,11 +40,25 @@ exports.AddWarehouseApi = class extends inventoryCommonMixin(LegacyApi) {
     });
   }
 
+  _checkOrganizationPackageWarehouseLimit({ organizationId, aPackage }, cbfn) {
+    this.legacyDatabase.warehouse.listByOrganizationId({ organizationId }, (err, warehouseList) => {
+      if (err) return reject(err);
+      if (warehouseList.length == aPackage.limits.maximumWarehouses) {
+        err = new Error("Organization activated package max warehouse limit reached");
+        err.code = "ORGANIZATION_PACKAGE_MAX_WAREHOUSE_LIMIT_REACHED";
+        return reject(err);
+      }
+      return cbfn();
+    });
+  }
+
   handle({ body }) {
-    let { name, organizationId, physicalAddress, phone, contactPersonName } = body;
-    this._createWarehouse({ name, organizationId, physicalAddress, phone, contactPersonName }, (warehouseId) => {
-      this._createStandardInventories({ inventoryContainerId: warehouseId, inventoryContainerType: "warehouse", organizationId }, () => {
-        this.success({ status: "success", warehouseId });
+    let { name, organizationId, physicalAddress, phone, contactPersonName, aPackage } = body;
+    this._checkOrganizationPackageWarehouseLimit({ organizationId, aPackage }, () => {
+      this._createWarehouse({ name, organizationId, physicalAddress, phone, contactPersonName }, (warehouseId) => {
+        this._createStandardInventories({ inventoryContainerId: warehouseId, inventoryContainerType: "warehouse", organizationId }, () => {
+          this.success({ status: "success", warehouseId });
+        });
       });
     });
   }
