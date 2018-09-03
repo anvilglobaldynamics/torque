@@ -34,6 +34,7 @@ class FixtureManager {
         name: "package-list",
         path: "./src/fixtures/package-list.json",
         version: 5
+      }
     ];
 
     return await Promise.all(fixtureList.map(async (fixture) => {
@@ -54,7 +55,7 @@ class FixtureManager {
   async initialize(database) {
     await this._loadAndPrepareFixtures(database);
   }
-  
+
 }
 
 exports.FixtureManager = FixtureManager;
