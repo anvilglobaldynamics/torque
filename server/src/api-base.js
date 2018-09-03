@@ -212,6 +212,7 @@ class Api {
 
   /** @private */
   async __handleSubscriptionVerification(body) {
+    // WARNING: Take extra care in modifying this function. It is reused by legacyApi using <Function>.call()
     if (!this.requiresSubscription) return;
     if (!('organizationId' in body)) {
       // NOTE: The following error should not be required. Since, every API call that does not take or infer organizationId

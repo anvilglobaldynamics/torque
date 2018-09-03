@@ -62,6 +62,11 @@ class LegacyApi {
     return null;
   }
 
+  // Makes sure the organization has purchased a subscription. Works only if accessControl is provided and functional.
+  get requiresSubscription() {
+    return true;
+  }
+
   // region: internals ==========
 
   _sendResponse(data) {
@@ -144,7 +149,12 @@ class LegacyApi {
                 if (err) {
                   return this.fail(err);
                 } else {
-                  return this.handle({ userId, body, apiKey });
+                  this.database = this.server.database;
+                  require('./api-base').Api.prototype.__handleSubscriptionVerification.call(this, body).then(() => {
+                    return this.handle({ userId, body, apiKey });
+                  }).catch(err => {
+                    return this.fail(err);
+                  });
                 }
               });
             });
