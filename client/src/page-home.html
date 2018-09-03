@@ -122,6 +122,16 @@
           <div class="">[[organization.phone]]</div>
           <div class="">[[organization.primaryBusinessAddress]]</div>
         </div>
+        <div class="card flex info-panel">
+          <div class="title">Package: [[package.name]] ([[package.code]])</div>
+          <!-- <div class="">Activated On: [[$mkDate(package.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div> -->
+          <div class="">Expires After: [[$mkDate(package.expirationDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
+          <div class="">Allows:
+            <span>[[package.limits.maximumEmployees]] employees,</span>
+            <span>[[package.limits.maximumOutlets]] outlets,</span>
+            <span>[[package.limits.maximumWarehouses]] warehouses.</span>
+          </div>
+        </div>
       </div>
 
       <div class="vartical">
@@ -255,8 +265,19 @@
       }
 
       _processDashboardSummary(cbfn) {
-        this._fetchDashboardSummary(({ metrics }) => {
+        this._fetchDashboardSummary(({ metrics, organizationPackageDetails }) => {
           this.metrics = metrics;
+          let { code, name, limits, duration } = organizationPackageDetails.packageDetail;
+          let { createdDatetimeStamp } = organizationPackageDetails.packageActivation;
+          let date = new Date(createdDatetimeStamp);
+          date.setMonth(date.getMonth() + duration.months);
+          date.setDate(date.getDate() + duration.days);
+          let expirationDatetimeStamp = date.getTime();
+          this.package = {
+            code, name, limits, duration,
+            createdDatetimeStamp,
+            expirationDatetimeStamp
+          }
           cbfn();
         });
       }
