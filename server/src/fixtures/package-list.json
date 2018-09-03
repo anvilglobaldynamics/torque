@@ -8,9 +8,9 @@
       "days": 1
     },
     "limits": {
-      "maximum-number-outlet": 2,
-      "maximum-number-warehouse": 2,
-      "maximum-number-employee": 5
+      "maximumOutlets": 2,
+      "maximumWarehouses": 2,
+      "maximumEmployees": 5
     }
   },
   {
@@ -22,9 +22,9 @@
       "days": 14
     },
     "limits": {
-      "maximum-number-outlet": 2,
-      "maximum-number-warehouse": 2,
-      "maximum-number-employee": 5
+      "maximumOutlets": 2,
+      "maximumWarehouses": 2,
+      "maximumEmployees": 5
     }
   },
   {
@@ -36,9 +36,9 @@
       "days": 0
     },
     "limits": {
-      "maximum-number-outlet": 2,
-      "maximum-number-warehouse": 2,
-      "maximum-number-employee": 5
+      "maximumOutlets": 2,
+      "maximumWarehouses": 2,
+      "maximumEmployees": 5
     }
   },
   {
@@ -50,9 +50,9 @@
       "days": 0
     },
     "limits": {
-      "maximum-number-outlet": 2,
-      "maximum-number-warehouse": 2,
-      "maximum-number-employee": 5
+      "maximumOutlets": 2,
+      "maximumWarehouses": 2,
+      "maximumEmployees": 5
     }
   },
   {
@@ -64,9 +64,9 @@
       "days": 0
     },
     "limits": {
-      "maximum-number-outlet": 2,
-      "maximum-number-warehouse": 2,
-      "maximum-number-employee": 5
+      "maximumOutlets": 2,
+      "maximumWarehouses": 2,
+      "maximumEmployees": 5
     }
   },
   {
@@ -78,9 +78,9 @@
       "days": 0
     },
     "limits": {
-      "maximum-number-outlet": 10,
-      "maximum-number-warehouse": 5,
-      "maximum-number-employee": 100
+      "maximumOutlets": 10,
+      "maximumWarehouses": 5,
+      "maximumEmployees": 100
     }
   },
   {
@@ -92,9 +92,9 @@
       "days": 0
     },
     "limits": {
-      "maximum-number-outlet": 10,
-      "maximum-number-warehouse": 5,
-      "maximum-number-employee": 100
+      "maximumOutlets": 10,
+      "maximumWarehouses": 5,
+      "maximumEmployees": 100
     }
   },
   {
@@ -106,9 +106,9 @@
       "days": 0
     },
     "limits": {
-      "maximum-number-outlet": 10,
-      "maximum-number-warehouse": 5,
-      "maximum-number-employee": 100
+      "maximumOutlets": 10,
+      "maximumWarehouses": 5,
+      "maximumEmployees": 100
     }
   },
   {
@@ -120,9 +120,9 @@
       "days": 0
     },
     "limits": {
-      "maximum-number-outlet": 40,
-      "maximum-number-warehouse": 20,
-      "maximum-number-employee": 500
+      "maximumOutlets": 40,
+      "maximumWarehouses": 20,
+      "maximumEmployees": 500
     }
   },
   {
@@ -134,9 +134,9 @@
       "days": 0
     },
     "limits": {
-      "maximum-number-outlet": 40,
-      "maximum-number-warehouse": 20,
-      "maximum-number-employee": 500
+      "maximumOutlets": 40,
+      "maximumWarehouses": 20,
+      "maximumEmployees": 500
     }
   },
   {
@@ -148,9 +148,9 @@
       "days": 0
     },
     "limits": {
-      "maximum-number-outlet": 40,
-      "maximum-number-warehouse": 20,
-      "maximum-number-employee": 500
+      "maximumOutlets": 40,
+      "maximumWarehouses": 20,
+      "maximumEmployees": 500
     }
   }
 ]
