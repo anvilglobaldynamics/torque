@@ -45,21 +45,22 @@ class Api {
 
   // region: properties (subclass needs to override) ==========
 
+  // Set it to false to temporarily disable the API for everyone.
+  get isEnabled() {
+    return true;
+  }
+
+  // This is a Joi Schema
+  get requestSchema() {
+    return null;
+  }
+
   get autoValidates() {
     return false;
   }
 
   get requiresAuthentication() {
     return false;
-  }
-
-  get autoPaginates() {
-    return false;
-  }
-
-  // Set it to false to temporarily disable the API for everyone.
-  get isEnabled() {
-    return true;
   }
 
   // This can either be 'user' or 'admin'
@@ -100,9 +101,13 @@ class Api {
     return null;
   }
 
-  // This is a Joi Schema
-  get requestSchema() {
-    return null;
+  // Makes sure the organization has purchased a subscription. Works only if accessControl is provided and functional.
+  get requiresSubscription() {
+    return true;
+  }
+
+  get autoPaginates() {
+    return false;
   }
 
   // region: internals ==========
@@ -200,9 +205,12 @@ class Api {
     } else {
       let userId = await this.__authenticate(body);
       await this.__enforceAccessControl(userId, body);
+      await this.__handleSubscriptionVerification(body);
       return { userId, apiKey };
     }
   }
+
+  
 
   /** @private */
   async _prehandle(originalBody) {
@@ -357,7 +365,6 @@ class Api {
     await Promise.all(rules.map(rule => this.__processAccessControlRule(userId, body, rule)));
   }
 
-
   // region: error handling =========================================
 
   /** @private */
@@ -415,7 +422,6 @@ class Api {
   }
 
   // region: utility ==========================
-
 
   /**
   * @param {Object} param
