@@ -41,6 +41,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: PHONE_ALREADY_IN_USE } // the phone number is already associated
+{ code: ORGANIZATION_PACKAGE_MAX_EMPLOYEE_LIMIT_REACHED }
 ```
 
 ### response (on success):
