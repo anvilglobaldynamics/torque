@@ -29,7 +29,7 @@ exports.AddOrganizationApi = class extends Api {
   }
 
   async _setTrialPackage({ organizationId }) {
-    const packageCode = "T1";
+    const packageCode = "T01";
     let aPackage = await this.database.fixture.findPackageByCode({ packageCode });
     throwOnFalsy(aPackage, "DEV_ERROR", "package is missing");
     let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId });

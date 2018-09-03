@@ -40,11 +40,25 @@ exports.AddOutletApi = class extends inventoryCommonMixin(LegacyApi) {
     });
   }
 
+  _checkOrganizationPackageOutletLimit({ organizationId, aPackage }, cbfn) {
+    this.legacyDatabase.outlet.listByOrganizationId({ organizationId }, (err, outletList) => {
+      if (err) return reject(err);
+      if (outletList.length == aPackage.limits.maximumOutlets) {
+        err = new Error("Organization activated package max outlet limit reached");
+        err.code = "ORGANIZATION_PACKAGE_MAX_OUTLET_LIMIT_REACHED";
+        return reject(err);
+      }
+      return cbfn();
+    });
+  }
+
   handle({ body }) {
-    let { name, organizationId, physicalAddress, phone, contactPersonName } = body;
-    this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName }, (outletId) => {
-      this._createStandardInventories({ inventoryContainerId: outletId, inventoryContainerType: "outlet", organizationId }, () => {
-        this.success({ status: "success", outletId });
+    let { name, organizationId, physicalAddress, phone, contactPersonName, aPackage } = body;
+    this._checkOrganizationPackageOutletLimit({ organizationId, aPackage }, () => {
+      this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName }, (outletId) => {
+        this._createStandardInventories({ inventoryContainerId: outletId, inventoryContainerType: "outlet", organizationId }, () => {
+          this.success({ status: "success", outletId });
+        });
       });
     });
   }
