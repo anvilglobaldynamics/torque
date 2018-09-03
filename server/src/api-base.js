@@ -112,8 +112,32 @@ class Api {
 
   // region: internals ==========
 
+  __removeMongodbObjectIdReferrences(data) {
+    const __fn = (object) => {
+      if (typeof (object) === "object" && object !== null) {
+        if (Array.isArray(object)) {
+          for (let i = 0; i < object.length; i++) {
+            __fn(object[i]);
+          }
+        } else {
+          let keys = Object.keys(object);
+          for (let i = 0; i < keys.length; i++) {
+            if (keys[i] === '_id') {
+              delete object[keys[i]];
+              continue;
+            }
+            __fn(object[keys[i]]);
+          }
+        }
+      }
+      return object;
+    }
+    return __fn(data);
+  }
+
   /** @private */
   _sendResponse(data) {
+    data = this.__removeMongodbObjectIdReferrences(data);
     if (this._channel === 'ws') {
       let reponse = {
         operation: 'response-proxy',

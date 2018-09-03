@@ -8,6 +8,8 @@ const baselib = require('baselib');
 
 const { CodedError } = require('./utils/coded-error');
 
+const ModernApi = require('./api-base').Api;
+
 const languageCache = {
   'en-us': require('./languages/en-us').verses,
   'bn-bd': require('./languages/bn-bd').verses
@@ -70,6 +72,7 @@ class LegacyApi {
   // region: internals ==========
 
   _sendResponse(data) {
+    data = ModernApi.prototype.__removeMongodbObjectIdReferrences.call(this, data);
     if (this._channel === 'ws') {
       let reponse = {
         operation: 'response-proxy',
@@ -150,7 +153,7 @@ class LegacyApi {
                   return this.fail(err);
                 } else {
                   this.database = this.server.database;
-                  require('./api-base').Api.prototype.__handleSubscriptionVerification.call(this, body).then(() => {
+                  ModernApi.prototype.__handleSubscriptionVerification.call(this, body).then(() => {
                     return this.handle({ userId, body, apiKey });
                   }).catch(err => {
                     return this.fail(err);
