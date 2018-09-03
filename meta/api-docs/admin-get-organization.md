@@ -1,6 +1,6 @@
 This API handles search of an organization with phone number or email
 
-url: `api/admin-find-organization`
+url: `api/admin-get-organization`
 
 method: `POST`
 
@@ -8,11 +8,7 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-
-  emailOrPhone: Joi.alternatives([
-    Joi.string().email().min(3).max(30), // if email
-    Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15) // if phone
-  ]).required()
+  organizationId: Joi.number().max(999999999999999).required()
 }
 ```
 
@@ -30,10 +26,7 @@ method: `POST`
 Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
-{ code: ORGANIZATION_DOES_NOT_EXIST } // organization with this phone/email does not exist
-// TODO: below 2 are unused
-{ code: PHONE_INVALID } // phone is not in system
-{ code: EMAIL_INVALID } // email is not in system
+{ code: ORGANIZATION_INVALID } // organization with this phone/email does not exist
 ```
 
 ### response (on success):

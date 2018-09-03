@@ -44,7 +44,7 @@ let org1id = null;
 let org2id = null;
 let packageActivationId = null;
 
-describe('Admin', _ => {
+describe.only('Admin', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -338,12 +338,12 @@ describe('Admin', _ => {
     });
   });
 
-  it('api/admin-find-organization (phone)', testDoneFn => {
+  it('api/admin-get-organization (Valid)', testDoneFn => {
 
-    callApi('api/admin-find-organization', {
+    callApi('api/admin-get-organization', {
       json: {
         apiKey,
-        emailOrPhone: newOrg1Phone
+        organizationId: org1id
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -354,49 +354,17 @@ describe('Admin', _ => {
 
   });
 
-  it('api/admin-find-organization (email)', testDoneFn => {
+  it('api/admin-get-organization (Invalid organizationId)', testDoneFn => {
 
-    callApi('api/admin-find-organization', {
+    callApi('api/admin-get-organization', {
       json: {
         apiKey,
-        emailOrPhone: newOrg2Email
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateAdminFindOrganizationApiSuccessResponse(body);
-      validateOrganizationSchema(body.organization);
-      testDoneFn();
-    });
-
-  });
-
-  it('api/admin-find-organization (Invalid Unused Phone)', testDoneFn => {
-
-    callApi('api/admin-find-organization', {
-      json: {
-        apiKey,
-        emailOrPhone: unusedPhone
+        organizationId: invalidOrganizationId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).equal('ORGANIZATION_DOES_NOT_EXIST');
-      testDoneFn();
-    });
-
-  });
-
-  it('api/admin-find-organization (Invalid Unused Email)', testDoneFn => {
-
-    callApi('api/admin-find-organization', {
-      json: {
-        apiKey,
-        emailOrPhone: unusedEmail
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiFailureResponse(body);
-      expect(body.error.code).equal('ORGANIZATION_DOES_NOT_EXIST');
+      expect(body.error.code).equal('ORGANIZATION_INVALID');
       testDoneFn();
     });
 
@@ -468,12 +436,12 @@ describe('Admin', _ => {
 
   });
 
-  it('api/admin-find-organization (valid assign package check)', testDoneFn => {
+  it('api/admin-get-organization (valid assign package check)', testDoneFn => {
 
-    callApi('api/admin-find-organization', {
+    callApi('api/admin-get-organization', {
       json: {
         apiKey,
-        emailOrPhone: newOrg1Phone
+        organizationId: org1id
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

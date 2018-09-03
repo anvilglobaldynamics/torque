@@ -27,6 +27,24 @@
           padding: 24px;
         }
       }
+
+      .ban-unban {
+        width: 10%;
+      }
+
+      .organization-list-container {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 5px;
+      }
+
+      .organization-list-title {
+        font-weight: bold;
+      }
+
+      .organization {
+        padding: 5px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -41,28 +59,35 @@
       <div class="card vertical layout">
         <div class="std-list">
           <template is="dom-repeat" items="[[userList]]" as="user">
-            <div class="horizontal layout std-list-item center">
+            <div class="horizontal layout std-list-item center" style="padding: 10px;">
               <div class="vertical layout flex">
+
                 <div class="title">Name: [[user.fullName]]</div>
                 <div class="description">Phone: [[user.phone]] Email: [[user.email]]</div>
                 <div class="description">NID: [[user.nid]]</div>
-                <div class="description">Organization:</div>
-                <div class="description">
-                  <ol>
+
+                <!-- TODO: align below buttons -->
+                <template is="dom-if" if="[[!user.isBanned]]">
+                  <paper-button raised class="ban-unban primary" on-tap="banUserTapped">Ban</paper-button>
+                </template>
+                <template is="dom-if" if="[[user.isBanned]]">
+                  <paper-button raised class="ban-unban primary" on-tap="unbanUserTapped">Unban</paper-button>
+                </template>
+                
+                <template is="dom-if" if="[[user.organizationList.length]]">
+                  <div class="organization-list-container">
+                    <p class="organization-list-title">Organizations:</p>
                     <template is="dom-repeat" items="[[user.organizationList]]" as="organization">
-                      <li>
+                      <div class="organization">
                         [[organization.name]] ([[organization.employment.role]]) - [[organization.employment.designation]]
-                      </li>
+                        <paper-button raised class="primary" on-tap="manageOrganizationTapped">Manage</paper-button>
+                      </div>
                     </template>
-                  </ol>
-                </div>
+                  </div>
+                </template>
+
               </div>
-              <template is="dom-if" if="[[!user.isBanned]]">
-                <paper-button raised class="primary" on-tap="banUserTapped">Ban</paper-button>
-              </template>
-              <template is="dom-if" if="[[user.isBanned]]">
-                <paper-button raised class="primary" on-tap="unbanUserTapped">Unban</paper-button>
-              </template>
+
             </div>
           </template>
         </div>
@@ -166,6 +191,11 @@
         this._processSetBanStatus({ isBanned: false, userId }, () => {
           this.searchTapped();
         });
+      }
+
+      manageOrganizationTapped(e) {
+        let { organization } = e.model;
+        return this.app.navigateTo(`/manage-organization/organization:${organization.id}`);
       }
 
       // region: misc =================================

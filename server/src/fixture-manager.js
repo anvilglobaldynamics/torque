@@ -33,8 +33,7 @@ class FixtureManager {
       {
         name: "package-list",
         path: "./src/fixtures/package-list.json",
-        version: 2
-      }
+        version: 5
     ];
 
     return await Promise.all(fixtureList.map(async (fixture) => {
