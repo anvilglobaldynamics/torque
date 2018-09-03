@@ -221,9 +221,9 @@ class Api {
       // throw new CodedError("DEV_ERROR", "api requires subscription but organizationId could not be looked up.");
       return;
     }
-    let organization = this.database.organization.findById({ id: body.organizationId });
+    let organization = await this.database.organization.findById({ id: body.organizationId });
     if (!organization.packageActivationId) {
-      throw new CodedError("SUBSCRIPTION_EXPIRED", "Your subscription has expired.");
+      throw new CodedError("SUBSCRIPTION_EXPIRED", "Your subscription has expired. (Never Assigned)");
     }
     let packageActivation = await this.database.packageActivation.findById({ id: organization.packageActivationId });
     throwOnFalsy(packageActivation, "DEV_ERROR", "packageActivation is missing");

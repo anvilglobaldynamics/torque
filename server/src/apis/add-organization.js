@@ -28,10 +28,20 @@ exports.AddOrganizationApi = class extends Api {
     throwOnFalsy(res, "UNABLE_TO_SET_EMPLOYMNET", "Unable to set employment for unknown reasons");
   }
 
+  async _setTrialPackage({ organizationId }) {
+    const packageCode = "T1";
+    let aPackage = await this.database.fixture.findPackageByCode({ packageCode });
+    throwOnFalsy(aPackage, "DEV_ERROR", "package is missing");
+    let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId });
+    let res = await this.database.organization.setPackageActivationId({ id: organizationId }, { packageActivationId });
+    throwOnFalsy(res, "DEV_ERROR", "Unable to set package");
+  }
+
   async handle({ body, userId }) {
     let { name, primaryBusinessAddress, phone, email } = body;
     let organizationId = await this._createOrganization({ name, primaryBusinessAddress, phone, email });
     await this._setUserAsOwner({ userId, organizationId });
+    await this._setTrialPackage({ organizationId });
     return { status: "success", organizationId };
   }
 
