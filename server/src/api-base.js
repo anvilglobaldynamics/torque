@@ -210,7 +210,36 @@ class Api {
     }
   }
 
-  
+  /** @private */
+  async __handleSubscriptionVerification(body) {
+    if (!this.requiresSubscription) return;
+    if (!('organizationId' in body)) {
+      // NOTE: The following error should not be required. Since, every API call that does not take or infer organizationId
+      // is essentially unable to use this.requiresSubscription = true and so, just returning should suffice.
+      // Still, it is here in case it is needed.
+      // throw new CodedError("DEV_ERROR", "api requires subscription but organizationId could not be looked up.");
+      return;
+    }
+    let organization = this.database.organization.findById({ id: body.organizationId });
+    if (!organization.packageActivationId) {
+      throw new CodedError("SUBSCRIPTION_EXPIRED", "Your subscription has expired.");
+    }
+    let packageActivation = await this.database.packageActivation.findById({ id: organization.packageActivationId });
+    throwOnFalsy(packageActivation, "DEV_ERROR", "packageActivation is missing");
+    let aPackage = await this.database.fixture.findPackageByCode({ packageCode: packageActivation.packageCode });
+    throwOnFalsy(aPackage, "DEV_ERROR", "package is missing");
+    // Below is for future references, useful when limiting number of employees, etc.
+    body.aPackage = aPackage;
+    let { createdDatetimeStamp } = packageActivation;
+    let { duration } = aPackage;
+    let date = new Date(createdDatetimeStamp);
+    date.setMonth(date.getMonth() + duration.months);
+    date.setDate(date.getDate() + duration.days);
+    let expirationDatetimeStamp = date.getTime();
+    if (Date.now() > expirationDatetimeStamp) {
+      throw new CodedError("SUBSCRIPTION_EXPIRED", "Your subscription has expired.");
+    }
+  }
 
   /** @private */
   async _prehandle(originalBody) {
