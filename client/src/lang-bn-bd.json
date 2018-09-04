@@ -463,7 +463,8 @@
     "deleteWarehouseQuestion": "গুদাম মুছে ফেলবেন?",
     "defaultInventoryName": "প্রধান",
     "returnedInventoryName": "ফেরৎ",
-    "damagedInventoryName": "ক্ষতিগ্রস্ত"
+    "damagedInventoryName": "ক্ষতিগ্রস্ত",
+    "noWarehouseFound": "কোনো গুদাম পাওয়া যায় নি।"
   },
   "error": {
     "404": "৪০৪",
