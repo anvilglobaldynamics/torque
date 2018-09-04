@@ -234,6 +234,8 @@
       assignPackageTapped(e) {
         this._assignPackage(parseInt(this.params.organization), this.packageCode, this.paymentReference, () => {
           this.app.refreshCurrentPage();
+          // TODO: below resetProperties
+          // this.resetProperties('packageCode', 'paymentReference');
           this.app.showToast("Package Successfully Assigned", _ => {});
         });
       }
