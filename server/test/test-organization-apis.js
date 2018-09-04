@@ -4,6 +4,7 @@ let expect = require('chai').expect;
 let { callApi } = require('./utils');
 let {
   rnd,
+  getDatabase,
   generateInvalidId,
   initializeServer,
   terminateServer,
@@ -15,7 +16,8 @@ let {
   validateGenericApiSuccessResponse,
   validateAdminAssignPackageToOrganizationApiSuccessResponse,
   validateListOrganizationPackagesApiSuccessResponse,
-  validatePackageActivationSchema
+  validatePackageActivationSchema,
+  validateGetDashboardSummaryApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -304,6 +306,57 @@ describe('Organization', _ => {
     });
 
   });
+
+  it('api/add-organization, api/get-dashboard-summary (Testing Default Activation Package)', testDoneFn => {
+
+    callApi('api/add-organization', {
+      json: {
+        apiKey,
+        name: "My Organization",
+        primaryBusinessAddress: "My Address",
+        phone: orgPhone,
+        email: orgEmail
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddOrganizationApiSuccessResponse(body);
+      organizationId = body.organizationId;
+
+      callApi('api/get-dashboard-summary', {
+        json: {
+          apiKey,
+          organizationId
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        validateGetDashboardSummaryApiSuccessResponse(body);
+
+        let modifications = {
+          $inc: { createdDatetimeStamp: (-1 * 1000 * 60 * 60 * 25) }
+        };
+        getDatabase().updateOne('package-activation', { organizationId: organizationId }, modifications, (err, wasUpdated) => {
+          if (err) throw err;
+          if (!wasUpdated) throw new Error("Was not updated");
+
+          callApi('api/get-dashboard-summary', {
+            json: {
+              apiKey,
+              organizationId
+            }
+          }, (err, response, body) => {
+            expect(response.statusCode).to.equal(200);
+            expect(body).to.have.property('hasError').that.equals(true);
+            expect(body.error.code).to.equal("SUBSCRIPTION_EXPIRED");
+            testDoneFn();
+          }); // callApi
+
+        }); // updateOne
+
+      }); // callApi
+
+    }); // callApi
+
+  }); //it
 
   // --- Package Section - end
 
