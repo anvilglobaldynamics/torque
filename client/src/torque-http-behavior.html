@@ -407,6 +407,11 @@
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('get-sales-return', data, cbfn);
       }
+
+      callGetActivatedPackageListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-activated-package-list', data, cbfn);
+      }
     }
 
   })();
