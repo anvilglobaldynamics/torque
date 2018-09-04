@@ -200,7 +200,8 @@
     "goToPreviousSales": "View/Return previous sales.",
     "defaultInventoryName": "Default",
     "returnedInventoryName": "Returned",
-    "damagedInventoryName": "Damaged"
+    "damagedInventoryName": "Damaged",
+    "noOutletFound": "No Outlet Found."
   },
   "productCategory": {
     "manageProductCategoriesTitle": "Manage Product Categories",
@@ -461,7 +462,8 @@
     "deleteWarehouseQuestion": "Delete warehouse?",
     "defaultInventoryName": "Default",
     "returnedInventoryName": "Returned",
-    "damagedInventoryName": "Damaged"
+    "damagedInventoryName": "Damaged",
+    "noWarehouseFound": "No Warehouse Found."
   },
   "error": {
     "404": "404",
@@ -536,7 +538,8 @@
     "deselectAllSelected": "Deselect All Selected",
     "confirmSelection": "Confirm Selection",
     "acquiredOn": "Acquired On",
-    "addedOn": "Added On"
+    "addedOn": "Added On",
+    "noProductFoundInOutlet": "There is no product in the store's main product list."
   },
   "settings": {
     "settingsTitle": "Settings",

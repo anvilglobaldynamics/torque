@@ -202,7 +202,8 @@
     "goToPreviousSales": "পূর্ববর্তী বিক্রয় দেখুন।",
     "defaultInventoryName": "প্রধান",
     "returnedInventoryName": "ফেরৎ",
-    "damagedInventoryName": "ক্ষতিগ্রস্ত"
+    "damagedInventoryName": "ক্ষতিগ্রস্ত",
+    "noOutletFound": "কোনো দোকান পাওয়া যায় নি।"
   },
   "productCategory": {
     "manageProductCategoriesTitle": "পণ্যের ধরন পরিচালনা",
@@ -539,7 +540,8 @@
     "deselectAllSelected": "সকল নির্বাচন সরিয়ে ফেলুন",
     "confirmSelection": "নির্বাচন নিশ্চিত করুন",
     "acquiredOn": "খরিদ হয়েছে",
-    "addedOn": "যুক্ত হয়েছে"
+    "addedOn": "যুক্ত হয়েছে",
+    "noProductFoundInOutlet": "দোকানের প্রধান পণ্য তালিকায় কোনো পণ্য নেই।"
   },
   "settings": {
     "settingsTitle": "সেটিংস",
