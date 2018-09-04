@@ -29,54 +29,64 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="card vertical layout">
+      <template is="dom-if" if="{{!customerList.length}}">
+        <div class="card">
+          [[verses.customer.noCustomerFound]]
+        </div>
+      </template>
 
-        <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button class="pagination-show-previous neutral" on-tap="showPreviousTapped">
-            [[verses.general.show]]
-            <iron-icon icon="icons:arrow-upward"></iron-icon>
-            [[verses.general.previous]]
-          </paper-button>
-        </template>
+      <template is="dom-if" if="{{customerList.length}}">
 
-        <div class="list">
-          <template is="dom-repeat" items="[[customerList]]" as="customer">
-            <div class="item">
-              <div class="content">
-                <div class="person-name-container">[[verses.general.name]]: [[customer.fullName]]</div>
-                <div class="person-phone-container">[[verses.general.phone]]: [[customer.phone]]</div>
-                <div class="person-detail-container">[[verses.general.balance]]: [[$round(customer.balance)]] [[app.settings.monetaryUnit]]</div>
-              </div>
-              <div class="control-buttons">
-                <paper-button raised class="secondary" on-tap="viewTapped">
-                  <iron-icon class="button-icon" icon="icons:visibility"></iron-icon>
-                  [[verses.general.view]]
-                </paper-button>
-                <paper-button raised class="secondary" on-tap="editTapped">
-                  <iron-icon class="button-icon" icon="icons:create"></iron-icon>
-                  [[verses.general.edit]]
-                </paper-button>
-              </div>
-            </div>
+        <div class="card vertical layout">
+
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button class="pagination-show-previous neutral" on-tap="showPreviousTapped">
+              [[verses.general.show]]
+              <iron-icon icon="icons:arrow-upward"></iron-icon>
+              [[verses.general.previous]]
+            </paper-button>
           </template>
+
+          <div class="list">
+            <template is="dom-repeat" items="[[customerList]]" as="customer">
+              <div class="item">
+                <div class="content">
+                  <div class="person-name-container">[[verses.general.name]]: [[customer.fullName]]</div>
+                  <div class="person-phone-container">[[verses.general.phone]]: [[customer.phone]]</div>
+                  <div class="person-detail-container">[[verses.general.balance]]: [[$round(customer.balance)]] [[app.settings.monetaryUnit]]</div>
+                </div>
+                <div class="control-buttons">
+                  <paper-button raised class="secondary" on-tap="viewTapped">
+                    <iron-icon class="button-icon" icon="icons:visibility"></iron-icon>
+                    [[verses.general.view]]
+                  </paper-button>
+                  <paper-button raised class="secondary" on-tap="editTapped">
+                    <iron-icon class="button-icon" icon="icons:create"></iron-icon>
+                    [[verses.general.edit]]
+                  </paper-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div class="pagination">
+            [[verses.general.showing]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button class="pagination-show-more neutral" on-tap="showMoreTapped">
+              [[verses.general.show]]
+              <iron-icon icon="icons:arrow-downward"></iron-icon>
+              [[verses.general.more]]
+            </paper-button>
+          </template>
+
         </div>
 
-        <div class="pagination">
-          [[verses.general.showing]]
-          <span class="limit">[[pagination.limit]]</span>
-          [[verses.general.itemsOutOf]]
-          <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
-          <span class="offset">#[[$inc(pagination.offset)]]</span>.
-        </div>
-        <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button class="pagination-show-more neutral" on-tap="showMoreTapped">
-            [[verses.general.show]]
-            <iron-icon icon="icons:arrow-downward"></iron-icon>
-            [[verses.general.more]]
-          </paper-button>
-        </template>
-
-      </div>
+      </template>
 
       <div class="lone-controls">
         <paper-button raised class="primary" on-tap="createTapped">

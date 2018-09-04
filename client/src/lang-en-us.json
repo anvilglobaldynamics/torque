@@ -351,7 +351,8 @@
     "clickAdjustCustomersBalance": "Click here to adjust the customer's balance.",
     "adjustCustomerBalance": "Adjust Customer Balance",
     "clickToDeleteCustomer": "Click here to delete the customer. Be warned that once deleted, an customer can not be restored.",
-    "deleteCustomer": "Delete Customer"
+    "deleteCustomer": "Delete Customer",
+    "noCustomerFound": "No Customer Found."
   },
   "editProfile": {
     "editProfileTitle": "Edit Profile",

@@ -353,7 +353,8 @@
     "clickAdjustCustomersBalance": "গ্রাহকের ব্যালেন্স সমন্বয় করতে এখানে ক্লিক করুন।",
     "adjustCustomerBalance": "গ্রাহক ব্যালেন্স সামঞ্জস্যবিধান",
     "clickToDeleteCustomer": "গ্রাহক মুছে ফেলার জন্য এখানে ক্লিক করুন একবার মুছে ফেলা সতর্ক করা হবে, একটি গ্রাহক পুনরুদ্ধার করা যাবে না।",
-    "deleteCustomer": "গ্রাহক মুছুন"
+    "deleteCustomer": "গ্রাহক মুছুন",
+    "noCustomerFound": "কোনো গ্রাহক পাওয়া যায় নি।"
   },
   "editProfile": {
     "editProfileTitle": "প্রোফাইল সম্পাদনা",
