@@ -23,6 +23,7 @@ const { UserCollection } = require('./collections/user');
 const { WarehouseCollection } = require('./collections/warehouse');
 const { ProductAcquisitionCollection } = require('./collections/product-acquisition');
 const { ProductTransferCollection } = require('./collections/product-transfer');
+const { PackageActivationCollection } = require('./collections/package-activation');
 
 class DatabaseService {
 
@@ -52,6 +53,7 @@ class DatabaseService {
     this.warehouse = new WarehouseCollection(this.engine, this);
     this.productAcquisition = new ProductAcquisitionCollection(this.engine, this);
     this.productTransfer = new ProductTransferCollection(this.engine, this);
+    this.packageActivation = new PackageActivationCollection(this.engine, this);
     /** @type {[Collection]} */
     this.collectionList = Object.keys(this).filter(key => this[key] instanceof Collection).map(key => this[key]);
   }

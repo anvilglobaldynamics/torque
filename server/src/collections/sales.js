@@ -137,4 +137,8 @@ exports.SalesCollection = class extends Collection {
     return await this._find(query);
   }
 
+  async findById({ salesId }) {
+    return await this._findOne({ id: salesId });
+  }
+
 }

@@ -127,6 +127,26 @@ describe('Outlet', _ => {
 
   });
 
+  it('api/add-outlet (Invalid default enterprise package outlet limit)', testDoneFn => {
+
+    callApi('api/add-outlet', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "My Outlet 2",
+        physicalAddress: "batcave address new",
+        phone: outletPhone3,
+        contactPersonName: "test contact person name"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('ORGANIZATION_PACKAGE_MAX_OUTLET_LIMIT_REACHED');
+      testDoneFn();
+    })
+
+  });
+
   it('api/add-outlet (Invalid organization)', testDoneFn => {
 
     callApi('api/add-outlet', {

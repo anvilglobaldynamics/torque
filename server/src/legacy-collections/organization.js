@@ -26,7 +26,7 @@ exports.OrganizationCollection = class extends LegacyCollection {
       primaryBusinessAddress: Joi.string().min(1).max(128).required(),
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       email: Joi.string().email().min(3).max(30).allow('').required(),
-      licenceExpiresOnDatetimeStamp: Joi.number().max(999999999999999).required(),
+      packageActivationId: Joi.number().max(999999999999999).allow(null).required(),
       isDeleted: Joi.boolean().required()
     });
 
@@ -38,7 +38,7 @@ exports.OrganizationCollection = class extends LegacyCollection {
     ];
   }
 
-  create({ name, primaryBusinessAddress, phone, email, licenceExpiresOnDatetimeStamp }, cbfn) {
+  create({ name, primaryBusinessAddress, phone, email }, cbfn) {
     let user = {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
@@ -46,7 +46,7 @@ exports.OrganizationCollection = class extends LegacyCollection {
       primaryBusinessAddress,
       phone,
       email,
-      licenceExpiresOnDatetimeStamp,
+      packageActivationId: null,
       isDeleted: false
     }
     this._insert(user, (err, id) => {

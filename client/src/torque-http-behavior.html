@@ -60,11 +60,22 @@
             if (path === 'user-logout') {
               return _cbfn(null, { hasError: false });
             }
+            // TODO: Translate
             let message = "Your session has expired. You will be automatically logged out. Please log in again.";
             this.showModalDialog("Sorry!", message, _ => {
               this.logoutTapped();
             });
             return;
+          }
+          if (response.hasError && (response.error.code === "SUBSCRIPTION_EXPIRED")) {
+            if (this.pageName !== 'payment') {
+              // TODO: Translate
+              let message = `Your subscription for "${this.organization.name}" has expired. Taking you to the payment page.`;
+              this.showModalDialog("Subscription Expired", message, _ => {
+                this.navigateTo('/payment');
+              });
+              return;
+            }
           }
           if (mode === 'development' && (!localStorage.getItem('nodebug')) && (path !== 'user-assert-api-key')) {
             console.log(`API/api=${path}`, data, response);
@@ -395,6 +406,11 @@
       callGetSalesReturnApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('get-sales-return', data, cbfn);
+      }
+
+      callGetActivatedPackageListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-activated-package-list', data, cbfn);
       }
     }
 

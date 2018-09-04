@@ -121,7 +121,8 @@ exports.EmploymentCollection = class extends Collection {
       } else {
         privileges[privilege] = false;
       }
-    })
+    });
+    return privileges;
   }
 
   async addOwner({ organizationId, userId }) {

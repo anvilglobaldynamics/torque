@@ -38,43 +38,53 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="card vertical layout">
-        <div class="list">
-          <template is="dom-repeat" items="[[productList]]" as="product">
-            <div class="horizontal layout item center">
-              <div class="flex" style="min-width: 128px;">
-                <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">[[product.count]][[product.unit]]</div>
-                <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
-                <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
-                <div class="inventory-product-added-date-container">[[verses.posSelectProduct.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
-                <div class="inventory-product-added-date-container">[[verses.posSelectProduct.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
-              </div>
-              <div class="horizontal layout wrap center">
-                <template is="dom-if" if="[[product.count]]">
-                  <template is="dom-if" if="[[!product.isSelected]]">
-                    <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
-                  </template>
-                  <template is="dom-if" if="[[product.isSelected]]">
-                    <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.posSelectProduct.count]]">
-                      <!-- <div slot="prefix">[[verses.general.selected]]&nbsp;</div> -->
-                      <div slot="suffix">&nbsp;[[product.unit]]</div>
-                    </paper-input>
-                    <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
-                  </template>
-                </template>
-              </div>
-            </div>
-          </template>
+      <template is="dom-if" if="{{!productList.length}}">
+        <div class="card">
+          [[verses.posSelectProduct.noProductFoundInOutlet]]
         </div>
-      </div>
+      </template>
 
-      <div class="vartical confirm-discard-button-group">
-        <template is="dom-if" if="[[selectedProductCount]]">
-          <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
-        </template>
-        <paper-button raised class="btn primary" on-tap="selectProductsTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
-      </div>
+      <template is="dom-if" if="{{productList.length}}">
+
+        <div class="card vertical layout">
+          <div class="list">
+            <template is="dom-repeat" items="[[productList]]" as="product">
+              <div class="horizontal layout item center">
+                <div class="flex" style="min-width: 128px;">
+                  <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                  <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">[[product.count]][[product.unit]]</div>
+                  <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                  <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                  <div class="inventory-product-added-date-container">[[verses.posSelectProduct.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
+                  <div class="inventory-product-added-date-container">[[verses.posSelectProduct.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
+                </div>
+                <div class="horizontal layout wrap center">
+                  <template is="dom-if" if="[[product.count]]">
+                    <template is="dom-if" if="[[!product.isSelected]]">
+                      <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+                    </template>
+                    <template is="dom-if" if="[[product.isSelected]]">
+                      <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.posSelectProduct.count]]">
+                        <!-- <div slot="prefix">[[verses.general.selected]]&nbsp;</div> -->
+                        <div slot="suffix">&nbsp;[[product.unit]]</div>
+                      </paper-input>
+                      <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                    </template>
+                  </template>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <div class="vartical confirm-discard-button-group">
+          <template is="dom-if" if="[[selectedProductCount]]">
+            <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
+          </template>
+          <paper-button raised class="btn primary" on-tap="selectProductsTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
+        </div>
+
+      </template>
 
     </div>
 

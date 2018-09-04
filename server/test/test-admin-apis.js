@@ -8,7 +8,14 @@ let {
   initializeServer,
   terminateServer,
   registerUser,
-  loginUser
+  loginUser,
+  addOrganization,
+  validateAdminFindOrganizationApiSuccessResponse,
+  validateOrganizationSchema,
+  validateGenericApiFailureResponse,
+  validateAdminAssignPackageToOrganizationApiSuccessResponse,
+  validateListOrganizationPackagesApiSuccessResponse,
+  validatePackageActivationSchema
 } = require('./lib');
 
 const prefix = 'adm';
@@ -21,8 +28,21 @@ const password = "123545678";
 const fullName = "Test " + rnd(prefix, 11);
 const fullName2 = "Test " + rnd(prefix, 11).split('').reverse().join('');
 const phone2 = rnd(prefix, 11).split('').reverse().join('');
+const newOrgOwnerPhone = 'o' + rnd(prefix, 11);
+const newOrg1Phone = '1' + rnd(prefix, 11);
+const newOrg2Phone = '2' + rnd(prefix, 11);
+const newOrg1Email = '1' + `${rnd(prefix)}@gmail.com`;
+const newOrg2Email = '2' + `${rnd(prefix)}@gmail.com`;
+const unusedPhone = 'x' + rnd(prefix, 11);
+const unusedEmail = 'x' + `${rnd(prefix)}@gmail.com`;
+
+let invalidOrganizationId = generateInvalidId();
 
 let apiKey = null;
+let orgApiKey = null;
+let org1id = null;
+let org2id = null;
+let packageActivationId = null;
 
 describe('Admin', _ => {
 
@@ -284,6 +304,194 @@ describe('Admin', _ => {
     });
 
   });
+
+  // --- Payment System - start
+
+  it('Organizations Creation', testDoneFn => {
+    registerUser({
+      password, fullName, phone: newOrgOwnerPhone
+    }, _ => {
+      loginUser({
+        emailOrPhone: newOrgOwnerPhone, password
+      }, (data) => {
+        orgApiKey = data.apiKey;
+        addOrganization({
+          apiKey: orgApiKey,
+          name: "Org Name 1",
+          primaryBusinessAddress: "Dhaka, Bangladesh",
+          phone: newOrg1Phone,
+          email: newOrg1Email
+        }, (data) => {
+          org1id = data.organizationId;
+          addOrganization({
+            apiKey: orgApiKey,
+            name: "Org Name 2",
+            primaryBusinessAddress: "Dhaka, Bangladesh",
+            phone: newOrg2Phone,
+            email: newOrg2Email
+          }, (data) => {
+            org2id = data.organizationId;
+            testDoneFn();
+          });
+        });
+      });
+    });
+  });
+
+  it('api/admin-get-organization (Valid)', testDoneFn => {
+
+    callApi('api/admin-get-organization', {
+      json: {
+        apiKey,
+        organizationId: org1id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminFindOrganizationApiSuccessResponse(body);
+      validateOrganizationSchema(body.organization);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-get-organization (Invalid organizationId)', testDoneFn => {
+
+    callApi('api/admin-get-organization', {
+      json: {
+        apiKey,
+        organizationId: invalidOrganizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('ORGANIZATION_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-get-package-list', testDoneFn => {
+
+    callApi('api/admin-get-package-list', {
+      json: {
+        apiKey
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('packageList').that.is.an('array');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-assign-package-to-organization (Valid)', testDoneFn => {
+
+    callApi('api/admin-assign-package-to-organization', {
+      json: {
+        apiKey,
+        organizationId: org1id,
+        packageCode: "SE03",
+        paymentReference: "joi test"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminAssignPackageToOrganizationApiSuccessResponse(body);
+      packageActivationId = body.packageActivationId;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-assign-package-to-organization (Invalid packageCode)', testDoneFn => {
+
+    callApi('api/admin-assign-package-to-organization', {
+      json: {
+        apiKey,
+        organizationId: org1id,
+        packageCode: "Invalid",
+        paymentReference: "joi test"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PACKAGE_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-assign-package-to-organization (Invalid organizationId)', testDoneFn => {
+
+    callApi('api/admin-assign-package-to-organization', {
+      json: {
+        apiKey,
+        organizationId: invalidOrganizationId,
+        packageCode: "SE03",
+        paymentReference: "joi test"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('ORGANIZATION_DOES_NOT_EXIST');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-get-organization (valid assign package check)', testDoneFn => {
+
+    callApi('api/admin-get-organization', {
+      json: {
+        apiKey,
+        organizationId: org1id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminFindOrganizationApiSuccessResponse(body);
+      validateOrganizationSchema(body.organization);
+      expect(body.organization.packageActivationId).equal(packageActivationId);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-assign-package-to-organization (Valid update)', testDoneFn => {
+
+    callApi('api/admin-assign-package-to-organization', {
+      json: {
+        apiKey,
+        organizationId: org1id,
+        packageCode: "SE12",
+        paymentReference: "joi test"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminAssignPackageToOrganizationApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-list-organization-packages (Valid)', testDoneFn => {
+
+    callApi('api/admin-list-organization-packages', {
+      json: {
+        apiKey,
+        organizationId: org1id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateListOrganizationPackagesApiSuccessResponse(body);
+      body.packageActivationList.forEach(packageActivation => {
+        validatePackageActivationSchema(packageActivation);
+      });
+      testDoneFn();
+    });
+
+  });
+
+  // --- Payment System - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

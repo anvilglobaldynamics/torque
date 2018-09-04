@@ -17,6 +17,7 @@
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
 
 <link rel="import" href="../bower_components/atomicdb/atomicdb.html">
@@ -37,6 +38,7 @@
 <link rel="lazy-import" href="page-about.html">
 <link rel="lazy-import" href="page-login.html">
 <link rel="lazy-import" href="page-manage-users.html">
+<link rel="lazy-import" href="page-manage-organization.html">
 <link rel="lazy-import" href="page-outgoing-smses.html">
 
 <link rel="import" href="shared-icons.html">
@@ -156,6 +158,7 @@
           <page-about name="about"></page-about>
           <page-login name="login"></page-login>
           <page-manage-users name="manage-users"></page-manage-users>
+          <page-manage-organization name="manage-organization"></page-manage-organization>
           <page-outgoing-smses name="outgoing-smses"></page-outgoing-smses>
         </iron-pages>
 
@@ -170,6 +173,7 @@
       </app-header-layout>
     </app-drawer-layout>
 
+    <paper-toast id="generic-toast" text="Done"></paper-toast>
     <div class="super-class-insertion-point"></div>
   </template>
 
@@ -283,6 +287,12 @@
         this.serviceManager.on('error', (event) => {
           this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
         });
+      }
+
+      showToast(message, cbfn) {
+        let el = this.elem('#generic-toast');
+        el.text = message;
+        el.open();
       }
 
       // ====================== navigation =============================

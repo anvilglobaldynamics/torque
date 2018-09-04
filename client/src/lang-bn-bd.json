@@ -202,7 +202,8 @@
     "goToPreviousSales": "পূর্ববর্তী বিক্রয় দেখুন।",
     "defaultInventoryName": "প্রধান",
     "returnedInventoryName": "ফেরৎ",
-    "damagedInventoryName": "ক্ষতিগ্রস্ত"
+    "damagedInventoryName": "ক্ষতিগ্রস্ত",
+    "noOutletFound": "কোনো দোকান পাওয়া যায় নি।"
   },
   "productCategory": {
     "manageProductCategoriesTitle": "পণ্যের ধরন পরিচালনা",
@@ -352,7 +353,8 @@
     "clickAdjustCustomersBalance": "গ্রাহকের ব্যালেন্স সমন্বয় করতে এখানে ক্লিক করুন।",
     "adjustCustomerBalance": "গ্রাহক ব্যালেন্স সামঞ্জস্যবিধান",
     "clickToDeleteCustomer": "গ্রাহক মুছে ফেলার জন্য এখানে ক্লিক করুন একবার মুছে ফেলা সতর্ক করা হবে, একটি গ্রাহক পুনরুদ্ধার করা যাবে না।",
-    "deleteCustomer": "গ্রাহক মুছুন"
+    "deleteCustomer": "গ্রাহক মুছুন",
+    "noCustomerFound": "কোনো গ্রাহক পাওয়া যায় নি।"
   },
   "editProfile": {
     "editProfileTitle": "প্রোফাইল সম্পাদনা",
@@ -399,7 +401,8 @@
     "salesReturnTitle": "বিক্রয় ফেরত",
     "creditedAmount": "ফেরতকৃত অর্থ",
     "productList": "পণ্য তালিকা",
-    "product": "পণ্য"
+    "product": "পণ্য",
+    "noSalesReturnFound": "কোনো বিক্রয় ফেরত রেকর্ড পাওয়া যায় নি।"
   },
   "sales": {
     "manageSalesTitle": "বিক্রয় রেকর্ড",
@@ -426,7 +429,8 @@
     "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
     "changeAmount": "ফেরত",
     "wasDebitedToUser": "ক্রেতাকে ডেবিট করা হয়েছিল।",
-    "allReturned": "সব ফেরত"
+    "allReturned": "সব ফেরত",
+    "noSalesFound": "কোনো বিক্রয় রেকর্ড পাওয়া যায় নি।"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
@@ -463,7 +467,8 @@
     "deleteWarehouseQuestion": "গুদাম মুছে ফেলবেন?",
     "defaultInventoryName": "প্রধান",
     "returnedInventoryName": "ফেরৎ",
-    "damagedInventoryName": "ক্ষতিগ্রস্ত"
+    "damagedInventoryName": "ক্ষতিগ্রস্ত",
+    "noWarehouseFound": "কোনো গুদাম পাওয়া যায় নি।"
   },
   "error": {
     "404": "৪০৪",
@@ -538,7 +543,8 @@
     "deselectAllSelected": "সকল নির্বাচন সরিয়ে ফেলুন",
     "confirmSelection": "নির্বাচন নিশ্চিত করুন",
     "acquiredOn": "খরিদ হয়েছে",
-    "addedOn": "যুক্ত হয়েছে"
+    "addedOn": "যুক্ত হয়েছে",
+    "noProductFoundInOutlet": "দোকানের প্রধান পণ্য তালিকায় কোনো পণ্য নেই।"
   },
   "settings": {
     "settingsTitle": "সেটিংস",

@@ -20,19 +20,9 @@ exports.AddOrganizationApi = class extends userCommonMixin(LegacyApi) {
     });
   }
 
-  _computeDefaultLisenceExpirationDate() {
-    let date = (new Date);
-    // NOTE: Because all new organizations get 1 day of free access
-    date.setHours((date.getHours() + 24));
-    return date.getTime();
-  }
-
   _createOrganization({ name, primaryBusinessAddress, phone, email }, cbfn) {
-    let licenceExpiresOnDatetimeStamp = this._computeDefaultLisenceExpirationDate();
-
     let organization = {
-      name, primaryBusinessAddress, phone, email,
-      licenceExpiresOnDatetimeStamp
+      name, primaryBusinessAddress, phone, email
     }
     this.legacyDatabase.organization.create(organization, (err, organizationId) => {
       if (err) return this.fail(err);

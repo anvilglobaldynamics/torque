@@ -1,0 +1,156 @@
+[
+  {
+    "code": "T01",
+    "name": "Enterprise Trial Package",
+    "price": 0,
+    "duration": {
+      "months": 0,
+      "days": 1
+    },
+    "limits": {
+      "maximumOutlets": 2,
+      "maximumWarehouses": 2,
+      "maximumEmployees": 5
+    }
+  },
+  {
+    "code": "D01",
+    "name": "Enterprise demo package",
+    "price": 0,
+    "duration": {
+      "months": 0,
+      "days": 14
+    },
+    "limits": {
+      "maximumOutlets": 2,
+      "maximumWarehouses": 2,
+      "maximumEmployees": 5
+    }
+  },
+  {
+    "code": "SE03",
+    "name": "SE 3 month package",
+    "price": 6000,
+    "duration": {
+      "months": 3,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 2,
+      "maximumWarehouses": 2,
+      "maximumEmployees": 5
+    }
+  },
+  {
+    "code": "SE06",
+    "name": "SE 6 month package",
+    "price": 11000,
+    "duration": {
+      "months": 6,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 2,
+      "maximumWarehouses": 2,
+      "maximumEmployees": 5
+    }
+  },
+  {
+    "code": "SE12",
+    "name": "SE 12 month package",
+    "price": 21000,
+    "duration": {
+      "months": 12,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 2,
+      "maximumWarehouses": 2,
+      "maximumEmployees": 5
+    }
+  },
+  {
+    "code": "ME03",
+    "name": "ME 3 month package",
+    "price": 5000,
+    "duration": {
+      "months": 3,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 10,
+      "maximumWarehouses": 5,
+      "maximumEmployees": 100
+    }
+  },
+  {
+    "code": "ME06",
+    "name": "ME 6 month package",
+    "price": 5000,
+    "duration": {
+      "months": 6,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 10,
+      "maximumWarehouses": 5,
+      "maximumEmployees": 100
+    }
+  },
+  {
+    "code": "ME12",
+    "name": "ME 12 month package",
+    "price": 5000,
+    "duration": {
+      "months": 12,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 10,
+      "maximumWarehouses": 5,
+      "maximumEmployees": 100
+    }
+  },
+  {
+    "code": "LE03",
+    "name": "LE 3 month package",
+    "price": 5000,
+    "duration": {
+      "months": 3,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 40,
+      "maximumWarehouses": 20,
+      "maximumEmployees": 500
+    }
+  },
+  {
+    "code": "LE06",
+    "name": "LE 6 month package",
+    "price": 5000,
+    "duration": {
+      "months": 6,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 40,
+      "maximumWarehouses": 20,
+      "maximumEmployees": 500
+    }
+  },
+  {
+    "code": "LE12",
+    "name": "LE 12 month package",
+    "price": 5000,
+    "duration": {
+      "months": 12,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 40,
+      "maximumWarehouses": 20,
+      "maximumEmployees": 500
+    }
+  }
+]

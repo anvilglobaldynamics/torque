@@ -30,9 +30,10 @@ let { UserResetPasswordRequestApi } = require('./legacy-apis/user-reset-password
 let { UserResetPasswordGetTokenInfoApi } = require('./legacy-apis/user-reset-password--get-token-info');
 let { UserResetPasswordConfirmApi } = require('./legacy-apis/user-reset-password--confirm');
 
-let { AddOrganizationApi } = require('./legacy-apis/add-organization');
+const { AddOrganizationApi } = require('./apis/add-organization');
 let { GetOrganizationListApi } = require('./legacy-apis/get-organization-list');
 let { EditOrganizationApi } = require('./legacy-apis/edit-organization');
+const { GetActivatedPackageListApi } = require('./apis/get-activated-package-list');
 
 let { AddNewEmployeeApi } = require('./legacy-apis/add-new-employee');
 let { FindUserApi } = require('./legacy-apis/find-user');
@@ -80,11 +81,12 @@ let { AddSalesReturnApi } = require('./legacy-apis/add-sales-return');
 let { GetSalesReturnApi } = require('./legacy-apis/get-sales-return');
 let { GetSalesReturnListApi } = require('./legacy-apis/get-sales-return-list');
 
-let { GetDashboardSummaryApi } = require('./legacy-apis/get-dashboard-summary');
+const { GetDashboardSummaryApi } = require('./apis/get-dashboard-summary');
 
 let { GetDesignationListApi } = require('./legacy-apis/get-designation-list');
 let { GetRoleListApi } = require('./legacy-apis/get-role-list');
 let { GetPrivilegeListApi } = require('./legacy-apis/get-privilege-list');
+const { AdminGetPackageListApi } = require('./apis/admin-get-package-list');
 
 let { InternalStatus } = require('./legacy-apis/internal--status');
 
@@ -93,6 +95,9 @@ let { AdminGetOutgoingSmsListApi } = require('./legacy-apis/admin-get-outgoing-s
 let { AdminSetOutgoingSmsStatusApi } = require('./legacy-apis/admin-set-outgoing-sms-status');
 let { AdminGetAggregatedUserListApi } = require('./legacy-apis/admin-get-aggregated-user-list');
 let { AdminSetUserBanningStatusApi } = require('./legacy-apis/admin-set-user-banning-status');
+const { AdminGetOrganizationApi } = require('./apis/admin-get-organization');
+const { AdminAssignPackageToOrganizationApi } = require('./apis/admin-assign-package-to-organization');
+const { AdminListOrganizationPackagesApi } = require('./apis/admin-list-organization-packages');
 
 let { FixtureCollection } = require('./legacy-collections/fixture');
 let { UserCollection } = require('./legacy-collections/user');
@@ -248,6 +253,7 @@ class Program {
     server.registerPostApi('/api/add-organization', AddOrganizationApi);
     server.registerPostApi('/api/get-organization-list', GetOrganizationListApi);
     server.registerPostApi('/api/edit-organization', EditOrganizationApi);
+    server.registerPostApi('/api/get-activated-package-list', GetActivatedPackageListApi);
     server.registerPostApi('/api/add-customer', AddCustomerApi);
     server.registerPostApi('/api/get-customer', GetCustomerApi);
     server.registerPostApi('/api/get-customer-summary-list', GetCustomerSummaryListApi);
@@ -298,6 +304,10 @@ class Program {
     server.registerPostApi('/api/admin-set-outgoing-sms-status', AdminSetOutgoingSmsStatusApi);
     server.registerPostApi('/api/admin-get-aggregated-user-list', AdminGetAggregatedUserListApi);
     server.registerPostApi('/api/admin-set-user-banning-status', AdminSetUserBanningStatusApi);
+    server.registerPostApi('/api/admin-get-organization', AdminGetOrganizationApi);
+    server.registerPostApi('/api/admin-get-package-list', AdminGetPackageListApi);
+    server.registerPostApi('/api/admin-assign-package-to-organization', AdminAssignPackageToOrganizationApi);
+    server.registerPostApi('/api/admin-list-organization-packages', AdminListOrganizationPackagesApi);
   }
 
 }

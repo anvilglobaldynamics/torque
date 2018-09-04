@@ -20,7 +20,7 @@ let {
   validateGenericApiSuccessResponse,
   validateGetAggregatedInventoryDetailsApiSuccessResponse,
   validateProductCategorySchema,
-  validateProductSchema
+  validateProductSchema,
 } = require('./lib');
 
 const prefix = 's';

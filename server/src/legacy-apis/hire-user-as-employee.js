@@ -88,12 +88,26 @@ exports.HireUserAsEmployeeApi = class extends userCommonMixin(collectionCommonMi
     })
   }
 
+  _checkOrganizationPackageEmployeeLimit({ organizationId, aPackage }, cbfn) {
+    this.legacyDatabase.employment.listByOrganizationId({ organizationId }, (err, employmentList) => {
+      if (err) return this.fail(err);
+      if (employmentList.length == aPackage.limits.maximumEmployees) {
+        err = new Error("Organization activated package max employee limit reached");
+        err.code = "ORGANIZATION_PACKAGE_MAX_EMPLOYEE_LIMIT_REACHED";
+        return this.fail(err);
+      }
+      return cbfn();
+    });
+  }
+
   handle({ body }) {
-    let { userId, organizationId, role, designation, companyProvidedId, privileges } = body;
-    this._findUserById({ userId }, (user) => {
-      this._checkIfUserEmployed({ userId, organizationId }, () => {
-        this._hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {
-          this.success({ status: "success", employmentId });
+    let { userId, organizationId, role, designation, companyProvidedId, privileges, aPackage } = body;
+    this._checkOrganizationPackageEmployeeLimit({ organizationId, aPackage }, () => {
+      this._findUserById({ userId }, (user) => {
+        this._checkIfUserEmployed({ userId, organizationId }, () => {
+          this._hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {
+            this.success({ status: "success", employmentId });
+          });
         });
       });
     });

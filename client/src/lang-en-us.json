@@ -200,7 +200,8 @@
     "goToPreviousSales": "View/Return previous sales.",
     "defaultInventoryName": "Default",
     "returnedInventoryName": "Returned",
-    "damagedInventoryName": "Damaged"
+    "damagedInventoryName": "Damaged",
+    "noOutletFound": "No Outlet Found."
   },
   "productCategory": {
     "manageProductCategoriesTitle": "Manage Product Categories",
@@ -350,7 +351,8 @@
     "clickAdjustCustomersBalance": "Click here to adjust the customer's balance.",
     "adjustCustomerBalance": "Adjust Customer Balance",
     "clickToDeleteCustomer": "Click here to delete the customer. Be warned that once deleted, an customer can not be restored.",
-    "deleteCustomer": "Delete Customer"
+    "deleteCustomer": "Delete Customer",
+    "noCustomerFound": "No Customer Found."
   },
   "editProfile": {
     "editProfileTitle": "Edit Profile",
@@ -397,7 +399,8 @@
     "salesReturnTitle": "Sales Return",
     "creditedAmount": "Credited Amount",
     "productList": "Product List",
-    "product": "Product"
+    "product": "Product",
+    "noSalesReturnFound": "No Sales Return Record Found."
   },
   "sales": {
     "manageSalesTitle": "Sales Record",
@@ -424,7 +427,8 @@
     "paymentMethod": "Payment Method",
     "changeAmount": "Change Amount",
     "wasDebitedToUser": "was debited to user.",
-    "allReturned": "all returned"
+    "allReturned": "all returned",
+    "noSalesFound": "No Sales Record Found."
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",
@@ -461,7 +465,8 @@
     "deleteWarehouseQuestion": "Delete warehouse?",
     "defaultInventoryName": "Default",
     "returnedInventoryName": "Returned",
-    "damagedInventoryName": "Damaged"
+    "damagedInventoryName": "Damaged",
+    "noWarehouseFound": "No Warehouse Found."
   },
   "error": {
     "404": "404",
@@ -536,7 +541,8 @@
     "deselectAllSelected": "Deselect All Selected",
     "confirmSelection": "Confirm Selection",
     "acquiredOn": "Acquired On",
-    "addedOn": "Added On"
+    "addedOn": "Added On",
+    "noProductFoundInOutlet": "There is no product in the store's main product list."
   },
   "settings": {
     "settingsTitle": "Settings",

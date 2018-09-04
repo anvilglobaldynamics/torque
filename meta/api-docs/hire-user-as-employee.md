@@ -40,6 +40,7 @@ Possible Error Codes:
 { code: USER_INVALID } // could not be find user
 { code: ORGANIZATION_INVALID } // could not be find organization
 { code: ALREADY_EMPLOYED } // the user exists and is already employed by another organization
+{ code: ORGANIZATION_PACKAGE_MAX_EMPLOYEE_LIMIT_REACHED }
 ```
 
 ### response (on success):
