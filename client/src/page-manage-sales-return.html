@@ -84,37 +84,45 @@
 
       <paper-button raised class="primary" on-tap="filterTapped">[[verses.general.filter]]</paper-button>
 
-      <div class="card vertical layout">
+      <template is="dom-if" if="{{!salesReturnList.length}}">
+        <div class="card">
+          [[verses.salesReturn.noSalesReturnFound]]
+        </div>
+      </template>
 
-        <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
-        </template>
+      <template is="dom-if" if="{{salesReturnList.length}}">
+        <div class="card vertical layout">
 
-        <div class="list">
-          <template is="dom-repeat" items="[[salesReturnList]]" as="saleReturn">
-            <div class="horizontal layout item center">
-              <div class="vertical layout flex">
-                <div class="title">[[verses.salesReturn.salesId]]: [[saleReturn.salesId]]</div>
-                <div class="description">[[$mkDate(saleReturn.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                <div class="description">[[verses.salesReturn.credited]] [[$round(saleReturn.creditedAmount)]] [[app.settings.monetaryUnit]]</div>
-              </div>
-              <paper-button raised class="secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
-            </div>
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
           </template>
-        </div>
 
-        <div class="pagination">
-          [[verses.general.showing]]
-          <span class="limit">[[pagination.limit]]</span>
-          [[verses.general.itemsOutOf]]
-          <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
-          <span class="offset">#[[$inc(pagination.offset)]]</span>.
-        </div>
-        <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
-        </template>
+          <div class="list">
+            <template is="dom-repeat" items="[[salesReturnList]]" as="saleReturn">
+              <div class="horizontal layout item center">
+                <div class="vertical layout flex">
+                  <div class="title">[[verses.salesReturn.salesId]]: [[saleReturn.salesId]]</div>
+                  <div class="description">[[$mkDate(saleReturn.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+                  <div class="description">[[verses.salesReturn.credited]] [[$round(saleReturn.creditedAmount)]] [[app.settings.monetaryUnit]]</div>
+                </div>
+                <paper-button raised class="secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
+              </div>
+            </template>
+          </div>
 
-      </div>
+          <div class="pagination">
+            [[verses.general.showing]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          </template>
+
+        </div>
+      </template>
 
     </div>
   </template>

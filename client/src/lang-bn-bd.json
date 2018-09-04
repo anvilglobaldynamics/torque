@@ -401,7 +401,8 @@
     "salesReturnTitle": "বিক্রয় ফেরত",
     "creditedAmount": "ফেরতকৃত অর্থ",
     "productList": "পণ্য তালিকা",
-    "product": "পণ্য"
+    "product": "পণ্য",
+    "noSalesReturnFound": "কোনো বিক্রয় ফেরত রেকর্ড পাওয়া যায় নি।"
   },
   "sales": {
     "manageSalesTitle": "বিক্রয় রেকর্ড",
@@ -428,7 +429,8 @@
     "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
     "changeAmount": "ফেরত",
     "wasDebitedToUser": "ক্রেতাকে ডেবিট করা হয়েছিল।",
-    "allReturned": "সব ফেরত"
+    "allReturned": "সব ফেরত",
+    "noSalesFound": "কোনো বিক্রয় রেকর্ড পাওয়া যায় নি।"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
