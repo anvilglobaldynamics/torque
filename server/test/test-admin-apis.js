@@ -391,7 +391,8 @@ describe('Admin', _ => {
       json: {
         apiKey,
         organizationId: org1id,
-        packageCode: "SE03"
+        packageCode: "SE03",
+        paymentReference: "joi test"
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -408,7 +409,8 @@ describe('Admin', _ => {
       json: {
         apiKey,
         organizationId: org1id,
-        packageCode: "Invalid"
+        packageCode: "Invalid",
+        paymentReference: "joi test"
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -425,7 +427,8 @@ describe('Admin', _ => {
       json: {
         apiKey,
         organizationId: invalidOrganizationId,
-        packageCode: "SE03"
+        packageCode: "SE03",
+        paymentReference: "joi test"
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -459,7 +462,8 @@ describe('Admin', _ => {
       json: {
         apiKey,
         organizationId: org1id,
-        packageCode: "SE12"
+        packageCode: "SE12",
+        paymentReference: "joi test"
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

@@ -89,7 +89,8 @@ describe('Dashboard', _ => {
       json: {
         apiKey: adminApiKey,
         organizationId,
-        packageCode: "SE03"
+        packageCode: "SE03",
+        paymentReference: "joi test"
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

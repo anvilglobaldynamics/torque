@@ -32,7 +32,7 @@ exports.AddOrganizationApi = class extends Api {
     const packageCode = "T01";
     let aPackage = await this.database.fixture.findPackageByCode({ packageCode });
     throwOnFalsy(aPackage, "DEV_ERROR", "package is missing");
-    let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId, createdByAdminName: "SERVER_ADD_ORGANIZATION_API" });
+    let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId, createdByAdminName: "SERVER_ADD_ORGANIZATION_API", paymentReference: "SERVER_ADD_ORGANIZATION_API" });
     let res = await this.database.organization.setPackageActivationId({ id: organizationId }, { packageActivationId });
     throwOnFalsy(res, "DEV_ERROR", "Unable to set package");
   }

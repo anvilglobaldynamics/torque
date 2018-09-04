@@ -263,7 +263,8 @@ describe('Organization', _ => {
       json: {
         apiKey: adminApiKey,
         organizationId: org1id,
-        packageCode: "SE03"
+        packageCode: "SE03",
+        paymentReference: "joi test"
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -279,7 +280,8 @@ describe('Organization', _ => {
       json: {
         apiKey: adminApiKey,
         organizationId: org1id,
-        packageCode: "SE12"
+        packageCode: "SE12",
+        paymentReference: "joi test"
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

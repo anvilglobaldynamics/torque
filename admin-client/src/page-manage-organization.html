@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
@@ -71,6 +72,7 @@
             <div class="package-activation">
               <div>Code: [[packageActivation.packageCode]]</div>
               <div>Package Name: [[packageActivation.packageDetail.name]] </div>
+              <div>Payment Reference: [[packageActivation.paymentReference]] </div>
               <div>Activation Date: [[$mkDate(packageActivation.createdDatetimeStamp, 'dd/MM/yyyy hh:mm:ss TT')]]</div>
             </div>
           </template>
@@ -87,6 +89,8 @@
             </template>
           </paper-listbox>
         </paper-dropdown-menu>
+        
+        <paper-textarea class="paymentReference" value="{{paymentReference}}" required minlength="4" error-message="Enter Valid Payment Reference" label="Payment Reference (Bkash TrxID or Bank Deposit)" rows="2"></paper-textarea>
 
         <paper-button raised class="primary flex" on-tap="assignPackageTapped">Assign Package</paper-button>
       </div>
@@ -122,6 +126,10 @@
       static get properties() {
         return {
           packageCode: {
+            type: String,
+            value: null
+          },
+          paymentReference: {
             type: String,
             value: null
           }
@@ -212,8 +220,8 @@
         });
       }
 
-      _assignPackage(organizationId, packageCode, cbfn) {
-        let data = { organizationId, packageCode };
+      _assignPackage(organizationId, packageCode, paymentReference, cbfn) {
+        let data = { organizationId, packageCode, paymentReference };
         this.app.callAssignPackageToOrganizationApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -224,7 +232,7 @@
       // region: ui  ===========================
 
       assignPackageTapped(e) {
-        this._assignPackage(parseInt(this.params.organization), this.packageCode, () => {
+        this._assignPackage(parseInt(this.params.organization), this.packageCode, this.paymentReference, () => {
           this.app.refreshCurrentPage();
           this.app.showToast("Package Successfully Assigned", _ => {});
         });

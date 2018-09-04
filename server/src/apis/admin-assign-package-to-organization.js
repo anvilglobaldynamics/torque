@@ -15,7 +15,8 @@ exports.AdminAssignPackageToOrganizationApi = class extends Api {
     return Joi.object().keys({
       apiKey: Joi.string().length(64).required(),
       organizationId: Joi.number().max(999999999999999).required(),
-      packageCode: Joi.string().required()
+      packageCode: Joi.string().required(),
+      paymentReference: Joi.string().min(4).max(128).required()
     });
   }
 
@@ -29,14 +30,14 @@ exports.AdminAssignPackageToOrganizationApi = class extends Api {
   }
 
   async handle({ body, username }) {
-    let { organizationId, packageCode } = body;
+    let { organizationId, packageCode, paymentReference } = body;
     let organization = await this.database.organization.findById({ id: organizationId });
     throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.organizationCommon.organizationDoesNotExist);
 
     let packageExists = await this._checkIfPackageExists({ packageCode });
     throwOnFalsy(packageExists, "PACKAGE_INVALID", this.verses.adminCommon.packageInvalid);
 
-    let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId, createdByAdminName: username });
+    let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId, createdByAdminName: username, paymentReference });
     await this._updateOrganizationPackageActivationId({ organizationId, packageActivationId });
 
     return { status: "success", packageActivationId };
