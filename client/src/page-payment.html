@@ -1,0 +1,177 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-verification-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-payment">
+  <template>
+    <style include="shared-styles">
+      .warning-message {
+        font-weight: bold;
+      }
+
+      .title {
+        font-size: 24px;
+      }
+
+      .metrics-box .value {
+        font-size: 60px;
+      }
+
+      @media (max-width: 960px) {
+        .metrics-box .value {
+          font-size: 48px;
+        }
+      }
+
+      .metrics-box .unit {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      @media (max-width: 960px) {
+        .card {
+          margin: 4px;
+        }
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="horizontal layout wrap">
+        <div class="card flex info-panel">
+          <div class="title">[[verses.general.user]]: [[user.fullName]]</div>
+          <div class="">[[user.email]]</div>
+          <div class="">[[user.phone]]</div>
+          <div class="">[[organization.employment.designation]] ([[organization.employment.role]])</div>
+        </div>
+        <div class="card flex info-panel">
+          <div class="title">[[verses.general.organization]]: [[organization.name]]</div>
+          <div class="">[[organization.email]]</div>
+          <div class="">[[organization.phone]]</div>
+          <div class="">[[organization.primaryBusinessAddress]]</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <!-- TODO: Translate -->
+        <div class="title">Your package has expired.</div>
+        <div>Please call us at +880 XXXX XXXXXX to purchase a subscription.</div>
+        <br>
+        <div class="button-row">
+          <paper-button raised class="primary" on-tap="recheckVerificationStatusTapped">Recheck Verification Status</paper-button>
+          <paper-button raised class="optional" on-tap="useDifferentOrganizationTapped">Use a different organization</paper-button>
+        </div>
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+    class PagePayment extends FxPage.mixin(TorqueVerificationBehavior, TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-payment';
+      }
+
+      static get properties() {
+        return {
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.app.pushPageTitle(this.app.verses.titleBar.payment);
+        if (!this._ensureAccess()) return;
+        this.onUserChange(this.app.user);
+        this.onOrganizationChange(this.app.organization);
+        this.onSettingsChange(this.app.settings);
+        this.useLanguageServices();
+        this._processDashboardSummary(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl('authenticated');
+      }
+
+      _processDashboardSummary(cbfn) {
+        let data = { organizationId: this.organization.id };
+        this.app.callGetDashboardSummaryApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError && (response.error.code === "SUBSCRIPTION_EXPIRED")) {
+            return cbfn();
+          } else {
+            this.app.navigateTo('/home');
+          }
+        });
+      }
+
+      onUserChange(user) {
+        this.user = user;
+      }
+
+      onSettingsChange(settings) {
+        this.settings = settings;
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
+
+      // region: ui  ===========================
+
+      useDifferentOrganizationTapped(e) {
+        this.app.navigateTo('/manage-organizations')
+      }
+
+      recheckVerificationStatusTapped(e) {
+        this.isReady = false;
+        this._processDashboardSummary(() => {
+          this.isReady = true;
+        });
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PagePayment.is, PagePayment);
+  </script>
+</dom-module>

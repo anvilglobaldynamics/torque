@@ -38,6 +38,7 @@
 <script src="torque-utils.js"></script>
 
 <link rel="lazy-import" href="page-home.html">
+<link rel="lazy-import" href="page-payment.html">
 <link rel="lazy-import" href="page-settings.html">
 <link rel="lazy-import" href="page-error404.html">
 <link rel="lazy-import" href="page-error403.html">
@@ -263,6 +264,7 @@
 
         <iron-pages on-iron-select="mainIronPagesIronSelected" id="main-iron-pages" selected="[[pageName]]" attr-for-selected="name" fallback-selection="error404" role="main">
           <page-home name="home"></page-home>
+          <page-payment name="payment"></page-payment>
           <page-settings name="settings"></page-settings>
           <page-error404 name="error404"></page-error404>
           <page-error403 name="error403"></page-error403>
