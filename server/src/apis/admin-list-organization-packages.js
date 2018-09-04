@@ -27,7 +27,6 @@ exports.AdminListOrganizationPackagesApi = class extends Api {
         }
       });
     });
-
     return packageActivationList;
   }
 
