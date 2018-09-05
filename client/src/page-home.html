@@ -156,31 +156,31 @@
 
       <div class="vertical layout wrap">
         <div class="card flex info-panel">
-          <div class="title">Package: [[package.name]] ([[package.code]])</div>
+          <div class="title">[[verses.home.activatedPackage]]: [[package.name]] ([[package.code]])</div>
           <!-- <div class="">Activated On: [[$mkDate(package.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div> -->
-          <div class="">Expires After: [[$mkDate(package.expirationDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
-          <div class="">Allows:
-            <span>[[package.limits.maximumEmployees]] employees,</span>
-            <span>[[package.limits.maximumOutlets]] outlets,</span>
-            <span>[[package.limits.maximumWarehouses]] warehouses.</span>
+          <div class="">[[verses.home.expirationDate]]: [[$mkDate(package.expirationDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
+          <div class="">[[verses.home.allows]]:
+            <span>[[package.limits.maximumEmployees]] [[verses.home.employees]],</span>
+            <span>[[package.limits.maximumOutlets]] [[verses.home.outlets]],</span>
+            <span>[[package.limits.maximumWarehouses]] [[verses.home.warehouses]].</span>
           </div>
           <template is="dom-if" if="[[!packageActivationList.length]]">
             <div class="button-row">
-              <paper-button raised class="optional" on-tap="viewActicationHistoryTapped">View Activation History</paper-button>
+              <paper-button raised class="secondary" on-tap="viewActicationHistoryTapped">[[verses.home.viewActivationHistory]]</paper-button>
             </div>
           </template>
         </div>
         <template is="dom-if" if="[[packageActivationList.length]]">
           <div class="card flex info-panel">
-            <div class="title" style="margin-top: 24px;">Activation History</div>
+            <div class="title" style="margin-top: 24px;">[[verses.home.activationHistory]]</div>
             <template is="dom-repeat" items="[[packageActivationList]]" as="packageActivation">
               <div style="margin-bottom: 24px;">
-                <div>Package: [[packageActivation.packageDetail.name]] ([[packageActivation.packageDetail.code]])</div>
-                <div class="">Activated On: [[$mkDate(packageActivation.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
-                <div class="">Allows:
-                  <span>[[packageActivation.packageDetail.limits.maximumEmployees]] employees,</span>
-                  <span>[[packageActivation.packageDetail.limits.maximumOutlets]] outlets,</span>
-                  <span>[[packageActivation.packageDetail.limits.maximumWarehouses]] warehouses.</span>
+                <div>[[verses.home.activatedPackage]]: [[packageActivation.packageDetail.name]] ([[packageActivation.packageDetail.code]])</div>
+                <div class="">[[verses.home.activatedOn]]: [[$mkDate(packageActivation.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
+                <div class="">[[verses.home.allows]]:
+                  <span>[[packageActivation.packageDetail.limits.maximumEmployees]] [[verses.home.employees]],</span>
+                  <span>[[packageActivation.packageDetail.limits.maximumOutlets]] [[verses.home.outlets]],</span>
+                  <span>[[packageActivation.packageDetail.limits.maximumWarehouses]] [[verses.home.warehouses]].</span>
                 </div>
               </div>
             </template>
