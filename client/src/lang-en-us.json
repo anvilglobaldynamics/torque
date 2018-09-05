@@ -305,7 +305,8 @@
     "productAddedToInventory": "Product(s) were successfully added to the inventory.",
     "count": "Count",
     "sellFor": "Sell For",
-    "purchasedFor": "Purchased For"
+    "purchasedFor": "Purchased For",
+    "noProductCategoryFound": "No product category found."
   },
   "about": {
     "about": "About",

@@ -307,7 +307,8 @@
     "productAddedToInventory": "পণ্য সফলভাবে তালিকাতে যুক্ত করা হয়েছে।",
     "count": "গণনা",
     "sellFor": "বিক্রয় মূল্য",
-    "purchasedFor": "ক্রয় মূল্য"
+    "purchasedFor": "ক্রয় মূল্য",
+    "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি।"
   },
   "about": {
     "about": "বিষয়ে",
