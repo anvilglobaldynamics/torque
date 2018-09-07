@@ -110,7 +110,8 @@
     "logout": "Logout"
   },
   "titleBar": {
-    "home": "Home"
+    "home": "Home",
+    "payment": "সাবস্ক্রিপশন"
   },
   "topMenu": {
     "home": "Home",
