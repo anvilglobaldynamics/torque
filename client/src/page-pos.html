@@ -40,8 +40,8 @@
       .individual-calculation-field-container {
         border: 1px solid #eee;
         background-color: #f7f7f7;
-        padding: 5px;
-        margin: 5px 0px 5px 0px;
+        padding: 6px;
+        margin: 8px 0px;
       }
 
       .full-width-paper-dropdown {
@@ -115,6 +115,7 @@
                 <div>
                   <span class="product-title">[[product.name]]</span>
                   <span class="product-discount-vat-detail">
+
                     <template is="dom-if" if="{{product.discountValue}}">
                       <template is="dom-if" if="[[isDiscountTypePercent(product.discountType)]]">
                         <span>([[verses.pos.discount]]: {{product.discountValue}}%, [[verses.pos.vat]]: {{product.vatValue}}%)</span>
@@ -123,6 +124,11 @@
                         <span>([[verses.pos.discount]]: {{product.discountValue}} [[app.settings.monetaryUnit]], [[verses.pos.vat]]: {{product.vatValue}}%)</span>
                       </template>
                     </template>
+
+                    <template is="dom-if" if="{{!product.discountValue}}">
+                      <span>([[verses.pos.vat]]: {{product.vatValue}}%)</span>
+                    </template>
+
                   </span>
                 </div>
                 <div class="horizontal layout center">
@@ -143,110 +149,109 @@
 
       <template is="dom-if" if="{{productList.length}}">
         <div class="card vertical layout">
+          <span>[[verses.general.total]]: <b>{{$round(payment.totalAmount)}} [[app.settings.monetaryUnit]]</b></span>
+        </div>
+      </template>
+
+      <template is="dom-if" if="{{productList.length}}">
+        <div class="card vertical layout">
           <div class="list">
 
-            <div class="horizontal layout item center">
-              <div class="vertical layout flex">
+            <div class="individual-calculation-field-container">
 
-                <div class="individual-calculation-field-container">
+              <!-- <paper-input class="payment--vatValue" value="{{payment.vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.vatInputError]]" label="[[verses.pos.vatInput]]">
+                <div slot="suffix">%</div>
+              </paper-input> -->
 
-                  [[verses.general.total]]:
-                  <b>{{$round(payment.totalAmount)}} [[app.settings.monetaryUnit]]</b>
+              <!-- <template is="dom-if" if="[[vatValue]]"> -->
+              [[verses.pos.vatAmount]]:
+              <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
+              <!-- </template> -->
 
-                </div>
+            </div>
 
-                <div class="individual-calculation-field-container">
+            <div class="individual-calculation-field-container">
 
-                  <!-- <paper-input class="payment--vatValue" value="{{payment.vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.vatInputError]]" label="[[verses.pos.vatInput]]">
+              <div class="vertical layout">
+
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discountType]]" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{payment.discountType}}" attr-for-selected="name">
+                    <paper-item name="percent">[[verses.general.percentage]]</paper-item>
+                    <paper-item name="fixed">[[verses.general.fixedValue]]</paper-item>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+
+                <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
+                  <template is="dom-if" if="[[$equals(payment.discountType, 'percent')]]">
                     <div slot="suffix">%</div>
-                  </paper-input> -->
-
-                  <!-- <template is="dom-if" if="[[vatValue]]"> -->
-                  [[verses.pos.vatAmount]]:
-                  <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
-                  <!-- </template> -->
-
-                </div>
-
-                <div class="individual-calculation-field-container">
-
-                  <div class="vertical layout">
-
-                    <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discountType]]" class="mr-4">
-                      <paper-listbox slot="dropdown-content" selected="{{payment.discountType}}" attr-for-selected="name">
-                        <paper-item name="percent">[[verses.general.percentage]]</paper-item>
-                        <paper-item name="fixed">[[verses.general.fixedValue]]</paper-item>
-                      </paper-listbox>
-                    </paper-dropdown-menu>
-
-                    <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
-                      <template is="dom-if" if="[[$equals(payment.discountType, 'percent')]]">
-                        <div slot="suffix">%</div>
-                      </template>
-                      <template is="dom-if" if="[[$equals(payment.discountType, 'fixed')]]">
-                        <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-                      </template>
-                    </paper-input>
-
-                  </div>
-
-                  <!-- <template is="dom-if" if="[[payment.discountValue]]"> -->
-                  <br> [[verses.pos.discountedAmount]]:
-                  <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
-                  <!-- </template> -->
-
-                </div>
-
-                <div class="individual-calculation-field-container">
-
-                  <paper-input class="payment--serviceChargeAmount" value="{{payment.serviceChargeAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.serviceChargeInputError]]" label="[[verses.pos.serviceChargeInput]]">
-                    <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-                  </paper-input>
-
-                </div>
-
-                <div class="individual-calculation-field-container">
-
-                  [[verses.pos.totalBilled]]:
-                  <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
-
-                </div>
-
-                <div class="individual-calculation-field-container">
-
-                  <template is="dom-if" if="[[customer]]">
-                    [[verses.pos.previousCustomerBalance]]:
-                    <b>{{$round(customer.balance)}} [[app.settings.monetaryUnit]]</b>
                   </template>
-
-                  <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+                  <template is="dom-if" if="[[$equals(payment.discountType, 'fixed')]]">
                     <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-                  </paper-input>
-
-                  <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4">
-                    <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
-                      <paper-item name="cash">[[verses.general.cash]]</paper-item>
-                      <paper-item name="card">[[verses.general.card]]</paper-item>
-                      <paper-item name="digital">[[verses.general.digital]]</paper-item>
-                    </paper-listbox>
-                  </paper-dropdown-menu>
-
-                  <template is="dom-if" if="[[payment.paidAmount]]">
-                    <br> [[verses.pos.changeAmount]]:
-                    <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
-
-                    <template is="dom-if" if="[[customer]]">
-                      <template is="dom-if" if="[[isChangeAmountPositive(payment.changeAmount)]]">
-                        <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
-                          [[verses.pos.shouldSaveChangeInAccount]]
-                        </paper-checkbox>
-                      </template>
-                    </template>
                   </template>
-
-                </div>
+                </paper-input>
 
               </div>
+
+              <!-- <template is="dom-if" if="[[payment.discountValue]]"> -->
+              <br> [[verses.pos.discountedAmount]]:
+              <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
+              <!-- </template> -->
+
+            </div>
+
+            <div class="individual-calculation-field-container">
+
+              <paper-input class="payment--serviceChargeAmount" value="{{payment.serviceChargeAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.serviceChargeInputError]]" label="[[verses.pos.serviceChargeInput]]">
+                <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+              </paper-input>
+
+            </div>
+
+          </div>
+        </div>
+      </template>
+
+      <template is="dom-if" if="{{productList.length}}">
+        <div class="card vertical layout">
+          <div class="list">
+
+            <div class="individual-calculation-field-container">
+              [[verses.pos.totalBilled]]:
+              <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
+            </div>
+
+            <div class="individual-calculation-field-container">
+
+              <template is="dom-if" if="[[customer]]">
+                [[verses.pos.previousCustomerBalance]]:
+                <b>{{$round(customer.balance)}} [[app.settings.monetaryUnit]]</b>
+              </template>
+
+              <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+                <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+              </paper-input>
+
+              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4">
+                <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
+                  <paper-item name="cash">[[verses.general.cash]]</paper-item>
+                  <paper-item name="card">[[verses.general.card]]</paper-item>
+                  <paper-item name="digital">[[verses.general.digital]]</paper-item>
+                </paper-listbox>
+              </paper-dropdown-menu>
+
+              <template is="dom-if" if="[[payment.paidAmount]]">
+                <br> [[verses.pos.changeAmount]]:
+                <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
+
+                <template is="dom-if" if="[[customer]]">
+                  <template is="dom-if" if="[[isChangeAmountPositive(payment.changeAmount)]]">
+                    <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
+                      [[verses.pos.shouldSaveChangeInAccount]]
+                    </paper-checkbox>
+                  </template>
+                </template>
+              </template>
+
             </div>
 
             <div class="horizontal layout m-top-16">
