@@ -133,7 +133,7 @@
                 </div>
                 <div class="horizontal layout center">
                   <div class="description">[[product.count]] [[product.unit]] @&nbsp;</div>
-                  <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" min="[[product.minSalePrice]]"></paper-input>
+                  <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" auto-validate min="[[product.minSalePrice]]"></paper-input>
                   <div class="description">[[app.settings.monetaryUnit]]</div>
                 </div>
               </div>
@@ -181,14 +181,16 @@
                   </paper-listbox>
                 </paper-dropdown-menu>
 
-                <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
-                  <template is="dom-if" if="[[$equals(payment.discountType, 'percent')]]">
+                <template is="dom-if" if="[[$equals(payment.discountType, 'percent')]]">
+                  <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" max="100" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
                     <div slot="suffix">%</div>
-                  </template>
-                  <template is="dom-if" if="[[$equals(payment.discountType, 'fixed')]]">
+                  </paper-input>
+                </template>
+                <template is="dom-if" if="[[$equals(payment.discountType, 'fixed')]]">
+                  <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" max="[[totalBilledCopy]]" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
                     <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-                  </template>
-                </paper-input>
+                  </paper-input>
+                </template>
 
               </div>
 
@@ -430,13 +432,13 @@
         }, 0);
 
         // updating totalBilled with calculated totalAmount and vatAmount
-        totalBilled = totalAmount;
-        totalBilled += vatAmount;
+        totalBilled = totalAmount + vatAmount;
+        this.totalBilledCopy = totalBilled;
 
         // overall discount calculation
         if (discountValue) {
           if (discountType === 'percent') {
-            discountedAmount = totalAmount * (discountValue / 100)
+            discountedAmount = totalBilled * (discountValue / 100)
             totalBilled -= discountedAmount;
           } else if (discountType === 'fixed') {
             discountedAmount = discountValue;
@@ -539,7 +541,8 @@
         })
       }
 
-      genericPaymentInputChanged(e = null) {
+      genericPaymentInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
         this._calculatePayment();
       }
 
