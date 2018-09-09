@@ -78,7 +78,7 @@
         <div>[[verses.sales.totalBilled]]: [[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</div>
         <div>[[verses.sales.discounted]]: [[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]] [[verses.general.by]] [[sales.payment.discountValue]] [[sales.payment.discountType]]</div>
         <div>[[verses.sales.serviceChargeAmount]]: [[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</div>
-        <div>[[verses.sales.vat]]: [[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]] [[verses.general.by]] [[sales.payment.vatValue]]%</div>
+        <div>[[verses.sales.vat]]: [[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</div>
         <div>[[verses.sales.paidAmount]]: [[$round(sales.payment.paidAmount)]] [[app.settings.monetaryUnit]]</div>
         <template is="dom-if" if="[[sales.payment.paymentMethod]]">
           <div>[[verses.sales.paymentMethod]]: [[sales.payment.paymentMethod]]</div>

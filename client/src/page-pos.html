@@ -116,8 +116,12 @@
                   <span class="product-title">[[product.name]]</span>
                   <span class="product-discount-vat-detail">
                     <template is="dom-if" if="{{product.discountValue}}">
-                      <!-- TODO: show vat percent below -->
-                      <span>([[verses.pos.discount]]: {{product.discountType}} {{product.discountValue}}, [[verses.pos.vat]] )</span>
+                      <template is="dom-if" if="[[isDiscountTypePercent(product.discountType)]]">
+                        <span>([[verses.pos.discount]]: {{product.discountValue}}%, [[verses.pos.vat]]: {{product.vatValue}}%)</span>
+                      </template>
+                      <template is="dom-if" if="[[!isDiscountTypePercent(product.discountType)]]">
+                        <span>([[verses.pos.discount]]: {{product.discountValue}} [[app.settings.monetaryUnit]], [[verses.pos.vat]]: {{product.vatValue}}%)</span>
+                      </template>
                     </template>
                   </span>
                 </div>
@@ -153,6 +157,19 @@
 
                 <div class="individual-calculation-field-container">
 
+                  <!-- <paper-input class="payment--vatValue" value="{{payment.vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.vatInputError]]" label="[[verses.pos.vatInput]]">
+                    <div slot="suffix">%</div>
+                  </paper-input> -->
+
+                  <!-- <template is="dom-if" if="[[vatValue]]"> -->
+                  [[verses.pos.vatAmount]]:
+                  <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
+                  <!-- </template> -->
+
+                </div>
+
+                <div class="individual-calculation-field-container">
+
                   <div class="vertical layout">
 
                     <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discountType]]" class="mr-4">
@@ -176,19 +193,6 @@
                   <!-- <template is="dom-if" if="[[payment.discountValue]]"> -->
                   <br> [[verses.pos.discountedAmount]]:
                   <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
-                  <!-- </template> -->
-
-                </div>
-
-                <div class="individual-calculation-field-container">
-
-                  <!-- <paper-input class="payment--vatValue" value="{{payment.vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.vatInputError]]" label="[[verses.pos.vatInput]]">
-                    <div slot="suffix">%</div>
-                  </paper-input> -->
-
-                  <!-- <template is="dom-if" if="[[vatValue]]"> -->
-                  [[verses.pos.vatAmount]]:
-                  <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
                   <!-- </template> -->
 
                 </div>
@@ -382,10 +386,10 @@
         });
       }
 
+      // main payment calculation method
       _calculatePayment() {
         let {
           totalAmount,
-          vatValue,
           vatAmount,
           discountType,
           discountValue,
@@ -399,24 +403,32 @@
           changeAmount,
         } = this.payment;
 
-        console.log("productList: ", this.productList);
+        // setting vatAmount to default value of 0 before calculating vatAmount on a loop
+        vatAmount = 0;
 
+        // reducing to find totalAmount
         totalAmount = this.productList.reduce((sum, product) => {
-          console.log("product: ", product);
-          let { salePrice, count, discountType, discountValue } = product;
+          let { salePrice, count, discountType, discountValue, vatValue } = product;
 
+          // discount calculation
           if (discountType === 'percent') {
             salePrice -= salePrice * (discountValue / 100);
           } else if (discountType === 'fixed') {
             salePrice -= discountValue;
           }
 
-          // individual vat is not being considered
+          // adding product vat value to to total vatAmount
+          vatAmount += salePrice * (vatValue / 100);
+
+          // the sum to be set as totalAmount
           return sum + (salePrice * count);
         }, 0);
 
+        // updating totalBilled with calculated totalAmount and vatAmount
         totalBilled = totalAmount;
+        totalBilled += vatAmount;
 
+        // overall discount calculation
         if (discountValue) {
           if (discountType === 'percent') {
             discountedAmount = totalAmount * (discountValue / 100)
@@ -427,21 +439,17 @@
           }
         }
 
-        // overall vat calculation
-        if (vatValue) {
-          vatValue = parseFloat(vatValue);
-          vatAmount = totalBilled * (vatValue / 100);
-          totalBilled += vatAmount;
-        }
-
+        // service charge calculation
         if (serviceChargeAmount) {
           totalBilled += parseFloat(serviceChargeAmount);
         }
 
+        // considering customer presence
         if (this.customer) {
           previousCustomerBalance = this.customer.balance;
         }
 
+        // calculating change amount
         if (paidAmount) {
           if (totalBilled > paidAmount) {
             changeAmount = paidAmount - totalBilled;
@@ -450,9 +458,10 @@
           }
         }
 
+        // returning updated payment info
         this.payment = {
           totalAmount,
-          vatValue,
+          vatValue: 0,
           vatAmount,
           discountType,
           discountValue,
@@ -540,6 +549,10 @@
 
       isChangeAmountPositive(changeAmount) {
         return changeAmount > 0;
+      }
+
+      isDiscountTypePercent(discountType) {
+        return (discountType === 'percent');
       }
 
       // region: misc =================================
