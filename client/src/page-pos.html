@@ -196,7 +196,7 @@
 
                 <div class="individual-calculation-field-container">
 
-                  [[verses.pos.totolBilled]]:
+                  [[verses.pos.totalBilled]]:
                   <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
 
                 </div>
@@ -392,7 +392,10 @@
           changeAmount,
         } = this.payment;
 
+        console.log("productList: ", this.productList);
+
         totalAmount = this.productList.reduce((sum, product) => {
+          console.log("product: ", product);
           let { salePrice, count, discountType, discountValue } = product;
 
           if (discountType === 'percent') {

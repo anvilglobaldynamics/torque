@@ -508,7 +508,7 @@
     "vatAmount": "ভ্যাট পরিমাণ",
     "serviceChargeInput": "সেবা মূল্য",
     "serviceChargeInputError": "একটি সঠিক নম্বর লিখুন",
-    "totolBilled": "মোট বিল",
+    "totalBilled": "মোট বিল",
     "previousCustomerBalance": "পূর্ববর্তী গ্রাহক ব্যালেন্স",
     "paidAmountInput": "পরিশোধিত পরিমাণ",
     "paidAmountInputError": "একটি সঠিক নম্বর লিখুন",

@@ -506,7 +506,7 @@
     "vatAmount": "Vat Amount",
     "serviceChargeInput": "Service Charge Amount",
     "serviceChargeInputError": "Please enter a valid number",
-    "totolBilled": "Totol Billed",
+    "totalBilled": "Total Billed",
     "previousCustomerBalance": "Previous Customer Balance",
     "paidAmountInput": "Paid Amount",
     "paidAmountInputError": "Please enter a valid number",
