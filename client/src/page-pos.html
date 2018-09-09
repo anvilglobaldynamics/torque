@@ -55,6 +55,10 @@
       .product-title {
         font-weight: bold;
       }
+
+      .product-discount-vat-detail {
+        font-size: 11px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -110,9 +114,12 @@
               <div class="vertical layout flex">
                 <div>
                   <span class="product-title">[[product.name]]</span>
-                  <template is="dom-if" if="{{product.discountValue}}">
-                    <span>([[verses.pos.hasDiscount]])</span>
-                  </template>
+                  <span class="product-discount-vat-detail">
+                    <template is="dom-if" if="{{product.discountValue}}">
+                      <!-- TODO: show vat percent below -->
+                      <span>([[verses.pos.discount]]: {{product.discountType}} {{product.discountValue}}, [[verses.pos.vat]] )</span>
+                    </template>
+                  </span>
                 </div>
                 <div class="horizontal layout center">
                   <div class="description">[[product.count]] [[product.unit]] @&nbsp;</div>
@@ -175,12 +182,12 @@
 
                 <div class="individual-calculation-field-container">
 
-                  <paper-input class="payment--vatValue" value="{{payment.vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.vatInputError]]" label="[[verses.pos.vatInput]]">
+                  <!-- <paper-input class="payment--vatValue" value="{{payment.vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.vatInputError]]" label="[[verses.pos.vatInput]]">
                     <div slot="suffix">%</div>
-                  </paper-input>
+                  </paper-input> -->
 
                   <!-- <template is="dom-if" if="[[vatValue]]"> -->
-                  <br> [[verses.pos.vatAmount]]:
+                  [[verses.pos.vatAmount]]:
                   <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
                   <!-- </template> -->
 
