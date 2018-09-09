@@ -497,7 +497,7 @@
       _fillDatabase() {
         this.db.upsert('settings', (({ which }) => which === 'only'), (doc => doc), {
           which: 'only',
-          shouldUseWebsockets: true,
+          shouldUseWebsockets: false,
           monetaryUnit: 'BDT'
         });
       }
