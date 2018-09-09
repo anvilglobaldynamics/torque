@@ -158,15 +158,8 @@
           <div class="list">
 
             <div class="individual-calculation-field-container">
-
-              <!-- <paper-input class="payment--vatValue" value="{{payment.vatValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.vatInputError]]" label="[[verses.pos.vatInput]]">
-                <div slot="suffix">%</div>
-              </paper-input> -->
-
-              <!-- <template is="dom-if" if="[[vatValue]]"> -->
               [[verses.pos.vatAmount]]:
               <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
-              <!-- </template> -->
 
             </div>
 
@@ -286,7 +279,6 @@
             value: () => {
               return {
                 totalAmount: null,
-                vatValue: 0,
                 vatAmount: 0,
                 discountType: 'percent',
                 discountValue: 0,
@@ -468,7 +460,6 @@
         // returning updated payment info
         this.payment = {
           totalAmount,
-          vatValue: 0,
           vatAmount,
           discountType,
           discountValue,
