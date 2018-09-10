@@ -10,6 +10,8 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
 
   get requiresAuthentication() { return true; }
 
+  get autoPaginates() { return ['aggregatedProductList']; }
+
   get requestSchema() {
     return Joi.object().keys({
       inventoryId: Joi.number().max(999999999999999).required()
