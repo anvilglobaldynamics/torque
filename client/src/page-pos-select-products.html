@@ -162,11 +162,12 @@
 
           let productList = aggregatedProductList.map(product => {
             let { purchasePrice, salePrice } = product.product;
-            let { name, unit, defaultDiscountType, defaultDiscountValue } = product.product.productCategory;
+            let { name, unit, defaultDiscountType, defaultDiscountValue, defaultVat } = product.product.productCategory;
             product.isSelected = false;
             let discountType = defaultDiscountType;
             let discountValue = defaultDiscountValue;
-            Object.assign(product, { name, unit, purchasePrice, salePrice, discountType, discountValue });
+            let vatValue = defaultVat;
+            Object.assign(product, { name, unit, purchasePrice, salePrice, discountType, discountValue, vatValue });
             return product;
           });
           productList.sort((a, b) => b.count - a.count);
@@ -194,10 +195,10 @@
 
         let productList = this.productList.filter(product => product.isSelected).map(product => {
           if (!('selectedCount' in product)) product.selectedCount = '' + product.count;
-          let { productId, name, selectedCount, salePrice, discountType, discountValue, unit } = product;
+          let { productId, name, selectedCount, salePrice, discountType, discountValue, vatValue, unit } = product;
           let count = parseFloat(String(selectedCount));
           let minSalePrice = salePrice;
-          return { productId, name, count, salePrice, discountType, discountValue, minSalePrice, unit };
+          return { productId, name, count, salePrice, discountType, discountValue, vatValue, minSalePrice, unit };
         });
 
         this.app.storeInSession('pos-selected-product-list', productList);
