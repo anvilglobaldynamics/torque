@@ -557,7 +557,7 @@
     "addedOn": "Added On",
     "noProductFoundInOutlet": "There is no product in the store's main product list.",
     "searchForProductInput": "Search for Product",
-    "searchForProductInputError": "Search for Product"
+    "searchForProductInputError": "Error in Search for Product"
   },
   "settings": {
     "settingsTitle": "Settings",

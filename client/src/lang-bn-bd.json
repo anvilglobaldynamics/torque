@@ -557,7 +557,9 @@
     "confirmSelection": "নির্বাচন নিশ্চিত করুন",
     "acquiredOn": "খরিদ হয়েছে",
     "addedOn": "যুক্ত হয়েছে",
-    "noProductFoundInOutlet": "দোকানের প্রধান পণ্য তালিকায় কোনো পণ্য নেই।"
+    "noProductFoundInOutlet": "দোকানের প্রধান পণ্য তালিকায় কোনো পণ্য নেই।",
+    "searchForProductInput": "পণ্য জন্য অনুসন্ধান করুন",
+    "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি"
   },
   "settings": {
     "settingsTitle": "সেটিংস",
