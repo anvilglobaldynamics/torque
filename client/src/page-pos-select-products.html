@@ -147,10 +147,11 @@
       _fetchInventoryDetails(cbfn) {
         let inventoryId = parseInt(this.params.inventory);
         this.inventoryId = inventoryId;
-        let data = { inventoryId };
+        let data = { inventoryId, paginate: this.paginate };
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
           return cbfn(response);
         });
       }
