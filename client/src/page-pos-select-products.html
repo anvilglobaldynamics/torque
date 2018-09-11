@@ -215,6 +215,10 @@
         });
       }
 
+      _addProductToSelectedProductList({ product }) {
+        
+      }
+
       // region: ui  ===========================
 
       selectProductsTapped(e = null) {
@@ -223,8 +227,9 @@
 
         let productList = this.productList.filter(product => product.isSelected).map(product => {
           if (!('selectedCount' in product)) product.selectedCount = '' + product.count;
-          let { productId, name, selectedCount, salePrice, discountType, discountValue, vatValue, unit } = product;
-          let count = parseFloat(String(selectedCount));
+          let { productId, name, selectedCount, count, salePrice, discountType, discountValue, vatValue, unit } = product;
+          let maxAllowedCount = count;
+          let selectedCount = parseFloat(String(selectedCount));
           let minSalePrice = salePrice;
           return { productId, name, count, salePrice, discountType, discountValue, vatValue, minSalePrice, unit };
         });
@@ -238,6 +243,8 @@
         let { product } = e.model;
         e.model.set('product.selectedCount', 1);
         e.model.set('product.isSelected', true);
+
+        this._addProductToSelectedProductList({ product: e.model.product });
       }
 
       deselectTapped(e) {

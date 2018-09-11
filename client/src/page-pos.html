@@ -132,7 +132,7 @@
                   </span>
                 </div>
                 <div class="horizontal layout center">
-                  <div class="description">[[product.count]] [[product.unit]] @&nbsp;</div>
+                  <div class="description">[[product.selectedCount]] [[product.unit]] @&nbsp;</div>
                   <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" auto-validate min="[[product.minSalePrice]]"></paper-input>
                   <div class="description">[[app.settings.monetaryUnit]]</div>
                 </div>
@@ -407,7 +407,7 @@
 
         // reducing to find totalAmount
         totalAmount = this.productList.reduce((sum, product) => {
-          let { salePrice, count, discountType, discountValue, vatValue } = product;
+          let { salePrice, selectedCount, discountType, discountValue, vatValue } = product;
 
           // discount calculation
           if (discountType === 'percent') {
@@ -420,7 +420,7 @@
           vatAmount += salePrice * (vatValue / 100);
 
           // the sum to be set as totalAmount
-          return sum + (salePrice * count);
+          return sum + (salePrice * selectedCount);
         }, 0);
 
         // updating totalBilled with calculated totalAmount and vatAmount
@@ -481,8 +481,8 @@
         }
 
         let productList = this.productList.map(product => {
-          let { productId, count, discountType, discountValue, salePrice } = product;
-          return { productId, count, discountType, discountValue, salePrice };
+          let { productId, selectedCount, discountType, discountValue, salePrice } = product;
+          return { productId, count: selectedCount, discountType, discountValue, salePrice };
         })
 
         let data = {
