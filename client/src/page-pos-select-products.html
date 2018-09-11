@@ -54,35 +54,35 @@
 
           <div class="list">
             <template is="dom-repeat" items="[[productList]]" as="product">
-              <div class="horizontal layout item center">
-                <div class="flex" style="min-width: 128px;">
-                  <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                  <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">[[product.count]][[product.unit]]</div>
-                  <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
-                  <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
-                  <div class="inventory-product-added-date-container">[[verses.posSelectProduct.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
-                  <div class="inventory-product-added-date-container">[[verses.posSelectProduct.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
-                </div>
-                <div class="horizontal layout wrap center">
-                  <template is="dom-if" if="[[product.count]]">
-                    <template is="dom-if" if="[[!product.isSelected]]">
+              <template is="dom-if" if="[[!product.isSelected]]">
+                <div class="horizontal layout item center">
+                  <div class="flex" style="min-width: 128px;">
+                    <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                    <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">[[product.count]][[product.unit]]</div>
+                    <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                    <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                    <div class="inventory-product-added-date-container">[[verses.posSelectProduct.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
+                    <div class="inventory-product-added-date-container">[[verses.posSelectProduct.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
+                  </div>
+                  <div class="horizontal layout wrap center">
+                    <template is="dom-if" if="[[product.count]]">
                       <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+                      
+                      <!-- <template is="dom-if" if="[[product.isSelected]]">
+                        <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.posSelectProduct.count]]">
+                          <div slot="suffix">&nbsp;[[product.unit]]</div>
+                        </paper-input>
+                        <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                      </template> -->
                     </template>
-                    <template is="dom-if" if="[[product.isSelected]]">
-                      <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.posSelectProduct.count]]">
-                        <!-- <div slot="prefix">[[verses.general.selected]]&nbsp;</div> -->
-                        <div slot="suffix">&nbsp;[[product.unit]]</div>
-                      </paper-input>
-                      <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
-                    </template>
-                  </template>
+                  </div>
                 </div>
-              </div>
+              </template>
             </template>
           </div>
 
           <div class="pagination">
-            [[verses.general.showing]]
+            [[verses.general.loaded]]
             <span class="limit">[[pagination.limit]]</span>
             [[verses.general.itemsOutOf]]
             <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
@@ -203,10 +203,10 @@
           let previousProductList = this.app.getFromSession('pos-selected-product-list');
           if (previousProductList) {
             this.selectedProductCount = previousProductList.length;
+            this.selectedProductList = previousProductList;
             previousProductList.forEach(previousProduct => {
               let product = productList.find(product => product.productId === previousProduct.productId);
               product.isSelected = true;
-              product.selectedCount = previousProduct.count;
             })
           }
 
