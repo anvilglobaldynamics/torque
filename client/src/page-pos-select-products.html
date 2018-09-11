@@ -93,14 +93,20 @@
           </template>
 
         </div>
+      </template>
 
-        <div class="vartical confirm-discard-button-group">
-          <template is="dom-if" if="[[selectedProductCount]]">
-            <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
-          </template>
-          <paper-button raised class="btn primary" on-tap="selectProductsTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
+      <template is="dom-if" if="{{selectedProductList.length}}">
+        <div class="card vertical layout">
+
+          selected product count {{selectedProductList.length}}
+
+          <div class="vartical confirm-discard-button-group">
+            <template is="dom-if" if="[[selectedProductCount]]">
+              <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
+            </template>
+            <paper-button raised class="btn primary" on-tap="selectProductsTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
+          </div>
         </div>
-
       </template>
 
     </div>
@@ -123,6 +129,10 @@
           selectedProductCount: {
             type: Number,
             value: 0
+          },
+          selectedProductList: {
+            type: Array,
+            value: () => []
           }
         };
       }
