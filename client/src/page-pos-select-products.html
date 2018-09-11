@@ -120,8 +120,7 @@
                   <div class="inventory-product-added-date-container">[[verses.posSelectProduct.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div> -->
                 </div>
                 <div class="horizontal layout wrap center">
-                  <!-- TODO: add paper input enforce here -->
-                  <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" type="number" min="1" max="[[product.maxAllowedCount]]" label="[[verses.posSelectProduct.count]]">
+                  <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" min="1" max="[[product.maxAllowedCount]]" label="[[verses.posSelectProduct.count]]">
                     <div slot="suffix">&nbsp;[[product.unit]]</div>
                   </paper-input>
                   <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
@@ -336,6 +335,10 @@
 
       searchTapped(e = null) {
         this._processInventory(() => this.isReady = true);
+      }
+
+      genericPaymentInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
       }
 
       // region: misc =================================
