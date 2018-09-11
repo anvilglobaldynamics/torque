@@ -95,15 +95,35 @@
         </div>
       </template>
 
-      <template is="dom-if" if="{{selectedProductList.length}}">
+      <template is="dom-if" if="{{selectedProductCount}}">
         <div class="card vertical layout">
 
-          selected product count {{selectedProductList.length}}
+          selectedProductCount: {{ selectedProductCount }}
+
+          <div class="list">
+            <template is="dom-repeat" items="[[selectedProductList]]" as="product">
+              <div class="horizontal layout item center">
+                <div class="flex" style="min-width: 128px;">
+                  <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                  <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">[[product.maxAllowedCount]][[product.unit]]</div>
+                  <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                  <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                  <!-- <div class="inventory-product-added-date-container">[[verses.posSelectProduct.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
+                  <div class="inventory-product-added-date-container">[[verses.posSelectProduct.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div> -->
+                </div>
+                <div class="horizontal layout wrap center">
+                  <!-- TODO: add paper input enforce here -->
+                  <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" type="number" min="1" max="[[product.maxAllowedCount]]" label="[[verses.posSelectProduct.count]]">
+                    <div slot="suffix">&nbsp;[[product.unit]]</div>
+                  </paper-input>
+                  <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                </div>
+              </div>
+            </template>
+          </div>
 
           <div class="vartical confirm-discard-button-group">
-            <template is="dom-if" if="[[selectedProductCount]]">
-              <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
-            </template>
+            <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
             <paper-button raised class="btn primary" on-tap="selectProductsTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
           </div>
         </div>
@@ -200,14 +220,25 @@
           });
           productList.sort((a, b) => b.count - a.count);
 
-          let previousProductList = this.app.getFromSession('pos-selected-product-list');
-          if (previousProductList) {
-            this.selectedProductCount = previousProductList.length;
-            this.selectedProductList = previousProductList;
-            previousProductList.forEach(previousProduct => {
+          if (this.selectedProductList.length > 0) {
+            console.log("there was a selectedProductList of length ", this.selectedProductList.length);
+            this.selectedProductList.forEach(previousProduct => {
               let product = productList.find(product => product.productId === previousProduct.productId);
-              product.isSelected = true;
+              if (product) {
+                product.isSelected = true;
+              }
             })
+          } else {
+            let previousProductList = this.app.getFromSession('pos-selected-product-list');
+            console.log("there was a previousProductList of length ", previousProductList.length);
+            if (previousProductList) {
+              this.selectedProductCount = previousProductList.length;
+              this.selectedProductList = previousProductList;
+              previousProductList.forEach(previousProduct => {
+                let product = productList.find(product => product.productId === previousProduct.productId);
+                product.isSelected = true;
+              })
+            }
           }
 
           this.productList = productList;
@@ -216,49 +247,54 @@
       }
 
       _addProductToSelectedProductList({ product }) {
-        
+        let { productId, name, selectedCount, count, salePrice, discountType, discountValue, vatValue, unit } = product;
+        let maxAllowedCount = count;
+        selectedCount = parseFloat(String(selectedCount));
+        let minSalePrice = salePrice;
+        this.selectedProductList.push({ productId, name, selectedCount, maxAllowedCount, salePrice, discountType, discountValue, vatValue, minSalePrice, unit });
+      }
+
+      _removeProductFromSelectedProductList({ product }) {
+        this.selectedProductList.forEach(function(item, index, selectedProductList) {
+          if (item.productId === product.productId) {
+            selectedProductList.splice(index, 1);
+          }
+        });
+
+        this.selectedProductCount = this.selectedProductList.length;
       }
 
       // region: ui  ===========================
 
       selectProductsTapped(e = null) {
         this.elemAll('pos-select-product').forEach(el => el.listProductsToAdd(productList));
-        let inventoryId = parseInt(this.params.inventory);
-
-        let productList = this.productList.filter(product => product.isSelected).map(product => {
-          if (!('selectedCount' in product)) product.selectedCount = '' + product.count;
-          let { productId, name, selectedCount, count, salePrice, discountType, discountValue, vatValue, unit } = product;
-          let maxAllowedCount = count;
-          let selectedCount = parseFloat(String(selectedCount));
-          let minSalePrice = salePrice;
-          return { productId, name, count, salePrice, discountType, discountValue, vatValue, minSalePrice, unit };
-        });
-
-        this.app.storeInSession('pos-selected-product-list', productList);
+        this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
+        this.selectedProductList = [];
         this.backButtonOnTopBarPressed();
       }
 
       selectTapped(e) {
         this.selectedProductCount += 1;
-        let { product } = e.model;
         e.model.set('product.selectedCount', 1);
         e.model.set('product.isSelected', true);
-
-        this._addProductToSelectedProductList({ product: e.model.product });
+        let { product } = e.model;
+        this._addProductToSelectedProductList({ product });
       }
 
       deselectTapped(e) {
-        this.selectedProductCount -= 1;
         let { product } = e.model;
-        e.model.set('product.isSelected', false);
+        this._removeProductFromSelectedProductList({ product });
       }
 
       deselectAllTapped(e) {
         this.productList.forEach((product, index) => this.set(`productList.${index}.isSelected`, false));
+        this.selectedProductList = [];
         this.selectedProductCount = 0;
       }
 
       backButtonOnTopBarPressed(e = null) {
+        this.selectedProductList = [];
+        this.selectedProductCount = 0;
         this.app.navigateToPreviousUrl(`/pos`);
       }
 
