@@ -280,9 +280,11 @@ describe.only('Inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      body.aggregatedProductList.forEach(aggregatedProduct => {
+        validateAggregatedProductScema(aggregatedProduct);
+      });
 
       productToBeTransferred = body.aggregatedProductList[0];
-      // TODO: Schema Validate aggregatedProductList
       expect(body.aggregatedProductList[0].productId).to.not.equal(body.aggregatedProductList[1].productId);
       testDoneFn();
     });
@@ -295,7 +297,7 @@ describe.only('Inventory', _ => {
       json: {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
-        searchString: ''
+        searchString: '2nd'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

@@ -96,6 +96,15 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     return productList;
   }
 
+  async __searchAggregatedProductList({ aggregatedProductList, searchString }) {
+    aggregatedProductList = aggregatedProductList.filter(aggregatedProduct => {
+      let regex = new RegExp(searchString, 'g');
+      return regex.test(aggregatedProduct.product.productCategory.name);
+    });
+
+    return aggregatedProductList;
+  }
+
   async handle({ body }) {
     let { inventoryId, searchString } = body;
     let inventory = await this.__getInventory({ inventoryId });
@@ -104,6 +113,10 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
 
     let clonedProductList = JSON.parse(JSON.stringify(productList));
     let aggregatedProductList = await this.__getAggregatedProductList({ productList: clonedProductList });
+
+    if (searchString) {
+      aggregatedProductList = await this.__searchAggregatedProductList({ aggregatedProductList, searchString });
+    }
 
     return {
       inventoryDetails: {
