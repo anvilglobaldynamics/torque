@@ -47,6 +47,16 @@
       <template is="dom-if" if="{{productList.length}}">
 
         <div class="card vertical layout">
+          <div class="p-16 horizontal layout center">
+            <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.posSelectProduct.searchForProductInputError]] label=[[verses.posSelectProduct.searchForProductInput]] on-keypress="searchFieldKeypressed"></paper-input>
+            <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
+            <paper-button raised class="primary" on-tap="searchTapped">
+              [[verses.general.search]]
+            </paper-button>
+          </div>
+        </div>
+
+        <div class="card vertical layout">
 
           <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
             <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
@@ -146,6 +156,10 @@
             type: Number,
             value: 0
           },
+          searchString: {
+            type: String,
+            value: ''
+          },
           selectedProductCount: {
             type: Number,
             value: 0
@@ -194,7 +208,7 @@
       _fetchInventoryDetails(cbfn) {
         let inventoryId = parseInt(this.params.inventory);
         this.inventoryId = inventoryId;
-        let data = { inventoryId, paginate: this.paginate };
+        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate };
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -221,7 +235,7 @@
           productList.sort((a, b) => b.count - a.count);
 
           if (this.selectedProductList.length > 0) {
-            console.log("there was a selectedProductList of length ", this.selectedProductList.length);
+            // console.log("there was a selectedProductList of length ", this.selectedProductList.length);
             this.selectedProductList.forEach(previousProduct => {
               let product = productList.find(product => product.productId === previousProduct.productId);
               if (product) {
@@ -230,13 +244,15 @@
             })
           } else {
             let previousProductList = this.app.getFromSession('pos-selected-product-list');
-            console.log("there was a previousProductList of length ", previousProductList.length);
+            // console.log("there was a previousProductList of length ", previousProductList.length);
             if (previousProductList) {
               this.selectedProductCount = previousProductList.length;
               this.selectedProductList = previousProductList;
               previousProductList.forEach(previousProduct => {
                 let product = productList.find(product => product.productId === previousProduct.productId);
-                product.isSelected = true;
+                if (product) {
+                  product.isSelected = true;
+                }
               })
             }
           }
@@ -315,6 +331,18 @@
       showPreviousTapped(e = null) {
         this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
         this.isReady = false;
+        this._processInventory(() => this.isReady = true);
+      }
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
+      searchCancelTapped(e = null) {
+        this.searchString = '';
+      }
+
+      searchTapped(e = null) {
         this._processInventory(() => this.isReady = true);
       }
 

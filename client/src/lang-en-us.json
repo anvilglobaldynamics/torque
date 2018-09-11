@@ -555,7 +555,9 @@
     "confirmSelection": "Confirm Selection",
     "acquiredOn": "Acquired On",
     "addedOn": "Added On",
-    "noProductFoundInOutlet": "There is no product in the store's main product list."
+    "noProductFoundInOutlet": "There is no product in the store's main product list.",
+    "searchForProductInput": "Search for Product",
+    "searchForProductInputError": "Search for Product"
   },
   "settings": {
     "settingsTitle": "Settings",
