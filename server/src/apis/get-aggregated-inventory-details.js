@@ -14,7 +14,8 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
 
   get requestSchema() {
     return Joi.object().keys({
-      inventoryId: Joi.number().max(999999999999999).required()
+      inventoryId: Joi.number().max(999999999999999).required(),
+      searchString: Joi.string().min(0).max(64).allow('').optional()
     });
   }
 
@@ -96,7 +97,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { inventoryId } = body;
+    let { inventoryId, searchString } = body;
     let inventory = await this.__getInventory({ inventoryId });
     let inventoryContainerDetails = await this.__getInventoryContainerDetails({ inventory });
     let productList = inventory.productList;
