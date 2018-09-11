@@ -105,10 +105,8 @@
         </div>
       </template>
 
-      <template is="dom-if" if="{{selectedProductCount}}">
+      <template is="dom-if" if="{{selectedProductList.length}}">
         <div class="card vertical layout">
-
-          selectedProductCount: {{ selectedProductCount }}
 
           <div class="list">
             <template is="dom-repeat" items="[[selectedProductList]]" as="product">
@@ -235,7 +233,6 @@
           productList.sort((a, b) => b.count - a.count);
 
           if (this.selectedProductList.length > 0) {
-            // console.log("there was a selectedProductList of length ", this.selectedProductList.length);
             this.selectedProductList.forEach(previousProduct => {
               let product = productList.find(product => product.productId === previousProduct.productId);
               if (product) {
@@ -243,12 +240,11 @@
               }
             })
           } else {
-            let previousProductList = this.app.getFromSession('pos-selected-product-list');
-            // console.log("there was a previousProductList of length ", previousProductList.length);
-            if (previousProductList) {
-              this.selectedProductCount = previousProductList.length;
-              this.selectedProductList = previousProductList;
-              previousProductList.forEach(previousProduct => {
+            let previousSavedSelectedProductList = this.app.getFromSession('pos-selected-product-list');
+            if (previousSavedSelectedProductList.length > 0) {
+              this.selectedProductCount = previousSavedSelectedProductList.length;
+              this.selectedProductList = previousSavedSelectedProductList;
+              previousSavedSelectedProductList.forEach(previousProduct => {
                 let product = productList.find(product => product.productId === previousProduct.productId);
                 if (product) {
                   product.isSelected = true;
@@ -256,6 +252,8 @@
               })
             }
           }
+
+          
 
           this.productList = productList;
           cbfn();
@@ -267,13 +265,14 @@
         let maxAllowedCount = count;
         selectedCount = parseFloat(String(selectedCount));
         let minSalePrice = salePrice;
-        this.selectedProductList.push({ productId, name, selectedCount, maxAllowedCount, salePrice, discountType, discountValue, vatValue, minSalePrice, unit });
+        this.push('selectedProductList', { productId, name, selectedCount, maxAllowedCount, salePrice, discountType, discountValue, vatValue, minSalePrice, unit });
+        this.selectedProductCount = this.selectedProductList.length;
       }
 
       _removeProductFromSelectedProductList({ product }) {
-        this.selectedProductList.forEach(function(item, index, selectedProductList) {
-          if (item.productId === product.productId) {
-            selectedProductList.splice(index, 1);
+        this.selectedProductList.forEach((selectedProduct, index) => {
+          if (selectedProduct.productId === product.productId) {
+            this.splice('selectedProductList', index, 1);
           }
         });
 
@@ -286,11 +285,11 @@
         this.elemAll('pos-select-product').forEach(el => el.listProductsToAdd(productList));
         this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
         this.selectedProductList = [];
+        this.selectedProductCount = 0;
         this.backButtonOnTopBarPressed();
       }
 
       selectTapped(e) {
-        this.selectedProductCount += 1;
         e.model.set('product.selectedCount', 1);
         e.model.set('product.isSelected', true);
         let { product } = e.model;
@@ -306,6 +305,7 @@
         this.productList.forEach((product, index) => this.set(`productList.${index}.isSelected`, false));
         this.selectedProductList = [];
         this.selectedProductCount = 0;
+        this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
       }
 
       backButtonOnTopBarPressed(e = null) {
