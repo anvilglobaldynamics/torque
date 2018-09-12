@@ -9,6 +9,7 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
   productCategoryId: Joi.number().max(999999999999999).required(),
+  
   name: Joi.string().min(1).max(64).required(),
   unit: Joi.string().max(1024).required(),
   defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),

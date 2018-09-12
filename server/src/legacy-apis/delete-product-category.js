@@ -31,6 +31,7 @@ exports.DeleteProductCategoryApi = class extends collectionCommonMixin(LegacyApi
   }
 
   _checkAndDeleteProductCategory({ productCategoryId }, cbfn) {
+    // FIXME: below method listChildren is not present anymore as product categories are flat
     this.legacyDatabase.productCategory.listChildren({ productCategoryId }, (err, productCategoryChildList) => {
       if (err) return this.fail(err);
       if (productCategoryChildList.length > 0) {

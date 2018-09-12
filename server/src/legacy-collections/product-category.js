@@ -24,7 +24,6 @@ exports.ProductCategoryCollection = class extends LegacyCollection {
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       name: Joi.string().min(1).max(64).required(),
       organizationId: Joi.number().max(999999999999999).required(),
-      parentProductCategoryId: Joi.number().max(999999999999999).allow(null).required(),
       unit: Joi.string().max(1024).required(),
       defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
       defaultDiscountValue: Joi.number().when(
@@ -60,13 +59,12 @@ exports.ProductCategoryCollection = class extends LegacyCollection {
   /**
    * 
    * 
-   * @param {any} { organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } 
+   * @param {any} { organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } 
    * @param {any} cbfn 
    */
   create(data, cbfn) {
     let {
       organizationId,
-      parentProductCategoryId,
       name,
       unit,
       defaultDiscountType,
@@ -80,7 +78,6 @@ exports.ProductCategoryCollection = class extends LegacyCollection {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       organizationId,
-      parentProductCategoryId,
       name,
       unit,
       defaultDiscountType,
@@ -109,14 +106,10 @@ exports.ProductCategoryCollection = class extends LegacyCollection {
     this._find({ id: { $in: idList } }, cbfn);
   }
 
-  listChildren({ productCategoryId }, cbfn) {
-    this._find({ parentProductCategoryId: productCategoryId }, cbfn)
-  }
-
-  update({ productCategoryId }, { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
+  update({ productCategoryId }, { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
     let modifications = {
       $set: {
-        parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
+        name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
       }
     }
     this._update({ id: productCategoryId }, modifications, cbfn);
