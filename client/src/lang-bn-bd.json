@@ -592,7 +592,7 @@
     "totalSelectedProducts": "মোট নির্বাচিত পণ্য",
     "moveToInventory": "পণ্য তালিকায় সরান",
     "moveSelected": "নির্বাচিত সরান",
-    "addProductsBatchToInventory": "গোছাতে পণ্য তালিকায় যুক্ত করুন",
+    "addProductsBatchToInventory": "একসাথে একাধিক পণ্য তালিকায় যুক্ত করুন",
     "addProducts": "পণ্য যুক্ত করুন",
     "noProductsInInventory": "এই পণ্য তালিকায় কোন পণ্য নেই।",
     "acquiredOn": "খরিদ হয়েছে",

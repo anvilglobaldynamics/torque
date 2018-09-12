@@ -96,15 +96,24 @@
       </template>
 
       <template is="dom-if" if="[[selectedProductCount]]">
-        <div class="card">
-          <div class="mb-4">[[verses.inventory.totalSelectedProducts]]: [[selectedProductCount]]</div>
-          <paper-dropdown-menu label="[[verses.inventory.moveToInventory]]" class="mr-4">
+        <div class="card vertical layout">
+          <div>[[verses.inventory.totalSelectedProducts]]: [[selectedProductCount]]</div>
+
+          <div class="list">
+            <!-- TODO: repeat list here -->
+          </div>
+        </div>
+
+        <div class="card vertical layout">
+
+          <paper-dropdown-menu label="[[verses.inventory.moveToInventory]]" style="width: 100%;">
             <paper-listbox slot="dropdown-content" selected="{{targetInventoryIndex}}">
               <template is="dom-repeat" items="[[inventoryList]]" as="inventory">
                 <paper-item data-id="[[inventory.id]]">[[inventory.inventoryContainerName]] - [[inventory.name]]</paper-item>
               </template>
             </paper-listbox>
           </paper-dropdown-menu>
+
           <paper-button raised class="primary m-0 manage-inventory-button" on-tap="moveSelectedTapped">[[verses.inventory.moveSelected]]</paper-button>
         </div>
       </template>
