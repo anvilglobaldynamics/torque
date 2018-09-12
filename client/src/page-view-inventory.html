@@ -186,6 +186,10 @@
             type: Array,
             value: () => []
           },
+          searchString: {
+            type: String,
+            value: ''
+          },
           targetInventoryIndex: {
             type: Number,
             value: 0
@@ -233,7 +237,7 @@
       _fetchInventoryDetails(cbfn) {
         let inventoryId = parseInt(this.params.inventory);
         this.inventoryId = inventoryId;
-        let data = { inventoryId, paginate: this.paginate };
+        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate };
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -353,6 +357,19 @@
       showPreviousTapped(e = null) {
         this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
         this.isReady = false;
+        this._processInventory(() => this.isReady = true);
+      }
+
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
+      searchCancelTapped(e = null) {
+        this.searchString = '';
+      }
+
+      searchTapped(e = null) {
         this._processInventory(() => this.isReady = true);
       }
 
