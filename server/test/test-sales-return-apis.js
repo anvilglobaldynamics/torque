@@ -124,7 +124,6 @@ describe('Sales Return', _ => {
                 addProductCategory({
                   apiKey,
                   organizationId,
-                  parentProductCategoryId: null,
                   name: "test product category",
                   unit: "box",
                   defaultDiscountType: "percent",
@@ -138,7 +137,6 @@ describe('Sales Return', _ => {
                   addProductCategory({
                     apiKey,
                     organizationId,
-                    parentProductCategoryId: null,
                     name: "non returnable product category",
                     unit: "box",
                     defaultDiscountType: "percent",
