@@ -128,40 +128,38 @@
       </template>
 
       <!-- section shows selected products -->
-      <template is="dom-if" if="[[selectedProductCount]]">
+      <template is="dom-if" if="[[selectedProductList.length]]">
         <div class="card vertical layout">
           <div>[[verses.inventory.totalSelectedProducts]]: [[selectedProductCount]]</div>
 
           <div class="list">
-
             <template is="dom-repeat" items="[[selectedProductList]]" as="product">
 
-                <div class="horizontal layout item center">
-                  <div class="vertical layout flex">
-                    <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                    <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
-                      [[product.count]][[product.unit]]
-                    </div>
-                    <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
-                    <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
-                    <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
-                    <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
+              <div class="horizontal layout item center">
+                <div class="vertical layout flex">
+                  <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                  <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
+                    [[product.count]][[product.unit]]
                   </div>
-
-                  <template is="dom-if" if="[[product.count]]">                    
-                    
-                    <template is="dom-if" if="[[product.isSelected]]">
-                      <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" on-input="genericSelectedCountInputChanged" min="0" max="[[product.count]]" label="[[verses.general.count]]">
-                        <div slot="suffix">&nbsp;[[product.unit]]</div>
-                      </paper-input>
-                      <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
-                    </template>
-                  </template>
-
+                  <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                  <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                  <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
+                  <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
                 </div>
 
-            </template>
+                <template is="dom-if" if="[[product.count]]">                    
+                  
+                  <template is="dom-if" if="[[product.isSelected]]">
+                    <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" on-input="genericSelectedCountInputChanged" min="1" max="[[product.count]]" label="[[verses.general.count]]">
+                      <div slot="suffix">&nbsp;[[product.unit]]</div>
+                    </paper-input>
+                    <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                  </template>
 
+                </template>
+              </div>
+
+            </template>
           </div>
         </div>
 
@@ -287,6 +285,16 @@
             return product;
           });
           productList.sort((a, b) => b.count - a.count);
+
+          if (this.selectedProductList.length > 0 ) {
+            this.selectedProductList.forEach(previousProduct => {
+              let product = productList.find(product => product.productId === previousProduct.productId);
+              if (product) {
+                product.isSelected = true;
+              }
+            })
+          }
+
           this.productList = productList;
           cbfn();
         });
@@ -323,7 +331,19 @@
           }
         });
 
+        this.productList.forEach((productInList, index) => {
+          if (productInList.productId === product.productId) {
+            this.set(`productList.${index}.isSelected`, false)
+          }
+        });
+
         this.selectedProductCount = this.selectedProductList.length;
+      }
+
+      _deselectAllFromSelectedProductList() {
+        this.productList.forEach((product, index) => this.set(`productList.${index}.isSelected`, false));
+        this.selectedProductList = [];
+        this.selectedProductCount = 0;
       }
 
       // region: ui  ===========================
@@ -338,6 +358,7 @@
           return { count, productId };
         });
         this._processMoveProducts({ fromInventoryId, toInventoryId, productList }, () => {
+          this._deselectAllFromSelectedProductList();
           let message = this.app.verses.inventory.selectedProductsMoved;
           this.app.showToast(message, () => {
             this.app.refreshCurrentPage();
