@@ -337,7 +337,6 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
           lastModifiedDatetimeStamp: Joi.number().required(),
           name: Joi.string().required(),
           organizationId: Joi.number().required(),
-          parentProductCategoryId: Joi.number().allow(null).required(),
           unit: Joi.string().required(),
           defaultDiscountType: Joi.string().required(),
           defaultDiscountValue: Joi.number().when(
