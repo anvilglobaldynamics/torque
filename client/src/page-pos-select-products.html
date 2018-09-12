@@ -275,7 +275,7 @@
             this.set(`productList.${index}.isSelected`, false)
           }
         });
-        
+
         this.selectedProductCount = this.selectedProductList.length;
       }
 
@@ -343,6 +343,7 @@
       }
 
       searchTapped(e = null) {
+        this.set('paginate.offset', 0);
         this._processInventory(() => this.isReady = true);
       }
 
