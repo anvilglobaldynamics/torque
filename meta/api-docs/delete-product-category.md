@@ -28,7 +28,6 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: PRODUCT_CATEGORY_INVALID } // product category does not exist
-{ code: PRODUCT_CATEGORY_NOT_CHILDLESS } // product category is parent of atleast one category
 ```
 
 ### response (on success):

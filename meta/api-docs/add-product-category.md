@@ -9,7 +9,7 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
   organizationId: Joi.number().max(999999999999999).required(),
-  
+
   name: Joi.string().min(1).max(64).required(),
   unit: Joi.string().max(1024).required(),
   defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
@@ -43,7 +43,6 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: ORGANIZATION_INVALID } // the organization id is invalid
-{ code: PARENT_PRODUCT_CATEGORY_INVALID } // the Parent Product Category is invalid
 ```
 
 ### response (on success):
