@@ -282,6 +282,21 @@
         });
       }
 
+      _addProductToSelectedProductList({ product }) {
+        this.push('selectedProductList', product);
+        this.selectedProductCount = this.selectedProductList.length;
+      }
+
+      _removeProductFromSelectedProductList({ product }) {
+        this.selectedProductList.forEach((selectedProduct, index) => {
+          if (selectedProduct.productId === product.productId) {
+            this.splice('selectedProductList', index, 1);
+          }
+        });
+
+        this.selectedProductCount = this.selectedProductList.length;
+      }
+
       // region: ui  ===========================
 
       moveSelectedTapped(e) {
@@ -302,16 +317,15 @@
       }
 
       selectTapped(e) {
-        this.selectedProductCount += 1;
-        let { product } = e.model;
         e.model.set('product.selectedCount', product.count);
         e.model.set('product.isSelected', true);
+        let { product } = e.model;
+        this._addProductToSelectedProductList({ product });
       }
 
       deselectTapped(e) {
-        this.selectedProductCount -= 1;
         let { product } = e.model;
-        e.model.set('product.isSelected', false);
+        this._removeProductFromSelectedProductList({ product });
       }
 
       // editTapped(e = null) {
