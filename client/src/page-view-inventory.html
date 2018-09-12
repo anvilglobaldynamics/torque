@@ -57,6 +57,11 @@
 
       <template is="dom-if" if="[[productList.length]]">
         <div class="card vertical layout">
+
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          </template>
+
           <div class="list">
 
             <template is="dom-repeat" items="[[productList]]" as="product">
@@ -92,6 +97,18 @@
             </template>
 
           </div>
+
+          <div class="pagination">
+            [[verses.general.loaded]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          </template>
+
         </div>
       </template>
 
@@ -148,6 +165,10 @@
             type: Number,
             value: 0
           },
+          selectedProductList: {
+            type: Array,
+            value: () => []
+          },
           targetInventoryIndex: {
             type: Number,
             value: 0
@@ -199,6 +220,7 @@
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
           return cbfn(response);
         });
       }
