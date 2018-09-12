@@ -10,7 +10,6 @@ method: `POST`
   apiKey: Joi.string().length(64).required(),
 
   organizationId: Joi.number().max(999999999999999).required(),
-  parentProductCategoryId: Joi.number().max(999999999999999).allow(null).required(),
 
   name: Joi.string().min(1).max(64).required(),
   unit: Joi.string().max(1024).required(),
@@ -32,8 +31,8 @@ method: `POST`
 ### response (on error):
 ```js
 {
-  "hasError": true,
-  "error": {
+  hasError: true,
+  error: {
     code,
     message
   }
@@ -51,9 +50,9 @@ Possible Error Codes:
 ### response (on success):
 ```js
 {
-  "hasError": false,
-  "status": "success",
-  "productCategoryId": Joi.number().max(999999999999999).required()
+  hasError: false,
+  status: "success",
+  productCategoryId: Joi.number().max(999999999999999).required()
 }
 ```
 

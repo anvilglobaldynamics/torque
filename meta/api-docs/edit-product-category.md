@@ -9,7 +9,6 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
   productCategoryId: Joi.number().max(999999999999999).required(),
-  parentProductCategoryId: Joi.number().max(999999999999999).required(),
   name: Joi.string().min(1).max(64).required(),
   unit: Joi.string().max(1024).required(),
   defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
@@ -30,8 +29,8 @@ method: `POST`
 ### response (on error):
 ```js
 {
-  "hasError": true,
-  "error": {
+  hasError: true,
+  error: {
     code,
     message
   }
@@ -49,8 +48,8 @@ Possible Error Codes:
 ### response (on success):
 ```js
 {
-  "hasError": false,
-  "status": "success"
+  hasError: false,
+  status: "success"
 }
 ```
 
