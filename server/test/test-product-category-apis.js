@@ -210,8 +210,6 @@ describe.only('Product Category', _ => {
       json: {
         apiKey,
         productCategoryId: productCategoryOne.id,
-
-        parentProductCategoryId: null,
         name: "new 1st product category name", // modification
         unit: "kg",
         defaultDiscountType: "percent",
@@ -229,83 +227,6 @@ describe.only('Product Category', _ => {
 
   });
 
-  it('api/edit-product-category (Valid updating parent)', testDoneFn => {
-
-    callApi('api/edit-product-category', {
-      json: {
-        apiKey,
-        productCategoryId: productCategoryTwo.id,
-
-        parentProductCategoryId: productCategoryOne.id,
-        name: "new product category name", // modification
-        unit: "kg",
-        defaultDiscountType: "percent",
-        defaultDiscountValue: 10,
-        defaultPurchasePrice: 99,
-        defaultVat: 2,
-        defaultSalePrice: 111,
-        isReturnable: false // modification
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiSuccessResponse(body);
-      testDoneFn();
-    })
-
-  });
-
-  it('api/edit-product-category (Invalid own parent)', testDoneFn => {
-
-    callApi('api/edit-product-category', {
-      json: {
-        apiKey,
-        productCategoryId: productCategoryTwo.id,
-
-        parentProductCategoryId: productCategoryTwo.id,
-        name: "new product category name", // modification
-        unit: "kg",
-        defaultDiscountType: "percent",
-        defaultDiscountValue: 10,
-        defaultPurchasePrice: 99,
-        defaultVat: 2,
-        defaultSalePrice: 111,
-        isReturnable: false // modification
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiFailureResponse(body);
-      expect(body.error.code).equal('PARENT_PRODUCT_CATEGORY_INVALID');
-      testDoneFn();
-    })
-
-  });
-
-  it('api/edit-product-category (Invalid parentProductCategoryId)', testDoneFn => {
-
-    callApi('api/edit-product-category', {
-      json: {
-        apiKey,
-        productCategoryId: productCategoryTwo.id,
-
-        parentProductCategoryId: invalidParentProductCategoryId,
-        name: "new product category name", // modification
-        unit: "kg",
-        defaultDiscountType: "percent",
-        defaultDiscountValue: 10,
-        defaultPurchasePrice: 99,
-        defaultVat: 2,
-        defaultSalePrice: 111,
-        isReturnable: false // modification
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiFailureResponse(body);
-      expect(body.error.code).equal('PARENT_PRODUCT_CATEGORY_INVALID');
-      testDoneFn();
-    })
-
-  });
-
   it('api/edit-product-category (Invalid productCategoryId)', testDoneFn => {
 
     callApi('api/edit-product-category', {
@@ -313,7 +234,6 @@ describe.only('Product Category', _ => {
         apiKey,
         productCategoryId: invalidProductCategoryId,
 
-        parentProductCategoryId: null,
         name: "new product category name", // modification
         unit: "kg",
         defaultDiscountType: "percent",
