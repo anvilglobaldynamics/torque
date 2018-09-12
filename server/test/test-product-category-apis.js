@@ -358,7 +358,7 @@ describe.only('Product Category', _ => {
 
   // DELETE
 
-  it('api/delete-product-category (Invalid productCategoryId)', testDoneFn => {
+  it.skip('api/delete-product-category (Invalid productCategoryId)', testDoneFn => {
 
     callApi('api/delete-product-category', {
       json: {
@@ -374,7 +374,7 @@ describe.only('Product Category', _ => {
 
   });
 
-  it('api/delete-product-category (Valid)', testDoneFn => {
+  it.skip('api/delete-product-category (Valid)', testDoneFn => {
 
     callApi('api/delete-product-category', {
       json: {
@@ -389,7 +389,7 @@ describe.only('Product Category', _ => {
 
   });
 
-  it('api/get-product-category-list (Valid deletion check)', testDoneFn => {
+  it.skip('api/get-product-category-list (Valid deletion check)', testDoneFn => {
 
     callApi('api/get-product-category-list', {
       json: {
@@ -412,7 +412,7 @@ describe.only('Product Category', _ => {
 
   });
 
-  it('api/delete-product-category (Invalid parent deletetion)', testDoneFn => {
+  it.skip('api/delete-product-category (Invalid parent deletetion)', testDoneFn => {
 
     callApi('api/delete-product-category', {
       json: {
