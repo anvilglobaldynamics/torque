@@ -49,44 +49,51 @@
         [[inventoryContainerName]] - [[inventoryName]]
       </p>
 
-      <div class="card vertical layout">
-        <div class="list">
+      <template is="dom-if" if="[[!productList.length]]">
+        <div class="card">
+          [[verses.inventory.noProductsInInventory]]
+        </div>
+      </template>
 
-          <template is="dom-if" if="[[!productList.length]]">
-            [[verses.inventory.noProductsInInventory]]
-          </template>
+      <template is="dom-if" if="[[productList.length]]">
+        <div class="card vertical layout">
+          <div class="list">
 
-          <template is="dom-repeat" items="[[productList]]" as="product">
-            <div class="horizontal layout item center">
-              <div class="vertical layout flex">
-                <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
-                  [[product.count]][[product.unit]]
+            <template is="dom-repeat" items="[[productList]]" as="product">
+              
+              <div class="horizontal layout item center">
+                <div class="vertical layout flex">
+                  <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                  <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
+                    [[product.count]][[product.unit]]
+                  </div>
+                  <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                  <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                  <!-- TODO TRANSLATE -->
+                  <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
+                  <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
                 </div>
-                <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
-                <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
-                <!-- TODO TRANSLATE -->
-                <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
-                <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
+
+                <template is="dom-if" if="[[product.count]]">
+                  <template is="dom-if" if="[[!product.isSelected]]">
+                    <paper-button raised class="secondary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+                  </template>
+                  <template is="dom-if" if="[[product.isSelected]]">
+                    <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.general.count]]">
+                      <!-- <div slot="prefix">[[verses.general.selected]]&nbsp;</div> -->
+                      <div slot="suffix">&nbsp;[[product.unit]]</div>
+                    </paper-input>
+                    <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                  </template>
+                </template>
+
               </div>
 
-              <template is="dom-if" if="[[product.count]]">
-                <template is="dom-if" if="[[!product.isSelected]]">
-                  <paper-button raised class="secondary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
-                </template>
-                <template is="dom-if" if="[[product.isSelected]]">
-                  <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.general.count]]">
-                    <!-- <div slot="prefix">[[verses.general.selected]]&nbsp;</div> -->
-                    <div slot="suffix">&nbsp;[[product.unit]]</div>
-                  </paper-input>
-                  <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
-                </template>
-              </template>
+            </template>
 
-            </div>
-          </template>
+          </div>
         </div>
-      </div>
+      </template>
 
       <template is="dom-if" if="[[selectedProductCount]]">
         <div class="card">
@@ -160,10 +167,9 @@
           return;
         }
         this._processInventory(() => {
-          this.isReady = true;
-        });
-        this._fetchInventoryList(() => {
-
+          this._fetchInventoryList(() => {
+            this.isReady = true;
+          });
         });
       }
 
@@ -288,6 +294,18 @@
         } else {
           return '';
         }
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processInventory(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processInventory(() => this.isReady = true);
       }
 
       // region: misc =================================
