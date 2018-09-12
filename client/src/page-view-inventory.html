@@ -80,33 +80,34 @@
           <div class="list">
 
             <template is="dom-repeat" items="[[productList]]" as="product">
-              
-              <div class="horizontal layout item center">
-                <div class="vertical layout flex">
-                  <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                  <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
-                    [[product.count]][[product.unit]]
+              <template is="dom-if" if="[[!product.isSelected]]">
+                
+                <div class="horizontal layout item center">
+                  <div class="vertical layout flex">
+                    <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                    <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
+                      [[product.count]][[product.unit]]
+                    </div>
+                    <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                    <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                    <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
+                    <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
                   </div>
-                  <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
-                  <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
-                  <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
-                  <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
+
+                  <template is="dom-if" if="[[product.count]]">                    
+                    <paper-button raised class="secondary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+                    
+                    <!-- <template is="dom-if" if="[[product.isSelected]]">
+                      <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.general.count]]">
+                        <div slot="suffix">&nbsp;[[product.unit]]</div>
+                      </paper-input>
+                      <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                    </template> -->
+                  </template>
+
                 </div>
 
-                <template is="dom-if" if="[[product.count]]">
-                  <template is="dom-if" if="[[!product.isSelected]]">
-                    <paper-button raised class="secondary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
-                  </template>
-                  <template is="dom-if" if="[[product.isSelected]]">
-                    <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.general.count]]">
-                      <div slot="suffix">&nbsp;[[product.unit]]</div>
-                    </paper-input>
-                    <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
-                  </template>
-                </template>
-
-              </div>
-
+              </template>
             </template>
 
           </div>
@@ -132,7 +133,35 @@
           <div>[[verses.inventory.totalSelectedProducts]]: [[selectedProductCount]]</div>
 
           <div class="list">
-            <!-- TODO: repeat list here -->
+
+            <template is="dom-repeat" items="[[selectedProductList]]" as="product">
+
+                <div class="horizontal layout item center">
+                  <div class="vertical layout flex">
+                    <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                    <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
+                      [[product.count]][[product.unit]]
+                    </div>
+                    <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                    <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                    <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
+                    <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
+                  </div>
+
+                  <template is="dom-if" if="[[product.count]]">                    
+                    
+                    <template is="dom-if" if="[[product.isSelected]]">
+                      <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" on-input="genericSelectedCountInputChanged" min="0" max="[[product.count]]" label="[[verses.general.count]]">
+                        <div slot="suffix">&nbsp;[[product.unit]]</div>
+                      </paper-input>
+                      <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                    </template>
+                  </template>
+
+                </div>
+
+            </template>
+
           </div>
         </div>
 
@@ -317,8 +346,9 @@
       }
 
       selectTapped(e) {
-        e.model.set('product.selectedCount', product.count);
+        e.model.set('product.selectedCount', 1);
         e.model.set('product.isSelected', true);
+        
         let { product } = e.model;
         this._addProductToSelectedProductList({ product });
       }
@@ -385,6 +415,10 @@
 
       searchTapped(e = null) {
         this._processInventory(() => this.isReady = true);
+      }
+
+      genericSelectedCountInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
       }
 
       // region: misc =================================
