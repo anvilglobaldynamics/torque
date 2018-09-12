@@ -1,10 +1,9 @@
+const { Api } = require('./../api-base');
+const Joi = require('joi');
+const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
+const { extract } = require('./../utils/extract');
 
-let { LegacyApi } = require('./../legacy-api-base');
-let Joi = require('joi');
-
-let { collectionCommonMixin } = require('./mixins/collection-common');
-
-exports.AddProductCategoryApi = class extends collectionCommonMixin(LegacyApi) {
+exports.AddProductCategoryApi = class extends Api {
 
   get autoValidates() { return true; }
 
@@ -42,26 +41,14 @@ exports.AddProductCategoryApi = class extends collectionCommonMixin(LegacyApi) {
     }];
   }
 
-  _createProductCategory(productCategory, cbfn) {
-    this.legacyDatabase.productCategory.create(productCategory, (err, productCategoryId) => {
-      if (err) return this.fail(err);
-      return cbfn(productCategoryId);
-    });
+  async _createProductCategory({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+    return await this.database.productCategory.create({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
   }
 
-  _checkAndCreateProductCategory({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
-    let productCategory = {
-      organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
-    }
-
-    this._createProductCategory(productCategory, cbfn);
-  }
-
-  handle({ body }) {
+  async handle({ body }) {
     let { organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
-    this._checkAndCreateProductCategory({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, (productCategoryId) => {
-      this.success({ status: "success", productCategoryId });
-    });
+    let productCategoryId = await this._createProductCategory({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+    return { status: "success", productCategoryId };
   }
 
 }

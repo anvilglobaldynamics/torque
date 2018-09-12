@@ -62,7 +62,7 @@ let { GetWarehouseApi } = require('./legacy-apis/get-warehouse');
 let { EditWarehouseApi } = require('./legacy-apis/edit-warehouse');
 const { DeleteWarehouseApi } = require('./apis/delete-warehouse');
 
-let { AddProductCategoryApi } = require('./legacy-apis/add-product-category');
+const { AddProductCategoryApi } = require('./apis/add-product-category');
 let { GetProductCategoryListApi } = require('./legacy-apis/get-product-category-list');
 let { EditProductCategoryApi } = require('./legacy-apis/edit-product-category');
 let { DeleteProductCategoryApi } = require('./legacy-apis/delete-product-category');
