@@ -244,6 +244,7 @@
           });
           return;
         }
+        if(this.searchString !== '') this.set('searchString', '');
         this._processInventory(() => {
           this._fetchInventoryList(() => {
             this.isReady = true;
