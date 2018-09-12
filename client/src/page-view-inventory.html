@@ -45,10 +45,23 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <!-- section shows inventory container and inventory name -->
       <p class="page-subtitle">
         [[inventoryContainerName]] - [[inventoryName]]
       </p>
 
+      <!-- search section -->
+      <div class="card vertical layout">
+        <div class="p-16 horizontal layout center">
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.posSelectProduct.searchForProductInputError]] label=[[verses.posSelectProduct.searchForProductInput]] on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
+          <paper-button raised class="primary" on-tap="searchTapped">
+            [[verses.general.search]]
+          </paper-button>
+        </div>
+      </div>
+
+      <!-- section shows no product found -->
       <template is="dom-if" if="[[!productList.length]]">
         <div class="card">
           [[verses.inventory.noProductsInInventory]]
@@ -58,10 +71,12 @@
       <template is="dom-if" if="[[productList.length]]">
         <div class="card vertical layout">
 
+          <!-- pagination show previous -->
           <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
             <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
           </template>
 
+          <!-- section loops over priduct list and shows individual products -->
           <div class="list">
 
             <template is="dom-repeat" items="[[productList]]" as="product">
@@ -74,7 +89,6 @@
                   </div>
                   <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
                   <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
-                  <!-- TODO TRANSLATE -->
                   <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
                   <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
                 </div>
@@ -85,7 +99,6 @@
                   </template>
                   <template is="dom-if" if="[[product.isSelected]]">
                     <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.general.count]]">
-                      <!-- <div slot="prefix">[[verses.general.selected]]&nbsp;</div> -->
                       <div slot="suffix">&nbsp;[[product.unit]]</div>
                     </paper-input>
                     <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
@@ -98,6 +111,7 @@
 
           </div>
 
+          <!-- pagination show more -->
           <div class="pagination">
             [[verses.general.loaded]]
             <span class="limit">[[pagination.limit]]</span>
@@ -112,6 +126,7 @@
         </div>
       </template>
 
+      <!-- section shows selected products -->
       <template is="dom-if" if="[[selectedProductCount]]">
         <div class="card vertical layout">
           <div>[[verses.inventory.totalSelectedProducts]]: [[selectedProductCount]]</div>
@@ -121,6 +136,7 @@
           </div>
         </div>
 
+        <!-- section handles inventory transfer -->
         <div class="card vertical layout">
 
           <paper-dropdown-menu label="[[verses.inventory.moveToInventory]]" style="width: 100%;">
@@ -135,6 +151,7 @@
         </div>
       </template>
 
+      <!-- add products trigger -->
       <div class="card">
         <div class="mb-4">[[verses.inventory.addProductsBatchToInventory]]</div>
         <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
