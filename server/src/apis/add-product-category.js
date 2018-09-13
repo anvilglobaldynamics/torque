@@ -11,8 +11,6 @@ exports.AddProductCategoryApi = class extends Api {
 
   get requestSchema() {
     return Joi.object().keys({
-      // apiKey: Joi.string().length(64).required(),
-
       organizationId: Joi.number().max(999999999999999).required(),
 
       name: Joi.string().min(1).max(64).required(),

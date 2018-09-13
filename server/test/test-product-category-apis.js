@@ -41,7 +41,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidParentProductCategoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('Product Category', _ => {
+describe.only('Product Category', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
