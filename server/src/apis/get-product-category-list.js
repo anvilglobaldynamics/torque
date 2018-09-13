@@ -1,7 +1,5 @@
 const { Api } = require('./../api-base');
 const Joi = require('joi');
-const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
-const { extract } = require('./../utils/extract');
 
 exports.GetProductCategoryListApi = class extends Api {
 
