@@ -108,7 +108,6 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  parentProductCategoryId: null,
                   name: "Bottoms",
                   unit: "pcs",
                   defaultDiscountType: "percent",
@@ -120,7 +119,6 @@
                 };
               } else {
                 return {
-                  parentProductCategoryId: null,
                   name: "",
                   unit: "",
                   defaultDiscountType: "percent",
@@ -207,19 +205,15 @@
           return productCategory.id === parseInt(this.params['product-category']);
         });
         this.editingProductCategory = productCategory;
-        let { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productCategory;
-        this.editProductCategoryForm = { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
+        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productCategory;
+        this.editProductCategoryForm = { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
       }
 
-      _processCreateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+      _processCreateProductCategory({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
         let data = {
           name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
           organizationId: this.app.organization.id,
-          parentProductCategoryId
         };
-        if (this.parentProductCategory) {
-          data.parentProductCategoryId = this.parentProductCategory.id;
-        }
         this.app.callAddProductCategoryApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
@@ -230,12 +224,14 @@
         });
       }
 
-      _processUpdateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+      _processUpdateProductCategory({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
         let data = {
           name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
           productCategoryId: this.editingProductCategory.id
         };
-        data.parentProductCategoryId = this.editingProductCategory.parentProductCategoryId;
+        
+        console.log(data);
+
         this.app.callEditProductCategoryApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
@@ -256,16 +252,16 @@
         this.elemAll('#editProductCategoryForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editProductCategoryForm').validate()) return;
 
-        let { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
-        this._processCreateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
+        this._processCreateProductCategory({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
       }
 
       updateProductCategoryTapped(e = null) {
         this.elemAll('#editProductCategoryForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editProductCategoryForm').validate()) return;
 
-        let { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
-        this._processUpdateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
+        this._processUpdateProductCategory({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
       }
 
       // region: misc =================================
