@@ -67,7 +67,9 @@
     "user": "User",
     "cash": "cash",
     "card": "card",
-    "digital": "digital"
+    "digital": "digital",
+    "email": "Email",
+    "designation": "Designation"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -595,5 +597,11 @@
     "noProductsInInventory": "No products in this Inventory.",
     "acquiredOn": "Acquired On",
     "addedOn": "Added On"
+  },
+  "payment": {
+    "packageHasExpired": "Your package has expired.",
+    "pleaseCallUsToPurchaseSubscription": "Please call us at +880 1760 160503 to purchase a subscription.",
+    "recheckVerificationStatus": "Recheck Verification Status",
+    "useDifferentOrganization": "Use a different organization"
   }
 }
