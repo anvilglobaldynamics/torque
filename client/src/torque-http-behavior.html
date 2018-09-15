@@ -22,6 +22,11 @@
       // internals ===================================
 
       callJsonWebsocketApi(path, data, cbfn) {
+        if (!window.torqueMasterOptions.allowWebsockets) {
+          let err = new Error("window.torqueMasterOptions.allowWebsockets is false");
+          err.stack = '';
+          return cbfn(err);
+        }
         let url = `${this.websocketApiPathPrefix}${path}`
         let service = new WebsocketRequestService(this.websocketHost, url, { responseType: 'json' });
         service.on('end', (event) => {
