@@ -124,7 +124,6 @@ describe('Sales Return', _ => {
                 addProductCategory({
                   apiKey,
                   organizationId,
-                  parentProductCategoryId: null,
                   name: "test product category",
                   unit: "box",
                   defaultDiscountType: "percent",
@@ -138,7 +137,6 @@ describe('Sales Return', _ => {
                   addProductCategory({
                     apiKey,
                     organizationId,
-                    parentProductCategoryId: null,
                     name: "non returnable product category",
                     unit: "box",
                     defaultDiscountType: "percent",
@@ -196,7 +194,6 @@ describe('Sales Return', _ => {
                                 ],
                                 payment: {
                                   totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-                                  vatValue: 5,
                                   vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
                                   discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
                                   discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -226,7 +223,6 @@ describe('Sales Return', _ => {
                                   ],
                                   payment: {
                                     totalAmount: (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2),
-                                    vatValue: 5,
                                     vatAmount: ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100)),
                                     discountType: outletInventoryMatchingProductCategoryList[1].defaultDiscountType,
                                     discountValue: outletInventoryMatchingProductCategoryList[1].defaultDiscountValue,

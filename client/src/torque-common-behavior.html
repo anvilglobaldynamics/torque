@@ -68,6 +68,31 @@
         return number + 1;
       }
 
+      enforceMinMaxOnPaperInput(e) {
+        try {
+          let el = e.target;
+
+          if (typeof(el.value) === 'undefined' || el.value === '') {
+            el.value = String(el.min);
+          }
+
+          if (typeof(el.max) !== 'undefined') {
+            if (parseFloat(el.value) > parseFloat(el.max)) {
+              el.value = String(el.max);
+            }
+          }
+
+          if (typeof(el.min) !== 'undefined') {
+            if (parseFloat(el.value) < parseFloat(el.min)) {
+              el.value = String(el.min);
+            }
+          }
+
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
     }
   })();
 

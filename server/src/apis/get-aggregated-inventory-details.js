@@ -10,9 +10,12 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
 
   get requiresAuthentication() { return true; }
 
+  get autoPaginates() { return ['aggregatedProductList']; }
+
   get requestSchema() {
     return Joi.object().keys({
-      inventoryId: Joi.number().max(999999999999999).required()
+      inventoryId: Joi.number().max(999999999999999).required(),
+      searchString: Joi.string().min(0).max(64).allow('').optional()
     });
   }
 
@@ -93,14 +96,27 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     return productList;
   }
 
+  async __searchAggregatedProductList({ aggregatedProductList, searchString }) {
+    aggregatedProductList = aggregatedProductList.filter(aggregatedProduct => {
+      let regex = new RegExp(searchString, 'g');
+      return regex.test(aggregatedProduct.product.productCategory.name);
+    });
+
+    return aggregatedProductList;
+  }
+
   async handle({ body }) {
-    let { inventoryId } = body;
+    let { inventoryId, searchString } = body;
     let inventory = await this.__getInventory({ inventoryId });
     let inventoryContainerDetails = await this.__getInventoryContainerDetails({ inventory });
     let productList = inventory.productList;
 
     let clonedProductList = JSON.parse(JSON.stringify(productList));
     let aggregatedProductList = await this.__getAggregatedProductList({ productList: clonedProductList });
+
+    if (searchString) {
+      aggregatedProductList = await this.__searchAggregatedProductList({ aggregatedProductList, searchString });
+    }
 
     return {
       inventoryDetails: {

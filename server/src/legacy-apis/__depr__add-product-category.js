@@ -1,5 +1,5 @@
 
-let { LegacyApi } = require('./../legacy-api-base');
+let { LegacyApi } = require('../legacy-api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
@@ -15,7 +15,6 @@ exports.AddProductCategoryApi = class extends collectionCommonMixin(LegacyApi) {
       // apiKey: Joi.string().length(64).required(),
 
       organizationId: Joi.number().max(999999999999999).required(),
-      parentProductCategoryId: Joi.number().max(999999999999999).allow(null).required(),
 
       name: Joi.string().min(1).max(64).required(),
       unit: Joi.string().max(1024).required(),
@@ -50,24 +49,17 @@ exports.AddProductCategoryApi = class extends collectionCommonMixin(LegacyApi) {
     });
   }
 
-  _checkAndCreateProductCategory({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
+  _checkAndCreateProductCategory({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
     let productCategory = {
-      organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
+      organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
     }
 
-    if (parentProductCategoryId === null) {
-      this._createProductCategory(productCategory, cbfn);
-    } else {
-      this.legacyDatabase.productCategory.findById({ productCategoryId: parentProductCategoryId }, (err, parentProductCategory) => {
-        if (!this._ensureDoc(err, parentProductCategory, "PARENT_PRODUCT_CATEGORY_INVALID", "parent product category not found")) return;
-        this._createProductCategory(productCategory, cbfn);
-      })
-    }
+    this._createProductCategory(productCategory, cbfn);
   }
 
   handle({ body }) {
-    let { organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
-    this._checkAndCreateProductCategory({ organizationId, parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, (productCategoryId) => {
+    let { organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
+    this._checkAndCreateProductCategory({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, (productCategoryId) => {
       this.success({ status: "success", productCategoryId });
     });
   }

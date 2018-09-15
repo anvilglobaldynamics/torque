@@ -337,7 +337,6 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
           lastModifiedDatetimeStamp: Joi.number().required(),
           name: Joi.string().required(),
           organizationId: Joi.number().required(),
-          parentProductCategoryId: Joi.number().allow(null).required(),
           unit: Joi.string().required(),
           defaultDiscountType: Joi.string().required(),
           defaultDiscountValue: Joi.number().when(
@@ -808,7 +807,6 @@ exports.validateProductCategorySchema = (doc) => {
 
     name: Joi.string().min(1).max(64).required(),
     organizationId: Joi.number().max(999999999999999).required(),
-    parentProductCategoryId: Joi.number().max(999999999999999).allow(null).required(),
     unit: Joi.string().max(1024).required(),
     defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
     defaultDiscountValue: Joi.number().when(
@@ -909,7 +907,6 @@ exports.validateSalesSchema = (doc) => {
     ),
     payment: Joi.object().keys({
       totalAmount: Joi.number().max(999999999999999).required(),
-      vatValue: Joi.number().max(999999999999999).required(),
       vatAmount: Joi.number().max(999999999999999).required(),
       discountType: Joi.string().max(1024).required(),
       discountValue: Joi.number().max(999999999999999).required(),
@@ -953,7 +950,6 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
     ),
     payment: Joi.object().keys({
       totalAmount: Joi.number().max(999999999999999).required(),
-      vatValue: Joi.number().max(999999999999999).required(),
       vatAmount: Joi.number().max(999999999999999).required(),
       discountType: Joi.string().max(1024).required(),
       discountValue: Joi.number().max(999999999999999).required(),
@@ -1039,6 +1035,44 @@ exports.validateUserSchema = (doc) => {
     isPhoneVerified: Joi.boolean().required(),
     isEmailVerified: Joi.boolean().required(),
     isBanned: Joi.boolean().required()
+  });
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateAggregatedProductScema = (doc) => {
+  let schema = Joi.object().keys({
+    productId: Joi.number().max(999999999999999).required(),
+    count: Joi.number().max(999999999999999).required(),
+    acquiredDatetimeStamp: Joi.number().max(999999999999999).required(),
+    addedDatetimeStamp:  Joi.number().max(999999999999999).required(),
+    "product": Joi.object().keys({
+      id: Joi.number().max(999999999999999).required(),
+      productCategoryId: Joi.number().max(999999999999999).required(),
+      purchasePrice: Joi.number().max(999999999999999).required(),
+      salePrice: Joi.number().max(999999999999999).required(),
+      "productCategory": Joi.object().keys({
+        id: Joi.number().max(999999999999999).required(),
+        createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+        lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+        name: Joi.string().min(1).max(64).required(),
+        organizationId: Joi.number().max(999999999999999).required(),
+        unit: Joi.string().max(1024).required(),
+        defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
+        defaultDiscountValue: Joi.number().when(
+          'defaultDiscountType', { 
+            is: 'percent', 
+            then: Joi.number().min(0).max(100).required(), 
+            otherwise: Joi.number().max(999999999999999).required() 
+          }
+        ),
+        defaultPurchasePrice: Joi.number().max(999999999999999).required(),
+        defaultVat: Joi.number().max(999999999999999).required(),
+        defaultSalePrice: Joi.number().max(999999999999999).required(),
+        isDeleted: Joi.boolean().required(),
+        isReturnable: Joi.boolean().required()
+      })
+    })
   });
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;

@@ -1,4 +1,4 @@
-let { LegacyApi } = require('./../legacy-api-base');
+let { LegacyApi } = require('../legacy-api-base');
 let Joi = require('joi');
 
 exports.GetProductCategoryListApi = class extends LegacyApi {

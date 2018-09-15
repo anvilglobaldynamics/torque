@@ -45,63 +45,140 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <!-- section shows inventory container and inventory name -->
       <p class="page-subtitle">
         [[inventoryContainerName]] - [[inventoryName]]
       </p>
 
+      <!-- search section -->
       <div class="card vertical layout">
-        <div class="list">
-
-          <template is="dom-if" if="[[!productList.length]]">
-            [[verses.inventory.noProductsInInventory]]
-          </template>
-
-          <template is="dom-repeat" items="[[productList]]" as="product">
-            <div class="horizontal layout item center">
-              <div class="vertical layout flex">
-                <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
-                  [[product.count]][[product.unit]]
-                </div>
-                <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
-                <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
-                <!-- TODO TRANSLATE -->
-                <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
-                <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
-              </div>
-
-              <template is="dom-if" if="[[product.count]]">
-                <template is="dom-if" if="[[!product.isSelected]]">
-                  <paper-button raised class="secondary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
-                </template>
-                <template is="dom-if" if="[[product.isSelected]]">
-                  <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.general.count]]">
-                    <!-- <div slot="prefix">[[verses.general.selected]]&nbsp;</div> -->
-                    <div slot="suffix">&nbsp;[[product.unit]]</div>
-                  </paper-input>
-                  <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
-                </template>
-              </template>
-
-            </div>
-          </template>
+        <div class="p-16 horizontal layout center">
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.posSelectProduct.searchForProductInputError]] label=[[verses.posSelectProduct.searchForProductInput]] on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
+          <paper-button raised class="primary" on-tap="searchTapped">
+            [[verses.general.search]]
+          </paper-button>
         </div>
       </div>
 
-      <template is="dom-if" if="[[selectedProductCount]]">
+      <!-- section shows no product found -->
+      <template is="dom-if" if="[[!productList.length]]">
         <div class="card">
-          <div class="mb-4">[[verses.inventory.totalSelectedProducts]]: [[selectedProductCount]]</div>
-          <paper-dropdown-menu label="[[verses.inventory.moveToInventory]]" class="mr-4">
+          [[verses.inventory.noProductsInInventory]]
+        </div>
+      </template>
+
+      <template is="dom-if" if="[[productList.length]]">
+        <div class="card vertical layout">
+
+          <!-- pagination show previous -->
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          </template>
+
+          <!-- section loops over priduct list and shows individual products -->
+          <div class="list">
+
+            <template is="dom-repeat" items="[[productList]]" as="product">
+              <template is="dom-if" if="[[!product.isSelected]]">
+                
+                <div class="horizontal layout item center">
+                  <div class="vertical layout flex">
+                    <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                    <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
+                      [[product.count]][[product.unit]]
+                    </div>
+                    <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                    <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                    <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
+                    <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
+                  </div>
+
+                  <template is="dom-if" if="[[product.count]]">                    
+                    <paper-button raised class="secondary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+                    
+                    <!-- <template is="dom-if" if="[[product.isSelected]]">
+                      <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.general.count]]">
+                        <div slot="suffix">&nbsp;[[product.unit]]</div>
+                      </paper-input>
+                      <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                    </template> -->
+                  </template>
+
+                </div>
+
+              </template>
+            </template>
+
+          </div>
+
+          <!-- pagination show more -->
+          <div class="pagination">
+            [[verses.general.loaded]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          </template>
+
+        </div>
+      </template>
+
+      <!-- section shows selected products -->
+      <template is="dom-if" if="[[selectedProductList.length]]">
+        <div class="card vertical layout">
+          <div>[[verses.inventory.totalSelectedProducts]]: [[selectedProductCount]]</div>
+
+          <div class="list">
+            <template is="dom-repeat" items="[[selectedProductList]]" as="product">
+
+              <div class="horizontal layout item center">
+                <div class="vertical layout flex">
+                  <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                  <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
+                    [[product.count]][[product.unit]]
+                  </div>
+                  <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                  <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                  <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
+                  <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
+                </div>
+
+                <template is="dom-if" if="[[product.count]]">                    
+                  
+                  <template is="dom-if" if="[[product.isSelected]]">
+                    <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" on-input="genericSelectedCountInputChanged" min="1" max="[[product.count]]" label="[[verses.general.count]]">
+                      <div slot="suffix">&nbsp;[[product.unit]]</div>
+                    </paper-input>
+                    <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                  </template>
+
+                </template>
+              </div>
+
+            </template>
+          </div>
+        </div>
+
+        <!-- section handles inventory transfer -->
+        <div class="card vertical layout">
+
+          <paper-dropdown-menu label="[[verses.inventory.moveToInventory]]" style="width: 100%;">
             <paper-listbox slot="dropdown-content" selected="{{targetInventoryIndex}}">
               <template is="dom-repeat" items="[[inventoryList]]" as="inventory">
                 <paper-item data-id="[[inventory.id]]">[[inventory.inventoryContainerName]] - [[inventory.name]]</paper-item>
               </template>
             </paper-listbox>
           </paper-dropdown-menu>
+
           <paper-button raised class="primary m-0 manage-inventory-button" on-tap="moveSelectedTapped">[[verses.inventory.moveSelected]]</paper-button>
         </div>
       </template>
 
+      <!-- add products trigger -->
       <div class="card">
         <div class="mb-4">[[verses.inventory.addProductsBatchToInventory]]</div>
         <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
@@ -132,6 +209,14 @@
             type: Number,
             value: 0
           },
+          selectedProductList: {
+            type: Array,
+            value: () => []
+          },
+          searchString: {
+            type: String,
+            value: ''
+          },
           targetInventoryIndex: {
             type: Number,
             value: 0
@@ -159,11 +244,11 @@
           });
           return;
         }
+        if(this.searchString !== '') this.set('searchString', '');
         this._processInventory(() => {
-          this.isReady = true;
-        });
-        this._fetchInventoryList(() => {
-
+          this._fetchInventoryList(() => {
+            this.isReady = true;
+          });
         });
       }
 
@@ -180,16 +265,17 @@
       _fetchInventoryDetails(cbfn) {
         let inventoryId = parseInt(this.params.inventory);
         this.inventoryId = inventoryId;
-        let data = { inventoryId };
+        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate };
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
           return cbfn(response);
         });
       }
 
       _processInventory(cbfn) {
-        this._fetchInventoryDetails(({ aggregatedProductList, matchingProductList, matchingProductCategoryList, inventoryContainerDetails, inventoryDetails }) => {
+        this._fetchInventoryDetails(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
           this.inventoryContainerName = inventoryContainerDetails.inventoryContainerName;
           this.inventoryName = inventoryDetails.inventoryName;
           let productList = aggregatedProductList.map(product => {
@@ -200,6 +286,14 @@
             return product;
           });
           productList.sort((a, b) => b.count - a.count);
+
+          this.selectedProductList.forEach(previousProduct => {
+            let product = productList.find(product => product.productId === previousProduct.productId);
+            if (product) {
+              product.isSelected = true;
+            }
+          })
+
           this.productList = productList;
           cbfn();
         });
@@ -224,6 +318,33 @@
         });
       }
 
+      _addProductToSelectedProductList({ product }) {
+        this.push('selectedProductList', product);
+        this.selectedProductCount = this.selectedProductList.length;
+      }
+
+      _removeProductFromSelectedProductList({ product }) {
+        this.selectedProductList.forEach((selectedProduct, index) => {
+          if (selectedProduct.productId === product.productId) {
+            this.splice('selectedProductList', index, 1);
+          }
+        });
+
+        this.productList.forEach((productInList, index) => {
+          if (productInList.productId === product.productId) {
+            this.set(`productList.${index}.isSelected`, false)
+          }
+        });
+
+        this.selectedProductCount = this.selectedProductList.length;
+      }
+
+      _deselectAllFromSelectedProductList() {
+        this.productList.forEach((product, index) => this.set(`productList.${index}.isSelected`, false));
+        this.selectedProductList = [];
+        this.selectedProductCount = 0;
+      }
+
       // region: ui  ===========================
 
       moveSelectedTapped(e) {
@@ -236,6 +357,7 @@
           return { count, productId };
         });
         this._processMoveProducts({ fromInventoryId, toInventoryId, productList }, () => {
+          this._deselectAllFromSelectedProductList();
           let message = this.app.verses.inventory.selectedProductsMoved;
           this.app.showToast(message, () => {
             this.app.refreshCurrentPage();
@@ -244,16 +366,16 @@
       }
 
       selectTapped(e) {
-        this.selectedProductCount += 1;
-        let { product } = e.model;
-        e.model.set('product.selectedCount', product.count);
+        e.model.set('product.selectedCount', 1);
         e.model.set('product.isSelected', true);
+        
+        let { product } = e.model;
+        this._addProductToSelectedProductList({ product });
       }
 
       deselectTapped(e) {
-        this.selectedProductCount -= 1;
         let { product } = e.model;
-        e.model.set('product.isSelected', false);
+        this._removeProductFromSelectedProductList({ product });
       }
 
       // editTapped(e = null) {
@@ -288,6 +410,36 @@
         } else {
           return '';
         }
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processInventory(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processInventory(() => this.isReady = true);
+      }
+
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
+      searchCancelTapped(e = null) {
+        this.searchString = '';
+      }
+
+      searchTapped(e = null) {
+        this.set('paginate.offset', 0);
+        this._processInventory(() => this.isReady = true);
+      }
+
+      genericSelectedCountInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
       }
 
       // region: misc =================================

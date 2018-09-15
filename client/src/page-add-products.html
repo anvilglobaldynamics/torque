@@ -228,18 +228,11 @@
           return cbfn(response.productCategoryList);
         });
       }
-
-      __listChildren(fullList, parentProductCategory) {
-        parentProductCategory.childList = fullList.filter(productCategory => productCategory.parentProductCategoryId === parentProductCategory.id);
-        parentProductCategory.childList.forEach(productCategory => this.__listChildren(fullList, productCategory));
-      }
-
+      
       _processProductCategoryList(cbfn) {
         this._fetchProductCategoryList(rawProductCategoryList => {
           this.rawProductCategoryList = rawProductCategoryList;
-          let productCategoryList = rawProductCategoryList.filter(productCategory => productCategory.parentProductCategoryId === null);
-          productCategoryList.forEach(productCategory => this.__listChildren(rawProductCategoryList, productCategory));
-          this.productCategoryList = productCategoryList;
+          this.productCategoryList = rawProductCategoryList;
           return cbfn();
         });
       }

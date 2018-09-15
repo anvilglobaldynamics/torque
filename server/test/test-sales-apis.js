@@ -119,7 +119,6 @@ describe('Sales', _ => {
                 addProductCategory({
                   apiKey,
                   organizationId,
-                  parentProductCategoryId: null,
                   name: productCategoryName,
                   unit: "box",
                   defaultDiscountType: "percent",
@@ -205,7 +204,6 @@ describe('Sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -241,7 +239,6 @@ describe('Sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -285,7 +282,6 @@ describe('Sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -329,7 +325,6 @@ describe('Sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -372,7 +367,6 @@ describe('Sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -416,7 +410,6 @@ describe('Sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
@@ -460,7 +453,6 @@ describe('Sales', _ => {
 
         payment: {
           totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatValue: 5,
           vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
           discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
           discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,

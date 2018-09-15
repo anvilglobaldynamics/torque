@@ -17,10 +17,15 @@ let {
   validateAddWarehouseApiSuccessResponse,
   validateGetWarehouseListApiSuccessResponse,
   validateGetWarehouseApiSuccessResponse,
-  validateGenericApiSuccessResponse
+  validateGenericApiSuccessResponse,
+
+  validateAdminAssignPackageToOrganizationApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
+
+const adminUsername = "default";
+const adminPassword = "johndoe1pass";
 
 const email = `${rnd(prefix)}@gmail.com`;
 const password = "123545678";
@@ -38,6 +43,7 @@ const warehousePhone3 = 'w3' + rnd(prefix, 11);
 const warehousePhone4 = 'w4' + rnd(prefix, 11);
 
 let apiKey = null;
+let adminApiKey = null;
 let organizationId = null;
 let productCategoryId = null;
 let warehouseList = null;
@@ -70,7 +76,6 @@ describe('Warehouse', _ => {
             addProductCategory({
               apiKey,
               organizationId,
-              parentProductCategoryId: null,
               name: "test product category",
               unit: "box",
               defaultDiscountType: "percent",
@@ -150,26 +155,6 @@ describe('Warehouse', _ => {
 
   });
 
-  it('api/add-warehouse (Valid 2nd)', testDoneFn => {
-
-    callApi('api/add-warehouse', {
-      json: {
-        apiKey,
-        organizationId,
-        name: "My Warehouse 2",
-        physicalAddress: "wayne manor address",
-        phone: warehousePhone2,
-        contactPersonName: "test contact person name"
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateAddWarehouseApiSuccessResponse(body);
-      warehouseToBeFilledId = body.warehouseId;
-      testDoneFn();
-    })
-
-  });
-
   it('api/add-warehouse (Invalid default enterprise package outlet limit)', testDoneFn => {
 
     callApi('api/add-warehouse', {
@@ -185,6 +170,67 @@ describe('Warehouse', _ => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equals('ORGANIZATION_PACKAGE_MAX_WAREHOUSE_LIMIT_REACHED');
+      testDoneFn();
+    })
+
+  });
+
+  // prerequisite - start
+
+  it('api/admin-login', testDoneFn => {
+
+    callApi('api/admin-login', {
+      json: {
+        username: adminUsername,
+        password: adminPassword
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string');
+      expect(body).to.have.property('sessionId').that.is.a('number');
+      expect(body).to.have.property('admin').that.is.an('object');
+      adminApiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/admin-assign-package-to-organization (Valid)', testDoneFn => {
+
+    callApi('api/admin-assign-package-to-organization', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId,
+        packageCode: "ME03",
+        paymentReference: "joi test"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminAssignPackageToOrganizationApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  // prerequisite - start
+
+  it('api/add-warehouse (Valid 2nd)', testDoneFn => {
+
+    callApi('api/add-warehouse', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "My Warehouse 2",
+        physicalAddress: "wayne manor address",
+        phone: warehousePhone2,
+        contactPersonName: "test contact person name"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddWarehouseApiSuccessResponse(body);
+      warehouseToBeFilledId = body.warehouseId;
       testDoneFn();
     })
 
