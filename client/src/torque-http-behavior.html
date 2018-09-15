@@ -77,6 +77,8 @@
             console.log('this.pageName', this.pageName);
             if (this.pageName !== 'payment') {
               // TODO: Translate
+              console.log('sending to payment');
+              this.navigateTo('/payment');
               console.log('showing dialog');
               let message = `Your subscription for "${this.organization.name}" has expired. Taking you to the payment page.`;
               this.showModalDialog("Subscription Expired", message, _ => {
