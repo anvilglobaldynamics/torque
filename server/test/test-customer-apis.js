@@ -448,38 +448,7 @@ describe('Customer', _ => {
 
   });
 
-  it('api/delete-customer (Valid): ', testDoneFn => {
-
-    callApi('api/delete-customer', {
-      json: {
-        apiKey,
-        customerId: firstCustomer.id
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiSuccessResponse(body);
-      testDoneFn();
-    })
-
-  });
-
-  it('api/get-customer (Deleted): ', testDoneFn => {
-
-    callApi('api/get-customer', {
-      json: {
-        apiKey,
-        customerId: firstCustomer.id
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiFailureResponse(body);
-      expect(body.error.code).equals('CUSTOMER_INVALID');
-      testDoneFn();
-    })
-
-  });
-
-  it('api/delete-customer (Invalid): ', testDoneFn => {
+  it('api/delete-customer (Confirm that API is disabled): ', testDoneFn => {
 
     callApi('api/delete-customer', {
       json: {
@@ -489,7 +458,7 @@ describe('Customer', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).equals('CUSTOMER_INVALID');
+      expect(body.error.code).equals('API_DISABLED');
       testDoneFn();
     })
 
