@@ -9,7 +9,7 @@ Joi.object().keys({
   organizationId: Joi.number().max(999999999999999).required(),
   designation: Joi.string().max(1024).required(),
   role: Joi.string().max(1024).required(),
-  companyProvidedId: Joi.string().alphanum().allow('').max(1024).required(),
+  companyProvidedId: Joi.string().alphanum().allow('').required(),
   privileges: Joi.object().required().keys({
     PRIV_VIEW_USERS: Joi.boolean().required(),
     PRIV_MODIFY_USERS: Joi.boolean().required(),

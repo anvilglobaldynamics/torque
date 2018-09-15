@@ -4,9 +4,12 @@ This script generates a huge number of bulk data in order to test manually.
 
 const fslib = require('fs-extra');
 
+let { rnd } = require('../test/lib');
+
 // --------------------------------------------------------------
 
-const phonePrefix = '99800';
+const phonePrefix = '+800';
+const emailPrefix = 'mail';
 const commonPassword = '12345678';
 
 // --------------------------------------------------------------
@@ -56,10 +59,15 @@ const pickOne = (list) => {
 // --------------------------------------------------------------
 
 let phoneNumberCount = 0;
-
 const makePhoneNumber = () => {
   phoneNumberCount += 1;
-  return phonePrefix + String(phoneNumberCount).padStart(8, '0');
+  return rnd(phonePrefix, 11);
+}
+
+let emailIdCount = 0;
+const makeEmailId = () => {
+  emailIdCount += 1;
+  return `${rnd(emailPrefix)}@gmail.com`;
 }
 
 // --------------------------------------------------------------
@@ -69,7 +77,6 @@ const utils = require('./../test/utils.js');
 let callApi = async (path, data) => {
   return await new Promise((accept, reject) => {
     utils.callApi(path, { json: data }, (err, response, body) => {
-      // console.log(err, body)
       if (err) return reject(err);
       if (response.statusCode !== 200) return reject(new Error('Non ok status code'));
       if (body.hasError) {
@@ -83,6 +90,7 @@ let callApi = async (path, data) => {
 
 const createUser = async () => {
   console.log('should create user');
+
   let phone = makePhoneNumber();
   let { userId } = data = await callApi('api/user-register', {
     password: commonPassword,
@@ -93,28 +101,49 @@ const createUser = async () => {
     emailOrPhone: phone,
     password: commonPassword
   });
-  console.log({ apiKey, userId })
+
   return { apiKey, userId };
 }
 
-const createOrganization = async () => {
+const createOrganization = async ({ apiKey }) => {
   console.log('should create organization');
+  
+  let { organizationId } = await callApi('api/add-organization', {
+    apiKey,
+    name: pickOne(nameList),
+    primaryBusinessAddress: pickOne(nameList),
+    phone: makePhoneNumber(),
+    email: makeEmailId()
+  });
+
+  return { organizationId };
 }
 
-const createProductCategory = async () => {
+const createProductCategory = async ({ apiKey }) => {
   console.log('should create productCategory');
 }
 
-const createWarehouse = async () => {
+const createWarehouse = async ({ apiKey }) => {
   console.log('should create warehouse');
 }
 
-const createOutlet = async () => {
+const createOutlet = async ({ apiKey, organizationId }) => {
   console.log('should create outlet');
+
+  let { outletId } = await callApi('api/add-outlet', {
+    apiKey,
+    organizationId,
+    name: pickOne(nameList),
+    physicalAddress: pickOne(nameList),
+    phone: makePhoneNumber(),
+    contactPersonName: pickOne(nameList)
+  });
+
+  return { outletId };
 }
 
-const createProduct = async () => {
-  console.log('should create product');
+const createEmployee = async ({ apiKey }) => {
+  console.log('should create employee');
 }
 
 // --------------------------------------------------------------
@@ -126,13 +155,12 @@ const generateBulkData = async () => {
   await mainProgram.initiateServer();
 
   let { userId: ownerUserId, apiKey } = await createUser();
-  console.log(apiKey, ownerUserId)
 
   for (let i = 0; i < getSolidCount(organizationCount); i++) {
-    let organization = await createOrganization();
+    let organizationId = await createOrganization({ apiKey });
 
     for (let i = 0; i < getSolidCount(employeeCount); i++) {
-      let employee = await createOrganization();
+      let employee = await createEmployee();
     }
 
     for (let i = 0; i < getSolidCount(warehouseCount); i++) {
@@ -140,7 +168,7 @@ const generateBulkData = async () => {
     }
 
     for (let i = 0; i < getSolidCount(outletCount); i++) {
-      let outlet = await createOutlet();
+      let outletId = await createOutlet({ apiKey, organizationId });
     }
 
     for (let i = 0; i < getSolidCount(productCategoryCount); i++) {
@@ -150,7 +178,6 @@ const generateBulkData = async () => {
   }
 
   process.exit(0);
-
 }
 
 generateBulkData().catch(ex => {
