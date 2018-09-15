@@ -33,6 +33,7 @@
     "view": "দেখুন",
     "edit": "পরিবর্তন করুন",
     "showing": "দেখাচ্ছে",
+    "loaded": "লোড করা হয়েছে",
     "itemsOutOf": "আইটেম গুলোর মধ্যে",
     "startingFrom": "থেকে শুরু করে",
     "per": "প্রতি",
@@ -556,7 +557,9 @@
     "confirmSelection": "নির্বাচন নিশ্চিত করুন",
     "acquiredOn": "খরিদ হয়েছে",
     "addedOn": "যুক্ত হয়েছে",
-    "noProductFoundInOutlet": "দোকানের প্রধান পণ্য তালিকায় কোনো পণ্য নেই।"
+    "noProductFoundInOutlet": "দোকানের প্রধান পণ্য তালিকায় কোনো পণ্য নেই।",
+    "searchForProductInput": "পণ্য জন্য অনুসন্ধান করুন",
+    "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি"
   },
   "settings": {
     "settingsTitle": "সেটিংস",
@@ -589,7 +592,7 @@
     "totalSelectedProducts": "মোট নির্বাচিত পণ্য",
     "moveToInventory": "পণ্য তালিকায় সরান",
     "moveSelected": "নির্বাচিত সরান",
-    "addProductsBatchToInventory": "গোছাতে পণ্য তালিকায় যুক্ত করুন",
+    "addProductsBatchToInventory": "একসাথে একাধিক পণ্য তালিকায় যুক্ত করুন",
     "addProducts": "পণ্য যুক্ত করুন",
     "noProductsInInventory": "এই পণ্য তালিকায় কোন পণ্য নেই।",
     "acquiredOn": "খরিদ হয়েছে",

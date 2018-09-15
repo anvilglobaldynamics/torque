@@ -19,6 +19,7 @@ let {
   validateGenericApiFailureResponse,
   validateGenericApiSuccessResponse,
   validateGetAggregatedInventoryDetailsApiSuccessResponse,
+  validateAggregatedProductScema,
   validateProductCategorySchema,
   validateProductSchema,
 } = require('./lib');
@@ -68,7 +69,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('Inventory', _ => {
+describe.only('Inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -279,10 +280,31 @@ describe('Inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      body.aggregatedProductList.forEach(aggregatedProduct => {
+        validateAggregatedProductScema(aggregatedProduct);
+      });
 
       productToBeTransferred = body.aggregatedProductList[0];
-      // TODO: Schema Validate aggregatedProductList
       expect(body.aggregatedProductList[0].productId).to.not.equal(body.aggregatedProductList[1].productId);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-aggregated-inventory-details (Valid searchString warehouse)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId,
+        searchString: '2nd'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      body.aggregatedProductList.forEach(aggregatedProduct => {
+        validateAggregatedProductScema(aggregatedProduct);
+      });
       testDoneFn();
     });
 

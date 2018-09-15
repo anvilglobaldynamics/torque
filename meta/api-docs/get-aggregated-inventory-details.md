@@ -12,14 +12,15 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
   inventoryId: Joi.number().max(999999999999999).required(),
+  searchString: Joi.string().min(0).max(64).allow('').optional()
 }
 ```
 
 ### response (on error):
 ```js
 {
-  "hasError": true,
-  "error": {
+  hasError: true,
+  error: {
     code,
     message
   }
@@ -36,29 +37,31 @@ Possible Error Codes:
 ### response (on success):
 ```js
 {
-  "hasError": false,
+  hasError: false,
 
-  "inventoryDetails": Joi.object().keys({
+  inventoryDetails: Joi.object().keys({
     inventoryName: Joi.string().min(1).max(64).required()
   }),
 
-  "inventoryContainerDetails": Joi.object().keys({
+  inventoryContainerDetails: Joi.object().keys({
     inventoryContainerType: Joi.string().valid('outlet', 'warehouse').required(),
     inventoryContainerId: Joi.number().max(999999999999999).required(),
     inventoryContainerName: Joi.string().min(1).max(64).required()
   }),
 
-  "aggregatedProductList": Joi.array().keys({
+  aggregatedProductList: Joi.array().keys({
     productId: Joi.number().max(999999999999999).required(),
     count: Joi.number().max(999999999999999).required(),
     acquiredDatetimeStamp: Joi.number().max(999999999999999).required(),
     addedDatetimeStamp:  Joi.number().max(999999999999999).required(),
-    "product": Joi.object().keys({
+
+    product: Joi.object().keys({
       id: Joi.number().max(999999999999999).required(),
       productCategoryId: Joi.number().max(999999999999999).required(),
       purchasePrice: Joi.number().max(999999999999999).required(),
       salePrice: Joi.number().max(999999999999999).required(),
-      "productCategory": Joi.object().keys({
+      
+      productCategory: Joi.object().keys({
         id: Joi.number().max(999999999999999).required(),
         createdDatetimeStamp: Joi.number().max(999999999999999).required(),
         lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
