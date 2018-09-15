@@ -133,28 +133,6 @@ describe('Warehouse', _ => {
 
   });
 
-  it.skip('api/add-warehouse (Invalid copy phone)', testDoneFn => {
-
-    callApi('api/add-warehouse', {
-      json: {
-        apiKey,
-        organizationId,
-        name: "My Warehouse",
-        physicalAddress: "wayne manor address",
-        phone: warehousePhone,
-        contactPersonName: "test contact person name"
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error.code).to.equal('PHONE_ALREADY_IN_USE');
-
-      testDoneFn();
-    })
-
-  });
-
   it('api/add-warehouse (Invalid default enterprise package outlet limit)', testDoneFn => {
 
     callApi('api/add-warehouse', {
@@ -347,27 +325,6 @@ describe('Warehouse', _ => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equal('WAREHOUSE_INVALID');
-      testDoneFn();
-    })
-
-  });
-
-  it.skip('api/edit-warehouse (Invalid copy phone)', testDoneFn => {
-
-    callApi('api/edit-warehouse', {
-      json: {
-        apiKey,
-        warehouseId: warehouseToBeModified.id,
-
-        name: "My Warehouse",
-        physicalAddress: "wayne manor address",
-        phone: warehousePhone2,
-        contactPersonName: "test contact person name"
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiFailureResponse(body);
-      expect(body.error.code).equal('PHONE_ALREADY_IN_USE');
       testDoneFn();
     })
 
