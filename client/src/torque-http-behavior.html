@@ -73,11 +73,16 @@
             return;
           }
           if (response.hasError && (response.error.code === "SUBSCRIPTION_EXPIRED")) {
+            console.log("SUBSCRIPTION_EXPIRED");
+            console.log('this.pageName', this.pageName);
             if (this.pageName !== 'payment') {
               // TODO: Translate
+              console.log('showing dialog');
               let message = `Your subscription for "${this.organization.name}" has expired. Taking you to the payment page.`;
               this.showModalDialog("Subscription Expired", message, _ => {
+                console.log('inside dialog callback');
                 this.navigateTo('/payment');
+                console.log('should already be navigating by now.')
               });
               return;
             }
