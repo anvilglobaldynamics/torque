@@ -287,14 +287,12 @@
           });
           productList.sort((a, b) => b.count - a.count);
 
-          if (this.selectedProductList.length > 0 ) {
-            this.selectedProductList.forEach(previousProduct => {
-              let product = productList.find(product => product.productId === previousProduct.productId);
-              if (product) {
-                product.isSelected = true;
-              }
-            })
-          }
+          this.selectedProductList.forEach(previousProduct => {
+            let product = productList.find(product => product.productId === previousProduct.productId);
+            if (product) {
+              product.isSelected = true;
+            }
+          })
 
           this.productList = productList;
           cbfn();

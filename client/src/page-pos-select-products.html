@@ -231,22 +231,20 @@
           });
           productList.sort((a, b) => b.count - a.count);
 
-          let previousSavedSelectedProductList = this.app.getFromSession('pos-selected-product-list');
+          let previousSavedSelectedProductList = this.app.getFromSession('pos-selected-product-list') || [];
 
-          if(previousSavedSelectedProductList) {
-            if (this.selectedProductList.length > 0 || previousSavedSelectedProductList.length > 0) {
-              if (previousSavedSelectedProductList.length > 0 && this.selectedProductList.length === 0) {
-                this.selectedProductCount = previousSavedSelectedProductList.length;
-                this.selectedProductList = previousSavedSelectedProductList;
-              }
-
-              this.selectedProductList.forEach(previousProduct => {
-                let product = productList.find(product => product.productId === previousProduct.productId);
-                if (product) {
-                  product.isSelected = true;
-                }
-              })
+          if (this.selectedProductList.length > 0 || previousSavedSelectedProductList.length > 0) {
+            if (previousSavedSelectedProductList.length > 0 && this.selectedProductList.length === 0) {
+              this.selectedProductCount = previousSavedSelectedProductList.length;
+              this.selectedProductList = previousSavedSelectedProductList;
             }
+
+            this.selectedProductList.forEach(previousProduct => {
+              let product = productList.find(product => product.productId === previousProduct.productId);
+              if (product) {
+                product.isSelected = true;
+              }
+            })
           }
 
           this.productList = productList;
