@@ -103,6 +103,11 @@
     <div class="spinner"></div>
   </torque-app>
   <script>
+    window.torqueMasterOptions = {
+      allowWebsockets: false
+    };
+  </script>
+  <script>
     if ('serviceWorker' in navigator && window.location.href.indexOf('pwa.') > -1) {
       window.addEventListener('load', function () {
         navigator.serviceWorker.register('service-worker.js', {
