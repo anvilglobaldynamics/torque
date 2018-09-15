@@ -76,6 +76,7 @@
       0% {
         -webkit-transform: scale(0)
       }
+
       100% {
         -webkit-transform: scale(1.0);
         opacity: 0;
@@ -87,6 +88,7 @@
         -webkit-transform: scale(0);
         transform: scale(0);
       }
+
       100% {
         -webkit-transform: scale(1.0);
         transform: scale(1.0);
@@ -100,7 +102,7 @@
   <torque-app>
     <div class="spinner"></div>
   </torque-app>
-  <script>   
+  <script>
     if ('serviceWorker' in navigator && window.location.href.indexOf('pwa.') > -1) {
       window.addEventListener('load', function () {
         navigator.serviceWorker.register('service-worker.js', {
