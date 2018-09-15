@@ -34,11 +34,6 @@
 
       <iron-form id="editProductCategoryForm" on-keypress="genericFormSubmitionKeypress">
         <form>
-          <template is="dom-if" if="[[parentProductCategory]]">
-            <div class="card vertical layout">
-              [[verses.productCategory.parentNameNotifierStart]] "[[parentProductCategory.name]]" [[verses.productCategory.parentNameNotifierEnd]]
-            </div>
-          </template>
 
           <div class="card vertical layout">
             <paper-input class="editProductCategoryForm--name" value="{{editProductCategoryForm.name}}" required minlength="3" error-message=[[verses.productCategory.productCategoryNameInputError]] label=[[verses.productCategory.productCategoryNameInput]]></paper-input>
@@ -108,7 +103,6 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  parentProductCategoryId: null,
                   name: "Bottoms",
                   unit: "pcs",
                   defaultDiscountType: "percent",
@@ -120,7 +114,6 @@
                 };
               } else {
                 return {
-                  parentProductCategoryId: null,
                   name: "",
                   unit: "",
                   defaultDiscountType: "percent",
@@ -156,7 +149,6 @@
         }
         if (!this._ensureAccess()) return;
         this._processGetProductCategoryList(() => {
-          this._processParentProductCategory();
           if (this.editMode) {
             this._processGetProductCategory();
             this.isReady = true;
@@ -193,33 +185,20 @@
         });
       }
 
-      _processParentProductCategory() {
-        this.parentProductCategory = null;
-        if ('parent' in this.params) {
-          this.parentProductCategory = this._productCategoryList.find(productCategory => {
-            return productCategory.id === parseInt(this.params.parent);
-          });
-        }
-      }
-
       _processGetProductCategory() {
         let productCategory = this._productCategoryList.find(productCategory => {
           return productCategory.id === parseInt(this.params['product-category']);
         });
         this.editingProductCategory = productCategory;
-        let { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productCategory;
-        this.editProductCategoryForm = { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
+        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productCategory;
+        this.editProductCategoryForm = { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
       }
 
-      _processCreateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+      _processCreateProductCategory({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
         let data = {
           name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
           organizationId: this.app.organization.id,
-          parentProductCategoryId
         };
-        if (this.parentProductCategory) {
-          data.parentProductCategoryId = this.parentProductCategory.id;
-        }
         this.app.callAddProductCategoryApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
@@ -230,12 +209,14 @@
         });
       }
 
-      _processUpdateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+      _processUpdateProductCategory({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
         let data = {
           name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
           productCategoryId: this.editingProductCategory.id
         };
-        data.parentProductCategoryId = this.editingProductCategory.parentProductCategoryId;
+
+        console.log(data);
+
         this.app.callEditProductCategoryApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
@@ -256,16 +237,16 @@
         this.elemAll('#editProductCategoryForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editProductCategoryForm').validate()) return;
 
-        let { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
-        this._processCreateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
+        this._processCreateProductCategory({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
       }
 
       updateProductCategoryTapped(e = null) {
         this.elemAll('#editProductCategoryForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editProductCategoryForm').validate()) return;
 
-        let { parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
-        this._processUpdateProductCategory({ parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
+        this._processUpdateProductCategory({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
       }
 
       // region: misc =================================

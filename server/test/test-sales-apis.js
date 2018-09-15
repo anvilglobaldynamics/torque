@@ -119,7 +119,6 @@ describe('Sales', _ => {
                 addProductCategory({
                   apiKey,
                   organizationId,
-                  parentProductCategoryId: null,
                   name: productCategoryName,
                   unit: "box",
                   defaultDiscountType: "percent",

@@ -12,7 +12,6 @@ exports.ProductCategoryCollection = class extends Collection {
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       name: Joi.string().min(1).max(64).required(),
       organizationId: Joi.number().max(999999999999999).required(),
-      parentProductCategoryId: Joi.number().max(999999999999999).allow(null).required(),
       unit: Joi.string().max(1024).required(),
       defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
       defaultDiscountValue: Joi.number().when(
@@ -47,7 +46,6 @@ exports.ProductCategoryCollection = class extends Collection {
   get deletionIndicatorKey() { return 'isDeleted'; }
 
   async create({ organizationId,
-    parentProductCategoryId,
     name,
     unit,
     defaultDiscountType,
@@ -60,7 +58,6 @@ exports.ProductCategoryCollection = class extends Collection {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
       organizationId,
-      parentProductCategoryId,
       name,
       unit,
       defaultDiscountType,
@@ -73,20 +70,16 @@ exports.ProductCategoryCollection = class extends Collection {
     });
   }
 
-  async setDetails({ id }, { arentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+  async setDetails({ id }, { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
     return await this._update({ id }, {
       $set: {
-        parentProductCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
+        name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
       }
     });
   }
 
   async listByOrganizationId({ organizationId }) {
     return await this._find({ organizationId });
-  }
-
-  async listChildren({ id }) {
-    return await this._find({ parentProductCategoryId: id });
   }
 
   async listByOrganizationIdAndSearchString({ organizationId, searchString }) {
