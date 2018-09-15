@@ -5,6 +5,8 @@ let { collectionCommonMixin } = require('./mixins/collection-common');
 
 exports.DeleteProductCategoryApi = class extends collectionCommonMixin(LegacyApi) {
 
+  get isEnabled() { return false; }
+
   get autoValidates() { return true; }
 
   get requiresAuthentication() { return true; }
