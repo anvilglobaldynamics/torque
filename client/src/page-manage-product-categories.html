@@ -25,7 +25,7 @@
     <style include="shared-styles">
     </style>
 
-    <div class$="layout vertical [[$hideIfBeingMoved(isBeingMoved)]]" id="wrapper" style$="margin-left: [[marginLeft]]px">
+    <div class="layout vertical" id="wrapper">
       <div class="list">
         <div class="horizontal layout item center wrap">
           <div class="content">
@@ -34,35 +34,12 @@
             <div class="inventory-product-price-container">[[verses.productCategory.sellingPrice]]: [[productCategory.defaultSalePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productCategory.unit]]</div>
           </div>
           <div class="control-buttons">
-            <template is="dom-if" if="[[!isAMovingGoingOn]]">
-              <paper-button class="secondary" on-tap="moveTapped" raised>
-                <iron-icon icon="icons:open-with" class="button-icon"></iron-icon>
-                [[verses.general.move]]
-              </paper-button>
-              <paper-button class="secondary" on-tap="editTapped" raised>
-                <iron-icon icon="create" class="button-icon"></iron-icon>
-                [[verses.general.edit]]
-              </paper-button>
-              <!-- <paper-button class="secondary" on-tap="deleteTapped" raised>
-                <iron-icon icon="delete" class="button-iconx"></iron-icon>
-                [[verses.general.delete]]
-              </paper-button> -->
-              <paper-button class="primary" on-tap="addSubcategoryTapped" raised>
-                <iron-icon icon="add" class="button-icon"></iron-icon>
-                [[verses.productCategory.subCategory]]
-              </paper-button>
-            </template>
-            <template is="dom-if" if="[[isAMovingGoingOn]]">
-              <paper-button class="primary" on-tap="moveHereTapped" raised>
-                [[verses.productCategory.moveHere]]
-              </paper-button>
-            </template>
+            <paper-button class="secondary" on-tap="editTapped" raised>
+              <iron-icon icon="create" class="button-icon"></iron-icon>
+              [[verses.general.edit]]
+            </paper-button>
           </div>
-
         </div>
-        <template is="dom-repeat" items="[[productCategory.childList]]" as="childProductCategory">
-          <product-category product-category="[[childProductCategory]]" margin-left="[[$marginMore(marginLeft)]]" app="[[app]]"></product-category>
-        </template>
       </div>
     </div>
 
@@ -77,14 +54,6 @@
 
       static get properties() {
         return {
-          isBeingMoved: {
-            type: Boolean,
-            value: false
-          },
-          isAMovingGoingOn: {
-            type: Boolean,
-            value: false
-          },
           page: {
             type: Object,
             value: null,
@@ -109,71 +78,10 @@
         this.useLanguageServices();
       }
 
-      _deleteProductCategory(productCategoryId, cbfn) {
-        productCategoryId = parseInt(productCategoryId);
-        let data = { productCategoryId };
-        this.app.callDeleteProductCategoryApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response);
-        });
-      }
-
       // region: ui  ===========================
-
-      $hideIfBeingMoved(isBeingMoved) {
-        if (isBeingMoved) return 'hidden';
-        return '';
-      }
-
-      $marginMore(marginLeft) {
-        if (marginLeft > 0) return marginLeft;
-        return marginLeft + 24;
-      }
 
       editTapped(e) {
         return this.app.navigateTo(`/edit-product-category/product-category:${this.productCategory.id}`);
-      }
-
-      deleteTapped(e) {
-        let message = `Are you sure you want to delete this product category ${this.productCategory.name}? Once deleted, you can not restore this product category.`;
-        this.app.showModalConfirmation("Delete Product Category?", message, (answer) => {
-          if (!answer) return;
-          this._deleteProductCategory(this.productCategory.id, () => {
-            this.app.showToast("Product category has been deleted", () => {
-              this.app.refreshCurrentPage();
-            });
-          });
-        });
-      }
-
-      addSubcategoryTapped(e = null) {
-        return this.app.navigateTo(`/edit-product-category/parent:${this.productCategory.id}`);
-      }
-
-      _movingInitiated(productCategoryId) {
-        let domHost = Polymer.dom(this).getOwnerRoot().host;
-        domHost._movingInitiated(productCategoryId);
-      }
-
-      moveTapped(e) {
-        this._movingInitiated(this.productCategory.id);
-        this.isBeingMoved = true;
-      }
-
-      _informMoving(isMoving) {
-        this.isAMovingGoingOn = isMoving;
-        if (!isMoving && this.isBeingMoved) this.isBeingMoved = false;
-        this.elemAll('product-category').forEach(el => el._informMoving(isMoving));
-      }
-
-      _movingConfirmed(productCategoryId) {
-        let domHost = Polymer.dom(this).getOwnerRoot().host;
-        domHost._movingConfirmed(productCategoryId);
-      }
-
-      moveHereTapped(e) {
-        this._movingConfirmed(this.productCategory.id);
       }
 
       // region: misc =================================
@@ -193,7 +101,7 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <template is="dom-if" if="{{!productCategoryList.length}}">
+      <template is="dom-if" if="[[!productCategoryList.length]]">
         <div class="card">
           [[verses.productCategory.noProductCategoryFound]]
         </div>
@@ -202,26 +110,19 @@
       <template is="dom-if" if="{{productCategoryList.length}}">
         <div class="card">
           <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
-            <product-category product-category="[[productCategory]]" margin-left="[[marginLeft]]" app="[[app]]"></product-category>
+            <product-category product-category="[[productCategory]]" app="[[app]]"></product-category>
           </template>
         </div>
       </template>
 
       <div class="lone-controls">
-        <template is="dom-if" if="[[isAMovingGoingOn]]">
-          <paper-button raised class="primary" on-tap="moveToRootTapped">[[verses.productCategory.moveToRoot]]</paper-button>
-          <paper-button raised class="secondary" on-tap="cancelMovingTapped">[[verses.general.cancel]]</paper-button>
-        </template>
-        <template is="dom-if" if="[[!isAMovingGoingOn]]">
-          <paper-button raised class="primary" on-tap="createTapped">
-            <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
-            [[verses.productCategory.createNewProductCategory]]
-          </paper-button>
-        </template>
+        <paper-button raised class="primary" on-tap="createTapped">
+          <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
+          [[verses.productCategory.createNewProductCategory]]
+        </paper-button>
       </div>
 
     </div>
-
   </template>
 
   <script>
@@ -233,14 +134,6 @@
 
       static get properties() {
         return {
-          marginLeft: {
-            type: Number,
-            value: 0
-          },
-          isAMovingGoingOn: {
-            type: Boolean,
-            value: false
-          }
         };
       }
 
@@ -264,8 +157,6 @@
 
       onNavigateOut() {
         super.onNavigateOut();
-        this.isAMovingGoingOn = false;
-        this.elemAll('product-category').forEach(el => el._informMoving(false));
         this.productCategoryList = [];
         this.app.popPageTitle();
       }
@@ -283,74 +174,18 @@
         });
       }
 
-      __listChildren(fullList, parentProductCategory) {
-        parentProductCategory.childList = fullList.filter(productCategory => productCategory.parentProductCategoryId === parentProductCategory.id);
-        parentProductCategory.childList.forEach(productCategory => this.__listChildren(fullList, productCategory));
-      }
-
       _processProductCategoryList(cbfn) {
         this._fetchProductCategoryList(rawProductCategoryList => {
           this.rawProductCategoryList = rawProductCategoryList;
-          let productCategoryList = rawProductCategoryList.filter(productCategory => productCategory.parentProductCategoryId === null);
-          productCategoryList.forEach(productCategory => this.__listChildren(rawProductCategoryList, productCategory));
-          this.productCategoryList = productCategoryList;
+          this.productCategoryList = rawProductCategoryList;
           return cbfn();
-        });
-      }
-
-      _moveProductCategory(productCategory, newParentProductCategoryId, cbfn) {
-        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productCategory;
-        let data = {
-          parentProductCategoryId: newParentProductCategoryId,
-          name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
-          productCategoryId: productCategory.id
-        };
-        this.app.callEditProductCategoryApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          let message = "Product Category has been moved."
-          this.app.showToast(message, _ => {
-            cbfn();
-          });
         });
       }
 
       // region: ui  ===========================
 
-      _movingInitiated(whichProductCategoryId) {
-        this.whichProductCategoryId = whichProductCategoryId;
-        this.isAMovingGoingOn = true;
-        this.elemAll('product-category').forEach(el => el._informMoving(true));
-      }
-
-      _movingConfirmed(targetProductCategoryId) {
-        let productCategory = this.rawProductCategoryList.find(({ id }) => id === this.whichProductCategoryId);
-        if (productCategory.parentProductCategoryId === targetProductCategoryId) {
-          this.app.refreshCurrentPage();
-          return;
-        }
-        this._moveProductCategory(productCategory, targetProductCategoryId, () => {
-          this.app.refreshCurrentPage();
-        });
-      }
-
-      moveToRootTapped() {
-        let productCategory = this.rawProductCategoryList.find(({ id }) => id === this.whichProductCategoryId);
-        this._moveProductCategory(productCategory, null, () => {
-          this.app.refreshCurrentPage();
-        });
-      }
-
-      cancelMovingTapped(e = null) {
-        this.app.refreshCurrentPage();
-      }
-
       createTapped(e = null) {
         return this.app.navigateTo('/edit-product-category');
-      }
-
-      _refresh() {
-
       }
 
       // region: misc =================================

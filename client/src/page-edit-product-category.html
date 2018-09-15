@@ -34,11 +34,6 @@
 
       <iron-form id="editProductCategoryForm" on-keypress="genericFormSubmitionKeypress">
         <form>
-          <template is="dom-if" if="[[parentProductCategory]]">
-            <div class="card vertical layout">
-              [[verses.productCategory.parentNameNotifierStart]] "[[parentProductCategory.name]]" [[verses.productCategory.parentNameNotifierEnd]]
-            </div>
-          </template>
 
           <div class="card vertical layout">
             <paper-input class="editProductCategoryForm--name" value="{{editProductCategoryForm.name}}" required minlength="3" error-message=[[verses.productCategory.productCategoryNameInputError]] label=[[verses.productCategory.productCategoryNameInput]]></paper-input>
@@ -154,7 +149,6 @@
         }
         if (!this._ensureAccess()) return;
         this._processGetProductCategoryList(() => {
-          this._processParentProductCategory();
           if (this.editMode) {
             this._processGetProductCategory();
             this.isReady = true;
@@ -191,15 +185,6 @@
         });
       }
 
-      _processParentProductCategory() {
-        this.parentProductCategory = null;
-        if ('parent' in this.params) {
-          this.parentProductCategory = this._productCategoryList.find(productCategory => {
-            return productCategory.id === parseInt(this.params.parent);
-          });
-        }
-      }
-
       _processGetProductCategory() {
         let productCategory = this._productCategoryList.find(productCategory => {
           return productCategory.id === parseInt(this.params['product-category']);
@@ -229,7 +214,7 @@
           name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
           productCategoryId: this.editingProductCategory.id
         };
-        
+
         console.log(data);
 
         this.app.callEditProductCategoryApi(data, (err, response) => {
