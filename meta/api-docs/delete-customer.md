@@ -1,3 +1,9 @@
+# WARNING! API DISABLED!
+
+This API has been disabled.
+
+# API
+
 This API handles attempt to delete a customer
 
 url: `api/delete-customer`
