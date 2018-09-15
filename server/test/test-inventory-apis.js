@@ -69,7 +69,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe.only('Inventory', _ => {
+describe('Inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
