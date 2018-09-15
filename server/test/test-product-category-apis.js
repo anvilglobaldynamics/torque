@@ -38,7 +38,6 @@ let productCategoryThree = null;
 
 let productCategoryToBeModified = null;
 let invalidOrganizationId = generateInvalidId();
-let invalidParentProductCategoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
 describe('Product Category', _ => {
