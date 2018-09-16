@@ -139,6 +139,11 @@ class Program {
     return legacyDatabase;
   }
 
+  // NOTE: Intended to be used during testing
+  exposeDatabaseForTesting() {
+    return database;
+  }
+
   // NOTE: Intended to be used during testing or by process manager
   terminateServer() {
     console.log("Server Terminated Programmatically.");

@@ -105,9 +105,9 @@ const createUser = async () => {
   return { apiKey, userId };
 }
 
-const createOrganization = async ({ apiKey }) => {
+const createOrganization = async ({ apiKey }, db) => {
   console.log('should create organization');
-  
+
   let { organizationId } = await callApi('api/add-organization', {
     apiKey,
     name: pickOne(nameList),
@@ -115,6 +115,8 @@ const createOrganization = async ({ apiKey }) => {
     phone: makePhoneNumber(),
     email: makeEmailId()
   });
+  let packageActivationId = await db.packageActivation.create({ packageCode: 'U01', organizationId, createdByAdminName: 'default', paymentReference: 'n/aaaa' });
+  let result = await db.organization.setPackageActivationId({ id: organizationId }, { packageActivationId });
 
   return { organizationId };
 }
@@ -149,30 +151,30 @@ const createEmployee = async ({ apiKey }) => {
 // --------------------------------------------------------------
 
 const generateBulkData = async () => {
-
   let { Program } = require('./../src/index');
   let mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
   await mainProgram.initiateServer();
+  let db = mainProgram.exposeDatabaseForTesting();
 
   let { userId: ownerUserId, apiKey } = await createUser();
 
   for (let i = 0; i < getSolidCount(organizationCount); i++) {
-    let organizationId = await createOrganization({ apiKey });
+    let { organizationId } = await createOrganization({ apiKey }, db);
 
-    for (let i = 0; i < getSolidCount(employeeCount); i++) {
-      let employee = await createEmployee();
-    }
+    // for (let i = 0; i < getSolidCount(employeeCount); i++) {
+    //   let employee = await createEmployee({ apiKey });
+    // }
 
-    for (let i = 0; i < getSolidCount(warehouseCount); i++) {
-      let warehouse = await createWarehouse();
-    }
+    // for (let i = 0; i < getSolidCount(warehouseCount); i++) {
+    //   let warehouse = await createWarehouse({ apiKey });
+    // }
 
     for (let i = 0; i < getSolidCount(outletCount); i++) {
       let outletId = await createOutlet({ apiKey, organizationId });
     }
 
     for (let i = 0; i < getSolidCount(productCategoryCount); i++) {
-      let productCategory = await createProductCategory();
+      let productCategory = await createProductCategory({ apiKey });
     }
 
   }
@@ -181,7 +183,7 @@ const generateBulkData = async () => {
 }
 
 generateBulkData().catch(ex => {
-  // console.error(ex);
+  console.error(ex);
   process.exit(0);
 });
 

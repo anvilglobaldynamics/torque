@@ -1,5 +1,19 @@
 [
   {
+    "code": "U01",
+    "name": "Internal Unlimited Package",
+    "price": 0,
+    "duration": {
+      "months": 12,
+      "days": 1
+    },
+    "limits": {
+      "maximumOutlets": 99999,
+      "maximumWarehouses": 99999,
+      "maximumEmployees": 99999
+    }
+  },
+  {
     "code": "T01",
     "name": "Enterprise Trial Package",
     "price": 0,
