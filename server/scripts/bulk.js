@@ -17,7 +17,7 @@ const commonPassword = '12345678';
 const organizationCount = 4;
 const employeeCount = {
   min: 0,
-  max: 2
+  max: 20
 };
 const warehouseCount = {
   min: 3,
@@ -78,7 +78,10 @@ let callApi = async (path, data) => {
   return await new Promise((accept, reject) => {
     utils.callApi(path, { json: data }, (err, response, body) => {
       if (err) return reject(err);
-      if (response.statusCode !== 200) return reject(new Error('Non ok status code'));
+      if (response.statusCode !== 200) {
+        console.log(body);
+        return reject(new Error('Non ok status code'));
+      }
       if (body.hasError) {
         console.log(body.error);
         return reject(new Error('Response has error'));
@@ -88,14 +91,12 @@ let callApi = async (path, data) => {
   });
 }
 
-const createUser = async () => {
-  let phone = makePhoneNumber();
+const createUser = async ({ phone }) => {
   console.log('should create user', phone, commonPassword);
-
   let { userId } = data = await callApi('api/user-register', {
+    phone,
     password: commonPassword,
-    fullName: pickOne(nameList),
-    phone
+    fullName: pickOne(nameList)
   });
   let { apiKey } = await callApi('api/user-login', {
     emailOrPhone: phone,
@@ -121,8 +122,23 @@ const createOrganization = async ({ apiKey }, db) => {
   return { organizationId };
 }
 
-const createProductCategory = async ({ apiKey }) => {
+const createProductCategory = async ({ apiKey, organizationId }) => {
   console.log('should create productCategory');
+
+  let { productCategoryId } = await callApi('api/add-product-category', {
+    apiKey,
+    organizationId,
+    name: pickOne(nounList) + "Category",
+    unit: "kg",
+    defaultDiscountType: "percent",
+    defaultDiscountValue: 10,
+    defaultPurchasePrice: 120,
+    defaultVat: 15,
+    defaultSalePrice: 190,
+    isReturnable: true
+  });
+
+  return { productCategoryId };
 }
 
 const createWarehouse = async ({ apiKey, organizationId }) => {
@@ -156,8 +172,60 @@ const createOutlet = async ({ apiKey, organizationId }) => {
   return { outletId };
 }
 
-const createEmployee = async ({ apiKey }) => {
+const createEmployee = async ({ apiKey, organizationId }) => {
   console.log('should create employee');
+
+  let { employeeId } = await callApi('api/add-new-employee', {
+    apiKey,
+
+    fullName: pickOne(nameList),
+    phone: makePhoneNumber(),
+    password: commonPassword,
+
+    organizationId,
+    role: "Joi.string().max(1024).required()",
+    designation: "Joi.string().max(1024).required()",
+    companyProvidedId: "abc123",
+
+    privileges: {
+      PRIV_VIEW_USERS: true,
+      PRIV_MODIFY_USERS: true,
+      PRIV_ADD_USER: true,
+      PRIV_MAKE_USER_AN_OWNER: true,
+      PRIV_MODIFY_USER_PRIVILEGES: true,
+
+      PRIV_ACCESS_POS: true,
+      PRIV_VIEW_SALES: true,
+      PRIV_MODIFY_SALES: true,
+      PRIV_ALLOW_FLAT_DISCOUNT: true,
+      PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
+      PRIV_ALLOW_FOC: true,
+
+      PRIV_VIEW_SALES_RETURN: true,
+      PRIV_MODIFY_SALES_RETURN: true,
+
+      PRIV_VIEW_ALL_INVENTORIES: true,
+      PRIV_MODIFY_ALL_INVENTORIES: true,
+      PRIV_TRANSFER_ALL_INVENTORIES: true,
+      PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+
+      PRIV_VIEW_ALL_OUTLETS: true,
+      PRIV_MODIFY_ALL_OUTLETS: true,
+
+      PRIV_VIEW_ALL_WAREHOUSES: true,
+      PRIV_MODIFY_ALL_WAREHOUSES: true,
+
+      PRIV_VIEW_ORGANIZATION_STATISTICS: true,
+      PRIV_MODIFY_ORGANIZATION: true,
+
+      PRIV_VIEW_CUSTOMER: true,
+      PRIV_ADD_CUSTOMER_DURING_SALES: true,
+      PRIV_MODIFY_CUSTOMER: true,
+      PRIV_MANAGE_CUSTOMER_DEBT: true
+    }
+  });
+
+  return { employeeId };
 }
 
 // --------------------------------------------------------------
@@ -168,28 +236,35 @@ const generateBulkData = async () => {
   await mainProgram.initiateServer();
   let db = mainProgram.exposeDatabaseForTesting();
 
-  let { userId: ownerUserId, apiKey } = await createUser();
+  let primaryUserPhone = makePhoneNumber();
+  let { userId: ownerUserId, apiKey } = await createUser({ phone: primaryUserPhone });
 
   for (let i = 0; i < getSolidCount(organizationCount); i++) {
     let { organizationId } = await createOrganization({ apiKey }, db);
 
-    // for (let i = 0; i < getSolidCount(employeeCount); i++) {
-    //   let employee = await createEmployee({ apiKey });
-    // }
+    for (let i = 0; i < getSolidCount(employeeCount); i++) {
+      let { employeeId } = await createEmployee({ apiKey, organizationId });
+    }
 
     for (let i = 0; i < getSolidCount(warehouseCount); i++) {
-      let warehouseId = await createWarehouse({ apiKey, organizationId });
+      let { warehouseId } = await createWarehouse({ apiKey, organizationId });
     }
 
+    let outletIdList = [];
     for (let i = 0; i < getSolidCount(outletCount); i++) {
-      let outletId = await createOutlet({ apiKey, organizationId });
+      let { outletId } = await createOutlet({ apiKey, organizationId });
+      outletIdList.push(outletId);
     }
 
-    // for (let i = 0; i < getSolidCount(productCategoryCount); i++) {
-    //   let productCategory = await createProductCategory({ apiKey });
-    // }
+    let productCategoryIdList = [];
+    for (let i = 0; i < getSolidCount(productCategoryCount); i++) {
+      let { productCategoryId } = await createProductCategory({ apiKey, organizationId });
+      productCategoryIdList.push(productCategoryId);
+    }
 
   }
+
+  console.log('Done. Primary User and Pass', primaryUserPhone, commonPassword);
 
   process.exit(0);
 }
