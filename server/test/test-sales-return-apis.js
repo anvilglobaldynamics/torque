@@ -175,9 +175,11 @@ describe('Sales Return', _ => {
                             customerData = data.customer;
                             getAggregatedInventoryDetails({
                               apiKey,
-                              inventoryId: outletDefaultInventoryId
+                              inventoryIdList: [
+                                outletDefaultInventoryId
+                              ]
                             }, (data) => {
-                              outletInventoryProductList = data.aggregatedProductList;
+                              outletInventoryProductList = data.aggregatedInventoryDetailsList[0].aggregatedProductList;
                               outletInventoryMatchingProductCategoryList = outletInventoryProductList.map(_product => _product.product.productCategory);
                               addSales({
                                 apiKey,
@@ -362,13 +364,15 @@ describe('Sales Return', _ => {
     callApi('api/get-aggregated-inventory-details', {
       json: {
         apiKey,
-        inventoryId: outletReturnedInventoryId
+        inventoryIdList: [
+          outletReturnedInventoryId
+        ]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
-      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(2);
+      expect(body.aggregatedInventoryDetailsList[0].aggregatedProductList[0]).to.have.property('count').that.equals(2);
       testDoneFn();
     });
 

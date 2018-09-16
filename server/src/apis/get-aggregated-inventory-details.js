@@ -136,7 +136,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     }
 
     aggregatedInventoryDetailsList.sort((a, b) => {
-      return b.inventoryDetails.inventoryId - a.inventoryDetails.inventoryId;
+      return inventoryIdList.indexOf(a.inventoryDetails.inventoryId) - inventoryIdList.indexOf(b.inventoryDetails.inventoryId);
     });
 
     return { aggregatedInventoryDetailsList };
