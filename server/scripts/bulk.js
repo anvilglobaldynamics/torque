@@ -89,9 +89,9 @@ let callApi = async (path, data) => {
 }
 
 const createUser = async () => {
-  console.log('should create user');
-
   let phone = makePhoneNumber();
+  console.log('should create user', phone, commonPassword);
+
   let { userId } = data = await callApi('api/user-register', {
     password: commonPassword,
     fullName: pickOne(nameList),
@@ -110,8 +110,8 @@ const createOrganization = async ({ apiKey }, db) => {
 
   let { organizationId } = await callApi('api/add-organization', {
     apiKey,
-    name: pickOne(nameList),
-    primaryBusinessAddress: pickOne(nameList),
+    name: (pickOne(adjectiveList) + 'Company'),
+    primaryBusinessAddress: 'ADDRESS GOES HERE',
     phone: makePhoneNumber(),
     email: makeEmailId()
   });
@@ -125,8 +125,20 @@ const createProductCategory = async ({ apiKey }) => {
   console.log('should create productCategory');
 }
 
-const createWarehouse = async ({ apiKey }) => {
+const createWarehouse = async ({ apiKey, organizationId }) => {
   console.log('should create warehouse');
+
+  let { warehouseId } = await callApi('api/add-warehouse', {
+    apiKey,
+    organizationId,
+    name: pickOne(nameList),
+    physicalAddress: pickOne(nameList),
+    phone: makePhoneNumber(),
+    contactPersonName: pickOne(nameList)
+  });
+
+  return { warehouseId };
+
 }
 
 const createOutlet = async ({ apiKey, organizationId }) => {
@@ -165,17 +177,17 @@ const generateBulkData = async () => {
     //   let employee = await createEmployee({ apiKey });
     // }
 
-    // for (let i = 0; i < getSolidCount(warehouseCount); i++) {
-    //   let warehouse = await createWarehouse({ apiKey });
-    // }
+    for (let i = 0; i < getSolidCount(warehouseCount); i++) {
+      let warehouseId = await createWarehouse({ apiKey, organizationId });
+    }
 
     for (let i = 0; i < getSolidCount(outletCount); i++) {
       let outletId = await createOutlet({ apiKey, organizationId });
     }
 
-    for (let i = 0; i < getSolidCount(productCategoryCount); i++) {
-      let productCategory = await createProductCategory({ apiKey });
-    }
+    // for (let i = 0; i < getSolidCount(productCategoryCount); i++) {
+    //   let productCategory = await createProductCategory({ apiKey });
+    // }
 
   }
 
