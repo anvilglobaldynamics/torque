@@ -84,7 +84,7 @@
   },
   "forgotPassword": {
     "emailOrPhoneInputTitle": "ফোন নম্বর বা ইমেইল লিখুন",
-    "emailOrPhoneInputMessage": "আপনি আপনার অ্যাকাউন্ট খুলতে ব্যবহৃত ফোন নম্বর / ইমেইল লিখুন।"
+    "emailOrPhoneInputMessage": "আপনি আপনার অ্যাকাউন্ট খুলতে ব্যবহৃত ফোন নম্বর/ইমেইল লিখুন।"
   },
   "register": {
     "register": "অ্যাকাউন্ট খুলুন",
@@ -487,11 +487,11 @@
   "error": {
     "404": "৪০৪",
     "contentNotFound": "বিষয়বস্তু খুঁজে পাওয়া যাচ্ছে না।",
-    "contentCouldNotBeFound": "অনুরোধকৃত সামগ্রী পাওয়া যায়নি",
+    "contentCouldNotBeFound": "অনুরোধকৃত বিষয়বস্তু পাওয়া যায়নি",
     "backToDashboard": "ড্যাশবোর্ডে ফিরে যান।",
     "403": "৪০৩",
-    "accessDenied": "একসেস নেই",
-    "accessDeniedDescription": "আপনার অ্যাডমিন আপনাকে এই পেজটির একসেস দেন নাই। "
+    "accessDenied": "অনুমতি নেই",
+    "accessDeniedDescription": "আপনার অ্যাডমিন আপনাকে এই পৃষ্ঠার অনুমতি দেয় নাই। "
   },
   "pos": {
     "posPageTitle": "নতুন বিক্রয়",
