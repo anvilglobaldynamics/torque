@@ -67,7 +67,9 @@
     "user": "ব্যবহারকারী",
     "cash": "নগদ",
     "card": "কার্ড",
-    "digital": "ডিজিটাল"
+    "digital": "ডিজিটাল",
+    "email": "ইমেইল",
+    "designation": "পদবী"
   },
   "login": {
     "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
@@ -287,7 +289,7 @@
     "newEmployeeHired": "নতুন কর্মচারী নিয়োগ করা হয়েছে।",
     "manageEmployeePageTitle": "কর্মচারীদের পরিচালনা",
     "companyProvidedId": "কোম্পানী প্রদত্ত আইডি",
-    "designation": "উপাধি",
+    "designation": "পদবী",
     "role": "ভূমিকা",
     "hireUserEmployee": "ব্যবহারকারীকে কর্মচারী হিসেবে নিয়োগ করুন",
     "addUserAsEmployee": "কর্মচারী হিসাবে নতুন ব্যবহারকারী যুক্ত করুন",
@@ -597,5 +599,11 @@
     "noProductsInInventory": "এই পণ্য তালিকায় কোন পণ্য নেই।",
     "acquiredOn": "খরিদ হয়েছে",
     "addedOn": "যুক্ত হয়েছে"
+  },
+  "payment": {
+    "packageHasExpired": "আপনার প্যাকেজ মেয়াদ শেষ হয়ে গেছে।",
+    "pleaseCallUsToPurchaseSubscription": "আমাদের কে +880 1760 160503 নম্বর এ যোগাযোগ করুন প্যাকেজ চালু করতে।",
+    "recheckVerificationStatus": "প্যাকেজ স্থিতি পুনরায় যাচাই করুন",
+    "useDifferentOrganization": "ভিন্ন সংস্থা ব্যবহার করুন"
   }
 }

@@ -166,27 +166,6 @@ describe('Outlet', _ => {
 
   });
 
-  it.skip('api/add-outlet (Invalid, copy phone)', testDoneFn => {
-
-    callApi('api/add-outlet', {
-      json: {
-        apiKey,
-        organizationId,
-        name: "My Outlet",
-        physicalAddress: "batcave address",
-        phone: outletPhone,
-        contactPersonName: "test contact person name"
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(true);
-      expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('PHONE_ALREADY_IN_USE');
-      testDoneFn();
-    })
-
-  });
-
   it('api/get-outlet-list (Valid)', testDoneFn => {
 
     callApi('api/get-outlet-list', {

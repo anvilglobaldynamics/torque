@@ -108,11 +108,30 @@
       </template>
 
       <template is="dom-if" if="{{productCategoryList.length}}">
-        <div class="card">
+
+        <div class="card vertical layout">
+
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          </template>
+
           <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
             <product-category product-category="[[productCategory]]" app="[[app]]"></product-category>
           </template>
+
+          <div class="pagination">
+            [[verses.general.loaded]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          </template>
+
         </div>
+
       </template>
 
       <div class="lone-controls">
@@ -166,10 +185,11 @@
       }
 
       _fetchProductCategoryList(cbfn) {
-        let data = { organizationId: this.app.organization.id };
+        let data = { organizationId: this.app.organization.id, paginate: this.paginate };
         this.app.callGetProductCategoryListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
           return cbfn(response.productCategoryList);
         });
       }
@@ -186,6 +206,18 @@
 
       createTapped(e = null) {
         return this.app.navigateTo('/edit-product-category');
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processProductCategoryList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processProductCategoryList(() => this.isReady = true);
       }
 
       // region: misc =================================

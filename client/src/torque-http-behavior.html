@@ -22,6 +22,11 @@
       // internals ===================================
 
       callJsonWebsocketApi(path, data, cbfn) {
+        if (!window.torqueMasterOptions.allowWebsockets) {
+          let err = new Error("window.torqueMasterOptions.allowWebsockets is false");
+          err.stack = '';
+          return cbfn(err);
+        }
         let url = `${this.websocketApiPathPrefix}${path}`
         let service = new WebsocketRequestService(this.websocketHost, url, { responseType: 'json' });
         service.on('end', (event) => {
@@ -70,9 +75,10 @@
           if (response.hasError && (response.error.code === "SUBSCRIPTION_EXPIRED")) {
             if (this.pageName !== 'payment') {
               // TODO: Translate
+              this.navigateTo('/payment');
               let message = `Your subscription for "${this.organization.name}" has expired. Taking you to the payment page.`;
               this.showModalDialog("Subscription Expired", message, _ => {
-                this.navigateTo('/payment');
+                return;
               });
               return;
             }

@@ -1,3 +1,9 @@
+# WARNING! API DISABLED!
+
+This API has been disabled.
+
+# API
+
 This API handles attempt to delete product-category.
 
 url: `api/delete-product-category`

@@ -64,26 +64,29 @@
       <div class="horizontal layout wrap">
         <div class="card flex info-panel">
           <div class="title">[[verses.general.user]]: [[user.fullName]]</div>
-          <div class="">[[user.email]]</div>
+          <template is="dom-if" if="[[user.email]]">
+            <div class="">[[verses.general.email]]: [[user.email]]</div>
+          </template>
           <div class="">[[user.phone]]</div>
-          <div class="">[[organization.employment.designation]] ([[organization.employment.role]])</div>
+          <div class="">[[verses.general.designation]]: [[organization.employment.designation]] ([[organization.employment.role]])</div>
         </div>
         <div class="card flex info-panel">
           <div class="title">[[verses.general.organization]]: [[organization.name]]</div>
-          <div class="">[[organization.email]]</div>
+          <template is="dom-if" if="[[organization.email]]">
+            <div class="">[[verses.general.email]]: [[organization.email]]</div>
+          </template>
           <div class="">[[organization.phone]]</div>
-          <div class="">[[organization.primaryBusinessAddress]]</div>
+          <div class="">[[verses.general.address]]: [[organization.primaryBusinessAddress]]</div>
         </div>
       </div>
 
       <div class="card">
-        <!-- TODO: Translate -->
-        <div class="title">Your package has expired.</div>
-        <div>Please call us at +880 XXXX XXXXXX to purchase a subscription.</div>
+        <div class="title">[[verses.payment.packageHasExpired]]</div>
+        <div>[[verses.payment.pleaseCallUsToPurchaseSubscription]]</div>
         <br>
         <div class="button-row">
-          <paper-button raised class="primary" on-tap="recheckVerificationStatusTapped">Recheck Verification Status</paper-button>
-          <paper-button raised class="optional" on-tap="useDifferentOrganizationTapped">Use a different organization</paper-button>
+          <paper-button raised class="primary" on-tap="recheckVerificationStatusTapped">[[verses.payment.recheckVerificationStatus]]</paper-button>
+          <paper-button raised class="optional" on-tap="useDifferentOrganizationTapped">[[verses.payment.useDifferentOrganization]]</paper-button>
         </div>
       </div>
 
