@@ -166,16 +166,18 @@ describe('Sales', _ => {
     callApi('api/get-aggregated-inventory-details', {
       json: {
         apiKey,
-        inventoryId: outletDefaultInventoryId
+        inventoryIdList: [
+          outletDefaultInventoryId
+        ]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
-      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(100);
-      expect(body.aggregatedProductList[0]).to.have.property('productId');
+      expect(body.aggregatedInventoryDetailsList[0].aggregatedProductList[0]).to.have.property('count').that.equals(100);
+      expect(body.aggregatedInventoryDetailsList[0].aggregatedProductList[0]).to.have.property('productId');
 
-      outletInventoryProductList = body.aggregatedProductList;
+      outletInventoryProductList = body.aggregatedInventoryDetailsList[0].aggregatedProductList;
       outletInventoryMatchingProductCategoryList = outletInventoryProductList.map(_product => _product.product.productCategory);
 
       testDoneFn();
@@ -481,13 +483,15 @@ describe('Sales', _ => {
     callApi('api/get-aggregated-inventory-details', {
       json: {
         apiKey,
-        inventoryId: outletDefaultInventoryId
+        inventoryIdList: [
+          outletDefaultInventoryId
+        ]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
-      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
+      expect(body.aggregatedInventoryDetailsList[0].aggregatedProductList[0]).to.have.property('count').that.equals(96);
       testDoneFn();
     });
 
