@@ -40,11 +40,7 @@
         <div class="card vertical layout">
 
           <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-            <paper-button class="pagination-show-previous neutral" on-tap="showPreviousTapped">
-              [[verses.general.show]]
-              <iron-icon icon="icons:arrow-upward"></iron-icon>
-              [[verses.general.previous]]
-            </paper-button>
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
           </template>
 
           <div class="list">
@@ -77,11 +73,7 @@
             <span class="offset">#[[$inc(pagination.offset)]]</span>.
           </div>
           <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-            <paper-button class="pagination-show-more neutral" on-tap="showMoreTapped">
-              [[verses.general.show]]
-              <iron-icon icon="icons:arrow-downward"></iron-icon>
-              [[verses.general.more]]
-            </paper-button>
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
           </template>
 
         </div>
