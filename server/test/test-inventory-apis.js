@@ -69,7 +69,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('Inventory', _ => {
+describe.only('Inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -273,7 +273,9 @@ describe('Inventory', _ => {
     callApi('api/get-aggregated-inventory-details', {
       json: {
         apiKey,
-        inventoryId: warehouseDefaultInventoryId
+        inventoryIdList: [
+          warehouseDefaultInventoryId
+        ]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -294,7 +296,9 @@ describe('Inventory', _ => {
     callApi('api/get-aggregated-inventory-details', {
       json: {
         apiKey,
-        inventoryId: warehouseDefaultInventoryId,
+        inventoryIdList: [
+          warehouseDefaultInventoryId
+        ],
         searchString: '2nd'
       }
     }, (err, response, body) => {
@@ -313,7 +317,9 @@ describe('Inventory', _ => {
     callApi('api/get-aggregated-inventory-details', {
       json: {
         apiKey,
-        inventoryId: invalidInventoryId
+        inventoryIdList: [
+          invalidInventoryId
+        ]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -427,7 +433,9 @@ describe('Inventory', _ => {
     callApi('api/get-aggregated-inventory-details', {
       json: {
         apiKey,
-        inventoryId: warehouseReturnedInventoryId
+        inventoryIdList: [
+          warehouseReturnedInventoryId
+        ]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -463,7 +471,9 @@ describe('Inventory', _ => {
     callApi('api/get-aggregated-inventory-details', {
       json: {
         apiKey,
-        inventoryId: outletDefaultInventoryId
+        inventoryIdList: [
+          outletDefaultInventoryId
+        ]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -480,7 +490,9 @@ describe('Inventory', _ => {
     callApi('api/get-aggregated-inventory-details', {
       json: {
         apiKey,
-        inventoryId: warehouseDefaultInventoryId
+        inventoryIdList: [
+          warehouseDefaultInventoryId
+        ]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

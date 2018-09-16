@@ -14,24 +14,23 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
 
   get requestSchema() {
     return Joi.object().keys({
-      inventoryId: Joi.number().max(999999999999999).required(),
+      inventoryIdList: Joi.array().items(
+        Joi.number().max(999999999999999).required()
+      ),
       searchString: Joi.string().min(0).max(64).allow('').optional()
     });
   }
 
-  get accessControl() {
-    return [{
-      organizationBy: {
-        from: "inventory",
-        query: ({ inventoryId }) => ({ id: inventoryId }),
-        select: "organizationId",
-        errorCode: "INVENTORY_INVALID"
-      },
-      privileges: [
-        "PRIV_VIEW_ALL_INVENTORIES"
-      ]
-    }];
-  }
+  // get accessControl() {
+  //   return [{
+  //     organizationBy: (self, userId, body) => {
+  //       errorCode: "INVENTORY_INVALID"
+  //     },
+  //     privileges: [
+  //       "PRIV_VIEW_ALL_INVENTORIES"
+  //     ]
+  //   }];
+  // }
 
   async __getInventory({ inventoryId }) {
     let doc = await this.database.inventory.findById({ id: inventoryId });
@@ -106,7 +105,13 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { inventoryId, searchString } = body;
+    let { inventoryId, inventoryIdList, searchString } = body;
+    
+    console.log("inventoryIdList: ", inventoryIdList);
+
+    // bodge!
+    inventoryId = inventoryIdList[0];
+
     let inventory = await this.__getInventory({ inventoryId });
     let inventoryContainerDetails = await this.__getInventoryContainerDetails({ inventory });
     let productList = inventory.productList;
