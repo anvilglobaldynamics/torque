@@ -104,14 +104,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     return aggregatedProductList;
   }
 
-  async handle({ body }) {
-    let { inventoryId, inventoryIdList, searchString } = body;
-    
-    console.log("inventoryIdList: ", inventoryIdList);
-
-    // bodge!
-    inventoryId = inventoryIdList[0];
-
+  async __getAggregatedInventoryDetails({ inventoryId, searchString }) {
     let inventory = await this.__getInventory({ inventoryId });
     let inventoryContainerDetails = await this.__getInventoryContainerDetails({ inventory });
     let productList = inventory.productList;
@@ -125,11 +118,28 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
 
     return {
       inventoryDetails: {
-        inventoryName: inventory.name
+        inventoryName: inventory.name,
+        inventoryId: inventory.id
       },
       inventoryContainerDetails,
       aggregatedProductList
     };
+  }
+
+  async handle({ body }) {
+    let { inventoryIdList, searchString } = body;
+
+    let aggregatedInventoryDetailsList = [];
+    for(let i=0; i<inventoryIdList.length; i++ ) {
+      let aggregatedInventoryDetails = await this.__getAggregatedInventoryDetails({ inventoryId: inventoryIdList[i], searchString});
+      aggregatedInventoryDetailsList.push(aggregatedInventoryDetails);
+    }
+
+    aggregatedInventoryDetailsList.sort((a, b) => {
+      return b.inventoryDetails.inventoryId - a.inventoryDetails.inventoryId;
+    });
+
+    return { aggregatedInventoryDetailsList };
   }
 
 }
