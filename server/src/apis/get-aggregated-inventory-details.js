@@ -130,10 +130,12 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     let { inventoryIdList, searchString } = body;
 
     let aggregatedInventoryDetailsList = [];
-    for(let i=0; i<inventoryIdList.length; i++ ) {
-      let aggregatedInventoryDetails = await this.__getAggregatedInventoryDetails({ inventoryId: inventoryIdList[i], searchString});
+
+    let promiseList = inventoryIdList.map(async (inventoryId) => {
+      let aggregatedInventoryDetails = await this.__getAggregatedInventoryDetails({ inventoryId, searchString });
       aggregatedInventoryDetailsList.push(aggregatedInventoryDetails);
-    }
+    });
+    await Promise.all(promiseList);
 
     aggregatedInventoryDetailsList.sort((a, b) => {
       return inventoryIdList.indexOf(a.inventoryDetails.inventoryId) - inventoryIdList.indexOf(b.inventoryDetails.inventoryId);
