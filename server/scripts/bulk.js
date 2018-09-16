@@ -28,8 +28,8 @@ const outletCount = {
   max: 40
 };
 const productCategoryCount = {
-  min: 10,
-  max: 100
+  min: 30,
+  max: 200
 };
 const productCountPerCategory = {
   min: 1,
@@ -163,13 +163,19 @@ const createOutlet = async ({ apiKey, organizationId }) => {
   let { outletId } = await callApi('api/add-outlet', {
     apiKey,
     organizationId,
-    name: pickOne(nameList),
-    physicalAddress: pickOne(nameList),
+    name: pickOne(nounList),
+    physicalAddress: 'Really Not Important',
     phone: makePhoneNumber(),
     contactPersonName: pickOne(nameList)
   });
 
-  return { outletId };
+  let body = await callApi('api/get-outlet', {
+    apiKey,
+    outletId
+  });
+  let outletDefaultInventoryId = body.defaultInventory.id;
+
+  return { outletId, outletDefaultInventoryId };
 }
 
 const createEmployee = async ({ apiKey, organizationId }) => {
@@ -228,6 +234,20 @@ const createEmployee = async ({ apiKey, organizationId }) => {
   return { employeeId };
 }
 
+const createProduct = async ({ apiKey, organizationId, outletId, productCategoryId, outletDefaultInventoryId }) => {
+  console.log('should create product');
+
+  let { productId } = await callApi('api/add-product-to-inventory', {
+    apiKey,
+    inventoryId: outletDefaultInventoryId,
+    productList: [
+      { productCategoryId, purchasePrice: 100, salePrice: 200, count: getSolidCount(productCountPerCategory) }
+    ]
+  });
+
+  return { productId };
+}
+
 // --------------------------------------------------------------
 
 const generateBulkData = async () => {
@@ -250,16 +270,23 @@ const generateBulkData = async () => {
       let { warehouseId } = await createWarehouse({ apiKey, organizationId });
     }
 
-    let outletIdList = [];
+    let outletList = [];
     for (let i = 0; i < getSolidCount(outletCount); i++) {
-      let { outletId } = await createOutlet({ apiKey, organizationId });
-      outletIdList.push(outletId);
+      let { outletId, outletDefaultInventoryId } = await createOutlet({ apiKey, organizationId });
+      outletList.push({ outletId, outletDefaultInventoryId });
     }
 
     let productCategoryIdList = [];
     for (let i = 0; i < getSolidCount(productCategoryCount); i++) {
       let { productCategoryId } = await createProductCategory({ apiKey, organizationId });
       productCategoryIdList.push(productCategoryId);
+    }
+
+    for (let outlet of outletList) {
+      let { outletId, outletDefaultInventoryId } = outlet
+      for (let productCategoryId of productCategoryIdList) {
+        let { productId } = await createProduct({ apiKey, organizationId, outletId, productCategoryId, outletDefaultInventoryId });
+      }
     }
 
   }
