@@ -278,16 +278,17 @@ describe.only('Inventory', _ => {
         ]
       }
     }, (err, response, body) => {
-      // console.log(body);
-
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
-      // body.aggregatedProductList.forEach(aggregatedProduct => {
-      //   validateAggregatedProductScema(aggregatedProduct);
-      // });
 
-      // productToBeTransferred = body.aggregatedProductList[0];
-      // expect(body.aggregatedProductList[0].productId).to.not.equal(body.aggregatedProductList[1].productId);
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails =>  {
+        aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
+          validateAggregatedProductScema(aggregatedProduct);
+        });
+      });
+
+      productToBeTransferred = body.aggregatedInventoryDetailsList[0].aggregatedProductList[0];
+      expect(body.aggregatedInventoryDetailsList[0].aggregatedProductList[0].productId).to.not.equal(body.aggregatedInventoryDetailsList[0].aggregatedProductList[1].productId);
       testDoneFn();
     });
 
@@ -306,9 +307,13 @@ describe.only('Inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
-      body.aggregatedProductList.forEach(aggregatedProduct => {
-        validateAggregatedProductScema(aggregatedProduct);
+
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails =>  {
+        aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
+          validateAggregatedProductScema(aggregatedProduct);
+        });
       });
+
       testDoneFn();
     });
 
@@ -442,8 +447,15 @@ describe.only('Inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
-      expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
-      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(2);
+
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails =>  {
+        aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
+          validateAggregatedProductScema(aggregatedProduct);
+        });
+      });
+
+      expect(body.aggregatedInventoryDetailsList[0].aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
+      expect(body.aggregatedInventoryDetailsList[0].aggregatedProductList[0]).to.have.property('count').that.equals(2);
       testDoneFn();
     });
 
@@ -480,8 +492,15 @@ describe.only('Inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
-      expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
-      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(3);
+
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails =>  {
+        aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
+          validateAggregatedProductScema(aggregatedProduct);
+        });
+      });
+
+      expect(body.aggregatedInventoryDetailsList[0].aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
+      expect(body.aggregatedInventoryDetailsList[0].aggregatedProductList[0]).to.have.property('count').that.equals(3);
       testDoneFn();
     });
 
@@ -499,8 +518,15 @@ describe.only('Inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
-      expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
-      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(productToBeTransferred.count - 5);
+
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails =>  {
+        aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
+          validateAggregatedProductScema(aggregatedProduct);
+        });
+      });
+
+      expect(body.aggregatedInventoryDetailsList[0].aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
+      expect(body.aggregatedInventoryDetailsList[0].aggregatedProductList[0]).to.have.property('count').that.equals(productToBeTransferred.count - 5);
       testDoneFn();
     });
 
