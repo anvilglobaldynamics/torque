@@ -28,8 +28,8 @@ const outletCount = {
   max: 40
 };
 const productCategoryCount = {
-  min: 30,
-  max: 200
+  min: 500,
+  max: 2000
 };
 const productCountPerCategory = {
   min: 1,
