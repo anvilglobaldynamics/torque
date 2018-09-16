@@ -398,7 +398,7 @@
     "returnCount": "Return Count",
     "productReturnCountInput": "Product Return Count",
     "productReturnCountInputError": "Enter a valid number",
-    "creditedAmountInput": "Credited Amount (amount that has been returned to the customer)",
+    "creditedAmountInput": "Customer Credited Amount",
     "creditedAmountInputError": "Enter a valid number",
     "addSalesReturn": "Add Sales Return",
     "manageSalesReturnTitle": "Sales Return Record",
