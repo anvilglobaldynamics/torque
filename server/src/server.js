@@ -12,7 +12,9 @@ let jsonParser = bodyParser.json({
 const { Logger } = require('./logger');
 const { LegacyApi } = require('./legacy-api-base');
 
-const WEBSOCKET_CLIENT_POOL_MAX_COUNT = 10;
+const WEBSOCKET_CLIENT_POOL_MAX_COUNT = 6;
+const WEBSOCKET_RECONNECTION_DELAY = 10000;
+const WEBSOCKET_STARTUP_DELAY = 5000;
 
 class Server {
 
@@ -75,32 +77,33 @@ class Server {
   __createWebsocketClient() {
     let ws = new WebSocket(this.config.socketProxy.url);
     let listener = (err) => {
+      this.__socketClientCount -= 1;
       if (!this.__hasReportedAnySocketFailure) {
         this.__hasReportedAnySocketFailure = true;
         this.logger.error(err);
       }
-    }
-    if (!this.__socketClientSerialSeed) {
-      this.__socketClientSerialSeed = 0;
     }
     let serial = this.__socketClientSerialSeed;
     this.__socketClientSerialSeed += 1;
 
     ws.once('error', listener);
 
+    this.__socketClientCount += 1;
     ws.on('open', () => {
       // this.logger.debug(`Websocket added to socket-pool: #${serial}`);
 
       ws.on('close', (code) => {
+        this.__socketClientCount -= 1;
         // this.logger.debug('Websocket closed:', `#${serial}`);
       });
 
       ws.on('error', (err) => {
+        this.__socketClientCount -= 1;
         this.logger.error(err);
       });
       ws.removeListener('error', listener);
 
-      let authMessage = this.config.socketProxy.pssk + '/' + (process.env.GAE_VERSION || '0');
+      let authMessage = this.config.socketProxy.pssk + '/' + (process.env.GAE_VERSION || '000000000000');
       ws.send(authMessage);
 
       ws.on('message', (message) => {
@@ -153,17 +156,29 @@ class Server {
     });
   }
 
+  __spawnWebsocketIfNecessary() {
+    this.logger.info("(server)> attempting websocket connection. Connected", this.__socketClientCount, 'out of', WEBSOCKET_CLIENT_POOL_MAX_COUNT);
+    let lim = Math.max(WEBSOCKET_CLIENT_POOL_MAX_COUNT - this.__socketClientCount, 0);
+    for (let i = 0; i < lim; i++) {
+      this.__createWebsocketClient();
+    }
+    setTimeout(() => {
+      this.__spawnWebsocketIfNecessary();
+    }, WEBSOCKET_RECONNECTION_DELAY);
+  }
+
   _initializeWebsocket() {
+    this.__socketClientSerialSeed = 0;
+    this.__socketClientCount = 0;
     this._wsApiList = [];
     if (!this.config.socketProxy.enabled) {
       this.logger.info("(server)> websocket server is not enabled.");
       return;
     }
     this.logger.info("(server)> websocket socket-proxy is", this.config.socketProxy.url);
-
-    for (let i = 0; i < WEBSOCKET_CLIENT_POOL_MAX_COUNT; i++) {
-      this.__createWebsocketClient();
-    }
+    setTimeout(() => {
+      this.__spawnWebsocketIfNecessary();
+    }, WEBSOCKET_STARTUP_DELAY);
   }
 
   setLogger(logger) {
