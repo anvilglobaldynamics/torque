@@ -315,10 +315,15 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.inventoriesReport.inventoriesReportTitle);
         if (!this._ensureAccess()) return;
-        this._processSalesList(() => {
+        this._processInventoriesReport(() => {
           if ('outlet' in this.params) {
             this.isSearchingOutlet = true;
             this.elem('elem-outlet-selector').forceSelect(this.params.outlet);
+          }
+          // TODO: elem-warehouse-selector
+          if ('warehouse' in this.params) {
+            this.isSearchingWarehouse = true;
+            this.elem('elem-warehouse-selector').forceSelect(this.params.warehouse);
           }
           this.self = this;
           this.isReady = true;
@@ -332,7 +337,7 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_VIEW_SALES']);
+        return this.accessControl('privileged', ['PRIV_VIEW_ALL_INVENTORIES']);
       }
 
       _fetchSalesList(cbfn) {
@@ -381,9 +386,16 @@
         });
       }
 
-      customerChanged() {
-        if (!this.customer) return;
-        this.app.storeInSession('last-selected-customer', this.customer);
+      _fetchInventoriesData(cbfn) {
+        let data = {
+          invenotryIdList: [ 1 ]
+        };
+
+        this.app.callReportInventoryDetailsApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.salesList);
+        });
       }
 
       outletChanged() {
@@ -391,8 +403,8 @@
         this.app.storeInSession('last-selected-outlet', this.outlet);
       }
 
-      _processSalesList(cbfn) {
-        this._fetchSalesList(newSalesList => {
+      _processInventoriesReport(cbfn) {
+        this._fetchInventoriesData(newSalesList => {
           this.salesList = newSalesList;
           this.salesSummary = {
             billedAmountSum: (newSalesList.reduce((sum, sales) => (sum + sales.payment.totalBilled), 0))
@@ -409,18 +421,6 @@
       _outletSelected(outlet) {
         this.outlet = outlet;
         this.isSearchingOutlet = false;
-      }
-
-      showMoreTapped(e = null) {
-        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
-        this.isReady = false;
-        this._processCustomerList(() => this.isReady = true);
-      }
-
-      showPreviousTapped(e = null) {
-        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
-        this.isReady = false;
-        this._processCustomerList(() => this.isReady = true);
       }
 
       // region: ui  ===========================
@@ -450,7 +450,7 @@
 
       filterTapped(e = null) {
         this.isReady = false;
-        this._processSalesList(() => {
+        this._processInventoriesReport(() => {
           this.isReady = true;
         });
       }

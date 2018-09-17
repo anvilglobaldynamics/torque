@@ -568,6 +568,22 @@ describe.only('Inventory', _ => {
 
   });
 
+  it('api/report-inventory-details (empty inventoryIdList)', testDoneFn => {
+
+    callApi('api/report-inventory-details', {
+      json: {
+        apiKey,
+        inventoryIdList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VALIDATION_ERROR');
+      testDoneFn();
+    });
+
+  });
+
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
   });
