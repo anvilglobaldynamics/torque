@@ -300,13 +300,13 @@
       showMoreTapped(e = null) {
         this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
         this.isReady = false;
-        this._processCustomerList(() => this.isReady = true);
+        this._processSalesList(() => this.isReady = true);
       }
 
       showPreviousTapped(e = null) {
         this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
         this.isReady = false;
-        this._processCustomerList(() => this.isReady = true);
+        this._processSalesList(() => this.isReady = true);
       }
 
       // region: ui  ===========================

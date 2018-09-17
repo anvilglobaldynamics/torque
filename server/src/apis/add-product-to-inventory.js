@@ -67,7 +67,7 @@ exports.AddProductToInventoryApi = class extends Api {
     await this._verifyProductCategoriesExist({ productList });
     let insertedProductList = await this._addProductToInventory({ inventoryId, productList });
     await this._addAcquisitionRecord({ createdByUserId: userId, acquiredDatetimeStamp: (new Date).getTime(), partyType: "unspecified", partyName: null, productList: insertedProductList });
-    return { status: "success" };
+    return { status: "success", insertedProductList };
   }
 
 }

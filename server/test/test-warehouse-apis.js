@@ -19,7 +19,8 @@ let {
   validateGetWarehouseApiSuccessResponse,
   validateGenericApiSuccessResponse,
 
-  validateAdminAssignPackageToOrganizationApiSuccessResponse
+  validateAdminAssignPackageToOrganizationApiSuccessResponse,
+  validateAddProductToInventoryApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -382,7 +383,7 @@ describe('Warehouse', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      validateGenericApiSuccessResponse(body);
+      validateAddProductToInventoryApiSuccessResponse(body);
       testDoneFn();
     });
   });
