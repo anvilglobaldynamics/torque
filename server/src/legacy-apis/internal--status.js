@@ -15,7 +15,7 @@ const importantEnvironmentVariableList = [
   "PORT"
 ]
 
-exports.InternalStatuApi = class extends LegacyApi {
+exports.InternalStatusApi = class extends LegacyApi {
 
   _showSuccess() {
     let body = "Server: Online<br>"
