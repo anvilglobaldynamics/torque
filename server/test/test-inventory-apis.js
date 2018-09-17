@@ -19,6 +19,7 @@ let {
   validateGenericApiFailureResponse,
   validateGenericApiSuccessResponse,
   validateGetAggregatedInventoryDetailsApiSuccessResponse,
+  validateReportInventoryDetailsApiSuccessResponse,
   validateAggregatedProductScema,
   validateProductCategorySchema,
   validateProductSchema,
@@ -504,7 +505,6 @@ describe('Inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
 
-      // validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       validateReportInventoryDetailsApiSuccessResponse(body);
 
       body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails =>  {
