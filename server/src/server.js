@@ -100,7 +100,8 @@ class Server {
       });
       ws.removeListener('error', listener);
 
-      ws.send(this.config.socketProxy.pssk);
+      let authMessage = this.config.socketProxy.pssk + '/' + (process.env.GAE_VERSION || '0');
+      ws.send(authMessage);
 
       ws.on('message', (message) => {
         // this.logger.debug('Websocket message on', `#${serial}`);
