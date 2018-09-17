@@ -24,7 +24,7 @@
 <link rel="import" href="elem-customer-selector.html">
 <link rel="import" href="elem-outlet-selector.html">
 
-<dom-module id="page-reports">
+<dom-module id="page-report-sales">
   <template>
     <style include="shared-styles">
       @media print {
@@ -234,9 +234,9 @@
   </template>
 
   <script>
-    class PageReports extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+    class PageReportSales extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
       static get is() {
-        return 'page-reports';
+        return 'page-report-sales';
       }
 
       static get properties() {
@@ -471,6 +471,6 @@
 
     }
 
-    window.customElements.define(PageReports.is, PageReports);
+    window.customElements.define(PageReportSales.is, PageReportSales);
   </script>
 </dom-module>

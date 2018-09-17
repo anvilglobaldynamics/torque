@@ -106,8 +106,9 @@
     "sales": "Sales Records",
     "salesReturn": "Sales Return Records",
     "customers": "Customers",
+    "salesReport": "Sales Report",
+    "inventoryReport": "Inventory Report",
     "profile": "Profile",
-    "reports": "Reports",
     "settings": "Settings",
     "about": "About",
     "logout": "Logout"
