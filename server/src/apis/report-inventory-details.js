@@ -14,8 +14,7 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
     return Joi.object().keys({
       inventoryIdList: Joi.array().items(
         Joi.number().max(999999999999999).required()
-      ),
-      searchString: Joi.string().min(0).max(64).allow('').optional()
+      )
     });
   }
 
@@ -38,26 +37,13 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
     }];
   }
 
-  async __searchAggregatedProductList({ aggregatedProductList, searchString }) {
-    aggregatedProductList = aggregatedProductList.filter(aggregatedProduct => {
-      let regex = new RegExp(searchString, 'g');
-      return regex.test(aggregatedProduct.product.productCategory.name);
-    });
-
-    return aggregatedProductList;
-  }
-
-  async __getAggregatedInventoryDetails({ inventoryId, searchString }) {
+  async __getAggregatedInventoryDetails({ inventoryId }) {
     let inventory = await this.__getInventory({ inventoryId });
     let inventoryContainerDetails = await this.__getInventoryContainerDetails({ inventory });
     let productList = inventory.productList;
 
     let clonedProductList = JSON.parse(JSON.stringify(productList));
     let aggregatedProductList = await this.__getAggregatedProductList({ productList: clonedProductList });
-
-    if (searchString) {
-      aggregatedProductList = await this.__searchAggregatedProductList({ aggregatedProductList, searchString });
-    }
 
     return {
       inventoryDetails: {
