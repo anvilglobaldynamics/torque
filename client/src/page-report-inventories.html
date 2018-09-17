@@ -86,59 +86,6 @@
 
       <div class="filter-region" hidden="[[!shouldShowFilters]]">
 
-        <div class="card horizontal layout center">
-          <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
-          <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
-        </div>
-
-        <template is="dom-if" if="[[!isSearchingCustomer]]">
-          <div class="card vertical layout">
-            <div class="horizontal layout center wrap">
-              <div class="flex">
-                <template is="dom-if" if="[[!customer]]">
-                  [[verses.salesReport.noCustomerSelected]]
-                </template>
-                <template is="dom-if" if="[[customer]]">
-                  [[verses.general.customer]]:
-                  <b>[[customer.fullName]]</b> ([[customer.phone]])
-                  <br> [[verses.general.balance]]:
-                  <b>[[$round(customer.balance)]] [[app.settings.monetaryUnit]]</b>
-                </template>
-              </div>
-              <div class="horizontal layout center">
-                <template is="dom-if" if="[[customer]]">
-                  <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.salesReport.removeCustomer]]</paper-button>
-                </template>
-                <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.salesReport.changeCustomer]]</paper-button>
-              </div>
-            </div>
-          </div>
-        </template>
-        <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
-
-        <template is="dom-if" if="[[!isSearchingOutlet]]">
-          <div class="card vertical layout">
-            <div class="horizontal layout center">
-              <div class="flex">
-                <template is="dom-if" if="[[!outlet]]">
-                  [[verses.salesReport.noOutletSelected]]
-                </template>
-                <template is="dom-if" if="[[outlet]]">
-                  [[verses.general.outlet]]:
-                  <b>[[outlet.name]]</b> ([[outlet.phone]])
-                  <br> [[verses.general.address]]:
-                  <b>[[outlet.physicalAddress]]</b>
-                </template>
-              </div>
-              <template is="dom-if" if="[[outlet]]">
-                <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.salesReport.removeOutlet]]</paper-button>
-              </template>
-              <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.salesReport.changeOutlet]]</paper-button>
-            </div>
-          </div>
-        </template>
-        <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
-
         <div class="lone-controls">
           <paper-checkbox checked="{{showProductDetails}}">[[verses.salesReport.showSalesProductDetails]]</paper-checkbox>
           <paper-button raised class="primary" on-tap="filterTapped">
@@ -245,58 +192,13 @@
             type: Boolean,
             value: false
           },
-          outletId: {
-            type: String,
-            value: null
+          inventoryList: {
+            type: Array,
+            value: () => []
           },
-          shouldFilterByOutlet: {
-            type: Boolean,
-            value: false
-          },
-          shouldFilterByCustomer: {
-            type: Boolean,
-            value: false
-          },
-          fromDate: {
-            type: String,
-            value: _ => {
-              let date = new Date();
-              date.setMonth(date.getMonth() - 1);
-              date = date.getTime();
-              date = (new XDate(date)).toString('yyyy-MM-dd');
-              return date;
-            }
-          },
-          toDate: {
-            type: String,
-            value: _ => {
-              let date = new Date();
-              date = date.getTime();
-              date = (new XDate(date)).toString('yyyy-MM-dd');
-              return date;
-            }
-          },
-          isSearchingCustomer: {
-            type: Boolean,
-            value: false
-          },
-          customer: {
-            type: Object,
-            value: null,
-            observer: 'customerChanged'
-          },
-          isSearchingOutlet: {
-            type: Boolean,
-            value: false
-          },
-          outlet: {
-            type: Object,
-            value: null,
-            observer: 'outletChanged'
-          },
-          showProductDetails: {
-            type: Boolean,
-            value: true
+          aggregatedInventoryDetailsList: {
+            type: Array,
+            value: () => []
           }
         };
       }
@@ -315,18 +217,11 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.inventoriesReport.inventoriesReportTitle);
         if (!this._ensureAccess()) return;
-        this._processInventoriesReport(() => {
-          if ('outlet' in this.params) {
-            this.isSearchingOutlet = true;
-            this.elem('elem-outlet-selector').forceSelect(this.params.outlet);
-          }
-          // TODO: elem-warehouse-selector
-          if ('warehouse' in this.params) {
-            this.isSearchingWarehouse = true;
-            this.elem('elem-warehouse-selector').forceSelect(this.params.warehouse);
-          }
-          this.self = this;
-          this.isReady = true;
+        this._fetchInventoryList(() => {
+          this._processInventoriesReport(() => {
+            this.self = this;
+            this.isReady = true;
+          });
         });
       }
 
@@ -340,129 +235,42 @@
         return this.accessControl('privileged', ['PRIV_VIEW_ALL_INVENTORIES']);
       }
 
-      _fetchSalesList(cbfn) {
-        if (!this.fromDate) {
-          this.resetProperties('fromDate');
-        }
-        if (!this.toDate) {
-          this.resetProperties('toDate');
-        }
-
-        let fromDate = new Date(this.fromDate).getTime();
-        let toDate = new Date(this.toDate).getTime();
-        let customerId = null;
-        if (this.customer) {
-          customerId = this.customer.id;
-          this.shouldFilterByCustomer = true;
-        } else {
-          this.shouldFilterByCustomer = false;
-        }
-
-        let outletId = null;
-        if (this.outlet) {
-          outletId = this.outlet.id;
-          this.shouldFilterByOutlet = true;
-        } else {
-          this.shouldFilterByOutlet = false;
-        }
-
-        let data = {
-          organizationId: this.app.organization.id,
-          outletId,
-          customerId,
-          shouldFilterByOutlet: this.shouldFilterByOutlet,
-          shouldFilterByCustomer: this.shouldFilterByCustomer,
-          fromDate,
-          toDate,
-          paginate: this.paginate,
-          includeExtendedInformation: true
-        };
-
-        this.app.callGetSalesListApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          this.pagination = response.pagination;
-          return cbfn(response.salesList);
-        });
-      }
-
       _fetchInventoriesData(cbfn) {
-        let data = {
-          inventoryIdList: []
-        };
+        let inventoryIdList = this.inventoryList.map(inventory => inventory.id);
+        let data = { inventoryIdList };
 
         this.app.callReportInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.salesList);
+          return cbfn(response.aggregatedInventoryDetailsList);
         });
       }
 
-      outletChanged() {
-        if (!this.outlet) return;
-        this.app.storeInSession('last-selected-outlet', this.outlet);
+      _fetchInventoryList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetInventoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.inventoryList = response.inventoryList;
+          return cbfn();
+        });
       }
 
       _processInventoriesReport(cbfn) {
-        this._fetchInventoriesData(newSalesList => {
-          this.salesList = newSalesList;
-          this.salesSummary = {
-            billedAmountSum: (newSalesList.reduce((sum, sales) => (sum + sales.payment.totalBilled), 0))
-          }
+        this._fetchInventoriesData(aggregatedInventoryDetailsList => {
+          this.aggregatedInventoryDetailsList = aggregatedInventoryDetailsList;
           cbfn();
         });
       }
 
-      _customerSelected(customer) {
-        this.customer = customer;
-        this.isSearchingCustomer = false;
-      }
-
-      _outletSelected(outlet) {
-        this.outlet = outlet;
-        this.isSearchingOutlet = false;
-      }
-
       // region: ui  ===========================
 
-      changeCustomerTapped(e = null) {
-        this.isSearchingCustomer = true;
-      }
-
-      changeOutletTapped(e = null) {
-        this.isSearchingOutlet = true;
-      }
-
-      removeCustomerTapped(e = null) {
-        this.customer = null;
-        this.app.storeInSession('last-selected-customer', null);
-      }
-
-      removeOutletTapped(e = null) {
-        this.outlet = null;
-        this.app.storeInSession('last-selected-outlet', null);
-      }
-
-      viewTapped(e) {
-        let { sale } = e.model;
-        return this.app.navigateTo(`/view-sales/sales:${sale.id}`);
-      }
 
       filterTapped(e = null) {
         this.isReady = false;
         this._processInventoriesReport(() => {
           this.isReady = true;
         });
-      }
-
-      $calculateIndividuallyDiscountedSalePrice(product) {
-        let { salePrice, count, discountType, discountValue } = product;
-        if (discountType === 'percent') {
-          salePrice -= salePrice * (discountValue / 100);
-        } else if (discountType === 'fixed') {
-          salePrice -= discountValue;
-        }
-        return salePrice;
       }
 
       printButtonOnTopBarPressed(e = null) {
