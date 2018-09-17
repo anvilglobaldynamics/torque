@@ -77,10 +77,24 @@
         font-weight: bold;
       }
 
+      .product-detail {
+        font-size: 11px;
+      }
+
+      .inventory-table-container {
+        margin-bottom: 20px;
+      }
+
       .inventory-table .column-header {
         border-bottom: 1px solid black;
         border-right: 1px solid black;
       }
+
+      .product-column {
+        min-width: 130px;
+      }
+
+      .digit-column {}
 
       .inventory-table .column-header-right {
         border-bottom: 1px solid black;
@@ -163,7 +177,7 @@
         <div class="body">
           <template is="dom-repeat" items="[[aggregatedInventoryDetailsList]]" as="aggregatedInventoryDetail">
 
-            <div class="inventory-table-container" style="margin-top: 30px;">
+            <div class="inventory-table-container">
               <table class="inventory-table">
                 <tr>
                   <span class="table-title">
@@ -173,17 +187,19 @@
 
                 <template is="dom-if" if="[[aggregatedInventoryDetail.aggregatedProductList.length]]">
                   <tr>
-                    <th class="column-header" style="min-width: 100px;">Product</th>
-                    <th class="column-header" style="width: 50px;">Added</th> 
-                    <th class="column-header" style="width: 50px;">Count</th> 
-                    <th class="column-header" style="width: 50px;">Purchase</th>
-                    <th class="column-header-right" style="width: 50px;">Sale</th>
+                    <th class="column-header product-column">Product</th>
+                    <th class="column-header digit-column">Count</th> 
+                    <th class="column-header digit-column">Purchase</th>
+                    <th class="column-header-right digit-column">Sale</th>
                   </tr>
 
                   <template is="dom-repeat" items="[[aggregatedInventoryDetail.aggregatedProductList]]" as="aggregatedProduct">
                     <tr>
-                      <td class="cell">[[aggregatedProduct.product.productCategory.name]]</td>
-                      <td class="cell">[[$mkDate(aggregatedProduct.addedDatetimeStamp, 'dd/MM/yy')]]</td> 
+                      <td class="cell">
+                        [[aggregatedProduct.product.productCategory.name]]
+                        <div class="product-detail">added: [[$mkDate(aggregatedProduct.addedDatetimeStamp, 'dd/MM/yy')]]</div>
+                        <div class="product-detail">acquired: [[$mkDate(aggregatedProduct.acquiredDatetimeStamp, 'dd/MM/yy')]]</div>
+                      </td>
                       <td class="cell">[[aggregatedProduct.count]]</td> 
                       <td class="cell">[[aggregatedProduct.product.purchasePrice]]</td>
                       <td class="cell cell-right">[[aggregatedProduct.product.salePrice]]</td>
@@ -191,12 +207,12 @@
                   </template>
 
                   <tr>
-                    <td colspan="2" class="cell total-cell" style="font-weight: bold;">
+                    <td class="cell total-cell" style="font-weight: bold;">
                       Total
                     </td>
                     <td class="cell total-cell">100000</td> 
-                    <td class="cell total-cell">100000000</td>
-                    <td class="cell cell-right total-cell">100000000</td>
+                    <td class="cell total-cell">10000000</td>
+                    <td class="cell cell-right total-cell">10000000</td>
                   </tr>
                 </template>
 
