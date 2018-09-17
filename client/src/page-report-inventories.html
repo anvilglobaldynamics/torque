@@ -65,6 +65,40 @@
 
       .report .body {}
 
+      .table-container {
+        background-color: aquamarine;
+      }
+
+      .inventory-table {
+        width: 100%;
+      }
+
+      .table-title {
+        font-weight: bold;
+      }
+
+      .inventory-table .column-header {
+        border-bottom: 1px solid black;
+        border-right: 1px solid black;
+      }
+
+      .inventory-table .column-header-right {
+        border-bottom: 1px solid black;
+        border-right: 0px solid black;
+      }
+
+      .inventory-table .cell {
+        border-bottom: 1px solid black;
+        border-right: 1px solid black;
+      }
+
+      .inventory-table .total-cell {}
+
+      .inventory-table .cell-right {
+        border-bottom: 1px solid black;
+        border-right: 0px solid black;
+      }
+
       .report .body .item {
         margin-bottom: 8px;
         margin-top: 8px;
@@ -110,7 +144,7 @@
           <div class="name">[[verses.inventoriesReport.inventoriesReportTitle]]</div>
           <div class="horizontal layout wrap">
             <div>
-              <div class="author-title">[[app.organization.name]]</div>
+              <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
               <div>[[app.organization.primaryBusinessAddress]]</div>
               <div>[[app.organization.email]]</div>
               <div>[[app.organization.phone]]</div>
@@ -127,67 +161,56 @@
 
         <!-- report body - start -->
         <div class="body">
-          <div class="horizontal layout center item wrap">
-            <div class="flex">
-              <strong>[[verses.salesReport.particulars]]</strong>
-            </div>
-            <div>
-              <strong>[[verses.salesReport.billedAmount]]</strong>
-            </div>
-          </div>
-          <template is="dom-repeat" items="[[salesList]]" as="sales">
-            <div class="horizontal layout center item wrap">
-              <div class="flex">
-                <div class="id">
-                  <strong>[[verses.salesReport.sales]] # [[sales.id]]</strong> [[$mkDate(sales.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]
-                </div>
-                <template is="dom-if" if="[[sales.customer]]">
-                  <div class="description">
-                    <strong>[[verses.salesReport.soldTo]]: </strong>[[sales.customer.fullName]] ([[sales.customer.phone]])
-                  </div>
+          <template is="dom-repeat" items="[[aggregatedInventoryDetailsList]]" as="aggregatedInventoryDetail">
+
+            <div class="inventory-table-container" style="margin-top: 30px;">
+              <table class="inventory-table">
+                <tr>
+                  <span class="table-title">
+                    [[aggregatedInventoryDetail.inventoryDetails.inventoryName]] of [[aggregatedInventoryDetail.inventoryContainerDetails.inventoryContainerName]] ([[aggregatedInventoryDetail.inventoryContainerDetails.inventoryContainerType]])
+                  </span>
+                </tr>
+
+                <template is="dom-if" if="[[aggregatedInventoryDetail.aggregatedProductList.length]]">
+                  <tr>
+                    <th class="column-header" style="min-width: 100px;">Product</th>
+                    <th class="column-header" style="width: 50px;">Added</th> 
+                    <th class="column-header" style="width: 50px;">Count</th> 
+                    <th class="column-header" style="width: 50px;">Purchase</th>
+                    <th class="column-header-right" style="width: 50px;">Sale</th>
+                  </tr>
+
+                  <template is="dom-repeat" items="[[aggregatedInventoryDetail.aggregatedProductList]]" as="aggregatedProduct">
+                    <tr>
+                      <td class="cell">[[aggregatedProduct.product.productCategory.name]]</td>
+                      <td class="cell">[[$mkDate(aggregatedProduct.addedDatetimeStamp, 'dd/MM/yy')]]</td> 
+                      <td class="cell">[[aggregatedProduct.count]]</td> 
+                      <td class="cell">[[aggregatedProduct.product.purchasePrice]]</td>
+                      <td class="cell cell-right">[[aggregatedProduct.product.salePrice]]</td>
+                    </tr>
+                  </template>
+
+                  <tr>
+                    <td colspan="2" class="cell total-cell" style="font-weight: bold;">
+                      Total
+                    </td>
+                    <td class="cell total-cell">100000</td> 
+                    <td class="cell total-cell">100000000</td>
+                    <td class="cell cell-right total-cell">100000000</td>
+                  </tr>
                 </template>
-                <template is="dom-if" if="[[!showProductDetails]]">
-                  <div class="description">[[sales.productList.length]] [[verses.salesReport.products]]</div>
+
+                <template is="dom-if" if="[[!aggregatedInventoryDetail.aggregatedProductList.length]]">
+                  <tr class="no-product-row">there's no product in this inventory</tr>
                 </template>
-                <template is="dom-if" if="[[showProductDetails]]">
-                  <template is="dom-repeat" items="[[sales.productList]]" as="product">
-                    <div class="description">[[product.productCategory.name]]: [[product.count]] [[product.productCategory.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]</div>
-                  </template>
-                  <div class="description">
-                    <strong>[[verses.salesReport.total]]:</strong> [[sales.productList.length]] [[verses.salesReport.products]]
-                  </div>
-                  <template is="dom-if" if="[[sales.payment.discountedAmount]]">
-                    <div class="description">
-                      <strong>[[verses.salesReport.discountedAmount]]: </strong>[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</div>
-                  </template>
-                  <template is="dom-if" if="[[sales.payment.vatAmount]]">
-                    <div class="description">
-                      <strong>[[verses.salesReport.vat]]: </strong>[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</div>
-                  </template>
-                  <template is="dom-if" if="[[sales.payment.serviceChargeAmount]]">
-                    <div class="description">
-                      <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]]%</div>
-                  </template>
-                  <template is="dom-if" if="[[sales.payment.previousCustomerBalance]]">
-                    <div class="description">
-                      <strong>[[verses.salesReport.previousBalance]]: </strong>[[$round(sales.payment.previousCustomerBalance)]] [[app.settings.monetaryUnit]]</div>
-                  </template>
-                </template>
-              </div>
-              <div class="description">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</div>
+
+              </table>
             </div>
+
           </template>
-          <div class="horizontal layout center item wrap">
-            <div class="flex">
-              <strong>[[verses.salesReport.total]]</strong>
-            </div>
-            <div>
-              <strong>[[salesSummary.billedAmountSum]] [[app.settings.monetaryUnit]]</strong>
-            </div>
-          </div>
         </div>
         <!-- report body - start -->
-        
+
       </div>
       <!-- report - end -->
 
