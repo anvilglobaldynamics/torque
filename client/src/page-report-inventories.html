@@ -1,0 +1,476 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="elem-customer-selector.html">
+<link rel="import" href="elem-outlet-selector.html">
+
+<dom-module id="page-report-inventories">
+  <template>
+    <style include="shared-styles">
+      @media print {
+        .filter-toggle-region,
+        .filter-toggle-region paper-toggle-button,
+        .filter-region {
+          display: none;
+        }
+
+        .report {
+          margin-top: -48px;
+        }
+      }
+
+      .report {
+        background-color: white;
+        padding: 12px;
+        width: calc(100% - 24px);
+      }
+
+      .report .header {
+        border-bottom: 1px solid black;
+      }
+
+      .report .header .name {
+        font-size: 36px;
+        text-align: center;
+      }
+
+      .report .header .date {
+        font-size: 18px;
+        text-align: center;
+      }
+
+      .report .body {}
+
+      .report .body .item {
+        margin-bottom: 8px;
+        margin-top: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px dotted rgb(131, 131, 131);
+      }
+
+      .filter-toggle-region {
+        text-align: right;
+        margin-right: 8px;
+        margin-bottom: 8px;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="filter-toggle-region horizontal layout center">
+        <div class="flex"></div>
+        <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.salesReport.showFilters]]</paper-toggle-button>
+      </div>
+
+      <div class="filter-region" hidden="[[!shouldShowFilters]]">
+
+        <div class="card horizontal layout center">
+          <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+          <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+        </div>
+
+        <template is="dom-if" if="[[!isSearchingCustomer]]">
+          <div class="card vertical layout">
+            <div class="horizontal layout center wrap">
+              <div class="flex">
+                <template is="dom-if" if="[[!customer]]">
+                  [[verses.salesReport.noCustomerSelected]]
+                </template>
+                <template is="dom-if" if="[[customer]]">
+                  [[verses.general.customer]]:
+                  <b>[[customer.fullName]]</b> ([[customer.phone]])
+                  <br> [[verses.general.balance]]:
+                  <b>[[$round(customer.balance)]] [[app.settings.monetaryUnit]]</b>
+                </template>
+              </div>
+              <div class="horizontal layout center">
+                <template is="dom-if" if="[[customer]]">
+                  <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.salesReport.removeCustomer]]</paper-button>
+                </template>
+                <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.salesReport.changeCustomer]]</paper-button>
+              </div>
+            </div>
+          </div>
+        </template>
+        <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+
+        <template is="dom-if" if="[[!isSearchingOutlet]]">
+          <div class="card vertical layout">
+            <div class="horizontal layout center">
+              <div class="flex">
+                <template is="dom-if" if="[[!outlet]]">
+                  [[verses.salesReport.noOutletSelected]]
+                </template>
+                <template is="dom-if" if="[[outlet]]">
+                  [[verses.general.outlet]]:
+                  <b>[[outlet.name]]</b> ([[outlet.phone]])
+                  <br> [[verses.general.address]]:
+                  <b>[[outlet.physicalAddress]]</b>
+                </template>
+              </div>
+              <template is="dom-if" if="[[outlet]]">
+                <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.salesReport.removeOutlet]]</paper-button>
+              </template>
+              <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.salesReport.changeOutlet]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
+
+        <div class="lone-controls">
+          <paper-checkbox checked="{{showProductDetails}}">[[verses.salesReport.showSalesProductDetails]]</paper-checkbox>
+          <paper-button raised class="primary" on-tap="filterTapped">
+            <iron-icon class="button-icon" icon="icons:find-in-page"></iron-icon>
+            [[verses.general.filter]]
+          </paper-button>
+        </div>
+
+      </div>
+
+      <div class="report">
+        <div class="header vertical layout">
+          <div class="name">[[verses.salesReport.salesReportTitle]]</div>
+          <div class="date">[[fromDate]] [[verses.general.to]] [[toDate]]</div>
+          <div class="horizontal layout wrap">
+            <div>
+              <div>[[app.organization.name]]</div>
+              <div>[[app.organization.primaryBusinessAddress]]</div>
+              <div>[[app.organization.email]]</div>
+              <div>[[app.organization.phone]]</div>
+            </div>
+            <div class="flex"></div>
+            <div>
+              <div>[[verses.salesReport.printedBy]]: [[app.user.fullName]]</div>
+              <div>[[app.organization.employment.designation]]</div>
+              <div>[[app.organization.employment.companyProvidedId]]</div>
+            </div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="horizontal layout center item wrap">
+            <div class="flex">
+              <strong>[[verses.salesReport.particulars]]</strong>
+            </div>
+            <div>
+              <strong>[[verses.salesReport.billedAmount]]</strong>
+            </div>
+          </div>
+          <template is="dom-repeat" items="[[salesList]]" as="sales">
+            <div class="horizontal layout center item wrap">
+              <div class="flex">
+                <div class="id">
+                  <strong>[[verses.salesReport.sales]] # [[sales.id]]</strong> [[$mkDate(sales.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]
+                </div>
+                <template is="dom-if" if="[[sales.customer]]">
+                  <div class="description">
+                    <strong>[[verses.salesReport.soldTo]]: </strong>[[sales.customer.fullName]] ([[sales.customer.phone]])
+                  </div>
+                </template>
+                <template is="dom-if" if="[[!showProductDetails]]">
+                  <div class="description">[[sales.productList.length]] [[verses.salesReport.products]]</div>
+                </template>
+                <template is="dom-if" if="[[showProductDetails]]">
+                  <template is="dom-repeat" items="[[sales.productList]]" as="product">
+                    <div class="description">[[product.productCategory.name]]: [[product.count]] [[product.productCategory.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]</div>
+                  </template>
+                  <div class="description">
+                    <strong>[[verses.salesReport.total]]:</strong> [[sales.productList.length]] [[verses.salesReport.products]]
+                  </div>
+                  <template is="dom-if" if="[[sales.payment.discountedAmount]]">
+                    <div class="description">
+                      <strong>[[verses.salesReport.discountedAmount]]: </strong>[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</div>
+                  </template>
+                  <template is="dom-if" if="[[sales.payment.vatAmount]]">
+                    <div class="description">
+                      <strong>[[verses.salesReport.vat]]: </strong>[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</div>
+                  </template>
+                  <template is="dom-if" if="[[sales.payment.serviceChargeAmount]]">
+                    <div class="description">
+                      <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]]%</div>
+                  </template>
+                  <template is="dom-if" if="[[sales.payment.previousCustomerBalance]]">
+                    <div class="description">
+                      <strong>[[verses.salesReport.previousBalance]]: </strong>[[$round(sales.payment.previousCustomerBalance)]] [[app.settings.monetaryUnit]]</div>
+                  </template>
+                </template>
+              </div>
+              <div class="description">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</div>
+            </div>
+          </template>
+          <div class="horizontal layout center item wrap">
+            <div class="flex">
+              <strong>[[verses.salesReport.total]]</strong>
+            </div>
+            <div>
+              <strong>[[salesSummary.billedAmountSum]] [[app.settings.monetaryUnit]]</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+    class PageReportInventories extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-report-inventories';
+      }
+
+      static get properties() {
+        return {
+          shouldShowFilters: {
+            type: Boolean,
+            value: false
+          },
+          outletId: {
+            type: String,
+            value: null
+          },
+          shouldFilterByOutlet: {
+            type: Boolean,
+            value: false
+          },
+          shouldFilterByCustomer: {
+            type: Boolean,
+            value: false
+          },
+          fromDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date.setMonth(date.getMonth() - 1);
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          toDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          isSearchingCustomer: {
+            type: Boolean,
+            value: false
+          },
+          customer: {
+            type: Object,
+            value: null,
+            observer: 'customerChanged'
+          },
+          isSearchingOutlet: {
+            type: Boolean,
+            value: false
+          },
+          outlet: {
+            type: Object,
+            value: null,
+            observer: 'outletChanged'
+          },
+          showProductDetails: {
+            type: Boolean,
+            value: true
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.app.shouldShowPrintButton = true;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.inventoriesReport.inventoriesReportTitle);
+        if (!this._ensureAccess()) return;
+        this._processSalesList(() => {
+          if ('outlet' in this.params) {
+            this.isSearchingOutlet = true;
+            this.elem('elem-outlet-selector').forceSelect(this.params.outlet);
+          }
+          this.self = this;
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.shouldShowPrintButton = false;
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl('privileged', ['PRIV_VIEW_SALES']);
+      }
+
+      _fetchSalesList(cbfn) {
+        if (!this.fromDate) {
+          this.resetProperties('fromDate');
+        }
+        if (!this.toDate) {
+          this.resetProperties('toDate');
+        }
+
+        let fromDate = new Date(this.fromDate).getTime();
+        let toDate = new Date(this.toDate).getTime();
+        let customerId = null;
+        if (this.customer) {
+          customerId = this.customer.id;
+          this.shouldFilterByCustomer = true;
+        } else {
+          this.shouldFilterByCustomer = false;
+        }
+
+        let outletId = null;
+        if (this.outlet) {
+          outletId = this.outlet.id;
+          this.shouldFilterByOutlet = true;
+        } else {
+          this.shouldFilterByOutlet = false;
+        }
+
+        let data = {
+          organizationId: this.app.organization.id,
+          outletId,
+          customerId,
+          shouldFilterByOutlet: this.shouldFilterByOutlet,
+          shouldFilterByCustomer: this.shouldFilterByCustomer,
+          fromDate,
+          toDate,
+          paginate: this.paginate,
+          includeExtendedInformation: true
+        };
+
+        this.app.callGetSalesListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.salesList);
+        });
+      }
+
+      customerChanged() {
+        if (!this.customer) return;
+        this.app.storeInSession('last-selected-customer', this.customer);
+      }
+
+      outletChanged() {
+        if (!this.outlet) return;
+        this.app.storeInSession('last-selected-outlet', this.outlet);
+      }
+
+      _processSalesList(cbfn) {
+        this._fetchSalesList(newSalesList => {
+          this.salesList = newSalesList;
+          this.salesSummary = {
+            billedAmountSum: (newSalesList.reduce((sum, sales) => (sum + sales.payment.totalBilled), 0))
+          }
+          cbfn();
+        });
+      }
+
+      _customerSelected(customer) {
+        this.customer = customer;
+        this.isSearchingCustomer = false;
+      }
+
+      _outletSelected(outlet) {
+        this.outlet = outlet;
+        this.isSearchingOutlet = false;
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processCustomerList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processCustomerList(() => this.isReady = true);
+      }
+
+      // region: ui  ===========================
+
+      changeCustomerTapped(e = null) {
+        this.isSearchingCustomer = true;
+      }
+
+      changeOutletTapped(e = null) {
+        this.isSearchingOutlet = true;
+      }
+
+      removeCustomerTapped(e = null) {
+        this.customer = null;
+        this.app.storeInSession('last-selected-customer', null);
+      }
+
+      removeOutletTapped(e = null) {
+        this.outlet = null;
+        this.app.storeInSession('last-selected-outlet', null);
+      }
+
+      viewTapped(e) {
+        let { sale } = e.model;
+        return this.app.navigateTo(`/view-sales/sales:${sale.id}`);
+      }
+
+      filterTapped(e = null) {
+        this.isReady = false;
+        this._processSalesList(() => {
+          this.isReady = true;
+        });
+      }
+
+      $calculateIndividuallyDiscountedSalePrice(product) {
+        let { salePrice, count, discountType, discountValue } = product;
+        if (discountType === 'percent') {
+          salePrice -= salePrice * (discountValue / 100);
+        } else if (discountType === 'fixed') {
+          salePrice -= discountValue;
+        }
+        return salePrice;
+      }
+
+      printButtonOnTopBarPressed(e = null) {
+        window.print();
+      }
+
+    }
+
+    window.customElements.define(PageReportInventories.is, PageReportInventories);
+  </script>
+</dom-module>

@@ -107,7 +107,7 @@
     "salesReturn": "Sales Return Records",
     "customers": "Customers",
     "salesReport": "Sales Report",
-    "inventoryReport": "Inventory Report",
+    "inventoryReport": "Inventories Report",
     "profile": "Profile",
     "settings": "Settings",
     "about": "About",
@@ -548,6 +548,9 @@
     "vat": "VAT",
     "serviceCharge": "Service Charge",
     "previousBalance": "Previous Balance"
+  },
+  "inventoriesReport": {
+    "inventoriesReportTitle": "Inventories Report"
   },
   "posSelectProduct": {
     "posSelectProductTitle": "Select Products",

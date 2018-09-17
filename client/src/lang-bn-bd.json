@@ -551,6 +551,9 @@
     "serviceCharge": "সেবা মূল্য",
     "previousBalance": "পূর্বের হিসাব"
   },
+  "inventoriesReport": {
+    "inventoriesReportTitle": "পণ্য তালিকার বিবরণ"
+  },
   "posSelectProduct": {
     "posSelectProductTitle": "পণ্য নির্বাচন করুন",
     "purchase": "ক্রয়",
