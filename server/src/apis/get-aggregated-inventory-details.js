@@ -21,16 +21,24 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     });
   }
 
-  // get accessControl() {
-  //   return [{
-  //     organizationBy: (self, userId, body) => {
-  //       errorCode: "INVENTORY_INVALID"
-  //     },
-  //     privileges: [
-  //       "PRIV_VIEW_ALL_INVENTORIES"
-  //     ]
-  //   }];
-  // }
+  get accessControl() {
+    return [{
+      organizationBy: async (userId, body) => {
+        let inventoryList = await this.database.inventory.listByIdList({ idList: body.inventoryIdList });
+        let map = {};
+        inventoryList.forEach(inventory => map[inventory.organizationId] = null);
+        if (Object.keys(map).length !== 1) {
+          throw new CodedError("INVENTORY_INVALID", "inventory could not be found");
+        }
+        let organizationId = parseInt(Object.keys(map)[0]);
+        let organization = await this.database.organization.findById({ id: organizationId });
+        return organization;
+      },
+      privileges: [
+        "PRIV_VIEW_ALL_INVENTORIES"
+      ]
+    }];
+  }
 
   async __getInventory({ inventoryId }) {
     let doc = await this.database.inventory.findById({ id: inventoryId });
