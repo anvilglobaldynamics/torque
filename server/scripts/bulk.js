@@ -14,7 +14,7 @@ const commonPassword = '12345678';
 
 // --------------------------------------------------------------
 
-const organizationCount = 4;
+const organizationCount = 1;
 const employeeCount = {
   min: 0,
   max: 20
@@ -28,12 +28,16 @@ const outletCount = {
   max: 40
 };
 const productCategoryCount = {
-  min: 500,
-  max: 2000
+  min: 5,
+  max: 200
 };
 const productCountPerCategory = {
   min: 1,
   max: 1000
+};
+const salesCountPerOutlet = {
+  min: 1,
+  max: 10
 };
 
 const getSolidCount = (item) => {
@@ -234,18 +238,54 @@ const createEmployee = async ({ apiKey, organizationId }) => {
   return { employeeId };
 }
 
-const createProduct = async ({ apiKey, organizationId, outletId, productCategoryId, outletDefaultInventoryId }) => {
+const createProduct = async ({ apiKey, organizationId, outletId, productCategoryId, outletDefaultInventoryId, count }) => {
   console.log('should create product');
 
-  let { productId } = await callApi('api/add-product-to-inventory', {
+  let results = await callApi('api/add-product-to-inventory', {
     apiKey,
     inventoryId: outletDefaultInventoryId,
     productList: [
-      { productCategoryId, purchasePrice: 100, salePrice: 200, count: getSolidCount(productCountPerCategory) }
+      { productCategoryId, purchasePrice: 100, salePrice: 200, count }
     ]
   });
 
-  return { productId };
+  return { productId: results.insertedProductList[0].productId };
+}
+
+const createSales = async ({ apiKey, outletId, productList }) => {
+  console.log('should create sales');
+
+  productList.forEach(product => {
+    product.discountType = 'fixed';
+    product.discountValue = 0;
+    product.salePrice = 200
+  });
+
+  let { salesId } = await callApi('api/add-sales', {
+    apiKey,
+
+    outletId,
+    customerId: null,
+
+    productList,
+
+    payment: {
+      totalAmount: 0,
+      vatAmount: 0,
+      discountType: 'fixed',
+      discountValue: 0,
+      discountedAmount: 0,
+      serviceChargeAmount: 0,
+      totalBilled: 0,
+      previousCustomerBalance: null,
+      paidAmount: 1000000000,
+      changeAmount: 0,
+      shouldSaveChangeInAccount: false,
+      paymentMethod: 'cash'
+    }
+  });
+
+  return { salesId };
 }
 
 // --------------------------------------------------------------
@@ -284,8 +324,23 @@ const generateBulkData = async () => {
 
     for (let outlet of outletList) {
       let { outletId, outletDefaultInventoryId } = outlet
+      let productList = [];
       for (let productCategoryId of productCategoryIdList) {
-        let { productId } = await createProduct({ apiKey, organizationId, outletId, productCategoryId, outletDefaultInventoryId });
+        let count = getSolidCount(productCountPerCategory);
+        let { productId } = await createProduct({ apiKey, organizationId, outletId, productCategoryId, outletDefaultInventoryId, count });
+        productList.push({ productId, count });
+      }
+      // add sales -
+      for (let i = 0; i < getSolidCount(salesCountPerOutlet); i++) {
+        if (productList.length === 0) break;
+        let amount = getSolidCount({ min: 1, max: Math.min(productList.length, 5) });
+        if (productList.length === 0) break;
+        let sellingProductList = [];
+        do {
+          if (productList.length === 0) break;
+          sellingProductList.push(productList.pop());
+        } while (amount--);
+        let { salesId } = await createSales({ apiKey, outletId, productList: sellingProductList });
       }
     }
 
