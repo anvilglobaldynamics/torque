@@ -70,7 +70,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('Inventory', _ => {
+describe.only('Inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -493,7 +493,7 @@ describe('Inventory', _ => {
 
   });
 
-  it.skip('api/report-inventory-details (Valid inventoryIdList check)', testDoneFn => {
+  it('api/report-inventory-details (Valid inventoryIdList check)', testDoneFn => {
 
     callApi('api/report-inventory-details', {
       json: {
@@ -503,6 +503,7 @@ describe('Inventory', _ => {
         ]
       }
     }, (err, response, body) => {
+      console.log(body);
       expect(response.statusCode).to.equal(200);
 
       validateReportInventoryDetailsApiSuccessResponse(body);
