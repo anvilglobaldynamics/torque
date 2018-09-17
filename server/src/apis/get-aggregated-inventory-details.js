@@ -62,6 +62,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     })).forEach((product, _product) => {
       _product.product = product;
     });
+
     (await this.crossmap({
       source: productList,
       sourceKeyFn: (doc => doc.product.productCategoryId),
@@ -70,6 +71,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
     })).forEach((productCategory, _product) => {
       _product.product.productCategory = productCategory;
     });
+
     let productAcquisitionList = await this.database.productAcquisition.listByProductIdList({ productIdList: productList.map(product => product.productId) });
     productList.forEach(product => {
       let productAcquisition = productAcquisitionList.find(productAcquisition =>
@@ -83,6 +85,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api {
         product.addedDatetimeStamp = 1514821590000;
       }
     });
+
     let productTransferList = await this.database.productTransfer.listByProductIdList({ productIdList: productList.map(product => product.productId) });
     productList.forEach(product => {
       let productTransfer = productTransferList.find(productTransfer =>
