@@ -9,7 +9,7 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  invenotryIdList: Joi.array().items(
+  inventoryIdList: Joi.array().items(
     Joi.number().max(999999999999999).required()
   )
 }
