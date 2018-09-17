@@ -492,6 +492,82 @@ describe('Inventory', _ => {
 
   });
 
+  it.skip('api/report-inventory-details (Valid inventoryIdList check)', testDoneFn => {
+
+    callApi('api/report-inventory-details', {
+      json: {
+        apiKey,
+        inventoryIdList: [
+          warehouseDefaultInventoryId, outletDefaultInventoryId
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      // validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      validateReportInventoryDetailsApiSuccessResponse(body);
+
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails =>  {
+        aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
+          validateAggregatedProductScema(aggregatedProduct);
+        });
+      });
+
+      expect(body.aggregatedInventoryDetailsList[0].inventoryDetails.inventoryId).equals(warehouseDefaultInventoryId);
+      expect(body.aggregatedInventoryDetailsList[1].inventoryDetails.inventoryId).equals(outletDefaultInventoryId);
+
+      testDoneFn();
+    });
+
+  });
+
+  it.skip('api/report-inventory-details (Valid inventoryIdList check more)', testDoneFn => {
+
+    callApi('api/report-inventory-details', {
+      json: {
+        apiKey,
+        inventoryIdList: [
+          warehouseDefaultInventoryId, warehouseReturnedInventoryId, outletDefaultInventoryId
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateReportInventoryDetailsApiSuccessResponse(body);
+
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails =>  {
+        aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
+          validateAggregatedProductScema(aggregatedProduct);
+        });
+      });
+
+      expect(body.aggregatedInventoryDetailsList[0].inventoryDetails.inventoryId).equals(warehouseDefaultInventoryId);
+      expect(body.aggregatedInventoryDetailsList[1].inventoryDetails.inventoryId).equals(warehouseReturnedInventoryId);
+      expect(body.aggregatedInventoryDetailsList[2].inventoryDetails.inventoryId).equals(outletDefaultInventoryId);
+
+      testDoneFn();
+    });
+
+  });
+
+  it.skip('api/report-inventory-details (Invalid invalidInventoryId in inventoryIdList)', testDoneFn => {
+
+    callApi('api/report-inventory-details', {
+      json: {
+        apiKey,
+        inventoryIdList: [
+          warehouseDefaultInventoryId, invalidInventoryId, outletDefaultInventoryId
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('INVENTORY_INVALID');
+      testDoneFn();
+    });
+
+  });
+
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
   });
