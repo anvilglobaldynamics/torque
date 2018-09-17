@@ -21,6 +21,7 @@ exports.ReportInventoryDetailsApi = class extends Api {
   get accessControl() {
     return [{
       organizationBy: async (userId, body) => {
+        console.log("in accessControl: ", body);
         let inventoryList = await this.database.inventory.listByIdList({ idList: body.inventoryIdList });
         let map = {};
         inventoryList.forEach(inventory => map[inventory.organizationId] = null);
@@ -135,6 +136,7 @@ exports.ReportInventoryDetailsApi = class extends Api {
   }
 
   async handle({ body }) {
+    console.log("in handle: ", body);
     let { inventoryIdList, searchString } = body;
 
     let aggregatedInventoryDetailsList = [];
