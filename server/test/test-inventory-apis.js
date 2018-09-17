@@ -522,7 +522,7 @@ describe.only('Inventory', _ => {
 
   });
 
-  it.skip('api/report-inventory-details (Valid inventoryIdList check more)', testDoneFn => {
+  it('api/report-inventory-details (Valid inventoryIdList check more)', testDoneFn => {
 
     callApi('api/report-inventory-details', {
       json: {
@@ -551,7 +551,7 @@ describe.only('Inventory', _ => {
 
   });
 
-  it.skip('api/report-inventory-details (Invalid invalidInventoryId in inventoryIdList)', testDoneFn => {
+  it('api/report-inventory-details (Invalid invalidInventoryId in inventoryIdList)', testDoneFn => {
 
     callApi('api/report-inventory-details', {
       json: {
