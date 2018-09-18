@@ -123,13 +123,13 @@
       <!-- filters - start -->
       <div class="filter-toggle-region horizontal layout center">
         <div class="flex"></div>
-        <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.salesReport.showFilters]]</paper-toggle-button>
+        <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.inventoriesReport.showFilters]]</paper-toggle-button>
       </div>
 
       <div class="filter-region" hidden="[[!shouldShowFilters]]">
 
         <div class="lone-controls">
-          <paper-checkbox checked="{{showProductDetails}}">[[verses.salesReport.showSalesProductDetails]]</paper-checkbox>
+          <paper-checkbox checked="{{showProductDetails}}">[[verses.inventoriesReport.showSalesProductDetails]]</paper-checkbox>
           <paper-button raised class="primary" on-tap="filterTapped">
             <iron-icon class="button-icon" icon="icons:find-in-page"></iron-icon>
             [[verses.general.filter]]
@@ -154,7 +154,7 @@
             </div>
             <div class="flex"></div>
             <div>
-              <div class="author-title">[[verses.salesReport.author]]: [[app.user.fullName]]</div>
+              <div class="author-title">[[verses.inventoriesReport.author]]: [[app.user.fullName]]</div>
               <div>[[app.organization.employment.designation]]</div>
               <div>[[app.organization.employment.companyProvidedId]]</div>
             </div>
@@ -170,43 +170,47 @@
               <table class="inventory-table">
                 <tr>
                   <span class="table-title">
-                    [[aggregatedInventoryDetail.inventoryDetails.inventoryName]] of [[aggregatedInventoryDetail.inventoryContainerDetails.inventoryContainerName]] ([[aggregatedInventoryDetail.inventoryContainerDetails.inventoryContainerType]])
+                    [[aggregatedInventoryDetail.inventoryDetails.inventoryName]], [[aggregatedInventoryDetail.inventoryContainerDetails.inventoryContainerName]] ([[aggregatedInventoryDetail.inventoryContainerDetails.inventoryContainerType]])
                   </span>
                 </tr>
 
                 <template is="dom-if" if="[[aggregatedInventoryDetail.aggregatedProductList.length]]">
                   <tr>
-                    <th class="cell product-column">Product</th>
-                    <th class="cell">Count</th> 
-                    <th class="cell">Purchase</th>
-                    <th class="cell cell-right">Sale</th>
+                    <th class="cell product-column">[[verses.general.product]]</th>
+                    <th class="cell">[[verses.general.count]]</th> 
+                    <th class="cell">[[verses.general.purchase]]</th>
+                    <th class="cell cell-right">[[verses.general.sale]]</th>
                   </tr>
 
                   <template is="dom-repeat" items="[[aggregatedInventoryDetail.aggregatedProductList]]" as="aggregatedProduct">
                     <tr>
                       <td class="cell">
                         [[aggregatedProduct.product.productCategory.name]]
-                        <div class="product-detail">added: [[$mkDate(aggregatedProduct.addedDatetimeStamp, 'dd/MM/yy')]]</div>
-                        <div class="product-detail">acquired: [[$mkDate(aggregatedProduct.acquiredDatetimeStamp, 'dd/MM/yy')]]</div>
+                        <div class="product-detail">Added On: [[$mkDate(aggregatedProduct.addedDatetimeStamp, 'dd/MM/yy')]]</div>
+                        <div class="product-detail">Acquired On: [[$mkDate(aggregatedProduct.acquiredDatetimeStamp, 'dd/MM/yy')]]</div>
                       </td>
-                      <td class="cell">[[aggregatedProduct.count]]</td> 
-                      <td class="cell">[[aggregatedProduct.product.purchasePrice]]</td>
-                      <td class="cell cell-right">[[aggregatedProduct.product.salePrice]]</td>
+                      <td class="cell" align="center">[[aggregatedProduct.count]]</td> 
+                      <td class="cell" align="center">[[aggregatedProduct.product.purchasePrice]]</td>
+                      <td class="cell cell-right" align="center">[[aggregatedProduct.product.salePrice]]</td>
                     </tr>
                   </template>
 
                   <tr>
-                    <td class="cell cell-bottom" style="font-weight: bold;">
-                      Total
+                    <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
+                    <td class="cell cell-bottom" align="center">
+                      {{computeTotalProductCount(aggregatedInventoryDetail.aggregatedProductList)}}
+                    </td> 
+                    <td class="cell cell-bottom" align="center">
+                      {{computeTotalPurchasePrice(aggregatedInventoryDetail.aggregatedProductList)}}
                     </td>
-                    <td class="cell cell-bottom">{{computeTotalProductCount(aggregatedInventoryDetail.aggregatedProductList)}}</td> 
-                    <td class="cell cell-bottom">{{computeTotalPurchasePrice(aggregatedInventoryDetail.aggregatedProductList)}}</td>
-                    <td class="cell cell-bottom cell-right">{{computeTotalSalePrice(aggregatedInventoryDetail.aggregatedProductList)}}</td>
+                    <td class="cell cell-bottom cell-right" align="center">
+                      {{computeTotalSalePrice(aggregatedInventoryDetail.aggregatedProductList)}}
+                    </td>
                   </tr>
                 </template>
 
                 <template is="dom-if" if="[[!aggregatedInventoryDetail.aggregatedProductList.length]]">
-                  <tr class="no-product-row">there's no product in this inventory</tr>
+                  <tr class="no-product-row">[[verses.inventoriesReport.noProductInInventory]]</tr>
                 </template>
 
               </table>

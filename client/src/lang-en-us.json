@@ -550,7 +550,11 @@
     "previousBalance": "Previous Balance"
   },
   "inventoriesReport": {
-    "inventoriesReportTitle": "Inventories Report"
+    "inventoriesReportTitle": "Inventories Report",
+    "showFilters": "Show Filters",
+    "showSalesProductDetails": "Show Sales and Product Details",
+    "author": "Author",
+    "noProductInInventory": "There's no product in this Inventory."
   },
   "posSelectProduct": {
     "posSelectProductTitle": "Select Products",

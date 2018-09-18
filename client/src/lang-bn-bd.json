@@ -552,7 +552,11 @@
     "previousBalance": "পূর্বের হিসাব"
   },
   "inventoriesReport": {
-    "inventoriesReportTitle": "পণ্য তালিকার বিবরণ"
+    "inventoriesReportTitle": "পণ্য তালিকার বিবরণ",
+    "showFilters": "সংকীর্ণকারক দেখান",
+    "showSalesProductDetails": "বিক্রয় এবং পণ্যের বিবরণ দেখান হোক",
+    "author": "রচক",
+    "noProductInInventory": "এই পণ্য তালিকায় কোনো পণ্য নেই।"
   },
   "posSelectProduct": {
     "posSelectProductTitle": "পণ্য নির্বাচন করুন",
