@@ -199,9 +199,9 @@
                     <td class="cell cell-bottom" style="font-weight: bold;">
                       Total
                     </td>
-                    <td class="cell cell-bottom">100000</td> 
-                    <td class="cell cell-bottom">10000000</td>
-                    <td class="cell cell-bottom cell-right">10000000</td>
+                    <td class="cell cell-bottom">{{computeTotalProductCount(aggregatedInventoryDetail.aggregatedProductList)}}</td> 
+                    <td class="cell cell-bottom">{{computeTotalPurchasePrice(aggregatedInventoryDetail.aggregatedProductList)}}</td>
+                    <td class="cell cell-bottom cell-right">{{computeTotalSalePrice(aggregatedInventoryDetail.aggregatedProductList)}}</td>
                   </tr>
                 </template>
 
@@ -234,7 +234,7 @@
             type: Boolean,
             value: false
           },
-          inventoryList: {
+          allInventoryList: {
             type: Array,
             value: () => []
           },
@@ -278,7 +278,7 @@
       }
 
       _fetchInventoriesData(cbfn) {
-        let inventoryIdList = this.inventoryList.map(inventory => inventory.id);
+        let inventoryIdList = this.allInventoryList.map(inventory => inventory.id);
         let data = { inventoryIdList };
 
         this.app.callReportInventoryDetailsApi(data, (err, response) => {
@@ -293,7 +293,7 @@
         this.app.callGetInventoryListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this.inventoryList = response.inventoryList;
+          this.allInventoryList = response.inventoryList;
           return cbfn();
         });
       }
@@ -307,7 +307,6 @@
 
       // region: ui  ===========================
 
-
       filterTapped(e = null) {
         this.isReady = false;
         this._processInventoriesReport(() => {
@@ -317,6 +316,32 @@
 
       printButtonOnTopBarPressed(e = null) {
         window.print();
+      }
+
+      // region: util
+
+      computeTotalProductCount(productList) {
+        let totalCount = 0;
+        productList.forEach(product => {
+          totalCount += product.count;
+        });
+        return totalCount;
+      }
+
+      computeTotalPurchasePrice(productList) {
+        let totalPurchasePrice = 0;
+        productList.forEach(product => {
+          totalPurchasePrice += product.product.purchasePrice;
+        });
+        return totalPurchasePrice;
+      }
+
+      computeTotalSalePrice(productList) {
+        let totalSalePrice = 0;
+        productList.forEach(product => {
+          totalSalePrice += product.product.salePrice;
+        });
+        return totalSalePrice;
       }
 
     }
