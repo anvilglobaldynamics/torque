@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
@@ -23,12 +24,55 @@
 
 <dom-module id="page-report-select-inventories">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+      :root {
+        --table-border-color: #9E9E9E;
+      }
+
+      .selection-table {
+        width: 100%;
+      }
+
+      .selection-table-title {}
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
-      stranger things!
+      <div class="card selection-table-container">
+        <table class="selection-table">
+          <tr><span class="selection-table-title">Selection Table</span></tr>
+
+          <template is="dom-repeat" items="[[groupedInventoryList]]" as="groupedInventory">
+            <tr>
+              <td class="cell inventory-container-cell">
+                <paper-checkbox checked="[[isGroupStatusChecked(groupedInventory.0.isSelected, groupedInventory.1.isSelected, groupedInventory.2.isSelected)]]" on-change="groupCheckChange">
+                  [[groupedInventory.0.inventoryContainerName]]
+                </paper-checkbox>
+              </td>
+              <td class="cell inventory-cell">
+                <paper-checkbox checked="{{groupedInventory.0.isSelected}}">
+                  [[groupedInventory.0.name]]
+                </paper-checkbox>
+              </td>
+              <td class="cell inventory-cell">
+                <paper-checkbox checked="{{groupedInventory.1.isSelected}}">
+                  [[groupedInventory.1.name]]
+                </paper-checkbox>
+              </td>
+              <td class="cell inventory-cell">
+                <paper-checkbox checked="{{groupedInventory.2.isSelected}}">
+                  [[groupedInventory.2.name]]
+                </paper-checkbox>
+              </td>
+            </tr>
+          </template>
+        </table>
+      </div>
+
+      <div class="card">
+        <!-- TODO: buttons -->
+      </div>
     </div>
   </template>
 
@@ -41,11 +85,15 @@
 
       static get properties() {
         return {
-          allInventoryList: {
+          inventoryList: {
             type: Array,
             value: () => []
           },
           selectedInventories: {
+            type: Array,
+            value: () => []
+          },
+          groupedInventoryList: {
             type: Array,
             value: () => []
           }
@@ -89,16 +137,16 @@
       }
 
       _processManageIsSelectedFlag(cbfn) {
-        this.allInventoryList.forEach(inventoryAll => {
+        this.inventoryList.forEach(inventory => {
           if (!this.savedInventoryList) {
-            inventoryAll.isSelected = true;
+            inventory.isSelected = true;
           }
           
           if (this.savedInventoryList) {
-            inventoryAll.isSelected = false;
-            this.savedInventoryList.forEach(inventorySaved => {
-              if (inventorySaved.id === inventoryAll.id) {
-                inventoryAll.isSelected = true;
+            inventory.isSelected = false;
+            this.savedInventoryList.forEach(savedInventory => {
+              if (savedInventory.id === inventory.id) {
+                inventory.isSelected = true;
               }
             });
           }
@@ -107,16 +155,53 @@
         return cbfn();
       }
 
+      _groupInventories(cbfn) {
+        if (this.inventoryList.length % 3 !== 0) {
+          // TODO: translate below
+          let message = "developer error";
+          this.app.showModalDialog("dev error", message, _ => {});
+          return;
+        }
+
+        this.groupedInventoryList = [];
+        for (let i=0; i<this.inventoryList.length/3; i++) {
+          let group = [
+            this.inventoryList[i*3], this.inventoryList[i*3+1], this.inventoryList[i*3+2]
+          ];
+          this.push('groupedInventoryList', group);
+        }
+
+        return cbfn();
+      }
+
       _processInventoriesAvailableForSelection(cbfn) {
         this.savedInventoryList = this.app.getFromSession('report-selected-inventory-list'); 
         
         this._fetchInventoryList((inventoryList) => {
-          this.allInventoryList = inventoryList;
+          this.inventoryList = inventoryList;
           this._processManageIsSelectedFlag(() => {
-
-            return cbfn();return cbfn();
+            this._groupInventories(() => {
+              console.log("groupedInventoryList: ", this.groupedInventoryList);
+              return cbfn();
+            });
           });
         });
+      }
+
+      // region: ui =================================
+
+      groupCheckChange(e) {
+        e.model.set('groupedInventory.0.isSelected', e.target.checked);
+        e.model.set('groupedInventory.1.isSelected', e.target.checked);
+        e.model.set('groupedInventory.2.isSelected', e.target.checked);
+      }
+
+      isGroupStatusChecked(groupedInventoryOneIsSelected, groupedInventoryTwoIsSelected, groupedInventoryThreeIsSelected) {
+        if (groupedInventoryOneIsSelected === false && groupedInventoryTwoIsSelected === false && groupedInventoryThreeIsSelected === false) {
+          return false;
+        } else {
+          return true;
+        }
       }
 
     }
