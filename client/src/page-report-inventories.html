@@ -27,6 +27,10 @@
 <dom-module id="page-report-inventories">
   <template>
     <style include="shared-styles">
+      :root {
+        --table-border-color: #9E9E9E;
+      }
+
       @media print {
         .filter-toggle-region,
         .filter-toggle-region paper-toggle-button,
@@ -50,7 +54,7 @@
       }
 
       .report .header {
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid var(--table-border-color);
       }
 
       .report .header .name {
@@ -64,10 +68,6 @@
       }
 
       .report .body {}
-
-      .table-container {
-        background-color: aquamarine;
-      }
 
       .inventory-table {
         width: 100%;
@@ -85,32 +85,21 @@
         margin-bottom: 20px;
       }
 
-      .inventory-table .column-header {
-        border-bottom: 1px solid black;
-        border-right: 1px solid black;
-      }
-
       .product-column {
         min-width: 130px;
       }
 
-      .digit-column {}
-
-      .inventory-table .column-header-right {
-        border-bottom: 1px solid black;
-        border-right: 0px solid black;
-      }
-
       .inventory-table .cell {
-        border-bottom: 1px solid black;
-        border-right: 1px solid black;
+        border-bottom: 1px solid var(--table-border-color);
+        border-right: 1px solid var(--table-border-color);
       }
-
-      .inventory-table .total-cell {}
 
       .inventory-table .cell-right {
-        border-bottom: 1px solid black;
-        border-right: 0px solid black;
+        border-right: 0px solid var(--table-border-color);
+      }
+
+      .inventory-table .cell-bottom {
+        border-bottom: 0px solid var(--table-border-color);
       }
 
       .report .body .item {
@@ -187,10 +176,10 @@
 
                 <template is="dom-if" if="[[aggregatedInventoryDetail.aggregatedProductList.length]]">
                   <tr>
-                    <th class="column-header product-column">Product</th>
-                    <th class="column-header digit-column">Count</th> 
-                    <th class="column-header digit-column">Purchase</th>
-                    <th class="column-header-right digit-column">Sale</th>
+                    <th class="cell product-column">Product</th>
+                    <th class="cell">Count</th> 
+                    <th class="cell">Purchase</th>
+                    <th class="cell cell-right">Sale</th>
                   </tr>
 
                   <template is="dom-repeat" items="[[aggregatedInventoryDetail.aggregatedProductList]]" as="aggregatedProduct">
@@ -207,12 +196,12 @@
                   </template>
 
                   <tr>
-                    <td class="cell total-cell" style="font-weight: bold;">
+                    <td class="cell cell-bottom" style="font-weight: bold;">
                       Total
                     </td>
-                    <td class="cell total-cell">100000</td> 
-                    <td class="cell total-cell">10000000</td>
-                    <td class="cell cell-right total-cell">10000000</td>
+                    <td class="cell cell-bottom">100000</td> 
+                    <td class="cell cell-bottom">10000000</td>
+                    <td class="cell cell-bottom cell-right">10000000</td>
                   </tr>
                 </template>
 
