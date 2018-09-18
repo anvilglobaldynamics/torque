@@ -221,7 +221,7 @@
 
       static get properties() {
         return {
-          allInventoryList: {
+          inventoriesToBeFetched: {
             type: Array,
             value: () => []
           },
@@ -246,11 +246,9 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.inventoriesReport.inventoriesReportTitle);
         if (!this._ensureAccess()) return;
-        this._fetchInventoryList(() => {
-          this._processInventoriesReport(() => {
-            this.self = this;
-            this.isReady = true;
-          });
+        this._processInventoriesReport(() => {
+          this.self = this;
+          this.isReady = true;
         });
       }
 
@@ -265,13 +263,14 @@
       }
 
       _fetchInventoriesData(cbfn) {
-        let inventoryIdList = this.allInventoryList.map(inventory => inventory.id);
+        let inventoryIdList = this.inventoriesToBeFetched.map(inventory => inventory.id);
         let data = { inventoryIdList };
 
         this.app.callReportInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.aggregatedInventoryDetailsList);
+          this.aggregatedInventoryDetailsList = response.aggregatedInventoryDetailsList;
+          return cbfn();
         });
       }
 
@@ -280,16 +279,26 @@
         this.app.callGetInventoryListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this.allInventoryList = response.inventoryList;
-          return cbfn();
+          return cbfn(response.inventoryList);
         });
       }
 
       _processInventoriesReport(cbfn) {
-        this._fetchInventoriesData(aggregatedInventoryDetailsList => {
-          this.aggregatedInventoryDetailsList = aggregatedInventoryDetailsList;
-          cbfn();
-        });
+        let savedInventoryList = this.app.getFromSession('report-selected-inventory-list'); 
+
+        if (!savedInventoryList) {
+          this._fetchInventoryList((inventoryList) => {
+            this.inventoriesToBeFetched = inventoryList;
+            this._fetchInventoriesData(() => {
+              cbfn();
+            });
+          });
+        } else {
+          this.inventoriesToBeFetched = savedInventoryList;
+          this._fetchInventoriesData(() => {
+            cbfn();
+          });
+        }
       }
 
       // region: ui  ===========================

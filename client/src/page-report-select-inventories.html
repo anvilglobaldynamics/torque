@@ -36,7 +36,7 @@
     class PageReportSelectInventories extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
-        return 'page-report-select-inventories"';
+        return 'page-report-select-inventories';
       }
 
       static get properties() {
@@ -76,4 +76,6 @@
       }
 
     }
+
+    window.customElements.define(PageReportSelectInventories.is, PageReportSelectInventories);
   </script>
