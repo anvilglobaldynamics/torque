@@ -556,7 +556,9 @@
     "showFilters": "সংকীর্ণকারক দেখান",
     "showSalesProductDetails": "বিক্রয় এবং পণ্যের বিবরণ দেখান হোক",
     "author": "রচক",
-    "noProductInInventory": "এই পণ্য তালিকায় কোনো পণ্য নেই।"
+    "noProductInInventory": "এই পণ্য তালিকায় কোনো পণ্য নেই।",
+    "filterInventoriesButton": "পণ্য তালিকা সংকীর্ণকারক",
+    "selectInventoriesTitle": "পণ্য তালিকা নির্বাচন"
   },
   "posSelectProduct": {
     "posSelectProductTitle": "পণ্য নির্বাচন করুন",

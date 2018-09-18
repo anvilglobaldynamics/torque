@@ -121,21 +121,8 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <!-- filters - start -->
-      <div class="filter-toggle-region horizontal layout center">
-        <div class="flex"></div>
-        <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.inventoriesReport.showFilters]]</paper-toggle-button>
-      </div>
-
-      <div class="filter-region" hidden="[[!shouldShowFilters]]">
-
-        <div class="lone-controls">
-          <paper-checkbox checked="{{showProductDetails}}">[[verses.inventoriesReport.showSalesProductDetails]]</paper-checkbox>
-          <paper-button raised class="primary" on-tap="filterTapped">
-            <iron-icon class="button-icon" icon="icons:find-in-page"></iron-icon>
-            [[verses.general.filter]]
-          </paper-button>
-        </div>
-
+      <div class="lone-controls">
+        <paper-button raised class="btn primary" on-tap="filterTapped">[[verses.inventoriesReport.filterInventoriesButton]]</paper-button>
       </div>
       <!-- filters - end -->
 
@@ -234,10 +221,6 @@
 
       static get properties() {
         return {
-          shouldShowFilters: {
-            type: Boolean,
-            value: false
-          },
           allInventoryList: {
             type: Array,
             value: () => []
@@ -312,10 +295,7 @@
       // region: ui  ===========================
 
       filterTapped(e = null) {
-        this.isReady = false;
-        this._processInventoriesReport(() => {
-          this.isReady = true;
-        });
+        return this.app.navigateTo(`/report-select-inventories/`);
       }
 
       printButtonOnTopBarPressed(e = null) {

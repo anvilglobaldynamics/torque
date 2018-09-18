@@ -554,7 +554,9 @@
     "showFilters": "Show Filters",
     "showSalesProductDetails": "Show Sales and Product Details",
     "author": "Author",
-    "noProductInInventory": "There's no product in this Inventory."
+    "noProductInInventory": "There's no product in this Inventory.",
+    "filterInventoriesButton": "Filter Inventories",
+    "selectInventoriesTitle": "Select Inventories"
   },
   "posSelectProduct": {
     "posSelectProductTitle": "Select Products",
