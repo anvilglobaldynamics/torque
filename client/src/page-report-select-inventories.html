@@ -44,6 +44,10 @@
           allInventoryList: {
             type: Array,
             value: () => []
+          },
+          selectedInventories: {
+            type: Array,
+            value: () => []
           }
         };
       }
@@ -61,9 +65,9 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.inventoriesReport.selectInventoriesTitle);
         if (!this._ensureAccess()) return;
-        // this._processInventory(() => {
+        this._processInventoriesAvailableForSelection(() => {
           this.isReady = true;
-        // });
+        });
       }
 
       onNavigateOut() {
@@ -73,6 +77,46 @@
 
       _ensureAccess() {
         return this.accessControl('privileged', ['PRIV_VIEW_ALL_INVENTORIES']);
+      }
+
+      _fetchInventoryList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetInventoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.inventoryList);
+        });
+      }
+
+      _processManageIsSelectedFlag(cbfn) {
+        this.allInventoryList.forEach(inventoryAll => {
+          if (!this.savedInventoryList) {
+            inventoryAll.isSelected = true;
+          }
+          
+          if (this.savedInventoryList) {
+            inventoryAll.isSelected = false;
+            this.savedInventoryList.forEach(inventorySaved => {
+              if (inventorySaved.id === inventoryAll.id) {
+                inventoryAll.isSelected = true;
+              }
+            });
+          }
+        });
+
+        return cbfn();
+      }
+
+      _processInventoriesAvailableForSelection(cbfn) {
+        this.savedInventoryList = this.app.getFromSession('report-selected-inventory-list'); 
+        
+        this._fetchInventoryList((inventoryList) => {
+          this.allInventoryList = inventoryList;
+          this._processManageIsSelectedFlag(() => {
+
+            return cbfn();return cbfn();
+          });
+        });
       }
 
     }
