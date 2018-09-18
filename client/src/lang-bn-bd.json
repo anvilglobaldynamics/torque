@@ -558,7 +558,11 @@
     "author": "রচক",
     "noProductInInventory": "এই পণ্য তালিকায় কোনো পণ্য নেই।",
     "filterInventoriesButton": "পণ্য তালিকা সংকীর্ণকারক",
-    "selectInventoriesTitle": "পণ্য তালিকা নির্বাচন"
+
+    "selectInventoriesTitle": "পণ্য তালিকা নির্বাচন",
+    "deselectAll": "Deselect All",
+    "resetSelection": "Reset Selection",
+    "confirmSelection": "Confirm Selection"
   },
   "posSelectProduct": {
     "posSelectProductTitle": "পণ্য নির্বাচন করুন",

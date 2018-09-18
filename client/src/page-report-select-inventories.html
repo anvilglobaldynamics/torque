@@ -34,6 +34,11 @@
       }
 
       .selection-table-title {}
+
+      .confirm-discard-button-group paper-button {
+        width: 100%;
+        margin: 5px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -46,7 +51,7 @@
           <template is="dom-repeat" items="[[groupedInventoryList]]" as="groupedInventory">
             <tr>
               <td class="cell inventory-container-cell">
-                <paper-checkbox checked="[[isGroupStatusChecked(groupedInventory.0.isSelected, groupedInventory.1.isSelected, groupedInventory.2.isSelected)]]" on-change="groupCheckChange">
+                <paper-checkbox checked on-change="groupCheckChange">
                   [[groupedInventory.0.inventoryContainerName]]
                 </paper-checkbox>
               </td>
@@ -70,8 +75,9 @@
         </table>
       </div>
 
-      <div class="card">
-        <!-- TODO: buttons -->
+      <div class="vartical confirm-discard-button-group">
+        <paper-button raised class="btn danger" on-tap="resetSelectionTapped">[[verses.inventoriesReport.resetSelection]]</paper-button>
+        <paper-button raised class="btn primary" on-tap="confirmSelectionTapped">[[verses.inventoriesReport.confirmSelection]]</paper-button>
       </div>
     </div>
   </template>
@@ -137,6 +143,8 @@
       }
 
       _processManageIsSelectedFlag(cbfn) {
+        this.savedInventoryList = this.app.getFromSession('report-selected-inventory-list'); 
+
         this.inventoryList.forEach(inventory => {
           if (!this.savedInventoryList) {
             inventory.isSelected = true;
@@ -174,14 +182,11 @@
         return cbfn();
       }
 
-      _processInventoriesAvailableForSelection(cbfn) {
-        this.savedInventoryList = this.app.getFromSession('report-selected-inventory-list'); 
-        
+      _processInventoriesAvailableForSelection(cbfn) {        
         this._fetchInventoryList((inventoryList) => {
           this.inventoryList = inventoryList;
           this._processManageIsSelectedFlag(() => {
             this._groupInventories(() => {
-              console.log("groupedInventoryList: ", this.groupedInventoryList);
               return cbfn();
             });
           });
@@ -196,12 +201,18 @@
         e.model.set('groupedInventory.2.isSelected', e.target.checked);
       }
 
-      isGroupStatusChecked(groupedInventoryOneIsSelected, groupedInventoryTwoIsSelected, groupedInventoryThreeIsSelected) {
-        if (groupedInventoryOneIsSelected === false && groupedInventoryTwoIsSelected === false && groupedInventoryThreeIsSelected === false) {
-          return false;
-        } else {
-          return true;
-        }
+      resetSelectionTapped(e = null) {
+        this._processManageIsSelectedFlag(() => {
+          this._groupInventories(() => {
+            this.set('groupedInventoryList', this.groupedInventoryList);
+          });
+        });
+      }
+
+      confirmSelectionTapped(e = null) {
+        let selectedInventoryList = this.inventoryList.filter(inventory => inventory.isSelected);
+        this.app.storeInSession('report-selected-inventory-list', selectedInventoryList);
+        this.app.navigateToPreviousUrl(`/report-inventories`);
       }
 
     }

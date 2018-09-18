@@ -556,7 +556,11 @@
     "author": "Author",
     "noProductInInventory": "There's no product in this Inventory.",
     "filterInventoriesButton": "Filter Inventories",
-    "selectInventoriesTitle": "Select Inventories"
+
+    "selectInventoriesTitle": "Select Inventories",
+    "deselectAll": "Deselect All",
+    "resetSelection": "Reset Selection",
+    "confirmSelection": "Confirm Selection"
   },
   "posSelectProduct": {
     "posSelectProductTitle": "Select Products",
