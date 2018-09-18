@@ -29,11 +29,20 @@
         --table-border-color: #9E9E9E;
       }
 
-      .selection-table {
-        width: 100%;
+      .inventories-checkbox-container {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 6px;
+        margin: 8px 0px;
       }
 
-      .selection-table-title {}
+      .inventory-container-checkbox {
+        margin-bottom: 10px;
+      }
+
+      .inventory-checkbox {
+        margin-right: 10px;
+      }
 
       .confirm-discard-button-group paper-button {
         width: 100%;
@@ -44,35 +53,38 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
-      <div class="card selection-table-container">
-        <table class="selection-table">
-          <tr><span class="selection-table-title">Selection Table</span></tr>
+      <div class="card">
+        <div class="vertical layout">
+          <p class="page-subtitle">[[verses.inventoriesReport.selectionTableTitle]]</p>
 
           <template is="dom-repeat" items="[[groupedInventoryList]]" as="groupedInventory">
-            <tr>
-              <td class="cell inventory-container-cell">
-                <paper-checkbox checked on-change="groupCheckChange">
+            <div class="inventories-checkbox-container">
+              <div>
+                <paper-checkbox class="inventory-container-checkbox" checked on-change="groupCheckChange">
                   [[groupedInventory.0.inventoryContainerName]]
                 </paper-checkbox>
-              </td>
-              <td class="cell inventory-cell">
-                <paper-checkbox checked="{{groupedInventory.0.isSelected}}">
-                  [[groupedInventory.0.name]]
-                </paper-checkbox>
-              </td>
-              <td class="cell inventory-cell">
-                <paper-checkbox checked="{{groupedInventory.1.isSelected}}">
-                  [[groupedInventory.1.name]]
-                </paper-checkbox>
-              </td>
-              <td class="cell inventory-cell">
-                <paper-checkbox checked="{{groupedInventory.2.isSelected}}">
-                  [[groupedInventory.2.name]]
-                </paper-checkbox>
-              </td>
-            </tr>
+              </div>
+
+              <div class="horizontal layout">
+                <div>
+                  <paper-checkbox class="inventory-checkbox" checked="{{groupedInventory.0.isSelected}}">
+                    [[groupedInventory.0.name]]
+                  </paper-checkbox>
+                </div>
+                <div>
+                  <paper-checkbox class="inventory-checkbox" checked="{{groupedInventory.1.isSelected}}">
+                    [[groupedInventory.1.name]]
+                  </paper-checkbox>
+                </div>
+                <div>
+                  <paper-checkbox class="inventory-checkbox" checked="{{groupedInventory.2.isSelected}}">
+                    [[groupedInventory.2.name]]
+                  </paper-checkbox>
+                </div>
+              </div>
+            </div>
           </template>
-        </table>
+        </div>
       </div>
 
       <div class="vartical confirm-discard-button-group">

@@ -560,9 +560,10 @@
     "filterInventoriesButton": "পণ্য তালিকা সংকীর্ণকারক",
 
     "selectInventoriesTitle": "পণ্য তালিকা নির্বাচন",
-    "deselectAll": "Deselect All",
-    "resetSelection": "Reset Selection",
-    "confirmSelection": "Confirm Selection"
+    "selectionTableTitle": "পণ্য তালিকা নির্বাচন ছক",
+    "deselectAll": "সব নির্বাচন মুছে দিন",
+    "resetSelection": "আগের নির্বাচন",
+    "confirmSelection": "নির্বাচন নিশ্চিত করুন"
   },
   "posSelectProduct": {
     "posSelectProductTitle": "পণ্য নির্বাচন করুন",

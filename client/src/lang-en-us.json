@@ -558,6 +558,7 @@
     "filterInventoriesButton": "Filter Inventories",
 
     "selectInventoriesTitle": "Select Inventories",
+    "selectionTableTitle": "Inventories Selection Table",
     "deselectAll": "Deselect All",
     "resetSelection": "Reset Selection",
     "confirmSelection": "Confirm Selection"
