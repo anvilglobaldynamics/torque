@@ -70,6 +70,7 @@ let { DeleteProductCategoryApi } = require('./legacy-apis/delete-product-categor
 
 const { GetInventoryListApi } = require('./apis/get-inventory-list');
 const { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-inventory-details');
+const { ReportInventoryDetailsApi } = require('./apis/report-inventory-details');
 let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
 const { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
 
@@ -285,6 +286,7 @@ class Program {
     server.registerPostApi('/api/user-reset-password--confirm', UserResetPasswordConfirmApi);
     server.registerPostApi('/api/get-inventory-list', GetInventoryListApi);
     server.registerPostApi('/api/get-aggregated-inventory-details', GetAggregatedInventoryDetailsApi);
+    server.registerPostApi('/api/report-inventory-details', ReportInventoryDetailsApi);
     server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
     server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
     server.registerPostApi('/api/get-designation-list', GetDesignationListApi);

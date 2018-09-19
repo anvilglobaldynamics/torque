@@ -106,7 +106,8 @@
     "sales": "বিক্রয় রেকর্ড",
     "salesReturn": "বিক্রয় ফেরত রেকর্ড",
     "customers": "গ্রাহক",
-    "reports": "রিপোর্টস",
+    "salesReport": "বিক্রয় রিপোর্টস",
+    "inventoryReport": "পণ্য তালিকা রিপোর্টস",
     "profile": "প্রোফাইল",
     "settings": "সেটিংস",
     "about": "আমাদের কথা",
@@ -538,7 +539,7 @@
     "removeOutlet": "দোকান সরান",
     "changeOutlet": "দোকান পরিবর্তন করুন",
     "showSalesProductDetails": "বিক্রয় এবং পণ্যের বিবরণ দেখান হোক",
-    "printedBy": "দ্বারা মুদ্রিত",
+    "author": "রচক",
     "particulars": "বিবরণ",
     "billedAmount": "বিল পরিমাণ",
     "sales": "বিক্রয়",
@@ -549,6 +550,20 @@
     "vat": "ভ্যাট",
     "serviceCharge": "সেবা মূল্য",
     "previousBalance": "পূর্বের হিসাব"
+  },
+  "inventoriesReport": {
+    "inventoriesReportTitle": "পণ্য তালিকার বিবরণ",
+    "showFilters": "সংকীর্ণকারক দেখান",
+    "showSalesProductDetails": "বিক্রয় এবং পণ্যের বিবরণ দেখান হোক",
+    "author": "রচক",
+    "noProductInInventory": "এই পণ্য তালিকায় কোনো পণ্য নেই।",
+    "filterInventoriesButton": "পণ্য তালিকা সংকীর্ণকারক",
+
+    "selectInventoriesTitle": "পণ্য তালিকা নির্বাচন",
+    "selectionTableTitle": "পণ্য তালিকা নির্বাচন ছক",
+    "deselectAll": "সব নির্বাচন মুছে দিন",
+    "resetSelection": "আগের নির্বাচন",
+    "confirmSelection": "নির্বাচন নিশ্চিত করুন"
   },
   "posSelectProduct": {
     "posSelectProductTitle": "পণ্য নির্বাচন করুন",
