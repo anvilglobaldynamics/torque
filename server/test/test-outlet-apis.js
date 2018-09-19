@@ -16,7 +16,8 @@ let {
   validateGenericApiFailureResponse,
   validateGetOutletListApiSuccessResponse,
   validateGetOutletApiSuccessResponse,
-  validateGenericApiSuccessResponse
+  validateGenericApiSuccessResponse,
+  validateAddProductToInventoryApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -334,7 +335,7 @@ describe('Outlet', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      validateGenericApiSuccessResponse(body);
+      validateAddProductToInventoryApiSuccessResponse(body);
       testDoneFn();
     });
   });

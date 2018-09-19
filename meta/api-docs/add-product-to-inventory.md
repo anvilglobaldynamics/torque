@@ -44,8 +44,14 @@ Possible Error Codes:
 ### response (on success):
 ```js
 {
-  "hasError": false,
-  "status": "success"
+  hasError: Joi.boolean().required().equal(false),
+  status: Joi.array().required().equal('success'),
+  insertedProductList: Joi.array().required().items(
+    Joi.object().keys({
+      productId: Joi.number().required(),
+      count: Joi.number().required(),
+    })
+  )
 }
 ```
 
