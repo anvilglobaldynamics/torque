@@ -40,7 +40,7 @@ let productCategoryToBeModified = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('Product Category', _ => {
+describe.only('Product Category', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -135,6 +135,28 @@ describe('Product Category', _ => {
       expect(body.error.code).equal('ORGANIZATION_INVALID');
       testDoneFn();
     })
+
+  });
+
+  it('api/get-product-category-list (Valid searchString)', testDoneFn => {
+
+    callApi('api/get-product-category-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: '1st'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetProductCategoryListApiSuccessResponse(body);
+
+      body.productCategoryList.forEach(productCategory => {
+        validateProductCategorySchema(productCategory);
+      });
+
+      testDoneFn();
+    });
 
   });
 
