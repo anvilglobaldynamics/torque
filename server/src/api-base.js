@@ -363,7 +363,7 @@ class Api {
     let { organizationBy } = rule;
     let organization;
     if (typeof (organizationBy) === "function") {
-      organization = await organizationBy(this, userId, body);
+      organization = await organizationBy(userId, body, this);
       throwOnFalsy(organization, "ORGANIZATION_INVALID", "organizationBy function did not return valid organization.");
     } else if (typeof (organizationBy) === "string") {
       let id = body[organizationBy];

@@ -106,8 +106,9 @@
     "sales": "Sales Records",
     "salesReturn": "Sales Return Records",
     "customers": "Customers",
+    "salesReport": "Sales Report",
+    "inventoryReport": "Inventories Report",
     "profile": "Profile",
-    "reports": "Reports",
     "settings": "Settings",
     "about": "About",
     "logout": "Logout"
@@ -536,7 +537,7 @@
     "removeOutlet": "Remove Outlet",
     "changeOutlet": "Change Outlet",
     "showSalesProductDetails": "Show Sales and Product Details",
-    "printedBy": "Printed By",
+    "author": "Author",
     "particulars": "Particulars",
     "billedAmount": "Billed Amount",
     "sales": "Sales",
@@ -547,6 +548,20 @@
     "vat": "VAT",
     "serviceCharge": "Service Charge",
     "previousBalance": "Previous Balance"
+  },
+  "inventoriesReport": {
+    "inventoriesReportTitle": "Inventories Report",
+    "showFilters": "Show Filters",
+    "showSalesProductDetails": "Show Sales and Product Details",
+    "author": "Author",
+    "noProductInInventory": "There's no product in this Inventory.",
+    "filterInventoriesButton": "Filter Inventories",
+
+    "selectInventoriesTitle": "Select Inventories",
+    "selectionTableTitle": "Inventories Selection Table",
+    "deselectAll": "Deselect All",
+    "resetSelection": "Reset Selection",
+    "confirmSelection": "Confirm Selection"
   },
   "posSelectProduct": {
     "posSelectProductTitle": "Select Products",

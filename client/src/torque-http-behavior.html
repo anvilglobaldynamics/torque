@@ -389,6 +389,11 @@
         this.callCombinedJsonApi('get-sales-list', data, cbfn);
       }
 
+      callReportInventoryDetailsApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('report-inventory-details', data, cbfn);
+      }
+
       callGetSalesApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('get-sales', data, cbfn);

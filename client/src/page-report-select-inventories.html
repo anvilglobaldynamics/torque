@@ -1,0 +1,233 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-report-select-inventories">
+  <template>
+    <style include="shared-styles">
+      :root {
+        --table-border-color: #9E9E9E;
+      }
+
+      .inventories-checkbox-container {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 6px;
+        margin: 8px 0px;
+      }
+
+      .inventory-container-checkbox {
+        margin-bottom: 10px;
+      }
+
+      .inventory-checkbox {
+        margin-right: 10px;
+      }
+
+      .confirm-discard-button-group paper-button {
+        width: 100%;
+        margin: 5px;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+      <div class="card">
+        <div class="vertical layout">
+          <p class="page-subtitle">[[verses.inventoriesReport.selectionTableTitle]]</p>
+
+          <template is="dom-repeat" items="[[groupedInventoryList]]" as="groupedInventory">
+            <div class="inventories-checkbox-container">
+              <div>
+                <paper-checkbox class="inventory-container-checkbox" checked on-change="groupCheckChange">
+                  [[groupedInventory.0.inventoryContainerName]]
+                </paper-checkbox>
+              </div>
+
+              <div class="horizontal layout">
+                <div>
+                  <paper-checkbox class="inventory-checkbox" checked="{{groupedInventory.0.isSelected}}">
+                    [[groupedInventory.0.name]]
+                  </paper-checkbox>
+                </div>
+                <div>
+                  <paper-checkbox class="inventory-checkbox" checked="{{groupedInventory.1.isSelected}}">
+                    [[groupedInventory.1.name]]
+                  </paper-checkbox>
+                </div>
+                <div>
+                  <paper-checkbox class="inventory-checkbox" checked="{{groupedInventory.2.isSelected}}">
+                    [[groupedInventory.2.name]]
+                  </paper-checkbox>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <div class="vartical confirm-discard-button-group">
+        <paper-button raised class="btn danger" on-tap="resetSelectionTapped">[[verses.inventoriesReport.resetSelection]]</paper-button>
+        <paper-button raised class="btn primary" on-tap="confirmSelectionTapped">[[verses.inventoriesReport.confirmSelection]]</paper-button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class PageReportSelectInventories extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-report-select-inventories';
+      }
+
+      static get properties() {
+        return {
+          inventoryList: {
+            type: Array,
+            value: () => []
+          },
+          selectedInventories: {
+            type: Array,
+            value: () => []
+          },
+          groupedInventoryList: {
+            type: Array,
+            value: () => []
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.inventoriesReport.selectInventoriesTitle);
+        if (!this._ensureAccess()) return;
+        this._processInventoriesAvailableForSelection(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl('privileged', ['PRIV_VIEW_ALL_INVENTORIES']);
+      }
+
+      _fetchInventoryList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetInventoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.inventoryList);
+        });
+      }
+
+      _processManageIsSelectedFlag(cbfn) {
+        this.savedInventoryList = this.app.getFromSession('report-selected-inventory-list'); 
+
+        this.inventoryList.forEach(inventory => {
+          if (!this.savedInventoryList) {
+            inventory.isSelected = true;
+          }
+          
+          if (this.savedInventoryList) {
+            inventory.isSelected = false;
+            this.savedInventoryList.forEach(savedInventory => {
+              if (savedInventory.id === inventory.id) {
+                inventory.isSelected = true;
+              }
+            });
+          }
+        });
+
+        return cbfn();
+      }
+
+      _groupInventories(cbfn) {
+        if (this.inventoryList.length % 3 !== 0) {
+          // TODO: translate below
+          let message = "developer error";
+          this.app.showModalDialog("dev error", message, _ => {});
+          return;
+        }
+
+        this.groupedInventoryList = [];
+        for (let i=0; i<this.inventoryList.length/3; i++) {
+          let group = [
+            this.inventoryList[i*3], this.inventoryList[i*3+1], this.inventoryList[i*3+2]
+          ];
+          this.push('groupedInventoryList', group);
+        }
+
+        return cbfn();
+      }
+
+      _processInventoriesAvailableForSelection(cbfn) {        
+        this._fetchInventoryList((inventoryList) => {
+          this.inventoryList = inventoryList;
+          this._processManageIsSelectedFlag(() => {
+            this._groupInventories(() => {
+              return cbfn();
+            });
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      groupCheckChange(e) {
+        e.model.set('groupedInventory.0.isSelected', e.target.checked);
+        e.model.set('groupedInventory.1.isSelected', e.target.checked);
+        e.model.set('groupedInventory.2.isSelected', e.target.checked);
+      }
+
+      resetSelectionTapped(e = null) {
+        this._processManageIsSelectedFlag(() => {
+          this._groupInventories(() => {
+            this.set('groupedInventoryList', this.groupedInventoryList);
+          });
+        });
+      }
+
+      confirmSelectionTapped(e = null) {
+        let selectedInventoryList = this.inventoryList.filter(inventory => inventory.isSelected);
+        this.app.storeInSession('report-selected-inventory-list', selectedInventoryList);
+        this.app.navigateToPreviousUrl(`/report-inventories`);
+      }
+
+    }
+
+    window.customElements.define(PageReportSelectInventories.is, PageReportSelectInventories);
+  </script>

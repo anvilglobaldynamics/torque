@@ -19,6 +19,7 @@ let {
   validateGenericApiFailureResponse,
   validateGenericApiSuccessResponse,
   validateGetAggregatedInventoryDetailsApiSuccessResponse,
+  validateReportInventoryDetailsApiSuccessResponse,
   validateAggregatedProductScema,
   validateProductCategorySchema,
   validateProductSchema,
@@ -70,7 +71,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('Inventory', _ => {
+describe.only('Inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -493,7 +494,7 @@ describe('Inventory', _ => {
 
   });
 
-  it.skip('api/report-inventory-details (Valid inventoryIdList check)', testDoneFn => {
+  it('api/report-inventory-details (Valid inventoryIdList check)', testDoneFn => {
 
     callApi('api/report-inventory-details', {
       json: {
@@ -505,7 +506,6 @@ describe('Inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
 
-      // validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       validateReportInventoryDetailsApiSuccessResponse(body);
 
       body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails =>  {
@@ -522,7 +522,7 @@ describe('Inventory', _ => {
 
   });
 
-  it.skip('api/report-inventory-details (Valid inventoryIdList check more)', testDoneFn => {
+  it('api/report-inventory-details (Valid inventoryIdList check more)', testDoneFn => {
 
     callApi('api/report-inventory-details', {
       json: {
@@ -551,7 +551,7 @@ describe('Inventory', _ => {
 
   });
 
-  it.skip('api/report-inventory-details (Invalid invalidInventoryId in inventoryIdList)', testDoneFn => {
+  it('api/report-inventory-details (Invalid invalidInventoryId in inventoryIdList)', testDoneFn => {
 
     callApi('api/report-inventory-details', {
       json: {
@@ -564,6 +564,22 @@ describe('Inventory', _ => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equals('INVENTORY_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-inventory-details (empty inventoryIdList)', testDoneFn => {
+
+    callApi('api/report-inventory-details', {
+      json: {
+        apiKey,
+        inventoryIdList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VALIDATION_ERROR');
       testDoneFn();
     });
 

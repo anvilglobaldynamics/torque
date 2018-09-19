@@ -73,7 +73,7 @@ Target is to reach a fully functional state with minimal features that closed be
 | PAGE | PageViewSales                | NO      | NO     | NO       | NO      | NO       | NO       | NO   |
 | PAGE | PageViewWarehouse            | NO      | NO     | NO       | NO      | NO       | NO       | NO   |
 | ---- | ---------------------------- | ------- | ------ | -------- | ------- | -------- | -------- | ---- |
-| PAGE | PageReports                  | NO      | NO     | NO       | NO      | NO       | NO       | NO   |
+| PAGE | PageReportSales                  | NO      | NO     | NO       | NO      | NO       | NO       | NO   |
 | PAGE | PagePosSelectProducts        | NO      | NO     | NO       | NO      | NO       | NO       | NO   |
 | PAGE | PagePos                      | NO      | NO     | NO       | NO      | NO       | NO       | NO   |
 | ---- | ---------------------------- | ------- | ------ | -------- | ------- | -------- | -------- | ---- |
