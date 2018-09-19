@@ -22,12 +22,12 @@
     }
   },
   "log": {
-    "mirrorToFile": true,
+    "mirrorToFile": false,
     "dir": "./logs",
     "format": "json"
   },
   "db": {
-    "path": "mongodb://localhost:27017",
+    "path": "mongodb://torque-server:pjAXJpzw3adQcg9L@db.lipi.live:27017/torque",
     "name": "torque"
   },
   "email": {
@@ -56,7 +56,7 @@
   },
   "socketProxy": {
     "enabled": true,
-    "url": "ws://localhost:8410",
+    "url": "wss://socket.lipi.live",
     "pssk": "ARANDOMSECURITYKEYTHATWILLBEUSEDASAMESSAGE"
   },
   "notes": [
