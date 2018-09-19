@@ -11,6 +11,7 @@ let jsonParser = bodyParser.json({
 });
 const { Logger } = require('./logger');
 const { LegacyApi } = require('./legacy-api-base');
+const moment = require('moment');
 
 const WEBSOCKET_CLIENT_POOL_MAX_COUNT = 6;
 const WEBSOCKET_RECONNECTION_DELAY = 10000;
@@ -103,21 +104,26 @@ class Server {
       });
       ws.removeListener('error', listener);
 
-      let authMessage = this.config.socketProxy.pssk + '/' + (process.env.GAE_VERSION || '000000000000');
+      let authMessage = this.config.socketProxy.pssk + '/' + (process.env.GAE_VERSION || this.__socketMockGaeVersion);
       ws.send(authMessage);
 
       ws.on('message', (message) => {
         // this.logger.debug('Websocket message on', `#${serial}`);
+        if (message === 'COMMAND:DISCONNECT:OLDVERSION') {
+          this.logger.important("(ws:socket)> Received request to stop opening websocket connections.");
+          this.__socketIsOldVersion = true;
+          return
+        }
 
         try {
           message = JSON.parse(message);
         } catch (err) {
-          ws.send("Expected message to be a valid JSON");
+          this.logger.log("(ws:socket)> Expected message to be a valid JSON", message);
           return;
         }
 
         if ((typeof message !== 'object') || (message === null)) {
-          ws.send("Expected message to be a stringified object.");
+          this.logger.log("(ws:socket)> Expected message to be a stringified object.", message);
           return;
         }
 
@@ -130,7 +136,7 @@ class Server {
         });
         let { error, value } = Joi.validate(message, schema);
         if (error) {
-          ws.send("Socket request validation error." + JSON.stringify(error));
+          this.logger.log("(ws:socket)> Socket request validation error." + JSON.stringify(error), message);
           return;
         }
         message = value;
@@ -157,17 +163,23 @@ class Server {
   }
 
   __spawnWebsocketIfNecessary() {
-    this.logger.info("(server)> attempting websocket connection. Connected", this.__socketClientCount, 'out of', WEBSOCKET_CLIENT_POOL_MAX_COUNT);
+    if (this.config.socketProxy.url.indexOf('wss') > -1) {
+      this.logger.info("(server)> attempting websocket connection. Connected", this.__socketClientCount, 'out of', WEBSOCKET_CLIENT_POOL_MAX_COUNT);
+    }
     let lim = Math.max(WEBSOCKET_CLIENT_POOL_MAX_COUNT - this.__socketClientCount, 0);
     for (let i = 0; i < lim; i++) {
       this.__createWebsocketClient();
     }
-    setTimeout(() => {
-      this.__spawnWebsocketIfNecessary();
-    }, WEBSOCKET_RECONNECTION_DELAY);
+    if (!this.__socketIsOldVersion) {
+      setTimeout(() => {
+        this.__spawnWebsocketIfNecessary();
+      }, WEBSOCKET_RECONNECTION_DELAY);
+    }
   }
 
   _initializeWebsocket() {
+    this.__socketIsOldVersion = false;
+    this.__socketMockGaeVersion = moment((new Date)).format('YYYYMMDDtHHmmss');
     this.__socketClientSerialSeed = 0;
     this.__socketClientCount = 0;
     this._wsApiList = [];

@@ -3,8 +3,8 @@
   "branding": {
     "shortName": "Lipi",
     "extendedName": "Lipi by Anvil",
-    "serverUrl": "http://localhost:8540",
-    "clientUrl": "http://localhost:8545",
+    "serverUrl": "http://server.lipi.live",
+    "clientUrl": "https://lipi.live",
     "authorName": "Anvil Global Dynamics",
     "authorWebsite": "https://anvil.live",
     "supportPhone": "017XXXXXXXX",
@@ -22,12 +22,12 @@
     }
   },
   "log": {
-    "mirrorToFile": false,
+    "mirrorToFile": true,
     "dir": "./logs",
     "format": "json"
   },
   "db": {
-    "path": "mongodb://torque-server:pjAXJpzw3adQcg9L@db.lipi.live:27017/torque",
+    "path": "mongodb://localhost:27017",
     "name": "torque"
   },
   "email": {
@@ -56,7 +56,7 @@
   },
   "socketProxy": {
     "enabled": true,
-    "url": "wss://socket.lipi.live",
+    "url": "ws://localhost:8410",
     "pssk": "ARANDOMSECURITYKEYTHATWILLBEUSEDASAMESSAGE"
   },
   "notes": [
