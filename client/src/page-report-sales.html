@@ -24,7 +24,7 @@
 <link rel="import" href="elem-customer-selector.html">
 <link rel="import" href="elem-outlet-selector.html">
 
-<dom-module id="page-reports">
+<dom-module id="page-report-sales">
   <template>
     <style include="shared-styles">
       @media print {
@@ -45,17 +45,21 @@
         width: calc(100% - 24px);
       }
 
+      .report .author-title {
+        font-weight: bold;
+      }
+
       .report .header {
         border-bottom: 1px solid black;
       }
 
       .report .header .name {
-        font-size: 36px;
+        font-size: 30px;
         text-align: center;
       }
 
       .report .header .date {
-        font-size: 18px;
+        font-size: 15px;
         text-align: center;
       }
 
@@ -155,14 +159,14 @@
           <div class="date">[[fromDate]] [[verses.general.to]] [[toDate]]</div>
           <div class="horizontal layout wrap">
             <div>
-              <div>[[app.organization.name]]</div>
+              <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
               <div>[[app.organization.primaryBusinessAddress]]</div>
               <div>[[app.organization.email]]</div>
               <div>[[app.organization.phone]]</div>
             </div>
             <div class="flex"></div>
             <div>
-              <div>[[verses.salesReport.printedBy]]: [[app.user.fullName]]</div>
+              <div class="author-title">[[verses.salesReport.author]]: [[app.user.fullName]]</div>
               <div>[[app.organization.employment.designation]]</div>
               <div>[[app.organization.employment.companyProvidedId]]</div>
             </div>
@@ -234,9 +238,9 @@
   </template>
 
   <script>
-    class PageReports extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+    class PageReportSales extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
       static get is() {
-        return 'page-reports';
+        return 'page-report-sales';
       }
 
       static get properties() {
@@ -316,6 +320,7 @@
         this.app.pushPageTitle(this.app.verses.salesReport.salesReportTitle);
         if (!this._ensureAccess()) return;
         this._processSalesList(() => {
+          console.log(this.app.organization);
           if ('outlet' in this.params) {
             this.isSearchingOutlet = true;
             this.elem('elem-outlet-selector').forceSelect(this.params.outlet);
@@ -471,6 +476,6 @@
 
     }
 
-    window.customElements.define(PageReports.is, PageReports);
+    window.customElements.define(PageReportSales.is, PageReportSales);
   </script>
 </dom-module>

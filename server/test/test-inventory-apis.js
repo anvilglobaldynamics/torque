@@ -19,6 +19,7 @@ let {
   validateGenericApiFailureResponse,
   validateGenericApiSuccessResponse,
   validateGetAggregatedInventoryDetailsApiSuccessResponse,
+  validateReportInventoryDetailsApiSuccessResponse,
   validateAggregatedProductScema,
   validateProductCategorySchema,
   validateProductSchema,
@@ -70,7 +71,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('Inventory', _ => {
+describe.only('Inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -488,6 +489,97 @@ describe('Inventory', _ => {
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(productToBeTransferred.count - 5);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-inventory-details (Valid inventoryIdList check)', testDoneFn => {
+
+    callApi('api/report-inventory-details', {
+      json: {
+        apiKey,
+        inventoryIdList: [
+          warehouseDefaultInventoryId, outletDefaultInventoryId
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateReportInventoryDetailsApiSuccessResponse(body);
+
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails =>  {
+        aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
+          validateAggregatedProductScema(aggregatedProduct);
+        });
+      });
+
+      expect(body.aggregatedInventoryDetailsList[0].inventoryDetails.inventoryId).equals(warehouseDefaultInventoryId);
+      expect(body.aggregatedInventoryDetailsList[1].inventoryDetails.inventoryId).equals(outletDefaultInventoryId);
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-inventory-details (Valid inventoryIdList check more)', testDoneFn => {
+
+    callApi('api/report-inventory-details', {
+      json: {
+        apiKey,
+        inventoryIdList: [
+          warehouseDefaultInventoryId, warehouseReturnedInventoryId, outletDefaultInventoryId
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateReportInventoryDetailsApiSuccessResponse(body);
+
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails =>  {
+        aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
+          validateAggregatedProductScema(aggregatedProduct);
+        });
+      });
+
+      expect(body.aggregatedInventoryDetailsList[0].inventoryDetails.inventoryId).equals(warehouseDefaultInventoryId);
+      expect(body.aggregatedInventoryDetailsList[1].inventoryDetails.inventoryId).equals(warehouseReturnedInventoryId);
+      expect(body.aggregatedInventoryDetailsList[2].inventoryDetails.inventoryId).equals(outletDefaultInventoryId);
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-inventory-details (Invalid invalidInventoryId in inventoryIdList)', testDoneFn => {
+
+    callApi('api/report-inventory-details', {
+      json: {
+        apiKey,
+        inventoryIdList: [
+          warehouseDefaultInventoryId, invalidInventoryId, outletDefaultInventoryId
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('INVENTORY_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-inventory-details (empty inventoryIdList)', testDoneFn => {
+
+    callApi('api/report-inventory-details', {
+      json: {
+        apiKey,
+        inventoryIdList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VALIDATION_ERROR');
       testDoneFn();
     });
 

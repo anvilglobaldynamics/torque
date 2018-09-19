@@ -376,6 +376,60 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateReportInventoryDetailsApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+
+    aggregatedInventoryDetailsList: Joi.array().items(
+      Joi.object().keys({
+
+        inventoryDetails: Joi.object().required(),
+        inventoryContainerDetails: Joi.object().required(),
+    
+        aggregatedProductList: Joi.array().required().items({
+          productId: Joi.number().required(),
+          count: Joi.number().required(),
+          acquiredDatetimeStamp: Joi.number().required(),
+          addedDatetimeStamp:  Joi.number().required(),
+    
+          product: Joi.object().keys({
+            id: Joi.number().required(),
+            productCategoryId: Joi.number().required(),
+            purchasePrice: Joi.number().required(),
+            salePrice: Joi.number().required(),
+    
+            productCategory: Joi.object().keys({
+              id: Joi.number().required(),
+              createdDatetimeStamp: Joi.number().required(),
+              lastModifiedDatetimeStamp: Joi.number().required(),
+              name: Joi.string().required(),
+              organizationId: Joi.number().required(),
+              unit: Joi.string().required(),
+              defaultDiscountType: Joi.string().required(),
+              defaultDiscountValue: Joi.number().when(
+                'defaultDiscountType', { 
+                  is: 'percent', 
+                  then: Joi.number().required(), 
+                  otherwise: Joi.number().required() 
+                }
+              ),
+              defaultPurchasePrice: Joi.number().required(),
+              defaultVat: Joi.number().required(),
+              defaultSalePrice: Joi.number().required(),
+              isDeleted: Joi.boolean().required(),
+              isReturnable: Joi.boolean().required()
+            })
+          })
+        })
+
+      })
+    )
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateAddOrganizationApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),

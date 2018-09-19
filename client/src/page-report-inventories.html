@@ -1,0 +1,344 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="elem-customer-selector.html">
+<link rel="import" href="elem-outlet-selector.html">
+
+<dom-module id="page-report-inventories">
+  <template>
+    <style include="shared-styles">
+      :root {
+        --table-border-color: #9E9E9E;
+      }
+
+      @media print {
+        .filter-toggle-region,
+        .filter-toggle-region paper-toggle-button,
+        .filter-region {
+          display: none;
+        }
+
+        .report {
+          margin-top: -48px;
+        }
+      }
+
+      .report {
+        background-color: white;
+        padding: 12px;
+        width: calc(100% - 24px);
+      }
+
+      .report .author-title {
+        font-weight: bold;
+      }
+
+      .report .header {
+        border-bottom: 1px solid var(--table-border-color);
+      }
+
+      .report .header .name {
+        font-size: 30px;
+        text-align: center;
+      }
+
+      .report .header .date {
+        font-size: 15px;
+        text-align: center;
+      }
+
+      .report .body {}
+
+      .inventory-table {
+        width: 100%;
+      }
+
+      .table-title {
+        font-weight: bold;
+      }
+
+      .product-detail {
+        font-size: 11px;
+      }
+
+      .inventory-table-container {
+        margin-bottom: 20px;
+      }
+
+      .product-column {
+        min-width: 130px;
+      }
+
+      .inventory-table .cell {
+        border-bottom: 1px solid var(--table-border-color);
+        border-right: 1px solid var(--table-border-color);
+      }
+
+      .inventory-table .cell-right {
+        border-right: 0px solid var(--table-border-color);
+      }
+
+      .inventory-table .cell-bottom {
+        border-bottom: 0px solid var(--table-border-color);
+      }
+
+      .report .body .item {
+        margin-bottom: 8px;
+        margin-top: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px dotted rgb(131, 131, 131);
+      }
+
+      .filter-toggle-region {
+        text-align: right;
+        margin-right: 8px;
+        margin-bottom: 8px;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <!-- filters - start -->
+      <div class="filter-region lone-controls">
+        <paper-button raised class="btn primary" on-tap="filterTapped">[[verses.inventoriesReport.filterInventoriesButton]]</paper-button>
+      </div>
+      <!-- filters - end -->
+
+      <!-- report - start -->
+      <div class="report">
+
+        <!-- report header - start -->
+        <div class="header vertical layout">
+          <div class="name">[[verses.inventoriesReport.inventoriesReportTitle]]</div>
+          <div class="horizontal layout wrap">
+            <div>
+              <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
+              <div>[[app.organization.primaryBusinessAddress]]</div>
+              <div>[[app.organization.email]]</div>
+              <div>[[app.organization.phone]]</div>
+            </div>
+            <div class="flex"></div>
+            <div>
+              <div class="author-title">[[verses.inventoriesReport.author]]: [[app.user.fullName]]</div>
+              <div>[[app.organization.employment.designation]]</div>
+              <div>[[app.organization.employment.companyProvidedId]]</div>
+            </div>
+          </div>
+        </div>
+        <!-- report header - start -->
+
+        <!-- report body - start -->
+        <div class="body">
+          <template is="dom-repeat" items="[[aggregatedInventoryDetailsList]]" as="aggregatedInventoryDetail">
+
+            <div class="inventory-table-container">
+              <table class="inventory-table">
+                <tr>
+                  <span class="table-title">
+                    [[aggregatedInventoryDetail.inventoryDetails.inventoryName]], [[aggregatedInventoryDetail.inventoryContainerDetails.inventoryContainerName]] ([[aggregatedInventoryDetail.inventoryContainerDetails.inventoryContainerType]])
+                  </span>
+                </tr>
+
+                <template is="dom-if" if="[[aggregatedInventoryDetail.aggregatedProductList.length]]">
+                  <tr>
+                    <th class="cell product-column">[[verses.general.product]]</th>
+                    <th class="cell">[[verses.general.count]]</th> 
+                    <th class="cell">[[verses.general.purchase]]</th>
+                    <th class="cell cell-right">[[verses.general.sale]]</th>
+                  </tr>
+
+                  <template is="dom-repeat" items="[[aggregatedInventoryDetail.aggregatedProductList]]" as="aggregatedProduct">
+                    <tr>
+                      <td class="cell">
+                        [[aggregatedProduct.product.productCategory.name]]
+                        <div class="product-detail">Added On: [[$mkDate(aggregatedProduct.addedDatetimeStamp, 'dd/MM/yy')]]</div>
+                        <div class="product-detail">Acquired On: [[$mkDate(aggregatedProduct.acquiredDatetimeStamp, 'dd/MM/yy')]]</div>
+                      </td>
+                      <td class="cell" align="center">[[aggregatedProduct.count]]</td> 
+                      <td class="cell" align="center">[[aggregatedProduct.product.purchasePrice]]</td>
+                      <td class="cell cell-right" align="center">[[aggregatedProduct.product.salePrice]]</td>
+                    </tr>
+                  </template>
+
+                  <tr>
+                    <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
+                    <td class="cell cell-bottom" align="center">
+                      {{computeTotalProductCount(aggregatedInventoryDetail.aggregatedProductList)}}
+                    </td> 
+                    <td class="cell cell-bottom" align="center">
+                      {{computeTotalPurchasePrice(aggregatedInventoryDetail.aggregatedProductList)}}
+                    </td>
+                    <td class="cell cell-bottom cell-right" align="center">
+                      {{computeTotalSalePrice(aggregatedInventoryDetail.aggregatedProductList)}}
+                    </td>
+                  </tr>
+                </template>
+
+                <template is="dom-if" if="[[!aggregatedInventoryDetail.aggregatedProductList.length]]">
+                  <tr class="no-product-row">[[verses.inventoriesReport.noProductInInventory]]</tr>
+                </template>
+
+              </table>
+            </div>
+
+          </template>
+        </div>
+        <!-- report body - start -->
+
+      </div>
+      <!-- report - end -->
+
+    </div>
+  </template>
+
+  <script>
+    class PageReportInventories extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-report-inventories';
+      }
+
+      static get properties() {
+        return {
+          inventoriesToBeFetched: {
+            type: Array,
+            value: () => []
+          },
+          aggregatedInventoryDetailsList: {
+            type: Array,
+            value: () => []
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.app.shouldShowPrintButton = true;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.inventoriesReport.inventoriesReportTitle);
+        if (!this._ensureAccess()) return;
+        this._processInventoriesReport(() => {
+          this.self = this;
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.shouldShowPrintButton = false;
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl('privileged', ['PRIV_VIEW_ALL_INVENTORIES']);
+      }
+
+      _fetchInventoriesData(cbfn) {
+        let inventoryIdList = this.inventoriesToBeFetched.map(inventory => inventory.id);
+        let data = { inventoryIdList };
+
+        this.app.callReportInventoryDetailsApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.aggregatedInventoryDetailsList = response.aggregatedInventoryDetailsList;
+          return cbfn();
+        });
+      }
+
+      _fetchInventoryList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetInventoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.inventoryList);
+        });
+      }
+
+      _processInventoriesReport(cbfn) {
+        let savedInventoryList = this.app.getFromSession('report-selected-inventory-list'); 
+
+        if (!savedInventoryList) {
+          this._fetchInventoryList((inventoryList) => {
+            this.inventoriesToBeFetched = inventoryList;
+            this._fetchInventoriesData(() => {
+              cbfn();
+            });
+          });
+        } else {
+          this.inventoriesToBeFetched = savedInventoryList;
+          this._fetchInventoriesData(() => {
+            cbfn();
+          });
+        }
+      }
+
+      // region: ui  ===========================
+
+      filterTapped(e = null) {
+        return this.app.navigateTo(`/report-select-inventories/`);
+      }
+
+      printButtonOnTopBarPressed(e = null) {
+        window.print();
+      }
+
+      // region: util
+
+      computeTotalProductCount(productList) {
+        let totalCount = 0;
+        productList.forEach(product => {
+          totalCount += product.count;
+        });
+        return totalCount;
+      }
+
+      computeTotalPurchasePrice(productList) {
+        let totalPurchasePrice = 0;
+        productList.forEach(product => {
+          totalPurchasePrice += product.product.purchasePrice;
+        });
+        return totalPurchasePrice;
+      }
+
+      computeTotalSalePrice(productList) {
+        let totalSalePrice = 0;
+        productList.forEach(product => {
+          totalSalePrice += product.product.salePrice;
+        });
+        return totalSalePrice;
+      }
+
+    }
+
+    window.customElements.define(PageReportInventories.is, PageReportInventories);
+  </script>
+</dom-module>
