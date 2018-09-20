@@ -223,6 +223,30 @@ describe('Product Category', _ => {
 
   });
 
+  it('api/add-product-category (Invalid fixed defaultDiscountValue)', testDoneFn => {
+
+    callApi('api/add-product-category', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "1st product category",
+        unit: "kg",
+        defaultDiscountType: "fixed",
+        defaultDiscountValue: 114,
+        defaultPurchasePrice: 99,
+        defaultVat: 2,
+        defaultSalePrice: 111,
+        isReturnable: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('DISCOUNT_VALUE_INVALID');
+      testDoneFn();
+    })
+
+  });
+
   // EDIT
 
   it('api/edit-product-category (Valid)', testDoneFn => {
