@@ -40,7 +40,7 @@ let productCategoryToBeModified = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('Product Category', _ => {
+describe.only('Product Category', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -84,6 +84,31 @@ describe('Product Category', _ => {
         isReturnable: true
       }
     }, (err, response, body) => {
+      console.log(body);
+      expect(response.statusCode).to.equal(200);
+      validateAddProductCategoryApiSuccessResponse(body);
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-product-category (Invalid copy name)', testDoneFn => {
+
+    callApi('api/add-product-category', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "1st product category",
+        unit: "kg",
+        defaultDiscountType: "percent",
+        defaultDiscountValue: 10,
+        defaultPurchasePrice: 99,
+        defaultVat: 2,
+        defaultSalePrice: 111,
+        isReturnable: true
+      }
+    }, (err, response, body) => {
+      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateAddProductCategoryApiSuccessResponse(body);
       testDoneFn();
