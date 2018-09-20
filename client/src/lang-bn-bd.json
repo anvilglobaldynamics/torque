@@ -69,7 +69,9 @@
     "card": "কার্ড",
     "digital": "ডিজিটাল",
     "email": "ইমেইল",
-    "designation": "পদবী"
+    "designation": "পদবী",
+    "errorMessageBody": "ত্রুটি ত্রুটি দেখা দিয়েছে, লিপি প্রতিনিধির সাথে যোগাযোগ করুন",
+    "errorMessageTitle": "ত্রুটি"
   },
   "login": {
     "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",

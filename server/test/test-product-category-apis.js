@@ -40,7 +40,7 @@ let productCategoryToBeModified = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe.only('Product Category', _ => {
+describe('Product Category', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

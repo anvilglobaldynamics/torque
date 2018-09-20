@@ -69,7 +69,9 @@
     "card": "card",
     "digital": "digital",
     "email": "Email",
-    "designation": "Designation"
+    "designation": "Designation",
+    "errorMessageBody": "Error Occurred, Please contact Lipi representative.",
+    "errorMessageTitle": "Error"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
