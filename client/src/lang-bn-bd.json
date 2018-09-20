@@ -252,17 +252,17 @@
     "subCategory": "উপ বিভাগ",
     "moveToRoot": "বাহিরে সরান",
     "createNewProductCategory": "নতুন পণ্য ধরণ যুক্ত করুন",
-    "searchForProductCategoryInput": "পণ্য তালিকার জন্য অনুসন্ধান করুন",
+    "searchForProductCategoryInput": "পণ্য তালিকার নাম",
     "searchForProductCategoryInputError": "পণ্য তালিকার সন্ধানে ত্রুটি"
   },
   "customerSelector": {
-    "customerNameOrPhoneInput": "নাম বা ফোন দিয়ে গ্রাহক খুজুন।",
-    "customerNameOrPhoneInputError": "একটি নাম বা ফোন লিখুন"
+    "customerNameOrPhoneInput": "গ্রাহকের নাম বা ফোন",
+    "customerNameOrPhoneInputError": "গ্রাহকের নাম বা ফোন লিখুন"
   },
   "outletSelector": {
     "outlets": "দোকান",
-    "outletNameOrPhoneInput": "নাম বা ফোন দিয়ে দোকান খুজুন।",
-    "outletNameOrPhoneInputError": "একটি নাম বা ফোন লিখুন"
+    "outletNameOrPhoneInput": "দোকানের নাম বা ফোন",
+    "outletNameOrPhoneInputError": "দোকানের নাম বা ফোন লিখুন"
   },
   "commonEmploymentDetails": {
     "privileges": "বিশেষাধিকার",
@@ -392,7 +392,7 @@
     "fullNameInputError": "একটি সঠিক নাম লিখুন",
     "NidInput": "আপনার জাতীয় পরিচয়পত্র নম্বর (ঐচ্ছিক)",
     "addressInput": "আপনার বর্তমান ঠিকানা (ঐচ্ছিক)",
-    "emergencyContactInput": "জরুরী যোগাযোগ (নম্বর/নাম)",
+    "emergencyContactInput": "জরুরী যোগাযোগের নাম/নম্বর",
     "bloodgroupInput": "রক্তের গ্রুপ (ঐচ্ছিক)",
     "saveChanges": "পরিবর্তনগুলো সংরক্ষণ করুন",
     "incorrectSecondPassword": "আপনি ভুলভাবে আপনার নতুন পাসওয়ার্ডটি দ্বিতীয় বার টাইপ করেছেন। আবার সঠিকভাবে টাইপ করুন।",
@@ -579,7 +579,7 @@
     "acquiredOn": "খরিদ হয়েছে",
     "addedOn": "যুক্ত হয়েছে",
     "noProductFoundInOutlet": "দোকানের প্রধান পণ্য তালিকায় কোনো পণ্য নেই।",
-    "searchForProductInput": "পণ্যের জন্য অনুসন্ধান করুন",
+    "searchForProductInput": "পণ্যের নাম দিয়ে অনুসন্ধান",
     "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি"
   },
   "settings": {
