@@ -101,6 +101,16 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <div class="card vertical layout">
+        <div class="p-16 horizontal layout center">
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.productCategory.searchForProductCategoryInputError]] label=[[verses.productCategory.searchForProductCategoryInput]] on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
+          <paper-button raised class="primary" on-tap="searchTapped">
+            [[verses.general.search]]
+          </paper-button>
+        </div>
+      </div>
+
       <template is="dom-if" if="[[!productCategoryList.length]]">
         <div class="card">
           [[verses.productCategory.noProductCategoryFound]]
@@ -153,6 +163,10 @@
 
       static get properties() {
         return {
+          searchString: {
+            type: String,
+            value: ''
+          }
         };
       }
 
@@ -185,7 +199,7 @@
       }
 
       _fetchProductCategoryList(cbfn) {
-        let data = { organizationId: this.app.organization.id, paginate: this.paginate };
+        let data = { organizationId: this.app.organization.id, searchString: this.searchString, paginate: this.paginate };
         this.app.callGetProductCategoryListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -195,9 +209,8 @@
       }
 
       _processProductCategoryList(cbfn) {
-        this._fetchProductCategoryList(rawProductCategoryList => {
-          this.rawProductCategoryList = rawProductCategoryList;
-          this.productCategoryList = rawProductCategoryList;
+        this._fetchProductCategoryList(productCategoryList => {
+          this.productCategoryList = productCategoryList;
           return cbfn();
         });
       }
@@ -217,6 +230,19 @@
       showPreviousTapped(e = null) {
         this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
         this.isReady = false;
+        this._processProductCategoryList(() => this.isReady = true);
+      }
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
+      searchCancelTapped(e = null) {
+        this.searchString = '';
+      }
+
+      searchTapped(e = null) {
+        this.set('paginate.offset', 0);
         this._processProductCategoryList(() => this.isReady = true);
       }
 

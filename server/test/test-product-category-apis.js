@@ -138,6 +138,28 @@ describe('Product Category', _ => {
 
   });
 
+  it('api/get-product-category-list (Valid searchString)', testDoneFn => {
+
+    callApi('api/get-product-category-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: '1st'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetProductCategoryListApiSuccessResponse(body);
+
+      body.productCategoryList.forEach(productCategory => {
+        validateProductCategorySchema(productCategory);
+      });
+
+      testDoneFn();
+    });
+
+  });
+
   it('api/get-product-category-list (Valid)', testDoneFn => {
 
     callApi('api/get-product-category-list', {

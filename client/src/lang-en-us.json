@@ -69,7 +69,9 @@
     "card": "card",
     "digital": "digital",
     "email": "Email",
-    "designation": "Designation"
+    "designation": "Designation",
+    "errorMessageBody": "Error Occurred, Please contact Lipi representative.",
+    "errorMessageTitle": "Error"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -247,7 +249,9 @@
     "moveHere": "Move Here",
     "subCategory": "Sub Category",
     "moveToRoot": "Move To Root",
-    "createNewProductCategory": "Create New Product Category"
+    "createNewProductCategory": "Create New Product Category",
+    "searchForProductCategoryInput": "Search for Product Category",
+    "searchForProductCategoryInputError": "Error in Search for Product Category"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "Search customer by name or phone.",

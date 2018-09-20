@@ -177,9 +177,8 @@
 
       _groupInventories(cbfn) {
         if (this.inventoryList.length % 3 !== 0) {
-          // TODO: translate below
-          let message = "developer error";
-          this.app.showModalDialog("dev error", message, _ => {});
+          let message = this.app.verses.general.errorMessageBody;
+          this.app.showModalDialog(this.app.verses.general.errorMessageTitle, message, _ => {});
           return;
         }
 

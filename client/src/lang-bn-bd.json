@@ -69,7 +69,9 @@
     "card": "কার্ড",
     "digital": "ডিজিটাল",
     "email": "ইমেইল",
-    "designation": "পদবী"
+    "designation": "পদবী",
+    "errorMessageBody": "ত্রুটি ত্রুটি দেখা দিয়েছে, লিপি প্রতিনিধির সাথে যোগাযোগ করুন",
+    "errorMessageTitle": "ত্রুটি"
   },
   "login": {
     "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
@@ -249,7 +251,9 @@
     "moveHere": "এখানে সরান",
     "subCategory": "উপ বিভাগ",
     "moveToRoot": "বাহিরে সরান",
-    "createNewProductCategory": "নতুন পণ্য ধরণ যুক্ত করুন"
+    "createNewProductCategory": "নতুন পণ্য ধরণ যুক্ত করুন",
+    "searchForProductCategoryInput": "পণ্য তালিকার জন্য অনুসন্ধান করুন",
+    "searchForProductCategoryInputError": "পণ্য তালিকার সন্ধানে ত্রুটি"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "নাম বা ফোন দিয়ে গ্রাহক খুজুন।",
