@@ -11,8 +11,11 @@ let jsonParser = bodyParser.json({
 });
 const { Logger } = require('./logger');
 const { LegacyApi } = require('./legacy-api-base');
+const moment = require('moment');
 
-const WEBSOCKET_CLIENT_POOL_MAX_COUNT = 10;
+const WEBSOCKET_CLIENT_POOL_MAX_COUNT = 6;
+const WEBSOCKET_RECONNECTION_DELAY = 10000;
+const WEBSOCKET_STARTUP_DELAY = 5000;
 
 class Server {
 
@@ -75,45 +78,52 @@ class Server {
   __createWebsocketClient() {
     let ws = new WebSocket(this.config.socketProxy.url);
     let listener = (err) => {
+      this.__socketClientCount -= 1;
       if (!this.__hasReportedAnySocketFailure) {
         this.__hasReportedAnySocketFailure = true;
         this.logger.error(err);
       }
-    }
-    if (!this.__socketClientSerialSeed) {
-      this.__socketClientSerialSeed = 0;
     }
     let serial = this.__socketClientSerialSeed;
     this.__socketClientSerialSeed += 1;
 
     ws.once('error', listener);
 
+    this.__socketClientCount += 1;
     ws.on('open', () => {
       // this.logger.debug(`Websocket added to socket-pool: #${serial}`);
 
       ws.on('close', (code) => {
+        this.__socketClientCount -= 1;
         // this.logger.debug('Websocket closed:', `#${serial}`);
       });
 
       ws.on('error', (err) => {
+        this.__socketClientCount -= 1;
         this.logger.error(err);
       });
       ws.removeListener('error', listener);
 
-      ws.send(this.config.socketProxy.pssk);
+      let authMessage = this.config.socketProxy.pssk + '/' + (process.env.GAE_VERSION || this.__socketMockGaeVersion);
+      ws.send(authMessage);
 
       ws.on('message', (message) => {
         // this.logger.debug('Websocket message on', `#${serial}`);
+        if (message === 'COMMAND:DISCONNECT:OLDVERSION') {
+          this.logger.important("(ws:socket)> Received request to stop opening websocket connections.");
+          this.__socketIsOldVersion = true;
+          return
+        }
 
         try {
           message = JSON.parse(message);
         } catch (err) {
-          ws.send("Expected message to be a valid JSON");
+          this.logger.log("(ws:socket)> Expected message to be a valid JSON", message);
           return;
         }
 
         if ((typeof message !== 'object') || (message === null)) {
-          ws.send("Expected message to be a stringified object.");
+          this.logger.log("(ws:socket)> Expected message to be a stringified object.", message);
           return;
         }
 
@@ -126,7 +136,7 @@ class Server {
         });
         let { error, value } = Joi.validate(message, schema);
         if (error) {
-          ws.send("Socket request validation error." + JSON.stringify(error));
+          this.logger.log("(ws:socket)> Socket request validation error." + JSON.stringify(error), message);
           return;
         }
         message = value;
@@ -152,17 +162,35 @@ class Server {
     });
   }
 
+  __spawnWebsocketIfNecessary() {
+    if (this.config.socketProxy.url.indexOf('wss') > -1) {
+      this.logger.info("(server)> attempting websocket connection. Connected", this.__socketClientCount, 'out of', WEBSOCKET_CLIENT_POOL_MAX_COUNT);
+    }
+    let lim = Math.max(WEBSOCKET_CLIENT_POOL_MAX_COUNT - this.__socketClientCount, 0);
+    for (let i = 0; i < lim; i++) {
+      this.__createWebsocketClient();
+    }
+    if (!this.__socketIsOldVersion) {
+      setTimeout(() => {
+        this.__spawnWebsocketIfNecessary();
+      }, WEBSOCKET_RECONNECTION_DELAY);
+    }
+  }
+
   _initializeWebsocket() {
+    this.__socketIsOldVersion = false;
+    this.__socketMockGaeVersion = moment((new Date)).format('YYYYMMDDtHHmmss');
+    this.__socketClientSerialSeed = 0;
+    this.__socketClientCount = 0;
     this._wsApiList = [];
     if (!this.config.socketProxy.enabled) {
       this.logger.info("(server)> websocket server is not enabled.");
       return;
     }
     this.logger.info("(server)> websocket socket-proxy is", this.config.socketProxy.url);
-
-    for (let i = 0; i < WEBSOCKET_CLIENT_POOL_MAX_COUNT; i++) {
-      this.__createWebsocketClient();
-    }
+    setTimeout(() => {
+      this.__spawnWebsocketIfNecessary();
+    }, WEBSOCKET_STARTUP_DELAY);
   }
 
   setLogger(logger) {

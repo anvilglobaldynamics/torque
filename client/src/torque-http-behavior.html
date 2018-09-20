@@ -7,7 +7,7 @@
 
     let { HttpRequestService, WebsocketRequestService, ServiceManager } = window.ServiceTree;
 
-    const WEBSOCKET_DELAY_BEFORE_RETRYING = 30 * 1000;
+    const WEBSOCKET_DELAY_BEFORE_RETRYING = 1 * 1000;
     let lastWebsocketFailureTimestamp = 0;
 
     /* @polymerMixin */
@@ -35,8 +35,10 @@
             event.detail.resolution = 'coerced-failure';
           }
           if (event.detail.resolution === 'success') {
+            window.torqueWebsocketIndicatorStatusReceivedFn('success');
             cbfn(null, event.detail.body);
           } else {
+            window.torqueWebsocketIndicatorStatusReceivedFn('failure');
             cbfn(event.detail);
           }
         });

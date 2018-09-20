@@ -314,19 +314,24 @@
         </iron-pages>
 
         <div class="footer">
-          <div>&#xA9; 2017
-            <a style="color: var(--app-primary-color-dark);" href="[[authorWebsite]]">[[authorName]]</a>
-          </div>
-          <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
-          <span class="extra-small" on-click="buildNumberTapped">build
-            <span id="build-number">[[__deploy.build]]</span>
-          </span>
-          <br>
-          <br>
           <div>
             <img src="../images/icons/en-us.png" data-key="en-us" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'en-us')]]" on-tap="languageIconTapped">
             <img src="../images/icons/bn-bd.png" data-key="bn-bd" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'bn-bd')]]" on-tap="languageIconTapped">
           </div>
+          <br>
+          <br>
+          <div>&#xA9; 2017
+            <a style="color: var(--app-primary-color-dark);" href="[[authorWebsite]]">[[authorName]]</a>
+          </div>
+          <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
+          <div>
+            <span class="extra-small" on-click="buildNumberTapped">ver [[appVersion]]</span>
+            <paper-icon-button icon="[[websocketConnectivityIndicatorIconName]]" on-tap="websocketConnectivityIndicatorIconTapped"></paper-icon-button>
+            <span class="extra-small" on-click="buildNumberTapped">build
+              <span id="build-number">[[__deploy.build]]</span>
+            </span>
+          </div>
+
         </div>
       </app-header-layout>
     </app-drawer-layout>
@@ -353,7 +358,7 @@
           },
           appVersion: {
             type: String,
-            value: '0.0.0'
+            value: '0.0.4'
           },
           definitionRevisionVersion: {
             type: Number,
@@ -386,6 +391,10 @@
           shouldShowPrintButton: {
             type: Boolean,
             value: false
+          },
+          websocketConnectivityIndicatorIconName: {
+            type: String,
+            value: 'cloud-queue'
           }
         };
       }
@@ -504,7 +513,7 @@
       _fillDatabase() {
         this.db.upsert('settings', (({ which }) => which === 'only'), (doc => doc), {
           which: 'only',
-          shouldUseWebsockets: false,
+          shouldUseWebsockets: true,
           monetaryUnit: 'BDT'
         });
       }
@@ -530,6 +539,28 @@
             this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
           }
         });
+        this.serviceManager.on('success', (event) => {
+          console.log("SSS")
+        });
+        (window.torqueWebsocketIndicatorStatusReceivedFn = (status) => {
+          if (!window.torqueMasterOptions.allowWebsockets || !this.settings.shouldUseWebsockets) {
+            this.websocketConnectivityIndicatorIconName = 'http';
+            return;
+          }
+          if (status === 'connected') {
+            this.websocketConnectivityIndicatorIconName = 'cloud';
+          } else if (status === 'error') {
+            this.websocketConnectivityIndicatorIconName = 'error';
+          } else if (status === 'closed') {
+            this.websocketConnectivityIndicatorIconName = 'cloud-queue';
+          } else if (status === 'success') {
+            this.websocketConnectivityIndicatorIconName = 'cloud-done';
+          } else if (status === 'failure') {
+            this.websocketConnectivityIndicatorIconName = 'cloud-off';
+          } else {
+            this.websocketConnectivityIndicatorIconName = 'gif';
+          }
+        })('closed');
       }
 
       showToast(message, cbfn) {
@@ -565,6 +596,11 @@
       }
 
       // ======================  events =============================
+
+      websocketConnectivityIndicatorIconTapped(e = null) {
+        this.settings.shouldUseWebsockets = !this.settings.shouldUseWebsockets;
+        window.torqueWebsocketIndicatorStatusReceivedFn('closed');
+      }
 
       logoutTapped(e = null) {
         this.callUserLogoutApi({}, (err, response) => {

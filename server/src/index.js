@@ -90,7 +90,7 @@ let { GetRoleListApi } = require('./legacy-apis/get-role-list');
 let { GetPrivilegeListApi } = require('./legacy-apis/get-privilege-list');
 const { AdminGetPackageListApi } = require('./apis/admin-get-package-list');
 
-let { InternalStatus } = require('./legacy-apis/internal--status');
+let { InternalStatusApi } = require('./legacy-apis/internal--status');
 
 let { AdminLoginApi } = require('./legacy-apis/admin-login');
 let { AdminGetOutgoingSmsListApi } = require('./legacy-apis/admin-get-outgoing-sms-list');
@@ -247,7 +247,7 @@ class Program {
     logger.info('(server)> registering APIs');
     server.registerGetApi('/verify-phone/:link', VerifyPhoneApi);
     server.registerGetApi('/verify-email/:link', VerifyEmailApi);
-    server.registerGetApi('/internal--status', InternalStatus);
+    server.registerGetApi('/internal--status', InternalStatusApi);
     server.registerPostApi('/api/user-register', UserRegisterApi);
     server.registerPostApi('/api/user-login', UserLoginApi);
     server.registerPostApi('/api/user-assert-api-key', UserAssertApiKeyApi);

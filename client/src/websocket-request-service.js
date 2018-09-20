@@ -1,6 +1,11 @@
 /* WebsocketRequestService adds WebsocketRequestService to service tree */
 (function () {
 
+  let secondaryNotifyFn = (status) => {
+    if (!window.torqueWebsocketIndicatorStatusReceivedFn) return;
+    window.torqueWebsocketIndicatorStatusReceivedFn(status);
+  }
+
   var openConnectionMap = {};
 
   let {
@@ -36,6 +41,8 @@
       var isCallbackCalled = false;
 
       if (host in openConnectionMap && openConnectionMap[host].isOpen) {
+        secondaryNotifyFn('connected');
+        isCallbackCalled = true;
         cbfn(null, openConnectionMap[host].connection);
         return;
       }
@@ -48,6 +55,8 @@
         connectionError = error;
       }
       if (connectionError) {
+        secondaryNotifyFn('error');
+        isCallbackCalled = true;
         return cbfn(connectionError);
       }
 
@@ -57,6 +66,7 @@
           isOpen: true
         };
 
+        secondaryNotifyFn('connected');
         if (!isCallbackCalled) {
           isCallbackCalled = true;
           cbfn(null, connection);
@@ -69,6 +79,7 @@
           openConnectionMap[host].isOpen = false;
         }
 
+        secondaryNotifyFn('closed');
         if (!isCallbackCalled) {
           isCallbackCalled = true;
           cbfn(e);
@@ -81,6 +92,7 @@
           openConnectionMap[host].isOpen = false;
         }
 
+        secondaryNotifyFn('error');
         if (!isCallbackCalled) {
           isCallbackCalled = true;
           cbfn(e);
