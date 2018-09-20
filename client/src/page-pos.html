@@ -238,6 +238,7 @@
                 <br> [[verses.pos.changeAmount]]:
                 <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
 
+                <br>
                 <template is="dom-if" if="[[customer]]">
                   <template is="dom-if" if="[[isChangeAmountPositive(payment.changeAmount)]]">
                     <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
