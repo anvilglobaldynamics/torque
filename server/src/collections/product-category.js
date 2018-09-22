@@ -32,10 +32,8 @@ exports.ProductCategoryCollection = class extends Collection {
   get uniqueKeyDefList() {
     return [
       {
-        filters: {
-          by: 'organizationId'
-        },
-        keyList: ['name']
+        filters: {},
+        keyList: ['organizationId+name']
       }
     ];
   }

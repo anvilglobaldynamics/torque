@@ -40,7 +40,7 @@ let productCategoryToBeModified = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe.only('Product Category', _ => {
+describe('Product Category', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -84,7 +84,6 @@ describe.only('Product Category', _ => {
         isReturnable: true
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateAddProductCategoryApiSuccessResponse(body);
       testDoneFn();
@@ -108,9 +107,8 @@ describe.only('Product Category', _ => {
         isReturnable: true
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
-      validateAddProductCategoryApiSuccessResponse(body);
+      validateGenericApiFailureResponse(body);
       testDoneFn();
     })
 
