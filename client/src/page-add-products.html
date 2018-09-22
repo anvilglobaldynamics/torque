@@ -188,7 +188,6 @@
         this._fetchProductCategoryList(productCategoryList => {
           this.productCategoryList = productCategoryList;
           this._addFieldsToProductCategory(() => {
-            console.log("productCategoryList: ", this.productCategoryList);
             return cbfn();
           });
         });
