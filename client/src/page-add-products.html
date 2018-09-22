@@ -45,7 +45,7 @@
         font-size: 13px;
       }
 
-      .product-category-numaric {
+      .product-category-numeric {
         min-width: 20%;
         max-width: 20%;
       }
@@ -73,9 +73,9 @@
           <div class="container-card">
             <div class="horizontal layout item center">
               <div class="product-header product-title">[[verses.product.productCategory]]</div>
-              <div class="product-header product-category-numaric">[[verses.product.count]]</div>
-              <div class="product-header product-category-numaric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
-              <div class="product-header product-category-numaric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+              <div class="product-header product-category-numeric">[[verses.product.count]]</div>
+              <div class="product-header product-category-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
+              <div class="product-header product-category-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
             </div>
           </div>
 
@@ -86,16 +86,16 @@
       
                 <div class="product-title">[[productCategory.name]]</div>
       
-                <div class="product-category-numaric">
-                  <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" on-input="genericNumaricInputChanged" label=[[productCategory.unit]]></paper-input>
+                <div class="product-category-numeric">
+                  <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" on-input="genericNumericInputChanged" label=[[productCategory.unit]]></paper-input>
                 </div>
       
-                <div class="product-category-numaric">
-                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="[[productCategory.purchasePrice]]" on-input="genericNumaricInputChanged" value="{{productCategory.salePrice}}" type="number"></paper-input>
+                <div class="product-category-numeric">
+                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="[[productCategory.purchasePrice]]" on-input="genericNumericInputChanged" value="{{productCategory.salePrice}}" type="number"></paper-input>
                 </div>
       
-                <div class="product-category-numaric">
-                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="0" on-input="genericNumaricInputChanged" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
+                <div class="product-category-numeric">
+                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="0" on-input="genericNumericInputChanged" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
                 </div>
       
               </div>
@@ -208,7 +208,7 @@
         return count <= 0;
       }
 
-      genericNumaricInputChanged(e) {
+      genericNumericInputChanged(e) {
         this.enforceMinMaxOnPaperInput(e);
       }
 
