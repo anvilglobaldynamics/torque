@@ -31,7 +31,7 @@
       }
     </style>
 
-    <div class$="layout vertical" id="wrapper" style$="margin-left: [[marginLeft]]px">
+    <div class$="layout vertical" id="wrapper">
       <div class="vertical layout">
         <div class="horizontal layout item center">
           <div class="vertical layout flex">
@@ -99,10 +99,6 @@
         return count <= 0;
       }
 
-      $marginMore(marginLeft) {
-        return marginLeft + 12;
-      }
-
       listProductsToAdd(productList) {
         if (this.count > 0) {
           productList.push({
@@ -146,7 +142,7 @@
         <div class="card vertical layout">
           <div class="list">
             <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
-              <product-category-add-product product-category="[[productCategory]]" margin-left="[[marginLeft]]" app="[[app]]"></product-category-add-product>
+              <product-category-add-product product-category="[[productCategory]]" app="[[app]]"></product-category-add-product>
             </template>
           </div>
         </div>
@@ -169,10 +165,6 @@
 
       static get properties() {
         return {
-          marginLeft: {
-            type: Number,
-            value: 0
-          },
           productCategoryList: {
             type: Array,
             value: () => []
@@ -227,9 +219,8 @@
       }
       
       _processProductCategoryList(cbfn) {
-        this._fetchProductCategoryList(rawProductCategoryList => {
-          this.rawProductCategoryList = rawProductCategoryList;
-          this.productCategoryList = rawProductCategoryList;
+        this._fetchProductCategoryList(productCategoryList => {
+          this.productCategoryList = productCategoryList;
           return cbfn();
         });
       }
