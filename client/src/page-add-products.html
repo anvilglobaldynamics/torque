@@ -47,9 +47,6 @@
             <div slot="suffix">[[app.settings.monetaryUnit]]</div>
           </paper-input>
         </div>
-        <template is="dom-repeat" items="[[productCategory.childList]]" as="childProductCategory">
-          <product-category-add-product product-category="[[childProductCategory]]" margin-left="[[$marginMore(marginLeft)]]" app="[[app]]"></product-category-add-product>
-        </template>
       </div>
     </div>
 
