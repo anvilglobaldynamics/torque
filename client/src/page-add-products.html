@@ -29,7 +29,7 @@
         border: 1px solid #eee;
         background-color: #f7f7f7;
         padding-left: 6px;
-        margin: 8px;
+        margin: 8px 0px;
       }
 
       .product-title {
@@ -38,7 +38,6 @@
         max-width: 40%;
         max-height: 100px;
         padding-right: 3px;
-        /* TODO: check if below is required */
         overflow: auto;
       }
 
@@ -88,15 +87,15 @@
                 <div class="product-title">[[productCategory.name]]</div>
       
                 <div class="product-category-numaric">
-                  <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" label=[[productCategory.unit]]></paper-input>
+                  <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" on-input="genericNumaricInputChanged" label=[[productCategory.unit]]></paper-input>
                 </div>
       
                 <div class="product-category-numaric">
-                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" value="{{productCategory.salePrice}}" type="number"></paper-input>
+                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="[[productCategory.purchasePrice]]" on-input="genericNumaricInputChanged" value="{{productCategory.salePrice}}" type="number"></paper-input>
                 </div>
       
                 <div class="product-category-numaric">
-                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
+                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="0" on-input="genericNumaricInputChanged" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
                 </div>
       
               </div>
@@ -208,6 +207,10 @@
 
       $isDisabled(count) {
         return count <= 0;
+      }
+
+      genericNumaricInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
       }
 
       addProductsTapped(e = null) {
