@@ -30,7 +30,12 @@ exports.ProductCategoryCollection = class extends Collection {
   }
 
   get uniqueKeyDefList() {
-    return [];
+    return [
+      {
+        filters: {},
+        keyList: ['organizationId+name']
+      }
+    ];
   }
 
   get foreignKeyDefList() {

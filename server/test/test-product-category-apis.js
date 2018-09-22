@@ -91,6 +91,29 @@ describe('Product Category', _ => {
 
   });
 
+  it('api/add-product-category (Invalid copy name)', testDoneFn => {
+
+    callApi('api/add-product-category', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "1st product category",
+        unit: "kg",
+        defaultDiscountType: "percent",
+        defaultDiscountValue: 10,
+        defaultPurchasePrice: 99,
+        defaultVat: 2,
+        defaultSalePrice: 111,
+        isReturnable: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      testDoneFn();
+    })
+
+  });
+
   it('api/add-product-category (Valid)', testDoneFn => {
 
     callApi('api/add-product-category', {
@@ -220,6 +243,30 @@ describe('Product Category', _ => {
 
       testDoneFn();
     });
+
+  });
+
+  it('api/add-product-category (Invalid fixed defaultDiscountValue)', testDoneFn => {
+
+    callApi('api/add-product-category', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "1st product category",
+        unit: "kg",
+        defaultDiscountType: "fixed",
+        defaultDiscountValue: 114,
+        defaultPurchasePrice: 99,
+        defaultVat: 2,
+        defaultSalePrice: 111,
+        isReturnable: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('DISCOUNT_VALUE_INVALID');
+      testDoneFn();
+    })
 
   });
 

@@ -56,14 +56,19 @@
                   <paper-item name="fixed">[[verses.general.fixedValue]]</paper-item>
                 </paper-listbox>
               </paper-dropdown-menu>
-              <paper-input class="editProductCategoryForm--defaultDiscountValue flex" value="{{editProductCategoryForm.defaultDiscountValue}}" type="number" required min="0" error-message=[[verses.productCategory.defaultDiscountValueInputError]] label=[[verses.productCategory.defaultDiscountValueInput]]>
-                <template is="dom-if" if="[[$equals(editProductCategoryForm.defaultDiscountType, 'percent')]]">
+
+              <template is="dom-if" if="[[$equals(editProductCategoryForm.defaultDiscountType, 'percent')]]">
+                <paper-input class="editProductCategoryForm--defaultDiscountValue flex" value="{{editProductCategoryForm.defaultDiscountValue}}" type="number" required min="0" max="100" on-input="genericDiscountValueInputChanged" error-message=[[verses.productCategory.defaultDiscountValueInputError]] label=[[verses.productCategory.defaultDiscountValueInput]]>
                   <div slot="suffix">%</div>
-                </template>
-                <template is="dom-if" if="[[$equals(editProductCategoryForm.defaultDiscountType, 'fixed')]]">
+                </paper-input>
+              </template>
+
+              <template is="dom-if" if="[[$equals(editProductCategoryForm.defaultDiscountType, 'fixed')]]">
+                <paper-input class="editProductCategoryForm--defaultDiscountValue flex" value="{{editProductCategoryForm.defaultDiscountValue}}" type="number" required min="0" max="[[calculateSalePriceAfterVat()]]" on-input="genericDiscountValueInputChanged" error-message=[[verses.productCategory.defaultDiscountValueInputError]] label=[[verses.productCategory.defaultDiscountValueInput]]>
                   <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-                </template>
-              </paper-input>
+                </paper-input>
+              </template>
+
             </div>
 
             <paper-checkbox checked="{{editProductCategoryForm.isReturnable}}">[[verses.productCategory.isProductReturnable]]</paper-checkbox>
@@ -247,6 +252,14 @@
 
         let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
         this._processUpdateProductCategory({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+      }
+
+      genericDiscountValueInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+      }
+
+      calculateSalePriceAfterVat() {
+        return (parseFloat(this.editProductCategoryForm.defaultSalePrice) + parseFloat(this.editProductCategoryForm.defaultSalePrice) * parseFloat(this.editProductCategoryForm.defaultVat)/100);
       }
 
       // region: misc =================================

@@ -43,6 +43,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: ORGANIZATION_INVALID } // the organization id is invalid
+{ code: DISCOUNT_VALUE_INVALID } // the discount value is more than sale price
 ```
 
 ### response (on success):
