@@ -40,7 +40,7 @@ let productCategoryToBeModified = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe.only('Product Category', _ => {
+describe('Product Category', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -295,7 +295,7 @@ describe.only('Product Category', _ => {
 
   });
 
-  it.skip('api/edit-product-category (Invalid copy name)', testDoneFn => {
+  it('api/edit-product-category (Invalid copy name)', testDoneFn => {
 
     callApi('api/edit-product-category', {
       json: {
