@@ -312,9 +312,10 @@
     "addProductsTitle": "Add Products",
     "addProducts": "Add Products",
     "productAddedToInventory": "Product(s) were successfully added to the inventory.",
+    "productCategory": "Product Category",
     "count": "Count",
-    "sellFor": "Sell For",
-    "purchasedFor": "Purchased For",
+    "sellFor": "Sell",
+    "purchasedFor": "Purchase",
     "noProductCategoryFound": "No product category found."
   },
   "about": {

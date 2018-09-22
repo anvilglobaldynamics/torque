@@ -42,6 +42,15 @@
         overflow: auto;
       }
 
+      .product-header {
+        font-size: 13px;
+      }
+
+      .product-category-numaric {
+        min-width: 20%;
+        max-width: 20%;
+      }
+
       .add-product-button-container paper-button {
         width: 100%;
         margin: 5px;
@@ -61,6 +70,16 @@
 
       <template is="dom-if" if="{{productCategoryList.length}}">
         <div class="vertical layout">
+
+          <div class="container-card">
+            <div class="horizontal layout item center">
+              <div class="product-header product-title">[[verses.product.productCategory]]</div>
+              <div class="product-header product-category-numaric">[[verses.product.count]]</div>
+              <div class="product-header product-category-numaric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
+              <div class="product-header product-category-numaric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+            </div>
+          </div>
+
           <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
 
             <div class="container-card">
@@ -68,11 +87,17 @@
       
                 <div class="product-title">[[productCategory.name]]</div>
       
-                <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" label=[[verses.product.count]]></paper-input>
+                <div class="product-category-numaric">
+                  <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" label=[[productCategory.unit]]></paper-input>
+                </div>
       
-                <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" value="{{productCategory.salePrice}}" type="number" label=[[verses.product.sellFor]]></paper-input>
+                <div class="product-category-numaric">
+                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" value="{{productCategory.salePrice}}" type="number"></paper-input>
+                </div>
       
-                <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" value="{{productCategory.purchasePrice}}" type="number" label=[[verses.product.purchasedFor]]></paper-input>
+                <div class="product-category-numaric">
+                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
+                </div>
       
               </div>
             </div>
