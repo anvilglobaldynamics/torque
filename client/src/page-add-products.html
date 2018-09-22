@@ -29,7 +29,7 @@
         border: 1px solid #eee;
         background-color: #f7f7f7;
         padding-left: 6px;
-        margin-top: 8px;
+        margin: 8px;
       }
 
       .product-title {
@@ -60,28 +60,24 @@
       </template>
 
       <template is="dom-if" if="{{productCategoryList.length}}">
-        <div class="card vertical layout">
-
+        <div class="vertical layout">
           <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
 
             <div class="container-card">
-              <div class="vertical layout">
-                <div class="horizontal layout item center">
-        
-                  <div class="product-title">[[productCategory.name]]</div>
-        
-                  <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" label=[[verses.product.count]]></paper-input>
-        
-                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" value="{{productCategory.salePrice}}" type="number" label=[[verses.product.sellFor]]></paper-input>
-        
-                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" value="{{productCategory.purchasePrice}}" type="number" label=[[verses.product.purchasedFor]]></paper-input>
-        
-                </div>
+              <div class="horizontal layout item center">
+      
+                <div class="product-title">[[productCategory.name]]</div>
+      
+                <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" label=[[verses.product.count]]></paper-input>
+      
+                <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" value="{{productCategory.salePrice}}" type="number" label=[[verses.product.sellFor]]></paper-input>
+      
+                <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" value="{{productCategory.purchasePrice}}" type="number" label=[[verses.product.purchasedFor]]></paper-input>
+      
               </div>
             </div>
 
           </template>
-
         </div>
       </template>
 
