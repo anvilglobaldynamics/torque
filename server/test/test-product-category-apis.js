@@ -295,6 +295,29 @@ describe('Product Category', _ => {
 
   });
 
+  it('api/edit-product-category (Invalid copy name)', testDoneFn => {
+
+    callApi('api/edit-product-category', {
+      json: {
+        apiKey,
+        productCategoryId: productCategoryOne.id,
+        name: "2nd product category", // copy modification
+        unit: "kg",
+        defaultDiscountType: "percent",
+        defaultDiscountValue: 10,
+        defaultPurchasePrice: 99,
+        defaultVat: 2,
+        defaultSalePrice: 111,
+        isReturnable: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      testDoneFn();
+    })
+
+  });
+
   it('api/edit-product-category (Invalid productCategoryId)', testDoneFn => {
 
     callApi('api/edit-product-category', {

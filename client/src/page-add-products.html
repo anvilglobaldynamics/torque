@@ -21,118 +21,40 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="product-category-add-product">
-  <template>
-
-    <style include="shared-styles">
-      .title {
-        /* font-weight: bold; */
-        padding-right: 5px;
-      }
-    </style>
-
-    <div class$="layout vertical" id="wrapper" style$="margin-left: [[marginLeft]]px">
-      <div class="vertical layout">
-        <div class="horizontal layout item center">
-          <div class="vertical layout flex">
-            <div class="title">[[productCategory.name]]</div>
-          </div>
-          <paper-input class="small-input" value="{{count}}" type="number" min="0" label=[[verses.product.count]]>
-            <div slot="suffix">[[productCategory.unit]]</div>
-          </paper-input>
-          <paper-input disabled="[[$isDisabled(count)]]" class="small-input" value="{{salePrice}}" type="number" label=[[verses.product.sellFor]]>
-            <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-          </paper-input>
-          <paper-input disabled="[[$isDisabled(count)]]" class="small-input" value="{{purchasePrice}}" type="number" label=[[verses.product.purchasedFor]]>
-            <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-          </paper-input>
-        </div>
-        <template is="dom-repeat" items="[[productCategory.childList]]" as="childProductCategory">
-          <product-category-add-product product-category="[[childProductCategory]]" margin-left="[[$marginMore(marginLeft)]]" app="[[app]]"></product-category-add-product>
-        </template>
-      </div>
-    </div>
-
-  </template>
-
-  <script>
-    class ProductCategoryAddProduct extends FxElement.mixin(TorqueLanguageBehavior) {
-
-      static get is() {
-        return 'product-category-add-product';
-      }
-
-      static get properties() {
-        return {
-          productCategory: {
-            type: Object,
-            value: null,
-            observer: 'productCategoryChanged'
-          },
-          count: {
-            type: Number,
-            value: 0
-          },
-          salePrice: {
-            type: Number,
-            value: 0
-          },
-          purchasePrice: {
-            type: Number,
-            value: 0
-          }
-        };
-      }
-
-      productCategoryChanged() {
-        this.salePrice = this.productCategory.defaultSalePrice;
-        this.purchasePrice = this.productCategory.defaultPurchasePrice;
-      }
-
-      // region: core =================================
-
-      constructor() {
-        super();
-        this.useLanguageServices();
-      }
-
-      // region: ui  ===========================
-
-      $isDisabled(count) {
-        return count <= 0;
-      }
-
-      $marginMore(marginLeft) {
-        return marginLeft + 12;
-      }
-
-      listProductsToAdd(productList) {
-        if (this.count > 0) {
-          productList.push({
-            productCategoryId: this.productCategory.id,
-            purchasePrice: parseFloat(this.purchasePrice),
-            salePrice: parseFloat(this.salePrice),
-            count: parseInt(String(this.count))
-          });
-        }
-        this.elemAll('product-category-add-product').forEach(el => el.listProductsToAdd(productList));
-      }
-
-      // region: misc =================================
-
-    }
-
-    window.customElements.define(ProductCategoryAddProduct.is, ProductCategoryAddProduct);
-  </script>
-</dom-module>
-
 <dom-module id="page-add-products">
   <template>
     <style include="shared-styles">
+      
+      .container-card {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding-left: 6px;
+        margin: 8px 0px;
+      }
+
+      .product-title {
+        /* border: 1px solid red; */
+        min-width: 40%;
+        max-width: 40%;
+        max-height: 100px;
+        padding-right: 3px;
+        overflow: auto;
+      }
+
+      .product-header {
+        font-size: 13px;
+      }
+
+      .product-category-numeric {
+        min-width: 20%;
+        max-width: 20%;
+      }
+
       .add-product-button-container paper-button {
         width: 100%;
         margin: 5px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -146,12 +68,40 @@
       </template>
 
       <template is="dom-if" if="{{productCategoryList.length}}">
-        <div class="card vertical layout">
-          <div class="list">
-            <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
-              <product-category-add-product product-category="[[productCategory]]" margin-left="[[marginLeft]]" app="[[app]]"></product-category-add-product>
-            </template>
+        <div class="vertical layout">
+
+          <div class="container-card">
+            <div class="horizontal layout item center">
+              <div class="product-header product-title">[[verses.product.productCategory]]</div>
+              <div class="product-header product-category-numeric">[[verses.product.count]]</div>
+              <div class="product-header product-category-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
+              <div class="product-header product-category-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+            </div>
           </div>
+
+          <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
+
+            <div class="container-card">
+              <div class="horizontal layout item center">
+      
+                <div class="product-title">[[productCategory.name]]</div>
+      
+                <div class="product-category-numeric">
+                  <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" on-input="genericNumericInputChanged" label=[[productCategory.unit]]></paper-input>
+                </div>
+      
+                <div class="product-category-numeric">
+                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="[[productCategory.purchasePrice]]" on-input="genericNumericInputChanged" value="{{productCategory.salePrice}}" type="number"></paper-input>
+                </div>
+      
+                <div class="product-category-numeric">
+                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="0" on-input="genericNumericInputChanged" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
+                </div>
+      
+              </div>
+            </div>
+
+          </template>
         </div>
       </template>
 
@@ -172,10 +122,6 @@
 
       static get properties() {
         return {
-          marginLeft: {
-            type: Number,
-            value: 0
-          },
           productCategoryList: {
             type: Array,
             value: () => []
@@ -228,12 +174,22 @@
           return cbfn(response.productCategoryList);
         });
       }
+
+      _addFieldsToProductCategory(cbfn) {
+        this.productCategoryList.forEach(productCategory => {
+          productCategory.purchasePrice = productCategory.defaultPurchasePrice;
+          productCategory.salePrice = productCategory.defaultSalePrice;
+          productCategory.count = 0;
+        });
+        return cbfn();
+      }
       
       _processProductCategoryList(cbfn) {
-        this._fetchProductCategoryList(rawProductCategoryList => {
-          this.rawProductCategoryList = rawProductCategoryList;
-          this.productCategoryList = rawProductCategoryList;
-          return cbfn();
+        this._fetchProductCategoryList(productCategoryList => {
+          this.productCategoryList = productCategoryList;
+          this._addFieldsToProductCategory(() => {
+            return cbfn();
+          });
         });
       }
 
@@ -248,9 +204,27 @@
 
       // region: ui  ===========================
 
+      $isDisabled(count) {
+        return count <= 0;
+      }
+
+      genericNumericInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+      }
+
       addProductsTapped(e = null) {
         let productList = [];
-        this.elemAll('product-category-add-product').forEach(el => el.listProductsToAdd(productList));
+        this.productCategoryList.forEach(productCategory => {
+          if(parseInt(productCategory.count) > 0) {
+            productList.push({
+              productCategoryId: productCategory.id,
+              purchasePrice: parseFloat(productCategory.purchasePrice),
+              salePrice: parseFloat(productCategory.salePrice),
+              count: parseInt(String(productCategory.count))
+            });
+          }
+        });
+        
         let inventoryId = parseInt(this.params.inventory);
         this._addProductsToInventory({ productList, inventoryId }, () => {
           let message = this.app.verses.product.productAddedToInventory;

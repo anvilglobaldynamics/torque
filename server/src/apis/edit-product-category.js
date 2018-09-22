@@ -44,15 +44,24 @@ exports.EditProductCategoryApi = class extends Api {
     }];
   }
 
+  async _checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat }) {
+    let salePriceAfterVat = defaultSalePrice + defaultSalePrice * defaultVat/100;
+    
+    if (defaultDiscountValue && defaultDiscountType === 'fixed' && defaultDiscountValue > salePriceAfterVat) {
+      throw new CodedError("DISCOUNT_VALUE_INVALID", "the discount value is more than sale price");
+    }
+
+    return;
+  }
+
   async _updateProductCategory({ productCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
-    let result = await this.database.productCategory._update({ id: productCategoryId }, { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
-    console.log("result: ", result);
-    this.ensureUpdate('productCategory', result);
+    let result = await this.database.productCategory.setDetails({ id: productCategoryId }, { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+    this.ensureUpdate(result, 'product-category');
   }
 
   async handle({ body }) {
     let { productCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
-    // FIXME: fix below method _updateProductCategory
+    await this._checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat });
     await this._updateProductCategory({ productCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
     return { status: "success" };
   }

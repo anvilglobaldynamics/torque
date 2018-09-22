@@ -47,7 +47,7 @@ exports.AddProductCategoryApi = class extends Api {
     let salePriceAfterVat = defaultSalePrice + defaultSalePrice * defaultVat/100;
     
     if (defaultDiscountValue && defaultDiscountType === 'fixed' && defaultDiscountValue > salePriceAfterVat) {
-      throw new CodedError("DISCOUNT_VALUE_INVALID", "not enough product(s) in source inventory");
+      throw new CodedError("DISCOUNT_VALUE_INVALID", "the discount value is more than sale price");
     }
 
     return;
