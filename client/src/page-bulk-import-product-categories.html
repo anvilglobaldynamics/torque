@@ -26,6 +26,11 @@
       .card-text {
         margin-bottom: 12px;
       }
+
+      .error-message {
+        font-size: 24px;
+        color: red;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -55,6 +60,18 @@
         <input type="file" style="visibility: hidden" id="upload-csv-el" accept=".csv" on-change="csvFileSelected">
       </div>
 
+      <template is="dom-if" if="[[error]]">
+        <div class="card vertical layout center">
+          <div class="error-message">
+            Error: [[error.message]]
+          </div>
+          <template class="error-row-cell" is="dom-if" if="[[error.rowNumber]]">
+            Error on row [[error.rowNumber]]
+          </template>
+        </div>
+      </template>
+
+
     </div>
   </template>
 
@@ -67,6 +84,18 @@
 
       static get properties() {
         return {
+          headerList: {
+            type: Array,
+            value: () => [
+              "Name",
+              "Unit",
+              "Purchase Price",
+              "Sale Price",
+              "VAT",
+              "Discount Type",
+              "Discount Amount"
+            ]
+          }
         };
       }
 
@@ -84,6 +113,7 @@
         // TRANSLATE
         this.app.pushPageTitle('Bulk Import');
         if (!this._ensureAccess()) return;
+        this._resetError();
         this.isReady = true;
       }
 
@@ -98,9 +128,14 @@
 
       // region: ui  ===========================
 
+      _resetError() {
+        this.error = null;
+      }
+
       downloadCsvTapped(e = null) {
+        this._resetError();
         let filename = 'Lipi Product Category Bulk Upload CSV.csv'
-        let content = 'Name,Unit,Purchase Price,Sale Price,VAT,Discount Type,Discount Amount';
+        let content = this.headerList.join(',');
         let el = document.createElement('a');
         el.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(content));
         el.setAttribute('download', filename);
@@ -111,6 +146,7 @@
       }
 
       uploadCsvTapped(e = null) {
+        this._resetError();
         this.elem('#upload-csv-el').click();
       }
 
@@ -126,17 +162,80 @@
         };
       }
 
+      _parseCsv(content, cbfn) {
+        return cbfn(null, CSV.parse(content));
+      }
+
+      _validateRawRowList(rawRowList, cbfn) {
+        let isArray = (obj) => (typeof (obj) === 'object' && Array.isArray(obj));
+        let makeError = (message, rowNumber, cellNumber) => {
+          let err = new Error(message);
+          err.rowNumber = rowNumber || null;
+          err.cellNumber = cellNumber || null;
+          return err;
+        }
+        if (!isArray(rawRowList) || rawRowList.length === 0) {
+          return cbfn(makeError("The file you provided is not a valid CSV file."));
+        }
+        let headerList = rawRowList.shift();
+        if (!isArray(headerList) || headerList.length !== this.headerList.length) {
+          return cbfn(makeError("File header is corrupted"));
+        }
+        for (let header of this.headerList) {
+          if (headerList.indexOf(header) === -1) {
+            console.log(this.headerList, headerList)
+            return cbfn(makeError(`File header is corrupted. Expected column "${header}"`));
+          }
+        }
+        if (rawRowList.length === 0) {
+          return cbfn(makeError("The file you provided is empty."));
+        }
+        let rowIndex = 1;
+        for (let rawRow of rawRowList) {
+          if (!isArray(rawRow) || rawRow.length !== this.headerList.length) {
+            return cbfn(makeError(`Row #${rowIndex} is missing cells.`));
+          }
+          rowIndex += 1;
+        }
+        cbfn(null, rawRowList);
+      }
+
+      _renderError(err) {
+        this.error = err;
+      }
+
       csvFileSelected(e) {
-        let fileList = e.target.files;
+        let el = e.target;
+        let fileList = el.files;
         if (fileList.length === 0) return;
         if (fileList.length !== 1) {
           return this.app.showModalDialog("Multiple files selected", "Please select only one file.");
         }
         let file = fileList[0];
         this._readFile(file, (err, content) => {
+          el.value = '';
           if (err) {
             return this.app.showModalDialog("Unable to read", "We were unable to read the file you provided.");
           }
+          this._parseCsv(content, (err, rawRowList) => {
+            this._validateRawRowList(rawRowList, (err, rowList) => {
+              if (err) return this._renderError(err);
+              this._sendBulkData(rowList, (err) => {
+
+              });
+            });
+          });
+        });
+      }
+
+      _sendBulkData(rowList, cbfn) {
+        let data = { organizationId: this.app.organization.id, rowList };
+        console.log(data)
+        this.app.callBulkImportProductCategoriesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          // return cbfn(response.productCategoryList);
+          console.log(response);
         });
       }
 
