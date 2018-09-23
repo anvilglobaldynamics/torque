@@ -144,6 +144,11 @@
       </template>
 
       <div class="lone-controls">
+        <paper-button class="secondary" on-tap="bulkImportTapped" raised>
+          <iron-icon icon="file-upload" class="button-icon"></iron-icon>
+          <!-- TRANSLATE -->
+          Bulk Import
+        </paper-button>
         <paper-button raised class="primary" on-tap="createTapped">
           <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
           [[verses.productCategory.createNewProductCategory]]
@@ -243,6 +248,10 @@
       searchTapped(e = null) {
         this.set('paginate.offset', 0);
         this._processProductCategoryList(() => this.isReady = true);
+      }
+
+      bulkImportTapped(e = null) {
+        return this.app.navigateTo('/bulk-import-product-category');
       }
 
       // region: misc =================================
