@@ -43,19 +43,16 @@ exports.AddProductCategoryApi = class extends Api {
     return await this.database.productCategory.create({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
   }
 
-  async _checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat }) {
-    let salePriceAfterVat = defaultSalePrice + defaultSalePrice * defaultVat/100;
-    
+  _checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat }) {
+    let salePriceAfterVat = defaultSalePrice + defaultSalePrice * defaultVat / 100;
     if (defaultDiscountValue && defaultDiscountType === 'fixed' && defaultDiscountValue > salePriceAfterVat) {
       throw new CodedError("DISCOUNT_VALUE_INVALID", "the discount value is more than sale price");
     }
-
-    return;
   }
 
   async handle({ body }) {
     let { organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
-    await this._checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat });
+    this._checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat });
     let productCategoryId = await this._createProductCategory({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
     return { status: "success", productCategoryId };
   }
