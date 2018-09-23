@@ -93,7 +93,7 @@ exports.BulkImportProductCategoriesApi = class extends Api.mixin(ProductCategory
         successfulCount += 1;
       } catch (err) {
         if (err.code && err.code.indexOf('DUPLICATE_') === 0) {
-          ignoredRowList.push({ rowNumber: i + 1, reason: 'name-duplicate' });
+          ignoredRowList.push({ rowNumber: i + 1, reason: 'name-duplication' });
         } else {
           err.rowNumber = i + 1;
           throw err;

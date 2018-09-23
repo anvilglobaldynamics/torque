@@ -31,6 +31,11 @@
         font-size: 24px;
         color: red;
       }
+
+      .success-message {
+        font-size: 24px;
+        color: green;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -60,13 +65,31 @@
         <input type="file" style="visibility: hidden" id="upload-csv-el" accept=".csv" on-change="csvFileSelected">
       </div>
 
+      <template is="dom-if" if="[[results]]">
+        <div class="card vertical layout center">
+          <div class="success-message">
+            Successfully imported [[results.successfulCount]] row(s) of data.
+          </div>
+          <template is="dom-if" if="[[results.ignoredRowList.length]]">
+            However, the following rows had to be ignored -
+            <ul>
+              <template is="dom-repeat" items="[[results.ignoredRowList]]">
+                <li>Row #[[item.rowNumber]]
+                  <template is="dom-if" if="[[$equals(item.reason, 'name-duplication')]]">(Because name already exists)</template>
+                </li>
+              </template>
+            </ul>
+          </template>
+        </div>
+      </template>
+
       <template is="dom-if" if="[[error]]">
         <div class="card vertical layout center">
           <div class="error-message">
             Error: [[error.message]]
           </div>
-          <template class="error-row-cell" is="dom-if" if="[[error.rowNumber]]">
-            Error on row [[error.rowNumber]]
+          <template is="dom-if" if="[[error.rowNumber]]">
+            <div class="error-row-cell">Error on row [[error.rowNumber]]</div>
           </template>
         </div>
       </template>
@@ -76,7 +99,7 @@
   </template>
 
   <script>
-    class PageBulkImportProductCategories extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+    class PageBulkImportProductCategories extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
 
       static get is() {
         return 'page-bulk-import-product-categories';
@@ -114,7 +137,7 @@
         // TRANSLATE
         this.app.pushPageTitle('Bulk Import');
         if (!this._ensureAccess()) return;
-        this._resetError();
+        this._resetErrorAndResults();
         this.isReady = true;
       }
 
@@ -129,12 +152,13 @@
 
       // region: ui  ===========================
 
-      _resetError() {
+      _resetErrorAndResults() {
         this.error = null;
+        this.results = null;
       }
 
       downloadCsvTapped(e = null) {
-        this._resetError();
+        this._resetErrorAndResults();
         let filename = 'Lipi Product Category Bulk Upload CSV.csv'
         let content = this.headerList.join(',');
         let el = document.createElement('a');
@@ -147,7 +171,7 @@
       }
 
       uploadCsvTapped(e = null) {
-        this._resetError();
+        this._resetErrorAndResults();
         this.elem('#upload-csv-el').click();
       }
 
@@ -205,6 +229,10 @@
         this.error = err;
       }
 
+      _renderSuccess({ ignoredRowList, successfulCount }) {
+        this.results = { ignoredRowList, successfulCount };
+      }
+
       csvFileSelected(e) {
         let el = e.target;
         let fileList = el.files;
@@ -231,12 +259,13 @@
 
       _sendBulkData(rowList, cbfn) {
         let data = { organizationId: this.app.organization.id, rowList };
-        console.log(data)
         this.app.callBulkImportProductCategoriesApi(data, (err, response) => {
           if (err) return;
-          // if (response.hasError) return this.onApiError(response.error);
-          // return cbfn(response.productCategoryList);
-          console.log(response);
+          if (response.hasError) {
+            this._renderError(response.error);
+          } else {
+            this._renderSuccess(response);
+          }
         });
       }
 
