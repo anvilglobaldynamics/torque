@@ -93,7 +93,8 @@
               "Sale Price",
               "VAT",
               "Discount Type",
-              "Discount Amount"
+              "Discount Amount",
+              "Returnable"
             ]
           }
         };
@@ -233,7 +234,7 @@
         console.log(data)
         this.app.callBulkImportProductCategoriesApi(data, (err, response) => {
           if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
+          // if (response.hasError) return this.onApiError(response.error);
           // return cbfn(response.productCategoryList);
           console.log(response);
         });
