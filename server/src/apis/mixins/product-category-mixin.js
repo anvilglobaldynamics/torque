@@ -11,6 +11,9 @@ exports.ProductCategoryMixin = (SuperApiClass) => class extends SuperApiClass {
     if (defaultDiscountValue && defaultDiscountType === 'fixed' && defaultDiscountValue > salePriceAfterVat) {
       throw new CodedError("DISCOUNT_VALUE_INVALID", "the discount value is more than sale price");
     }
+    if (defaultDiscountValue && defaultDiscountType === 'percent' && defaultDiscountValue > 100) {
+      throw new CodedError("DISCOUNT_VALUE_INVALID", "the discount percentage is more than 100");
+    }
   }
 
 }
