@@ -23,27 +23,37 @@
 <dom-module id="page-bulk-import-product-categories">
   <template>
     <style include="shared-styles">
+      .card-text {
+        margin-bottom: 12px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+      <!-- FIXME: DESCRIBE IT BETTER -->
+      <!-- TRANSLATE -->
 
-      <div class="card vertical layout">
-        <!-- <div class="p-16 horizontal layout center">
-          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.productCategory.searchForProductCategoryInputError]] label=[[verses.productCategory.searchForProductCategoryInput]] on-keypress="searchFieldKeypressed"></paper-input>
-          <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
-          <paper-button raised class="primary" on-tap="searchTapped">
-            [[verses.general.search]]
-          </paper-button>
-        </div> -->
-        AAA
-        <paper-button raised class="primary" on-tap="createTapped">
-          <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
-          [[verses.productCategory.createNewProductCategory]]
+      <div class="card vertical layout center">
+        <div class="card-text">You can use any modern Spreadsheet editor to edit the following CSV file.</div>
+        <paper-button raised class="primary" on-tap="downloadCsvTapped">
+          <iron-icon class="button-icon" icon="icons:file-download"></iron-icon>
+          Download CSV File
         </paper-button>
       </div>
 
+      <div class="card vertical layout center">
+        <div>Upload your csv below. Make sure - </div>
+        <ul class="card-text">
+          <li>Rule 1</li>
+          <li>Rule 2</li>
+        </ul>
+        <paper-button raised class="primary" on-tap="uploadCsvTapped">
+          <iron-icon class="button-icon" icon="icons:file-upload"></iron-icon>
+          Upload CSV File
+        </paper-button>
+        <input type="file" style="visibility: hidden" id="upload-csv-el" accept=".csv" on-change="csvFileSelected">
+      </div>
 
     </div>
   </template>
@@ -87,6 +97,48 @@
       }
 
       // region: ui  ===========================
+
+      downloadCsvTapped(e = null) {
+        let filename = 'Lipi Product Category Bulk Upload CSV.csv'
+        let content = 'Name,Unit,Purchase Price,Sale Price,VAT,Discount Type,Discount Amount';
+        let el = document.createElement('a');
+        el.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(content));
+        el.setAttribute('download', filename);
+        el.style.display = 'none';
+        document.body.appendChild(el);
+        el.click();
+        document.body.removeChild(el);
+      }
+
+      uploadCsvTapped(e = null) {
+        this.elem('#upload-csv-el').click();
+      }
+
+      _readFile(file, cbfn) {
+        var reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = (e) => {
+          return cbfn(null, event.target.result);
+        };
+        reader.onerror = (e) => {
+          let err = evt.target.error || new Error("Unknown error while reading file");
+          return cbfn(err, null);
+        };
+      }
+
+      csvFileSelected(e) {
+        let fileList = e.target.files;
+        if (fileList.length === 0) return;
+        if (fileList.length !== 1) {
+          return this.app.showModalDialog("Multiple files selected", "Please select only one file.");
+        }
+        let file = fileList[0];
+        this._readFile(file, (err, content) => {
+          if (err) {
+            return this.app.showModalDialog("Unable to read", "We were unable to read the file you provided.");
+          }
+        });
+      }
 
       // region: misc =================================
 
