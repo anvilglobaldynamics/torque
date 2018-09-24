@@ -385,19 +385,19 @@ exports.validateReportInventoryDetailsApiSuccessResponse = (doc) => {
 
         inventoryDetails: Joi.object().required(),
         inventoryContainerDetails: Joi.object().required(),
-    
+
         aggregatedProductList: Joi.array().required().items({
           productId: Joi.number().required(),
           count: Joi.number().required(),
           acquiredDatetimeStamp: Joi.number().required(),
-          addedDatetimeStamp:  Joi.number().required(),
-    
+          addedDatetimeStamp: Joi.number().required(),
+
           product: Joi.object().keys({
             id: Joi.number().required(),
             productCategoryId: Joi.number().required(),
             purchasePrice: Joi.number().required(),
             salePrice: Joi.number().required(),
-    
+
             productCategory: Joi.object().keys({
               id: Joi.number().required(),
               createdDatetimeStamp: Joi.number().required(),
@@ -407,10 +407,10 @@ exports.validateReportInventoryDetailsApiSuccessResponse = (doc) => {
               unit: Joi.string().required(),
               defaultDiscountType: Joi.string().required(),
               defaultDiscountValue: Joi.number().when(
-                'defaultDiscountType', { 
-                  is: 'percent', 
-                  then: Joi.number().required(), 
-                  otherwise: Joi.number().required() 
+                'defaultDiscountType', {
+                  is: 'percent',
+                  then: Joi.number().required(),
+                  otherwise: Joi.number().required()
                 }
               ),
               defaultPurchasePrice: Joi.number().required(),
@@ -596,6 +596,18 @@ exports.validateAddProductCategoryApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateBulkImportProductCategoriesApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    ignoredRowList: Joi.array().required().allow([]),
+    successfulCount: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateGetProductCategoryListApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
@@ -742,7 +754,9 @@ exports.validateGenericApiFailureResponse = (doc) => {
       message: Joi.string().required(),
       // check if stack and details are required 
       stack: Joi.required(),
-      details: Joi.required()
+      details: Joi.required(),
+      rowNumber: Joi.number().optional(),
+      cellNumber: Joi.number().optional()
     })
   });
 
