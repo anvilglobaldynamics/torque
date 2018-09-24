@@ -44,7 +44,7 @@ exports.BulkImportProductCategoriesApi = class extends Api.mixin(ProductCategory
     if (error) {
       let { message, path } = error.details[0];
       let cellNumber = parseInt(path) + 1;
-      message = message.replace(path, 'Cell #' + cellNumber);
+      message = message.replace('"' + path + '"', 'Cell #' + cellNumber);
       let err = new CodedError('MODIFIED_VALIDATION_ERROR', message);
       err.cellNumber = cellNumber;
       throw err;
@@ -89,7 +89,7 @@ exports.BulkImportProductCategoriesApi = class extends Api.mixin(ProductCategory
       let productCategory = productCategoryList[i];
       try {
         productCategory.organizationId = organizationId;
-        let productCategoryId = await this._createProductCategory(productCategory);
+        await this._createProductCategory(productCategory);
         successfulCount += 1;
       } catch (err) {
         if (err.code && err.code.indexOf('DUPLICATE_') === 0) {
