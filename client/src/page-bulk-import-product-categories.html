@@ -159,8 +159,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
-        // TRANSLATE
-        this.app.pushPageTitle('Bulk Import');
+        this.app.pushPageTitle(this.app.verses.bulkImportProductCategory.pageTitle);
         if (!this._ensureAccess()) return;
         this._resetErrorAndResults();
         this.isReady = true;

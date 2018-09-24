@@ -623,5 +623,8 @@
     "pleaseCallUsToPurchaseSubscription": "Call us at +880 1760 160503 to purchase a subscription.",
     "recheckVerificationStatus": "Recheck Verification Status",
     "useDifferentOrganization": "Use a different organization"
+  },
+  "bulkImportProductCategory": {
+    "pageTitle": "Product Category Bulk Import"
   }
 }
