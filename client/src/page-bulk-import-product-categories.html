@@ -23,8 +23,11 @@
 <dom-module id="page-bulk-import-product-categories">
   <template>
     <style include="shared-styles">
-      .card-text {
-        margin-bottom: 12px;
+      .card-text-container {
+        /* border: 1px solid red; */
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 6px;
       }
 
       .error-message {
@@ -41,35 +44,53 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
-      <!-- FIXME: DESCRIBE IT BETTER -->
-      <!-- TRANSLATE -->
 
-      <div class="card vertical layout center">
-        <div class="card-text">You can use any modern Spreadsheet editor to edit the following CSV file.</div>
-        <paper-button raised class="primary" on-tap="downloadCsvTapped">
+      <!-- Download card - start -->
+      <div class="card vertical layout">
+        <div class="card-text-container">
+          You can use any modern Spreadsheet editor to edit the following CSV file.
+        </div>
+        
+        <paper-button raised class="primary" style="width: 100%; margin-top: 12px;" on-tap="downloadCsvTapped">
           <iron-icon class="button-icon" icon="icons:file-download"></iron-icon>
           Download CSV File
         </paper-button>
       </div>
+      <!-- Download card - end -->
 
-      <div class="card vertical layout center">
-        <div>Upload your csv below. Make sure - </div>
-        <ul class="card-text">
-          <li>Rule 1</li>
-          <li>Rule 2</li>
-        </ul>
-        <paper-button raised class="primary" on-tap="uploadCsvTapped">
+      <!-- Edit instruction card - start -->
+      <div class="card vertical layout">
+        <div class="card-text-container">
+          <ul>
+            <li>Rule 1</li>
+            <li>Rule 2</li>
+          </ul>
+        </div>
+      </div>
+      <!-- Edit instruction card - end -->
+
+      <!-- Upload card - start -->
+      <div class="card vertical layout">
+        <div class="card-text-container">
+          Upload your csv below.
+        </div>
+
+        <paper-button raised class="primary" style="width: 100%; margin-top: 12px;" on-tap="uploadCsvTapped">
           <iron-icon class="button-icon" icon="icons:file-upload"></iron-icon>
           Upload CSV File
         </paper-button>
-        <input type="file" style="visibility: hidden" id="upload-csv-el" accept=".csv" on-change="csvFileSelected">
+        <input type="file" style="visibility: hidden;" id="upload-csv-el" accept=".csv" on-change="csvFileSelected">
       </div>
+      <!-- Upload card - end -->
 
+      <!-- Result card - start -->
       <template is="dom-if" if="[[results]]">
-        <div class="card vertical layout center">
+        <div class="card vertical layout">
+
           <div class="success-message">
             Successfully imported [[results.successfulCount]] row(s) of data.
           </div>
+          
           <template is="dom-if" if="[[results.ignoredRowList.length]]">
             However, the following rows had to be ignored -
             <ul>
@@ -80,11 +101,15 @@
               </template>
             </ul>
           </template>
+
         </div>
       </template>
+      <!-- Result card - start -->
 
+      <!-- Error card - start -->
       <template is="dom-if" if="[[error]]">
-        <div class="card vertical layout center">
+        <div class="card vertical layout">
+
           <div class="error-message">
             Error: <template is="dom-if" if="[[error.rowNumber]]">
               <span>Row #[[error.rowNumber]]</span>
@@ -93,7 +118,7 @@
 
         </div>
       </template>
-
+      <!-- Error card - end -->
 
     </div>
   </template>
