@@ -153,7 +153,12 @@
           if (!emailOrPhone) return;
           emailOrPhone = emailOrPhone.toLowerCase();
           this._processForgotPasswordRequestApi({ emailOrPhone }, type => {
-            let message = this.app.verses.login.confirmationLinkPartOne + ": " + type + this.app.verses.login.confirmationLinkPartTwo;
+            let message;
+            if (type === 'phone') {
+              message = this.app.verses.login.confirmationLinkPhone;
+            } else {
+              message = this.app.verses.login.confirmationLinkEmail;
+            }
             this.app.showModalDialog(this.app.verses.general.thankYou, message, () => 'pass');
           });
         });
