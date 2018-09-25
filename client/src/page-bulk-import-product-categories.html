@@ -30,6 +30,14 @@
         padding: 6px;
       }
 
+      .instruction-list {
+        list-style-type: none;
+      }
+
+      .instruction-list li {
+        margin-left: -30px;
+      }
+
       .error-message {
         font-size: 24px;
         color: red;
@@ -48,22 +56,70 @@
       <!-- Download card - start -->
       <div class="card vertical layout">
         <div class="card-text-container">
-          You can use any modern Spreadsheet editor to edit the following CSV file.
+          [[verses.bulkImportProductCategory.downloadSectionTip]]
         </div>
         
         <paper-button raised class="primary" style="width: 100%; margin-top: 12px;" on-tap="downloadCsvTapped">
           <iron-icon class="button-icon" icon="icons:file-download"></iron-icon>
-          Download CSV File
+          [[verses.bulkImportProductCategory.downloadButtonLabel]]
         </paper-button>
       </div>
       <!-- Download card - end -->
 
       <!-- Edit instruction card - start -->
       <div class="card vertical layout">
-        <div class="card-text-container">
-          <ul>
-            <li>Rule 1</li>
-            <li>Rule 2</li>
+        <div class="card-text-container instruction-list-container">
+          <ul class="instruction-list">
+
+            <li>
+              [[verses.bulkImportProductCategory.instructionOne]]
+              <div class="instruction-image-container">
+                <!-- image here -->
+              </div>
+            </li>
+
+            <li>
+              [[verses.bulkImportProductCategory.instructionTwo]]
+              <div class="instruction-image-container">
+                <!-- image here -->
+              </div>
+            </li>
+
+            <li>
+              [[verses.bulkImportProductCategory.instructionThree]]
+              <div class="instruction-image-container">
+                <!-- image here -->
+              </div>
+            </li>
+
+            <li>
+              [[verses.bulkImportProductCategory.instructionFour]]
+              <div class="instruction-image-container">
+                <!-- image here -->
+              </div>
+            </li>
+
+            <li>
+              [[verses.bulkImportProductCategory.instructionFive]]
+              <div class="instruction-image-container">
+                <!-- image here -->
+              </div>
+            </li>
+
+            <li>
+              [[verses.bulkImportProductCategory.instructionSix]]
+              <div class="instruction-image-container">
+                <!-- image here -->
+              </div>
+            </li>
+
+            <li>
+              [[verses.bulkImportProductCategory.instructionSeven]]
+              <div class="instruction-image-container">
+                <!-- image here -->
+              </div>
+            </li>
+
           </ul>
         </div>
       </div>
@@ -72,12 +128,12 @@
       <!-- Upload card - start -->
       <div class="card vertical layout">
         <div class="card-text-container">
-          Upload your csv below.
+          [[verses.bulkImportProductCategory.uploadSectionTip]]
         </div>
 
         <paper-button raised class="primary" style="width: 100%; margin-top: 12px;" on-tap="uploadCsvTapped">
           <iron-icon class="button-icon" icon="icons:file-upload"></iron-icon>
-          Upload CSV File
+          [[verses.bulkImportProductCategory.uploadButtonLabel]]
         </paper-button>
         <input type="file" style="visibility: hidden; height: 0px;" id="upload-csv-el" accept=".csv" on-change="csvFileSelected">
       </div>
@@ -183,7 +239,7 @@
 
       downloadCsvTapped(e = null) {
         this._resetErrorAndResults();
-        let filename = 'Lipi Product Category Bulk Upload CSV.csv'
+        let filename = 'Lipi Product Category Bulk Upload CSV.csv'; // change also in lang files if this name is changed
         let content = this.headerList.join(',');
         let el = document.createElement('a');
         el.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(content));

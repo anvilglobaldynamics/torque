@@ -627,6 +627,10 @@
     "useDifferentOrganization": "ভিন্ন সংস্থা ব্যবহার করুন"
   },
   "bulkImportProductCategory": {
-    "pageTitle": "একাধিক পণ্যের ধরন তৈরি"
+    "pageTitle": "একাধিক পণ্যের ধরন তৈরি",
+    "downloadSectionTip": "Download the template file, we will be creating multiple Product Categories at once using this file;",
+    "downloadButtonLabel": "Download File",
+    "uploadSectionTip": "Upload the CSV file containing Product Category data below;",
+    "uploadButtonLabel": "Upload File"
   }
 }

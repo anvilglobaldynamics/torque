@@ -625,6 +625,19 @@
     "useDifferentOrganization": "Use a different organization"
   },
   "bulkImportProductCategory": {
-    "pageTitle": "Product Category Bulk Import"
+    "pageTitle": "Product Category Bulk Import",
+    "downloadSectionTip": "Download the template file, we will be creating multiple Product Categories at once using this file;",
+    "downloadButtonLabel": "Download File",
+
+    "instructionOne": "1. The downloaded file: 'Lipi Product Category Bulk Upload CSV.csv', is a CSV format file, you can use any modern Spreadsheet software to view and update this file. It should look like this: ",
+    "instructionTwo": "2. Enter a unique product category Name like so;",
+    "instructionThree": "3. Enter the Unit of the product category, example: kg, piece, box;",
+    "instructionFour": "4. Enter Purchase Price, Sale Price and VAT percentage of the product category;",
+    "instructionFive": "5. Enter either 'percent' or 'fixed' as Discount Type, and the amount under Discount Amount;",
+    "instructionSix": "6. Under Returnable enter 'yes' if customers can return this product category, 'no' if not;",
+    "instructionSeven": "7. All the fields must be entered, like below, or else Lipi will not accept this file;",
+
+    "uploadSectionTip": "Upload the CSV file containing Product Category data below;",
+    "uploadButtonLabel": "Upload File"
   }
 }
