@@ -628,9 +628,18 @@
   },
   "bulkImportProductCategory": {
     "pageTitle": "একাধিক পণ্যের ধরন তৈরি",
-    "downloadSectionTip": "Download the template file, we will be creating multiple Product Categories at once using this file;",
-    "downloadButtonLabel": "Download File",
-    "uploadSectionTip": "Upload the CSV file containing Product Category data below;",
-    "uploadButtonLabel": "Upload File"
+    "downloadSectionTip": "ফাইলটি সংগ্রহ করুন, আমরা এই ফাইলটি ব্যবহার করে একাধিক পণ্যের ধরণ একসাথে তৈরি করবো;",
+    "downloadButtonLabel": "ফাইল সংগ্রহ করুন",
+
+    "instructionOne": "১. সংগ্রহীত ফাইলটি: 'Lipi Product Category Bulk Upload CSV.csv', একটি CSV (সি এস ভি) জাতীয় ফাইল, যেকোনো স্প্রেডশীট সফটওয়্যার ব্যবহার করে আপনি ফাইলটি দেখতে এবং পাল্টাতে পারবেন। ফাইলটি দেখতে এরকম হবে;",
+    "instructionTwo": "২. পণ্য ধরণের একটি নাম (Name) দিন যেটি আগে ব্যবহত হয়নি, এভাবে;",
+    "instructionThree": "৩. পণ্য ধরণের একটি একক (Unit) দিন, যেমন: কেজি, পিস অথবা বাক্স;",
+    "instructionFour": "৪. পণ্য ধরণের কেনা দাম (Purchase Price), বিক্রি দাম (Sale Price) এবং ভ্যাট শতাংশ (VAT) দিন, এভাবে;",
+    "instructionFive": "৫. ছাড় এর ধরণ দিন Discount Type এর নিচে, শতাংশ ছাড় হলে percent লিখুন, নির্ধারিত অর্থ ছাড় হলে fixed লিখুন। এবং ছাড় এর পরিমান দিন Discount Amount এর নিচে, এভাবে;",
+    "instructionSix": "৬. Returnable এর নিচে yes (হ্যা) দিন যদি পণ্য ফেরতযোগ্য হয়ে, no (না) দিন যদি নয়;",
+    "instructionSeven": "৭. সকল স্থান পূরণ থাকতে হবে, নাহলে লিপি ফাইলটি গ্রহণ করবে না;",
+
+    "uploadSectionTip": "পণ্যের ধরণ ধারণকারী CSV ফাইলটি জমা করুন;",
+    "uploadButtonLabel": "ফাইল জমা করুন"
   }
 }
