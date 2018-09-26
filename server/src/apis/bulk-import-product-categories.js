@@ -49,7 +49,7 @@ exports.BulkImportProductCategoriesApi = class extends Api.mixin(ProductCategory
       err.cellNumber = cellNumber;
       throw err;
     }
-    value[7] = (value[7] === 'YES');
+    value[7] = (value[7] === 'Yes');
     return value;
   }
 

@@ -278,20 +278,20 @@
           err.cellNumber = cellNumber || null;
           return err;
         }
-        if (!isArray(rawRowList) || rawRowList.length === 0) {
+        if (!isArray(rawRowList) || rawRowList.length === 0 || (rawRowList.length === 1 && rawRowList[0].length === 1 && rawRowList[0][0] === null)) {
           return cbfn(makeError("The file you provided is not a valid CSV file."));
         }
         let headerList = rawRowList.shift();
         if (!isArray(headerList) || headerList.length !== this.headerList.length) {
-          return cbfn(makeError("File header is corrupted"));
+          return cbfn(makeError("File is invalid."));
         }
         for (let header of this.headerList) {
           if (headerList.indexOf(header) === -1) {
-            return cbfn(makeError(`File header is corrupted. Expected column "${header}"`));
+            return cbfn(makeError(`File is invalid. Expected column "${header}".`));
           }
         }
         if (rawRowList.length === 0) {
-          return cbfn(makeError("The file you provided is empty."));
+          return cbfn(makeError("The file you provided has no data."));
         }
         let rowIndex = 1;
         for (let rawRow of rawRowList) {
