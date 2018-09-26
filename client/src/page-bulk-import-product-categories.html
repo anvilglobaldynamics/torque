@@ -305,10 +305,16 @@
 
       _renderError(err) {
         this.error = err;
+        window.setTimeout(() => {
+          this.elem('.error-message').scrollIntoView();
+        }, 100);
       }
 
       _renderSuccess({ ignoredRowList, successfulCount }) {
         this.results = { ignoredRowList, successfulCount };
+        window.setTimeout(() => {
+          this.elem('.success-message').scrollIntoView();
+        }, 100);
       }
 
       csvFileSelected(e) {
