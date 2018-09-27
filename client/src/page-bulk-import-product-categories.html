@@ -45,13 +45,26 @@
       }
 
       .error-message {
-        font-size: 24px;
-        color: red;
+        border: 1px solid #ffcdd2;
+        background-color: #ffebee;
+        padding: 6px;
+
+        font-size: 16px;
+        color: #b71c1c;
       }
 
       .success-message {
-        font-size: 24px;
-        color: green;
+        border: 1px solid #C8E6C9;
+        background-color: #E8F5E9;
+        padding: 6px;
+        margin-bottom: 10px;
+
+        font-size: 16px;
+        color: #1B5E20;
+      }
+
+      .ignored-row-list li {
+        margin-left: -15px;
       }
     </style>
 
@@ -154,8 +167,8 @@
           </div>
           
           <template is="dom-if" if="[[results.ignoredRowList.length]]">
-            However, the following rows had to be ignored -
-            <ul>
+            However, the following rows had to be ignored:
+            <ul class="ignored-row-list">
               <template is="dom-repeat" items="[[results.ignoredRowList]]">
                 <li>Row #[[item.rowNumber]]
                   <template is="dom-if" if="[[$equals(item.reason, 'name-duplication')]]">(Because name already exists)</template>
