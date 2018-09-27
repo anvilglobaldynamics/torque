@@ -638,6 +638,12 @@
     "instructionSeven": "7. All the fields must be entered, like below, or else Lipi will not accept this file;",
 
     "uploadSectionTip": "Upload the CSV file containing Product Category data;",
-    "uploadButtonLabel": "Upload File"
+    "uploadButtonLabel": "Upload File",
+
+    "successfullyImported" : "Import Successful, total product categories created",
+    "rowsIgnored": "Following rows had to be ignored",
+    "row": "Row",
+    "nameUsed": "Product Category with this name already exists",
+    "errorOccurred": "Error Occurred, resolve and try again"
   }
 }

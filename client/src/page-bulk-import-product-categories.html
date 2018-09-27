@@ -57,7 +57,7 @@
         border: 1px solid #C8E6C9;
         background-color: #E8F5E9;
         padding: 6px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
 
         font-size: 16px;
         color: #1B5E20;
@@ -163,15 +163,15 @@
         <div class="card vertical layout">
 
           <div class="success-message">
-            Successfully imported [[results.successfulCount]] row(s) of data.
+            [[verses.bulkImportProductCategory.successfullyImported]]: [[results.successfulCount]]
           </div>
           
           <template is="dom-if" if="[[results.ignoredRowList.length]]">
-            However, the following rows had to be ignored:
+              [[verses.bulkImportProductCategory.rowsIgnored]]:
             <ul class="ignored-row-list">
               <template is="dom-repeat" items="[[results.ignoredRowList]]">
-                <li>Row #[[item.rowNumber]]
-                  <template is="dom-if" if="[[$equals(item.reason, 'name-duplication')]]">(Because name already exists)</template>
+                <li>[[verses.bulkImportProductCategory.row]] #[[item.rowNumber]]
+                  <template is="dom-if" if="[[$equals(item.reason, 'name-duplication')]]">([[verses.bulkImportProductCategory.nameUsed]])</template>
                 </li>
               </template>
             </ul>
@@ -186,7 +186,8 @@
         <div class="card vertical layout">
 
           <div class="error-message">
-            Error: <template is="dom-if" if="[[error.rowNumber]]">
+            [[verses.bulkImportProductCategory.errorOccurred]]:<br>
+            <template is="dom-if" if="[[error.rowNumber]]">
               <span>Row #[[error.rowNumber]]</span>
             </template> [[error.message]]
           </div>
