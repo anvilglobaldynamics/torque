@@ -3,8 +3,8 @@
   "branding": {
     "shortName": "Lipi",
     "extendedName": "Lipi by Anvil",
-    "serverUrl": "http://server.lipi.live",
-    "clientUrl": "https://lipi.live",
+    "serverUrl": "http://localhost:8540",
+    "clientUrl": "http://localhost:8545",
     "authorName": "Anvil Global Dynamics",
     "authorWebsite": "https://anvil.live",
     "supportPhone": "017XXXXXXXX",
