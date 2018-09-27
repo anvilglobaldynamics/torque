@@ -652,6 +652,11 @@
     "multipleFilesSelectedTitle": "একাধিক ফাইল নির্বাচিত",
     "multipleFilesSelectedBody": "একটি ফাইল নির্বাচন করুন।",
     "unableToReadTitle": "পড়া যায়নি",
-    "unableToReadBody": "লিপি আপনার দেয়া ফাইলটি পড়তে পারেনি।"
+    "unableToReadBody": "লিপি আপনার দেয়া ফাইলটি পড়তে পারেনি।",
+    "fileProvidedIsNotValidCsv": "প্রদত্ত ফাইলটি একটি বৈধ CSV ফাইল নয়।",
+    "fileIsInvalid": "ফাইলটি অবৈধ।",
+    "fileProvidedHasNoData": "প্রদত্ত ফাইলটিতে কোনো তথ্য নেই।",
+    "expectedColumn": "প্রত্যাশিত কলাম",
+    "missingCellsInRow": "এই শাড়িতে তথ্য নেই"
   }
 }

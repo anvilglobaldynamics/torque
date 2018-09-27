@@ -300,24 +300,24 @@
           return err;
         }
         if (!isArray(rawRowList) || rawRowList.length === 0 || (rawRowList.length === 1 && rawRowList[0].length === 1 && rawRowList[0][0] === null)) {
-          return cbfn(makeError("The file you provided is not a valid CSV file."));
+          return cbfn(makeError(this.app.verses.bulkImportProductCategory.fileProvidedIsNotValidCsv));
         }
         let headerList = rawRowList.shift();
         if (!isArray(headerList) || headerList.length !== this.headerList.length) {
-          return cbfn(makeError("File is invalid."));
+          return cbfn(makeError(this.app.verses.bulkImportProductCategory.fileIsInvalid));
         }
         for (let header of this.headerList) {
           if (headerList.indexOf(header) === -1) {
-            return cbfn(makeError(`File is invalid. Expected column "${header}".`));
+            return cbfn(makeError(this.app.verses.bulkImportProductCategory.expectedColumn + ": " + header));
           }
         }
         if (rawRowList.length === 0) {
-          return cbfn(makeError("The file you provided has no data."));
+          return cbfn(makeError(this.app.verses.bulkImportProductCategory.fileProvidedHasNoData));
         }
         let rowIndex = 1;
         for (let rawRow of rawRowList) {
           if (!isArray(rawRow) || rawRow.length !== this.headerList.length) {
-            return cbfn(makeError(`Row #${rowIndex} is missing cells.`));
+            return cbfn(makeError(this.app.verses.bulkImportProductCategory.missingCellsInRow + ": " + rowIndex));
           }
           rowIndex += 1;
         }

@@ -650,6 +650,11 @@
     "multipleFilesSelectedTitle": "Multiple files selected",
     "multipleFilesSelectedBody": "Please select only 1 file.",
     "unableToReadTitle": "Unable to read",
-    "unableToReadBody": "Lipi is unable to read the file you provided."
+    "unableToReadBody": "Lipi is unable to read the file you provided.",
+    "fileProvidedIsNotValidCsv": "The file you provided is not a valid CSV file.",
+    "fileIsInvalid": "File is invalid.",
+    "fileProvidedHasNoData": "The file you provided has no data.",
+    "expectedColumn": "Expected column",
+    "missingCellsInRow": "Missing cells in row"
   }
 }
