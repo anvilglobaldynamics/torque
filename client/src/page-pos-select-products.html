@@ -68,7 +68,7 @@
                 <div class="horizontal layout item center">
                   <div class="flex" style="min-width: 128px;">
                     <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                    <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">[[product.count]][[product.unit]]</div>
+                    <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">[[product.count]] [[product.unit]]</div>
                     <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
                     <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                     <div class="inventory-product-added-date-container">[[verses.posSelectProduct.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
@@ -113,7 +113,7 @@
               <div class="horizontal layout item center">
                 <div class="flex" style="min-width: 128px;">
                   <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                  <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">[[product.maxAllowedCount]][[product.unit]]</div>
+                  <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.maxAllowedCount)]]">[[product.maxAllowedCount]] [[product.unit]]</div>
                   <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
                   <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                   <!-- <div class="inventory-product-added-date-container">[[verses.posSelectProduct.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
@@ -313,7 +313,7 @@
       }
 
       $isProductCountLow(count) {
-        if (count <= 5) {
+        if (count <= parseInt(this.app.settings.minimumProductQuantity)) {
           return 'low-product-count-div'
         } else {
           return '';
