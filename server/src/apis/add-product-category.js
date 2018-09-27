@@ -2,8 +2,9 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const { ProductCategoryMixin } = require('./mixins/product-category-mixin');
 
-exports.AddProductCategoryApi = class extends Api {
+exports.AddProductCategoryApi = class extends Api.mixin(ProductCategoryMixin) {
 
   get autoValidates() { return true; }
 
@@ -39,23 +40,9 @@ exports.AddProductCategoryApi = class extends Api {
     }];
   }
 
-  async _createProductCategory({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
-    return await this.database.productCategory.create({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
-  }
-
-  async _checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat }) {
-    let salePriceAfterVat = defaultSalePrice + defaultSalePrice * defaultVat/100;
-    
-    if (defaultDiscountValue && defaultDiscountType === 'fixed' && defaultDiscountValue > salePriceAfterVat) {
-      throw new CodedError("DISCOUNT_VALUE_INVALID", "the discount value is more than sale price");
-    }
-
-    return;
-  }
-
   async handle({ body }) {
     let { organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
-    await this._checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat });
+    this._checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat });
     let productCategoryId = await this._createProductCategory({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
     return { status: "success", productCategoryId };
   }

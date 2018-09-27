@@ -13,7 +13,8 @@ let {
   validateAddProductCategoryApiSuccessResponse,
   validateGenericApiFailureResponse,
   validateGetProductCategoryListApiSuccessResponse,
-  validateGenericApiSuccessResponse
+  validateGenericApiSuccessResponse,
+  validateBulkImportProductCategoriesApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -380,6 +381,99 @@ describe('Product Category', _ => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equal('API_DISABLED');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/bulk-import-product-categories (Valid and unique)', testDoneFn => {
+
+    callApi('api/bulk-import-product-categories', {
+      json: {
+        apiKey,
+        organizationId,
+        rowList: [
+          ["Should Be Unique 1", "pc", 300, 500, 10, "percent", 100, "Yes"],
+          ["Should Be Unique 2", "haali", 10, 10, 10, "fixed", 0, "No"]
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateBulkImportProductCategoriesApiSuccessResponse(body);
+      expect(body.ignoredRowList).to.deep.equal([]);
+      expect(body.successfulCount).to.equal(2);
+      testDoneFn();
+    })
+
+  });
+
+  it('api/bulk-import-product-categories (Valid but not unique)', testDoneFn => {
+
+    callApi('api/bulk-import-product-categories', {
+      json: {
+        apiKey,
+        organizationId,
+        rowList: [
+          ["Should Be Unique 3", "pc", 300, 500, 10, "percent", 100, "Yes"],
+          ["Should Be Unique 2", "haali", 10, 10, 10, "fixed", 0, "No"]
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateBulkImportProductCategoriesApiSuccessResponse(body);
+      expect(body.ignoredRowList).to.deep.equal([
+        {
+          "reason": "name-duplication",
+          "rowNumber": 2
+        }
+      ]);
+      expect(body.successfulCount).to.equal(1);
+      testDoneFn();
+    })
+
+  });
+
+  it('api/bulk-import-product-categories (Invalid)', testDoneFn => {
+
+    callApi('api/bulk-import-product-categories', {
+      json: {
+        apiKey,
+        organizationId,
+        rowList: [
+          ["Should Be Unique 4", "pc", 300, 500, 10, "percent", 100, "FFYes"],
+          ["Should Be Unique 5", "haali", 10, 10, 10, "fixed", 0, "No"]
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('MODIFIED_VALIDATION_ERROR');
+      expect(body.error.message).to.equal('Cell #8 must be one of [Yes, No]');
+      expect(body.error.rowNumber).to.equal(1);
+      expect(body.error.cellNumber).to.equal(8);
+      testDoneFn();
+    })
+
+  });
+
+  it('api/bulk-import-product-categories (Invalid)', testDoneFn => {
+
+    callApi('api/bulk-import-product-categories', {
+      json: {
+        apiKey,
+        organizationId,
+        rowList: [
+          ["Should Be Unique 5", "pc", 300, 500, 10, "percent", 100, "Yes"],
+          ["", "haali", 10, 10, 10, "fixed", 0, "No"]
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('MODIFIED_VALIDATION_ERROR');
+      expect(body.error.message).to.equal('Cell #1 is not allowed to be empty');
+      expect(body.error.rowNumber).to.equal(2);
+      expect(body.error.cellNumber).to.equal(1);
       testDoneFn();
     })
 

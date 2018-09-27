@@ -63,6 +63,7 @@ let { EditWarehouseApi } = require('./legacy-apis/edit-warehouse');
 const { DeleteWarehouseApi } = require('./apis/delete-warehouse');
 
 const { AddProductCategoryApi } = require('./apis/add-product-category');
+const { BulkImportProductCategoriesApi } = require('./apis/bulk-import-product-categories');
 const { GetProductCategoryListApi } = require('./apis/get-product-category-list');
 const { EditProductCategoryApi } = require('./apis/edit-product-category');
 let { DeleteProductCategoryApi } = require('./legacy-apis/delete-product-category');
@@ -277,6 +278,7 @@ class Program {
     server.registerPostApi('/api/edit-warehouse', EditWarehouseApi);
     server.registerPostApi('/api/delete-warehouse', DeleteWarehouseApi);
     server.registerPostApi('/api/add-product-category', AddProductCategoryApi);
+    server.registerPostApi('/api/bulk-import-product-categories', BulkImportProductCategoriesApi);
     server.registerPostApi('/api/get-product-category-list', GetProductCategoryListApi);
     server.registerPostApi('/api/edit-product-category', EditProductCategoryApi);
     server.registerPostApi('/api/delete-product-category', DeleteProductCategoryApi);

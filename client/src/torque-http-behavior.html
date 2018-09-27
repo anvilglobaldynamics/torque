@@ -425,6 +425,11 @@
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('get-activated-package-list', data, cbfn);
       }
+
+      callBulkImportProductCategoriesApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('bulk-import-product-categories', data, cbfn);
+      }
     }
 
   })();

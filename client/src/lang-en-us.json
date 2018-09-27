@@ -623,5 +623,38 @@
     "pleaseCallUsToPurchaseSubscription": "Call us at +880 1760 160503 to purchase a subscription.",
     "recheckVerificationStatus": "Recheck Verification Status",
     "useDifferentOrganization": "Use a different organization"
+  },
+  "bulkImportProductCategory": {
+    "pageTitle": "Product Category Bulk Import",
+    "downloadSectionTip": "Download the template file, we will be creating multiple Product Categories at once using this file;",
+    "downloadButtonLabel": "Download File",
+
+    "instructionOne": "1. The downloaded file: 'Lipi Product Category Bulk Upload CSV.csv', is a CSV format file, you can use any Spreadsheet software to view and update this file. It should look like this: ",
+    "instructionTwo": "2. Enter a unique product category Name like so;",
+    "instructionThree": "3. Enter a Unit of the product category, example: kg, piece or box;",
+    "instructionFour": "4. Enter Purchase Price, Sale Price and VAT percentage of the product category;",
+    "instructionFive": "5. Enter either 'percent' or 'fixed' as Discount Type, and the amount under Discount Amount;",
+    "instructionSix": "6. Under Returnable enter 'yes' if customers can return this product category, 'no' if not;",
+    "instructionSeven": "7. All the fields must be entered, like below, or else Lipi will not accept this file;",
+
+    "uploadSectionTip": "Upload the CSV file containing Product Category data;",
+    "uploadButtonLabel": "Upload File",
+
+    "successfullyImported" : "Import Successful, total product categories created",
+    "rowsIgnored": "Following rows had to be ignored",
+    "row": "Row",
+    "nameUsed": "Product Category with this name already exists",
+    "errorOccurred": "Error Occurred, resolve and try again",
+
+    "unknownErrorWhileReadingFile": "Unknown error while reading file",
+    "multipleFilesSelectedTitle": "Multiple files selected",
+    "multipleFilesSelectedBody": "Please select only 1 file.",
+    "unableToReadTitle": "Unable to read",
+    "unableToReadBody": "Lipi is unable to read the file you provided.",
+    "fileProvidedIsNotValidCsv": "The file you provided is not a valid CSV file.",
+    "fileIsInvalid": "File is invalid.",
+    "fileProvidedHasNoData": "The file you provided has no data.",
+    "expectedColumn": "Expected column",
+    "missingCellsInRow": "No row missing data"
   }
 }

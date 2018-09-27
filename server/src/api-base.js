@@ -444,7 +444,9 @@ class Api {
       message = errorObject.message;
     }
     let stack = errorObject.stack;
-    return { code, message, stack, details };
+    let rowNumber = errorObject.rowNumber;
+    let cellNumber = errorObject.cellNumber;
+    return { code, message, stack, details, rowNumber, cellNumber };
   }
 
   /** @private */
