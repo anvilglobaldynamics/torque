@@ -151,6 +151,10 @@
 
         <!-- report body - start -->
         <div class="body">
+          <template is="dom-if" if="{{!aggregatedInventoryDetailsList.length}}">
+            [[verses.general.noDataFound]]
+          </template>
+
           <template is="dom-repeat" items="[[aggregatedInventoryDetailsList]]" as="aggregatedInventoryDetail">
 
             <div class="inventory-table-container">
@@ -266,12 +270,16 @@
         let inventoryIdList = this.inventoriesToBeFetched.map(inventory => inventory.id);
         let data = { inventoryIdList };
 
-        this.app.callReportInventoryDetailsApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          this.aggregatedInventoryDetailsList = response.aggregatedInventoryDetailsList;
+        if (!inventoryIdList.length === 0) {
+          this.app.callReportInventoryDetailsApi(data, (err, response) => {
+            if (err) return;
+            if (response.hasError) return this.onApiError(response.error);
+            this.aggregatedInventoryDetailsList = response.aggregatedInventoryDetailsList;
+            return cbfn();
+          });
+        } else {
           return cbfn();
-        });
+        }
       }
 
       _fetchInventoryList(cbfn) {

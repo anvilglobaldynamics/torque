@@ -71,7 +71,8 @@
     "email": "Email",
     "designation": "Designation",
     "errorMessageBody": "Error Occurred, Please contact Lipi representative.",
-    "errorMessageTitle": "Error"
+    "errorMessageTitle": "Error",
+    "noDataFound": "No Data Found"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
