@@ -646,6 +646,12 @@
     "rowsIgnored": "নিম্নলিখিত সারিগুলো উপেক্ষা করা হয়েছে",
     "row": "সারি",
     "nameUsed": "এই নামের পণ্য ধরণ ইতিমধ্যে আছে",
-    "errorOccurred": "ত্রুটি দেখা দিয়েছে, সমাধান করুন এবং আবার চেষ্টা করুন"
+    "errorOccurred": "ত্রুটি দেখা দিয়েছে, সমাধান করুন এবং আবার চেষ্টা করুন",
+
+    "unknownErrorWhileReadingFile": "ফাইল পড়ার সময় অপ্রত্যাশিত ত্রুটি দেখা দিয়েছে",
+    "multipleFilesSelectedTitle": "একাধিক ফাইল নির্বাচিত",
+    "multipleFilesSelectedBody": "একটি ফাইল নির্বাচন করুন।",
+    "unableToReadTitle": "পড়া যায়নি",
+    "unableToReadBody": "লিপি আপনার দেয়া ফাইলটি পড়তে পারেনি।"
   }
 }

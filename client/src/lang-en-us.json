@@ -644,6 +644,12 @@
     "rowsIgnored": "Following rows had to be ignored",
     "row": "Row",
     "nameUsed": "Product Category with this name already exists",
-    "errorOccurred": "Error Occurred, resolve and try again"
+    "errorOccurred": "Error Occurred, resolve and try again",
+
+    "unknownErrorWhileReadingFile": "Unknown error while reading file",
+    "multipleFilesSelectedTitle": "Multiple files selected",
+    "multipleFilesSelectedBody": "Please select only 1 file.",
+    "unableToReadTitle": "Unable to read",
+    "unableToReadBody": "Lipi is unable to read the file you provided."
   }
 }

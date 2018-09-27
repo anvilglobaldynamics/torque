@@ -282,7 +282,7 @@
           return cbfn(null, event.target.result);
         };
         reader.onerror = (e) => {
-          let err = evt.target.error || new Error("Unknown error while reading file");
+          let err = evt.target.error || new Error(this.app.verses.bulkImportProductCategory.unknownErrorWhileReadingFile);
           return cbfn(err, null);
         };
       }
@@ -343,13 +343,13 @@
         let fileList = el.files;
         if (fileList.length === 0) return;
         if (fileList.length !== 1) {
-          return this.app.showModalDialog("Multiple files selected", "Please select only one file.");
+          return this.app.showModalDialog(this.app.verses.bulkImportProductCategory.multipleFilesSelectedTitle, this.app.verses.bulkImportProductCategory.multipleFilesSelectedBody);
         }
         let file = fileList[0];
         this._readFile(file, (err, content) => {
           el.value = '';
           if (err) {
-            return this.app.showModalDialog("Unable to read", "We were unable to read the file you provided.");
+            return this.app.showModalDialog(this.app.verses.bulkImportProductCategory.unableToReadTitle, this.app.verses.bulkImportProductCategory.unableToReadBody);
           }
           this._parseCsv(content, (err, rawRowList) => {
             this._validateRawRowList(rawRowList, (err, rowList) => {
