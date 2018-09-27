@@ -317,7 +317,7 @@
         let rowIndex = 1;
         for (let rawRow of rawRowList) {
           if (!isArray(rawRow) || rawRow.length !== this.headerList.length) {
-            return cbfn(makeError(this.app.verses.bulkImportProductCategory.missingCellsInRow + ": " + rowIndex));
+            return cbfn(makeError(rowIndex + " " + this.app.verses.bulkImportProductCategory.missingCellsInRow ));
           }
           rowIndex += 1;
         }

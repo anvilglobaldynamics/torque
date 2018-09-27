@@ -657,6 +657,6 @@
     "fileIsInvalid": "ফাইলটি অবৈধ।",
     "fileProvidedHasNoData": "প্রদত্ত ফাইলটিতে কোনো তথ্য নেই।",
     "expectedColumn": "প্রত্যাশিত কলাম",
-    "missingCellsInRow": "এই শাড়িতে তথ্য নেই"
+    "missingCellsInRow": "নং শাড়িতে তথ্য নেই"
   }
 }

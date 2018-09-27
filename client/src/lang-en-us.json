@@ -655,6 +655,6 @@
     "fileIsInvalid": "File is invalid.",
     "fileProvidedHasNoData": "The file you provided has no data.",
     "expectedColumn": "Expected column",
-    "missingCellsInRow": "Missing cells in row"
+    "missingCellsInRow": "No row missing data"
   }
 }
