@@ -8,8 +8,8 @@ Joi.object().keys({
   userId: Joi.number().max(999999999999999).required(),
   organizationId: Joi.number().max(999999999999999).required(),
 
-  designation: Joi.string().max(1024).required(),
-  role: Joi.string().max(1024).required(),
+  designation: Joi.string().max(64).required(),
+  role: Joi.string().max(64).required(),
   companyProvidedId: Joi.string().alphanum().allow('').required(),
   
   privileges: Joi.object().required().keys({
