@@ -59,7 +59,7 @@ let invalidUserId = generateInvalidId();
 let invalidEmploymentId = generateInvalidId();
 let invalidOrganizationId = generateInvalidId();
 
-describe.only('Employee', _ => {
+describe('Employee', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -344,7 +344,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/find-user (Valid phone)', testDoneFn => {
+  it('api/find-user (Valid phone)', testDoneFn => {
 
     callApi('api/find-user', {
       json: {
@@ -360,7 +360,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/find-user (Valid email)', testDoneFn => {
+  it('api/find-user (Valid email)', testDoneFn => {
 
     callApi('api/find-user', {
       json: {
@@ -377,7 +377,7 @@ describe.only('Employee', _ => {
   });
 
   // TODO: below needs better validation
-  it.skip('api/find-user (Invalid emailOrPhone)', testDoneFn => {
+  it('api/find-user (Invalid emailOrPhone)', testDoneFn => {
 
     callApi('api/find-user', {
       json: {
@@ -393,7 +393,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/find-user (Unused email)', testDoneFn => {
+  it('api/find-user (Unused email)', testDoneFn => {
 
     callApi('api/find-user', {
       json: {
@@ -409,7 +409,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/find-user (Unused phone)', testDoneFn => {
+  it('api/find-user (Unused phone)', testDoneFn => {
 
     callApi('api/find-user', {
       json: {
@@ -632,7 +632,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/get-employee-list (Valid)', testDoneFn => {
+  it('api/get-employee-list (Valid)', testDoneFn => {
 
     callApi('api/get-employee-list', {
       json: {
@@ -650,7 +650,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/get-employee-list (Invalid organizationId)', testDoneFn => {
+  it('api/get-employee-list (Invalid organizationId)', testDoneFn => {
 
     callApi('api/get-employee-list', {
       json: {
@@ -666,7 +666,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/get-employee (Valid)', testDoneFn => {
+  it('api/get-employee (Valid)', testDoneFn => {
 
     callApi('api/get-employee', {
       json: {
@@ -683,7 +683,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/get-employee (Invalid)', testDoneFn => {
+  it('api/get-employee (Invalid)', testDoneFn => {
 
     callApi('api/get-employee', {
       json: {
@@ -699,7 +699,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/edit-employment (Valid)', testDoneFn => {
+  it('api/edit-employment (Valid)', testDoneFn => {
 
     callApi('api/edit-employment', {
       json: {
@@ -723,7 +723,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/get-employee (Valid Modification check)', testDoneFn => {
+  it('api/get-employee (Valid Modification check)', testDoneFn => {
 
     callApi('api/get-employee', {
       json: {
@@ -740,7 +740,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/edit-employment (Invalid)', testDoneFn => {
+  it('api/edit-employment (Invalid)', testDoneFn => {
 
     callApi('api/edit-employment', {
       json: {
@@ -765,7 +765,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/fire-employee (Valid)', testDoneFn => {
+  it('api/fire-employee (Valid)', testDoneFn => {
 
     callApi('api/fire-employee', {
       json: {
@@ -780,7 +780,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/get-employee (Valid sack check)', testDoneFn => {
+  it('api/get-employee (Valid sack check)', testDoneFn => {
 
     callApi('api/get-employee', {
       json: {
@@ -798,7 +798,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/fire-employee (Inalid)', testDoneFn => {
+  it('api/fire-employee (Inalid)', testDoneFn => {
 
     callApi('api/fire-employee', {
       json: {
@@ -814,7 +814,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/hire-user-as-employee (Valid, rehire)', testDoneFn => {
+  it('api/hire-user-as-employee (Valid, rehire)', testDoneFn => {
 
     callApi('api/hire-user-as-employee', {
       json: {
@@ -870,7 +870,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/get-employee (Valid rehire check)', testDoneFn => {
+  it('api/get-employee (Valid rehire check)', testDoneFn => {
 
     callApi('api/get-employee', {
       json: {
