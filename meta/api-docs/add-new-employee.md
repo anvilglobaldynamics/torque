@@ -17,7 +17,7 @@ method: `POST`
 
   role: Joi.string().max(64).required(),
   designation: Joi.string().max(64).required(),
-  companyProvidedId: Joi.string().alphanum().required(),
+  companyProvidedId: Joi.string().required(),
 
   privileges: Joi.object().required().keys({
     [Look up privileges here](../server-db-docs/employment.md)

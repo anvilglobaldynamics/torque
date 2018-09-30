@@ -52,7 +52,7 @@ Possible Error Codes:
     organizationId: Joi.number().max(999999999999999).required(),
     designation: Joi.string().max(64).required(),
     role: Joi.string().max(64).required(),
-    companyProvidedId: Joi.string().alphanum().allow('').max(1024).required(),
+    companyProvidedId: Joi.string().allow('').max(1024).required(),
     
     privileges: Joi.object().required().keys({
       PRIV_VIEW_USERS: Joi.boolean().required(),

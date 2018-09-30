@@ -41,7 +41,7 @@ Possible Error Codes:
       employment: Joi.object().keys({ 
         designation: Joi.string().max(64).required(), 
         role: Joi.string().max(64).required(), 
-        companyProvidedId: Joi.string().alphanum().allow('').required(), 
+        companyProvidedId: Joi.string().allow('').required(), 
         isActive: Joi.boolean().required()
         privileges: Joi.object().required()
       })
