@@ -71,7 +71,8 @@
     "email": "ইমেইল",
     "designation": "পদবী",
     "errorMessageBody": "ত্রুটি ত্রুটি দেখা দিয়েছে, লিপি প্রতিনিধির সাথে যোগাযোগ করুন",
-    "errorMessageTitle": "ত্রুটি"
+    "errorMessageTitle": "ত্রুটি",
+    "noDataFound": "কোন তথ্য পাওয়া যায়নি"
   },
   "login": {
     "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
