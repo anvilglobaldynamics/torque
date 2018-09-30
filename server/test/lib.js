@@ -891,7 +891,7 @@ exports.validateProductCategorySchema = (doc) => {
 
     name: Joi.string().min(1).max(64).required(),
     organizationId: Joi.number().max(999999999999999).required(),
-    unit: Joi.string().max(1024).required(),
+    unit: Joi.string().max(64).required(),
     defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
     defaultDiscountValue: Joi.number().when(
       'defaultDiscountType', {
@@ -1141,7 +1141,7 @@ exports.validateAggregatedProductScema = (doc) => {
         lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
         name: Joi.string().min(1).max(64).required(),
         organizationId: Joi.number().max(999999999999999).required(),
-        unit: Joi.string().max(1024).required(),
+        unit: Joi.string().max(64).required(),
         defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
         defaultDiscountValue: Joi.number().when(
           'defaultDiscountType', {
