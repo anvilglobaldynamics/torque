@@ -425,7 +425,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/add-new-employee (Invalid, no privileges)', testDoneFn => {
+  it('api/add-new-employee (Invalid, no privileges)', testDoneFn => {
 
     callApi('api/add-new-employee', {
       json: {
@@ -449,7 +449,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/add-new-employee (Valid, all privileges)', testDoneFn => {
+  it('api/add-new-employee (Valid, all privileges)', testDoneFn => {
 
     callApi('api/add-new-employee', {
       json: {
@@ -510,7 +510,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/add-new-employee (Copy phone)', testDoneFn => {
+  it('api/add-new-employee (Copy phone)', testDoneFn => {
 
     callApi('api/add-new-employee', {
       json: {
@@ -571,7 +571,7 @@ describe.only('Employee', _ => {
 
   });
 
-  it.skip('api/add-new-employee (Invalid organization)', testDoneFn => {
+  it('api/add-new-employee (Invalid organization)', testDoneFn => {
 
     callApi('api/add-new-employee', {
       json: {
