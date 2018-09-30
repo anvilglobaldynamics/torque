@@ -22,7 +22,7 @@ const changedPhone = '9' + rnd(prefix, 11);
 
 let apiKey = null;
 
-describe.only('user apis (1)', _ => {
+describe('user apis (1)', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
