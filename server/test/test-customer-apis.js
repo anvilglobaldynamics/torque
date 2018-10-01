@@ -270,6 +270,27 @@ describe('Customer', _ => {
 
   });
 
+  it('api/get-customer-summary-list (Valid searchString)', testDoneFn => {
+
+    callApi('api/get-customer-summary-list', {
+      json: {
+        apiKey,
+        organizationId: organizationId,
+        searchString: "2nd"
+      }
+    }, (err, response, body) => {      
+      expect(response.statusCode).to.equal(200);
+
+      validateGetCustomerSummaryListApiSuccessResponse(body);
+      body.customerList.forEach(customer => {
+        validateCustomerSchema(customer)
+      });
+
+      testDoneFn();
+    })
+
+  });
+
   it('api/get-customer-summary-list (Invalid organizationId)', testDoneFn => {
     // NOTE: foreign key violations are not verified for find/findOne calls since
     // foreign key is validated during insert/update calls and so legacyDatabase actively

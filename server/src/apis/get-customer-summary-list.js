@@ -14,7 +14,7 @@ exports.GetCustomerSummaryListApi = class extends Api {
 
       organizationId: Joi.number().max(999999999999999).required(),
       searchString: Joi.string().min(0).max(64).allow('').optional()
-      
+
     });
   }
 
