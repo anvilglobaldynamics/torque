@@ -55,6 +55,13 @@
         margin: 5px;
       }
 
+      .in-page-header{
+        margin-top: 24px;
+        margin-bottom: 8px;
+        text-align: center;
+        text-decoration: underline;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -71,6 +78,7 @@
         </div>
       </div>
 
+      <!-- product category selection area - start -->
       <template is="dom-if" if="{{!productCategoryList.length}}">
         <div class="card">
           [[verses.product.noProductCategoryFound]]
@@ -95,29 +103,21 @@
           </div>
 
           <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
-
             <div class="container-card">
               <div class="horizontal layout item center">
-
                 <div class="product-title">[[productCategory.name]]</div>
-
                 <div class="product-category-numeric">
-                  <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" on-input="genericNumericInputChanged" label=[[productCategory.unit]]></paper-input>
+                  <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" on-change="productCategoryInputChanged" label=[[productCategory.unit]]></paper-input>
                 </div>
-
                 <div class="product-category-numeric">
-                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="[[productCategory.purchasePrice]]" on-input="genericNumericInputChanged" value="{{productCategory.salePrice}}" type="number"></paper-input>
+                  <paper-input disabled class="small-input" min="[[productCategory.purchasePrice]]" value="{{productCategory.salePrice}}" type="number"></paper-input>
                 </div>
-
                 <div class="product-category-numeric">
-                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="0" on-input="genericNumericInputChanged" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
+                  <paper-input disabled class="small-input" min="0" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
                 </div>
-
               </div>
             </div>
-
           </template>
-
 
         </div>
 
@@ -132,14 +132,14 @@
           <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
         </template>
       </template>
+      <!-- product category selection area - end -->
 
+      <!-- adding value to product category area - start -->
       <template is="dom-if" if="{{selectedProductCategoryList.length}}">
 
-        <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
-        </template>
-
         <div class="vertical layout">
+
+          <div class="in-page-header">Selected Products</div>
 
           <div class="container-card">
             <div class="horizontal layout item center">
@@ -151,32 +151,26 @@
           </div>
 
           <template is="dom-repeat" items="[[selectedProductCategoryList]]" as="productCategory">
-
             <div class="container-card">
               <div class="horizontal layout item center">
-
                 <div class="product-title">[[productCategory.name]]</div>
-
                 <div class="product-category-numeric">
-                  <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" on-input="genericNumericInputChanged" label=[[productCategory.unit]]></paper-input>
+                  <paper-input class$="small-input id-[[productCategory.id]]" value="{{productCategory.count}}" type="number" min="0" on-input="genericNumericInputChanged" label=[[productCategory.unit]]></paper-input>
                 </div>
-
                 <div class="product-category-numeric">
                   <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="[[productCategory.purchasePrice]]" on-input="genericNumericInputChanged" value="{{productCategory.salePrice}}" type="number"></paper-input>
                 </div>
-
                 <div class="product-category-numeric">
                   <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="0" on-input="genericNumericInputChanged" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
                 </div>
-
               </div>
             </div>
-
           </template>
 
         </div>
 
       </template>
+      <!-- adding value to product category area - end -->
 
       <div class="add-product-button-container">
         <paper-button raised class="primary m-0" on-tap="addProductsTapped">[[verses.product.addProducts]]</paper-button>
@@ -196,6 +190,10 @@
       static get properties() {
         return {
           productCategoryList: {
+            type: Array,
+            value: () => []
+          },
+          selectedProductCategoryList: {
             type: Array,
             value: () => []
           }
@@ -230,7 +228,7 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.app.popPageTitle();
-        this.resetProperties('productCategoryList');
+        this.resetProperties('productCategoryList', 'selectedProductCategoryList');
       }
 
       _ensureAccess() {
@@ -249,22 +247,25 @@
         });
       }
 
-      _addFieldsToProductCategory() {
-        this.productCategoryList.forEach(productCategory => {
+      _addFieldsToProductCategory(productCategoryList) {
+        productCategoryList.forEach(productCategory => {
           productCategory.purchasePrice = productCategory.defaultPurchasePrice;
           productCategory.salePrice = productCategory.defaultSalePrice;
           productCategory.count = 0;
         });
       }
 
-      _discardAlreadySelectedCategories() {
-
+      _discardAlreadySelectedCategories(productCategoryList) {
+        return productCategoryList.filter(productCategory => {
+          return !this.selectedProductCategoryList.find(selected => selected.id === productCategory.id);
+        });
       }
 
       _processProductCategoryList(cbfn) {
         this._fetchProductCategoryList(productCategoryList => {
+          this._addFieldsToProductCategory(productCategoryList);
+          productCategoryList = this._discardAlreadySelectedCategories(productCategoryList);
           this.productCategoryList = productCategoryList;
-          this._addFieldsToProductCategory();
           return cbfn();
         });
       }
@@ -290,7 +291,7 @@
 
       addProductsTapped(e = null) {
         let productList = [];
-        this.productCategoryList.forEach(productCategory => {
+        this.selectedProductCategoryList.forEach(productCategory => {
           if (parseInt(productCategory.count) > 0) {
             productList.push({
               productCategoryId: productCategory.id,
@@ -337,6 +338,17 @@
 
       searchFieldKeypressed(e) {
         if (e.which === 13) this.searchTapped(null);
+      }
+
+      productCategoryInputChanged(e) {
+        let index = parseInt(String(e.model.index));
+        let productCategory = this.productCategoryList[index];
+        this.unshift('selectedProductCategoryList', productCategory);
+        this.splice('productCategoryList', index, 1);
+        window.setTimeout(() => {
+          let el = this.elem(`.id-${productCategory.id}`);
+          el.focus();
+        }, 100);
       }
 
       // region: misc =================================
