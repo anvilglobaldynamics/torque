@@ -30,9 +30,9 @@ exports.GetCustomerSummaryListApi = class extends Api {
   }
 
   async __searchCustomerList({ customerList, searchString }) {
-    customerList = customerList.filter(productCategory => {
+    customerList = customerList.filter(customer => {
       let regex = new RegExp(searchString, 'g');
-      return regex.test(productCategory.name);
+      return regex.test(customer.fullName);
     });
 
     return customerList;
