@@ -24,7 +24,7 @@
 <dom-module id="page-add-products">
   <template>
     <style include="shared-styles">
-      
+
       .container-card {
         border: 1px solid #eee;
         background-color: #f7f7f7;
@@ -61,6 +61,16 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <div class="card vertical layout">
+        <div class="p-16 horizontal layout center">
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="[[verses.addProducts.searchInputError]]" label="[[verses.addProducts.searchInputLabel]]" on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
+          <paper-button raised class="primary" on-tap="searchTapped">
+            [[verses.general.search]]
+          </paper-button>
+        </div>
+      </div>
+
       <template is="dom-if" if="{{!productCategoryList.length}}">
         <div class="card">
           [[verses.product.noProductCategoryFound]]
@@ -68,6 +78,11 @@
       </template>
 
       <template is="dom-if" if="{{productCategoryList.length}}">
+
+        <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+          <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+        </template>
+
         <div class="vertical layout">
 
           <div class="container-card">
@@ -83,26 +98,84 @@
 
             <div class="container-card">
               <div class="horizontal layout item center">
-      
+
                 <div class="product-title">[[productCategory.name]]</div>
-      
+
                 <div class="product-category-numeric">
                   <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" on-input="genericNumericInputChanged" label=[[productCategory.unit]]></paper-input>
                 </div>
-      
+
                 <div class="product-category-numeric">
                   <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="[[productCategory.purchasePrice]]" on-input="genericNumericInputChanged" value="{{productCategory.salePrice}}" type="number"></paper-input>
                 </div>
-      
+
                 <div class="product-category-numeric">
                   <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="0" on-input="genericNumericInputChanged" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
                 </div>
-      
+
               </div>
             </div>
 
           </template>
+
+
         </div>
+
+        <div class="pagination">
+          [[verses.general.loaded]]
+          <span class="limit">[[pagination.limit]]</span>
+          [[verses.general.itemsOutOf]]
+          <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+          <span class="offset">#[[$inc(pagination.offset)]]</span>.
+        </div>
+        <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+          <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+        </template>
+      </template>
+
+      <template is="dom-if" if="{{selectedProductCategoryList.length}}">
+
+        <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+          <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+        </template>
+
+        <div class="vertical layout">
+
+          <div class="container-card">
+            <div class="horizontal layout item center">
+              <div class="product-header product-title">[[verses.product.productCategory]]</div>
+              <div class="product-header product-category-numeric">[[verses.product.count]]</div>
+              <div class="product-header product-category-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
+              <div class="product-header product-category-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+            </div>
+          </div>
+
+          <template is="dom-repeat" items="[[selectedProductCategoryList]]" as="productCategory">
+
+            <div class="container-card">
+              <div class="horizontal layout item center">
+
+                <div class="product-title">[[productCategory.name]]</div>
+
+                <div class="product-category-numeric">
+                  <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" on-input="genericNumericInputChanged" label=[[productCategory.unit]]></paper-input>
+                </div>
+
+                <div class="product-category-numeric">
+                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="[[productCategory.purchasePrice]]" on-input="genericNumericInputChanged" value="{{productCategory.salePrice}}" type="number"></paper-input>
+                </div>
+
+                <div class="product-category-numeric">
+                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="0" on-input="genericNumericInputChanged" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
+                </div>
+
+              </div>
+            </div>
+
+          </template>
+
+        </div>
+
       </template>
 
       <div class="add-product-button-container">
@@ -165,31 +238,34 @@
       }
 
       _fetchProductCategoryList(cbfn) {
-        let data = { organizationId: this.app.organization.id };
+        let data = { organizationId: this.app.organization.id, paginate: this.paginate, searchString: this.searchString };
         this.isBusy = true;
         this.app.callGetProductCategoryListApi(data, (err, response) => {
           this.isBusy = false;
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
           return cbfn(response.productCategoryList);
         });
       }
 
-      _addFieldsToProductCategory(cbfn) {
+      _addFieldsToProductCategory() {
         this.productCategoryList.forEach(productCategory => {
           productCategory.purchasePrice = productCategory.defaultPurchasePrice;
           productCategory.salePrice = productCategory.defaultSalePrice;
           productCategory.count = 0;
         });
-        return cbfn();
       }
-      
+
+      _discardAlreadySelectedCategories() {
+
+      }
+
       _processProductCategoryList(cbfn) {
         this._fetchProductCategoryList(productCategoryList => {
           this.productCategoryList = productCategoryList;
-          this._addFieldsToProductCategory(() => {
-            return cbfn();
-          });
+          this._addFieldsToProductCategory();
+          return cbfn();
         });
       }
 
@@ -215,7 +291,7 @@
       addProductsTapped(e = null) {
         let productList = [];
         this.productCategoryList.forEach(productCategory => {
-          if(parseInt(productCategory.count) > 0) {
+          if (parseInt(productCategory.count) > 0) {
             productList.push({
               productCategoryId: productCategory.id,
               purchasePrice: parseFloat(productCategory.purchasePrice),
@@ -224,7 +300,7 @@
             });
           }
         });
-        
+
         let inventoryId = parseInt(this.params.inventory);
         this._addProductsToInventory({ productList, inventoryId }, () => {
           let message = this.app.verses.product.productAddedToInventory;
@@ -236,6 +312,31 @@
 
       backButtonOnTopBarPressed(e = null) {
         this.app.navigateToPreviousUrl(`/view-inventory/inventory:${this.params.inventory}`);
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processProductCategoryList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processProductCategoryList(() => this.isReady = true);
+      }
+
+      searchCancelTapped(e = null) {
+        this.searchString = '';
+      }
+
+      searchTapped(e = null) {
+        this.set('paginate.offset', 0);
+        this._processProductCategoryList(() => this.isReady = true);
+      }
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
       }
 
       // region: misc =================================
