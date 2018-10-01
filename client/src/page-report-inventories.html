@@ -269,8 +269,8 @@
       _fetchInventoriesData(cbfn) {
         let inventoryIdList = this.inventoriesToBeFetched.map(inventory => inventory.id);
         let data = { inventoryIdList };
-
-        if (!inventoryIdList.length === 0) {
+        
+        if (inventoryIdList.length !== 0) {
           this.app.callReportInventoryDetailsApi(data, (err, response) => {
             if (err) return;
             if (response.hasError) return this.onApiError(response.error);
