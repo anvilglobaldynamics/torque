@@ -373,7 +373,10 @@
     "adjustCustomerBalance": "Adjust Customer Balance",
     "clickToDeleteCustomer": "Click here to delete the customer. Be warned that once deleted, an customer can not be restored.",
     "deleteCustomer": "Delete Customer",
-    "noCustomerFound": "No Customer Found."
+    "noCustomerFound": "No Customer Found.",
+
+    "searchForCustomerInput": "Customer Name/Number",
+    "searchForCustomerInputError": "Error in Search"
   },
   "editProfile": {
     "editProfileTitle": "Edit Profile",

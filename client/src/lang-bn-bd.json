@@ -375,7 +375,10 @@
     "adjustCustomerBalance": "গ্রাহক ব্যালেন্স ডেবিট-ক্রেডিট",
     "clickToDeleteCustomer": "গ্রাহক মুছে ফেলার জন্য এখানে ক্লিক করুন একবার মুছে ফেলা সতর্ক করা হবে, একটি গ্রাহক পুনরুদ্ধার করা যাবে না।",
     "deleteCustomer": "গ্রাহক মুছুন",
-    "noCustomerFound": "কোনো গ্রাহক পাওয়া যায় নি।"
+    "noCustomerFound": "কোনো গ্রাহক পাওয়া যায় নি।",
+
+    "searchForCustomerInput": "গ্রাহকের নাম/নম্বর",
+    "searchForCustomerInputError": "গ্রাহকের সন্ধানে ত্রুটি"
   },
   "editProfile": {
     "editProfileTitle": "প্রোফাইল সম্পাদনা",

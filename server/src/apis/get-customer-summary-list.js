@@ -27,26 +27,13 @@ exports.GetCustomerSummaryListApi = class extends Api {
     }];
   }
 
-  async _getCustomerList({ organizationId }) {
-    return await this.database.customer.listByOrganizationId({ organizationId });
-  }
-
-  async __searchCustomerList({ customerList, searchString }) {
-    customerList = customerList.filter(customer => {
-      let regex = new RegExp(searchString, 'g');
-      return regex.test(customer.fullName);
-    });
-
-    return customerList;
+  async _getCustomerList({ organizationId, searchString }) {
+    return await this.database.customer.listByOrganizationIdAndSearchString({ organizationId, searchString });
   }
 
   async handle({ body }) {
     let { organizationId, searchString } =  body;
-    let customerList = await this._getCustomerList({ organizationId });
-
-    if (searchString) {
-      customerList = await this.__searchCustomerList({ customerList, searchString });
-    }
+    let customerList = await this._getCustomerList({ organizationId, searchString });
 
     return { customerList };
   }
