@@ -8,15 +8,16 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  organizationId: Joi.number().max(999999999999999).required()
+  organizationId: Joi.number().max(999999999999999).required(),
+  searchString: Joi.string().min(0).max(64).allow('').optional()
 }
 ```
 
 ### response (on error):
 ```js
 {
-  "hasError": true,
-  "error": {
+  hasError: true,
+  error: {
     code,
     message
   }
@@ -33,8 +34,9 @@ Possible Error Codes:
 ### response (on success):
 ```js
 {
-  "hasError": false,
-  "customerList": Joi.array().items(
+  hasError: false,
+
+  customerList: Joi.array().items(
     Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
@@ -55,6 +57,7 @@ Possible Error Codes:
       )
     });
   )
+  
 }
 ```
 

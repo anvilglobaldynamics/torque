@@ -45,7 +45,7 @@ let { FireEmployeeApi } = require('./legacy-apis/fire-employee');
 
 let { AddCustomerApi } = require('./legacy-apis/add-customer');
 let { GetCustomerApi } = require('./legacy-apis/get-customer');
-let { GetCustomerSummaryListApi } = require('./legacy-apis/get-customer-summary-list');
+const { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
 let { EditCustomerApi } = require('./legacy-apis/edit-customer');
 let { AdjustCustomerBalanceApi } = require('./legacy-apis/adjust-customer-balance');
 let { DeleteCustomerApi } = require('./legacy-apis/delete-customer');
