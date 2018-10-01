@@ -585,7 +585,29 @@
           qualifiedName = matchingEl.href;
         }
         var resolvedPageUrl = this.resolveUrl(qualifiedName);
-        Polymer.importHref(resolvedPageUrl, null, (_ => this.pageName = 'error404'), true);
+        const successFn = (...args) => {
+          'pass'
+        }
+        const failureFn = (...args) => {
+          console.log('FAIL', resolvedPageUrl);
+          this.pageName = 'error404';
+          if (navigator.onLine) {
+            // NOTE: At this point, there is no guarantee that any language *.json file has been loaded.
+            // So, translation has to be manual.
+            if (this.selectedLanguageIdentifier === 'bn-bd') {
+              this.showAlertMessage("দুঃখিত!", "আপনার ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়ে আছে।");
+            } else {
+              this.showAlertMessage("Sorry!", "Unable to connect to the internet.");
+            }
+          } else {
+            // NOTE: if the user absolutely not online (i.e. not poor connection. Actually 'no' connection)
+            // it's a better practice to simply reload the page. That way, the browser will show the
+            // no internet available page. Additionally, browser will also reload the page on it's own
+            // when internet becomes available again.
+            window.location.reload();
+          }
+        }
+        Polymer.importHref(resolvedPageUrl, successFn, failureFn, true);
       }
 
       mainIronPagesIronSelected(e, details) {
