@@ -323,7 +323,8 @@
   },
   "addProducts": {
     "searchInputLabel": "পণ্যের ধরণের নাম",
-    "searchInputError": "পণ্য সন্ধান করতে ত্রূটি হয়েছে"
+    "searchInputError": "পণ্য সন্ধানে ত্রূটি হয়েছে",
+    "selectedProducts": "বাছাইকৃত পণ্য তালিকা"
   },
   "about": {
     "about": "বিষয়ে",

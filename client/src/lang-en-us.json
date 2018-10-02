@@ -321,7 +321,8 @@
   },
   "addProducts": {
     "searchInputLabel": "Product Category Name",
-    "searchInputError": "Error in Search"
+    "searchInputError": "Error in Search",
+    "selectedProducts": "Selected Product Category"
   },
   "about": {
     "about": "About",

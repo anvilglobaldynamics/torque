@@ -28,8 +28,8 @@
       .container-card {
         border: 1px solid #eee;
         background-color: #f7f7f7;
-        padding-left: 6px;
-        margin: 8px 0px;
+        padding-left: 4px;
+        margin: 4px 0px;
       }
 
       .product-title {
@@ -37,7 +37,7 @@
         min-width: 40%;
         max-width: 40%;
         max-height: 100px;
-        padding-right: 3px;
+        padding-right: 10px;
         overflow: auto;
       }
 
@@ -56,10 +56,10 @@
       }
 
       .in-page-header{
-        margin-top: 24px;
-        margin-bottom: 8px;
-        text-align: center;
-        text-decoration: underline;
+        margin-top: 20px;
+        margin-bottom: 4px;
+        /* text-align: center;
+        text-decoration: underline; */
       }
 
     </style>
@@ -86,60 +86,63 @@
       </template>
 
       <template is="dom-if" if="{{productCategoryList.length}}">
+        <div class="card">
 
-        <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-          <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
-        </template>
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          </template>
 
-        <div class="vertical layout">
+          <div class="vertical layout">
 
-          <div class="container-card">
-            <div class="horizontal layout item center">
-              <div class="product-header product-title">[[verses.product.productCategory]]</div>
-              <div class="product-header product-category-numeric">[[verses.product.count]]</div>
-              <div class="product-header product-category-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
-              <div class="product-header product-category-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
-            </div>
-          </div>
-
-          <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
             <div class="container-card">
               <div class="horizontal layout item center">
-                <div class="product-title">[[productCategory.name]]</div>
-                <div class="product-category-numeric">
-                  <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" on-change="productCategoryInputChanged" label=[[productCategory.unit]]></paper-input>
-                </div>
-                <div class="product-category-numeric">
-                  <paper-input disabled class="small-input" min="[[productCategory.purchasePrice]]" value="{{productCategory.salePrice}}" type="number"></paper-input>
-                </div>
-                <div class="product-category-numeric">
-                  <paper-input disabled class="small-input" min="0" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
-                </div>
+                <div class="product-header product-title">[[verses.product.productCategory]]</div>
+                <div class="product-header product-category-numeric">[[verses.product.count]]</div>
+                <div class="product-header product-category-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
+                <div class="product-header product-category-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
               </div>
             </div>
+
+            <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
+              <div class="container-card">
+                <div class="horizontal layout item center">
+                  <div class="product-title">[[productCategory.name]]</div>
+                  <div class="product-category-numeric">
+                    <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" on-change="productCategoryInputChanged" label=[[productCategory.unit]]></paper-input>
+                  </div>
+                  <div class="product-category-numeric">
+                    <paper-input disabled class="small-input" min="[[productCategory.purchasePrice]]" value="{{productCategory.salePrice}}" type="number"></paper-input>
+                  </div>
+                  <div class="product-category-numeric">
+                    <paper-input disabled class="small-input" min="0" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+          </div>
+
+          <div class="pagination">
+            [[verses.general.loaded]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
           </template>
 
         </div>
-
-        <div class="pagination">
-          [[verses.general.loaded]]
-          <span class="limit">[[pagination.limit]]</span>
-          [[verses.general.itemsOutOf]]
-          <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
-          <span class="offset">#[[$inc(pagination.offset)]]</span>.
-        </div>
-        <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-          <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
-        </template>
       </template>
       <!-- product category selection area - end -->
 
       <!-- adding value to product category area - start -->
       <template is="dom-if" if="{{selectedProductCategoryList.length}}">
 
-        <div class="vertical layout">
+        <div class="card vertical layout">
 
-          <div class="in-page-header">Selected Products</div>
+          <div class="in-page-header">[[verses.addProducts.selectedProducts]]</div>
 
           <div class="container-card">
             <div class="horizontal layout item center">
