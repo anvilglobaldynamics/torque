@@ -29,6 +29,18 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <div class="card vertical layout">
+        <div class="p-16 horizontal layout center">
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.customer.searchForCustomerInputError]] label=[[verses.customer.searchForCustomerInput]] on-keypress="searchFieldKeypressed"></paper-input>
+          
+          <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
+          
+          <paper-button raised class="primary" on-tap="searchTapped">
+            [[verses.general.search]]
+          </paper-button>
+        </div>
+      </div>
+
       <template is="dom-if" if="{{!customerList.length}}">
         <div class="card">
           [[verses.customer.noCustomerFound]]
@@ -99,7 +111,12 @@
       }
 
       static get properties() {
-        return {};
+        return {
+          searchString: {
+            type: String,
+            value: ''
+          }
+        };
       }
 
       // region: core =================================
@@ -130,7 +147,7 @@
       }
 
       _fetchCustomerList(cbfn) {
-        let data = { organizationId: this.app.organization.id, paginate: this.paginate };
+        let data = { organizationId: this.app.organization.id, searchString: this.searchString, paginate: this.paginate };
         this.app.callGetCustomerListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -177,6 +194,19 @@
       posTapped(e) {
         let { customer } = e.model;
         return this.app.navigateTo(`/pos/customer:${customer.id}`);
+      }
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
+      searchCancelTapped(e = null) {
+        this.searchString = '';
+      }
+
+      searchTapped(e = null) {
+        this.set('paginate.offset', 0);
+        this._processCustomerList(() => this.isReady = true);
       }
 
       // region: misc =================================

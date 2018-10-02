@@ -94,7 +94,7 @@ exports.CustomerCollection = class extends Collection {
     return await this._find({ organizationId });
   }
 
-  async listByOrganizationIdAndSearchString({ organizationId }) {
+  async listByOrganizationIdAndSearchString({ organizationId, searchString }) {
     let query = { organizationId };
     if (searchString) {
       let searchRegex = new RegExp(searchString, 'i');
