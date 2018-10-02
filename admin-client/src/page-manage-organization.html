@@ -66,6 +66,22 @@
         <div class="inventory-container-view-details">Phone: [[organization.phone]]</div>
       </div>
 
+      <template is="dom-if" if="[[activatedPackage]]">
+        <div class="card vertical layout">
+          <div class="package-activation-title">Current Active Package:</div>
+          <div class="package-activation">
+            <div>Code: [[activatedPackage.code]]</div>
+            <div>Package Name: [[activatedPackage.name]] </div>
+            <div class="">Expiration Date: [[$mkDate(activatedPackage.expirationDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
+            <div class="">allows:
+              <span>[[activatedPackage.limits.maximumEmployees]] employees,</span>
+              <span>[[activatedPackage.limits.maximumOutlets]] outlets,</span>
+              <span>[[activatedPackage.limits.maximumWarehouses]] warehouses.</span>
+            </div>
+          </div>
+        </div>
+      </template>
+
       <template is="dom-if" if="[[packageActivationList.length]]">
         <div class="card vertical layout package-activation-list-container">
           <div class="package-activation-title">Package Activation List:</div>
@@ -132,6 +148,10 @@
           },
           paymentReference: {
             type: String,
+            value: null
+          },
+          activatedPackage: {
+            type: Object,
             value: null
           }
         };
@@ -207,8 +227,24 @@
       _processOrganization(cbfn) {
         this._fetchOrganization(({ organization }) => {
           this.organization = organization;
+
           this._fetchOrganizationPackageActivationHistory(({packageActivationList}) => {
             this.packageActivationList = packageActivationList;
+
+            let { code, name, limits, duration } = this.packageActivationList[0].packageDetail;
+            let { createdDatetimeStamp } = this.packageActivationList[0];
+            let date = new Date(createdDatetimeStamp);
+            date.setMonth(date.getMonth() + duration.months);
+            date.setDate(date.getDate() + duration.days);
+            let expirationDatetimeStamp = date.getTime();
+
+            this.activatedPackage = {
+              code, name, limits, duration,
+              createdDatetimeStamp,
+              expirationDatetimeStamp
+            };
+            console.log("activatedPackage: ", this.activatedPackage);
+
             cbfn();
           });
         });
