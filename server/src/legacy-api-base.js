@@ -459,7 +459,6 @@ class LegacyApi {
   }
 
   _hideRestrictedErrorsOnProduction(errorObject) {
-    require('fs').appendFileSync('./errors.txt', `"${errorObject.code}",`);
     if (this.server.mode === 'production') {
       delete errorObject['stack'];
       if (_restrictedErrorCodeList.indexOf(errorObject.code) > -1) {
