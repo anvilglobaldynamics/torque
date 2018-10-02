@@ -247,14 +247,15 @@
     "updateProductCategory": "পণ্যের ধরণ আপডেট করুন",
     "productCategoryCreated": "নতুন পণ্যের ধরণ যুক্ত করা হয়েছে।",
     "productCategoryUpdated": "পণ্যের ধরণ আপডেট করা হয়েছে।",
-    "buyingPrice": "কেনা দাম",
-    "sellingPrice": "বিক্রি দাম",
+    "buyingPrice": "ক্রয় মূল্য",
+    "sellingPrice": "বিক্রয় মূল্য",
     "moveHere": "এখানে সরান",
     "subCategory": "উপ বিভাগ",
     "moveToRoot": "বাহিরে সরান",
     "createNewProductCategory": "নতুন পণ্য ধরণ যুক্ত করুন",
     "searchForProductCategoryInput": "পণ্য তালিকার নাম",
-    "searchForProductCategoryInputError": "পণ্য তালিকার সন্ধানে ত্রুটি"
+    "searchForProductCategoryInputError": "পণ্য তালিকার সন্ধানে ত্রুটি",
+    "bulkImport": "একাধিক পণ্যের ধরন তৈরি"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "গ্রাহকের নাম বা ফোন",
@@ -435,7 +436,8 @@
   },
   "sales": {
     "manageSalesTitle": "বিক্রয় রেকর্ড",
-    "billed": "বিল করা",
+    "salesId": "বিক্রয় আইডি",
+    "billed": "বিল",
     "products": "পণ্য",
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
     "removeCustomer": "গ্রাহক সরান",
@@ -626,6 +628,8 @@
     "addProductsBatchToInventory": "একসাথে একাধিক পণ্য তালিকায় যুক্ত করুন",
     "addProducts": "পণ্য যুক্ত করুন",
     "noProductsInInventory": "এই পণ্য তালিকায় কোন পণ্য নেই।",
+    "buyingPrice": "ক্রয় মূল্য",
+    "sellingPrice": "বিক্রয় মূল্য",
     "acquiredOn": "খরিদ হয়েছে",
     "addedOn": "যুক্ত হয়েছে"
   },
