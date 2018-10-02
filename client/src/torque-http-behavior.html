@@ -10,6 +10,7 @@
     const WEBSOCKET_DELAY_BEFORE_RETRYING = 60 * 1000;
     const WEBSOCKET_REQUEST_TIMEOUT = 15 * 1000;
     let lastWebsocketFailureTimestamp = 0;
+    let possibleLastWebsocketFailureTimestamp = 0;
 
     /* @polymerMixin */
     window.TorqueHttpBehavior = (SuperClass) => class extends FxHttpBehavior(SuperClass) {
@@ -54,6 +55,13 @@
 
       _createGenericCallback(path, data, _cbfn) {
         return (err, response) => {
+          if (possibleLastWebsocketFailureTimestamp > lastWebsocketFailureTimestamp) {
+            if (err) {
+              possibleLastWebsocketFailureTimestamp = 0;
+            } else {
+              lastWebsocketFailureTimestamp = possibleLastWebsocketFailureTimestamp;
+            }
+          }
           if (err) {
             if (mode === 'development') {
               console.log(`NETWORK_ERROR/api=${path}`, { data, err });
@@ -121,7 +129,7 @@
               if (mode === 'development') {
                 console.log(`WS_ERROR/api=${path}`, err);
               }
-              lastWebsocketFailureTimestamp = (new Date).getTime();
+              possibleLastWebsocketFailureTimestamp = (new Date).getTime();
               this.callJsonPostApi(path, data, cbfn);
             } else {
               cbfn(null, message);
