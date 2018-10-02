@@ -1,6 +1,4 @@
 
-let _knownErrorCodeList = [];
-
 const Joi = require('joi');
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
@@ -17,11 +15,11 @@ const languageCache = {
 
 const SESSION_DURATION_LIMIT = 15 * 24 * 60 * 60 * 1000;
 
-class LegacyApi {
+const _restrictedErrorCodeList = [
+  "INTERNAL_SERVER_ERROR"
+];
 
-  static addKnownErrorCode(code) {
-    _knownErrorCodeList.push(code);
-  }
+class LegacyApi {
 
   constructor(server, legacyDatabase, logger, request, response, socket, channel, requestUid = null, consumerId = null) {
     this.server = server;
@@ -34,6 +32,13 @@ class LegacyApi {
     this._requestUid = requestUid;
     this.__paginationCache = null;
     this._consumerId = consumerId;
+    this.__assignFailsafeLanguageFeature();
+  }
+
+  __assignFailsafeLanguageFeature() {
+    // NOTE: necessary to avoid some errors in production.
+    this.clientLanguage = 'en-us';
+    this.verses = languageCache[this.clientLanguage];
   }
 
   // region: properties (subclass needs to override) ==========
@@ -453,10 +458,11 @@ class LegacyApi {
     return { code, message, stack, details };
   }
 
-  _hideUnknownErrorsOnProduction(errorObject) {
+  _hideRestrictedErrorsOnProduction(errorObject) {
+    require('fs').appendFileSync('./errors.txt', `"${errorObject.code}",`);
     if (this.server.mode === 'production') {
       delete errorObject['stack'];
-      if (_knownErrorCodeList.indexOf(errorObject.code) === -1) {
+      if (_restrictedErrorCodeList.indexOf(errorObject.code) > -1) {
         errorObject.code = 'GENERIC_SERVER_ERROR';
         errorObject.message = this.verses.genericServerError;
       }
@@ -482,7 +488,7 @@ class LegacyApi {
   failable(originalErrorObject, extraData) {
     let errorObject = this._translateKnownError(originalErrorObject);
     errorObject = this._stringifyErrorObject(errorObject);
-    errorObject = this._hideUnknownErrorsOnProduction(errorObject);
+    errorObject = this._hideRestrictedErrorsOnProduction(errorObject);
     this.logger.silent('error', originalErrorObject);
     this.logger.silent('error-response', errorObject);
     return errorObject;
