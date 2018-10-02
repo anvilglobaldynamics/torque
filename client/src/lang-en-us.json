@@ -319,6 +319,11 @@
     "purchasedFor": "Purchase",
     "noProductCategoryFound": "No product category found."
   },
+  "addProducts": {
+    "searchInputLabel": "Product Category Name",
+    "searchInputError": "Error in Search",
+    "selectedProducts": "Selected Product Category"
+  },
   "about": {
     "about": "About",
     "tos": "TOS/Privacy",
