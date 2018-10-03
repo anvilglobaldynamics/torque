@@ -222,7 +222,7 @@
                 <b>{{$round(customer.balance)}} [[app.settings.monetaryUnit]]</b>
               </template>
 
-              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4">
+              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4" on-iron-select="paymentMethodSelected">
                 <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
                   <paper-item name="cash">[[verses.general.cash]]</paper-item>
                   <paper-item name="card">[[verses.general.card]]</paper-item>
@@ -297,7 +297,7 @@
                 totalBilled: null,
                 previousCustomerBalance: null,
                 shouldSaveChangeInAccount: false,
-                paymentMethod: 'cash',
+                paymentMethod: 'card',
                 paidAmount: 0,
                 changeAmount: 0
               }
@@ -470,20 +470,20 @@
         console.log("paymentMethod: ", paymentMethod);
 
         // calculating change amount, paid amount depending on payment method
-        if(paymentMethod === 'cash') {          
+        if (paymentMethod === 'cash') {
           if (paidAmount > totalBilled) {
             changeAmount = paidAmount - totalBilled;
           } else {
             changeAmount = 0;
           }
         }
-        
-        if(paymentMethod === 'card' || paymentMethod === 'digital') {
+
+        if (paymentMethod === 'card' || paymentMethod === 'digital') {
           changeAmount = 0;
           paidAmount = totalBilled;
         }
 
-        if(paymentMethod === 'change-wallet') {
+        if (paymentMethod === 'change-wallet') {
           changeAmount = 0;
           paidAmount = 0;
         }
@@ -561,6 +561,15 @@
         this._processGetOutletDefaultInventoryId(defaultInventoryId => {
           return this.app.navigateTo(`/pos-select-products/inventory:${defaultInventoryId}`);
         })
+      }
+
+      paymentMethodSelected(e) {
+        // NOTE: The timeout should not be necessary. However, without it
+        // the value of this.payment.paymentMethod is not being updated in time.
+        window.setTimeout(() => {
+          console.log('paymentMethodSelected', this.payment.paymentMethod);
+          this._calculatePayment();
+        }, 100);
       }
 
       genericPaymentInputChanged(e) {
