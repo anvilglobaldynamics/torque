@@ -15,6 +15,10 @@ const languageCache = {
 
 const SESSION_DURATION_LIMIT = 15 * 24 * 60 * 60 * 1000;
 
+const _restrictedErrorCodeList = [
+  "INTERNAL_SERVER_ERROR"
+];
+
 class Api {
 
   static mixin(...mixinList) {
@@ -41,6 +45,13 @@ class Api {
     this._requestUid = requestUid;
     this.__paginationCache = null;
     this._consumerId = consumerId;
+    this.__assignFailsafeLanguageFeature();
+  }
+
+  __assignFailsafeLanguageFeature() {
+    // NOTE: necessary to avoid some errors in production.
+    this.clientLanguage = 'en-us';
+    this.verses = languageCache[this.clientLanguage];
   }
 
   // region: properties (subclass needs to override) ==========
@@ -295,7 +306,7 @@ class Api {
       this.logger.error(originalErrorObject);
       let errorObject = this._translateKnownError(originalErrorObject);
       errorObject = this._stringifyErrorObject(errorObject);
-      errorObject = this._hideUnknownErrorsOnProduction(errorObject);
+      errorObject = this._hideRestrictedErrorsOnProduction(errorObject);
       this._sendResponse({ hasError: true, error: errorObject });
     }
   }
@@ -450,10 +461,10 @@ class Api {
   }
 
   /** @private */
-  _hideUnknownErrorsOnProduction(errorObject) {
+  _hideRestrictedErrorsOnProduction(errorObject) {
     if (this.server.mode === 'production') {
       delete errorObject['stack'];
-      if (_knownErrorCodeList.indexOf(errorObject.code) === -1) {
+      if (_restrictedErrorCodeList.indexOf(errorObject.code) > -1) {
         errorObject.code = 'GENERIC_SERVER_ERROR';
         errorObject.message = this.verses.genericServerError;
       }

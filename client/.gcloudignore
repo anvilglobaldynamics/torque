@@ -15,3 +15,8 @@
 
 # Node.js dependencies:
 node_modules/
+
+# reducing upload size
+/src
+/scripts
+/bower_componenets
