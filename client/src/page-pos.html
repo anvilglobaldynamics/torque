@@ -222,28 +222,37 @@
                 <b>{{$round(customer.balance)}} [[app.settings.monetaryUnit]]</b>
               </template>
 
-              <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
-                <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-              </paper-input>
-
               <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4">
                 <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
                   <paper-item name="cash">[[verses.general.cash]]</paper-item>
                   <paper-item name="card">[[verses.general.card]]</paper-item>
                   <paper-item name="digital">[[verses.general.digital]]</paper-item>
+                  <template is="dom-if" if="[[customer]]">
+                    <paper-item name="change-wallet">change wallet</paper-item>
+                  </template>
                 </paper-listbox>
               </paper-dropdown-menu>
 
-              <template is="dom-if" if="[[payment.paidAmount]]">
-                <br> [[verses.pos.changeAmount]]:
-                <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
+              {{$json(payment.paymentMethod)}}
 
-                <br>
-                <template is="dom-if" if="[[customer]]">
-                  <template is="dom-if" if="[[isChangeAmountPositive(payment.changeAmount)]]">
-                    <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
-                      [[verses.pos.shouldSaveChangeInAccount]]
-                    </paper-checkbox>
+              <template is="dom-if" if="[[isPaymentMethodCash(payment.paymentMethod)]]">
+                <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+                  <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                </paper-input>
+              </template>
+
+              <template is="dom-if" if="[[isPaymentMethodCash(payment.paymentMethod)]]">
+                <template is="dom-if" if="[[payment.changeAmount]]">
+                  <br> [[verses.pos.changeAmount]]:
+                  <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
+
+                  <br>
+                  <template is="dom-if" if="[[customer]]">
+                    <template is="dom-if" if="[[payment.changeAmount]]">
+                      <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
+                        [[verses.pos.shouldSaveChangeInAccount]]
+                      </paper-checkbox>
+                    </template>
                   </template>
                 </template>
               </template>
@@ -458,6 +467,27 @@
           }
         }
 
+        console.log("paymentMethod: ", paymentMethod);
+
+        // calculating change amount, paid amount depending on payment method
+        if(paymentMethod === 'cash') {          
+          if (paidAmount > totalBilled) {
+            changeAmount = paidAmount - totalBilled;
+          } else {
+            changeAmount = 0;
+          }
+        }
+        
+        if(paymentMethod === 'card' || paymentMethod === 'digital') {
+          changeAmount = 0;
+          paidAmount = totalBilled;
+        }
+
+        if(paymentMethod === 'change-wallet') {
+          changeAmount = 0;
+          paidAmount = 0;
+        }
+
         // returning updated payment info
         this.payment = {
           totalAmount,
@@ -547,12 +577,12 @@
         this._processAddSales({ outletId: this.params.outlet, payment: this.payment });
       }
 
-      isChangeAmountPositive(changeAmount) {
-        return changeAmount > 0;
-      }
-
       isDiscountTypePercent(discountType) {
         return (discountType === 'percent');
+      }
+
+      isPaymentMethodCash(paymentMethod) {
+        return (paymentMethod === 'cash');
       }
 
       // region: misc =================================
