@@ -1,11 +1,10 @@
-let { LegacyApi } = require('./../legacy-api-base');
-let Joi = require('joi');
+const { Api } = require('./../api-base');
+const Joi = require('joi');
+const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
+const { extract } = require('./../utils/extract');
+const { InventoryMixin } = require('./mixins/inventory-mixin');
 
-let { collectionCommonMixin } = require('./mixins/collection-common');
-let { inventoryCommonMixin } = require('./mixins/inventory-common');
-let { customerCommonMixin } = require('./mixins/customer-common');
-
-exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(collectionCommonMixin(LegacyApi))) {
+exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
 
   get autoValidates() { return true; }
 
@@ -13,7 +12,6 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
 
   get requestSchema() {
     return Joi.object().keys({
-      // apiKey: Joi.string().length(64).required(),
 
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
@@ -43,6 +41,7 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
         shouldSaveChangeInAccount: Joi.boolean().required(),
         paymentMethod: Joi.string().valid('cash', 'card', 'digital').required()
       })
+
     });
   }
 
@@ -62,73 +61,72 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
     }];
   }
 
-  _sell({ outletDefaultInventory, productList }, cbfn) {
+  _sell({ outletDefaultInventory, productList }) {
     for (let product of productList) {
       let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
       if (!foundProduct) {
-        let err = new Error("product could not be found in source inventory");
-        err.code = "PRODUCT_INVALID";
-        return this.fail(err);
+        throw new CodedError("PRODUCT_INVALID", "product could not be found in source inventory");
       }
       if (foundProduct.count < product.count) {
-        let err = new Error("not enough product(s) in source inventory");
-        err.code = "INSUFFICIENT_PRODUCT";
-        return this.fail(err);
+        throw new CodedError("INSUFFICIENT_PRODUCT", "not enough product(s) in source inventory");
       }
       foundProduct.count -= product.count;
     }
-    return cbfn();
   }
 
-  _handlePayment({ payment, customer }, cbfn) {
+  async _handlePayment({ payment, customer }) {
     if (payment.totalBilled > payment.paidAmount) {
       if (customer) {
-        this._adjustCustomerBalanceAndSave({ customer, action: 'withdrawl', amount: (payment.totalBilled - payment.paidAmount) }, () => {
-          return cbfn(payment);
-        });
+        await this._adjustCustomerBalanceAndSave({ customer, action: 'withdrawl', amount: (payment.totalBilled - payment.paidAmount) });
+        return;
       } else {
-        let err = new Error("credit sale is not allowed without registered cutomer");
-        err.code = "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER";
-        return this.fail(err);
+        throw new CodedError("CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "credit sale is not allowed without registered cutomer");
       }
     }
+
     if (payment.totalBilled == payment.paidAmount) {
-      return cbfn(payment);
+      return;
     }
+
     if (payment.totalBilled < payment.paidAmount) {
       if (customer && payment.shouldSaveChangeInAccount) {
-        this._adjustCustomerBalanceAndSave({ customer, action: 'payment', amount: (payment.paidAmount - payment.totalBilled) }, () => {
-          return cbfn(payment);
-        });
+        await this._adjustCustomerBalanceAndSave({ customer, action: 'payment', amount: (payment.totalBilled - payment.paidAmount) });
+        return;
       } else {
-        return cbfn(payment);
+        return;
       }
     }
   }
 
-  _addSales({ outletId, customerId, productList, payment }, cbfn) {
-    this.legacyDatabase.sales.create({ outletId, customerId, productList, payment }, (err, salesId) => {
-      if (err) return this.fail(err);
-      cbfn(salesId);
-    })
+  async _adjustCustomerBalanceAndSave({ customer, action, amount }) {
+    if (action === 'payment') {
+      customer.balance += amount;
+    } else if (action === 'withdrawl') {
+      customer.balance -= amount;
+    }
+
+    await this.database.customer.setBalance({ id: customer.id }, { balance: customer.balance });
+    return;
   }
 
-  handle({ body }) {
-    let { salesId, outletId, customerId, productList, payment } = body;
+  async handle({ body }) {
+    let { outletId, customerId, productList, payment } = body;
+    
+    let customer = null;
+    if (customerId) {
+      customer = await this.database.customer.findById({ id: customerId });
+      if (!customer) {
+        throw new CodedError("CUSTOMER_INVALID", "Customer not found.");
+      }
+    }
 
-    this._getOutletDefaultInventory({ outletId }, (outletDefaultInventory) => {
-      this._getCustomer({ customerId }, (customer) => {
-        this._sell({ outletDefaultInventory, productList }, () => {
-          this._handlePayment({ payment, customer }, () => {
-            this._updateInventory({ inventoryId: outletDefaultInventory.id, productList: outletDefaultInventory.productList }, () => {
-              this._addSales({ outletId, customerId, productList, payment }, (salesId) => {
-                this.success({ status: "success", salesId });
-              });
-            });
-          });
-        });
-      });
-    });
+    let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
+    this._sell({ outletDefaultInventory, productList });
+    await this._handlePayment({ payment, customer });
+    await this.database.inventory.setProductList({ id: outletDefaultInventory.id }, { productList: outletDefaultInventory.productList });
+    let salesId = await this.database.sales.create({ outletId, customerId, productList, payment });
+
+    return { status: "success", salesId };
   }
 
 }
