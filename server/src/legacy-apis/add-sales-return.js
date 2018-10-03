@@ -95,28 +95,10 @@ exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(
     });
   }
 
-  _handlePayback({ payment, customer }, cbfn) {
-    // TODO: will handle customer payback here in the future
-  }
-
   _addSalesReturn({ salesId, returnedProductList, creditedAmount }, cbfn) {
     this.legacyDatabase.salesReturn.create({ salesId, returnedProductList, creditedAmount }, (err, salesReturnId) => {
       return cbfn(salesReturnId);
     })
-  }
-
-  // below are copied code
-
-  _handlePayment(payment, customer, cbfn) {
-    let diff = (payment.paidAmount + payment.previousCustomerBalance) - payment.totalBilled;
-    payment.changeAmount = diff;
-    if (diff >= 0) {
-      return cbfn(payment);
-    } else {
-      this._updateCustomerBalance(diff, customer, () => {
-        return cbfn(payment);
-      });
-    }
   }
 
   handle({ body }) {
