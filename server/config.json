@@ -55,7 +55,7 @@
     ]
   },
   "socketProxy": {
-    "enabled": false,
+    "enabled": true,
     "url": "ws://localhost:8410",
     "pssk": "ARANDOMSECURITYKEYTHATWILLBEUSEDASAMESSAGE"
   },

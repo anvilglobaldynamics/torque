@@ -20,9 +20,9 @@ exports.AddNewEmployeeApi = class extends phoneVerificationRequestMixin(userComm
 
       organizationId: Joi.number().max(999999999999999).required(),
 
-      role: Joi.string().max(1024).required(),
-      designation: Joi.string().max(1024).required(),
-      companyProvidedId: Joi.string().alphanum().required(),
+      role: Joi.string().max(64).required(),
+      designation: Joi.string().max(64).required(),
+      companyProvidedId: Joi.string().allow('').max(64).required(),
 
       privileges: Joi.object().required().keys({
         PRIV_VIEW_USERS: Joi.boolean().required(),

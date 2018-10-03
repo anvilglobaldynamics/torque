@@ -1,6 +1,6 @@
 
 exports.detectMode = _ => {
-  let mode = process.env.TORQUE_MODE;
+  let mode = process.env.NODE_ENV;
   if (['production', 'development'].indexOf(mode) === -1) {
     mode = 'development';
   }

@@ -247,14 +247,15 @@
     "updateProductCategory": "পণ্যের ধরণ আপডেট করুন",
     "productCategoryCreated": "নতুন পণ্যের ধরণ যুক্ত করা হয়েছে।",
     "productCategoryUpdated": "পণ্যের ধরণ আপডেট করা হয়েছে।",
-    "buyingPrice": "কেনা দাম",
-    "sellingPrice": "বিক্রি দাম",
+    "buyingPrice": "ক্রয় মূল্য",
+    "sellingPrice": "বিক্রয় মূল্য",
     "moveHere": "এখানে সরান",
     "subCategory": "উপ বিভাগ",
     "moveToRoot": "বাহিরে সরান",
     "createNewProductCategory": "নতুন পণ্য ধরণ যুক্ত করুন",
     "searchForProductCategoryInput": "পণ্য তালিকার নাম",
-    "searchForProductCategoryInputError": "পণ্য তালিকার সন্ধানে ত্রুটি"
+    "searchForProductCategoryInputError": "পণ্য তালিকার সন্ধানে ত্রুটি",
+    "bulkImport": "একাধিক পণ্যের ধরন তৈরি"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "গ্রাহকের নাম বা ফোন",
@@ -320,6 +321,11 @@
     "sellFor": "বিক্রয় মূল্য",
     "purchasedFor": "ক্রয় মূল্য",
     "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি।"
+  },
+  "addProducts": {
+    "searchInputLabel": "পণ্যের ধরণের নাম",
+    "searchInputError": "পণ্য সন্ধানে ত্রূটি হয়েছে",
+    "selectedProducts": "বাছাইকৃত পণ্য তালিকা"
   },
   "about": {
     "about": "বিষয়ে",
@@ -430,7 +436,8 @@
   },
   "sales": {
     "manageSalesTitle": "বিক্রয় রেকর্ড",
-    "billed": "বিল করা",
+    "salesId": "বিক্রয় আইডি",
+    "billed": "বিল",
     "products": "পণ্য",
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
     "removeCustomer": "গ্রাহক সরান",
@@ -621,12 +628,14 @@
     "addProductsBatchToInventory": "একসাথে একাধিক পণ্য তালিকায় যুক্ত করুন",
     "addProducts": "পণ্য যুক্ত করুন",
     "noProductsInInventory": "এই পণ্য তালিকায় কোন পণ্য নেই।",
+    "buyingPrice": "ক্রয় মূল্য",
+    "sellingPrice": "বিক্রয় মূল্য",
     "acquiredOn": "খরিদ হয়েছে",
     "addedOn": "যুক্ত হয়েছে"
   },
   "payment": {
     "packageHasExpired": "আপনার প্যাকেজের মেয়াদ শেষ হয়ে গেছে।",
-    "pleaseCallUsToPurchaseSubscription": "আমাদের কে +880 1760 160503 নম্বর এ যোগাযোগ করুন প্যাকেজ চালু করতে।",
+    "pleaseCallUsToPurchaseSubscription": "আমাদের কে +880 1730 589311 নম্বর এ যোগাযোগ করুন প্যাকেজ চালু করতে।",
     "recheckVerificationStatus": "প্যাকেজ স্থিতি পুনরায় যাচাই করুন",
     "useDifferentOrganization": "ভিন্ন সংস্থা ব্যবহার করুন"
   },

@@ -170,7 +170,7 @@
   "organization": {
     "addOrganizationTitle": "Add Organization",
     "isNotOneOutletOrg": "This organization has more than one outlets.",
-    "nameOfYourOrganization": "Name of your organization.",
+    "nameOfYourOrganization": "Name of your Organization",
     "pleaseEnterAValidName": "Enter a valid name.",
     "emailInput": "Your email address (Optional)",
     "emailInputError": "Enter a valid email",
@@ -185,13 +185,13 @@
   "outlet": {
     "editOutletTitle": "Edit Outlet",
     "addOutletTitle": "Add Outlet",
-    "nameOfOutletInput": "Name of your outlet.",
-    "nameOfOutletInputError": "Enter a valid name.",
+    "nameOfOutletInput": "Name of your Outlet",
+    "nameOfOutletInputError": "Enter a valid name",
     "physicalAddressInput": "Physical Address",
     "physicalAddressInputError": "Enter an address at least 8 characters long",
-    "contactPersonNameInput": "Name of Manager/Contact Person",
+    "contactPersonNameInput": "Name of Contact Person",
     "contactPersonNameInputError": "Enter a valid name.",
-    "contactPhoneOfContactPerson": "Contact Number of Manager/Contact Person",
+    "contactPhoneOfContactPerson": "Contact Number of Contact Person",
     "contactPhoneOfContactPersonError": "Enter your valid phone number.",
     "createOutlet": "Create Outlet",
     "updateOutlet": "Update Outlet",
@@ -252,7 +252,8 @@
     "moveToRoot": "Move To Root",
     "createNewProductCategory": "Create New Product Category",
     "searchForProductCategoryInput": "Product Category name",
-    "searchForProductCategoryInputError": "Error in Search for Product Category"
+    "searchForProductCategoryInputError": "Error in Search for Product Category",
+    "bulkImport": "Bulk Product Category Creation"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "Customer name or phone.",
@@ -275,7 +276,7 @@
   "employee": {
     "addEmployeeTitle": "Add Employee",
     "editEmployeeTitle": "Edit Employee",
-    "nameOfEmployeeInput": "Name of Employee.",
+    "nameOfEmployeeInput": "Name of Employee",
     "nameOfEmployeeInputError": "Enter a valid name",
     "addEmployee": "Add Employee",
     "emailOrPhoneInputTitle": "Enter Phone or Email.",
@@ -286,7 +287,7 @@
     "passwordInputError": "Enter a password at least 8 characters long.",
     "passwordInput": "Employee password",
     "phoneInputError": "Enter your valid phone number.",
-    "contactPhoneOfContactPerson": "Contact Number of Manager/Contact Person",
+    "contactPhoneOfContactPerson": "Contact Number of Contact Person",
     "employeeUpdated": "Employee has been updated.",
     "updateEmployee": "Update Employee",
     "hireEmployeePageTitle": "Hire Employee",
@@ -318,6 +319,11 @@
     "sellFor": "Sell",
     "purchasedFor": "Purchase",
     "noProductCategoryFound": "No product category found."
+  },
+  "addProducts": {
+    "searchInputLabel": "Product Category Name",
+    "searchInputError": "Error in Search",
+    "selectedProducts": "Selected Product Category"
   },
   "about": {
     "about": "About",
@@ -428,6 +434,7 @@
   },
   "sales": {
     "manageSalesTitle": "Sales Record",
+    "salesId": "Sales Id",
     "billed": "Billed",
     "products": "product(s)",
     "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
@@ -459,13 +466,13 @@
     "addPageTitle": "Add Warehouse",
     "warehouseCreated": "New warehouse has been created.",
     "warehouseUpdated": "Warehouse has been updated.",
-    "warehouseNameInput": "Name of your warehouse.",
+    "warehouseNameInput": "Name of your Warehouse",
     "warehouseNameInputError": "Enter a valid name",
     "warehousePhysicalAddressInput": "Physical Address",
     "warehousePhysicalAddressInputError": "Enter an address at least 8 characters long",
-    "warehouseManagerNameInput": "Name of Manager/Contact Person",
+    "warehouseManagerNameInput": "Name of Contact Person",
     "warehouseManagerNameInputError": "Enter a valid name",
-    "warehouseManagerNumberInput": "Contact Number of Manager/Contact Person",
+    "warehouseManagerNumberInput": "Contact Number of Contact Person",
     "warehouseManagerNumberInputError": "Enter a valid phone number",
     "createWarehouse": "Create Warehouse",
     "updateWarehouse": "Update Warehouse",
@@ -619,12 +626,14 @@
     "addProductsBatchToInventory": "Add products to this inventory in batch.",
     "addProducts": "Add Products",
     "noProductsInInventory": "No products in this Inventory.",
+    "buyingPrice": "Buying Price",
+    "sellingPrice": "Selling Price",
     "acquiredOn": "Acquired On",
     "addedOn": "Added On"
   },
   "payment": {
     "packageHasExpired": "Your package has expired.",
-    "pleaseCallUsToPurchaseSubscription": "Call us at +880 1760 160503 to purchase a subscription.",
+    "pleaseCallUsToPurchaseSubscription": "Call us at +880 1730 589311 to purchase a subscription.",
     "recheckVerificationStatus": "Recheck Verification Status",
     "useDifferentOrganization": "Use a different organization"
   },

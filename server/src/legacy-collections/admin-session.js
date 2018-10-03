@@ -25,7 +25,7 @@ exports.AdminSessionCollection = class extends LegacyCollection {
       apiKey: Joi.string().length(64).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       terminatedDatetimeStamp: Joi.number().max(999999999999999).required().allow(null),
-      terminatedBy: Joi.string().allow('').max(1024).required(),
+      terminatedBy: Joi.string().allow('').max(64).required(),
       hasExpired: Joi.boolean().required()
     });
 

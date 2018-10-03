@@ -15,7 +15,7 @@ method: `POST`
   fullName: Joi.string().min(1).max(64).required(),
   nid: Joi.string().allow('').min(16).max(16).required(),
   physicalAddress: Joi.string().allow('').min(1).max(128).required(),
-  emergencyContact: Joi.string().allow('').min(6).max(11).required(),
+  emergencyContact: Joi.string().allow('').min(1).max(128).required(),
   bloodGroup: Joi.string().allow('').min(2).max(3).required()
 }
 ```
