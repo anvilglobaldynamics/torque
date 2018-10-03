@@ -217,11 +217,6 @@
 
             <div class="individual-calculation-field-container">
 
-              <template is="dom-if" if="[[customer]]">
-                [[verses.pos.previousCustomerBalance]]:
-                <b>{{$round(customer.balance)}} [[app.settings.monetaryUnit]]</b>
-              </template>
-
               <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4" on-iron-select="paymentMethodSelected">
                 <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
                   <paper-item name="cash">[[verses.general.cash]]</paper-item>
@@ -234,26 +229,26 @@
               </paper-dropdown-menu>
 
               <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
-                <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" disabled="[[!isPaymentMethodCash(payment.paymentMethod)]]" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+                <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
                   <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                 </paper-input>
               </template>
 
-              <template is="dom-if" if="[[isPaymentMethodCash(payment.paymentMethod)]]">
-                <template is="dom-if" if="[[payment.changeAmount]]">
-                  <br> [[verses.pos.changeAmount]]:
-                  <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
+              
+              <template is="dom-if" if="[[payment.changeAmount]]">
+                <br> [[verses.pos.changeAmount]]:
+                <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
 
-                  <br>
-                  <template is="dom-if" if="[[customer]]">
-                    <template is="dom-if" if="[[payment.changeAmount]]">
-                      <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
-                        [[verses.pos.shouldSaveChangeInAccount]]
-                      </paper-checkbox>
-                    </template>
+                <br>
+                <template is="dom-if" if="[[customer]]">
+                  <template is="dom-if" if="[[payment.changeAmount]]">
+                    <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
+                      [[verses.pos.shouldSaveChangeInAccount]]
+                    </paper-checkbox>
                   </template>
                 </template>
               </template>
+              
 
             </div>
 
@@ -455,22 +450,15 @@
         }
 
         // calculating change amount, paid amount depending on payment method
-        if (paymentMethod === 'cash') {
+        if (paymentMethod === 'change-wallet') {
+          changeAmount = 0;
+          paidAmount = 0;
+        } else {
           if (paidAmount > totalBilled) {
             changeAmount = paidAmount - totalBilled;
           } else {
             changeAmount = 0;
           }
-        }
-
-        if (paymentMethod === 'card' || paymentMethod === 'digital') {
-          changeAmount = 0;
-          paidAmount = totalBilled;
-        }
-
-        if (paymentMethod === 'change-wallet') {
-          changeAmount = 0;
-          paidAmount = 0;
         }
 
         // returning updated payment info
