@@ -233,10 +233,8 @@
                 </paper-listbox>
               </paper-dropdown-menu>
 
-              {{$json(payment.paymentMethod)}}
-
-              <template is="dom-if" if="[[isPaymentMethodCash(payment.paymentMethod)]]">
-                <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+              <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
+                <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" disabled="[[!isPaymentMethodCash(payment.paymentMethod)]]" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
                   <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                 </paper-input>
               </template>
@@ -297,7 +295,7 @@
                 totalBilled: null,
                 previousCustomerBalance: null,
                 shouldSaveChangeInAccount: false,
-                paymentMethod: 'card',
+                paymentMethod: 'cash',
                 paidAmount: 0,
                 changeAmount: 0
               }
@@ -453,21 +451,10 @@
           totalBilled += parseFloat(serviceChargeAmount);
         }
 
-        // considering customer presence
-        if (this.customer) {
-          previousCustomerBalance = this.customer.balance;
+        // setting the default paid amount equal to total billed
+        if (!paidAmount) {
+          paidAmount = totalBilled;
         }
-
-        // calculating change amount
-        if (paidAmount) {
-          if (totalBilled > paidAmount) {
-            changeAmount = paidAmount - totalBilled;
-          } else {
-            changeAmount = paidAmount - totalBilled;
-          }
-        }
-
-        console.log("paymentMethod: ", paymentMethod);
 
         // calculating change amount, paid amount depending on payment method
         if (paymentMethod === 'cash') {
@@ -567,7 +554,6 @@
         // NOTE: The timeout should not be necessary. However, without it
         // the value of this.payment.paymentMethod is not being updated in time.
         window.setTimeout(() => {
-          console.log('paymentMethodSelected', this.payment.paymentMethod);
           this._calculatePayment();
         }, 100);
       }
@@ -592,6 +578,10 @@
 
       isPaymentMethodCash(paymentMethod) {
         return (paymentMethod === 'cash');
+      }
+
+      isPaymentMethodChangeWallet(paymentMethod) {
+        return (paymentMethod === 'change-wallet');
       }
 
       // region: misc =================================
