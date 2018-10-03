@@ -68,16 +68,13 @@
 
       <template is="dom-if" if="[[activatedPackage]]">
         <div class="card vertical layout">
-          <div class="package-activation-title">Current Active Package:</div>
+          <div class="package-activation-title">Currently Active Package:</div>
           <div class="package-activation">
             <div>Code: [[activatedPackage.code]]</div>
             <div>Package Name: [[activatedPackage.name]] </div>
+            <div>Payment Reference: [[activatedPackage.paymentReference]] </div>
+            <div class="">Activation Date: [[$mkDate(activatedPackage.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
             <div class="">Expiration Date: [[$mkDate(activatedPackage.expirationDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
-            <div class="">allows:
-              <span>[[activatedPackage.limits.maximumEmployees]] employees,</span>
-              <span>[[activatedPackage.limits.maximumOutlets]] outlets,</span>
-              <span>[[activatedPackage.limits.maximumWarehouses]] warehouses.</span>
-            </div>
           </div>
         </div>
       </template>
@@ -232,7 +229,7 @@
             this.packageActivationList = packageActivationList;
 
             let { code, name, limits, duration } = this.packageActivationList[0].packageDetail;
-            let { createdDatetimeStamp } = this.packageActivationList[0];
+            let { createdDatetimeStamp, paymentReference } = this.packageActivationList[0];
             let date = new Date(createdDatetimeStamp);
             date.setMonth(date.getMonth() + duration.months);
             date.setDate(date.getDate() + duration.days);
@@ -241,9 +238,9 @@
             this.activatedPackage = {
               code, name, limits, duration,
               createdDatetimeStamp,
-              expirationDatetimeStamp
+              expirationDatetimeStamp,
+              paymentReference
             };
-            console.log("activatedPackage: ", this.activatedPackage);
 
             cbfn();
           });
