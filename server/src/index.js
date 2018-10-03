@@ -74,7 +74,6 @@ const { ReportInventoryDetailsApi } = require('./apis/report-inventory-details')
 let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
 const { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
 
-// let { AddSalesApi } = require('./legacy-apis/add-sales');
 const { AddSalesApi } = require('./apis/add-sales');
 let { GetSalesApi } = require('./legacy-apis/get-sales');
 const { GetSalesListApi } = require('./apis/get-sales-list');

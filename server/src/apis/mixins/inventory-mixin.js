@@ -8,6 +8,13 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
     return doc;
   }
 
+  async __getOutletDefaultInventory({ outletId }) {
+    let inventoryList = await this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId, inventoryContainerType: 'outlet' });
+    throwOnFalsy(inventoryList, "OUTLET_INVENTORY_INVALID", "Invalid Outlet Or Inventory could not be found");
+    let outletDefaultInventory = inventoryList.find(inventory => inventory.type === 'default');
+    return outletDefaultInventory;
+  }
+
   async __getInventoryContainerDetails({ inventory }) {
     let inventoryContainer;
     if (inventory.inventoryContainerType === "outlet") {

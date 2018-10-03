@@ -2,8 +2,9 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const { InventoryMixin } = require('./mixins/inventory-mixin');
 
-exports.AddSalesApi = class extends Api {
+exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
 
   get autoValidates() { return true; }
 
@@ -60,10 +61,72 @@ exports.AddSalesApi = class extends Api {
     }];
   }
 
+  _sell({ outletDefaultInventory, productList }) {
+    for (let product of productList) {
+      let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
+      if (!foundProduct) {
+        throw new CodedError("PRODUCT_INVALID", "product could not be found in source inventory");
+      }
+      if (foundProduct.count < product.count) {
+        throw new CodedError("INSUFFICIENT_PRODUCT", "not enough product(s) in source inventory");
+      }
+      foundProduct.count -= product.count;
+    }
+  }
+
+  async _handlePayment({ payment, customer }) {
+    if (payment.totalBilled > payment.paidAmount) {
+      if (customer) {
+        await this._adjustCustomerBalanceAndSave({ customer, action: 'withdrawl', amount: (payment.totalBilled - payment.paidAmount) });
+        return;
+      } else {
+        throw new CodedError("CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "credit sale is not allowed without registered cutomer");
+      }
+    }
+
+    if (payment.totalBilled == payment.paidAmount) {
+      return;
+    }
+
+    if (payment.totalBilled < payment.paidAmount) {
+      if (customer && payment.shouldSaveChangeInAccount) {
+        await this._adjustCustomerBalanceAndSave({ customer, action: 'payment', amount: (payment.totalBilled - payment.paidAmount) });
+        return;
+      } else {
+        return;
+      }
+    }
+  }
+
+  async _adjustCustomerBalanceAndSave({ customer, action, amount }) {
+    if (action === 'payment') {
+      customer.balance += amount;
+    } else if (action === 'withdrawl') {
+      customer.balance -= amount;
+    }
+
+    await this.database.customer.setBalance({ id: customer.id }, { balance: customer.balance });
+    return;
+  }
+
   async handle({ body }) {
     let { outletId, customerId, productList, payment } = body;
     
-    return { status: "success", salesId: 123 };
+    let customer = null;
+    if (customerId) {
+      customer = await this.database.customer.findById({ id: customerId });
+      if (!customer) {
+        throw new CodedError("CUSTOMER_INVALID", "Customer not found.");
+      }
+    }
+
+    let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
+    this._sell({ outletDefaultInventory, productList });
+    await this._handlePayment({ payment, customer });
+    await this.database.inventory.setProductList({ id: outletDefaultInventory.id }, { productList: outletDefaultInventory.productList });
+    let salesId = await this.database.sales.create({ outletId, customerId, productList, payment });
+
+    return { status: "success", salesId };
   }
 
 }
