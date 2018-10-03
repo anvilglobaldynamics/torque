@@ -453,7 +453,7 @@ exports.validateGetOrganizationListApiSuccessResponse = (doc) => {
       employment: Joi.object().keys({
         designation: Joi.string().required(),
         role: Joi.string().required(),
-        companyProvidedId: Joi.string().alphanum().allow('').required(),
+        companyProvidedId: Joi.string().allow('').required(),
         isActive: Joi.boolean().required(),
         privileges: Joi.object().required()
       })
@@ -835,9 +835,9 @@ exports.validateResponseOrganizationSchema = (doc) => {
     phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
     email: Joi.string().email().min(3).max(30).required(),
     employment: Joi.object().keys({
-      designation: Joi.string().max(1024).required(),
-      role: Joi.string().max(1024).required(),
-      companyProvidedId: Joi.string().alphanum().allow('').required(),
+      designation: Joi.string().max(64).required(),
+      role: Joi.string().max(64).required(),
+      companyProvidedId: Joi.string().allow('').required(),
       isActive: Joi.boolean().required(),
       privileges: Joi.object()
     })
@@ -891,7 +891,7 @@ exports.validateProductCategorySchema = (doc) => {
 
     name: Joi.string().min(1).max(64).required(),
     organizationId: Joi.number().max(999999999999999).required(),
-    unit: Joi.string().max(1024).required(),
+    unit: Joi.string().max(64).required(),
     defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
     defaultDiscountValue: Joi.number().when(
       'defaultDiscountType', {
@@ -1112,7 +1112,7 @@ exports.validateUserSchema = (doc) => {
     email: Joi.string().email().min(3).max(30).allow(null).required(),
     nid: Joi.string().min(16).max(16).allow('').required(),
     physicalAddress: Joi.string().min(1).max(128).allow('').required(),
-    emergencyContact: Joi.string().min(6).max(11).allow('').required(),
+    emergencyContact: Joi.string().min(1).max(128).allow('').required(),
     bloodGroup: Joi.string().alphanum().min(2).max(3).allow('').required(),
 
     isDeleted: Joi.boolean().required(),
@@ -1141,7 +1141,7 @@ exports.validateAggregatedProductScema = (doc) => {
         lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
         name: Joi.string().min(1).max(64).required(),
         organizationId: Joi.number().max(999999999999999).required(),
-        unit: Joi.string().max(1024).required(),
+        unit: Joi.string().max(64).required(),
         defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
         defaultDiscountValue: Joi.number().when(
           'defaultDiscountType', {
@@ -1175,14 +1175,14 @@ exports.validateEmploymentSchema = (doc) => {
       email: Joi.string().email().min(3).max(30).allow(null).required(),
       nid: Joi.string().min(16).max(16).allow('').required(),
       physicalAddress: Joi.string().min(1).max(128).allow('').required(),
-      emergencyContact: Joi.string().min(6).max(11).allow('').required(),
+      emergencyContact: Joi.string().min(1).max(128).allow('').required(),
       bloodGroup: Joi.string().alphanum().min(2).max(3).allow('').required()
     }),
 
     organizationId: Joi.number().max(999999999999999).required(),
-    designation: Joi.string().max(1024).required(),
-    role: Joi.string().max(1024).required(),
-    companyProvidedId: Joi.string().alphanum().allow('').max(1024).required(),
+    designation: Joi.string().max(64).required(),
+    role: Joi.string().max(64).required(),
+    companyProvidedId: Joi.string().allow('').max(64).required(),
 
     privileges: Joi.object().required().keys({
       PRIV_VIEW_USERS: Joi.boolean().required(),

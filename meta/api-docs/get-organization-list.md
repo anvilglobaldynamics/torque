@@ -39,9 +39,9 @@ Possible Error Codes:
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       email: Joi.string().email().min(3).max(30).required(),
       employment: Joi.object().keys({ 
-        designation: Joi.string().max(1024).required(), 
-        role: Joi.string().max(1024).required(), 
-        companyProvidedId: Joi.string().alphanum().allow('').required(), 
+        designation: Joi.string().max(64).required(), 
+        role: Joi.string().max(64).required(), 
+        companyProvidedId: Joi.string().allow('').max(64).required(), 
         isActive: Joi.boolean().required()
         privileges: Joi.object().required()
       })

@@ -17,9 +17,9 @@ exports.EditEmploymentApi = class extends userCommonMixin(collectionCommonMixin(
 
       isActive: Joi.boolean().required(),
 
-      role: Joi.string().max(1024).required(),
-      designation: Joi.string().max(1024).required(),
-      companyProvidedId: Joi.string().alphanum().allow('').max(1024).required(),
+      role: Joi.string().max(64).required(),
+      designation: Joi.string().max(64).required(),
+      companyProvidedId: Joi.string().allow('').max(64).required(),
 
       privileges: Joi.object().keys({
         PRIV_VIEW_USERS: Joi.boolean().required(),

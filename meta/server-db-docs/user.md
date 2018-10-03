@@ -12,7 +12,7 @@ Joi.object().keys({
   email: Joi.string().email().min(3).max(30).allow(null).required(),
   nid: Joi.string().min(16).max(16).allow('').required(),
   physicalAddress: Joi.string().min(1).max(128).allow('').required(),
-  emergencyContact: Joi.string().min(6).max(11).allow('').required(),
+  emergencyContact: Joi.string().min(1).max(128).allow('').required(),
   bloodGroup: Joi.string().alphanum().min(2).max(3).allow('').required(),
 
   isDeleted: Joi.boolean().required(),
