@@ -277,7 +277,6 @@ const createSales = async ({ apiKey, outletId, productList }) => {
       discountedAmount: 0,
       serviceChargeAmount: 0,
       totalBilled: 0,
-      previousCustomerBalance: null,
       paidAmount: 1000000000,
       changeAmount: 0,
       shouldSaveChangeInAccount: false,

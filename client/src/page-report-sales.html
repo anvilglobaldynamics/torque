@@ -214,10 +214,6 @@
                     <div class="description">
                       <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]]%</div>
                   </template>
-                  <template is="dom-if" if="[[sales.payment.previousCustomerBalance]]">
-                    <div class="description">
-                      <strong>[[verses.salesReport.previousBalance]]: </strong>[[$round(sales.payment.previousCustomerBalance)]] [[app.settings.monetaryUnit]]</div>
-                  </template>
                 </template>
               </div>
               <div class="description">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</div>
