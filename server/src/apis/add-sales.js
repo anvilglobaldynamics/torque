@@ -59,7 +59,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
     }];
   }
 
-  _sell({ outletDefaultInventory, productList }) {
+  _reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList }) {
     for (let product of productList) {
       let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
       if (!foundProduct) {
@@ -72,7 +72,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
     }
   }
 
-  async _handlePayment({ payment, customer }) {
+  async _handleReceivedPayment({ payment, customer }) {
     if (payment.totalBilled > payment.paidAmount) {
       if (customer) {
         await this._adjustCustomerBalanceAndSave({ customer, action: 'withdrawl', amount: (payment.totalBilled - payment.paidAmount) });
@@ -119,8 +119,8 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
     }
 
     let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
-    this._sell({ outletDefaultInventory, productList });
-    await this._handlePayment({ payment, customer });
+    this._reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList });
+    await this._handleReceivedPayment({ payment, customer });
     await this.database.inventory.setProductList({ id: outletDefaultInventory.id }, { productList: outletDefaultInventory.productList });
     let salesId = await this.database.sales.create({ outletId, customerId, productList, payment });
 
