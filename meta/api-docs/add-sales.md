@@ -58,6 +58,7 @@ Possible Error Codes:
 { code: CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER }
 { code: PRODUCT_INVALID } // product could not be found
 { code: INSUFFICIENT_PRODUCT } // not enough product in inventory
+{ code: BILL_INACCURATE } // Bill is mathematically inaccurate
 ```
 
 ### response (on success):

@@ -60,6 +60,11 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
     }];
   }
 
+  _manualPaymentValidation({ payment }) {
+    // TODO: should check if adding product(s) salePrice and modifiers (discountedAmount, serviceChargeAmount) equals totalBilled
+    // throw new CodedError("BILL_INACCURATE", "Bill is mathematically inaccurate");
+  }
+
   _reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList }) {
     for (let product of productList) {
       let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
@@ -101,7 +106,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
       // console.log("payment.totalBilled < payment.paidAmount");
       if (customer && payment.shouldSaveChangeInAccount) {
         paymentList[0].wasChangeSavedInChangeWallet = true;
-        await this._setCustomerChangeWalletBalance({ customer, changeWalletBalance: (customer.changeWalletBalance + payment.totalBilled - payment.paidAmount) });
+        await this._setCustomerChangeWalletBalance({ customer, changeWalletBalance: (customer.changeWalletBalance + payment.paidAmount - payment.totalBilled) });
       }
     }
 
@@ -111,6 +116,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
 
   async handle({ userId, body }) {
     let { outletId, customerId, productList, payment } = body;
+    this._manualPaymentValidation({ payment });
     
     let customer = null;
     if (customerId) {
