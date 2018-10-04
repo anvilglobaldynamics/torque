@@ -72,7 +72,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
     }
   }
 
-  async _handleReceivedPayment({ payment, customer }) {
+  async depr_handleReceivedPayment({ payment, customer }) {
     if (payment.totalBilled > payment.paidAmount) {
       if (customer) {
         await this._adjustCustomerBalanceAndSave({ customer, action: 'withdrawl', amount: (payment.totalBilled - payment.paidAmount) });
@@ -96,6 +96,45 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
     }
   }
 
+  async _handleReceivedPayment({ userId, payment, customer }) {
+    let paymentList = [
+      {
+        createdDatetimeStamp: (new Date).getTime(),
+        acceptedByUserId: userId,
+
+        paidAmount: payment.paidAmount,
+        changeAmount: payment.changeAmount,
+        paymentMethod: payment.paymentMethod,
+        wasChangeSavedInChangeWallet: false
+      }
+    ];
+
+    if (payment.totalBilled > payment.paidAmount) {
+      // console.log("payment.totalBilled > payment.paidAmount");
+      if (customer) {
+        await this._adjustCustomerBalanceAndSave({ customer, action: 'withdrawl', amount: (payment.totalBilled - payment.paidAmount) });
+      } else {
+        throw new CodedError("CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "credit sale is not allowed without registered cutomer");
+      }
+    }
+
+    if (payment.totalBilled === payment.paidAmount) {
+      // console.log("payment.totalBilled === payment.paidAmount");
+    }
+
+    if (payment.totalBilled < payment.paidAmount) {
+      // console.log("payment.totalBilled < payment.paidAmount");
+      if (customer && payment.shouldSaveChangeInAccount) {
+        paymentList[0].wasChangeSavedInChangeWallet = true;
+
+        await this._adjustCustomerBalanceAndSave({ customer, action: 'payment', amount: (payment.totalBilled - payment.paidAmount) });
+      }
+    }
+
+    let { totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount, totalBilled } = payment;
+    return { totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount, totalBilled, totalPaidAmount: paymentList[0].paidAmount, paymentList};
+  }
+
   async _adjustCustomerBalanceAndSave({ customer, action, amount }) {
     if (action === 'payment') {
       customer.balance += amount;
@@ -107,7 +146,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
     return;
   }
 
-  async handle({ body }) {
+  async handle({ userId, body }) {
     let { outletId, customerId, productList, payment } = body;
     
     let customer = null;
@@ -120,9 +159,10 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
 
     let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
     this._reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList });
-    await this._handleReceivedPayment({ payment, customer });
+    let standardizedPayment = await this._handleReceivedPayment({ userId, payment, customer });
+    // console.log("standardizedPayment: ", standardizedPayment);
     await this.database.inventory.setProductList({ id: outletDefaultInventory.id }, { productList: outletDefaultInventory.productList });
-    let salesId = await this.database.sales.create({ outletId, customerId, productList, payment });
+    let salesId = await this.database.sales.create({ outletId, customerId, productList, payment: standardizedPayment });
 
     return { status: "success", salesId };
   }
