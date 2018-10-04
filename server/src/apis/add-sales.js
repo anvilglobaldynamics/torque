@@ -101,7 +101,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
       // console.log("payment.totalBilled < payment.paidAmount");
       if (customer && payment.shouldSaveChangeInAccount) {
         paymentList[0].wasChangeSavedInChangeWallet = true;
-        await this._setCustomerChangeWalletBalance({ customer, amount: (payment.totalBilled - payment.paidAmount) });
+        await this._setCustomerChangeWalletBalance({ customer, changeWalletBalance: (customer.changeWalletBalance + payment.totalBilled - payment.paidAmount) });
       }
     }
 
