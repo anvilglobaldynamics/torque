@@ -63,8 +63,7 @@ describe('Security', _ => {
         apiKey,
         organizationId: organizationId,
         fullName: "<script>alert('TEST AAA');</script>",
-        phone: customerPhone,
-        openingBalance: 500,
+        phone: customerPhone
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

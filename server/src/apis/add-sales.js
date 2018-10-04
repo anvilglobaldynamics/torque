@@ -72,30 +72,6 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
     }
   }
 
-  async depr_handleReceivedPayment({ payment, customer }) {
-    if (payment.totalBilled > payment.paidAmount) {
-      if (customer) {
-        await this._adjustCustomerBalanceAndSave({ customer, action: 'withdrawl', amount: (payment.totalBilled - payment.paidAmount) });
-        return;
-      } else {
-        throw new CodedError("CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "credit sale is not allowed without registered cutomer");
-      }
-    }
-
-    if (payment.totalBilled == payment.paidAmount) {
-      return;
-    }
-
-    if (payment.totalBilled < payment.paidAmount) {
-      if (customer && payment.shouldSaveChangeInAccount) {
-        await this._adjustCustomerBalanceAndSave({ customer, action: 'payment', amount: (payment.totalBilled - payment.paidAmount) });
-        return;
-      } else {
-        return;
-      }
-    }
-  }
-
   async _handleReceivedPayment({ userId, payment, customer }) {
     let paymentList = [
       {
@@ -111,9 +87,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
 
     if (payment.totalBilled > payment.paidAmount) {
       // console.log("payment.totalBilled > payment.paidAmount");
-      if (customer) {
-        await this._adjustCustomerBalanceAndSave({ customer, action: 'withdrawl', amount: (payment.totalBilled - payment.paidAmount) });
-      } else {
+      if (!customer) {
         throw new CodedError("CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "credit sale is not allowed without registered cutomer");
       }
     }
@@ -127,7 +101,8 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
       if (customer && payment.shouldSaveChangeInAccount) {
         paymentList[0].wasChangeSavedInChangeWallet = true;
 
-        await this._adjustCustomerBalanceAndSave({ customer, action: 'payment', amount: (payment.totalBilled - payment.paidAmount) });
+        // add to customer changeWalletBalance
+        // await this._adjustCustomerBalanceAndSave({ customer, action: 'payment', amount: (payment.totalBilled - payment.paidAmount) });
       }
     }
 
