@@ -3,8 +3,9 @@ const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
 const { InventoryMixin } = require('./mixins/inventory-mixin');
+const { CustomerMixin } = require('./mixins/customer-mixin');
 
-exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
+exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
 
   get autoValidates() { return true; }
 
@@ -100,25 +101,12 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin) {
       // console.log("payment.totalBilled < payment.paidAmount");
       if (customer && payment.shouldSaveChangeInAccount) {
         paymentList[0].wasChangeSavedInChangeWallet = true;
-
-        // add to customer changeWalletBalance
-        // await this._adjustCustomerBalanceAndSave({ customer, action: 'payment', amount: (payment.totalBilled - payment.paidAmount) });
+        await this._setCustomerChangeWalletBalance({ customer, amount: (payment.totalBilled - payment.paidAmount) });
       }
     }
 
     let { totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount, totalBilled } = payment;
     return { totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount, totalBilled, totalPaidAmount: paymentList[0].paidAmount, paymentList};
-  }
-
-  async _adjustCustomerBalanceAndSave({ customer, action, amount }) {
-    if (action === 'payment') {
-      customer.balance += amount;
-    } else if (action === 'withdrawl') {
-      customer.balance -= amount;
-    }
-
-    await this.database.customer.setBalance({ id: customer.id }, { balance: customer.balance });
-    return;
   }
 
   async handle({ userId, body }) {

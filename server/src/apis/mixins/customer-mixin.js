@@ -1,3 +1,12 @@
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-error');
 
-exports.CustomerMixin = (SuperApiClass) => class extends SuperApiClass {}
+exports.CustomerMixin = (SuperApiClass) => class extends SuperApiClass {
+
+  async _setCustomerChangeWalletBalance({ customer, amount }) {
+    let changeWalletBalance = customer.changeWalletBalance + amount;
+    let doc = await this.database.customer.setChangeWalletBalance({ id: customer.id }, { changeWalletBalance });
+    throwOnFalsy(doc, "UNABLE_TO_UPDATE_CUSTOMER_CHANGE_WALLET_BALANCE", "Unable to update customer change wallet balance");
+    return;
+  }
+  
+}

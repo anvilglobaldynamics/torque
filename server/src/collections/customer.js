@@ -71,20 +71,18 @@ exports.CustomerCollection = class extends Collection {
     });
   }
 
-  // TODO: this should set withdrawalHistory
-  async setAdditionalPaymentHistory({ id }, { additionalPaymentHistory }) {
+  async setWithdrawalHistory({ id }, { withdrawalHistory }) {
     return await this._update({ id }, {
       $set: {
-        additionalPaymentHistory
+        withdrawalHistory
       }
     });
   }
 
-  // TODO: this should set changeWalletBalance
-  async setBalance({ id }, { balance }) {
+  async setChangeWalletBalance({ id }, { changeWalletBalance }) {
     return await this._update({ id }, {
       $set: {
-        balance
+        changeWalletBalance
       }
     });
   }
