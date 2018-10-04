@@ -989,6 +989,7 @@ exports.validateSalesSchema = (doc) => {
         salePrice: Joi.number().max(999999999999999).required()
       })
     ),
+
     payment: Joi.object().keys({
       totalAmount: Joi.number().max(999999999999999).required(),
       vatAmount: Joi.number().max(999999999999999).required(),
@@ -997,10 +998,19 @@ exports.validateSalesSchema = (doc) => {
       discountedAmount: Joi.number().max(999999999999999).required(),
       serviceChargeAmount: Joi.number().max(999999999999999).required(),
       totalBilled: Joi.number().max(999999999999999).required(),
-      paidAmount: Joi.number().max(999999999999999).required(),
-      changeAmount: Joi.number().max(999999999999999).required(),
-      shouldSaveChangeInAccount: Joi.boolean().required(),
-      paymentMethod: Joi.string().valid('cash', 'card', 'digital').required()
+  
+      totalPaidAmount: Joi.number().max(999999999999999).required(),
+      paymentList: Joi.array().required().items(
+        Joi.object().keys({
+          createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+          acceptedByUserId: Joi.number().max(999999999999999).required(),
+  
+          paidAmount: Joi.number().max(999999999999999).required(),
+          changeAmount: Joi.number().max(999999999999999).required(),
+          paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
+          wasChangeSavedInChangeWallet: Joi.boolean().required()   
+        })
+      )
     }),
 
     isModified: Joi.boolean().required(),
@@ -1031,6 +1041,7 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
         salePrice: Joi.number().max(999999999999999).required()
       })
     ),
+
     payment: Joi.object().keys({
       totalAmount: Joi.number().max(999999999999999).required(),
       vatAmount: Joi.number().max(999999999999999).required(),
@@ -1039,10 +1050,19 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
       discountedAmount: Joi.number().max(999999999999999).required(),
       serviceChargeAmount: Joi.number().max(999999999999999).required(),
       totalBilled: Joi.number().max(999999999999999).required(),
-      paidAmount: Joi.number().max(999999999999999).required(),
-      changeAmount: Joi.number().max(999999999999999).required(),
-      shouldSaveChangeInAccount: Joi.boolean().required(),
-      paymentMethod: Joi.string().valid('cash', 'card', 'digital').required()
+  
+      totalPaidAmount: Joi.number().max(999999999999999).required(),
+      paymentList: Joi.array().required().items(
+        Joi.object().keys({
+          createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+          acceptedByUserId: Joi.number().max(999999999999999).required(),
+  
+          paidAmount: Joi.number().max(999999999999999).required(),
+          changeAmount: Joi.number().max(999999999999999).required(),
+          paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
+          wasChangeSavedInChangeWallet: Joi.boolean().required()   
+        })
+      )
     }),
 
     isModified: Joi.boolean().required(),

@@ -335,7 +335,6 @@ describe.only('Sales', _ => {
         }
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateAddSalesApiSuccessResponse(body);
       testDoneFn();
@@ -791,6 +790,7 @@ describe.only('Sales', _ => {
         salesId,
       }
     }, (err, response, body) => {
+      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateGenericApiSuccessResponse(body);
       testDoneFn();
