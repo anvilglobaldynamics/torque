@@ -4,6 +4,10 @@ url: `api/adjust-customer-balance`
 
 method: `POST`
 
+# WARNING! API DISABLED!
+
+This API has been disabled.
+
 ### request: 
 ```js
 {

@@ -6,6 +6,8 @@ let { customerCommonMixin } = require('./mixins/customer-common');
 
 exports.AdjustCustomerBalanceApi = class extends collectionCommonMixin(customerCommonMixin(LegacyApi)) {
 
+  get isEnabled() { return false; }
+
   get autoValidates() { return true; }
 
   get requiresAuthentication() { return true; }
