@@ -125,14 +125,14 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
     let paidAmountWithoutChange = (newPayment.paidAmount - newPayment.changeAmount);
 
     if (newPayment.paymentMethod === 'change-wallet') {
-      await this._deductFromChangeWalletAsPayment({ customerId: customer.id, amount: paidAmountWithoutChange });
+      await this._deductFromChangeWalletAsPayment({ customer, amount: paidAmountWithoutChange });
     }
 
     payment.totalPaidAmount += paidAmountWithoutChange;
     let wasChangeSavedInChangeWallet = false;
     if (newPayment.changeAmount && newPayment.shouldSaveChangeInAccount) {
       wasChangeSavedInChangeWallet = true;
-      await this._addChangeToChangeWallet({ customerId: customer.id, amount: newPayment.changeAmount });
+      await this._addChangeToChangeWallet({ customer, amount: newPayment.changeAmount });
     }
 
     let {
@@ -145,10 +145,6 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
 
     return payment;
 
-  }
-
-  async _handleReceivedPayment({ userId, payment: originalPayment, customer }) {
-    return await this._processASinglePayment({ userId, payment, customer, newPayment });
   }
 
   async _findCustomerIfSelected({ customerId }) {
@@ -165,7 +161,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
   async handle({ userId, body }) {
     let { outletId, customerId, productList, payment: originalPayment } = body;
 
-    let customer = this._findCustomerIfSelected({ customerId });
+    let customer = await this._findCustomerIfSelected({ customerId });
 
     let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
     this._reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList });
