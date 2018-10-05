@@ -432,7 +432,9 @@
     "creditedAmount": "Credited Amount",
     "productList": "Product List",
     "product": "Product",
-    "noSalesReturnFound": "No Sales Return Record Found."
+    "noSalesReturnFound": "No Sales Return Record Found.",
+
+    "shouldSaveReturnableInChangeWallet": "Should save returnable in change wallet?"
   },
   "sales": {
     "manageSalesTitle": "Sales Record",
@@ -464,7 +466,10 @@
     "changeAmount": "Change Amount",
     "wasDebitedToUser": "was debited to user.",
     "allReturned": "all returned",
-    "noSalesFound": "No Sales Record Found."
+    "noSalesFound": "No Sales Record Found.",
+
+    "soldCount": "Sold Count",
+    "returnedCount": "Returned Count"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",

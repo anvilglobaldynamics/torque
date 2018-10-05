@@ -434,7 +434,9 @@
     "creditedAmount": "ফেরতকৃত অর্থ",
     "productList": "পণ্য তালিকা",
     "product": "পণ্য",
-    "noSalesReturnFound": "কোনো বিক্রয় ফেরত রেকর্ড পাওয়া যায় নি।"
+    "noSalesReturnFound": "কোনো বিক্রয় ফেরত রেকর্ড পাওয়া যায় নি।",
+
+    "shouldSaveReturnableInChangeWallet": "ফেরতযোগ্য অর্থ ক্রেতার ওয়ালেট এ সংরক্ষণ করা হোক?"
   },
   "sales": {
     "manageSalesTitle": "বিক্রয় রেকর্ড",
@@ -466,7 +468,10 @@
     "changeAmount": "ফেরত",
     "wasDebitedToUser": "গ্রাহককে ডেবিট করা হয়েছিল।",
     "allReturned": "সব ফেরত",
-    "noSalesFound": "কোনো বিক্রয় রেকর্ড পাওয়া যায় নি।"
+    "noSalesFound": "কোনো বিক্রয় রেকর্ড পাওয়া যায় নি।",
+
+    "soldCount": "বিক্রয় গণনা",
+    "returnedCount": "ফেরৎ গণনা"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",

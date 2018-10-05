@@ -28,6 +28,11 @@
         width: 100%;
       }
 
+      .return-button {
+        width: 97%;
+        margin: 6px;
+      }
+
       .list-object {
         border: 1px solid #eee;
         background-color: #f7f7f7;
@@ -53,6 +58,7 @@
         <template is="dom-if" if="{{sales.customerId}}">
           <div>[[verses.sales.customerId]]: [[sales.customerId]]</div>
         </template>
+
         <template is="dom-if" if="{{!sales.isDiscarded}}">
           <paper-button raised class="danger discard-button" on-tap="discardTapped">[[verses.general.discard]]</paper-button>
         </template>
@@ -69,13 +75,18 @@
               <div class="list-object">
               
                 <div>[[verses.general.product]]: [[product.productCategoryName]]</div>
-                <div>[[verses.general.count]]: [[product.count]]</div>
+                <div>[[verses.sales.soldCount]]: [[product.count]]</div>
+                <template is="dom-if" if="[[product.returnedProductCount]]">
+                  <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
+                </template>
                 <div>[[verses.sales.salePrice]]: [[product.salePrice]] [[app.settings.monetaryUnit]]</div>
+                
                 <template is="dom-if" if="{{checkIfAllProductReturned(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}" >
                   *[[verses.sales.allReturned]]
                 </template>
+
                 <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}">
-                  <paper-button raised class="danger discard-button" on-tap="returnTapped">[[verses.general.return]]</paper-button>
+                  <paper-button raised class="danger return-button" on-tap="returnTapped">[[verses.general.return]]</paper-button>
                 </template>
 
               </div>
