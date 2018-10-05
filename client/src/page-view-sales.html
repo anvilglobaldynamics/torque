@@ -28,6 +28,17 @@
         width: 100%;
       }
 
+      .list-object {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 6px;
+        margin: 4px 0px;
+      }
+
+      .dated {
+        font-size: 12px;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -54,8 +65,9 @@
         </div>
         <div class="list">
           <template is="dom-repeat" items="{{sales.productList}}" as="product">
-            <div class="horizontal layout item center">
-              <div class="vertical layout flex">
+            <div class="vertical layout flex">
+              <div class="list-object">
+              
                 <div>[[verses.general.product]]: [[product.productCategoryName]]</div>
                 <div>[[verses.general.count]]: [[product.count]]</div>
                 <div>[[verses.sales.salePrice]]: [[product.salePrice]] [[app.settings.monetaryUnit]]</div>
@@ -65,6 +77,7 @@
                 <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}">
                   <paper-button raised class="danger discard-button" on-tap="returnTapped">[[verses.general.return]]</paper-button>
                 </template>
+
               </div>
             </div>
           </template>
@@ -79,14 +92,20 @@
         <div>[[verses.sales.discounted]]: [[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]] [[verses.general.by]] [[sales.payment.discountValue]] [[sales.payment.discountType]]</div>
         <div>[[verses.sales.serviceChargeAmount]]: [[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</div>
         <div>[[verses.sales.vat]]: [[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</div>
-        <div>[[verses.sales.paidAmount]]: [[$round(sales.payment.paidAmount)]] [[app.settings.monetaryUnit]]</div>
-        <template is="dom-if" if="[[sales.payment.paymentMethod]]">
-          <div>[[verses.sales.paymentMethod]]: [[sales.payment.paymentMethod]]</div>
+        <div>[[verses.sales.totalPaid]]: [[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</div>
+
+        <div>
+          <b>[[verses.sales.paymentList]]:</b>
+        </div>
+        <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
+          <div class="list-object">
+            <div>[[verses.sales.paidAmount]]: [[$round(payment.paidAmount)]] [[app.settings.monetaryUnit]]</div>
+            <div>[[verses.sales.changeAmount]]: [[$round(payment.changeAmount)]] [[app.settings.monetaryUnit]]</div>
+            <div>[[verses.sales.paymentMethod]]: [[payment.paymentMethod]]</div>
+            <div class="dated">[[verses.general.dated]]: [[$mkDate(payment.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+          </div>
         </template>
-        <div>[[verses.sales.changeAmount]]: [[$round(sales.payment.changeAmount)]] [[app.settings.monetaryUnit]]</div>
-        <template is="dom-if" if="[[sales.payment.shouldSaveChangeInAccount]]">
-          <div>([[$round(sales.payment.changeAmount)]] [[app.settings.monetaryUnit]] [[verses.sales.wasDebitedToUser]])</div>
-        </template>
+
       </div>
 
     </div>
@@ -151,7 +170,6 @@
       _processSales(cbfn) {
         this._fetchSales(({ sales }) => {
           this.sales = sales;
-          console.log(this.sales);
           cbfn();
         });
       }

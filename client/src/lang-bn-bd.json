@@ -458,6 +458,8 @@
     "serviceChargeAmount": "সেবা মূল্য",
     "vat": "ভ্যাট",
     "paidAmount": "পরিশোধিত",
+    "totalPaid": "মোট পরিশোধিত",
+    "paymentList": "মূল্যপরিশোধ তালিকা",
     "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
     "changeAmount": "ফেরত",
     "wasDebitedToUser": "গ্রাহককে ডেবিট করা হয়েছিল।",

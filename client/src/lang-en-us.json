@@ -456,6 +456,8 @@
     "serviceChargeAmount": "Service Charge Amount",
     "vat": "VAT",
     "paidAmount": "Paid Amount",
+    "totalPaid": "Total Paid Amount",
+    "paymentList": "Payemnt list",
     "paymentMethod": "Payment Method",
     "changeAmount": "Change Amount",
     "wasDebitedToUser": "was debited to user.",

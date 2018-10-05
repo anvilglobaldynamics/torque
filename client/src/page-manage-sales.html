@@ -292,7 +292,6 @@
       _processSalesList(cbfn) {
         this._fetchSalesList(newSalesList => {
           this.salesList = newSalesList;
-          console.log("sales list: ", this.salesList);
           cbfn();
         });
       }
