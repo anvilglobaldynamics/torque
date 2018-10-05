@@ -438,6 +438,7 @@
     "manageSalesTitle": "বিক্রয় রেকর্ড",
     "salesId": "বিক্রয় আইডি",
     "billed": "বিল",
+    "paid": "প্রদত্ত",
     "products": "পণ্য",
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
     "removeCustomer": "গ্রাহক সরান",

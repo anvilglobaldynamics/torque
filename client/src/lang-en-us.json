@@ -436,6 +436,7 @@
     "manageSalesTitle": "Sales Record",
     "salesId": "Sales Id",
     "billed": "Billed",
+    "paid": "Paid",
     "products": "product(s)",
     "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
     "removeCustomer": "Remove Customer",

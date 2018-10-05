@@ -27,6 +27,14 @@
   <template>
     <style include="shared-styles">
 
+      .description {
+        font-size: 15px;
+      }
+
+      .description-time {
+        font-size: 12px;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -107,8 +115,9 @@
               <div class="horizontal layout item center">
                 <div class="vertical layout flex">
                   <div class="title">[[verses.sales.salesId]]: [[sale.id]]</div>
-                  <div class="description">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                  <div class="description">[[verses.sales.billed]]: [[$round(sale.payment.totalBilled)]] [[app.settings.monetaryUnit]], [[sale.productList.length]] [[verses.sales.products]]</div>
+                  <div class="description-time">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+                  <div class="description">[[verses.sales.billed]]: [[$round(sale.payment.totalBilled)]] [[app.settings.monetaryUnit]], [[verses.sales.paid]]: [[$round(sale.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</div>
+                  <div class="description">[[sale.productList.length]] [[verses.sales.products]]</div>
                 </div>
                 <paper-button raised class="secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
               </div>
@@ -283,6 +292,7 @@
       _processSalesList(cbfn) {
         this._fetchSalesList(newSalesList => {
           this.salesList = newSalesList;
+          console.log("sales list: ", this.salesList);
           cbfn();
         });
       }
