@@ -37,35 +37,35 @@
 
       <div class="card vertical layout">
         <div>[[customer.fullName]]</div>
-        <div>[[verses.general.balance]]: [[$round(customer.balance)]] [[app.settings.monetaryUnit]]</div>
-        <!-- <div>[[verses.general.balance]]: [[$round(customer.balance)]]</div> -->
+        <div>[[verses.general.balance]]: [[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</div>
         <div>[[verses.general.number]]: [[customer.phone]]</div>
       </div>
 
-      <div class="card vertical layout">
-        [[verses.customer.additionalPaymentHistory]]:
-        <template is="dom-repeat" items="[[customer.additionalPaymentHistory]]" as="additionalPayment">
-          <div>
-            <b>#[[index]]</b> [[verses.general.date]]: [[$mkDate(additionalPayment.creditedDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
-          </div>
-          <div>
-            [[verses.general.amount]]: [[$round(additionalPayment.amount)]] [[app.settings.monetaryUnit]]
-          </div>
-          <div>
-            [[verses.general.action]]: [[additionalPayment.action]]
-          </div>
-        </template>
-      </div>
+      <template is="dom-if" if="[[customer.withdrawalHistory.length]]">
+        <div class="card vertical layout">
+
+          [[verses.customer.withdrawalHistory]]:
+          <template is="dom-repeat" items="[[customer.withdrawalHistory]]" as="withdrawal">
+            <div>
+              <b>#[[index]]</b> [[verses.general.date]]: [[$mkDate(withdrawal.creditedDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
+            </div>
+            <div>
+              [[verses.general.amount]]: [[$round(withdrawal.amount)]] [[app.settings.monetaryUnit]]
+            </div>
+          </template>
+
+        </div>
+      </template>
 
       <div class="card action-button-container">
         <div class="mb-4">[[verses.customer.clickToEditCustomer]]</div>
         <paper-button raised class="secondary m-0" on-tap="editTapped">[[verses.customer.editCustomer]]</paper-button>
       </div>
 
-      <div class="card action-button-container">
+      <!-- <div class="card action-button-container">
         <div class="mb-4">[[verses.customer.clickAdjustCustomersBalance]]</div>
         <paper-button raised class="secondary m-0" on-tap="adjustCustomerBalanceTapped">[[verses.customer.adjustCustomerBalance]]</paper-button>
-      </div>
+      </div> -->
 
       <!-- <div class="card action-button-container">
         <div class="mb-4">[[verses.customer.clickToDeleteCustomer]]</div>
