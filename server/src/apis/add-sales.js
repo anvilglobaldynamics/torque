@@ -60,7 +60,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
     }];
   }
 
-  _manualPaymentValidation({ payment }) {
+  _manualPaymentValidation({ productList, payment }) {
     // TODO: should check if adding product(s) salePrice and modifiers (discountedAmount, serviceChargeAmount) equals totalBilled
     // throw new CodedError("BILL_INACCURATE", "Bill is mathematically inaccurate");
   }
@@ -116,7 +116,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
 
   async handle({ userId, body }) {
     let { outletId, customerId, productList, payment } = body;
-    this._manualPaymentValidation({ payment });
+    this._manualPaymentValidation({ productList, payment });
     
     let customer = null;
     if (customerId) {
