@@ -28,17 +28,19 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
       ),
 
       payment: Joi.object().keys({
-        totalAmount: Joi.number().max(999999999999999).required(),
+        totalAmount: Joi.number().max(999999999999999).required(), // means total sale price of all products
         vatAmount: Joi.number().max(999999999999999).required(),
         discountType: Joi.string().max(1024).required(),
         discountValue: Joi.number().max(999999999999999).required(),
         discountedAmount: Joi.number().max(999999999999999).required(),
         serviceChargeAmount: Joi.number().max(999999999999999).required(),
-        totalBilled: Joi.number().max(999999999999999).required(),
+        totalBilled: Joi.number().max(999999999999999).required(), // this is the final amount customer has to pay (regardless of the method)
+
+        // NOTE: below is a single payment.
+        paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
         paidAmount: Joi.number().max(999999999999999).required(),
         changeAmount: Joi.number().max(999999999999999).required(),
-        shouldSaveChangeInAccount: Joi.boolean().required(),
-        paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required()
+        shouldSaveChangeInAccount: Joi.boolean().required()
       })
 
     });
@@ -60,9 +62,10 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
     }];
   }
 
-  _manualPaymentValidation({ productList, payment }) {
+  async _validatePayment({ productList, payment }) {
     // TODO: should check if adding product(s) salePrice and modifiers (discountedAmount, serviceChargeAmount) equals totalBilled
     // throw new CodedError("BILL_INACCURATE", "Bill is mathematically inaccurate");
+    return;
   }
 
   _reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList }) {
@@ -78,11 +81,45 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
     }
   }
 
-  async _handleReceivedPayment({ userId, payment, customer }) {
+  /**
+    @method _standardizePayment
+    Splits an original payment received from POS into two separate objects.
+      - First one is 'payment' containing the standardized form of payment that can be
+        inserted into database.
+      - Second one is 'newPayment' containing the only the details of current "payment" provided
+        by customer.
+      see the signature of the objects returned for more clarification.
+  */
+  _standardizePayment({ originalPayment }) {
+    let {
+      totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount,
+      totalBilled,
+      paymentMethod, paidAmount, changeAmount, shouldSaveChangeInAccount
+    } = originalPayment;
+
+    let payment = {
+      totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount,
+      totalBilled,
+      paymentList: [], totalPaidAmount: 0
+    }
+
+    let newPayment = {
+      createdDatetimeStamp: Date.now(),
+      acceptedByUserId: userId,
+      paymentMethod, paidAmount, changeAmount, shouldSaveChangeInAccount
+    }
+
+    return { payment, newPayment };
+  }
+
+
+  async _processASinglePayment({ userId, payment, customer, newPayment }) {
+
+
+
     let paymentList = [
       {
-        createdDatetimeStamp: (new Date).getTime(),
-        acceptedByUserId: userId,
+
 
         paidAmount: payment.paidAmount,
         changeAmount: payment.changeAmount,
@@ -110,14 +147,13 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
       }
     }
 
-    let { totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount, totalBilled } = payment;
-    return { totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount, totalBilled, totalPaidAmount: paymentList[0].paidAmount, paymentList};
   }
 
-  async handle({ userId, body }) {
-    let { outletId, customerId, productList, payment } = body;
-    this._manualPaymentValidation({ productList, payment });
-    
+  async _handleReceivedPayment({ userId, payment: originalPayment, customer }) {
+    return await this._processASinglePayment({ userId, payment, customer, newPayment });
+  }
+
+  async _findCustomerIfSelected({ customerId }) {
     let customer = null;
     if (customerId) {
       customer = await this.database.customer.findById({ id: customerId });
@@ -125,13 +161,23 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
         throw new CodedError("CUSTOMER_INVALID", "Customer not found.");
       }
     }
+    return customer;
+  }
+
+  async handle({ userId, body }) {
+    let { outletId, customerId, productList, payment: originalPayment } = body;
+
+    let customer = this._findCustomerIfSelected({ customerId });
 
     let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
     this._reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList });
-    let standardizedPayment = await this._handleReceivedPayment({ userId, payment, customer });
-    // console.log("standardizedPayment: ", standardizedPayment);
+
+    let { payment, newPayment } = this._standardizePayment({ originalPayment });
+    await this._validatePayment({ productList, payment, newPayment });
+    payment = await this._processASinglePayment({ userId, customer, payment, newPayment });
+
     await this.database.inventory.setProductList({ id: outletDefaultInventory.id }, { productList: outletDefaultInventory.productList });
-    let salesId = await this.database.sales.create({ outletId, customerId, productList, payment: standardizedPayment });
+    let salesId = await this.database.sales.create({ outletId, customerId, productList, payment });
 
     return { status: "success", salesId };
   }
