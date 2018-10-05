@@ -436,7 +436,8 @@
     "product": "পণ্য",
     "noSalesReturnFound": "কোনো বিক্রয় ফেরত রেকর্ড পাওয়া যায় নি।",
 
-    "shouldSaveReturnableInChangeWallet": "ফেরতযোগ্য অর্থ ক্রেতার ওয়ালেট এ সংরক্ষণ করা হোক?"
+    "shouldSaveReturnableInChangeWallet": "ফেরতযোগ্য অর্থ ক্রেতার ওয়ালেট এ সংরক্ষণ করা হোক?",
+    "returnedCount": "ফেরৎ গণনা"
   },
   "sales": {
     "manageSalesTitle": "বিক্রয় রেকর্ড",

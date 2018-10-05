@@ -25,7 +25,17 @@
 
 <dom-module id="page-manage-sales-return">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+    
+      .description {
+          font-size: 15px;
+        }
+
+      .description-time {
+        font-size: 12px;
+      }
+
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -99,14 +109,19 @@
 
           <div class="list">
             <template is="dom-repeat" items="[[salesReturnList]]" as="saleReturn">
+
               <div class="horizontal layout item center">
                 <div class="vertical layout flex">
+
                   <div class="title">[[verses.salesReturn.salesId]]: [[saleReturn.salesId]]</div>
-                  <div class="description">[[$mkDate(saleReturn.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                  <div class="description">[[verses.salesReturn.credited]] [[$round(saleReturn.creditedAmount)]] [[app.settings.monetaryUnit]]</div>
+                  <div class="description-time">[[$mkDate(saleReturn.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+                  <div class="description">[[verses.salesReturn.credited]]: [[$round(saleReturn.creditedAmount)]] [[app.settings.monetaryUnit]]</div>
+                  <div class="description">[[verses.salesReturn.returnedCount]]: [[saleReturn.returnedProductList.length]]</div>
+                
                 </div>
                 <paper-button raised class="secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
               </div>
+          
             </template>
           </div>
 

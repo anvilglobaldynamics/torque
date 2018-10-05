@@ -434,7 +434,8 @@
     "product": "Product",
     "noSalesReturnFound": "No Sales Return Record Found.",
 
-    "shouldSaveReturnableInChangeWallet": "Should save returnable in change wallet?"
+    "shouldSaveReturnableInChangeWallet": "Should save returnable in change wallet?",
+    "returnedCount": "Returned Count"
   },
   "sales": {
     "manageSalesTitle": "Sales Record",

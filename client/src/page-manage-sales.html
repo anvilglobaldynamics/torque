@@ -114,10 +114,12 @@
             <template is="dom-repeat" items="[[salesList]]" as="sale">
               <div class="horizontal layout item center">
                 <div class="vertical layout flex">
+
                   <div class="title">[[verses.sales.salesId]]: [[sale.id]]</div>
                   <div class="description-time">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
                   <div class="description">[[verses.sales.billed]]: [[$round(sale.payment.totalBilled)]] [[app.settings.monetaryUnit]], [[verses.sales.paid]]: [[$round(sale.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</div>
                   <div class="description">[[sale.productList.length]] [[verses.sales.products]]</div>
+                
                 </div>
                 <paper-button raised class="secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
               </div>
