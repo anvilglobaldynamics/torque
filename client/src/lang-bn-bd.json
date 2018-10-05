@@ -373,7 +373,7 @@
     "deleteCustomerQuestionPartOne": "আপনি কি এই গ্রাহককে মুছে ফেলতে চান?",
     "deleteCustomerQuestionPartTwo": "একবার মুছে ফেলা হলে, আপনি এই গ্রাহকটি পুনরুদ্ধার করতে পারবেন না।",
     "customerDeleted": "গ্রাহক মোছা হয়েছে",
-    "additionalPaymentHistory": "অর্থ আদান-প্রদান ইতিহাস",
+    "withdrawalHistory": "অর্থ অপসারণ ইতিহাস",
     "acceptedBy": "দ্বারা গৃহীত",
     "clickToEditCustomer": "গ্রাহক সম্পাদনা করতে এখানে ক্লিক করুন।",
     "editCustomer": "গ্রাহক সম্পাদনা",

@@ -371,7 +371,7 @@
     "deleteCustomerQuestionPartOne": "Are you sure you want to delete this customer",
     "deleteCustomerQuestionPartTwo": "Once deleted, you can not restore this customer.",
     "customerDeleted": "Customer has been deleted",
-    "additionalPaymentHistory": "Additional Payment History",
+    "withdrawalHistory": "Withdrawal History",
     "acceptedBy": "Accepted By",
     "clickToEditCustomer": "Click here to edit the customer.",
     "editCustomer": "Edit Customer",
