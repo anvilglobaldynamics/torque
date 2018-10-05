@@ -1,0 +1,170 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../bower_components/iron-icons/editor-icons.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="elem-additional-payment">
+  <template>
+    <style include="shared-styles">
+      .individual-calculation-field-container {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 6px;
+        margin: 8px 0px;
+      }
+    </style>
+    <div class="card p-0 vertical layout">
+      <!-- 
+      <div class="p-16 horizontal layout center">
+        <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.customerSelector.customerNameOrPhoneInputError]] label=[[verses.customerSelector.customerNameOrPhoneInput]] on-keypress="searchFieldKeypressed"></paper-input>
+        <paper-icon-button icon="clear" on-tap="cancelTapped"></paper-icon-button>
+        <paper-button raised class="primary" on-tap="searchTapped">
+          [[verses.general.search]]
+        </paper-button>
+      </div>
+
+      <paper-listbox>
+        <template is="dom-repeat" items="[[customerList]]" as="customer" index-as="customerIndex">
+          <paper-item class="custom layout horizontal center">
+            <div class="flex">
+              <div class="type body capitalize">[[customer.fullName]]</div>
+              <div class="horizontal layout wrap type secondary">
+                <div class="horizontal layout center m-right-8">
+                  <iron-icon icon="hardware:smartphone" class="icon small"></iron-icon>
+                  <div class="type caption-2">[[customer.phone]]</div>
+                </div>
+                <div class="horizontal layout center">
+                  <iron-icon icon="editor:attach-money" class="icon small"></iron-icon>
+                  <div class="type caption-2">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
+                </div>
+              </div>
+            </div>
+            <paper-button raised class="primary btn btn-default" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+          </paper-item>
+      </paper-listbox>
+      </template> -->
+
+      <div class="list">
+
+        <div class="individual-calculation-field-container">
+          Due amount:
+          <b>{{$round(amountLeftToPay)}} [[page.app.settings.monetaryUnit]]</b>
+        </div>
+
+        <div class="individual-calculation-field-container">
+
+          <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4" on-iron-select="paymentMethodSelected">
+            <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
+              <paper-item name="cash">[[verses.general.cash]]</paper-item>
+              <paper-item name="card">[[verses.general.card]]</paper-item>
+              <paper-item name="digital">[[verses.general.digital]]</paper-item>
+              <template is="dom-if" if="[[customer]]">
+                <paper-item name="change-wallet">change wallet</paper-item>
+              </template>
+            </paper-listbox>
+          </paper-dropdown-menu>
+
+          <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
+            <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+            </paper-input>
+          </template>
+
+
+          <template is="dom-if" if="[[payment.changeAmount]]">
+            <br> [[verses.pos.changeAmount]]:
+            <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
+
+            <br>
+            <template is="dom-if" if="[[customer]]">
+              <template is="dom-if" if="[[payment.changeAmount]]">
+                <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
+                  [[verses.pos.shouldSaveChangeInAccount]]
+                </paper-checkbox>
+              </template>
+            </template>
+          </template>
+
+
+        </div>
+
+        <div class="horizontal layout m-top-16">
+          <paper-button raised class="primary flex" on-tap="saveSaleTapped">[[verses.pos.confirmSales]]</paper-button>
+        </div>
+
+      </div>
+  </template>
+  <script>
+    class ElemAdditionalPayment extends FxElement.mixin(TorqueLanguageBehavior, TorqueCommonBehavior) {
+
+      static get is() { return 'elem-additional-payment'; }
+
+      static get properties() {
+        return {
+          amountLeftToPay: {
+            type: Number,
+            value: 0
+          },
+          page: {
+            type: Object,
+            value: null,
+            observer: 'pageChanged'
+          },
+          payment: {
+            type: Object,
+            value: () => {
+              return {
+                paymentMethod: 'cash',
+                paidAmount: 0,
+                changeAmount: 0,
+                shouldSaveChangeInAccount: false
+              }
+            }
+          }
+        };
+      }
+
+      pageChanged() {
+        this.useLanguageServices();
+        if (!this.page) return;
+      }
+
+
+      paymentMethodSelected(e) {
+        // NOTE: The timeout should not be necessary. However, without it
+        // the value of this.payment.paymentMethod is not being updated in time.
+        window.setTimeout(() => {
+          // this._calculatePayment();
+        }, 100);
+      }
+
+      isPaymentMethodChangeWallet(paymentMethod) {
+        return (paymentMethod === 'change-wallet');
+      }
+
+    }
+    window.customElements.define(ElemAdditionalPayment.is, ElemAdditionalPayment);
+  </script>
+</dom-module>

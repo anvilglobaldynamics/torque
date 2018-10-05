@@ -17,12 +17,13 @@
 <link rel="import" href="torque-common-behavior.html">
 <link rel="import" href="torque-page-behavior.html">
 
+<link rel="import" href="elem-additional-payment.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="page-view-sales">
   <template>
     <style include="shared-styles">
-    
       .discard-button {
         margin-top: 5px;
         width: 100%;
@@ -43,7 +44,6 @@
       .dated {
         font-size: 12px;
       }
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -51,7 +51,7 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
-        
+
         <div>[[verses.general.id]]: [[sales.id]]</div>
         <div>[[verses.general.dated]]: [[$mkDate(sales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
         <div>[[verses.sales.outletId]]: [[sales.outletId]]</div>
@@ -62,7 +62,7 @@
         <template is="dom-if" if="{{!sales.isDiscarded}}">
           <paper-button raised class="danger discard-button" on-tap="discardTapped">[[verses.general.discard]]</paper-button>
         </template>
-        
+
       </div>
 
       <div class="card vertical layout">
@@ -73,15 +73,15 @@
           <template is="dom-repeat" items="{{sales.productList}}" as="product">
             <div class="vertical layout flex">
               <div class="list-object">
-              
+
                 <div>[[verses.general.product]]: [[product.productCategoryName]]</div>
                 <div>[[verses.sales.soldCount]]: [[product.count]]</div>
                 <template is="dom-if" if="[[product.returnedProductCount]]">
                   <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
                 </template>
                 <div>[[verses.sales.salePrice]]: [[product.salePrice]] [[app.settings.monetaryUnit]]</div>
-                
-                <template is="dom-if" if="{{checkIfAllProductReturned(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}" >
+
+                <template is="dom-if" if="{{checkIfAllProductReturned(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}">
                   *[[verses.sales.allReturned]]
                 </template>
 
@@ -118,6 +118,11 @@
         </template>
 
       </div>
+
+      <template is="dom-if" if="[[$shouldTakeAdditionalPayment(sales.payment.totalBilled,  sales.payment.totalPaidAmount)]]">
+        <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[page]]" customer="[[customer]]">
+          </elem-additional-paymentt>
+      </template>
 
       <template is="dom-if" if="{{sales.customerId}}">
         <div class="card vertical layout">
@@ -245,6 +250,11 @@
       }
 
       // region: misc =================================
+
+      $shouldTakeAdditionalPayment(totalBilled, totalPaidAmount) {
+        this.amountLeftToPay = (totalBilled - totalPaidAmount);
+        return this.amountLeftToPay > 0;
+      }
 
     }
 
