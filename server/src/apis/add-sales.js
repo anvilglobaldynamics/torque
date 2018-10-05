@@ -62,9 +62,14 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
     }];
   }
 
-  async _validatePayment({ productList, payment }) {
+  async _validateBillingAndPayment({ productList, payment, newPayment, customer }) {
     // TODO: should check if adding product(s) salePrice and modifiers (discountedAmount, serviceChargeAmount) equals totalBilled
     // throw new CodedError("BILL_INACCURATE", "Bill is mathematically inaccurate");
+    // Also should validate the new payment portion. i.e. paidAmount > changeAmount etc
+    // Also, if paymentMethod is 'change-wallet' then customer must exist
+    if (payment.totalBilled > (payment.totalPaidAmount + newPayment.paidAmount)) {
+      throwOnFalsy(customer, "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "credit sale is not allowed without registered cutomer");
+    }
     return;
   }
 
@@ -90,7 +95,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
         by customer.
       see the signature of the objects returned for more clarification.
   */
-  _standardizePayment({ originalPayment }) {
+  _standardizePayment({ originalPayment, userId }) {
     let {
       totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount,
       totalBilled,
@@ -114,38 +119,31 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
 
 
   async _processASinglePayment({ userId, payment, customer, newPayment }) {
+    // NOTE: At this point, all of above fields are validated and completely trustworthy.
 
+    // NOTE: since paidAmount includes changeAmount, we confirmed after discussion.
+    let paidAmountWithoutChange = (newPayment.paidAmount - newPayment.changeAmount);
 
-
-    let paymentList = [
-      {
-
-
-        paidAmount: payment.paidAmount,
-        changeAmount: payment.changeAmount,
-        paymentMethod: payment.paymentMethod,
-        wasChangeSavedInChangeWallet: false
-      }
-    ];
-
-    if (payment.totalBilled > payment.paidAmount) {
-      // console.log("payment.totalBilled > payment.paidAmount");
-      if (!customer) {
-        throw new CodedError("CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "credit sale is not allowed without registered cutomer");
-      }
+    if (newPayment.paymentMethod === 'change-wallet') {
+      await this._deductFromChangeWalletAsPayment({ customerId: customer.id, amount: paidAmountWithoutChange });
     }
 
-    if (payment.totalBilled === payment.paidAmount) {
-      // console.log("payment.totalBilled === payment.paidAmount");
+    payment.totalPaidAmount += paidAmountWithoutChange;
+    let wasChangeSavedInChangeWallet = false;
+    if (newPayment.changeAmount && newPayment.shouldSaveChangeInAccount) {
+      wasChangeSavedInChangeWallet = true;
+      await this._addChangeToChangeWallet({ customerId: customer.id, amount: newPayment.changeAmount });
     }
 
-    if (payment.totalBilled < payment.paidAmount) {
-      // console.log("payment.totalBilled < payment.paidAmount");
-      if (customer && payment.shouldSaveChangeInAccount) {
-        paymentList[0].wasChangeSavedInChangeWallet = true;
-        await this._setCustomerChangeWalletBalance({ customer, changeWalletBalance: (customer.changeWalletBalance + payment.paidAmount - payment.totalBilled) });
-      }
-    }
+    let {
+      createdDatetimeStamp, acceptedByUserId, paymentMethod, paidAmount, changeAmount
+    } = newPayment;
+    payment.paymentList.push({
+      createdDatetimeStamp, acceptedByUserId, paymentMethod, paidAmount, changeAmount,
+      wasChangeSavedInChangeWallet
+    });
+
+    return payment;
 
   }
 
@@ -172,8 +170,8 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
     let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
     this._reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList });
 
-    let { payment, newPayment } = this._standardizePayment({ originalPayment });
-    await this._validatePayment({ productList, payment, newPayment });
+    let { payment, newPayment } = this._standardizePayment({ originalPayment, userId });
+    await this._validateBillingAndPayment({ productList, payment, newPayment, customer });
     payment = await this._processASinglePayment({ userId, customer, payment, newPayment });
 
     await this.database.inventory.setProductList({ id: outletDefaultInventory.id }, { productList: outletDefaultInventory.productList });
