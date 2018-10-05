@@ -274,7 +274,8 @@ describe('Sales Return', _ => {
             count: salesData.productList[0].count
           }
         ],
-        creditedAmount: 100 // TODO: use data from salesData.payment
+        creditedAmount: 100, // TODO: use data from salesData.payment
+        shouldSaveReturnableInChangeWallet: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -297,7 +298,8 @@ describe('Sales Return', _ => {
             count: 10
           }
         ],
-        creditedAmount: 100 // TODO: use data from salesData.payment
+        creditedAmount: 100, // TODO: use data from salesData.payment
+        shouldSaveReturnableInChangeWallet: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -320,7 +322,8 @@ describe('Sales Return', _ => {
             count: salesData.productList[0].count
           }
         ],
-        creditedAmount: 100 // TODO: use data from salesData.payment
+        creditedAmount: 100, // TODO: use data from salesData.payment
+        shouldSaveReturnableInChangeWallet: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -343,7 +346,8 @@ describe('Sales Return', _ => {
             count: sales2Data.productList[0].count
           }
         ],
-        creditedAmount: 300 // TODO: use data from salesData.payment
+        creditedAmount: 300, // TODO: use data from salesData.payment
+        shouldSaveReturnableInChangeWallet: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

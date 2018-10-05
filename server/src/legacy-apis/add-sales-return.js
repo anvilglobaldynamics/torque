@@ -25,7 +25,9 @@ exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(
           count: Joi.number().max(999999999999999).required()
         })
       ),
-      creditedAmount: Joi.number().max(999999999999999).required()
+
+      creditedAmount: Joi.number().max(999999999999999).required(),
+      shouldSaveReturnableInChangeWallet: Joi.boolean().required()
     });
   }
 
