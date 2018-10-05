@@ -382,7 +382,9 @@
     "noCustomerFound": "No Customer Found.",
 
     "searchForCustomerInput": "Customer Name/Number",
-    "searchForCustomerInputError": "Error in Search"
+    "searchForCustomerInputError": "Error in Search",
+
+    "customerName": "Customer Name"
   },
   "editProfile": {
     "editProfileTitle": "Edit Profile",

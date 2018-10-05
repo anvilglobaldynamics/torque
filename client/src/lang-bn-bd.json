@@ -384,7 +384,9 @@
     "noCustomerFound": "কোনো গ্রাহক পাওয়া যায় নি।",
 
     "searchForCustomerInput": "গ্রাহকের নাম/নম্বর",
-    "searchForCustomerInputError": "গ্রাহকের সন্ধানে ত্রুটি"
+    "searchForCustomerInputError": "গ্রাহকের সন্ধানে ত্রুটি",
+
+    "customerName": "গ্রাহকের নাম"
   },
   "editProfile": {
     "editProfileTitle": "প্রোফাইল সম্পাদনা",
