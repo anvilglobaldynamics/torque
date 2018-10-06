@@ -62,7 +62,7 @@ exports.EmploymentCollection = class extends LegacyCollection {
         PRIV_VIEW_CUSTOMER: Joi.boolean().required(),
         PRIV_ADD_CUSTOMER_DURING_SALES: Joi.boolean().required(),
         PRIV_MODIFY_CUSTOMER: Joi.boolean().required(),
-        PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: Joi.boolean().required()
+        PRIV_MANAGE_CUSTOMER_DEBT: Joi.boolean().required()
       }),
       isActive: Joi.boolean().required(),
     });
@@ -123,7 +123,7 @@ exports.EmploymentCollection = class extends LegacyCollection {
       "PRIV_VIEW_CUSTOMER",
       "PRIV_ADD_CUSTOMER_DURING_SALES",
       "PRIV_MODIFY_CUSTOMER",
-      "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE"
+      "PRIV_MANAGE_CUSTOMER_DEBT"
     ];
 
     let employeeDefaultPrivilegeList = [
@@ -160,7 +160,7 @@ exports.EmploymentCollection = class extends LegacyCollection {
       "PRIV_VIEW_CUSTOMER",
       "PRIV_ADD_CUSTOMER_DURING_SALES",
       "PRIV_MODIFY_CUSTOMER",
-      "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE"
+      "PRIV_MANAGE_CUSTOMER_DEBT"
     ];
 
     let privileges = {};

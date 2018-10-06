@@ -72,7 +72,8 @@
     "designation": "পদবী",
     "errorMessageBody": "ত্রুটি ত্রুটি দেখা দিয়েছে, লিপি প্রতিনিধির সাথে যোগাযোগ করুন",
     "errorMessageTitle": "ত্রুটি",
-    "noDataFound": "কোন তথ্য পাওয়া যায়নি"
+    "noDataFound": "কোন তথ্য পাওয়া যায়নি",
+    "changeWallet": "Change Wallet"
   },
   "login": {
     "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
@@ -355,6 +356,7 @@
   },
   "customer": {
     "editCustomerTitle": "গ্রাহক সম্পাদনা করুন",
+    "withdrawFromChangeWalletBalance": "Withdraw from change wallet balance",
     "addCustomerTitle": "গ্রাহক যুক্ত করুন",
     "customerNameInput": "গ্রাহকের নাম",
     "customerNameInputError": "একটি সঠিক নাম লিখুন",
@@ -682,5 +684,12 @@
     "fileProvidedHasNoData": "প্রদত্ত ফাইলটিতে কোনো তথ্য নেই।",
     "expectedColumn": "প্রত্যাশিত কলাম",
     "missingCellsInRow": "নং শাড়িতে তথ্য নেই"
+  },
+  "withdrawFromChangeWalletBalance": {
+    "withdrawFromChangeWalletBalanceTitle": "Withdraw from change wallet balance",
+    "amountInput": "অর্থ পরিমাণ",
+    "amountInputError": "অর্থ পরিমাণ লিখুন",
+    "withdraw": "সরান",
+    "customerBalanceUpdated": "গ্রাহকের change wallet ব্যালান্স আপডেট হয়ে গিয়েছে।"
   }
 }
