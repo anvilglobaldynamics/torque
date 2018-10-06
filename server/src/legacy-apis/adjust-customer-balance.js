@@ -32,7 +32,7 @@ exports.AdjustCustomerBalanceApi = class extends collectionCommonMixin(customerC
         errorCode: "CUSTOMER_INVALID"
       },
       privileges: [
-        "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE"
+        "PRIV_MANAGE_CUSTOMER_DEBT"
       ]
     }];
   }
