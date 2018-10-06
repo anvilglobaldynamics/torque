@@ -33,15 +33,13 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
-      <iron-form id="adjustCustomerBalanceForm">
+      <iron-form id="withdrawFromChangeWalletBalanceForm">
         <form>
           <div class="card vertical layout">
 
-            <paper-input class="adjustCustomerBalanceForm--amount" value="{{adjustCustomerBalanceForm.amount}}" type="number" required minlength="1" maxlength="10" error-message=[[verses.adjustCustomerBalance.amountInputError]] label=[[verses.adjustCustomerBalance.amountInput]]></paper-input>
-            <div class="horizontal layout button-row end">
-              <div class="flex"></div>
-              <paper-button raised class="primary" on-tap="adjustCustomerBalanceTapped">[[verses.adjustCustomerBalance.adjust]]</paper-button>
-            </div>
+            <div>[[verses.general.changeWallet]]: [[$round(editingCustomer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</div>
+            <paper-input class="withdrawFromChangeWalletBalanceForm--amount" value="{{withdrawFromChangeWalletBalanceForm.amount}}" type="number" required min="1" max="[[editingCustomer.changeWalletBalance]]" error-message=[[verses.withdrawFromChangeWalletBalance.amountInputError]] label=[[verses.withdrawFromChangeWalletBalance.amountInput]]></paper-input>
+            <paper-button raised class="primary" on-tap="withdrawFromChangeWalletBalanceTapped">[[verses.withdrawFromChangeWalletBalance.withdraw]]</paper-button>
 
           </div>
         </form>
@@ -62,17 +60,15 @@
             type: Object,
             value: null
           },
-          adjustCustomerBalanceForm: {
+          withdrawFromChangeWalletBalanceForm: {
             type: Object,
             value: _ => {
               if (mode === 'development') {
                 return {
-                  action: 'payment',
                   amount: '100'
                 };
               } else {
                 return {
-                  action: '',
                   amount: ''
                 };
               }
@@ -92,7 +88,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
-        this.app.pushPageTitle(this.app.verses.adjustCustomerBalance.adjustCustomerBalanceTitle);
+        this.app.pushPageTitle(this.app.verses.withdrawFromChangeWalletBalance.withdrawFromChangeWalletBalanceTitle);
         if (!this._ensureAccess()) return;
         if (!('customer' in this.params)) {
           let message = this.app.verses.general.pageCannotBeDisplayed;
@@ -109,8 +105,8 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.app.popPageTitle();
-        this.resetProperties('adjustCustomerBalanceForm');
-        this.removeAutoValidation('#adjustCustomerBalanceForm paper-input');
+        this.resetProperties('withdrawFromChangeWalletBalanceForm');
+        this.removeAutoValidation('#withdrawFromChangeWalletBalanceForm paper-input');
       }
 
       _ensureAccess() {
@@ -132,15 +128,15 @@
         });
       }
 
-      _processAdjustCustomerBalance({ action, amount }) {
+      _processWithdrawFromChangeWalletBalance({ action, amount }) {
         let data = {
           action, amount,
           customerId: this.editingCustomer.id
         };
-        this.app.callAdjustCustomerBalanceApi(data, (err, response) => {
+        this.app.callWithdrawFromChangeWalletBalanceApi(data, (err, response) => {
           if (err) return;
-          if (response.hasError) return this.onApiError(response.error, 'adjustCustomerBalanceForm');
-          let message = this.app.verses.adjustCustomerBalance.customerBalanceUpdated;
+          if (response.hasError) return this.onApiError(response.error, 'withdrawFromChangeWalletBalanceForm');
+          let message = this.app.verses.withdrawFromChangeWalletBalance.customerBalanceUpdated;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
@@ -149,12 +145,12 @@
 
       // region: ui =================================
 
-      adjustCustomerBalanceTapped(e = null) {
-        this.elemAll('#adjustCustomerBalanceForm paper-input').forEach(el => el.autoValidate = true);
-        if (!this.elem('#adjustCustomerBalanceForm').validate()) return;
+      withdrawFromChangeWalletBalanceTapped(e = null) {
+        this.elemAll('#withdrawFromChangeWalletBalanceForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#withdrawFromChangeWalletBalanceForm').validate()) return;
 
-        let { action, amount } = this.adjustCustomerBalanceForm;
-        this._processAdjustCustomerBalance({ action, amount });
+        let { action, amount } = this.withdrawFromChangeWalletBalanceForm;
+        this._processWithdrawFromChangeWalletBalance({ action, amount });
       }
 
       backButtonOnTopBarPressed(e = null) {

@@ -682,5 +682,12 @@
     "fileProvidedHasNoData": "The file you provided has no data.",
     "expectedColumn": "Expected column",
     "missingCellsInRow": "No row missing data"
+  },
+  "withdrawFromChangeWalletBalance": {
+    "withdrawFromChangeWalletBalanceTitle": "Withdraw from change wallet balance",
+    "amountInput": "Amount",
+    "amountInputError": "Enter the amount",
+    "withdraw": "Withdraw",
+    "customerBalanceUpdated": "Customer's change wallet balance has been updated."
   }
 }

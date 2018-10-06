@@ -85,7 +85,7 @@ let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
-describe('Sales', _ => {
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -899,7 +899,7 @@ describe('Sales', _ => {
       validateGetCustomerApiSuccessResponse(body);
       validateCustomerSchema(body.customer);
 
-      expect(body.customer).to.have.property('withdrawalHistory').to.have.lengthOf(0);
+      expect(body.customer).to.have.property('withdrawalHistory').to.have.lengthOf(1);
 
       testDoneFn();
     })

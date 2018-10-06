@@ -684,5 +684,12 @@
     "fileProvidedHasNoData": "প্রদত্ত ফাইলটিতে কোনো তথ্য নেই।",
     "expectedColumn": "প্রত্যাশিত কলাম",
     "missingCellsInRow": "নং শাড়িতে তথ্য নেই"
+  },
+  "withdrawFromChangeWalletBalance": {
+    "withdrawFromChangeWalletBalanceTitle": "Withdraw from change wallet balance",
+    "amountInput": "অর্থ পরিমাণ",
+    "amountInputError": "অর্থ পরিমাণ লিখুন",
+    "withdraw": "সরান",
+    "customerBalanceUpdated": "গ্রাহকের change wallet ব্যালান্স আপডেট হয়ে গিয়েছে।"
   }
 }
