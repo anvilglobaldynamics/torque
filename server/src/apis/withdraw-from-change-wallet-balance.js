@@ -35,6 +35,9 @@ exports.WithdrawFromChangeWalletBalanceApi = class extends Api {
   async handle({ body, userId }) {
     let { customerId, amount } = body;
 
+    let customer = await this.database.customer.findById({ id: customerId });
+    console.log("customer: ", customer);
+
     return { status: "success" };
   }
 

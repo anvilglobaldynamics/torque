@@ -82,7 +82,7 @@ let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
-describe('Sales', _ => {
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -452,7 +452,7 @@ describe('Sales', _ => {
           discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
-          paidAmount: 300,
+          paidAmount: 1300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: true,
           paymentMethod: 'cash'
@@ -810,6 +810,59 @@ describe('Sales', _ => {
       validateSalesSchema(body.sales);
 
       expect(body.sales).to.have.property('isDiscarded').that.equals(true);
+      testDoneFn();
+    });
+
+  });
+
+  // Customer test
+
+  it('api/withdraw-from-change-wallet-balance (Invalid customerId)', testDoneFn => {
+
+    callApi('api/withdraw-from-change-wallet-balance', {
+      json: {
+        apiKey,
+        customerId: invalidCustomerId,
+        amount: 50
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('CUSTOMER_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/withdraw-from-change-wallet-balance (Invalid amount)', testDoneFn => {
+
+    callApi('api/withdraw-from-change-wallet-balance', {
+      json: {
+        apiKey,
+        customerId,
+        amount: -50
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('VALIDATION_ERROR');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/withdraw-from-change-wallet-balance (Valid)', testDoneFn => {
+
+    callApi('api/withdraw-from-change-wallet-balance', {
+      json: {
+        apiKey,
+        customerId,
+        amount: 50
+      }
+    }, (err, response, body) => {
+      console.log(body);
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
 
