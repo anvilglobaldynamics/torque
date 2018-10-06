@@ -120,7 +120,7 @@
       </div>
 
       <template is="dom-if" if="[[$shouldTakeAdditionalPayment(sales.payment.totalBilled,  sales.payment.totalPaidAmount)]]">
-        <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[page]]" customer="[[customer]]">
+        <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[page]]" customer="[[customer]]" is-from-view-sales-page>
           </elem-additional-paymentt>
       </template>
 

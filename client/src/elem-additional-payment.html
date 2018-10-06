@@ -34,41 +34,16 @@
         padding: 6px;
         margin: 8px 0px;
       }
+
+      .full-width-paper-dropdown {
+        width: 100%;
+      }
     </style>
     <div class="card p-0 vertical layout">
-      <!-- 
-      <div class="p-16 horizontal layout center">
-        <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.customerSelector.customerNameOrPhoneInputError]] label=[[verses.customerSelector.customerNameOrPhoneInput]] on-keypress="searchFieldKeypressed"></paper-input>
-        <paper-icon-button icon="clear" on-tap="cancelTapped"></paper-icon-button>
-        <paper-button raised class="primary" on-tap="searchTapped">
-          [[verses.general.search]]
-        </paper-button>
-      </div>
-
-      <paper-listbox>
-        <template is="dom-repeat" items="[[customerList]]" as="customer" index-as="customerIndex">
-          <paper-item class="custom layout horizontal center">
-            <div class="flex">
-              <div class="type body capitalize">[[customer.fullName]]</div>
-              <div class="horizontal layout wrap type secondary">
-                <div class="horizontal layout center m-right-8">
-                  <iron-icon icon="hardware:smartphone" class="icon small"></iron-icon>
-                  <div class="type caption-2">[[customer.phone]]</div>
-                </div>
-                <div class="horizontal layout center">
-                  <iron-icon icon="editor:attach-money" class="icon small"></iron-icon>
-                  <div class="type caption-2">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
-                </div>
-              </div>
-            </div>
-            <paper-button raised class="primary btn btn-default" on-tap="selectTapped">[[verses.general.select]]</paper-button>
-          </paper-item>
-      </paper-listbox>
-      </template> -->
-
       <div class="list">
 
         <div class="individual-calculation-field-container">
+          <!-- TRANSLATE -->
           Due amount:
           <b>{{$round(amountLeftToPay)}} [[page.app.settings.monetaryUnit]]</b>
         </div>
@@ -92,11 +67,9 @@
             </paper-input>
           </template>
 
-
           <template is="dom-if" if="[[payment.changeAmount]]">
             <br> [[verses.pos.changeAmount]]:
             <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
-
             <br>
             <template is="dom-if" if="[[customer]]">
               <template is="dom-if" if="[[payment.changeAmount]]">
@@ -107,12 +80,14 @@
             </template>
           </template>
 
-
         </div>
 
-        <div class="horizontal layout m-top-16">
-          <paper-button raised class="primary flex" on-tap="saveSaleTapped">[[verses.pos.confirmSales]]</paper-button>
-        </div>
+        <template is="dom-if" if="[[isFromViewSalesPage]]">
+          <!-- TRANSLATE -->
+          <div class="horizontal layout m-top-16">
+            <paper-button raised class="primary flex" on-tap="addPaymentTapped">Add Payment</paper-button>
+          </div>
+        </template>
 
       </div>
   </template>
@@ -123,6 +98,10 @@
 
       static get properties() {
         return {
+          isFromViewSalesPage: {
+            type: Boolean,
+            value: false
+          },
           amountLeftToPay: {
             type: Number,
             value: 0
@@ -150,7 +129,6 @@
         this.useLanguageServices();
         if (!this.page) return;
       }
-
 
       paymentMethodSelected(e) {
         // NOTE: The timeout should not be necessary. However, without it
