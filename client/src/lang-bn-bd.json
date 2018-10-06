@@ -72,7 +72,8 @@
     "designation": "পদবী",
     "errorMessageBody": "ত্রুটি ত্রুটি দেখা দিয়েছে, লিপি প্রতিনিধির সাথে যোগাযোগ করুন",
     "errorMessageTitle": "ত্রুটি",
-    "noDataFound": "কোন তথ্য পাওয়া যায়নি"
+    "noDataFound": "কোন তথ্য পাওয়া যায়নি",
+    "changeWallet": "Change Wallet"
   },
   "login": {
     "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
@@ -355,6 +356,7 @@
   },
   "customer": {
     "editCustomerTitle": "গ্রাহক সম্পাদনা করুন",
+    "withdrawFromChangeWalletBalance": "Withdraw from change wallet balance",
     "addCustomerTitle": "গ্রাহক যুক্ত করুন",
     "customerNameInput": "গ্রাহকের নাম",
     "customerNameInputError": "একটি সঠিক নাম লিখুন",

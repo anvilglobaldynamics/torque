@@ -72,7 +72,8 @@
     "designation": "Designation",
     "errorMessageBody": "Error Occurred, Please contact Lipi representative.",
     "errorMessageTitle": "Error",
-    "noDataFound": "No Data Found"
+    "noDataFound": "No Data Found",
+    "changeWallet": "Change Wallet"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -353,6 +354,7 @@
   },
   "customer": {
     "editCustomerTitle": "Edit Customer",
+    "withdrawFromChangeWalletBalance": "Withdraw from change wallet balance",
     "addCustomerTitle": "Add Customer",
     "customerNameInput": "Name of your customer.",
     "customerNameInputError": "Enter a valid name",

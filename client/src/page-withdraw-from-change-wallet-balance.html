@@ -1,0 +1,168 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+
+<dom-module id="page-withdraw-from-change-wallet-balance">
+  <template>
+    <style include="shared-styles">
+
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+      <iron-form id="adjustCustomerBalanceForm">
+        <form>
+          <div class="card vertical layout">
+
+            <paper-input class="adjustCustomerBalanceForm--amount" value="{{adjustCustomerBalanceForm.amount}}" type="number" required minlength="1" maxlength="10" error-message=[[verses.adjustCustomerBalance.amountInputError]] label=[[verses.adjustCustomerBalance.amountInput]]></paper-input>
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class="primary" on-tap="adjustCustomerBalanceTapped">[[verses.adjustCustomerBalance.adjust]]</paper-button>
+            </div>
+
+          </div>
+        </form>
+      </iron-form>
+    </div>
+
+  </template>
+
+  <script>
+    class PageWithdrawFromChangeWalletBalance extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-withdraw-from-change-wallet-balance';
+      }
+
+      static get properties() {
+        return {
+          editingCustomer: {
+            type: Object,
+            value: null
+          },
+          adjustCustomerBalanceForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  action: 'payment',
+                  amount: '100'
+                };
+              } else {
+                return {
+                  action: '',
+                  amount: ''
+                };
+              }
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.adjustCustomerBalance.adjustCustomerBalanceTitle);
+        if (!this._ensureAccess()) return;
+        if (!('customer' in this.params)) {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog("Something went wrong!", message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processGetCustomer(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('adjustCustomerBalanceForm');
+        this.removeAutoValidation('#adjustCustomerBalanceForm paper-input');
+      }
+
+      _ensureAccess() {
+        return this.accessControl('privileged', ['PRIV_MANAGE_CUSTOMER_WALLET_BALANCE']);
+      }
+
+      // region: editCustomer =================================
+
+      _processGetCustomer(cbfn) {
+        let customerId = parseInt(this.params.customer);
+        let data = {
+          customerId
+        };
+        this.app.callGetCustomerApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.editingCustomer = response.customer;
+          cbfn();
+        });
+      }
+
+      _processAdjustCustomerBalance({ action, amount }) {
+        let data = {
+          action, amount,
+          customerId: this.editingCustomer.id
+        };
+        this.app.callAdjustCustomerBalanceApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'adjustCustomerBalanceForm');
+          let message = this.app.verses.adjustCustomerBalance.customerBalanceUpdated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      adjustCustomerBalanceTapped(e = null) {
+        this.elemAll('#adjustCustomerBalanceForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#adjustCustomerBalanceForm').validate()) return;
+
+        let { action, amount } = this.adjustCustomerBalanceForm;
+        this._processAdjustCustomerBalance({ action, amount });
+      }
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl(`/view-customer/customer:${this.params.customer}`);
+      }
+
+    }
+
+    window.customElements.define(PageWithdrawFromChangeWalletBalance.is, PageWithdrawFromChangeWalletBalance);
+  </script>
+</dom-module>

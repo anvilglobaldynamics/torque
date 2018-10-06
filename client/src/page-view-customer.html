@@ -41,17 +41,22 @@
         <div>[[verses.general.number]]: [[customer.phone]]</div>
       </div>
 
-      <template is="dom-if" if="[[customer.withdrawalHistory.length]]">
+      <template is="dom-if" if="[[customer.changeWalletBalance]]">
+        
         <div class="card vertical layout">
 
-          [[verses.customer.withdrawalHistory]]:
-          <template is="dom-repeat" items="[[customer.withdrawalHistory]]" as="withdrawal">
-            <div>
-              <b>#[[index]]</b> [[verses.general.date]]: [[$mkDate(withdrawal.creditedDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
-            </div>
-            <div>
-              [[verses.general.amount]]: [[$round(withdrawal.amount)]] [[app.settings.monetaryUnit]]
-            </div>
+          <paper-button raised class="secondary" on-tap="withdrawFromChangeWalletBalanceTapped">[[verses.customer.withdrawFromChangeWalletBalance]]</paper-button>
+
+          <template is="dom-if" if="[[customer.withdrawalHistory.length]]">
+            [[verses.customer.withdrawalHistory]]:
+            <template is="dom-repeat" items="[[customer.withdrawalHistory]]" as="withdrawal">
+              <div>
+                <b>#[[index]]</b> [[verses.general.date]]: [[$mkDate(withdrawal.creditedDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
+              </div>
+              <div>
+                [[verses.general.amount]]: [[$round(withdrawal.amount)]] [[app.settings.monetaryUnit]]
+              </div>
+            </template>
           </template>
 
         </div>
@@ -155,6 +160,10 @@
 
       adjustCustomerBalanceTapped(e = null) {
         return this.app.navigateTo(`/adjust-customer-balance/customer:${this.customer.id}`);
+      }
+
+      withdrawFromChangeWalletBalanceTapped(e = null) {
+        return this.app.navigateTo(`/withdraw-from-change-wallet-balance/customer:${this.customer.id}`);
       }
 
       deleteTapped(e = null) {
