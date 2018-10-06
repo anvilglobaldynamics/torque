@@ -104,7 +104,7 @@
     "name": "Modify customer"
   },
   {
-    "code": "PRIV_MANAGE_CUSTOMER_DEBT",
+    "code": "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE",
     "name": "Manage customer debt"
   }
 ]
