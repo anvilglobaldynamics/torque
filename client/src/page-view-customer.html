@@ -29,6 +29,18 @@
       margin: 5px;
     }
 
+    .withdrawal-history-title {
+      font-weight: bold;
+      margin-top: 6px;
+    }
+
+    .list-object {
+      border: 1px solid #eee;
+      background-color: #f7f7f7;
+      padding: 6px;
+      margin: 4px 0px;
+    }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -48,14 +60,19 @@
           <paper-button raised class="secondary" on-tap="withdrawFromChangeWalletBalanceTapped">[[verses.customer.withdrawFromChangeWalletBalance]]</paper-button>
 
           <template is="dom-if" if="[[customer.withdrawalHistory.length]]">
-            [[verses.customer.withdrawalHistory]]:
+            <div class="withdrawal-history-title">[[verses.customer.withdrawalHistory]]:</div>
+
             <template is="dom-repeat" items="[[customer.withdrawalHistory]]" as="withdrawal">
-              <div>
-                <b>#[[index]]</b> [[verses.general.date]]: [[$mkDate(withdrawal.creditedDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
+
+              <div class="list-object">
+                <div>
+                  <b>#[[index]]</b> [[verses.general.date]]: [[$mkDate(withdrawal.creditedDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
+                </div>
+                <div>
+                  [[verses.general.amount]]: [[$round(withdrawal.amount)]] [[app.settings.monetaryUnit]]
+                </div>
               </div>
-              <div>
-                [[verses.general.amount]]: [[$round(withdrawal.amount)]] [[app.settings.monetaryUnit]]
-              </div>
+
             </template>
           </template>
 
