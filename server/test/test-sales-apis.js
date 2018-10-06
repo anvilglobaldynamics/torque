@@ -26,7 +26,10 @@ let {
   validateGetSalesListApiSuccessResponse,
   validateAddSalesReturnApiSuccessResponse,
   validateSalesSchema,
-  validateSalesSchemaWhenListObj
+  validateSalesSchemaWhenListObj,
+
+  validateGetCustomerApiSuccessResponse,
+  validateCustomerSchema
 } = require('./lib');
 
 const prefix = 's';
@@ -815,7 +818,7 @@ describe.only('Sales', _ => {
 
   });
 
-  // Customer test
+  // WithdrawFromChangeWalletBalanceApi tests - start
 
   it('api/withdraw-from-change-wallet-balance (Invalid customerId)', testDoneFn => {
 
@@ -851,22 +854,59 @@ describe.only('Sales', _ => {
 
   });
 
+  it('api/withdraw-from-change-wallet-balance (Invalid amount)', testDoneFn => {
+
+    callApi('api/withdraw-from-change-wallet-balance', {
+      json: {
+        apiKey,
+        customerId,
+        amount: 3000
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('INSUFFICIENT_BALANCE');
+      testDoneFn();
+    });
+
+  });
+
   it('api/withdraw-from-change-wallet-balance (Valid)', testDoneFn => {
 
     callApi('api/withdraw-from-change-wallet-balance', {
       json: {
         apiKey,
         customerId,
-        amount: 50
+        amount: 50.9
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
 
   });
+
+  it('api/get-customer (changeWalletBalance check)', testDoneFn => {
+
+    callApi('api/get-customer', {
+      json: {
+        apiKey,
+        customerId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetCustomerApiSuccessResponse(body);
+      validateCustomerSchema(body.customer);
+
+      expect(body.customer).to.have.property('withdrawalHistory').to.have.lengthOf(0);
+
+      testDoneFn();
+    })
+
+  });
+
+  // WithdrawFromChangeWalletBalanceApi tests - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

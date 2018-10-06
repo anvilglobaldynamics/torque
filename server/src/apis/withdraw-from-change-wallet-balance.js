@@ -2,8 +2,9 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const { CustomerMixin } = require('./mixins/customer-mixin');
 
-exports.WithdrawFromChangeWalletBalanceApi = class extends Api {
+exports.WithdrawFromChangeWalletBalanceApi = class extends Api.mixin(CustomerMixin) {
 
   get autoValidates() { return true; }
 
@@ -36,7 +37,7 @@ exports.WithdrawFromChangeWalletBalanceApi = class extends Api {
     let { customerId, amount } = body;
 
     let customer = await this.database.customer.findById({ id: customerId });
-    console.log("customer: ", customer);
+    await this._deductFromChangeWalletAsPayment({ customer, amount });
 
     return { status: "success" };
   }
