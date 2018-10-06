@@ -12,6 +12,8 @@ Joi.object().keys({
       count: Joi.number().max(999999999999999).required()
     })
   ),
-  creditedAmount: Joi.number().max(999999999999999).required()
+
+  creditedAmount: Joi.number().max(999999999999999).required(),
+  returnableWasSavedInChangeWallet: Joi.boolean().required()
 });
 ```
