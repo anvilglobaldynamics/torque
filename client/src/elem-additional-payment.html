@@ -38,6 +38,11 @@
       .full-width-paper-dropdown {
         width: 100%;
       }
+
+      .should-save-change{
+        margin-top: 12px;
+        margin-bottom: 4px;
+      }
     </style>
     <div class="card p-0 vertical layout">
       <div class="list">
@@ -73,7 +78,7 @@
             <br>
             <template is="dom-if" if="[[customer]]">
               <template is="dom-if" if="[[payment.changeAmount]]">
-                <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
+                <paper-checkbox class="should-save-change" checked="{{payment.shouldSaveChangeInAccount}}">
                   [[verses.pos.shouldSaveChangeInAccount]]
                 </paper-checkbox>
               </template>
@@ -85,7 +90,7 @@
         <template is="dom-if" if="[[isFromViewSalesPage]]">
           <!-- TRANSLATE -->
           <div class="horizontal layout m-top-16">
-            <paper-button raised class="primary flex" on-tap="addPaymentTapped">Add Payment</paper-button>
+            <paper-button raised class="primary flex" on-tap="addPaymentTapped">Add Additional Payment</paper-button>
           </div>
         </template>
 
@@ -130,12 +135,41 @@
         if (!this.page) return;
       }
 
+      _calculatePayment() {
+        let {
+          paymentMethod,
+          paidAmount,
+          changeAmount,
+          shouldSaveChangeInAccount
+        } = this.payment;
+        let amountLeftToPay = parseFloat(this.amountLeftToPay);
+        paidAmount = parseFloat(paidAmount);
+        changeAmount = parseFloat(changeAmount);
+        if (paymentMethod === 'change-wallet') {
+          changeAmount = 0;
+        } else {
+          if (paidAmount > amountLeftToPay) {
+            changeAmount = paidAmount - amountLeftToPay;
+          }
+        }
+        this.payment = {
+          paymentMethod,
+          paidAmount,
+          changeAmount,
+          shouldSaveChangeInAccount
+        };
+      }
+
       paymentMethodSelected(e) {
         // NOTE: The timeout should not be necessary. However, without it
         // the value of this.payment.paymentMethod is not being updated in time.
         window.setTimeout(() => {
-          // this._calculatePayment();
+          this._calculatePayment();
         }, 100);
+      }
+
+      genericPaymentInputChanged(e) {
+        this._calculatePayment();
       }
 
       isPaymentMethodChangeWallet(paymentMethod) {
