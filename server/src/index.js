@@ -47,7 +47,7 @@ let { AddCustomerApi } = require('./legacy-apis/add-customer');
 let { GetCustomerApi } = require('./legacy-apis/get-customer');
 const { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
 let { EditCustomerApi } = require('./legacy-apis/edit-customer');
-let { AdjustCustomerBalanceApi } = require('./legacy-apis/adjust-customer-balance');
+const { WithdrawFromChangeWalletBalanceApi } = require('./apis/withdraw-from-change-wallet-balance');
 let { DeleteCustomerApi } = require('./legacy-apis/delete-customer');
 
 let { AddOutletApi } = require('./legacy-apis/add-outlet');
@@ -266,7 +266,7 @@ class Program {
     server.registerPostApi('/api/get-customer', GetCustomerApi);
     server.registerPostApi('/api/get-customer-summary-list', GetCustomerSummaryListApi);
     server.registerPostApi('/api/edit-customer', EditCustomerApi);
-    server.registerPostApi('/api/adjust-customer-balance', AdjustCustomerBalanceApi);
+    server.registerPostApi('/api/withdraw-from-change-wallet-balance', WithdrawFromChangeWalletBalanceApi);
     server.registerPostApi('/api/delete-customer', DeleteCustomerApi);
     server.registerPostApi('/api/add-outlet', AddOutletApi);
     server.registerPostApi('/api/get-outlet-list', GetOutletListApi);
