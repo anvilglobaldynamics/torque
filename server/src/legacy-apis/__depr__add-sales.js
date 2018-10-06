@@ -86,7 +86,7 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
           return cbfn(payment);
         });
       } else {
-        let err = new Error("credit sale is not allowed without registered cutomer");
+        let err = new Error("Credit sale is not allowed without a registered cutomer.");
         err.code = "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER";
         return this.fail(err);
       }

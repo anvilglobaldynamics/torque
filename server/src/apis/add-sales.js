@@ -68,7 +68,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
     // Also should validate the new payment portion. i.e. paidAmount > changeAmount etc
     // Also, if paymentMethod is 'change-wallet' then customer must exist
     if (payment.totalBilled > (payment.totalPaidAmount + newPayment.paidAmount)) {
-      throwOnFalsy(customer, "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "credit sale is not allowed without registered cutomer");
+      throwOnFalsy(customer, "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "Credit sale is not allowed without a registered cutomer.");
     }
     return;
   }
