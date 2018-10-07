@@ -3,7 +3,7 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../../utils/coded
 exports.salesCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async _getSales({ salesId }) {
-    let sales = await this.database.sales.findById({ salesId });
+    let sales = await this.database.sales.findById({ id: salesId });
     throwOnFalsy(sales, "SALES_INVALID", "Sales not found");
     return sales;
   }
@@ -14,5 +14,5 @@ exports.salesCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     let salesList = await this.database.sales.listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate });
     return salesList;
   }
-  
+
 }
