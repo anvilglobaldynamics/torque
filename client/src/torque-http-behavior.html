@@ -451,6 +451,11 @@
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('bulk-import-product-categories', data, cbfn);
       }
+
+      callAddAdditionalPaymentApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-additional-payment', data, cbfn);
+      }
     }
 
   })();
