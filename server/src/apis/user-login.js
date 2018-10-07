@@ -35,7 +35,7 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
 
     let warning = [];
     if (emailOrPhone === user.phone && !user.isPhoneVerified) {
-      let phoneVerificationRequest = this.database.phoneVerificationRequest.findByForPhone({ forPhone: user.phone });
+      let phoneVerificationRequest = await this.database.phoneVerificationRequest.findByForPhone({ forPhone: user.phone });
       throwOnFalsy(phoneVerificationRequest, "PHONE_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.phoneVerificationRequestNotFound);
       let { createdDatetimeStamp, isVerificationComplete } = phoneVerificationRequest;
       if (!isVerificationComplete) {
@@ -45,7 +45,7 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
         warning.push(`You have less than 1 hour to verify your phone number "${user.phone}".`);
       }
     } else if (emailOrPhone === user.email && !user.isEmailVerified) {
-      let emailVerificationRequest = this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email });
+      let emailVerificationRequest = await this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email });
       throwOnFalsy(emailVerificationRequest, "EMAIL_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.emailVerificationRequestNotFound)
       throwOnFalsy(emailVerificationRequest.isVerificationComplete, "USER_REQUIRES_EMAIL_VERIFICATION", this.verses.userLoginApi.userRequiresEmailVerification)
     } else {

@@ -4,8 +4,9 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-er
 const { extract } = require('./../utils/extract');
 const { InventoryMixin } = require('./mixins/inventory-mixin');
 const { CustomerMixin } = require('./mixins/customer-mixin');
+const { SalesMixin } = require('./mixins/sales-mixin');
 
-exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
+exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin) {
 
   get autoValidates() { return true; }
 
@@ -95,7 +96,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
         by customer.
       see the signature of the objects returned for more clarification.
   */
-  _standardizePayment({ originalPayment, userId }) {
+  _standardizePayment({ originalPayment }) {
     let {
       totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount,
       totalBilled,
@@ -109,42 +110,10 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
     }
 
     let newPayment = {
-      createdDatetimeStamp: Date.now(),
-      acceptedByUserId: userId,
       paymentMethod, paidAmount, changeAmount, shouldSaveChangeInAccount
     }
 
     return { payment, newPayment };
-  }
-
-
-  async _processASinglePayment({ userId, payment, customer, newPayment }) {
-    // NOTE: At this point, all of above fields are validated and completely trustworthy.
-
-    // NOTE: since paidAmount includes changeAmount, we confirmed after discussion.
-    let paidAmountWithoutChange = (newPayment.paidAmount - newPayment.changeAmount);
-
-    if (newPayment.paymentMethod === 'change-wallet') {
-      await this._deductFromChangeWalletAsPayment({ customer, amount: paidAmountWithoutChange });
-    }
-
-    payment.totalPaidAmount += paidAmountWithoutChange;
-    let wasChangeSavedInChangeWallet = false;
-    if (newPayment.changeAmount && newPayment.shouldSaveChangeInAccount) {
-      wasChangeSavedInChangeWallet = true;
-      await this._addChangeToChangeWallet({ customer, amount: newPayment.changeAmount });
-    }
-
-    let {
-      createdDatetimeStamp, acceptedByUserId, paymentMethod, paidAmount, changeAmount
-    } = newPayment;
-    payment.paymentList.push({
-      createdDatetimeStamp, acceptedByUserId, paymentMethod, paidAmount, changeAmount,
-      wasChangeSavedInChangeWallet
-    });
-
-    return payment;
-
   }
 
   async _findCustomerIfSelected({ customerId }) {
@@ -166,7 +135,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
     let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
     this._reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList });
 
-    let { payment, newPayment } = this._standardizePayment({ originalPayment, userId });
+    let { payment, newPayment } = this._standardizePayment({ originalPayment });
     await this._validateBillingAndPayment({ productList, payment, newPayment, customer });
     payment = await this._processASinglePayment({ userId, customer, payment, newPayment });
 

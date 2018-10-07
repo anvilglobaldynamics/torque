@@ -144,9 +144,10 @@
         } = this.payment;
         let amountLeftToPay = parseFloat(this.amountLeftToPay);
         paidAmount = parseFloat(paidAmount);
-        changeAmount = parseFloat(changeAmount);
+        changeAmount = 0;
         if (paymentMethod === 'change-wallet') {
           changeAmount = 0;
+          paidAmount = amountLeftToPay;
         } else {
           if (paidAmount > amountLeftToPay) {
             changeAmount = paidAmount - amountLeftToPay;
@@ -183,23 +184,23 @@
 
       _processAddPayment(salesId) {
         this._calculatePayment();
-        let customerId = this.customerId;
+        let customerId = this.customer.id;
         let payment = this.payment;
         let data = { customerId, salesId, payment };
         this.page.app.callAddAdditionalPaymentApi(data, (err, response) => {
           if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
+          if (response.hasError) return this.page.onApiError(response.error);
           // TRANSLATE
-          let message = "You are adding an additional payment to this sale. Proceed?";
-          this.app.showToast(message, _ => {
+          let message = "Additional payment has been added.";
+          this.page.app.showToast(message, _ => {
             this._resetAdditionalPayment();
           });
         });
       }
 
       _resetAdditionalPayment() {
-        this.resetProperties('payment', 'customer');
-        this.app.refreshCurrentPage();
+        // this.resetProperties('payment', 'customer');
+        this.page.app.refreshCurrentPage();
       }
 
     }

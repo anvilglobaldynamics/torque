@@ -59,6 +59,11 @@ Possible Error Codes:
 { code: PRODUCT_INVALID } // product could not be found
 { code: INSUFFICIENT_PRODUCT } // not enough product in inventory
 { code: BILL_INACCURATE } // Bill is mathematically inaccurate
+
+From "customer-mixin":
+  { code: INSUFFICIENT_BALANCE }
+  { code: NEGATIVE_AMOUNT_GIVEN }
+  { code: UNABLE_TO_UPDATE_CUSTOMER_CHANGE_WALLET_BALANCE }
 ```
 
 ### response (on success):

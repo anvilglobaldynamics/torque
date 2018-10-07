@@ -75,6 +75,7 @@ let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
 const { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
 
 const { AddSalesApi } = require('./apis/add-sales');
+const { AddAdditionalPaymentApi } = require('./apis/add-additional-payment');
 let { GetSalesApi } = require('./legacy-apis/get-sales');
 const { GetSalesListApi } = require('./apis/get-sales-list');
 let { DiscardSalesApi } = require('./legacy-apis/discard-sales');
@@ -295,6 +296,7 @@ class Program {
     server.registerPostApi('/api/get-role-list', GetRoleListApi);
     server.registerPostApi('/api/get-privilege-list', GetPrivilegeListApi);
     server.registerPostApi('/api/add-sales', AddSalesApi);
+    server.registerPostApi('/api/add-additional-payment', AddAdditionalPaymentApi);
     server.registerPostApi('/api/get-sales', GetSalesApi);
     server.registerPostApi('/api/get-sales-list', GetSalesListApi);
     server.registerPostApi('/api/discard-sales', DiscardSalesApi);
