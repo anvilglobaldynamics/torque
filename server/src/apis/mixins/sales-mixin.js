@@ -13,8 +13,6 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     let outletIdList = outletList.map(outlet => outlet.id);
     let salesList = await this.database.sales.listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate });
     return salesList;
-  }
-
-  
+  } 
 
 }
