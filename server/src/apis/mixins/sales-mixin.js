@@ -15,4 +15,35 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     return salesList;
   }
 
+  async _processASinglePayment({ userId, payment, customer, newPayment }) {
+    // NOTE: At this point, all of above fields are validated and completely trustworthy.
+
+    // NOTE: since paidAmount includes changeAmount, we confirmed after discussion.
+    let paidAmountWithoutChange = (newPayment.paidAmount - newPayment.changeAmount);
+
+    if (newPayment.paymentMethod === 'change-wallet') {
+      await this._deductFromChangeWalletAsPayment({ customer, amount: paidAmountWithoutChange });
+    }
+
+    payment.totalPaidAmount += paidAmountWithoutChange;
+    let wasChangeSavedInChangeWallet = false;
+    if (newPayment.changeAmount && newPayment.shouldSaveChangeInAccount) {
+      wasChangeSavedInChangeWallet = true;
+      await this._addChangeToChangeWallet({ customer, amount: newPayment.changeAmount });
+    }
+
+    let {
+      paymentMethod, paidAmount, changeAmount
+    } = newPayment;
+
+    payment.paymentList.push({
+      createdDatetimeStamp: Date.now(),
+      acceptedByUserId: userId,
+      paymentMethod, paidAmount, changeAmount,
+      wasChangeSavedInChangeWallet
+    });
+
+    return payment;
+  }
+
 }

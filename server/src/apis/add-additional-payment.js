@@ -46,37 +46,6 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
     }];
   }
 
-  async _processASinglePayment({ userId, payment, customer, newPayment }) {
-    // NOTE: At this point, all of above fields are validated and completely trustworthy.
-
-    // NOTE: since paidAmount includes changeAmount, we confirmed after discussion.
-    let paidAmountWithoutChange = (newPayment.paidAmount - newPayment.changeAmount);
-
-    if (newPayment.paymentMethod === 'change-wallet') {
-      await this._deductFromChangeWalletAsPayment({ customer, amount: paidAmountWithoutChange });
-    }
-
-    payment.totalPaidAmount += paidAmountWithoutChange;
-    let wasChangeSavedInChangeWallet = false;
-    if (newPayment.changeAmount && newPayment.shouldSaveChangeInAccount) {
-      wasChangeSavedInChangeWallet = true;
-      await this._addChangeToChangeWallet({ customer, amount: newPayment.changeAmount });
-    }
-
-    let {
-      paymentMethod, paidAmount, changeAmount
-    } = newPayment;
-
-    payment.paymentList.push({
-      createdDatetimeStamp: Date.now(),
-      acceptedByUserId: userId,
-      paymentMethod, paidAmount, changeAmount,
-      wasChangeSavedInChangeWallet
-    });
-
-    return payment;
-  }
-
   async _getCustomer({ customerId }) {
     let customer = await this.database.customer.findById({ id: customerId });
     throwOnFalsy(customer, "CUSTOMER_INVALID", "Customer not found.");
@@ -89,8 +58,6 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
       // NOTE: skipping the error throwing here since the error is being thrown by _deductFromChangeWalletAsPayment
     }
     let calculatedChangeAmount = Math.max((payment.totalPaidAmount + newPayment.paidAmount) - payment.totalBilled, 0);
-
-    console.log(payment.totalPaidAmount, newPayment.paidAmount, payment.totalBilled, calculatedChangeAmount, newPayment.changeAmount);
     if (this.round(calculatedChangeAmount) !== this.round(newPayment.changeAmount)) {
       throw new CodedError("INCORRECT_PAYMENT_CALCULATION", "Change calculation is not accurate.");
     }
@@ -101,11 +68,10 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
     let sales = await this._getSales({ salesId });
     let customer = await this._getCustomer({ customerId });
     let payment = sales.payment;
-    console.log("BEFORE", payment);
+
     await this._validateNewPayment({ payment, newPayment, customer });
     payment = await this._processASinglePayment({ userId, customer, payment, newPayment });
     await this.database.sales.setPayment({ id: salesId }, { payment });
-    console.log("AFTER", payment);
     return { status: "success" };
   }
 
