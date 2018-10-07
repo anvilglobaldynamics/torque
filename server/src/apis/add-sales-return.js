@@ -57,7 +57,7 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
     let sales = await this.database.sales.findById({ id: salesId });
 
     await this._verifyProductsExist({ productList: returnedProductList });
-    // _verifyProductsAreReturnable in returnedProductList
+    await this._verifyProductsAreReturnable({ productList: returnedProductList });
     let outletReturnedInventory = await this.__getOutletReturnedInventory({ outletId: salesId.outletId });
     
     if (shouldSaveReturnableInChangeWallet && sales.customerId && creditedAmount) {

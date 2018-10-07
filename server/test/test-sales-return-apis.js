@@ -302,7 +302,6 @@ describe.only('Sales Return', _ => {
         shouldSaveReturnableInChangeWallet: false
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equal('PRODUCT_INVALID');
