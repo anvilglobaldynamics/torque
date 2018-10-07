@@ -4,8 +4,9 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-er
 const { extract } = require('./../utils/extract');
 const { InventoryMixin } = require('./mixins/inventory-mixin');
 const { CustomerMixin } = require('./mixins/customer-mixin');
+const { ProductMixin } = require('./mixins/product-mixin');
 
-exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
+exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixin, ProductMixin) {
 
   get autoValidates() { return true; }
 
@@ -54,8 +55,8 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
     let { salesId, returnedProductList, creditedAmount, shouldSaveReturnableInChangeWallet } = body;
 
     let sales = await this.database.sales.findById({ id: salesId });
-    // verify sales exists 
-    // _verifyProductsExist in returnedProductList
+
+    await this._verifyProductsExist({ productList: returnedProductList });
     // _verifyProductsAreReturnable in returnedProductList
     let outletReturnedInventory = await this.__getOutletReturnedInventory({ outletId: salesId.outletId });
     

@@ -3,8 +3,9 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const { ProductCategoryMixin } = require('./mixins/product-category-mixin');
 
-exports.AddProductToInventoryApi = class extends Api {
+exports.AddProductToInventoryApi = class extends Api.mixin(ProductCategoryMixin) {
 
   get autoValidates() { return true; }
 
@@ -36,15 +37,6 @@ exports.AddProductToInventoryApi = class extends Api {
         "PRIV_MODIFY_ALL_INVENTORIES"
       ]
     }];
-  }
-
-  async _verifyProductCategoriesExist({ productList }) {
-    await this.crossmap({
-      source: productList,
-      sourceKey: 'productCategoryId',
-      target: 'productCategory',
-      onError: (inventory) => { throw new CodedError("PRODUCT_CATEGORY_INVALID", "Unable to find all products in productList"); }
-    });
   }
 
   async _addProductToInventory({ inventoryId, productList }) {
