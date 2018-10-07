@@ -84,28 +84,28 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
   }
 
   async _validateNewPayment({ payment, newPayment, customer }) {
-    if (payment.totalBilled > (payment.totalPaidAmount + newPayment.paidAmount)) {
-      if (newPayment.changeAmount !== 0) {
-        throw new CodedError("INCORRECT_PAYMENT_CALCULATION", "Non-zero change amount.");
-      }
-    } else {
-      let calculatedChangeAmount = (payment.totalPaidAmount + newPayment.paidAmount) - payment.totalBilled;
-      if (calculatedChangeAmount !== newPayment.changeAmount) {
-        throw new CodedError("INCORRECT_PAYMENT_CALCULATION", "Change calculation not accurate.");
-      }
-    }
     if (newPayment.paymentMethod === 'change-wallet' && customer.changeWalletBalance < newPayment.paidAmount) {
-      throw new CodedError("CUSTOMER_HAS_INSUFFICIENT_BALANCE_IN_CHANGE_WALLET", "The customer does not have enough balance in change wallet.");
+      // throw new CodedError("CUSTOMER_HAS_INSUFFICIENT_BALANCE_IN_CHANGE_WALLET", "The customer does not have enough balance in change wallet.");
+      // NOTE: skipping the error throwing here since the error is being thrown by _deductFromChangeWalletAsPayment
+    }
+    let calculatedChangeAmount = Math.max((payment.totalPaidAmount + newPayment.paidAmount) - payment.totalBilled, 0);
+
+    console.log(payment.totalPaidAmount, newPayment.paidAmount, payment.totalBilled, calculatedChangeAmount, newPayment.changeAmount);
+    if (this.round(calculatedChangeAmount) !== this.round(newPayment.changeAmount)) {
+      throw new CodedError("INCORRECT_PAYMENT_CALCULATION", "Change calculation is not accurate.");
     }
   }
 
   async handle({ userId, body }) {
     let { salesId, customerId, payment: newPayment } = body;
-    let sales = this._getSales({ salesId });
+    let sales = await this._getSales({ salesId });
     let customer = await this._getCustomer({ customerId });
     let payment = sales.payment;
+    console.log("BEFORE", payment);
     await this._validateNewPayment({ payment, newPayment, customer });
     payment = await this._processASinglePayment({ userId, customer, payment, newPayment });
+    await this.database.sales.setPayment({ id: salesId }, { payment });
+    console.log("AFTER", payment);
     return { status: "success" };
   }
 
