@@ -63,15 +63,17 @@ exports.AddAdditionalSalesApi = class extends Api.mixin(InventoryMixin, Customer
     }
 
     let {
-      createdDatetimeStamp, acceptedByUserId, paymentMethod, paidAmount, changeAmount
+      paymentMethod, paidAmount, changeAmount
     } = newPayment;
+
     payment.paymentList.push({
-      createdDatetimeStamp, acceptedByUserId, paymentMethod, paidAmount, changeAmount,
+      createdDatetimeStamp: Date.now(),
+      acceptedByUserId: userId,
+      paymentMethod, paidAmount, changeAmount,
       wasChangeSavedInChangeWallet
     });
 
     return payment;
-
   }
 
   async _getCustomer({ customerId }) {
@@ -86,11 +88,20 @@ exports.AddAdditionalSalesApi = class extends Api.mixin(InventoryMixin, Customer
     return sales;
   }
 
-  async _validateBillingAndPayment({ payment, newPayment, customer }) {
+  async _validateNewPayment({ payment, newPayment, customer }) {
     if (payment.totalBilled > (payment.totalPaidAmount + newPayment.paidAmount)) {
-      throwOnFalsy(customer, "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "Credit sale is not allowed without a registered cutomer.");
+      if (newPayment.changeAmount !== 0) {
+        throw new CodedError("INCORRECT_PAYMENT_CALCULATION", "Non-zero change amount.");
+      }
+    } else {
+      let calculatedChangeAmount = (payment.totalPaidAmount + newPayment.paidAmount) - payment.totalBilled;
+      if (calculatedChangeAmount !== newPayment.changeAmount) {
+        throw new CodedError("INCORRECT_PAYMENT_CALCULATION", "Change calculation not accurate.");
+      }
     }
-    return;
+    if (newPayment.paymentMethod === 'change-wallet' && customer.changeWalletBalance < newPayment.paidAmount) {
+      throw new CodedError("CUSTOMER_HAS_INSUFFICIENT_BALANCE_IN_CHANGE_WALLET", "The customer does not have enough balance in change wallet.");
+    }
   }
 
   async handle({ userId, body }) {
@@ -98,7 +109,7 @@ exports.AddAdditionalSalesApi = class extends Api.mixin(InventoryMixin, Customer
     let sales = this._getSales({ salesId });
     let customer = await this._getCustomer({ customerId });
     let payment = sales.payment;
-    await this._validateBillingAndPayment({ payment, newPayment, customer });
+    await this._validateNewPayment({ payment, newPayment, customer });
     payment = await this._processASinglePayment({ userId, customer, payment, newPayment });
     return { status: "success" };
   }

@@ -95,7 +95,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
         by customer.
       see the signature of the objects returned for more clarification.
   */
-  _standardizePayment({ originalPayment, userId }) {
+  _standardizePayment({ originalPayment }) {
     let {
       totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount,
       totalBilled,
@@ -109,8 +109,6 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
     }
 
     let newPayment = {
-      createdDatetimeStamp: Date.now(),
-      acceptedByUserId: userId,
       paymentMethod, paidAmount, changeAmount, shouldSaveChangeInAccount
     }
 
@@ -136,15 +134,17 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
     }
 
     let {
-      createdDatetimeStamp, acceptedByUserId, paymentMethod, paidAmount, changeAmount
+      paymentMethod, paidAmount, changeAmount
     } = newPayment;
+
     payment.paymentList.push({
-      createdDatetimeStamp, acceptedByUserId, paymentMethod, paidAmount, changeAmount,
+      createdDatetimeStamp: Date.now(),
+      acceptedByUserId: userId,
+      paymentMethod, paidAmount, changeAmount,
       wasChangeSavedInChangeWallet
     });
 
     return payment;
-
   }
 
   async _findCustomerIfSelected({ customerId }) {
@@ -166,7 +166,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
     let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
     this._reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList });
 
-    let { payment, newPayment } = this._standardizePayment({ originalPayment, userId });
+    let { payment, newPayment } = this._standardizePayment({ originalPayment });
     await this._validateBillingAndPayment({ productList, payment, newPayment, customer });
     payment = await this._processASinglePayment({ userId, customer, payment, newPayment });
 
