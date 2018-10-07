@@ -32,17 +32,17 @@ exports.SalesCollection = class extends Collection {
         discountedAmount: Joi.number().max(999999999999999).required(),
         serviceChargeAmount: Joi.number().max(999999999999999).required(),
         totalBilled: Joi.number().max(999999999999999).required(),
-    
+
         totalPaidAmount: Joi.number().max(999999999999999).required(),
         paymentList: Joi.array().required().items(
           Joi.object().keys({
             createdDatetimeStamp: Joi.number().max(999999999999999).required(),
             acceptedByUserId: Joi.number().max(999999999999999).required(),
-    
+
             paidAmount: Joi.number().max(999999999999999).required(),
             changeAmount: Joi.number().max(999999999999999).required(),
             paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
-            wasChangeSavedInChangeWallet: Joi.boolean().required()   
+            wasChangeSavedInChangeWallet: Joi.boolean().required()
           })
         )
       }),
@@ -93,6 +93,14 @@ exports.SalesCollection = class extends Collection {
     });
   }
 
+  async setPayment({ id }, { payment }) {
+    return await this._update({ id }, {
+      $set: {
+        payment
+      }
+    });
+  }
+
   async discard({ id }) {
     return await this._update({ id }, {
       $push: {
@@ -127,7 +135,7 @@ exports.SalesCollection = class extends Collection {
     return await this._find(query);
   }
 
-  async listByFiltersForSalesReturn({outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer }) {
+  async listByFiltersForSalesReturn({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer }) {
     let query = {
       $and: [
         {
@@ -143,7 +151,7 @@ exports.SalesCollection = class extends Collection {
     if (shouldFilterByCustomer) {
       query.$and.push({ customerId });
     }
-    
+
     return await this._find(query);
   }
 
