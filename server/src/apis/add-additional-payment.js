@@ -4,8 +4,9 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-er
 const { extract } = require('./../utils/extract');
 const { InventoryMixin } = require('./mixins/inventory-mixin');
 const { CustomerMixin } = require('./mixins/customer-mixin');
+const { SalesMixin } = require('./mixins/sales-mixin');
 
-exports.AddAdditionalSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin) {
+exports.AddAdditionalSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin) {
 
   get autoValidates() { return true; }
 
@@ -80,12 +81,6 @@ exports.AddAdditionalSalesApi = class extends Api.mixin(InventoryMixin, Customer
     let customer = await this.database.customer.findById({ id: customerId });
     throwOnFalsy(customer, "CUSTOMER_INVALID", "Customer not found.");
     return customer;
-  }
-
-  async _getSales({ salesId }) {
-    let sales = await this.database.sales.findById({ id: salesId });
-    throwOnFalsy(sales, "SALES_INVALID", "Sales not found");
-    return sales;
   }
 
   async _validateNewPayment({ payment, newPayment, customer }) {

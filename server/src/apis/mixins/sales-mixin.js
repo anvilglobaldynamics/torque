@@ -1,6 +1,6 @@
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../../utils/coded-error');
 
-exports.salesCommonMixin = (SuperApiClass) => class extends SuperApiClass {
+exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async _getSales({ salesId }) {
     let sales = await this.database.sales.findById({ id: salesId });
@@ -14,5 +14,7 @@ exports.salesCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     let salesList = await this.database.sales.listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate });
     return salesList;
   }
+
+  
 
 }
