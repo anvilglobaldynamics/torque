@@ -116,11 +116,10 @@
             <div class="dated">[[verses.general.dated]]: [[$mkDate(payment.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
           </div>
         </template>
-
       </div>
 
       <template is="dom-if" if="[[$shouldTakeAdditionalPayment(sales.payment.totalBilled,  sales.payment.totalPaidAmount)]]">
-        <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[page]]" customer="[[customer]]" is-from-view-sales-page>
+        <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[self]]" customer="[[customer]]" is-from-view-sales-page>
           </elem-additional-paymentt>
       </template>
 
@@ -155,6 +154,7 @@
       }
 
       onNavigateIn() {
+        this.self = this;
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();

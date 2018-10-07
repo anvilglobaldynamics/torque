@@ -176,6 +176,32 @@
         return (paymentMethod === 'change-wallet');
       }
 
+      addPaymentTapped(e) {
+        let salesId = parseInt(this.page.params.sales);
+        this._processAddPayment(salesId);
+      }
+
+      _processAddPayment(salesId) {
+        this._calculatePayment();
+        let customerId = this.customerId;
+        let payment = this.payment;
+        let data = { customerId, salesId, payment };
+        this.page.app.callAddAdditionalPaymentApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          // TRANSLATE
+          let message = "You are adding an additional payment to this sale. Proceed?";
+          this.app.showToast(message, _ => {
+            this._resetAdditionalPayment();
+          });
+        });
+      }
+
+      _resetAdditionalPayment() {
+        this.resetProperties('payment', 'customer');
+        this.app.refreshCurrentPage();
+      }
+
     }
     window.customElements.define(ElemAdditionalPayment.is, ElemAdditionalPayment);
   </script>
