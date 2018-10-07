@@ -4,10 +4,6 @@ url: `api/withdraw-from-change-wallet-balance`
 
 method: `POST`
 
-# WARNING! API DISABLED!
-
-This API has been disabled.
-
 ### request: 
 ```js
 {
