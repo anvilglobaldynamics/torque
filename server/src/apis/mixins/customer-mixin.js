@@ -1,5 +1,7 @@
+const { Api } = require('./../../api-base');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-error');
 
+/** @param {typeof Api} SuperApiClass */
 exports.CustomerMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async _deductFromChangeWalletAsPayment({ customer, amount }) {
@@ -33,7 +35,7 @@ exports.CustomerMixin = (SuperApiClass) => class extends SuperApiClass {
     changeWalletBalance -= amount;
     let doc = await this.database.customer.setChangeWalletBalance({ id: customer.id }, { changeWalletBalance });
     throwOnFalsy(doc, "UNABLE_TO_UPDATE_CUSTOMER_CHANGE_WALLET_BALANCE", "Unable to update customer change wallet balance");
-    
+
     let withdrawalHistory = customer.withdrawalHistory;
     withdrawalHistory.push({
       creditedDatetimeStamp: Date.now(),
