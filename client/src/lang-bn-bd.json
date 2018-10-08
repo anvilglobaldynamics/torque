@@ -356,7 +356,7 @@
   },
   "customer": {
     "editCustomerTitle": "গ্রাহক সম্পাদনা করুন",
-    "withdrawFromChangeWalletBalance": "Withdraw from change wallet balance",
+    "withdrawFromChangeWalletBalance": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স থেকে সরান",
     "addCustomerTitle": "গ্রাহক যুক্ত করুন",
     "customerNameInput": "গ্রাহকের নাম",
     "customerNameInputError": "একটি সঠিক নাম লিখুন",
@@ -696,10 +696,10 @@
     "dueAmount": "বাকি অর্থ"
   },
   "withdrawFromChangeWalletBalance": {
-    "withdrawFromChangeWalletBalanceTitle": "Withdraw from change wallet balance",
+    "withdrawFromChangeWalletBalanceTitle": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স থেকে সরান",
     "amountInput": "অর্থ পরিমাণ",
     "amountInputError": "অর্থ পরিমাণ লিখুন",
     "withdraw": "সরান",
-    "customerBalanceUpdated": "গ্রাহকের change wallet ব্যালান্স আপডেট হয়ে গিয়েছে।"
+    "customerBalanceUpdated": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স আপডেট হয়ে গিয়েছে।"
   }
 }

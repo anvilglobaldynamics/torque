@@ -354,7 +354,7 @@
   },
   "customer": {
     "editCustomerTitle": "Edit Customer",
-    "withdrawFromChangeWalletBalance": "Withdraw from change wallet balance",
+    "withdrawFromChangeWalletBalance": "Withdraw from customer account balance",
     "addCustomerTitle": "Add Customer",
     "customerNameInput": "Name of your customer.",
     "customerNameInputError": "Enter a valid name",
@@ -694,7 +694,7 @@
     "dueAmount": "Due amount"
   },
   "withdrawFromChangeWalletBalance": {
-    "withdrawFromChangeWalletBalanceTitle": "Withdraw from change wallet balance",
+    "withdrawFromChangeWalletBalanceTitle": "Withdraw from customer account balance",
     "amountInput": "Amount",
     "amountInputError": "Enter the amount",
     "withdraw": "Withdraw",
