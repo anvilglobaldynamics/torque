@@ -472,7 +472,9 @@
     "noSalesFound": "No Sales Record Found.",
 
     "soldCount": "Sold Count",
-    "returnedCount": "Returned Count"
+    "returnedCount": "Returned Count",
+
+    "isCredit": "Credit"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",

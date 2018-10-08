@@ -27,12 +27,26 @@
   <template>
     <style include="shared-styles">
 
+      .sale-conteiner {
+        /* border: 1px solid red; */
+        margin-top: 10px;
+      }
+
       .description {
         font-size: 15px;
       }
 
       .description-time {
         font-size: 12px;
+      }
+
+      .credit-text {
+        border: 1px solid red;
+        border-radius: 5px;
+        margin-left: 2px;
+        font-size: 14px;
+        padding: 2px;
+        color: red;
       }
 
     </style>
@@ -115,12 +129,19 @@
             <template is="dom-repeat" items="[[salesList]]" as="sale">
               <div class="horizontal layout item center">
                 <div class="vertical layout flex">
+                  <div class="sale-conteiner">
 
-                  <div class="title">[[verses.sales.salesId]]: [[sale.id]]</div>
-                  <div class="description-time">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                  <div class="description">[[verses.sales.billed]]: [[$round(sale.payment.totalBilled)]] [[app.settings.monetaryUnit]], [[verses.sales.paid]]: [[$round(sale.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</div>
-                  <div class="description">[[sale.productList.length]] [[verses.sales.products]]</div>
-
+                    <div class="title">
+                      [[verses.sales.salesId]]: [[sale.id]]
+                      <template is="dom-if" if="[[$isCreditSale(sale.payment.totalBilled, sale.payment.totalPaidAmount)]]">
+                        <span class="credit-text"> [[verses.sales.isCredit]] </span>
+                      </template>
+                    </div>
+                    <div class="description-time">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+                    <div class="description">[[verses.sales.billed]]: [[$round(sale.payment.totalBilled)]] [[app.settings.monetaryUnit]], [[verses.sales.paid]]: [[$round(sale.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</div>
+                    <div class="description">[[sale.productList.length]] [[verses.sales.products]]</div>
+                    
+                  </div>
                 </div>
                 <paper-button raised class="secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
               </div>
@@ -351,6 +372,10 @@
         this._processSalesList(() => {
           this.isReady = true;
         });
+      }
+
+      $isCreditSale(totalBilled, totalPaidAmount) {
+        return totalBilled > totalPaidAmount;
       }
 
     }

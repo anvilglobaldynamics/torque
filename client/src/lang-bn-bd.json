@@ -475,7 +475,9 @@
     "noSalesFound": "কোনো বিক্রয় রেকর্ড পাওয়া যায় নি।",
 
     "soldCount": "বিক্রয় গণনা",
-    "returnedCount": "ফেরৎ গণনা"
+    "returnedCount": "ফেরৎ গণনা",
+
+    "isCredit": "বাকি"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
