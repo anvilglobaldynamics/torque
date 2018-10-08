@@ -417,6 +417,7 @@
   "salesReturn": {
     "pageTitle": "বিক্রয় ফেরত",
     "soldCount": "বিক্রি গণনা",
+    "salePrice": "বিক্রি দাম",
     "returnCount": "ফেরত গণনা",
     "productReturnCountInput": "পণ্য ফেরত গণনা",
     "productReturnCountInputError": "একটি সঠিক নম্বর লিখুন",
