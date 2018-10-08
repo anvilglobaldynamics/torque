@@ -111,9 +111,7 @@ exports.CustomerCollection = class extends LegacyCollection {
       let searchRegex = new RegExp(searchString, 'i');
       query.$or = [
         { fullName: searchRegex },
-        { email: searchRegex },
-        { phone: searchRegex },
-        { nid: searchRegex }
+        { phone: searchRegex }
       ];
     }
     this._find(query, cbfn);

@@ -92,10 +92,7 @@ exports.ProductCategoryCollection = class extends Collection {
     if (searchString) {
       let searchRegex = new RegExp(searchString, 'i');
       query.$or = [
-        { name: searchRegex },
-        { physicalAddress: searchRegex },
-        { contactPersonName: searchRegex },
-        { phone: searchRegex }
+        { name: searchRegex }
       ];
       if (String(parseInt(searchString)) === searchString) {
         query.$or.push({ id: parseInt(searchString) });

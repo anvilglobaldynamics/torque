@@ -97,9 +97,7 @@ exports.CustomerCollection = class extends Collection {
       let searchRegex = new RegExp(searchString, 'i');
       query.$or = [
         { fullName: searchRegex },
-        { email: searchRegex },
-        { phone: searchRegex },
-        { nid: searchRegex }
+        { phone: searchRegex }
       ];
     }
     return await this._find(query);
