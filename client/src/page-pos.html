@@ -445,7 +445,7 @@
         }
 
         // setting the default paid amount equal to total billed
-        if (!paidAmount) {
+        if (paymentMethod !== 'cash' && paidAmount < 1) {
           paidAmount = totalBilled;
         }
 
