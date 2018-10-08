@@ -34,7 +34,6 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
     salesList.forEach((sales) => {
       totalAmount += sales.payment.totalBilled;
     });
-
     return ({ totalAmount, totalCount });
   }
 

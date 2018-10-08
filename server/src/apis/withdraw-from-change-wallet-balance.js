@@ -12,10 +12,8 @@ exports.WithdrawFromChangeWalletBalanceApi = class extends Api.mixin(CustomerMix
 
   get requestSchema() {
     return Joi.object().keys({
-
       customerId: Joi.number().max(999999999999999).required(),
       amount: Joi.number().min(1).max(999999999999999).required()
-
     });
   }
 

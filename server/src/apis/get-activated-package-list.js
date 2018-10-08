@@ -24,7 +24,6 @@ exports.GetActivatedPackageListApi = class extends Api {
         }
       });
     });
-
     return packageActivationList;
   }
 
@@ -32,7 +31,7 @@ exports.GetActivatedPackageListApi = class extends Api {
     let { organizationId } = body;
     let organization = await this.database.organization.findById({ id: organizationId });
     throwOnFalsy(organization, "ORGANIZATION_INVALID", this.verses.organizationCommon.organizationDoesNotExist);
-    
+
     let packageActivationList = await this.database.packageActivation.listByOrganizationId({ organizationId });
     packageActivationList = await this._insertPackageDetailsInPackageActivationList({ packageActivationList });
 

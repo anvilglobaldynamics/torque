@@ -34,12 +34,11 @@ exports.GetProductCategoryListApi = class extends Api {
       let regex = new RegExp(searchString, 'g');
       return regex.test(productCategory.name);
     });
-
     return productCategoryList;
   }
 
   async handle({ body }) {
-    let { organizationId, searchString } =  body;
+    let { organizationId, searchString } = body;
     let productCategoryList = await this._getProductCategoryList({ organizationId });
 
     if (searchString) {
