@@ -1,6 +1,7 @@
+const { Api } = require('./../../api-base');
+const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-error');
 
-let cryptolib = require('crypto');
-
+/** @param {typeof Api} SuperApiClass */
 exports.UserMixin = (SuperApiClass) => class extends SuperApiClass {
 
 }

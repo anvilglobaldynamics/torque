@@ -8,7 +8,7 @@ exports.CustomerCollection = class extends Collection {
 
   get joiSchema() {
     return Joi.object().keys({
-      
+
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       isDeleted: Joi.boolean().required(),

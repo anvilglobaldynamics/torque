@@ -12,10 +12,8 @@ exports.WithdrawFromChangeWalletBalanceApi = class extends Api.mixin(CustomerMix
 
   get requestSchema() {
     return Joi.object().keys({
-
       customerId: Joi.number().max(999999999999999).required(),
       amount: Joi.number().min(1).max(999999999999999).required()
-
     });
   }
 
@@ -33,24 +31,11 @@ exports.WithdrawFromChangeWalletBalanceApi = class extends Api.mixin(CustomerMix
     }];
   }
 
-  async _addToCustomerWithdrawalHistory({ customer, amount, userId }) {
-    let withdrawalHistory = customer.withdrawalHistory;
-    withdrawalHistory.push({
-      creditedDatetimeStamp: (new Date).getTime(),
-      byUserId: userId,
-      amount
-    });
-
-    let doc = await this.database.customer.setWithdrawalHistory({ id: customer.id }, { withdrawalHistory });
-    return;
-  }
-
   async handle({ body, userId }) {
     let { customerId, amount } = body;
 
     let customer = await this.database.customer.findById({ id: customerId });
-    await this._deductFromChangeWalletAsPayment({ customer, amount });
-    await this._addToCustomerWithdrawalHistory({ customer, amount, userId });
+    await this._deductFromChangeWalletAsManualWithdrawal({ customer, amount, byUserId: userId });
 
     return { status: "success" };
   }

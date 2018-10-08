@@ -11,10 +11,8 @@ exports.GetCustomerSummaryListApi = class extends Api {
 
   get requestSchema() {
     return Joi.object().keys({
-
       organizationId: Joi.number().max(999999999999999).required(),
       searchString: Joi.string().min(0).max(64).allow('').optional()
-
     });
   }
 
@@ -32,9 +30,8 @@ exports.GetCustomerSummaryListApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { organizationId, searchString } =  body;
+    let { organizationId, searchString } = body;
     let customerList = await this._getCustomerList({ organizationId, searchString });
-
     return { customerList };
   }
 

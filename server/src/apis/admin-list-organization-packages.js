@@ -34,7 +34,7 @@ exports.AdminListOrganizationPackagesApi = class extends Api {
     let { organizationId } = body;
     let organization = await this.database.organization.findById({ id: organizationId });
     throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.organizationCommon.organizationDoesNotExist);
-    
+
     let packageActivationList = await this.database.packageActivation.listByOrganizationId({ organizationId });
     packageActivationList = await this._insertPackageDetailsInPackageActivationList({ packageActivationList });
 

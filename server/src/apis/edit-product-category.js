@@ -45,13 +45,10 @@ exports.EditProductCategoryApi = class extends Api {
   }
 
   async _checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat }) {
-    let salePriceAfterVat = defaultSalePrice + defaultSalePrice * defaultVat/100;
-    
+    let salePriceAfterVat = defaultSalePrice + defaultSalePrice * defaultVat / 100;
     if (defaultDiscountValue && defaultDiscountType === 'fixed' && defaultDiscountValue > salePriceAfterVat) {
       throw new CodedError("DISCOUNT_VALUE_INVALID", "the discount value is more than sale price");
     }
-
-    return;
   }
 
   async _updateProductCategory({ productCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
