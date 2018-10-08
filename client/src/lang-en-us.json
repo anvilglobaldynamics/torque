@@ -29,7 +29,7 @@
     "showMore": "Show More",
     "name": "Name",
     "phone": "Phone",
-    "balance": "Balance",
+    "balance": "Account Balance",
     "view": "View",
     "edit": "Edit",
     "showing": "Showing",
@@ -682,6 +682,15 @@
     "fileProvidedHasNoData": "The file you provided has no data.",
     "expectedColumn": "Expected column",
     "missingCellsInRow": "No row missing data"
+  },
+  "additionalPayment": {
+    "paymentMethod": "Payment Method",
+    "paidAmountInput": "Paid Amount",
+    "paidAmountInputError": "Enter a valid number",
+    "changeAmount": "Change Amount",
+    "shouldSaveChangeInAccount": "Save in customer's account instead of paying cash.",
+    "addAdditionalPayment": "Add Additional Payment",
+    "dueAmount": "Due amount"
   },
   "withdrawFromChangeWalletBalance": {
     "withdrawFromChangeWalletBalanceTitle": "Withdraw from change wallet balance",

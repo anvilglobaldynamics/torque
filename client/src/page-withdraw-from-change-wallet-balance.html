@@ -37,7 +37,7 @@
         <form>
           <div class="card vertical layout">
 
-            <div>[[verses.general.changeWallet]]: [[$round(editingCustomer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</div>
+            <div>[[verses.general.balance]]: [[$round(editingCustomer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</div>
             <paper-input class="withdrawFromChangeWalletBalanceForm--amount" value="{{withdrawFromChangeWalletBalanceForm.amount}}" type="number" required min="1" max="[[editingCustomer.changeWalletBalance]]" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" error-message=[[verses.withdrawFromChangeWalletBalance.amountInputError]] label=[[verses.withdrawFromChangeWalletBalance.amountInput]]></paper-input>
             <paper-button raised class="primary" on-tap="withdrawFromChangeWalletBalanceTapped">[[verses.withdrawFromChangeWalletBalance.withdraw]]</paper-button>
 

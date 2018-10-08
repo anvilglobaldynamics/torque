@@ -48,38 +48,37 @@
       <div class="list">
 
         <div class="individual-calculation-field-container">
-          <!-- TRANSLATE -->
-          Due amount:
+          [[verses.additionalPayment.dueAmount]]:
           <b>{{$round(amountLeftToPay)}} [[page.app.settings.monetaryUnit]]</b>
         </div>
 
         <div class="individual-calculation-field-container">
 
-          <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4" on-iron-select="paymentMethodSelected">
+          <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.additionalPayment.paymentMethod]]" class="mr-4" on-iron-select="paymentMethodSelected">
             <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
               <paper-item name="cash">[[verses.general.cash]]</paper-item>
               <paper-item name="card">[[verses.general.card]]</paper-item>
               <paper-item name="digital">[[verses.general.digital]]</paper-item>
               <template is="dom-if" if="[[customer]]">
-                <paper-item name="change-wallet">change wallet</paper-item>
+                <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
               </template>
             </paper-listbox>
           </paper-dropdown-menu>
 
           <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
-            <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+            <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" min="1" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.additionalPayment.paidAmountInputError]]" label="[[verses.additionalPayment.paidAmountInput]]">
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
           </template>
 
           <template is="dom-if" if="[[payment.changeAmount]]">
-            <br> [[verses.pos.changeAmount]]:
+            <br> [[verses.additionalPayment.changeAmount]]:
             <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
             <br>
             <template is="dom-if" if="[[customer]]">
               <template is="dom-if" if="[[payment.changeAmount]]">
                 <paper-checkbox class="should-save-change" checked="{{payment.shouldSaveChangeInAccount}}">
-                  [[verses.pos.shouldSaveChangeInAccount]]
+                  [[verses.additionalPayment.shouldSaveChangeInAccount]]
                 </paper-checkbox>
               </template>
             </template>
@@ -88,9 +87,8 @@
         </div>
 
         <template is="dom-if" if="[[isFromViewSalesPage]]">
-          <!-- TRANSLATE -->
           <div class="horizontal layout m-top-16">
-            <paper-button raised class="primary flex" on-tap="addPaymentTapped">Add Additional Payment</paper-button>
+            <paper-button raised class="primary flex" on-tap="addPaymentTapped">[[verses.additionalPayment.addAdditionalPayment]]</paper-button>
           </div>
         </template>
 
@@ -170,6 +168,7 @@
       }
 
       genericPaymentInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
         this._calculatePayment();
       }
 

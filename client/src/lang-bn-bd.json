@@ -29,7 +29,7 @@
     "showMore": "আরও দেখাও",
     "name": "নাম",
     "phone": "ফোন",
-    "balance": "ব্যালান্স",
+    "balance": "অ্যাকাউন্ট ব্যালান্স",
     "view": "দেখুন",
     "edit": "পরিবর্তন করুন",
     "showing": "দেখাচ্ছে",
@@ -684,6 +684,15 @@
     "fileProvidedHasNoData": "প্রদত্ত ফাইলটিতে কোনো তথ্য নেই।",
     "expectedColumn": "প্রত্যাশিত কলাম",
     "missingCellsInRow": "নং শাড়িতে তথ্য নেই"
+  },
+  "additionalPayment": {
+    "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
+    "paidAmountInput": "পরিশোধিত পরিমাণ",
+    "paidAmountInputError": "একটি সঠিক নম্বর লিখুন",
+    "changeAmount": "ফেরত পরিমান",
+    "shouldSaveChangeInAccount": "অর্থ প্রদানের পরিবর্তে গ্রাহকের অ্যাকাউন্ট সংরক্ষণ করুন",
+    "addAdditionalPayment": "অতিরিক্ত অর্থ প্রদান করুন",
+    "dueAmount": "বাকি অর্থ"
   },
   "withdrawFromChangeWalletBalance": {
     "withdrawFromChangeWalletBalanceTitle": "Withdraw from change wallet balance",
