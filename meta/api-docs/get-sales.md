@@ -62,7 +62,6 @@ Possible Error Codes:
       discountedAmount: Joi.number().max(999999999999999).required(),
       serviceChargeAmount: Joi.number().max(999999999999999).required(),
       totalBilled: Joi.number().max(999999999999999).required(),
-      previousCustomerBalance: Joi.number().max(999999999999999).allow(null).required(),
       paidAmount: Joi.number().max(999999999999999).required(),
       changeAmount: Joi.number().max(999999999999999).required()
     }),

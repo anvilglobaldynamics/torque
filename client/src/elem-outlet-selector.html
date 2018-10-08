@@ -75,26 +75,43 @@
 <dom-module id="elem-outlet-selector">
   <template>
     <style include="shared-styles">
+      .item {
+        margin-bottom: 4px;
+        padding-bottom: 6px;
+        border-bottom: 1px dashed rgb(192, 198, 214);
+      }
+
+      .item:first-of-type {
+        margin-top: 4px;
+      }
+
+      .item:last-of-type {
+        border: none;
+      }
     </style>
     <div class="card vertical layout">
       <div class="horizontal layout center">
         <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.outletSelector.outletNameOrPhoneInputError]] label=[[verses.outletSelector.outletNameOrPhoneInput]] on-keypress="searchFieldKeypressed"></paper-input>
         <paper-icon-button icon="clear" on-tap="cancelTapped"></paper-icon-button>
         <paper-button raised class="primary" on-tap="searchTapped">
-          <iron-icon icon="search" class="m-right-8"></iron-icon>[[verses.general.search]]</paper-button>
+          <iron-icon icon="search" class="m-right-8"></iron-icon>[[verses.general.search]]
+        </paper-button>
       </div>
 
-      <template is="dom-repeat" items="[[outletList]]" as="outlet" index-as="outletIndex">
-        <div class="horizontal layout item flex">
-          <div>
-            [[verses.outletSelector.outlets]]:
-            <b>[[outlet.name]]</b> ([[outlet.phone]])
-            <br>[[verses.general.address]]:
-            <b>[[outlet.physicalAddress]]</b>
+      <div class="vertical layout">
+        <template is="dom-repeat" items="[[outletList]]" as="outlet" index-as="outletIndex">
+          <div class="horizontal layout item center">
+            <div class="flex">
+              [[verses.outletSelector.outlets]]:
+              <b>[[outlet.name]]</b> ([[outlet.phone]])
+              <br>[[verses.general.address]]:
+              <b>[[outlet.physicalAddress]]</b>
+            </div>
+            <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
           </div>
-          <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
-        </div>
-      </template>
+        </template>
+      </div>
+
     </div>
   </template>
   <script>

@@ -27,7 +27,6 @@ Joi.object().keys({
     discountedAmount: Joi.number().max(999999999999999).required(),
     serviceChargeAmount: Joi.number().max(999999999999999).required(),
     totalBilled: Joi.number().max(999999999999999).required(),
-    wasInitiallyCreditSale: Joi.boolean().required(),
 
     totalPaidAmount: Joi.number().max(999999999999999).required(),
     paymentList: Joi.array().required().items(

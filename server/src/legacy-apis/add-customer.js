@@ -13,8 +13,7 @@ exports.AddCustomerApi = class extends LegacyApi {
       organizationId: Joi.number().max(999999999999999).required(),
 
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
-      openingBalance: Joi.number().max(999999999999999).required()
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required()
     });
   }
 
@@ -27,9 +26,9 @@ exports.AddCustomerApi = class extends LegacyApi {
     }];
   }
 
-  _createCustomer({ organizationId, fullName, phone, openingBalance, acceptedByUserId }, cbfn) {
+  _createCustomer({ organizationId, fullName, phone }, cbfn) {
     let customer = {
-      organizationId, fullName, phone, openingBalance, acceptedByUserId
+      organizationId, fullName, phone
     }
     this.legacyDatabase.customer.create(customer, (err, customerId) => {
       if (err) return this.fail(err);
@@ -38,8 +37,8 @@ exports.AddCustomerApi = class extends LegacyApi {
   }
 
   handle({ body, userId }) {
-    let { organizationId, fullName, phone, openingBalance } = body;
-    this._createCustomer({ organizationId, fullName, phone, openingBalance, acceptedByUserId: userId }, (customerId) => {
+    let { organizationId, fullName, phone } = body;
+    this._createCustomer({ organizationId, fullName, phone }, (customerId) => {
       this.success({ status: "success", customerId });
     });
   }

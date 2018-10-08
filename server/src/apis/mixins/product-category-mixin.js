@@ -16,4 +16,13 @@ exports.ProductCategoryMixin = (SuperApiClass) => class extends SuperApiClass {
     }
   }
 
+  async _verifyProductCategoriesExist({ productList }) {
+    await this.crossmap({
+      source: productList,
+      sourceKey: 'productCategoryId',
+      target: 'productCategory',
+      onError: (inventory) => { throw new CodedError("PRODUCT_CATEGORY_INVALID", "Unable to find all products in productList"); }
+    });
+  }
+
 }

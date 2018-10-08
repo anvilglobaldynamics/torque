@@ -22,7 +22,16 @@
 
 <dom-module id="page-view-sales-return">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+    
+      .list-object {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 6px;
+        margin: 4px 0px;
+      }
+    
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -39,15 +48,15 @@
 
       <div class="card vertical layout">
         <div class="title">
-          <b>[[verses.salesReturn.productList]]: ([[salesReturn.returnedProductList.length]] products)</b>
+          <b>[[verses.salesReturn.productList]]:</b>
         </div>
         <div class="list">
           <template is="dom-repeat" items="{{salesReturn.returnedProductList}}" as="returnedProduct">
-            <div class="horizontal layout item center">
-              <div class="vertical layout flex">
-                <div>[[verses.salesReturn.product]]: [[returnedProduct.productCategoryName]]</div>
-                <div>[[verses.general.count]]: [[returnedProduct.count]]</div>
-              </div>
+            <div class="list-object">
+              
+              <div>[[verses.salesReturn.product]]: [[returnedProduct.productCategoryName]]</div>
+              <div>[[verses.salesReturn.returnedCount]]: [[returnedProduct.count]]</div>
+              
             </div>
           </template>
         </div>

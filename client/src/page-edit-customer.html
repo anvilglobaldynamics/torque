@@ -33,9 +33,6 @@
           <div class="card vertical layout">
             <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message=[[verses.customer.customerNameInputError]] label=[[verses.customer.customerNameInput]]></paper-input>
             <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.customer.customerNumberInputError]] label=[[verses.customer.customerNumberInput]]></paper-input>
-            <template is="dom-if" if="{{!editMode}}">
-              <paper-input class$="editCustomerForm--openingBalance" value="{{editCustomerForm.openingBalance}}" type="number" required minlength="0" maxlength="8" error-message=[[verses.customer.openingBalanceError]] label=[[verses.customer.openingBalance]]></paper-input>
-            </template>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editCustomerForm--submit" on-tap="createCustomerTapped">[[verses.customer.createCustomer]]</paper-button>
@@ -70,14 +67,12 @@
               if (mode === 'development') {
                 return {
                   fullName: 'Rahim Karim',
-                  phone: '01700000011',
-                  openingBalance: '100',
+                  phone: '01700000011'
                 };
               } else {
                 return {
                   fullName: '',
-                  phone: '',
-                  openingBalance: ''
+                  phone: ''
                 };
               }
             }
@@ -143,9 +138,9 @@
         });
       }
 
-      _processCreateCustomer({ fullName, phone, openingBalance }) {
+      _processCreateCustomer({ fullName, phone }) {
         let data = {
-          fullName, phone, openingBalance,
+          fullName, phone,
           organizationId: this.app.organization.id
         };
         this.app.callAddCustomerApi(data, (err, response) => {
@@ -184,8 +179,8 @@
         this.elemAll('#editCustomerForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editCustomerForm').validate()) return;
 
-        let { fullName, phone, openingBalance } = this.editCustomerForm;
-        this._processCreateCustomer({ fullName, phone, openingBalance });
+        let { fullName, phone } = this.editCustomerForm;
+        this._processCreateCustomer({ fullName, phone });
       }
 
       updateCustomerTapped(e = null) {

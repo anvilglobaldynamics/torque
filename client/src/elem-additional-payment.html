@@ -1,0 +1,208 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../bower_components/iron-icons/editor-icons.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="elem-additional-payment">
+  <template>
+    <style include="shared-styles">
+      .individual-calculation-field-container {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 6px;
+        margin: 8px 0px;
+      }
+
+      .full-width-paper-dropdown {
+        width: 100%;
+      }
+
+      .should-save-change{
+        margin-top: 12px;
+        margin-bottom: 4px;
+      }
+    </style>
+    <div class="card p-0 vertical layout">
+      <div class="list">
+
+        <div class="individual-calculation-field-container">
+          [[verses.additionalPayment.dueAmount]]:
+          <b>{{$round(amountLeftToPay)}} [[page.app.settings.monetaryUnit]]</b>
+        </div>
+
+        <div class="individual-calculation-field-container">
+
+          <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.additionalPayment.paymentMethod]]" class="mr-4" on-iron-select="paymentMethodSelected">
+            <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
+              <paper-item name="cash">[[verses.general.cash]]</paper-item>
+              <paper-item name="card">[[verses.general.card]]</paper-item>
+              <paper-item name="digital">[[verses.general.digital]]</paper-item>
+              <template is="dom-if" if="[[customer]]">
+                <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
+              </template>
+            </paper-listbox>
+          </paper-dropdown-menu>
+
+          <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
+            <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" min="1" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.additionalPayment.paidAmountInputError]]" label="[[verses.additionalPayment.paidAmountInput]]">
+              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+            </paper-input>
+          </template>
+
+          <template is="dom-if" if="[[payment.changeAmount]]">
+            <br> [[verses.additionalPayment.changeAmount]]:
+            <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
+            <br>
+            <template is="dom-if" if="[[customer]]">
+              <template is="dom-if" if="[[payment.changeAmount]]">
+                <paper-checkbox class="should-save-change" checked="{{payment.shouldSaveChangeInAccount}}">
+                  [[verses.additionalPayment.shouldSaveChangeInAccount]]
+                </paper-checkbox>
+              </template>
+            </template>
+          </template>
+
+        </div>
+
+        <template is="dom-if" if="[[isFromViewSalesPage]]">
+          <div class="horizontal layout m-top-16">
+            <paper-button raised class="primary flex" on-tap="addPaymentTapped">[[verses.additionalPayment.addAdditionalPayment]]</paper-button>
+          </div>
+        </template>
+
+      </div>
+  </template>
+  <script>
+    class ElemAdditionalPayment extends FxElement.mixin(TorqueLanguageBehavior, TorqueCommonBehavior) {
+
+      static get is() { return 'elem-additional-payment'; }
+
+      static get properties() {
+        return {
+          isFromViewSalesPage: {
+            type: Boolean,
+            value: false
+          },
+          amountLeftToPay: {
+            type: Number,
+            value: 0
+          },
+          page: {
+            type: Object,
+            value: null,
+            observer: 'pageChanged'
+          },
+          payment: {
+            type: Object,
+            value: () => {
+              return {
+                paymentMethod: 'cash',
+                paidAmount: 0,
+                changeAmount: 0,
+                shouldSaveChangeInAccount: false
+              }
+            }
+          }
+        };
+      }
+
+      pageChanged() {
+        this.useLanguageServices();
+        if (!this.page) return;
+      }
+
+      _calculatePayment() {
+        let {
+          paymentMethod,
+          paidAmount,
+          changeAmount,
+          shouldSaveChangeInAccount
+        } = this.payment;
+        let amountLeftToPay = parseFloat(this.amountLeftToPay);
+        paidAmount = parseFloat(paidAmount);
+        changeAmount = 0;
+        if (paymentMethod === 'change-wallet') {
+          changeAmount = 0;
+          paidAmount = amountLeftToPay;
+        } else {
+          if (paidAmount > amountLeftToPay) {
+            changeAmount = paidAmount - amountLeftToPay;
+          }
+        }
+        this.payment = {
+          paymentMethod,
+          paidAmount,
+          changeAmount,
+          shouldSaveChangeInAccount
+        };
+      }
+
+      paymentMethodSelected(e) {
+        // NOTE: The timeout should not be necessary. However, without it
+        // the value of this.payment.paymentMethod is not being updated in time.
+        window.setTimeout(() => {
+          this._calculatePayment();
+        }, 100);
+      }
+
+      genericPaymentInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+        this._calculatePayment();
+      }
+
+      isPaymentMethodChangeWallet(paymentMethod) {
+        return (paymentMethod === 'change-wallet');
+      }
+
+      addPaymentTapped(e) {
+        let salesId = parseInt(this.page.params.sales);
+        this._processAddPayment(salesId);
+      }
+
+      _processAddPayment(salesId) {
+        this._calculatePayment();
+        let customerId = this.customer.id;
+        let payment = this.payment;
+        let data = { customerId, salesId, payment };
+        this.page.app.callAddAdditionalPaymentApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.page.onApiError(response.error);
+          // TRANSLATE
+          let message = "Additional payment has been added.";
+          this.page.app.showToast(message, _ => {
+            this._resetAdditionalPayment();
+          });
+        });
+      }
+
+      _resetAdditionalPayment() {
+        // this.resetProperties('payment', 'customer');
+        this.page.app.refreshCurrentPage();
+      }
+
+    }
+    window.customElements.define(ElemAdditionalPayment.is, ElemAdditionalPayment);
+  </script>
+</dom-module>

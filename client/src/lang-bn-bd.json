@@ -29,7 +29,7 @@
     "showMore": "আরও দেখাও",
     "name": "নাম",
     "phone": "ফোন",
-    "balance": "ব্যালান্স",
+    "balance": "অ্যাকাউন্ট ব্যালান্স",
     "view": "দেখুন",
     "edit": "পরিবর্তন করুন",
     "showing": "দেখাচ্ছে",
@@ -72,7 +72,8 @@
     "designation": "পদবী",
     "errorMessageBody": "ত্রুটি ত্রুটি দেখা দিয়েছে, লিপি প্রতিনিধির সাথে যোগাযোগ করুন",
     "errorMessageTitle": "ত্রুটি",
-    "noDataFound": "কোন তথ্য পাওয়া যায়নি"
+    "noDataFound": "কোন তথ্য পাওয়া যায়নি",
+    "changeWallet": "Change Wallet"
   },
   "login": {
     "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
@@ -355,6 +356,7 @@
   },
   "customer": {
     "editCustomerTitle": "গ্রাহক সম্পাদনা করুন",
+    "withdrawFromChangeWalletBalance": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স থেকে সরান",
     "addCustomerTitle": "গ্রাহক যুক্ত করুন",
     "customerNameInput": "গ্রাহকের নাম",
     "customerNameInputError": "একটি সঠিক নাম লিখুন",
@@ -373,7 +375,7 @@
     "deleteCustomerQuestionPartOne": "আপনি কি এই গ্রাহককে মুছে ফেলতে চান?",
     "deleteCustomerQuestionPartTwo": "একবার মুছে ফেলা হলে, আপনি এই গ্রাহকটি পুনরুদ্ধার করতে পারবেন না।",
     "customerDeleted": "গ্রাহক মোছা হয়েছে",
-    "additionalPaymentHistory": "অর্থ আদান-প্রদান ইতিহাস",
+    "withdrawalHistory": "অর্থ অপসারণ ইতিহাস",
     "acceptedBy": "দ্বারা গৃহীত",
     "clickToEditCustomer": "গ্রাহক সম্পাদনা করতে এখানে ক্লিক করুন।",
     "editCustomer": "গ্রাহক সম্পাদনা",
@@ -384,7 +386,9 @@
     "noCustomerFound": "কোনো গ্রাহক পাওয়া যায় নি।",
 
     "searchForCustomerInput": "গ্রাহকের নাম/নম্বর",
-    "searchForCustomerInputError": "গ্রাহকের সন্ধানে ত্রুটি"
+    "searchForCustomerInputError": "গ্রাহকের সন্ধানে ত্রুটি",
+
+    "customerName": "গ্রাহকের নাম"
   },
   "editProfile": {
     "editProfileTitle": "প্রোফাইল সম্পাদনা",
@@ -413,6 +417,7 @@
   "salesReturn": {
     "pageTitle": "বিক্রয় ফেরত",
     "soldCount": "বিক্রি গণনা",
+    "salePrice": "বিক্রি দাম",
     "returnCount": "ফেরত গণনা",
     "productReturnCountInput": "পণ্য ফেরত গণনা",
     "productReturnCountInputError": "একটি সঠিক নম্বর লিখুন",
@@ -432,12 +437,16 @@
     "creditedAmount": "ফেরতকৃত অর্থ",
     "productList": "পণ্য তালিকা",
     "product": "পণ্য",
-    "noSalesReturnFound": "কোনো বিক্রয় ফেরত রেকর্ড পাওয়া যায় নি।"
+    "noSalesReturnFound": "কোনো বিক্রয় ফেরত রেকর্ড পাওয়া যায় নি।",
+
+    "shouldSaveReturnableInChangeWallet": "ফেরতযোগ্য অর্থ ক্রেতার ওয়ালেট এ সংরক্ষণ করা হোক?",
+    "returnedCount": "ফেরৎ গণনা"
   },
   "sales": {
     "manageSalesTitle": "বিক্রয় রেকর্ড",
     "salesId": "বিক্রয় আইডি",
     "billed": "বিল",
+    "paid": "প্রদত্ত",
     "products": "পণ্য",
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
     "removeCustomer": "গ্রাহক সরান",
@@ -457,11 +466,16 @@
     "serviceChargeAmount": "সেবা মূল্য",
     "vat": "ভ্যাট",
     "paidAmount": "পরিশোধিত",
+    "totalPaid": "মোট পরিশোধিত",
+    "paymentList": "মূল্যপরিশোধ তালিকা",
     "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
     "changeAmount": "ফেরত",
     "wasDebitedToUser": "গ্রাহককে ডেবিট করা হয়েছিল।",
     "allReturned": "সব ফেরত",
-    "noSalesFound": "কোনো বিক্রয় রেকর্ড পাওয়া যায় নি।"
+    "noSalesFound": "কোনো বিক্রয় রেকর্ড পাওয়া যায় নি।",
+
+    "soldCount": "বিক্রয় গণনা",
+    "returnedCount": "ফেরৎ গণনা"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
@@ -635,7 +649,7 @@
   },
   "payment": {
     "packageHasExpired": "আপনার প্যাকেজের মেয়াদ শেষ হয়ে গেছে।",
-    "pleaseCallUsToPurchaseSubscription": "আমাদের কে +880 1730 589311 নম্বর এ যোগাযোগ করুন প্যাকেজ চালু করতে।",
+    "pleaseCallUsToPurchaseSubscription": "আমাদের কে +880 1770 947908 নম্বর এ যোগাযোগ করুন প্যাকেজ চালু করতে।",
     "recheckVerificationStatus": "প্যাকেজ স্থিতি পুনরায় যাচাই করুন",
     "useDifferentOrganization": "ভিন্ন সংস্থা ব্যবহার করুন"
   },
@@ -671,5 +685,21 @@
     "fileProvidedHasNoData": "প্রদত্ত ফাইলটিতে কোনো তথ্য নেই।",
     "expectedColumn": "প্রত্যাশিত কলাম",
     "missingCellsInRow": "নং শাড়িতে তথ্য নেই"
+  },
+  "additionalPayment": {
+    "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
+    "paidAmountInput": "পরিশোধিত পরিমাণ",
+    "paidAmountInputError": "একটি সঠিক নম্বর লিখুন",
+    "changeAmount": "ফেরত পরিমান",
+    "shouldSaveChangeInAccount": "অর্থ প্রদানের পরিবর্তে গ্রাহকের অ্যাকাউন্ট সংরক্ষণ করুন",
+    "addAdditionalPayment": "অতিরিক্ত অর্থ প্রদান করুন",
+    "dueAmount": "বাকি অর্থ"
+  },
+  "withdrawFromChangeWalletBalance": {
+    "withdrawFromChangeWalletBalanceTitle": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স থেকে সরান",
+    "amountInput": "অর্থ পরিমাণ",
+    "amountInputError": "অর্থ পরিমাণ লিখুন",
+    "withdraw": "সরান",
+    "customerBalanceUpdated": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স আপডেট হয়ে গিয়েছে।"
   }
 }

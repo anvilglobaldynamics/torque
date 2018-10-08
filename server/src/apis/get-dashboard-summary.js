@@ -2,9 +2,9 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 
-const { salesCommonMixin } = require('./mixins/sales-common');
+const { SalesMixin } = require('./mixins/sales-mixin');
 
-exports.GetDashboardSummaryApi = class extends Api.mixin(salesCommonMixin) {
+exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
 
   get autoValidates() { return true; }
 

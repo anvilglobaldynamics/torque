@@ -26,7 +26,10 @@ let {
   validateGetSalesListApiSuccessResponse,
   validateAddSalesReturnApiSuccessResponse,
   validateSalesSchema,
-  validateSalesSchemaWhenListObj
+  validateSalesSchemaWhenListObj,
+
+  validateGetCustomerApiSuccessResponse,
+  validateCustomerSchema
 } = require('./lib');
 
 const prefix = 's';
@@ -125,7 +128,7 @@ describe('Sales', _ => {
                   defaultDiscountValue: 10,
                   defaultPurchasePrice: 99,
                   defaultVat: 3,
-                  defaultSalePrice: 111,
+                  defaultSalePrice: 112,
                   isReturnable: true
                 }, (data) => {
                   productCategoryId = data.productCategoryId;
@@ -140,8 +143,7 @@ describe('Sales', _ => {
                       apiKey,
                       organizationId,
                       fullName: customerFullName,
-                      phone: customerPhone,
-                      openingBalance
+                      phone: customerPhone
                     }, (data) => {
                       customerId = data.customerId;
                       getCustomer({
@@ -210,7 +212,6 @@ describe('Sales', _ => {
           discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
-          previousCustomerBalance: null,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
@@ -245,7 +246,6 @@ describe('Sales', _ => {
           discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
-          previousCustomerBalance: null,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
@@ -288,7 +288,6 @@ describe('Sales', _ => {
           discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
-          previousCustomerBalance: null,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
@@ -331,7 +330,6 @@ describe('Sales', _ => {
           discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
-          previousCustomerBalance: null,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
@@ -373,7 +371,6 @@ describe('Sales', _ => {
           discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
-          previousCustomerBalance: null,
           paidAmount: 0,
           changeAmount: (0 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
@@ -416,7 +413,6 @@ describe('Sales', _ => {
           discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
-          previousCustomerBalance: customerData.balance,
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
@@ -459,10 +455,9 @@ describe('Sales', _ => {
           discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
           totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
-          previousCustomerBalance: customerData.balance,
-          paidAmount: 300,
+          paidAmount: 1300,
           changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false,
+          shouldSaveChangeInAccount: true,
           paymentMethod: 'cash'
         }
       }
@@ -539,7 +534,8 @@ describe('Sales', _ => {
             count: salesData.productList[0].count - 1
           }
         ],
-        creditedAmount: 100
+        creditedAmount: 100,
+        shouldSaveReturnableInChangeWallet: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -821,6 +817,295 @@ describe('Sales', _ => {
     });
 
   });
+
+  // WithdrawFromChangeWalletBalanceApi tests - start
+
+  it('api/withdraw-from-change-wallet-balance (Invalid customerId)', testDoneFn => {
+
+    callApi('api/withdraw-from-change-wallet-balance', {
+      json: {
+        apiKey,
+        customerId: invalidCustomerId,
+        amount: 50
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('CUSTOMER_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/withdraw-from-change-wallet-balance (Invalid amount)', testDoneFn => {
+
+    callApi('api/withdraw-from-change-wallet-balance', {
+      json: {
+        apiKey,
+        customerId,
+        amount: -50
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('VALIDATION_ERROR');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/withdraw-from-change-wallet-balance (Invalid amount)', testDoneFn => {
+
+    callApi('api/withdraw-from-change-wallet-balance', {
+      json: {
+        apiKey,
+        customerId,
+        amount: 3000
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('INSUFFICIENT_BALANCE');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/withdraw-from-change-wallet-balance (Valid)', testDoneFn => {
+
+    callApi('api/withdraw-from-change-wallet-balance', {
+      json: {
+        apiKey,
+        customerId,
+        amount: 50.9
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-customer (changeWalletBalance check)', testDoneFn => {
+
+    callApi('api/get-customer', {
+      json: {
+        apiKey,
+        customerId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetCustomerApiSuccessResponse(body);
+      validateCustomerSchema(body.customer);
+
+      expect(body.customer).to.have.property('withdrawalHistory').to.have.lengthOf(1);
+
+      testDoneFn();
+    })
+
+  });
+
+  // WithdrawFromChangeWalletBalanceApi tests - end
+
+  // AddAdditionalPayment tests - start
+
+  it('api/add-sales (Valid, Credit Sale With Customer)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId,
+
+        productList: [
+          {
+            productId: outletInventoryProductList[0].productId,
+            count: 3,
+            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+          }
+        ],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+          discountValue: 0,
+          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 30, // out of total billed 212.799999999
+          changeAmount: 0,
+          shouldSaveChangeInAccount: true,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddSalesApiSuccessResponse(body);
+
+      salesId = body.salesId;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-additional-payment (Valid, cash, Less than total billed)', testDoneFn => {
+
+    callApi('api/add-additional-payment', {
+      json: {
+        apiKey,
+        salesId,
+        customerId,
+        payment: {
+          paidAmount: 20,
+          changeAmount: 0,
+          shouldSaveChangeInAccount: true,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-additional-payment (Valid, change-wallet, Less than total billed, user has that amount)', testDoneFn => {
+
+    callApi('api/add-additional-payment', {
+      json: {
+        apiKey,
+        salesId,
+        customerId,
+        payment: {
+          paidAmount: 10,
+          changeAmount: 0,
+          shouldSaveChangeInAccount: true,
+          paymentMethod: 'change-wallet'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-additional-payment (Invalid, change-wallet, Less than total billed, user does not have that amount)', testDoneFn => {
+
+    callApi('api/add-additional-payment', {
+      json: {
+        apiKey,
+        salesId,
+        customerId,
+        payment: {
+          paidAmount: 60,
+          changeAmount: 0,
+          shouldSaveChangeInAccount: true,
+          paymentMethod: 'change-wallet'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('INSUFFICIENT_BALANCE');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-additional-payment (Invalid, cash, incorrect change calculation)', testDoneFn => {
+
+    callApi('api/add-additional-payment', {
+      json: {
+        apiKey,
+        salesId,
+        customerId,
+        payment: {
+          paidAmount: 20,
+          changeAmount: 5,
+          shouldSaveChangeInAccount: true,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('INCORRECT_PAYMENT_CALCULATION');
+      testDoneFn();
+    });
+
+  });
+
+  let customerRef1 = null;
+  it('api/get-customer (to verify impact of add-additional-payment)', testDoneFn => {
+
+    callApi('api/get-customer', {
+      json: {
+        apiKey,
+        customerId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetCustomerApiSuccessResponse(body);
+      validateCustomerSchema(body.customer);
+      customerRef1 = body.customer;
+      expect(body.customer).to.have.property('withdrawalHistory').to.have.lengthOf(1);
+
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-additional-payment (Valid, cash, Greater than remaining)', testDoneFn => {
+
+    callApi('api/add-additional-payment', {
+      json: {
+        apiKey,
+        salesId,
+        customerId,
+        payment: {
+          paidAmount: 200,
+          changeAmount: 47.20,
+          shouldSaveChangeInAccount: true,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-customer (to verify impact of add-additional-payment)', testDoneFn => {
+
+    callApi('api/get-customer', {
+      json: {
+        apiKey,
+        customerId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetCustomerApiSuccessResponse(body);
+      validateCustomerSchema(body.customer);
+      let diff = body.customer.changeWalletBalance - customerRef1.changeWalletBalance;
+      diff = Math.round(diff * 100) / 100;
+      expect(diff).to.equal(47.2)
+      testDoneFn();
+    })
+
+  });
+
+
+  // AddAdditionalPayment tests - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

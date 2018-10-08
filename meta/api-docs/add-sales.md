@@ -30,7 +30,6 @@ method: `POST`
     discountedAmount: Joi.number().max(999999999999999).required(),
     serviceChargeAmount: Joi.number().max(999999999999999).required(),
     totalBilled: Joi.number().max(999999999999999).required(),
-    previousCustomerBalance: Joi.number().max(999999999999999).allow(null).required(),
     paidAmount: Joi.number().max(999999999999999).required(),
     changeAmount: Joi.number().max(999999999999999).required(),
     shouldSaveChangeInAccount: Joi.boolean().required(),
@@ -59,6 +58,12 @@ Possible Error Codes:
 { code: CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER }
 { code: PRODUCT_INVALID } // product could not be found
 { code: INSUFFICIENT_PRODUCT } // not enough product in inventory
+{ code: BILL_INACCURATE } // Bill is mathematically inaccurate
+
+From "customer-mixin":
+  { code: INSUFFICIENT_BALANCE }
+  { code: NEGATIVE_AMOUNT_GIVEN }
+  { code: UNABLE_TO_UPDATE_CUSTOMER_CHANGE_WALLET_BALANCE }
 ```
 
 ### response (on success):

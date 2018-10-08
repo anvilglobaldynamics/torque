@@ -1,4 +1,4 @@
-let { LegacyApi } = require('./../legacy-api-base');
+let { LegacyApi } = require('../legacy-api-base');
 let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
@@ -25,7 +25,9 @@ exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(
           count: Joi.number().max(999999999999999).required()
         })
       ),
-      creditedAmount: Joi.number().max(999999999999999).required()
+
+      creditedAmount: Joi.number().max(999999999999999).required(),
+      shouldSaveReturnableInChangeWallet: Joi.boolean().required()
     });
   }
 
@@ -71,67 +73,22 @@ exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(
       })
   }
 
-  _calculatePayback({ returnedProductList }, cbfn) {
-    let promiseList = [];
-    let productIdList = returnedProductList.map(product => product.productId);
-    let payment = 0;
-
-    this.legacyDatabase.product.findByIdList({ idList: productIdList }, (err, productList) => {
-      productList.forEach(product => {
-        let promise = new Promise((accept, reject) => {
-          payment += product.salePrice;
-          accept();
-        });
-        promiseList.push(promise);
-      });
-
-      Promise.all(promiseList)
-        .then(_ => {
-          return cbfn(payment);
-        })
-        .catch(err => {
-          return this.fail(err);
-        })
-    });
-  }
-
-  _handlePayback({ payment, customer }, cbfn) {
-    // TODO: will handle customer payback here in the future
-  }
-
-  _addSalesReturn({ salesId, returnedProductList, creditedAmount }, cbfn) {
-    this.legacyDatabase.salesReturn.create({ salesId, returnedProductList, creditedAmount }, (err, salesReturnId) => {
+  _addSalesReturn({ salesId, returnedProductList, creditedAmount, shouldSaveReturnableInChangeWallet }, cbfn) {
+    this.legacyDatabase.salesReturn.create({ salesId, returnedProductList, creditedAmount, shouldSaveReturnableInChangeWallet }, (err, salesReturnId) => {
       return cbfn(salesReturnId);
     })
   }
 
-  // below are copied code
-
-  _handlePayment(payment, customer, cbfn) {
-    let diff = (payment.paidAmount + payment.previousCustomerBalance) - payment.totalBilled;
-    payment.changeAmount = diff;
-    if (diff >= 0) {
-      return cbfn(payment);
-    } else {
-      this._updateCustomerBalance(diff, customer, () => {
-        return cbfn(payment);
-      });
-    }
-  }
-
   handle({ body }) {
-    let { salesId, returnedProductList, creditedAmount } = body;
+    let { salesId, returnedProductList, creditedAmount, shouldSaveReturnableInChangeWallet } = body;
 
     this._getSales({ salesId }, (sales) => {
       this._verifyProductsExist({ productList: returnedProductList }, () => {
         this._verifyProductsAreReturnable({ productList: returnedProductList }, () => {
           this._getOutletReturnedInventory({ outletId: sales.outletId }, (outletReturnedInventory) => {
             this._returnProducts({ returnedProductList, outletReturnedInventory }, (outletReturnedInventory) => {
-              // this._getCustomer({ customerId: salesId.customerId }, (customer) => {
-              // this._calculatePayback({ returnedProductList }, (payment) => {
-              // this._handlePayback({ payment, customer }, () => {
-              this._addSalesReturn({ salesId, returnedProductList, creditedAmount }, (salesReturnId) => {
-                this.success({ status: "success", salesReturnId: salesReturnId });
+              this._addSalesReturn({ salesId, returnedProductList, creditedAmount, shouldSaveReturnableInChangeWallet }, (salesReturnId) => {
+                this.success({ status: "success", salesReturnId });
               });
             });
           });

@@ -38,16 +38,27 @@
           <div class="card vertical layout">
 
             <div>[[productToBeReturned.productCategoryName]]</div>
+            <div>[[verses.salesReturn.salePrice]] [[productToBeReturned.salePrice]]</div>
             <div>[[verses.salesReturn.soldCount]]: [[productToBeReturned.count]]</div>
             <div>[[verses.salesReturn.returnCount]]: [[productToBeReturned.returnedProductCount]]</div>
-            <paper-input class="salesReturnForm--productReturnCount" value="{{salesReturnForm.productReturnCount}}" type="number" required min="1" max="[[maxAllowedReturnCount(productToBeReturned.count, productToBeReturned.returnedProductCount)]]" error-message=[[verses.salesReturn.productReturnCountInputError]] label=[[verses.salesReturn.productReturnCountInput]]></paper-input>
-            <paper-input class="salesReturnForm--creditedAmount" value="{{salesReturnForm.creditedAmount}}" type="number" required min="0" max="[[maxAllowedCreditAmount(productToBeReturned.count, productToBeReturned.returnedProductCount, productToBeReturned.salePrice)]]" error-message=[[verses.salesReturn.creditedAmountInputError]] label=[[verses.salesReturn.creditedAmountInput]]>
+            
+            <paper-input class="salesReturnForm--productReturnCount" value="{{salesReturnForm.productReturnCount}}" type="number" required min="1" max="[[maxAllowedReturnCount(productToBeReturned.count, productToBeReturned.returnedProductCount)]]" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" error-message=[[verses.salesReturn.productReturnCountInputError]] label=[[verses.salesReturn.productReturnCountInput]]></paper-input>
+            
+            <paper-input class="salesReturnForm--creditedAmount" value="{{salesReturnForm.creditedAmount}}" type="number" required min="0" max="[[maxAllowedCreditAmount(productToBeReturned.count, productToBeReturned.returnedProductCount, productToBeReturned.salePrice)]]" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" error-message=[[verses.salesReturn.creditedAmountInputError]] label=[[verses.salesReturn.creditedAmountInput]]>
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
+
+            <template is="dom-if" if="sales.customerId">
+              <paper-checkbox checked="{{salesReturnForm.shouldSaveReturnableInChangeWallet}}">
+                [[verses.salesReturn.shouldSaveReturnableInChangeWallet]]
+              </paper-checkbox>
+            </template>
+            
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary salesReturnForm--submit" on-tap="addSalesReturnTapped">[[verses.salesReturn.addSalesReturn]]</paper-button>
             </div>
+
           </div>
         </form>
       </iron-form>
@@ -68,12 +79,14 @@
               if (mode === 'development') {
                 return {
                   productReturnCount: 1,
-                  creditedAmount: 100
+                  creditedAmount: 0,
+                  shouldSaveReturnableInChangeWallet: true
                 };
               } else {
                 return {
-                  productReturnCount: null,
+                  productReturnCount: 0,
                   creditedAmount: 0,
+                  shouldSaveReturnableInChangeWallet: true
                 };
               }
             }
@@ -137,13 +150,11 @@
 
       _processProductToBeReturned(cbfn) {
         this.productToBeReturned = this.sales.productList.find(product => product.productId == this.params.product);
-        this.set("salesReturnForm.creditedAmount", this.productToBeReturned.salePrice * (this.productToBeReturned.count - this.productToBeReturned.returnedProductCount));
         this.set("salesReturnForm.productReturnCount", (this.productToBeReturned.count - this.productToBeReturned.returnedProductCount));
-
         cbfn();
       }
 
-      _processAddSalesReturn({ productReturnCount, creditedAmount }) {
+      _processAddSalesReturn({ productReturnCount, creditedAmount, shouldSaveReturnableInChangeWallet }) {
         let returnedProductList = [
           {
             productId: this.params.product,
@@ -153,7 +164,7 @@
 
         let data = {
           salesId: this.params.sales,
-          returnedProductList, creditedAmount
+          returnedProductList, creditedAmount, shouldSaveReturnableInChangeWallet
         };
 
         this.app.callAddSalesReturnApi(data, (err, response) => {
@@ -177,15 +188,19 @@
       }
 
       maxAllowedCreditAmount(soldCount, returnedCount, salePrice) {
-        return ((soldCount-returnedCount)*salePrice)
+        return ((soldCount-returnedCount)*salePrice);
       }
 
       addSalesReturnTapped(e = null) {
         this.elemAll('#salesReturnForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#salesReturnForm').validate()) return;
 
-        let { productReturnCount, creditedAmount } = this.salesReturnForm;
-        this._processAddSalesReturn({ productReturnCount, creditedAmount });
+        let { productReturnCount, creditedAmount, shouldSaveReturnableInChangeWallet } = this.salesReturnForm;
+        this._processAddSalesReturn({ productReturnCount, creditedAmount, shouldSaveReturnableInChangeWallet });
+      }
+
+      genericNumericInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
       }
     }
 

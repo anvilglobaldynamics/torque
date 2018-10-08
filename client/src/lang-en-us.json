@@ -29,7 +29,7 @@
     "showMore": "Show More",
     "name": "Name",
     "phone": "Phone",
-    "balance": "Balance",
+    "balance": "Account Balance",
     "view": "View",
     "edit": "Edit",
     "showing": "Showing",
@@ -72,7 +72,8 @@
     "designation": "Designation",
     "errorMessageBody": "Error Occurred, Please contact Lipi representative.",
     "errorMessageTitle": "Error",
-    "noDataFound": "No Data Found"
+    "noDataFound": "No Data Found",
+    "changeWallet": "Change Wallet"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -353,6 +354,7 @@
   },
   "customer": {
     "editCustomerTitle": "Edit Customer",
+    "withdrawFromChangeWalletBalance": "Withdraw from customer account balance",
     "addCustomerTitle": "Add Customer",
     "customerNameInput": "Name of your customer.",
     "customerNameInputError": "Enter a valid name",
@@ -371,7 +373,7 @@
     "deleteCustomerQuestionPartOne": "Are you sure you want to delete this customer",
     "deleteCustomerQuestionPartTwo": "Once deleted, you can not restore this customer.",
     "customerDeleted": "Customer has been deleted",
-    "additionalPaymentHistory": "Additional Payment History",
+    "withdrawalHistory": "Withdrawal History",
     "acceptedBy": "Accepted By",
     "clickToEditCustomer": "Click here to edit the customer.",
     "editCustomer": "Edit Customer",
@@ -382,7 +384,9 @@
     "noCustomerFound": "No Customer Found.",
 
     "searchForCustomerInput": "Customer Name/Number",
-    "searchForCustomerInputError": "Error in Search"
+    "searchForCustomerInputError": "Error in Search",
+
+    "customerName": "Customer Name"
   },
   "editProfile": {
     "editProfileTitle": "Edit Profile",
@@ -430,12 +434,16 @@
     "creditedAmount": "Credited Amount",
     "productList": "Product List",
     "product": "Product",
-    "noSalesReturnFound": "No Sales Return Record Found."
+    "noSalesReturnFound": "No Sales Return Record Found.",
+
+    "shouldSaveReturnableInChangeWallet": "Should save returnable in change wallet?",
+    "returnedCount": "Returned Count"
   },
   "sales": {
     "manageSalesTitle": "Sales Record",
     "salesId": "Sales Id",
     "billed": "Billed",
+    "paid": "Paid",
     "products": "product(s)",
     "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
     "removeCustomer": "Remove Customer",
@@ -455,11 +463,16 @@
     "serviceChargeAmount": "Service Charge Amount",
     "vat": "VAT",
     "paidAmount": "Paid Amount",
+    "totalPaid": "Total Paid Amount",
+    "paymentList": "Payment list",
     "paymentMethod": "Payment Method",
     "changeAmount": "Change Amount",
     "wasDebitedToUser": "was debited to user.",
     "allReturned": "all returned",
-    "noSalesFound": "No Sales Record Found."
+    "noSalesFound": "No Sales Record Found.",
+
+    "soldCount": "Sold Count",
+    "returnedCount": "Returned Count"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",
@@ -546,6 +559,7 @@
   "salesReport": {
     "salesReportTitle": "Sales Report",
     "showFilters": "Show Filters",
+    "salePrice": "Sale Price",
     "noCustomerSelected": "No customer selected (Anonymous Sale)",
     "removeCustomer": "Remove Customer",
     "changeCustomer": "Change Customer",
@@ -633,7 +647,7 @@
   },
   "payment": {
     "packageHasExpired": "Your package has expired.",
-    "pleaseCallUsToPurchaseSubscription": "Call us at +880 1730 589311 to purchase a subscription.",
+    "pleaseCallUsToPurchaseSubscription": "Call us at +880 1770 947908 to purchase a subscription.",
     "recheckVerificationStatus": "Recheck Verification Status",
     "useDifferentOrganization": "Use a different organization"
   },
@@ -669,5 +683,21 @@
     "fileProvidedHasNoData": "The file you provided has no data.",
     "expectedColumn": "Expected column",
     "missingCellsInRow": "No row missing data"
+  },
+  "additionalPayment": {
+    "paymentMethod": "Payment Method",
+    "paidAmountInput": "Paid Amount",
+    "paidAmountInputError": "Enter a valid number",
+    "changeAmount": "Change Amount",
+    "shouldSaveChangeInAccount": "Save in customer's account instead of paying cash.",
+    "addAdditionalPayment": "Add Additional Payment",
+    "dueAmount": "Due amount"
+  },
+  "withdrawFromChangeWalletBalance": {
+    "withdrawFromChangeWalletBalanceTitle": "Withdraw from customer account balance",
+    "amountInput": "Amount",
+    "amountInputError": "Enter the amount",
+    "withdraw": "Withdraw",
+    "customerBalanceUpdated": "Customer's change wallet balance has been updated."
   }
 }

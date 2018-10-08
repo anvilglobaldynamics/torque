@@ -13,8 +13,8 @@ exports.SalesCollection = class extends Collection {
       lastModifiedByUserId: Joi.number().max(999999999999999).allow(null).required(),
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
-      // FIXME: productList does not need min
-      productList: Joi.array().required().min(1).items(
+
+      productList: Joi.array().required().items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required(),
@@ -23,6 +23,7 @@ exports.SalesCollection = class extends Collection {
           salePrice: Joi.number().max(999999999999999).required()
         })
       ),
+
       payment: Joi.object().keys({
         totalAmount: Joi.number().max(999999999999999).required(),
         vatAmount: Joi.number().max(999999999999999).required(),
@@ -31,12 +32,21 @@ exports.SalesCollection = class extends Collection {
         discountedAmount: Joi.number().max(999999999999999).required(),
         serviceChargeAmount: Joi.number().max(999999999999999).required(),
         totalBilled: Joi.number().max(999999999999999).required(),
-        previousCustomerBalance: Joi.number().max(999999999999999).allow(null).required(),
-        paidAmount: Joi.number().max(999999999999999).required(),
-        changeAmount: Joi.number().max(999999999999999).required(),
-        shouldSaveChangeInAccount: Joi.boolean().required(),
-        paymentMethod: Joi.string().valid('cash', 'card', 'digital').required()
+
+        totalPaidAmount: Joi.number().max(999999999999999).required(),
+        paymentList: Joi.array().required().items(
+          Joi.object().keys({
+            createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+            acceptedByUserId: Joi.number().max(999999999999999).required(),
+
+            paidAmount: Joi.number().max(999999999999999).required(),
+            changeAmount: Joi.number().max(999999999999999).required(),
+            paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
+            wasChangeSavedInChangeWallet: Joi.boolean().required()
+          })
+        )
       }),
+
       isModified: Joi.boolean().required(),
       isDeleted: Joi.boolean().required(),
       isDiscarded: Joi.boolean().required()
@@ -83,6 +93,14 @@ exports.SalesCollection = class extends Collection {
     });
   }
 
+  async setPayment({ id }, { payment }) {
+    return await this._update({ id }, {
+      $set: {
+        payment
+      }
+    });
+  }
+
   async discard({ id }) {
     return await this._update({ id }, {
       $push: {
@@ -117,7 +135,7 @@ exports.SalesCollection = class extends Collection {
     return await this._find(query);
   }
 
-  async listByFiltersForSalesReturn({outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer }) {
+  async listByFiltersForSalesReturn({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer }) {
     let query = {
       $and: [
         {
@@ -133,12 +151,8 @@ exports.SalesCollection = class extends Collection {
     if (shouldFilterByCustomer) {
       query.$and.push({ customerId });
     }
-    
-    return await this._find(query);
-  }
 
-  async findById({ salesId }) {
-    return await this._findOne({ id: salesId });
+    return await this._find(query);
   }
 
 }

@@ -165,8 +165,7 @@ describe('Sales Return', _ => {
                           apiKey,
                           organizationId,
                           fullName: customerFullName,
-                          phone: customerPhone,
-                          openingBalance
+                          phone: customerPhone
                         }, (data) => {
                           customerId = data.customerId;
                           getCustomer({
@@ -200,7 +199,6 @@ describe('Sales Return', _ => {
                                   discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
                                   serviceChargeAmount: 0,
                                   totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
-                                  previousCustomerBalance: customerData.balance,
                                   paidAmount: 300,
                                   changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
                                   shouldSaveChangeInAccount: false,
@@ -229,7 +227,6 @@ describe('Sales Return', _ => {
                                     discountedAmount: ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[1].defaultDiscountValue / 100)),
                                     serviceChargeAmount: 0,
                                     totalBilled: (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[1].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100))),
-                                    previousCustomerBalance: customerData.balance,
                                     paidAmount: 300,
                                     changeAmount: (300 - (outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[1].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[1].defaultSalePrice * 2) * (5 / 100)))),
                                     shouldSaveChangeInAccount: false,
@@ -277,7 +274,8 @@ describe('Sales Return', _ => {
             count: salesData.productList[0].count
           }
         ],
-        creditedAmount: 100 // TODO: use data from salesData.payment
+        creditedAmount: 100, // TODO: use data from salesData.payment
+        shouldSaveReturnableInChangeWallet: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -300,7 +298,8 @@ describe('Sales Return', _ => {
             count: 10
           }
         ],
-        creditedAmount: 100 // TODO: use data from salesData.payment
+        creditedAmount: 100, // TODO: use data from salesData.payment
+        shouldSaveReturnableInChangeWallet: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -323,7 +322,8 @@ describe('Sales Return', _ => {
             count: salesData.productList[0].count
           }
         ],
-        creditedAmount: 100 // TODO: use data from salesData.payment
+        creditedAmount: 100, // TODO: use data from salesData.payment
+        shouldSaveReturnableInChangeWallet: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -346,7 +346,8 @@ describe('Sales Return', _ => {
             count: sales2Data.productList[0].count
           }
         ],
-        creditedAmount: 300 // TODO: use data from salesData.payment
+        creditedAmount: 300, // TODO: use data from salesData.payment
+        shouldSaveReturnableInChangeWallet: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

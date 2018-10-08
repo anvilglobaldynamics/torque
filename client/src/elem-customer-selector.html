@@ -78,6 +78,19 @@
 <dom-module id="elem-customer-selector">
   <template>
     <style include="shared-styles">
+      .item {
+        margin-bottom: 4px;
+        padding-bottom: 6px;
+        border-bottom: 1px dashed rgb(192, 198, 214);
+      }
+
+      .item:first-of-type {
+        margin-top: 4px;
+      }
+
+      .item:last-of-type {
+        border: none;
+      }
     </style>
     <div class="card p-0 vertical layout">
 
@@ -85,13 +98,14 @@
         <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.customerSelector.customerNameOrPhoneInputError]] label=[[verses.customerSelector.customerNameOrPhoneInput]] on-keypress="searchFieldKeypressed"></paper-input>
         <paper-icon-button icon="clear" on-tap="cancelTapped"></paper-icon-button>
         <paper-button raised class="primary" on-tap="searchTapped">
-          [[verses.general.search]]
+          <iron-icon icon="search" class="m-right-8"></iron-icon>[[verses.general.search]]
         </paper-button>
       </div>
 
-      <paper-listbox>
+      <div class="vertical layout">
         <template is="dom-repeat" items="[[customerList]]" as="customer" index-as="customerIndex">
-          <paper-item class="custom layout horizontal center">
+          <div class="horizontal layout item center">
+
             <div class="flex">
               <div class="type body capitalize">[[customer.fullName]]</div>
               <div class="horizontal layout wrap type secondary">
@@ -101,14 +115,17 @@
                 </div>
                 <div class="horizontal layout center">
                   <iron-icon icon="editor:attach-money" class="icon small"></iron-icon>
-                  <div class="type caption-2">[[customer.balance]] [[page.app.settings.monetaryUnit]]</div>
+                  <div class="type caption-2">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
                 </div>
               </div>
             </div>
             <paper-button raised class="primary btn btn-default" on-tap="selectTapped">[[verses.general.select]]</paper-button>
-          </paper-item>
-      </paper-listbox>
-      </template>
+
+
+          </div>
+        </template>
+      </div>
+
     </div>
   </template>
   <script>

@@ -18,6 +18,7 @@ exports.SalesReturnCollection = class extends Collection {
         })
       ),
       creditedAmount: Joi.number().max(999999999999999).required(),
+      returnableWasSavedInChangeWallet: Joi.boolean().required(),
 
       isDeleted: Joi.boolean().required()
     });
@@ -40,13 +41,14 @@ exports.SalesReturnCollection = class extends Collection {
   // NOTE: commented out, because currently we don't support deleting sales return.
   // get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ salesId, returnedProductList, creditedAmount }) {
+  async create({ salesId, returnedProductList, creditedAmount, shouldSaveReturnableInChangeWallet }) {
     return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
 
       salesId,
       returnedProductList,
       creditedAmount,
+      returnableWasSavedInChangeWallet: shouldSaveReturnableInChangeWallet,
 
       isDeleted: false
     });

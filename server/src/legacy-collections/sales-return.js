@@ -30,6 +30,7 @@ exports.SalesReturnCollection = class extends LegacyCollection {
         })
       ),
       creditedAmount: Joi.number().max(999999999999999).required(),
+      returnableWasSavedInChangeWallet: Joi.boolean().required(),
 
       isDeleted: Joi.boolean().required()
     });
@@ -50,13 +51,14 @@ exports.SalesReturnCollection = class extends LegacyCollection {
     ];
   }
 
-  create({ salesId, returnedProductList, creditedAmount }, cbfn) {
+  create({ salesId, returnedProductList, creditedAmount, shouldSaveReturnableInChangeWallet }, cbfn) {
     let doc = {
       createdDatetimeStamp: (new Date).getTime(),
 
       salesId,
       returnedProductList,
       creditedAmount,
+      returnableWasSavedInChangeWallet: shouldSaveReturnableInChangeWallet,
 
       isDeleted: false
     }

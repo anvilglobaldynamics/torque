@@ -11,16 +11,15 @@ method: `POST`
   organizationId: Joi.number().max(999999999999999).required(),
 
   fullName: Joi.string().min(1).max(64).required(),
-  phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
-  openingBalance: Joi.number().max(999999999999999).required()
+  phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required()
 }
 ```
 
 ### response (on error):
 ```js
 {
-  "hasError": true,
-  "error": {
+  hasError: true,
+  error: {
     code,
     message
   }
@@ -38,9 +37,9 @@ Possible Error Codes:
 ### response (on success):
 ```js
 {
-  "hasError": false,
-  "status": "success",
-  "customerId": Joi.number().max(999999999999999).required()
+  hasError: false,
+  status: success,
+  customerId: Joi.number().max(999999999999999).required()
 }
 ```
 

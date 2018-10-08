@@ -37,11 +37,10 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
         serviceChargeAmount: Joi.number().max(999999999999999).required(),
         totalBilled: Joi.number().max(999999999999999).required(),
         paidAmount: Joi.number().max(999999999999999).required(),
-        previousCustomerBalance: Joi.number().max(999999999999999).allow(null).required(),
         paidAmount: Joi.number().max(999999999999999).required(),
         changeAmount: Joi.number().max(999999999999999).required(),
         shouldSaveChangeInAccount: Joi.boolean().required(),
-        paymentMethod: Joi.string().valid('cash', 'card', 'digital').required()
+        paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required()
       })
     });
   }
@@ -87,7 +86,7 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
           return cbfn(payment);
         });
       } else {
-        let err = new Error("credit sale is not allowed without registered cutomer");
+        let err = new Error("Credit sale is not allowed without a registered cutomer.");
         err.code = "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER";
         return this.fail(err);
       }

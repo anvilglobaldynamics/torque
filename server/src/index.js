@@ -47,7 +47,7 @@ let { AddCustomerApi } = require('./legacy-apis/add-customer');
 let { GetCustomerApi } = require('./legacy-apis/get-customer');
 const { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
 let { EditCustomerApi } = require('./legacy-apis/edit-customer');
-let { AdjustCustomerBalanceApi } = require('./legacy-apis/adjust-customer-balance');
+const { WithdrawFromChangeWalletBalanceApi } = require('./apis/withdraw-from-change-wallet-balance');
 let { DeleteCustomerApi } = require('./legacy-apis/delete-customer');
 
 let { AddOutletApi } = require('./legacy-apis/add-outlet');
@@ -75,11 +75,12 @@ let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
 const { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
 
 const { AddSalesApi } = require('./apis/add-sales');
+const { AddAdditionalPaymentApi } = require('./apis/add-additional-payment');
 let { GetSalesApi } = require('./legacy-apis/get-sales');
 const { GetSalesListApi } = require('./apis/get-sales-list');
 let { DiscardSalesApi } = require('./legacy-apis/discard-sales');
 
-let { AddSalesReturnApi } = require('./legacy-apis/add-sales-return');
+const { AddSalesReturnApi } = require('./apis/add-sales-return');
 let { GetSalesReturnApi } = require('./legacy-apis/get-sales-return');
 let { GetSalesReturnListApi } = require('./legacy-apis/get-sales-return-list');
 
@@ -265,7 +266,7 @@ class Program {
     server.registerPostApi('/api/get-customer', GetCustomerApi);
     server.registerPostApi('/api/get-customer-summary-list', GetCustomerSummaryListApi);
     server.registerPostApi('/api/edit-customer', EditCustomerApi);
-    server.registerPostApi('/api/adjust-customer-balance', AdjustCustomerBalanceApi);
+    server.registerPostApi('/api/withdraw-from-change-wallet-balance', WithdrawFromChangeWalletBalanceApi);
     server.registerPostApi('/api/delete-customer', DeleteCustomerApi);
     server.registerPostApi('/api/add-outlet', AddOutletApi);
     server.registerPostApi('/api/get-outlet-list', GetOutletListApi);
@@ -294,6 +295,7 @@ class Program {
     server.registerPostApi('/api/get-role-list', GetRoleListApi);
     server.registerPostApi('/api/get-privilege-list', GetPrivilegeListApi);
     server.registerPostApi('/api/add-sales', AddSalesApi);
+    server.registerPostApi('/api/add-additional-payment', AddAdditionalPaymentApi);
     server.registerPostApi('/api/get-sales', GetSalesApi);
     server.registerPostApi('/api/get-sales-list', GetSalesListApi);
     server.registerPostApi('/api/discard-sales', DiscardSalesApi);

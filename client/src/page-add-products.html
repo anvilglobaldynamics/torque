@@ -158,13 +158,13 @@
               <div class="horizontal layout item center">
                 <div class="product-title">[[productCategory.name]]</div>
                 <div class="product-category-numeric">
-                  <paper-input class$="small-input id-[[productCategory.id]]" value="{{productCategory.count}}" type="number" min="0" on-input="genericNumericInputChanged" label=[[productCategory.unit]]></paper-input>
+                  <paper-input class$="small-input id-[[productCategory.id]]" value="{{productCategory.count}}" type="number" min="0" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" label=[[productCategory.unit]]></paper-input>
                 </div>
                 <div class="product-category-numeric">
-                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="[[productCategory.purchasePrice]]" on-input="genericNumericInputChanged" value="{{productCategory.salePrice}}" type="number"></paper-input>
+                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="[[productCategory.purchasePrice]]" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" value="{{productCategory.salePrice}}" type="number"></paper-input>
                 </div>
                 <div class="product-category-numeric">
-                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="0" on-input="genericNumericInputChanged" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
+                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="0" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
                 </div>
               </div>
             </div>
