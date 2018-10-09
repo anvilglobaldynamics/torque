@@ -19,8 +19,8 @@ exports.AddOrganizationApi = class extends Api {
     });
   }
 
-  async _createOrganization({ name, primaryBusinessAddress, phone, email }) {
-    return await this.database.organization.create({ name, primaryBusinessAddress, phone, email });
+  async _createOrganization({ name, primaryBusinessAddress, phone, email, userId }) {
+    return await this.database.organization.create({ name, primaryBusinessAddress, phone, email, userId });
   }
 
   async _setUserAsOwner({ userId, organizationId }) {
@@ -38,9 +38,11 @@ exports.AddOrganizationApi = class extends Api {
   }
 
   async _checkIfMaxOrganizationLimitReached({ userId }) {
-    let employmentList = await this.database.employment.listActiveEmploymentsOfUser({ userId });
-    if (employmentList.length >= 10) {
-      throw new CodedError("MAX_ORGANIZATION_LIMIT_REACHED", "Maximum organization limit has been reached.");
+    let organizationList = await this.database.organization.listByCreatedByUserId({ userId });
+    if (organizationList) {
+      if (organizationList.length >= 10000) {
+        throw new CodedError("MAX_ORGANIZATION_LIMIT_REACHED", "Maximum organization limit has been reached.");
+      }
     }
   }
 
@@ -48,7 +50,7 @@ exports.AddOrganizationApi = class extends Api {
     let { name, primaryBusinessAddress, phone, email } = body;
     await this._checkIfMaxOrganizationLimitReached({ userId });
 
-    let organizationId = await this._createOrganization({ name, primaryBusinessAddress, phone, email });
+    let organizationId = await this._createOrganization({ name, primaryBusinessAddress, phone, email, userId });
     await this._setUserAsOwner({ userId, organizationId });
     await this._setTrialPackage({ organizationId });
 

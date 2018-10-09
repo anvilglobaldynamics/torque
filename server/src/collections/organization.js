@@ -10,6 +10,7 @@ exports.OrganizationCollection = class extends Collection {
     return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+      createdByUserId: Joi.number().max(999999999999999).required(),
       name: Joi.string().min(1).max(64).required(),
       primaryBusinessAddress: Joi.string().min(1).max(128).required(),
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
@@ -27,10 +28,11 @@ exports.OrganizationCollection = class extends Collection {
     return [];
   }
 
-  async create({ name, primaryBusinessAddress, phone, email }) {
+  async create({ name, primaryBusinessAddress, phone, email, userId }) {
     return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
+      createdByUserId: userId,
       name,
       primaryBusinessAddress,
       phone,
@@ -55,6 +57,10 @@ exports.OrganizationCollection = class extends Collection {
         { phone: emailOrPhone }
       ]
     });
+  }
+
+  async listByCreatedByUserId({ createdByUserId }) {
+    return await this._find({ createdByUserId });
   }
 
   async setPackageActivationId({ id }, { packageActivationId }) {
