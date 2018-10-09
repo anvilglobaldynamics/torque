@@ -37,11 +37,21 @@ exports.AddOrganizationApi = class extends Api {
     throwOnFalsy(res, "DEV_ERROR", "Unable to set package");
   }
 
+  async _checkIfMaxOrganizationLimitReached({ userId }) {
+    let employmentList = await this.database.employment.listActiveEmploymentsOfUser({ userId });
+    if (employmentList.length >= 10) {
+      throw new CodedError("MAX_ORGANIZATION_LIMIT_REACHED", "Maximum organization limit has been reached.");
+    }
+  }
+
   async handle({ body, userId }) {
     let { name, primaryBusinessAddress, phone, email } = body;
+    await this._checkIfMaxOrganizationLimitReached({ userId });
+
     let organizationId = await this._createOrganization({ name, primaryBusinessAddress, phone, email });
     await this._setUserAsOwner({ userId, organizationId });
     await this._setTrialPackage({ organizationId });
+
     return { status: "success", organizationId };
   }
 
