@@ -134,7 +134,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
@@ -185,7 +184,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
@@ -235,7 +233,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
@@ -286,7 +283,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
@@ -447,7 +443,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
@@ -503,7 +498,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
@@ -559,7 +553,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
@@ -792,7 +785,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,

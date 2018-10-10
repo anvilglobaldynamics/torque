@@ -24,7 +24,6 @@ exports.EditEmploymentApi = class extends userCommonMixin(collectionCommonMixin(
       privileges: Joi.object().keys({
         PRIV_VIEW_USERS: Joi.boolean().required(),
         PRIV_MODIFY_USERS: Joi.boolean().required(),
-        PRIV_MODIFY_USER_PRIVILEGES: Joi.boolean().required(),
 
         PRIV_ACCESS_POS: Joi.boolean().required(),
         PRIV_VIEW_SALES: Joi.boolean().required(),
@@ -64,8 +63,7 @@ exports.EditEmploymentApi = class extends userCommonMixin(collectionCommonMixin(
         errorCode: "EMPLOYEE_INVALID"
       },
       privileges: [
-        "PRIV_MODIFY_USERS",
-        "PRIV_MODIFY_USER_PRIVILEGES"
+        "PRIV_MODIFY_USERS"
       ]
     }];
   }

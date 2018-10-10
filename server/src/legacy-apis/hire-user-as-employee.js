@@ -24,7 +24,6 @@ exports.HireUserAsEmployeeApi = class extends userCommonMixin(collectionCommonMi
       privileges: Joi.object().required().keys({
         PRIV_VIEW_USERS: Joi.boolean().required(),
         PRIV_MODIFY_USERS: Joi.boolean().required(),
-        PRIV_MODIFY_USER_PRIVILEGES: Joi.boolean().required(),
 
         PRIV_ACCESS_POS: Joi.boolean().required(),
         PRIV_VIEW_SALES: Joi.boolean().required(),

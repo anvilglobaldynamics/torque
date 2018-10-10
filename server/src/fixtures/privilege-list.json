@@ -8,10 +8,6 @@
     "name": "Modify users"
   },
   {
-    "code": "PRIV_MODIFY_USER_PRIVILEGES",
-    "name": "Modify user privileges"
-  },
-  {
     "code": "PRIV_ACCESS_POS",
     "name": "Access pos"
   },
