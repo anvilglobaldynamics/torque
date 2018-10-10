@@ -94,9 +94,6 @@ exports.ProductCategoryCollection = class extends Collection {
       query.$or = [
         { name: searchRegex }
       ];
-      if (String(parseInt(searchString)) === searchString) {
-        query.$or.push({ id: parseInt(searchString) });
-      }
     }
     return await this._find(query);
   }

@@ -25,25 +25,13 @@ exports.GetProductCategoryListApi = class extends Api {
     }];
   }
 
-  async _getProductCategoryList({ organizationId }) {
-    return await this.database.productCategory.listByOrganizationId({ organizationId });
-  }
-
-  async __searchProductCategoryList({ productCategoryList, searchString }) {
-    productCategoryList = productCategoryList.filter(productCategory => {
-      let regex = new RegExp(searchString, 'g');
-      return regex.test(productCategory.name);
-    });
-    return productCategoryList;
+  async _getProductCategoryList({ organizationId, searchString }) {
+    return await this.database.productCategory.listByOrganizationIdAndSearchString({ organizationId, searchString });
   }
 
   async handle({ body }) {
     let { organizationId, searchString } = body;
-    let productCategoryList = await this._getProductCategoryList({ organizationId });
-
-    if (searchString) {
-      productCategoryList = await this.__searchProductCategoryList({ productCategoryList, searchString });
-    }
+    let productCategoryList = await this._getProductCategoryList({ organizationId, searchString });
 
     return { productCategoryList };
   }

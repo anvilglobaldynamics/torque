@@ -168,7 +168,7 @@ describe('Product Category', _ => {
       json: {
         apiKey,
         organizationId,
-        searchString: '1st'
+        searchString: '1ST'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
