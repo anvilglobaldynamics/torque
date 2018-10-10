@@ -134,7 +134,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
           PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
@@ -186,7 +185,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
           PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
@@ -237,7 +235,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
           PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
@@ -289,7 +286,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
           PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
@@ -451,7 +447,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
           PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
@@ -508,7 +503,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
           PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
@@ -565,7 +559,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
           PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
@@ -799,7 +792,6 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
           PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
