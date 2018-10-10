@@ -36,10 +36,6 @@
     "name": "Allow flat discount"
   },
   {
-    "code": "PRIV_ALLOW_FOC",
-    "name": "Allow foc"
-  },
-  {
     "code": "PRIV_VIEW_SALES_RETURN",
     "name": "View sales return"
   },

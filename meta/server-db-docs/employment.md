@@ -23,7 +23,6 @@ Joi.object().keys({
     PRIV_VIEW_SALES: Joi.boolean().required(),
     PRIV_MODIFY_SALES: Joi.boolean().required(),
     PRIV_ALLOW_FLAT_DISCOUNT: Joi.boolean().required(),
-    PRIV_ALLOW_FOC: Joi.boolean().required(),
 
     PRIV_VIEW_SALES_RETURN: Joi.boolean().required(),
     PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
