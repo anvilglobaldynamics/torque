@@ -142,7 +142,6 @@ describe('Employee', _ => {
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
           PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
@@ -197,7 +196,6 @@ describe('Employee', _ => {
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
           PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
@@ -251,7 +249,6 @@ describe('Employee', _ => {
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
           PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
@@ -306,7 +303,6 @@ describe('Employee', _ => {
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
           PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
@@ -471,7 +467,6 @@ describe('Employee', _ => {
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
           PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
@@ -531,7 +526,6 @@ describe('Employee', _ => {
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
           PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
@@ -591,7 +585,6 @@ describe('Employee', _ => {
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
           PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
@@ -828,7 +821,6 @@ describe('Employee', _ => {
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
           PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,

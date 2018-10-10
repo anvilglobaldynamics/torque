@@ -36,10 +36,6 @@
     "name": "Allow flat discount"
   },
   {
-    "code": "PRIV_ALLOW_INDIVIDUAL_DISCOUNT",
-    "name": "Allow individual discount"
-  },
-  {
     "code": "PRIV_ALLOW_FOC",
     "name": "Allow foc"
   },
