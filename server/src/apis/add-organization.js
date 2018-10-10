@@ -3,6 +3,7 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const MAX_ORGANIZATION_LIMIT = 10000;
 
 exports.AddOrganizationApi = class extends Api {
 
@@ -40,7 +41,7 @@ exports.AddOrganizationApi = class extends Api {
   async _checkIfMaxOrganizationLimitReached({ userId }) {
     let organizationList = await this.database.organization.listByCreatedByUserId({ userId });
     if (organizationList) {
-      if (organizationList.length >= 10000) {
+      if (organizationList.length >= MAX_ORGANIZATION_LIMIT) {
         throw new CodedError("MAX_ORGANIZATION_LIMIT_REACHED", "Maximum organization limit has been reached.");
       }
     }
