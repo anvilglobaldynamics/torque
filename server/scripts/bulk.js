@@ -230,7 +230,7 @@ const createEmployee = async ({ apiKey, organizationId }) => {
 
       PRIV_VIEW_CUSTOMER: true,
       PRIV_MODIFY_CUSTOMER: true,
-      PRIV_MANAGE_CUSTOMER_DEBT: true
+      PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
     }
   });
 
