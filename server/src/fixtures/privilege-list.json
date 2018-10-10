@@ -96,10 +96,6 @@
     "name": "View customer"
   },
   {
-    "code": "PRIV_ADD_CUSTOMER_DURING_SALES",
-    "name": "Add customer during sales"
-  },
-  {
     "code": "PRIV_MODIFY_CUSTOMER",
     "name": "Modify customer"
   },

@@ -163,7 +163,6 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
           PRIV_MANAGE_CUSTOMER_DEBT: true
         }
@@ -219,7 +218,6 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
           PRIV_MANAGE_CUSTOMER_DEBT: true
         }
@@ -274,7 +272,6 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
           PRIV_MANAGE_CUSTOMER_DEBT: true
         }
@@ -330,7 +327,6 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
           PRIV_MANAGE_CUSTOMER_DEBT: true
         }
@@ -496,7 +492,6 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
           PRIV_MANAGE_CUSTOMER_DEBT: true
         }
@@ -557,7 +552,6 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
           PRIV_MANAGE_CUSTOMER_DEBT: true
         }
@@ -618,7 +612,6 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
           PRIV_MANAGE_CUSTOMER_DEBT: true
         }
@@ -856,7 +849,6 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
           PRIV_MANAGE_CUSTOMER_DEBT: true
         }

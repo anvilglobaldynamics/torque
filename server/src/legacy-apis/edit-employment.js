@@ -53,7 +53,6 @@ exports.EditEmploymentApi = class extends userCommonMixin(collectionCommonMixin(
         PRIV_MODIFY_ORGANIZATION: Joi.boolean().required(),
 
         PRIV_VIEW_CUSTOMER: Joi.boolean().required(),
-        PRIV_ADD_CUSTOMER_DURING_SALES: Joi.boolean().required(),
         PRIV_MODIFY_CUSTOMER: Joi.boolean().required(),
         PRIV_MANAGE_CUSTOMER_DEBT: Joi.boolean().required()
       })
