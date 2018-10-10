@@ -36,16 +36,16 @@
     "name": "View all inventories"
   },
   {
-    "code": "PRIV_MODIFY_ALL_INVENTORIES",
-    "name": "Modify all inventories"
+    "code": "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES",
+    "name": "Modify all product categories"
   },
   {
     "code": "PRIV_TRANSFER_ALL_INVENTORIES",
     "name": "Transfer all inventories"
   },
   {
-    "code": "PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES",
-    "name": "Report damages in all inventories"
+    "code": "PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES",
+    "name": "add products to all inventories"
   },
   {
     "code": "PRIV_VIEW_ALL_OUTLETS",

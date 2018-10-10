@@ -40,7 +40,7 @@ exports.EditProductCategoryApi = class extends Api.mixin(ProductCategoryMixin) {
         errorCode: "PRODUCT_CATEGORY_INVALID"
       },
       privileges: [
-        "PRIV_MODIFY_ALL_INVENTORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
       ]
     }];
   }

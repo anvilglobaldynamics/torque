@@ -210,9 +210,9 @@ const createEmployee = async ({ apiKey, organizationId }) => {
       PRIV_MODIFY_SALES_RETURN: true,
 
       PRIV_VIEW_ALL_INVENTORIES: true,
-      PRIV_MODIFY_ALL_INVENTORIES: true,
+      PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
       PRIV_TRANSFER_ALL_INVENTORIES: true,
-      PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+      PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
       PRIV_VIEW_ALL_OUTLETS: true,
       PRIV_MODIFY_ALL_OUTLETS: true,

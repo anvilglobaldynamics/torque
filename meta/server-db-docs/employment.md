@@ -25,9 +25,9 @@ Joi.object().keys({
     PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
 
     PRIV_VIEW_ALL_INVENTORIES: Joi.boolean().required(),
-    PRIV_MODIFY_ALL_INVENTORIES: Joi.boolean().required(),
+    PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: Joi.boolean().required(),
     PRIV_TRANSFER_ALL_INVENTORIES: Joi.boolean().required(),
-    PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: Joi.boolean().required(),
+    PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: Joi.boolean().required(),
 
     PRIV_VIEW_ALL_OUTLETS: Joi.boolean().required(),
     PRIV_MODIFY_ALL_OUTLETS: Joi.boolean().required(),
