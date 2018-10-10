@@ -31,7 +31,6 @@ exports.EmploymentCollection = class extends LegacyCollection {
       privileges: Joi.object().required().keys({
         PRIV_VIEW_USERS: Joi.boolean().required(),
         PRIV_MODIFY_USERS: Joi.boolean().required(),
-        PRIV_ADD_USER: Joi.boolean().required(),
         PRIV_MAKE_USER_AN_OWNER: Joi.boolean().required(),
         PRIV_MODIFY_USER_PRIVILEGES: Joi.boolean().required(),
 
@@ -89,7 +88,6 @@ exports.EmploymentCollection = class extends LegacyCollection {
     let privilegeList = [
       "PRIV_VIEW_USERS",
       "PRIV_MODIFY_USERS",
-      "PRIV_ADD_USER",
       "PRIV_MAKE_USER_AN_OWNER",
       "PRIV_MODIFY_USER_PRIVILEGES",
 
@@ -123,7 +121,6 @@ exports.EmploymentCollection = class extends LegacyCollection {
     let employeeDefaultPrivilegeList = [
       "PRIV_VIEW_USERS",
       // "PRIV_MODIFY_USERS",
-      // "PRIV_ADD_USER",
       // "PRIV_MAKE_USER_AN_OWNER",
       // "PRIV_MODIFY_USER_PRIVILEGES",
 

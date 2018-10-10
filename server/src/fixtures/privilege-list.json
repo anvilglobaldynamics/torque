@@ -8,10 +8,6 @@
     "name": "Modify users"
   },
   {
-    "code": "PRIV_ADD_USER",
-    "name": "Add user"
-  },
-  {
     "code": "PRIV_MAKE_USER_AN_OWNER",
     "name": "Make user an owner"
   },
