@@ -74,6 +74,8 @@ const makeEmailId = () => {
   return `${rnd(emailPrefix)}@gmail.com`;
 }
 
+let uid = 0;
+
 // --------------------------------------------------------------
 
 const utils = require('./../test/utils.js');
@@ -115,7 +117,7 @@ const createOrganization = async ({ apiKey }, db) => {
 
   let { organizationId } = await callApi('api/add-organization', {
     apiKey,
-    name: (pickOne(adjectiveList) + 'Company'),
+    name: (pickOne(adjectiveList) + ' Company ' + (uid++)),
     primaryBusinessAddress: 'ADDRESS GOES HERE',
     phone: makePhoneNumber(),
     email: makeEmailId()
@@ -132,7 +134,7 @@ const createProductCategory = async ({ apiKey, organizationId }) => {
   let { productCategoryId } = await callApi('api/add-product-category', {
     apiKey,
     organizationId,
-    name: pickOne(nounList) + "Category",
+    name: pickOne(nounList) + " Category " + (uid++),
     unit: "kg",
     defaultDiscountType: "percent",
     defaultDiscountValue: 10,
