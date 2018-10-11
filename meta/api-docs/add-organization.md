@@ -32,6 +32,7 @@ Possible Error Codes:
 { code: APIKEY_INVALID } // the api key is invalid
 { code: EMAIL_ALREADY_IN_USE } // the email id is already associated
 { code: PHONE_ALREADY_IN_USE } // the phone number is already associated
+{ code: MAX_ORGANIZATION_LIMIT_REACHED }
 ```
 
 ### response (on success):

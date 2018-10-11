@@ -852,6 +852,7 @@ exports.validateOrganizationSchema = (doc) => {
 
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+    createdByUserId: Joi.number().max(999999999999999).required(),
     name: Joi.string().min(1).max(64).required(),
     primaryBusinessAddress: Joi.string().min(1).max(128).required(),
     phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
@@ -972,7 +973,6 @@ exports.validateSalesSchema = (doc) => {
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
-    lastModifiedByUserId: Joi.number().max(999999999999999).allow(null).required(),
     outletId: Joi.number().max(999999999999999).required(),
     customerId: Joi.number().max(999999999999999).allow(null).required(),
 
@@ -1028,7 +1028,6 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
-    lastModifiedByUserId: Joi.number().max(999999999999999).allow(null).required(),
     outletId: Joi.number().max(999999999999999).required(),
     customerId: Joi.number().max(999999999999999).allow(null).required(),
 
@@ -1207,24 +1206,19 @@ exports.validateEmploymentSchema = (doc) => {
     privileges: Joi.object().required().keys({
       PRIV_VIEW_USERS: Joi.boolean().required(),
       PRIV_MODIFY_USERS: Joi.boolean().required(),
-      PRIV_ADD_USER: Joi.boolean().required(),
-      PRIV_MAKE_USER_AN_OWNER: Joi.boolean().required(),
-      PRIV_MODIFY_USER_PRIVILEGES: Joi.boolean().required(),
 
       PRIV_ACCESS_POS: Joi.boolean().required(),
       PRIV_VIEW_SALES: Joi.boolean().required(),
       PRIV_MODIFY_SALES: Joi.boolean().required(),
       PRIV_ALLOW_FLAT_DISCOUNT: Joi.boolean().required(),
-      PRIV_ALLOW_INDIVIDUAL_DISCOUNT: Joi.boolean().required(),
-      PRIV_ALLOW_FOC: Joi.boolean().required(),
 
       PRIV_VIEW_SALES_RETURN: Joi.boolean().required(),
       PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
 
       PRIV_VIEW_ALL_INVENTORIES: Joi.boolean().required(),
-      PRIV_MODIFY_ALL_INVENTORIES: Joi.boolean().required(),
+      PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: Joi.boolean().required(),
       PRIV_TRANSFER_ALL_INVENTORIES: Joi.boolean().required(),
-      PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: Joi.boolean().required(),
+      PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: Joi.boolean().required(),
 
       PRIV_VIEW_ALL_OUTLETS: Joi.boolean().required(),
       PRIV_MODIFY_ALL_OUTLETS: Joi.boolean().required(),
@@ -1236,9 +1230,8 @@ exports.validateEmploymentSchema = (doc) => {
       PRIV_MODIFY_ORGANIZATION: Joi.boolean().required(),
 
       PRIV_VIEW_CUSTOMER: Joi.boolean().required(),
-      PRIV_ADD_CUSTOMER_DURING_SALES: Joi.boolean().required(),
       PRIV_MODIFY_CUSTOMER: Joi.boolean().required(),
-      PRIV_MANAGE_CUSTOMER_DEBT: Joi.boolean().required()
+      PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: Joi.boolean().required()
     }),
 
     isActive: Joi.boolean().required()

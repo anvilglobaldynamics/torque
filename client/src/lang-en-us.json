@@ -308,7 +308,7 @@
     "clickToDeleteEmployee": "Click here to delete the employee. Be warned that once deleted, an employee can not be restored.",
     "fireEmployee": "Fire Employee",
     "fireEmployeeQuestion": "Fire employee?",
-    "sureFireThisEmployee": "Are you sure you want to fire this employee",
+    "sureFireThisEmployee": "Are you sure you want to fire this employee?",
     "sureFireYourself": "Are you sure you want to fire Yourself? You will loose all access to this organization."
   },
   "product": {

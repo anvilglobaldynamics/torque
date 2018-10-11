@@ -134,24 +134,19 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_ADD_USER: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
-          PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_INVENTORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
           PRIV_VIEW_ALL_OUTLETS: true,
           PRIV_MODIFY_ALL_OUTLETS: true,
@@ -163,9 +158,8 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_DEBT: true
+          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
         }
       }
     }, (err, response, body) => {
@@ -190,24 +184,19 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_ADD_USER: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
-          PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_INVENTORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
           PRIV_VIEW_ALL_OUTLETS: true,
           PRIV_MODIFY_ALL_OUTLETS: true,
@@ -219,9 +208,8 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_DEBT: true
+          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
         }
       }
     }, (err, response, body) => {
@@ -245,24 +233,19 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_ADD_USER: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
-          PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_INVENTORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
           PRIV_VIEW_ALL_OUTLETS: true,
           PRIV_MODIFY_ALL_OUTLETS: true,
@@ -274,9 +257,8 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_DEBT: true
+          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
         }
       }
     }, (err, response, body) => {
@@ -301,24 +283,19 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_ADD_USER: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
-          PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_INVENTORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
           PRIV_VIEW_ALL_OUTLETS: true,
           PRIV_MODIFY_ALL_OUTLETS: true,
@@ -330,9 +307,8 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_DEBT: true
+          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
         }
       }
     }, (err, response, body) => {
@@ -467,24 +443,19 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_ADD_USER: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
-          PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_INVENTORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
           PRIV_VIEW_ALL_OUTLETS: true,
           PRIV_MODIFY_ALL_OUTLETS: true,
@@ -496,9 +467,8 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_DEBT: true
+          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
         }
       }
     }, (err, response, body) => {
@@ -528,24 +498,19 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_ADD_USER: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
-          PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_INVENTORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
           PRIV_VIEW_ALL_OUTLETS: true,
           PRIV_MODIFY_ALL_OUTLETS: true,
@@ -557,9 +522,8 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_DEBT: true
+          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
         }
       }
     }, (err, response, body) => {
@@ -589,24 +553,19 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_ADD_USER: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
-          PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_INVENTORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
           PRIV_VIEW_ALL_OUTLETS: true,
           PRIV_MODIFY_ALL_OUTLETS: true,
@@ -618,9 +577,8 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_DEBT: true
+          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
         }
       }
     }, (err, response, body) => {
@@ -827,24 +785,19 @@ describe('Employee', _ => {
         privileges: {
           PRIV_VIEW_USERS: true,
           PRIV_MODIFY_USERS: true,
-          PRIV_ADD_USER: true,
-          PRIV_MAKE_USER_AN_OWNER: true,
-          PRIV_MODIFY_USER_PRIVILEGES: true,
 
           PRIV_ACCESS_POS: true,
           PRIV_VIEW_SALES: true,
           PRIV_MODIFY_SALES: true,
           PRIV_ALLOW_FLAT_DISCOUNT: true,
-          PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
-          PRIV_ALLOW_FOC: true,
 
           PRIV_VIEW_SALES_RETURN: true,
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_INVENTORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
           PRIV_VIEW_ALL_OUTLETS: true,
           PRIV_MODIFY_ALL_OUTLETS: true,
@@ -856,9 +809,8 @@ describe('Employee', _ => {
           PRIV_MODIFY_ORGANIZATION: true,
 
           PRIV_VIEW_CUSTOMER: true,
-          PRIV_ADD_CUSTOMER_DURING_SALES: true,
           PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_DEBT: true
+          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
         }
       }
     }, (err, response, body) => {

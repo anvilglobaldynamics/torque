@@ -22,7 +22,7 @@ exports.SalesCollection = class extends LegacyCollection {
     this.joiSchema = Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-      lastModifiedByUserId: Joi.number().max(999999999999999).allow(null).required(),
+      
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
 
@@ -91,7 +91,6 @@ exports.SalesCollection = class extends LegacyCollection {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
 
-      lastModifiedByUserId: null,
       outletId,
       customerId,
       productList,

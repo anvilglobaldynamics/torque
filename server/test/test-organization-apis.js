@@ -78,8 +78,6 @@ describe('Organization', _ => {
 
   });
 
-
-
   it('api/add-organization (Valid 2nd)', testDoneFn => {
 
     callApi('api/add-organization', {

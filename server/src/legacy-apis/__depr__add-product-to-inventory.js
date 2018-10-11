@@ -37,7 +37,7 @@ exports.AddProductToInventoryApi = class extends productCommonMixin(collectionCo
         errorCode: "INVENTORY_INVALID"
       },
       privileges: [
-        "PRIV_MODIFY_ALL_INVENTORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
       ]
     }];
   }
