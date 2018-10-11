@@ -78,9 +78,9 @@ exports.GetSalesApi = class extends collectionCommonMixin(LegacyApi) {
         productList.forEach(product => {
           let productCategory = productCategoryList.find(productCategory => productCategory.id === product.productCategoryId);
           let matchingProduct = sales.productList.find(salesProduct => salesProduct.productId === product.id);
-          
           matchingProduct.productCategoryId = productCategory.id;
           matchingProduct.productCategoryName = productCategory.name;
+          matchingProduct.productCategoryUnit = productCategory.unit;
           matchingProduct.productCategoryIsReturnable = productCategory.isReturnable;
         });
         return cbfn(sales);
