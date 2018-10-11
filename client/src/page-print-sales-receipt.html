@@ -93,6 +93,11 @@
       .product-table td {
         border: 1px solid black;
       }
+
+      .monetary-cell {
+        text-align: right;
+        padding-right: 4px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -165,34 +170,34 @@
                   </template>
                 </td>
                 <td>[[product.count]] [[product.unit]]</td>
-                <td>[[product.salePrice]] [[app.settings.monetaryUnit]]</td>
-                <td>XXX [[app.settings.monetaryUnit]]</td>
+                <td class="monetary-cell">[[product.salePrice]] [[app.settings.monetaryUnit]]</td>
+                <th class="monetary-cell">[[$calculateIndividualPrice(product)]] [[app.settings.monetaryUnit]]</th>
               </tr>
             </template>
             <tr>
               <th rowspan="7" colspan="2" style="border:none;"></th>
               <th>Total Amount</th>
-              <th>[[$round(sales.payment.totalAmount)]] [[app.settings.monetaryUnit]]</th>
+              <th class="monetary-cell">[[$round(sales.payment.totalAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
               <th>VAT</th>
-              <th>[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</th>
+              <th class="monetary-cell">[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
               <th>Discount</th>
-              <th>[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</th>
+              <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
               <th>Service Charge</th>
-              <th>[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</th>
+              <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
               <th>Total Billed</th>
-              <th>[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</th>
+              <th class="monetary-cell">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
               <th>Total Paid</th>
-              <th>[[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</th>
+              <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
           </table>
 
@@ -323,18 +328,27 @@
 
       // region: ui  ===========================
 
-      // $calculateIndividuallyDiscountedSalePrice(product) {
-      //   let { salePrice, count, discountType, discountValue } = product;
-      //   if (discountType === 'percent') {
-      //     salePrice -= salePrice * (discountValue / 100);
-      //   } else if (discountType === 'fixed') {
-      //     salePrice -= discountValue;
-      //   }
-      //   return salePrice;
-      // }
+      $calculateIndividualPrice(product) {
+        let { salePrice, count, discountType, discountValue } = product;
+        if (discountType === 'percent') {
+          salePrice -= salePrice * (discountValue / 100);
+        } else if (discountType === 'fixed') {
+          salePrice -= discountValue;
+        }
+        return this.$round(salePrice);
+      }
 
       printButtonOnTopBarPressed(e = null) {
         window.print();
+      }
+
+      $round(number) {
+        number = String(super.$round(number));
+        let [left, right] = number.split('.');
+        if (!right) right = '0'
+        if (right.length < 1) right += '0';
+        if (right.length < 2) right += '0';
+        return [left, right].join('.');
       }
 
     }
