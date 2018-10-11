@@ -78,6 +78,21 @@
         margin-right: 8px;
         margin-bottom: 8px;
       }
+
+      .ml-8 {
+        margin-left: 8px;
+      }
+
+      .product-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      /* table.product-table, */
+      .product-table th,
+      .product-table td {
+        border: 1px solid black;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -87,14 +102,21 @@
       <div class="report">
         <div class="header vertical layout">
           <!-- TRANSLATE -->
-          <div class="name">Sales Receipt</div>
-          <div class="date">[[fromDate]] [[verses.general.to]] [[toDate]]</div>
+          <div class="name">Sales Receipt #[[sales.id]]</div>
+          <!-- <div class="date">[[fromDate]] [[verses.general.to]] [[toDate]]</div> -->
           <div class="horizontal layout wrap">
             <div>
               <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
               <div>[[app.organization.primaryBusinessAddress]]</div>
               <div>[[app.organization.email]]</div>
               <div>[[app.organization.phone]]</div>
+            </div>
+            <div class="flex"></div>
+            <div>
+              <div class="author-title">[[verses.general.outlet]]: [[outlet.name]]</div>
+              <div>[[outlet.physicalAddress]]</div>
+              <div>[[outlet.contactPersonName]]</div>
+              <div>[[outlet.phone]]</div>
             </div>
             <div class="flex"></div>
             <div>
@@ -108,62 +130,92 @@
         <div class="body">
           <!-- body - start -->
 
+          <template is="dom-if" if="{{sales.isDiscarded}}">
+            <div><b>WARNING! This sale has been discarded.</b></div>
+          </template>
 
-
-          <!-- <div class="horizontal layout center item wrap">
-            <div class="flex">
-              <strong>[[verses.salesReport.particulars]]</strong>
-            </div>
-            <div>
-              <strong>[[verses.salesReport.billedAmount]]</strong>
-            </div>
-          </div>
-          <template is="dom-repeat" items="[[salesList]]" as="sales">
-            <div class="horizontal layout center item wrap">
-              <div class="flex">
-                <div class="id">
-                  <strong>[[verses.salesReport.sales]] # [[sales.id]]</strong> [[$mkDate(sales.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]
-                </div>
-                <template is="dom-if" if="[[sales.customer]]">
-                  <div class="description">
-                    <strong>[[verses.salesReport.soldTo]]: </strong>[[sales.customer.fullName]] ([[sales.customer.phone]])
-                  </div>
-                </template>
-                <template is="dom-if" if="[[!showProductDetails]]">
-                  <div class="description">[[sales.productList.length]] [[verses.salesReport.products]]</div>
-                </template>
-                <template is="dom-if" if="[[showProductDetails]]">
-                  <template is="dom-repeat" items="[[sales.productList]]" as="product">
-                    <div class="description">[[product.productCategory.name]]: [[product.count]] [[product.productCategory.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]</div>
-                  </template>
-                  <div class="description">
-                    <strong>[[verses.salesReport.total]]:</strong> [[sales.productList.length]] [[verses.salesReport.products]]
-                  </div>
-                  <template is="dom-if" if="[[sales.payment.discountedAmount]]">
-                    <div class="description">
-                      <strong>[[verses.salesReport.discountedAmount]]: </strong>[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</div>
-                  </template>
-                  <template is="dom-if" if="[[sales.payment.vatAmount]]">
-                    <div class="description">
-                      <strong>[[verses.salesReport.vat]]: </strong>[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</div>
-                  </template>
-                  <template is="dom-if" if="[[sales.payment.serviceChargeAmount]]">
-                    <div class="description">
-                      <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]]%</div>
-                  </template>
-                </template>
-              </div>
-              <div class="description">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</div>
+          <template is="dom-if" if="{{sales.customerId}}">
+            <div class="horizontal layout">
+              <div><b>[[verses.customer.customerName]]:</b> [[customer.fullName]]</div>
+              <div class="flex"></div>
+              <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
+              <div class="ml-8"><b>[[verses.sales.customerId]]:</b> [[sales.customerId]]</div>
             </div>
           </template>
-          <div class="horizontal layout center item wrap">
-            <div class="flex">
-              <strong>[[verses.salesReport.total]]</strong>
-            </div>
-            <div>
-              <strong>[[salesSummary.billedAmountSum]] [[app.settings.monetaryUnit]]</strong>
-            </div>
-          </div> -->
+
+          <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+
+          <!-- TRANSLATE -->
+          <div style="text-align:center; text-decoration: underline;"><b>Products</b></div>
+
+          <!-- TRANSLATE: ALL BELOW -->
+          <table class="product-table">
+            <tr>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
+              <th>Price</th>
+            </tr>
+            <template is="dom-repeat" items="{{sales.productList}}" as="product">
+              <tr>
+                <td>
+                  [[product.productCategoryName]]
+                  <template is="dom-if" if="[[product.returnedProductCount]]">
+                    <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
+                  </template>
+                </td>
+                <td>[[product.count]] [[product.unit]]</td>
+                <td>[[product.salePrice]] [[app.settings.monetaryUnit]]</td>
+                <td>XXX [[app.settings.monetaryUnit]]</td>
+              </tr>
+            </template>
+            <tr>
+              <th rowspan="7" colspan="2" style="border:none;"></th>
+              <th>Total Amount</th>
+              <th>[[$round(sales.payment.totalAmount)]] [[app.settings.monetaryUnit]]</th>
+            </tr>
+            <tr>
+              <th>VAT</th>
+              <th>[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</th>
+            </tr>
+            <tr>
+              <th>Discount</th>
+              <th>[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</th>
+            </tr>
+            <tr>
+              <th>Service Charge</th>
+              <th>[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</th>
+            </tr>
+            <tr>
+              <th>Total Billed</th>
+              <th>[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</th>
+            </tr>
+            <tr>
+              <th>Total Paid</th>
+              <th>[[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</th>
+            </tr>
+          </table>
+
+          <!-- TRANSLATE -->
+          <div style="text-align:center; text-decoration: underline;"><b>Payments</b></div>
+
+          <!-- TRANSLATE: ALL BELOW -->
+          <table class="product-table">
+            <tr>
+              <th>Date</th>
+              <th>Payment Method</th>
+              <th>Paid Amount</th>
+              <th>Change</th>
+            </tr>
+            <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
+              <tr>
+                <td>[[$mkDate(payment.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</td>
+                <td>[[payment.paymentMethod]]</td>
+                <td>[[$round(payment.paidAmount)]] [[app.settings.monetaryUnit]]</td>
+                <td>[[$round(payment.changeAmount)]] [[app.settings.monetaryUnit]]</td>
+              </tr>
+            </template>
+          </table>
 
           <!-- body - end -->
         </div>
@@ -196,7 +248,7 @@
 
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
-        this.app.currentPageIsModal = false;
+        this.app.currentPageIsModal = true;
         this.app.shouldShowPrintButton = true;
         this.useLanguageServices();
         // TRANSLATE
@@ -239,21 +291,33 @@
         this.app.callGetCustomerApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.customer);
+          return cbfn(response);
+        });
+      }
+
+      _fetchOutlet({ outletId }, cbfn) {
+        let data = { outletId };
+        this.app.callGetOutletApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
         });
       }
 
       _processSales(cbfn) {
         this._fetchSales(({ sales }) => {
           this.sales = sales;
-          if (this.sales.customerId) {
-            this._fetchCustomer({ customerId: this.sales.customerId }, (customer) => {
-              this.customer = customer;
+          this._fetchOutlet({ outletId: this.sales.outletId }, ({ outlet }) => {
+            this.outlet = outlet;
+            if (this.sales.customerId) {
+              this._fetchCustomer({ customerId: this.sales.customerId }, ({ customer }) => {
+                this.customer = customer;
+                cbfn();
+              })
+            } else {
               cbfn();
-            })
-          } else {
-            cbfn();
-          }
+            }
+          });
         });
       }
 
