@@ -484,8 +484,9 @@
         }
 
         let productList = this.productList.map(product => {
-          let { productId, selectedCount, discountType, discountValue, salePrice } = product;
-          return { productId, count: selectedCount, discountType, discountValue, salePrice };
+          let { productId, selectedCount, discountType, discountValue, salePrice, vatValue } = product;
+          let vatPercentage = vatValue;
+          return { productId, count: selectedCount, discountType, discountValue, salePrice, vatPercentage };
         })
 
         let data = {

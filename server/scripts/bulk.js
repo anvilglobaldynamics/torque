@@ -255,6 +255,7 @@ const createSales = async ({ apiKey, outletId, productList }) => {
     product.discountType = 'fixed';
     product.discountValue = 0;
     product.salePrice = 200
+    product.vatPercentage = 5;
   });
 
   let { salesId } = await callApi('api/add-sales', {

@@ -188,7 +188,8 @@ describe('Sales Return', _ => {
                                     count: 2,
                                     discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
                                     discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-                                    salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+                                    salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+                                    vatPercentage: 5
                                   }
                                 ],
                                 payment: {
@@ -216,7 +217,8 @@ describe('Sales Return', _ => {
                                       count: 2,
                                       discountType: outletInventoryMatchingProductCategoryList[1].defaultDiscountType,
                                       discountValue: outletInventoryMatchingProductCategoryList[1].defaultDiscountValue,
-                                      salePrice: outletInventoryMatchingProductCategoryList[1].defaultSalePrice
+                                      salePrice: outletInventoryMatchingProductCategoryList[1].defaultSalePrice,
+                                      vatPercentage: 5
                                     }
                                   ],
                                   payment: {
