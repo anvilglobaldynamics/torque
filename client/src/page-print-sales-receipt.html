@@ -1,0 +1,280 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="elem-customer-selector.html">
+<link rel="import" href="elem-outlet-selector.html">
+
+<dom-module id="page-print-sales-receipt">
+  <template>
+    <style include="shared-styles">
+      @media print {
+
+        .filter-toggle-region,
+        .filter-toggle-region paper-toggle-button,
+        .filter-region {
+          display: none;
+        }
+
+        .report {
+          margin-top: -48px;
+        }
+      }
+
+      .report {
+        background-color: white;
+        padding: 12px;
+        width: calc(100% - 24px);
+      }
+
+      .report .author-title {
+        font-weight: bold;
+      }
+
+      .report .header {
+        border-bottom: 1px solid black;
+      }
+
+      .report .header .name {
+        font-size: 30px;
+        text-align: center;
+      }
+
+      .report .header .date {
+        font-size: 15px;
+        text-align: center;
+      }
+
+      .report .body {}
+
+      .report .body .item {
+        margin-bottom: 8px;
+        margin-top: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px dotted rgb(131, 131, 131);
+      }
+
+      .filter-toggle-region {
+        text-align: right;
+        margin-right: 8px;
+        margin-bottom: 8px;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="report">
+        <div class="header vertical layout">
+          <!-- TRANSLATE -->
+          <div class="name">Sales Receipt</div>
+          <div class="date">[[fromDate]] [[verses.general.to]] [[toDate]]</div>
+          <div class="horizontal layout wrap">
+            <div>
+              <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
+              <div>[[app.organization.primaryBusinessAddress]]</div>
+              <div>[[app.organization.email]]</div>
+              <div>[[app.organization.phone]]</div>
+            </div>
+            <div class="flex"></div>
+            <div>
+              <div class="author-title">[[verses.salesReport.author]]: [[app.user.fullName]]</div>
+              <div>[[app.organization.employment.designation]]</div>
+              <div>[[app.organization.employment.companyProvidedId]]</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="body">
+          <!-- body - start -->
+
+
+
+          <!-- <div class="horizontal layout center item wrap">
+            <div class="flex">
+              <strong>[[verses.salesReport.particulars]]</strong>
+            </div>
+            <div>
+              <strong>[[verses.salesReport.billedAmount]]</strong>
+            </div>
+          </div>
+          <template is="dom-repeat" items="[[salesList]]" as="sales">
+            <div class="horizontal layout center item wrap">
+              <div class="flex">
+                <div class="id">
+                  <strong>[[verses.salesReport.sales]] # [[sales.id]]</strong> [[$mkDate(sales.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]
+                </div>
+                <template is="dom-if" if="[[sales.customer]]">
+                  <div class="description">
+                    <strong>[[verses.salesReport.soldTo]]: </strong>[[sales.customer.fullName]] ([[sales.customer.phone]])
+                  </div>
+                </template>
+                <template is="dom-if" if="[[!showProductDetails]]">
+                  <div class="description">[[sales.productList.length]] [[verses.salesReport.products]]</div>
+                </template>
+                <template is="dom-if" if="[[showProductDetails]]">
+                  <template is="dom-repeat" items="[[sales.productList]]" as="product">
+                    <div class="description">[[product.productCategory.name]]: [[product.count]] [[product.productCategory.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]</div>
+                  </template>
+                  <div class="description">
+                    <strong>[[verses.salesReport.total]]:</strong> [[sales.productList.length]] [[verses.salesReport.products]]
+                  </div>
+                  <template is="dom-if" if="[[sales.payment.discountedAmount]]">
+                    <div class="description">
+                      <strong>[[verses.salesReport.discountedAmount]]: </strong>[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</div>
+                  </template>
+                  <template is="dom-if" if="[[sales.payment.vatAmount]]">
+                    <div class="description">
+                      <strong>[[verses.salesReport.vat]]: </strong>[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</div>
+                  </template>
+                  <template is="dom-if" if="[[sales.payment.serviceChargeAmount]]">
+                    <div class="description">
+                      <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]]%</div>
+                  </template>
+                </template>
+              </div>
+              <div class="description">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</div>
+            </div>
+          </template>
+          <div class="horizontal layout center item wrap">
+            <div class="flex">
+              <strong>[[verses.salesReport.total]]</strong>
+            </div>
+            <div>
+              <strong>[[salesSummary.billedAmountSum]] [[app.settings.monetaryUnit]]</strong>
+            </div>
+          </div> -->
+
+          <!-- body - end -->
+        </div>
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+    class PagePrintSalesReceipt extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-print-sales-receipt';
+      }
+
+      static get properties() {
+        return {
+          sales: {
+            type: Object,
+            value: null,
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.app.shouldShowPrintButton = true;
+        this.useLanguageServices();
+        // TRANSLATE
+        this.app.pushPageTitle("SALES RECEIPT");
+        if (!this._ensureAccess()) return;
+        if (!('sales' in this.params)) {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processSales(_ => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.shouldShowPrintButton = false;
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl('privileged', ['PRIV_VIEW_SALES']);
+      }
+
+      _fetchSales(cbfn) {
+        let salesId = parseInt(this.params.sales);
+        let data = { salesId };
+        this.app.callGetSalesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _fetchCustomer({ customerId }, cbfn) {
+        let data = { customerId };
+        this.app.callGetCustomerApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.customer);
+        });
+      }
+
+      _processSales(cbfn) {
+        this._fetchSales(({ sales }) => {
+          this.sales = sales;
+          if (this.sales.customerId) {
+            this._fetchCustomer({ customerId: this.sales.customerId }, (customer) => {
+              this.customer = customer;
+              cbfn();
+            })
+          } else {
+            cbfn();
+          }
+        });
+      }
+
+      // region: ui  ===========================
+
+      // $calculateIndividuallyDiscountedSalePrice(product) {
+      //   let { salePrice, count, discountType, discountValue } = product;
+      //   if (discountType === 'percent') {
+      //     salePrice -= salePrice * (discountValue / 100);
+      //   } else if (discountType === 'fixed') {
+      //     salePrice -= discountValue;
+      //   }
+      //   return salePrice;
+      // }
+
+      printButtonOnTopBarPressed(e = null) {
+        window.print();
+      }
+
+    }
+
+    window.customElements.define(PagePrintSalesReceipt.is, PagePrintSalesReceipt);
+  </script>
+</dom-module>

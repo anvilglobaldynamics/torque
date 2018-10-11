@@ -474,7 +474,9 @@
     "soldCount": "Sold Count",
     "returnedCount": "Returned Count",
 
-    "isCredit": "Credit"
+    "isCredit": "Credit",
+
+    "printReceipt": "Print Receipt"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",

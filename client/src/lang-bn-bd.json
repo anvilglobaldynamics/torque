@@ -477,7 +477,9 @@
     "soldCount": "বিক্রয় গণনা",
     "returnedCount": "ফেরৎ গণনা",
 
-    "isCredit": "বাকি"
+    "isCredit": "বাকি",
+
+    "printReceipt": "রসিদ প্রিন্ট করুন"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
