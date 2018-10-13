@@ -526,9 +526,8 @@ describe('Inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
-      expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeEditedId);
-      expect(body.aggregatedProductList[0]).to.have.property('product');
-      expect(body.aggregatedProductList[0].product).to.have.property('salePrice').that.equals(210);
+      expect(body.aggregatedProductList[0].productId).equals(productToBeEditedId);
+      expect(body.aggregatedProductList[0].product.salePrice).equals(210);
       testDoneFn();
     });
 
