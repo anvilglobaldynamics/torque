@@ -16,20 +16,15 @@ exports.EditInventoryProductApi = class extends Api.mixin(ProductMixin) {
       productId: Joi.number().max(999999999999999).required(),
       purchasePrice: Joi.number().max(999999999999999).required(),
       salePrice: Joi.number().max(999999999999999).required()
-      
+
     });
   }
 
   get accessControl() {
     return [{
-      organizationBy: {
-        from: "product-category",
-        query: ({ productCategoryId }) => ({ id: productCategoryId }),
-        select: "organizationId",
-        errorCode: "PRODUCT_CATEGORY_INVALID"
-      },
+      organizationBy: {},
       privileges: [
-        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
+        "PRIV_MODIFY_ALL_PRODUCT"
       ]
     }];
   }
