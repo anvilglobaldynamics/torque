@@ -72,6 +72,7 @@ const { GetInventoryListApi } = require('./apis/get-inventory-list');
 const { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-inventory-details');
 const { ReportInventoryDetailsApi } = require('./apis/report-inventory-details');
 let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
+const { EditInventoryProductApi } = require('./apis/edit-inventory-product');
 const { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
 
 const { AddSalesApi } = require('./apis/add-sales');
@@ -291,6 +292,7 @@ class Program {
     server.registerPostApi('/api/report-inventory-details', ReportInventoryDetailsApi);
     server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
     server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
+    server.registerPostApi('/api/edit-inventory-product', EditInventoryProductApi);
     server.registerPostApi('/api/get-designation-list', GetDesignationListApi);
     server.registerPostApi('/api/get-role-list', GetRoleListApi);
     server.registerPostApi('/api/get-privilege-list', GetPrivilegeListApi);

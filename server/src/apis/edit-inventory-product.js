@@ -13,6 +13,7 @@ exports.EditInventoryProductApi = class extends Api.mixin(ProductMixin) {
   get requestSchema() {
     return Joi.object().keys({
 
+      inventoryId: Joi.number().max(999999999999999).required(),
       productId: Joi.number().max(999999999999999).required(),
       purchasePrice: Joi.number().max(999999999999999).required(),
       salePrice: Joi.number().max(999999999999999).required()
@@ -22,16 +23,20 @@ exports.EditInventoryProductApi = class extends Api.mixin(ProductMixin) {
 
   get accessControl() {
     return [{
-      organizationBy: {},
+      organizationBy: {
+        from: "inventory",
+        query: ({ inventoryId }) => ({ id: inventoryId }),
+        select: "organizationId",
+        errorCode: "INVENTORY_INVALID"
+      },
       privileges: [
-        "PRIV_MODIFY_ALL_PRODUCT"
+        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
       ]
     }];
   }
 
   async handle({ body }) {
     let { productId, purchasePrice, salePrice } = body;
-    
     await this._updateProduct({ productId, purchasePrice, salePrice });
     return { status: "success" };
   }

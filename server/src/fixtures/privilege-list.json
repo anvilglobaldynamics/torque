@@ -40,10 +40,6 @@
     "name": "Modify all product categories"
   },
   {
-    "code": "PRIV_MODIFY_ALL_PRODUCT",
-    "name": "Modify all product"
-  },
-  {
     "code": "PRIV_TRANSFER_ALL_INVENTORIES",
     "name": "Transfer all inventories"
   },

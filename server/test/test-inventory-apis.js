@@ -72,7 +72,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe.only('Inventory', _ => {
+describe('Inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -474,7 +474,61 @@ describe.only('Inventory', _ => {
       expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(3);
       productToBeEditedId = body.aggregatedProductList[0].productId;
-      console.log("productToBeEdited before: ", body.aggregatedProductList[0]);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/edit-inventory-product (Invalid inventoryId)', testDoneFn => {
+
+    callApi('api/edit-inventory-product', {
+      json: {
+        apiKey,
+        productId: productToBeEditedId,
+        inventoryId: invalidInventoryId,
+        purchasePrice: 100,
+        salePrice: 110
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('INVENTORY_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/edit-inventory-product (Valid)', testDoneFn => {
+
+    callApi('api/edit-inventory-product', {
+      json: {
+        apiKey,
+        productId: productToBeEditedId,
+        inventoryId: outletDefaultInventoryId,
+        purchasePrice: 100,
+        salePrice: 210
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-aggregated-inventory-details (Valid product modification check)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: outletDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeEditedId);
+      expect(body.aggregatedProductList[0]).to.have.property('product');
+      expect(body.aggregatedProductList[0].product).to.have.property('salePrice').that.equals(210);
       testDoneFn();
     });
 
