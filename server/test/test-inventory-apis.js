@@ -66,12 +66,13 @@ let outletReturnedInventoryId = null;
 let outletDamagedInventoryId = null;
 
 let productToBeTransferred = null;
+let productToBeEditedId = null;
 
 let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('Inventory', _ => {
+describe.only('Inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -468,10 +469,13 @@ describe('Inventory', _ => {
         inventoryId: outletDefaultInventoryId
       }
     }, (err, response, body) => {
+      // console.log(body.aggregatedProductList);
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(3);
+      productToBeEditedId = body.aggregatedProductList[0];
+      console.log("productToBeEditedId: ", productToBeEditedId);
       testDoneFn();
     });
 

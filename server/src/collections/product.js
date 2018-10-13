@@ -34,4 +34,12 @@ exports.ProductCollection = class extends Collection {
     });
   }
 
+  async setDetails({ id }, { purchasePrice, salePrice }) {
+    return await this._update({ id }, {
+      $set: {
+        purchasePrice, salePrice
+      }
+    });
+  }
+
 }
