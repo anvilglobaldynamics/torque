@@ -7,6 +7,7 @@ method: `POST`
 ### request: 
 ```js
 {
+  inventoryId: Joi.number().max(999999999999999).required(),
   productId: Joi.number().max(999999999999999).required(),
   purchasePrice: Joi.number().max(999999999999999).required(),
   salePrice: Joi.number().max(999999999999999).required()
@@ -28,7 +29,7 @@ Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
-{ code: PRODUCT_INVALID } // product not found
+{ code: INVENTORY_INVALID } // inventory not found
 ```
 
 ### response (on success):
