@@ -469,13 +469,12 @@ describe.only('Inventory', _ => {
         inventoryId: outletDefaultInventoryId
       }
     }, (err, response, body) => {
-      // console.log(body.aggregatedProductList);
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(3);
-      productToBeEditedId = body.aggregatedProductList[0];
-      console.log("productToBeEditedId: ", productToBeEditedId);
+      productToBeEditedId = body.aggregatedProductList[0].productId;
+      console.log("productToBeEdited before: ", body.aggregatedProductList[0]);
       testDoneFn();
     });
 

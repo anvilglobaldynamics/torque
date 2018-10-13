@@ -25,4 +25,9 @@ exports.ProductMixin = (SuperApiClass) => class extends SuperApiClass {
     return;
   }
 
+  async _updateProduct({ productId, purchasePrice, salePrice }) {
+    let result = await this.database.product.setDetails({ id: productId }, { purchasePrice, salePrice });
+    this.ensureUpdate(result, 'product');
+  }
+
 }
