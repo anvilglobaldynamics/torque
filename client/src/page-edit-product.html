@@ -1,0 +1,157 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-product">
+  <template>
+    <style include="shared-styles">
+
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+      <iron-form id="editProductForm" on-keypress="genericFormSubmitionKeypress">
+        <form>
+          <div class="card vertical layout">
+            
+            <paper-input class="editProductForm--purchasePrice" value="{{editProductForm.purchasePrice}}" type="number" required min="0" error-message=[[verses.editProduct.purchasedForInputError]] label=[[verses.editProduct.purchasedForInput]]></paper-input>
+            <paper-input class="editProductForm--salePrice" value="{{editProductForm.salePrice}}" type="number" required min="0" error-message=[[verses.editProduct.sellForInputError]] label=[[verses.editProduct.sellForInput]]></paper-input>
+            
+            <div class="horizontal layout button-row end">
+              <paper-button raised class="primary editProductForm--submit" on-tap="updateProductTapped">[[verses.editProduct.updateProduct]]</paper-button>
+            </div>
+
+          </div>
+        </form>
+      </iron-form>
+    </div>
+
+  </template>
+
+  <script>
+    class PageEditProduct extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-edit-product';
+      }
+
+      static get properties() {
+        return {
+          editingProduct: {
+            type: Object,
+            value: null
+          },
+          editProductForm: {
+            type: Object,
+            value: _ => {
+              return {
+                purchasePrice: 0,
+                salePrice: 0
+              };
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.editProduct.editProductTitle);
+        if ('product' in this.params && 'inventory' in this.params) {
+          if (!this._ensureAccess()) return;
+          this._processGetProduct(() => {
+            this.isReady = true;
+          });
+        }
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editProductForm');
+        this.removeAutoValidation('#editProductForm paper-input');
+      }
+
+      _ensureAccess() {
+        return this.accessControl('privileged', ['PRIV_MODIFY_ALL_PRODUCT_CATEGORIES']);
+      }
+
+      // region: editCustomer =================================
+
+      _processGetProduct(cbfn) {
+        let productId = parseInt(this.params.product);
+        let inventoryId = parseInt(this.params.inventory);
+        let data = { productId, inventoryId };
+        this.app.callGetProductApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.editingProduct = response.product;
+          let { purchasePrice, salePrice } = this.editingProduct;
+          this.editProductForm = { purchasePrice, salePrice };
+          cbfn();
+        });
+      }
+
+      _processUpdateProduct({ purchasePrice, salePrice }) {
+        let data = {
+          purchasePrice, salePrice,
+          productId: parseInt(this.params.product),
+          inventoryId: parseInt(this.params.inventory)
+        };
+        this.app.callEditInventoryProductApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editProductForm');
+          let message = this.app.verses.editProduct.productUpdated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        let inventoryId = parseInt(this.params.inventory);
+        this.app.navigateToPreviousUrl(`/view-inventory/inventory:${inventoryId}`);
+      }
+
+      updateProductTapped(e = null) {
+        this.elemAll('#editProductForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editProductForm').validate()) return;
+
+        let { purchasePrice, salePrice } = this.editProductForm;
+        this._processUpdateProduct({ purchasePrice, salePrice });
+      }
+
+      // region: misc =================================
+    }
+
+    window.customElements.define(PageEditProduct.is, PageEditProduct);
+  </script>
+</dom-module>

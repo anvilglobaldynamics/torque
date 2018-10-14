@@ -699,5 +699,14 @@
     "amountInputError": "Enter the amount",
     "withdraw": "Withdraw",
     "customerBalanceUpdated": "Customer's change wallet balance has been updated."
+  },  
+  "editProduct": {
+    "editProductTitle": "Edit Product",
+    "updateProduct": "Update Product",
+    "purchasedForInput": "Purchase Price",
+    "purchasedForInputError": "Enter a valid purchase price",
+    "sellForInput": "Sell Price",
+    "sellForInputError": "Enter a valid sell price",
+    "productUpdated": "Product has been updated"
   }
 }

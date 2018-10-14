@@ -1,6 +1,6 @@
-This API handles attempt to edit a inventory products’s information
+This API handles attempt to get a product's information
 
-url: `api/edit-inventory-product`
+url: `api/get-product`
 
 method: `POST`
 
@@ -8,9 +8,7 @@ method: `POST`
 ```js
 {
   inventoryId: Joi.number().max(999999999999999).required(), // this is in req only to varify correct organization
-  productId: Joi.number().max(999999999999999).required(),
-  purchasePrice: Joi.number().max(999999999999999).required(),
-  salePrice: Joi.number().max(999999999999999).required()
+  productId: Joi.number().max(999999999999999).required()
 }
 ```
 
@@ -31,15 +29,21 @@ Possible Error Codes:
 { code: APIKEY_INVALID } // the api key is invalid
 { code: INVENTORY_INVALID } // inventory not found
 { code: PRODUCT_NOT_IN_INVENTORY } // product is not in this inventory
+{ code: PRODUCT_INVALID } // product not found
 ```
 
 ### response (on success):
 ```js
 {
   hasError: false,
-  status: "success"
+
+  product: Joi.object().keys({
+    productCategoryId: Joi.number().max(999999999999999).required(),
+    purchasePrice: Joi.number().max(999999999999999).required(),
+    salePrice: Joi.number().max(999999999999999).required()
+  })
 }
 ```
 
 ### db changes:
-updates the `product` collection in db.
+updates no collection in db.

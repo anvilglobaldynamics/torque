@@ -23,6 +23,7 @@ let {
   validateAggregatedProductScema,
   validateProductCategorySchema,
   validateProductSchema,
+  validateGetProductApiSuccessResponse,
   validateAddProductToInventoryApiSuccessResponse
 } = require('./lib');
 
@@ -72,7 +73,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('Inventory', _ => {
+describe.only('Inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -498,6 +499,25 @@ describe('Inventory', _ => {
 
   });
 
+  it('api/edit-inventory-product (Invalid productId)', testDoneFn => {
+
+    callApi('api/edit-inventory-product', {
+      json: {
+        apiKey,
+        productId: invalidInventoryId,
+        inventoryId: outletDefaultInventoryId,
+        purchasePrice: 100,
+        salePrice: 110
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('PRODUCT_NOT_IN_INVENTORY');
+      testDoneFn();
+    });
+
+  });
+
   it('api/edit-inventory-product (Valid)', testDoneFn => {
 
     callApi('api/edit-inventory-product', {
@@ -515,19 +535,20 @@ describe('Inventory', _ => {
     });
 
   });
+  
+  it('api/get-product (Valid product modification check)', testDoneFn => {
 
-  it('api/get-aggregated-inventory-details (Valid product modification check)', testDoneFn => {
-
-    callApi('api/get-aggregated-inventory-details', {
+    callApi('api/get-product', {
       json: {
         apiKey,
-        inventoryId: outletDefaultInventoryId
+        productId: productToBeEditedId,
+        inventoryId: outletDefaultInventoryId,
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
-      expect(body.aggregatedProductList[0].productId).equals(productToBeEditedId);
-      expect(body.aggregatedProductList[0].product.salePrice).equals(210);
+      validateGetProductApiSuccessResponse(body);
+      validateProductSchema(body.product);
+      expect(body.product.salePrice).equals(210);
       testDoneFn();
     });
 

@@ -376,6 +376,16 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateGetProductApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    product: Joi.object().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateReportInventoryDetailsApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
