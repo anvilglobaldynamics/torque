@@ -59,7 +59,7 @@ let invalidUserId = generateInvalidId();
 let invalidEmploymentId = generateInvalidId();
 let invalidOrganizationId = generateInvalidId();
 
-describe('Employee', _ => {
+describe.only('Employee', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -215,6 +215,70 @@ describe('Employee', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateHireUserAsEmployeeApiSuccessResponse(body);
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-user-display-information (Valid)', testDoneFn => {
+
+    callApi('api/get-user-display-information', {
+      json: {
+        apiKey,
+        userId: employeeId,
+        organizationId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      // NOTE: It is validated unorthodoxly since the results need to be matched exactly
+      let knownResult = {
+        "hasError": false,
+        userDisplayInformation:
+        {
+          fullName: 'Test Employee',
+          email: firstEmpEmail,
+          phone: firstEmpPhone,
+          designation: 'Joi.string().max(1024).required()',
+          role: 'Joi.string().max(1024).required()',
+          companyProvidedId: 'abc123',
+          isActive: true
+        }
+      }
+      expect(knownResult).to.deep.equal(body)
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-user-display-information (Invalid userId)', testDoneFn => {
+
+    callApi('api/get-user-display-information', {
+      json: {
+        apiKey,
+        userId: -1,
+        organizationId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('USER_INVALID');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-user-display-information (Invalid organizationId)', testDoneFn => {
+
+    callApi('api/get-user-display-information', {
+      json: {
+        apiKey,
+        userId: employeeId,
+        organizationId: -1,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('ORGANIZATION_INVALID');
       testDoneFn();
     })
 
