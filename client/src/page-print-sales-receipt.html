@@ -303,6 +303,7 @@
         }
         this._processSales(_ => {
           this.isReady = true;
+          this._printAndGoBack();
         });
       }
 
@@ -314,6 +315,13 @@
 
       _ensureAccess() {
         return this.accessControl('privileged', ['PRIV_VIEW_SALES']);
+      }
+
+      _printAndGoBack() {
+        window.setTimeout(() => {
+          window.print();
+          window.history.back();
+        }, 100);
       }
 
       _fetchSales(cbfn) {

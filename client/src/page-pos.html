@@ -59,6 +59,10 @@
       .product-discount-vat-detail {
         font-size: 11px;
       }
+
+      .m-top-16{
+        margin-top: 16px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -254,6 +258,10 @@
 
             <div class="horizontal layout m-top-16">
               <paper-button raised class="primary flex" on-tap="saveSaleTapped">[[verses.pos.confirmSales]]</paper-button>
+            </div>
+
+            <div class="horizontal layout m-top-16">
+              <paper-button raised class="primary flex" on-tap="saveSaleAndPrintTapped">[[verses.pos.confirmSalesAndPrint]]</paper-button>
             </div>
 
           </div>
@@ -477,7 +485,7 @@
         };
       }
 
-      _processAddSales({ outletId, payment }) {
+      _processAddSales({ outletId, payment }, cbfn) {
         let customerId = null;
         if (this.customer) {
           customerId = this.customer.id;
@@ -496,10 +504,7 @@
         this.app.callAddSalesApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          let message = this.app.verses.pos.newSalesAdded;
-          this.app.showToast(message, _ => {
-            this._resetSales();
-          });
+          cbfn(response);
         });
       }
 
@@ -555,7 +560,19 @@
       }
 
       saveSaleTapped(e = null) {
-        this._processAddSales({ outletId: this.params.outlet, payment: this.payment });
+        this._processAddSales({ outletId: this.params.outlet, payment: this.payment }, ({ salesId }) => {
+          let message = this.app.verses.pos.newSalesAdded;
+          this.app.showToast(message, _ => {
+            this._resetSales();
+          });
+        });
+      }
+
+      saveSaleAndPrintTapped(e = null) {
+        this._processAddSales({ outletId: this.params.outlet, payment: this.payment }, ({ salesId }) => {
+          this._resetSales();
+          return this.app.navigateTo(`/print-sales-receipt/sales:${salesId}/from:pos`);
+        });
       }
 
       isDiscountTypePercent(discountType) {
