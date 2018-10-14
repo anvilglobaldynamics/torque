@@ -705,5 +705,14 @@
     "amountInputError": "অর্থ পরিমাণ লিখুন",
     "withdraw": "সরান",
     "customerBalanceUpdated": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স আপডেট হয়ে গিয়েছে।"
+  },
+  "editProduct": {
+    "editProductTitle": "পণ্য সম্পাদনা করুন",
+    "updateProduct": "পণ্য আপডেট করুন",
+    "purchasedForInput": "ক্রয় মূল্য",
+    "purchasedForInputError": "একটি বৈধ ক্রয়মূল্য লিখুন",
+    "sellForInput": "বিক্রয় মূল্য",
+    "sellForInputError": "একটি বৈধ বিক্রয়মূল্য লিখুন",
+    "productUpdated": "পণ্য আপডেট করা হয়েছে"
   }
 }
