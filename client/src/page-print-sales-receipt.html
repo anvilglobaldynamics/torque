@@ -83,20 +83,48 @@
         margin-left: 8px;
       }
 
-      .product-table {
+      .product-table,
+      .payment-table {
         width: 100%;
         border-collapse: collapse;
       }
 
       /* table.product-table, */
       .product-table th,
-      .product-table td {
+      .product-table td,
+      .payment-table th,
+      .payment-table td {
         border: 1px solid black;
+      }
+
+      .product-table {
+        margin-top: 18px;
       }
 
       .monetary-cell {
         text-align: right;
         padding-right: 4px;
+      }
+
+      .quantitive-cell {
+        text-align: right;
+        padding-right: 4px;
+      }
+
+      .section-header {
+        text-align: center;
+        text-decoration: underline;
+        margin-top: 18px;
+        margin-bottom: 8px;
+      }
+
+      .footer {
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+
+      .footer-sold-by {
+        text-align: right;
       }
     </style>
 
@@ -117,17 +145,11 @@
               <div>[[app.organization.phone]]</div>
             </div>
             <div class="flex"></div>
-            <div>
+            <div style="text-align: right;">
               <div class="author-title">[[verses.general.outlet]]: [[outlet.name]]</div>
               <div>[[outlet.physicalAddress]]</div>
               <div>[[outlet.contactPersonName]]</div>
               <div>[[outlet.phone]]</div>
-            </div>
-            <div class="flex"></div>
-            <div>
-              <div class="author-title">[[verses.salesReport.author]]: [[app.user.fullName]]</div>
-              <div>[[app.organization.employment.designation]]</div>
-              <div>[[app.organization.employment.companyProvidedId]]</div>
             </div>
           </div>
         </div>
@@ -144,14 +166,13 @@
               <div><b>[[verses.customer.customerName]]:</b> [[customer.fullName]]</div>
               <div class="flex"></div>
               <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
-              <div class="ml-8"><b>[[verses.sales.customerId]]:</b> [[sales.customerId]]</div>
+              <div class="flex"></div>
+              <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy hh:mmtt')]]</div>
             </div>
           </template>
 
-          <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-
           <!-- TRANSLATE -->
-          <div style="text-align:center; text-decoration: underline;"><b>Products</b></div>
+          <!-- <div class="section-header"><b>Products</b></div> -->
 
           <!-- TRANSLATE: ALL BELOW -->
           <table class="product-table">
@@ -169,7 +190,7 @@
                     <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
                   </template>
                 </td>
-                <td>[[product.count]] [[product.unit]]</td>
+                <td class="quantitive-cell">[[product.count]] [[product.unit]]</td>
                 <td class="monetary-cell">[[product.salePrice]] [[app.settings.monetaryUnit]]</td>
                 <th class="monetary-cell">[[$calculateIndividualPrice(product)]] [[app.settings.monetaryUnit]]</th>
               </tr>
@@ -202,10 +223,10 @@
           </table>
 
           <!-- TRANSLATE -->
-          <div style="text-align:center; text-decoration: underline;"><b>Payments</b></div>
+          <div class="section-header"><b>Payments</b></div>
 
           <!-- TRANSLATE: ALL BELOW -->
-          <table class="product-table">
+          <table class="payment-table">
             <tr>
               <th>Date</th>
               <th>Payment Method</th>
@@ -221,6 +242,20 @@
               </tr>
             </template>
           </table>
+
+          <div class="footer horizontal layout">
+            <div>
+              <div class="author-title">Printed By: [[app.user.fullName]]</div>
+              <div>[[app.organization.employment.designation]]</div>
+              <div>[[app.organization.employment.companyProvidedId]]</div>
+            </div>
+            <div class="flex"></div>
+            <div class="footer-sold-by">
+              <div class="author-title">Sold By: [[app.user.fullName]]</div>
+              <div>[[app.organization.employment.designation]]</div>
+              <div>[[app.organization.employment.companyProvidedId]]</div>
+            </div>
+          </div>
 
           <!-- body - end -->
         </div>
