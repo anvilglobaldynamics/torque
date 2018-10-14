@@ -51,6 +51,7 @@
       }
 
       .report .header {
+        padding-bottom: 4px;
         border-bottom: 1px solid black;
       }
 
@@ -126,6 +127,15 @@
       .footer-sold-by {
         text-align: right;
       }
+
+      .customer-area {
+        margin-top: 4px;
+      }
+
+      .body {
+        /* NOTE: A4 page - header - footer - page margin */
+        min-height: calc(297mm - 38mm - 20mm - 34mm);
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -134,9 +144,7 @@
 
       <div class="report">
         <div class="header vertical layout">
-          <!-- TRANSLATE -->
-          <div class="name">Sales Receipt #[[sales.id]]</div>
-          <!-- <div class="date">[[fromDate]] [[verses.general.to]] [[toDate]]</div> -->
+          <div class="name">[[verses.sales.receiptTitle]] #[[sales.id]]</div>
           <div class="horizontal layout wrap">
             <div>
               <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
@@ -158,11 +166,11 @@
           <!-- body - start -->
 
           <template is="dom-if" if="{{sales.isDiscarded}}">
-            <div><b>WARNING! This sale has been discarded.</b></div>
+            <div><b>[[verses.sales.warnDiscared]]</b></div>
           </template>
 
           <template is="dom-if" if="{{sales.customerId}}">
-            <div class="horizontal layout">
+            <div class="horizontal layout customer-area">
               <div><b>[[verses.customer.customerName]]:</b> [[customer.fullName]]</div>
               <div class="flex"></div>
               <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
@@ -171,16 +179,13 @@
             </div>
           </template>
 
-          <!-- TRANSLATE -->
-          <!-- <div class="section-header"><b>Products</b></div> -->
-
           <!-- TRANSLATE: ALL BELOW -->
           <table class="product-table">
             <tr>
-              <th>Product</th>
-              <th>Quantity</th>
-              <th>Unit Price</th>
-              <th>Price</th>
+              <th>[[verses.general.product]]</th>
+              <th>[[verses.general.quantity]]</th>
+              <th>[[verses.general.unitPrice]]</th>
+              <th>[[verses.general.price]]</th>
             </tr>
             <template is="dom-repeat" items="{{sales.productList}}" as="product">
               <tr>
@@ -197,27 +202,27 @@
             </template>
             <tr>
               <th rowspan="7" colspan="2" style="border:none;"></th>
-              <th>Total Amount</th>
+              <th>[[verses.pos.totalAmount]]</th>
               <th class="monetary-cell">[[$round(sales.payment.totalAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
-              <th>VAT</th>
+              <th>[[verses.pos.vatAmount]]</th>
               <th class="monetary-cell">[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
-              <th>Discount</th>
+              <th>[[verses.pos.discountedAmount]]</th>
               <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
-              <th>Service Charge</th>
+              <th>[[verses.pos.serviceChargeInput]]</th>
               <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
-              <th>Total Billed</th>
+              <th>[[verses.pos.totalBilled]]</th>
               <th class="monetary-cell">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
-              <th>Total Paid</th>
+              <th>[[verses.sales.totalPaid]]</th>
               <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
           </table>
@@ -243,23 +248,26 @@
             </template>
           </table>
 
-          <div class="footer horizontal layout">
-            <div>
-              <div class="author-title">Printed By: [[app.user.fullName]]</div>
-              <div>[[app.organization.employment.designation]]</div>
-              <div>[[app.organization.employment.companyProvidedId]]</div>
-            </div>
-            <div class="flex"></div>
-            <div class="footer-sold-by">
-              <div class="author-title">Sold By: [[soldByUser.fullName]]</div>
-              <div>[[soldByUser.designation]]</div>
-              <div>[[soldByUser.companyProvidedId]]</div>
-              <!-- <div>[[soldByUser.phone]]</div> -->
-            </div>
-          </div>
+
 
           <!-- body - end -->
         </div>
+
+        <div class="footer horizontal layout">
+          <div>
+            <div class="author-title">Printed By: [[app.user.fullName]]</div>
+            <div>[[app.organization.employment.designation]]</div>
+            <div>[[app.organization.employment.companyProvidedId]]</div>
+          </div>
+          <div class="flex"></div>
+          <div class="footer-sold-by">
+            <div class="author-title">Sold By: [[soldByUser.fullName]]</div>
+            <div>[[soldByUser.designation]]</div>
+            <div>[[soldByUser.companyProvidedId]]</div>
+            <!-- <div>[[soldByUser.phone]]</div> -->
+          </div>
+        </div>
+
       </div>
 
     </div>
@@ -320,8 +328,8 @@
 
       _printAndGoBack() {
         window.setTimeout(() => {
-          window.print();
-          window.history.back();
+          // window.print();
+          // window.history.back();
         }, 100);
       }
 
