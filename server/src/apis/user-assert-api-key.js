@@ -17,12 +17,6 @@ exports.UserAssertApiKeyApi = class extends Api.mixin(SecurityMixin, UserMixin) 
     return Joi.object().keys({});
   }
 
-  async __getUser({ userId }) {
-    let user = await this.database.user.findById({ id: userId });
-    throwOnFalsy(user, "USER_INVALID", "User could not be found");
-    return { user, warning: [] };
-  }
-
   async __getSession({ apiKey }) {
     let session = await this.database.sesssion.findByApiKey({ apiKey });
     throwOnFalsy(session, "APIKEY_INVALID", "Session could not be found using the ApiKey");
@@ -30,8 +24,9 @@ exports.UserAssertApiKeyApi = class extends Api.mixin(SecurityMixin, UserMixin) 
   }
 
   async handle({ userId, apiKey }) {
-    let { user, warning } = await this.__getUser({ userId });
+    let { user } = await this.__getUser({ userId });
     let { sessionId } = await this.__getSession({ apiKey });
+    let warning = [];
     return {
       status: "success",
       apiKey,
