@@ -7,7 +7,7 @@ method: `POST`
 ### request: 
 ```js
 {
-  inventoryId: Joi.number().max(999999999999999).required(),
+  inventoryId: Joi.number().max(999999999999999).required(), // this is in req only to varify correct organization
   productId: Joi.number().max(999999999999999).required(),
   purchasePrice: Joi.number().max(999999999999999).required(),
   salePrice: Joi.number().max(999999999999999).required()
