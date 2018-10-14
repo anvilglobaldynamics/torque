@@ -4,6 +4,12 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-e
 /** @param {typeof Api} SuperApiClass */
 exports.ProductMixin = (SuperApiClass) => class extends SuperApiClass {
 
+  async __getProduct({ productId }) {
+    let product = await this.database.product.findById({ id: productId });
+    throwOnFalsy(product, "PRODUCT_INVALID", "product not found");
+    return product;
+  }
+  
   async _verifyProductsExist({ productList }) {
     let productIdList = productList.map(product => product.productId);
     let newProductList = await this.database.product.listByIdList({ idList: productIdList });
