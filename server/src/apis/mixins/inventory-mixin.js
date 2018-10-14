@@ -5,13 +5,13 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-e
 exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async __getInventory({ inventoryId }) {
-    let doc = await this.database.inventory.findById({ id: inventoryId });
-    throwOnFalsy(doc, "INVENTORY_INVALID", "inventory could not be found");
-    return doc;
+    let inventory = await this.database.inventory.findById({ id: inventoryId });
+    throwOnFalsy(inventory, "INVENTORY_INVALID", "inventory could not be found");
+    return inventory;
   }
 
   async __checkIfInventoryContainsProduct({ inventoryId, productId }) {
-    let inventory = await this.database.inventory.findById({ id: inventoryId });
+    let inventory = await this.__getInventory({ inventoryId });
     let product = inventory.productList.find(product => product.productId === productId);
     throwOnFalsy(product, "PRODUCT_NOT_IN_INVENTORY", "product is not in this inventory");
     return;
