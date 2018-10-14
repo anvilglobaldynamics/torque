@@ -179,7 +179,6 @@
             </div>
           </template>
 
-          <!-- TRANSLATE: ALL BELOW -->
           <table class="product-table">
             <tr>
               <th>[[verses.general.product]]</th>
@@ -227,16 +226,14 @@
             </tr>
           </table>
 
-          <!-- TRANSLATE -->
-          <div class="section-header"><b>Payments</b></div>
+          <div class="section-header"><b>[[verses.sales.payment]]</b></div>
 
-          <!-- TRANSLATE: ALL BELOW -->
           <table class="payment-table">
             <tr>
-              <th>Date</th>
-              <th>Payment Method</th>
-              <th>Paid Amount</th>
-              <th>Change</th>
+              <th>[[verses.general.date]]</th>
+              <th>[[verses.sales.paymentMethod]]</th>
+              <th>[[verses.pos.paidAmountInput]]</th>
+              <th>[[verses.pos.changeAmount]]</th>
             </tr>
             <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
               <tr>
@@ -247,8 +244,6 @@
               </tr>
             </template>
           </table>
-
-
 
           <!-- body - end -->
         </div>
@@ -269,6 +264,7 @@
         </div>
 
       </div>
+      <!-- /div.report -->
 
     </div>
   </template>
@@ -300,8 +296,7 @@
         this.app.currentPageIsModal = true;
         this.app.shouldShowPrintButton = true;
         this.useLanguageServices();
-        // TRANSLATE
-        this.app.pushPageTitle("SALES RECEIPT");
+        this.app.pushPageTitle(this.verses.sales.receiptTitle);
         if (!this._ensureAccess()) return;
         if (!('sales' in this.params)) {
           let message = this.app.verses.general.pageCannotBeDisplayed;
