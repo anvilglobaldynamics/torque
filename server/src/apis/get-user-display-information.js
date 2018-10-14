@@ -38,8 +38,6 @@ exports.GetUserDisplayInformationApi = class extends Api.mixin(UserMixin) {
     }
     let employment = employmentList[0];
 
-    // console.log(user, employment)
-
     let { fullName, phone, email } = extract(user, [
       'fullName',
       'email',
