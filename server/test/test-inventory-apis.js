@@ -72,7 +72,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductCategoryId = generateInvalidId();
 
-describe('Inventory', _ => {
+describe.only('Inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -493,6 +493,25 @@ describe('Inventory', _ => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equals('INVENTORY_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/edit-inventory-product (Invalid productId)', testDoneFn => {
+
+    callApi('api/edit-inventory-product', {
+      json: {
+        apiKey,
+        productId: invalidInventoryId,
+        inventoryId: outletDefaultInventoryId,
+        purchasePrice: 100,
+        salePrice: 110
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('PRODUCT_NOT_IN_INVENTORY');
       testDoneFn();
     });
 

@@ -10,6 +10,13 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
     return doc;
   }
 
+  async __checkIfInventoryContainsProduct({ inventoryId, productId }) {
+    let inventory = await this.database.inventory.findById({ id: inventoryId });
+    let product = inventory.productList.find(product => product.productId === productId);
+    throwOnFalsy(product, "PRODUCT_NOT_IN_INVENTORY", "product is not in this inventory");
+    return;
+  }
+
   async __getOutletDefaultInventory({ outletId }) {
     let inventoryList = await this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId, inventoryContainerType: 'outlet' });
     throwOnFalsy(inventoryList.length, "OUTLET_INVENTORY_INVALID", "Invalid Outlet Or Inventory could not be found");

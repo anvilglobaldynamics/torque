@@ -3,8 +3,9 @@ const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
 const { ProductMixin } = require('./mixins/product-mixin');
+const { InventoryMixin } = require('./mixins/inventory-mixin');
 
-exports.EditInventoryProductApi = class extends Api.mixin(ProductMixin) {
+exports.EditInventoryProductApi = class extends Api.mixin(ProductMixin, InventoryMixin) {
 
   get autoValidates() { return true; }
 
@@ -36,7 +37,8 @@ exports.EditInventoryProductApi = class extends Api.mixin(ProductMixin) {
   }
 
   async handle({ body }) {
-    let { productId, purchasePrice, salePrice } = body;
+    let { inventoryId, productId, purchasePrice, salePrice } = body;
+    await this.__checkIfInventoryContainsProduct({ inventoryId, productId });
     await this._updateProduct({ productId, purchasePrice, salePrice });
     return { status: "success" };
   }

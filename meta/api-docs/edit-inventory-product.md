@@ -30,6 +30,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: INVENTORY_INVALID } // inventory not found
+{ code: PRODUCT_NOT_IN_INVENTORY } // product is not in this inventory
 ```
 
 ### response (on success):
