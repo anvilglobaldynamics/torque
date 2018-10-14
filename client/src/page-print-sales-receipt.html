@@ -251,9 +251,10 @@
             </div>
             <div class="flex"></div>
             <div class="footer-sold-by">
-              <div class="author-title">Sold By: [[app.user.fullName]]</div>
-              <div>[[app.organization.employment.designation]]</div>
-              <div>[[app.organization.employment.companyProvidedId]]</div>
+              <div class="author-title">Sold By: [[soldByUser.fullName]]</div>
+              <div>[[soldByUser.designation]]</div>
+              <div>[[soldByUser.companyProvidedId]]</div>
+              <!-- <div>[[soldByUser.phone]]</div> -->
             </div>
           </div>
 
@@ -343,6 +344,18 @@
         });
       }
 
+      _fetchSoldByUser({ sales }, cbfn) {
+        let data = {
+          organizationId: this.app.organization.id,
+          userId: sales.payment.paymentList[0].acceptedByUserId
+        };
+        this.app.callGetUserDisplayInformationApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
       _fetchOutlet({ outletId }, cbfn) {
         let data = { outletId };
         this.app.callGetOutletApi(data, (err, response) => {
@@ -357,14 +370,17 @@
           this.sales = sales;
           this._fetchOutlet({ outletId: this.sales.outletId }, ({ outlet }) => {
             this.outlet = outlet;
-            if (this.sales.customerId) {
-              this._fetchCustomer({ customerId: this.sales.customerId }, ({ customer }) => {
-                this.customer = customer;
+            this._fetchSoldByUser({ sales }, ({ userDisplayInformation }) => {
+              this.soldByUser = userDisplayInformation;
+              if (this.sales.customerId) {
+                this._fetchCustomer({ customerId: this.sales.customerId }, ({ customer }) => {
+                  this.customer = customer;
+                  cbfn();
+                })
+              } else {
                 cbfn();
-              })
-            } else {
-              cbfn();
-            }
+              }
+            });
           });
         });
       }

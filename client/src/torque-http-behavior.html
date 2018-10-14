@@ -232,6 +232,11 @@
         this.callCombinedJsonApi('hire-user-as-employee', data, cbfn);
       }
 
+      callGetUserDisplayInformationApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-user-display-information', data, cbfn);
+      }
+
       callFindUserApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('find-user', data, cbfn);

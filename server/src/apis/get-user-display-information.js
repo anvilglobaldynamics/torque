@@ -27,7 +27,7 @@ exports.GetUserDisplayInformationApi = class extends Api.mixin(UserMixin) {
     }];
   }
 
-  async handle({ body }) {
+  async handle({ body, userId: apiCallerUserId }) {
     let { organizationId, userId } = body;
 
     let { user } = await this.__getUser({ userId });
