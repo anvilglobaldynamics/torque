@@ -42,6 +42,7 @@ let { GetEmployeeListApi } = require('./legacy-apis/get-employee-list');
 let { GetEmployeeApi } = require('./legacy-apis/get-employee');
 let { EditEmploymentApi } = require('./legacy-apis/edit-employment');
 let { FireEmployeeApi } = require('./legacy-apis/fire-employee');
+const { GetUserDisplayInformationApi } = require('./apis/get-user-display-information');
 
 let { AddCustomerApi } = require('./legacy-apis/add-customer');
 let { GetCustomerApi } = require('./legacy-apis/get-customer');
@@ -312,6 +313,7 @@ class Program {
     server.registerPostApi('/api/get-employee', GetEmployeeApi);
     server.registerPostApi('/api/edit-employment', EditEmploymentApi);
     server.registerPostApi('/api/fire-employee', FireEmployeeApi);
+    server.registerPostApi('/api/get-user-display-information', GetUserDisplayInformationApi);
     server.registerPostApi('/api/admin-login', AdminLoginApi);
     server.registerPostApi('/api/admin-get-outgoing-sms-list', AdminGetOutgoingSmsListApi);
     server.registerPostApi('/api/admin-set-outgoing-sms-status', AdminSetOutgoingSmsStatusApi);
