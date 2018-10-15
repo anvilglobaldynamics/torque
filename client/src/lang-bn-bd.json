@@ -478,7 +478,9 @@
     "isCredit": "বাকি",
     "printReceipt": "রসিদ প্রিন্ট করুন",
     "warnDiscared": "সতর্কবার্তা! এই বিক্রয় রেকর্ড বাতিল করা হয়েছে।",
-    "receiptTitle": "বিক্রয় রসিদ"
+    "receiptTitle": "বিক্রয় রসিদ",
+    "printedBy": "প্রিন্ট করেছেন",
+    "soldBy": "বিক্রয়কারী"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
@@ -693,7 +695,7 @@
     "changeAmount": "ফেরত পরিমান",
     "shouldSaveChangeInAccount": "অর্থ প্রদানের পরিবর্তে গ্রাহকের অ্যাকাউন্ট সংরক্ষণ করুন",
     "addAdditionalPayment": "অতিরিক্ত অর্থ প্রদান করুন",
-    "dueAmount": "বাকি অর্থ"
+    "dueAmount": "বাকি"
   },
   "withdrawFromChangeWalletBalance": {
     "withdrawFromChangeWalletBalanceTitle": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স থেকে সরান",

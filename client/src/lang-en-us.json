@@ -475,7 +475,9 @@
     "isCredit": "Credit",
     "printReceipt": "Print Receipt",
     "warnDiscared": "WARNING! This sale has been discarded.",
-    "receiptTitle": "Sales Receipt "
+    "receiptTitle": "Sales Receipt ",
+    "printedBy": "Printed By",
+    "soldBy": "Sold By"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",

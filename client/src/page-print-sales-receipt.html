@@ -132,6 +132,10 @@
         margin-top: 4px;
       }
 
+      .centered-cell {
+        text-align: center;
+      }
+
       .body {
         /* NOTE: A4 page - header - footer - page margin */
         min-height: calc(297mm - 38mm - 20mm - 34mm);
@@ -163,7 +167,6 @@
         </div>
 
         <div class="body">
-          <!-- body - start -->
 
           <template is="dom-if" if="{{sales.isDiscarded}}">
             <div><b>[[verses.sales.warnDiscared]]</b></div>
@@ -175,7 +178,7 @@
               <div class="flex"></div>
               <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
               <div class="flex"></div>
-              <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy hh:mmtt')]]</div>
+              <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
             </div>
           </template>
 
@@ -196,7 +199,7 @@
                 </td>
                 <td class="quantitive-cell">[[product.count]] [[product.unit]]</td>
                 <td class="monetary-cell">[[product.salePrice]] [[app.settings.monetaryUnit]]</td>
-                <th class="monetary-cell">[[$calculateIndividualPrice(product)]] [[app.settings.monetaryUnit]]</th>
+                <td class="monetary-cell">[[$calculateIndividualPrice(product)]] [[app.settings.monetaryUnit]]</td>
               </tr>
             </template>
             <tr>
@@ -224,6 +227,12 @@
               <th>[[verses.sales.totalPaid]]</th>
               <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
+            <template is="dom-if" if="[[sales.payment.dueAmount]]">
+              <tr>
+                <th>[[verses.additionalPayment.dueAmount]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.dueAmount)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+            </template>
           </table>
 
           <div class="section-header"><b>[[verses.sales.payment]]</b></div>
@@ -233,32 +242,30 @@
               <th>[[verses.general.date]]</th>
               <th>[[verses.sales.paymentMethod]]</th>
               <th>[[verses.pos.paidAmountInput]]</th>
-              <th>[[verses.pos.changeAmount]]</th>
+              <th>[[verses.sales.changeAmount]]</th>
             </tr>
             <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
               <tr>
-                <td>[[$mkDate(payment.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</td>
-                <td>[[payment.paymentMethod]]</td>
-                <td>[[$round(payment.paidAmount)]] [[app.settings.monetaryUnit]]</td>
-                <td>[[$round(payment.changeAmount)]] [[app.settings.monetaryUnit]]</td>
+                <td class="centered-cell">[[$mkDate(payment.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</td>
+                <td class="centered-cell">[[payment.paymentMethod]]</td>
+                <td class="monetary-cell">[[$round(payment.paidAmount)]] [[app.settings.monetaryUnit]]</td>
+                <td class="monetary-cell">[[$round(payment.changeAmount)]] [[app.settings.monetaryUnit]]</td>
               </tr>
             </template>
           </table>
 
-          <!-- body - end -->
         </div>
+        <!-- /div.body -->
 
         <div class="footer horizontal layout">
           <div>
-            <div class="author-title">Printed By: [[app.user.fullName]]</div>
-            <div>[[app.organization.employment.designation]]</div>
-            <div>[[app.organization.employment.companyProvidedId]]</div>
+            <div class="author-title">[[verses.sales.printedBy]]: [[app.user.fullName]]</div>
+            <div>[[app.organization.employment.designation]] [[app.organization.employment.companyProvidedId]]</div>
           </div>
           <div class="flex"></div>
           <div class="footer-sold-by">
-            <div class="author-title">Sold By: [[soldByUser.fullName]]</div>
-            <div>[[soldByUser.designation]]</div>
-            <div>[[soldByUser.companyProvidedId]]</div>
+            <div class="author-title">[[verses.sales.soldBy]]: [[soldByUser.fullName]]</div>
+            <div>[[soldByUser.designation]] [[soldByUser.companyProvidedId]]</div>
             <!-- <div>[[soldByUser.phone]]</div> -->
           </div>
         </div>
@@ -323,8 +330,8 @@
 
       _printAndGoBack() {
         window.setTimeout(() => {
-          window.print();
-          window.history.back();
+          // window.print();
+          // window.history.back();
         }, 100);
       }
 
@@ -370,6 +377,7 @@
 
       _processSales(cbfn) {
         this._fetchSales(({ sales }) => {
+          sales.payment.dueAmount = this._calculateDue(sales);
           this.sales = sales;
           this._fetchOutlet({ outletId: this.sales.outletId }, ({ outlet }) => {
             this.outlet = outlet;
@@ -386,6 +394,10 @@
             });
           });
         });
+      }
+
+      _calculateDue(sales) {
+        return (Math.max(sales.payment.totalBilled - sales.payment.totalPaidAmount, 0));
       }
 
       // region: ui  ===========================
@@ -412,6 +424,8 @@
         if (right.length < 2) right += '0';
         return [left, right].join('.');
       }
+
+
 
     }
 
