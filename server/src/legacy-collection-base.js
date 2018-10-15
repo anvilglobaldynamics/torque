@@ -241,6 +241,10 @@ class LegacyCollection {
     return this.legacyDatabase.deleteOne(this.collectionName, query, cbfn);
   }
 
+  escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
 }
 
 exports.LegacyCollection = LegacyCollection;
