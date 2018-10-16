@@ -24,24 +24,19 @@ exports.EditEmploymentApi = class extends userCommonMixin(collectionCommonMixin(
       privileges: Joi.object().keys({
         PRIV_VIEW_USERS: Joi.boolean().required(),
         PRIV_MODIFY_USERS: Joi.boolean().required(),
-        PRIV_ADD_USER: Joi.boolean().required(),
-        PRIV_MAKE_USER_AN_OWNER: Joi.boolean().required(),
-        PRIV_MODIFY_USER_PRIVILEGES: Joi.boolean().required(),
 
         PRIV_ACCESS_POS: Joi.boolean().required(),
         PRIV_VIEW_SALES: Joi.boolean().required(),
         PRIV_MODIFY_SALES: Joi.boolean().required(),
         PRIV_ALLOW_FLAT_DISCOUNT: Joi.boolean().required(),
-        PRIV_ALLOW_INDIVIDUAL_DISCOUNT: Joi.boolean().required(),
-        PRIV_ALLOW_FOC: Joi.boolean().required(),
 
         PRIV_VIEW_SALES_RETURN: Joi.boolean().required(),
         PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
 
         PRIV_VIEW_ALL_INVENTORIES: Joi.boolean().required(),
-        PRIV_MODIFY_ALL_INVENTORIES: Joi.boolean().required(),
+        PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: Joi.boolean().required(),
         PRIV_TRANSFER_ALL_INVENTORIES: Joi.boolean().required(),
-        PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: Joi.boolean().required(),
+        PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: Joi.boolean().required(),
 
         PRIV_VIEW_ALL_OUTLETS: Joi.boolean().required(),
         PRIV_MODIFY_ALL_OUTLETS: Joi.boolean().required(),
@@ -53,9 +48,8 @@ exports.EditEmploymentApi = class extends userCommonMixin(collectionCommonMixin(
         PRIV_MODIFY_ORGANIZATION: Joi.boolean().required(),
 
         PRIV_VIEW_CUSTOMER: Joi.boolean().required(),
-        PRIV_ADD_CUSTOMER_DURING_SALES: Joi.boolean().required(),
         PRIV_MODIFY_CUSTOMER: Joi.boolean().required(),
-        PRIV_MANAGE_CUSTOMER_DEBT: Joi.boolean().required()
+        PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: Joi.boolean().required()
       })
     });
   }
@@ -69,8 +63,7 @@ exports.EditEmploymentApi = class extends userCommonMixin(collectionCommonMixin(
         errorCode: "EMPLOYEE_INVALID"
       },
       privileges: [
-        "PRIV_MODIFY_USERS",
-        "PRIV_MODIFY_USER_PRIVILEGES"
+        "PRIV_MODIFY_USERS"
       ]
     }];
   }

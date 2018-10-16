@@ -61,7 +61,12 @@
        * @returns 
        */
       $mkDate(date, format = 'MMM d, yyyy') {
-        return (new XDate(date)).toString(format);
+        try {
+          return (new XDate(date)).toString(format);
+        } catch (ex) {
+          console.error(ex);
+          return 'INVALID DATE';
+        }
       }
 
       $inc(number) {
@@ -72,17 +77,17 @@
         try {
           let el = e.target;
 
-          if (typeof(el.value) === 'undefined' || el.value === '') {
+          if (typeof (el.value) === 'undefined' || el.value === '') {
             el.value = String(el.min);
           }
 
-          if (typeof(el.max) !== 'undefined') {
+          if (typeof (el.max) !== 'undefined') {
             if (parseFloat(el.value) > parseFloat(el.max)) {
               el.value = String(el.max);
             }
           }
 
-          if (typeof(el.min) !== 'undefined') {
+          if (typeof (el.min) !== 'undefined') {
             if (parseFloat(el.value) < parseFloat(el.min)) {
               el.value = String(el.min);
             }

@@ -1,0 +1,434 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="elem-customer-selector.html">
+<link rel="import" href="elem-outlet-selector.html">
+
+<dom-module id="page-print-sales-receipt">
+  <template>
+    <style include="shared-styles">
+      @media print {
+
+        .filter-toggle-region,
+        .filter-toggle-region paper-toggle-button,
+        .filter-region {
+          display: none;
+        }
+
+        .report {
+          margin-top: -48px;
+        }
+      }
+
+      .report {
+        background-color: white;
+        padding: 12px;
+        width: calc(100% - 24px);
+      }
+
+      .report .author-title {
+        font-weight: bold;
+      }
+
+      .report .header {
+        padding-bottom: 4px;
+        border-bottom: 1px solid black;
+      }
+
+      .report .header .name {
+        font-size: 30px;
+        text-align: center;
+      }
+
+      .report .header .date {
+        font-size: 15px;
+        text-align: center;
+      }
+
+      .report .body {}
+
+      .report .body .item {
+        margin-bottom: 8px;
+        margin-top: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px dotted rgb(131, 131, 131);
+      }
+
+      .filter-toggle-region {
+        text-align: right;
+        margin-right: 8px;
+        margin-bottom: 8px;
+      }
+
+      .ml-8 {
+        margin-left: 8px;
+      }
+
+      .product-table,
+      .payment-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      /* table.product-table, */
+      .product-table th,
+      .product-table td,
+      .payment-table th,
+      .payment-table td {
+        border: 1px solid black;
+      }
+
+      .product-table {
+        margin-top: 18px;
+      }
+
+      .monetary-cell {
+        text-align: right;
+        padding-right: 4px;
+      }
+
+      .quantitive-cell {
+        text-align: right;
+        padding-right: 4px;
+      }
+
+      .section-header {
+        text-align: center;
+        text-decoration: underline;
+        margin-top: 18px;
+        margin-bottom: 8px;
+      }
+
+      .footer {
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+
+      .footer-sold-by {
+        text-align: right;
+      }
+
+      .customer-area {
+        margin-top: 4px;
+      }
+
+      .centered-cell {
+        text-align: center;
+      }
+
+      .body {
+        /* NOTE: A4 page - header - footer - page margin */
+        min-height: calc(297mm - 38mm - 20mm - 34mm);
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="report">
+        <div class="header vertical layout">
+          <div class="name">[[verses.sales.receiptTitle]] #[[sales.id]]</div>
+          <div class="horizontal layout wrap">
+            <div>
+              <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
+              <div>[[app.organization.primaryBusinessAddress]]</div>
+              <div>[[app.organization.email]]</div>
+              <div>[[app.organization.phone]]</div>
+            </div>
+            <div class="flex"></div>
+            <div style="text-align: right;">
+              <div class="author-title">[[verses.general.outlet]]: [[outlet.name]]</div>
+              <div>[[outlet.physicalAddress]]</div>
+              <div>[[outlet.contactPersonName]]</div>
+              <div>[[outlet.phone]]</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="body">
+
+          <template is="dom-if" if="{{sales.isDiscarded}}">
+            <div><b>[[verses.sales.warnDiscared]]</b></div>
+          </template>
+
+          <template is="dom-if" if="{{sales.customerId}}">
+            <div class="horizontal layout customer-area">
+              <div><b>[[verses.customer.customerName]]:</b> [[customer.fullName]]</div>
+              <div class="flex"></div>
+              <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
+              <div class="flex"></div>
+              <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
+            </div>
+          </template>
+
+          <table class="product-table">
+            <tr>
+              <th>[[verses.general.product]]</th>
+              <th>[[verses.general.quantity]]</th>
+              <th>[[verses.general.unitPrice]]</th>
+              <th>[[verses.general.price]]</th>
+            </tr>
+            <template is="dom-repeat" items="{{sales.productList}}" as="product">
+              <tr>
+                <td>
+                  [[product.productCategoryName]]
+                  <template is="dom-if" if="[[product.returnedProductCount]]">
+                    <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
+                  </template>
+                </td>
+                <td class="quantitive-cell">[[product.count]] [[product.unit]]</td>
+                <td class="monetary-cell">[[product.salePrice]] [[app.settings.monetaryUnit]]</td>
+                <td class="monetary-cell">[[$calculateIndividualPrice(product)]] [[app.settings.monetaryUnit]]</td>
+              </tr>
+            </template>
+            <tr>
+              <th rowspan="7" colspan="2" style="border:none;"></th>
+              <th>[[verses.pos.totalAmount]]</th>
+              <th class="monetary-cell">[[$round(sales.payment.totalAmount)]] [[app.settings.monetaryUnit]]</th>
+            </tr>
+            <tr>
+              <th>[[verses.pos.vatAmount]]</th>
+              <th class="monetary-cell">[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</th>
+            </tr>
+            <tr>
+              <th>[[verses.pos.discountedAmount]]</th>
+              <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</th>
+            </tr>
+            <tr>
+              <th>[[verses.pos.serviceChargeInput]]</th>
+              <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</th>
+            </tr>
+            <tr>
+              <th>[[verses.pos.totalBilled]]</th>
+              <th class="monetary-cell">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</th>
+            </tr>
+            <tr>
+              <th>[[verses.sales.totalPaid]]</th>
+              <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</th>
+            </tr>
+            <template is="dom-if" if="[[sales.payment.dueAmount]]">
+              <tr>
+                <th>[[verses.additionalPayment.dueAmount]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.dueAmount)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+            </template>
+          </table>
+
+          <div class="section-header"><b>[[verses.sales.payment]]</b></div>
+
+          <table class="payment-table">
+            <tr>
+              <th>[[verses.general.date]]</th>
+              <th>[[verses.sales.paymentMethod]]</th>
+              <th>[[verses.pos.paidAmountInput]]</th>
+              <th>[[verses.sales.changeAmount]]</th>
+            </tr>
+            <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
+              <tr>
+                <td class="centered-cell">[[$mkDate(payment.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</td>
+                <td class="centered-cell">[[payment.paymentMethod]]</td>
+                <td class="monetary-cell">[[$round(payment.paidAmount)]] [[app.settings.monetaryUnit]]</td>
+                <td class="monetary-cell">[[$round(payment.changeAmount)]] [[app.settings.monetaryUnit]]</td>
+              </tr>
+            </template>
+          </table>
+
+        </div>
+        <!-- /div.body -->
+
+        <div class="footer horizontal layout">
+          <div>
+            <div class="author-title">[[verses.sales.printedBy]]: [[app.user.fullName]]</div>
+            <div>[[app.organization.employment.designation]] [[app.organization.employment.companyProvidedId]]</div>
+          </div>
+          <div class="flex"></div>
+          <div class="footer-sold-by">
+            <div class="author-title">[[verses.sales.soldBy]]: [[soldByUser.fullName]]</div>
+            <div>[[soldByUser.designation]] [[soldByUser.companyProvidedId]]</div>
+            <!-- <div>[[soldByUser.phone]]</div> -->
+          </div>
+        </div>
+
+      </div>
+      <!-- /div.report -->
+
+    </div>
+  </template>
+
+  <script>
+    class PagePrintSalesReceipt extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-print-sales-receipt';
+      }
+
+      static get properties() {
+        return {
+          sales: {
+            type: Object,
+            value: null,
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.shouldShowPrintButton = true;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.verses.sales.receiptTitle);
+        if (!this._ensureAccess()) return;
+        if (!('sales' in this.params)) {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processSales(_ => {
+          this.isReady = true;
+          this._printAndGoBack();
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.shouldShowPrintButton = false;
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl('privileged', ['PRIV_VIEW_SALES']);
+      }
+
+      _printAndGoBack() {
+        window.setTimeout(() => {
+          window.print();
+          window.history.back();
+        }, 100);
+      }
+
+      _fetchSales(cbfn) {
+        let salesId = parseInt(this.params.sales);
+        let data = { salesId };
+        this.app.callGetSalesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _fetchCustomer({ customerId }, cbfn) {
+        let data = { customerId };
+        this.app.callGetCustomerApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _fetchSoldByUser({ sales }, cbfn) {
+        let data = {
+          organizationId: this.app.organization.id,
+          userId: sales.payment.paymentList[0].acceptedByUserId
+        };
+        this.app.callGetUserDisplayInformationApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _fetchOutlet({ outletId }, cbfn) {
+        let data = { outletId };
+        this.app.callGetOutletApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _processSales(cbfn) {
+        this._fetchSales(({ sales }) => {
+          sales.payment.dueAmount = this._calculateDue(sales);
+          this.sales = sales;
+          this._fetchOutlet({ outletId: this.sales.outletId }, ({ outlet }) => {
+            this.outlet = outlet;
+            this._fetchSoldByUser({ sales }, ({ userDisplayInformation }) => {
+              this.soldByUser = userDisplayInformation;
+              if (this.sales.customerId) {
+                this._fetchCustomer({ customerId: this.sales.customerId }, ({ customer }) => {
+                  this.customer = customer;
+                  cbfn();
+                })
+              } else {
+                cbfn();
+              }
+            });
+          });
+        });
+      }
+
+      _calculateDue(sales) {
+        return (Math.max(sales.payment.totalBilled - sales.payment.totalPaidAmount, 0));
+      }
+
+      // region: ui  ===========================
+
+      $calculateIndividualPrice(product) {
+        let { salePrice, count, discountType, discountValue } = product;
+        if (discountType === 'percent') {
+          salePrice -= salePrice * (discountValue / 100);
+        } else if (discountType === 'fixed') {
+          salePrice -= discountValue;
+        }
+        return this.$round(salePrice);
+      }
+
+      printButtonOnTopBarPressed(e = null) {
+        window.print();
+      }
+
+      $round(number) {
+        number = String(super.$round(number));
+        let [left, right] = number.split('.');
+        if (!right) right = '0'
+        if (right.length < 1) right += '0';
+        if (right.length < 2) right += '0';
+        return [left, right].join('.');
+      }
+
+
+
+    }
+
+    window.customElements.define(PagePrintSalesReceipt.is, PagePrintSalesReceipt);
+  </script>
+</dom-module>

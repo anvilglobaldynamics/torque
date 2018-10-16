@@ -200,7 +200,8 @@ describe('Sales', _ => {
             count: 2,
             discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
             discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            vatPercentage: 5,
           }
         ],
 
@@ -276,7 +277,8 @@ describe('Sales', _ => {
             count: 2,
             discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
             discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            vatPercentage: 5,
           }
         ],
 
@@ -318,7 +320,8 @@ describe('Sales', _ => {
             count: 2,
             discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
             discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            vatPercentage: 5,
           }
         ],
 
@@ -359,7 +362,8 @@ describe('Sales', _ => {
             count: 2,
             discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
             discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            vatPercentage: 5,
           }
         ],
 
@@ -401,7 +405,8 @@ describe('Sales', _ => {
             count: 2,
             discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
             discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            vatPercentage: 5,
           }
         ],
 
@@ -443,7 +448,8 @@ describe('Sales', _ => {
             count: 2,
             discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
             discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            vatPercentage: 5,
           }
         ],
 
@@ -925,7 +931,8 @@ describe('Sales', _ => {
             count: 3,
             discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
             discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            vatPercentage: 5,
           }
         ],
 

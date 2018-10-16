@@ -42,6 +42,7 @@ let { GetEmployeeListApi } = require('./legacy-apis/get-employee-list');
 let { GetEmployeeApi } = require('./legacy-apis/get-employee');
 let { EditEmploymentApi } = require('./legacy-apis/edit-employment');
 let { FireEmployeeApi } = require('./legacy-apis/fire-employee');
+const { GetUserDisplayInformationApi } = require('./apis/get-user-display-information');
 
 let { AddCustomerApi } = require('./legacy-apis/add-customer');
 let { GetCustomerApi } = require('./legacy-apis/get-customer');
@@ -72,7 +73,9 @@ const { GetInventoryListApi } = require('./apis/get-inventory-list');
 const { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-inventory-details');
 const { ReportInventoryDetailsApi } = require('./apis/report-inventory-details');
 let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
+const { EditInventoryProductApi } = require('./apis/edit-inventory-product');
 const { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
+const { GetProductApi } = require('./apis/get-product');
 
 const { AddSalesApi } = require('./apis/add-sales');
 const { AddAdditionalPaymentApi } = require('./apis/add-additional-payment');
@@ -291,6 +294,8 @@ class Program {
     server.registerPostApi('/api/report-inventory-details', ReportInventoryDetailsApi);
     server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
     server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
+    server.registerPostApi('/api/edit-inventory-product', EditInventoryProductApi);
+    server.registerPostApi('/api/get-product', GetProductApi);
     server.registerPostApi('/api/get-designation-list', GetDesignationListApi);
     server.registerPostApi('/api/get-role-list', GetRoleListApi);
     server.registerPostApi('/api/get-privilege-list', GetPrivilegeListApi);
@@ -310,6 +315,7 @@ class Program {
     server.registerPostApi('/api/get-employee', GetEmployeeApi);
     server.registerPostApi('/api/edit-employment', EditEmploymentApi);
     server.registerPostApi('/api/fire-employee', FireEmployeeApi);
+    server.registerPostApi('/api/get-user-display-information', GetUserDisplayInformationApi);
     server.registerPostApi('/api/admin-login', AdminLoginApi);
     server.registerPostApi('/api/admin-get-outgoing-sms-list', AdminGetOutgoingSmsListApi);
     server.registerPostApi('/api/admin-set-outgoing-sms-status', AdminSetOutgoingSmsStatusApi);

@@ -543,6 +543,10 @@ class Api {
     return (Math.round(number * 100) / 100);
   }
 
+  escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
 }
 
 exports.Api = Api;

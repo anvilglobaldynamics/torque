@@ -26,7 +26,7 @@ exports.WithdrawFromChangeWalletBalanceApi = class extends Api.mixin(CustomerMix
         errorCode: "CUSTOMER_INVALID"
       },
       privileges: [
-        "PRIV_MANAGE_CUSTOMER_DEBT"
+        "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE"
       ]
     }];
   }

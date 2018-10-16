@@ -21,7 +21,7 @@ exports.BulkImportProductCategoriesApi = class extends Api.mixin(ProductCategory
     return [{
       organizationBy: "organizationId",
       privileges: [
-        "PRIV_MODIFY_ALL_INVENTORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
       ]
     }];
   }

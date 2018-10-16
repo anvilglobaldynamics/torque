@@ -3,6 +3,7 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const MAX_ORGANIZATION_LIMIT = 1000;
 
 exports.AddOrganizationApi = class extends Api {
 
@@ -19,8 +20,8 @@ exports.AddOrganizationApi = class extends Api {
     });
   }
 
-  async _createOrganization({ name, primaryBusinessAddress, phone, email }) {
-    return await this.database.organization.create({ name, primaryBusinessAddress, phone, email });
+  async _createOrganization({ name, primaryBusinessAddress, phone, email, userId }) {
+    return await this.database.organization.create({ name, primaryBusinessAddress, phone, email, userId });
   }
 
   async _setUserAsOwner({ userId, organizationId }) {
@@ -37,11 +38,23 @@ exports.AddOrganizationApi = class extends Api {
     throwOnFalsy(res, "DEV_ERROR", "Unable to set package");
   }
 
+  async _checkIfMaxOrganizationLimitReached({ userId }) {
+    let organizationList = await this.database.organization.listByCreatedByUserId({ userId });
+    if (organizationList) {
+      if (organizationList.length >= MAX_ORGANIZATION_LIMIT) {
+        throw new CodedError("MAX_ORGANIZATION_LIMIT_REACHED", "Maximum organization limit has been reached.");
+      }
+    }
+  }
+
   async handle({ body, userId }) {
     let { name, primaryBusinessAddress, phone, email } = body;
-    let organizationId = await this._createOrganization({ name, primaryBusinessAddress, phone, email });
+    await this._checkIfMaxOrganizationLimitReached({ userId });
+
+    let organizationId = await this._createOrganization({ name, primaryBusinessAddress, phone, email, userId });
     await this._setUserAsOwner({ userId, organizationId });
     await this._setTrialPackage({ organizationId });
+
     return { status: "success", organizationId };
   }
 

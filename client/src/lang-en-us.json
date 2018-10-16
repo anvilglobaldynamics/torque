@@ -60,6 +60,9 @@
     "id": "ID",
     "discard": "Discard",
     "product": "Product",
+    "quantity": "Quantity",
+    "unitPrice": "Unit Price",
+    "price": "Price",
     "return": "Return",
     "by": "by",
     "cancel": "Cancel",
@@ -308,7 +311,7 @@
     "clickToDeleteEmployee": "Click here to delete the employee. Be warned that once deleted, an employee can not be restored.",
     "fireEmployee": "Fire Employee",
     "fireEmployeeQuestion": "Fire employee?",
-    "sureFireThisEmployee": "Are you sure you want to fire this employee",
+    "sureFireThisEmployee": "Are you sure you want to fire this employee?",
     "sureFireYourself": "Are you sure you want to fire Yourself? You will loose all access to this organization."
   },
   "product": {
@@ -382,10 +385,8 @@
     "clickToDeleteCustomer": "Click here to delete the customer. Be warned that once deleted, an customer can not be restored.",
     "deleteCustomer": "Delete Customer",
     "noCustomerFound": "No Customer Found.",
-
     "searchForCustomerInput": "Customer Name/Number",
     "searchForCustomerInputError": "Error in Search",
-
     "customerName": "Customer Name"
   },
   "editProfile": {
@@ -435,7 +436,6 @@
     "productList": "Product List",
     "product": "Product",
     "noSalesReturnFound": "No Sales Return Record Found.",
-
     "shouldSaveReturnableInChangeWallet": "Should save returnable in change wallet?",
     "returnedCount": "Returned Count"
   },
@@ -470,11 +470,14 @@
     "wasDebitedToUser": "was debited to user.",
     "allReturned": "all returned",
     "noSalesFound": "No Sales Record Found.",
-
     "soldCount": "Sold Count",
     "returnedCount": "Returned Count",
-
-    "isCredit": "Credit"
+    "isCredit": "Credit",
+    "printReceipt": "Print Receipt",
+    "warnDiscared": "WARNING! This sale has been discarded.",
+    "receiptTitle": "Sales Receipt ",
+    "printedBy": "Printed By",
+    "soldBy": "Sold By"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",
@@ -541,6 +544,7 @@
     "vatAmount": "Vat Amount",
     "serviceChargeInput": "Service Charge Amount",
     "serviceChargeInputError": "Enter a valid number",
+    "totalAmount": "Total Amount",
     "totalBilled": "Total Billed",
     "previousCustomerBalance": "Previous Customer Balance",
     "paidAmountInput": "Paid Amount",
@@ -548,6 +552,7 @@
     "changeAmount": "Change Amount",
     "changeAmountIfNegative": "Additional Payment Required",
     "confirmSales": "Confirm Sales",
+    "confirmSalesAndPrint": "Confirm Sales & Print",
     "sellingPrice": "Selling Price",
     "discount": "Discount",
     "vat": "VAT",
@@ -555,7 +560,7 @@
     "shouldSaveChangeInAccountStart": "Save this ",
     "shouldSaveChangeInAccountEnd": " in this customer's account instead of paying cash now.",
     "allowCreditSaleMessage": "Save this amount as due in customer's account.",
-    "creditSaleHint":" The paid amount is less than total amount billed. In order to do a credit sale, you need to select/create a customer and allow credit sale.",
+    "creditSaleHint": " The paid amount is less than total amount billed. In order to do a credit sale, you need to select/create a customer and allow credit sale.",
     "paymentMethod": "Payment Method"
   },
   "salesReport": {
@@ -588,7 +593,6 @@
     "author": "Author",
     "noProductInInventory": "There's no product in this Inventory.",
     "filterInventoriesButton": "Filter Inventories",
-
     "selectInventoriesTitle": "Select Inventories",
     "selectionTableTitle": "Inventories Selection Table",
     "deselectAll": "Deselect All",
@@ -657,7 +661,6 @@
     "pageTitle": "Product Category Bulk Import",
     "downloadSectionTip": "Download the template file, we will be creating multiple Product Categories at once using this file;",
     "downloadButtonLabel": "Download File",
-
     "instructionOne": "1. The downloaded file: 'Lipi Product Category Bulk Upload CSV.csv', is a CSV format file, you can use any Spreadsheet software to view and update this file. It should look like this: ",
     "instructionTwo": "2. Enter a unique product category Name like so;",
     "instructionThree": "3. Enter a Unit of the product category, example: kg, piece or box;",
@@ -665,16 +668,13 @@
     "instructionFive": "5. Enter either 'percent' or 'fixed' as Discount Type, and the amount under Discount Amount;",
     "instructionSix": "6. Under Returnable enter 'yes' if customers can return this product category, 'no' if not;",
     "instructionSeven": "7. All the fields must be entered, like below, or else Lipi will not accept this file;",
-
     "uploadSectionTip": "Upload the CSV file containing Product Category data;",
     "uploadButtonLabel": "Upload File",
-
-    "successfullyImported" : "Import Successful, total product categories created",
+    "successfullyImported": "Import Successful, total product categories created",
     "rowsIgnored": "Following rows had to be ignored",
     "row": "Row",
     "nameUsed": "Product Category with this name already exists",
     "errorOccurred": "Error Occurred, resolve and try again",
-
     "unknownErrorWhileReadingFile": "Unknown error while reading file",
     "multipleFilesSelectedTitle": "Multiple files selected",
     "multipleFilesSelectedBody": "Please select only 1 file.",
@@ -701,5 +701,14 @@
     "amountInputError": "Enter the amount",
     "withdraw": "Withdraw",
     "customerBalanceUpdated": "Customer's change wallet balance has been updated."
+  },  
+  "editProduct": {
+    "editProductTitle": "Edit Product",
+    "updateProduct": "Update Product",
+    "purchasedForInput": "Purchase Price",
+    "purchasedForInputError": "Enter a valid purchase price",
+    "sellForInput": "Sell Price",
+    "sellForInputError": "Enter a valid sell price",
+    "productUpdated": "Product has been updated"
   }
 }

@@ -40,7 +40,7 @@ exports.EditProductCategoryApi = class extends collectionCommonMixin(LegacyApi) 
         errorCode: "PRODUCT_CATEGORY_INVALID"
       },
       privileges: [
-        "PRIV_MODIFY_ALL_INVENTORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
       ]
     }];
   }

@@ -26,7 +26,6 @@
     <style include="shared-styles">
       .discard-button {
         margin-top: 5px;
-        width: 100%;
       }
 
       .return-button {
@@ -53,7 +52,6 @@
         padding: 2px;
         color: red;
       }
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -70,6 +68,8 @@
         <template is="dom-if" if="{{sales.customerId}}">
           <div>[[verses.sales.customerId]]: [[sales.customerId]]</div>
         </template>
+
+        <paper-button raised class="secondary" on-tap="printReceiptTapped">[[verses.sales.printReceipt]]</paper-button>
 
         <template is="dom-if" if="{{!sales.isDiscarded}}">
           <paper-button raised class="danger discard-button" on-tap="discardTapped">[[verses.general.discard]]</paper-button>
@@ -134,7 +134,8 @@
       </div>
 
       <template is="dom-if" if="[[$shouldTakeAdditionalPayment(sales.payment.totalBilled,  sales.payment.totalPaidAmount)]]">
-        <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[self]]" customer="[[customer]]" is-from-view-sales-page></elem-additional-paymentt>
+        <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[self]]" customer="[[customer]]" is-from-view-sales-page>
+          </elem-additional-paymentt>
       </template>
 
       <template is="dom-if" if="{{sales.customerId}}">
@@ -261,6 +262,10 @@
       returnTapped(e) {
         let { product } = e.model;
         return this.app.navigateTo(`/edit-sales-return/sales:${this.sales.id}/product:${product.productId}`);
+      }
+
+      printReceiptTapped(e) {
+        return this.app.navigateTo(`/print-sales-receipt/sales:${this.sales.id}/from:sales-record`);
       }
 
       // region: misc =================================

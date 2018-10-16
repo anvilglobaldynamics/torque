@@ -493,6 +493,10 @@ class LegacyApi {
     return errorObject;
   }
 
+  escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
 }
 
 exports.LegacyApi = LegacyApi;

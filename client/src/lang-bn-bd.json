@@ -43,7 +43,7 @@
     "outlet": "দোকান",
     "filter": "সংকীর্ণ",
     "date": "তারিখ",
-    "dated": "তারিখ চিহ্নিত",
+    "dated": "তারিখ",
     "number": "নম্বর",
     "amount": "অর্থ",
     "action": "কর্ম",
@@ -60,6 +60,9 @@
     "id": "আইডি",
     "discard": "বাতিল",
     "product": "পণ্য",
+    "quantity": "পরিমান",
+    "unitPrice": "একক মূল্য",
+    "price": "মূল্য",
     "return": "ফেরত",
     "by": "দ্বারা",
     "cancel": "বাতিল",
@@ -342,7 +345,7 @@
     "payment": "যুক্ত/ক্রেডিট",
     "withdrawl": "বিয়োগ/ডেবিট",
     "amountInput": "অর্থ",
-    "amountInputError": "পরিমাণ লিখুন",
+    "amountInputError": "পরিমান লিখুন",
     "adjust": "এডজাস্ট",
     "customerBalanceUpdated": "গ্রাহকের ব্যালান্স আপডেট হয়ে গিয়েছে।"
   },
@@ -363,7 +366,7 @@
     "customerNumberInput": "যোগাযোগের নম্বর",
     "customerNumberInputError": "একটি সঠিক ফোন নম্বর লিখুন",
     "openingBalance": "প্রার্থমিক ব্যালেন্স",
-    "openingBalanceError": "প্রার্থমিক ব্যালেন্স হিসাবে একটি পরিমাণ লিখুন",
+    "openingBalanceError": "প্রার্থমিক ব্যালেন্স হিসাবে একটি পরিমান লিখুন",
     "createCustomer": "গ্রাহক যুক্ত করুন",
     "updateCustomer": "গ্রাহক আপডেট করুন",
     "newCustomerCreated": "নতুন গ্রাহক যুক্ত করা হয়েছে।",
@@ -384,10 +387,8 @@
     "clickToDeleteCustomer": "গ্রাহক মুছে ফেলার জন্য এখানে ক্লিক করুন একবার মুছে ফেলা সতর্ক করা হবে, একটি গ্রাহক পুনরুদ্ধার করা যাবে না।",
     "deleteCustomer": "গ্রাহক মুছুন",
     "noCustomerFound": "কোনো গ্রাহক পাওয়া যায় নি।",
-
     "searchForCustomerInput": "গ্রাহকের নাম/নম্বর",
     "searchForCustomerInputError": "গ্রাহকের সন্ধানে ত্রুটি",
-
     "customerName": "গ্রাহকের নাম"
   },
   "editProfile": {
@@ -438,7 +439,6 @@
     "productList": "পণ্য তালিকা",
     "product": "পণ্য",
     "noSalesReturnFound": "কোনো বিক্রয় ফেরত রেকর্ড পাওয়া যায় নি।",
-
     "shouldSaveReturnableInChangeWallet": "ফেরতযোগ্য অর্থ ক্রেতার ওয়ালেট এ সংরক্ষণ করা হোক?",
     "returnedCount": "ফেরৎ গণনা"
   },
@@ -473,11 +473,14 @@
     "wasDebitedToUser": "গ্রাহককে ডেবিট করা হয়েছিল।",
     "allReturned": "সব ফেরত",
     "noSalesFound": "কোনো বিক্রয় রেকর্ড পাওয়া যায় নি।",
-
     "soldCount": "বিক্রয় গণনা",
     "returnedCount": "ফেরৎ গণনা",
-
-    "isCredit": "বাকি"
+    "isCredit": "বাকি",
+    "printReceipt": "রসিদ প্রিন্ট করুন",
+    "warnDiscared": "সতর্কবার্তা! এই বিক্রয় রেকর্ড বাতিল করা হয়েছে।",
+    "receiptTitle": "বিক্রয় রসিদ",
+    "printedBy": "প্রিন্ট করেছেন",
+    "soldBy": "বিক্রয়কারী"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
@@ -538,19 +541,21 @@
     "discountType": "ছাড় প্রকার",
     "discountValueInput": "ছাড় পরিমান",
     "discountValueInputError": "একটি সঠিক নম্বর লিখুন",
-    "discountedAmount": "ছাড়ের পরিমাণ",
+    "discountedAmount": "ছাড়ের পরিমান",
     "vatInput": "ভ্যাট",
     "vatInputError": "একটি সঠিক নম্বর লিখুন",
-    "vatAmount": "ভ্যাট পরিমাণ",
-    "serviceChargeInput": "সেবা মূল্য",
+    "vatAmount": "ভ্যাট পরিমান",
+    "serviceChargeInput": "সার্ভিস চার্জ",
     "serviceChargeInputError": "একটি সঠিক নম্বর লিখুন",
+    "totalAmount": "মোট পরিমান",
     "totalBilled": "মোট বিল",
     "previousCustomerBalance": "পূর্ববর্তী গ্রাহক ব্যালেন্স",
-    "paidAmountInput": "পরিশোধিত পরিমাণ",
+    "paidAmountInput": "পরিশোধিত পরিমান",
     "paidAmountInputError": "একটি সঠিক নম্বর লিখুন",
     "changeAmount": "ফেরত পরিমান",
     "changeAmountIfNegative": "বকেয়া পরিমান",
     "confirmSales": "বিক্রয় নিশ্চিত করুন",
+    "confirmSalesAndPrint": "বিক্রয় করে প্রিন্ট করুন",
     "sellingPrice": "বিক্রি দাম",
     "discount": "ছাড়",
     "vat": "ভ্যাট",
@@ -558,7 +563,7 @@
     "shouldSaveChangeInAccountStart": "এই",
     "shouldSaveChangeInAccountEnd": "ফেরত না দিয়ে গ্রাহকের একাউন্টএ জমা রাখা হোক। ",
     "allowCreditSaleMessage": "এই টাকা গ্রাহকের একাউন্টএ বকেয়া হিসাবে জমা রাখা হোক।",
-    "creditSaleHint": "প্রদত্ত পরিমাণ, মোট প্রদেয় পরিমাণের চেয়ে কম এন্ট্রি দেওয়া হয়েছে। একটি ক্রেডিট বিক্রয় করার জন্য, আপনাকে একটি গ্রাহক নির্বাচন বা যুক্ত করতে হবে এবং ক্রেডিট বিক্রয় অনুমোদন করতে হবে। ",
+    "creditSaleHint": "প্রদত্ত পরিমান, মোট প্রদেয় পরিমানের চেয়ে কম এন্ট্রি দেওয়া হয়েছে। একটি ক্রেডিট বিক্রয় করার জন্য, আপনাকে একটি গ্রাহক নির্বাচন বা যুক্ত করতে হবে এবং ক্রেডিট বিক্রয় অনুমোদন করতে হবে। ",
     "paymentMethod": "মূল্যপরিশোধ পদ্ধতি"
   },
   "salesReport": {
@@ -573,12 +578,12 @@
     "showSalesProductDetails": "বিক্রয় এবং পণ্যের বিবরণ দেখান হোক",
     "author": "রচক",
     "particulars": "বিবরণ",
-    "billedAmount": "বিল পরিমাণ",
+    "billedAmount": "বিল পরিমান",
     "sales": "বিক্রয়",
     "soldTo": "গ্রাহক",
     "products": "পণ্য",
     "total": "মোট",
-    "discountedAmount": "ছাড়ের পরিমাণ",
+    "discountedAmount": "ছাড়ের পরিমান",
     "vat": "ভ্যাট",
     "serviceCharge": "সেবা মূল্য",
     "previousBalance": "পূর্বের হিসাব"
@@ -590,7 +595,6 @@
     "author": "রচক",
     "noProductInInventory": "এই পণ্য তালিকায় কোনো পণ্য নেই।",
     "filterInventoriesButton": "পণ্য তালিকা সংকীর্ণকারক",
-
     "selectInventoriesTitle": "পণ্য তালিকা নির্বাচন",
     "selectionTableTitle": "পণ্য তালিকা নির্বাচন ছক",
     "deselectAll": "সব নির্বাচন মুছে দিন",
@@ -620,8 +624,8 @@
     "monetaryUnit": "মুদ্রা",
     "monetaryUnitDetail": "নোট: আর্থিক মুদ্রা পরিবর্তন আপনার বিক্রয় প্রভাবিত করে না।",
     "moreOptionsForthcoming": "আরো সেটিংস আসন্ন।",
-    "minimumProductQuantity": "নূন্যতম পণ্য পরিমাণ",
-    "minimumProductQuantityDetail": "এই সংখ্যাটির নীচে পণ্য পরিমাণটি লাল রঙিন হবে।"
+    "minimumProductQuantity": "নূন্যতম পণ্য পরিমান",
+    "minimumProductQuantityDetail": "এই সংখ্যাটির নীচে পণ্য পরিমানটি লাল রঙিন হবে।"
   },
   "verify": {
     "verificationModalTitle": "যাচাইকরণ এসএমএস পাঠানো হয়েছে",
@@ -659,7 +663,6 @@
     "pageTitle": "একাধিক পণ্যের ধরন তৈরি",
     "downloadSectionTip": "ফাইলটি সংগ্রহ করুন, আমরা এই ফাইলটি ব্যবহার করে একাধিক পণ্যের ধরণ একসাথে তৈরি করবো;",
     "downloadButtonLabel": "ফাইল সংগ্রহ করুন",
-
     "instructionOne": "১. সংগ্রহীত ফাইলটি: 'Lipi Product Category Bulk Upload CSV.csv', একটি CSV (সি এস ভি) জাতীয় ফাইল, যেকোনো স্প্রেডশীট সফটওয়্যার ব্যবহার করে আপনি ফাইলটি দেখতে এবং পাল্টাতে পারবেন। ফাইলটি দেখতে এরকম হবে;",
     "instructionTwo": "২. পণ্য ধরণের একটি নাম (Name) দিন যেটি আগে ব্যবহত হয়নি, এভাবে;",
     "instructionThree": "৩. পণ্য ধরণের একটি একক (Unit) দিন, যেমন: কেজি, পিস অথবা বাক্স;",
@@ -667,16 +670,13 @@
     "instructionFive": "৫. ছাড় এর ধরণ দিন Discount Type এর নিচে, শতাংশ ছাড় হলে percent লিখুন, নির্ধারিত অর্থ ছাড় হলে fixed লিখুন। এবং ছাড় এর পরিমান দিন Discount Amount এর নিচে, এভাবে;",
     "instructionSix": "৬. Returnable এর নিচে yes (হ্যা) দিন যদি পণ্য ফেরতযোগ্য হয়ে, no (না) দিন যদি নয়;",
     "instructionSeven": "৭. সকল স্থান পূরণ থাকতে হবে, নাহলে লিপি ফাইলটি গ্রহণ করবে না;",
-
     "uploadSectionTip": "পণ্যের ধরণ ধারণকারী CSV ফাইলটি জমা করুন;",
     "uploadButtonLabel": "ফাইল জমা করুন",
-
-    "successfullyImported" : "ফাইল পড়তে সফল, মোট পণ্যের ধরণ তৈরি হয়েছে",
+    "successfullyImported": "ফাইল পড়তে সফল, মোট পণ্যের ধরণ তৈরি হয়েছে",
     "rowsIgnored": "নিম্নলিখিত সারিগুলো উপেক্ষা করা হয়েছে",
     "row": "সারি",
     "nameUsed": "এই নামের পণ্য ধরণ ইতিমধ্যে আছে",
     "errorOccurred": "ত্রুটি দেখা দিয়েছে, সমাধান করুন এবং আবার চেষ্টা করুন",
-
     "unknownErrorWhileReadingFile": "ফাইল পড়ার সময় অপ্রত্যাশিত ত্রুটি দেখা দিয়েছে",
     "multipleFilesSelectedTitle": "একাধিক ফাইল নির্বাচিত",
     "multipleFilesSelectedBody": "একটি ফাইল নির্বাচন করুন।",
@@ -690,18 +690,27 @@
   },
   "additionalPayment": {
     "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
-    "paidAmountInput": "পরিশোধিত পরিমাণ",
+    "paidAmountInput": "পরিশোধিত পরিমান",
     "paidAmountInputError": "একটি সঠিক নম্বর লিখুন",
     "changeAmount": "ফেরত পরিমান",
     "shouldSaveChangeInAccount": "অর্থ প্রদানের পরিবর্তে গ্রাহকের অ্যাকাউন্ট সংরক্ষণ করুন",
     "addAdditionalPayment": "অতিরিক্ত অর্থ প্রদান করুন",
-    "dueAmount": "বাকি অর্থ"
+    "dueAmount": "বাকি"
   },
   "withdrawFromChangeWalletBalance": {
     "withdrawFromChangeWalletBalanceTitle": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স থেকে সরান",
-    "amountInput": "অর্থ পরিমাণ",
-    "amountInputError": "অর্থ পরিমাণ লিখুন",
+    "amountInput": "অর্থ পরিমান",
+    "amountInputError": "অর্থ পরিমান লিখুন",
     "withdraw": "সরান",
     "customerBalanceUpdated": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স আপডেট হয়ে গিয়েছে।"
+  },
+  "editProduct": {
+    "editProductTitle": "পণ্য সম্পাদনা করুন",
+    "updateProduct": "পণ্য আপডেট করুন",
+    "purchasedForInput": "ক্রয় মূল্য",
+    "purchasedForInputError": "একটি বৈধ ক্রয়মূল্য লিখুন",
+    "sellForInput": "বিক্রয় মূল্য",
+    "sellForInputError": "একটি বৈধ বিক্রয়মূল্য লিখুন",
+    "productUpdated": "পণ্য আপডেট করা হয়েছে"
   }
 }

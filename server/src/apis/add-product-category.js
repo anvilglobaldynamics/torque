@@ -35,7 +35,7 @@ exports.AddProductCategoryApi = class extends Api.mixin(ProductCategoryMixin) {
     return [{
       organizationBy: "organizationId",
       privileges: [
-        "PRIV_MODIFY_ALL_INVENTORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
       ]
     }];
   }

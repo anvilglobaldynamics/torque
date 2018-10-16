@@ -2,8 +2,9 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const { ProductCategoryMixin } = require('./mixins/product-category-mixin');
 
-exports.EditProductCategoryApi = class extends Api {
+exports.EditProductCategoryApi = class extends Api.mixin(ProductCategoryMixin) {
 
   get autoValidates() { return true; }
 
@@ -39,16 +40,9 @@ exports.EditProductCategoryApi = class extends Api {
         errorCode: "PRODUCT_CATEGORY_INVALID"
       },
       privileges: [
-        "PRIV_MODIFY_ALL_INVENTORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
       ]
     }];
-  }
-
-  async _checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat }) {
-    let salePriceAfterVat = defaultSalePrice + defaultSalePrice * defaultVat / 100;
-    if (defaultDiscountValue && defaultDiscountType === 'fixed' && defaultDiscountValue > salePriceAfterVat) {
-      throw new CodedError("DISCOUNT_VALUE_INVALID", "the discount value is more than sale price");
-    }
   }
 
   async _updateProductCategory({ productCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {

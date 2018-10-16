@@ -232,6 +232,11 @@
         this.callCombinedJsonApi('hire-user-as-employee', data, cbfn);
       }
 
+      callGetUserDisplayInformationApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-user-display-information', data, cbfn);
+      }
+
       callFindUserApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('find-user', data, cbfn);
@@ -315,6 +320,16 @@
       callAddProductToInventoryApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('add-product-to-inventory', data, cbfn);
+      }
+
+      callGetProductApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-product', data, cbfn);
+      }
+
+      callEditInventoryProductApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-inventory-product', data, cbfn);
       }
 
       callGetCustomerListApi(data, cbfn) {

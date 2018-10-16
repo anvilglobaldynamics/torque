@@ -39,6 +39,11 @@
       .low-product-count-div {
         color: red;
       }
+
+      .edit-button {
+        /* border: 1px solid red; */
+        margin-right: 10px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -94,15 +99,10 @@
                     <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
                   </div>
 
+                  <iron-icon class="button-icon edit-button" icon="icons:create" on-tap="editTapped"></iron-icon>
+
                   <template is="dom-if" if="[[product.count]]">                    
                     <paper-button raised class="secondary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
-                    
-                    <!-- <template is="dom-if" if="[[product.isSelected]]">
-                      <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.general.count]]">
-                        <div slot="suffix">&nbsp;[[product.unit]]</div>
-                      </paper-input>
-                      <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
-                    </template> -->
                   </template>
 
                 </div>
@@ -424,7 +424,6 @@
         this._processInventory(() => this.isReady = true);
       }
 
-
       searchFieldKeypressed(e) {
         if (e.which === 13) this.searchTapped(null);
       }
@@ -440,6 +439,12 @@
 
       genericSelectedCountInputChanged(e) {
         this.enforceMinMaxOnPaperInput(e);
+      }
+
+      editTapped(e) {
+        let { product } = e.model;
+        let inventoryId = parseInt(this.params.inventory);
+        return this.app.navigateTo(`/edit-product/product:${product.productId}/inventory:${inventoryId}`);
       }
 
       // region: misc =================================

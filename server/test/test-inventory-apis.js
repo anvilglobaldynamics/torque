@@ -23,6 +23,7 @@ let {
   validateAggregatedProductScema,
   validateProductCategorySchema,
   validateProductSchema,
+  validateGetProductApiSuccessResponse,
   validateAddProductToInventoryApiSuccessResponse
 } = require('./lib');
 
@@ -66,6 +67,7 @@ let outletReturnedInventoryId = null;
 let outletDamagedInventoryId = null;
 
 let productToBeTransferred = null;
+let productToBeEditedId = null;
 
 let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
@@ -472,6 +474,81 @@ describe('Inventory', _ => {
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(3);
+      productToBeEditedId = body.aggregatedProductList[0].productId;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/edit-inventory-product (Invalid inventoryId)', testDoneFn => {
+
+    callApi('api/edit-inventory-product', {
+      json: {
+        apiKey,
+        productId: productToBeEditedId,
+        inventoryId: invalidInventoryId,
+        purchasePrice: 100,
+        salePrice: 110
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('INVENTORY_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/edit-inventory-product (Invalid productId)', testDoneFn => {
+
+    callApi('api/edit-inventory-product', {
+      json: {
+        apiKey,
+        productId: invalidInventoryId,
+        inventoryId: outletDefaultInventoryId,
+        purchasePrice: 100,
+        salePrice: 110
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('PRODUCT_NOT_IN_INVENTORY');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/edit-inventory-product (Valid)', testDoneFn => {
+
+    callApi('api/edit-inventory-product', {
+      json: {
+        apiKey,
+        productId: productToBeEditedId,
+        inventoryId: outletDefaultInventoryId,
+        purchasePrice: 100,
+        salePrice: 210
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+  
+  it('api/get-product (Valid product modification check)', testDoneFn => {
+
+    callApi('api/get-product', {
+      json: {
+        apiKey,
+        productId: productToBeEditedId,
+        inventoryId: outletDefaultInventoryId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetProductApiSuccessResponse(body);
+      validateProductSchema(body.product);
+      expect(body.product.salePrice).equals(210);
       testDoneFn();
     });
 

@@ -37,7 +37,7 @@ exports.AddProductCategoryApi = class extends collectionCommonMixin(LegacyApi) {
     return [{
       organizationBy: "organizationId",
       privileges: [
-        "PRIV_MODIFY_ALL_INVENTORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
       ]
     }];
   }

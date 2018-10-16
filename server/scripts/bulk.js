@@ -74,6 +74,8 @@ const makeEmailId = () => {
   return `${rnd(emailPrefix)}@gmail.com`;
 }
 
+let uid = 0;
+
 // --------------------------------------------------------------
 
 const utils = require('./../test/utils.js');
@@ -115,7 +117,7 @@ const createOrganization = async ({ apiKey }, db) => {
 
   let { organizationId } = await callApi('api/add-organization', {
     apiKey,
-    name: (pickOne(adjectiveList) + 'Company'),
+    name: (pickOne(adjectiveList) + ' Company ' + (uid++)),
     primaryBusinessAddress: 'ADDRESS GOES HERE',
     phone: makePhoneNumber(),
     email: makeEmailId()
@@ -132,7 +134,7 @@ const createProductCategory = async ({ apiKey, organizationId }) => {
   let { productCategoryId } = await callApi('api/add-product-category', {
     apiKey,
     organizationId,
-    name: pickOne(nounList) + "Category",
+    name: pickOne(nounList) + " Category " + (uid++),
     unit: "kg",
     defaultDiscountType: "percent",
     defaultDiscountValue: 10,
@@ -200,24 +202,19 @@ const createEmployee = async ({ apiKey, organizationId }) => {
     privileges: {
       PRIV_VIEW_USERS: true,
       PRIV_MODIFY_USERS: true,
-      PRIV_ADD_USER: true,
-      PRIV_MAKE_USER_AN_OWNER: true,
-      PRIV_MODIFY_USER_PRIVILEGES: true,
 
       PRIV_ACCESS_POS: true,
       PRIV_VIEW_SALES: true,
       PRIV_MODIFY_SALES: true,
       PRIV_ALLOW_FLAT_DISCOUNT: true,
-      PRIV_ALLOW_INDIVIDUAL_DISCOUNT: true,
-      PRIV_ALLOW_FOC: true,
 
       PRIV_VIEW_SALES_RETURN: true,
       PRIV_MODIFY_SALES_RETURN: true,
 
       PRIV_VIEW_ALL_INVENTORIES: true,
-      PRIV_MODIFY_ALL_INVENTORIES: true,
+      PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
       PRIV_TRANSFER_ALL_INVENTORIES: true,
-      PRIV_REPORT_DAMAGES_IN_ALL_INVENTORIES: true,
+      PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
       PRIV_VIEW_ALL_OUTLETS: true,
       PRIV_MODIFY_ALL_OUTLETS: true,
@@ -229,9 +226,8 @@ const createEmployee = async ({ apiKey, organizationId }) => {
       PRIV_MODIFY_ORGANIZATION: true,
 
       PRIV_VIEW_CUSTOMER: true,
-      PRIV_ADD_CUSTOMER_DURING_SALES: true,
       PRIV_MODIFY_CUSTOMER: true,
-      PRIV_MANAGE_CUSTOMER_DEBT: true
+      PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
     }
   });
 
@@ -259,6 +255,7 @@ const createSales = async ({ apiKey, outletId, productList }) => {
     product.discountType = 'fixed';
     product.discountValue = 0;
     product.salePrice = 200
+    product.vatPercentage = 5;
   });
 
   let { salesId } = await callApi('api/add-sales', {
