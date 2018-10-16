@@ -172,15 +172,15 @@
             <div><b>[[verses.sales.warnDiscared]]</b></div>
           </template>
 
-          <template is="dom-if" if="{{sales.customerId}}">
-            <div class="horizontal layout customer-area">
+          <div class="horizontal layout customer-area">
+            <template is="dom-if" if="{{sales.customerId}}">
               <div><b>[[verses.customer.customerName]]:</b> [[customer.fullName]]</div>
               <div class="flex"></div>
               <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
-              <div class="flex"></div>
-              <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
-            </div>
-          </template>
+            </template>
+            <div class="flex"></div>
+            <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
+          </div>
 
           <table class="product-table">
             <tr>
