@@ -653,7 +653,10 @@
     "buyingPrice": "ক্রয় মূল্য",
     "sellingPrice": "বিক্রয় মূল্য",
     "acquiredOn": "খরিদ হয়েছে",
-    "addedOn": "যুক্ত হয়েছে"
+    "addedOn": "যুক্ত হয়েছে",
+
+    "transferInventoryHelp": "একটি পণ্য তালিকা থেকে অন্য পণ্য তালিকায় পণ্য সরাতে পারেন। পণ্য বাছাই শুরু করতে নিচে ক্লিক করুন।",
+    "selectProductsToTransfer": "সরানোর জন্য পণ্য বাছাই"
   },
   "payment": {
     "packageHasExpired": "আপনার প্যাকেজের মেয়াদ শেষ হয়ে গেছে।",

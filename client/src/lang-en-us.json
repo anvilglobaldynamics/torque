@@ -651,7 +651,10 @@
     "buyingPrice": "Buying Price",
     "sellingPrice": "Selling Price",
     "acquiredOn": "Acquired On",
-    "addedOn": "Added On"
+    "addedOn": "Added On",
+
+    "transferInventoryHelp": "Product can be transfered between inventories. You can start selecting product(s) to be transfered by clicking below.",
+    "selectProductsToTransfer": "Select Products to Transfer"
   },
   "payment": {
     "packageHasExpired": "Your package has expired.",
