@@ -361,7 +361,8 @@
   },
   "customer": {
     "editCustomerTitle": "গ্রাহক সম্পাদনা করুন",
-    "withdrawFromChangeWalletBalance": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স থেকে সরান",
+    "changeWalletBalanceTip": "বিক্রির পর ফেরতযোগ্য অর্থ পরিশোধ না করা হলে ক্রেতার আকাউন্ট ব্যালান্স এ জমা হয়। ফিরিয়ে দিতে নিচে ক্লিক করুন। ",
+    "withdrawFromChangeWalletBalance": "ফিরিয়ে দিন",
     "addCustomerTitle": "গ্রাহক যুক্ত করুন",
     "customerNameInput": "গ্রাহকের নাম",
     "customerNameInputError": "একটি সঠিক নাম লিখুন",
@@ -380,7 +381,7 @@
     "deleteCustomerQuestionPartOne": "আপনি কি এই গ্রাহককে মুছে ফেলতে চান?",
     "deleteCustomerQuestionPartTwo": "একবার মুছে ফেলা হলে, আপনি এই গ্রাহকটি পুনরুদ্ধার করতে পারবেন না।",
     "customerDeleted": "গ্রাহক মোছা হয়েছে",
-    "withdrawalHistory": "অর্থ অপসারণ ইতিহাস",
+    "withdrawalHistory": "অর্থ ফেরতের ইতিহাস",
     "acceptedBy": "দ্বারা গৃহীত",
     "clickToEditCustomer": "গ্রাহক সম্পাদনা করতে এখানে ক্লিক করুন।",
     "editCustomer": "গ্রাহক সম্পাদনা",
@@ -441,12 +442,12 @@
     "productList": "পণ্য তালিকা",
     "product": "পণ্য",
     "noSalesReturnFound": "কোনো বিক্রয় ফেরত রেকর্ড পাওয়া যায় নি।",
-    "shouldSaveReturnableInChangeWallet": "ফেরতযোগ্য অর্থ ক্রেতার ওয়ালেট এ সংরক্ষণ করা হোক?",
+    "shouldSaveReturnableInChangeWallet": "ফেরতযোগ্য অর্থ ক্রেতার আকাউন্ট ব্যালান্স এ সংরক্ষণ করা হোক?",
     "returnedCount": "ফেরৎ গণনা"
   },
   "sales": {
     "manageSalesTitle": "বিক্রয় রেকর্ড",
-    "salesId": "বিক্রয় আইডি",
+    "salesId": "বিক্রয় নং",
     "billed": "বিল",
     "paid": "প্রদত্ত",
     "products": "পণ্য",
@@ -482,7 +483,9 @@
     "warnDiscared": "সতর্কবার্তা! এই বিক্রয় রেকর্ড বাতিল করা হয়েছে।",
     "receiptTitle": "বিক্রয় রসিদ",
     "printedBy": "প্রিন্ট করেছেন",
-    "soldBy": "বিক্রয়কারী"
+    "soldBy": "বিক্রয়কারী",
+
+    "productReturn": "পণ্য ফেরত"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
@@ -700,8 +703,8 @@
     "paidAmountInputError": "একটি সঠিক নম্বর লিখুন",
     "changeAmount": "ফেরত পরিমান",
     "shouldSaveChangeInAccount": "অর্থ প্রদানের পরিবর্তে গ্রাহকের অ্যাকাউন্ট সংরক্ষণ করুন",
-    "addAdditionalPayment": "অতিরিক্ত অর্থ প্রদান করুন",
-    "dueAmount": "বাকি"
+    "addAdditionalPayment": "অতিরিক্ত অর্থ গ্রহণ করুন",
+    "dueAmount": "বাকি অর্থ"
   },
   "withdrawFromChangeWalletBalance": {
     "withdrawFromChangeWalletBalanceTitle": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স থেকে সরান",

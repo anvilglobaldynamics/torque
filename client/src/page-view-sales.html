@@ -60,14 +60,14 @@
 
       <div class="card vertical layout">
 
-        <div>
-          [[verses.general.id]]: [[sales.id]]
+        <div style="font-weight: bold;">
+          [[verses.sales.salesId]]: [[sales.id]]
         </div>
         <div>[[verses.general.dated]]: [[$mkDate(sales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-        <div>[[verses.sales.outletId]]: [[sales.outletId]]</div>
+        <!-- <div>[[verses.sales.outletId]]: [[sales.outletId]]</div>
         <template is="dom-if" if="{{sales.customerId}}">
           <div>[[verses.sales.customerId]]: [[sales.customerId]]</div>
-        </template>
+        </template> -->
 
         <paper-button raised class="secondary" on-tap="printReceiptTapped">[[verses.sales.printReceipt]]</paper-button>
 
@@ -98,7 +98,7 @@
                 </template>
 
                 <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}">
-                  <paper-button raised class="danger return-button" on-tap="returnTapped">[[verses.general.return]]</paper-button>
+                  <paper-button raised class="danger return-button" on-tap="returnTapped">[[verses.sales.productReturn]]</paper-button>
                 </template>
 
               </div>
@@ -120,7 +120,7 @@
         <div>[[verses.sales.vat]]: [[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</div>
         <div>[[verses.sales.totalPaid]]: [[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</div>
 
-        <div>
+        <div style="margin-top: 10px;">
           <b>[[verses.sales.paymentList]]:</b>
         </div>
         <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
@@ -140,7 +140,7 @@
 
       <template is="dom-if" if="{{sales.customerId}}">
         <div class="card vertical layout">
-          <div>[[verses.customer.customerName]] [[customer.fullName]]</div>
+          <div>[[verses.customer.customerName]]: [[customer.fullName]]</div>
           <div>[[verses.general.balance]]: [[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</div>
           <div>[[verses.general.number]]: [[customer.phone]]</div>
         </div>

@@ -359,7 +359,8 @@
   },
   "customer": {
     "editCustomerTitle": "Edit Customer",
-    "withdrawFromChangeWalletBalance": "Withdraw from customer account balance",
+    "changeWalletBalanceTip": "Unpaid Change Amount from sales are stoed in Customer Account Balance. You can withdraw it by clicking below.",
+    "withdrawFromChangeWalletBalance": "Withdraw",
     "addCustomerTitle": "Add Customer",
     "customerNameInput": "Name of your customer.",
     "customerNameInputError": "Enter a valid name",
@@ -418,6 +419,7 @@
   "salesReturn": {
     "pageTitle": "Return Sales",
     "soldCount": "Sold Count",
+    "salePrice": "Sale Price",
     "returnCount": "Return Count",
     "productReturnCountInput": "Product Return Count",
     "productReturnCountInputError": "Enter a valid number",
@@ -438,12 +440,12 @@
     "productList": "Product List",
     "product": "Product",
     "noSalesReturnFound": "No Sales Return Record Found.",
-    "shouldSaveReturnableInChangeWallet": "Should save returnable in change wallet?",
+    "shouldSaveReturnableInChangeWallet": "Should save returnable amount in customer balance?",
     "returnedCount": "Returned Count"
   },
   "sales": {
     "manageSalesTitle": "Sales Record",
-    "salesId": "Sales Id",
+    "salesId": "Sales Number",
     "billed": "Billed",
     "paid": "Paid",
     "products": "product(s)",
@@ -479,7 +481,9 @@
     "warnDiscared": "WARNING! This sale has been discarded.",
     "receiptTitle": "Sales Receipt ",
     "printedBy": "Printed By",
-    "soldBy": "Sold By"
+    "soldBy": "Sold By",
+
+    "productReturn": "Return Product"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",
@@ -698,7 +702,7 @@
     "paidAmountInputError": "Enter a valid number",
     "changeAmount": "Change Amount",
     "shouldSaveChangeInAccount": "Save in customer's account instead of paying cash.",
-    "addAdditionalPayment": "Add Additional Payment",
+    "addAdditionalPayment": "Collect Additional Payment",
     "dueAmount": "Due amount"
   },
   "withdrawFromChangeWalletBalance": {
