@@ -632,7 +632,7 @@
     "monetaryUnitDetail": "নোট: আর্থিক মুদ্রা পরিবর্তন আপনার বিক্রয় প্রভাবিত করে না।",
     "moreOptionsForthcoming": "আরো সেটিংস আসন্ন।",
     "minimumProductQuantity": "নূন্যতম পণ্য পরিমান",
-    "minimumProductQuantityDetail": "এই সংখ্যাটির নীচে পণ্য পরিমানটি লাল রঙিন হবে।"
+    "minimumProductQuantityDetail": "এই সংখ্যাটির নীচে পণ্য গণনা লাল রঙে দেখানো হবে।"
   },
   "verify": {
     "verificationModalTitle": "যাচাইকরণ এসএমএস পাঠানো হয়েছে",
