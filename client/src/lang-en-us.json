@@ -212,17 +212,17 @@
     "contactNumber": "Contact Number",
     "editOutlet": "Edit Outlet",
     "deleteOutlet": "Delete Outlet",
-    "goToPos": "Go to POS (Point of Sale) to start selling from this organization.",
+    "goToPos": "Go to POS (Point of Sale) to start selling from this Outlet.",
     "inventory": "Inventory",
-    "goToDefaultInventory": "This is the main inventory.",
+    "goToDefaultInventory": "You can sell products only from this inventory.",
     "goToReturnedInventory": "Products that are returned by the customer go in here.",
-    "goToDamagedInventory": "Products that are damaged by the customer go in here.",
-    "previousSales": "Previous Sales",
-    "goToPreviousSales": "View/Return previous sales.",
+    "goToDamagedInventory": "Products that are damaged go in here.",
+    "previousSales": "Sales Record",
+    "goToPreviousSales": "View sales records of this outlet.",
     "defaultInventoryName": "Default",
     "returnedInventoryName": "Returned",
     "damagedInventoryName": "Damaged",
-    "noOutletFound": "No Outlet Found."
+    "noOutletFound": "No Outlet has been created in your Organization."
   },
   "productCategory": {
     "manageProductCategoriesTitle": "Manage Product Categories",
@@ -257,7 +257,9 @@
     "createNewProductCategory": "Create New Product Category",
     "searchForProductCategoryInput": "Product Category name",
     "searchForProductCategoryInputError": "Error in Search for Product Category",
-    "bulkImport": "Bulk Product Category Creation"
+    "bulkImport": "Bulk Product Category Creation",
+
+    "whatIsProductCategoryMessage": "Product Category is the blueprint of a Product. Product Category needs to be added only once for a Product. Information of Product Category will be reused in all Product related tasks."
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "Customer name or phone.",
@@ -322,7 +324,7 @@
     "count": "Count",
     "sellFor": "Sell",
     "purchasedFor": "Purchase",
-    "noProductCategoryFound": "No product category found."
+    "noProductCategoryFound": "No product category found. Add as \"Product Catogory\" first to add it as a Product to this inventory."
   },
   "addProducts": {
     "searchInputLabel": "Product Category Name",
@@ -515,7 +517,7 @@
     "defaultInventoryName": "Default",
     "returnedInventoryName": "Returned",
     "damagedInventoryName": "Damaged",
-    "noWarehouseFound": "No Warehouse Found."
+    "noWarehouseFound": "No Warehouse has been created in your Organization."
   },
   "error": {
     "404": "404",
@@ -608,7 +610,7 @@
     "confirmSelection": "Confirm Selection",
     "acquiredOn": "Acquired On",
     "addedOn": "Added On",
-    "noProductFoundInOutlet": "There is no product in the store's main product list.",
+    "noProductFoundInOutlet": "No products found. Go back and products to the Outlet's default inventory.",
     "searchForProductInput": "Product Name",
     "searchForProductInputError": "Error in Search"
   },
@@ -643,8 +645,8 @@
     "totalSelectedProducts": "Total selected products",
     "moveToInventory": "Move to Inventory",
     "moveSelected": "Move Selected",
-    "addProductsBatchToInventory": "Add products to this inventory in batch.",
-    "addProducts": "Add Products",
+    "addProductsBatchToInventory": "Add products to this inventory.",
+    "addProducts": "Add Products to this inventory",
     "noProductsInInventory": "No products in this Inventory.",
     "buyingPrice": "Buying Price",
     "sellingPrice": "Selling Price",
