@@ -395,6 +395,7 @@
           return { count, productId };
         });
         this._processMoveProducts({ fromInventoryId, toInventoryId, productList }, () => {
+          this.isProductSelectionForInitiated = false;
           this._deselectAllFromSelectedProductList();
           let message = this.app.verses.inventory.selectedProductsMoved;
           this.app.showToast(message, () => {
