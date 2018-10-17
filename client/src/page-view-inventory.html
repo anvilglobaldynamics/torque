@@ -179,9 +179,12 @@
       </template>
 
       <!-- add products trigger -->
+      <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
+
+      <!-- transfer products trigger -->
       <div class="card">
-        <div class="mb-4">[[verses.inventory.addProductsBatchToInventory]]</div>
-        <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
+        <div class="mb-4">[[verses.inventory.transferInventoryHelp]]</div>
+        <paper-button raised style="width: 100%;" class="secondary" on-tap="selectProductsToTransferTapped">[[verses.inventory.selectProductsToTransfer]]</paper-button>
       </div>
 
     </div>
@@ -403,6 +406,9 @@
       addProductsTapped(e) {
         return this.app.navigateTo(`/add-products/inventory:${this.inventoryId}`);
       }
+
+      // TODO:
+      selectProductsToTransferTapped(e) {}
 
       $isProductCountLow(count) {
         if (count <= parseInt(this.app.settings.minimumProductQuantity)) {
