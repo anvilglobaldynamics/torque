@@ -274,6 +274,7 @@
   },
   "commonEmploymentDetails": {
     "privileges": "বিশেষাধিকার",
+    "privilegesTip": "একজন কর্মচারী কি কি ফিচার ব্যবহার করতে পারবে তা আপনি বিশেষধিকার বাছাই এর মাধ্যমে নিয়ত্রন করতে পারবেন",
     "roleOfEmployeeInput": "কর্মচারীর ভূমিকা",
     "roleOfEmployeeInputError": "একটি সঠিক ভূমিকা লিখুন",
     "designationOfEmployeeInput": "কর্মচারী পদবী",
