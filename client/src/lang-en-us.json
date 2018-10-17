@@ -563,7 +563,8 @@
     "shouldSaveChangeInAccountEnd": " in this customer's account instead of paying cash now.",
     "allowCreditSaleMessage": "Save this amount as due in customer's account.",
     "creditSaleHint": " The paid amount is less than total amount billed. In order to do a credit sale, you need to select/create a customer and allow credit sale.",
-    "paymentMethod": "Payment Method"
+    "paymentMethod": "Payment Method",
+    "thisWillBeACreditSale": "This will be a Credit Sale. Additional Payment can be collected later from View Sales Page."
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",

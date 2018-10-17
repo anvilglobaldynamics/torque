@@ -253,6 +253,9 @@
                 </template>
               </template>
 
+              <template is="dom-if" if="[[isValidCreditSale(customer, payment.totalBilled, payment.paidAmount)]]">
+                [[verses.pos.thisWillBeACreditSale]]
+              </template>
 
             </div>
 
@@ -585,6 +588,10 @@
 
       isPaymentMethodChangeWallet(paymentMethod) {
         return (paymentMethod === 'change-wallet');
+      }
+
+      isValidCreditSale(customer, totalBilled, paidAmount) {
+        return (customer && totalBilled > paidAmount);
       }
 
       // region: misc =================================
