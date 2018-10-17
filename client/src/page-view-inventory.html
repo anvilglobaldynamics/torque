@@ -44,6 +44,16 @@
         /* border: 1px solid red; */
         margin-right: 10px;
       }
+
+      .selected-products-text {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .move-to-inventory-help {
+
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -99,10 +109,16 @@
                     <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
                   </div>
 
-                  <iron-icon class="button-icon edit-button" icon="icons:create" on-tap="editTapped"></iron-icon>
+                  <!-- edit -->
+                  <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
+                    <iron-icon class="button-icon edit-button" icon="icons:create" on-tap="editTapped"></iron-icon>
+                  </template>
 
-                  <template is="dom-if" if="[[product.count]]">                    
-                    <paper-button raised class="secondary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+                  <!-- select -->
+                  <template is="dom-if" if="[[isProductSelectionForInitiated]]">
+                    <template is="dom-if" if="[[product.count]]">                    
+                      <paper-button raised class="secondary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+                    </template>
                   </template>
 
                 </div>
@@ -130,7 +146,9 @@
       <!-- section shows selected products -->
       <template is="dom-if" if="[[selectedProductList.length]]">
         <div class="card vertical layout">
-          <div>[[verses.inventory.totalSelectedProducts]]: [[selectedProductCount]]</div>
+          <div class="selected-products-text">
+            [[verses.inventory.totalSelectedProducts]]: [[selectedProductCount]]
+          </div>
 
           <div class="list">
             <template is="dom-repeat" items="[[selectedProductList]]" as="product">
@@ -166,7 +184,11 @@
         <!-- section handles inventory transfer -->
         <div class="card vertical layout">
 
-          <paper-dropdown-menu label="[[verses.inventory.moveToInventory]]" style="width: 100%;">
+          <div class="move-to-inventory-help">
+            [[verses.inventory.moveSelectedHelp]]
+          </div>
+
+          <paper-dropdown-menu style="width: 100%;">
             <paper-listbox slot="dropdown-content" selected="{{targetInventoryIndex}}">
               <template is="dom-repeat" items="[[inventoryList]]" as="inventory">
                 <paper-item data-id="[[inventory.id]]">[[inventory.inventoryContainerName]] - [[inventory.name]]</paper-item>
@@ -179,12 +201,20 @@
       </template>
 
       <!-- add products trigger -->
-      <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
+      <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
+        <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
+      </template>
 
       <!-- transfer products trigger -->
       <div class="card">
-        <div class="mb-4">[[verses.inventory.transferInventoryHelp]]</div>
-        <paper-button raised style="width: 100%;" class="secondary" on-tap="selectProductsToTransferTapped">[[verses.inventory.selectProductsToTransfer]]</paper-button>
+        <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
+          <div class="mb-4">[[verses.inventory.transferInventoryHelp]]</div>
+          <paper-button raised style="width: 100%;" class="secondary" on-tap="selectProductsToTransferTapped">[[verses.inventory.selectProductsToTransfer]]</paper-button>
+        </template>
+
+        <template is="dom-if" if="[[isProductSelectionForInitiated]]">
+          <paper-button raised style="width: 100%;" class="danger" on-tap="cancelTransferTapped">[[verses.inventory.stopSelectingProductsToTransfer]]</paper-button>
+        </template>
       </div>
 
     </div>
@@ -223,6 +253,10 @@
           targetInventoryIndex: {
             type: Number,
             value: 0
+          },
+          isProductSelectionForInitiated: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -248,6 +282,7 @@
           return;
         }
         if(this.searchString !== '') this.set('searchString', '');
+        this.isProductSelectionForInitiated = false;
         this._processInventory(() => {
           this._fetchInventoryList(() => {
             this.isReady = true;
@@ -408,7 +443,14 @@
       }
 
       // TODO:
-      selectProductsToTransferTapped(e) {}
+      selectProductsToTransferTapped(e) {
+        this.isProductSelectionForInitiated = true;
+      }
+
+      cancelTransferTapped(e) {
+        this.isProductSelectionForInitiated = false;
+        this._deselectAllFromSelectedProductList();
+      }
 
       $isProductCountLow(count) {
         if (count <= parseInt(this.app.settings.minimumProductQuantity)) {

@@ -649,8 +649,9 @@
     "inventoryTitle": "Inventory",
     "selectedProductsMoved": "Selected products have been moved.",
     "totalSelectedProducts": "Total selected products",
-    "moveToInventory": "Move to Inventory",
-    "moveSelected": "Move Selected",
+    "moveToInventory": "Move Selected Products to Inventory",
+    "moveSelected": "Move Selected Products",
+    "moveSelectedHelp": "The above selected products can now be moved to any other Inventory. Select an Inventory from below list and confirm Inventory Transfer;",
     "addProductsBatchToInventory": "Add products to this inventory.",
     "addProducts": "Add Products to this inventory",
     "noProductsInInventory": "No products in this Inventory. Add a new product or you can transfer product from other inventories to this inventory.",
@@ -660,7 +661,8 @@
     "addedOn": "Added On",
 
     "transferInventoryHelp": "Product can be transfered between inventories. You can start selecting product(s) to be transfered by clicking below.",
-    "selectProductsToTransfer": "Select Products to Transfer"
+    "selectProductsToTransfer": "Start Selecting Products to Transfer",
+    "stopSelectingProductsToTransfer": "Stop Selecting Products to Transfer"
   },
   "payment": {
     "packageHasExpired": "Your package has expired.",
