@@ -647,7 +647,7 @@
     "moveSelected": "Move Selected",
     "addProductsBatchToInventory": "Add products to this inventory.",
     "addProducts": "Add Products to this inventory",
-    "noProductsInInventory": "No products in this Inventory.",
+    "noProductsInInventory": "No products in this Inventory. Add a new product or you can transfer product from other inventories to this inventory.",
     "buyingPrice": "Buying Price",
     "sellingPrice": "Selling Price",
     "acquiredOn": "Acquired On",
