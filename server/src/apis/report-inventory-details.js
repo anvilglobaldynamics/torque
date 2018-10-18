@@ -12,7 +12,7 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
 
   get requestSchema() {
     return Joi.object().keys({
-      inventoryIdList: Joi.array().items(
+      inventoryIdList: Joi.array().min(1).items(
         Joi.number().max(999999999999999).required()
       )
     });

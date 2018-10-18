@@ -15,7 +15,7 @@ exports.ProductAcquisitionCollection = class extends Collection {
       partyType: Joi.string().valid('unspecified', 'own', 'subsidiary', 'vendor').required(),
       partyName: Joi.string().min(1).max(64).allow(null).required(),
 
-      productList: Joi.array().items(
+      productList: Joi.array().min(1).items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required()
