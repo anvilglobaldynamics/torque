@@ -58,7 +58,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
           errorCode: "OUTLET_INVALID"
         }
       ],
-      privileges: [
+      privilegeList: [
         "PRIV_ACCESS_POS"
       ]
     }];

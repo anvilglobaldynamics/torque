@@ -25,7 +25,7 @@ exports.GetCustomerApi = class extends collectionCommonMixin(LegacyApi) {
         select: "organizationId",
         errorCode: "CUSTOMER_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_CUSTOMER"
       ]
     }];

@@ -57,7 +57,7 @@ exports.HireUserAsEmployeeApi = class extends userCommonMixin(collectionCommonMi
   get accessControl() {
     return [{
       organizationBy: "organizationId",
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_USERS"
       ]
     }];

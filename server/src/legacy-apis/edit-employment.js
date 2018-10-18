@@ -62,7 +62,7 @@ exports.EditEmploymentApi = class extends userCommonMixin(collectionCommonMixin(
         select: "organizationId",
         errorCode: "EMPLOYEE_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_USERS"
       ]
     }];

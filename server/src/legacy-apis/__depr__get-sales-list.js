@@ -35,7 +35,7 @@ exports.GetSalesListApi = class extends salesCommonMixin(outletCommonMixin(custo
   get accessControl() {
     return [{
       organizationBy: "organizationId",
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_SALES"
       ]
     }];

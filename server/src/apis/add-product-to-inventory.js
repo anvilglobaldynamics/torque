@@ -33,7 +33,7 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductCategoryMixin)
         select: "organizationId",
         errorCode: "INVENTORY_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES"
       ]
     }];

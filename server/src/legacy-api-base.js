@@ -379,7 +379,7 @@ class LegacyApi {
     enforces Access Control Rules. Rules are specified using the accessControl property. Format - 
     [
       {
-        privileges: [ ...list of privileges ]
+        privilegeList: [ ...list of privileges ]
         organizationBy: "keyName" or <function> or <object>
       }
     ]
@@ -407,6 +407,10 @@ class LegacyApi {
   _enforceAccessControl(userId, body, cbfn) {
     let rules = this.accessControl;
     if (!rules) return cbfn();
+    rules.forEach(rule => {
+      rule.privileges = rule.privilegeList;
+      delete rule['privilegeList'];
+    })
     Promise.all(rules.map((rule) => this.__processAccessControlRule(userId, body, rule)))
       .then(() => {
         cbfn();

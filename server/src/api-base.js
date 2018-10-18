@@ -83,7 +83,7 @@ class Api {
     enforces Access Control Rules. Rules are specified using the accessControl property. Format - 
     [
       {
-        privileges: [ ...list of privileges ]
+        privilegeList: [ ...list of privileges ]
         organizationBy: "keyName" or <function> or <object>
       }
     ]
@@ -427,6 +427,10 @@ class Api {
   async __enforceAccessControl(userId, body) {
     let rules = this.accessControl;
     if (!rules) return;
+    rules.forEach(rule => {
+      rule.privileges = rule.privilegeList;
+      delete rule['privilegeList'];
+    })
     await Promise.all(rules.map(rule => this.__processAccessControlRule(userId, body, rule)));
   }
 

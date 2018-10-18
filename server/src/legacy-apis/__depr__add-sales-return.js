@@ -46,7 +46,7 @@ exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(
           select: "organizationId"
         }
       ],
-      privileges: [
+      privilegeList: [
         "PRIV_ACCESS_POS"
       ]
     }];
