@@ -135,7 +135,10 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_VIEW_CUSTOMER']);
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_CUSTOMER']
+        });
       }
 
       _fetchCustomer(cbfn) {

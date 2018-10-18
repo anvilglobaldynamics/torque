@@ -110,7 +110,10 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_MANAGE_CUSTOMER_WALLET_BALANCE']);
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MANAGE_CUSTOMER_WALLET_BALANCE']
+        });
       }
 
       // region: editCustomer =================================

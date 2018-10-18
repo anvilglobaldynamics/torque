@@ -263,7 +263,10 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_VIEW_ALL_INVENTORIES']);
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_ALL_INVENTORIES']
+        });
       }
 
       _fetchInventoriesData(cbfn) {

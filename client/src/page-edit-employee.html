@@ -112,7 +112,10 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_MODIFY_USERS']);
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_USERS']
+        });
       }
 
       // region: editEmployee =================================

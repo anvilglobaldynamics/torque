@@ -243,7 +243,9 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('authenticated');
+        return this.accessControl({
+          authLevel: 'authenticated'
+        });
       }
 
       _computeWarnings() {

@@ -368,7 +368,10 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_ACCESS_POS']);
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_ACCESS_POS']
+        });
       }
 
       // region: pos =================================

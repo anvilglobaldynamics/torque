@@ -226,7 +226,10 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_VIEW_SALES_RETURN']);
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_SALES_RETURN']
+        });
       }
 
       _fetchSalesReturnList(cbfn) {

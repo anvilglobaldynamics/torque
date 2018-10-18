@@ -247,7 +247,10 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_MODIFY_ALL_PRODUCT_CATEGORIES']);
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_ALL_PRODUCT_CATEGORIES']
+        });
       }
 
       // region: ui  ===========================
