@@ -101,16 +101,16 @@
         return this.app.organization.employment.privileges[privilege];
       }
 
-      accessControl(type, privilegeList = []) {
-        const typeList = ['special', 'authenticated', 'organization-selected'];
-        if (typeList.indexOf(type) === -1) throw new Error("Invalid accessControl type.");
-        if (type === 'authenticated' || type === 'organization-selected') {
+      accessControl({ authLevel, privilegeList = [] }) {
+        const authLevelList = ['authenticated', 'organization-selected'];
+        if (authLevelList.indexOf(authLevel) === -1) throw new Error("Invalid accessControl authLevel.");
+        if (authLevel === 'authenticated' || authLevel === 'organization-selected') {
           if (!(this.app.user)) {
             this.app.navigateTo('/login');
             return false;
           }
         }
-        if (type === 'organization-selected') {
+        if (authLevel === 'organization-selected') {
           if (!this.app.organization) {
             this.app.navigateTo('/manage-organizations');
             return false;
