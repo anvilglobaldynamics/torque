@@ -347,6 +347,37 @@ describe('Sales', _ => {
 
   });
 
+  it('api/add-sales (Ivalid payment)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: outletInventoryProductList[0].productId,
+            count: 2,
+            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            vatPercentage: 5,
+          }
+        ],
+
+        payment: {}
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('VALIDATION_ERROR');
+      testDoneFn();
+    });
+
+  });
+
   it('api/add-sales (Invalid, No Customer credit sale)', testDoneFn => {
 
     callApi('api/add-sales', {

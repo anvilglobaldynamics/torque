@@ -18,7 +18,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
 
-      productList: Joi.array().required().min(1).items(
+      productList: Joi.array().min(1).items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required(),
@@ -29,7 +29,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
         })
       ),
 
-      payment: Joi.object().keys({
+      payment: Joi.object().required().keys({
         totalAmount: Joi.number().max(999999999999999).required(), // means total sale price of all products
         vatAmount: Joi.number().max(999999999999999).required(),
         discountType: Joi.string().max(1024).required(),

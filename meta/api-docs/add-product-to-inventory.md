@@ -11,14 +11,14 @@ method: `POST`
 
   inventoryId: Joi.number().max(999999999999999).required(),
 
-  productList: Joi.array().items(
+  productList: Joi.array().min(1).items(
     Joi.object().keys({
       productCategoryId: Joi.number().max(999999999999999).required(),
       purchasePrice: Joi.number().max(999999999999999).required(),
       salePrice: Joi.number().max(999999999999999).required(),
       count: Joi.number().max(999999999999999).required()
     });
-  );
+  )
 }
 ```
 
