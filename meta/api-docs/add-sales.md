@@ -12,7 +12,7 @@ method: `POST`
   outletId: Joi.number().max(999999999999999).required(),
   customerId: Joi.number().max(999999999999999).allow(null).required(),
 
-  productList: Joi.array().required().length(1).items(
+  productList: Joi.array().min(1).items(
     Joi.object().keys({
       productId: Joi.number().max(999999999999999).required(),
       count: Joi.number().max(999999999999999).required(),
@@ -23,7 +23,7 @@ method: `POST`
     })
   ),
   
-  payment: Joi.object().keys({
+  payment: Joi.object().required().keys({
     totalAmount: Joi.number().max(999999999999999).required(),
     vatAmount: Joi.number().max(999999999999999).required(),
     discountType: Joi.string().max(1024).required(),
@@ -31,10 +31,10 @@ method: `POST`
     discountedAmount: Joi.number().max(999999999999999).required(),
     serviceChargeAmount: Joi.number().max(999999999999999).required(),
     totalBilled: Joi.number().max(999999999999999).required(),
+    paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
     paidAmount: Joi.number().max(999999999999999).required(),
     changeAmount: Joi.number().max(999999999999999).required(),
-    shouldSaveChangeInAccount: Joi.boolean().required(),
-    paymentMethod: Joi.string().valid('cash', 'card', 'digital').required()
+    shouldSaveChangeInAccount: Joi.boolean().required()
   })
 }
 ```

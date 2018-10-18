@@ -28,7 +28,7 @@ exports.EditCustomerApi = class extends collectionCommonMixin(LegacyApi) {
         select: "organizationId",
         errorCode: "CUSTOMER_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_CUSTOMER"
       ]
     }];

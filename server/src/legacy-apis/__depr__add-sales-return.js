@@ -19,7 +19,7 @@ exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(
 
       salesId: Joi.number().max(999999999999999).required(),
 
-      returnedProductList: Joi.array().items(
+      returnedProductList: Joi.array().min(1).items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required()
@@ -46,7 +46,7 @@ exports.AddSalesReturnApi = class extends salesCommonMixin(inventoryCommonMixin(
           select: "organizationId"
         }
       ],
-      privileges: [
+      privilegeList: [
         "PRIV_ACCESS_POS"
       ]
     }];

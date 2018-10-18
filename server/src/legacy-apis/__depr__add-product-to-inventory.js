@@ -17,7 +17,7 @@ exports.AddProductToInventoryApi = class extends productCommonMixin(collectionCo
 
       inventoryId: Joi.number().max(999999999999999).required(),
 
-      productList: Joi.array().items(
+      productList: Joi.array().min(1).items(
         Joi.object().keys({
           productCategoryId: Joi.number().max(999999999999999).required(),
           purchasePrice: Joi.number().max(999999999999999).required(),
@@ -36,7 +36,7 @@ exports.AddProductToInventoryApi = class extends productCommonMixin(collectionCo
         select: "organizationId",
         errorCode: "INVENTORY_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
       ]
     }];

@@ -9,7 +9,7 @@ Joi.object().keys({
   outletId: Joi.number().max(999999999999999).required(),
   customerId: Joi.number().max(999999999999999).allow(null).required(),
 
-  productList: Joi.array().required().length(1).items(
+  productList: Joi.array().min(1).items(
     Joi.object().keys({
       productId: Joi.number().max(999999999999999).required(),
       count: Joi.number().max(999999999999999).required(),
@@ -20,7 +20,7 @@ Joi.object().keys({
     })
   ),
 
-  payment: Joi.object().keys({
+  payment: Joi.object().required().keys({
     totalAmount: Joi.number().max(999999999999999).required(),
     vatAmount: Joi.number().max(999999999999999).required(),
     discountType: Joi.string().max(1024).required(),
@@ -30,7 +30,7 @@ Joi.object().keys({
     totalBilled: Joi.number().max(999999999999999).required(),
 
     totalPaidAmount: Joi.number().max(999999999999999).required(),
-    paymentList: Joi.array().required().items(
+    paymentList: Joi.array().min(1).items(
       Joi.object().keys({
         createdDatetimeStamp: Joi.number().max(999999999999999).required(),
         acceptedByUserId: Joi.number().max(999999999999999).required(),
@@ -38,7 +38,7 @@ Joi.object().keys({
         paidAmount: Joi.number().max(999999999999999).required(),
         changeAmount: Joi.number().max(999999999999999).required(),
         paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
-        wasChangeSavedInChangeWallet: Joi.boolean().required()   
+        wasChangeSavedInChangeWallet: Joi.boolean().required()
       })
     )
   }),

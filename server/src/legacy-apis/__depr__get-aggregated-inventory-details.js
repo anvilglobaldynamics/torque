@@ -25,7 +25,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(L
         select: "organizationId",
         errorCode: "INVENTORY_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_ALL_INVENTORIES"
       ]
     }];

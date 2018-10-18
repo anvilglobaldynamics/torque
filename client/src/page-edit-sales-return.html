@@ -37,7 +37,7 @@
         <form>
           <div class="card vertical layout">
 
-            <div>[[productToBeReturned.productCategoryName]]</div>
+            <div style="font-weight: bold;">[[productToBeReturned.productCategoryName]]</div>
             <div>[[verses.salesReturn.salePrice]] [[productToBeReturned.salePrice]]</div>
             <div>[[verses.salesReturn.soldCount]]: [[productToBeReturned.count]]</div>
             <div>[[verses.salesReturn.returnCount]]: [[productToBeReturned.returnedProductCount]]</div>
@@ -128,7 +128,10 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_MODIFY_SALES_RETURN']);
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_SALES_RETURN']
+        });
       }
 
       _fetchSales(cbfn) {

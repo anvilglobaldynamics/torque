@@ -17,7 +17,7 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
 
       salesId: Joi.number().max(999999999999999).required(),
 
-      returnedProductList: Joi.array().items(
+      returnedProductList: Joi.array().min(1).items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required()
@@ -45,7 +45,7 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
           select: "organizationId"
         }
       ],
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_SALES_RETURN"
       ]
     }];

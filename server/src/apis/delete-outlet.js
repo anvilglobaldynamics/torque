@@ -24,7 +24,7 @@ exports.DeleteOutletApi = class extends Api {
         select: "organizationId",
         errorCode: "OUTLET_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_ALL_OUTLETS"
       ]
     }];

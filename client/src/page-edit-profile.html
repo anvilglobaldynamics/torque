@@ -132,9 +132,11 @@
         this.removeAutoValidation('#changePasswordForm paper-input');
         this.removeAutoValidation('#editProfileForm paper-input');
       }
-
+      
       _ensureAccess() {
-        return this.accessControl('authenticated');
+        return this.accessControl({
+          authLevel: 'authenticated'
+        });
       }
 
       _processLoadProfile() {

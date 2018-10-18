@@ -21,7 +21,7 @@ exports.GetUserDisplayInformationApi = class extends Api.mixin(UserMixin) {
   get accessControl() {
     return [{
       organizationBy: "organizationId",
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_USERS"
       ]
     }];

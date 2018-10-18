@@ -212,19 +212,19 @@
     "outletDeleted": "দোকান মোছা হয়েছে",
     "contactPerson": "যোগাযোগের ব্যাক্তি",
     "contactNumber": "যোগাযোগের ফোন",
-    "editOutlet": "আউটলেট সম্পাদনা করুন",
-    "deleteOutlet": "আউটলেট মুছে ফেলুন",
-    "goToPos": "এই সংস্থা থেকে বিক্রি শুরু করার জন্য বিক্রয়কেন্দ্রে যান।",
+    "editOutlet": "দোকান সম্পাদনা করুন",
+    "deleteOutlet": "দোকান মুছে ফেলুন",
+    "goToPos": "এই দোকান থেকে বিক্রি শুরু করার জন্য বিক্রয়কেন্দ্রে যান।",
     "inventory": "পণ্য তালিকা",
-    "goToDefaultInventory": "এটি প্রধান পণ্য তালিকা.",
-    "goToReturnedInventory": "ফেরত আসা পণ্য এখানে যায়।",
-    "goToDamagedInventory": "বাতিল পণ্য এখানে যায়।",
-    "previousSales": "পূর্ববর্তী বিক্রয়",
-    "goToPreviousSales": "পূর্ববর্তী বিক্রয় দেখুন।",
+    "goToDefaultInventory": "আপনি শুধুমাত্র এই তালিকা থেকে পণ্য বিক্রি করতে পারবেন।",
+    "goToReturnedInventory": "ক্রেতার ফেরত দেয়া পণ্য এখানে রাখা হয়।",
+    "goToDamagedInventory": "বাতিল পণ্য এখানে রাখা হয়।",
+    "previousSales": "বিক্রয় রেকর্ড",
+    "goToPreviousSales": "এই দোকানের বিক্রয় রেকর্ড গুলো দেখুন।",
     "defaultInventoryName": "প্রধান",
     "returnedInventoryName": "ফেরৎ",
     "damagedInventoryName": "ক্ষতিগ্রস্ত",
-    "noOutletFound": "কোনো দোকান পাওয়া যায় নি।"
+    "noOutletFound": "আপনার সংস্থার কোনো দোকান তৈরি করা হয়নি।"
   },
   "productCategory": {
     "manageProductCategoriesTitle": "পণ্যের ধরন পরিচালনা",
@@ -256,10 +256,12 @@
     "moveHere": "এখানে সরান",
     "subCategory": "উপ বিভাগ",
     "moveToRoot": "বাহিরে সরান",
-    "createNewProductCategory": "নতুন পণ্য ধরণ যুক্ত করুন",
+    "createNewProductCategory": "নতুন পণ্য ধরণ তৈরি করুন",
     "searchForProductCategoryInput": "পণ্য তালিকার নাম",
     "searchForProductCategoryInputError": "পণ্য তালিকার সন্ধানে ত্রুটি",
-    "bulkImport": "একাধিক পণ্যের ধরন তৈরি"
+    "bulkImport": "একাধিক পণ্যের ধরন তৈরি",
+
+    "whatIsProductCategoryMessage": "পণ্যের ধরণ একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের ধরণ তৈরি করতে হবে। পণ্যের ধরণে দেয়া তথ্য পণ্য সংক্রান্ত কাজে ব্যবহত হবে।"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "গ্রাহকের নাম বা ফোন",
@@ -272,6 +274,7 @@
   },
   "commonEmploymentDetails": {
     "privileges": "বিশেষাধিকার",
+    "privilegesTip": "একজন কর্মচারী কি কি ফিচার ব্যবহার করতে পারবে তা আপনি বিশেষধিকার বাছাই এর মাধ্যমে নিয়ত্রন করতে পারবেন",
     "roleOfEmployeeInput": "কর্মচারীর ভূমিকা",
     "roleOfEmployeeInputError": "একটি সঠিক ভূমিকা লিখুন",
     "designationOfEmployeeInput": "কর্মচারী পদবী",
@@ -324,7 +327,7 @@
     "count": "গণনা",
     "sellFor": "বিক্রয় মূল্য",
     "purchasedFor": "ক্রয় মূল্য",
-    "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি।"
+    "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি। প্রথমে পণ্যটি একটি \"পণ্যের ধরণ\" হিসেবে যোগ করুন, এর পর এই পণ্য তালিকায় পণ্য হিসেবে যোগ করুন।"
   },
   "addProducts": {
     "searchInputLabel": "পণ্যের ধরণের নাম",
@@ -359,7 +362,8 @@
   },
   "customer": {
     "editCustomerTitle": "গ্রাহক সম্পাদনা করুন",
-    "withdrawFromChangeWalletBalance": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স থেকে সরান",
+    "changeWalletBalanceTip": "বিক্রির পর ফেরতযোগ্য অর্থ পরিশোধ না করা হলে ক্রেতার আকাউন্ট ব্যালান্স এ জমা হয়। ফিরিয়ে দিতে নিচে ক্লিক করুন। ",
+    "withdrawFromChangeWalletBalance": "ফিরিয়ে দিন",
     "addCustomerTitle": "গ্রাহক যুক্ত করুন",
     "customerNameInput": "গ্রাহকের নাম",
     "customerNameInputError": "একটি সঠিক নাম লিখুন",
@@ -378,7 +382,7 @@
     "deleteCustomerQuestionPartOne": "আপনি কি এই গ্রাহককে মুছে ফেলতে চান?",
     "deleteCustomerQuestionPartTwo": "একবার মুছে ফেলা হলে, আপনি এই গ্রাহকটি পুনরুদ্ধার করতে পারবেন না।",
     "customerDeleted": "গ্রাহক মোছা হয়েছে",
-    "withdrawalHistory": "অর্থ অপসারণ ইতিহাস",
+    "withdrawalHistory": "অর্থ ফেরতের ইতিহাস",
     "acceptedBy": "দ্বারা গৃহীত",
     "clickToEditCustomer": "গ্রাহক সম্পাদনা করতে এখানে ক্লিক করুন।",
     "editCustomer": "গ্রাহক সম্পাদনা",
@@ -439,12 +443,12 @@
     "productList": "পণ্য তালিকা",
     "product": "পণ্য",
     "noSalesReturnFound": "কোনো বিক্রয় ফেরত রেকর্ড পাওয়া যায় নি।",
-    "shouldSaveReturnableInChangeWallet": "ফেরতযোগ্য অর্থ ক্রেতার ওয়ালেট এ সংরক্ষণ করা হোক?",
+    "shouldSaveReturnableInChangeWallet": "ফেরতযোগ্য অর্থ ক্রেতার আকাউন্ট ব্যালান্স এ সংরক্ষণ করা হোক?",
     "returnedCount": "ফেরৎ গণনা"
   },
   "sales": {
     "manageSalesTitle": "বিক্রয় রেকর্ড",
-    "salesId": "বিক্রয় আইডি",
+    "salesId": "বিক্রয় নং",
     "billed": "বিল",
     "paid": "প্রদত্ত",
     "products": "পণ্য",
@@ -480,7 +484,9 @@
     "warnDiscared": "সতর্কবার্তা! এই বিক্রয় রেকর্ড বাতিল করা হয়েছে।",
     "receiptTitle": "বিক্রয় রসিদ",
     "printedBy": "প্রিন্ট করেছেন",
-    "soldBy": "বিক্রয়কারী"
+    "soldBy": "বিক্রয়কারী",
+
+    "productReturn": "পণ্য ফেরত"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
@@ -518,7 +524,7 @@
     "defaultInventoryName": "প্রধান",
     "returnedInventoryName": "ফেরৎ",
     "damagedInventoryName": "ক্ষতিগ্রস্ত",
-    "noWarehouseFound": "কোনো গুদাম পাওয়া যায় নি।"
+    "noWarehouseFound": "আপনার সংস্থার কোনো গুদাম তৈরি করা হয়নি।"
   },
   "error": {
     "404": "৪০৪",
@@ -564,7 +570,8 @@
     "shouldSaveChangeInAccountEnd": "ফেরত না দিয়ে গ্রাহকের একাউন্টএ জমা রাখা হোক। ",
     "allowCreditSaleMessage": "এই টাকা গ্রাহকের একাউন্টএ বকেয়া হিসাবে জমা রাখা হোক।",
     "creditSaleHint": "প্রদত্ত পরিমান, মোট প্রদেয় পরিমানের চেয়ে কম এন্ট্রি দেওয়া হয়েছে। একটি ক্রেডিট বিক্রয় করার জন্য, আপনাকে একটি গ্রাহক নির্বাচন বা যুক্ত করতে হবে এবং ক্রেডিট বিক্রয় অনুমোদন করতে হবে। ",
-    "paymentMethod": "মূল্যপরিশোধ পদ্ধতি"
+    "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
+    "thisWillBeACreditSale": "এটি একটি বাকি বিক্রি হবে। অতিরিক্ত অর্থ গ্রহণ বিক্রয় পৃষ্ঠায় গিয়ে করতে পারবেন।"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",
@@ -610,7 +617,7 @@
     "confirmSelection": "নির্বাচন নিশ্চিত করুন",
     "acquiredOn": "খরিদ হয়েছে",
     "addedOn": "যুক্ত হয়েছে",
-    "noProductFoundInOutlet": "দোকানের প্রধান পণ্য তালিকায় কোনো পণ্য নেই।",
+    "noProductFoundInOutlet": "কোনো পণ্য পাওয়া যায়নি। পেছনে গিয়ে দোকানের প্রধান পণ্য তালিকায় পণ্য যোগ করুন।",
     "searchForProductInput": "পণ্যের নাম দিয়ে অনুসন্ধান",
     "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি"
   },
@@ -625,7 +632,7 @@
     "monetaryUnitDetail": "নোট: আর্থিক মুদ্রা পরিবর্তন আপনার বিক্রয় প্রভাবিত করে না।",
     "moreOptionsForthcoming": "আরো সেটিংস আসন্ন।",
     "minimumProductQuantity": "নূন্যতম পণ্য পরিমান",
-    "minimumProductQuantityDetail": "এই সংখ্যাটির নীচে পণ্য পরিমানটি লাল রঙিন হবে।"
+    "minimumProductQuantityDetail": "এই সংখ্যাটির নীচে পণ্য গণনা লাল রঙে দেখানো হবে।"
   },
   "verify": {
     "verificationModalTitle": "যাচাইকরণ এসএমএস পাঠানো হয়েছে",
@@ -644,14 +651,19 @@
     "selectedProductsMoved": "নির্বাচিত পণ্য সরানো হয়েছে।",
     "totalSelectedProducts": "মোট নির্বাচিত পণ্য",
     "moveToInventory": "পণ্য অন্য তালিকায় সরান",
-    "moveSelected": "নির্বাচিত সরান",
+    "moveSelected": "বাছাইকৃত পণ্য সরান",
+    "moveSelectedHelp": "উপরে বাছাইকৃত পণ্য গুলো এখন অন্য পণ্য তালিকায় সরানো যাবে। নিচের লিস্ট থেকে একটি পণ্য তালিকা বাছাই করুন এবং পণ্য স্থানান্তর নিশ্চিত করুন;",
     "addProductsBatchToInventory": "একসাথে একাধিক পণ্য তালিকায় যুক্ত করুন",
-    "addProducts": "পণ্য যুক্ত করুন",
-    "noProductsInInventory": "এই পণ্য তালিকায় কোন পণ্য নেই।",
+    "addProducts": "পণ্য তালিকায় পণ্য যুক্ত করুন",
+    "noProductsInInventory": "এই পণ্য তালিকায় কোন পণ্য নেই। নতুন পণ্য যোগ করুন অথবা অন্য পণ্য তালিকা থেকে এই পণ্য তালিকায় পণ্য নিয়ে আসুন।",
     "buyingPrice": "ক্রয় মূল্য",
     "sellingPrice": "বিক্রয় মূল্য",
     "acquiredOn": "খরিদ হয়েছে",
-    "addedOn": "যুক্ত হয়েছে"
+    "addedOn": "যুক্ত হয়েছে",
+
+    "transferInventoryHelp": "একটি পণ্য তালিকা থেকে অন্য পণ্য তালিকায় পণ্য সরাতে পারেন। পণ্য বাছাই শুরু করতে নিচে ক্লিক করুন।",
+    "selectProductsToTransfer": "সরানোর জন্য পণ্য বাছাই শুরু করুন",
+    "stopSelectingProductsToTransfer": "সরানোর জন্য পণ্য বাছাই বন্ধ করুন"
   },
   "payment": {
     "packageHasExpired": "আপনার প্যাকেজের মেয়াদ শেষ হয়ে গেছে।",
@@ -694,8 +706,8 @@
     "paidAmountInputError": "একটি সঠিক নম্বর লিখুন",
     "changeAmount": "ফেরত পরিমান",
     "shouldSaveChangeInAccount": "অর্থ প্রদানের পরিবর্তে গ্রাহকের অ্যাকাউন্ট সংরক্ষণ করুন",
-    "addAdditionalPayment": "অতিরিক্ত অর্থ প্রদান করুন",
-    "dueAmount": "বাকি"
+    "addAdditionalPayment": "অতিরিক্ত অর্থ গ্রহণ করুন",
+    "dueAmount": "বাকি অর্থ"
   },
   "withdrawFromChangeWalletBalance": {
     "withdrawFromChangeWalletBalanceTitle": "গ্রাহকের অ্যাকাউন্ট ব্যালান্স থেকে সরান",

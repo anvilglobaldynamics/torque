@@ -11,7 +11,7 @@ Joi.object().keys({
   fromInventoryId: Joi.number().max(999999999999999).required(),
   toInventoryId: Joi.number().max(999999999999999).required(),
 
-  productList: Joi.array().items(
+  productList: Joi.array().min(1).items(
     Joi.object().keys({
       productId: Joi.number().max(999999999999999).required(),
       count: Joi.number().max(999999999999999).required()

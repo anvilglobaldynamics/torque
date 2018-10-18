@@ -29,7 +29,7 @@ exports.EditWarehouseApi = class extends collectionCommonMixin(LegacyApi) {
         select: "organizationId",
         errorCode: "WAREHOUSE_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_ALL_WAREHOUSES"
       ]
     }];

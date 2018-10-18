@@ -25,7 +25,7 @@ exports.DeleteOutletApi = class extends collectionCommonMixin(inventoryCommonMix
         select: "organizationId",
         errorCode: "OUTLET_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_ALL_OUTLETS"
       ]
     }];

@@ -60,7 +60,7 @@ exports.AddNewEmployeeApi = class extends phoneVerificationRequestMixin(userComm
   get accessControl() {
     return [{
       organizationBy: "organizationId",
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_USERS"
       ]
     }];

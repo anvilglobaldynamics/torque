@@ -57,10 +57,11 @@
         
         <div class="card vertical layout">
 
+          <div>[[verses.customer.changeWalletBalanceTip]]</div>
           <paper-button raised class="secondary" on-tap="withdrawFromChangeWalletBalanceTapped">[[verses.customer.withdrawFromChangeWalletBalance]]</paper-button>
 
           <template is="dom-if" if="[[customer.withdrawalHistory.length]]">
-            <div class="withdrawal-history-title">[[verses.customer.withdrawalHistory]]:</div>
+            <div style="margin-top: 10px;" class="withdrawal-history-title">[[verses.customer.withdrawalHistory]]:</div>
 
             <template is="dom-repeat" items="[[customer.withdrawalHistory]]" as="withdrawal">
 
@@ -134,7 +135,10 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_VIEW_CUSTOMER']);
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_CUSTOMER']
+        });
       }
 
       _fetchCustomer(cbfn) {

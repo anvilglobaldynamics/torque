@@ -172,11 +172,9 @@
       }
 
       _ensureAccess() {
-        if (!this.app.user) {
-          this.app.navigateTo('/login');
-          return false;
-        }
-        return true;
+        return this.accessControl({
+          authLevel: 'authenticated'
+        });
       }
 
       // region: general settinggs =================================
