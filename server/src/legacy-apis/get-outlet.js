@@ -26,7 +26,7 @@ exports.GetOutletApi = class extends collectionCommonMixin(inventoryCommonMixin(
         select: "organizationId",
         errorCode: "OUTLET_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_ALL_OUTLETS"
       ]
     }];

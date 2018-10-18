@@ -25,7 +25,7 @@ exports.FireEmployeeApi = class extends userCommonMixin(collectionCommonMixin(Le
         select: "organizationId",
         errorCode: "EMPLOYEE_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_USERS"
       ]
     }];

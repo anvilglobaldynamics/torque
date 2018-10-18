@@ -36,7 +36,7 @@ exports.AddProductToInventoryApi = class extends productCommonMixin(collectionCo
         select: "organizationId",
         errorCode: "INVENTORY_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
       ]
     }];

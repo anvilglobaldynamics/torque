@@ -26,7 +26,7 @@ exports.GetEmployeeApi = class extends collectionCommonMixin(userCommonMixin(Leg
         select: "organizationId",
         errorCode: "EMPLOYEE_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_USERS"
       ]
     }];

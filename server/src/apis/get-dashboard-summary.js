@@ -21,7 +21,7 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
   get accessControl() {
     return [{
       organizationBy: "organizationId",
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_ORGANIZATION_STATISTICS"
       ]
     }];

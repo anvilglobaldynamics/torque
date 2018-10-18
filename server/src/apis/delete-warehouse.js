@@ -24,7 +24,7 @@ exports.DeleteWarehouseApi = class extends Api {
         select: "organizationId",
         errorCode: "WAREHOUSE_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_ALL_WAREHOUSES"
       ]
     }];
