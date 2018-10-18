@@ -20,7 +20,7 @@ exports.AddCustomerApi = class extends LegacyApi {
   get accessControl() {
     return [{
       organizationBy: "organizationId",
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_CUSTOMER"
       ]
     }];

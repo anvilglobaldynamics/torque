@@ -37,7 +37,7 @@ exports.GetSalesReturnApi = class extends collectionCommonMixin(LegacyApi) {
           select: "organizationId"
         }
       ],
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_SALES_RETURN"
       ]
     }];

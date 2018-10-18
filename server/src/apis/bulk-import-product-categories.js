@@ -20,7 +20,7 @@ exports.BulkImportProductCategoriesApi = class extends Api.mixin(ProductCategory
   get accessControl() {
     return [{
       organizationBy: "organizationId",
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
       ]
     }];

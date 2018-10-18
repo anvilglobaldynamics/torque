@@ -19,7 +19,7 @@ exports.GetInventoryListApi = class extends Api {
   get accessControl() {
     return [{
       organizationBy: "organizationId",
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_ALL_INVENTORIES"
       ]
     }];

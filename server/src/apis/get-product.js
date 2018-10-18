@@ -26,7 +26,7 @@ exports.GetProductApi = class extends Api.mixin(ProductMixin, InventoryMixin) {
         select: "organizationId",
         errorCode: "INVENTORY_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_ALL_INVENTORIES"
       ]
     }];

@@ -31,7 +31,7 @@ exports.GetSalesListApi = class extends Api {
   get accessControl() {
     return [{
       organizationBy: "organizationId",
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_SALES"
       ]
     }];

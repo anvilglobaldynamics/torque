@@ -83,7 +83,7 @@ class Api {
     enforces Access Control Rules. Rules are specified using the accessControl property. Format - 
     [
       {
-        privileges: [ ...list of privileges ]
+        privilegeList: [ ...list of privileges ]
         organizationBy: "keyName" or <function> or <object>
       }
     ]
@@ -412,8 +412,8 @@ class Api {
     if (!employment || !employment.isActive) {
       throw new CodedError("USER_NOT_EMPLOYED_BY_ORGANIZATION", this.verses.organizationCommon.userNotEmployedByOrganization);
     }
-    let { privileges = [] } = rule;
-    let unmetPrivileges = privileges.filter(privilege => !employment.privileges[privilege]);
+    let { privilegeList = [] } = rule;
+    let unmetPrivileges = privilegeList.filter(privilege => !employment.privileges[privilege]);
     if (unmetPrivileges.length > 0) {
       let message = this.verses.accessControlCommon.accessControlUnmetPrivileges;
       message += unmetPrivileges.join(', ') + ".";

@@ -40,7 +40,7 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
           select: "organizationId"
         }
       ],
-      privileges: [
+      privilegeList: [
         "PRIV_ACCESS_POS"
       ]
     }];

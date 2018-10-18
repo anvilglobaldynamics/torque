@@ -26,7 +26,7 @@ exports.GetWarehouseApi = class extends collectionCommonMixin(inventoryCommonMix
         select: "organizationId",
         errorCode: "WAREHOUSE_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_ALL_WAREHOUSES"
       ]
     }];

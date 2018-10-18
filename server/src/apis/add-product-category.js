@@ -34,7 +34,7 @@ exports.AddProductCategoryApi = class extends Api.mixin(ProductCategoryMixin) {
   get accessControl() {
     return [{
       organizationBy: "organizationId",
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
       ]
     }];

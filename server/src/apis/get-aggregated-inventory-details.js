@@ -28,7 +28,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
         select: "organizationId",
         errorCode: "INVENTORY_INVALID"
       },
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_ALL_INVENTORIES"
       ]
     }];

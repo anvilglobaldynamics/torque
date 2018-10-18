@@ -318,7 +318,7 @@ class LegacyApi {
   __processAccessControlRule(userId, body, rule) {
     return new Promise((accept, reject) => {
       if (!('organizationBy' in rule)) return accept();
-      let { privileges = [], organizationBy } = rule;
+      let { privilegeList = [], organizationBy } = rule;
       new Promise((accept, reject) => {
         if (typeof (organizationBy) === "function") {
           organizationBy.call(this, userId, body, (err, organization) => {
@@ -356,7 +356,7 @@ class LegacyApi {
             return reject(err);
           }
           let unmetPrivileges = [];
-          privileges.forEach((privilege) => {
+          privilegeList.forEach((privilege) => {
             if (!employment.privileges[privilege]) {
               unmetPrivileges.push(privilege);
             }
@@ -379,7 +379,7 @@ class LegacyApi {
     enforces Access Control Rules. Rules are specified using the accessControl property. Format - 
     [
       {
-        privileges: [ ...list of privileges ]
+        privilegeList: [ ...list of privileges ]
         organizationBy: "keyName" or <function> or <object>
       }
     ]

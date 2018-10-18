@@ -55,7 +55,7 @@ exports.AddSalesApi = class extends inventoryCommonMixin(customerCommonMixin(col
           errorCode: "OUTLET_INVALID"
         }
       ],
-      privileges: [
+      privilegeList: [
         "PRIV_ACCESS_POS"
       ]
     }];

@@ -20,7 +20,7 @@ exports.GetWarehouseListApi = class extends LegacyApi {
   get accessControl() {
     return [{
       organizationBy: "organizationId",
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_ALL_WAREHOUSES"
       ]
     }];

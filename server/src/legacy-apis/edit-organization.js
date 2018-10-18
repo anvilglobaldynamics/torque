@@ -25,7 +25,7 @@ exports.EditOrganizationApi = class extends collectionCommonMixin(LegacyApi) {
   get accessControl() {
     return [{
       organizationBy: "organizationId",
-      privileges: [
+      privilegeList: [
         "PRIV_MODIFY_ORGANIZATION"
       ]
     }];

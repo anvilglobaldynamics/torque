@@ -31,7 +31,7 @@ exports.DiscardSalesApi = class extends collectionCommonMixin(LegacyApi) {
           select: "organizationId"
         }
       ],
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_SALES"
       ]
     }];

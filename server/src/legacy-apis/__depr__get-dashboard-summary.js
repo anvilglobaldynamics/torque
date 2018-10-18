@@ -20,7 +20,7 @@ exports.GetDashboardSummaryApi = class extends salesCommonMixin(LegacyApi) {
   get accessControl() {
     return [{
       organizationBy: "organizationId",
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_ORGANIZATION_STATISTICS"
       ]
     }];

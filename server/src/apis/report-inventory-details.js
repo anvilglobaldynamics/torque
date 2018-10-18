@@ -31,7 +31,7 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
         let organization = await this.database.organization.findById({ id: organizationId });
         return organization;
       },
-      privileges: [
+      privilegeList: [
         "PRIV_VIEW_ALL_INVENTORIES"
       ]
     }];
