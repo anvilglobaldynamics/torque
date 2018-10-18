@@ -9,12 +9,12 @@ let {
   registerUser,
   loginUser,
   addOrganization,
-  validateProductCategorySchema,
-  validateAddProductCategoryApiSuccessResponse,
+  validateProductBlueprintSchema,
+  validateAddProductBlueprintApiSuccessResponse,
   validateGenericApiFailureResponse,
-  validateGetProductCategoryListApiSuccessResponse,
+  validateGetProductBlueprintListApiSuccessResponse,
   validateGenericApiSuccessResponse,
-  validateBulkImportProductCategoriesApiSuccessResponse
+  validateBulkImportProductBlueprintsApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -32,16 +32,16 @@ const orgPhone = 'o' + rnd(prefix, 11);
 let apiKey = null;
 let organizationId = null;
 
-let productCategoryList = null;
-let productCategoryOne = null;
-let productCategoryTwo = null;
-let productCategoryThree = null;
+let productBlueprintList = null;
+let productBlueprintOne = null;
+let productBlueprintTwo = null;
+let productBlueprintThree = null;
 
-let productCategoryToBeModified = null;
+let productBlueprintToBeModified = null;
 let invalidOrganizationId = generateInvalidId();
-let invalidProductCategoryId = generateInvalidId();
+let invalidProductBlueprintId = generateInvalidId();
 
-describe('Product Category', _ => {
+describe('Product Blueprint', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -69,13 +69,13 @@ describe('Product Category', _ => {
 
   // ADD-GET
 
-  it('api/add-product-category (Valid)', testDoneFn => {
+  it('api/add-product-blueprint (Valid)', testDoneFn => {
 
-    callApi('api/add-product-category', {
+    callApi('api/add-product-blueprint', {
       json: {
         apiKey,
         organizationId,
-        name: "1st product category",
+        name: "1st product blueprint",
         unit: "kg",
         defaultDiscountType: "percent",
         defaultDiscountValue: 10,
@@ -86,19 +86,19 @@ describe('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      validateAddProductCategoryApiSuccessResponse(body);
+      validateAddProductBlueprintApiSuccessResponse(body);
       testDoneFn();
     })
 
   });
 
-  it('api/add-product-category (Invalid copy name)', testDoneFn => {
+  it('api/add-product-blueprint (Invalid copy name)', testDoneFn => {
 
-    callApi('api/add-product-category', {
+    callApi('api/add-product-blueprint', {
       json: {
         apiKey,
         organizationId,
-        name: "1st product category",
+        name: "1st product blueprint",
         unit: "kg",
         defaultDiscountType: "percent",
         defaultDiscountValue: 10,
@@ -115,13 +115,13 @@ describe('Product Category', _ => {
 
   });
 
-  it('api/add-product-category (Valid)', testDoneFn => {
+  it('api/add-product-blueprint (Valid)', testDoneFn => {
 
-    callApi('api/add-product-category', {
+    callApi('api/add-product-blueprint', {
       json: {
         apiKey,
         organizationId,
-        name: "2nd product category",
+        name: "2nd product blueprint",
         unit: "kg",
         defaultDiscountType: "fixed",
         defaultDiscountValue: 11,
@@ -132,19 +132,19 @@ describe('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      validateAddProductCategoryApiSuccessResponse(body);
+      validateAddProductBlueprintApiSuccessResponse(body);
       testDoneFn();
     })
 
   });
 
-  it('api/add-product-category (Invalid organization)', testDoneFn => {
+  it('api/add-product-blueprint (Invalid organization)', testDoneFn => {
 
-    callApi('api/add-product-category', {
+    callApi('api/add-product-blueprint', {
       json: {
         apiKey,
         organizationId: invalidOrganizationId,
-        name: "invalid product category",
+        name: "invalid product blueprint",
         unit: "kg",
         defaultDiscountType: "percent",
         defaultDiscountValue: 10,
@@ -162,9 +162,9 @@ describe('Product Category', _ => {
 
   });
 
-  it('api/get-product-category-list (Valid searchString)', testDoneFn => {
+  it('api/get-product-blueprint-list (Valid searchString)', testDoneFn => {
 
-    callApi('api/get-product-category-list', {
+    callApi('api/get-product-blueprint-list', {
       json: {
         apiKey,
         organizationId,
@@ -173,10 +173,10 @@ describe('Product Category', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
 
-      validateGetProductCategoryListApiSuccessResponse(body);
+      validateGetProductBlueprintListApiSuccessResponse(body);
 
-      body.productCategoryList.forEach(productCategory => {
-        validateProductCategorySchema(productCategory);
+      body.productBlueprintList.forEach(productBlueprint => {
+        validateProductBlueprintSchema(productBlueprint);
       });
 
       testDoneFn();
@@ -184,32 +184,32 @@ describe('Product Category', _ => {
 
   });
 
-  it('api/get-product-category-list (Valid)', testDoneFn => {
+  it('api/get-product-blueprint-list (Valid)', testDoneFn => {
 
-    callApi('api/get-product-category-list', {
+    callApi('api/get-product-blueprint-list', {
       json: {
         apiKey,
         organizationId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      validateGetProductCategoryListApiSuccessResponse(body);
+      validateGetProductBlueprintListApiSuccessResponse(body);
 
-      body.productCategoryList.forEach(productCategory => {
-        validateProductCategorySchema(productCategory);
+      body.productBlueprintList.forEach(productBlueprint => {
+        validateProductBlueprintSchema(productBlueprint);
       });
 
-      body.productCategoryList.reverse();
-      productCategoryOne = body.productCategoryList[0];
+      body.productBlueprintList.reverse();
+      productBlueprintOne = body.productBlueprintList[0];
 
       testDoneFn();
     });
 
   });
 
-  it('api/get-product-category-list (Invalid Organization)', testDoneFn => {
+  it('api/get-product-blueprint-list (Invalid Organization)', testDoneFn => {
 
-    callApi('api/get-product-category-list', {
+    callApi('api/get-product-blueprint-list', {
       json: {
         apiKey,
         organizationId: invalidOrganizationId
@@ -223,37 +223,37 @@ describe('Product Category', _ => {
 
   });
 
-  it('api/get-product-category-list (Valid)', testDoneFn => {
+  it('api/get-product-blueprint-list (Valid)', testDoneFn => {
 
-    callApi('api/get-product-category-list', {
+    callApi('api/get-product-blueprint-list', {
       json: {
         apiKey,
         organizationId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      validateGetProductCategoryListApiSuccessResponse(body);
-      body.productCategoryList.forEach(productCategory => {
-        validateProductCategorySchema(productCategory);
+      validateGetProductBlueprintListApiSuccessResponse(body);
+      body.productBlueprintList.forEach(productBlueprint => {
+        validateProductBlueprintSchema(productBlueprint);
       });
 
-      body.productCategoryList.reverse();
-      productCategoryOne = body.productCategoryList[0];
-      productCategoryTwo = body.productCategoryList[1];
-      productCategoryThree = body.productCategoryList[2];
+      body.productBlueprintList.reverse();
+      productBlueprintOne = body.productBlueprintList[0];
+      productBlueprintTwo = body.productBlueprintList[1];
+      productBlueprintThree = body.productBlueprintList[2];
 
       testDoneFn();
     });
 
   });
 
-  it('api/add-product-category (Invalid fixed defaultDiscountValue)', testDoneFn => {
+  it('api/add-product-blueprint (Invalid fixed defaultDiscountValue)', testDoneFn => {
 
-    callApi('api/add-product-category', {
+    callApi('api/add-product-blueprint', {
       json: {
         apiKey,
         organizationId,
-        name: "1st product category",
+        name: "1st product blueprint",
         unit: "kg",
         defaultDiscountType: "fixed",
         defaultDiscountValue: 114,
@@ -273,13 +273,13 @@ describe('Product Category', _ => {
 
   // EDIT
 
-  it('api/edit-product-category (Valid)', testDoneFn => {
+  it('api/edit-product-blueprint (Valid)', testDoneFn => {
 
-    callApi('api/edit-product-category', {
+    callApi('api/edit-product-blueprint', {
       json: {
         apiKey,
-        productCategoryId: productCategoryOne.id,
-        name: "new 1st product category name", // modification
+        productBlueprintId: productBlueprintOne.id,
+        name: "new 1st product blueprint name", // modification
         unit: "kg",
         defaultDiscountType: "percent",
         defaultDiscountValue: 10,
@@ -296,13 +296,13 @@ describe('Product Category', _ => {
 
   });
 
-  it('api/edit-product-category (Invalid copy name)', testDoneFn => {
+  it('api/edit-product-blueprint (Invalid copy name)', testDoneFn => {
 
-    callApi('api/edit-product-category', {
+    callApi('api/edit-product-blueprint', {
       json: {
         apiKey,
-        productCategoryId: productCategoryOne.id,
-        name: "2nd product category", // copy modification
+        productBlueprintId: productBlueprintOne.id,
+        name: "2nd product blueprint", // copy modification
         unit: "kg",
         defaultDiscountType: "percent",
         defaultDiscountValue: 10,
@@ -319,14 +319,14 @@ describe('Product Category', _ => {
 
   });
 
-  it('api/edit-product-category (Invalid productCategoryId)', testDoneFn => {
+  it('api/edit-product-blueprint (Invalid productBlueprintId)', testDoneFn => {
 
-    callApi('api/edit-product-category', {
+    callApi('api/edit-product-blueprint', {
       json: {
         apiKey,
-        productCategoryId: invalidProductCategoryId,
+        productBlueprintId: invalidProductBlueprintId,
 
-        name: "new product category name", // modification
+        name: "new product blueprint name", // modification
         unit: "kg",
         defaultDiscountType: "percent",
         defaultDiscountValue: 10,
@@ -338,30 +338,30 @@ describe('Product Category', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).equal('PRODUCT_CATEGORY_INVALID');
+      expect(body.error.code).equal('PRODUCT_BLUEPRINT_INVALID');
       testDoneFn();
     })
 
   });
 
-  it('api/get-product-category-list (Valid modification check)', testDoneFn => {
+  it('api/get-product-blueprint-list (Valid modification check)', testDoneFn => {
 
-    callApi('api/get-product-category-list', {
+    callApi('api/get-product-blueprint-list', {
       json: {
         apiKey,
         organizationId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      validateGetProductCategoryListApiSuccessResponse(body);
-      body.productCategoryList.forEach(productCategory => {
-        validateProductCategorySchema(productCategory);
+      validateGetProductBlueprintListApiSuccessResponse(body);
+      body.productBlueprintList.forEach(productBlueprint => {
+        validateProductBlueprintSchema(productBlueprint);
       });
 
-      body.productCategoryList.reverse();
-      productCategoryList = body.productCategoryList;
-      expect(body.productCategoryList[0].name).to.equal("new 1st product category name");
-      expect(body.productCategoryList[0].isReturnable).to.equal(false);
+      body.productBlueprintList.reverse();
+      productBlueprintList = body.productBlueprintList;
+      expect(body.productBlueprintList[0].name).to.equal("new 1st product blueprint name");
+      expect(body.productBlueprintList[0].isReturnable).to.equal(false);
 
       testDoneFn();
     });
@@ -370,12 +370,12 @@ describe('Product Category', _ => {
 
   // DELETE
 
-  it('api/delete-product-category (Confirm that API is disabled)', testDoneFn => {
+  it('api/delete-product-blueprint (Confirm that API is disabled)', testDoneFn => {
 
-    callApi('api/delete-product-category', {
+    callApi('api/delete-product-blueprint', {
       json: {
         apiKey,
-        productCategoryId: invalidProductCategoryId
+        productBlueprintId: invalidProductBlueprintId
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -386,9 +386,9 @@ describe('Product Category', _ => {
 
   });
 
-  it('api/bulk-import-product-categories (Valid and unique)', testDoneFn => {
+  it('api/bulk-import-product-blueprints (Valid and unique)', testDoneFn => {
 
-    callApi('api/bulk-import-product-categories', {
+    callApi('api/bulk-import-product-blueprints', {
       json: {
         apiKey,
         organizationId,
@@ -399,7 +399,7 @@ describe('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      validateBulkImportProductCategoriesApiSuccessResponse(body);
+      validateBulkImportProductBlueprintsApiSuccessResponse(body);
       expect(body.ignoredRowList).to.deep.equal([]);
       expect(body.successfulCount).to.equal(2);
       testDoneFn();
@@ -407,9 +407,9 @@ describe('Product Category', _ => {
 
   });
 
-  it('api/bulk-import-product-categories (Valid but not unique)', testDoneFn => {
+  it('api/bulk-import-product-blueprints (Valid but not unique)', testDoneFn => {
 
-    callApi('api/bulk-import-product-categories', {
+    callApi('api/bulk-import-product-blueprints', {
       json: {
         apiKey,
         organizationId,
@@ -420,7 +420,7 @@ describe('Product Category', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      validateBulkImportProductCategoriesApiSuccessResponse(body);
+      validateBulkImportProductBlueprintsApiSuccessResponse(body);
       expect(body.ignoredRowList).to.deep.equal([
         {
           "reason": "name-duplication",
@@ -433,9 +433,9 @@ describe('Product Category', _ => {
 
   });
 
-  it('api/bulk-import-product-categories (Invalid)', testDoneFn => {
+  it('api/bulk-import-product-blueprints (Invalid)', testDoneFn => {
 
-    callApi('api/bulk-import-product-categories', {
+    callApi('api/bulk-import-product-blueprints', {
       json: {
         apiKey,
         organizationId,
@@ -456,9 +456,9 @@ describe('Product Category', _ => {
 
   });
 
-  it('api/bulk-import-product-categories (Invalid)', testDoneFn => {
+  it('api/bulk-import-product-blueprints (Invalid)', testDoneFn => {
 
-    callApi('api/bulk-import-product-categories', {
+    callApi('api/bulk-import-product-blueprints', {
       json: {
         apiKey,
         organizationId,

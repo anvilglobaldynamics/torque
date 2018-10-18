@@ -92,10 +92,10 @@ exports.GetSalesListApi = class extends Api {
     map.forEach((product, soldProduct) => soldProduct.product = product);
     map = await this.crossmap({
       source: productList,
-      sourceKeyFn: (soldProduct) => soldProduct.product.productCategoryId,
-      target: 'productCategory'
+      sourceKeyFn: (soldProduct) => soldProduct.product.productBlueprintId,
+      target: 'productBlueprint'
     });
-    map.forEach((productCategory, soldProduct) => soldProduct.productCategory = productCategory);
+    map.forEach((productBlueprint, soldProduct) => soldProduct.productBlueprint = productBlueprint);
   }
 
   async handle({ body }) {

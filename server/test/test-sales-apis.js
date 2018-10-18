@@ -10,13 +10,13 @@ let {
   loginUser,
   addOrganization,
   addOutlet,
-  addProductCategory,
+  addProductBlueprint,
   addProductToInventory,
   addCustomer,
   getCustomer,
   getOutlet,
   validateInventorySchema,
-  validateProductCategorySchema,
+  validateProductBlueprintSchema,
   validateProductSchema,
   validateGenericApiFailureResponse,
   validateGenericApiSuccessResponse,
@@ -49,7 +49,7 @@ const outletName = "Test Outlet";
 const outletPhysicalAddress = "Test Outlet Address";
 const outletContactPersonName = "Test Outlet Person";
 
-const productCategoryName = "test product category";
+const productBlueprintName = "test product blueprint";
 
 const customerFullName = "A Test Customer";
 const customerPhone = 'c' + rnd(prefix, 11);
@@ -58,14 +58,14 @@ const openingBalance = '500';
 let apiKey = null;
 let organizationId = null;
 let outletId = null;
-let productCategoryId = null;
+let productBlueprintId = null;
 let customerId = null;
 let salesId = null;
 let salesData = null;
 
 let outletInventoryProductList = null;
 let outletInventoryMatchingProductList = null;
-let outletInventoryMatchingProductCategoryList = null;
+let outletInventoryMatchingProductBlueprintList = null;
 
 let outletDefaultInventoryId = null;
 let outletReturnedInventoryId = null;
@@ -119,10 +119,10 @@ describe('Sales', _ => {
                 outletDefaultInventoryId = data.defaultInventory.id;
                 outletReturnedInventoryId = data.returnedInventory.id;
                 outletDamagedInventoryId = data.damagedInventory.id;
-                addProductCategory({
+                addProductBlueprint({
                   apiKey,
                   organizationId,
-                  name: productCategoryName,
+                  name: productBlueprintName,
                   unit: "box",
                   defaultDiscountType: "percent",
                   defaultDiscountValue: 10,
@@ -131,12 +131,12 @@ describe('Sales', _ => {
                   defaultSalePrice: 112,
                   isReturnable: true
                 }, (data) => {
-                  productCategoryId = data.productCategoryId;
+                  productBlueprintId = data.productBlueprintId;
                   addProductToInventory({
                     apiKey,
                     inventoryId: outletDefaultInventoryId,
                     productList: [
-                      { productCategoryId, purchasePrice: 99, salePrice: 200, count: 100 }
+                      { productBlueprintId, purchasePrice: 99, salePrice: 200, count: 100 }
                     ]
                   }, (data) => {
                     addCustomer({
@@ -178,7 +178,7 @@ describe('Sales', _ => {
       expect(body.aggregatedProductList[0]).to.have.property('productId');
 
       outletInventoryProductList = body.aggregatedProductList;
-      outletInventoryMatchingProductCategoryList = outletInventoryProductList.map(_product => _product.product.productCategory);
+      outletInventoryMatchingProductBlueprintList = outletInventoryProductList.map(_product => _product.product.productBlueprint);
 
       testDoneFn();
     });
@@ -198,23 +198,23 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         }
@@ -240,15 +240,15 @@ describe('Sales', _ => {
         productList: [],
 
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         }
@@ -275,23 +275,23 @@ describe('Sales', _ => {
           {
             productId: invalidProductId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         }
@@ -318,23 +318,23 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         }
@@ -360,9 +360,9 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
@@ -391,23 +391,23 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 0,
-          changeAmount: (0 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (0 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         }
@@ -434,23 +434,23 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         }
@@ -477,23 +477,23 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 1300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: true,
           paymentMethod: 'cash'
         }
@@ -960,21 +960,21 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 3,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
           discountValue: 0,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 30, // out of total billed 212.799999999
           changeAmount: 0,
           shouldSaveChangeInAccount: true,

@@ -1,4 +1,4 @@
-This collection contains an product category
+This collection contains an product blueprint
 
 ## signature
 ```js

@@ -45,7 +45,7 @@
         font-size: 13px;
       }
 
-      .product-category-numeric {
+      .product-blueprint-numeric {
         min-width: 20%;
         max-width: 20%;
       }
@@ -79,14 +79,14 @@
         </div>
       </div>
 
-      <!-- product category selection area - start -->
-      <template is="dom-if" if="{{!productCategoryList.length}}">
+      <!-- product blueprint selection area - start -->
+      <template is="dom-if" if="{{!productBlueprintList.length}}">
         <div class="card">
-          [[verses.product.noProductCategoryFound]]
+          [[verses.product.noProductBlueprintFound]]
         </div>
       </template>
 
-      <template is="dom-if" if="{{productCategoryList.length}}">
+      <template is="dom-if" if="{{productBlueprintList.length}}">
         <div class="card">
 
           <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
@@ -97,25 +97,25 @@
 
             <div class="container-card">
               <div class="horizontal layout item center">
-                <div class="product-header product-title">[[verses.product.productCategory]]</div>
-                <div class="product-header product-category-numeric">[[verses.product.count]]</div>
-                <div class="product-header product-category-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
-                <div class="product-header product-category-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+                <div class="product-header product-title">[[verses.product.productBlueprint]]</div>
+                <div class="product-header product-blueprint-numeric">[[verses.product.count]]</div>
+                <div class="product-header product-blueprint-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
+                <div class="product-header product-blueprint-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
               </div>
             </div>
 
-            <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
+            <template is="dom-repeat" items="[[productBlueprintList]]" as="productBlueprint">
               <div class="container-card">
                 <div class="horizontal layout item center">
-                  <div class="product-title">[[productCategory.name]]</div>
-                  <div class="product-category-numeric">
-                    <paper-input class="small-input" value="{{productCategory.count}}" type="number" min="0" on-change="productCategoryInputChanged" label=[[productCategory.unit]]></paper-input>
+                  <div class="product-title">[[productBlueprint.name]]</div>
+                  <div class="product-blueprint-numeric">
+                    <paper-input class="small-input" value="{{productBlueprint.count}}" type="number" min="0" on-change="productBlueprintInputChanged" label=[[productBlueprint.unit]]></paper-input>
                   </div>
-                  <div class="product-category-numeric">
-                    <paper-input disabled class="small-input" min="[[productCategory.purchasePrice]]" value="{{productCategory.salePrice}}" type="number"></paper-input>
+                  <div class="product-blueprint-numeric">
+                    <paper-input disabled class="small-input" min="[[productBlueprint.purchasePrice]]" value="{{productBlueprint.salePrice}}" type="number"></paper-input>
                   </div>
-                  <div class="product-category-numeric">
-                    <paper-input disabled class="small-input" min="0" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
+                  <div class="product-blueprint-numeric">
+                    <paper-input disabled class="small-input" min="0" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
                   </div>
                 </div>
               </div>
@@ -136,10 +136,10 @@
 
         </div>
       </template>
-      <!-- product category selection area - end -->
+      <!-- product blueprint selection area - end -->
 
-      <!-- adding value to product category area - start -->
-      <template is="dom-if" if="{{selectedProductCategoryList.length}}">
+      <!-- adding value to product blueprint area - start -->
+      <template is="dom-if" if="{{selectedProductBlueprintList.length}}">
 
         <div class="card vertical layout">
 
@@ -147,25 +147,25 @@
 
           <div class="container-card">
             <div class="horizontal layout item center">
-              <div class="product-header product-title">[[verses.product.productCategory]]</div>
-              <div class="product-header product-category-numeric">[[verses.product.count]]</div>
-              <div class="product-header product-category-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
-              <div class="product-header product-category-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+              <div class="product-header product-title">[[verses.product.productBlueprint]]</div>
+              <div class="product-header product-blueprint-numeric">[[verses.product.count]]</div>
+              <div class="product-header product-blueprint-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
+              <div class="product-header product-blueprint-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
             </div>
           </div>
 
-          <template is="dom-repeat" items="[[selectedProductCategoryList]]" as="productCategory">
+          <template is="dom-repeat" items="[[selectedProductBlueprintList]]" as="productBlueprint">
             <div class="container-card">
               <div class="horizontal layout item center">
-                <div class="product-title">[[productCategory.name]]</div>
-                <div class="product-category-numeric">
-                  <paper-input class$="small-input id-[[productCategory.id]]" value="{{productCategory.count}}" type="number" min="0" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" label=[[productCategory.unit]]></paper-input>
+                <div class="product-title">[[productBlueprint.name]]</div>
+                <div class="product-blueprint-numeric">
+                  <paper-input class$="small-input id-[[productBlueprint.id]]" value="{{productBlueprint.count}}" type="number" min="0" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" label=[[productBlueprint.unit]]></paper-input>
                 </div>
-                <div class="product-category-numeric">
-                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="[[productCategory.purchasePrice]]" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" value="{{productCategory.salePrice}}" type="number"></paper-input>
+                <div class="product-blueprint-numeric">
+                  <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="[[productBlueprint.purchasePrice]]" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" value="{{productBlueprint.salePrice}}" type="number"></paper-input>
                 </div>
-                <div class="product-category-numeric">
-                  <paper-input disabled="[[$isDisabled(productCategory.count)]]" class="small-input" min="0" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" value="{{productCategory.purchasePrice}}" type="number"></paper-input>
+                <div class="product-blueprint-numeric">
+                  <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="0" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
                 </div>
               </div>
             </div>
@@ -174,9 +174,9 @@
         </div>
 
       </template>
-      <!-- adding value to product category area - end -->
+      <!-- adding value to product blueprint area - end -->
 
-      <template is="dom-if" if="[[selectedProductCategoryList.length]]">
+      <template is="dom-if" if="[[selectedProductBlueprintList.length]]">
         <div class="add-product-button-container">
           <paper-button raised class="primary m-0" on-tap="addProductsTapped">[[verses.product.addProducts]]</paper-button>
         </div>
@@ -195,11 +195,11 @@
 
       static get properties() {
         return {
-          productCategoryList: {
+          productBlueprintList: {
             type: Array,
             value: () => []
           },
-          selectedProductCategoryList: {
+          selectedProductBlueprintList: {
             type: Array,
             value: () => []
           }
@@ -226,7 +226,7 @@
           });
           return;
         }
-        this._processProductCategoryList(_ => {
+        this._processProductBlueprintList(_ => {
           this.isReady = true;
         });
       }
@@ -234,7 +234,7 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.app.popPageTitle();
-        this.resetProperties('productCategoryList', 'selectedProductCategoryList');
+        this.resetProperties('productBlueprintList', 'selectedProductBlueprintList');
       }
 
       _ensureAccess() {
@@ -244,37 +244,37 @@
         });
       }
 
-      _fetchProductCategoryList(cbfn) {
+      _fetchProductBlueprintList(cbfn) {
         let data = { organizationId: this.app.organization.id, paginate: this.paginate, searchString: this.searchString };
         this.isBusy = true;
-        this.app.callGetProductCategoryListApi(data, (err, response) => {
+        this.app.callGetProductBlueprintListApi(data, (err, response) => {
           this.isBusy = false;
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.pagination = response.pagination;
-          return cbfn(response.productCategoryList);
+          return cbfn(response.productBlueprintList);
         });
       }
 
-      _addFieldsToProductCategory(productCategoryList) {
-        productCategoryList.forEach(productCategory => {
-          productCategory.purchasePrice = productCategory.defaultPurchasePrice;
-          productCategory.salePrice = productCategory.defaultSalePrice;
-          productCategory.count = 0;
+      _addFieldsToProductBlueprint(productBlueprintList) {
+        productBlueprintList.forEach(productBlueprint => {
+          productBlueprint.purchasePrice = productBlueprint.defaultPurchasePrice;
+          productBlueprint.salePrice = productBlueprint.defaultSalePrice;
+          productBlueprint.count = 0;
         });
       }
 
-      _discardAlreadySelectedCategories(productCategoryList) {
-        return productCategoryList.filter(productCategory => {
-          return !this.selectedProductCategoryList.find(selected => selected.id === productCategory.id);
+      _discardAlreadySelectedBlueprints(productBlueprintList) {
+        return productBlueprintList.filter(productBlueprint => {
+          return !this.selectedProductBlueprintList.find(selected => selected.id === productBlueprint.id);
         });
       }
 
-      _processProductCategoryList(cbfn) {
-        this._fetchProductCategoryList(productCategoryList => {
-          this._addFieldsToProductCategory(productCategoryList);
-          productCategoryList = this._discardAlreadySelectedCategories(productCategoryList);
-          this.productCategoryList = productCategoryList;
+      _processProductBlueprintList(cbfn) {
+        this._fetchProductBlueprintList(productBlueprintList => {
+          this._addFieldsToProductBlueprint(productBlueprintList);
+          productBlueprintList = this._discardAlreadySelectedBlueprints(productBlueprintList);
+          this.productBlueprintList = productBlueprintList;
           return cbfn();
         });
       }
@@ -300,13 +300,13 @@
 
       addProductsTapped(e = null) {
         let productList = [];
-        this.selectedProductCategoryList.forEach(productCategory => {
-          if (parseInt(productCategory.count) > 0) {
+        this.selectedProductBlueprintList.forEach(productBlueprint => {
+          if (parseInt(productBlueprint.count) > 0) {
             productList.push({
-              productCategoryId: productCategory.id,
-              purchasePrice: parseFloat(productCategory.purchasePrice),
-              salePrice: parseFloat(productCategory.salePrice),
-              count: parseInt(String(productCategory.count))
+              productBlueprintId: productBlueprint.id,
+              purchasePrice: parseFloat(productBlueprint.purchasePrice),
+              salePrice: parseFloat(productBlueprint.salePrice),
+              count: parseInt(String(productBlueprint.count))
             });
           }
         });
@@ -327,13 +327,13 @@
       showMoreTapped(e = null) {
         this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
         this.isReady = false;
-        this._processProductCategoryList(() => this.isReady = true);
+        this._processProductBlueprintList(() => this.isReady = true);
       }
 
       showPreviousTapped(e = null) {
         this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
         this.isReady = false;
-        this._processProductCategoryList(() => this.isReady = true);
+        this._processProductBlueprintList(() => this.isReady = true);
       }
 
       searchCancelTapped(e = null) {
@@ -342,20 +342,20 @@
 
       searchTapped(e = null) {
         this.set('paginate.offset', 0);
-        this._processProductCategoryList(() => this.isReady = true);
+        this._processProductBlueprintList(() => this.isReady = true);
       }
 
       searchFieldKeypressed(e) {
         if (e.which === 13) this.searchTapped(null);
       }
 
-      productCategoryInputChanged(e) {
+      productBlueprintInputChanged(e) {
         let index = parseInt(String(e.model.index));
-        let productCategory = this.productCategoryList[index];
-        this.unshift('selectedProductCategoryList', productCategory);
-        this.splice('productCategoryList', index, 1);
+        let productBlueprint = this.productBlueprintList[index];
+        this.unshift('selectedProductBlueprintList', productBlueprint);
+        this.splice('productBlueprintList', index, 1);
         window.setTimeout(() => {
-          let el = this.elem(`.id-${productCategory.id}`);
+          let el = this.elem(`.id-${productBlueprint.id}`);
           el.focus();
         }, 100);
       }

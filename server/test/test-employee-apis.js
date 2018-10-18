@@ -144,7 +144,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -194,7 +194,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -307,7 +307,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -357,7 +357,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -517,7 +517,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -572,7 +572,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -627,7 +627,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -859,7 +859,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
+          PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 

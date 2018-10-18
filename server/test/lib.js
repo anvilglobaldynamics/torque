@@ -132,10 +132,10 @@ exports.getOutlet = (data, callback) => {
   })
 }
 
-// ===================================== Product Category
+// ===================================== Product Blueprint
 
-exports.addProductCategory = (data, callback) => {
-  callApi('api/add-product-category', {
+exports.addProductBlueprint = (data, callback) => {
+  callApi('api/add-product-blueprint', {
     json: data
   }, (err, response, body) => {
     callback(body);
@@ -343,11 +343,11 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
 
       product: Joi.object().keys({
         id: Joi.number().required(),
-        productCategoryId: Joi.number().required(),
+        productBlueprintId: Joi.number().required(),
         purchasePrice: Joi.number().required(),
         salePrice: Joi.number().required(),
 
-        productCategory: Joi.object().keys({
+        productBlueprint: Joi.object().keys({
           id: Joi.number().required(),
           createdDatetimeStamp: Joi.number().required(),
           lastModifiedDatetimeStamp: Joi.number().required(),
@@ -404,11 +404,11 @@ exports.validateReportInventoryDetailsApiSuccessResponse = (doc) => {
 
           product: Joi.object().keys({
             id: Joi.number().required(),
-            productCategoryId: Joi.number().required(),
+            productBlueprintId: Joi.number().required(),
             purchasePrice: Joi.number().required(),
             salePrice: Joi.number().required(),
 
-            productCategory: Joi.object().keys({
+            productBlueprint: Joi.object().keys({
               id: Joi.number().required(),
               createdDatetimeStamp: Joi.number().required(),
               lastModifiedDatetimeStamp: Joi.number().required(),
@@ -595,18 +595,18 @@ exports.validateGetWarehouseApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
-exports.validateAddProductCategoryApiSuccessResponse = (doc) => {
+exports.validateAddProductBlueprintApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
-    productCategoryId: Joi.number().required()
+    productBlueprintId: Joi.number().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
 }
 
-exports.validateBulkImportProductCategoriesApiSuccessResponse = (doc) => {
+exports.validateBulkImportProductBlueprintsApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
@@ -618,10 +618,10 @@ exports.validateBulkImportProductCategoriesApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
-exports.validateGetProductCategoryListApiSuccessResponse = (doc) => {
+exports.validateGetProductBlueprintListApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
-    productCategoryList: Joi.array().required()
+    productBlueprintList: Joi.array().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -893,7 +893,7 @@ exports.validateWarehouseSchema = (doc) => {
   if (error) throw error;
 }
 
-exports.validateProductCategorySchema = (doc) => {
+exports.validateProductBlueprintSchema = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
 
@@ -926,7 +926,7 @@ exports.validateProductSchema = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
 
-    productCategoryId: Joi.number().max(999999999999999).required(),
+    productBlueprintId: Joi.number().max(999999999999999).required(),
     purchasePrice: Joi.number().max(999999999999999).required(),
     salePrice: Joi.number().max(999999999999999).required()
   });
@@ -989,10 +989,10 @@ exports.validateSalesSchema = (doc) => {
     productList: Joi.array().min(1).items(
       Joi.object().keys({
         productId: Joi.number().max(999999999999999).required(),
-        productCategoryId: Joi.number().max(999999999999999).required(),
-        productCategoryName: Joi.string().min(1).max(64).required(),
-        productCategoryUnit: Joi.string().max(64).required(),
-        productCategoryIsReturnable: Joi.boolean().required(),
+        productBlueprintId: Joi.number().max(999999999999999).required(),
+        productBlueprintName: Joi.string().min(1).max(64).required(),
+        productBlueprintUnit: Joi.string().max(64).required(),
+        productBlueprintIsReturnable: Joi.boolean().required(),
         count: Joi.number().max(999999999999999).required(),
         returnedProductCount: Joi.number().max(999999999999999).required(),
         discountType: Joi.string().max(1024).required(),
@@ -1096,9 +1096,9 @@ exports.validateSalesReturnSchema = (doc) => {
       Joi.object().keys({
         productId: Joi.number().max(999999999999999).required(),
         count: Joi.number().max(999999999999999).required(),
-        productCategoryId: Joi.number().max(999999999999999).required(),
-        productCategoryName: Joi.string().min(1).max(64).required(),
-        productCategoryIsReturnable: Joi.boolean().required()
+        productBlueprintId: Joi.number().max(999999999999999).required(),
+        productBlueprintName: Joi.string().min(1).max(64).required(),
+        productBlueprintIsReturnable: Joi.boolean().required()
       })
     ),
     creditedAmount: Joi.number().max(999999999999999).required(),
@@ -1164,10 +1164,10 @@ exports.validateAggregatedProductScema = (doc) => {
     addedDatetimeStamp: Joi.number().max(999999999999999).required(),
     "product": Joi.object().keys({
       id: Joi.number().max(999999999999999).required(),
-      productCategoryId: Joi.number().max(999999999999999).required(),
+      productBlueprintId: Joi.number().max(999999999999999).required(),
       purchasePrice: Joi.number().max(999999999999999).required(),
       salePrice: Joi.number().max(999999999999999).required(),
-      "productCategory": Joi.object().keys({
+      "productBlueprint": Joi.object().keys({
         id: Joi.number().max(999999999999999).required(),
         createdDatetimeStamp: Joi.number().max(999999999999999).required(),
         lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
@@ -1229,7 +1229,7 @@ exports.validateEmploymentSchema = (doc) => {
       PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
 
       PRIV_VIEW_ALL_INVENTORIES: Joi.boolean().required(),
-      PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: Joi.boolean().required(),
+      PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: Joi.boolean().required(),
       PRIV_TRANSFER_ALL_INVENTORIES: Joi.boolean().required(),
       PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: Joi.boolean().required(),
 

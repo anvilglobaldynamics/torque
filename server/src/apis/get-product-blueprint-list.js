@@ -1,13 +1,13 @@
 const { Api } = require('../api-base');
 const Joi = require('joi');
 
-exports.GetProductCategoryListApi = class extends Api {
+exports.GetProductBlueprintListApi = class extends Api {
 
   get autoValidates() { return true; }
 
   get requiresAuthentication() { return true; }
 
-  get autoPaginates() { return ['productCategoryList']; }
+  get autoPaginates() { return ['productBlueprintList']; }
 
   get requestSchema() {
     return Joi.object().keys({
@@ -25,15 +25,15 @@ exports.GetProductCategoryListApi = class extends Api {
     }];
   }
 
-  async _getProductCategoryList({ organizationId, searchString }) {
-    return await this.database.productCategory.listByOrganizationIdAndSearchString({ organizationId, searchString });
+  async _getProductBlueprintList({ organizationId, searchString }) {
+    return await this.database.productBlueprint.listByOrganizationIdAndSearchString({ organizationId, searchString });
   }
 
   async handle({ body }) {
     let { organizationId, searchString } = body;
-    let productCategoryList = await this._getProductCategoryList({ organizationId, searchString });
+    let productBlueprintList = await this._getProductBlueprintList({ organizationId, searchString });
 
-    return { productCategoryList };
+    return { productBlueprintList };
   }
 
 }

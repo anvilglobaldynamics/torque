@@ -20,7 +20,7 @@ exports.ProductCollection = class extends LegacyCollection {
     this.collectionName = 'product';
 
     this.joiSchema = Joi.object().keys({
-      productCategoryId: Joi.number().max(999999999999999).required(),
+      productBlueprintId: Joi.number().max(999999999999999).required(),
       purchasePrice: Joi.number().max(999999999999999).required(),
       salePrice: Joi.number().max(999999999999999).required()
     });
@@ -34,16 +34,16 @@ exports.ProductCollection = class extends LegacyCollection {
 
     this.foreignKeyDefList = [
       {
-        targetCollection: 'product-category',
+        targetCollection: 'product-blueprint',
         foreignKey: 'id',
-        referringKey: 'productCategoryId'
+        referringKey: 'productBlueprintId'
       }
     ];
   }
 
-  create({ productCategoryId, purchasePrice, salePrice }, cbfn) {
+  create({ productBlueprintId, purchasePrice, salePrice }, cbfn) {
     let doc = {
-      productCategoryId, purchasePrice, salePrice
+      productBlueprintId, purchasePrice, salePrice
     }
     this._insert(doc, (err, id) => {
       return cbfn(err, id);

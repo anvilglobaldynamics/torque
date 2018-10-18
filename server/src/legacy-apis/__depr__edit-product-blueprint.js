@@ -3,7 +3,7 @@ let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
 
-exports.EditProductCategoryApi = class extends collectionCommonMixin(LegacyApi) {
+exports.EditProductBlueprintApi = class extends collectionCommonMixin(LegacyApi) {
 
   get autoValidates() { return true; }
 
@@ -12,7 +12,7 @@ exports.EditProductCategoryApi = class extends collectionCommonMixin(LegacyApi) 
   get requestSchema() {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),
-      productCategoryId: Joi.number().max(999999999999999).required(),
+      productBlueprintId: Joi.number().max(999999999999999).required(),
 
       name: Joi.string().min(1).max(64).required(),
       unit: Joi.string().max(64).required(),
@@ -34,31 +34,31 @@ exports.EditProductCategoryApi = class extends collectionCommonMixin(LegacyApi) 
   get accessControl() {
     return [{
       organizationBy: {
-        from: "product-category",
-        query: ({ productCategoryId }) => ({ id: productCategoryId }),
+        from: "product-blueprint",
+        query: ({ productBlueprintId }) => ({ id: productBlueprintId }),
         select: "organizationId",
-        errorCode: "PRODUCT_CATEGORY_INVALID"
+        errorCode: "PRODUCT_BLUEPRINT_INVALID"
       },
       privilegeList: [
-        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
       ]
     }];
   }
 
-  _checkAndUpdateProductCategory({ productCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
-      this._updateProductCategory({ productCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn);
+  _checkAndUpdateProductBlueprint({ productBlueprintId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
+      this._updateProductBlueprint({ productBlueprintId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn);
   }
 
-  _updateProductCategory({ productCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
-    this.legacyDatabase.productCategory.update({ productCategoryId }, { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, (err, wasUpdated) => {
-      if (!this._ensureUpdate(err, wasUpdated, "product-category")) return;
+  _updateProductBlueprint({ productBlueprintId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
+    this.legacyDatabase.productBlueprint.update({ productBlueprintId }, { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, (err, wasUpdated) => {
+      if (!this._ensureUpdate(err, wasUpdated, "product-blueprint")) return;
       return cbfn();
     });
   }
 
   handle({ body, userId }) {
-    let { productCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
-    this._checkAndUpdateProductCategory({ productCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, () => {
+    let { productBlueprintId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
+    this._checkAndUpdateProductBlueprint({ productBlueprintId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, () => {
       this.success({ status: "success" });
     });
   }

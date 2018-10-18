@@ -13,7 +13,7 @@ let {
   getWarehouse,
   getOutlet,
   addOutlet,
-  addProductCategory,
+  addProductBlueprint,
   validateInventorySchema,
   validateGetInventoryListApiSuccessResponse,
   validateGenericApiFailureResponse,
@@ -21,7 +21,7 @@ let {
   validateGetAggregatedInventoryDetailsApiSuccessResponse,
   validateReportInventoryDetailsApiSuccessResponse,
   validateAggregatedProductScema,
-  validateProductCategorySchema,
+  validateProductBlueprintSchema,
   validateProductSchema,
   validateGetProductApiSuccessResponse,
   validateAddProductToInventoryApiSuccessResponse
@@ -49,14 +49,14 @@ const outletName = "Test Outlet";
 const outletPhysicalAddress = "Test Outlet Address";
 const outletContactPersonName = "Test Outlet Person";
 
-const productCategoryName = "test product category";
+const productBlueprintName = "test product blueprint";
 
 let apiKey = null;
 let organizationId = null;
 let warehouseId = null;
 let outletId = null;
-let productCategoryId = null;
-let productCategoryId2 = null;
+let productBlueprintId = null;
+let productBlueprintId2 = null;
 
 let warehouseDefaultInventoryId = null;
 let warehouseReturnedInventoryId = null;
@@ -71,7 +71,7 @@ let productToBeEditedId = null;
 
 let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
-let invalidProductCategoryId = generateInvalidId();
+let invalidProductBlueprintId = generateInvalidId();
 
 describe('Inventory', _ => {
 
@@ -122,10 +122,10 @@ describe('Inventory', _ => {
                     outletDefaultInventoryId = data.defaultInventory.id;
                     outletReturnedInventoryId = data.returnedInventory.id;
                     outletDamagedInventoryId = data.damagedInventory.id;
-                    addProductCategory({
+                    addProductBlueprint({
                       apiKey,
                       organizationId,
-                      name: "test product category",
+                      name: "test product blueprint",
                       unit: "box",
                       defaultDiscountType: "percent",
                       defaultDiscountValue: 10,
@@ -134,11 +134,11 @@ describe('Inventory', _ => {
                       defaultSalePrice: 111,
                       isReturnable: true
                     }, (data) => {
-                      productCategoryId = data.productCategoryId;
-                      addProductCategory({
+                      productBlueprintId = data.productBlueprintId;
+                      addProductBlueprint({
                         apiKey,
                         organizationId,
-                        name: "2nd test product category",
+                        name: "2nd test product blueprint",
                         unit: "box",
                         defaultDiscountType: "percent",
                         defaultDiscountValue: 10,
@@ -147,7 +147,7 @@ describe('Inventory', _ => {
                         defaultSalePrice: 300,
                         isReturnable: false
                       }, (data) => {
-                        productCategoryId2 = data.productCategoryId;
+                        productBlueprintId2 = data.productBlueprintId;
                         testDoneFn();
                       });
                     });
@@ -201,8 +201,8 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
         productList: [
-          { productCategoryId, purchasePrice: 100, salePrice: 200, count: 10 },
-          { productCategoryId: productCategoryId2, purchasePrice: 199, salePrice: 300, count: 30 }
+          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 10 },
+          { productBlueprintId: productBlueprintId2, purchasePrice: 199, salePrice: 300, count: 30 }
         ]
       }
     }, (err, response, body) => {
@@ -212,14 +212,14 @@ describe('Inventory', _ => {
     });
   });
 
-  it('api/add-product-to-inventory (Valid same product category)', testDoneFn => {
+  it('api/add-product-to-inventory (Valid same product blueprint)', testDoneFn => {
     callApi('api/add-product-to-inventory', {
       json: {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
         productList: [
-          { productCategoryId, purchasePrice: 100, salePrice: 200, count: 5 },
-          { productCategoryId: productCategoryId2, purchasePrice: 199, salePrice: 300, count: 5 }
+          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 5 },
+          { productBlueprintId: productBlueprintId2, purchasePrice: 199, salePrice: 300, count: 5 }
         ]
       }
     }, (err, response, body) => {
@@ -236,7 +236,7 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: invalidInventoryId,
         productList: [
-          { productCategoryId, purchasePrice: 100, salePrice: 200, count: 10 }
+          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 10 }
         ]
       }
     }, (err, response, body) => {
@@ -248,7 +248,7 @@ describe('Inventory', _ => {
 
   });
 
-  it('api/add-product-to-inventory (Invalid productCategoryId)', testDoneFn => {
+  it('api/add-product-to-inventory (Invalid productBlueprintId)', testDoneFn => {
 
     callApi('api/add-product-to-inventory', {
       json: {
@@ -256,7 +256,7 @@ describe('Inventory', _ => {
         inventoryId: warehouseDefaultInventoryId,
         productList: [
           {
-            productCategoryId: invalidProductCategoryId,
+            productBlueprintId: invalidProductBlueprintId,
             purchasePrice: 100,
             salePrice: 200,
             count: 10
@@ -266,7 +266,7 @@ describe('Inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).equals('PRODUCT_CATEGORY_INVALID');
+      expect(body.error.code).equals('PRODUCT_BLUEPRINT_INVALID');
       testDoneFn();
     });
 

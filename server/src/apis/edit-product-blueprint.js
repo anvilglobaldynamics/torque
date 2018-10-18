@@ -2,9 +2,9 @@ const { Api } = require('../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
 const { extract } = require('../utils/extract');
-const { ProductCategoryMixin } = require('./mixins/product-blueprint-mixin');
+const { ProductBlueprintMixin } = require('./mixins/product-blueprint-mixin');
 
-exports.EditProductCategoryApi = class extends Api.mixin(ProductCategoryMixin) {
+exports.EditProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin) {
 
   get autoValidates() { return true; }
 
@@ -12,7 +12,7 @@ exports.EditProductCategoryApi = class extends Api.mixin(ProductCategoryMixin) {
 
   get requestSchema() {
     return Joi.object().keys({
-      productCategoryId: Joi.number().max(999999999999999).required(),
+      productBlueprintId: Joi.number().max(999999999999999).required(),
 
       name: Joi.string().min(1).max(64).required(),
       unit: Joi.string().max(64).required(),
@@ -34,26 +34,26 @@ exports.EditProductCategoryApi = class extends Api.mixin(ProductCategoryMixin) {
   get accessControl() {
     return [{
       organizationBy: {
-        from: "product-category",
-        query: ({ productCategoryId }) => ({ id: productCategoryId }),
+        from: "product-blueprint",
+        query: ({ productBlueprintId }) => ({ id: productBlueprintId }),
         select: "organizationId",
-        errorCode: "PRODUCT_CATEGORY_INVALID"
+        errorCode: "PRODUCT_BLUEPRINT_INVALID"
       },
       privilegeList: [
-        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
       ]
     }];
   }
 
-  async _updateProductCategory({ productCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
-    let result = await this.database.productCategory.setDetails({ id: productCategoryId }, { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
-    this.ensureUpdate(result, 'product-category');
+  async _updateProductBlueprint({ productBlueprintId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+    let result = await this.database.productBlueprint.setDetails({ id: productBlueprintId }, { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+    this.ensureUpdate(result, 'product-blueprint');
   }
 
   async handle({ body }) {
-    let { productCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
+    let { productBlueprintId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
     await this._checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat });
-    await this._updateProductCategory({ productCategoryId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+    await this._updateProductBlueprint({ productBlueprintId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
     return { status: "success" };
   }
 

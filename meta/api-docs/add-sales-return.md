@@ -41,8 +41,8 @@ Possible Error Codes:
 { code: SALES_INVALID } // sales not found
 { code: PRODUCT_INVALID } // product not found
 { code: OUTLET_INVENTORY_INVALID } // outler returned inventory invalid
-{ code: PRODUCT_CATEGORY_INVALID }
-{ code: PRODUCT_CATEGORY_NON_RETURNABLE } // product in list is non-returnable
+{ code: PRODUCT_BLUEPRINT_INVALID }
+{ code: PRODUCT_BLUEPRINT_NON_RETURNABLE } // product in list is non-returnable
 ```
 
 ### response (on success):

@@ -292,24 +292,24 @@
         this.callCombinedJsonApi('delete-warehouse', data, cbfn);
       }
 
-      callGetProductCategoryListApi(data, cbfn) {
+      callGetProductBlueprintListApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
-        this.callCombinedJsonApi('get-product-category-list', data, cbfn);
+        this.callCombinedJsonApi('get-product-blueprint-list', data, cbfn);
       }
 
-      callAddProductCategoryApi(data, cbfn) {
+      callAddProductBlueprintApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
-        this.callCombinedJsonApi('add-product-category', data, cbfn);
+        this.callCombinedJsonApi('add-product-blueprint', data, cbfn);
       }
 
-      callEditProductCategoryApi(data, cbfn) {
+      callEditProductBlueprintApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
-        this.callCombinedJsonApi('edit-product-category', data, cbfn);
+        this.callCombinedJsonApi('edit-product-blueprint', data, cbfn);
       }
 
-      callDeleteProductCategoryApi(data, cbfn) {
+      callDeleteProductBlueprintApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
-        this.callCombinedJsonApi('delete-product-category', data, cbfn);
+        this.callCombinedJsonApi('delete-product-blueprint', data, cbfn);
       }
 
       callGetAggregatedInventoryDetailsApi(data, cbfn) {
@@ -462,9 +462,9 @@
         this.callCombinedJsonApi('get-activated-package-list', data, cbfn);
       }
 
-      callBulkImportProductCategoriesApi(data, cbfn) {
+      callBulkImportProductBlueprintsApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
-        this.callCombinedJsonApi('bulk-import-product-categories', data, cbfn);
+        this.callCombinedJsonApi('bulk-import-product-blueprints', data, cbfn);
       }
 
       callAddAdditionalPaymentApi(data, cbfn) {

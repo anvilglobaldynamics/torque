@@ -70,18 +70,18 @@ exports.GetSalesApi = class extends collectionCommonMixin(LegacyApi) {
     });
   }
 
-  _fetchProductCategoryData({ sales }, cbfn) {
+  _fetchProductBlueprintData({ sales }, cbfn) {
     let productIdList = sales.productList.map(product => product.productId);
     this.legacyDatabase.product.findByIdList({ idList: productIdList }, (err, productList) => {
-      let productCategoryIdList = productList.map(product => product.productCategoryId);
-      this.legacyDatabase.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
+      let productBlueprintIdList = productList.map(product => product.productBlueprintId);
+      this.legacyDatabase.productBlueprint.listByIdList({ idList: productBlueprintIdList }, (err, productBlueprintList) => {
         productList.forEach(product => {
-          let productCategory = productCategoryList.find(productCategory => productCategory.id === product.productCategoryId);
+          let productBlueprint = productBlueprintList.find(productBlueprint => productBlueprint.id === product.productBlueprintId);
           let matchingProduct = sales.productList.find(salesProduct => salesProduct.productId === product.id);
-          matchingProduct.productCategoryId = productCategory.id;
-          matchingProduct.productCategoryName = productCategory.name;
-          matchingProduct.productCategoryUnit = productCategory.unit;
-          matchingProduct.productCategoryIsReturnable = productCategory.isReturnable;
+          matchingProduct.productBlueprintId = productBlueprint.id;
+          matchingProduct.productBlueprintName = productBlueprint.name;
+          matchingProduct.productBlueprintUnit = productBlueprint.unit;
+          matchingProduct.productBlueprintIsReturnable = productBlueprint.isReturnable;
         });
         return cbfn(sales);
       });
@@ -92,7 +92,7 @@ exports.GetSalesApi = class extends collectionCommonMixin(LegacyApi) {
     let { salesId } = body;
     this._getSales({ salesId }, (sales) => {
       this._addReturnedProductCountToSales({ sales }, (sales) => {
-        this._fetchProductCategoryData({ sales }, (sales) => {
+        this._fetchProductBlueprintData({ sales }, (sales) => {
           this.success({ sales: sales });
         });
       });

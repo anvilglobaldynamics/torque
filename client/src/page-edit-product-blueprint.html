@@ -23,7 +23,7 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="page-edit-product-category">
+<dom-module id="page-edit-product-blueprint">
   <template>
     <style include="shared-styles">
     </style>
@@ -32,51 +32,51 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <iron-form id="editProductCategoryForm" on-keypress="genericFormSubmitionKeypress">
+      <iron-form id="editProductBlueprintForm" on-keypress="genericFormSubmitionKeypress">
         <form>
 
           <div class="card vertical layout">
-            <paper-input class="editProductCategoryForm--name" value="{{editProductCategoryForm.name}}" required minlength="3" error-message=[[verses.productCategory.productCategoryNameInputError]] label=[[verses.productCategory.productCategoryNameInput]]></paper-input>
-            <paper-input class="editProductCategoryForm--unit" value="{{editProductCategoryForm.unit}}" required minlength="1" error-message=[[verses.productCategory.productCategoryUnitInputError]] label=[[verses.productCategory.productCategoryUnitInput]]></paper-input>
+            <paper-input class="editProductBlueprintForm--name" value="{{editProductBlueprintForm.name}}" required minlength="3" error-message=[[verses.productBlueprint.productBlueprintNameInputError]] label=[[verses.productBlueprint.productBlueprintNameInput]]></paper-input>
+            <paper-input class="editProductBlueprintForm--unit" value="{{editProductBlueprintForm.unit}}" required minlength="1" error-message=[[verses.productBlueprint.productBlueprintUnitInputError]] label=[[verses.productBlueprint.productBlueprintUnitInput]]></paper-input>
 
-            <paper-input class="editProductCategoryForm--defaultPurchasePrice" step="0.01" value="{{editProductCategoryForm.defaultPurchasePrice}}" type="number" required min="0" error-message=[[verses.productCategory.defaultPurchasePriceInputError]] label=[[verses.productCategory.defaultPurchasePriceInput]]>
+            <paper-input class="editProductBlueprintForm--defaultPurchasePrice" step="0.01" value="{{editProductBlueprintForm.defaultPurchasePrice}}" type="number" required min="0" error-message=[[verses.productBlueprint.defaultPurchasePriceInputError]] label=[[verses.productBlueprint.defaultPurchasePriceInput]]>
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
-            <paper-input class="editProductCategoryForm--defaultVat" value="{{editProductCategoryForm.defaultVat}}" type="number" required min="0" max="100" error-message=[[verses.productCategory.defaultVatInputError]] label=[[verses.productCategory.defaultVatInput]]>
+            <paper-input class="editProductBlueprintForm--defaultVat" value="{{editProductBlueprintForm.defaultVat}}" type="number" required min="0" max="100" error-message=[[verses.productBlueprint.defaultVatInputError]] label=[[verses.productBlueprint.defaultVatInput]]>
               <div slot="suffix">%</div>
             </paper-input>
-            <paper-input class="editProductCategoryForm--defaultSalePrice" step="0.01" value="{{editProductCategoryForm.defaultSalePrice}}" type="number" required min="0" error-message=[[verses.productCategory.productCategoryDefaultSalePriceInputError]] label=[[verses.productCategory.productCategoryDefaultSalePriceInput]]>
+            <paper-input class="editProductBlueprintForm--defaultSalePrice" step="0.01" value="{{editProductBlueprintForm.defaultSalePrice}}" type="number" required min="0" error-message=[[verses.productBlueprint.productBlueprintDefaultSalePriceInputError]] label=[[verses.productBlueprint.productBlueprintDefaultSalePriceInput]]>
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
 
             <div class="vartical layout">
-              <paper-dropdown-menu label=[[verses.productCategory.defaultDiscountType]] class="mr-4" style="width: 100%">
-                <paper-listbox slot="dropdown-content" selected="{{editProductCategoryForm.defaultDiscountType}}" attr-for-selected="name">
+              <paper-dropdown-menu label=[[verses.productBlueprint.defaultDiscountType]] class="mr-4" style="width: 100%">
+                <paper-listbox slot="dropdown-content" selected="{{editProductBlueprintForm.defaultDiscountType}}" attr-for-selected="name">
                   <paper-item name="percent">[[verses.general.percentage]]</paper-item>
                   <paper-item name="fixed">[[verses.general.fixedValue]]</paper-item>
                 </paper-listbox>
               </paper-dropdown-menu>
 
-              <template is="dom-if" if="[[$equals(editProductCategoryForm.defaultDiscountType, 'percent')]]">
-                <paper-input class="editProductCategoryForm--defaultDiscountValue flex" value="{{editProductCategoryForm.defaultDiscountValue}}" type="number" required min="0" max="100" on-input="genericDiscountValueInputChanged" error-message=[[verses.productCategory.defaultDiscountValueInputError]] label=[[verses.productCategory.defaultDiscountValueInput]]>
+              <template is="dom-if" if="[[$equals(editProductBlueprintForm.defaultDiscountType, 'percent')]]">
+                <paper-input class="editProductBlueprintForm--defaultDiscountValue flex" value="{{editProductBlueprintForm.defaultDiscountValue}}" type="number" required min="0" max="100" on-input="genericDiscountValueInputChanged" error-message=[[verses.productBlueprint.defaultDiscountValueInputError]] label=[[verses.productBlueprint.defaultDiscountValueInput]]>
                   <div slot="suffix">%</div>
                 </paper-input>
               </template>
 
-              <template is="dom-if" if="[[$equals(editProductCategoryForm.defaultDiscountType, 'fixed')]]">
-                <paper-input class="editProductCategoryForm--defaultDiscountValue flex" value="{{editProductCategoryForm.defaultDiscountValue}}" type="number" required min="0" max="[[calculateSalePriceAfterVat()]]" on-input="genericDiscountValueInputChanged" error-message=[[verses.productCategory.defaultDiscountValueInputError]] label=[[verses.productCategory.defaultDiscountValueInput]]>
+              <template is="dom-if" if="[[$equals(editProductBlueprintForm.defaultDiscountType, 'fixed')]]">
+                <paper-input class="editProductBlueprintForm--defaultDiscountValue flex" value="{{editProductBlueprintForm.defaultDiscountValue}}" type="number" required min="0" max="[[calculateSalePriceAfterVat()]]" on-input="genericDiscountValueInputChanged" error-message=[[verses.productBlueprint.defaultDiscountValueInputError]] label=[[verses.productBlueprint.defaultDiscountValueInput]]>
                   <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                 </paper-input>
               </template>
 
             </div>
 
-            <paper-checkbox checked="{{editProductCategoryForm.isReturnable}}">[[verses.productCategory.isProductReturnable]]</paper-checkbox>
+            <paper-checkbox checked="{{editProductBlueprintForm.isReturnable}}">[[verses.productBlueprint.isProductReturnable]]</paper-checkbox>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
-              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editProductCategoryForm--submit" on-tap="createProductCategoryTapped">[[verses.productCategory.createProductCategory]]</paper-button>
-              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editProductCategoryForm--submit" on-tap="updateProductCategoryTapped">[[verses.productCategory.updateProductCategory]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editProductBlueprintForm--submit" on-tap="createProductBlueprintTapped">[[verses.productBlueprint.createProductBlueprint]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editProductBlueprintForm--submit" on-tap="updateProductBlueprintTapped">[[verses.productBlueprint.updateProductBlueprint]]</paper-button>
             </div>
           </div>
         </form>
@@ -87,10 +87,10 @@
   </template>
 
   <script>
-    class PageEditProductCategory extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+    class PageEditProductBlueprint extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
 
       static get is() {
-        return 'page-edit-product-category';
+        return 'page-edit-product-blueprint';
       }
 
       static get properties() {
@@ -99,11 +99,11 @@
             type: Boolean,
             value: false
           },
-          editingProductCategory: {
+          editingProductBlueprint: {
             type: Object,
             value: null
           },
-          editProductCategoryForm: {
+          editProductBlueprintForm: {
             type: Object,
             value: _ => {
               if (mode === 'development') {
@@ -145,17 +145,17 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
-        if ('product-category' in this.params) {
+        if ('product-blueprint' in this.params) {
           this.editMode = true;
-          this.app.pushPageTitle(this.app.verses.productCategory.editProductCategoryTitle);
+          this.app.pushPageTitle(this.app.verses.productBlueprint.editProductBlueprintTitle);
         } else {
           this.editMode = false;
-          this.app.pushPageTitle(this.app.verses.productCategory.addProductCategoryTitle);
+          this.app.pushPageTitle(this.app.verses.productBlueprint.addProductBlueprintTitle);
         }
         if (!this._ensureAccess()) return;
-        this._processGetProductCategoryList(() => {
+        this._processGetProductBlueprintList(() => {
           if (this.editMode) {
-            this._processGetProductCategory();
+            this._processGetProductBlueprint();
             this.isReady = true;
           } else {
             this.delay(300, () => {
@@ -168,67 +168,67 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.app.popPageTitle();
-        this.resetProperties('editProductCategoryForm');
-        this.removeAutoValidation('#editProductCategoryForm paper-input');
+        this.resetProperties('editProductBlueprintForm');
+        this.removeAutoValidation('#editProductBlueprintForm paper-input');
       }
 
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
-          privilegeList: ['PRIV_MODIFY_ALL_PRODUCT_CATEGORIES']
+          privilegeList: ['PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS']
         });
       }
 
-      // region: editProductCategory =================================
+      // region: editProductBlueprint =================================
 
-      _processGetProductCategoryList(cbfn) {
+      _processGetProductBlueprintList(cbfn) {
         let data = {
           organizationId: this.app.organization.id
         };
-        this.app.callGetProductCategoryListApi(data, (err, response) => {
+        this.app.callGetProductBlueprintListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this._productCategoryList = response.productCategoryList;
+          this._productBlueprintList = response.productBlueprintList;
           cbfn();
         });
       }
 
-      _processGetProductCategory() {
-        let productCategory = this._productCategoryList.find(productCategory => {
-          return productCategory.id === parseInt(this.params['product-category']);
+      _processGetProductBlueprint() {
+        let productBlueprint = this._productBlueprintList.find(productBlueprint => {
+          return productBlueprint.id === parseInt(this.params['product-blueprint']);
         });
-        this.editingProductCategory = productCategory;
-        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productCategory;
-        this.editProductCategoryForm = { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
+        this.editingProductBlueprint = productBlueprint;
+        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productBlueprint;
+        this.editProductBlueprintForm = { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
       }
 
-      _processCreateProductCategory({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+      _processCreateProductBlueprint({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
         let data = {
           name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
           organizationId: this.app.organization.id,
         };
-        this.app.callAddProductCategoryApi(data, (err, response) => {
+        this.app.callAddProductBlueprintApi(data, (err, response) => {
           if (err) return;
-          if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
-          let message = this.app.verses.productCategory.productCategoryCreated;
+          if (response.hasError) return this.onApiError(response.error, 'editProductBlueprintForm');
+          let message = this.app.verses.productBlueprint.productBlueprintCreated;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
         });
       }
 
-      _processUpdateProductCategory({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+      _processUpdateProductBlueprint({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
         let data = {
           name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
-          productCategoryId: this.editingProductCategory.id
+          productBlueprintId: this.editingProductBlueprint.id
         };
 
         console.log(data);
 
-        this.app.callEditProductCategoryApi(data, (err, response) => {
+        this.app.callEditProductBlueprintApi(data, (err, response) => {
           if (err) return;
-          if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
-          let message = this.app.verses.productCategory.productCategoryUpdated;
+          if (response.hasError) return this.onApiError(response.error, 'editProductBlueprintForm');
+          let message = this.app.verses.productBlueprint.productBlueprintUpdated;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
@@ -238,23 +238,23 @@
       // region: ui =================================
 
       backButtonOnTopBarPressed(e = null) {
-        this.app.navigateToPreviousUrl('/manage-product-categorys');
+        this.app.navigateToPreviousUrl('/manage-product-blueprints');
       }
 
-      createProductCategoryTapped(e = null) {
-        this.elemAll('#editProductCategoryForm paper-input').forEach(el => el.autoValidate = true);
-        if (!this.elem('#editProductCategoryForm').validate()) return;
+      createProductBlueprintTapped(e = null) {
+        this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editProductBlueprintForm').validate()) return;
 
-        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
-        this._processCreateProductCategory({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
+        this._processCreateProductBlueprint({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
       }
 
-      updateProductCategoryTapped(e = null) {
-        this.elemAll('#editProductCategoryForm paper-input').forEach(el => el.autoValidate = true);
-        if (!this.elem('#editProductCategoryForm').validate()) return;
+      updateProductBlueprintTapped(e = null) {
+        this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editProductBlueprintForm').validate()) return;
 
-        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductCategoryForm;
-        this._processUpdateProductCategory({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
+        this._processUpdateProductBlueprint({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
       }
 
       genericDiscountValueInputChanged(e) {
@@ -262,13 +262,13 @@
       }
 
       calculateSalePriceAfterVat() {
-        return (parseFloat(this.editProductCategoryForm.defaultSalePrice) + parseFloat(this.editProductCategoryForm.defaultSalePrice) * parseFloat(this.editProductCategoryForm.defaultVat)/100);
+        return (parseFloat(this.editProductBlueprintForm.defaultSalePrice) + parseFloat(this.editProductBlueprintForm.defaultSalePrice) * parseFloat(this.editProductBlueprintForm.defaultVat)/100);
       }
 
       // region: misc =================================
 
     }
 
-    window.customElements.define(PageEditProductCategory.is, PageEditProductCategory);
+    window.customElements.define(PageEditProductBlueprint.is, PageEditProductBlueprint);
   </script>
 </dom-module>

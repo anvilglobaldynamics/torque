@@ -73,11 +73,11 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(L
     })
   }
 
-  _getMatchingProductCategoryList({ matchingProductList }, cbfn) {
-    let productCategoryIdList = matchingProductList.map(product => product.productCategoryId);
-    this.legacyDatabase.productCategory.listByIdList({ idList: productCategoryIdList }, (err, matchingProductCategoryList) => {
+  _getMatchingProductBlueprintList({ matchingProductList }, cbfn) {
+    let productBlueprintIdList = matchingProductList.map(product => product.productBlueprintId);
+    this.legacyDatabase.productBlueprint.listByIdList({ idList: productBlueprintIdList }, (err, matchingProductBlueprintList) => {
       if (err) return this.fail(err);
-      cbfn(matchingProductCategoryList)
+      cbfn(matchingProductBlueprintList)
     })
   }
 
@@ -87,8 +87,8 @@ exports.GetAggregatedInventoryDetailsApi = class extends collectionCommonMixin(L
       this._getInventoryContainerDetails({ inventory }, (inventoryContainerDetails) => {
         this._getInventoryDetails({ inventory }, (inventoryDetails) => {
           this._getMatchingProductList({ productList: inventory.productList }, (matchingProductList) => {
-            this._getMatchingProductCategoryList({ matchingProductList }, (matchingProductCategoryList) => {
-              this.success({ inventoryDetails, inventoryContainerDetails, productList: inventory.productList, matchingProductList, matchingProductCategoryList });
+            this._getMatchingProductBlueprintList({ matchingProductList }, (matchingProductBlueprintList) => {
+              this.success({ inventoryDetails, inventoryContainerDetails, productList: inventory.productList, matchingProductList, matchingProductBlueprintList });
             });
           });
         });

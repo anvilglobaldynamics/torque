@@ -36,8 +36,8 @@
     "name": "View all inventories"
   },
   {
-    "code": "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES",
-    "name": "Modify all product categories"
+    "code": "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS",
+    "name": "Modify all product blueprints"
   },
   {
     "code": "PRIV_TRANSFER_ALL_INVENTORIES",

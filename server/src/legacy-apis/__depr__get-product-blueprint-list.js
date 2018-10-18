@@ -1,7 +1,7 @@
 let { LegacyApi } = require('../legacy-api-base');
 let Joi = require('joi');
 
-exports.GetProductCategoryListApi = class extends LegacyApi {
+exports.GetProductBlueprintListApi = class extends LegacyApi {
 
   get autoValidates() { return true; }
 
@@ -24,17 +24,17 @@ exports.GetProductCategoryListApi = class extends LegacyApi {
     }];
   }
 
-  _getProductCategoryList({ organizationId }, cbfn) {
-    this.legacyDatabase.productCategory.listByOrganizationId({ organizationId }, (err, productCategoryList) => {
+  _getProductBlueprintList({ organizationId }, cbfn) {
+    this.legacyDatabase.productBlueprint.listByOrganizationId({ organizationId }, (err, productBlueprintList) => {
       if (err) return this.fail(err);
-      cbfn(productCategoryList);
+      cbfn(productBlueprintList);
     })
   }
 
   handle({ body }) {
     let { organizationId } =  body;
-    this._getProductCategoryList({ organizationId }, (productCategoryList) => {
-      this.success({ productCategoryList });
+    this._getProductBlueprintList({ organizationId }, (productBlueprintList) => {
+      this.success({ productBlueprintList });
     });
   }
 

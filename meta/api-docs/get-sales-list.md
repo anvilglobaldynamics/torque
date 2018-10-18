@@ -100,7 +100,7 @@ Possible Error Codes:
           discountType: Joi.string().max(1024).required(),
           discountValue: Joi.number().max(999999999999999).required(),
           salePrice: Joi.number().max(999999999999999).required(),
-          productCategory: Joi.object().required()
+          productBlueprint: Joi.object().required()
         })
       ),
       payment: Joi.object().keys({

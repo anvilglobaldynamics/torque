@@ -60,7 +60,7 @@ Target is to reach a fully functional state with minimal features that closed be
 | PAGE | PageEditCustomer             | NO      | NO     | NO       | NO      | NO       | NO       | NO   |
 | PAGE | PageEditEmployee             | NO      | NO     | NO       | NO      | NO       | NO       | NO   |
 | PAGE | PageEditOutlet               | NO      | NO     | NO       | NO      | NO       | NO       | NO   |
-| PAGE | PageEditProductCategory      | NO      | NO     | NO       | NO      | NO       | NO       | NO   |
+| PAGE | PageEditProductBlueprint      | NO      | NO     | NO       | NO      | NO       | NO       | NO   |
 | PAGE | PageEditProfile              | NO      | NO     | NO       | NO      | NO       | NO       | NO   |
 | PAGE | PageEditWarehouse            | NO      | NO     | NO       | NO      | NO       | NO       | NO   |
 | PAGE | PageEditSalesReturn          | NO      | NO     | NO       | NO      | NO       | NO       | NO   |

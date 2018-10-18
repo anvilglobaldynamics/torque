@@ -1,6 +1,6 @@
-This API handles get product categories to populate product category tree view and search result while adding product to inventory requirement.
+This API handles get product blueprints to populate product blueprint tree view and search result while adding product to inventory requirement.
 
-url: `api/get-product-category-list`
+url: `api/get-product-blueprint-list`
 
 method: `POST`
 
@@ -36,7 +36,7 @@ Possible Error Codes:
 {
   hasError: false,
   
-  productCategoryList: Joi.array().items(
+  productBlueprintList: Joi.array().items(
     Joi.object().keys({
       id: Joi.number().max(999999999999999).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),

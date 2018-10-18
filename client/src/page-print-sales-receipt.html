@@ -192,7 +192,7 @@
             <template is="dom-repeat" items="{{sales.productList}}" as="product">
               <tr>
                 <td>
-                  [[product.productCategoryName]]
+                  [[product.productBlueprintName]]
                   <template is="dom-if" if="[[product.returnedProductCount]]">
                     <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
                   </template>

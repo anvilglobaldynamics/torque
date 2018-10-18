@@ -321,7 +321,7 @@
           this.inventoryName = inventoryDetails.inventoryName;
           let productList = aggregatedProductList.map(product => {
             let { purchasePrice, salePrice } = product.product;
-            let { name, unit } = product.product.productCategory;
+            let { name, unit } = product.product.productBlueprint;
             product.isSelected = false;
             Object.assign(product, { name, unit, purchasePrice, salePrice });
             return product;

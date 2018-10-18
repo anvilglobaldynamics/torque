@@ -1,6 +1,6 @@
-This API handles adding new product categories in bulk.
+This API handles adding new product blueprints in bulk.
 
-url: `api/bulk-import-product-categories`
+url: `api/bulk-import-product-blueprints`
 
 method: `POST`
 
@@ -54,7 +54,7 @@ Possible Error Codes:
 ```
 
 ### db changes:
-updates the `product-category` collection in db.
+updates the `product-blueprint` collection in db.
 
 ### notes:
 ignoredRowList can contain an array of objects similar to `{

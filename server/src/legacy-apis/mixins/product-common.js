@@ -17,13 +17,13 @@ exports.productCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   _verifyProductsAreReturnable({ productList }, cbfn) {
     let productIdList = productList.map(product => product.productId);
     this.legacyDatabase.product.findByIdList({ idList: productIdList }, (err, _productList) => {
-      let productCategoryIdList = _productList.map(product => product.productCategoryId);
-      this.legacyDatabase.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
+      let productBlueprintIdList = _productList.map(product => product.productBlueprintId);
+      this.legacyDatabase.productBlueprint.listByIdList({ idList: productBlueprintIdList }, (err, productBlueprintList) => {
         if (err) return this.fail(err);
-        for (let productCategory of productCategoryList) {
-          if (productCategory.isReturnable == false) {
+        for (let productBlueprint of productBlueprintList) {
+          if (productBlueprint.isReturnable == false) {
             err = new Error("product in list is non-returnable");
-            err.code = "PRODUCT_CATEGORY_NON_RETURNABLE";
+            err.code = "PRODUCT_BLUEPRINT_NON_RETURNABLE";
             return this.fail(err);
           }
         }
@@ -32,13 +32,13 @@ exports.productCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     });
   }
 
-  _verifyProductCategoriesExist({ productList }, cbfn) {
-    let productCategoryIdList = productList.map(product => product.productCategoryId);
-    this.legacyDatabase.productCategory.listByIdList({ idList: productCategoryIdList }, (err, _productList) => {
+  _verifyProductBlueprintsExist({ productList }, cbfn) {
+    let productBlueprintIdList = productList.map(product => product.productBlueprintId);
+    this.legacyDatabase.productBlueprint.listByIdList({ idList: productBlueprintIdList }, (err, _productList) => {
       if (err) return this.fail(err);
       if (productList.length !== _productList.length) {
         err = new Error("Unable to find all products in productList");
-        err.code = "PRODUCT_CATEGORY_INVALID";
+        err.code = "PRODUCT_BLUEPRINT_INVALID";
         return this.fail(err);
       }
       return cbfn();

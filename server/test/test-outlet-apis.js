@@ -9,7 +9,7 @@ let {
   registerUser,
   loginUser,
   addOrganization,
-  addProductCategory,
+  addProductBlueprint,
   validateOutletSchema,
   validateEmbeddedInventorySchema,
   validateAddOutletApiSuccessResponse,
@@ -32,7 +32,7 @@ const orgName = "Test Organization";
 const orgBusinessAddress = "My Address";
 const orgPhone = 'o' + rnd(prefix, 11);
 
-let productCategoryId = null;
+let productBlueprintId = null;
 let outletDefaultInventoryId = null;
 
 const outletPhone = 'o1' + rnd(prefix, 11);
@@ -67,10 +67,10 @@ describe('Outlet', _ => {
             email: orgEmail
           }, (data) => {
             organizationId = data.organizationId;
-            addProductCategory({
+            addProductBlueprint({
               apiKey,
               organizationId,
-              name: "test product category",
+              name: "test product blueprint",
               unit: "box",
               defaultDiscountType: "percent",
               defaultDiscountValue: 10,
@@ -79,7 +79,7 @@ describe('Outlet', _ => {
               defaultSalePrice: 111,
               isReturnable: true
             }, (data) => {
-              productCategoryId = data.productCategoryId;
+              productBlueprintId = data.productBlueprintId;
               testDoneFn();
             });
           });
@@ -330,7 +330,7 @@ describe('Outlet', _ => {
         apiKey,
         inventoryId: outletDefaultInventoryId,
         productList: [
-          { productCategoryId, purchasePrice: 100, salePrice: 200, count: 10 }
+          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 10 }
         ]
       }
     }, (err, response, body) => {

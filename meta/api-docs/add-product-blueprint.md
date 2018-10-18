@@ -1,6 +1,6 @@
-This API handles adding new product category.
+This API handles adding new product blueprint.
 
-url: `api/add-product-category`
+url: `api/add-product-blueprint`
 
 method: `POST`
 
@@ -51,9 +51,9 @@ Possible Error Codes:
 {
   hasError: false,
   status: "success",
-  productCategoryId: Joi.number().max(999999999999999).required()
+  productBlueprintId: Joi.number().max(999999999999999).required()
 }
 ```
 
 ### db changes:
-updates the `product-category` collection in db.
+updates the `product-blueprint` collection in db.

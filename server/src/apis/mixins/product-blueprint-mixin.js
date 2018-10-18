@@ -2,10 +2,10 @@ const { Api } = require('../../api-base');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-error');
 
 /** @param {typeof Api} SuperApiClass */
-exports.ProductCategoryMixin = (SuperApiClass) => class extends SuperApiClass {
+exports.ProductBlueprintMixin = (SuperApiClass) => class extends SuperApiClass {
 
-  async _createProductCategory({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
-    return await this.database.productCategory.create({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+  async _createProductBlueprint({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+    return await this.database.productBlueprint.create({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
   }
 
   _checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat }) {
@@ -18,12 +18,12 @@ exports.ProductCategoryMixin = (SuperApiClass) => class extends SuperApiClass {
     }
   }
 
-  async _verifyProductCategoriesExist({ productList }) {
+  async _verifyProductBlueprintsExist({ productList }) {
     await this.crossmap({
       source: productList,
-      sourceKey: 'productCategoryId',
-      target: 'productCategory',
-      onError: (inventory) => { throw new CodedError("PRODUCT_CATEGORY_INVALID", "Unable to find all products in productList"); }
+      sourceKey: 'productBlueprintId',
+      target: 'productBlueprint',
+      onError: (inventory) => { throw new CodedError("PRODUCT_BLUEPRINT_INVALID", "Unable to find all products in productList"); }
     });
   }
 

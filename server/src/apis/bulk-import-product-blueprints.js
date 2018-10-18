@@ -1,10 +1,10 @@
-const { Api } = require('./../api-base');
+const { Api } = require('../api-base');
 const Joi = require('joi');
-const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
-const { extract } = require('./../utils/extract');
-const { ProductCategoryMixin } = require('./mixins/product-category-mixin');
+const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
+const { extract } = require('../utils/extract');
+const { ProductBlueprintMixin } = require('./mixins/product-blueprint-mixin');
 
-exports.BulkImportProductCategoriesApi = class extends Api.mixin(ProductCategoryMixin) {
+exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprintMixin) {
 
   get autoValidates() { return true; }
 
@@ -21,12 +21,12 @@ exports.BulkImportProductCategoriesApi = class extends Api.mixin(ProductCategory
     return [{
       organizationBy: "organizationId",
       privilegeList: [
-        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
       ]
     }];
   }
 
-  get _productCategoryRowSchema() {
+  get _productBlueprintRowSchema() {
     return Joi.array().ordered(
       Joi.string().min(1).max(64).required(), // name
       Joi.string().max(1024).required(), // unit
@@ -40,7 +40,7 @@ exports.BulkImportProductCategoriesApi = class extends Api.mixin(ProductCategory
   }
 
   _validateAgainstRowSchema(row) {
-    let { error, value } = this.validate(row, this._productCategoryRowSchema);
+    let { error, value } = this.validate(row, this._productBlueprintRowSchema);
     if (error) {
       let { message, path } = error.details[0];
       let cellNumber = parseInt(path) + 1;
@@ -53,7 +53,7 @@ exports.BulkImportProductCategoriesApi = class extends Api.mixin(ProductCategory
     return value;
   }
 
-  _convertRowToProductCategory(row) {
+  _convertRowToProductBlueprint(row) {
     let [
       name, unit, defaultPurchasePrice, defaultSalePrice,
       defaultVat, defaultDiscountType, defaultDiscountValue, isReturnable
@@ -67,29 +67,29 @@ exports.BulkImportProductCategoriesApi = class extends Api.mixin(ProductCategory
   async handle({ body }) {
     let { organizationId, rowList } = body;
 
-    let productCategoryList = [];
+    let productBlueprintList = [];
 
     // phase 1. detect issues pre-emptively.
     for (let i = 0; i < rowList.length; i++) {
       try {
         rowList[i] = this._validateAgainstRowSchema(rowList[i]);
-        let productCategory = this._convertRowToProductCategory(rowList[i]);
-        this._checkIfDiscountValueIsValid(productCategory);
-        productCategoryList.push(productCategory);
+        let productBlueprint = this._convertRowToProductBlueprint(rowList[i]);
+        this._checkIfDiscountValueIsValid(productBlueprint);
+        productBlueprintList.push(productBlueprint);
       } catch (err) {
         err.rowNumber = i + 1;
         throw err;
       }
     }
 
-    // phase 2. create product categories
+    // phase 2. create product blueprints
     let ignoredRowList = [];
     let successfulCount = 0;
-    for (let i = 0; i < productCategoryList.length; i++) {
-      let productCategory = productCategoryList[i];
+    for (let i = 0; i < productBlueprintList.length; i++) {
+      let productBlueprint = productBlueprintList[i];
       try {
-        productCategory.organizationId = organizationId;
-        await this._createProductCategory(productCategory);
+        productBlueprint.organizationId = organizationId;
+        await this._createProductBlueprint(productBlueprint);
         successfulCount += 1;
       } catch (err) {
         if (err.code && err.code.indexOf('DUPLICATE_') === 0) {

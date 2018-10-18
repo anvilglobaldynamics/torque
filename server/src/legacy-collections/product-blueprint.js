@@ -12,12 +12,12 @@ const { LegacyCollection } = require('../legacy-collection-base');
 
 const Joi = require('joi');
 
-exports.ProductCategoryCollection = class extends LegacyCollection {
+exports.ProductBlueprintCollection = class extends LegacyCollection {
 
   constructor(...args) {
     super(...args);
 
-    this.collectionName = 'product-category';
+    this.collectionName = 'product-blueprint';
 
     this.joiSchema = Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
@@ -97,8 +97,8 @@ exports.ProductCategoryCollection = class extends LegacyCollection {
     this._find({ organizationId }, cbfn);
   }
 
-  findById({ productCategoryId }, cbfn) {
-    this._findOne({ id: productCategoryId }, cbfn)
+  findById({ productBlueprintId }, cbfn) {
+    this._findOne({ id: productBlueprintId }, cbfn)
   }
 
   // FIXME: naming issue
@@ -106,19 +106,19 @@ exports.ProductCategoryCollection = class extends LegacyCollection {
     this._find({ id: { $in: idList } }, cbfn);
   }
 
-  update({ productCategoryId }, { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
+  update({ productBlueprintId }, { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
     let modifications = {
       $set: {
         name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
       }
     }
-    this._update({ id: productCategoryId }, modifications, cbfn);
+    this._update({ id: productBlueprintId }, modifications, cbfn);
   }
 
-  delete({ productCategoryId }, cbfn) {
+  delete({ productBlueprintId }, cbfn) {
     let modifications = {
       $set: { isDeleted: true }
     }
-    this._update({ id: productCategoryId }, modifications, cbfn);
+    this._update({ id: productBlueprintId }, modifications, cbfn);
   }
 }

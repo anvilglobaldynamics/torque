@@ -20,7 +20,7 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="page-bulk-import-product-categories">
+<dom-module id="page-bulk-import-product-blueprints">
   <template>
     <style include="shared-styles">
       .card-text-container {}
@@ -75,12 +75,12 @@
       <!-- Download card - start -->
       <div class="card vertical layout">
         <div class="card-text-container">
-          [[verses.bulkImportProductCategory.downloadSectionTip]]
+          [[verses.bulkImportProductBlueprint.downloadSectionTip]]
         </div>
         
         <paper-button raised class="primary" style="width: 100%; margin-top: 12px;" on-tap="downloadCsvTapped">
           <iron-icon class="button-icon" icon="icons:file-download"></iron-icon>
-          [[verses.bulkImportProductCategory.downloadButtonLabel]]
+          [[verses.bulkImportProductBlueprint.downloadButtonLabel]]
         </paper-button>
       </div>
       <!-- Download card - end -->
@@ -91,51 +91,51 @@
           <ul class="instruction-list">
 
             <li>
-              [[verses.bulkImportProductCategory.instructionOne]]
+              [[verses.bulkImportProductBlueprint.instructionOne]]
               <div class="instruction-image-container">
-                <img class="instruction-image" src="../images/bulk-product-category-instruction/instruction-1.png">
+                <img class="instruction-image" src="../images/bulk-product-blueprint-instruction/instruction-1.png">
               </div>
             </li>
 
             <li>
-              [[verses.bulkImportProductCategory.instructionTwo]]
+              [[verses.bulkImportProductBlueprint.instructionTwo]]
               <div class="instruction-image-container">
-                <img class="instruction-image" src="../images/bulk-product-category-instruction/instruction-2.png">
+                <img class="instruction-image" src="../images/bulk-product-blueprint-instruction/instruction-2.png">
               </div>
             </li>
 
             <li>
-              [[verses.bulkImportProductCategory.instructionThree]]
+              [[verses.bulkImportProductBlueprint.instructionThree]]
               <div class="instruction-image-container">
-                <img class="instruction-image" src="../images/bulk-product-category-instruction/instruction-3.png">
+                <img class="instruction-image" src="../images/bulk-product-blueprint-instruction/instruction-3.png">
               </div>
             </li>
 
             <li>
-              [[verses.bulkImportProductCategory.instructionFour]]
+              [[verses.bulkImportProductBlueprint.instructionFour]]
               <div class="instruction-image-container">
-                <img class="instruction-image" src="../images/bulk-product-category-instruction/instruction-4.png">
+                <img class="instruction-image" src="../images/bulk-product-blueprint-instruction/instruction-4.png">
               </div>
             </li>
 
             <li>
-              [[verses.bulkImportProductCategory.instructionFive]]
+              [[verses.bulkImportProductBlueprint.instructionFive]]
               <div class="instruction-image-container">
-                <img class="instruction-image" src="../images/bulk-product-category-instruction/instruction-5.png">
+                <img class="instruction-image" src="../images/bulk-product-blueprint-instruction/instruction-5.png">
               </div>
             </li>
 
             <li>
-              [[verses.bulkImportProductCategory.instructionSix]]
+              [[verses.bulkImportProductBlueprint.instructionSix]]
               <div class="instruction-image-container">
-                <img class="instruction-image" src="../images/bulk-product-category-instruction/instruction-6.png">
+                <img class="instruction-image" src="../images/bulk-product-blueprint-instruction/instruction-6.png">
               </div>
             </li>
 
             <li>
-              [[verses.bulkImportProductCategory.instructionSeven]]
+              [[verses.bulkImportProductBlueprint.instructionSeven]]
               <div class="instruction-image-container">
-                <img class="instruction-image" src="../images/bulk-product-category-instruction/instruction-7.png">
+                <img class="instruction-image" src="../images/bulk-product-blueprint-instruction/instruction-7.png">
               </div>
             </li>
 
@@ -147,12 +147,12 @@
       <!-- Upload card - start -->
       <div class="card vertical layout">
         <div class="card-text-container">
-          [[verses.bulkImportProductCategory.uploadSectionTip]]
+          [[verses.bulkImportProductBlueprint.uploadSectionTip]]
         </div>
 
         <paper-button raised class="primary" style="width: 100%; margin-top: 12px;" on-tap="uploadCsvTapped">
           <iron-icon class="button-icon" icon="icons:file-upload"></iron-icon>
-          [[verses.bulkImportProductCategory.uploadButtonLabel]]
+          [[verses.bulkImportProductBlueprint.uploadButtonLabel]]
         </paper-button>
         <input type="file" style="visibility: hidden; height: 0px;" id="upload-csv-el" accept=".csv" on-change="csvFileSelected">
       </div>
@@ -163,15 +163,15 @@
         <div class="card vertical layout">
 
           <div class="success-message">
-            [[verses.bulkImportProductCategory.successfullyImported]]: [[results.successfulCount]]
+            [[verses.bulkImportProductBlueprint.successfullyImported]]: [[results.successfulCount]]
           </div>
           
           <template is="dom-if" if="[[results.ignoredRowList.length]]">
-              [[verses.bulkImportProductCategory.rowsIgnored]]:
+              [[verses.bulkImportProductBlueprint.rowsIgnored]]:
             <ul class="ignored-row-list">
               <template is="dom-repeat" items="[[results.ignoredRowList]]">
-                <li>[[verses.bulkImportProductCategory.row]] #[[item.rowNumber]]
-                  <template is="dom-if" if="[[$equals(item.reason, 'name-duplication')]]">([[verses.bulkImportProductCategory.nameUsed]])</template>
+                <li>[[verses.bulkImportProductBlueprint.row]] #[[item.rowNumber]]
+                  <template is="dom-if" if="[[$equals(item.reason, 'name-duplication')]]">([[verses.bulkImportProductBlueprint.nameUsed]])</template>
                 </li>
               </template>
             </ul>
@@ -186,7 +186,7 @@
         <div class="card vertical layout">
 
           <div class="error-message">
-            [[verses.bulkImportProductCategory.errorOccurred]]:<br>
+            [[verses.bulkImportProductBlueprint.errorOccurred]]:<br>
             <template is="dom-if" if="[[error.rowNumber]]">
               <span>Row #[[error.rowNumber]]</span>
             </template> [[error.message]]
@@ -200,10 +200,10 @@
   </template>
 
   <script>
-    class PageBulkImportProductCategories extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+    class PageBulkImportProductBlueprints extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
 
       static get is() {
-        return 'page-bulk-import-product-categories';
+        return 'page-bulk-import-product-blueprints';
       }
 
       static get properties() {
@@ -235,7 +235,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
-        this.app.pushPageTitle(this.app.verses.bulkImportProductCategory.pageTitle);
+        this.app.pushPageTitle(this.app.verses.bulkImportProductBlueprint.pageTitle);
         if (!this._ensureAccess()) return;
         this._resetErrorAndResults();
         this.isReady = true;
@@ -249,7 +249,7 @@
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
-          privilegeList: ['PRIV_MODIFY_ALL_PRODUCT_CATEGORIES']
+          privilegeList: ['PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS']
         });
       }
 
@@ -262,7 +262,7 @@
 
       downloadCsvTapped(e = null) {
         this._resetErrorAndResults();
-        let filename = 'Lipi Product Category Bulk Upload CSV.csv'; // change also in lang files if this name is changed
+        let filename = 'Lipi Product Blueprint Bulk Upload CSV.csv'; // change also in lang files if this name is changed
         let content = this.headerList.join(',');
         let el = document.createElement('a');
         el.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(content));
@@ -285,7 +285,7 @@
           return cbfn(null, event.target.result);
         };
         reader.onerror = (e) => {
-          let err = evt.target.error || new Error(this.app.verses.bulkImportProductCategory.unknownErrorWhileReadingFile);
+          let err = evt.target.error || new Error(this.app.verses.bulkImportProductBlueprint.unknownErrorWhileReadingFile);
           return cbfn(err, null);
         };
       }
@@ -303,24 +303,24 @@
           return err;
         }
         if (!isArray(rawRowList) || rawRowList.length === 0 || (rawRowList.length === 1 && rawRowList[0].length === 1 && rawRowList[0][0] === null)) {
-          return cbfn(makeError(this.app.verses.bulkImportProductCategory.fileProvidedIsNotValidCsv));
+          return cbfn(makeError(this.app.verses.bulkImportProductBlueprint.fileProvidedIsNotValidCsv));
         }
         let headerList = rawRowList.shift();
         if (!isArray(headerList) || headerList.length !== this.headerList.length) {
-          return cbfn(makeError(this.app.verses.bulkImportProductCategory.fileIsInvalid));
+          return cbfn(makeError(this.app.verses.bulkImportProductBlueprint.fileIsInvalid));
         }
         for (let header of this.headerList) {
           if (headerList.indexOf(header) === -1) {
-            return cbfn(makeError(this.app.verses.bulkImportProductCategory.expectedColumn + ": " + header));
+            return cbfn(makeError(this.app.verses.bulkImportProductBlueprint.expectedColumn + ": " + header));
           }
         }
         if (rawRowList.length === 0) {
-          return cbfn(makeError(this.app.verses.bulkImportProductCategory.fileProvidedHasNoData));
+          return cbfn(makeError(this.app.verses.bulkImportProductBlueprint.fileProvidedHasNoData));
         }
         let rowIndex = 1;
         for (let rawRow of rawRowList) {
           if (!isArray(rawRow) || rawRow.length !== this.headerList.length) {
-            return cbfn(makeError(rowIndex + " " + this.app.verses.bulkImportProductCategory.missingCellsInRow ));
+            return cbfn(makeError(rowIndex + " " + this.app.verses.bulkImportProductBlueprint.missingCellsInRow ));
           }
           rowIndex += 1;
         }
@@ -346,13 +346,13 @@
         let fileList = el.files;
         if (fileList.length === 0) return;
         if (fileList.length !== 1) {
-          return this.app.showModalDialog(this.app.verses.bulkImportProductCategory.multipleFilesSelectedTitle, this.app.verses.bulkImportProductCategory.multipleFilesSelectedBody);
+          return this.app.showModalDialog(this.app.verses.bulkImportProductBlueprint.multipleFilesSelectedTitle, this.app.verses.bulkImportProductBlueprint.multipleFilesSelectedBody);
         }
         let file = fileList[0];
         this._readFile(file, (err, content) => {
           el.value = '';
           if (err) {
-            return this.app.showModalDialog(this.app.verses.bulkImportProductCategory.unableToReadTitle, this.app.verses.bulkImportProductCategory.unableToReadBody);
+            return this.app.showModalDialog(this.app.verses.bulkImportProductBlueprint.unableToReadTitle, this.app.verses.bulkImportProductBlueprint.unableToReadBody);
           }
           this._parseCsv(content, (err, rawRowList) => {
             this._validateRawRowList(rawRowList, (err, rowList) => {
@@ -367,7 +367,7 @@
 
       _sendBulkData(rowList, cbfn) {
         let data = { organizationId: this.app.organization.id, rowList };
-        this.app.callBulkImportProductCategoriesApi(data, (err, response) => {
+        this.app.callBulkImportProductBlueprintsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) {
             this._renderError(response.error);
@@ -381,6 +381,6 @@
 
     }
 
-    window.customElements.define(PageBulkImportProductCategories.is, PageBulkImportProductCategories);
+    window.customElements.define(PageBulkImportProductBlueprints.is, PageBulkImportProductBlueprints);
   </script>
 </dom-module>

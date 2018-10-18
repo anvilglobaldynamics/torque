@@ -20,12 +20,12 @@ exports.ProductMixin = (SuperApiClass) => class extends SuperApiClass {
   async _verifyProductsAreReturnable({ productList }) {
     let productIdList = productList.map(product => product.productId);
     let newProductList = await this.database.product.listByIdList({ idList: productIdList });
-    let productCategoryIdList = newProductList.map(product => product.productCategoryId);
-    let productCategoryList = await this.database.productCategory.listByIdList({ idList: productCategoryIdList });
-    throwOnFalsy(productCategoryList.length, "PRODUCT_CATEGORY_INVALID", "Unable to find all product categories");
+    let productBlueprintIdList = newProductList.map(product => product.productBlueprintId);
+    let productBlueprintList = await this.database.productBlueprint.listByIdList({ idList: productBlueprintIdList });
+    throwOnFalsy(productBlueprintList.length, "PRODUCT_BLUEPRINT_INVALID", "Unable to find all product blueprints");
 
-    for (let productCategory of productCategoryList) {
-      throwOnFalsy(productCategory.isReturnable, "PRODUCT_CATEGORY_NON_RETURNABLE", "product in list is non-returnable");
+    for (let productBlueprint of productBlueprintList) {
+      throwOnFalsy(productBlueprint.isReturnable, "PRODUCT_BLUEPRINT_NON_RETURNABLE", "product in list is non-returnable");
     }
 
     return;

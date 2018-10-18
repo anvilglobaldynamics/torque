@@ -45,10 +45,10 @@ Possible Error Codes:
     productList: Joi.array().items(
       Joi.object().keys({
         productId: Joi.number().max(999999999999999).required(),
-        productCategoryId: Joi.number().max(999999999999999).required(),
-        productCategoryName: Joi.string().min(1).max(64).required(),
-        productCategoryUnit: Joi.string().max(64).required(),
-        productCategoryIsReturnable: Joi.boolean().required(),
+        productBlueprintId: Joi.number().max(999999999999999).required(),
+        productBlueprintName: Joi.string().min(1).max(64).required(),
+        productBlueprintUnit: Joi.string().max(64).required(),
+        productBlueprintIsReturnable: Joi.boolean().required(),
         count: Joi.number().max(999999999999999).required(),
         discountType: Joi.string().max(1024).required(),
         discountValue: Joi.number().max(999999999999999).required(),

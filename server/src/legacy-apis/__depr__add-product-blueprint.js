@@ -4,7 +4,7 @@ let Joi = require('joi');
 
 let { collectionCommonMixin } = require('./mixins/collection-common');
 
-exports.AddProductCategoryApi = class extends collectionCommonMixin(LegacyApi) {
+exports.AddProductBlueprintApi = class extends collectionCommonMixin(LegacyApi) {
 
   get autoValidates() { return true; }
 
@@ -37,30 +37,30 @@ exports.AddProductCategoryApi = class extends collectionCommonMixin(LegacyApi) {
     return [{
       organizationBy: "organizationId",
       privilegeList: [
-        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
       ]
     }];
   }
 
-  _createProductCategory(productCategory, cbfn) {
-    this.legacyDatabase.productCategory.create(productCategory, (err, productCategoryId) => {
+  _createProductBlueprint(productBlueprint, cbfn) {
+    this.legacyDatabase.productBlueprint.create(productBlueprint, (err, productBlueprintId) => {
       if (err) return this.fail(err);
-      return cbfn(productCategoryId);
+      return cbfn(productBlueprintId);
     });
   }
 
-  _checkAndCreateProductCategory({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
-    let productCategory = {
+  _checkAndCreateProductBlueprint({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
+    let productBlueprint = {
       organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
     }
 
-    this._createProductCategory(productCategory, cbfn);
+    this._createProductBlueprint(productBlueprint, cbfn);
   }
 
   handle({ body }) {
     let { organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
-    this._checkAndCreateProductCategory({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, (productCategoryId) => {
-      this.success({ status: "success", productCategoryId });
+    this._checkAndCreateProductBlueprint({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, (productBlueprintId) => {
+      this.success({ status: "success", productBlueprintId });
     });
   }
 

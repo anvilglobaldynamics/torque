@@ -20,7 +20,7 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="product-category">
+<dom-module id="product-blueprint">
   <template>
     <style include="shared-styles">
     </style>
@@ -29,9 +29,9 @@
       <div class="list">
         <div class="horizontal layout item center">
           <div class="vertical layout flex">
-            <div class="inventory-product-important-detail-container">[[productCategory.name]]</div>
-            <div class="inventory-product-price-container">[[verses.productCategory.buyingPrice]]: [[productCategory.defaultPurchasePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productCategory.unit]]</div>
-            <div class="inventory-product-price-container">[[verses.productCategory.sellingPrice]]: [[productCategory.defaultSalePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productCategory.unit]]</div>
+            <div class="inventory-product-important-detail-container">[[productBlueprint.name]]</div>
+            <div class="inventory-product-price-container">[[verses.productBlueprint.buyingPrice]]: [[productBlueprint.defaultPurchasePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productBlueprint.unit]]</div>
+            <div class="inventory-product-price-container">[[verses.productBlueprint.sellingPrice]]: [[productBlueprint.defaultSalePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productBlueprint.unit]]</div>
           </div>
           <div class="horizontal layout wrap">
             <paper-button class="secondary" on-tap="editTapped" raised>
@@ -45,10 +45,10 @@
   </template>
 
   <script>
-    class ProductCategory extends FxElement.mixin(TorqueLanguageBehavior) {
+    class ProductBlueprint extends FxElement.mixin(TorqueLanguageBehavior) {
 
       static get is() {
-        return 'product-category';
+        return 'product-blueprint';
       }
 
       static get properties() {
@@ -58,7 +58,7 @@
             value: null,
             observer: 'pageChanged'
           },
-          productCategory: {
+          productBlueprint: {
             type: Object,
             value: null
           }
@@ -80,18 +80,18 @@
       // region: ui  ===========================
 
       editTapped(e) {
-        return this.app.navigateTo(`/edit-product-category/product-category:${this.productCategory.id}`);
+        return this.app.navigateTo(`/edit-product-blueprint/product-blueprint:${this.productBlueprint.id}`);
       }
 
       // region: misc =================================
 
     }
 
-    window.customElements.define(ProductCategory.is, ProductCategory);
+    window.customElements.define(ProductBlueprint.is, ProductBlueprint);
   </script>
 </dom-module>
 
-<dom-module id="page-manage-product-categories">
+<dom-module id="page-manage-product-blueprints">
   <template>
     <style include="shared-styles">
     </style>
@@ -101,12 +101,12 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card helpful-tips">
-        [[verses.productCategory.whatIsProductCategoryMessage]]
+        [[verses.productBlueprint.whatIsProductBlueprintMessage]]
       </div>
 
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
-          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.productCategory.searchForProductCategoryInputError]] label=[[verses.productCategory.searchForProductCategoryInput]] on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.productBlueprint.searchForProductBlueprintInputError]] label=[[verses.productBlueprint.searchForProductBlueprintInput]] on-keypress="searchFieldKeypressed"></paper-input>
           <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
           <paper-button raised class="primary" on-tap="searchTapped">
             [[verses.general.search]]
@@ -114,13 +114,13 @@
         </div>
       </div>
 
-      <template is="dom-if" if="[[!productCategoryList.length]]">
+      <template is="dom-if" if="[[!productBlueprintList.length]]">
         <div class="card">
-          [[verses.productCategory.noProductCategoryFound]]
+          [[verses.productBlueprint.noProductBlueprintFound]]
         </div>
       </template>
 
-      <template is="dom-if" if="{{productCategoryList.length}}">
+      <template is="dom-if" if="{{productBlueprintList.length}}">
 
         <div class="card vertical layout">
 
@@ -128,8 +128,8 @@
             <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
           </template>
 
-          <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
-            <product-category product-category="[[productCategory]]" app="[[app]]"></product-category>
+          <template is="dom-repeat" items="[[productBlueprintList]]" as="productBlueprint">
+            <product-blueprint product-blueprint="[[productBlueprint]]" app="[[app]]"></product-blueprint>
           </template>
 
           <div class="pagination">
@@ -150,11 +150,11 @@
       <div class="lone-controls">
         <paper-button class="secondary" on-tap="bulkImportTapped" raised>
           <iron-icon icon="file-upload" class="button-icon"></iron-icon>
-          [[verses.productCategory.bulkImport]]
+          [[verses.productBlueprint.bulkImport]]
         </paper-button>
         <paper-button raised class="primary" on-tap="createTapped">
           <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
-          [[verses.productCategory.createNewProductCategory]]
+          [[verses.productBlueprint.createNewProductBlueprint]]
         </paper-button>
       </div>
 
@@ -162,10 +162,10 @@
   </template>
 
   <script>
-    class PageManageProductCategories extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+    class PageManageProductBlueprints extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
-        return 'page-manage-product-categories';
+        return 'page-manage-product-blueprints';
       }
 
       static get properties() {
@@ -188,16 +188,16 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.useLanguageServices();
-        this.app.pushPageTitle(this.app.verses.productCategory.manageProductCategoriesTitle);
+        this.app.pushPageTitle(this.app.verses.productBlueprint.manageProductBlueprintsTitle);
         if (!this._ensureAccess()) return;
-        this._processProductCategoryList(() => {
+        this._processProductBlueprintList(() => {
           this.isReady = true;
         });
       }
 
       onNavigateOut() {
         super.onNavigateOut();
-        this.productCategoryList = [];
+        this.productBlueprintList = [];
         this.app.popPageTitle();
       }
 
@@ -208,19 +208,19 @@
         });
       }
 
-      _fetchProductCategoryList(cbfn) {
+      _fetchProductBlueprintList(cbfn) {
         let data = { organizationId: this.app.organization.id, searchString: this.searchString, paginate: this.paginate };
-        this.app.callGetProductCategoryListApi(data, (err, response) => {
+        this.app.callGetProductBlueprintListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.pagination = response.pagination;
-          return cbfn(response.productCategoryList);
+          return cbfn(response.productBlueprintList);
         });
       }
 
-      _processProductCategoryList(cbfn) {
-        this._fetchProductCategoryList(productCategoryList => {
-          this.productCategoryList = productCategoryList;
+      _processProductBlueprintList(cbfn) {
+        this._fetchProductBlueprintList(productBlueprintList => {
+          this.productBlueprintList = productBlueprintList;
           return cbfn();
         });
       }
@@ -228,19 +228,19 @@
       // region: ui  ===========================
 
       createTapped(e = null) {
-        return this.app.navigateTo('/edit-product-category');
+        return this.app.navigateTo('/edit-product-blueprint');
       }
 
       showMoreTapped(e = null) {
         this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
         this.isReady = false;
-        this._processProductCategoryList(() => this.isReady = true);
+        this._processProductBlueprintList(() => this.isReady = true);
       }
 
       showPreviousTapped(e = null) {
         this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
         this.isReady = false;
-        this._processProductCategoryList(() => this.isReady = true);
+        this._processProductBlueprintList(() => this.isReady = true);
       }
 
       searchFieldKeypressed(e) {
@@ -253,17 +253,17 @@
 
       searchTapped(e = null) {
         this.set('paginate.offset', 0);
-        this._processProductCategoryList(() => this.isReady = true);
+        this._processProductBlueprintList(() => this.isReady = true);
       }
 
       bulkImportTapped(e = null) {
-        return this.app.navigateTo('/bulk-import-product-categories');
+        return this.app.navigateTo('/bulk-import-product-blueprints');
       }
 
       // region: misc =================================
 
     }
 
-    window.customElements.define(PageManageProductCategories.is, PageManageProductCategories);
+    window.customElements.define(PageManageProductBlueprints.is, PageManageProductBlueprints);
   </script>
 </dom-module>

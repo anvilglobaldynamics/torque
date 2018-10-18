@@ -197,7 +197,7 @@
                 </template>
                 <template is="dom-if" if="[[showProductDetails]]">
                   <template is="dom-repeat" items="[[sales.productList]]" as="product">
-                    <div class="description">[[product.productCategory.name]]: [[product.count]] [[product.productCategory.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]</div>
+                    <div class="description">[[product.productBlueprint.name]]: [[product.count]] [[product.productBlueprint.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]</div>
                   </template>
                   <div class="description">
                     <strong>[[verses.salesReport.total]]:</strong> [[sales.productList.length]] [[verses.salesReport.products]]

@@ -2,9 +2,9 @@
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
-exports.ProductCategoryCollection = class extends Collection {
+exports.ProductBlueprintCollection = class extends Collection {
 
-  get name() { return 'product-category'; }
+  get name() { return 'product-blueprint'; }
 
   get joiSchema() {
     return Joi.object().keys({

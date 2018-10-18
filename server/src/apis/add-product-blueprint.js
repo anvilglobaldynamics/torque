@@ -2,9 +2,9 @@ const { Api } = require('../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
 const { extract } = require('../utils/extract');
-const { ProductCategoryMixin } = require('./mixins/product-category-mixin');
+const { ProductBlueprintMixin } = require('./mixins/product-blueprint-mixin');
 
-exports.AddProductCategoryApi = class extends Api.mixin(ProductCategoryMixin) {
+exports.AddProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin) {
 
   get autoValidates() { return true; }
 
@@ -35,7 +35,7 @@ exports.AddProductCategoryApi = class extends Api.mixin(ProductCategoryMixin) {
     return [{
       organizationBy: "organizationId",
       privilegeList: [
-        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
       ]
     }];
   }
@@ -43,8 +43,8 @@ exports.AddProductCategoryApi = class extends Api.mixin(ProductCategoryMixin) {
   async handle({ body }) {
     let { organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
     this._checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat });
-    let productCategoryId = await this._createProductCategory({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
-    return { status: "success", productCategoryId };
+    let productBlueprintId = await this._createProductBlueprint({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+    return { status: "success", productBlueprintId };
   }
 
 }

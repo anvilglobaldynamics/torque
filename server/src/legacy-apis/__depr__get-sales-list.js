@@ -65,7 +65,7 @@ exports.GetSalesListApi = class extends salesCommonMixin(outletCommonMixin(custo
           return accept();
         });
       });
-      let productCategoryPromise = new Promise((accept, reject) => {
+      let productBlueprintPromise = new Promise((accept, reject) => {
         let productIdList = sales.productList.map(product => product.productId);
         this.legacyDatabase.product.findByIdList({ idList: productIdList }, (err, productList) => {
           if (err) return reject(err);
@@ -74,19 +74,19 @@ exports.GetSalesListApi = class extends salesCommonMixin(outletCommonMixin(custo
             err.code = "PRODUCT_INVALID";
             return reject(err);
           }
-          let productCategoryIdList = productList.map(product => product.productCategoryId);
-          this.legacyDatabase.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
+          let productBlueprintIdList = productList.map(product => product.productBlueprintId);
+          this.legacyDatabase.productBlueprint.listByIdList({ idList: productBlueprintIdList }, (err, productBlueprintList) => {
             if (err) return reject(err);
-            productCategoryList.forEach(productCategory => {
-              let _product = productList.find(product => product.productCategoryId === productCategory.id);
+            productBlueprintList.forEach(productBlueprint => {
+              let _product = productList.find(product => product.productBlueprintId === productBlueprint.id);
               let product = sales.productList.find(product => product.productId === _product.id);
-              product.productCategory = productCategory;
+              product.productBlueprint = productBlueprint;
             })
             return accept();
           });
         });
       });
-      return Promise.all([customerPromise, productCategoryPromise]);
+      return Promise.all([customerPromise, productBlueprintPromise]);
     }))
       .then(() => cbfn())
       .catch((ex) => this.fail(ex));

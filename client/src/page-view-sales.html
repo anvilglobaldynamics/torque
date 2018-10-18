@@ -86,18 +86,18 @@
             <div class="vertical layout flex">
               <div class="list-object">
 
-                <div>[[verses.general.product]]: [[product.productCategoryName]]</div>
+                <div>[[verses.general.product]]: [[product.productBlueprintName]]</div>
                 <div>[[verses.sales.soldCount]]: [[product.count]]</div>
                 <template is="dom-if" if="[[product.returnedProductCount]]">
                   <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
                 </template>
                 <div>[[verses.sales.salePrice]]: [[product.salePrice]] [[app.settings.monetaryUnit]]</div>
 
-                <template is="dom-if" if="{{checkIfAllProductReturned(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}">
+                <template is="dom-if" if="{{checkIfAllProductReturned(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
                   *[[verses.sales.allReturned]]
                 </template>
 
-                <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productCategoryIsReturnable)}}">
+                <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
                   <paper-button raised class="danger return-button" on-tap="returnTapped">[[verses.sales.productReturn]]</paper-button>
                 </template>
 

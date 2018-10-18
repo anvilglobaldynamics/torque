@@ -224,7 +224,7 @@
 
           let productList = aggregatedProductList.map(product => {
             let { purchasePrice, salePrice } = product.product;
-            let { name, unit, defaultDiscountType, defaultDiscountValue, defaultVat } = product.product.productCategory;
+            let { name, unit, defaultDiscountType, defaultDiscountValue, defaultVat } = product.product.productBlueprint;
             product.isSelected = false;
             let discountType = defaultDiscountType;
             let discountValue = defaultDiscountValue;
