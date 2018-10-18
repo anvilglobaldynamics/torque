@@ -135,7 +135,7 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_VIEW_CUSTOMER']);
+        return this.accessControl('organization-selected', ['PRIV_VIEW_CUSTOMER']);
       }
 
       _fetchCustomer(cbfn) {

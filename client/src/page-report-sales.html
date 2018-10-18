@@ -333,7 +333,7 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_VIEW_SALES']);
+        return this.accessControl('organization-selected', ['PRIV_VIEW_SALES']);
       }
 
       _fetchSalesList(cbfn) {

@@ -114,7 +114,7 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_VIEW_ALL_WAREHOUSES']);
+        return this.accessControl('organization-selected', ['PRIV_VIEW_ALL_WAREHOUSES']);
       }
 
       _fetchWarehouseList(cbfn) {

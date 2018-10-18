@@ -238,7 +238,7 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('privileged', ['PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES']);
+        return this.accessControl('organization-selected', ['PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES']);
       }
 
       _fetchProductCategoryList(cbfn) {
