@@ -124,7 +124,10 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('organization-selected', ['PRIV_VIEW_ALL_WAREHOUSES']);
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_ALL_WAREHOUSES']
+        });
       }
 
       _fetchWarehouse(cbfn) {

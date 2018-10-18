@@ -105,7 +105,10 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('organization-selected', ['PRIV_VIEW_USERS']);
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_USERS']
+        });
       }
 
       _fetchEmployee(cbfn) {

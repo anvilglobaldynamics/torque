@@ -106,7 +106,9 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('authenticated');
+        return this.accessControl({
+          authLevel: 'authenticated'
+        });
       }
 
       // region: addOrganization =================================

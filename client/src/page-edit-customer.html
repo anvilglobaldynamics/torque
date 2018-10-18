@@ -118,7 +118,10 @@
       }
 
       _ensureAccess() {
-        return this.accessControl('organization-selected', ['PRIV_MODIFY_CUSTOMER']);
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_CUSTOMER']
+        });
       }
 
       // region: editCustomer =================================
