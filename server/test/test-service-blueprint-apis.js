@@ -156,7 +156,7 @@ describe.only('Service Blueprint', _ => {
         
         name: "2nd service blueprint",
       
-        defaultVat: 2,
+        defaultVat: 10,
         defaultSalePrice: 250,
         
         isLongstanding: false,
