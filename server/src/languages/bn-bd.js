@@ -25,7 +25,8 @@ exports.verses = {
     userInvalid: "অবৈধ ব্যবহারকারী পাওয়া যায়নি।"
   },
   adminCommon: {
-    packageInvalid: "অবৈধ প্যাকেজ পাওয়া যায়নি।"
+    packageInvalid: "প্যাকেজ পাওয়া যায়নি।",
+    moduleInvalid: "মডিউল খুঁজে পাওয়া যায়নি।"
   },
   organizationCommon: {
     organizationInvalid: "প্রবেশাধিকার নিয়ন্ত্রণকালে প্রতিষ্ঠান খুঁজে পাওয়া যায়নি।",
