@@ -11,6 +11,7 @@ let {
   addOrganization,
 
   validateGenericApiFailureResponse,
+  validateGenericApiSuccessResponse,
   validateAddServiceBlueprintApiSuccessResponse,
   validateGetServiceBlueprintListApiSuccessResponse,
   validateServiceBlueprintSchema
@@ -32,6 +33,8 @@ let organizationId = null;
 
 let invalidOrganizationId = generateInvalidId();
 let invalidProductBlueprintId = generateInvalidId();
+
+let serviceBlueprintToBeEdited = null;
 
 describe.only('Service Blueprint', _ => {
 
@@ -336,8 +339,34 @@ describe.only('Service Blueprint', _ => {
         validateServiceBlueprintSchema(serviceBlueprint);
       });
 
+      serviceBlueprintToBeEdited = body.serviceBlueprintList[0];
       testDoneFn();
     });
+
+  });
+
+  // Edit
+
+  it('api/edit-service-blueprint (Valid)', testDoneFn => {
+
+    callApi('api/edit-service-blueprint', {
+      json: {
+        apiKey,
+        serviceBlueprintId: serviceBlueprintToBeEdited.id,
+
+        name: "new 1st service blueprint name", // modification
+        defaultVat: serviceBlueprintToBeEdited.defaultVat,
+        defaultSalePrice: serviceBlueprintToBeEdited.defaultSalePrice,
+
+        isEmployeeAssignable: serviceBlueprintToBeEdited.isEmployeeAssignable,
+        isCustomerRequired: serviceBlueprintToBeEdited.isCustomerRequired,
+        isRefundable: serviceBlueprintToBeEdited.isRefundable
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    })
 
   });
 
