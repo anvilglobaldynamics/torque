@@ -12,22 +12,21 @@ exports.AddServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin) 
 
   get requestSchema() {
     return Joi.object().keys({
-      organizationId: Joi.number().max(999999999999999).required(),
-
       name: Joi.string().min(1).max(64).required(),
-      unit: Joi.string().max(64).required(),
-      defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
-      defaultDiscountValue: Joi.number().when(
-        'defaultDiscountType', {
-          is: 'percent',
-          then: Joi.number().min(0).max(100).required(),
-          otherwise: Joi.number().max(999999999999999).required()
-        }
-      ),
-      defaultPurchasePrice: Joi.number().max(999999999999999).required(),
+      organizationId: Joi.number().max(999999999999999).required(),
+    
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
-      isReturnable: Joi.boolean().required()
+      
+      isLongstanding: Joi.boolean().required(),
+      serviceDuration: Joi.object().allow(null).required().keys({
+        months: Joi.number().min(0).max(999999999999999).required(),
+        days: Joi.number().min(0).max(999999999999999).required(),
+      }),
+    
+      isEmployeeAssignable: Joi.boolean().required(),
+      isCustomerRequired: Joi.boolean().required(),
+      isRefundable: Joi.boolean().required()
     });
   }
 
@@ -41,9 +40,9 @@ exports.AddServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin) 
   }
 
   async handle({ body }) {
-    let { organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
-    let productBlueprintId = await this._createProductBlueprint({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
-    return { status: "success", productBlueprintId };
+    let { organizationId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = body;
+    let serviceBlueprintId = await this.database.serviceBlueprint.create({ organizationId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable })
+    return { status: "success", serviceBlueprintId };
   }
 
 }
