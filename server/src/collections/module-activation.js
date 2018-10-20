@@ -42,6 +42,10 @@ exports.ModuleActivationCollection = class extends Collection {
     return await this._find({ organizationId });
   }
 
+  async findByOrganizationIdAndModuleCode({ organizationId, moduleCode }) {
+    return await this._findOne({ organizationId, moduleCode });
+  }
+
   async deactivate({ id }) {
     return await this._update({ id }, { isDiscarded: true, deactivatedDatetimeStamp: Date.now() });
   }
