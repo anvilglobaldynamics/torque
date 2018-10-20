@@ -73,7 +73,6 @@ describe.only('Service Blueprint', _ => {
         isRefundable: false
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateAddServiceBlueprintApiSuccessResponse(body);
       testDoneFn();
