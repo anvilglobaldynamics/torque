@@ -10,8 +10,8 @@ Joi.object().keys({
   name: Joi.string().min(1).max(64).required(),
   organizationId: Joi.number().max(999999999999999).required(),
 
-  defaultVat: Joi.number().max(999999999999999).required(),
-  defaultSalePrice: Joi.number().max(999999999999999).required(),
+  defaultVat: Joi.number().min(0).max(999999999999999).required(),
+  defaultSalePrice: Joi.number().min(0).max(999999999999999).required(),
   
   isLongstanding: Joi.boolean().required(),
   serviceDuration: Joi.object().allow(null).required().keys({

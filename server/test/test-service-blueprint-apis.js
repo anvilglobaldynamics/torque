@@ -10,6 +10,7 @@ let {
   loginUser,
   addOrganization,
 
+  validateGenericApiFailureResponse,
   validateAddServiceBlueprintApiSuccessResponse
 } = require('./lib');
 
@@ -26,6 +27,9 @@ const orgPhone = 'o' + rnd(prefix, 11);
 
 let apiKey = null;
 let organizationId = null;
+
+let invalidOrganizationId = generateInvalidId();
+let invalidProductBlueprintId = generateInvalidId();
 
 describe.only('Service Blueprint', _ => {
 
@@ -53,6 +57,62 @@ describe.only('Service Blueprint', _ => {
     });
   });
 
+  it('api/add-service-blueprint (Invalid defaultVat)', testDoneFn => {
+
+    callApi('api/add-service-blueprint', {
+      json: {
+        apiKey,
+        organizationId,
+        
+        name: "1st service blueprint",
+      
+        defaultVat: 110,
+        defaultSalePrice: 250,
+        
+        isLongstanding: false,
+        serviceDuration: null,
+      
+        isEmployeeAssignable: false,
+        isCustomerRequired: false,
+        isRefundable: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('VAT_VALUE_INVALID');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-service-blueprint (Invalid organizationId)', testDoneFn => {
+
+    callApi('api/add-service-blueprint', {
+      json: {
+        apiKey,
+        organizationId: invalidOrganizationId,
+        
+        name: "1st service blueprint",
+      
+        defaultVat: 10,
+        defaultSalePrice: 250,
+        
+        isLongstanding: false,
+        serviceDuration: null,
+      
+        isEmployeeAssignable: false,
+        isCustomerRequired: false,
+        isRefundable: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('ORGANIZATION_INVALID');
+      testDoneFn();
+    })
+
+  });
+
   it('api/add-service-blueprint (Valid basic service)', testDoneFn => {
 
     callApi('api/add-service-blueprint', {
@@ -71,6 +131,33 @@ describe.only('Service Blueprint', _ => {
         isEmployeeAssignable: false,
         isCustomerRequired: false,
         isRefundable: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddServiceBlueprintApiSuccessResponse(body);
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-service-blueprint (Valid service)', testDoneFn => {
+
+    callApi('api/add-service-blueprint', {
+      json: {
+        apiKey,
+        organizationId,
+        
+        name: "2nd service blueprint",
+      
+        defaultVat: 2,
+        defaultSalePrice: 250,
+        
+        isLongstanding: false,
+        serviceDuration: null,
+      
+        isEmployeeAssignable: true,
+        isCustomerRequired: true,
+        isRefundable: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

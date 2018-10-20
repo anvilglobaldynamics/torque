@@ -12,8 +12,8 @@ method: `POST`
   name: Joi.string().min(1).max(64).required(),
   organizationId: Joi.number().max(999999999999999).required(),
 
-  defaultVat: Joi.number().max(999999999999999).required(),
-  defaultSalePrice: Joi.number().max(999999999999999).required(),
+  defaultVat: Joi.number().min(0).max(999999999999999).required(),
+  defaultSalePrice: Joi.number().min(0).max(999999999999999).required(),
   
   isLongstanding: Joi.boolean().required(),
   serviceDuration: Joi.object().allow(null).required().keys({
@@ -43,7 +43,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: ORGANIZATION_INVALID } // the organization id is invalid
-{ code: VAT_VALUE_INVALID } // the vat value is more than sale price
+{ code: VAT_VALUE_INVALID } // the vat value is not within 0 to 100
 ```
 
 ### response (on success):
