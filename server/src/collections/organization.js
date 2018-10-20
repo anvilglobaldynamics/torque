@@ -16,7 +16,10 @@ exports.OrganizationCollection = class extends Collection {
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       email: Joi.string().email().min(3).max(30).allow('').required(),
       packageActivationId: Joi.number().max(999999999999999).allow(null).required(),
-      isDeleted: Joi.boolean().required()
+      isDeleted: Joi.boolean().required(),
+      activeModuleList: Joi.array().items(
+        Joi.string().required()
+      ).required()
     });
   }
 
@@ -28,7 +31,7 @@ exports.OrganizationCollection = class extends Collection {
     return [];
   }
 
-  async create({ name, primaryBusinessAddress, phone, email, userId }) {
+  async create({ name, primaryBusinessAddress, phone, email, userId, activeModuleList }) {
     return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
@@ -38,7 +41,8 @@ exports.OrganizationCollection = class extends Collection {
       phone,
       email,
       packageActivationId: null,
-      isDeleted: false
+      isDeleted: false,
+      activeModuleList
     });
   }
 
@@ -67,6 +71,14 @@ exports.OrganizationCollection = class extends Collection {
     return await this._update({ id }, {
       $set: {
         packageActivationId
+      }
+    });
+  }
+
+  async setActiveModuleList({ id }, { activeModuleList }) {
+    return await this._update({ id }, {
+      $set: {
+        activeModuleList
       }
     });
   }
