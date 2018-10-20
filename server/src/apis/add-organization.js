@@ -17,14 +17,14 @@ exports.AddOrganizationApi = class extends Api {
       primaryBusinessAddress: Joi.string().min(1).max(128).required(),
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       email: Joi.string().email().min(3).max(30).allow('').required(),
-      activeModuleList: Joi.array().items(
+      activeModuleCodeList: Joi.array().items(
         Joi.string().required()
       ).optional().default(['MOD_PRODUCT', 'MOD_SERVICE'])
     });
   }
 
-  async _createOrganization({ name, primaryBusinessAddress, phone, email, userId, activeModuleList }) {
-    return await this.database.organization.create({ name, primaryBusinessAddress, phone, email, userId, activeModuleList });
+  async _createOrganization({ name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList }) {
+    return await this.database.organization.create({ name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList });
   }
 
   async _setUserAsOwner({ userId, organizationId }) {
@@ -50,21 +50,21 @@ exports.AddOrganizationApi = class extends Api {
     }
   }
 
-  async _validatedActiveModuleList({ activeModuleList }) {
+  async _validatedactiveModuleCodeList({ activeModuleCodeList }) {
     let moduleList = await this.database.fixture.getModuleList();
-    activeModuleList.forEach(activeModuleCode => {
+    activeModuleCodeList.forEach(activeModuleCode => {
       let aModule = moduleList.find(aModule => aModule.code === activeModuleCode);
       throwOnFalsy(aModule, "MODULE_INVALID", "Selected module is invalid."); // TRANSLATE
     })
   }
 
   async handle({ body, userId }) {
-    let { name, primaryBusinessAddress, phone, email, activeModuleList } = body;
+    let { name, primaryBusinessAddress, phone, email, activeModuleCodeList } = body;
     await this._checkIfMaxOrganizationLimitReached({ userId });
 
-    await this._validatedActiveModuleList({ activeModuleList });
+    await this._validatedactiveModuleCodeList({ activeModuleCodeList });
 
-    let organizationId = await this._createOrganization({ name, primaryBusinessAddress, phone, email, userId, activeModuleList });
+    let organizationId = await this._createOrganization({ name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList });
     await this._setUserAsOwner({ userId, organizationId });
     await this._setTrialPackage({ organizationId });
 

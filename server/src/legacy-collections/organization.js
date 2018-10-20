@@ -29,7 +29,7 @@ exports.OrganizationCollection = class extends LegacyCollection {
       email: Joi.string().email().min(3).max(30).allow('').required(),
       packageActivationId: Joi.number().max(999999999999999).allow(null).required(),
       isDeleted: Joi.boolean().required(),
-      activeModuleList: Joi.array().items(
+      activeModuleCodeList: Joi.array().items(
         Joi.string().required()
       ).required()
     });
@@ -55,7 +55,7 @@ exports.OrganizationCollection = class extends LegacyCollection {
       email,
       packageActivationId: null,
       isDeleted: false,
-      activeModuleList: []
+      activeModuleCodeList: []
     }
     this._insert(user, (err, id) => {
       return cbfn(err, id);

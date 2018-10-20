@@ -869,7 +869,7 @@ exports.validateOrganizationSchema = (doc) => {
     email: Joi.string().email().min(3).max(30).required(),
     packageActivationId: Joi.number().max(999999999999999).allow(null).required(),
     isDeleted: Joi.boolean().required(),
-    activeModuleList: Joi.array().items(
+    activeModuleCodeList: Joi.array().items(
       Joi.string().required()
     ).required()
   });
