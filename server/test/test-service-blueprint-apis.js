@@ -8,7 +8,9 @@ let {
   terminateServer,
   registerUser,
   loginUser,
-  addOrganization
+  addOrganization,
+
+  validateAddServiceBlueprintApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -49,6 +51,34 @@ describe.only('Service Blueprint', _ => {
         });
       });
     });
+  });
+
+  it('api/add-service-blueprint (Valid basic service)', testDoneFn => {
+
+    callApi('api/add-service-blueprint', {
+      json: {
+        apiKey,
+        organizationId,
+        
+        name: "1st service blueprint",
+      
+        defaultVat: 2,
+        defaultSalePrice: 250,
+        
+        isLongstanding: false,
+        serviceDuration: null,
+      
+        isEmployeeAssignable: false,
+        isCustomerRequired: false,
+        isRefundable: false
+      }
+    }, (err, response, body) => {
+      console.log(body);
+      expect(response.statusCode).to.equal(200);
+      validateAddServiceBlueprintApiSuccessResponse(body);
+      testDoneFn();
+    })
+
   });
 
   it('END', testDoneFn => {

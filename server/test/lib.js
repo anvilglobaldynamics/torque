@@ -711,6 +711,17 @@ exports.validateGetWarehouseListApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateAddServiceBlueprintApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    serviceBlueprintId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 // Admin
 
 exports.validateAdminFindOrganizationApiSuccessResponse = (doc) => {

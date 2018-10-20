@@ -40,6 +40,7 @@ exports.AddServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin) 
   }
 
   async handle({ body }) {
+    console.log("in handle: ", body);
     let { organizationId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = body;
     let serviceBlueprintId = await this.database.serviceBlueprint.create({ organizationId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable })
     return { status: "success", serviceBlueprintId };
