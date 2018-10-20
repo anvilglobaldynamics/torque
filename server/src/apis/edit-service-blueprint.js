@@ -47,13 +47,14 @@ exports.EditServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin)
   async _updateServiceBlueprint({ serviceBlueprintId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable }) {
     let result = await this.database.serviceBlueprint.setDetails({ id: serviceBlueprintId }, { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable });
     this.ensureUpdate(result, 'service-blueprint');
+    return;
   }
 
   async handle({ body }) {
-    let { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = body;
+    let { serviceBlueprintId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = body;
     this._isLongstandingServiceSetupValid({ isLongstanding, serviceDuration });
     this._isVatPercentageValid({ vat: defaultVat });
-    await this._updateServiceBlueprint({ name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable });
+    await this._updateServiceBlueprint({ serviceBlueprintId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable });
     return { status: "success" };
   }
 

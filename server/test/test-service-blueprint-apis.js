@@ -358,6 +358,9 @@ describe.only('Service Blueprint', _ => {
         defaultVat: serviceBlueprintToBeEdited.defaultVat,
         defaultSalePrice: serviceBlueprintToBeEdited.defaultSalePrice,
 
+        isLongstanding: serviceBlueprintToBeEdited.isLongstanding,
+        serviceDuration: serviceBlueprintToBeEdited.serviceDuration,
+
         isEmployeeAssignable: serviceBlueprintToBeEdited.isEmployeeAssignable,
         isCustomerRequired: serviceBlueprintToBeEdited.isCustomerRequired,
         isRefundable: serviceBlueprintToBeEdited.isRefundable
