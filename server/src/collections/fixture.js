@@ -47,4 +47,8 @@ exports.FixtureCollection = class extends Collection {
     return (await this.getPackageList()).find(aPackage => aPackage.code === packageCode);
   }
 
+  async getModuleList() {
+    return (await this._findOne({ name: 'module-list' })).data;
+  }
+
 }

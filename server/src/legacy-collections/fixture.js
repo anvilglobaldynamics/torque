@@ -57,4 +57,11 @@ exports.FixtureCollection = class extends LegacyCollection {
     });
   }
 
+  getModuleList(cbfn) {
+    return this._findByName('module-list', (err, doc) => {
+      if (err) return cbfn(err);
+      return cbfn(null, doc.data);
+    });
+  }
+
 }

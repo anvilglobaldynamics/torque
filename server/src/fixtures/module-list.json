@@ -1,0 +1,18 @@
+[
+  {
+    "code": "MOD_PRODUCT",
+    "name": "Unlocks the ability to handle and sale products."
+  },
+  {
+    "code": "MOD_SERVICE",
+    "name": "Unlocks the ability to provide and sale services."
+  },
+  {
+    "code": "MOD_GYM",
+    "name": "Unlocks the ability to use gym specific features."
+  },
+  {
+    "code": "MOD_EMPLOYEE_ATTENDANCE",
+    "name": "Unlocks the ability to use extended employee features."
+  }
+]
