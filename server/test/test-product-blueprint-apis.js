@@ -41,7 +41,7 @@ let productBlueprintToBeModified = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidProductBlueprintId = generateInvalidId();
 
-describe('Product Blueprint', _ => {
+describe.only('Product Blueprint', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
