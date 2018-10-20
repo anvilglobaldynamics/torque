@@ -147,6 +147,34 @@ describe.only('Service Blueprint', _ => {
 
   });
 
+  it('api/add-service-blueprint (Invalid copy name)', testDoneFn => {
+
+    callApi('api/add-service-blueprint', {
+      json: {
+        apiKey,
+        organizationId,
+        
+        name: "1st service blueprint",
+      
+        defaultVat: 2,
+        defaultSalePrice: 250,
+        
+        isLongstanding: false,
+        serviceDuration: null,
+      
+        isEmployeeAssignable: false,
+        isCustomerRequired: false,
+        isRefundable: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('DUPLICATE_organizationId+name');
+      testDoneFn();
+    })
+
+  });
+
   it('api/add-service-blueprint (Valid service)', testDoneFn => {
 
     callApi('api/add-service-blueprint', {
@@ -347,6 +375,117 @@ describe.only('Service Blueprint', _ => {
 
   // Edit
 
+  it('api/edit-service-blueprint (Invalid defaultVat)', testDoneFn => {
+
+    callApi('api/edit-service-blueprint', {
+      json: {
+        apiKey,
+        serviceBlueprintId: serviceBlueprintToBeEdited.id,
+
+        name: serviceBlueprintToBeEdited.name,
+        defaultVat: 200,
+        defaultSalePrice: serviceBlueprintToBeEdited.defaultSalePrice,
+
+        isLongstanding: serviceBlueprintToBeEdited.isLongstanding,
+        serviceDuration: serviceBlueprintToBeEdited.serviceDuration,
+
+        isEmployeeAssignable: serviceBlueprintToBeEdited.isEmployeeAssignable,
+        isCustomerRequired: serviceBlueprintToBeEdited.isCustomerRequired,
+        isRefundable: serviceBlueprintToBeEdited.isRefundable
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('VAT_VALUE_INVALID');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/edit-service-blueprint (Invalid Longstanding service setup)', testDoneFn => {
+
+    callApi('api/edit-service-blueprint', {
+      json: {
+        apiKey,
+        serviceBlueprintId: serviceBlueprintToBeEdited.id,
+
+        name: serviceBlueprintToBeEdited.name,
+        defaultVat: serviceBlueprintToBeEdited.defaultVat,
+        defaultSalePrice: serviceBlueprintToBeEdited.defaultSalePrice,
+
+        isLongstanding: true,
+        serviceDuration: serviceBlueprintToBeEdited.serviceDuration,
+
+        isEmployeeAssignable: serviceBlueprintToBeEdited.isEmployeeAssignable,
+        isCustomerRequired: serviceBlueprintToBeEdited.isCustomerRequired,
+        isRefundable: serviceBlueprintToBeEdited.isRefundable
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('LONGSTANDING_SETUP_INVALID');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/edit-service-blueprint (Invalid Longstanding service setup)', testDoneFn => {
+
+    callApi('api/edit-service-blueprint', {
+      json: {
+        apiKey,
+        serviceBlueprintId: serviceBlueprintToBeEdited.id,
+
+        name: serviceBlueprintToBeEdited.name,
+        defaultVat: serviceBlueprintToBeEdited.defaultVat,
+        defaultSalePrice: serviceBlueprintToBeEdited.defaultSalePrice,
+
+        isLongstanding: false,
+        serviceDuration: {
+          months: 1,
+          days: 7
+        },
+
+        isEmployeeAssignable: serviceBlueprintToBeEdited.isEmployeeAssignable,
+        isCustomerRequired: serviceBlueprintToBeEdited.isCustomerRequired,
+        isRefundable: serviceBlueprintToBeEdited.isRefundable
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('LONGSTANDING_SETUP_INVALID');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/edit-service-blueprint (Invalid copy name)', testDoneFn => {
+
+    callApi('api/edit-service-blueprint', {
+      json: {
+        apiKey,
+        serviceBlueprintId: serviceBlueprintToBeEdited.id,
+
+        name: '3rd service blueprint',
+        defaultVat: serviceBlueprintToBeEdited.defaultVat,
+        defaultSalePrice: serviceBlueprintToBeEdited.defaultSalePrice,
+
+        isLongstanding: serviceBlueprintToBeEdited.isLongstanding,
+        serviceDuration: serviceBlueprintToBeEdited.serviceDuration,
+
+        isEmployeeAssignable: serviceBlueprintToBeEdited.isEmployeeAssignable,
+        isCustomerRequired: serviceBlueprintToBeEdited.isCustomerRequired,
+        isRefundable: serviceBlueprintToBeEdited.isRefundable
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('DUPLICATE_organizationId+name');
+      testDoneFn();
+    })
+
+  });
+
   it('api/edit-service-blueprint (Valid)', testDoneFn => {
 
     callApi('api/edit-service-blueprint', {
@@ -354,7 +493,7 @@ describe.only('Service Blueprint', _ => {
         apiKey,
         serviceBlueprintId: serviceBlueprintToBeEdited.id,
 
-        name: "new 1st service blueprint name", // modification
+        name: 'new 1st service blueprint name', // modification
         defaultVat: serviceBlueprintToBeEdited.defaultVat,
         defaultSalePrice: serviceBlueprintToBeEdited.defaultSalePrice,
 
@@ -370,6 +509,28 @@ describe.only('Service Blueprint', _ => {
       validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
+
+  });
+
+  it('api/get-service-blueprint-list (Valid edit check)', testDoneFn => {
+
+    callApi('api/get-service-blueprint-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: 'new 1st service blueprint name'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetServiceBlueprintListApiSuccessResponse(body);
+      body.serviceBlueprintList.forEach(serviceBlueprint => {
+        validateServiceBlueprintSchema(serviceBlueprint);
+      });
+
+      expect(body.serviceBlueprintList[0].name).equal('new 1st service blueprint name');
+      testDoneFn();
+    });
 
   });
 
