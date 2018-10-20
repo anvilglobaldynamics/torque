@@ -218,10 +218,39 @@ describe.only('Service Blueprint', _ => {
         isRefundable: true
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equal('LONGSTANDING_SETUP_INVALID');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-service-blueprint (Valid Longstanding service)', testDoneFn => {
+
+    callApi('api/add-service-blueprint', {
+      json: {
+        apiKey,
+        organizationId,
+        
+        name: "3rd service blueprint",
+      
+        defaultVat: 2,
+        defaultSalePrice: 250,
+        
+        isLongstanding: true,
+        serviceDuration: {
+          months: 1,
+          days: 7
+        },
+      
+        isEmployeeAssignable: true,
+        isCustomerRequired: true,
+        isRefundable: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddServiceBlueprintApiSuccessResponse(body);
       testDoneFn();
     })
 
