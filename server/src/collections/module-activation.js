@@ -2,18 +2,19 @@
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
-exports.PackageActivationCollection = class extends Collection {
+exports.ModuleActivationCollection = class extends Collection {
 
-  get name() { return 'package-activation'; }
+  get name() { return 'module-activation'; }
 
   get joiSchema() {
     return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
-      packageCode: Joi.string().required(),
+      deactivatedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
+      moduleCode: Joi.string().required(),
       organizationId: Joi.number().max(999999999999999).required(),
       createdByAdminName: Joi.string().min(1).max(64).required(),
       paymentReference: Joi.string().min(4).max(128).required(),
-      isDiscarded: Joi.boolean().required()
+      isDeactivated: Joi.boolean().required()
     });
   }
 
@@ -25,14 +26,15 @@ exports.PackageActivationCollection = class extends Collection {
     return [];
   }
 
-  async create({ packageCode, organizationId, createdByAdminName, paymentReference }) {
+  async create({ moduleCode, organizationId, createdByAdminName, paymentReference }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      packageCode,
+      createdDatetimeStamp: Date.now(),
+      deactivatedDatetimeStamp: null,
+      moduleCode,
       organizationId,
       createdByAdminName,
       paymentReference,
-      isDiscarded: false
+      isDeactivated: false
     });
   }
 
@@ -40,8 +42,8 @@ exports.PackageActivationCollection = class extends Collection {
     return await this._find({ organizationId });
   }
 
-  async discard({ id }) {
-    return await this._update({ id }, { isDiscarded: true });
+  async deactivate({ id }) {
+    return await this._update({ id }, { isDiscarded: true, deactivatedDatetimeStamp: Date.now() });
   }
 
 }
