@@ -375,6 +375,33 @@ describe.only('Service Blueprint', _ => {
 
   // Edit
 
+  it('api/edit-service-blueprint (Invalid serviceBlueprintId)', testDoneFn => {
+
+    callApi('api/edit-service-blueprint', {
+      json: {
+        apiKey,
+        serviceBlueprintId: invalidProductBlueprintId,
+
+        name: serviceBlueprintToBeEdited.name,
+        defaultVat: serviceBlueprintToBeEdited.defaultVat,
+        defaultSalePrice: serviceBlueprintToBeEdited.defaultSalePrice,
+
+        isLongstanding: serviceBlueprintToBeEdited.isLongstanding,
+        serviceDuration: serviceBlueprintToBeEdited.serviceDuration,
+
+        isEmployeeAssignable: serviceBlueprintToBeEdited.isEmployeeAssignable,
+        isCustomerRequired: serviceBlueprintToBeEdited.isCustomerRequired,
+        isRefundable: serviceBlueprintToBeEdited.isRefundable
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PRODUCT_BLUEPRINT_INVALID');
+      testDoneFn();
+    })
+
+  });
+
   it('api/edit-service-blueprint (Invalid defaultVat)', testDoneFn => {
 
     callApi('api/edit-service-blueprint', {
