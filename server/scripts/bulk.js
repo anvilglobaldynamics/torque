@@ -31,6 +31,10 @@ const productBlueprintCount = {
   min: 5,
   max: 200
 };
+const serviceBlueprintCount = {
+  min: 5,
+  max: 200
+};
 const productCountPerBlueprint = {
   min: 1,
   max: 1000
@@ -147,6 +151,25 @@ const createProductBlueprint = async ({ apiKey, organizationId }) => {
   return { productBlueprintId };
 }
 
+const createServiceBlueprint = async ({ apiKey, organizationId }) => {
+  console.log('should create serviceBlueprint');
+
+  let { serviceBlueprintId } = await callApi('api/add-service-blueprint', {
+    apiKey,
+    organizationId,
+    name: pickOne(nounList) + " Blueprint " + (uid++),
+    defaultVat: 15,
+    defaultSalePrice: 250,
+    isLongstanding: false,
+    serviceDuration: null,
+    isEmployeeAssignable: true,
+    isCustomerRequired: true,
+    isRefundable: true
+  });
+
+  return { serviceBlueprintId };
+}
+
 const createWarehouse = async ({ apiKey, organizationId }) => {
   console.log('should create warehouse');
 
@@ -213,6 +236,7 @@ const createEmployee = async ({ apiKey, organizationId }) => {
 
       PRIV_VIEW_ALL_INVENTORIES: true,
       PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
+      PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
       PRIV_TRANSFER_ALL_INVENTORIES: true,
       PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -316,6 +340,12 @@ const generateBulkData = async () => {
     for (let i = 0; i < getSolidCount(productBlueprintCount); i++) {
       let { productBlueprintId } = await createProductBlueprint({ apiKey, organizationId });
       productBlueprintIdList.push(productBlueprintId);
+    }
+
+    let serviceBlueprintIdList = [];
+    for (let i = 0; i < getSolidCount(serviceBlueprintCount); i++) {
+      let { serviceBlueprintId } = await createServiceBlueprint({ apiKey, organizationId });
+      serviceBlueprintIdList.push(serviceBlueprintId);
     }
 
     for (let outlet of outletList) {
