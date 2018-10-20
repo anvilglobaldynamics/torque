@@ -145,6 +145,7 @@ describe('Employee', _ => {
 
           PRIV_VIEW_ALL_INVENTORIES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
+          PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -195,6 +196,7 @@ describe('Employee', _ => {
 
           PRIV_VIEW_ALL_INVENTORIES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
+          PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -308,6 +310,7 @@ describe('Employee', _ => {
 
           PRIV_VIEW_ALL_INVENTORIES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
+          PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -358,6 +361,7 @@ describe('Employee', _ => {
 
           PRIV_VIEW_ALL_INVENTORIES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
+          PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -518,6 +522,7 @@ describe('Employee', _ => {
 
           PRIV_VIEW_ALL_INVENTORIES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
+          PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -573,6 +578,7 @@ describe('Employee', _ => {
 
           PRIV_VIEW_ALL_INVENTORIES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
+          PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -628,6 +634,7 @@ describe('Employee', _ => {
 
           PRIV_VIEW_ALL_INVENTORIES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
+          PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
@@ -860,6 +867,7 @@ describe('Employee', _ => {
 
           PRIV_VIEW_ALL_INVENTORIES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
+          PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
           PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
 
