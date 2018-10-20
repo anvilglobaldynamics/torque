@@ -70,6 +70,7 @@ const { EditProductBlueprintApi } = require('./apis/edit-product-blueprint');
 let { DeleteProductBlueprintApi } = require('./legacy-apis/delete-product-blueprint');
 
 const { AddServiceBlueprintApi } = require('./apis/add-service-blueprint');
+const { GetServiceBlueprintListApi } = require('./apis/get-service-blueprint-list');
 
 const { GetInventoryListApi } = require('./apis/get-inventory-list');
 const { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-inventory-details');
@@ -328,6 +329,7 @@ class Program {
     server.registerPostApi('/api/admin-assign-package-to-organization', AdminAssignPackageToOrganizationApi);
     server.registerPostApi('/api/admin-list-organization-packages', AdminListOrganizationPackagesApi);
     server.registerPostApi('/api/add-service-blueprint', AddServiceBlueprintApi);
+    server.registerPostApi('/api/get-service-blueprint-list', GetServiceBlueprintListApi);
   }
 
 }

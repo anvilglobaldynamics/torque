@@ -11,7 +11,9 @@ let {
   addOrganization,
 
   validateGenericApiFailureResponse,
-  validateAddServiceBlueprintApiSuccessResponse
+  validateAddServiceBlueprintApiSuccessResponse,
+  validateGetServiceBlueprintListApiSuccessResponse,
+  validateServiceBlueprintSchema
 } = require('./lib');
 
 const prefix = 's';
@@ -56,6 +58,8 @@ describe.only('Service Blueprint', _ => {
       });
     });
   });
+
+  // Add
 
   it('api/add-service-blueprint (Invalid defaultVat)', testDoneFn => {
 
@@ -253,6 +257,87 @@ describe.only('Service Blueprint', _ => {
       validateAddServiceBlueprintApiSuccessResponse(body);
       testDoneFn();
     })
+
+  });
+
+  // Get
+
+  it('api/get-service-blueprint-list (Invalid organizationId)', testDoneFn => {
+
+    callApi('api/get-service-blueprint-list', {
+      json: {
+        apiKey,
+        organizationId: invalidOrganizationId,
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('ORGANIZATION_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-blueprint-list (Valid)', testDoneFn => {
+
+    callApi('api/get-service-blueprint-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetServiceBlueprintListApiSuccessResponse(body);
+
+      body.serviceBlueprintList.forEach(serviceBlueprint => {
+        validateServiceBlueprintSchema(serviceBlueprint);
+      });
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-blueprint-list (Invalid searchString)', testDoneFn => {
+
+    callApi('api/get-service-blueprint-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: 99
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('VALIDATION_ERROR');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-blueprint-list (Valid searchString)', testDoneFn => {
+
+    callApi('api/get-service-blueprint-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: '2nd'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetServiceBlueprintListApiSuccessResponse(body);
+      expect(body.serviceBlueprintList.length).equal(1);
+
+      body.serviceBlueprintList.forEach(serviceBlueprint => {
+        validateServiceBlueprintSchema(serviceBlueprint);
+      });
+
+      testDoneFn();
+    });
 
   });
 
