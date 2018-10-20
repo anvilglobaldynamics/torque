@@ -28,7 +28,10 @@ exports.OrganizationCollection = class extends LegacyCollection {
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       email: Joi.string().email().min(3).max(30).allow('').required(),
       packageActivationId: Joi.number().max(999999999999999).allow(null).required(),
-      isDeleted: Joi.boolean().required()
+      isDeleted: Joi.boolean().required(),
+      activeModuleList: Joi.array().items(
+        Joi.string().required()
+      ).required()
     });
 
     this.uniqueKeyDefList = [
@@ -39,7 +42,10 @@ exports.OrganizationCollection = class extends LegacyCollection {
     ];
   }
 
-  create({ name, primaryBusinessAddress, phone, email }, cbfn) {
+  /*
+  WARNING! This method has no usage and has been deprecated. Use the Non-legacy verion.
+  */
+  __depr__create({ name, primaryBusinessAddress, phone, email }, cbfn) {
     let user = {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
@@ -48,7 +54,8 @@ exports.OrganizationCollection = class extends LegacyCollection {
       phone,
       email,
       packageActivationId: null,
-      isDeleted: false
+      isDeleted: false,
+      activeModuleList: []
     }
     this._insert(user, (err, id) => {
       return cbfn(err, id);
