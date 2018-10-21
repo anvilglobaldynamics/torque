@@ -7,7 +7,6 @@ method: `POST`
 ### request: 
 ```js
 {
-
   apiKey: Joi.string().length(64).required(),
   serviceBlueprintId: Joi.number().max(999999999999999).required(),
 
@@ -23,7 +22,6 @@ method: `POST`
   outletIdtList: Joi.array().min(0).items(
     joi.number().max(999999999999999).required()
   )
-
 }
 ```
 

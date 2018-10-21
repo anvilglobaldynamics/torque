@@ -3,7 +3,6 @@ This collection contains an service blueprint
 ## signature
 ```js
 Joi.object().keys({
-  
   createdDatetimeStamp: Joi.number().max(999999999999999).required(),
   lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
@@ -23,6 +22,5 @@ Joi.object().keys({
   isCustomerRequired: Joi.boolean().required(),
   isRefundable: Joi.boolean().required(),
   isDeleted: Joi.boolean().required()
-
 });
 ```
