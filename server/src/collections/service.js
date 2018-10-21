@@ -86,12 +86,17 @@ exports.ServiceCollection = class extends Collection {
     if (searchString) {
       searchString = this.escapeRegExp(searchString);
       let searchRegex = new RegExp(searchString, 'i');
-      query.$or = [
+      query.$and = [
         { name: searchRegex },
         { isAvailable: true }
       ];
     }
     return await this._find(query);
+  }
+
+  async findByOutletIdAndServiceBlueprintId({ outletId, serviceBlueprintId }) {
+    let query = { outletId, serviceBlueprintId };
+    return await this._findOne(query);
   }
 
 }

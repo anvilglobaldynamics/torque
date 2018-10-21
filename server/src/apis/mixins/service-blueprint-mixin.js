@@ -4,13 +4,13 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-e
 /** @param {typeof Api} SuperApiClass */
 exports.ServiceBlueprintMixin = (SuperApiClass) => class extends SuperApiClass {
 
-  _isVatPercentageValid({ vat }) {
+  __isVatPercentageValid({ vat }) {
     if (vat < 0 || vat > 100) {
       throw new CodedError("VAT_VALUE_INVALID", "Vat value is not within 0 to 100.");
     }
   }
 
-  _isLongstandingServiceSetupValid({ isLongstanding, serviceDuration }) {
+  __isLongstandingServiceSetupValid({ isLongstanding, serviceDuration }) {
     if (!isLongstanding) {
       if (serviceDuration) {
         throw new CodedError("LONGSTANDING_SETUP_INVALID", "A flag and service duration is required.");

@@ -41,19 +41,23 @@ exports.AddServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin, 
     }];
   }
   
-  async activateServiceInAllOutlets({ organizationId, serviceBlueprintId }) {
+  async _checkAndActivateServiceInAllOutlets({ organizationId, serviceBlueprintId, defaultSalePrice, userId }) {
     let outletList = await this.database.outlet.listByOrganizationId({ organizationId });
-    console.log("outletList: ", outletList);
+
+    for(let i=0; i<outletList.length; i++) {
+      await this.__activateServiceInOutlet({ createdByUserId: userId, serviceBlueprintId, outletId: outletList[i].id, salePrice: defaultSalePrice });
+    }
+
     return;
   }
 
-  async handle({ body }) {
+  async handle({ body, userId }) {
     let { organizationId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets } = body;
-    this._isLongstandingServiceSetupValid({ isLongstanding, serviceDuration });
-    this._isVatPercentageValid({ vat: defaultVat });
+    this.__isLongstandingServiceSetupValid({ isLongstanding, serviceDuration });
+    this.__isVatPercentageValid({ vat: defaultVat });
     let serviceBlueprintId = await this.database.serviceBlueprint.create({ organizationId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable })
     if (avtivateInAllOutlets) {
-      await this.activateServiceInAllOutlets({ organizationId, serviceBlueprintId });
+      await this._checkAndActivateServiceInAllOutlets({ organizationId, serviceBlueprintId, defaultSalePrice, userId });
     }
     return { status: "success", serviceBlueprintId };
   }
