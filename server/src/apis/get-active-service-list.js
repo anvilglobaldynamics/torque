@@ -25,7 +25,7 @@ exports.GetActiveServiceListApi = class extends Api {
         errorCode: "OUTLET_INVALID"
       },
       privilegeList: [
-        "PRIV_VIEW_ALL_INVENTORIES"
+        "PRIV_VIEW_ALL_SERVICES"
       ]
     }];
   }

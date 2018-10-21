@@ -144,6 +144,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
+          PRIV_VIEW_ALL_SERVICES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
@@ -195,6 +196,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
+          PRIV_VIEW_ALL_SERVICES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
@@ -309,6 +311,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
+          PRIV_VIEW_ALL_SERVICES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
@@ -360,6 +363,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
+          PRIV_VIEW_ALL_SERVICES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
@@ -521,6 +525,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
+          PRIV_VIEW_ALL_SERVICES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
@@ -577,6 +582,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
+          PRIV_VIEW_ALL_SERVICES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
@@ -633,6 +639,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
+          PRIV_VIEW_ALL_SERVICES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,
@@ -866,6 +873,7 @@ describe('Employee', _ => {
           PRIV_MODIFY_SALES_RETURN: true,
 
           PRIV_VIEW_ALL_INVENTORIES: true,
+          PRIV_VIEW_ALL_SERVICES: true,
           PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
           PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
           PRIV_TRANSFER_ALL_INVENTORIES: true,

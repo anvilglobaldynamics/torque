@@ -34,6 +34,7 @@ exports.HireUserAsEmployeeApi = class extends userCommonMixin(collectionCommonMi
         PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
 
         PRIV_VIEW_ALL_INVENTORIES: Joi.boolean().required(),
+        PRIV_VIEW_ALL_SERVICES: Joi.boolean().required(),
         PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: Joi.boolean().required(),
         PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: Joi.boolean().required(),
         PRIV_TRANSFER_ALL_INVENTORIES: Joi.boolean().required(),
