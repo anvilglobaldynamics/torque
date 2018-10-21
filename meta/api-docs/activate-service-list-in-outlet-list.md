@@ -19,7 +19,7 @@ method: `POST`
   ),
 
   activateInAllOutlets: Joi.boolean().required(),
-  outletIdtList: Joi.array().min(0).items(
+  outletIdList: Joi.array().min(0).items(
     joi.number().max(999999999999999).required()
   )
 }
@@ -43,6 +43,7 @@ Possible Error Codes:
 { code: SERVICE_BLUEPRINT_INVALID } // service blueprint not found
 { code: OUTLET_INVALID } // outlet not found
 { code: PREDETERMINER_SETUP_INVALID } // lists referred by true flag should be empty
+{ code: GENERIC_ACTIVATION_ERROR } // Error occurred while activating
 ```
 
 ### response (on success):

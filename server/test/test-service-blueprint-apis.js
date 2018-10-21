@@ -45,6 +45,7 @@ let invalidOutletId = generateInvalidId();
 let invalidServiceBlueprintId = generateInvalidId(); 
 
 let serviceBlueprintToBeEdited = null;
+let serviceBlueprintToBeActivated = null;
 
 describe.only('Service', _ => {
 
@@ -308,7 +309,7 @@ describe.only('Service', _ => {
         name: "3rd service blueprint",
       
         defaultVat: 2,
-        defaultSalePrice: 250,
+        defaultSalePrice: 8600,
         
         isLongstanding: true,
         serviceDuration: {
@@ -382,6 +383,30 @@ describe.only('Service', _ => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equal('VALIDATION_ERROR');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-blueprint-list (Valid searchString)', testDoneFn => {
+
+    callApi('api/get-service-blueprint-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: '1st'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetServiceBlueprintListApiSuccessResponse(body);
+      expect(body.serviceBlueprintList.length).equal(1);
+
+      body.serviceBlueprintList.forEach(serviceBlueprint => {
+        validateServiceBlueprintSchema(serviceBlueprint);
+      });
+
+      serviceBlueprintToBeActivated = body.serviceBlueprintList[0];
       testDoneFn();
     });
 
@@ -558,7 +583,7 @@ describe.only('Service', _ => {
         apiKey,
         serviceBlueprintId: serviceBlueprintToBeEdited.id,
 
-        name: 'new 1st service blueprint name', // modification
+        name: 'new 2nd service blueprint name', // modification
         defaultVat: serviceBlueprintToBeEdited.defaultVat,
         defaultSalePrice: serviceBlueprintToBeEdited.defaultSalePrice,
 
@@ -583,7 +608,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        searchString: 'new 1st service blueprint name'
+        searchString: 'new 2nd service blueprint name'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -593,7 +618,7 @@ describe.only('Service', _ => {
         validateServiceBlueprintSchema(serviceBlueprint);
       });
 
-      expect(body.serviceBlueprintList[0].name).equal('new 1st service blueprint name');
+      expect(body.serviceBlueprintList[0].name).equal('new 2nd service blueprint name');
       testDoneFn();
     });
 
@@ -653,7 +678,7 @@ describe.only('Service', _ => {
         serviceBlueprintList: [],
       
         activateInAllOutlets: true,
-        outletIdtList: []
+        outletIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -679,12 +704,61 @@ describe.only('Service', _ => {
         ],
       
         activateInAllOutlets: true,
-        outletIdtList: []
+        outletIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equal('VALIDATION_ERROR');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/activate-service-list-in-outlet-list (Invalid serviceBlueprintList)', testDoneFn => {
+
+    callApi('api/activate-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId,
+
+        activateAllServices: false,
+        serviceBlueprintList: [
+          {
+            serviceBlueprintId: invalidServiceBlueprintId,
+            salePrice: 999
+          }
+        ],
+      
+        activateInAllOutlets: true,
+        outletIdList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('SERVICE_BLUEPRINT_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/activate-service-list-in-outlet-list (Invalid outletIdList)', testDoneFn => {
+
+    callApi('api/activate-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId,
+
+        activateAllServices: true,
+        serviceBlueprintList: [],
+      
+        activateInAllOutlets: false,
+        outletIdList: [invalidOutletId]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('OUTLET_INVALID');
       testDoneFn();
     });
 
@@ -701,7 +775,7 @@ describe.only('Service', _ => {
         serviceBlueprintList: [],
       
         activateInAllOutlets: false,
-        outletIdtList: []
+        outletIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -723,7 +797,7 @@ describe.only('Service', _ => {
         serviceBlueprintList: [],
       
         activateInAllOutlets: true,
-        outletIdtList: [1]
+        outletIdList: [1]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -750,12 +824,85 @@ describe.only('Service', _ => {
         ],
       
         activateInAllOutlets: true,
-        outletIdtList: []
+        outletIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equal('PREDETERMINER_SETUP_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/activate-service-list-in-outlet-list (Valid)', testDoneFn => {
+
+    callApi('api/activate-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId,
+
+        activateAllServices: false,
+        serviceBlueprintList: [
+          {
+            serviceBlueprintId: serviceBlueprintToBeActivated.id,
+            salePrice: serviceBlueprintToBeActivated.defaultSalePrice
+          }
+        ],
+      
+        activateInAllOutlets: false,
+        outletIdList: [outletId]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/activate-service-list-in-outlet-list (Valid service blueprint in all outlet)', testDoneFn => {
+
+    callApi('api/activate-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId,
+
+        activateAllServices: false,
+        serviceBlueprintList: [
+          {
+            serviceBlueprintId: serviceBlueprintToBeActivated.id,
+            salePrice: serviceBlueprintToBeActivated.defaultSalePrice
+          }
+        ],
+      
+        activateInAllOutlets: true,
+        outletIdList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/activate-service-list-in-outlet-list (Valid all in all)', testDoneFn => {
+
+    callApi('api/activate-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId,
+
+        activateAllServices: true,
+        serviceBlueprintList: [],
+      
+        activateInAllOutlets: true,
+        outletIdList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
 

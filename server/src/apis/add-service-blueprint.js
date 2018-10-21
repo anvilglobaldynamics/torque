@@ -44,7 +44,12 @@ exports.AddServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin, 
   async _checkAndActivateServiceInAllOutlets({ organizationId, serviceBlueprintId, defaultSalePrice, userId }) {
     let outletList = await this.database.outlet.listByOrganizationId({ organizationId });
     for(let i=0; i<outletList.length; i++) {
-      await this.__activateServiceInOutlet({ createdByUserId: userId, serviceBlueprintId, outletId: outletList[i].id, salePrice: defaultSalePrice });
+      await this.__activateServiceInOutlet({ 
+        createdByUserId: userId, 
+        outletId: outletList[i].id, 
+        serviceBlueprintId, 
+        salePrice: defaultSalePrice 
+      });
     }
     return;
   }

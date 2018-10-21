@@ -46,6 +46,7 @@ Possible Error Codes:
 { code: ORGANIZATION_INVALID } // the organization id is invalid
 { code: VAT_VALUE_INVALID } // the vat value is not within 0 to 100
 { code: LONGSTANDING_SETUP_INVALID } // A flag and service duration is required
+{ code: GENERIC_ACTIVATION_ERROR } // Error occurred while activating
 ```
 
 ### response (on success):

@@ -24,4 +24,11 @@ exports.ServiceBlueprintMixin = (SuperApiClass) => class extends SuperApiClass {
     }
   }
 
+  async __varifyServiceBlueprintList({ serviceBlueprintList }) {
+    for (let i=0; i<serviceBlueprintList.length; i++) {
+      let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: serviceBlueprintList[i].serviceBlueprintId });
+      throwOnFalsy(serviceBlueprint, "SERVICE_BLUEPRINT_INVALID", "Service blueprint not found.");
+    }
+  }
+
 }

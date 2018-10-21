@@ -4,19 +4,17 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-e
 /** @param {typeof Api} SuperApiClass */
 exports.ServiceMixin = (SuperApiClass) => class extends SuperApiClass {
 
-  async __activateServiceInOutlet({ createdByUserId, serviceBlueprintId, outletId, salePrice }) {
-    let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: serviceBlueprintId });
-    throwOnFalsy(serviceBlueprint, "SERVICE_BLUEPRINT_INVALID", "service blueprint not found");
-
+  async __activateServiceInOutlet({ createdByUserId, outletId, serviceBlueprintId, salePrice }) {
     let result = await this.database.service.findByOutletIdAndServiceBlueprintId({ outletId, serviceBlueprintId });
 
     if (result) {
-      // active old service
-      console.log("found existing: ", result);
+      let res = await this.database.service.setAvailability({ id: result.id }, { isAvailable: true });
+      throwOnFalsy(res, "GENERIC_ACTIVATION_ERROR", "Error occurred while activating.");
     }
 
     if(!result) {
-      await this.database.service.create({ createdByUserId, serviceBlueprintId, outletId, salePrice });
+      let res = await this.database.service.create({ createdByUserId, serviceBlueprintId, outletId, salePrice });
+      throwOnFalsy(res, "GENERIC_ACTIVATION_ERROR", "Error occurred while activating.");
     }
   }
 
