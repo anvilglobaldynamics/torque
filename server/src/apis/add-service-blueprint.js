@@ -3,8 +3,9 @@ const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
 const { extract } = require('../utils/extract');
 const { ServiceBlueprintMixin } = require('./mixins/service-blueprint-mixin');
+const { ServiceMixin } = require('./mixins/service-mixin');
 
-exports.AddServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin) {
+exports.AddServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin, ServiceMixin) {
 
   get autoValidates() { return true; }
 
@@ -39,12 +40,21 @@ exports.AddServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin) 
       ]
     }];
   }
+  
+  async activateServiceInAllOutlets({ organizationId, serviceBlueprintId }) {
+    let outletList = await this.database.outlet.listByOrganizationId({ organizationId });
+    console.log("outletList: ", outletList);
+    return;
+  }
 
   async handle({ body }) {
     let { organizationId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets } = body;
     this._isLongstandingServiceSetupValid({ isLongstanding, serviceDuration });
     this._isVatPercentageValid({ vat: defaultVat });
     let serviceBlueprintId = await this.database.serviceBlueprint.create({ organizationId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable })
+    if (avtivateInAllOutlets) {
+      await this.activateServiceInAllOutlets({ organizationId, serviceBlueprintId });
+    }
     return { status: "success", serviceBlueprintId };
   }
 
