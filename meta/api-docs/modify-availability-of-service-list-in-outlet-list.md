@@ -1,6 +1,6 @@
 This API handles attempt to activate a list of service blueprints in all outlets of a outlet list.
 
-url: `api/activate-service-list-in-outlet-list`
+url: `api/modify-availability-of-service-list-in-outlet-list`
 
 method: `POST`
 
@@ -10,7 +10,9 @@ method: `POST`
   apiKey: Joi.string().length(64).required(),
   organizationId: Joi.number().max(999999999999999).required(),
 
-  activateAllServices: Joi.boolean().required(),
+  action: Joi.string().valid('activate', 'deactivate').required(),
+
+  performActionForAllServices: Joi.boolean().required(),
   serviceBlueprintList: Joi.array().min(0).items(
     Joi.object().keys({
       serviceBlueprintId: Joi.number().max(999999999999999).required(),
@@ -18,7 +20,7 @@ method: `POST`
     });
   ),
 
-  activateInAllOutlets: Joi.boolean().required(),
+  performActionOnAllOutlets: Joi.boolean().required(),
   outletIdList: Joi.array().min(0).items(
     joi.number().max(999999999999999).required()
   )
@@ -44,6 +46,7 @@ Possible Error Codes:
 { code: OUTLET_INVALID } // outlet not found
 { code: PREDETERMINER_SETUP_INVALID } // lists referred by true flag should be empty
 { code: GENERIC_ACTIVATION_ERROR } // Error occurred while activating
+{ code: GENERIC_DEACTIVATION_ERROR } // Error occurred while deactivating
 ```
 
 ### response (on success):

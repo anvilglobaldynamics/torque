@@ -18,4 +18,13 @@ exports.ServiceMixin = (SuperApiClass) => class extends SuperApiClass {
     }
   }
 
+  async __deactivateServiceInOutlet({ outletId, serviceBlueprintId }) {
+    let result = await this.database.service.findByOutletIdAndServiceBlueprintId({ outletId, serviceBlueprintId });
+
+    if (result) {
+      let res = await this.database.service.setAvailability({ id: result.id }, { isAvailable: false });
+      throwOnFalsy(res, "GENERIC_DEACTIVATION_ERROR", "Error occurred while activating.");
+    }
+  }
+
 }

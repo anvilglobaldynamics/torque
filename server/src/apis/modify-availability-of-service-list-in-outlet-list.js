@@ -6,7 +6,7 @@ const { ServiceBlueprintMixin } = require('./mixins/service-blueprint-mixin');
 const { ServiceMixin } = require('./mixins/service-mixin');
 const { OutletMixin } = require('./mixins/outlet-mixin');
 
-exports.ActivateServiceListInOutletListApi = class extends Api.mixin(ServiceBlueprintMixin, ServiceMixin, OutletMixin) {
+exports.ModifyAvailabilityOfServiceListInOutletListApi = class extends Api.mixin(ServiceBlueprintMixin, ServiceMixin, OutletMixin) {
 
   get autoValidates() { return true; }
 
@@ -16,7 +16,9 @@ exports.ActivateServiceListInOutletListApi = class extends Api.mixin(ServiceBlue
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
 
-      activateAllServices: Joi.boolean().required(),
+      action: Joi.string().valid('activate', 'deactivate').required(),
+
+      performActionForAllServices: Joi.boolean().required(),
       serviceBlueprintList: Joi.array().min(0).items(
         Joi.object().keys({
           serviceBlueprintId: Joi.number().max(999999999999999).required(),
@@ -24,7 +26,7 @@ exports.ActivateServiceListInOutletListApi = class extends Api.mixin(ServiceBlue
         })
       ),
     
-      activateInAllOutlets: Joi.boolean().required(),
+      performActionOnAllOutlets: Joi.boolean().required(),
       outletIdList: Joi.array().min(0).items(
         Joi.number().max(999999999999999)
       )
@@ -40,8 +42,8 @@ exports.ActivateServiceListInOutletListApi = class extends Api.mixin(ServiceBlue
     }];
   }
 
-  _validatePredeterminerSetup({ activateAllServices, serviceBlueprintList, activateInAllOutlets, outletIdList }) {
-    if (activateAllServices) {
+  _validatePredeterminerSetup({ performActionForAllServices, serviceBlueprintList, performActionOnAllOutlets, outletIdList }) {
+    if (performActionForAllServices) {
       if (serviceBlueprintList.length !== 0) {
         throw new CodedError("PREDETERMINER_SETUP_INVALID", "Lists referred by true flag should be empty.");
       }
@@ -51,7 +53,7 @@ exports.ActivateServiceListInOutletListApi = class extends Api.mixin(ServiceBlue
       }
     }
 
-    if (activateInAllOutlets) {
+    if (performActionOnAllOutlets) {
       if (outletIdList.length !== 0) {
         throw new CodedError("PREDETERMINER_SETUP_INVALID", "Lists referred by true flag should be empty.");
       }
@@ -81,16 +83,16 @@ exports.ActivateServiceListInOutletListApi = class extends Api.mixin(ServiceBlue
   }
 
   async handle({ body, userId }) {
-    let { organizationId, activateAllServices, serviceBlueprintList, activateInAllOutlets, outletIdList } = body;
-    this._validatePredeterminerSetup({ activateAllServices, serviceBlueprintList, activateInAllOutlets, outletIdList });
+    let { organizationId, action, performActionForAllServices, serviceBlueprintList, performActionOnAllOutlets, outletIdList } = body;
+    this._validatePredeterminerSetup({ performActionForAllServices, serviceBlueprintList, performActionOnAllOutlets, outletIdList });
 
-    if (activateAllServices) {
+    if (performActionForAllServices) {
       serviceBlueprintList = await this._populateServiceBlueprintList({ organizationId, serviceBlueprintList });
     } else {
       await this.__varifyServiceBlueprintList({ serviceBlueprintList });
     }
 
-    if (activateInAllOutlets) {
+    if (performActionOnAllOutlets) {
       outletIdList = await this._populateOutletIdList({ organizationId, outletIdList }); 
     } else {
       await this.__varifyOutletIdList({ outletIdList });
@@ -98,12 +100,21 @@ exports.ActivateServiceListInOutletListApi = class extends Api.mixin(ServiceBlue
 
     for(let i=0; i<serviceBlueprintList.length; i++) {
       for(let j=0; j<outletIdList.length; j++) {
-        await this.__activateServiceInOutlet({ 
-          createdByUserId: userId, 
-          outletId: outletIdList[j], 
-          serviceBlueprintId: serviceBlueprintList[i].serviceBlueprintId, 
-          salePrice: serviceBlueprintList[i].salePrice 
-        });
+        if (action === 'activate') {
+          await this.__activateServiceInOutlet({ 
+            createdByUserId: userId, 
+            outletId: outletIdList[j], 
+            serviceBlueprintId: serviceBlueprintList[i].serviceBlueprintId, 
+            salePrice: serviceBlueprintList[i].salePrice 
+          });
+        }
+
+        if (action === 'deactivate') {
+          await this.__deactivateServiceInOutlet({
+            outletId: outletIdList[j], 
+            serviceBlueprintId: serviceBlueprintList[i].serviceBlueprintId
+          });
+        }
       }
     }
 

@@ -47,7 +47,7 @@ let invalidServiceBlueprintId = generateInvalidId();
 let serviceBlueprintToBeEdited = null;
 let serviceBlueprintToBeActivated = null;
 
-describe('Service', _ => {
+describe.only('Service', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -667,17 +667,18 @@ describe('Service', _ => {
 
   // Activate Service
 
-  it('api/activate-service-list-in-outlet-list (Invalid organizationId)', testDoneFn => {
+  it('api/modify-availability-of-service-list-in-outlet-list (Invalid organizationId)', testDoneFn => {
 
-    callApi('api/activate-service-list-in-outlet-list', {
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
       json: {
         apiKey,
         organizationId: invalidOrganizationId,
+        action: 'activate',
 
-        activateAllServices: true,
+        performActionForAllServices: true,
         serviceBlueprintList: [],
       
-        activateInAllOutlets: true,
+        performActionOnAllOutlets: true,
         outletIdList: []
       }
     }, (err, response, body) => {
@@ -689,21 +690,22 @@ describe('Service', _ => {
 
   });
 
-  it('api/activate-service-list-in-outlet-list (Invalid serviceBlueprintList)', testDoneFn => {
+  it('api/modify-availability-of-service-list-in-outlet-list (Invalid serviceBlueprintList)', testDoneFn => {
 
-    callApi('api/activate-service-list-in-outlet-list', {
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
       json: {
         apiKey,
         organizationId,
+        action: 'activate',
 
-        activateAllServices: false,
+        performActionForAllServices: false,
         serviceBlueprintList: [
           {
             something: "something"
           }
         ],
       
-        activateInAllOutlets: true,
+        performActionOnAllOutlets: true,
         outletIdList: []
       }
     }, (err, response, body) => {
@@ -715,14 +717,15 @@ describe('Service', _ => {
 
   });
 
-  it('api/activate-service-list-in-outlet-list (Invalid serviceBlueprintList)', testDoneFn => {
+  it('api/modify-availability-of-service-list-in-outlet-list (Invalid serviceBlueprintList)', testDoneFn => {
 
-    callApi('api/activate-service-list-in-outlet-list', {
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
       json: {
         apiKey,
         organizationId,
+        action: 'activate',
 
-        activateAllServices: false,
+        performActionForAllServices: false,
         serviceBlueprintList: [
           {
             serviceBlueprintId: invalidServiceBlueprintId,
@@ -730,7 +733,7 @@ describe('Service', _ => {
           }
         ],
       
-        activateInAllOutlets: true,
+        performActionOnAllOutlets: true,
         outletIdList: []
       }
     }, (err, response, body) => {
@@ -742,17 +745,18 @@ describe('Service', _ => {
 
   });
 
-  it('api/activate-service-list-in-outlet-list (Invalid outletIdList)', testDoneFn => {
+  it('api/modify-availability-of-service-list-in-outlet-list (Invalid outletIdList)', testDoneFn => {
 
-    callApi('api/activate-service-list-in-outlet-list', {
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
       json: {
         apiKey,
         organizationId,
+        action: 'activate',
 
-        activateAllServices: true,
+        performActionForAllServices: true,
         serviceBlueprintList: [],
       
-        activateInAllOutlets: false,
+        performActionOnAllOutlets: false,
         outletIdList: [invalidOutletId]
       }
     }, (err, response, body) => {
@@ -764,17 +768,18 @@ describe('Service', _ => {
 
   });
 
-  it('api/activate-service-list-in-outlet-list (Invalid predeterminer setup)', testDoneFn => {
+  it('api/modify-availability-of-service-list-in-outlet-list (Invalid predeterminer setup)', testDoneFn => {
 
-    callApi('api/activate-service-list-in-outlet-list', {
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
       json: {
         apiKey,
         organizationId,
+        action: 'activate',
 
-        activateAllServices: false,
+        performActionForAllServices: false,
         serviceBlueprintList: [],
       
-        activateInAllOutlets: false,
+        performActionOnAllOutlets: false,
         outletIdList: []
       }
     }, (err, response, body) => {
@@ -786,17 +791,18 @@ describe('Service', _ => {
 
   });
 
-  it('api/activate-service-list-in-outlet-list (Invalid predeterminer setup)', testDoneFn => {
+  it('api/modify-availability-of-service-list-in-outlet-list (Invalid predeterminer setup)', testDoneFn => {
 
-    callApi('api/activate-service-list-in-outlet-list', {
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
       json: {
         apiKey,
         organizationId,
+        action: 'activate',
 
-        activateAllServices: true,
+        performActionForAllServices: true,
         serviceBlueprintList: [],
       
-        activateInAllOutlets: true,
+        performActionOnAllOutlets: true,
         outletIdList: [1]
       }
     }, (err, response, body) => {
@@ -808,14 +814,15 @@ describe('Service', _ => {
 
   });
 
-  it('api/activate-service-list-in-outlet-list (Invalid predeterminer setup)', testDoneFn => {
+  it('api/modify-availability-of-service-list-in-outlet-list (Invalid predeterminer setup)', testDoneFn => {
 
-    callApi('api/activate-service-list-in-outlet-list', {
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
       json: {
         apiKey,
         organizationId,
+        action: 'activate',
 
-        activateAllServices: true,
+        performActionForAllServices: true,
         serviceBlueprintList: [
           {
             serviceBlueprintId: 1,
@@ -823,7 +830,7 @@ describe('Service', _ => {
           }
         ],
       
-        activateInAllOutlets: true,
+        performActionOnAllOutlets: true,
         outletIdList: []
       }
     }, (err, response, body) => {
@@ -835,14 +842,15 @@ describe('Service', _ => {
 
   });
 
-  it('api/activate-service-list-in-outlet-list (Valid)', testDoneFn => {
+  it('api/modify-availability-of-service-list-in-outlet-list (Invalid action)', testDoneFn => {
 
-    callApi('api/activate-service-list-in-outlet-list', {
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
       json: {
         apiKey,
         organizationId,
+        action: 'something',
 
-        activateAllServices: false,
+        performActionForAllServices: false,
         serviceBlueprintList: [
           {
             serviceBlueprintId: serviceBlueprintToBeActivated.id,
@@ -850,7 +858,35 @@ describe('Service', _ => {
           }
         ],
       
-        activateInAllOutlets: false,
+        performActionOnAllOutlets: false,
+        outletIdList: [outletId]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('VALIDATION_ERROR');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/modify-availability-of-service-list-in-outlet-list (Valid activation)', testDoneFn => {
+
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId,
+        action: 'activate',
+
+        performActionForAllServices: false,
+        serviceBlueprintList: [
+          {
+            serviceBlueprintId: serviceBlueprintToBeActivated.id,
+            salePrice: serviceBlueprintToBeActivated.defaultSalePrice
+          }
+        ],
+      
+        performActionOnAllOutlets: false,
         outletIdList: [outletId]
       }
     }, (err, response, body) => {
@@ -905,17 +941,18 @@ describe('Service', _ => {
 
   });
 
-  it('api/activate-service-list-in-outlet-list (Valid all service in outlet)', testDoneFn => {
+  it('api/modify-availability-of-service-list-in-outlet-list (Valid activation all service in outlet)', testDoneFn => {
 
-    callApi('api/activate-service-list-in-outlet-list', {
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
       json: {
         apiKey,
         organizationId,
+        action: 'activate',
 
-        activateAllServices: true,
+        performActionForAllServices: true,
         serviceBlueprintList: [],
       
-        activateInAllOutlets: false,
+        performActionOnAllOutlets: false,
         outletIdList: [outletTwoId]
       }
     }, (err, response, body) => {
@@ -948,14 +985,15 @@ describe('Service', _ => {
 
   });
 
-  it('api/activate-service-list-in-outlet-list (Valid service blueprint in all outlet)', testDoneFn => {
+  it('api/modify-availability-of-service-list-in-outlet-list (Valid activation service blueprint in all outlet)', testDoneFn => {
 
-    callApi('api/activate-service-list-in-outlet-list', {
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
       json: {
         apiKey,
         organizationId,
+        action: 'activate',
 
-        activateAllServices: false,
+        performActionForAllServices: false,
         serviceBlueprintList: [
           {
             serviceBlueprintId: serviceBlueprintToBeActivated.id,
@@ -963,7 +1001,7 @@ describe('Service', _ => {
           }
         ],
       
-        activateInAllOutlets: true,
+        performActionOnAllOutlets: true,
         outletIdList: []
       }
     }, (err, response, body) => {
@@ -974,22 +1012,116 @@ describe('Service', _ => {
 
   });
 
-  it('api/activate-service-list-in-outlet-list (Valid all in all)', testDoneFn => {
+  it('api/modify-availability-of-service-list-in-outlet-list (Valid activation all in all)', testDoneFn => {
 
-    callApi('api/activate-service-list-in-outlet-list', {
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
       json: {
         apiKey,
         organizationId,
+        action: 'activate',
 
-        activateAllServices: true,
+        performActionForAllServices: true,
         serviceBlueprintList: [],
       
-        activateInAllOutlets: true,
+        performActionOnAllOutlets: true,
         outletIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/modify-availability-of-service-list-in-outlet-list (Valid deactivation a service in a outlet)', testDoneFn => {
+
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId,
+        action: 'deactivate',
+
+        performActionForAllServices: false,
+        serviceBlueprintList: [
+          {
+            serviceBlueprintId: serviceBlueprintToBeActivated.id,
+            salePrice: serviceBlueprintToBeActivated.defaultSalePrice
+          }
+        ],
+      
+        performActionOnAllOutlets: false,
+        outletIdList: [outletId]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-active-service-list (Valid all service activation check)', testDoneFn => {
+
+    callApi('api/get-active-service-list', {
+      json: {
+        apiKey,
+        outletId: outletId,
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetActiveServiceListApiSuccessResponse(body);
+      body.serviceList.forEach(service => {
+        validateServiceSchema(service);
+      });
+
+      expect(body.serviceList.length).equal(2);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/modify-availability-of-service-list-in-outlet-list (Valid deactivation all in all)', testDoneFn => {
+
+    callApi('api/modify-availability-of-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId,
+        action: 'deactivate',
+
+        performActionForAllServices: true,
+        serviceBlueprintList: [],
+      
+        performActionOnAllOutlets: true,
+        outletIdList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-active-service-list (Valid all service activation check)', testDoneFn => {
+
+    callApi('api/get-active-service-list', {
+      json: {
+        apiKey,
+        outletId: outletTwoId,
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetActiveServiceListApiSuccessResponse(body);
+      body.serviceList.forEach(service => {
+        validateServiceSchema(service);
+      });
+
+      expect(body.serviceList.length).equal(0);
       testDoneFn();
     });
 
