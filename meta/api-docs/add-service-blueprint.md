@@ -23,7 +23,8 @@ method: `POST`
 
   isEmployeeAssignable: Joi.boolean().required(),
   isCustomerRequired: Joi.boolean().required(),
-  isRefundable: Joi.boolean().required()
+  isRefundable: Joi.boolean().required(),
+  avtivateInAllOutlets: Joi.boolean().required()
 }
 ```
 

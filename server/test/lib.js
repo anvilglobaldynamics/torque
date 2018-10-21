@@ -638,6 +638,16 @@ exports.validateGetServiceBlueprintListApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateGetActiveServiceListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    serviceList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateAddSalesApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
@@ -966,6 +976,24 @@ exports.validateServiceBlueprintSchema = (doc) => {
     isCustomerRequired: Joi.boolean().required(),
     isRefundable: Joi.boolean().required(),
     isDeleted: Joi.boolean().required()
+  });
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateServiceSchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+    createdByUserId: Joi.number().max(999999999999999).required(),
+  
+    serviceBlueprintId: Joi.number().max(999999999999999).required(),
+    outletId: Joi.number().max(999999999999999).required(),
+    
+    salePrice: Joi.number().min(0).max(999999999999999).required(),
+    isAvailable: Joi.boolean().required()
   });
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;

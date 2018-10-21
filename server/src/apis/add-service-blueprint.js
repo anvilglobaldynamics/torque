@@ -26,7 +26,8 @@ exports.AddServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin) 
     
       isEmployeeAssignable: Joi.boolean().required(),
       isCustomerRequired: Joi.boolean().required(),
-      isRefundable: Joi.boolean().required()
+      isRefundable: Joi.boolean().required(),
+      avtivateInAllOutlets: Joi.boolean().required()
     });
   }
 
@@ -40,7 +41,7 @@ exports.AddServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin) 
   }
 
   async handle({ body }) {
-    let { organizationId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = body;
+    let { organizationId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets } = body;
     this._isLongstandingServiceSetupValid({ isLongstanding, serviceDuration });
     this._isVatPercentageValid({ vat: defaultVat });
     let serviceBlueprintId = await this.database.serviceBlueprint.create({ organizationId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable })

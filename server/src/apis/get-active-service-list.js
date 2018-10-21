@@ -32,8 +32,7 @@ exports.GetActiveServiceListApi = class extends Api {
 
   async handle({ body }) {
     let { outletId, searchString } = body;
-    let serviceList = [];
-
+    let serviceList = await this.database.service.listByOutletIdAndSearchString({ outletId, searchString });
     return { serviceList };
   }
 

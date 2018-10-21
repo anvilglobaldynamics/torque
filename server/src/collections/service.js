@@ -81,4 +81,17 @@ exports.ServiceCollection = class extends Collection {
     });
   }
 
+  async listByOutletIdAndSearchString({ outletId, searchString }) {
+    let query = { outletId };
+    if (searchString) {
+      searchString = this.escapeRegExp(searchString);
+      let searchRegex = new RegExp(searchString, 'i');
+      query.$or = [
+        { name: searchRegex },
+        { isAvailable: true }
+      ];
+    }
+    return await this._find(query);
+  }
+
 }

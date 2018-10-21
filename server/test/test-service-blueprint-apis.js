@@ -15,7 +15,9 @@ let {
   validateGenericApiSuccessResponse,
   validateAddServiceBlueprintApiSuccessResponse,
   validateGetServiceBlueprintListApiSuccessResponse,
-  validateServiceBlueprintSchema
+  validateServiceBlueprintSchema,
+  validateGetActiveServiceListApiSuccessResponse,
+  validateServiceSchema
 } = require('./lib');
 
 const prefix = 's';
@@ -30,13 +32,16 @@ const orgBusinessAddress = "Test Organization Address";
 const orgPhone = 'o' + rnd(prefix, 11);
 const outletName = "Test Outlet";
 const outletContactPersonName = "Test Outlet contact person";
+const outletTwoName = "2nd Test Outlet";
 
 let apiKey = null;
 let organizationId = null;
 let outletId = null;
+let outletTwoId = null;
 
 let invalidOrganizationId = generateInvalidId();
 let invalidProductBlueprintId = generateInvalidId();
+let invalidOutletId = generateInvalidId(); 
 
 let serviceBlueprintToBeEdited = null;
 
@@ -68,7 +73,17 @@ describe.only('Service', _ => {
               contactPersonName: outletContactPersonName
             }, (data) => {
               outletId = data.outletId;
-              testDoneFn();
+              addOutlet({
+                apiKey,
+                organizationId,
+                name: outletTwoName,
+                physicalAddress: orgBusinessAddress,
+                phone: orgPhone,
+                contactPersonName: outletContactPersonName
+              }, (data) => {
+                outletTwoId = data.outletId;
+                testDoneFn();
+              });
             });
           });
         });
@@ -95,7 +110,8 @@ describe.only('Service', _ => {
       
         isEmployeeAssignable: false,
         isCustomerRequired: false,
-        isRefundable: false
+        isRefundable: false,
+        avtivateInAllOutlets: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -123,7 +139,8 @@ describe.only('Service', _ => {
       
         isEmployeeAssignable: false,
         isCustomerRequired: false,
-        isRefundable: false
+        isRefundable: false,
+        avtivateInAllOutlets: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -151,7 +168,8 @@ describe.only('Service', _ => {
       
         isEmployeeAssignable: false,
         isCustomerRequired: false,
-        isRefundable: false
+        isRefundable: false,
+        avtivateInAllOutlets: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -178,7 +196,8 @@ describe.only('Service', _ => {
       
         isEmployeeAssignable: false,
         isCustomerRequired: false,
-        isRefundable: false
+        isRefundable: false,
+        avtivateInAllOutlets: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -206,7 +225,8 @@ describe.only('Service', _ => {
       
         isEmployeeAssignable: true,
         isCustomerRequired: true,
-        isRefundable: true
+        isRefundable: true,
+        avtivateInAllOutlets: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -233,7 +253,8 @@ describe.only('Service', _ => {
       
         isEmployeeAssignable: true,
         isCustomerRequired: true,
-        isRefundable: true
+        isRefundable: true,
+        avtivateInAllOutlets: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -264,7 +285,8 @@ describe.only('Service', _ => {
       
         isEmployeeAssignable: true,
         isCustomerRequired: true,
-        isRefundable: true
+        isRefundable: true,
+        avtivateInAllOutlets: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -295,7 +317,8 @@ describe.only('Service', _ => {
       
         isEmployeeAssignable: true,
         isCustomerRequired: true,
-        isRefundable: true
+        isRefundable: true,
+        avtivateInAllOutlets: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -577,6 +600,23 @@ describe.only('Service', _ => {
 
   // Get Service 
 
+  it('api/get-active-service-list (Invalid outletId)', testDoneFn => {
+
+    callApi('api/get-active-service-list', {
+      json: {
+        apiKey,
+        outletId: invalidOutletId,
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('OUTLET_INVALID');
+      testDoneFn();
+    });
+
+  });
+
   it('api/get-active-service-list (Valid)', testDoneFn => {
 
     callApi('api/get-active-service-list', {
@@ -586,19 +626,19 @@ describe.only('Service', _ => {
         searchString: ''
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
 
-      // validateGetServiceBlueprintListApiSuccessResponse(body);
-
-      // body.serviceBlueprintList.forEach(serviceBlueprint => {
-      //   validateServiceBlueprintSchema(serviceBlueprint);
-      // });
+      validateGetActiveServiceListApiSuccessResponse(body);
+      body.serviceList.forEach(service => {
+        validateServiceSchema(service);
+      });
 
       testDoneFn();
     });
 
   });
+
+  // Activate Service
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
