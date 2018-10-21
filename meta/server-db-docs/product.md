@@ -1,4 +1,4 @@
-This collection contains an product
+This collection contains a product
 
 ## signature
 ```js
