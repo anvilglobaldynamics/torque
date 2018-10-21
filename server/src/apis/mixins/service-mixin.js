@@ -5,6 +5,9 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-e
 exports.ServiceMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async __activateServiceInOutlet({ createdByUserId, serviceBlueprintId, outletId, salePrice }) {
+    let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: serviceBlueprintId });
+    throwOnFalsy(serviceBlueprint, "SERVICE_BLUEPRINT_INVALID", "service blueprint not found");
+
     let result = await this.database.service.findByOutletIdAndServiceBlueprintId({ outletId, serviceBlueprintId });
 
     if (result) {

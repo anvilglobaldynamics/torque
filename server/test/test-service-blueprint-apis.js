@@ -42,6 +42,7 @@ let outletTwoId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidProductBlueprintId = generateInvalidId();
 let invalidOutletId = generateInvalidId(); 
+let invalidServiceBlueprintId = generateInvalidId(); 
 
 let serviceBlueprintToBeEdited = null;
 
@@ -640,6 +641,125 @@ describe.only('Service', _ => {
   });
 
   // Activate Service
+
+  it('api/activate-service-list-in-outlet-list (Invalid organizationId)', testDoneFn => {
+
+    callApi('api/activate-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId: invalidOrganizationId,
+
+        activateAllServices: true,
+        serviceBlueprintList: [],
+      
+        activateInAllOutlets: true,
+        outletIdtList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('ORGANIZATION_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/activate-service-list-in-outlet-list (Invalid serviceBlueprintList)', testDoneFn => {
+
+    callApi('api/activate-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId,
+
+        activateAllServices: false,
+        serviceBlueprintList: [
+          {
+            something: "something"
+          }
+        ],
+      
+        activateInAllOutlets: true,
+        outletIdtList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('VALIDATION_ERROR');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/activate-service-list-in-outlet-list (Invalid predeterminer setup)', testDoneFn => {
+
+    callApi('api/activate-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId,
+
+        activateAllServices: false,
+        serviceBlueprintList: [],
+      
+        activateInAllOutlets: false,
+        outletIdtList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PREDETERMINER_SETUP_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/activate-service-list-in-outlet-list (Invalid predeterminer setup)', testDoneFn => {
+
+    callApi('api/activate-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId,
+
+        activateAllServices: true,
+        serviceBlueprintList: [],
+      
+        activateInAllOutlets: true,
+        outletIdtList: [1]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PREDETERMINER_SETUP_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/activate-service-list-in-outlet-list (Invalid predeterminer setup)', testDoneFn => {
+
+    callApi('api/activate-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId,
+
+        activateAllServices: true,
+        serviceBlueprintList: [
+          {
+            serviceBlueprintId: 1,
+            salePrice: 100
+          }
+        ],
+      
+        activateInAllOutlets: true,
+        outletIdtList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PREDETERMINER_SETUP_INVALID');
+      testDoneFn();
+    });
+
+  });
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
