@@ -172,7 +172,6 @@ describe.only('Service', _ => {
         avtivateInAllOutlets: true
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateAddServiceBlueprintApiSuccessResponse(body);
       testDoneFn();
@@ -634,6 +633,7 @@ describe.only('Service', _ => {
         validateServiceSchema(service);
       });
 
+      expect(body.serviceList.length).equal(1);
       testDoneFn();
     });
 
