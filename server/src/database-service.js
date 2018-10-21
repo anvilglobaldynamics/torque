@@ -25,6 +25,7 @@ const { ProductAcquisitionCollection } = require('./collections/product-acquisit
 const { ProductTransferCollection } = require('./collections/product-transfer');
 const { PackageActivationCollection } = require('./collections/package-activation');
 const { ServiceBlueprintCollection } = require('./collections/service-blueprint');
+const { ServiceCollection } = require('./collections/service');
 
 class DatabaseService {
 
@@ -56,6 +57,7 @@ class DatabaseService {
     this.productTransfer = new ProductTransferCollection(this.engine, this);
     this.packageActivation = new PackageActivationCollection(this.engine, this);
     this.serviceBlueprint = new ServiceBlueprintCollection(this.engine, this);
+    this.service = new ServiceCollection(this.engine, this);
     /** @type {[Collection]} */
     this.collectionList = Object.keys(this).filter(key => this[key] instanceof Collection).map(key => this[key]);
   }
