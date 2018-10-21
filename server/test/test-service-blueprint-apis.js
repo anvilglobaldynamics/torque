@@ -9,6 +9,7 @@ let {
   registerUser,
   loginUser,
   addOrganization,
+  addOutlet,
 
   validateGenericApiFailureResponse,
   validateGenericApiSuccessResponse,
@@ -27,16 +28,19 @@ const orgEmail = 'o' + `${rnd(prefix)}@gmail.com`;
 const orgName = "Test Organization";
 const orgBusinessAddress = "Test Organization Address";
 const orgPhone = 'o' + rnd(prefix, 11);
+const outletName = "Test Outlet";
+const outletContactPersonName = "Test Outlet contact person";
 
 let apiKey = null;
 let organizationId = null;
+let outletId = null;
 
 let invalidOrganizationId = generateInvalidId();
 let invalidProductBlueprintId = generateInvalidId();
 
 let serviceBlueprintToBeEdited = null;
 
-describe('Service Blueprint', _ => {
+describe.only('Service', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -55,14 +59,24 @@ describe('Service Blueprint', _ => {
             email: orgEmail
           }, (data) => {
             organizationId = data.organizationId;
-            testDoneFn();
-          })
+            addOutlet({
+              apiKey,
+              organizationId,
+              name: outletName,
+              physicalAddress: orgBusinessAddress,
+              phone: orgPhone,
+              contactPersonName: outletContactPersonName
+            }, (data) => {
+              outletId = data.outletId;
+              testDoneFn();
+            });
+          });
         });
       });
     });
   });
 
-  // Add
+  // Add Service Blueprint
 
   it('api/add-service-blueprint (Invalid defaultVat)', testDoneFn => {
 
@@ -291,7 +305,7 @@ describe('Service Blueprint', _ => {
 
   });
 
-  // Get
+  // Get Service Blueprint
 
   it('api/get-service-blueprint-list (Invalid organizationId)', testDoneFn => {
 
@@ -373,7 +387,7 @@ describe('Service Blueprint', _ => {
 
   });
 
-  // Edit
+  // Edit Service Blueprint
 
   it('api/edit-service-blueprint (Invalid serviceBlueprintId)', testDoneFn => {
 
@@ -556,6 +570,31 @@ describe('Service Blueprint', _ => {
       });
 
       expect(body.serviceBlueprintList[0].name).equal('new 1st service blueprint name');
+      testDoneFn();
+    });
+
+  });
+
+  // Get Service 
+
+  it('api/get-active-service-list (Valid)', testDoneFn => {
+
+    callApi('api/get-active-service-list', {
+      json: {
+        apiKey,
+        outletId,
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      console.log(body);
+      expect(response.statusCode).to.equal(200);
+
+      // validateGetServiceBlueprintListApiSuccessResponse(body);
+
+      // body.serviceBlueprintList.forEach(serviceBlueprint => {
+      //   validateServiceBlueprintSchema(serviceBlueprint);
+      // });
+
       testDoneFn();
     });
 
