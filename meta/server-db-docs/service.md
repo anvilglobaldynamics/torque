@@ -8,9 +8,9 @@ Joi.object().keys({
   createdByUserId: Joi.number().max(999999999999999).required(),
 
   serviceBlueprintId: Joi.number().max(999999999999999).required(),
-  salePrice: Joi.number().min(0).max(999999999999999).required(),
-
   outletId: Joi.number().max(999999999999999).required(),
+  
+  salePrice: Joi.number().min(0).max(999999999999999).required(),
   isAvailable: Joi.boolean().required()
 });
 ```
