@@ -56,6 +56,10 @@
     "name": "Add products to all inventories"
   },
   {
+    "code": "PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS",
+    "name": "Activate all services in all outlets"
+  },
+  {
     "code": "PRIV_VIEW_ALL_OUTLETS",
     "name": "View all outlets"
   },

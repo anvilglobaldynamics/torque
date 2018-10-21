@@ -42,6 +42,7 @@ exports.AddNewEmployeeApi = class extends phoneVerificationRequestMixin(userComm
         PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: Joi.boolean().required(),
         PRIV_TRANSFER_ALL_INVENTORIES: Joi.boolean().required(),
         PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: Joi.boolean().required(),
+        PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS: Joi.boolean().required(),
 
         PRIV_VIEW_ALL_OUTLETS: Joi.boolean().required(),
         PRIV_MODIFY_ALL_OUTLETS: Joi.boolean().required(),

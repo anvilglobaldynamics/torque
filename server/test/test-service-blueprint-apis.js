@@ -47,7 +47,7 @@ let invalidServiceBlueprintId = generateInvalidId();
 let serviceBlueprintToBeEdited = null;
 let serviceBlueprintToBeActivated = null;
 
-describe.only('Service', _ => {
+describe('Service', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

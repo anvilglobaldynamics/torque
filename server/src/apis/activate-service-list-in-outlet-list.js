@@ -35,7 +35,7 @@ exports.ActivateServiceListInOutletListApi = class extends Api.mixin(ServiceBlue
     return [{
       organizationBy: "organizationId",
       privilegeList: [
-        "PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES"
+        "PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS"
       ]
     }];
   }
