@@ -861,6 +861,93 @@ describe.only('Service', _ => {
 
   });
 
+  it('api/get-active-service-list (Valid activation check)', testDoneFn => {
+
+    callApi('api/get-active-service-list', {
+      json: {
+        apiKey,
+        outletId,
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetActiveServiceListApiSuccessResponse(body);
+      body.serviceList.forEach(service => {
+        validateServiceSchema(service);
+      });
+
+      expect(body.serviceList.length).equal(1);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-active-service-list (Valid activation check)', testDoneFn => {
+
+    callApi('api/get-active-service-list', {
+      json: {
+        apiKey,
+        outletId: outletTwoId,
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetActiveServiceListApiSuccessResponse(body);
+      body.serviceList.forEach(service => {
+        validateServiceSchema(service);
+      });
+
+      expect(body.serviceList.length).equal(1);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/activate-service-list-in-outlet-list (Valid all service in outlet)', testDoneFn => {
+
+    callApi('api/activate-service-list-in-outlet-list', {
+      json: {
+        apiKey,
+        organizationId,
+
+        activateAllServices: true,
+        serviceBlueprintList: [],
+      
+        activateInAllOutlets: false,
+        outletIdList: [outletTwoId]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-active-service-list (Valid all service activation check)', testDoneFn => {
+
+    callApi('api/get-active-service-list', {
+      json: {
+        apiKey,
+        outletId: outletTwoId,
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetActiveServiceListApiSuccessResponse(body);
+      body.serviceList.forEach(service => {
+        validateServiceSchema(service);
+      });
+
+      expect(body.serviceList.length).equal(3);
+      testDoneFn();
+    });
+
+  });
+
   it('api/activate-service-list-in-outlet-list (Valid service blueprint in all outlet)', testDoneFn => {
 
     callApi('api/activate-service-list-in-outlet-list', {
