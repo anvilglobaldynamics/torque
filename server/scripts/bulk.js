@@ -164,7 +164,8 @@ const createServiceBlueprint = async ({ apiKey, organizationId }) => {
     serviceDuration: null,
     isEmployeeAssignable: true,
     isCustomerRequired: true,
-    isRefundable: true
+    isRefundable: true,
+    avtivateInAllOutlets: true
   });
 
   return { serviceBlueprintId };
@@ -236,9 +237,12 @@ const createEmployee = async ({ apiKey, organizationId }) => {
 
       PRIV_VIEW_ALL_INVENTORIES: true,
       PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
-      PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
       PRIV_TRANSFER_ALL_INVENTORIES: true,
       PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
+
+      PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
+      PRIV_VIEW_ALL_SERVICES: true,
+      PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS: true,
 
       PRIV_VIEW_ALL_OUTLETS: true,
       PRIV_MODIFY_ALL_OUTLETS: true,
