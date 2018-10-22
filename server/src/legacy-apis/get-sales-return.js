@@ -29,12 +29,14 @@ exports.GetSalesReturnApi = class extends collectionCommonMixin(LegacyApi) {
         {
           from: "sales",
           query: ({ salesId }) => ({ id: salesId }),
-          select: "outletId"
+          select: "outletId",
+          errorCode: "SALES_INVALID"
         },
         {
           from: "outlet",
           query: ({ outletId }) => ({ id: outletId }),
-          select: "organizationId"
+          select: "organizationId",
+          errorCode: "OUTLET_INVALID"
         }
       ],
       privilegeList: [

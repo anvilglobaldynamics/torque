@@ -31,7 +31,8 @@ exports.EditOutletServiceApi = class extends Api {
         {
           from: "outlet",
           query: ({ outletId }) => ({ id: outletId }),
-          select: "organizationId"
+          select: "organizationId",
+          errorCode: "OUTLET_INVALID"
         }
       ],
       privilegeList: [
