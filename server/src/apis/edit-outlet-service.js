@@ -2,8 +2,9 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const { ServiceMixin } = require('./mixins/service-mixin');
 
-exports.EditOutletServiceApi = class extends Api {
+exports.EditOutletServiceApi = class extends Api.mixin(ServiceMixin) {
 
   get autoValidates() { return true; }
 
@@ -11,11 +12,9 @@ exports.EditOutletServiceApi = class extends Api {
 
   get requestSchema() {
     return Joi.object().keys({
-
       serviceId: Joi.number().max(999999999999999).required(),
       salePrice: Joi.number().min(0).max(999999999999999).required(),
       isAvailable: Joi.boolean().required()
-
     });
   }
 
@@ -43,6 +42,7 @@ exports.EditOutletServiceApi = class extends Api {
 
   async handle({ body }) {
     let { serviceId, salePrice, isAvailable } = body;
+    await this.__updateService({ serviceId, salePrice, isAvailable });
     return { status: "success" };
   }
 

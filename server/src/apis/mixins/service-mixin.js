@@ -27,4 +27,9 @@ exports.ServiceMixin = (SuperApiClass) => class extends SuperApiClass {
     }
   }
 
+  async __updateService({ serviceId, salePrice, isAvailable }) {
+    let res = this.database.service.setDetails({ id: serviceId }, { salePrice, isAvailable });
+    throwOnFalsy(res, "GENERIC_UPDATE_ERROR", "Error occurred while updating.");
+  }
+
 }

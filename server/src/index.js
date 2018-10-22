@@ -74,6 +74,7 @@ const { GetServiceBlueprintListApi } = require('./apis/get-service-blueprint-lis
 const { EditServiceBlueprintApi } = require('./apis/edit-service-blueprint');
 const { GetActiveServiceListApi } = require('./apis/get-active-service-list');
 const { ModifyAvailabilityOfServiceListInOutletListApi } = require('./apis/modify-availability-of-service-list-in-outlet-list');
+const { EditOutletServiceApi } = require('./apis/edit-outlet-service');
 
 const { GetInventoryListApi } = require('./apis/get-inventory-list');
 const { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-inventory-details');
@@ -336,6 +337,7 @@ class Program {
     server.registerPostApi('/api/edit-service-blueprint', EditServiceBlueprintApi);
     server.registerPostApi('/api/get-active-service-list', GetActiveServiceListApi);
     server.registerPostApi('/api/modify-availability-of-service-list-in-outlet-list', ModifyAvailabilityOfServiceListInOutletListApi);
+    server.registerPostApi('/api/edit-outlet-service', EditOutletServiceApi);
   }
 
 }

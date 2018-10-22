@@ -42,10 +42,12 @@ let outletTwoId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidProductBlueprintId = generateInvalidId();
 let invalidOutletId = generateInvalidId(); 
-let invalidServiceBlueprintId = generateInvalidId(); 
+let invalidServiceBlueprintId = generateInvalidId();
+let invalidServiceId = generateInvalidId(); 
 
 let serviceBlueprintToBeEdited = null;
 let serviceBlueprintToBeActivated = null;
+let serviceToBeEdited = null;
 
 describe.only('Service', _ => {
 
@@ -660,6 +662,67 @@ describe.only('Service', _ => {
       });
 
       expect(body.serviceList.length).equal(1);
+      serviceToBeEdited = body.serviceList[0];
+      testDoneFn();
+    });
+
+  });
+
+  // Edit Service
+
+  it('api/edit-outlet-service (Invalid serviceId)', testDoneFn => {
+
+    callApi('api/edit-outlet-service', {
+      json: {
+        apiKey,
+        serviceId: invalidServiceId,
+        salePrice: 300,
+        isAvailable: serviceToBeEdited.isAvailable
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('SERVICE_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/edit-outlet-service (Valid)', testDoneFn => {
+
+    callApi('api/edit-outlet-service', {
+      json: {
+        apiKey,
+        serviceId: serviceToBeEdited.id,
+        salePrice: 300,
+        isAvailable: serviceToBeEdited.isAvailable
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-active-service-list (Valid edit check)', testDoneFn => {
+
+    callApi('api/get-active-service-list', {
+      json: {
+        apiKey,
+        outletId,
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetActiveServiceListApiSuccessResponse(body);
+      body.serviceList.forEach(service => {
+        validateServiceSchema(service);
+      });
+
+      let editedService = body.serviceList.find(service => service.id === serviceToBeEdited.id);
+      expect(editedService.salePrice).equal(300);
       testDoneFn();
     });
 
