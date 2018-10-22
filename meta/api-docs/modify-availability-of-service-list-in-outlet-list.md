@@ -10,7 +10,7 @@ method: `POST`
   apiKey: Joi.string().length(64).required(),
   organizationId: Joi.number().max(999999999999999).required(),
 
-  action: Joi.string().valid('activate', 'deactivate').required(),
+  action: Joi.string().valid('mark-as-available', 'mark-as-unavailable').required(),
 
   performActionForAllServices: Joi.boolean().required(),
   serviceBlueprintList: Joi.array().min(0).items(

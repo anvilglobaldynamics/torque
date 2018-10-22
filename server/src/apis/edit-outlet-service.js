@@ -13,19 +13,27 @@ exports.EditOutletServiceApi = class extends Api {
     return Joi.object().keys({
 
       serviceId: Joi.number().max(999999999999999).required(),
-      salePrice: Joi.number().min(0).max(999999999999999).required()
+      salePrice: Joi.number().min(0).max(999999999999999).required(),
+      isAvailable: Joi.boolean().required()
 
     });
   }
 
   get accessControl() {
     return [{
-      organizationBy: {
-        from: "inventory",
-        query: ({ inventoryId }) => ({ id: inventoryId }),
-        select: "organizationId",
-        errorCode: "INVENTORY_INVALID"
-      },
+      organizationBy: [
+        {
+          from: "service",
+          query: ({ serviceId }) => ({ id: serviceId }),
+          select: "outletId",
+          errorCode: "SERVICE_INVALID"
+        },
+        {
+          from: "outlet",
+          query: ({ outletId }) => ({ id: outletId }),
+          select: "organizationId"
+        }
+      ],
       privilegeList: [
         "PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS"
       ]
@@ -33,7 +41,7 @@ exports.EditOutletServiceApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { serviceId, salePrice } = body;
+    let { serviceId, salePrice, isAvailable } = body;
     return { status: "success" };
   }
 

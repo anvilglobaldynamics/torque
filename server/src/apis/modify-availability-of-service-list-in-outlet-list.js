@@ -16,7 +16,7 @@ exports.ModifyAvailabilityOfServiceListInOutletListApi = class extends Api.mixin
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
 
-      action: Joi.string().valid('activate', 'deactivate').required(),
+      action: Joi.string().valid('mark-as-available', 'mark-as-unavailable').required(),
 
       performActionForAllServices: Joi.boolean().required(),
       serviceBlueprintList: Joi.array().min(0).items(
@@ -25,7 +25,7 @@ exports.ModifyAvailabilityOfServiceListInOutletListApi = class extends Api.mixin
           salePrice: Joi.number().min(0).max(999999999999999).required()
         })
       ),
-    
+
       performActionOnAllOutlets: Joi.boolean().required(),
       outletIdList: Joi.array().min(0).items(
         Joi.number().max(999999999999999)
@@ -66,11 +66,11 @@ exports.ModifyAvailabilityOfServiceListInOutletListApi = class extends Api.mixin
 
   async _populateServiceBlueprintList({ organizationId, serviceBlueprintList }) {
     let unrefinedServiceBlueprintList = await this.database.serviceBlueprint.listByOrganizationId({ organizationId });
-    for (let i=0; i<unrefinedServiceBlueprintList.length; i++) {
+    for (let i = 0; i < unrefinedServiceBlueprintList.length; i++) {
       let { id, defaultSalePrice } = unrefinedServiceBlueprintList[i];
-      serviceBlueprintList.push({ 
-        serviceBlueprintId: id, 
-        salePrice: defaultSalePrice 
+      serviceBlueprintList.push({
+        serviceBlueprintId: id,
+        salePrice: defaultSalePrice
       });
     }
     return serviceBlueprintList;
@@ -93,25 +93,25 @@ exports.ModifyAvailabilityOfServiceListInOutletListApi = class extends Api.mixin
     }
 
     if (performActionOnAllOutlets) {
-      outletIdList = await this._populateOutletIdList({ organizationId, outletIdList }); 
+      outletIdList = await this._populateOutletIdList({ organizationId, outletIdList });
     } else {
       await this.__varifyOutletIdList({ outletIdList });
     }
 
-    for(let i=0; i<serviceBlueprintList.length; i++) {
-      for(let j=0; j<outletIdList.length; j++) {
-        if (action === 'activate') {
-          await this.__activateServiceInOutlet({ 
-            createdByUserId: userId, 
-            outletId: outletIdList[j], 
-            serviceBlueprintId: serviceBlueprintList[i].serviceBlueprintId, 
-            salePrice: serviceBlueprintList[i].salePrice 
+    for (let i = 0; i < serviceBlueprintList.length; i++) {
+      for (let j = 0; j < outletIdList.length; j++) {
+        if (action === 'mark-as-available') {
+          await this.__activateServiceInOutlet({
+            createdByUserId: userId,
+            outletId: outletIdList[j],
+            serviceBlueprintId: serviceBlueprintList[i].serviceBlueprintId,
+            salePrice: serviceBlueprintList[i].salePrice
           });
         }
 
-        if (action === 'deactivate') {
+        if (action === 'mark-as-unavailable') {
           await this.__deactivateServiceInOutlet({
-            outletId: outletIdList[j], 
+            outletId: outletIdList[j],
             serviceBlueprintId: serviceBlueprintList[i].serviceBlueprintId
           });
         }

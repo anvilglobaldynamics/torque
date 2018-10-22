@@ -673,7 +673,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId: invalidOrganizationId,
-        action: 'activate',
+        action: 'mark-as-available',
 
         performActionForAllServices: true,
         serviceBlueprintList: [],
@@ -696,7 +696,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        action: 'activate',
+        action: 'mark-as-available',
 
         performActionForAllServices: false,
         serviceBlueprintList: [
@@ -723,7 +723,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        action: 'activate',
+        action: 'mark-as-available',
 
         performActionForAllServices: false,
         serviceBlueprintList: [
@@ -751,7 +751,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        action: 'activate',
+        action: 'mark-as-available',
 
         performActionForAllServices: true,
         serviceBlueprintList: [],
@@ -774,7 +774,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        action: 'activate',
+        action: 'mark-as-available',
 
         performActionForAllServices: false,
         serviceBlueprintList: [],
@@ -797,7 +797,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        action: 'activate',
+        action: 'mark-as-available',
 
         performActionForAllServices: true,
         serviceBlueprintList: [],
@@ -820,7 +820,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        action: 'activate',
+        action: 'mark-as-available',
 
         performActionForAllServices: true,
         serviceBlueprintList: [
@@ -876,7 +876,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        action: 'activate',
+        action: 'mark-as-available',
 
         performActionForAllServices: false,
         serviceBlueprintList: [
@@ -947,7 +947,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        action: 'activate',
+        action: 'mark-as-available',
 
         performActionForAllServices: true,
         serviceBlueprintList: [],
@@ -991,7 +991,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        action: 'activate',
+        action: 'mark-as-available',
 
         performActionForAllServices: false,
         serviceBlueprintList: [
@@ -1018,7 +1018,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        action: 'activate',
+        action: 'mark-as-available',
 
         performActionForAllServices: true,
         serviceBlueprintList: [],
@@ -1040,7 +1040,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        action: 'deactivate',
+        action: 'mark-as-unavailable',
 
         performActionForAllServices: false,
         serviceBlueprintList: [
@@ -1089,7 +1089,7 @@ describe.only('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        action: 'deactivate',
+        action: 'mark-as-unavailable',
 
         performActionForAllServices: true,
         serviceBlueprintList: [],
