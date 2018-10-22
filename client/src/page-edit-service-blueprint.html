@@ -45,7 +45,7 @@
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
 
-            <paper-checkbox checked="{{editServiceBlueprintForm.isRefundable}}">[[verses.serviceBlueprint.isServiceReturnable]]</paper-checkbox>
+            <paper-checkbox checked="{{editServiceBlueprintForm.isLongstanding}}">[[verses.serviceBlueprint.isServiceLongstanding]]</paper-checkbox>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -82,17 +82,30 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  name: "Bottoms",
-                  defaultVat: 15,
-                  defaultSalePrice: 500,
-                  isRefundable: true
+                  name: "Gym Membership",
+                  defaultVat: 5,
+                  defaultSalePrice: 5000,
+                  isLongstanding: true,
+                  serviceDuration: {
+                    months: 1,
+                    days: 7
+                  },
+                  isEmployeeAssignable: false,
+                  isCustomerRequired: true,
+                  isRefundable: true,
+                  avtivateInAllOutlets: true
                 };
               } else {
                 return {
                   name: "",
                   defaultVat: 0,
                   defaultSalePrice: 0,
-                  isRefundable: false
+                  isLongstanding: false,
+                  serviceDuration: null,
+                  isEmployeeAssignable: false,
+                  isCustomerRequired: false,
+                  isRefundable: true,
+                  avtivateInAllOutlets: false
                 };
               }
             }
