@@ -44,7 +44,7 @@ Possible Error Codes:
 { code: APIKEY_INVALID } // the api key is invalid
 { code: SERVICE_BLUEPRINT_INVALID } // service blueprint not found
 { code: VAT_VALUE_INVALID } // the vat value is not within 0 to 100
-{ code: LONGSTANDING_SETUP_INVALID } // A flag and service duration is required
+{ code: LONGSTANDING_SETUP_INVALID } // A flag, service duration and customer are required
 ```
 
 ### response (on success):
