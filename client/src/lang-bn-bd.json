@@ -110,6 +110,7 @@
     "outlets": "দোকান",
     "warehouses": "গুদাম",
     "productBlueprints": "পণ্যের পরিকল্পনা",
+    "serviceBlueprints": "Service পরিকল্পনা",
     "sales": "বিক্রয় রেকর্ড",
     "salesReturn": "বিক্রয় ফেরত রেকর্ড",
     "customers": "গ্রাহক",
@@ -262,6 +263,9 @@
     "bulkImport": "একাধিক পণ্যের পরিকল্পনা তৈরি",
 
     "whatIsProductBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত কাজে ব্যবহত হবে।"
+  },
+  "serviceBlueprint": {
+    "manageServiceBlueprintsTitle": "Service পরিকল্পনা পরিচালনা"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "গ্রাহকের নাম বা ফোন",

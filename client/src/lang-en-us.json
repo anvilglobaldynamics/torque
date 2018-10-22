@@ -110,6 +110,7 @@
     "outlets": "Outlets",
     "warehouses": "Warehouses",
     "productBlueprints": "Product Blueprints",
+    "serviceBlueprints": "Service Blueprints",
     "sales": "Sales Records",
     "salesReturn": "Sales Return Records",
     "customers": "Customers",
@@ -260,6 +261,9 @@
     "bulkImport": "Bulk Product Blueprint Creation",
 
     "whatIsProductBlueprintMessage": "Product Blueprint is the blueprint of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
+  },
+  "serviceBlueprint": {
+    "manageServiceBlueprintsTitle": "Manage Service Blueprints"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "Customer name or phone.",
