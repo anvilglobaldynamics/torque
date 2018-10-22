@@ -56,7 +56,7 @@ exports.AddServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin, 
 
   async handle({ body, userId }) {
     let { organizationId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets } = body;
-    this.__isLongstandingServiceSetupValid({ isLongstanding, serviceDuration });
+    this.__isLongstandingServiceSetupValid({ isLongstanding, serviceDuration, isCustomerRequired });
     this.__isVatPercentageValid({ vat: defaultVat });
     let serviceBlueprintId = await this.database.serviceBlueprint.create({ organizationId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable })
     if (avtivateInAllOutlets) {

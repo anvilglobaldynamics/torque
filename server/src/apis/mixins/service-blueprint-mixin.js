@@ -10,7 +10,7 @@ exports.ServiceBlueprintMixin = (SuperApiClass) => class extends SuperApiClass {
     }
   }
 
-  __isLongstandingServiceSetupValid({ isLongstanding, serviceDuration }) {
+  __isLongstandingServiceSetupValid({ isLongstanding, serviceDuration, isCustomerRequired }) {
     if (!isLongstanding) {
       if (serviceDuration) {
         throw new CodedError("LONGSTANDING_SETUP_INVALID", "A flag and service duration is required.");
@@ -18,7 +18,7 @@ exports.ServiceBlueprintMixin = (SuperApiClass) => class extends SuperApiClass {
     }
 
     if (isLongstanding) {
-      if (!serviceDuration) {
+      if (!serviceDuration || !isCustomerRequired) {
         throw new CodedError("LONGSTANDING_SETUP_INVALID", "A flag and service duration is required.");
       }
     }

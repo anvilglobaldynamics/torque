@@ -301,6 +301,38 @@ describe.only('Service', _ => {
 
   });
 
+  it('api/add-service-blueprint (Inalid Longstanding service no customer)', testDoneFn => {
+
+    callApi('api/add-service-blueprint', {
+      json: {
+        apiKey,
+        organizationId,
+        
+        name: "3rd service blueprint",
+      
+        defaultVat: 2,
+        defaultSalePrice: 8600,
+        
+        isLongstanding: true,
+        serviceDuration: {
+          months: 1,
+          days: 7
+        },
+      
+        isEmployeeAssignable: true,
+        isCustomerRequired: false,
+        isRefundable: true,
+        avtivateInAllOutlets: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('LONGSTANDING_SETUP_INVALID');
+      testDoneFn();
+    })
+
+  });
+
   it('api/add-service-blueprint (Valid Longstanding service)', testDoneFn => {
 
     callApi('api/add-service-blueprint', {

@@ -52,7 +52,7 @@ exports.EditServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin)
 
   async handle({ body }) {
     let { serviceBlueprintId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = body;
-    this.__isLongstandingServiceSetupValid({ isLongstanding, serviceDuration });
+    this.__isLongstandingServiceSetupValid({ isLongstanding, serviceDuration, isCustomerRequired });
     this.__isVatPercentageValid({ vat: defaultVat });
     await this._updateServiceBlueprint({ serviceBlueprintId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable });
     return { status: "success" };
