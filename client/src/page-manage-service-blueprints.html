@@ -30,8 +30,10 @@
         <div class="horizontal layout item center">
           <div class="vertical layout flex">
             <div>[[serviceBlueprint.name]]</div>
-            <div>[[verses.serviceBlueprint.buyingPrice]]: [[serviceBlueprint.defaultPurchasePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[serviceBlueprint.unit]]</div>
             <div>[[verses.serviceBlueprint.sellingPrice]]: [[serviceBlueprint.defaultSalePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[serviceBlueprint.unit]]</div>
+            <template is="dom-if" if="[[serviceBlueprint.isLongstanding]]">
+              <div>long stanging info here</div>
+            </template>
           </div>
           <div class="horizontal layout wrap">
             <paper-button class="secondary" on-tap="editTapped" raised>

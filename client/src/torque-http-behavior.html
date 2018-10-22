@@ -312,6 +312,11 @@
         this.callCombinedJsonApi('delete-product-blueprint', data, cbfn);
       }
 
+      callGetServiceBlueprintListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-service-blueprint-list', data, cbfn);
+      }
+
       callGetAggregatedInventoryDetailsApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('get-aggregated-inventory-details', data, cbfn);

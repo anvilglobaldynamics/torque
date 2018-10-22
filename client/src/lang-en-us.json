@@ -263,7 +263,14 @@
     "whatIsProductBlueprintMessage": "Product Blueprint is the blueprint of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
   },
   "serviceBlueprint": {
-    "manageServiceBlueprintsTitle": "Manage Service Blueprints"
+    "manageServiceBlueprintsTitle": "Manage Service Blueprints",
+    "sellingPrice": "Selling Price",
+    "searchForServiceBlueprintInput": "Service Blueprint name",
+    "searchForServiceBlueprintInputError": "Error in Search for Service Blueprint",
+    "noServiceBlueprintFound": "No Service Blueprint found.",
+    "createNewServiceBlueprint": "Create New Service Blueprint",
+
+    "whatIsServiceBlueprintMessage": "Product Blueprint is the blueprint of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "Customer name or phone.",
