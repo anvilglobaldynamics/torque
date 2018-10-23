@@ -42,7 +42,7 @@ let adminApiKey = null;
 const adminUsername = "default";
 const adminPassword = "johndoe1pass";
 
-describe('Organization', _ => {
+describe.only('Organization', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -70,6 +70,7 @@ describe('Organization', _ => {
         email: orgEmail
       }
     }, (err, response, body) => {
+      console.log(body)
       expect(response.statusCode).to.equal(200);
       validateAddOrganizationApiSuccessResponse(body);
       org1id = body.organizationId;
@@ -279,6 +280,131 @@ describe('Organization', _ => {
   }); //it
 
   // --- Package Section - end
+
+  // --- Module Section - start
+
+  it('api/admin-login', testDoneFn => {
+
+    callApi('api/admin-login', {
+      json: {
+        username: adminUsername,
+        password: adminPassword
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      adminApiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/admin-get-module-list (Valid)', testDoneFn => {
+
+    callApi('api/admin-get-module-list', {
+      json: {
+        apiKey: adminApiKey,
+      }
+    }, (err, response, body) => {
+      console.log(body)
+      expect(response.statusCode).to.equal(200);
+      validateAdminGetModuleListApiSuccessResponse(body);
+      body.moduleList.forEach(aModule => {
+        validateModuleSchema(aModule);
+      });
+      testDoneFn();
+    });
+
+  });
+
+  // it('api/admin-assign-package-to-organization (Valid)', testDoneFn => {
+
+  //   callApi('api/admin-assign-package-to-organization', {
+  //     json: {
+  //       apiKey: adminApiKey,
+  //       organizationId: org1id,
+  //       packageCode: "SE03",
+  //       paymentReference: "joi test"
+  //     }
+  //   }, (err, response, body) => {
+  //     expect(response.statusCode).to.equal(200);
+  //     validateAdminAssignPackageToOrganizationApiSuccessResponse(body);
+  //     testDoneFn();
+  //   });
+
+  // });
+
+  // it('api/admin-assign-package-to-organization (Valid update)', testDoneFn => {
+
+  //   callApi('api/admin-assign-package-to-organization', {
+  //     json: {
+  //       apiKey: adminApiKey,
+  //       organizationId: org1id,
+  //       packageCode: "SE12",
+  //       paymentReference: "joi test"
+  //     }
+  //   }, (err, response, body) => {
+  //     expect(response.statusCode).to.equal(200);
+  //     validateAdminAssignPackageToOrganizationApiSuccessResponse(body);
+  //     testDoneFn();
+  //   });
+
+  // });
+
+
+
+  // it('api/add-organization, api/get-dashboard-summary (Testing Default Activation Package)', testDoneFn => {
+
+  //   callApi('api/add-organization', {
+  //     json: {
+  //       apiKey,
+  //       name: "My Organization",
+  //       primaryBusinessAddress: "My Address",
+  //       phone: orgPhone,
+  //       email: orgEmail
+  //     }
+  //   }, (err, response, body) => {
+  //     expect(response.statusCode).to.equal(200);
+  //     validateAddOrganizationApiSuccessResponse(body);
+  //     organizationId = body.organizationId;
+
+  //     callApi('api/get-dashboard-summary', {
+  //       json: {
+  //         apiKey,
+  //         organizationId
+  //       }
+  //     }, (err, response, body) => {
+  //       expect(response.statusCode).to.equal(200);
+  //       validateGetDashboardSummaryApiSuccessResponse(body);
+
+  //       let modifications = {
+  //         $inc: { createdDatetimeStamp: (-1 * 1000 * 60 * 60 * 25) }
+  //       };
+  //       getDatabase().updateOne('package-activation', { organizationId: organizationId }, modifications, (err, wasUpdated) => {
+  //         if (err) throw err;
+  //         if (!wasUpdated) throw new Error("Was not updated");
+
+  //         callApi('api/get-dashboard-summary', {
+  //           json: {
+  //             apiKey,
+  //             organizationId
+  //           }
+  //         }, (err, response, body) => {
+  //           expect(response.statusCode).to.equal(200);
+  //           expect(body).to.have.property('hasError').that.equals(true);
+  //           expect(body.error.code).to.equal("SUBSCRIPTION_EXPIRED");
+  //           testDoneFn();
+  //         }); // callApi
+
+  //       }); // updateOne
+
+  //     }); // callApi
+
+  //   }); // callApi
+
+  // }); //it
+
+  // --- Module Section - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
