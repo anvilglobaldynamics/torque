@@ -272,7 +272,29 @@
     "noServiceBlueprintFound": "কোনো Service পরিকল্পনা পাওয়া যায় নি।",
     "createNewServiceBlueprint": "নতুন Service পরিকল্পনা তৈরি করুন",
 
-    "whatIsServiceBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত কাজে ব্যবহত হবে।"
+    "serviceBlueprintNameInput": "Service পরিকল্পনার নাম",
+    "serviceBlueprintNameInputError": "একটি সঠিক Service পরিকল্পনার নাম লিখুন",
+    "defaultVatInput": "ভ্যাট",
+    "defaultVatInputError": "ভ্যাট হবে ০ থেকে ১০০ এর মধ্যে",
+    "serviceBlueprintDefaultSalePriceInput": "বিক্রয় মূল্য",
+    "serviceBlueprintDefaultSalePriceInputError": "একটি সঠিক অংক লিখুন",
+    "isServiceLongstanding": "Is this Service Longstanding? (Service is active for a duration of time)",
+    "isCustomerRequired": "Is Customer data required? (Longstanding Services require Customer data)",
+    "serviceDuration": "Duration",
+    "serviceDurationMonths": "Months",
+    "serviceDurationDays": "Days",
+    "serviceDurationMonthsInput": "Duration Month",
+    "serviceDurationMonthsInputError": "Valid is 0-12",
+    "serviceDurationDaysInput": "Duration Days",
+    "serviceDurationDaysInputError": "Valid is 0-31",
+    "isEmployeeAssignable": "Should an Employee be assigned?",
+    "isRefundable": "Is this Service Refundable?",
+    "avtivateInAllOutlets": "Should this service be made available in all Outlets?",
+
+    "whatIsServiceBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত কাজে ব্যবহত হবে।",
+
+    "createServiceBlueprint": "নতুন Service পরিকল্পনা তৈরি করুন",
+    "updateServiceBlueprint": "Service পরিকল্পনা আপডেট করুন"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "গ্রাহকের নাম বা ফোন",
