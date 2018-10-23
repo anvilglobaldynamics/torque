@@ -23,16 +23,31 @@
 <dom-module id="service-blueprint">
   <template>
     <style include="shared-styles">
+
+      .service-card-content {
+        margin-top: 4px;
+        margin-bottom: 4px;
+      }
+
+      .service-name {
+        font-weight: bold;
+      }
+
+      .duration-text {
+        font-size: 12px;
+      }
+
     </style>
 
     <div class="layout vertical" id="wrapper">
       <div class="list">
-        <div class="horizontal layout item center">
+
+        <div class="service-card-content horizontal layout item center">
           <div class="vertical layout flex">
-            <div>[[serviceBlueprint.name]]</div>
-            <div>[[verses.serviceBlueprint.sellingPrice]]: [[serviceBlueprint.defaultSalePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[serviceBlueprint.unit]]</div>
+            <div class="service-name">[[serviceBlueprint.name]]</div>
+            <div>[[verses.serviceBlueprint.sellingPrice]]: [[serviceBlueprint.defaultSalePrice]] [[app.settings.monetaryUnit]]</div>
             <template is="dom-if" if="[[serviceBlueprint.isLongstanding]]">
-              <div>long stanging info here</div>
+              <div class="duration-text">[[verses.serviceBlueprint.serviceDuration]]: [[serviceBlueprint.serviceDuration.months]] [[verses.serviceBlueprint.serviceDurationMonths]], [[serviceBlueprint.serviceDuration.days]] [[verses.serviceBlueprint.serviceDurationDays]]</div>
             </template>
           </div>
           <div class="horizontal layout wrap">
@@ -41,6 +56,7 @@
             </paper-button>
           </div>
         </div>
+
       </div>
     </div>
 
