@@ -744,6 +744,16 @@ exports.validateListOrganizationPackagesApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateAdminGetModuleListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    moduleList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 // Generic
 
 exports.validateGenericApiSuccessResponse = (doc) => {
