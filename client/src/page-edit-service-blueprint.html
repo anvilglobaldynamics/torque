@@ -26,6 +26,13 @@
 <dom-module id="page-edit-service-blueprint">
   <template>
     <style include="shared-styles">
+
+      .editServiceBlueprintForm--serviceDuration {
+        margin-left: 6px;
+        margin-right: 6px;
+        width: 48%;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -36,16 +43,30 @@
         <form>
 
           <div class="card vertical layout">
-            <paper-input class="editServiceBlueprintForm--name" value="{{editServiceBlueprintForm.name}}" required minlength="3" error-message=[[verses.serviceBlueprint.serviceBlueprintNameInputError]] label=[[verses.serviceBlueprint.serviceBlueprintNameInput]]></paper-input>
+            <paper-input class="editServiceBlueprintForm--name" value="{{editServiceBlueprintForm.name}}" required minlength="3" maxlength="64" error-message=[[verses.serviceBlueprint.serviceBlueprintNameInputError]] label=[[verses.serviceBlueprint.serviceBlueprintNameInput]]></paper-input>
 
             <paper-input class="editServiceBlueprintForm--defaultVat" value="{{editServiceBlueprintForm.defaultVat}}" type="number" required min="0" max="100" error-message=[[verses.serviceBlueprint.defaultVatInputError]] label=[[verses.serviceBlueprint.defaultVatInput]]>
               <div slot="suffix">%</div>
             </paper-input>
+
             <paper-input class="editServiceBlueprintForm--defaultSalePrice" step="0.01" value="{{editServiceBlueprintForm.defaultSalePrice}}" type="number" required min="0" error-message=[[verses.serviceBlueprint.serviceBlueprintDefaultSalePriceInputError]] label=[[verses.serviceBlueprint.serviceBlueprintDefaultSalePriceInput]]>
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
 
-            <paper-checkbox checked="{{editServiceBlueprintForm.isLongstanding}}">[[verses.serviceBlueprint.isServiceLongstanding]]</paper-checkbox>
+            <paper-checkbox checked="{{editServiceBlueprintForm.isLongstanding}}" on-change="isServiceLongstandingInputChanged">[[verses.serviceBlueprint.isServiceLongstanding]]</paper-checkbox>
+
+            <div class="horizontal layout">
+              <paper-input class="editServiceBlueprintForm--serviceDuration" hidden="[[!editServiceBlueprintForm.isLongstanding]]" value="{{editServiceBlueprintForm.serviceDuration.months}}" type="number" required min="0" max="12" error-message=[[verses.serviceBlueprint.serviceDurationMonthInputError]] label=[[verses.serviceBlueprint.serviceDurationMonthInput]]></paper-input>
+              <paper-input class="editServiceBlueprintForm--serviceDuration" hidden="[[!editServiceBlueprintForm.isLongstanding]]" value="{{editServiceBlueprintForm.serviceDuration.days}}" type="number" required min="0" max="31" error-message=[[verses.serviceBlueprint.serviceDurationDaysInputError]] label=[[verses.serviceBlueprint.serviceDurationDaysInput]]></paper-input>
+            </div>
+
+            <paper-checkbox checked="{{editServiceBlueprintForm.isCustomerRequired}}" on-change="isCustomerRequiredInputChanged">[[verses.serviceBlueprint.isCustomerRequired]]</paper-checkbox>
+
+            <paper-checkbox checked="{{editServiceBlueprintForm.isEmployeeAssignable}}">[[verses.serviceBlueprint.isEmployeeAssignable]]</paper-checkbox>
+
+            <paper-checkbox checked="{{editServiceBlueprintForm.isRefundable}}">[[verses.serviceBlueprint.isRefundable]]</paper-checkbox>
+
+            <paper-checkbox checked="{{editServiceBlueprintForm.avtivateInAllOutlets}}">[[verses.serviceBlueprint.avtivateInAllOutlets]]</paper-checkbox>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -90,7 +111,7 @@
                     months: 1,
                     days: 7
                   },
-                  isEmployeeAssignable: false,
+                  isEmployeeAssignable: true,
                   isCustomerRequired: true,
                   isRefundable: true,
                   avtivateInAllOutlets: true
@@ -101,7 +122,10 @@
                   defaultVat: 0,
                   defaultSalePrice: 0,
                   isLongstanding: false,
-                  serviceDuration: null,
+                  serviceDuration: {
+                    months: 0,
+                    days: 0
+                  },
                   isEmployeeAssignable: false,
                   isCustomerRequired: false,
                   isRefundable: true,
@@ -181,11 +205,16 @@
         this.editServiceBlueprintForm = { name, defaultVat, defaultSalePrice, isRefundable };
       }
 
-      _processCreateServiceBlueprint({ name, defaultVat, defaultSalePrice, isRefundable }) {
+      _processCreateServiceBlueprint({ name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets }) {
+        if (!isLongstanding) {
+          serviceDuration = null;
+        }
+
         let data = {
-          name, defaultVat, defaultSalePrice, isRefundable,
+          name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets,
           organizationId: this.app.organization.id,
         };
+
         this.app.callAddServiceBlueprintApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editServiceBlueprintForm');
@@ -201,8 +230,6 @@
           name, defaultVat, defaultSalePrice, isRefundable,
           serviceBlueprintId: this.editingServiceBlueprint.id
         };
-
-        console.log(data);
 
         this.app.callEditServiceBlueprintApi(data, (err, response) => {
           if (err) return;
@@ -224,8 +251,8 @@
         this.elemAll('#editServiceBlueprintForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editServiceBlueprintForm').validate()) return;
 
-        let { name, defaultVat, defaultSalePrice, isRefundable } = this.editServiceBlueprintForm;
-        this._processCreateServiceBlueprint({ name, defaultVat, defaultSalePrice, isRefundable });
+        let { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets } = this.editServiceBlueprintForm;
+        this._processCreateServiceBlueprint({ name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets });
       }
 
       updateServiceBlueprintTapped(e = null) {
@@ -236,12 +263,20 @@
         this._processUpdateServiceBlueprint({ name, defaultVat, defaultSalePrice, isRefundable });
       }
 
-      genericDiscountValueInputChanged(e) {
-        this.enforceMinMaxOnPaperInput(e);
+      isServiceLongstandingInputChanged(e = null) {
+        if (this.editServiceBlueprintForm.isLongstanding) {
+          this.set('editServiceBlueprintForm.isCustomerRequired', true);
+        }
       }
 
-      calculateSalePriceAfterVat() {
-        return (parseFloat(this.editServiceBlueprintForm.defaultSalePrice) + parseFloat(this.editServiceBlueprintForm.defaultSalePrice) * parseFloat(this.editServiceBlueprintForm.defaultVat)/100);
+      isCustomerRequiredInputChanged(e = null) {
+        if (this.editServiceBlueprintForm.isLongstanding) {
+          this.set('editServiceBlueprintForm.isCustomerRequired', true);
+        }
+      }
+
+      $isServiceLongstanding() {
+        return !this.editServiceBlueprintForm.isLongstandin;
       }
 
       // region: misc =================================

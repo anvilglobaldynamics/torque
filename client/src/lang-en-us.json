@@ -270,7 +270,26 @@
     "noServiceBlueprintFound": "No Service Blueprint found.",
     "createNewServiceBlueprint": "Create New Service Blueprint",
 
-    "whatIsServiceBlueprintMessage": "Product Blueprint is the blueprint of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
+    "serviceBlueprintNameInput": "Service Blueprint Name",
+    "serviceBlueprintNameInputError": "Provide a valid Service Blueprint Name",
+    "defaultVatInput": "Default VAT",
+    "defaultVatInputError": "Default VAT should be 0-100",
+    "serviceBlueprintDefaultSalePriceInput": "Default Sale Price",
+    "serviceBlueprintDefaultSalePriceInputError": "Provide a valid Default Sale Price",
+    "isServiceLongstanding": "Is this Service Longstanding? (Service is active for a duration of time)",
+    "isCustomerRequired": "Is Customer data required? (Longstanding Services require Customer data)",
+    "serviceDurationMonthInput": "Duration Month",
+    "serviceDurationMonthInputError": "Valid is 0-12",
+    "serviceDurationDaysInput": "Duration Days",
+    "serviceDurationDaysInputError": "Valid is 0-31",
+    "isEmployeeAssignable": "Should an Employee be assigned?",
+    "isRefundable": "Is this Service Refundable?",
+    "avtivateInAllOutlets": "Should this service be made available in all Outlets?",
+
+    "whatIsServiceBlueprintMessage": "Product Blueprint is the blueprint of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks.",
+
+    "createServiceBlueprint": "Create Service Blueprint",
+    "updateServiceBlueprint": "Update Service Blueprint"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "Customer name or phone.",
