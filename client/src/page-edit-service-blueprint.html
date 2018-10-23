@@ -66,7 +66,7 @@
 
             <paper-checkbox checked="{{editServiceBlueprintForm.isRefundable}}">[[verses.serviceBlueprint.isRefundable]]</paper-checkbox>
 
-            <paper-checkbox checked="{{editServiceBlueprintForm.avtivateInAllOutlets}}">[[verses.serviceBlueprint.avtivateInAllOutlets]]</paper-checkbox>
+            <paper-checkbox hidden="[[editMode]]" checked="{{editServiceBlueprintForm.avtivateInAllOutlets}}">[[verses.serviceBlueprint.avtivateInAllOutlets]]</paper-checkbox>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -201,8 +201,12 @@
           return serviceBlueprint.id === parseInt(this.params['service-blueprint']);
         });
         this.editingServiceBlueprint = serviceBlueprint;
-        let { name, defaultVat, defaultSalePrice, isRefundable } = serviceBlueprint;
-        this.editServiceBlueprintForm = { name, defaultVat, defaultSalePrice, isRefundable };
+        let { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = serviceBlueprint;
+
+        if(!isLongstanding) {
+          serviceDuration = { months: 0, days: 0 };
+        }
+        this.editServiceBlueprintForm = { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable };
       }
 
       _processCreateServiceBlueprint({ name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets }) {
@@ -225,9 +229,13 @@
         });
       }
 
-      _processUpdateServiceBlueprint({ name, defaultVat, defaultSalePrice, isRefundable }) {
+      _processUpdateServiceBlueprint({ name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable }) {
+        if (!isLongstanding) {
+          serviceDuration = null;
+        }
+        
         let data = {
-          name, defaultVat, defaultSalePrice, isRefundable,
+          name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable,
           serviceBlueprintId: this.editingServiceBlueprint.id
         };
 
@@ -259,8 +267,8 @@
         this.elemAll('#editServiceBlueprintForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editServiceBlueprintForm').validate()) return;
 
-        let { name, defaultVat, defaultSalePrice, isRefundable } = this.editServiceBlueprintForm;
-        this._processUpdateServiceBlueprint({ name, defaultVat, defaultSalePrice, isRefundable });
+        let { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = this.editServiceBlueprintForm;
+        this._processUpdateServiceBlueprint({ name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable });
       }
 
       isServiceLongstandingInputChanged(e = null) {

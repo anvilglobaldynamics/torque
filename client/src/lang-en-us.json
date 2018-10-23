@@ -270,6 +270,9 @@
     "noServiceBlueprintFound": "No Service Blueprint found.",
     "createNewServiceBlueprint": "Create New Service Blueprint",
 
+    "addServiceBlueprintTitle": "Add Service Blueprint",
+    "editServiceBlueprintTitle": "Edit Service Blueprint",
+
     "serviceBlueprintNameInput": "Service Blueprint Name",
     "serviceBlueprintNameInputError": "Provide a valid Service Blueprint Name",
     "defaultVatInput": "Default VAT",

@@ -272,6 +272,9 @@
     "noServiceBlueprintFound": "কোনো Service পরিকল্পনা পাওয়া যায় নি।",
     "createNewServiceBlueprint": "নতুন Service পরিকল্পনা তৈরি করুন",
 
+    "addServiceBlueprintTitle": "Service পরিকল্পনা যুক্ত করুন",
+    "editServiceBlueprintTitle": "Service পরিকল্পনা সম্পাদনা করুন",
+
     "serviceBlueprintNameInput": "Service পরিকল্পনার নাম",
     "serviceBlueprintNameInputError": "একটি সঠিক Service পরিকল্পনার নাম লিখুন",
     "defaultVatInput": "ভ্যাট",
