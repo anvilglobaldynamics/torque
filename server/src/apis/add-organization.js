@@ -58,6 +58,14 @@ exports.AddOrganizationApi = class extends Api {
     })
   }
 
+  async _addModuleActivation({ organizationId, activeModuleCodeList }) {
+    for (let moduleCode of activeModuleCodeList) {
+      let createdByAdminName = 'SERVER_ADD_ORGANIZATION_API';
+      let paymentReference = 'SERVER_ADD_ORGANIZATION_API';
+      await this.database.moduleActivation.create({ moduleCode, organizationId, createdByAdminName, paymentReference });
+    }
+  }
+
   async handle({ body, userId }) {
     let { name, primaryBusinessAddress, phone, email, activeModuleCodeList } = body;
     await this._checkIfMaxOrganizationLimitReached({ userId });
@@ -67,6 +75,7 @@ exports.AddOrganizationApi = class extends Api {
     let organizationId = await this._createOrganization({ name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList });
     await this._setUserAsOwner({ userId, organizationId });
     await this._setTrialPackage({ organizationId });
+    await this._addModuleActivation({ organizationId, activeModuleCodeList });
 
     return { status: "success", organizationId };
   }
