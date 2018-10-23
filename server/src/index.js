@@ -104,6 +104,10 @@ let { AdminSetUserBanningStatusApi } = require('./legacy-apis/admin-set-user-ban
 const { AdminGetOrganizationApi } = require('./apis/admin-get-organization');
 const { AdminAssignPackageToOrganizationApi } = require('./apis/admin-assign-package-to-organization');
 const { AdminListOrganizationPackagesApi } = require('./apis/admin-list-organization-packages');
+const { AdminGetModuleListApi } = require('./apis/admin-get-module-list');
+const { AdminListOrganizationModulesApi } = require('./apis/admin-list-organization-modules');
+const { AdminSetModuleActivationStatusApi } = require('./apis/admin-set-module-activation-status');
+
 
 let { FixtureCollection } = require('./legacy-collections/fixture');
 let { UserCollection } = require('./legacy-collections/user');
@@ -325,6 +329,9 @@ class Program {
     server.registerPostApi('/api/admin-get-package-list', AdminGetPackageListApi);
     server.registerPostApi('/api/admin-assign-package-to-organization', AdminAssignPackageToOrganizationApi);
     server.registerPostApi('/api/admin-list-organization-packages', AdminListOrganizationPackagesApi);
+    server.registerPostApi('/api/admin-get-module-list', AdminGetModuleListApi);
+    server.registerPostApi('/api/admin-list-organization-modules', AdminListOrganizationModulesApi);
+    server.registerPostApi('/api/admin-set-module-activation-status', AdminSetModuleActivationStatusApi);
   }
 
 }
