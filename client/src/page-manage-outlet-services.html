@@ -31,7 +31,7 @@
 
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
-          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.customer.searchForCustomerInputError]] label=[[verses.customer.searchForCustomerInput]] on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.manageServices.searchForServiceInputError]] label=[[verses.manageServices.searchForServicerInput]] on-keypress="searchFieldKeypressed"></paper-input>
           
           <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
           
@@ -113,10 +113,8 @@
         this.app.pushPageTitle(this.app.verses.manageServices.manageServicesTitle);
         if ('outlet' in this.params) {
           if (!this._ensureAccess()) return;
-          this._processGetOutlet(() => {
-            this._processServicesLists(() => {
-              this.isReady = true;
-            });
+          this._processServicesLists(() => {
+            this.isReady = true;
           });
         }
       }
@@ -133,34 +131,36 @@
         });
       }
 
-      _fetchCustomerList(cbfn) {
+      _fetchServiceBlueprintList(cbfn) {
         let data = { organizationId: this.app.organization.id, searchString: this.searchString };
-        this.app.callGetCustomerListApi(data, (err, response) => {
+
+        this.app.callGetServiceBlueprintListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.customerList);
+          return cbfn(response.serviceBlueprintList);
         });
       }
 
-      _processGetOutlet(cbfn) {
-        let outletId = parseInt(this.params.outlet);
-        let data = { outletId };
+      _fetchOutletServiceList(cbfn) {
+        let data = { outletId: parseInt(this.params.outlet), searchString: this.searchString };
 
-        this.app.callGetOutletApi(data, (err, response) => {
+        this.app.callGetActiveServiceListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this.outlet = response.outlet;
-          cbfn();
+          return cbfn(response.serviceList);
         });
       }
 
       _processServicesLists(cbfn) {
-        this._fetchCustomerList(newCustomerList => {
-          // organizationServiceList outletServiceList curatedServicesList
-          cbfn();
+        this._fetchServiceBlueprintList(serviceBlueprintList => {
+          this.organizationServiceList = serviceBlueprintList;
+          this._fetchOutletServiceList(serviceList => {
+            this.outletServiceList = serviceList;
+            // TODO: curatedServicesList
+            cbfn();
+          });
         });
       }
-
 
       // region: ui  ===========================
 

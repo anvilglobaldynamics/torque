@@ -327,6 +327,11 @@
         this.callCombinedJsonApi('edit-service-blueprint', data, cbfn);
       }
 
+      callGetActiveServiceListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-active-service-list', data, cbfn);
+      }
+
       callGetAggregatedInventoryDetailsApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('get-aggregated-inventory-details', data, cbfn);

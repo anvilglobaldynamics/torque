@@ -766,6 +766,8 @@
   "manageServices": {
     "manageServicesTitle": "Manage Outlet Services",
     "confirmUpdate": "Confirm Services Availability Update",
-    "noServicesFound": "No Services Found"
+    "noServicesFound": "No Services Found",
+    "searchForServiceInputError": "Valid Service Name",
+    "searchForServicerInput": "Service Name"
   }
 }
