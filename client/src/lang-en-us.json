@@ -279,7 +279,7 @@
     "defaultVatInputError": "Default VAT should be 0-100",
     "serviceBlueprintDefaultSalePriceInput": "Default Sale Price",
     "serviceBlueprintDefaultSalePriceInputError": "Provide a valid Default Sale Price",
-    "isServiceLongstanding": "Is this Service Longstanding? (Service is active for a duration of time)",
+    "isServiceLongstanding": "Is this Service Longstanding? (Service is active for days or months)",
     "isCustomerRequired": "Is Customer data required? (Longstanding Services require Customer data)",
     "serviceDuration": "Duration",
     "serviceDurationMonths": "Months",
