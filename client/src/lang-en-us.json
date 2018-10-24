@@ -762,5 +762,10 @@
     "sellForInput": "Sell Price",
     "sellForInputError": "Enter a valid sell price",
     "productUpdated": "Product has been updated"
+  },
+  "manageServices": {
+    "manageServicesTitle": "Manage Outlet Services",
+    "confirmUpdate": "Confirm Services Availability Update",
+    "noServicesFound": "No Services Found"
   }
 }
