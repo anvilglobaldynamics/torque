@@ -223,7 +223,10 @@
     "defaultInventoryName": "Default",
     "returnedInventoryName": "Returned",
     "damagedInventoryName": "Damaged",
-    "noOutletFound": "No Outlet has been created in your Organization."
+    "noOutletFound": "No Outlet has been created in your Organization.",
+
+    "manageOutletServicesTitle": "Manage Services",
+    "manageOutletServices": "Manage Services provided in this Outlet"
   },
   "productBlueprint": {
     "manageProductBlueprintsTitle": "Manage Product Blueprints",

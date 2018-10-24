@@ -225,7 +225,10 @@
     "defaultInventoryName": "প্রধান",
     "returnedInventoryName": "ফেরৎ",
     "damagedInventoryName": "ক্ষতিগ্রস্ত",
-    "noOutletFound": "আপনার সংস্থার কোনো দোকান তৈরি করা হয়নি।"
+    "noOutletFound": "আপনার সংস্থার কোনো দোকান তৈরি করা হয়নি।",
+
+    "manageOutletServicesTitle": "সেবা পরিচালনা",
+    "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন"
   },
   "productBlueprint": {
     "manageProductBlueprintsTitle": "পণ্যের পরিকল্পনা পরিচালনা",
