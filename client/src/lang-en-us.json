@@ -260,7 +260,7 @@
     "searchForProductBlueprintInputError": "Error in Search for Product Blueprint",
     "bulkImport": "Bulk Product Blueprint Creation",
 
-    "whatIsProductBlueprintMessage": "Product Blueprint is the blueprint of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
+    "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
   },
   "serviceBlueprint": {
     "manageServiceBlueprintsTitle": "Manage Service Blueprints",
@@ -292,7 +292,7 @@
     "isRefundable": "Is this Service Refundable?",
     "avtivateInAllOutlets": "Should this service be made available in all Outlets?",
 
-    "whatIsServiceBlueprintMessage": "Product Blueprint is the blueprint of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks.",
+    "whatIsServiceBlueprintMessage": "Service Blueprint is the planning of a Service. Service Blueprint needs to be added only once for a Service. Information of Service Blueprint will be reused in all Service related tasks.",
 
     "createServiceBlueprint": "Create Service Blueprint",
     "updateServiceBlueprint": "Update Service Blueprint"

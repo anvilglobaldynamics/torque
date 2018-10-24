@@ -110,7 +110,7 @@
     "outlets": "দোকান",
     "warehouses": "গুদাম",
     "productBlueprints": "পণ্যের পরিকল্পনা",
-    "serviceBlueprints": "Service পরিকল্পনা",
+    "serviceBlueprints": "সেবা পরিকল্পনা",
     "sales": "বিক্রয় রেকর্ড",
     "salesReturn": "বিক্রয় ফেরত রেকর্ড",
     "customers": "গ্রাহক",
@@ -265,23 +265,23 @@
     "whatIsProductBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত কাজে ব্যবহত হবে।"
   },
   "serviceBlueprint": {
-    "manageServiceBlueprintsTitle": "Service পরিকল্পনা পরিচালনা",
+    "manageServiceBlueprintsTitle": "সেবা পরিকল্পনা পরিচালনা",
     "sellingPrice": "বিক্রয় মূল্য",
-    "searchForServiceBlueprintInput": "Service পরিকল্পনার নাম",
-    "searchForServiceBlueprintInputError": "Service পরিকল্পনার সন্ধানে ত্রুটি",
-    "noServiceBlueprintFound": "কোনো Service পরিকল্পনা পাওয়া যায় নি।",
-    "createNewServiceBlueprint": "নতুন Service পরিকল্পনা তৈরি করুন",
+    "searchForServiceBlueprintInput": "সেবা পরিকল্পনার নাম",
+    "searchForServiceBlueprintInputError": "সেবা পরিকল্পনার সন্ধানে ত্রুটি",
+    "noServiceBlueprintFound": "কোনো সেবা পরিকল্পনা পাওয়া যায় নি।",
+    "createNewServiceBlueprint": "নতুন সেবা পরিকল্পনা তৈরি করুন",
 
-    "addServiceBlueprintTitle": "Service পরিকল্পনা যুক্ত করুন",
-    "editServiceBlueprintTitle": "Service পরিকল্পনা সম্পাদনা করুন",
+    "addServiceBlueprintTitle": "সেবা পরিকল্পনা যুক্ত করুন",
+    "editServiceBlueprintTitle": "সেবা পরিকল্পনা সম্পাদনা করুন",
 
-    "serviceBlueprintNameInput": "Service পরিকল্পনার নাম",
-    "serviceBlueprintNameInputError": "একটি সঠিক Service পরিকল্পনার নাম লিখুন",
+    "serviceBlueprintNameInput": "সেবা পরিকল্পনার নাম",
+    "serviceBlueprintNameInputError": "একটি সঠিক সেবা পরিকল্পনার নাম লিখুন",
     "defaultVatInput": "ভ্যাট",
     "defaultVatInputError": "ভ্যাট হবে ০ থেকে ১০০ এর মধ্যে",
     "serviceBlueprintDefaultSalePriceInput": "বিক্রয় মূল্য",
     "serviceBlueprintDefaultSalePriceInputError": "একটি সঠিক অংক লিখুন",
-    "isServiceLongstanding": "Is this Service Longstanding? (Service is active for a duration of time)",
+    "isServiceLongstanding": "Is this সেবা Longstanding? (সেবা is active for a duration of time)",
     "isCustomerRequired": "Is Customer data required? (Longstanding Services require Customer data)",
     "serviceDuration": "Duration",
     "serviceDurationMonths": "Months",
@@ -291,13 +291,13 @@
     "serviceDurationDaysInput": "Duration Days",
     "serviceDurationDaysInputError": "Valid is 0-31",
     "isEmployeeAssignable": "Should an Employee be assigned?",
-    "isRefundable": "Is this Service Refundable?",
+    "isRefundable": "Is this সেবা Refundable?",
     "avtivateInAllOutlets": "Should this service be made available in all Outlets?",
 
-    "whatIsServiceBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত কাজে ব্যবহত হবে।",
+    "whatIsServiceBlueprintMessage": "সেবার পরিকল্পনা একটু সেবার নকশা। প্রতি সেবার জন্য একবারই সেবার পরিকল্পনা তৈরি করতে হবে। সেবার পরিকল্পনায় দেয়া তথ্য সেবা সংক্রান্ত কাজে ব্যবহত হবে।",
 
-    "createServiceBlueprint": "নতুন Service পরিকল্পনা তৈরি করুন",
-    "updateServiceBlueprint": "Service পরিকল্পনা আপডেট করুন"
+    "createServiceBlueprint": "নতুন সেবা পরিকল্পনা তৈরি করুন",
+    "updateServiceBlueprint": "সেবা পরিকল্পনা আপডেট করুন"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "গ্রাহকের নাম বা ফোন",
