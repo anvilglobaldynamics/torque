@@ -30,9 +30,35 @@ exports.GetActiveServiceListApi = class extends Api {
     }];
   }
 
+  async _combineServiceBlueprintDetail({ serviceList }) {
+    (await this.crossmap({
+      source: serviceList,
+      sourceKeyFn: (doc => doc.serviceBlueprintId),
+      target: 'serviceBlueprint',
+      onError: (service) => { throw new CodedError("SERVICE_BLUEPRINT_INVALID", "Invalid serviceBlueprintId"); }
+    })).forEach((serviceBlueprint, service) => {
+      service.serviceBlueprint = serviceBlueprint;
+    });
+  }
+
+  async _searchCombineServiceList({ serviceList, searchString }) {
+    serviceList = serviceList.filter(service => {
+      searchString = this.escapeRegExp(searchString);
+      let regex = new RegExp(searchString, 'i');
+      return regex.test(service.serviceBlueprint.name);
+    });
+
+    return serviceList;
+  }
+
   async handle({ body }) {
     let { outletId, searchString } = body;
-    let serviceList = await this.database.service.listAvailableByOutletIdAndSearchString({ outletId, searchString });
+    let serviceList = await this.database.service.listAvailableByOutletId({ outletId });
+    await this._combineServiceBlueprintDetail({ serviceList });
+    if (searchString) {
+      serviceList = await this._searchCombineServiceList({ serviceList, searchString });
+    }
+    
     return { serviceList };
   }
 

@@ -81,13 +81,8 @@ exports.ServiceCollection = class extends Collection {
     });
   }
 
-  async listAvailableByOutletIdAndSearchString({ outletId, searchString }) {
+  async listAvailableByOutletId({ outletId }) {
     let query = { outletId, isAvailable: true };
-    if (searchString) {
-      searchString = this.escapeRegExp(searchString);
-      let searchRegex = new RegExp(searchString, 'i');
-      query.name = searchRegex;
-    }
     return await this._find(query);
   }
 

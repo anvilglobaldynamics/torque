@@ -1080,6 +1080,28 @@ describe.only('Service', _ => {
 
   });
 
+  it('api/get-active-service-list (Valid all searchString)', testDoneFn => {
+
+    callApi('api/get-active-service-list', {
+      json: {
+        apiKey,
+        outletId: outletTwoId,
+        searchString: '1st'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetActiveServiceListApiSuccessResponse(body);
+      body.serviceList.forEach(service => {
+        validateServiceSchema(service);
+      });
+
+      expect(body.serviceList.length).equal(1);
+      testDoneFn();
+    });
+
+  });
+
   it('api/modify-availability-of-service-list-in-outlet-list (Valid activation service blueprint in all outlet)', testDoneFn => {
 
     callApi('api/modify-availability-of-service-list-in-outlet-list', {
