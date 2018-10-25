@@ -764,6 +764,9 @@
     "productUpdated": "Product has been updated"
   },
   "manageServices": {
+    "manageOutletServicesTitle": "Manage Services",
+    "manageOutletServices": "Manage Services provided in this Outlet",
+
     "manageServicesTitle": "Manage Outlet Services",
     "confirmUpdate": "Confirm Services Availability Update",
     "noServicesFound": "No Services Found",

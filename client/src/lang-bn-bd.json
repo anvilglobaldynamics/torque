@@ -763,5 +763,15 @@
     "sellForInput": "বিক্রয় মূল্য",
     "sellForInputError": "একটি বৈধ বিক্রয়মূল্য লিখুন",
     "productUpdated": "পণ্য আপডেট করা হয়েছে"
+  },
+  "manageServices": {
+    "manageOutletServicesTitle": "সেবা পরিচালনা",
+    "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন",
+
+    "manageServicesTitle": "দোকানের সেবা পরিচালনা",
+    "confirmUpdate": "সেবা প্রাপ্যতা আপডেট নিশ্চিত করুন",
+    "noServicesFound": "কোন সেবা পাওয়া যায়নি",
+    "searchForServiceInputError": "বৈধ সেবার নাম",
+    "searchForServicerInput": "সেবার নাম"
   }
 }
