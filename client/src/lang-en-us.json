@@ -590,6 +590,7 @@
     "vatAmount": "Vat Amount",
     "serviceChargeInput": "Service Charge Amount",
     "serviceChargeInputError": "Enter a valid number",
+    "totalSalePrice": "Total Sale Price",
     "totalAmount": "Total Amount",
     "totalBilled": "Total Billed",
     "previousCustomerBalance": "Previous Customer Balance",

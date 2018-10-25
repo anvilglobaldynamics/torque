@@ -153,7 +153,9 @@
 
       <template is="dom-if" if="{{productList.length}}">
         <div class="card vertical layout">
-          <span>[[verses.general.total]]: <b>{{$round(payment.totalAmount)}} [[app.settings.monetaryUnit]]</b></span>
+          <div class="individual-calculation-field-container">
+            <span>[[verses.pos.totalSalePrice]]: <b>{{$round(payment.totalAmount)}} [[app.settings.monetaryUnit]]</b></span>
+          </div>
         </div>
       </template>
 

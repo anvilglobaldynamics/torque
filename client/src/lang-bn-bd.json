@@ -592,6 +592,7 @@
     "vatAmount": "ভ্যাট পরিমান",
     "serviceChargeInput": "সার্ভিস চার্জ",
     "serviceChargeInputError": "একটি সঠিক নম্বর লিখুন",
+    "totalSalePrice": "মোট বিক্রয় মূল্য",
     "totalAmount": "মোট পরিমান",
     "totalBilled": "মোট বিল",
     "previousCustomerBalance": "পূর্ববর্তী গ্রাহক ব্যালেন্স",
