@@ -769,9 +769,12 @@
     "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন",
 
     "manageServicesTitle": "দোকানের সেবা পরিচালনা",
-    "confirmUpdate": "সেবা প্রাপ্যতা আপডেট নিশ্চিত করুন",
+    "confirmUpdate": "সেবা লভ্যতা আপডেট নিশ্চিত করুন",
     "noServicesFound": "কোন সেবা পাওয়া যায়নি",
     "searchForServiceInputError": "বৈধ সেবার নাম",
-    "searchForServicerInput": "সেবার নাম"
+    "searchForServicerInput": "সেবার নাম",
+
+    "availability": "লভ্যতা",
+    "modificationComplete": "দোকানে সেবার লভ্যতা পরিবর্তন শেষ"
   }
 }
