@@ -7,6 +7,7 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
@@ -23,6 +24,18 @@
 <dom-module id="page-manage-outlet-services">
   <template>
     <style include="shared-styles">
+
+      .service-blueprint {
+        border: 1px solid blue;
+      }
+
+      .service-blueprint .service-blueprint-name {
+        border: 1px solid red;
+      }
+
+      .service-blueprint paper-checkbox {
+        border: 1px solid red;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -41,17 +54,22 @@
         </div>
       </div>
 
-      <template is="dom-if" if="{{!curatedServicesList.length}}">
+      <template is="dom-if" if="{{!serviceBlueprintList.length}}">
         <div class="card">
           [[verses.manageServices.noServicesFound]]
         </div>
       </template>
 
-      <template is="dom-if" if="{{curatedServicesList.length}}">
+      <template is="dom-if" if="{{serviceBlueprintList.length}}">
 
         <div class="card vertical layout">
 
-          <!-- main content here -->
+          <template is="dom-repeat" items="[[serviceBlueprintList]]" as="serviceBlueprint">
+            <div class="service-blueprint"> 
+              <span class="service-blueprint-name">[[serviceBlueprint.name]], [[serviceBlueprint.isActive]]</span>
+              <paper-checkbox checked="{{serviceBlueprint.isActive}}" on-change="availabilityInputChanged">[[verses.manageServices.availability]]</paper-checkbox>
+            </div>
+          </template>
 
         </div>
 
@@ -84,7 +102,7 @@
             type: Object,
             value: null
           },
-          organizationServiceList: {
+          serviceBlueprintList: {
             type: Array,
             value: []
           },
@@ -92,7 +110,11 @@
             type: Array,
             value: []
           },
-          curatedServicesList: {
+          serviceBlueprintsToBeActivatedList: {
+            type: Array,
+            value: []
+          },
+          serviceBlueprintsToBeDeactivatedList: {
             type: Array,
             value: []
           }
@@ -151,13 +173,29 @@
         });
       }
 
+      _crossMatchServiceBlueprintListWithOutletServiceList(cbfn) {
+        this.serviceBlueprintList.forEach((serviceBlueprint, index) => {
+          let outletActiveService = this.outletServiceList.find(outletService => outletService.serviceBlueprintId === serviceBlueprint.id);
+          if (outletActiveService) {
+            serviceBlueprint.isActive = true;
+          } else {
+            serviceBlueprint.isActive = false;
+          }
+          this.set(`serviceBlueprintList.${index}.isActive`, serviceBlueprint.isActive);
+        });
+
+        cbfn();
+      }
+
       _processServicesLists(cbfn) {
         this._fetchServiceBlueprintList(serviceBlueprintList => {
-          this.organizationServiceList = serviceBlueprintList;
+          this.serviceBlueprintList = serviceBlueprintList;
           this._fetchOutletServiceList(serviceList => {
             this.outletServiceList = serviceList;
-            // TODO: curatedServicesList
-            cbfn();
+            this._crossMatchServiceBlueprintListWithOutletServiceList(_ => {
+              console.log("serviceBlueprintList: ", this.serviceBlueprintList);
+              cbfn();
+            })
           });
         });
       }
@@ -178,6 +216,8 @@
         this.set('paginate.offset', 0);
         this._processServicesLists(() => this.isReady = true);
       }
+
+      availabilityInputChanged(e) {}
 
       // region: misc =================================
     }
