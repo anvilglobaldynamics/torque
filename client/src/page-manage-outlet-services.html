@@ -30,12 +30,11 @@
       }
 
       .service-blueprint .service-blueprint-name {
-        border: 1px solid red;
+        display: inline-block;
+        width: 50%;
       }
 
-      .service-blueprint paper-checkbox {
-        border: 1px solid red;
-      }
+      .service-blueprint paper-checkbox {}
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -65,9 +64,9 @@
         <div class="card vertical layout">
 
           <template is="dom-repeat" items="[[serviceBlueprintList]]" as="serviceBlueprint">
-            <div class="service-blueprint"> 
-              <span class="service-blueprint-name">[[serviceBlueprint.name]], [[serviceBlueprint.isActive]]</span>
-              <paper-checkbox checked="{{serviceBlueprint.isActive}}" on-change="availabilityInputChanged">[[verses.manageServices.availability]]</paper-checkbox>
+            <div class="service-blueprint horizontal layout"> 
+              <div class="service-blueprint-name">[[serviceBlueprint.name]]</div>
+              <paper-checkbox checked="{{serviceBlueprint.isActive}}">[[verses.manageServices.availability]]</paper-checkbox>
             </div>
           </template>
 
@@ -107,14 +106,6 @@
             value: []
           },
           outletServiceList: {
-            type: Array,
-            value: []
-          },
-          serviceBlueprintsToBeActivatedList: {
-            type: Array,
-            value: []
-          },
-          serviceBlueprintsToBeDeactivatedList: {
             type: Array,
             value: []
           }
@@ -177,11 +168,12 @@
         this.serviceBlueprintList.forEach((serviceBlueprint, index) => {
           let outletActiveService = this.outletServiceList.find(outletService => outletService.serviceBlueprintId === serviceBlueprint.id);
           if (outletActiveService) {
-            serviceBlueprint.isActive = true;
+            this.set(`serviceBlueprintList.${index}.isActive`, true);
+            this.set(`serviceBlueprintList.${index}.wasActive`, true);
           } else {
-            serviceBlueprint.isActive = false;
+            this.set(`serviceBlueprintList.${index}.isActive`, false);
+            this.set(`serviceBlueprintList.${index}.wasActive`, false);
           }
-          this.set(`serviceBlueprintList.${index}.isActive`, serviceBlueprint.isActive);
         });
 
         cbfn();
@@ -193,16 +185,98 @@
           this._fetchOutletServiceList(serviceList => {
             this.outletServiceList = serviceList;
             this._crossMatchServiceBlueprintListWithOutletServiceList(_ => {
-              console.log("serviceBlueprintList: ", this.serviceBlueprintList);
               cbfn();
             })
           });
         });
       }
 
+      modifyAvailabilityOfServiceInOutletApi(serviceBlueprintsToBeActivatedList, serviceBlueprintsToBeDeactivatedList, cbfn) {
+        let fnActivate = (cbfn) => {
+          if (serviceBlueprintsToBeActivatedList.length) {
+            let data = { 
+              organizationId: parseInt(this.app.organization.id),
+
+              action: 'mark-as-available',
+
+              performActionForAllServices: false,
+              serviceBlueprintList: serviceBlueprintsToBeActivatedList,
+
+              performActionOnAllOutlets: false,
+              outletIdList: [parseInt(this.params.outlet)]
+            };
+
+            this.app.callModifyAvailabilityOfServiceListInOutletListApi(data, (err, response) => {
+              if (err) return;
+              if (response.hasError) return this.onApiError(response.error);
+              return cbfn();
+            });
+          } else {
+            return cbfn();
+          }
+        }
+
+        let fnDeactivate = (cbfn) => {
+          if (serviceBlueprintsToBeDeactivatedList.length) {
+            let data = { 
+              organizationId: parseInt(this.app.organization.id),
+
+              action: 'mark-as-unavailable',
+
+              performActionForAllServices: false,
+              serviceBlueprintList: serviceBlueprintsToBeDeactivatedList,
+
+              performActionOnAllOutlets: false,
+              outletIdList: [parseInt(this.params.outlet)]
+            };
+
+            this.app.callModifyAvailabilityOfServiceListInOutletListApi(data, (err, response) => {
+              if (err) return;
+              if (response.hasError) return this.onApiError(response.error);
+              return cbfn();
+            });
+          } else {
+            return cbfn();
+          }
+        }
+
+        fnActivate(_ => {
+          fnDeactivate(_ => {
+            cbfn();
+          });
+        });
+      }
+
       // region: ui  ===========================
 
-      confirmTapped(e = null) {}
+      confirmTapped(e = null) {
+        let serviceBlueprintsToBeActivatedList = [];
+        let serviceBlueprintsToBeDeactivatedList = [];
+
+        this.serviceBlueprintList.forEach(serviceBlueprint => {
+          if (serviceBlueprint.wasActive && !serviceBlueprint.isActive) {
+            serviceBlueprintsToBeDeactivatedList.push({
+              serviceBlueprintId: serviceBlueprint.id,
+              salePrice: serviceBlueprint.defaultSalePrice
+            });
+          }
+
+          if (!serviceBlueprint.wasActive && serviceBlueprint.isActive) {
+            serviceBlueprintsToBeActivatedList.push({
+              serviceBlueprintId: serviceBlueprint.id,
+              salePrice: serviceBlueprint.defaultSalePrice
+            });
+          }
+        });
+
+        this.modifyAvailabilityOfServiceInOutletApi(serviceBlueprintsToBeActivatedList, serviceBlueprintsToBeDeactivatedList, () => {
+          let message = this.app.verses.manageServices.modificationComplete;
+          this.app.showToast(message, _ => {
+            this.isReady = false; 
+            this._processServicesLists(() => this.isReady = true);
+          });
+        });
+      }
 
       searchFieldKeypressed(e) {
         if (e.which === 13) this.searchTapped(null);
@@ -216,8 +290,6 @@
         this.set('paginate.offset', 0);
         this._processServicesLists(() => this.isReady = true);
       }
-
-      availabilityInputChanged(e) {}
 
       // region: misc =================================
     }

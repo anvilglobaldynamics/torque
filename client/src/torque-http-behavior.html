@@ -332,6 +332,11 @@
         this.callCombinedJsonApi('get-active-service-list', data, cbfn);
       }
 
+      callModifyAvailabilityOfServiceListInOutletListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('modify-availability-of-service-list-in-outlet-list', data, cbfn);
+      }
+
       callGetAggregatedInventoryDetailsApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('get-aggregated-inventory-details', data, cbfn);

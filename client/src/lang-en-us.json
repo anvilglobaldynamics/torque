@@ -773,6 +773,7 @@
     "searchForServiceInputError": "Valid Service Name",
     "searchForServicerInput": "Service Name",
 
-    "availability": "Availability"
+    "availability": "Availability",
+    "modificationComplete": "Outlet Service Availability Modification(s) Complete"
   }
 }
