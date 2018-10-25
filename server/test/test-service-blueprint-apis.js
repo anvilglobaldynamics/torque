@@ -49,7 +49,7 @@ let serviceBlueprintToBeEdited = null;
 let serviceBlueprintToBeActivated = null;
 let serviceToBeEdited = null;
 
-describe.only('Service', _ => {
+describe('Service', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

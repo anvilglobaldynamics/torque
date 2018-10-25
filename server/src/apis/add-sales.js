@@ -32,7 +32,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
       payment: Joi.object().required().keys({
         totalAmount: Joi.number().max(999999999999999).required(), // means total sale price of all products
         vatAmount: Joi.number().max(999999999999999).required(),
-        discountType: Joi.string().max(1024).required(),
+        discountType: Joi.string().valid('percent', 'fixed').required(),
         discountValue: Joi.number().max(999999999999999).required(),
         discountedAmount: Joi.number().max(999999999999999).required(),
         serviceChargeAmount: Joi.number().max(999999999999999).required(),
