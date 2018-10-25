@@ -10,12 +10,11 @@ exports.ServiceMixin = (SuperApiClass) => class extends SuperApiClass {
     if (result) {
       let res = await this.database.service.setAvailability({ id: result.id }, { isAvailable: true });
       throwOnFalsy(res, "GENERIC_ACTIVATION_ERROR", "Error occurred while activating.");
+      return;
     }
 
-    if(!result) {
-      let res = await this.database.service.create({ createdByUserId, serviceBlueprintId, outletId, salePrice });
-      throwOnFalsy(res, "GENERIC_ACTIVATION_ERROR", "Error occurred while activating.");
-    }
+    let res = await this.database.service.create({ createdByUserId, serviceBlueprintId, outletId, salePrice });
+    throwOnFalsy(res, "GENERIC_ACTIVATION_ERROR", "Error occurred while activating.");
   }
 
   async __deactivateServiceInOutlet({ outletId, serviceBlueprintId }) {
