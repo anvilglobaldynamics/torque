@@ -26,6 +26,13 @@ exports.ServiceMixin = (SuperApiClass) => class extends SuperApiClass {
     }
   }
 
+  async __validateServiceIdList({ serviceIdList }) {
+    for (let i = 0; i < serviceIdList.length; i++) {
+      let service = await this.database.service.findById({ id: serviceIdList[i] });
+      throwOnFalsy(service, "SERVICE_INVALID", "Service could not be found.");
+    }
+  }
+
   async __updateService({ serviceId, salePrice, isAvailable }) {
     let res = this.database.service.setDetails({ id: serviceId }, { salePrice, isAvailable });
     throwOnFalsy(res, "GENERIC_UPDATE_ERROR", "Error occurred while updating.");

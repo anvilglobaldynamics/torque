@@ -5,6 +5,7 @@ const { extract } = require('./../utils/extract');
 const { InventoryMixin } = require('./mixins/inventory-mixin');
 const { CustomerMixin } = require('./mixins/customer-mixin');
 const { SalesMixin } = require('./mixins/sales-mixin');
+const { ServiceMixin } = require('./mixins/service-mixin');
 
 exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin) {
 
@@ -158,7 +159,8 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     }
 
     if (serviceList.length) {
-      // service(s) task
+      let serviceIdList = this.serviceList.map(service => service.serviceId);
+      console.log("serviceIdList: ", serviceIdList);
     }
 
     let salesId = await this.database.sales.create({ outletId, customerId, productList, payment });

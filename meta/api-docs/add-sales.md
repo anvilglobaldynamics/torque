@@ -67,6 +67,7 @@ Possible Error Codes:
 { code: CUSTOMER_INVALID } // customer could not be found
 { code: CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER }
 { code: PRODUCT_INVALID } // product could not be found
+{ code: SERVICE_INVALID } // service could not be found
 { code: INSUFFICIENT_PRODUCT } // not enough product in inventory
 { code: BILL_INACCURATE } // Bill is mathematically inaccurate
 { code: NO_PRODUCT_OR_SERVICE_SELECTED } // Both productList and serviceList can not be empty.
