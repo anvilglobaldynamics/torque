@@ -12,14 +12,23 @@ method: `POST`
   outletId: Joi.number().max(999999999999999).required(),
   customerId: Joi.number().max(999999999999999).allow(null).required(),
 
-  productList: Joi.array().min(1).items(
+  productList: Joi.array().required().items(
     Joi.object().keys({
       productId: Joi.number().max(999999999999999).required(),
       count: Joi.number().max(999999999999999).required(),
       discountType: Joi.string().max(1024).required(),
-      discountValue: Joi.number().max(999999999999999).required(),
-      salePrice: Joi.number().max(999999999999999).required(),
+      discountValue: Joi.number().min(0).max(999999999999999).required(),
+      salePrice: Joi.number().min(0).max(999999999999999).required(),
       vatPercentage: Joi.number().max(999999999999999).required(),
+    })
+  ),
+
+  serviceList: Joi.array().required().items(
+    Joi.object().keys({
+      serviceId: Joi.number().max(999999999999999).required(),
+      salePrice: Joi.number().min(0).max(999999999999999).required(),
+      vatPercentage: Joi.number().min(0).max(999999999999999).required(),
+      assignedEmploymentId: Joi.number().max(999999999999999).allow(null).required()
     })
   ),
   
@@ -60,6 +69,7 @@ Possible Error Codes:
 { code: PRODUCT_INVALID } // product could not be found
 { code: INSUFFICIENT_PRODUCT } // not enough product in inventory
 { code: BILL_INACCURATE } // Bill is mathematically inaccurate
+{ code: NO_PRODUCT_OR_SERVICE_SELECTED } // Both productList and serviceList can not be empty.
 
 From "customer-mixin":
   { code: INSUFFICIENT_BALANCE }
