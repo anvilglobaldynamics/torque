@@ -232,7 +232,7 @@ describe.only('Sales', _ => {
 
   });
 
-  it('api/add-sales (Invalid empty productList)', testDoneFn => {
+  it('api/add-sales (Invalid empty productList and serviceList)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -262,7 +262,7 @@ describe.only('Sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).to.equal('VALIDATION_ERROR');
+      expect(body.error.code).to.equal('NO_PRODUCT_OR_SERVICE_SELECTED');
       testDoneFn();
     });
 
@@ -1047,7 +1047,6 @@ describe.only('Sales', _ => {
         }
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateAddSalesApiSuccessResponse(body);
 

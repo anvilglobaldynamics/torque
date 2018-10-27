@@ -18,7 +18,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
 
-      productList: Joi.array().min(1).items(
+      productList: Joi.array().required().items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required(),
@@ -138,7 +138,11 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
   }
 
   async handle({ userId, body }) {
-    let { outletId, customerId, productList, payment: originalPayment } = body;
+    let { outletId, customerId, productList, serviceList, payment: originalPayment } = body;
+
+    if (!productList.length && !serviceList.length) {
+      throw new CodedError("NO_PRODUCT_OR_SERVICE_SELECTED", "Both productList and serviceList can not be empty.");
+    }
 
     let customer = await this._findCustomerIfSelected({ customerId });
 
