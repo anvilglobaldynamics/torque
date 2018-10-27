@@ -207,6 +207,8 @@ describe.only('Sales', _ => {
           }
         ],
 
+        serviceList: [],
+
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
@@ -240,6 +242,8 @@ describe.only('Sales', _ => {
         customerId: null,
 
         productList: [],
+
+        serviceList: [],
 
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
@@ -284,6 +288,8 @@ describe.only('Sales', _ => {
           }
         ],
 
+        serviceList: [],
+
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
@@ -326,6 +332,8 @@ describe.only('Sales', _ => {
             vatPercentage: 5,
           }
         ],
+
+        serviceList: [],
 
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
@@ -370,6 +378,8 @@ describe.only('Sales', _ => {
           }
         ],
 
+        serviceList: [],
+
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
@@ -412,6 +422,8 @@ describe.only('Sales', _ => {
           }
         ],
 
+        serviceList: [],
+
         payment: {}
       }
     }, (err, response, body) => {
@@ -442,6 +454,8 @@ describe.only('Sales', _ => {
             vatPercentage: 5,
           }
         ],
+
+        serviceList: [],
 
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
@@ -486,6 +500,8 @@ describe.only('Sales', _ => {
           }
         ],
 
+        serviceList: [],
+
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
@@ -528,6 +544,8 @@ describe.only('Sales', _ => {
             vatPercentage: 5,
           }
         ],
+
+        serviceList: [],
 
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
@@ -1012,6 +1030,8 @@ describe.only('Sales', _ => {
           }
         ],
 
+        serviceList: [],
+
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
@@ -1027,6 +1047,7 @@ describe.only('Sales', _ => {
         }
       }
     }, (err, response, body) => {
+      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateAddSalesApiSuccessResponse(body);
 
