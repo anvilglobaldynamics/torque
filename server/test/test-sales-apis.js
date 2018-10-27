@@ -85,6 +85,8 @@ let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
+let customerRef1 = null;
+
 describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
@@ -1124,7 +1126,6 @@ describe.only('Sales', _ => {
 
   });
 
-  let customerRef1 = null;
   it('api/get-customer (to verify impact of add-additional-payment)', testDoneFn => {
 
     callApi('api/get-customer', {

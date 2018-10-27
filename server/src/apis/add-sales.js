@@ -64,12 +64,12 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     }];
   }
 
-  async _validateBillingAndPayment({ productList, payment, newPayment, customer }) {
+  async _validateBillingAndPayment({ productList, payment, paymentListEntry, customer }) {
     // TODO: should check if adding product(s) salePrice and modifiers (discountedAmount, serviceChargeAmount) equals totalBilled
     // throw new CodedError("BILL_INACCURATE", "Bill is mathematically inaccurate");
     // Also should validate the new payment portion. i.e. paidAmount > changeAmount etc
     // Also, if paymentMethod is 'change-wallet' then customer must exist
-    if (payment.totalBilled > (payment.totalPaidAmount + newPayment.paidAmount)) {
+    if (payment.totalBilled > (payment.totalPaidAmount + paymentListEntry.paidAmount)) {
       throwOnFalsy(customer, "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "Credit sale is not allowed without a registered cutomer.");
     }
     return;
@@ -93,7 +93,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     Splits an original payment received from POS into two separate objects.
       - First one is 'payment' containing the standardized form of payment that can be
         inserted into database.
-      - Second one is 'newPayment' containing the only the details of current "payment" provided
+      - Second one is 'paymentListEntry' containing the only the details of current "payment" provided
         by customer.
       see the signature of the objects returned for more clarification.
   */
@@ -110,11 +110,11 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
       paymentList: [], totalPaidAmount: 0
     }
 
-    let newPayment = {
+    let paymentListEntry = {
       paymentMethod, paidAmount, changeAmount, shouldSaveChangeInAccount
     }
 
-    return { payment, newPayment };
+    return { payment, paymentListEntry };
   }
 
   async _findCustomerIfSelected({ customerId }) {
@@ -136,9 +136,9 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
     this._reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList });
 
-    let { payment, newPayment } = this._standardizePayment({ originalPayment });
-    await this._validateBillingAndPayment({ productList, payment, newPayment, customer });
-    payment = await this._processASinglePayment({ userId, customer, payment, newPayment });
+    let { payment, paymentListEntry } = this._standardizePayment({ originalPayment });
+    await this._validateBillingAndPayment({ productList, payment, paymentListEntry, customer });
+    payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
 
     await this.database.inventory.setProductList({ id: outletDefaultInventory.id }, { productList: outletDefaultInventory.productList });
     let salesId = await this.database.sales.create({ outletId, customerId, productList, payment });

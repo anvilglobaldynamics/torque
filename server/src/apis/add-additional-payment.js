@@ -53,25 +53,25 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
     return customer;
   }
 
-  async _validateNewPayment({ payment, newPayment, customer }) {
-    if (newPayment.paymentMethod === 'change-wallet' && customer.changeWalletBalance < newPayment.paidAmount) {
+  async _validateNewPayment({ payment, paymentListEntry, customer }) {
+    if (paymentListEntry.paymentMethod === 'change-wallet' && customer.changeWalletBalance < paymentListEntry.paidAmount) {
       // throw new CodedError("CUSTOMER_HAS_INSUFFICIENT_BALANCE_IN_CHANGE_WALLET", "The customer does not have enough balance in change wallet.");
       // NOTE: skipping the error throwing here since the error is being thrown by _deductFromChangeWalletAsPayment
     }
-    let calculatedChangeAmount = Math.max((payment.totalPaidAmount + newPayment.paidAmount) - payment.totalBilled, 0);
-    if (this.round(calculatedChangeAmount) !== this.round(newPayment.changeAmount)) {
+    let calculatedChangeAmount = Math.max((payment.totalPaidAmount + paymentListEntry.paidAmount) - payment.totalBilled, 0);
+    if (this.round(calculatedChangeAmount) !== this.round(paymentListEntry.changeAmount)) {
       throw new CodedError("INCORRECT_PAYMENT_CALCULATION", "Change calculation is not accurate.");
     }
   }
 
   async handle({ userId, body }) {
-    let { salesId, customerId, payment: newPayment } = body;
+    let { salesId, customerId, payment: paymentListEntry } = body;
     let sales = await this._getSales({ salesId });
     let customer = await this._getCustomer({ customerId });
     let payment = sales.payment;
 
-    await this._validateNewPayment({ payment, newPayment, customer });
-    payment = await this._processASinglePayment({ userId, customer, payment, newPayment });
+    await this._validateNewPayment({ payment, paymentListEntry, customer });
+    payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
     await this.database.sales.setPayment({ id: salesId }, { payment });
     return { status: "success" };
   }
