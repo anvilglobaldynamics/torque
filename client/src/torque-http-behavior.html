@@ -312,6 +312,31 @@
         this.callCombinedJsonApi('delete-product-blueprint', data, cbfn);
       }
 
+      callGetServiceBlueprintListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-service-blueprint-list', data, cbfn);
+      }
+
+      callAddServiceBlueprintApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-service-blueprint', data, cbfn);
+      }
+
+      callEditServiceBlueprintApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-service-blueprint', data, cbfn);
+      }
+
+      callGetActiveServiceListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-active-service-list', data, cbfn);
+      }
+
+      callModifyAvailabilityOfServiceListInOutletListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('modify-availability-of-service-list-in-outlet-list', data, cbfn);
+      }
+
       callGetAggregatedInventoryDetailsApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('get-aggregated-inventory-details', data, cbfn);

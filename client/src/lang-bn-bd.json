@@ -110,6 +110,7 @@
     "outlets": "দোকান",
     "warehouses": "গুদাম",
     "productBlueprints": "পণ্যের পরিকল্পনা",
+    "serviceBlueprints": "সেবা পরিকল্পনা",
     "sales": "বিক্রয় রেকর্ড",
     "salesReturn": "বিক্রয় ফেরত রেকর্ড",
     "customers": "গ্রাহক",
@@ -224,7 +225,10 @@
     "defaultInventoryName": "প্রধান",
     "returnedInventoryName": "ফেরৎ",
     "damagedInventoryName": "ক্ষতিগ্রস্ত",
-    "noOutletFound": "আপনার সংস্থার কোনো দোকান তৈরি করা হয়নি।"
+    "noOutletFound": "আপনার সংস্থার কোনো দোকান তৈরি করা হয়নি।",
+
+    "manageOutletServicesTitle": "সেবা পরিচালনা",
+    "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন"
   },
   "productBlueprint": {
     "manageProductBlueprintsTitle": "পণ্যের পরিকল্পনা পরিচালনা",
@@ -257,11 +261,46 @@
     "subBlueprint": "উপ বিভাগ",
     "moveToRoot": "বাহিরে সরান",
     "createNewProductBlueprint": "নতুন পণ্য পরিকল্পনা তৈরি করুন",
-    "searchForProductBlueprintInput": "পণ্য তালিকার নাম",
-    "searchForProductBlueprintInputError": "পণ্য তালিকার সন্ধানে ত্রুটি",
+    "searchForProductBlueprintInput": "পণ্য পরিকল্পনার নাম",
+    "searchForProductBlueprintInputError": "পণ্য পরিকল্পনার সন্ধানে ত্রুটি",
     "bulkImport": "একাধিক পণ্যের পরিকল্পনা তৈরি",
 
     "whatIsProductBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত কাজে ব্যবহত হবে।"
+  },
+  "serviceBlueprint": {
+    "manageServiceBlueprintsTitle": "সেবা পরিকল্পনা পরিচালনা",
+    "sellingPrice": "বিক্রয় মূল্য",
+    "searchForServiceBlueprintInput": "সেবা পরিকল্পনার নাম",
+    "searchForServiceBlueprintInputError": "সেবা পরিকল্পনার সন্ধানে ত্রুটি",
+    "noServiceBlueprintFound": "কোনো সেবা পরিকল্পনা পাওয়া যায় নি।",
+    "createNewServiceBlueprint": "নতুন সেবা পরিকল্পনা তৈরি করুন",
+
+    "addServiceBlueprintTitle": "সেবা পরিকল্পনা যুক্ত করুন",
+    "editServiceBlueprintTitle": "সেবা পরিকল্পনা সম্পাদনা করুন",
+
+    "serviceBlueprintNameInput": "সেবা পরিকল্পনার নাম",
+    "serviceBlueprintNameInputError": "একটি সঠিক সেবা পরিকল্পনার নাম লিখুন",
+    "defaultVatInput": "ভ্যাট",
+    "defaultVatInputError": "ভ্যাট হবে ০ থেকে ১০০ এর মধ্যে",
+    "serviceBlueprintDefaultSalePriceInput": "বিক্রয় মূল্য",
+    "serviceBlueprintDefaultSalePriceInputError": "একটি সঠিক অংক লিখুন",
+    "isServiceLongstanding": "এই সেবাটি কি দীর্ঘস্থায়ী? (সেবাটি দিন অথবা মাসব্যাপি সক্রিয় থাকবে)",
+    "isCustomerRequired": "ক্রেতা সংযোগ করা কি প্রয়োজন? (দীর্ঘস্থায়ী সেবাগুলোতে ক্রেতা সংযোগ অনিবার্য)",
+    "serviceDuration": "স্থায়িত্বের কাল",
+    "serviceDurationMonths": "মাস",
+    "serviceDurationDays": "দিন",
+    "serviceDurationMonthsInput": "স্থায়িত্বের মাস",
+    "serviceDurationMonthsInputError": "সঠিক হবে 0-12",
+    "serviceDurationDaysInput": "স্থায়িত্বের দিন",
+    "serviceDurationDaysInputError": "সঠিক হবে 0-31",
+    "isEmployeeAssignable": "একজন কর্মচারীকে দায়িত্ব দেয়া হবে?",
+    "isRefundable": "এই সেবাটি কি ফেরতযোগ্য?",
+    "avtivateInAllOutlets": "এই সেবাটি কি সকল দোকানে প্রাপ্য?",
+
+    "whatIsServiceBlueprintMessage": "সেবার পরিকল্পনা একটু সেবার নকশা। প্রতি সেবার জন্য একবারই সেবার পরিকল্পনা তৈরি করতে হবে। সেবার পরিকল্পনায় দেয়া তথ্য সেবা সংক্রান্ত কাজে ব্যবহত হবে।",
+
+    "createServiceBlueprint": "নতুন সেবা পরিকল্পনা তৈরি করুন",
+    "updateServiceBlueprint": "সেবা পরিকল্পনা আপডেট করুন"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "গ্রাহকের নাম বা ফোন",
@@ -553,6 +592,7 @@
     "vatAmount": "ভ্যাট পরিমান",
     "serviceChargeInput": "সার্ভিস চার্জ",
     "serviceChargeInputError": "একটি সঠিক নম্বর লিখুন",
+    "totalSalePrice": "মোট বিক্রয় মূল্য",
     "totalAmount": "মোট পরিমান",
     "totalBilled": "মোট বিল",
     "previousCustomerBalance": "পূর্ববর্তী গ্রাহক ব্যালেন্স",
@@ -724,5 +764,18 @@
     "sellForInput": "বিক্রয় মূল্য",
     "sellForInputError": "একটি বৈধ বিক্রয়মূল্য লিখুন",
     "productUpdated": "পণ্য আপডেট করা হয়েছে"
+  },
+  "manageServices": {
+    "manageOutletServicesTitle": "সেবা পরিচালনা",
+    "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন",
+
+    "manageServicesTitle": "দোকানের সেবা পরিচালনা",
+    "confirmUpdate": "সেবা লভ্যতা আপডেট নিশ্চিত করুন",
+    "noServicesFound": "কোন সেবা পাওয়া যায়নি",
+    "searchForServiceInputError": "বৈধ সেবার নাম",
+    "searchForServicerInput": "সেবার নাম",
+
+    "availability": "লভ্যতা",
+    "modificationComplete": "দোকানে সেবার লভ্যতা পরিবর্তন শেষ"
   }
 }

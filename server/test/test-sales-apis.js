@@ -85,7 +85,9 @@ let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
-describe('Sales', _ => {
+let customerRef1 = null;
+
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -305,6 +307,49 @@ describe('Sales', _ => {
 
   });
 
+  it('api/add-sales (Invalid discountType)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: outletInventoryProductList[0].productId,
+            count: 2,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
+            vatPercentage: 5,
+          }
+        ],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: 'something',
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('VALIDATION_ERROR');
+      testDoneFn();
+    });
+
+  });
+
   it('api/add-sales (Valid, No Customer)', testDoneFn => {
 
     callApi('api/add-sales', {
@@ -347,7 +392,7 @@ describe('Sales', _ => {
 
   });
 
-  it('api/add-sales (Ivalid payment)', testDoneFn => {
+  it('api/add-sales (Invalid payment)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -1081,7 +1126,6 @@ describe('Sales', _ => {
 
   });
 
-  let customerRef1 = null;
   it('api/get-customer (to verify impact of add-additional-payment)', testDoneFn => {
 
     callApi('api/get-customer', {
@@ -1141,7 +1185,6 @@ describe('Sales', _ => {
     })
 
   });
-
 
   // AddAdditionalPayment tests - end
 

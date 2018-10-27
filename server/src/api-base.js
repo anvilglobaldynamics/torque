@@ -417,7 +417,7 @@ class Api {
     if (unmetPrivileges.length > 0) {
       let message = this.verses.accessControlCommon.accessControlUnmetPrivileges;
       message += unmetPrivileges.join(', ') + ".";
-      err = new CodedError("ACCESS_CONTROL_UNMET_PRIVILEGES", message);
+      let err = new CodedError("ACCESS_CONTROL_UNMET_PRIVILEGES", message);
       err.privileges = unmetPrivileges;
       throw err;
     }

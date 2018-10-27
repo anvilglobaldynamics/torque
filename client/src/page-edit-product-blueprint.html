@@ -223,8 +223,6 @@
           productBlueprintId: this.editingProductBlueprint.id
         };
 
-        console.log(data);
-
         this.app.callEditProductBlueprintApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProductBlueprintForm');

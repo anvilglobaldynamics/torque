@@ -69,6 +69,13 @@ const { GetProductBlueprintListApi } = require('./apis/get-product-blueprint-lis
 const { EditProductBlueprintApi } = require('./apis/edit-product-blueprint');
 let { DeleteProductBlueprintApi } = require('./legacy-apis/delete-product-blueprint');
 
+const { AddServiceBlueprintApi } = require('./apis/add-service-blueprint');
+const { GetServiceBlueprintListApi } = require('./apis/get-service-blueprint-list');
+const { EditServiceBlueprintApi } = require('./apis/edit-service-blueprint');
+const { GetActiveServiceListApi } = require('./apis/get-active-service-list');
+const { ModifyAvailabilityOfServiceListInOutletListApi } = require('./apis/modify-availability-of-service-list-in-outlet-list');
+const { EditOutletServiceApi } = require('./apis/edit-outlet-service');
+
 const { GetInventoryListApi } = require('./apis/get-inventory-list');
 const { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-inventory-details');
 const { ReportInventoryDetailsApi } = require('./apis/report-inventory-details');
@@ -325,6 +332,12 @@ class Program {
     server.registerPostApi('/api/admin-get-package-list', AdminGetPackageListApi);
     server.registerPostApi('/api/admin-assign-package-to-organization', AdminAssignPackageToOrganizationApi);
     server.registerPostApi('/api/admin-list-organization-packages', AdminListOrganizationPackagesApi);
+    server.registerPostApi('/api/add-service-blueprint', AddServiceBlueprintApi);
+    server.registerPostApi('/api/get-service-blueprint-list', GetServiceBlueprintListApi);
+    server.registerPostApi('/api/edit-service-blueprint', EditServiceBlueprintApi);
+    server.registerPostApi('/api/get-active-service-list', GetActiveServiceListApi);
+    server.registerPostApi('/api/modify-availability-of-service-list-in-outlet-list', ModifyAvailabilityOfServiceListInOutletListApi);
+    server.registerPostApi('/api/edit-outlet-service', EditOutletServiceApi);
   }
 
 }

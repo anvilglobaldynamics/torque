@@ -110,6 +110,7 @@
     "outlets": "Outlets",
     "warehouses": "Warehouses",
     "productBlueprints": "Product Blueprints",
+    "serviceBlueprints": "Service Blueprints",
     "sales": "Sales Records",
     "salesReturn": "Sales Return Records",
     "customers": "Customers",
@@ -222,7 +223,10 @@
     "defaultInventoryName": "Default",
     "returnedInventoryName": "Returned",
     "damagedInventoryName": "Damaged",
-    "noOutletFound": "No Outlet has been created in your Organization."
+    "noOutletFound": "No Outlet has been created in your Organization.",
+
+    "manageOutletServicesTitle": "Manage Services",
+    "manageOutletServices": "Manage Services provided in this Outlet"
   },
   "productBlueprint": {
     "manageProductBlueprintsTitle": "Manage Product Blueprints",
@@ -259,7 +263,42 @@
     "searchForProductBlueprintInputError": "Error in Search for Product Blueprint",
     "bulkImport": "Bulk Product Blueprint Creation",
 
-    "whatIsProductBlueprintMessage": "Product Blueprint is the blueprint of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
+    "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
+  },
+  "serviceBlueprint": {
+    "manageServiceBlueprintsTitle": "Manage Service Blueprints",
+    "sellingPrice": "Selling Price",
+    "searchForServiceBlueprintInput": "Service Blueprint name",
+    "searchForServiceBlueprintInputError": "Error in Search for Service Blueprint",
+    "noServiceBlueprintFound": "No Service Blueprint found.",
+    "createNewServiceBlueprint": "Create New Service Blueprint",
+
+    "addServiceBlueprintTitle": "Add Service Blueprint",
+    "editServiceBlueprintTitle": "Edit Service Blueprint",
+
+    "serviceBlueprintNameInput": "Service Blueprint Name",
+    "serviceBlueprintNameInputError": "Provide a valid Service Blueprint Name",
+    "defaultVatInput": "Default VAT",
+    "defaultVatInputError": "Default VAT should be 0-100",
+    "serviceBlueprintDefaultSalePriceInput": "Default Sale Price",
+    "serviceBlueprintDefaultSalePriceInputError": "Provide a valid Default Sale Price",
+    "isServiceLongstanding": "Is this Service Longstanding? (Service is active for days or months)",
+    "isCustomerRequired": "Is Customer data required? (Longstanding Services require Customer data)",
+    "serviceDuration": "Duration",
+    "serviceDurationMonths": "Months",
+    "serviceDurationDays": "Days",
+    "serviceDurationMonthsInput": "Duration Month",
+    "serviceDurationMonthsInputError": "Valid is 0-12",
+    "serviceDurationDaysInput": "Duration Days",
+    "serviceDurationDaysInputError": "Valid is 0-31",
+    "isEmployeeAssignable": "Should an Employee be assigned?",
+    "isRefundable": "Is this Service Refundable?",
+    "avtivateInAllOutlets": "Should this service be made available in all Outlets?",
+
+    "whatIsServiceBlueprintMessage": "Service Blueprint is the planning of a Service. Service Blueprint needs to be added only once for a Service. Information of Service Blueprint will be reused in all Service related tasks.",
+
+    "createServiceBlueprint": "Create Service Blueprint",
+    "updateServiceBlueprint": "Update Service Blueprint"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "Customer name or phone.",
@@ -551,6 +590,7 @@
     "vatAmount": "Vat Amount",
     "serviceChargeInput": "Service Charge Amount",
     "serviceChargeInputError": "Enter a valid number",
+    "totalSalePrice": "Total Sale Price",
     "totalAmount": "Total Amount",
     "totalBilled": "Total Billed",
     "previousCustomerBalance": "Previous Customer Balance",
@@ -723,5 +763,18 @@
     "sellForInput": "Sell Price",
     "sellForInputError": "Enter a valid sell price",
     "productUpdated": "Product has been updated"
+  },
+  "manageServices": {
+    "manageOutletServicesTitle": "Manage Services",
+    "manageOutletServices": "Manage Services provided in this Outlet",
+
+    "manageServicesTitle": "Manage Outlet Services",
+    "confirmUpdate": "Confirm Services Availability Update",
+    "noServicesFound": "No Services Found",
+    "searchForServiceInputError": "Valid Service Name",
+    "searchForServicerInput": "Service Name",
+
+    "availability": "Availability",
+    "modificationComplete": "Outlet Service Availability Modification(s) Complete"
   }
 }
