@@ -15,6 +15,7 @@ let {
   addCustomer,
   getCustomer,
   getOutlet,
+  addServiceBlueprint,
   validateInventorySchema,
   validateProductBlueprintSchema,
   validateProductSchema,
@@ -27,6 +28,9 @@ let {
   validateAddSalesReturnApiSuccessResponse,
   validateSalesSchema,
   validateSalesSchemaWhenListObj,
+
+  validateGetActiveServiceListApiSuccessResponse,
+  validateServiceSchema,
 
   validateGetCustomerApiSuccessResponse,
   validateCustomerSchema
@@ -86,6 +90,13 @@ fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
 let customerRef1 = null;
+
+let basicServiceBlueprintId = null;
+let basicService = null;
+let customerAndEmployeeServiceBlueprintId = null;
+let customerAndEmployeeService = null;
+let longstandingServiceBlueprintId = null;
+let longstandingService = null;
 
 describe.only('Sales', _ => {
 
@@ -152,7 +163,55 @@ describe.only('Sales', _ => {
                         apiKey, customerId
                       }, (data) => {
                         customerData = data.customer;
-                        testDoneFn();
+                        addServiceBlueprint({
+                          apiKey,
+                          organizationId,
+                          name: "1st service blueprint",
+                          defaultVat: 2,
+                          defaultSalePrice: 250,
+                          isLongstanding: false,
+                          serviceDuration: null,
+                          isEmployeeAssignable: false,
+                          isCustomerRequired: false,
+                          isRefundable: false,
+                          avtivateInAllOutlets: true
+                        }, (data) => {
+                          basicServiceBlueprintId = data.serviceBlueprintId;
+                          addServiceBlueprint({
+                            apiKey,
+                            organizationId,
+                            name: "2nd service blueprint",
+                            defaultVat: 2,
+                            defaultSalePrice: 250,
+                            isLongstanding: false,
+                            serviceDuration: null,
+                            isEmployeeAssignable: true,
+                            isCustomerRequired: true,
+                            isRefundable: false,
+                            avtivateInAllOutlets: true
+                          }, (data) => {
+                            customerAndEmployeeServiceBlueprintId = data.serviceBlueprintId;
+                            addServiceBlueprint({
+                              apiKey,
+                              organizationId,
+                              name: "3rd long service blueprint",
+                              defaultVat: 2,
+                              defaultSalePrice: 250,
+                              isLongstanding: true,
+                              serviceDuration: {
+                                months: 1,
+                                days: 7
+                              },
+                              isEmployeeAssignable: true,
+                              isCustomerRequired: true,
+                              isRefundable: false,
+                              avtivateInAllOutlets: true
+                            }, (data) => {
+                              longstandingServiceBlueprintId = data.serviceBlueprintId;
+                              testDoneFn();
+                            });
+                          });
+                        });
                       });
                     });
                   });
@@ -1210,7 +1269,73 @@ describe.only('Sales', _ => {
 
   // Service Sales - start
 
-  
+  it('api/get-active-service-list (Valid)', testDoneFn => {
+
+    callApi('api/get-active-service-list', {
+      json: {
+        apiKey,
+        outletId,
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetActiveServiceListApiSuccessResponse(body);
+      body.serviceList.forEach(service => {
+        validateServiceSchema(service);
+      });
+
+      basicService = body.serviceList.find(service => service.serviceBlueprintId === basicServiceBlueprintId);
+      customerAndEmployeeService = body.serviceList.find(service => service.serviceBlueprintId === customerAndEmployeeServiceBlueprintId);
+      longstandingService = body.serviceList.find(service => service.serviceBlueprintId === longstandingServiceBlueprintId);
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Valid, basic service)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: basicService.id,
+            salePrice: basicService.salePrice,
+            vatPercentage: basicService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+
+        payment: {
+          totalAmount: basicService.salePrice,
+          vatAmount: (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)),
+          paidAmount: 1000,
+          changeAmount: (1000 - (basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      console.log(body);
+      expect(response.statusCode).to.equal(200);
+      validateAddSalesApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
 
   // Service Sales - end
 

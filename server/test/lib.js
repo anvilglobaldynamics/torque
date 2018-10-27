@@ -142,6 +142,16 @@ exports.addProductBlueprint = (data, callback) => {
   })
 }
 
+// ===================================== Service Blueprint
+
+exports.addServiceBlueprint = (data, callback) => {
+  callApi('api/add-Service-blueprint', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
 // ===================================== Customer
 
 exports.addCustomer = (data, callback) => {
