@@ -392,7 +392,7 @@ describe.only('Sales', _ => {
 
   });
 
-  it('api/add-sales (Ivalid payment)', testDoneFn => {
+  it('api/add-sales (Invalid payment)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
