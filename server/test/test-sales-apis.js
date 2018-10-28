@@ -671,7 +671,6 @@ describe.only('Sales', _ => {
         salesId,
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateGetSalesApiSuccessResponse(body);
       validateSalesSchema(body.sales);

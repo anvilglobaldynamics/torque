@@ -176,7 +176,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     }
 
     let salesId = await this.database.sales.create({ outletId, customerId, productList, payment });
-    return { status: "success", salesId: 69 };
+    return { status: "success", salesId };
   }
 
 }

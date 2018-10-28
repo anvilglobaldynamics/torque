@@ -90,7 +90,6 @@ exports.GetSalesApi = class extends collectionCommonMixin(LegacyApi) {
   }
 
   handle({ body }) {
-    console.log(body);
     let { salesId } = body;
     this._getSales({ salesId }, (sales) => {
       this._addReturnedProductCountToSales({ sales }, (sales) => {
