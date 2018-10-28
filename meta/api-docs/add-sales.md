@@ -65,6 +65,7 @@ Possible Error Codes:
 { code: APIKEY_INVALID } // the api key is invalid
 { code: OUTLET_INVENTORY_INVALID } // outlet or inventory could not be found 
 { code: CUSTOMER_INVALID } // customer could not be found
+{ code: CUSTOMER_REQUIRED_TO_SAVE_CHANGE } // customer is required to save change in change wallet
 { code: CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER }
 { code: PRODUCT_INVALID } // product could not be found
 { code: SERVICE_INVALID } // service could not be found

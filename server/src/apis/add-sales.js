@@ -161,8 +161,6 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     let { payment, paymentListEntry } = this._standardizePayment({ originalPayment });
     await this._validateBillingAndPayment({ productList, payment, paymentListEntry, customer });
 
-    payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
-
     if (productList.length) {
       let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
       this._reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList });
@@ -174,6 +172,8 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
         await this._validateServiceAndCheckRequirements({ serviceListObj: serviceList[i], customer });
       }
     }
+
+    payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
 
     let salesId = await this.database.sales.create({ outletId, customerId, productList, serviceList, payment });
     return { status: "success", salesId };

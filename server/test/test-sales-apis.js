@@ -98,6 +98,7 @@ let customerAndEmployeeServiceBlueprintId = null;
 let customerAndEmployeeService = null;
 let longstandingServiceBlueprintId = null;
 let longstandingService = null;
+let variedServiceSaleId = null;
 
 describe.only('Sales', _ => {
 
@@ -1349,6 +1350,60 @@ describe.only('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetSalesApiSuccessResponse(body);
       validateSalesSchema(body.sales);
+      testDoneFn();
+    });
+
+  });
+
+  // basicService
+  // customerAndEmployeeService
+  // longstandingService
+
+  it('api/add-sales (Valid, varied service sale)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: basicService.id,
+            salePrice: basicService.salePrice,
+            vatPercentage: basicService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          },
+          {
+            serviceId: customerAndEmployeeService.id,
+            salePrice: customerAndEmployeeService.salePrice,
+            vatPercentage: customerAndEmployeeService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+
+        payment: {
+          totalAmount: basicService.salePrice + customerAndEmployeeService.salePrice,
+          vatAmount: (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)) + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100))) + (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 2000,
+          changeAmount: 2000 - ((basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100))) + (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100)))),
+          shouldSaveChangeInAccount: true,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      console.log(body);
+      expect(response.statusCode).to.equal(200);
+      validateAddSalesApiSuccessResponse(body);
+      variedServiceSaleId = body.salesId;
       testDoneFn();
     });
 
