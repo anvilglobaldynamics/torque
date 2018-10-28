@@ -138,9 +138,15 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     return customer;
   }
 
-  async _checkIfServiceRequirementsAreMet({ service, serviceBlueprint }) {
-    // console.log("service: ", service);
-    // console.log("serviceBlueprint: ", serviceBlueprint);
+  async _validateServiceAndCheckRequirements({ serviceListObj, customer }) {
+    let service = await this.database.service.findById({ id: serviceListObj.serviceId });
+    throwOnFalsy(service, "SERVICE_INVALID", "Service could not be found.");
+    let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: service.serviceBlueprintId });
+    throwOnFalsy(serviceBlueprint, "SERVICE_INVALID", "Service could not be found.");
+
+    if (serviceBlueprint.isCustomerRequired && !customer) {
+      throw new CodedError("SERVICE_REQUIRES_CUSTOMER", "Service requires a customer.");
+    }
   }
 
   async handle({ userId, body }) {
@@ -165,14 +171,8 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
 
     if (serviceList.length) {
       for (let i = 0; i < serviceList.length; i++) { 
-        let service = await this.database.service.findById({ id: serviceList[i].serviceId });
-        throwOnFalsy(service, "SERVICE_INVALID", "Service could not be found.");
-        let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: service.serviceBlueprintId });
-        throwOnFalsy(serviceBlueprint, "SERVICE_INVALID", "Service could not be found.");
-        await this._checkIfServiceRequirementsAreMet({ service, serviceBlueprint });
+        await this._validateServiceAndCheckRequirements({ serviceListObj: serviceList[i], customer });
       }
-
-      let serviceIdList = serviceList.map(service => service.serviceId);
     }
 
     let salesId = await this.database.sales.create({ outletId, customerId, productList, serviceList, payment });

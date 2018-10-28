@@ -71,6 +71,7 @@ Possible Error Codes:
 { code: INSUFFICIENT_PRODUCT } // not enough product in inventory
 { code: BILL_INACCURATE } // Bill is mathematically inaccurate
 { code: NO_PRODUCT_OR_SERVICE_SELECTED } // Both productList and serviceList can not be empty.
+{ code: SERVICE_REQUIRES_CUSTOMER } // Service requires a customer.
 
 From "customer-mixin":
   { code: INSUFFICIENT_BALANCE }
