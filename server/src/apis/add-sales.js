@@ -175,7 +175,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
       let serviceIdList = serviceList.map(service => service.serviceId);
     }
 
-    let salesId = await this.database.sales.create({ outletId, customerId, productList, payment });
+    let salesId = await this.database.sales.create({ outletId, customerId, productList, serviceList, payment });
     return { status: "success", salesId };
   }
 
