@@ -7,7 +7,7 @@ const { CustomerMixin } = require('./mixins/customer-mixin');
 const { SalesMixin } = require('./mixins/sales-mixin');
 const { ServiceMixin } = require('./mixins/service-mixin');
 
-exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin) {
+exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin, ServiceMixin) {
 
   get autoValidates() { return true; }
 
@@ -138,6 +138,11 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     return customer;
   }
 
+  async _checkIfServiceRequirementsAreMet({ service, serviceBlueprint }) {
+    console.log("service: ", service);
+    console.log("serviceBlueprint: ", serviceBlueprint);
+  }
+
   async handle({ userId, body }) {
     let { outletId, customerId, productList, serviceList, payment: originalPayment } = body;
 
@@ -159,11 +164,18 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     }
 
     if (serviceList.length) {
+      for (let i = 0; i < serviceList.length; i++) { 
+        let service = await this.database.service.findById({ id: serviceList[i].serviceId });
+        throwOnFalsy(service, "SERVICE_INVALID", "Service could not be found.");
+        let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: service.serviceBlueprintId });
+        throwOnFalsy(serviceBlueprint, "SERVICE_INVALID", "Service could not be found.");
+        await this._checkIfServiceRequirementsAreMet({ service, serviceBlueprint });
+      }
+
       let serviceIdList = serviceList.map(service => service.serviceId);
-      console.log("serviceIdList: ", serviceIdList);
     }
 
-    // let salesId = await this.database.sales.create({ outletId, customerId, productList, payment });
+    let salesId = await this.database.sales.create({ outletId, customerId, productList, payment });
     return { status: "success", salesId: 69 };
   }
 
