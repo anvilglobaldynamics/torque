@@ -93,6 +93,7 @@ let customerRef1 = null;
 
 let basicServiceBlueprintId = null;
 let basicService = null;
+let basicServiceSaleId = null;
 let customerAndEmployeeServiceBlueprintId = null;
 let customerAndEmployeeService = null;
 let longstandingServiceBlueprintId = null;
@@ -1331,6 +1332,23 @@ describe.only('Sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateAddSalesApiSuccessResponse(body);
+      basicServiceSaleId = body.salesId;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales (Valid service sale)', testDoneFn => {
+
+    callApi('api/get-sales', {
+      json: {
+        apiKey,
+        salesId: basicServiceSaleId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetSalesApiSuccessResponse(body);
+      validateSalesSchema(body.sales);
       testDoneFn();
     });
 
