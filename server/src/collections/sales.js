@@ -14,7 +14,7 @@ exports.SalesCollection = class extends Collection {
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
 
-      productList: Joi.array().min(1).items(
+      productList: Joi.array().required().items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required(),

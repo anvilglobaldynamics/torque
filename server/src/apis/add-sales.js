@@ -139,8 +139,8 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
   }
 
   async _checkIfServiceRequirementsAreMet({ service, serviceBlueprint }) {
-    console.log("service: ", service);
-    console.log("serviceBlueprint: ", serviceBlueprint);
+    // console.log("service: ", service);
+    // console.log("serviceBlueprint: ", serviceBlueprint);
   }
 
   async handle({ userId, body }) {
