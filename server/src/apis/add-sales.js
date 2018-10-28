@@ -144,8 +144,17 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: service.serviceBlueprintId });
     throwOnFalsy(serviceBlueprint, "SERVICE_INVALID", "Service could not be found.");
 
-    if (serviceBlueprint.isCustomerRequired && !customer) {
+    if (( serviceBlueprint.isLongstanding || serviceBlueprint.isCustomerRequired) && !customer) {
       throw new CodedError("SERVICE_REQUIRES_CUSTOMER", "Service requires a customer.");
+    }
+
+    if (!serviceBlueprint.isEmployeeAssignable && serviceListObj.assignedEmploymentId) {
+      throw new CodedError("CANT_ASSIGN_EMPLOYEE_TO_SERVICE", "Cant assign employee to this service.");
+    } 
+    
+    if (serviceListObj.assignedEmploymentId) {
+      let employee = await this.database.employment.findById({ id: serviceListObj.assignedEmploymentId });
+      throwOnFalsy(employee, "ASSIGNED_EMPLOYEE_INVALID", "Service could not be found.");
     }
   }
 

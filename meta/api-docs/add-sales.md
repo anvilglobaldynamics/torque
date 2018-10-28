@@ -73,6 +73,7 @@ Possible Error Codes:
 { code: BILL_INACCURATE } // Bill is mathematically inaccurate
 { code: NO_PRODUCT_OR_SERVICE_SELECTED } // Both productList and serviceList can not be empty.
 { code: SERVICE_REQUIRES_CUSTOMER } // Service requires a customer.
+{ code: CANT_ASSIGN_EMPLOYEE_TO_SERVICE } // Cant assign employee to this service
 
 From "customer-mixin":
   { code: INSUFFICIENT_BALANCE }

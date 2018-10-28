@@ -84,6 +84,7 @@ let invalidOutletId = generateInvalidId();
 let invalidProductId = generateInvalidId();
 let invalidCustomerId = generateInvalidId();
 let invalidSalesId = generateInvalidId();
+let invalidEmployeeId = generateInvalidId();
 
 let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
@@ -1296,6 +1297,49 @@ describe.only('Sales', _ => {
 
   });
 
+  it('api/add-sales (Invalid employee assignment)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: basicService.id,
+            salePrice: basicService.salePrice,
+            vatPercentage: basicService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: 99
+          }
+        ],
+
+        payment: {
+          totalAmount: basicService.salePrice,
+          vatAmount: (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)),
+          paidAmount: 1000,
+          changeAmount: (1000 - (basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('CANT_ASSIGN_EMPLOYEE_TO_SERVICE');
+      testDoneFn();
+    });
+
+  });
+
   it('api/add-sales (Valid, basic service)', testDoneFn => {
 
     callApi('api/add-sales', {
@@ -1331,6 +1375,7 @@ describe.only('Sales', _ => {
         }
       }
     }, (err, response, body) => {
+      console.log(body)
       expect(response.statusCode).to.equal(200);
       validateAddSalesApiSuccessResponse(body);
       basicServiceSaleId = body.salesId;
@@ -1359,7 +1404,7 @@ describe.only('Sales', _ => {
   // customerAndEmployeeService
   // longstandingService
 
-  it('api/add-sales (Valid, varied service sale)', testDoneFn => {
+  it('api/add-sales (Invalid no customer)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -1372,12 +1417,6 @@ describe.only('Sales', _ => {
 
         serviceList: [
           {
-            serviceId: basicService.id,
-            salePrice: basicService.salePrice,
-            vatPercentage: basicService.serviceBlueprint.defaultVat,
-            assignedEmploymentId: null
-          },
-          {
             serviceId: customerAndEmployeeService.id,
             salePrice: customerAndEmployeeService.salePrice,
             vatPercentage: customerAndEmployeeService.serviceBlueprint.defaultVat,
@@ -1386,24 +1425,66 @@ describe.only('Sales', _ => {
         ],
 
         payment: {
-          totalAmount: basicService.salePrice + customerAndEmployeeService.salePrice,
-          vatAmount: (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)) + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100)),
+          totalAmount: customerAndEmployeeService.salePrice,
+          vatAmount: (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100)),
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
           serviceChargeAmount: 0,
-          totalBilled: (basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100))) + (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
-          paidAmount: 2000,
-          changeAmount: 2000 - ((basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100))) + (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100)))),
-          shouldSaveChangeInAccount: true,
+          totalBilled: (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         }
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
-      validateAddSalesApiSuccessResponse(body);
-      variedServiceSaleId = body.salesId;
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('SERVICE_REQUIRES_CUSTOMER');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Invalid assigned employee)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: customerAndEmployeeService.id,
+            salePrice: customerAndEmployeeService.salePrice,
+            vatPercentage: customerAndEmployeeService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: invalidEmployeeId
+          }
+        ],
+
+        payment: {
+          totalAmount: customerAndEmployeeService.salePrice,
+          vatAmount: (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('ASSIGNED_EMPLOYEE_INVALID');
       testDoneFn();
     });
 
