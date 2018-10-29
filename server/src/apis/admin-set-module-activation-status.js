@@ -33,7 +33,7 @@ exports.AdminSetModuleActivationStatusApi = class extends Api {
   async handle({ body, username }) {
     let { organizationId, moduleCode, paymentReference, action } = body;
     let organization = await this.database.organization.findById({ id: organizationId });
-    throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.organizationCommon.organizationDoesNotExist);
+    throwOnFalsy(organization, "ORGANIZATION_INVALID", this.verses.organizationCommon.organizationDoesNotExist);
 
     let moduleExists = await this._checkIfModuleExists({ moduleCode });
     throwOnFalsy(moduleExists, "MODULE_INVALID", this.verses.adminCommon.moduleInvalid);

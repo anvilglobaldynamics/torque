@@ -19,7 +19,8 @@ let {
   validatePackageActivationSchema,
   validateGetDashboardSummaryApiSuccessResponse,
   validateAdminGetModuleListApiSuccessResponse,
-  validateAdminListOrganizationModulesApiSuccessResponse
+  validateAdminListOrganizationModulesApiSuccessResponse,
+  validateGenericApiFailureResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -395,6 +396,62 @@ describe.only('Organization', _ => {
       validateAdminListOrganizationModulesApiSuccessResponse(body);
       expect(body.moduleActivationList.length).to.equal(3); // 2 from default activation + 1 created above
       expect(body.moduleActivationList.filter(i => i.isDeactivated).length).to.equal(1);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-list-organization-modules (Invalid Organization)', testDoneFn => {
+
+    callApi('api/admin-list-organization-modules', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: -1
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('ORGANIZATION_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-set-module-activation-status (Valid, MOD_GYM)', testDoneFn => {
+
+    callApi('api/admin-set-module-activation-status', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: org1id,
+        moduleCode: 'MOD_GYM',
+        paymentReference: 'Paid in full',
+        action: 'activate'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body)
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-organization-list (Valid modification check, MOD_GYM)', testDoneFn => {
+
+    callApi('api/get-organization-list', {
+      json: {
+        apiKey,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetOrganizationListApiSuccessResponse(body);
+
+      body.organizationList.forEach(organization => {
+        validateResponseOrganizationSchema(organization);
+      });
+
+      let organization = body.organizationList.find(organization => organization.id === org1id);
+      expect(organization.activeModuleCodeList.sort()).to.deep.equal(['MOD_PRODUCT', 'MOD_SERVICE', 'MOD_GYM'].sort());
+
       testDoneFn();
     });
 

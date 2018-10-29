@@ -33,7 +33,7 @@ exports.AdminListOrganizationModulesApi = class extends Api {
   async handle({ body }) {
     let { organizationId } = body;
     let organization = await this.database.organization.findById({ id: organizationId });
-    throwOnFalsy(organization, "ORGANIZATION_DOES_NOT_EXIST", this.verses.organizationCommon.organizationDoesNotExist);
+    throwOnFalsy(organization, "ORGANIZATION_INVALID", this.verses.organizationCommon.organizationDoesNotExist);
 
     let moduleActivationList = await this.database.moduleActivation.listByOrganizationId({ organizationId });
     moduleActivationList = await this._insertModuleDetailsInModuleActivationList({ moduleActivationList });
