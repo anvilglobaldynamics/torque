@@ -17,7 +17,9 @@ let {
   validateAdminAssignPackageToOrganizationApiSuccessResponse,
   validateListOrganizationPackagesApiSuccessResponse,
   validatePackageActivationSchema,
-  validateGetDashboardSummaryApiSuccessResponse
+  validateGetDashboardSummaryApiSuccessResponse,
+  validateAdminGetModuleListApiSuccessResponse,
+  validateAdminListOrganizationModulesApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -70,7 +72,6 @@ describe.only('Organization', _ => {
         email: orgEmail
       }
     }, (err, response, body) => {
-      console.log(body)
       expect(response.statusCode).to.equal(200);
       validateAddOrganizationApiSuccessResponse(body);
       org1id = body.organizationId;
@@ -306,103 +307,98 @@ describe.only('Organization', _ => {
         apiKey: adminApiKey,
       }
     }, (err, response, body) => {
-      console.log(body)
       expect(response.statusCode).to.equal(200);
       validateAdminGetModuleListApiSuccessResponse(body);
-      body.moduleList.forEach(aModule => {
-        validateModuleSchema(aModule);
-      });
       testDoneFn();
     });
 
   });
 
-  // it('api/admin-assign-package-to-organization (Valid)', testDoneFn => {
+  it('api/admin-list-organization-modules (Valid)', testDoneFn => {
 
-  //   callApi('api/admin-assign-package-to-organization', {
-  //     json: {
-  //       apiKey: adminApiKey,
-  //       organizationId: org1id,
-  //       packageCode: "SE03",
-  //       paymentReference: "joi test"
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     validateAdminAssignPackageToOrganizationApiSuccessResponse(body);
-  //     testDoneFn();
-  //   });
+    callApi('api/admin-list-organization-modules', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: org1id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminListOrganizationModulesApiSuccessResponse(body);
+      expect(body.moduleActivationList.length).to.equal(2); // from default activation
+      testDoneFn();
+    });
 
-  // });
+  });
 
-  // it('api/admin-assign-package-to-organization (Valid update)', testDoneFn => {
+  it('api/admin-set-module-activation-status (Valid)', testDoneFn => {
 
-  //   callApi('api/admin-assign-package-to-organization', {
-  //     json: {
-  //       apiKey: adminApiKey,
-  //       organizationId: org1id,
-  //       packageCode: "SE12",
-  //       paymentReference: "joi test"
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     validateAdminAssignPackageToOrganizationApiSuccessResponse(body);
-  //     testDoneFn();
-  //   });
+    callApi('api/admin-set-module-activation-status', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: org1id,
+        moduleCode: 'MOD_PRODUCT',
+        paymentReference: 'not-provided',
+        action: 'deactivate'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body)
+      testDoneFn();
+    });
 
-  // });
+  });
 
+  it('api/admin-list-organization-modules (Valid)', testDoneFn => {
 
+    callApi('api/admin-list-organization-modules', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: org1id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminListOrganizationModulesApiSuccessResponse(body);
+      expect(body.moduleActivationList.length).to.equal(2); // from default activation
+      expect(body.moduleActivationList.filter(i => i.isDeactivated).length).to.equal(1);
+      testDoneFn();
+    });
 
-  // it('api/add-organization, api/get-dashboard-summary (Testing Default Activation Package)', testDoneFn => {
+  });
 
-  //   callApi('api/add-organization', {
-  //     json: {
-  //       apiKey,
-  //       name: "My Organization",
-  //       primaryBusinessAddress: "My Address",
-  //       phone: orgPhone,
-  //       email: orgEmail
-  //     }
-  //   }, (err, response, body) => {
-  //     expect(response.statusCode).to.equal(200);
-  //     validateAddOrganizationApiSuccessResponse(body);
-  //     organizationId = body.organizationId;
+  it('api/admin-set-module-activation-status (Valid)', testDoneFn => {
 
-  //     callApi('api/get-dashboard-summary', {
-  //       json: {
-  //         apiKey,
-  //         organizationId
-  //       }
-  //     }, (err, response, body) => {
-  //       expect(response.statusCode).to.equal(200);
-  //       validateGetDashboardSummaryApiSuccessResponse(body);
+    callApi('api/admin-set-module-activation-status', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: org1id,
+        moduleCode: 'MOD_PRODUCT',
+        paymentReference: 'Paid in full',
+        action: 'activate'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body)
+      testDoneFn();
+    });
 
-  //       let modifications = {
-  //         $inc: { createdDatetimeStamp: (-1 * 1000 * 60 * 60 * 25) }
-  //       };
-  //       getDatabase().updateOne('package-activation', { organizationId: organizationId }, modifications, (err, wasUpdated) => {
-  //         if (err) throw err;
-  //         if (!wasUpdated) throw new Error("Was not updated");
+  });
 
-  //         callApi('api/get-dashboard-summary', {
-  //           json: {
-  //             apiKey,
-  //             organizationId
-  //           }
-  //         }, (err, response, body) => {
-  //           expect(response.statusCode).to.equal(200);
-  //           expect(body).to.have.property('hasError').that.equals(true);
-  //           expect(body.error.code).to.equal("SUBSCRIPTION_EXPIRED");
-  //           testDoneFn();
-  //         }); // callApi
+  it('api/admin-list-organization-modules (Valid)', testDoneFn => {
 
-  //       }); // updateOne
+    callApi('api/admin-list-organization-modules', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: org1id
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAdminListOrganizationModulesApiSuccessResponse(body);
+      expect(body.moduleActivationList.length).to.equal(3); // 2 from default activation + 1 created above
+      expect(body.moduleActivationList.filter(i => i.isDeactivated).length).to.equal(1);
+      testDoneFn();
+    });
 
-  //     }); // callApi
-
-  //   }); // callApi
-
-  // }); //it
+  });
 
   // --- Module Section - end
 

@@ -747,7 +747,29 @@ exports.validateListOrganizationPackagesApiSuccessResponse = (doc) => {
 exports.validateAdminGetModuleListApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
-    moduleList: Joi.array().required()
+    moduleList: Joi.array().items(Joi.object().keys({
+      code: Joi.string().required(),
+      name: Joi.string().required()
+    })).required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateAdminListOrganizationModulesApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    moduleActivationList: Joi.array().items(Joi.object().keys({
+      id: Joi.number().optional(),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      deactivatedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
+      moduleCode: Joi.string().required(),
+      organizationId: Joi.number().max(999999999999999).required(),
+      createdByAdminName: Joi.string().min(1).max(64).required(),
+      paymentReference: Joi.string().min(4).max(128).required(),
+      isDeactivated: Joi.boolean().required()
+    })).required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -1023,17 +1045,17 @@ exports.validateSalesSchema = (doc) => {
       discountedAmount: Joi.number().max(999999999999999).required(),
       serviceChargeAmount: Joi.number().max(999999999999999).required(),
       totalBilled: Joi.number().max(999999999999999).required(),
-  
+
       totalPaidAmount: Joi.number().max(999999999999999).required(),
       paymentList: Joi.array().min(1).items(
         Joi.object().keys({
           createdDatetimeStamp: Joi.number().max(999999999999999).required(),
           acceptedByUserId: Joi.number().max(999999999999999).required(),
-  
+
           paidAmount: Joi.number().max(999999999999999).required(),
           changeAmount: Joi.number().max(999999999999999).required(),
           paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
-          wasChangeSavedInChangeWallet: Joi.boolean().required()   
+          wasChangeSavedInChangeWallet: Joi.boolean().required()
         })
       )
     }),
@@ -1075,17 +1097,17 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
       discountedAmount: Joi.number().max(999999999999999).required(),
       serviceChargeAmount: Joi.number().max(999999999999999).required(),
       totalBilled: Joi.number().max(999999999999999).required(),
-  
+
       totalPaidAmount: Joi.number().max(999999999999999).required(),
       paymentList: Joi.array().min(1).items(
         Joi.object().keys({
           createdDatetimeStamp: Joi.number().max(999999999999999).required(),
           acceptedByUserId: Joi.number().max(999999999999999).required(),
-  
+
           paidAmount: Joi.number().max(999999999999999).required(),
           changeAmount: Joi.number().max(999999999999999).required(),
           paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
-          wasChangeSavedInChangeWallet: Joi.boolean().required()   
+          wasChangeSavedInChangeWallet: Joi.boolean().required()
         })
       )
     }),

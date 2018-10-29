@@ -47,7 +47,7 @@ exports.ModuleActivationCollection = class extends Collection {
   }
 
   async deactivate({ id }) {
-    return await this._update({ id }, { isDiscarded: true, deactivatedDatetimeStamp: Date.now() });
+    return await this._update({ id }, { $set: { isDeactivated: true, deactivatedDatetimeStamp: Date.now() } });
   }
 
 }

@@ -53,7 +53,7 @@ exports.AdminSetModuleActivationStatusApi = class extends Api {
       throwOnFalsy(organizationHasModule, "MODULE_DEACTIVATION_INVALID", "Unable to find module activation record."); // TRANSLATE
 
       let result = await this.database.moduleActivation.deactivate({ id: moduleActivation.id });
-      this.ensureUpdate('organization', result);
+      this.ensureUpdate('module-activation', result);
 
       activeModuleCodeList.splice(activeModuleCodeList.indexOf(moduleCode), 1);
     }
