@@ -1399,7 +1399,6 @@ describe.only('Sales', _ => {
 
   });
 
-  // basicService
   // customerAndEmployeeService
   // longstandingService
 
