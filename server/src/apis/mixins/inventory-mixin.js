@@ -46,7 +46,7 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
     }
   }
 
-  async __getAggregatedProductList({ productList }) {
+  async __getAggregatedProductListWithoutAcquisitionDetails({ productList }) {
     (await this.crossmap({
       source: productList,
       sourceKey: 'productId',
@@ -63,6 +63,10 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
     })).forEach((productBlueprint, _product) => {
       _product.product.productBlueprint = productBlueprint;
     });
+  }
+
+  async __getAggregatedProductList({ productList }) {
+    await this.__getAggregatedProductListWithoutAcquisitionDetails({ productList });
     let productAcquisitionList = await this.database.productAcquisition.listByProductIdList({ productIdList: productList.map(product => product.productId) });
     productList.forEach(product => {
       let productAcquisition = productAcquisitionList.find(productAcquisition =>
