@@ -31,4 +31,23 @@ exports.ServiceMixin = (SuperApiClass) => class extends SuperApiClass {
     throwOnFalsy(res, "GENERIC_UPDATE_ERROR", "Error occurred while updating.");
   }
 
+  async __getAggregatedServiceList({ serviceList }) {
+    (await this.crossmap({
+      source: serviceList,
+      sourceKey: 'serviceId',
+      target: 'service',
+      onError: (service) => { throw new CodedError("SERVICE_INVALID", "Invalid Service"); }
+    })).forEach((service, _service) => {
+      _service.service = service;
+    });
+    (await this.crossmap({
+      source: serviceList,
+      sourceKeyFn: (doc => doc.service.serviceBlueprintId),
+      target: 'serviceBlueprint',
+      onError: (service) => { throw new CodedError("SERVICE_BLUEPRINT_INVALID", "Invalid ServiceBlueprint"); }
+    })).forEach((serviceBlueprint, _service) => {
+      _service.service.serviceBlueprint = serviceBlueprint;
+    });
+  }
+
 }
