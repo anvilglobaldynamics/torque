@@ -158,6 +158,19 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     }
   }
 
+  async _createServiceMembership({ createdByUserId, serviceListObj, customerId, salesId }) {
+    let service = await this.database.service.findById({ id: serviceListObj.serviceId });
+    let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: service.serviceBlueprintId });
+
+    console.log("serviceBlueprint: ", serviceBlueprint);
+    
+    if (serviceBlueprint.isLongstanding) {
+      let expiringDatetimeStamp = (new Date).getTime();
+      let res = await this.database.serviceMembership.create({ createdByUserId, customerId, salesId, serviceId: service.id , expiringDatetimeStamp })
+      console.log(res);
+    }
+  }
+
   async handle({ userId, body }) {
     let { outletId, customerId, productList, serviceList, payment: originalPayment } = body;
 
@@ -185,6 +198,13 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
 
     let salesId = await this.database.sales.create({ outletId, customerId, productList, serviceList, payment });
+
+    if (serviceList.length) {
+      for (let i = 0; i < serviceList.length; i++) { 
+        await this._createServiceMembership({ createdByUserId: userId, serviceListObj: serviceList[i], customerId, salesId });
+      }
+    }
+
     return { status: "success", salesId };
   }
 
