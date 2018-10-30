@@ -60,7 +60,7 @@ exports.SalesReturnCollection = class extends Collection {
     });
   }
 
-  async listBySalesId({ listBySalesIdList }) {
+  async listBySalesId({ salesId }) {
     return await this._find({
       salesId
     });
