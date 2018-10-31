@@ -162,10 +162,11 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     let service = await this.database.service.findById({ id: serviceListObj.serviceId });
     let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: service.serviceBlueprintId });
 
-    console.log("serviceBlueprint: ", serviceBlueprint);
+    // console.log("serviceBlueprint: ", serviceBlueprint);
 
     if (serviceBlueprint.isLongstanding) {
       console.log("found longstanding service");
+      // TODO: do some magic with serviceBlueprint.serviceDuration.months and serviceBlueprint.serviceDuration.days
       let expiringDatetimeStamp = (new Date).getTime();
       let res = await this.database.serviceMembership.create({ createdByUserId, customerId, salesId, serviceId: service.id , expiringDatetimeStamp })
       console.log(res);

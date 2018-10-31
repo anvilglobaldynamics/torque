@@ -1116,6 +1116,14 @@ exports.validateSalesSchema = (doc) => {
     serviceList: Joi.array().required().items(
       Joi.object().keys({
         serviceId: Joi.number().max(999999999999999).required(),
+        serviceBlueprintId: Joi.number().max(999999999999999).required(),
+        serviceBlueprintName: Joi.string().min(1).max(64).required(),
+        serviceBlueprintIsLongstanding: Joi.boolean().required(),
+        serviceBlueprintServiceDuration: Joi.object().allow(null).required().keys({
+          months: Joi.number().min(0).max(999999999999999).required(),
+          days: Joi.number().min(0).max(999999999999999).required(),
+        }),
+        serviceBlueprintIsRefundable: Joi.boolean().required(),
         salePrice: Joi.number().min(0).max(999999999999999).required(),
         vatPercentage: Joi.number().min(0).max(999999999999999).required(),
         assignedEmploymentId: Joi.number().max(999999999999999).allow(null).required()

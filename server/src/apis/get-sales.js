@@ -81,7 +81,11 @@ exports.GetSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin, Servic
     await this.__getAggregatedServiceList({ serviceList });
     serviceList.forEach(service => {
       let { serviceBlueprint } = service.service;
-      // service.serviceBlueprintId = serviceBlueprint.id;
+      service.serviceBlueprintId = serviceBlueprint.id;
+      service.serviceBlueprintName = serviceBlueprint.name;
+      service.serviceBlueprintIsLongstanding = serviceBlueprint.isLongstanding;
+      service.serviceBlueprintServiceDuration = serviceBlueprint.serviceDuration;
+      service.serviceBlueprintIsRefundable = serviceBlueprint.isRefundable;
       delete service.service;
     });
   }
