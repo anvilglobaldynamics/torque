@@ -1488,6 +1488,91 @@ describe.only('Sales', _ => {
 
   });
 
+  it('api/add-sales (Invalid customerId longstandingService)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('SERVICE_REQUIRES_CUSTOMER');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Valid longstandingService)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddSalesApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
   // Service Sales - end
 
   it('END', testDoneFn => {
