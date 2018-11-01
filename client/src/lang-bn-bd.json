@@ -664,7 +664,9 @@
     "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি"
   },
   "posSelectService": {
-    "posSelectServiceTitle": "সেবা নির্বাচন"
+    "posSelectServiceTitle": "সেবা নির্বাচন",
+    "searchForProductInput": "সেবার নাম দিয়ে অনুসন্ধান",
+    "searchForProductInputError": "সেবার সন্ধানে ত্রুটি"
   },
   "settings": {
     "settingsTitle": "সেটিংস",

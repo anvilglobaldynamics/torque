@@ -663,7 +663,9 @@
     "searchForProductInputError": "Error in Search"
   },
   "posSelectService": {
-    "posSelectServiceTitle": "Select Services"
+    "posSelectServiceTitle": "Select Services",
+    "searchForProductInput": "Service Name",
+    "searchForProductInputError": "Error in Search"
   },
   "settings": {
     "settingsTitle": "Settings",
