@@ -69,6 +69,7 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <!-- customer selector - start -->
       <template is="dom-if" if="[[!isSearchingCustomer]]">
         <div class="card vertical layout">
           <div class="horizontal layout center">
@@ -109,7 +110,9 @@
         </div>
       </template>
       <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+      <!-- customer selector - end -->
 
+      <!-- selected product list - start -->
       <div class="card vertical layout">
         <div class="list">
 
@@ -150,7 +153,9 @@
 
         </div>
       </div>
+      <!-- selected product list - end -->
 
+      <!-- calculations - start -->
       <template is="dom-if" if="{{productList.length}}">
         <div class="card vertical layout">
           <div class="individual-calculation-field-container">
@@ -193,10 +198,8 @@
 
               </div>
 
-              <!-- <template is="dom-if" if="[[payment.discountValue]]"> -->
               <br> [[verses.pos.discountedAmount]]:
               <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
-              <!-- </template> -->
 
             </div>
 
@@ -272,6 +275,7 @@
           </div>
         </div>
       </template>
+      <!-- calculations - end -->
 
     </div>
 
