@@ -591,7 +591,9 @@
         })
       }
 
-      addServiceTapped(e = null) {}
+      addServiceTapped(e = null) {
+        return this.app.navigateTo(`/pos-select-services/outlet:${this.params.outlet}`);
+      }
 
       paymentMethodSelected(e) {
         // NOTE: The timeout should not be necessary. However, without it
