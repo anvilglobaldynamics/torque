@@ -609,7 +609,9 @@
     "allowCreditSaleMessage": "Save this amount as due in customer's account.",
     "creditSaleHint": " The paid amount is less than total amount billed. In order to do a credit sale, you need to select/create a customer and allow credit sale.",
     "paymentMethod": "Payment Method",
-    "thisWillBeACreditSale": "This will be a Credit Sale. Additional Payment can be collected later from View Sales Page."
+    "thisWillBeACreditSale": "This will be a Credit Sale. Additional Payment can be collected later from View Sales Page.",
+
+    "selectService": "Select Service"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",

@@ -155,6 +155,34 @@
       </div>
       <!-- selected product list - end -->
 
+      <!-- selected service list - start -->
+      <div class="card vertical layout">
+        <div class="list">
+
+          <template is="dom-repeat" items="[[serviceList]]" as="service">
+            <div class="horizontal layout item center">
+              <div class="vertical layout flex">
+                
+                <span class="product-title">[[service.name]]</span>
+                <span class="product-discount-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
+
+                <div class="horizontal layout center">
+                  <paper-input class="flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" auto-validate></paper-input>
+                  <div class="description">[[app.settings.monetaryUnit]]</div>
+                </div>
+                
+              </div>
+            </div>
+          </template>
+
+          <div class="select-product-button-container">
+            <paper-button raised class="btn primary" on-tap="addServiceTapped">[[verses.pos.selectService]]</paper-button>
+          </div>
+
+        </div>
+      </div>
+      <!-- selected service list - end -->
+
       <!-- calculations - start -->
       <template is="dom-if" if="{{productList.length}}">
         <div class="card vertical layout">
@@ -291,6 +319,10 @@
       static get properties() {
         return {
           productList: {
+            type: Array,
+            value: () => []
+          },
+          serviceList: {
             type: Array,
             value: () => []
           },
@@ -552,6 +584,8 @@
           return this.app.navigateTo(`/pos-select-products/inventory:${defaultInventoryId}`);
         })
       }
+
+      addServiceTapped(e = null) {}
 
       paymentMethodSelected(e) {
         // NOTE: The timeout should not be necessary. However, without it
