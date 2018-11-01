@@ -194,7 +194,6 @@
       }
 
       _addProductToSelectedServiceList({ service }) {
-        console.log(service);
         let { id, name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration } = service;
         let minSalePrice = salePrice;
         this.push('selectedServiceList', { id, name, minSalePrice, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration });
