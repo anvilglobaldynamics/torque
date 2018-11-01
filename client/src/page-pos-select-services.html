@@ -195,11 +195,10 @@
 
       _addProductToSelectedServiceList({ service }) {
         console.log(service);
-        // let { productId, name, count, salePrice, discountType, discountValue, vatValue, unit } = service;
-        // let maxAllowedCount = count;
-        // let minSalePrice = salePrice;
-        // this.push('selectedServiceList', { productId, name, maxAllowedCount, salePrice, discountType, discountValue, vatValue, minSalePrice, unit });
-        // this.selectedServiceCount = this.selectedServiceList.length;
+        let { id, name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration } = service;
+        let minSalePrice = salePrice;
+        this.push('selectedServiceList', { id, name, minSalePrice, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration });
+        this.selectedServiceCount = this.selectedServiceList.length;
       }
 
       // region: ui ===========================
