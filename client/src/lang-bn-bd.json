@@ -651,7 +651,7 @@
     "confirmSelection": "নির্বাচন নিশ্চিত করুন"
   },
   "posSelectProduct": {
-    "posSelectProductTitle": "পণ্য নির্বাচন করুন",
+    "posSelectProductTitle": "পণ্য নির্বাচন",
     "purchase": "ক্রয়",
     "sale": "বিক্রয়",
     "count": "গণনা",
@@ -662,6 +662,9 @@
     "noProductFoundInOutlet": "কোনো পণ্য পাওয়া যায়নি। পেছনে গিয়ে দোকানের প্রধান পণ্য তালিকায় পণ্য যোগ করুন।",
     "searchForProductInput": "পণ্যের নাম দিয়ে অনুসন্ধান",
     "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি"
+  },
+  "posSelectService": {
+    "posSelectServiceTitle": "সেবা নির্বাচন"
   },
   "settings": {
     "settingsTitle": "সেটিংস",
