@@ -91,8 +91,47 @@
         });
       }
 
+      _fetchOutletServiceList(cbfn) {
+        let data = { outletId: parseInt(this.params.outlet), searchString: this.searchString };
+
+        this.app.callGetActiveServiceListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.serviceList);
+        });
+      }
+
       _processOutletServices(cbfn) {
-        cbfn();
+        this._fetchOutletServiceList(serviceList => {
+
+          this.serviceList = serviceList.map(service => {
+            let { salePrice } = service;
+            let { name, defaultVat, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration } = service.serviceBlueprint;
+            service.isSelected = false;
+            let vatValue = defaultVat;
+            Object.assign(service, { name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration });
+            return service;
+          });
+          this.serviceList.sort((a, b) => b.count - a.count);
+
+          let previousSavedSelectedServiceList = this.app.getFromSession('pos-selected-service-list') || [];
+
+          if (this.selectedServiceList.length > 0 || previousSavedSelectedServiceList.length > 0) {
+            if (previousSavedSelectedServiceList.length > 0 && this.selectedServiceList.length === 0) {
+              this.selectedServiceCount = previousSavedSelectedServiceList.length;
+              this.selectedServiceList = previousSavedSelectedServiceList;
+            }
+
+            this.selectedServiceList.forEach(previousProduct => {
+              let product = productList.find(product => product.productId === previousProduct.productId);
+              if (product) {
+                product.isSelected = true;
+              }
+            })
+          }
+
+          cbfn();
+        });
       }
 
       // region: ui ===========================
