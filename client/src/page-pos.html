@@ -393,6 +393,11 @@
             this.productList = productList;
           }
 
+          let serviceList = this.app.getFromSession('pos-selected-service-list');
+          if (serviceList) {
+            this.serviceList = serviceList;
+          }
+
           this._calculatePayment();
         });
         this.delay(300, () => {
@@ -554,6 +559,7 @@
 
       _resetSales() {
         this.app.extractFromSession('pos-selected-product-list');
+        this.app.extractFromSession('pos-selected-service-list');
         this.app.extractFromSession('last-selected-customer');
         this.resetProperties('payment', 'productList', 'customer');
         this.app.refreshCurrentPage();
