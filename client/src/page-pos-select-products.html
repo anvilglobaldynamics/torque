@@ -232,7 +232,6 @@
             Object.assign(product, { name, unit, purchasePrice, salePrice, discountType, discountValue, vatValue });
             return product;
           });
-          productList.sort((a, b) => b.count - a.count);
 
           let previousSavedSelectedProductList = this.app.getFromSession('pos-selected-product-list') || [];
 
