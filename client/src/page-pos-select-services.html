@@ -23,12 +23,20 @@
 
 <dom-module id="page-pos-select-services">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+    
+    .confirm-discard-button-group paper-button {
+      width: 100%;
+      margin: 5px;
+    }
+    
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <!-- service search area - start -->
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
           <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="[[verses.posSelectProduct.searchForProductInputError]]" label="[[verses.posSelectProduct.searchForProductInput]]" on-keypress="searchFieldKeypressed"></paper-input>
@@ -38,6 +46,7 @@
           </paper-button>
         </div>
       </div>
+      <!-- service search area - end -->
 
       <template is="dom-if" if="{{!serviceList.length}}">
         <div class="card">
@@ -45,6 +54,7 @@
         </div>
       </template>
 
+      <!-- all service list - start -->
       <template is="dom-if" if="{{serviceList.length}}">
         <div class="card vertical layout">
 
@@ -84,6 +94,36 @@
 
         </div>
       </template>
+      <!-- all service list - end -->
+
+      <!-- selected service list - start -->
+      <template is="dom-if" if="{{selectedServiceList.length}}">
+        <div class="card vertical layout">
+          <div class="list">
+            <template is="dom-repeat" items="[[selectedServiceList]]" as="service">
+              <div class="horizontal layout item center">
+                <div class="flex" style="min-width: 128px;">
+
+                  <div class="inventory-product-important-detail-container">[[service.name]]</div>
+                  <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[service.salePrice]][[app.settings.monetaryUnit]]</div>
+
+                </div>
+
+                <div class="horizontal layout wrap center">
+                  <!-- TODO: emplooyee button -->
+                  <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div class="vertical confirm-discard-button-group">
+            <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
+            <paper-button raised class="btn primary" on-tap="selectProductsTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
+          </div>
+        </div>
+      </template>
+      <!-- selected service list - end -->
 
     </div>
   </template>
