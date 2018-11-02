@@ -82,60 +82,64 @@
       </div>
 
       <!-- product list - start -->
-      <div class="card vertical layout">
-        <div class="title">
-          <b>[[verses.sales.productList]]: [[sales.productList.length]] [[verses.sales.products]]</b>
-        </div>
-        <div class="list">
-          <template is="dom-repeat" items="{{sales.productList}}" as="product">
-            <div class="vertical layout flex">
-              <div class="list-object">
+      <template is="dom-if" if="{{sales.productList.length}}">
+        <div class="card vertical layout">
+          <div class="title">
+            <b>[[verses.sales.productList]]: [[sales.productList.length]] [[verses.sales.products]]</b>
+          </div>
+          <div class="list">
+            <template is="dom-repeat" items="{{sales.productList}}" as="product">
+              <div class="vertical layout flex">
+                <div class="list-object">
 
-                <div>[[verses.general.product]]: [[product.productBlueprintName]]</div>
-                <div>[[verses.sales.soldCount]]: [[product.count]]</div>
-                <template is="dom-if" if="[[product.returnedProductCount]]">
-                  <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
-                </template>
-                <div>[[verses.sales.salePrice]]: [[product.salePrice]] [[app.settings.monetaryUnit]]</div>
+                  <div>[[verses.general.product]]: [[product.productBlueprintName]]</div>
+                  <div>[[verses.sales.soldCount]]: [[product.count]]</div>
+                  <template is="dom-if" if="[[product.returnedProductCount]]">
+                    <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
+                  </template>
+                  <div>[[verses.sales.salePrice]]: [[product.salePrice]] [[app.settings.monetaryUnit]]</div>
 
-                <template is="dom-if" if="{{checkIfAllProductReturned(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
-                  *[[verses.sales.allReturned]]
-                </template>
+                  <template is="dom-if" if="{{checkIfAllProductReturned(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
+                    *[[verses.sales.allReturned]]
+                  </template>
 
-                <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
-                  <paper-button raised class="danger return-button" on-tap="returnTapped">[[verses.sales.productReturn]]</paper-button>
-                </template>
+                  <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
+                    <paper-button raised class="danger return-button" on-tap="returnTapped">[[verses.sales.productReturn]]</paper-button>
+                  </template>
 
+                </div>
               </div>
-            </div>
-          </template>
+            </template>
+          </div>
         </div>
-      </div>
+      </template>
       <!-- product list - end -->
 
       <!-- service list - start -->
-      <div class="card vertical layout">
-        <div class="title">
-          <b>[[verses.sales.serviceList]]: [[sales.serviceList.length]] [[verses.sales.services]]</b>
-        </div>
+      <template is="dom-if" if="{{sales.serviceList.length}}">
+        <div class="card vertical layout">
+          <div class="title">
+            <b>[[verses.sales.serviceList]]: [[sales.serviceList.length]] [[verses.sales.services]]</b>
+          </div>
 
-        <div class="list">
-          <template is="dom-repeat" items="{{sales.serviceList}}" as="service">
-            <div class="vertical layout flex">
-              <div class="list-object">
+          <div class="list">
+            <template is="dom-repeat" items="{{sales.serviceList}}" as="service">
+              <div class="vertical layout flex">
+                <div class="list-object">
 
-                <div>[[verses.sales.service]]: [[service.serviceBlueprintName]]</div>
-                <div>[[verses.sales.salePrice]]: [[service.salePrice]] [[app.settings.monetaryUnit]]</div>
+                  <div>[[verses.sales.service]]: [[service.serviceBlueprintName]]</div>
+                  <div>[[verses.sales.salePrice]]: [[service.salePrice]] [[app.settings.monetaryUnit]]</div>
 
-                <template is="dom-if" if="[[service.serviceBlueprintIsLongstanding]]">
-                  <div class="duration-text">[[verses.serviceBlueprint.serviceDuration]]: [[service.serviceBlueprintServiceDuration.months]] [[verses.serviceBlueprint.serviceDurationMonths]], [[service.serviceBlueprintServiceDuration.days]] [[verses.serviceBlueprint.serviceDurationDays]]</div>
-                </template>
+                  <template is="dom-if" if="[[service.serviceBlueprintIsLongstanding]]">
+                    <div class="duration-text">[[verses.serviceBlueprint.serviceDuration]]: [[service.serviceBlueprintServiceDuration.months]] [[verses.serviceBlueprint.serviceDurationMonths]], [[service.serviceBlueprintServiceDuration.days]] [[verses.serviceBlueprint.serviceDurationDays]]</div>
+                  </template>
 
+                </div>
               </div>
-            </div>
-          </template>
+            </template>
+          </div>
         </div>
-      </div>
+      </template>
       <!-- service list - end -->
 
       <!-- payment details - start -->

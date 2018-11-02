@@ -195,7 +195,7 @@
       <!-- selected service list - end -->
 
       <!-- calculations - start -->
-      <template is="dom-if" if="{{productList.length}}">
+      <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
         <div class="card vertical layout">
           <div class="individual-calculation-field-container">
             <span>[[verses.pos.totalSalePrice]]: <b>{{$round(payment.totalAmount)}} [[app.settings.monetaryUnit]]</b></span>
@@ -203,7 +203,7 @@
         </div>
       </template>
 
-      <template is="dom-if" if="{{productList.length}}">
+      <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
         <div class="card vertical layout">
           <div class="list">
 
@@ -254,7 +254,7 @@
         </div>
       </template>
 
-      <template is="dom-if" if="{{productList.length}}">
+      <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
         <div class="card vertical layout">
           <div class="list">
 
@@ -681,6 +681,10 @@
       }
 
       // region: misc =================================
+
+      productListOrServiceListHasElement(productListLength, serviceListLength) {
+        return (productListLength || serviceListLength);
+      }
 
     }
 
