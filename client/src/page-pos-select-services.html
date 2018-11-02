@@ -119,7 +119,7 @@
 
           <div class="vertical confirm-discard-button-group">
             <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
-            <paper-button raised class="btn primary" on-tap="selectProductsTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
+            <paper-button raised class="btn primary" on-tap="selectServicesTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
           </div>
         </div>
       </template>
@@ -233,10 +233,26 @@
         });
       }
 
-      _addProductToSelectedServiceList({ service }) {
+      _addServiceToSelectedServiceList({ service }) {
         let { id, name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration } = service;
         let minSalePrice = salePrice;
         this.push('selectedServiceList', { id, name, minSalePrice, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration });
+        this.selectedServiceCount = this.selectedServiceList.length;
+      }
+
+      _removeServiceFromSelectedServiceList({ service }) {
+        this.selectedServiceList.forEach((selectedProduct, index) => {
+          if (selectedProduct.id === service.id) {
+            this.splice('selectedServiceList', index, 1);
+          }
+        });
+
+        this.serviceList.forEach((serviceInList, index) => {
+          if (serviceInList.id === service.id) {
+            this.set(`serviceList.${index}.isSelected`, false);
+          }
+        });
+
         this.selectedServiceCount = this.selectedServiceList.length;
       }
 
@@ -270,10 +286,35 @@
       selectTapped(e) {
         e.model.set('service.isSelected', true);
         let { service } = e.model;
-        this._addProductToSelectedServiceList({ service });
+        this._addServiceToSelectedServiceList({ service });
+      }
+
+      deselectTapped(e) {
+        let { service } = e.model;
+        this._removeServiceFromSelectedServiceList({ service });
+      }
+
+      selectServicesTapped(e = null) {
+        this.app.storeInSession('pos-selected-service-list', this.selectedServiceList);
+        this.selectedServiceList = [];
+        this.selectedServiceCount = 0;
+        this.backButtonOnTopBarPressed();
+      }
+
+      deselectAllTapped(e) {
+        this.serviceList.forEach((service, index) => this.set(`serviceList.${index}.isSelected`, false));
+        this.selectedServiceList = [];
+        this.selectedServiceCount = 0;
+        this.app.storeInSession('pos-selected-service-list', this.selectedServiceList);
       }
 
       // region: misc ===========================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.selectedServiceList = [];
+        this.selectedServiceCount = 0;
+        this.app.navigateToPreviousUrl(`/pos`);
+      }
 
     }
 
