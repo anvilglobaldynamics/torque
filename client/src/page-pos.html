@@ -560,10 +560,18 @@
           let { productId, selectedCount, discountType, discountValue, salePrice, vatValue } = product;
           let vatPercentage = vatValue;
           return { productId, count: selectedCount, discountType, discountValue, salePrice, vatPercentage };
-        })
+        });
+
+        let serviceList = this.serviceList.map(service => {
+          let { id, salePrice, vatValue } = service;
+          let serviceId = id;
+          let vatPercentage = vatValue;
+          let assignedEmploymentId = null; // TODO: assignedEmploymentId
+          return { serviceId, salePrice, vatPercentage, assignedEmploymentId };
+        });
 
         let data = {
-          customerId, outletId, productList, payment
+          customerId, outletId, productList, serviceList, payment
         };
 
         this.app.callAddSalesApi(data, (err, response) => {
@@ -577,7 +585,7 @@
         this.app.extractFromSession('pos-selected-product-list');
         this.app.extractFromSession('pos-selected-service-list');
         this.app.extractFromSession('last-selected-customer');
-        this.resetProperties('payment', 'productList', 'customer');
+        this.resetProperties('payment', 'productList', 'serviceList', 'customer');
         this.app.refreshCurrentPage();
       }
 
