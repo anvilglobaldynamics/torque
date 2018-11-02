@@ -463,8 +463,9 @@
         // setting vatAmount to default value of 0 before calculating vatAmount on a loop
         vatAmount = 0;
 
-        // reducing to find totalAmount
-        totalAmount = this.productList.reduce((sum, product) => {
+        // reducing to find totalProductAmount
+        let totalProductAmount = 0;
+        totalProductAmount = this.productList.reduce((sum, product) => {
           let { salePrice, selectedCount, discountType, discountValue, vatValue } = product;
 
           // discount calculation
@@ -477,9 +478,24 @@
           // adding product vat value to to total vatAmount
           vatAmount += salePrice * (vatValue / 100);
 
-          // the sum to be set as totalAmount
-          return sum + (salePrice * selectedCount);
+          // the sum to be set as totalProductAmount
+          return parseFloat(sum) + parseFloat(salePrice * selectedCount);
         }, 0);
+
+        // reducing to find totalServiceAmount
+        let totalServiceAmount = 0;
+        totalServiceAmount = this.serviceList.reduce((sum, service) => {
+          let { salePrice, vatValue } = service;
+
+          // adding service vat value to to total vatAmount
+          vatAmount += salePrice * (vatValue / 100);
+
+          // the sum to be set as totalServiceAmount
+          return parseFloat(sum) + parseFloat(salePrice);
+        }, 0);
+
+        // totalAmount of service and product sale price(s)
+        totalAmount = parseFloat(totalProductAmount) + parseFloat(totalServiceAmount);
 
         // updating totalBilled with calculated totalAmount and vatAmount
         totalBilled = totalAmount + vatAmount;
