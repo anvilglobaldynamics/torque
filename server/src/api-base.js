@@ -89,6 +89,7 @@ class Api {
       {
         privilegeList: [ ...list of privileges ]
         organizationBy: "keyName" or <function> or <object>
+        moduleCodeList: [ ...list of module codes ]
       }
     ]
 
@@ -409,10 +410,18 @@ class Api {
   }
 
   /** @private */
-  async __processAccessControlRule(userId, body, rule) {
-    let organization = await this.__getOrganizationForAccessControlRule(userId, body, rule);
+  async __processModuleActivationValidation({ organization, rule }) {
     // NOTE: this assignment has direct impact on module related validations.
     this.interimData.organization = organization;
+    let { moduleList } = rule;
+    if (!moduleList || moduleList.length === 0) return;
+    await this.ensureModule(...moduleList);
+  }
+
+  /** @private */
+  async __processAccessControlRule(userId, body, rule) {
+    let organization = await this.__getOrganizationForAccessControlRule(userId, body, rule);
+    await this.__processModuleActivationValidation({ organization, rule });
     let organizationId = organization.id;
     let employment = await this.database.employment.getLatestActiveEmploymentOfUserInOrganization({ userId, organizationId });
     if (!employment || !employment.isActive) {
