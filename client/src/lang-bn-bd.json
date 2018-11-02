@@ -665,8 +665,12 @@
   },
   "posSelectService": {
     "posSelectServiceTitle": "সেবা নির্বাচন",
-    "searchForProductInput": "সেবার নাম দিয়ে অনুসন্ধান",
-    "searchForProductInputError": "সেবার সন্ধানে ত্রুটি"
+    "searchForServiceInput": "সেবার নাম দিয়ে অনুসন্ধান",
+    "searchForServiceInputError": "সেবার সন্ধানে ত্রুটি",
+    "noServiceFoundInOutlet": "কোনো সেবা পাওয়া যায়নি। পেছনে গিয়ে দোকানে সেবা উপলব্ধ করুন।",
+    "sale": "বিক্রয়",
+    "deselectAllSelected": "সকল নির্বাচন সরিয়ে ফেলুন",
+    "confirmSelection": "নির্বাচন নিশ্চিত করুন"
   },
   "settings": {
     "settingsTitle": "সেটিংস",

@@ -39,7 +39,7 @@
       <!-- service search area - start -->
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
-          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="[[verses.posSelectProduct.searchForProductInputError]]" label="[[verses.posSelectProduct.searchForProductInput]]" on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="[[verses.posSelectService.searchForServiceInputError]]" label="[[verses.posSelectService.searchForServiceInput]]" on-keypress="searchFieldKeypressed"></paper-input>
           <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
           <paper-button raised class="primary" on-tap="searchTapped">
             [[verses.general.search]]
@@ -50,7 +50,7 @@
 
       <template is="dom-if" if="{{!serviceList.length}}">
         <div class="card">
-          [[verses.posSelectProduct.noProductFoundInOutlet]]
+          [[verses.posSelectService.noServiceFoundInOutlet]]
         </div>
       </template>
 
@@ -69,7 +69,7 @@
                 <div class="horizontal layout item center">
                   <div class="flex" style="min-width: 128px;">
                     <div class="inventory-product-important-detail-container">[[service.name]]</div>
-                    <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[service.salePrice]][[app.settings.monetaryUnit]]</div>
+                    <div class="inventory-product-price-container">[[verses.posSelectService.sale]]: [[service.salePrice]][[app.settings.monetaryUnit]]</div>
                   </div>
 
                   <div class="horizontal layout wrap center">
@@ -105,7 +105,7 @@
                 <div class="flex" style="min-width: 128px;">
 
                   <div class="inventory-product-important-detail-container">[[service.name]]</div>
-                  <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[service.salePrice]][[app.settings.monetaryUnit]]</div>
+                  <div class="inventory-product-price-container">[[verses.posSelectService.sale]]: [[service.salePrice]][[app.settings.monetaryUnit]]</div>
 
                 </div>
 
@@ -118,8 +118,8 @@
           </div>
 
           <div class="vertical confirm-discard-button-group">
-            <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
-            <paper-button raised class="btn primary" on-tap="selectServicesTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
+            <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectService.deselectAllSelected]]</paper-button>
+            <paper-button raised class="btn primary" on-tap="selectServicesTapped">[[verses.posSelectService.confirmSelection]]</paper-button>
           </div>
         </div>
       </template>

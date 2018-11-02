@@ -658,14 +658,18 @@
     "confirmSelection": "Confirm Selection",
     "acquiredOn": "Acquired On",
     "addedOn": "Added On",
-    "noProductFoundInOutlet": "No products found. Go back and products to the Outlet's default inventory.",
+    "noProductFoundInOutlet": "No products found. Go back and add products to the Outlet's default inventory.",
     "searchForProductInput": "Product Name",
     "searchForProductInputError": "Error in Search"
   },
   "posSelectService": {
     "posSelectServiceTitle": "Select Services",
-    "searchForProductInput": "Service Name",
-    "searchForProductInputError": "Error in Search"
+    "searchForServiceInput": "Service Name",
+    "searchForServiceInputError": "Error in Search",
+    "noServiceFoundInOutlet": "No services found. Go back and activate services in the Outlet.",
+    "sale": "Sale",
+    "deselectAllSelected": "Deselect All Selected",
+    "confirmSelection": "Confirm Selection"
   },
   "settings": {
     "settingsTitle": "Settings",
