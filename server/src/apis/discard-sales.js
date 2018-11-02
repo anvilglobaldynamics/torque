@@ -38,8 +38,19 @@ exports.DiscardSalesApi = class extends Api {
     }];
   }
 
+  async _listAndDiscardServiceMembership({ salesId }) {
+    let serviceMembershipList = await this.database.serviceMembership.listBySalesId({ salesId });
+    if (serviceMembershipList) {
+      for (let i = 0; i < serviceMembershipList.length; i++) {
+        await this.database.serviceMembership.discard({ id: serviceMembershipList[i].id }, { discardReason: "Sales Discarded." });
+      }
+    }
+    return;
+  }
+
   async handle({ body }) {
     let { salesId } = body;
+    await this._listAndDiscardServiceMembership({ salesId });
     await this.database.sales.discard({ id: salesId });
     return { status: 'success' };
   }

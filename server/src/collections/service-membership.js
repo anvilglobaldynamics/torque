@@ -74,12 +74,16 @@ exports.ServiceMembershipCollection = class extends Collection {
     });
   }
 
-  async discardServiceMembership({ id }, { discardReason }) {
+  async discard({ id }, { discardReason }) {
     return await this._update({ id }, {
       $set: {
         isDiscarded: true, discardReason
       }
     });
+  }
+
+  async listBySalesId({ salesId }) {
+    return await this._find({ salesId });
   }
 
 }
