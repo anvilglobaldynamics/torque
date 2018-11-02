@@ -99,7 +99,7 @@ let customerAndEmployeeServiceBlueprintId = null;
 let customerAndEmployeeService = null;
 let longstandingServiceBlueprintId = null;
 let longstandingService = null;
-let variedServiceSaleId = null;
+let longstandingServiceSaleId = null;
 
 describe.only('Sales', _ => {
 
@@ -1399,9 +1399,6 @@ describe.only('Sales', _ => {
 
   });
 
-  // customerAndEmployeeService
-  // longstandingService
-
   it('api/add-sales (Invalid no customer)', testDoneFn => {
 
     callApi('api/add-sales', {
@@ -1568,6 +1565,40 @@ describe.only('Sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateAddSalesApiSuccessResponse(body);
+      longstandingServiceSaleId = body.salesId;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/discard-sales (Valid)', testDoneFn => {
+
+    callApi('api/discard-sales', {
+      json: {
+        apiKey,
+        salesId: longstandingServiceSaleId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales (Valid discard check)', testDoneFn => {
+
+    callApi('api/get-sales', {
+      json: {
+        apiKey,
+        salesId: longstandingServiceSaleId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetSalesApiSuccessResponse(body);
+      validateSalesSchema(body.sales);
+
+      expect(body.sales).to.have.property('isDiscarded').that.equals(true);
       testDoneFn();
     });
 
