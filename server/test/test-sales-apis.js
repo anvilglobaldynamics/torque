@@ -85,7 +85,7 @@ let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
-describe('Sales', _ => {
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

@@ -43,13 +43,17 @@ class Api {
     this._socket = socket;
     this._channel = channel;
     this._requestUid = requestUid;
-    this.__paginationCache = null;
     this._consumerId = consumerId;
+    this.__paginationCache = null;
+    this.interimData = {
+      organization: null
+    }
+    this.verses = null;
     this.__assignFailsafeLanguageFeature();
   }
 
   __assignFailsafeLanguageFeature() {
-    // NOTE: necessary to avoid some errors in production.
+    // NOTE: necessary in order to avoid some errors in production.
     this.clientLanguage = 'en-us';
     this.verses = languageCache[this.clientLanguage];
   }
@@ -407,6 +411,8 @@ class Api {
   /** @private */
   async __processAccessControlRule(userId, body, rule) {
     let organization = await this.__getOrganizationForAccessControlRule(userId, body, rule);
+    // NOTE: this assignment has direct impact on module related validations.
+    this.interimData.organization = organization;
     let organizationId = organization.id;
     let employment = await this.database.employment.getLatestActiveEmploymentOfUserInOrganization({ userId, organizationId });
     if (!employment || !employment.isActive) {
@@ -486,6 +492,54 @@ class Api {
       err.code = 'PHONE_ALREADY_IN_USE';
     }
     return err;
+  }
+
+  // region: utility ==========================
+
+  async hasModule(...moduleCodeClauseList) {
+    try {
+      return await this.ensureModule(...moduleCodeClauseList);
+    } catch (ex) {
+      if (ex.code === 'UNMET_MODULE') {
+        return false;
+      }
+      throw ex;
+    }
+  }
+
+  async ensureModule(...moduleCodeClauseList) {
+    const moduleList = await this.database.fixture.getModuleList();
+    let { organization } = this.interimData;
+    throwOnFalsy(organization, "NO_ORGANIZATION_TO_LOOKUP_MODULE", "This API does not resolve an organization and so can not use modules.");
+
+    let err = null;
+    const didAnyPass = moduleCodeClauseList.some(moduleCodeClause => {
+      let innerErr = null;
+      moduleCodeClause.split('+').forEach(moduleCode => {
+        const isModuleValid = moduleList.find(aModule => aModule.code === moduleCode);
+        throwOnFalsy(isModuleValid, "DEV_ERROR", `"${moduleCode}" is not a valid module code.`);
+
+        const isModuleActivated = (organization.activeModuleCodeList.includes(moduleCode));
+        if (!isModuleActivated) {
+          innerErr = new CodedError("UNMET_MODULE", `This feature requires "${moduleCode}" module which is not activated for this organization.`);
+          innerErr.moduleCodeClause = moduleCodeClause;
+        }
+      });
+      if (innerErr) {
+        err = innerErr;
+        return false;
+      }
+      return true;
+    });
+
+    if (!didAnyPass) {
+      if (!err) {
+        err = new CodedError("DEV_ERROR", "Invalid arguments for ensureModule().");
+      }
+      throw err;
+    }
+
+    return true;
   }
 
   // region: utility ==========================
