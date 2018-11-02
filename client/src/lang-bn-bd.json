@@ -490,7 +490,8 @@
     "salesId": "বিক্রয় নং",
     "billed": "বিল",
     "paid": "প্রদত্ত",
-    "products": "পণ্য",
+    "products": "টি পণ্য",
+    "services": "টি সেবা",
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
     "removeCustomer": "গ্রাহক সরান",
     "changeCustomer": "গ্রাহক পরিবর্তন করুন",
@@ -502,6 +503,7 @@
     "outletId": "দোকান আইডি",
     "customerId": "গ্রাহক আইডি",
     "productList": "পণ্য তালিকা",
+    "serviceList": "সেবা তালিকা",
     "salePrice": "বিক্রয় মূল্য",
     "payment": "টাকা প্রদান",
     "totalBilled": "মোট বিল",
@@ -525,7 +527,8 @@
     "printedBy": "প্রিন্ট করেছেন",
     "soldBy": "বিক্রয়কারী",
 
-    "productReturn": "পণ্য ফেরত"
+    "productReturn": "পণ্য ফেরত",
+    "service": "সেবা"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",

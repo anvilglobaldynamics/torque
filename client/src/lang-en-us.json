@@ -489,6 +489,7 @@
     "billed": "Billed",
     "paid": "Paid",
     "products": "product(s)",
+    "services": "service(s)",
     "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
     "removeCustomer": "Remove Customer",
     "changeCustomer": "Change Customer",
@@ -500,6 +501,7 @@
     "outletId": "Outlet ID",
     "customerId": "Customer ID",
     "productList": "Product List",
+    "serviceList": "Service List",
     "salePrice": "Sale Price",
     "payment": "Payment",
     "totalBilled": "Total Billed",
@@ -523,7 +525,8 @@
     "printedBy": "Printed By",
     "soldBy": "Sold By",
 
-    "productReturn": "Return Product"
+    "productReturn": "Return Product",
+    "service": "Service"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",

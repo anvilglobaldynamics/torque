@@ -52,6 +52,10 @@
         padding: 2px;
         color: red;
       }
+
+      .duration-text {
+        font-size: 12px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -77,9 +81,10 @@
 
       </div>
 
+      <!-- product list - start -->
       <div class="card vertical layout">
         <div class="title">
-          <b>[[verses.sales.productList]]: ([[sales.productList.length]] products)</b>
+          <b>[[verses.sales.productList]]: [[sales.productList.length]] [[verses.sales.products]]</b>
         </div>
         <div class="list">
           <template is="dom-repeat" items="{{sales.productList}}" as="product">
@@ -106,7 +111,34 @@
           </template>
         </div>
       </div>
+      <!-- product list - end -->
 
+      <!-- service list - start -->
+      <div class="card vertical layout">
+        <div class="title">
+          <b>[[verses.sales.serviceList]]: [[sales.serviceList.length]] [[verses.sales.services]]</b>
+        </div>
+
+        <div class="list">
+          <template is="dom-repeat" items="{{sales.serviceList}}" as="service">
+            <div class="vertical layout flex">
+              <div class="list-object">
+
+                <div>[[verses.sales.service]]: [[service.serviceBlueprintName]]</div>
+                <div>[[verses.sales.salePrice]]: [[service.salePrice]] [[app.settings.monetaryUnit]]</div>
+
+                <template is="dom-if" if="[[service.serviceBlueprintIsLongstanding]]">
+                  <div class="duration-text">[[verses.serviceBlueprint.serviceDuration]]: [[service.serviceBlueprintServiceDuration.months]] [[verses.serviceBlueprint.serviceDurationMonths]], [[service.serviceBlueprintServiceDuration.days]] [[verses.serviceBlueprint.serviceDurationDays]]</div>
+                </template>
+
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+      <!-- service list - end -->
+
+      <!-- payment details - start -->
       <div class="card vertical layout">
         <div class="title">
           <b>[[verses.sales.payment]]:</b>
@@ -132,12 +164,14 @@
           </div>
         </template>
       </div>
+      <!-- payment details - start -->
 
       <template is="dom-if" if="[[$shouldTakeAdditionalPayment(sales.payment.totalBilled,  sales.payment.totalPaidAmount)]]">
         <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[self]]" customer="[[customer]]" is-from-view-sales-page>
           </elem-additional-paymentt>
       </template>
 
+      <!-- customer detail - start -->
       <template is="dom-if" if="{{sales.customerId}}">
         <div class="card vertical layout">
           <div>[[verses.customer.customerName]]: [[customer.fullName]]</div>
@@ -145,6 +179,7 @@
           <div>[[verses.general.number]]: [[customer.phone]]</div>
         </div>
       </template>
+      <!-- customer detail - end -->
 
     </div>
 
