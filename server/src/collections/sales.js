@@ -113,7 +113,7 @@ exports.SalesCollection = class extends Collection {
 
   async discard({ id }) {
     return await this._update({ id }, {
-      $push: {
+      $set: {
         isDiscarded: true
       }
     });

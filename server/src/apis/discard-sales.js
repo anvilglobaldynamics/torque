@@ -40,6 +40,7 @@ exports.DiscardSalesApi = class extends Api {
 
   async handle({ body }) {
     let { salesId } = body;
+    await this.database.sales.discard({ id: salesId });
     return { status: 'success' };
   }
 
