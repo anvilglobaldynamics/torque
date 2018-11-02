@@ -60,6 +60,11 @@
         font-size: 11px;
       }
 
+      .service-customer-required {
+        font-size: 11px;
+        font-weight: bold;
+      }
+
       .m-top-16{
         margin-top: 16px;
       }
@@ -163,8 +168,14 @@
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
                 
-                <span class="product-title">[[service.name]]</span>
-                <span class="product-discount-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                <div>
+                  <span class="product-title">[[service.name]]</span>
+                  <span class="product-discount-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                </div>
+
+                <template is="dom-if" if="{{service.isCustomerRequired}}">
+                  <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
+                </template>
 
                 <div class="horizontal layout center">
                   <paper-input class="flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" auto-validate></paper-input>

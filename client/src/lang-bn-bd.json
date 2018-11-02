@@ -613,7 +613,8 @@
     "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
     "thisWillBeACreditSale": "এটি একটি বাকি বিক্রি হবে। অতিরিক্ত অর্থ গ্রহণ বিক্রয় পৃষ্ঠায় গিয়ে করতে পারবেন।",
 
-    "selectService": "সেবা নির্বাচন করুন"
+    "selectService": "সেবা নির্বাচন করুন",
+    "serviceRequiresCustomerSelection": "এই সেবাটি বিক্রির জন্য একজন ক্রেতা নির্বাচন প্রয়োজন"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",
