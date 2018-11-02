@@ -283,10 +283,13 @@
       // region: ui  ===========================
 
       discardTapped(e = null) {
-        this._discardSales(this.sales.id, () => {
-          this.app.showToast(this.app.verses.sales.salesDiscarded, () => {
-            this.app.reloadTapped();
-            this.app.refreshCurrentPage();
+        this.app.showModalConfirmation(this.app.verses.sales.discardQuestion, this.app.verses.sales.discardMessage, (answer) => {
+          if (!answer) return;
+          this._discardSales(this.sales.id, () => {
+            this.app.showToast(this.app.verses.sales.salesDiscarded, () => {
+              this.app.reloadTapped();
+              this.app.refreshCurrentPage();
+            });
           });
         });
       }

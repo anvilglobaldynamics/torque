@@ -526,7 +526,9 @@
     "soldBy": "Sold By",
 
     "productReturn": "Return Product",
-    "service": "Service"
+    "service": "Service",
+    "discardQuestion": "Discard this Sale?",
+    "discardMessage": "Once discarded, this sale will not be considered in any report or calculation. Service Membership(s) sold in this sale (if any) will also be discarded."
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",
