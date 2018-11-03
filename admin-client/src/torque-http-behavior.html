@@ -157,6 +157,21 @@
           this.callCombinedJsonApi('admin-assign-package-to-organization', data, cbfn);
         }
 
+        callAdminGetModuleListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-get-module-list', data, cbfn);
+        }
+
+        callAdminListOrganizationModulesApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-list-organization-modules', data, cbfn);
+        }
+
+        callAdminSetModuleActivationStatusApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-set-module-activation-status', data, cbfn);
+        }
+
       }
     }
 
