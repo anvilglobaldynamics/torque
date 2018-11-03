@@ -192,6 +192,7 @@ describe('Sales Return', _ => {
                                     vatPercentage: 5
                                   }
                                 ],
+                                serviceList: [],
                                 payment: {
                                   totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
                                   vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
@@ -221,6 +222,7 @@ describe('Sales Return', _ => {
                                       vatPercentage: 5
                                     }
                                   ],
+                                  serviceList: [],
                                   payment: {
                                     totalAmount: (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2),
                                     vatAmount: ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100)),
