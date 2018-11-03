@@ -533,7 +533,7 @@
     "backToDashboard": "Back to Dashboard.",
     "403": "403",
     "accessDenied": "Access Denied.",
-    "accessDeniedDescription": "You do not have access to this page/content."
+    "accessDeniedDescription": "You do not have access to this feature."
   },
   "pos": {
     "posPageTitle": "New Sales",

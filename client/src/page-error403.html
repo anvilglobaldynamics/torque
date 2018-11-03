@@ -44,7 +44,7 @@
       <div class="circle">[[verses.error.403]]</div>
       <h1>[[verses.error.accessDenied]]</h1>
       <p>[[verses.error.accessDeniedDescription]]</p>
-      <p>Reasons: [[detailedMessage]]</p>
+      <p>[[detailedMessage]]</p>
       <p>
         <a href="[[rootPath]]">[[verses.error.backToDashboard]]</a>
       </p>
@@ -80,8 +80,18 @@
 
       prepareDetailedMessage() {
         this.detailedMessage = "";
-        if ('unmet' in this.params) {
-          this.detailedMessage = this.params.unmet;
+        if ('privilege' in this.params) {
+          if (this.selectedLanguageIdentifier === 'bn-bd') {
+            this.detailedMessage = `এই ফীচারটি ব্যবহার করতে আপনার "${this.params.privilege}" প্রিভিলেজটি প্রয়োজন।`;
+          } else {
+            this.detailedMessage = `You need the privilege "${this.params.privilege}" to access this feature.`;
+          }
+        } else if ('module' in this.params) {
+          if (this.selectedLanguageIdentifier === 'bn-bd') {
+            this.detailedMessage = `এই ফীচারটি ব্যবহার করার জন্য আপনাকে "${this.params.module}" মডিউলটি সক্রিয় করতে হবে।`;
+          } else {
+            this.detailedMessage = `You need the module "${this.params.module}" activated to use this feature.`;
+          }
         }
       }
 

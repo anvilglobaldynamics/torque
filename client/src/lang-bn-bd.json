@@ -534,8 +534,8 @@
     "contentCouldNotBeFound": "অনুরোধকৃত বিষয়বস্তু পাওয়া যায়নি",
     "backToDashboard": "ড্যাশবোর্ডে ফিরে যান।",
     "403": "৪০৩",
-    "accessDenied": "অনুমতি নেই",
-    "accessDeniedDescription": "আপনার অ্যাডমিন আপনাকে এই পৃষ্ঠার অনুমতি দেয় নাই। "
+    "accessDenied": "এক্সেস নেই",
+    "accessDeniedDescription": "আপনার এই ফীচারটির এক্সেস নাই। "
   },
   "pos": {
     "posPageTitle": "নতুন বিক্রয়",

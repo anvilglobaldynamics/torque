@@ -117,7 +117,7 @@
           }
           let unmetPrivilegeList = privilegeList.filter(privilege => !this.checkPrivilege(privilege));
           if (unmetPrivilegeList.length > 0) {
-            this.app.navigateTo('/error403/unmet:' + unmetPrivilegeList.join(','));
+            this.app.navigateTo('/error403/privilege:' + unmetPrivilegeList.join(','));
             return false;
           }
           if (moduleList.length > 0) {
