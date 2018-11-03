@@ -3,7 +3,7 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 
-exports.AdminGetPackageListApi = class extends Api {
+exports.AdminGetModuleListApi = class extends Api {
 
   get autoValidates() { return true; }
 
@@ -18,8 +18,8 @@ exports.AdminGetPackageListApi = class extends Api {
   }
 
   async handle({ body }) {
-    let packageList = await this.database.fixture.getPackageList();
-    return { packageList };
+    let moduleList = await this.database.fixture.getModuleList();
+    return { moduleList };
   }
 
 }

@@ -98,6 +98,65 @@
         }
       }
 
+      ensureModule(...moduleCodeClauseList) {
+        let organization, showModalDialog;
+        try {
+          organization = this.organization || this.app.organization || this.page.app.organization;
+          showModalDialog = this.showModalDialog || this.app.showModalDialog || this.page.app.showModalDialog;
+        } catch (ex) {
+          'pass'
+        }
+        if (!organization) {
+          console.error(new Error("DEV_ERROR unable to locate organization object"));
+          return false;
+        }
+        if (!('activeModuleCodeList' in organization)) {
+          // TRANSLATE
+          showModalDialog("Your organization has no modules activated. Please contact support.");
+          return false;
+        }
+
+        let err = null;
+        const didAnyPass = moduleCodeClauseList.some(moduleCodeClause => {
+          let innerErr = null;
+          moduleCodeClause.split('+').forEach(moduleCode => {
+            const isModuleActivated = (organization.activeModuleCodeList.includes(moduleCode));
+            if (!isModuleActivated) {
+              // This message is not shown to client.
+              innerErr = new Error(`This feature requires "${moduleCode}" module which is not activated for this organization.`);
+              innerErr.code = 'UNMET_MODULE';
+              innerErr.module = moduleCode;
+              innerErr.moduleCodeClause = moduleCodeClause;
+            }
+          });
+          if (innerErr) {
+            err = innerErr;
+            return false;
+          }
+          return true;
+        });
+
+        if (!didAnyPass) {
+          if (!err) {
+            err = new Error("Invalid arguments for ensureModule().");
+          }
+          throw err;
+        }
+
+        return true;
+      }
+
+      hasModule(...moduleCodeClauseList) {
+        try {
+          return this.ensureModule(...moduleCodeClauseList);
+        } catch (ex) {
+          if (ex.code === 'UNMET_MODULE') {
+            return false;
+          }
+          throw ex;
+        }
+      }
+
     }
   })();
 

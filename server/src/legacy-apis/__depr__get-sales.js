@@ -35,6 +35,10 @@ exports.GetSalesApi = class extends collectionCommonMixin(LegacyApi) {
       ],
       privilegeList: [
         "PRIV_VIEW_SALES"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
+        "MOD_SERVICE",
       ]
     }];
   }
@@ -62,11 +66,11 @@ exports.GetSalesApi = class extends collectionCommonMixin(LegacyApi) {
           });
         });
         return cbfn(sales);
-      } else { 
+      } else {
         sales.productList.forEach(product => {
           product.returnedProductCount = 0;
         });
-        return cbfn(sales); 
+        return cbfn(sales);
       }
     });
   }
