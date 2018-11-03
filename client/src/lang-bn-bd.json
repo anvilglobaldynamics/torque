@@ -490,7 +490,8 @@
     "salesId": "বিক্রয় নং",
     "billed": "বিল",
     "paid": "প্রদত্ত",
-    "products": "পণ্য",
+    "products": "টি পণ্য",
+    "services": "টি সেবা",
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
     "removeCustomer": "গ্রাহক সরান",
     "changeCustomer": "গ্রাহক পরিবর্তন করুন",
@@ -502,6 +503,7 @@
     "outletId": "দোকান আইডি",
     "customerId": "গ্রাহক আইডি",
     "productList": "পণ্য তালিকা",
+    "serviceList": "সেবা তালিকা",
     "salePrice": "বিক্রয় মূল্য",
     "payment": "টাকা প্রদান",
     "totalBilled": "মোট বিল",
@@ -525,7 +527,10 @@
     "printedBy": "প্রিন্ট করেছেন",
     "soldBy": "বিক্রয়কারী",
 
-    "productReturn": "পণ্য ফেরত"
+    "productReturn": "পণ্য ফেরত",
+    "service": "সেবা",
+    "discardQuestion": "এই বিক্রি বাতিল?",
+    "discardMessage": "বাতিল করা হলে কোনো রিপোর্ট কিংবা হিসেবে এই বিক্রি ধরা হবে না। বিক্রয়কৃত সেবা সদস্যপদ (যদি থাকে) বাতিল হয়ে যাবে।"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
@@ -611,7 +616,10 @@
     "allowCreditSaleMessage": "এই টাকা গ্রাহকের একাউন্টএ বকেয়া হিসাবে জমা রাখা হোক।",
     "creditSaleHint": "প্রদত্ত পরিমান, মোট প্রদেয় পরিমানের চেয়ে কম এন্ট্রি দেওয়া হয়েছে। একটি ক্রেডিট বিক্রয় করার জন্য, আপনাকে একটি গ্রাহক নির্বাচন বা যুক্ত করতে হবে এবং ক্রেডিট বিক্রয় অনুমোদন করতে হবে। ",
     "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
-    "thisWillBeACreditSale": "এটি একটি বাকি বিক্রি হবে। অতিরিক্ত অর্থ গ্রহণ বিক্রয় পৃষ্ঠায় গিয়ে করতে পারবেন।"
+    "thisWillBeACreditSale": "এটি একটি বাকি বিক্রি হবে। অতিরিক্ত অর্থ গ্রহণ বিক্রয় পৃষ্ঠায় গিয়ে করতে পারবেন।",
+
+    "selectService": "সেবা নির্বাচন করুন",
+    "serviceRequiresCustomerSelection": "এই সেবাটি বিক্রির জন্য একজন ক্রেতা নির্বাচন প্রয়োজন"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",
@@ -649,7 +657,7 @@
     "confirmSelection": "নির্বাচন নিশ্চিত করুন"
   },
   "posSelectProduct": {
-    "posSelectProductTitle": "পণ্য নির্বাচন করুন",
+    "posSelectProductTitle": "পণ্য নির্বাচন",
     "purchase": "ক্রয়",
     "sale": "বিক্রয়",
     "count": "গণনা",
@@ -660,6 +668,15 @@
     "noProductFoundInOutlet": "কোনো পণ্য পাওয়া যায়নি। পেছনে গিয়ে দোকানের প্রধান পণ্য তালিকায় পণ্য যোগ করুন।",
     "searchForProductInput": "পণ্যের নাম দিয়ে অনুসন্ধান",
     "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি"
+  },
+  "posSelectService": {
+    "posSelectServiceTitle": "সেবা নির্বাচন",
+    "searchForServiceInput": "সেবার নাম দিয়ে অনুসন্ধান",
+    "searchForServiceInputError": "সেবার সন্ধানে ত্রুটি",
+    "noServiceFoundInOutlet": "কোনো সেবা পাওয়া যায়নি। পেছনে গিয়ে দোকানে সেবা উপলব্ধ করুন।",
+    "sale": "বিক্রয়",
+    "deselectAllSelected": "সকল নির্বাচন সরিয়ে ফেলুন",
+    "confirmSelection": "নির্বাচন নিশ্চিত করুন"
   },
   "settings": {
     "settingsTitle": "সেটিংস",

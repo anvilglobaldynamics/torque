@@ -30,6 +30,10 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     payment.totalPaidAmount += paidAmountWithoutChange;
     let wasChangeSavedInChangeWallet = false;
     if (paymentListEntry.changeAmount && paymentListEntry.shouldSaveChangeInAccount) {
+      if (!customer) {
+        throw new CodedError("CUSTOMER_REQUIRED_TO_SAVE_CHANGE", "Customer is required to save change in change wallet.");
+      }
+
       wasChangeSavedInChangeWallet = true;
       await this._addChangeToChangeWallet({ customer, amount: paymentListEntry.changeAmount });
     }

@@ -86,9 +86,9 @@ const { GetProductApi } = require('./apis/get-product');
 
 const { AddSalesApi } = require('./apis/add-sales');
 const { AddAdditionalPaymentApi } = require('./apis/add-additional-payment');
-let { GetSalesApi } = require('./legacy-apis/get-sales');
+const { GetSalesApi } = require('./apis/get-sales');
 const { GetSalesListApi } = require('./apis/get-sales-list');
-let { DiscardSalesApi } = require('./legacy-apis/discard-sales');
+const { DiscardSalesApi } = require('./apis/discard-sales');
 
 const { AddSalesReturnApi } = require('./apis/add-sales-return');
 let { GetSalesReturnApi } = require('./legacy-apis/get-sales-return');

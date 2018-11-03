@@ -60,6 +60,11 @@
         font-size: 11px;
       }
 
+      .service-customer-required {
+        font-size: 11px;
+        font-weight: bold;
+      }
+
       .m-top-16{
         margin-top: 16px;
       }
@@ -69,6 +74,7 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <!-- customer selector - start -->
       <template is="dom-if" if="[[!isSearchingCustomer]]">
         <div class="card vertical layout">
           <div class="horizontal layout center">
@@ -109,7 +115,9 @@
         </div>
       </template>
       <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+      <!-- customer selector - end -->
 
+      <!-- selected product list - start -->
       <div class="card vertical layout">
         <div class="list">
 
@@ -150,8 +158,44 @@
 
         </div>
       </div>
+      <!-- selected product list - end -->
 
-      <template is="dom-if" if="{{productList.length}}">
+      <!-- selected service list - start -->
+      <div class="card vertical layout">
+        <div class="list">
+
+          <template is="dom-repeat" items="[[serviceList]]" as="service">
+            <div class="horizontal layout item center">
+              <div class="vertical layout flex">
+                
+                <div>
+                  <span class="product-title">[[service.name]]</span>
+                  <span class="product-discount-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                </div>
+
+                <template is="dom-if" if="{{service.isCustomerRequired}}">
+                  <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
+                </template>
+
+                <div class="horizontal layout center">
+                  <paper-input class="flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" auto-validate></paper-input>
+                  <div class="description">[[app.settings.monetaryUnit]]</div>
+                </div>
+                
+              </div>
+            </div>
+          </template>
+
+          <div class="select-product-button-container">
+            <paper-button raised class="btn primary" on-tap="addServiceTapped">[[verses.pos.selectService]]</paper-button>
+          </div>
+
+        </div>
+      </div>
+      <!-- selected service list - end -->
+
+      <!-- calculations - start -->
+      <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
         <div class="card vertical layout">
           <div class="individual-calculation-field-container">
             <span>[[verses.pos.totalSalePrice]]: <b>{{$round(payment.totalAmount)}} [[app.settings.monetaryUnit]]</b></span>
@@ -159,7 +203,7 @@
         </div>
       </template>
 
-      <template is="dom-if" if="{{productList.length}}">
+      <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
         <div class="card vertical layout">
           <div class="list">
 
@@ -193,10 +237,8 @@
 
               </div>
 
-              <!-- <template is="dom-if" if="[[payment.discountValue]]"> -->
               <br> [[verses.pos.discountedAmount]]:
               <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
-              <!-- </template> -->
 
             </div>
 
@@ -212,7 +254,7 @@
         </div>
       </template>
 
-      <template is="dom-if" if="{{productList.length}}">
+      <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
         <div class="card vertical layout">
           <div class="list">
 
@@ -272,6 +314,7 @@
           </div>
         </div>
       </template>
+      <!-- calculations - end -->
 
     </div>
 
@@ -287,6 +330,10 @@
       static get properties() {
         return {
           productList: {
+            type: Array,
+            value: () => []
+          },
+          serviceList: {
             type: Array,
             value: () => []
           },
@@ -357,6 +404,11 @@
             this.productList = productList;
           }
 
+          let serviceList = this.app.getFromSession('pos-selected-service-list');
+          if (serviceList) {
+            this.serviceList = serviceList;
+          }
+
           this._calculatePayment();
         });
         this.delay(300, () => {
@@ -422,8 +474,9 @@
         // setting vatAmount to default value of 0 before calculating vatAmount on a loop
         vatAmount = 0;
 
-        // reducing to find totalAmount
-        totalAmount = this.productList.reduce((sum, product) => {
+        // reducing to find totalProductAmount
+        let totalProductAmount = 0;
+        totalProductAmount = this.productList.reduce((sum, product) => {
           let { salePrice, selectedCount, discountType, discountValue, vatValue } = product;
 
           // discount calculation
@@ -436,9 +489,24 @@
           // adding product vat value to to total vatAmount
           vatAmount += salePrice * (vatValue / 100);
 
-          // the sum to be set as totalAmount
-          return sum + (salePrice * selectedCount);
+          // the sum to be set as totalProductAmount
+          return parseFloat(sum) + parseFloat(salePrice * selectedCount);
         }, 0);
+
+        // reducing to find totalServiceAmount
+        let totalServiceAmount = 0;
+        totalServiceAmount = this.serviceList.reduce((sum, service) => {
+          let { salePrice, vatValue } = service;
+
+          // adding service vat value to to total vatAmount
+          vatAmount += salePrice * (vatValue / 100);
+
+          // the sum to be set as totalServiceAmount
+          return parseFloat(sum) + parseFloat(salePrice);
+        }, 0);
+
+        // totalAmount of service and product sale price(s)
+        totalAmount = parseFloat(totalProductAmount) + parseFloat(totalServiceAmount);
 
         // updating totalBilled with calculated totalAmount and vatAmount
         totalBilled = totalAmount + vatAmount;
@@ -503,10 +571,18 @@
           let { productId, selectedCount, discountType, discountValue, salePrice, vatValue } = product;
           let vatPercentage = vatValue;
           return { productId, count: selectedCount, discountType, discountValue, salePrice, vatPercentage };
-        })
+        });
+
+        let serviceList = this.serviceList.map(service => {
+          let { id, salePrice, vatValue } = service;
+          let serviceId = id;
+          let vatPercentage = vatValue;
+          let assignedEmploymentId = null; // TODO: assignedEmploymentId
+          return { serviceId, salePrice, vatPercentage, assignedEmploymentId };
+        });
 
         let data = {
-          customerId, outletId, productList, payment
+          customerId, outletId, productList, serviceList, payment
         };
 
         this.app.callAddSalesApi(data, (err, response) => {
@@ -518,8 +594,9 @@
 
       _resetSales() {
         this.app.extractFromSession('pos-selected-product-list');
+        this.app.extractFromSession('pos-selected-service-list');
         this.app.extractFromSession('last-selected-customer');
-        this.resetProperties('payment', 'productList', 'customer');
+        this.resetProperties('payment', 'productList', 'serviceList', 'customer');
         this.app.refreshCurrentPage();
       }
 
@@ -547,6 +624,10 @@
         this._processGetOutletDefaultInventoryId(defaultInventoryId => {
           return this.app.navigateTo(`/pos-select-products/inventory:${defaultInventoryId}`);
         })
+      }
+
+      addServiceTapped(e = null) {
+        return this.app.navigateTo(`/pos-select-services/outlet:${this.params.outlet}`);
       }
 
       paymentMethodSelected(e) {
@@ -600,6 +681,10 @@
       }
 
       // region: misc =================================
+
+      productListOrServiceListHasElement(productListLength, serviceListLength) {
+        return (productListLength || serviceListLength);
+      }
 
     }
 

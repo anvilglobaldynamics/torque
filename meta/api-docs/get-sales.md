@@ -15,8 +15,8 @@ method: `POST`
 ### response (on error):
 ```js
 {
-  "hasError": true,
-  "error": {
+  hasError: true,
+  error: {
     code,
     message
   }
@@ -34,14 +34,15 @@ Possible Error Codes:
 ### response (on success):
 ```js
 {
-  "hasError": false,
+  hasError: false,
 
-  "sales": Joi.object().keys({
+  sales: Joi.object().keys({
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedByUserId: Joi.number().max(999999999999999).allow(null).required(),
     outletId: Joi.number().max(999999999999999).required(),
     customerId: Joi.number().max(999999999999999).required(),
+
     productList: Joi.array().items(
       Joi.object().keys({
         productId: Joi.number().max(999999999999999).required(),
@@ -55,6 +56,24 @@ Possible Error Codes:
         salePrice: Joi.number().max(999999999999999).required()
       })
     ),
+
+    serviceList: Joi.array().required().items(
+      Joi.object().keys({
+        serviceId: Joi.number().max(999999999999999).required(),
+        serviceBlueprintId: Joi.number().max(999999999999999).required(),
+        serviceBlueprintName: Joi.string().min(1).max(64).required(),
+        serviceBlueprintIsLongstanding: Joi.boolean().required(),
+        serviceBlueprintServiceDuration: Joi.object().allow(null).required().keys({
+          months: Joi.number().min(0).max(999999999999999).required(),
+          days: Joi.number().min(0).max(999999999999999).required(),
+        }),
+        serviceBlueprintIsRefundable: Joi.boolean().required(),
+        salePrice: Joi.number().min(0).max(999999999999999).required(),
+        vatPercentage: Joi.number().min(0).max(999999999999999).required(),
+        assignedEmploymentId: Joi.number().max(999999999999999).allow(null).required()
+      })
+    ),
+
     payment: Joi.object().keys({
       totalAmount: Joi.number().max(999999999999999).required(),
       vatAmount: Joi.number().max(999999999999999).required(),
@@ -66,6 +85,7 @@ Possible Error Codes:
       paidAmount: Joi.number().max(999999999999999).required(),
       changeAmount: Joi.number().max(999999999999999).required()
     }),
+
     isModified: Joi.boolean().required()
   });
 }

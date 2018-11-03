@@ -5,8 +5,9 @@ const { extract } = require('./../utils/extract');
 const { InventoryMixin } = require('./mixins/inventory-mixin');
 const { CustomerMixin } = require('./mixins/customer-mixin');
 const { SalesMixin } = require('./mixins/sales-mixin');
+const { ServiceMixin } = require('./mixins/service-mixin');
 
-exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin) {
+exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin, ServiceMixin) {
 
   get autoValidates() { return true; }
 
@@ -18,7 +19,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
 
-      productList: Joi.array().min(1).items(
+      productList: Joi.array().required().items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required(),
@@ -26,6 +27,15 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
           discountValue: Joi.number().max(999999999999999).required(),
           salePrice: Joi.number().max(999999999999999).required(),
           vatPercentage: Joi.number().max(999999999999999).required(),
+        })
+      ),
+
+      serviceList: Joi.array().required().items(
+        Joi.object().keys({
+          serviceId: Joi.number().max(999999999999999).required(),
+          salePrice: Joi.number().min(0).max(999999999999999).required(),
+          vatPercentage: Joi.number().min(0).max(999999999999999).required(),
+          assignedEmploymentId: Joi.number().max(999999999999999).allow(null).required()
         })
       ),
 
@@ -128,20 +138,70 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     return customer;
   }
 
+  async _validateServiceAndCheckRequirements({ serviceListObj, customer }) {
+    let service = await this.database.service.findById({ id: serviceListObj.serviceId });
+    throwOnFalsy(service, "SERVICE_INVALID", "Service could not be found.");
+    let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: service.serviceBlueprintId });
+    throwOnFalsy(serviceBlueprint, "SERVICE_INVALID", "Service could not be found.");
+
+    if (( serviceBlueprint.isLongstanding || serviceBlueprint.isCustomerRequired) && !customer) {
+      throw new CodedError("SERVICE_REQUIRES_CUSTOMER", "Service requires a customer.");
+    }
+
+    if (!serviceBlueprint.isEmployeeAssignable && serviceListObj.assignedEmploymentId) {
+      throw new CodedError("CANT_ASSIGN_EMPLOYEE_TO_SERVICE", "Cant assign employee to this service.");
+    } 
+    
+    if (serviceListObj.assignedEmploymentId) {
+      let employee = await this.database.employment.findById({ id: serviceListObj.assignedEmploymentId });
+      throwOnFalsy(employee, "ASSIGNED_EMPLOYEE_INVALID", "Service could not be found.");
+    }
+  }
+
+  async _createServiceMembership({ createdByUserId, serviceListObj, customerId, salesId }) {
+    let service = await this.database.service.findById({ id: serviceListObj.serviceId });
+    let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: service.serviceBlueprintId });
+
+    if (serviceBlueprint.isLongstanding) {
+      // TODO: do some magic with serviceBlueprint.serviceDuration.months and serviceBlueprint.serviceDuration.days
+      let expiringDatetimeStamp = (new Date).getTime();
+      let res = await this.database.serviceMembership.create({ createdByUserId, customerId, salesId, serviceId: service.id , expiringDatetimeStamp })
+    }
+  }
+
   async handle({ userId, body }) {
-    let { outletId, customerId, productList, payment: originalPayment } = body;
+    let { outletId, customerId, productList, serviceList, payment: originalPayment } = body;
+
+    if (!productList.length && !serviceList.length) {
+      throw new CodedError("NO_PRODUCT_OR_SERVICE_SELECTED", "Both productList and serviceList can not be empty.");
+    }
 
     let customer = await this._findCustomerIfSelected({ customerId });
 
-    let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
-    this._reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList });
-
     let { payment, paymentListEntry } = this._standardizePayment({ originalPayment });
     await this._validateBillingAndPayment({ productList, payment, paymentListEntry, customer });
+
+    if (productList.length) {
+      let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
+      this._reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList });
+      await this.database.inventory.setProductList({ id: outletDefaultInventory.id }, { productList: outletDefaultInventory.productList });
+    }
+
+    if (serviceList.length) {
+      for (let i = 0; i < serviceList.length; i++) { 
+        await this._validateServiceAndCheckRequirements({ serviceListObj: serviceList[i], customer });
+      }
+    }
+
     payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
 
-    await this.database.inventory.setProductList({ id: outletDefaultInventory.id }, { productList: outletDefaultInventory.productList });
-    let salesId = await this.database.sales.create({ outletId, customerId, productList, payment });
+    let salesId = await this.database.sales.create({ outletId, customerId, productList, serviceList, payment });
+
+    if (serviceList.length) {
+      for (let i = 0; i < serviceList.length; i++) { 
+        await this._createServiceMembership({ createdByUserId: userId, serviceListObj: serviceList[i], customerId, salesId });
+      }
+    }
 
     return { status: "success", salesId };
   }

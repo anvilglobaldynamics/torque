@@ -489,6 +489,7 @@
     "billed": "Billed",
     "paid": "Paid",
     "products": "product(s)",
+    "services": "service(s)",
     "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
     "removeCustomer": "Remove Customer",
     "changeCustomer": "Change Customer",
@@ -500,6 +501,7 @@
     "outletId": "Outlet ID",
     "customerId": "Customer ID",
     "productList": "Product List",
+    "serviceList": "Service List",
     "salePrice": "Sale Price",
     "payment": "Payment",
     "totalBilled": "Total Billed",
@@ -523,7 +525,10 @@
     "printedBy": "Printed By",
     "soldBy": "Sold By",
 
-    "productReturn": "Return Product"
+    "productReturn": "Return Product",
+    "service": "Service",
+    "discardQuestion": "Discard this Sale?",
+    "discardMessage": "Once discarded, this sale will not be considered in any report or calculation. Service Membership(s) sold in this sale (if any) will also be discarded."
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",
@@ -609,7 +614,10 @@
     "allowCreditSaleMessage": "Save this amount as due in customer's account.",
     "creditSaleHint": " The paid amount is less than total amount billed. In order to do a credit sale, you need to select/create a customer and allow credit sale.",
     "paymentMethod": "Payment Method",
-    "thisWillBeACreditSale": "This will be a Credit Sale. Additional Payment can be collected later from View Sales Page."
+    "thisWillBeACreditSale": "This will be a Credit Sale. Additional Payment can be collected later from View Sales Page.",
+
+    "selectService": "Select Service",
+    "serviceRequiresCustomerSelection": "This Service requires a customer selection"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
@@ -656,9 +664,18 @@
     "confirmSelection": "Confirm Selection",
     "acquiredOn": "Acquired On",
     "addedOn": "Added On",
-    "noProductFoundInOutlet": "No products found. Go back and products to the Outlet's default inventory.",
+    "noProductFoundInOutlet": "No products found. Go back and add products to the Outlet's default inventory.",
     "searchForProductInput": "Product Name",
     "searchForProductInputError": "Error in Search"
+  },
+  "posSelectService": {
+    "posSelectServiceTitle": "Select Services",
+    "searchForServiceInput": "Service Name",
+    "searchForServiceInputError": "Error in Search",
+    "noServiceFoundInOutlet": "No services found. Go back and activate services in the Outlet.",
+    "sale": "Sale",
+    "deselectAllSelected": "Deselect All Selected",
+    "confirmSelection": "Confirm Selection"
   },
   "settings": {
     "settingsTitle": "Settings",

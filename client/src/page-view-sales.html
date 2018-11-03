@@ -52,6 +52,10 @@
         padding: 2px;
         color: red;
       }
+
+      .duration-text {
+        font-size: 12px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -77,36 +81,68 @@
 
       </div>
 
-      <div class="card vertical layout">
-        <div class="title">
-          <b>[[verses.sales.productList]]: ([[sales.productList.length]] products)</b>
-        </div>
-        <div class="list">
-          <template is="dom-repeat" items="{{sales.productList}}" as="product">
-            <div class="vertical layout flex">
-              <div class="list-object">
+      <!-- product list - start -->
+      <template is="dom-if" if="{{sales.productList.length}}">
+        <div class="card vertical layout">
+          <div class="title">
+            <b>[[verses.sales.productList]]: [[sales.productList.length]] [[verses.sales.products]]</b>
+          </div>
+          <div class="list">
+            <template is="dom-repeat" items="{{sales.productList}}" as="product">
+              <div class="vertical layout flex">
+                <div class="list-object">
 
-                <div>[[verses.general.product]]: [[product.productBlueprintName]]</div>
-                <div>[[verses.sales.soldCount]]: [[product.count]]</div>
-                <template is="dom-if" if="[[product.returnedProductCount]]">
-                  <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
-                </template>
-                <div>[[verses.sales.salePrice]]: [[product.salePrice]] [[app.settings.monetaryUnit]]</div>
+                  <div>[[verses.general.product]]: [[product.productBlueprintName]]</div>
+                  <div>[[verses.sales.soldCount]]: [[product.count]]</div>
+                  <template is="dom-if" if="[[product.returnedProductCount]]">
+                    <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
+                  </template>
+                  <div>[[verses.sales.salePrice]]: [[product.salePrice]] [[app.settings.monetaryUnit]]</div>
 
-                <template is="dom-if" if="{{checkIfAllProductReturned(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
-                  *[[verses.sales.allReturned]]
-                </template>
+                  <template is="dom-if" if="{{checkIfAllProductReturned(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
+                    *[[verses.sales.allReturned]]
+                  </template>
 
-                <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
-                  <paper-button raised class="danger return-button" on-tap="returnTapped">[[verses.sales.productReturn]]</paper-button>
-                </template>
+                  <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
+                    <paper-button raised class="danger return-button" on-tap="returnTapped">[[verses.sales.productReturn]]</paper-button>
+                  </template>
 
+                </div>
               </div>
-            </div>
-          </template>
+            </template>
+          </div>
         </div>
-      </div>
+      </template>
+      <!-- product list - end -->
 
+      <!-- service list - start -->
+      <template is="dom-if" if="{{sales.serviceList.length}}">
+        <div class="card vertical layout">
+          <div class="title">
+            <b>[[verses.sales.serviceList]]: [[sales.serviceList.length]] [[verses.sales.services]]</b>
+          </div>
+
+          <div class="list">
+            <template is="dom-repeat" items="{{sales.serviceList}}" as="service">
+              <div class="vertical layout flex">
+                <div class="list-object">
+
+                  <div>[[verses.sales.service]]: [[service.serviceBlueprintName]]</div>
+                  <div>[[verses.sales.salePrice]]: [[service.salePrice]] [[app.settings.monetaryUnit]]</div>
+
+                  <template is="dom-if" if="[[service.serviceBlueprintIsLongstanding]]">
+                    <div class="duration-text">[[verses.serviceBlueprint.serviceDuration]]: [[service.serviceBlueprintServiceDuration.months]] [[verses.serviceBlueprint.serviceDurationMonths]], [[service.serviceBlueprintServiceDuration.days]] [[verses.serviceBlueprint.serviceDurationDays]]</div>
+                  </template>
+
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+      <!-- service list - end -->
+
+      <!-- payment details - start -->
       <div class="card vertical layout">
         <div class="title">
           <b>[[verses.sales.payment]]:</b>
@@ -132,12 +168,14 @@
           </div>
         </template>
       </div>
+      <!-- payment details - start -->
 
       <template is="dom-if" if="[[$shouldTakeAdditionalPayment(sales.payment.totalBilled,  sales.payment.totalPaidAmount)]]">
         <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[self]]" customer="[[customer]]" is-from-view-sales-page>
           </elem-additional-paymentt>
       </template>
 
+      <!-- customer detail - start -->
       <template is="dom-if" if="{{sales.customerId}}">
         <div class="card vertical layout">
           <div>[[verses.customer.customerName]]: [[customer.fullName]]</div>
@@ -145,6 +183,7 @@
           <div>[[verses.general.number]]: [[customer.phone]]</div>
         </div>
       </template>
+      <!-- customer detail - end -->
 
     </div>
 
@@ -244,10 +283,13 @@
       // region: ui  ===========================
 
       discardTapped(e = null) {
-        this._discardSales(this.sales.id, () => {
-          this.app.showToast(this.app.verses.sales.salesDiscarded, () => {
-            this.app.reloadTapped();
-            this.app.refreshCurrentPage();
+        this.app.showModalConfirmation(this.app.verses.sales.discardQuestion, this.app.verses.sales.discardMessage, (answer) => {
+          if (!answer) return;
+          this._discardSales(this.sales.id, () => {
+            this.app.showToast(this.app.verses.sales.salesDiscarded, () => {
+              this.app.reloadTapped();
+              this.app.refreshCurrentPage();
+            });
           });
         });
       }

@@ -130,7 +130,7 @@
 
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
-        this.app.currentPageIsModal = false;
+        this.app.currentPageIsModal = true;
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.manageServices.manageServicesTitle);
         if ('outlet' in this.params) {
