@@ -33,6 +33,10 @@ exports.GetSalesListApi = class extends Api {
       organizationBy: "organizationId",
       privilegeList: [
         "PRIV_VIEW_SALES"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
+        "MOD_SERVICE",
       ]
     }];
   }

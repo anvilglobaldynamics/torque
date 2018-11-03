@@ -44,7 +44,10 @@ Possible Error Codes:
         companyProvidedId: Joi.string().allow('').max(64).required(), 
         isActive: Joi.boolean().required()
         privileges: Joi.object().required()
-      })
+      }),
+      activeModuleCodeList: Joi.array().items(
+        Joi.string().required()
+      ).required()
     });
   )
 }

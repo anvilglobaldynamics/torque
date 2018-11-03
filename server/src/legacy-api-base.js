@@ -7,6 +7,7 @@ const baselib = require('baselib');
 const { CodedError } = require('./utils/coded-error');
 
 const ModernApi = require('./api-base').Api;
+const { callbackify } = require('./utils/callbackify');
 
 const languageCache = {
   'en-us': require('./languages/en-us').verses,
@@ -21,9 +22,10 @@ const _restrictedErrorCodeList = [
 
 class LegacyApi {
 
-  constructor(server, legacyDatabase, logger, request, response, socket, channel, requestUid = null, consumerId = null) {
+  constructor(server, database, legacyDatabase, logger, request, response, socket, channel, requestUid = null, consumerId = null) {
     this.server = server;
     this.legacyDatabase = legacyDatabase;
+    this.database = database; // Do not use during coding without .then and .catch
     this.logger = logger;
     this._request = request;
     this._response = response;
@@ -32,7 +34,11 @@ class LegacyApi {
     this._requestUid = requestUid;
     this.__paginationCache = null;
     this._consumerId = consumerId;
+    this.verses = null;
     this.__assignFailsafeLanguageFeature();
+    this.interimData = {
+      organization: null
+    }
   }
 
   __assignFailsafeLanguageFeature() {
@@ -347,30 +353,46 @@ class LegacyApi {
           err.code = "ORGANIZATION_INVALID";
           return reject(err);
         }
-        let organizationId = organization.id;
-        this.legacyDatabase.employment.getEmploymentOfUserInOrganization({ userId, organizationId }, (err, employment) => {
-          if (err) return reject(err);
-          if (!employment || !employment.isActive) {
-            err = new Error(this.verses.organizationCommon.userNotEmployedByOrganization);
-            err.code = "USER_NOT_EMPLOYED_BY_ORGANIZATION";
-            return reject(err);
-          }
-          let unmetPrivileges = [];
-          privilegeList.forEach((privilege) => {
-            if (!employment.privileges[privilege]) {
-              unmetPrivileges.push(privilege);
+
+        // NOTE: this assignment has direct impact on module related validations.
+        this.interimData.organization = organization;
+        let { moduleList } = rule;
+        let promise = null;
+        if (!moduleList || moduleList.length === 0) {
+          promise = Promise.resolve();
+        } else {
+          promise = ModernApi.prototype.ensureModule.apply(this, moduleList);
+        }
+
+        promise.then(() => {
+          let organizationId = organization.id;
+          this.legacyDatabase.employment.getEmploymentOfUserInOrganization({ userId, organizationId }, (err, employment) => {
+            if (err) return reject(err);
+            if (!employment || !employment.isActive) {
+              err = new Error(this.verses.organizationCommon.userNotEmployedByOrganization);
+              err.code = "USER_NOT_EMPLOYED_BY_ORGANIZATION";
+              return reject(err);
             }
+            let unmetPrivileges = [];
+            privilegeList.forEach((privilege) => {
+              if (!employment.privileges[privilege]) {
+                unmetPrivileges.push(privilege);
+              }
+            });
+            if (unmetPrivileges.length > 0) {
+              let message = this.verses.accessControlCommon.accessControlUnmetPrivileges;
+              message += unmetPrivileges.join(', ') + ".";
+              err = new Error(message);
+              err.code = "ACCESS_CONTROL_UNMET_PRIVILEGES";
+              err.privileges = unmetPrivileges;
+              return reject(err);
+            }
+            return accept();
           });
-          if (unmetPrivileges.length > 0) {
-            let message = this.verses.accessControlCommon.accessControlUnmetPrivileges;
-            message += unmetPrivileges.join(', ') + ".";
-            err = new Error(message);
-            err.code = "ACCESS_CONTROL_UNMET_PRIVILEGES";
-            err.privileges = unmetPrivileges;
-            return reject(err);
-          }
-          return accept();
+        }, (err) => {
+          return reject(err);
         });
+
       });
     });
   }
@@ -414,6 +436,30 @@ class LegacyApi {
       .catch(err => {
         cbfn(err);
       });
+  }
+
+  // region: module ==========================
+
+  // Usage - this.hasModule(moduleCode1, moduleCode2,...., cbfn)
+  ensureModule(...moduleCodeClauseListAndCbfn) {
+    let cbfn = moduleCodeClauseListAndCbfn.pop();
+    let moduleCodeClauseList = moduleCodeClauseListAndCbfn;
+    callbackify(ModernApi.prototype.ensureModule.apply(this, moduleCodeClauseList), cbfn);
+  }
+
+  // Usage - this.hasModule(moduleCode1, moduleCode2,...., cbfn)
+  hasModule(...moduleCodeClauseListAndCbfn) {
+    let cbfn = moduleCodeClauseListAndCbfn.pop();
+    let moduleCodeClauseList = moduleCodeClauseListAndCbfn;
+    this.ensureModule(...moduleCodeClauseList, (err => {
+      if (!err) {
+        return cbfn(null, true);
+      }
+      if (err.code === 'UNMET_MODULE') {
+        return cbfn(null, false);
+      }
+      return cbfn(err);
+    }));
   }
 
   // region: template rendering ==========================

@@ -12,6 +12,9 @@ method: `POST`
   primaryBusinessAddress: Joi.string().min(1).max(128).required(),
   phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
   email: Joi.string().email().min(3).max(30).required(),
+  activeModuleList: Joi.array().items(
+    Joi.string().required()
+  ).optional().default(['MOD_PRODUCT', 'MOD_SERVICE'])
 }
 ```
 
@@ -32,6 +35,7 @@ Possible Error Codes:
 { code: APIKEY_INVALID } // the api key is invalid
 { code: EMAIL_ALREADY_IN_USE } // the email id is already associated
 { code: PHONE_ALREADY_IN_USE } // the phone number is already associated
+{ code: MODULE_INVALID } // the module provided by client is invalid
 { code: MAX_ORGANIZATION_LIMIT_REACHED }
 ```
 

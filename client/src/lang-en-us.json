@@ -76,7 +76,11 @@
     "errorMessageBody": "Error Occurred, Please contact Lipi representative.",
     "errorMessageTitle": "Error",
     "noDataFound": "No Data Found",
-    "changeWallet": "Change Wallet"
+    "changeWallet": "Change Wallet",
+    "activatedModules": "Activated Modules",
+    "productModule": "Product Module",
+    "serviceModule": "Service Module",
+    "gymModule": "Gym Module"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -224,7 +228,6 @@
     "returnedInventoryName": "Returned",
     "damagedInventoryName": "Damaged",
     "noOutletFound": "No Outlet has been created in your Organization.",
-
     "manageOutletServicesTitle": "Manage Services",
     "manageOutletServices": "Manage Services provided in this Outlet"
   },
@@ -262,7 +265,6 @@
     "searchForProductBlueprintInput": "Product Blueprint name",
     "searchForProductBlueprintInputError": "Error in Search for Product Blueprint",
     "bulkImport": "Bulk Product Blueprint Creation",
-
     "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
   },
   "serviceBlueprint": {
@@ -272,10 +274,8 @@
     "searchForServiceBlueprintInputError": "Error in Search for Service Blueprint",
     "noServiceBlueprintFound": "No Service Blueprint found.",
     "createNewServiceBlueprint": "Create New Service Blueprint",
-
     "addServiceBlueprintTitle": "Add Service Blueprint",
     "editServiceBlueprintTitle": "Edit Service Blueprint",
-
     "serviceBlueprintNameInput": "Service Blueprint Name",
     "serviceBlueprintNameInputError": "Provide a valid Service Blueprint Name",
     "defaultVatInput": "Default VAT",
@@ -294,9 +294,7 @@
     "isEmployeeAssignable": "Should an Employee be assigned?",
     "isRefundable": "Is this Service Refundable?",
     "avtivateInAllOutlets": "Should this service be made available in all Outlets?",
-
     "whatIsServiceBlueprintMessage": "Service Blueprint is the planning of a Service. Service Blueprint needs to be added only once for a Service. Information of Service Blueprint will be reused in all Service related tasks.",
-
     "createServiceBlueprint": "Create Service Blueprint",
     "updateServiceBlueprint": "Update Service Blueprint"
   },
@@ -524,7 +522,6 @@
     "receiptTitle": "Sales Receipt ",
     "printedBy": "Printed By",
     "soldBy": "Sold By",
-
     "productReturn": "Return Product",
     "service": "Service",
     "discardQuestion": "Discard this Sale?",
@@ -575,7 +572,7 @@
     "backToDashboard": "Back to Dashboard.",
     "403": "403",
     "accessDenied": "Access Denied.",
-    "accessDeniedDescription": "You do not have access to this page/content."
+    "accessDeniedDescription": "You do not have access to this feature."
   },
   "pos": {
     "posPageTitle": "New Sales",
@@ -615,7 +612,6 @@
     "creditSaleHint": " The paid amount is less than total amount billed. In order to do a credit sale, you need to select/create a customer and allow credit sale.",
     "paymentMethod": "Payment Method",
     "thisWillBeACreditSale": "This will be a Credit Sale. Additional Payment can be collected later from View Sales Page.",
-
     "selectService": "Select Service",
     "serviceRequiresCustomerSelection": "This Service requires a customer selection"
   },
@@ -716,7 +712,6 @@
     "sellingPrice": "Selling Price",
     "acquiredOn": "Acquired On",
     "addedOn": "Added On",
-
     "transferInventoryHelp": "Product can be transfered between inventories. You can start selecting product(s) to be transfered by clicking below.",
     "selectProductsToTransfer": "Start Selecting Products to Transfer",
     "stopSelectingProductsToTransfer": "Stop Selecting Products to Transfer"
@@ -771,7 +766,7 @@
     "amountInputError": "Enter the amount",
     "withdraw": "Withdraw",
     "customerBalanceUpdated": "Customer's change wallet balance has been updated."
-  },  
+  },
   "editProduct": {
     "editProductTitle": "Edit Product",
     "updateProduct": "Update Product",
@@ -784,13 +779,11 @@
   "manageServices": {
     "manageOutletServicesTitle": "Manage Services",
     "manageOutletServices": "Manage Services provided in this Outlet",
-
     "manageServicesTitle": "Manage Outlet Services",
     "confirmUpdate": "Confirm Services Availability Update",
     "noServicesFound": "No Services Found",
     "searchForServiceInputError": "Valid Service Name",
     "searchForServicerInput": "Service Name",
-
     "availability": "Availability",
     "modificationComplete": "Outlet Service Availability Modification(s) Complete"
   }

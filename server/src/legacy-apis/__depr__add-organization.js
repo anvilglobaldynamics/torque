@@ -1,4 +1,9 @@
 
+/*
+WARNING! Since deprecation, the requirements for this API has been updated significantly. This
+deprecated version will NOT work as expected!
+*/
+
 let { LegacyApi } = require('./../legacy-api-base');
 let Joi = require('joi');
 
