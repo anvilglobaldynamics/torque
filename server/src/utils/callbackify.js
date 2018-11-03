@@ -6,7 +6,7 @@ exports.callbackify = (promise, cbfn) => {
 
   if (typeof (cbfn) !== 'function') {
     console.error(new TypeError('Expected a callback function'));
-    return
+    return;
   }
 
   let hasBeenCalled = false;
