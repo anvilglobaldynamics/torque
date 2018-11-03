@@ -31,6 +31,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-http-behavior.html">
 <link rel="import" href="torque-language-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
 
 <link rel="import" href="elem-not-ready.html">
 
@@ -349,7 +350,7 @@
   <script>
     let localDocument = document.currentScript.ownerDocument;
 
-    class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior, TorqueLanguageBehavior) {
+    class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior, TorqueLanguageBehavior, TorqueCommonBehavior) {
 
       static get is() { return 'torque-app'; }
 
@@ -547,7 +548,7 @@
           }
         });
         this.serviceManager.on('success', (event) => {
-          console.log("SSS")
+          'pass'
         });
         (window.torqueWebsocketIndicatorStatusReceivedFn = (status) => {
           if (!window.torqueMasterOptions.allowWebsockets || !this.settings.shouldUseWebsockets) {
