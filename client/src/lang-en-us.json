@@ -76,7 +76,11 @@
     "errorMessageBody": "Error Occurred, Please contact Lipi representative.",
     "errorMessageTitle": "Error",
     "noDataFound": "No Data Found",
-    "changeWallet": "Change Wallet"
+    "changeWallet": "Change Wallet",
+    "activatedModules": "Activated Modules",
+    "productModule": "Product Module",
+    "serviceModule": "Service Module",
+    "gymModule": "Gym Module"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -258,7 +262,6 @@
     "searchForProductBlueprintInput": "Product Blueprint name",
     "searchForProductBlueprintInputError": "Error in Search for Product Blueprint",
     "bulkImport": "Bulk Product Blueprint Creation",
-
     "whatIsProductBlueprintMessage": "Product Blueprint is the blueprint of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
   },
   "customerSelector": {
@@ -483,7 +486,6 @@
     "receiptTitle": "Sales Receipt ",
     "printedBy": "Printed By",
     "soldBy": "Sold By",
-
     "productReturn": "Return Product"
   },
   "warehouse": {
@@ -659,7 +661,6 @@
     "sellingPrice": "Selling Price",
     "acquiredOn": "Acquired On",
     "addedOn": "Added On",
-
     "transferInventoryHelp": "Product can be transfered between inventories. You can start selecting product(s) to be transfered by clicking below.",
     "selectProductsToTransfer": "Start Selecting Products to Transfer",
     "stopSelectingProductsToTransfer": "Stop Selecting Products to Transfer"
@@ -714,7 +715,7 @@
     "amountInputError": "Enter the amount",
     "withdraw": "Withdraw",
     "customerBalanceUpdated": "Customer's change wallet balance has been updated."
-  },  
+  },
   "editProduct": {
     "editProductTitle": "Edit Product",
     "updateProduct": "Update Product",
