@@ -293,7 +293,7 @@ const createSales = async ({ apiKey, outletId, productList }) => {
     customerId: null,
 
     productList,
-    serviceList:[],
+    serviceList: [],
 
     payment: {
       totalAmount: 0,
