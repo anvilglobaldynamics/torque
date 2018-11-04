@@ -93,7 +93,7 @@ let invalidUserId = generateInvalidId();
 let invalidEmploymentId = generateInvalidId();
 let invalidOrganizationId = generateInvalidId();
 
-describe('Employee', _ => {
+describe.only('Employee', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -491,6 +491,25 @@ describe('Employee', _ => {
       json: {
         apiKey,
         organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetEmployeeListApiSuccessResponse(body);
+      body.employeeList.forEach(employee => {
+        validateEmploymentSchema(employee);
+      });
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-employee-list (Valid searchString)', testDoneFn => {
+
+    callApi('api/get-employee-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: 'user'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

@@ -13,7 +13,8 @@ exports.GetEmployeeListApi = class extends Api {
 
   get requestSchema() {
     return Joi.object().keys({
-      organizationId: Joi.number().max(999999999999999).required()
+      organizationId: Joi.number().max(999999999999999).required(),
+      searchString: Joi.string().min(0).max(64).allow('').optional()
     });
   }
 
@@ -43,12 +44,26 @@ exports.GetEmployeeListApi = class extends Api {
     return employeeList;
   }
 
+  _searchCombineEmployeeList({ employeeList, searchString }) {
+    employeeList = employeeList.filter(employee => {
+      searchString = this.escapeRegExp(searchString);
+      let regex = new RegExp(searchString, 'i');
+      return regex.test(employee.userDetails.fullName);
+    });
+
+    return employeeList;
+  }
+
   async handle({ body }) {
-    let { organizationId } =  body;
+    let { organizationId, searchString } =  body;
 
     let employeeList = await this.database.employment.listByOrganizationId({ organizationId });
     let userList = await this._getUserList({ employeeList });
     employeeList = this._insertUserInfoInEmployeeList({ employeeList, userList });
+
+    if (searchString) {
+      employeeList = this._searchCombineEmployeeList({ employeeList, searchString });
+    }
 
     return { employeeList };
   }
