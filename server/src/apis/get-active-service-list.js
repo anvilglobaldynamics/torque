@@ -41,7 +41,7 @@ exports.GetActiveServiceListApi = class extends Api {
     });
   }
 
-  async _searchCombineServiceList({ serviceList, searchString }) {
+  _searchCombineServiceList({ serviceList, searchString }) {
     serviceList = serviceList.filter(service => {
       searchString = this.escapeRegExp(searchString);
       let regex = new RegExp(searchString, 'i');
@@ -56,7 +56,7 @@ exports.GetActiveServiceListApi = class extends Api {
     let serviceList = await this.database.service.listAvailableByOutletId({ outletId });
     await this._combineServiceBlueprintDetail({ serviceList });
     if (searchString) {
-      serviceList = await this._searchCombineServiceList({ serviceList, searchString });
+      serviceList = this._searchCombineServiceList({ serviceList, searchString });
     }
     
     return { serviceList };
