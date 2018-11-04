@@ -144,14 +144,14 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: service.serviceBlueprintId });
     throwOnFalsy(serviceBlueprint, "SERVICE_INVALID", "Service could not be found.");
 
-    if (( serviceBlueprint.isLongstanding || serviceBlueprint.isCustomerRequired) && !customer) {
+    if ((serviceBlueprint.isLongstanding || serviceBlueprint.isCustomerRequired) && !customer) {
       throw new CodedError("SERVICE_REQUIRES_CUSTOMER", "Service requires a customer.");
     }
 
     if (!serviceBlueprint.isEmployeeAssignable && serviceListObj.assignedEmploymentId) {
       throw new CodedError("CANT_ASSIGN_EMPLOYEE_TO_SERVICE", "Cant assign employee to this service.");
-    } 
-    
+    }
+
     if (serviceListObj.assignedEmploymentId) {
       let employee = await this.database.employment.findById({ id: serviceListObj.assignedEmploymentId });
       throwOnFalsy(employee, "ASSIGNED_EMPLOYEE_INVALID", "Service could not be found.");
@@ -165,7 +165,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     if (serviceBlueprint.isLongstanding) {
       // TODO: do some magic with serviceBlueprint.serviceDuration.months and serviceBlueprint.serviceDuration.days
       let expiringDatetimeStamp = (new Date).getTime();
-      let res = await this.database.serviceMembership.create({ createdByUserId, customerId, salesId, serviceId: service.id , expiringDatetimeStamp })
+      let res = await this.database.serviceMembership.create({ createdByUserId, customerId, salesId, serviceId: service.id, expiringDatetimeStamp })
     }
   }
 
@@ -188,7 +188,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     }
 
     if (serviceList.length) {
-      for (let i = 0; i < serviceList.length; i++) { 
+      for (let i = 0; i < serviceList.length; i++) {
         await this._validateServiceAndCheckRequirements({ serviceListObj: serviceList[i], customer });
       }
     }
@@ -198,7 +198,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     let salesId = await this.database.sales.create({ outletId, customerId, productList, serviceList, payment });
 
     if (serviceList.length) {
-      for (let i = 0; i < serviceList.length; i++) { 
+      for (let i = 0; i < serviceList.length; i++) {
         await this._createServiceMembership({ createdByUserId: userId, serviceListObj: serviceList[i], customerId, salesId });
       }
     }
