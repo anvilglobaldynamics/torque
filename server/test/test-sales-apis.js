@@ -101,7 +101,7 @@ let longstandingServiceBlueprintId = null;
 let longstandingService = null;
 let longstandingServiceSaleId = null;
 
-describe.only('Sales', _ => {
+describe('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -1563,7 +1563,6 @@ describe.only('Sales', _ => {
         }
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateAddSalesApiSuccessResponse(body);
       longstandingServiceSaleId = body.salesId;

@@ -50,7 +50,7 @@ exports.GetEmployeeListApi = class extends Api {
     let userList = await this._getUserList({ employeeList });
     employeeList = this._insertUserInfoInEmployeeList({ employeeList, userList });
 
-    return { employeeList: [] };
+    return { employeeList };
   }
 
 }
