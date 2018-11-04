@@ -196,7 +196,7 @@
                   <template is="dom-if" if="{{service.isEmployeeAssignable}}" >
                     <div class="employee-icon-container">
                       <!-- assignedEmploymentId -->
-                      <iron-icon icon="icons:account-circle"></iron-icon>
+                      <iron-icon icon="icons:account-circle" on-tap="assignEmployeeTapped"></iron-icon>
                     </div>
                   </template>
                 </div>
@@ -707,6 +707,8 @@
       isValidCreditSale(customer, totalBilled, paidAmount) {
         return (customer && totalBilled > paidAmount);
       }
+
+      assignEmployeeTapped(e) {}
 
       // region: misc =================================
 
