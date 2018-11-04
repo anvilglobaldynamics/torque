@@ -789,6 +789,7 @@
     "modificationComplete": "দোকানে সেবার লভ্যতা পরিবর্তন শেষ"
   },
   "assignEmployeeService": {
-    "assignEmployeeServiceTitle": "সেবার দায়িত্বে কর্মচারী"
+    "assignEmployeeServiceTitle": "সেবার দায়িত্বে কর্মচারী",
+    "clearEmployeeLabel": "সেবার দায়িত্ব মুছে ফেলুন"
   }
 }

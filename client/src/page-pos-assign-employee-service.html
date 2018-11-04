@@ -27,7 +27,16 @@
     .service-title {
       font-weight: bold;
     }
+
+    .duration-text {
+      font-size: 12px;
+    }
     
+    .already-selected {
+      font-weight: bold;
+      font-size: 12px;
+    }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -36,6 +45,14 @@
 
       <div class="card vertical layout">
         <div class="service-title">[[service.name]]</div>
+        <div>[[verses.serviceBlueprint.sellingPrice]]: [[service.minSalePrice]] [[app.settings.monetaryUnit]]</div>
+        <template is="dom-if" if="[[service.isLongstanding]]">
+          <div class="duration-text">[[verses.serviceBlueprint.serviceDuration]]: [[service.serviceDuration.months]] [[verses.serviceBlueprint.serviceDurationMonths]], [[service.serviceDuration.days]] [[verses.serviceBlueprint.serviceDurationDays]]</div>
+        </template>
+
+        <template is="dom-if" if="{{service.assignedEmploymentId}}">
+          <paper-button raised class="danger" style="margin-top: 10px;" on-tap="clearEmployeeTapped">[[verses.assignEmployeeService.clearEmployeeLabel]]</paper-button>
+        </template>
       </div>
 
       <div class="card vertical layout">
@@ -55,7 +72,9 @@
                 <div class="person-detail-container">[[verses.employee.designation]] : [[employee.designation]], [[verses.employee.role]]: [[employee.role]]</div>
               </div>
               
-              <paper-button raised class="secondary" on-tap="selectEmployeeTapped">[[verses.general.select]]</paper-button>
+              <template is="dom-if" if="[[!employee.isSelected]]">
+                <paper-button raised class="secondary" on-tap="selectEmployeeTapped">[[verses.general.select]]</paper-button>
+              </template>
 
             </div>
           </template>
@@ -107,8 +126,8 @@
           });
           return;
         }
-        this._processEmployeeList(() => {
-          this._processService(() => {
+        this._processService(() => {
+          this._processEmployeeList(() => {
             this.isReady = true;
           });
         });
@@ -139,6 +158,13 @@
       _processEmployeeList(cbfn) {
         this._fetchEmployeeList(newEmployeeList => {
           this.employeeList = newEmployeeList;
+          if (this.service.assignedEmploymentId) {
+            for (let i = 0; i < this.employeeList.length; i++) {
+              if (this.employeeList[i].id === this.service.assignedEmploymentId) {
+                this.employeeList[i].isSelected = true;
+              }
+            }
+          }
           cbfn();
         });
       }
@@ -147,6 +173,7 @@
         let serviceId = parseInt(this.params.service);
         let serviceList = this.app.getFromSession('pos-selected-service-list');
         this.service = serviceList.find(service => service.id === serviceId);
+        console.log(this.service);
         cbfn();
       }
 
@@ -172,6 +199,20 @@
         for (let i = 0; i < previousSavedSelectedServiceList.length; i++) {
           if (previousSavedSelectedServiceList[i].id === serviceId) {
             previousSavedSelectedServiceList[i].assignedEmploymentId = id;
+          }
+        }
+
+        this.app.storeInSession('pos-selected-service-list', previousSavedSelectedServiceList);
+        this.app.navigateToPreviousUrl(`/pos`);
+      }
+
+      clearEmployeeTapped(e = null) {
+        let serviceId = parseInt(this.params.service);
+        let previousSavedSelectedServiceList = this.app.getFromSession('pos-selected-service-list');
+
+        for (let i = 0; i < previousSavedSelectedServiceList.length; i++) {
+          if (previousSavedSelectedServiceList[i].id === serviceId) {
+            previousSavedSelectedServiceList[i].assignedEmploymentId = null;
           }
         }
 

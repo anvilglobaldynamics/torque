@@ -788,6 +788,7 @@
     "modificationComplete": "Outlet Service Availability Modification(s) Complete"
   },
   "assignEmployeeService": {
-    "assignEmployeeServiceTitle": "Assign Employee To Service"
+    "assignEmployeeServiceTitle": "Assign Employee To Service",
+    "clearEmployeeLabel": "Clear Selected Employee"
   }
 }

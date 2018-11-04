@@ -81,6 +81,10 @@
 
       .employee-icon-container {
         padding: 10px;
+      }
+
+      .employee-icon-container-active {
+        padding: 10px;
         color: var(--app-button-primary);
       }
 
@@ -194,10 +198,19 @@
                   </div>
                   
                   <template is="dom-if" if="{{service.isEmployeeAssignable}}" >
-                    <div class="employee-icon-container">
-                      [[service.assignedEmploymentId]]
-                      <iron-icon icon="icons:account-circle" on-tap="assignEmployeeTapped"></iron-icon>
-                    </div>
+
+                    <template is="dom-if" if="{{service.assignedEmploymentId}}">
+                      <div class="employee-icon-container-active">
+                        <iron-icon icon="icons:account-circle" on-tap="assignEmployeeTapped"></iron-icon>
+                      </div>
+                    </template>
+
+                    <template is="dom-if" if="{{!service.assignedEmploymentId}}">
+                      <div class="employee-icon-container">
+                        <iron-icon icon="icons:account-circle" on-tap="assignEmployeeTapped"></iron-icon>
+                      </div>
+                    </template>
+
                   </template>
                 </div>
 
