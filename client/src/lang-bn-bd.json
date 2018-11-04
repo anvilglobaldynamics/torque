@@ -787,5 +787,8 @@
     "searchForServicerInput": "সেবার নাম",
     "availability": "লভ্যতা",
     "modificationComplete": "দোকানে সেবার লভ্যতা পরিবর্তন শেষ"
+  },
+  "assignEmployeeService": {
+    "assignEmployeeServiceTitle": "সেবার দায়িত্বে কর্মচারী"
   }
 }

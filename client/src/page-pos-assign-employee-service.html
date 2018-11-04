@@ -1,0 +1,177 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-pos-assign-employee-service">
+  <template>
+    <style include="shared-styles">
+    
+    .service-title {
+      font-weight: bold;
+    }
+    
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card vertical layout">
+        <div class="service-title">[[service.name]]</div>
+      </div>
+
+      <div class="card vertical layout">
+
+        <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+          <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+        </template>
+
+        <div class="list">
+          <template is="dom-repeat" items="[[employeeList]]" as="employee">
+            <div class="horizontal layout item center">
+
+              <div class="vertical layout flex">
+                <div class="person-name-container">[[verses.general.name]]: [[employee.userDetails.fullName]]</div>
+                <div class="person-phone-container">[[verses.general.phone]]: [[employee.userDetails.phone]]</div>
+                <div class="person-detail-container">[[verses.employee.companyProvidedId]]: [[employee.companyProvidedId]]</div>
+                <div class="person-detail-container">[[verses.employee.designation]] : [[employee.designation]], [[verses.employee.role]]: [[employee.role]]</div>
+              </div>
+              
+              <paper-button raised class="secondary" on-tap="selectEmployeeTapped">[[verses.general.select]]</paper-button>
+
+            </div>
+          </template>
+        </div>
+
+        <div class="pagination">
+          [[verses.general.showing]]
+          <span class="limit">[[pagination.limit]]</span>
+          [[verses.general.itemsOutOf]]
+          <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+          <span class="offset">#[[$inc(pagination.offset)]]</span>.
+        </div>
+        <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+          <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+        </template>
+
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+    class PagePosAssignEmployeeService extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-pos-assign-employee-service';
+      }
+
+      static get properties() {
+        return {};
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.assignEmployeeService.assignEmployeeServiceTitle);
+        if (!this._ensureAccess()) return;
+        if (!('service' in this.params)) {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processEmployeeList(() => {
+          this._processService(() => {
+            this.isReady = true;
+          });
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+      
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_USERS']
+        });
+      }
+
+      _fetchEmployeeList(cbfn) {
+        let data = { organizationId: this.app.organization.id, paginate: this.paginate };
+        this.app.callGetEmployeeListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.employeeList);
+        });
+      }
+
+      _processEmployeeList(cbfn) {
+        this._fetchEmployeeList(newEmployeeList => {
+          this.employeeList = newEmployeeList;
+          cbfn();
+        });
+      }
+
+      _processService(cbfn) {
+        let serviceId = parseInt(this.params.service);
+        let serviceList = this.app.getFromSession('pos-selected-service-list');
+        this.service = serviceList.find(service => service.id === serviceId);
+        console.log(this.service);
+        cbfn();
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processEmployeeList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processEmployeeList(() => this.isReady = true);
+      }
+
+      // region: ui  =================================
+
+      selectEmployeeTapped(e) {
+        console.log("selectEmployeeTapped");
+      }
+
+      // region: misc =================================
+    }
+
+    window.customElements.define(PagePosAssignEmployeeService.is, PagePosAssignEmployeeService);
+  </script>
+</dom-module>

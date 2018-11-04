@@ -708,7 +708,10 @@
         return (customer && totalBilled > paidAmount);
       }
 
-      assignEmployeeTapped(e) {}
+      assignEmployeeTapped(e) {
+        let { id } = e.model.service;
+        return this.app.navigateTo(`/pos-assign-employee-service/service:${id}`);
+      }
 
       // region: misc =================================
 

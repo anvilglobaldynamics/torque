@@ -786,5 +786,8 @@
     "searchForServicerInput": "Service Name",
     "availability": "Availability",
     "modificationComplete": "Outlet Service Availability Modification(s) Complete"
+  },
+  "assignEmployeeService": {
+    "assignEmployeeServiceTitle": "Assign Employee To Service"
   }
 }
