@@ -26,22 +26,13 @@ exports.GetEmployeeListApi = class extends Api {
     }];
   }
 
-  _getEmployeeList({ organizationId }, cbfn) {
-    this.legacyDatabase.employment.listByOrganizationId({ organizationId }, (err, employeeList) => {
-      if (err) return this.fail(err);
-      cbfn(employeeList);
-    })
-  }
-
-  _getUserList({ employeeList }, cbfn) {
+  async _getUserList({ employeeList }) {
     let userIdList = employeeList.map(employee => employee.userId);
-    this.legacyDatabase.user.listByIdList({ idList: userIdList }, (err, userList) => {
-      if (err) return this.fail(err);
-      cbfn(userList);
-    })
+    let userList = await this.database.user.listByIdList({ idList: userIdList });
+    return userList;
   }
 
-  _insertUserInfoInEmployeeList({ employeeList, userList }, cbfn) {
+  _insertUserInfoInEmployeeList({ employeeList, userList }) {
     employeeList.forEach(employee => {
       let matchingUser = userList.find(user => user.id === employee.userId);
 
@@ -49,19 +40,15 @@ exports.GetEmployeeListApi = class extends Api {
       employee.userDetails = { fullName, phone, email, nid, physicalAddress, emergencyContact, bloodGroup };
     });
 
-    cbfn(employeeList);
+    return employeeList;
   }
 
   async handle({ body }) {
     let { organizationId } =  body;
 
-    // this._getEmployeeList({ organizationId }, (employeeList) => {
-    //   this._getUserList({ employeeList }, (userList) => {
-    //     this._insertUserInfoInEmployeeList({ employeeList, userList }, (employeeList) => {
-    //       this.success({ employeeList });
-    //     });
-    //   });
-    // });
+    let employeeList = await this.database.employment.listByOrganizationId({ organizationId });
+    let userList = await this._getUserList({ employeeList });
+    employeeList = this._insertUserInfoInEmployeeList({ employeeList, userList });
 
     return { employeeList: [] };
   }
