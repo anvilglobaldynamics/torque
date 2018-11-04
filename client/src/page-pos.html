@@ -60,9 +60,28 @@
         font-size: 11px;
       }
 
+      .service-info {
+        flex: 1;
+        /* border: 1px solid blue; */
+      }
+
+      .service-title {
+        font-weight: bold;
+      }
+
+      .service-vat-detail {
+        font-size: 11px;
+        margin-left: 6px;
+      }
+
       .service-customer-required {
         font-size: 11px;
         font-weight: bold;
+      }
+
+      .employee-icon-container {
+        padding: 10px;
+        color: var(--app-button-primary);
       }
 
       .m-top-16{
@@ -168,9 +187,18 @@
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
                 
-                <div>
-                  <span class="product-title">[[service.name]]</span>
-                  <span class="product-discount-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                <div class="horizontal layout center">
+                  <div class="service-info">
+                    <span class="service-title">[[service.name]]</span>
+                    <span class="service-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                  </div>
+                  
+                  <template is="dom-if" if="{{service.isEmployeeAssignable}}" >
+                    <div class="employee-icon-container">
+                      <!-- assignedEmploymentId -->
+                      <iron-icon icon="icons:account-circle"></iron-icon>
+                    </div>
+                  </template>
                 </div>
 
                 <template is="dom-if" if="{{service.isCustomerRequired}}">
@@ -574,10 +602,10 @@
         });
 
         let serviceList = this.serviceList.map(service => {
-          let { id, salePrice, vatValue } = service;
+          console.log(service);
+          let { id, salePrice, vatValue, assignedEmploymentId } = service;
           let serviceId = id;
           let vatPercentage = vatValue;
-          let assignedEmploymentId = null; // TODO: assignedEmploymentId
           return { serviceId, salePrice, vatPercentage, assignedEmploymentId };
         });
 
