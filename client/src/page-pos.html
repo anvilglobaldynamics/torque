@@ -195,7 +195,7 @@
                   
                   <template is="dom-if" if="{{service.isEmployeeAssignable}}" >
                     <div class="employee-icon-container">
-                      <!-- assignedEmploymentId -->
+                      [[service.assignedEmploymentId]]
                       <iron-icon icon="icons:account-circle" on-tap="assignEmployeeTapped"></iron-icon>
                     </div>
                   </template>

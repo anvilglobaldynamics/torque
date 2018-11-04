@@ -147,7 +147,6 @@
         let serviceId = parseInt(this.params.service);
         let serviceList = this.app.getFromSession('pos-selected-service-list');
         this.service = serviceList.find(service => service.id === serviceId);
-        console.log(this.service);
         cbfn();
       }
 
@@ -166,7 +165,18 @@
       // region: ui  =================================
 
       selectEmployeeTapped(e) {
-        console.log("selectEmployeeTapped");
+        let { id } = e.model.employee;
+        let serviceId = parseInt(this.params.service);
+        let previousSavedSelectedServiceList = this.app.getFromSession('pos-selected-service-list');
+
+        for (let i = 0; i < previousSavedSelectedServiceList.length; i++) {
+          if (previousSavedSelectedServiceList[i].id === serviceId) {
+            previousSavedSelectedServiceList[i].assignedEmploymentId = id;
+          }
+        }
+
+        this.app.storeInSession('pos-selected-service-list', previousSavedSelectedServiceList);
+        this.app.navigateToPreviousUrl(`/pos`);
       }
 
       // region: misc =================================
