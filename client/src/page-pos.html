@@ -88,6 +88,10 @@
         color: var(--app-button-primary);
       }
 
+      .assign-icon {
+        margin-right: 4px;
+      }
+
       .m-top-16{
         margin-top: 16px;
       }
@@ -201,13 +205,13 @@
 
                     <template is="dom-if" if="{{service.assignedEmploymentId}}">
                       <div class="employee-icon-container-active">
-                        <iron-icon icon="icons:account-circle" on-tap="assignEmployeeTapped"></iron-icon>
+                        <iron-icon icon="icons:account-circle" class="assign-icon" on-tap="assignEmployeeTapped"></iron-icon>[[verses.pos.assignedEmployee]]
                       </div>
                     </template>
 
                     <template is="dom-if" if="{{!service.assignedEmploymentId}}">
                       <div class="employee-icon-container">
-                        <iron-icon icon="icons:account-circle" on-tap="assignEmployeeTapped"></iron-icon>
+                        <iron-icon icon="icons:account-circle" class="assign-icon" on-tap="assignEmployeeTapped"></iron-icon>[[verses.pos.assignEmployee]]
                       </div>
                     </template>
 

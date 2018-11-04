@@ -613,7 +613,10 @@
     "paymentMethod": "Payment Method",
     "thisWillBeACreditSale": "This will be a Credit Sale. Additional Payment can be collected later from View Sales Page.",
     "selectService": "Select Service",
-    "serviceRequiresCustomerSelection": "This Service requires a customer selection"
+    "serviceRequiresCustomerSelection": "This Service requires a customer selection",
+
+    "assignedEmployee": "assigned",
+    "assignEmployee": "assign"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
