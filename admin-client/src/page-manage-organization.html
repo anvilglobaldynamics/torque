@@ -44,13 +44,15 @@
         font-weight: bold;
       }
 
-      .a-package {
+      .a-package,
+      .a-module {
         border: 1px solid #eee;
         background-color: #f7f7f7;
         padding: 5px;
       }
 
-      .a-package-detail {
+      .a-package-detail,
+      .a-module-detail {
         font-size: 12px;
       }
 
@@ -162,10 +164,10 @@
           </div>
 
           <template is="dom-if" if="[[moduleActivationList.length]]">
-            <div class="card vertical layout package-activation-list-container">
-              <div class="package-activation-title">Module Activation/Deactivation List:</div>
+            <div class="card vertical layout module-activation-list-container">
+              <div class="module-activation-title">Module Activation/Deactivation List:</div>
               <template is="dom-repeat" items="[[moduleActivationList]]" as="moduleActivation">
-                <div class="package-activation">
+                <div class="module-activation">
                   <div>Code: [[moduleActivation.moduleCode]]</div>
                   <div>Is Deactivated: [[moduleActivation.isDeactivated]] </div>
                   <div>Payment Reference: [[moduleActivation.paymentReference]] </div>
@@ -183,7 +185,7 @@
           </template>
 
           <div class="card vertical layout">
-            <div class="package-activation-title">Module Activation:</div>
+            <div class="module-activation-title">Module Activation:</div>
 
             <paper-dropdown-menu class="full-width-paper-dropdown" label="Select Module" class="mr-4">
               <paper-listbox slot="dropdown-content" selected="{{moduleCode}}" attr-for-selected="code">
@@ -200,12 +202,12 @@
           </div>
 
           <div class="card vertical layout">
-            <div class="package-activation-title">Module Detail</div>
+            <div class="module-activation-title">Module Detail</div>
 
             <template is="dom-repeat" items="[[moduleList]]" as="module">
-              <div class="a-package">
+              <div class="a-module">
                 <div>[[module.code]]</div>
-                <div class="a-package-detail">[[module.name]]</div>
+                <div class="a-module-detail">[[module.name]]</div>
               </div>
             </template>
           </div>
@@ -251,7 +253,7 @@
           // Module Details - End
           paperTabSelectedViewIndex: {
             type: Number,
-            value: 1
+            value: 0
           }
         };
       }
