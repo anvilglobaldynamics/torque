@@ -32,6 +32,7 @@ exports.GetCustomerSummaryListApi = class extends Api {
   async handle({ body }) {
     let { organizationId, searchString } = body;
     let customerList = await this._getCustomerList({ organizationId, searchString });
+    console.log(customerList);
     return { customerList };
   }
 
