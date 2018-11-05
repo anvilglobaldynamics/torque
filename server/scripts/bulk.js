@@ -10,7 +10,7 @@ let { rnd } = require('../test/lib');
 
 const phonePrefix = '+800';
 const emailPrefix = 'mail';
-const commonPassword = '12345678';
+const commonPassword = 'johndoe1pass';
 
 // --------------------------------------------------------------
 
@@ -293,6 +293,8 @@ const createSales = async ({ apiKey, outletId, productList }) => {
     customerId: null,
 
     productList,
+
+    serviceList: [],
 
     payment: {
       totalAmount: 0,
