@@ -93,6 +93,10 @@ let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
+let toMonthsLaterDate = new Date();
+toMonthsLaterDate.setDate(toMonthsLaterDate.getMonth() + 3);
+toMonthsLaterDate = toMonthsLaterDate.getTime();
+
 let customerRef1 = null;
 
 let basicServiceBlueprintId = null;
@@ -1653,8 +1657,8 @@ describe.only('Sales', _ => {
         shouldFilterByOutlet: false,
         shouldFilterByCustomer: false,
 
-        fromDate,
-        toDate: (new Date()).getTime(),
+        fromDate: (new Date()).getTime(),
+        toDate: toMonthsLaterDate
       }
     }, (err, response, body) => {
       console.log(body);

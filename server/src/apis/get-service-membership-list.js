@@ -71,6 +71,8 @@ exports.GetServiceMembershipListApi = class extends Api {
 
   async handle({ body }) {
     let { serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate } = body;
+    console.log(fromDate);
+    console.log(toDate);
 
     toDate = this._getExtendedToDate(toDate);
 
