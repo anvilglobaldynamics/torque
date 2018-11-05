@@ -101,7 +101,7 @@ let longstandingServiceBlueprintId = null;
 let longstandingService = null;
 let longstandingServiceSaleId = null;
 
-describe('Sales', _ => {
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -737,6 +737,7 @@ describe('Sales', _ => {
 
         fromDate,
         toDate: (new Date()).getTime(),
+        includeExtendedInformation: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -1605,6 +1606,33 @@ describe('Sales', _ => {
   });
 
   // Service Sales - end
+
+  it('api/get-sales-list (Valid only organization Id and includeExtendedInformation)', testDoneFn => {
+
+    callApi('api/get-sales-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate,
+        toDate: (new Date()).getTime(),
+        includeExtendedInformation: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetSalesListApiSuccessResponse(body);
+      body.salesList.forEach(sales => {
+        validateSalesSchemaWhenListObj(sales);
+      });
+      testDoneFn();
+    });
+
+  });
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
