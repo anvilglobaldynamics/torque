@@ -69,18 +69,28 @@ exports.GetServiceMembershipListApi = class extends Api {
     }
   }
 
+  async _insertCustomerData({ serviceMembershipList }) {
+    for (let i = 0; i < serviceMembershipList.length; i++) {
+      let { fullName, phone } = await this.database.customer.findById({ id: serviceMembershipList[i].customerId });
+      serviceMembershipList[i].customerDetails = { fullName, phone };
+    }
+
+    return serviceMembershipList;
+  }
+
   async handle({ body }) {
     let { serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate } = body;
-    console.log(fromDate);
-    console.log(toDate);
 
     toDate = this._getExtendedToDate(toDate);
 
     await this._verifyOutletIfNeeded({ outletId, shouldFilterByOutlet });
     await this._verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer });
     await this._verifyServiceBlueprintIfNeeded({ serviceBlueprintId, shouldFilterByServiceBlueprint });
+
+    let serviceMembershipList = await this.database.serviceMembership._find({});
+    serviceMembershipList = await this._insertCustomerData({ serviceMembershipList });
     
-    return { serviceMembershipList: [] };
+    return { serviceMembershipList };
   }
 
 }

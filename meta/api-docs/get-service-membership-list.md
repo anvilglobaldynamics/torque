@@ -55,6 +55,11 @@ Possible Error Codes:
       createdByUserId: Joi.number().max(999999999999999).required(),
 
       customerId: Joi.number().max(999999999999999).required(),
+      customerDetails: Joi.object().keys({
+        fullName: Joi.string().min(1).max(64).required(),
+        phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      }),
+
       salesId: Joi.number().max(999999999999999).required(),
       serviceId: Joi.number().max(999999999999999).required(),
 

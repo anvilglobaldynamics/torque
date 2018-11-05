@@ -1661,7 +1661,7 @@ describe.only('Sales', _ => {
         toDate: toMonthsLaterDate
       }
     }, (err, response, body) => {
-      console.log(body);
+      // console.log(body.serviceMembershipList);
       expect(response.statusCode).to.equal(200);
       validateGetServiceMembershipListApiSuccessResponse(body);
       body.serviceMembershipList.forEach(serviceMembership => {
