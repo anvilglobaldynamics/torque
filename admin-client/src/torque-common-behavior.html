@@ -94,7 +94,7 @@
 
       checkPrivilege(privilege) {
         if (!(privilege in this.app.organization.employment.privileges)) {
-          throw new Error(`No such privilege ""${privilege}.`);
+          throw new Error(`No such privilege "${privilege}".`);
         }
         return this.app.organization.employment.privileges[privilege];
       }
