@@ -204,12 +204,18 @@
                 </template>
 
                 <template is="dom-if" if="[[showProductDetails]]">
-                  <template is="dom-repeat" items="[[sales.productList]]" as="product">
-                    <div class="description">[[product.productBlueprint.name]]: [[product.count]] [[product.productBlueprint.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]</div>
+                  <template is="dom-if" if="[[sales.productList.length]]">
+                    <strong>[[verses.salesReport.products]]:</strong>
+                    <template is="dom-repeat" items="[[sales.productList]]" as="product">
+                      <div class="description">[[product.productBlueprint.name]]: [[product.count]] [[product.productBlueprint.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]</div>
+                    </template>
                   </template>
 
-                  <template is="dom-repeat" items="[[sales.serviceList]]" as="service">
-                    <div class="description">[[service.serviceBlueprint.name]]: [[service.salePrice]] [[app.settings.monetaryUnit]]</div>
+                  <template is="dom-if" if="[[sales.serviceList.length]]">
+                    <strong>[[verses.salesReport.services]]:</strong>
+                    <template is="dom-repeat" items="[[sales.serviceList]]" as="service">
+                      <div class="description">[[service.serviceBlueprint.name]]: [[service.salePrice]] [[app.settings.monetaryUnit]]</div>
+                    </template>
                   </template>
 
                   <div class="description">
