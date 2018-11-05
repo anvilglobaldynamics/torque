@@ -452,6 +452,11 @@
         this.callCombinedJsonApi('get-sales-list', data, cbfn);
       }
 
+      callGetServiceMembershipListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-service-membership-list', data, cbfn);
+      }
+
       callReportInventoryDetailsApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('report-inventory-details', data, cbfn);

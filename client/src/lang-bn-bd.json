@@ -117,6 +117,7 @@
     "serviceBlueprints": "সেবা পরিকল্পনা",
     "sales": "বিক্রয় রেকর্ড",
     "salesReturn": "বিক্রয় ফেরত রেকর্ড",
+    "serviceMembership": "সেবার সদস্যপদ",
     "customers": "গ্রাহক",
     "salesReport": "বিক্রয় রিপোর্টস",
     "inventoryReport": "পণ্য তালিকা রিপোর্টস",
@@ -795,5 +796,8 @@
   "assignEmployeeService": {
     "assignEmployeeServiceTitle": "সেবার দায়িত্বে কর্মচারী",
     "clearEmployeeLabel": "সেবার দায়িত্ব মুছে ফেলুন"
+  },
+  "serviceMembership": {
+    "serviceMembershipTitle": "সেবার সদস্যপদ"
   }
 }

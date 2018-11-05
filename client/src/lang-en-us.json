@@ -117,6 +117,7 @@
     "serviceBlueprints": "Service Blueprints",
     "sales": "Sales Records",
     "salesReturn": "Sales Return Records",
+    "serviceMembership": "Service Memberships",
     "customers": "Customers",
     "salesReport": "Sales Report",
     "inventoryReport": "Inventories Report",
@@ -794,5 +795,8 @@
   "assignEmployeeService": {
     "assignEmployeeServiceTitle": "Assign Employee To Service",
     "clearEmployeeLabel": "Clear Selected Employee"
+  },
+  "serviceMembership": {
+    "serviceMembershipTitle": "Service Memberships"
   }
 }
