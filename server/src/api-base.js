@@ -392,8 +392,18 @@ class Api {
       }
       let queryObjectArray = organizationBy;
       for (let queryObject of queryObjectArray) {
-        let { from, query, select } = queryObject;
-        query = query(body);
+        let { from, query: queryFn, select } = queryObject;
+        let query = queryFn(body);
+        if (Object.keys(query).length === 0) {
+          throw new CodedError("DEV_ERROR", "accessControl: Query is invalid.");
+        } else if (Object.keys(query).length > 1) {
+          throw new CodedError("DEV_ERROR", "accessControl: Multikey query is not yet supported.");
+        } else {
+          let key = Object.keys(query).pop();
+          if (typeof (query[key]) === 'undefined') {
+            query = queryFn(this.interimData);
+          }
+        }
         let doc = await this.database.engine.findOne(from, query);
         if (!doc || !(select in doc)) {
           if ('errorCode' in queryObject) {
@@ -401,9 +411,9 @@ class Api {
             throw new CodedError(queryObject.errorCode, message);
           }
         }
-        body[select] = doc[select];
+        this.interimData[select] = doc[select];
       }
-      let id = body[queryObjectArray[queryObjectArray.length - 1].select];
+      let id = this.interimData[queryObjectArray[queryObjectArray.length - 1].select];
       organization = await this.database.organization.findById({ id });
       throwOnFalsy(organization, "ORGANIZATION_INVALID", this.verses.organizationCommon.organizationInvalid);
     }

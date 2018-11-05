@@ -294,8 +294,18 @@ class LegacyApi {
   }
 
   __processAccessControlQuery(body, queryObject, cbfn) {
-    let { from, query, select } = queryObject;
-    query = query(body);
+    let { from, query: queryFn, select } = queryObject;
+    let query = queryFn(body);
+    if (Object.keys(query).length === 0) {
+      throw new CodedError("DEV_ERROR", "accessControl: Query is invalid.");
+    } else if (Object.keys(query).length > 1) {
+      throw new CodedError("DEV_ERROR", "accessControl: Multikey query is not yet supported.");
+    } else {
+      let key = Object.keys(query).pop();
+      if (typeof (query[key]) === 'undefined') {
+        query = queryFn(this.interimData);
+      }
+    }
     this.legacyDatabase.findOne(from, query, (err, doc) => {
       if (err) return cbfn(err);
       cbfn(null, doc);
@@ -314,11 +324,11 @@ class LegacyApi {
           }
           return cbfn(null, null);
         }
-        body[queryObject.select] = doc[queryObject.select];
+        this.interimData[queryObject.select] = doc[queryObject.select];
         next();
       })
     }).finally(() => {
-      cbfn(null, body[queryObjectArray[queryObjectArray.length - 1].select]);
+      cbfn(null, this.interimData[queryObjectArray[queryObjectArray.length - 1].select]);
     });
   }
 
