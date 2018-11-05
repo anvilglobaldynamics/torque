@@ -635,6 +635,7 @@
     "sales": "Sales",
     "soldTo": "Sold To",
     "products": "product(s)",
+    "services": "service(s)",
     "total": "Total",
     "discountedAmount": "Discounted Amount",
     "vat": "VAT",
