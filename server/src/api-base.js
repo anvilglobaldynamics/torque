@@ -46,7 +46,8 @@ class Api {
     this._consumerId = consumerId;
     this.__paginationCache = null;
     this.interimData = {
-      organization: null
+      organization: null, // NOTE: populated from accessControl
+      aPackage: null // NOTE: populated from package subscription
     }
     this.verses = null;
     this.__assignFailsafeLanguageFeature();
@@ -270,7 +271,7 @@ class Api {
     let aPackage = await this.database.fixture.findPackageByCode({ packageCode: packageActivation.packageCode });
     throwOnFalsy(aPackage, "DEV_ERROR", "package is missing");
     // Below is for future references, useful when limiting number of employees, etc.
-    body.aPackage = aPackage;
+    this.interimData.aPackage = aPackage;
     let { createdDatetimeStamp } = packageActivation;
     let { duration } = aPackage;
     let date = new Date(createdDatetimeStamp);

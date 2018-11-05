@@ -37,7 +37,8 @@ class LegacyApi {
     this.verses = null;
     this.__assignFailsafeLanguageFeature();
     this.interimData = {
-      organization: null
+      organization: null,
+      aPackage: null
     }
   }
 
