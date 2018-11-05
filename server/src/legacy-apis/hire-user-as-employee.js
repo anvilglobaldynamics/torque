@@ -98,7 +98,8 @@ exports.HireUserAsEmployeeApi = class extends userCommonMixin(collectionCommonMi
   }
 
   handle({ body }) {
-    let { userId, organizationId, role, designation, companyProvidedId, privileges, aPackage } = body;
+    let { userId, organizationId, role, designation, companyProvidedId, privileges } = body;
+    let { aPackage } = this.interimData;
     this._checkOrganizationPackageEmployeeLimit({ organizationId, aPackage }, () => {
       this._findUserById({ userId }, (user) => {
         this._checkIfUserEmployed({ userId, organizationId }, () => {
