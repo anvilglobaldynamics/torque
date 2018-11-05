@@ -37,6 +37,9 @@ exports.EmploymentCollection = class extends LegacyCollection {
         PRIV_MODIFY_SALES: Joi.boolean().required(),
         PRIV_ALLOW_FLAT_DISCOUNT: Joi.boolean().required(),
 
+        PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: Joi.boolean().required(),
+        PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: Joi.boolean().required(),
+
         PRIV_VIEW_SALES_RETURN: Joi.boolean().required(),
         PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
 
@@ -95,6 +98,9 @@ exports.EmploymentCollection = class extends LegacyCollection {
       "PRIV_MODIFY_SALES",
       "PRIV_ALLOW_FLAT_DISCOUNT",
 
+      "PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS",
+      "PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS",
+
       "PRIV_VIEW_SALES_RETURN",
       "PRIV_MODIFY_SALES_RETURN",
 
@@ -128,6 +134,9 @@ exports.EmploymentCollection = class extends LegacyCollection {
       "PRIV_VIEW_SALES",
       "PRIV_MODIFY_SALES",
       "PRIV_ALLOW_FLAT_DISCOUNT",
+
+      "PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS",
+      // "PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS",
 
       "PRIV_VIEW_SALES_RETURN",
       "PRIV_MODIFY_SALES_RETURN",

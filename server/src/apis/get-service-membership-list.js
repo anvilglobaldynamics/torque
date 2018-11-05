@@ -32,7 +32,7 @@ exports.GetServiceMembershipListApi = class extends Api {
     return [{
       organizationBy: "organizationId",
       privilegeList: [
-        "PRIV_VIEW_SALES"
+        "PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS"
       ],
       moduleList: [
         "MOD_SERVICE",
