@@ -9,6 +9,7 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
@@ -27,36 +28,50 @@
 <dom-module id="page-manage-organization">
   <template>
     <style include="shared-styles">
-    
       .full-width-paper-dropdown {
         width: 100%;
       }
 
-      .package-activation {
+      .package-activation,
+      .module-activation {
         border: 1px solid #eee;
         background-color: #f7f7f7;
         padding: 5px;
       }
 
-      .package-activation-title {
+      .package-activation-title,
+      .module-activation-title {
         font-weight: bold;
       }
 
-      .a-package {
+      .a-package,
+      .a-module {
         border: 1px solid #eee;
         background-color: #f7f7f7;
         padding: 5px;
       }
 
-      .a-package-detail {
+      .a-package-detail,
+      .a-module-detail {
         font-size: 12px;
       }
 
+      paper-tabs.view-selector {
+        --paper-tabs: {
+          background-color: var(--app-primary-color);
+          color: white;
+        }
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <paper-tabs id="main-view-selector" class="view-selector" selected="{{paperTabSelectedViewIndex}}" fit-container>
+        <paper-tab>Package Details</paper-tab>
+        <paper-tab>Module Details</paper-tab>
+      </paper-tabs>
 
       <div class="card vertical layout">
         <div class="package-activation-title">Organization Detail:</div>
@@ -66,66 +81,139 @@
         <div class="inventory-container-view-details">Phone: [[organization.phone]]</div>
       </div>
 
-      <template is="dom-if" if="[[activatedPackage]]">
-        <div class="card vertical layout">
-          <div class="package-activation-title">Currently Active Package:</div>
-          <div class="package-activation">
-            <div>Code: [[activatedPackage.code]]</div>
-            <div>Package Name: [[activatedPackage.name]] </div>
-            <div>Payment Reference: [[activatedPackage.paymentReference]] </div>
-            <div class="">Activation Date: [[$mkDate(activatedPackage.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
-            <div class="">Expiration Date: [[$mkDate(activatedPackage.expirationDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
-          </div>
-        </div>
-      </template>
-
-      <template is="dom-if" if="[[packageActivationList.length]]">
-        <div class="card vertical layout package-activation-list-container">
-          <div class="package-activation-title">Package Activation List:</div>
-          <template is="dom-repeat" items="[[packageActivationList]]" as="packageActivation">
-            <div class="package-activation">
-              <div>Code: [[packageActivation.packageCode]]</div>
-              <div>Package Name: [[packageActivation.packageDetail.name]] </div>
-              <div>Payment Reference: [[packageActivation.paymentReference]] </div>
-              <div>Activation Date: [[$mkDate(packageActivation.createdDatetimeStamp, 'dd/MM/yyyy hh:mm:ss TT')]]</div>
+      <iron-pages selected="{{paperTabSelectedViewIndex}}">
+        <div class="subpage-package-details">
+          <!-- Package Details - Start -->
+          <template is="dom-if" if="[[activatedPackage]]">
+            <div class="card vertical layout">
+              <div class="package-activation-title">Currently Active Package:</div>
+              <div class="package-activation">
+                <div>Code: [[activatedPackage.code]]</div>
+                <div>Package Name: [[activatedPackage.name]] </div>
+                <div>Payment Reference: [[activatedPackage.paymentReference]] </div>
+                <div class="">Activation Date: [[$mkDate(activatedPackage.createdDatetimeStamp, 'dd MMM yyyy hh:mm
+                  TT')]]</div>
+                <div class="">Expiration Date: [[$mkDate(activatedPackage.expirationDatetimeStamp, 'dd MMM yyyy hh:mm
+                  TT')]]</div>
+              </div>
             </div>
           </template>
-        </div>
-      </template>
 
-      <div class="card vertical layout">
-        <div class="package-activation-title">Package Activation:</div>
+          <template is="dom-if" if="[[packageActivationList.length]]">
+            <div class="card vertical layout package-activation-list-container">
+              <div class="package-activation-title">Package Activation List:</div>
+              <template is="dom-repeat" items="[[packageActivationList]]" as="packageActivation">
+                <div class="package-activation">
+                  <div>Code: [[packageActivation.packageCode]]</div>
+                  <div>Package Name: [[packageActivation.packageDetail.name]] </div>
+                  <div>Payment Reference: [[packageActivation.paymentReference]] </div>
+                  <div>Activation Date: [[$mkDate(packageActivation.createdDatetimeStamp, 'dd/MM/yyyy hh:mm:ss TT')]]</div>
+                </div>
+              </template>
+            </div>
+          </template>
 
-        <paper-dropdown-menu class="full-width-paper-dropdown" label="select package" class="mr-4">
-          <paper-listbox slot="dropdown-content" selected="{{packageCode}}" attr-for-selected="code">
+          <div class="card vertical layout">
+            <div class="package-activation-title">Package Activation:</div>
+
+            <paper-dropdown-menu class="full-width-paper-dropdown" label="select package" class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{packageCode}}" attr-for-selected="code">
+                <template is="dom-repeat" items="[[packageList]]" as="package">
+                  <paper-item code="[[package.code]]">[[package.name]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+
+            <paper-textarea class="paymentReference" value="{{paymentReference}}" required minlength="4" error-message="Enter Valid Payment Reference"
+              label="Payment Reference (Bkash TrxID or Bank Deposit)" rows="2"></paper-textarea>
+
+            <paper-button raised class="primary" on-tap="assignPackageTapped">Assign Package</paper-button>
+          </div>
+
+          <div class="card vertical layout">
+            <div class="package-activation-title">Packages Detail</div>
+
             <template is="dom-repeat" items="[[packageList]]" as="package">
-              <paper-item code="[[package.code]]">[[package.name]]</paper-item>
+              <div class="a-package">
+                <div>[[package.name]] (Code: [[package.code]])</div>
+                <div class="a-package-detail">[[package.name]]</div>
+                <div class="a-package-detail">Price: [[package.price]]</div>
+                <div class="a-package-detail">Duration: [[package.duration.days]] days, [[package.duration.months]]
+                  months</div>
+                <div class="a-package-detail">Limits:
+                  [[package.limits.maximumEmployees]] employees,
+                  [[package.limits.maximumOutlets]] outlets,
+                  [[package.limits.maximumWarehouses]] warehouses
+                </div>
+              </div>
             </template>
-          </paper-listbox>
-        </paper-dropdown-menu>
-        
-        <paper-textarea class="paymentReference" value="{{paymentReference}}" required minlength="4" error-message="Enter Valid Payment Reference" label="Payment Reference (Bkash TrxID or Bank Deposit)" rows="2"></paper-textarea>
-
-        <paper-button raised class="primary" on-tap="assignPackageTapped">Assign Package</paper-button>
-      </div>
-
-      <div class="card vertical layout">
-        <div class="package-activation-title">Packages Detail</div>
-
-        <template is="dom-repeat" items="[[packageList]]" as="package">
-          <div class="a-package">
-            <div>[[package.name]] (Code: [[package.code]])</div>
-            <div class="a-package-detail">[[package.name]]</div>
-            <div class="a-package-detail">Price: [[package.price]]</div>
-            <div class="a-package-detail">Duration: [[package.duration.days]] days, [[package.duration.months]] months</div>
-            <div class="a-package-detail">Limits:
-              [[package.limits.maximumEmployees]] employees, 
-              [[package.limits.maximumOutlets]] outlets,
-              [[package.limits.maximumWarehouses]] warehouses
+          </div>
+          <!-- Package Details - End -->
+        </div>
+        <div class="subpage-module-details">
+          <!-- Module Details - Start -->
+          <div class="card vertical layout">
+            <div class="module-activation-title">Currently Active Modules:</div>
+            <div class="module-activation">
+              <ul>
+                <template is="dom-repeat" items="[[organization.activeModuleCodeList]]" as="moduleCode">
+                  <li>[[moduleCode]]</li>
+                </template>
+              </ul>
             </div>
           </div>
-        </template>
-      </div>
+
+          <template is="dom-if" if="[[moduleActivationList.length]]">
+            <div class="card vertical layout module-activation-list-container">
+              <div class="module-activation-title">Module Activation/Deactivation List:</div>
+              <template is="dom-repeat" items="[[moduleActivationList]]" as="moduleActivation">
+                <div class="module-activation">
+                  <div>Code: [[moduleActivation.moduleCode]]</div>
+                  <div>Is Deactivated: [[moduleActivation.isDeactivated]] </div>
+                  <div>Payment Reference: [[moduleActivation.paymentReference]] </div>
+                  <div>Activation Date: [[$mkDate(moduleActivation.createdDatetimeStamp, 'dd/MM/yyyy hh:mm:ss TT')]]</div>
+                  <template is="dom-if" if="[[moduleActivation.deactivatedDatetimeStamp]]">
+                    <div>Deactivation Date: [[$mkDate(moduleActivation.deactivatedDatetimeStamp, 'dd/MM/yyyy hh:mm:ss
+                      TT')]]</div>
+                  </template>
+                  <template is="dom-if" if="[[!moduleActivation.isDeactivated]]">
+                    <paper-button raised class="primary" on-tap="deactivateModuleTapped">Deactivate Module</paper-button>
+                  </template>
+                </div>
+              </template>
+            </div>
+          </template>
+
+          <div class="card vertical layout">
+            <div class="module-activation-title">Module Activation:</div>
+
+            <paper-dropdown-menu class="full-width-paper-dropdown" label="Select Module" class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{moduleCode}}" attr-for-selected="code">
+                <template is="dom-repeat" items="[[moduleList]]" as="module">
+                  <paper-item code="[[module.code]]">[[module.code]] [[module.name]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+
+            <paper-textarea class="paymentReference" value="{{paymentReference}}" required minlength="4" error-message="Enter Valid Payment Reference"
+              label="Payment Reference (Bkash TrxID or Bank Deposit)" rows="2"></paper-textarea>
+
+            <paper-button raised class="primary" on-tap="activateModuleTapped">Activate Module</paper-button>
+          </div>
+
+          <div class="card vertical layout">
+            <div class="module-activation-title">Module Detail</div>
+
+            <template is="dom-repeat" items="[[moduleList]]" as="module">
+              <div class="a-module">
+                <div>[[module.code]]</div>
+                <div class="a-module-detail">[[module.name]]</div>
+              </div>
+            </template>
+          </div>
+          <!-- Module Details - End -->
+        </div>
+      </iron-pages>
 
     </div>
   </template>
@@ -139,6 +227,7 @@
 
       static get properties() {
         return {
+          // Package Details - Start
           packageCode: {
             type: String,
             value: null
@@ -150,6 +239,21 @@
           activatedPackage: {
             type: Object,
             value: null
+          },
+          // Package Details - END
+          // Module Details - Start
+          moduleCode: {
+            type: String,
+            value: null
+          },
+          activatedModule: {
+            type: Object,
+            value: null
+          },
+          // Module Details - End
+          paperTabSelectedViewIndex: {
+            type: Number,
+            value: 0
           }
         };
       }
@@ -175,7 +279,9 @@
         }
         this._processOrganization(() => {
           this._processPackageList(() => {
-            this.isReady = true;
+            this._processModuleList(() => {
+              this.isReady = true;
+            });
           });
         });
       }
@@ -193,10 +299,40 @@
         return true;
       }
 
+      _processModuleList(cbfn) {
+        this._fetchOrganizationModuleList(({ moduleActivationList }) => {
+          this.moduleActivationList = moduleActivationList;
+          this._fetchModuleList(({ moduleList }) => {
+            this.moduleList = moduleList;
+            cbfn();
+          });
+        });
+      }
+
+      _fetchModuleList(cbfn) {
+        let organizationId = parseInt(this.params.organization);
+        let data = {};
+        this.app.callAdminGetModuleListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _fetchOrganizationModuleList(cbfn) {
+        let organizationId = parseInt(this.params.organization);
+        let data = { organizationId };
+        this.app.callAdminListOrganizationModulesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
       _fetchOrganization(cbfn) {
         let organizationId = parseInt(this.params.organization);
         let data = { organizationId };
-        this.app.callGetOrganizationApi(data, (err, response) => {
+        this.app.callAdminGetOrganizationApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           return cbfn(response);
@@ -225,7 +361,7 @@
         this._fetchOrganization(({ organization }) => {
           this.organization = organization;
 
-          this._fetchOrganizationPackageActivationHistory(({packageActivationList}) => {
+          this._fetchOrganizationPackageActivationHistory(({ packageActivationList }) => {
             this.packageActivationList = packageActivationList;
 
             let { code, name, limits, duration } = this.packageActivationList[0].packageDetail;
@@ -263,13 +399,38 @@
         });
       }
 
+      _activateModule(organizationId, moduleCode, paymentReference, action, cbfn) {
+        let data = { organizationId, moduleCode, paymentReference, action };
+        this.app.callAdminSetModuleActivationStatusApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
       // region: ui  ===========================
+
+      deactivateModuleTapped(e) {
+        this._activateModule(parseInt(this.params.organization), e.model.moduleActivation.moduleCode, 'NOT PROVIDED', 'deactivate', () => {
+          this.app.refreshCurrentPage();
+          // this.resetProperties('packageCode', 'paymentReference');
+          this.app.showToast("Module Successfully Activated", _ => { });
+        });
+      }
+
+      activateModuleTapped(e) {
+        this._activateModule(parseInt(this.params.organization), this.moduleCode, this.paymentReference, 'activate', () => {
+          this.app.refreshCurrentPage();
+          // this.resetProperties('packageCode', 'paymentReference');
+          this.app.showToast("Module Successfully Activated", _ => { });
+        });
+      }
 
       assignPackageTapped(e) {
         this._assignPackage(parseInt(this.params.organization), this.packageCode, this.paymentReference, () => {
           this.app.refreshCurrentPage();
-          this.resetProperties('packageCode', 'paymentReference');
-          this.app.showToast("Package Successfully Assigned", _ => {});
+          // this.resetProperties('packageCode', 'paymentReference');
+          this.app.showToast("Package Successfully Assigned", _ => { });
         });
       }
 
