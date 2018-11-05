@@ -14,6 +14,7 @@ exports.GetServiceMembershipListApi = class extends Api {
 
   get requestSchema() {
     return Joi.object().keys({
+      organizationId: Joi.number().max(999999999999999).required(),
       serviceBlueprintId: Joi.number().max(999999999999999).allow(null).required(),
       outletId: Joi.number().max(999999999999999).allow(null).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),

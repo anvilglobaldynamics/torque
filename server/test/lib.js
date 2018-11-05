@@ -703,6 +703,16 @@ exports.validateGetSalesListApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateGetServiceMembershipListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    serviceMembershipList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateGetSalesReturnApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
@@ -1354,6 +1364,29 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
     isDeleted: Joi.boolean().required(),
     isDiscarded: Joi.boolean().required()
   });
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateServiceMembershipSchemaWhenListObj = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+  
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+    createdByUserId: Joi.number().max(999999999999999).required(),
+  
+    customerId: Joi.number().max(999999999999999).required(),
+    salesId: Joi.number().max(999999999999999).required(),
+    serviceId: Joi.number().max(999999999999999).required(),
+  
+    expiringDatetimeStamp: Joi.number().max(999999999999999).required(),
+  
+    isDiscarded: Joi.boolean().required(),
+    discardReason: Joi.string().allow('').max(128).required(),
+    isDeleted: Joi.boolean().required()
+  });
+
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
 }

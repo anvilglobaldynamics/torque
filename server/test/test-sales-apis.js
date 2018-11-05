@@ -32,6 +32,9 @@ let {
   validateGetActiveServiceListApiSuccessResponse,
   validateServiceSchema,
 
+  validateGetServiceMembershipListApiSuccessResponse,
+  validateServiceMembershipSchemaWhenListObj,
+
   validateGetCustomerApiSuccessResponse,
   validateCustomerSchema
 } = require('./lib');
@@ -1633,6 +1636,39 @@ describe.only('Sales', _ => {
     });
 
   });
+
+  // Service Membership - start
+
+  it('api/get-service-membership-list (Valid)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId,
+        serviceBlueprintId: null,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByServiceBlueprint: false,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      console.log(body);
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      testDoneFn();
+    });
+
+  });
+
+  // Service Membership - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
