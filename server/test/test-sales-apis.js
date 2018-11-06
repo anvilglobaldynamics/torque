@@ -93,9 +93,13 @@ let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
-let toMonthsLaterDate = new Date();
-toMonthsLaterDate.setDate(toMonthsLaterDate.getMonth() + 3);
-toMonthsLaterDate = toMonthsLaterDate.getTime();
+let monthsLaterDate = new Date();
+monthsLaterDate.setDate(monthsLaterDate.getMonth() + 3);
+monthsLaterDate = monthsLaterDate.getTime();
+
+let monthsEarlierDate = new Date();
+monthsEarlierDate.setDate(monthsEarlierDate.getMonth() - 3);
+monthsEarlierDate = monthsEarlierDate.getTime();
 
 let customerRef1 = null;
 
@@ -1657,8 +1661,8 @@ describe.only('Sales', _ => {
         shouldFilterByOutlet: false,
         shouldFilterByCustomer: false,
 
-        fromDate: (new Date()).getTime(),
-        toDate: toMonthsLaterDate
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
       }
     }, (err, response, body) => {
       // console.log(body.serviceMembershipList);
