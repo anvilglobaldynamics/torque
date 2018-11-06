@@ -32,12 +32,12 @@
         margin-top: 10px;
       }
 
-      .description {
-        font-size: 15px;
+      .service-title {
+        font-weight: bold;
       }
 
-      .description-time {
-        font-size: 12px;
+      .service-description {
+        font-size: 15px;
       }
 
       .credit-text {
@@ -68,7 +68,7 @@
           <div class="horizontal layout center wrap">
             <div class="flex">
               <template is="dom-if" if="[[!customer]]">
-                [[verses.sales.noCustomerSelected]]
+                [[verses.serviceMembership.noCustomerSelected]]
               </template>
               <template is="dom-if" if="[[customer]]">
                 [[verses.general.customer]]:
@@ -79,9 +79,9 @@
             </div>
             <div class="horizontal layout center">
               <template is="dom-if" if="[[customer]]">
-                <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.sales.removeCustomer]]</paper-button>
+                <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.serviceMembership.removeCustomer]]</paper-button>
               </template>
-              <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.sales.changeCustomer]]</paper-button>
+              <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.serviceMembership.changeCustomer]]</paper-button>
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@
           <div class="horizontal layout center">
             <div class="flex">
               <template is="dom-if" if="[[!outlet]]">
-                [[verses.sales.noOutletSelected]]
+                [[verses.serviceMembership.noOutletSelected]]
               </template>
               <template is="dom-if" if="[[outlet]]">
                 [[verses.general.outlet]]:
@@ -106,9 +106,9 @@
               </template>
             </div>
             <template is="dom-if" if="[[outlet]]">
-              <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.sales.removeOutlet]]</paper-button>
+              <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.serviceMembership.removeOutlet]]</paper-button>
             </template>
-            <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.sales.changeOutlet]]</paper-button>
+            <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.serviceMembership.changeOutlet]]</paper-button>
           </div>
         </div>
       </template>
@@ -120,7 +120,7 @@
 
       <template is="dom-if" if="{{!serviceMembershipList.length}}">
         <div class="card">
-          [[verses.sales.noSalesFound]]
+          [[verses.serviceMembership.noServiceMembershipFound]]
         </div>
       </template>
 
@@ -140,11 +140,11 @@
                 <div class="vertical layout flex">
                   <div class="service-conteiner">
 
-                    <div class="title">
-                      [[verses.sales.salesId]]: [[serviceMembership.id]]
+                    <div class="service-title">
+                      [[verses.serviceMembership.serviceMembershipNumber]]: [[serviceMembership.id]]
                     </div>
-                    <div class="description-time">[[$mkDate(serviceMembership.expiringDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                    <div class="description">[[serviceMembership.customer.fullName]] [[serviceMembership.customer.phone]]</div>
+                    <div class="service-description">[[verses.serviceMembership.expiringDatetime]]: [[$mkDate(serviceMembership.expiringDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+                    <div class="service-description">[[verses.serviceMembership.customer]]: [[serviceMembership.customerDetails.fullName]], [[serviceMembership.customerDetails.phone]]</div>
                     
                   </div>
                 </div>
@@ -200,7 +200,7 @@
             type: String,
             value: _ => {
               let date = new Date();
-              date.setDate(date.getDate() - 1);
+              date.setMonth(date.getMonth() - 1);
               date = date.getTime();
               date = (new XDate(date)).toString('yyyy-MM-dd');
               return date;
@@ -210,6 +210,7 @@
             type: String,
             value: _ => {
               let date = new Date();
+              date.setMonth(date.getMonth() + 1);
               date = date.getTime();
               date = (new XDate(date)).toString('yyyy-MM-dd');
               return date;

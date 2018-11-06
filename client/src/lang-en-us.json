@@ -489,10 +489,10 @@
     "paid": "Paid",
     "products": "product(s)",
     "services": "service(s)",
-    "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
+    "noCustomerSelected": "No customer selected (Anonymous Sale)",
     "removeCustomer": "Remove Customer",
     "changeCustomer": "Change Customer",
-    "noOutletSelected": "No outlet selected (Anonymous Sale Return)",
+    "noOutletSelected": "No outlet selected (Anonymous Sale)",
     "removeOutlet": "Remove Outlet",
     "changeOutlet": "Change Outlet",
     "salesTitle": "Sales",
@@ -797,6 +797,18 @@
     "clearEmployeeLabel": "Clear Selected Employee"
   },
   "serviceMembership": {
-    "serviceMembershipTitle": "Service Memberships"
+    "serviceMembershipTitle": "Service Memberships",
+    "noServiceMembershipFound": "No Service Membership Record Found.",
+
+    "noCustomerSelected": "No customer selected",
+    "removeCustomer": "Remove Customer",
+    "changeCustomer": "Change Customer",
+    "noOutletSelected": "No outlet selected",
+    "removeOutlet": "Remove Outlet",
+    "changeOutlet": "Change Outlet",
+
+    "serviceMembershipNumber": "Membership Number",
+    "expiringDatetime": "Expiring Date",
+    "customer": "Customer"
   }
 }

@@ -798,6 +798,18 @@
     "clearEmployeeLabel": "সেবার দায়িত্ব মুছে ফেলুন"
   },
   "serviceMembership": {
-    "serviceMembershipTitle": "সেবার সদস্যপদ"
+    "serviceMembershipTitle": "সেবার সদস্যপদ",
+    "noServiceMembershipFound": "কোনো সেবা সদস্যপদের রেকর্ড পাওয়া যায় নি।",
+
+    "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
+    "removeCustomer": "গ্রাহক সরান",
+    "changeCustomer": "গ্রাহক পরিবর্তন করুন",
+    "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি",
+    "removeOutlet": "দোকান সরান",
+    "changeOutlet": "দোকান পরিবর্তন করুন",
+
+    "serviceMembershipNumber": "সদস্যপদ নং",
+    "expiringDatetime": "মেয়াদ উত্তীর্ণের সময়",
+    "customer": "ক্রেতা"
   }
 }
