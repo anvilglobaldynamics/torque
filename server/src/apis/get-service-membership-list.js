@@ -183,7 +183,8 @@ exports.GetServiceMembershipListApi = class extends Api {
     await this._verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer });
     await this._verifyServiceBlueprintIfNeeded({ serviceBlueprintId, shouldFilterByServiceBlueprint });
 
-    let serviceMembershipList = await this._findServiceMembershipList({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId });
+    // let serviceMembershipList = await this._findServiceMembershipList({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId });
+    let serviceMembershipList = await this.database.serviceMembership._find({});
 
     await this._combineCustomerData({ serviceMembershipList });
 

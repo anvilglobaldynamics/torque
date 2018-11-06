@@ -41,13 +41,19 @@
         font-size: 15px;
       }
 
-      .credit-text {
-        border: 1px solid red;
-        border-radius: 5px;
-        margin-left: 4px;
-        font-size: 13px;
-        padding: 2px;
-        color: red;
+      .expiring-datetime-container {
+        padding: 6px;
+        margin-top: 6px;
+      }
+
+      .expired {
+        background-color: var(--app-button-danger);
+        color: var(--app-button-label-danger);
+      }
+
+      .not-expired {
+        background-color: var(--app-button-secondary);
+        color: var(--app-button-label-secondary);
       }
 
     </style>
@@ -167,11 +173,12 @@
                 <div class="vertical layout flex">
                   <div class="service-conteiner">
 
-                    <div class="service-title">
-                      [[verses.serviceMembership.serviceMembershipNumber]]: [[serviceMembership.id]]
-                    </div>
-                    <div class="service-description">[[verses.serviceMembership.expiringDatetime]]: [[$mkDate(serviceMembership.expiringDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+                    <div class="service-title">[[verses.serviceMembership.serviceMembershipNumber]]: [[serviceMembership.id]]</div>
                     <div class="service-description">[[verses.serviceMembership.customer]]: [[serviceMembership.customerDetails.fullName]], [[serviceMembership.customerDetails.phone]]</div>
+
+                    <div class$="expiring-datetime-container [[$serviceMembershipExpiryStatus(serviceMembership.expiringDatetimeStamp)]]">
+                      [[verses.serviceMembership.expiringDatetime]]: [[$mkDate(serviceMembership.expiringDatetimeStamp, 'hh:mmtt dd-MMM-yyyy')]]
+                    </div>
                     
                   </div>
                 </div>
@@ -451,6 +458,15 @@
         this._processServiceMembershipList(() => {
           this.isReady = true;
         });
+      }
+
+      $serviceMembershipExpiryStatus(expiringDatetimeStamp) {
+        let currentDatetimeStamp = (new Date()).getTime();
+        if (currentDatetimeStamp <= parseInt(expiringDatetimeStamp)) {
+          return 'not-expired'
+        } else {
+          return 'expired';
+        }
       }
 
     }
