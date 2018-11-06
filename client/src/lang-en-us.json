@@ -300,12 +300,12 @@
     "updateServiceBlueprint": "Update Service Blueprint"
   },
   "customerSelector": {
-    "customerNameOrPhoneInput": "Customer name or phone.",
+    "customerNameOrPhoneInput": "By name or phone.",
     "customerNameOrPhoneInputError": "Enter a name or phone"
   },
   "outletSelector": {
-    "outlets": "Outlets",
-    "outletNameOrPhoneInput": "Outlet by name or phone.",
+    "outlets": "Outlet",
+    "outletNameOrPhoneInput": "By name or phone.",
     "outletNameOrPhoneInputError": "Enter a name or phone"
   },
   "commonEmploymentDetails": {
@@ -801,13 +801,11 @@
     "noServiceMembershipFound": "No Service Membership Record Found.",
 
     "noCustomerSelected": "No customer selected",
-    "removeCustomer": "Remove Customer",
     "noOutletSelected": "No outlet selected",
-    "removeOutlet": "Remove Outlet",
     "noServiceBlueprintSelected": "No service blueprint selected",
-    "removeServiceBlueprint": "Remove Service Blueprint",
 
     "change": "Change",
+    "remove": "Remove",
 
     "serviceMembershipNumber": "Membership Number",
     "expiringDatetime": "Expiring Date",
@@ -816,7 +814,7 @@
     "serviceBlueprint": "Service blueprint"
   },
   "serviceBlueprintSelector": {
-    "serviceBlueprintNameOrPhoneInput": "Service blueprint by name.",
+    "serviceBlueprintNameOrPhoneInput": "By name.",
     "serviceBlueprintNameOrPhoneInputError": "Enter valid Service blueprint name",
     "serviceBlueprints": "Service Blueprint"
   }

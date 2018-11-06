@@ -302,12 +302,12 @@
     "updateServiceBlueprint": "সেবা পরিকল্পনা আপডেট করুন"
   },
   "customerSelector": {
-    "customerNameOrPhoneInput": "গ্রাহকের নাম বা ফোন",
+    "customerNameOrPhoneInput": "নাম বা ফোন",
     "customerNameOrPhoneInputError": "গ্রাহকের নাম বা ফোন লিখুন"
   },
   "outletSelector": {
     "outlets": "দোকান",
-    "outletNameOrPhoneInput": "দোকানের নাম বা ফোন",
+    "outletNameOrPhoneInput": "নাম বা ফোন",
     "outletNameOrPhoneInputError": "দোকানের নাম বা ফোন লিখুন"
   },
   "commonEmploymentDetails": {
@@ -802,18 +802,21 @@
     "noServiceMembershipFound": "কোনো সেবা সদস্যপদের রেকর্ড পাওয়া যায় নি।",
 
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
-    "removeCustomer": "গ্রাহক সরান",
     "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি",
-    "removeOutlet": "দোকান সরান",
     "noServiceBlueprintSelected": "কোন সেবার সদস্যপদ নির্বাচন করা হয়নি",
-    "removeServiceBlueprint": "সেবার সদস্যপদ সরান",
 
     "change": "পরিবর্তন",
+    "remove": "সরান",
 
     "serviceMembershipNumber": "সদস্যপদ নং",
     "expiringDatetime": "মেয়াদ উত্তীর্ণের সময়",
     "customer": "ক্রেতা",
 
     "serviceBlueprint": "সেবার সদস্যপদ"
+  },
+  "serviceBlueprintSelector": {
+    "serviceBlueprintNameOrPhoneInput": "নাম দিয়ে খুজুন",
+    "serviceBlueprintNameOrPhoneInputError": "বৈধ নাম লিখুন",
+    "serviceBlueprints": "সেবার সদস্যপদ"
   }
 }

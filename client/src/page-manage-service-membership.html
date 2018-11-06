@@ -78,7 +78,7 @@
             </div>
             <div class="horizontal layout center">
               <template is="dom-if" if="[[serviceBlueprint]]">
-                <paper-button raised class="danger" on-tap="removeServiceBlueprintTapped">[[verses.serviceMembership.removeServiceBlueprint]]</paper-button>
+                <paper-button raised class="danger" on-tap="removeServiceBlueprintTapped">[[verses.serviceMembership.remove]]</paper-button>
               </template>
               <paper-button raised class="secondary" on-tap="changeServiceBlueprintTapped">[[verses.serviceMembership.change]]</paper-button>
             </div>
@@ -106,7 +106,7 @@
             </div>
             <div class="horizontal layout center">
               <template is="dom-if" if="[[customer]]">
-                <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.serviceMembership.removeCustomer]]</paper-button>
+                <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.serviceMembership.remove]]</paper-button>
               </template>
               <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.serviceMembership.change]]</paper-button>
             </div>
@@ -133,7 +133,7 @@
               </template>
             </div>
             <template is="dom-if" if="[[outlet]]">
-              <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.serviceMembership.removeOutlet]]</paper-button>
+              <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.serviceMembership.remove]]</paper-button>
             </template>
             <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.serviceMembership.change]]</paper-button>
           </div>
