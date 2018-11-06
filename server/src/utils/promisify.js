@@ -13,12 +13,3 @@ exports.promisify = (context, method, ...args) => {
   });
 }
 
-exports.promisifySingleCallback = (context, method, ...args) => {
-  return new Promise((success, fail) => {
-    args.push((res) => {
-      console.log(res)
-      success(res);
-    })
-    method.apply(context, args);
-  });
-}

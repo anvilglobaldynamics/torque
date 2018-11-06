@@ -8,6 +8,18 @@ let pendingTerminationRequest = false;
 
 let testStartDatetimeStamp = (new Date).getTime();
 
+exports.promisifyApiCall = (context, method, ...args) => {
+  return new Promise((success, fail) => {
+    args.push((res) => {
+      if (res.hasError){
+        return fail(res);
+      }
+      return success(res);
+    })
+    method.apply(context, args);
+  });
+}
+
 exports.delay = (after, cbfn) => setTimeout(cbfn, after);
 
 // ===================================== Commons
