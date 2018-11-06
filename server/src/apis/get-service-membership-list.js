@@ -69,17 +69,113 @@ exports.GetServiceMembershipListApi = class extends Api {
     }
   }
 
-  async _insertCustomerData({ serviceMembershipList }) {
+  async _combineCustomerData({ serviceMembershipList }) {
     for (let i = 0; i < serviceMembershipList.length; i++) {
       let { fullName, phone } = await this.database.customer.findById({ id: serviceMembershipList[i].customerId });
       serviceMembershipList[i].customerDetails = { fullName, phone };
     }
+  }
+
+  async _findServiceMembershipList({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId }) {
+
+    let aggregateQuery = [];
+
+    // NOTE: handling - organizationId, outletId, shouldFilterByOutlet
+    {
+      let query;
+      if (shouldFilterByOutlet) {
+        query = { "salesDetailsArray.outletId": outletId }
+      } else {
+        let outletIdList = (await this.database.outlet.listByOrganizationId({ organizationId })).map(outlet => outlet.id);
+        console.log(organizationId, outletIdList)
+        query = { "salesDetailsArray.outletId": { $in: outletIdList } }
+      }
+      aggregateQuery = aggregateQuery.concat([
+        {
+          $lookup: {
+            from: 'sales',
+            localField: 'salesId',
+            foreignField: 'id',
+            as: 'salesDetailsArray'
+          },
+        },
+        { "$unwind": "$salesDetailsArray" },
+        { "$match": query },
+      ]);
+    }
+
+    // NOTE: handling - customerId, shouldFilterByCustomer
+    {
+      if (shouldFilterByCustomer) {
+        aggregateQuery = aggregateQuery.concat([
+          { "$match": { "customerId": customerId } },
+        ]);
+      }
+    }
+
+    // NOTE: handling - serviceBlueprintId, shouldFilterByServiceBlueprint
+    {
+      if (shouldFilterByServiceBlueprint) {
+        aggregateQuery = aggregateQuery.concat([
+          {
+            $lookup: {
+              from: 'service',
+              localField: 'serviceId',
+              foreignField: 'id',
+              as: 'serviceDetailsArray'
+            },
+          },
+          { "$unwind": "$serviceDetailsArray" },
+          { "$match": { "serviceDetailsArray.serviceBlueprintId": serviceBlueprintId } },
+        ]);
+      }
+    }
+
+    aggregateQuery = aggregateQuery.concat([
+      {
+        "$match": {
+          "expiringDatetimeStamp": {
+            $gte: fromDate,
+            $lte: toDate
+          }
+        }
+      },
+    ]);
+
+    let serviceMembershipList = await this.database.engine.getDatabaseHandle().collection('service-membership').aggregate(aggregateQuery).toArray();
+    console.log(serviceMembershipList);
+
+    // NOTE: Cleaning up intermediary variables
+    serviceMembershipList.forEach(serviceMembership => {
+      if ('salesDetailsArray' in serviceMembership) {
+        delete serviceMembership['salesDetailsArray'];
+      }
+      if ('serviceDetailsArray' in serviceMembership) {
+        delete serviceMembership['serviceDetailsArray'];
+      }
+    });
 
     return serviceMembershipList;
+
+    // return await this.database.serviceMembership._find({});
+    // // let serviceMembershipList = await this.database.engine.getDatabaseHandle().collection('service-membership').find({}).toArray();   
+    //   .aggregate([
+    //     {
+    //       $lookup: {
+    //         from: 'sales',
+    //         localField: 'salesId',
+    //         foreignField: 'id',
+    //         as: 'salesDetailsArray'
+    //       },
+    //     },
+    //     { "$unwind": "$salesDetailsArray" },
+    //     { "$match": { "salesDetailsArray.outletId": outletId } },
+    //   ])
+    //   .toArray();
   }
 
   async handle({ body }) {
-    let { serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate } = body;
+    let { serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId } = body;
 
     toDate = this._getExtendedToDate(toDate);
 
@@ -87,9 +183,10 @@ exports.GetServiceMembershipListApi = class extends Api {
     await this._verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer });
     await this._verifyServiceBlueprintIfNeeded({ serviceBlueprintId, shouldFilterByServiceBlueprint });
 
-    let serviceMembershipList = await this.database.serviceMembership._find({});
-    serviceMembershipList = await this._insertCustomerData({ serviceMembershipList });
-    
+    let serviceMembershipList = await this._findServiceMembershipList({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId });
+
+    await this._combineCustomerData({ serviceMembershipList });
+
     return { serviceMembershipList };
   }
 
