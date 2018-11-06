@@ -94,11 +94,11 @@ fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
 let monthsLaterDate = new Date();
-monthsLaterDate.setDate(monthsLaterDate.getMonth() + 3);
+monthsLaterDate.setMonth(monthsLaterDate.getMonth() + 3);
 monthsLaterDate = monthsLaterDate.getTime();
 
 let monthsEarlierDate = new Date();
-monthsEarlierDate.setDate(monthsEarlierDate.getMonth() - 3);
+monthsEarlierDate.setMonth(monthsEarlierDate.getMonth() - 3);
 monthsEarlierDate = monthsEarlierDate.getTime();
 
 let customerRef1 = null;
@@ -1647,7 +1647,7 @@ describe.only('Sales', _ => {
 
   // Service Membership - start
 
-  it('api/get-service-membership-list (Valid)', testDoneFn => {
+  it('api/get-service-membership-list (Valid no filter)', testDoneFn => {
 
     callApi('api/get-service-membership-list', {
       json: {
@@ -1666,6 +1666,35 @@ describe.only('Sales', _ => {
       }
     }, (err, response, body) => {
       // console.log(body.serviceMembershipList);
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Valid all filter)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId,
+        serviceBlueprintId: longstandingServiceBlueprintId,
+        outletId,
+        customerId,
+
+        shouldFilterByServiceBlueprint: true,
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: true,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      // console.log(body);
       expect(response.statusCode).to.equal(200);
       validateGetServiceMembershipListApiSuccessResponse(body);
       body.serviceMembershipList.forEach(serviceMembership => {
