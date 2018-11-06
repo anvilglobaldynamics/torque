@@ -164,6 +164,16 @@ exports.addServiceBlueprint = (data, callback) => {
   })
 }
 
+// ===================================== Service 
+
+exports.getActiveServiceList = (data, callback) => {
+  callApi('api/get-active-service-list', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
 // ===================================== Customer
 
 exports.addCustomer = (data, callback) => {
