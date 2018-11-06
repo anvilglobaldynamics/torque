@@ -814,5 +814,10 @@
     "customer": "Customer",
 
     "serviceBlueprint": "Service blueprint"
+  },
+  "serviceBlueprintSelector": {
+    "serviceBlueprintNameOrPhoneInput": "Service blueprint by name.",
+    "serviceBlueprintNameOrPhoneInputError": "Enter valid Service blueprint name",
+    "serviceBlueprints": "Service Blueprint"
   }
 }

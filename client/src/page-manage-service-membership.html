@@ -22,6 +22,7 @@
 
 <link rel="import" href="elem-customer-selector.html">
 <link rel="import" href="elem-outlet-selector.html">
+<link rel="import" href="elem-service-blueprint-selector.html">
 
 <dom-module id="page-manage-service-membership">
   <template>
@@ -441,7 +442,7 @@
       }
 
       removeServiceBlueprintTapped(e = null) {
-        this.outlet = null;
+        this.serviceBlueprint = null;
         this.app.storeInSession('last-selected-service-blueprint', null);
       }
 
