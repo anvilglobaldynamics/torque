@@ -62,6 +62,32 @@
       </div>
       <!-- dates selection - end -->
 
+      <!-- service blueprint search - start -->
+      <template is="dom-if" if="[[!isSearchingServiceBlueprint]]">
+        <div class="card vertical layout">
+          <div class="horizontal layout center wrap">
+            <div class="flex">
+              <template is="dom-if" if="[[!serviceBlueprint]]">
+                [[verses.serviceMembership.noServiceBlueprintSelected]]
+              </template>
+              <template is="dom-if" if="[[serviceBlueprint]]">
+                [[verses.serviceMembership.serviceBlueprint]]:
+                <b>[[serviceBlueprint.name]]</b>
+              </template>
+            </div>
+            <div class="horizontal layout center">
+              <template is="dom-if" if="[[serviceBlueprint]]">
+                <paper-button raised class="danger" on-tap="removeServiceBlueprintTapped">[[verses.serviceMembership.removeServiceBlueprint]]</paper-button>
+              </template>
+              <paper-button raised class="secondary" on-tap="changeServiceBlueprintTapped">[[verses.serviceMembership.change]]</paper-button>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <elem-service-blueprint-selector page="{{self}}" class$="[[$if(isSearchingServiceBlueprint, '', 'hidden')]]"></elem-service-blueprint-selector>
+      <!-- service blueprint search - end -->
+
       <!-- customer search - start -->
       <template is="dom-if" if="[[!isSearchingCustomer]]">
         <div class="card vertical layout">
@@ -81,7 +107,7 @@
               <template is="dom-if" if="[[customer]]">
                 <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.serviceMembership.removeCustomer]]</paper-button>
               </template>
-              <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.serviceMembership.changeCustomer]]</paper-button>
+              <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.serviceMembership.change]]</paper-button>
             </div>
           </div>
         </div>
@@ -108,7 +134,7 @@
             <template is="dom-if" if="[[outlet]]">
               <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.serviceMembership.removeOutlet]]</paper-button>
             </template>
-            <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.serviceMembership.changeOutlet]]</paper-button>
+            <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.serviceMembership.change]]</paper-button>
           </div>
         </div>
       </template>

@@ -802,13 +802,17 @@
 
     "noCustomerSelected": "No customer selected",
     "removeCustomer": "Remove Customer",
-    "changeCustomer": "Change Customer",
     "noOutletSelected": "No outlet selected",
     "removeOutlet": "Remove Outlet",
-    "changeOutlet": "Change Outlet",
+    "noServiceBlueprintSelected": "No service blueprint selected",
+    "removeServiceBlueprint": "Remove Service Blueprint",
+
+    "change": "Change",
 
     "serviceMembershipNumber": "Membership Number",
     "expiringDatetime": "Expiring Date",
-    "customer": "Customer"
+    "customer": "Customer",
+
+    "serviceBlueprint": "Service blueprint"
   }
 }
