@@ -1922,7 +1922,7 @@ describe.only('Sales', _ => {
       .then((body) => { })
 
       // add sale - outlet 2, customer 2, service 1
-      .then(() => { longstandingService = membershipTest.outlet2ServiceList.find(i => i.serviceBlueprint.name === 'Long 1'); console.log(longstandingService); return Promise.resolve() })
+      .then(() => { longstandingService = membershipTest.outlet2ServiceList.find(i => i.serviceBlueprint.name === 'Long 1'); return Promise.resolve() })
       .then(() => promisifyApiCall({}, addSales, {
         apiKey,
         outletId: membershipTest.outlet2Id,
@@ -1953,7 +1953,7 @@ describe.only('Sales', _ => {
       .then((body) => { })
 
       .then(() => {
-        console.log(membershipTest);
+        // console.log('final test object', membershipTest);
         testDoneFn();
       });
 
