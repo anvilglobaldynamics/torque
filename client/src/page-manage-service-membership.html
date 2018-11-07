@@ -249,7 +249,7 @@
             type: String,
             value: _ => {
               let date = new Date();
-              date.setMonth(date.getMonth() + 2);
+              date.setMonth(date.getMonth() + 1);
               date = date.getTime();
               date = (new XDate(date)).toString('yyyy-MM-dd');
               return date;
@@ -468,7 +468,7 @@
       $serviceMembershipExpiryStatus(expiringDatetimeStamp) {
         let currentDatetimeStamp = (new Date()).getTime();
         if (currentDatetimeStamp <= parseInt(expiringDatetimeStamp)) {
-          return 'not-expired'
+          return 'not-expired';
         } else {
           return 'expired';
         }
