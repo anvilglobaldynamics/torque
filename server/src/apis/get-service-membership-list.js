@@ -76,12 +76,27 @@ exports.GetServiceMembershipListApi = class extends Api {
     }
   }
 
-  // FIXME: This method is not working as intended. Currently switching to naive approach.
-  // Will come back and fix this at a later time.
   async _findServiceMembershipList({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId }) {
     // console.log({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId })
 
-    let aggregateQuery = [];
+    let aggregateQuery = [
+      {
+        $lookup: {
+          from: 'service',
+          localField: 'serviceId',
+          foreignField: 'id',
+          as: 'serviceDetailsArray'
+        },
+      },
+      {
+        $lookup: {
+          from: 'service-blueprint',
+          localField: 'serviceDetailsArray.0.serviceBlueprintId',
+          foreignField: 'id',
+          as: 'serviceBlueprintDetailsArray'
+        },
+      }
+    ];
 
     // NOTE: handling - organizationId, outletId, shouldFilterByOutlet
     {
@@ -118,14 +133,6 @@ exports.GetServiceMembershipListApi = class extends Api {
     {
       if (shouldFilterByServiceBlueprint) {
         aggregateQuery = aggregateQuery.concat([
-          {
-            $lookup: {
-              from: 'service',
-              localField: 'serviceId',
-              foreignField: 'id',
-              as: 'serviceDetailsArray'
-            },
-          },
           { "$match": { "serviceDetailsArray.serviceBlueprintId": serviceBlueprintId } },
         ]);
       }
@@ -155,11 +162,20 @@ exports.GetServiceMembershipListApi = class extends Api {
       if ('serviceDetailsArray' in serviceMembership) {
         delete serviceMembership['serviceDetailsArray'];
       }
+      if ('serviceBlueprintDetailsArray' in serviceMembership) {
+        serviceMembership.serviceBlueprintDetails = {
+          name: serviceMembership.serviceBlueprintDetailsArray[0].name
+        };
+        delete serviceMembership['serviceBlueprintDetailsArray'];
+      }
+
     });
 
     return serviceMembershipList;
   }
 
+  // NOTE: This method was written as an alternative to _findServiceMembershipList.
+  // Currently letting it remain here in case the mongodb complex queries don't work for some reason.
   async _findServiceMembershipListNaive({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId }) {
 
     let outletIdList;
