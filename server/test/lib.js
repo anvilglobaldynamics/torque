@@ -8,6 +8,18 @@ let pendingTerminationRequest = false;
 
 let testStartDatetimeStamp = (new Date).getTime();
 
+exports.promisifyApiCall = (context, method, ...args) => {
+  return new Promise((success, fail) => {
+    args.push((res) => {
+      if (res.hasError){
+        return fail(res);
+      }
+      return success(res);
+    })
+    method.apply(context, args);
+  });
+}
+
 exports.delay = (after, cbfn) => setTimeout(cbfn, after);
 
 // ===================================== Commons
@@ -146,6 +158,16 @@ exports.addProductBlueprint = (data, callback) => {
 
 exports.addServiceBlueprint = (data, callback) => {
   callApi('api/add-Service-blueprint', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
+// ===================================== Service 
+
+exports.getActiveServiceList = (data, callback) => {
+  callApi('api/get-active-service-list', {
     json: data
   }, (err, response, body) => {
     callback(body);

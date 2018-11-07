@@ -84,11 +84,11 @@ exports.GetServiceMembershipListApi = class extends Api {
     {
       let query;
       if (shouldFilterByOutlet) {
-        query = { "salesDetailsArray.outletId": outletId }
+        query = { "salesDetailsArray.outletId": outletId };
       } else {
         let outletIdList = (await this.database.outlet.listByOrganizationId({ organizationId })).map(outlet => outlet.id);
         console.log(organizationId, outletIdList)
-        query = { "salesDetailsArray.outletId": { $in: outletIdList } }
+        query = { "salesDetailsArray.outletId": { $in: outletIdList } };
       }
       aggregateQuery = aggregateQuery.concat([
         {
@@ -131,6 +131,7 @@ exports.GetServiceMembershipListApi = class extends Api {
       }
     }
 
+    // NOTE: handling - fromDate, toDate
     aggregateQuery = aggregateQuery.concat([
       {
         "$match": {
