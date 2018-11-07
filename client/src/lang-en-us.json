@@ -299,7 +299,8 @@
     "avtivateInAllOutlets": "Should this service be made available in all Outlets?",
     "whatIsServiceBlueprintMessage": "Service Blueprint is the planning of a Service. Service Blueprint needs to be added only once for a Service. Information of Service Blueprint will be reused in all Service related tasks.",
     "createServiceBlueprint": "Create Service Blueprint",
-    "updateServiceBlueprint": "Update Service Blueprint"
+    "updateServiceBlueprint": "Update Service Blueprint",
+    "serviceBlueprintCreated": "Service Blueprint Created"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "By name or phone.",
@@ -819,5 +820,8 @@
     "serviceBlueprintNameOrPhoneInput": "By name.",
     "serviceBlueprintNameOrPhoneInputError": "Enter valid Service blueprint name",
     "serviceBlueprints": "Service Blueprint"
+  },
+  "salesReceipt": {
+    "goodsTitle": "Product / Service"
   }
 }

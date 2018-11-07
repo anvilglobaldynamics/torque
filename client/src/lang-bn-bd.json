@@ -301,7 +301,8 @@
     "avtivateInAllOutlets": "এই সেবাটি কি সকল দোকানে প্রাপ্য?",
     "whatIsServiceBlueprintMessage": "সেবার পরিকল্পনা একটু সেবার নকশা। প্রতি সেবার জন্য একবারই সেবার পরিকল্পনা তৈরি করতে হবে। সেবার পরিকল্পনায় দেয়া তথ্য সেবা সংক্রান্ত কাজে ব্যবহত হবে।",
     "createServiceBlueprint": "নতুন সেবা পরিকল্পনা তৈরি করুন",
-    "updateServiceBlueprint": "সেবা পরিকল্পনা আপডেট করুন"
+    "updateServiceBlueprint": "সেবা পরিকল্পনা আপডেট করুন",
+    "serviceBlueprintCreated": "সেবা পরিকল্পনা তৈরি হয়েছে"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "নাম বা ফোন",
@@ -820,5 +821,8 @@
     "serviceBlueprintNameOrPhoneInput": "নাম দিয়ে খুজুন",
     "serviceBlueprintNameOrPhoneInputError": "বৈধ নাম লিখুন",
     "serviceBlueprints": "সেবার সদস্যপদ"
+  },  
+  "salesReceipt": {
+    "goodsTitle": "পণ্য / সেবা"
   }
 }
