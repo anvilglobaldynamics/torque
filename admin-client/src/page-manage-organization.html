@@ -91,10 +91,8 @@
                 <div>Code: [[activatedPackage.code]]</div>
                 <div>Package Name: [[activatedPackage.name]] </div>
                 <div>Payment Reference: [[activatedPackage.paymentReference]] </div>
-                <div class="">Activation Date: [[$mkDate(activatedPackage.createdDatetimeStamp, 'dd MMM yyyy hh:mm
-                  TT')]]</div>
-                <div class="">Expiration Date: [[$mkDate(activatedPackage.expirationDatetimeStamp, 'dd MMM yyyy hh:mm
-                  TT')]]</div>
+                <div class="">Activation Date: [[$mkDate(activatedPackage.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
+                <div class="">Expiration Date: [[$mkDate(activatedPackage.expirationDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
               </div>
             </div>
           </template>
@@ -124,8 +122,7 @@
               </paper-listbox>
             </paper-dropdown-menu>
 
-            <paper-textarea class="paymentReference" value="{{paymentReference}}" required minlength="4" error-message="Enter Valid Payment Reference"
-              label="Payment Reference (Bkash TrxID or Bank Deposit)" rows="2"></paper-textarea>
+            <paper-textarea class="paymentReference" value="{{paymentReference}}" required minlength="4" error-message="Enter Valid Payment Reference" label="Payment Reference (Bkash TrxID or Bank Deposit)" rows="2"></paper-textarea>
 
             <paper-button raised class="primary" on-tap="assignPackageTapped">Assign Package</paper-button>
           </div>
@@ -173,8 +170,7 @@
                   <div>Payment Reference: [[moduleActivation.paymentReference]] </div>
                   <div>Activation Date: [[$mkDate(moduleActivation.createdDatetimeStamp, 'dd/MM/yyyy hh:mm:ss TT')]]</div>
                   <template is="dom-if" if="[[moduleActivation.deactivatedDatetimeStamp]]">
-                    <div>Deactivation Date: [[$mkDate(moduleActivation.deactivatedDatetimeStamp, 'dd/MM/yyyy hh:mm:ss
-                      TT')]]</div>
+                    <div>Deactivation Date: [[$mkDate(moduleActivation.deactivatedDatetimeStamp, 'dd/MM/yyyy hh:mm:ss TT')]]</div>
                   </template>
                   <template is="dom-if" if="[[!moduleActivation.isDeactivated]]">
                     <paper-button raised class="primary" on-tap="deactivateModuleTapped">Deactivate Module</paper-button>
@@ -195,8 +191,7 @@
               </paper-listbox>
             </paper-dropdown-menu>
 
-            <paper-textarea class="paymentReference" value="{{paymentReference}}" required minlength="4" error-message="Enter Valid Payment Reference"
-              label="Payment Reference (Bkash TrxID or Bank Deposit)" rows="2"></paper-textarea>
+            <paper-textarea class="paymentReference" value="{{paymentReference}}" required minlength="4" error-message="Enter Valid Payment Reference" label="Payment Reference (Bkash TrxID or Bank Deposit)" rows="2"></paper-textarea>
 
             <paper-button raised class="primary" on-tap="activateModuleTapped">Activate Module</paper-button>
           </div>

@@ -178,14 +178,13 @@
 
       <div class="vertical layout wrap">
         <div class="card flex info-panel">
-          <div class="title">[[verses.home.activatedPackage]]: [[package.name]] ([[package.code]])</div>
-          <!-- <div class="">Activated On: [[$mkDate(package.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div> -->
-          <div class="">[[verses.home.expirationDate]]: [[$mkDate(package.expirationDatetimeStamp, 'dd MMM yyyy hh:mm
-            TT')]]</div>
+          <div class="title">[[verses.home.activatedPackage]]: [[aPackage.name]] ([[aPackage.code]])</div>
+          <!-- <div class="">Activated On: [[$mkDate(aPackage.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div> -->
+          <div class="">[[verses.home.expirationDate]]: [[$mkDate(aPackage.expirationDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
           <div class="">[[verses.home.allows]]:
-            <span>[[package.limits.maximumEmployees]] [[verses.home.employees]],</span>
-            <span>[[package.limits.maximumOutlets]] [[verses.home.outlets]],</span>
-            <span>[[package.limits.maximumWarehouses]] [[verses.home.warehouses]].</span>
+            <span>[[aPackage.limits.maximumEmployees]] [[verses.home.employees]],</span>
+            <span>[[aPackage.limits.maximumOutlets]] [[verses.home.outlets]],</span>
+            <span>[[aPackage.limits.maximumWarehouses]] [[verses.home.warehouses]].</span>
           </div>
           <template is="dom-if" if="[[!packageActivationList.length]]">
             <div class="button-row">
@@ -200,8 +199,7 @@
               <div style="margin-bottom: 24px;">
                 <div>[[verses.home.activatedPackage]]: [[packageActivation.packageDetail.name]]
                   ([[packageActivation.packageDetail.code]])</div>
-                <div class="">[[verses.home.activatedOn]]: [[$mkDate(packageActivation.createdDatetimeStamp, 'dd MMM
-                  yyyy hh:mm TT')]]</div>
+                <div class="">[[verses.home.activatedOn]]: [[$mkDate(packageActivation.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
                 <div class="">[[verses.home.allows]]:
                   <span>[[packageActivation.packageDetail.limits.maximumEmployees]] [[verses.home.employees]],</span>
                   <span>[[packageActivation.packageDetail.limits.maximumOutlets]] [[verses.home.outlets]],</span>
@@ -328,7 +326,7 @@
           date.setMonth(date.getMonth() + duration.months);
           date.setDate(date.getDate() + duration.days);
           let expirationDatetimeStamp = date.getTime();
-          this.package = {
+          this.aPackage = {
             code, name, limits, duration,
             createdDatetimeStamp,
             expirationDatetimeStamp
