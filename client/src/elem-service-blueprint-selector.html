@@ -1,0 +1,184 @@
+<!-- 
+  ========================================
+  =====    elem-service-blueprint-selector    =====
+  ========================================
+
+  Host Configuratio Details:=
+
+    required properties:=
+
+      isSearchingServiceBlueprint: {
+        type: Boolean,
+        value: false
+      },
+      serviceBlueprint: {
+        type: Object,
+        value: null,
+        observer: 'serviceBlueprintChanged'
+      }
+
+    required assign in construction/navigatedIn:= 
+
+      this.self = this;
+
+    required methods:=
+
+      serviceBlueprintChanged() {
+        if (!this.serviceBlueprint) return;
+        this.app.storeInSession('last-selected-serviceBlueprint', this.serviceBlueprint);
+      }
+
+      _serviceBlueprintSelected(serviceBlueprint){
+        this.serviceBlueprint = serviceBlueprint;
+        this.isSearchingServiceBlueprint = false;
+      }
+      
+      // optional
+      changeServiceBlueprintTapped(e = null) {
+        this.isSearchingServiceBlueprint = true;
+      }
+
+      createServiceBlueprintTapped(e = null) {
+        this.app.navigateTo('/edit-serviceBlueprint');
+      }
+
+      removeServiceBlueprintTapped(e = null) {
+        this.serviceBlueprint = null;
+        this.app.storeInSession('last-selected-serviceBlueprint', null);
+      }
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="elem-service-blueprint-selector">
+  <template>
+    <style include="shared-styles">
+      .item {
+        margin-bottom: 4px;
+        padding-bottom: 6px;
+        border-bottom: 1px dashed rgb(192, 198, 214);
+      }
+
+      .item:first-of-type {
+        margin-top: 4px;
+      }
+
+      .item:last-of-type {
+        border: none;
+      }
+    </style>
+    <div class="card vertical layout">
+      <div class="horizontal layout center">
+        <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.serviceBlueprintSelector.serviceBlueprintNameOrPhoneInputError]] label=[[verses.serviceBlueprintSelector.serviceBlueprintNameOrPhoneInput]] on-keypress="searchFieldKeypressed"></paper-input>
+        <paper-icon-button icon="clear" on-tap="cancelTapped"></paper-icon-button>
+        <paper-button raised class="primary" on-tap="searchTapped">
+          <iron-icon icon="search" class="m-right-8"></iron-icon>[[verses.general.search]]
+        </paper-button>
+      </div>
+
+      <div class="vertical layout">
+        <template is="dom-repeat" items="[[serviceBlueprintList]]" as="serviceBlueprint" index-as="serviceBlueprintIndex">
+          <div class="horizontal layout item center">
+            <div class="flex">
+              [[verses.serviceBlueprintSelector.serviceBlueprints]]:
+              <b>[[serviceBlueprint.name]]
+            </div>
+            <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+          </div>
+        </template>
+      </div>
+
+    </div>
+  </template>
+  <script>
+    class ElemServiceBlueprintSelector extends FxElement.mixin(TorqueLanguageBehavior) {
+
+      static get is() { return 'elem-service-blueprint-selector'; }
+
+      static get properties() {
+        return {
+          searchString: {
+            type: String,
+            value: ''
+          },
+          page: {
+            type: Object,
+            value: null,
+            observer: 'pageChanged'
+          }
+        };
+      }
+
+      pageChanged() {
+        if (!this.page) return;
+        this.useLanguageServices();
+      }
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
+      cancelTapped(e = null) {
+        this.page._serviceBlueprintSelected(null);
+      }
+
+      searchTapped(e = null) {
+        let organizationId = parseInt(this.page.app.organization.id);
+        let data = {
+          organizationId,
+          searchString: this.searchString
+        };
+        this.page.app.callGetServiceBlueprintListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.page.onApiError(response.error);
+          this.serviceBlueprintList = response.serviceBlueprintList;
+          if (this.serviceBlueprintList.length === 1) {
+            this._selectServiceBlueprint(0);
+          }
+        });
+      }
+
+      _selectServiceBlueprint(serviceBlueprintIndex) {
+        let serviceBlueprint = this.serviceBlueprintList[serviceBlueprintIndex];
+        this.page._serviceBlueprintSelected(serviceBlueprint);
+        this.serviceBlueprintList = [];
+      }
+
+      selectTapped(e) {
+        let { serviceBlueprintIndex } = e.model;
+        this._selectServiceBlueprint(serviceBlueprintIndex);
+      }
+
+      forceSelect(serviceBlueprintId) {
+        this.delay(0, () => {
+          this.searchString = serviceBlueprintId;
+          this.searchTapped();
+        });
+      }
+
+    }
+    window.customElements.define(ElemServiceBlueprintSelector.is, ElemServiceBlueprintSelector);
+  </script>
+</dom-module>

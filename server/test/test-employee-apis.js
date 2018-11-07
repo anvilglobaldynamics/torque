@@ -65,9 +65,14 @@ const privilegeObject = {
   PRIV_VIEW_ALL_SERVICES: true,
   PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
   PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
+  PRIV_VIEW_ALL_SERVICE_BLUEPRINTS: true,
+  PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS: true,
   PRIV_TRANSFER_ALL_INVENTORIES: true,
   PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
   PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS: true,
+
+  PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: true,
+  PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: true,
 
   PRIV_VIEW_ALL_OUTLETS: true,
   PRIV_MODIFY_ALL_OUTLETS: true,
@@ -491,6 +496,25 @@ describe('Employee', _ => {
       json: {
         apiKey,
         organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetEmployeeListApiSuccessResponse(body);
+      body.employeeList.forEach(employee => {
+        validateEmploymentSchema(employee);
+      });
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-employee-list (Valid searchString)', testDoneFn => {
+
+    callApi('api/get-employee-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: 'user'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

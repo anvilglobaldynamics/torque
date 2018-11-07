@@ -12,3 +12,4 @@ exports.promisify = (context, method, ...args) => {
     method.apply(context, args);
   });
 }
+

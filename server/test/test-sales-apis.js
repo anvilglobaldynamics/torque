@@ -32,8 +32,14 @@ let {
   validateGetActiveServiceListApiSuccessResponse,
   validateServiceSchema,
 
+  validateGetServiceMembershipListApiSuccessResponse,
+  validateServiceMembershipSchemaWhenListObj,
+
   validateGetCustomerApiSuccessResponse,
-  validateCustomerSchema
+  validateCustomerSchema,
+
+  getActiveServiceList,
+  addSales
 } = require('./lib');
 
 const prefix = 's';
@@ -89,6 +95,14 @@ let invalidEmployeeId = generateInvalidId();
 let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
+
+let monthsLaterDate = new Date();
+monthsLaterDate.setMonth(monthsLaterDate.getMonth() + 3);
+monthsLaterDate = monthsLaterDate.getTime();
+
+let monthsEarlierDate = new Date();
+monthsEarlierDate.setMonth(monthsEarlierDate.getMonth() - 3);
+monthsEarlierDate = monthsEarlierDate.getTime();
 
 let customerRef1 = null;
 
@@ -737,6 +751,7 @@ describe('Sales', _ => {
 
         fromDate,
         toDate: (new Date()).getTime(),
+        includeExtendedInformation: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -1605,6 +1620,578 @@ describe('Sales', _ => {
   });
 
   // Service Sales - end
+
+  it('api/get-sales-list (Valid only organization Id and includeExtendedInformation)', testDoneFn => {
+
+    callApi('api/get-sales-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate,
+        toDate: (new Date()).getTime(),
+        includeExtendedInformation: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetSalesListApiSuccessResponse(body);
+      body.salesList.forEach(sales => {
+        validateSalesSchemaWhenListObj(sales);
+      });
+      testDoneFn();
+    });
+
+  });
+
+  // Service Membership - start
+
+  it('api/get-service-membership-list (Valid no filter. Only one entry. (created above))', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId,
+        serviceBlueprintId: null,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByServiceBlueprint: false,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      testDoneFn();
+    });
+
+  });
+
+  let membershipTest = {
+    organizationId,
+    customer1Id: null,
+    customer2Id: null,
+    customer1Phone: 'c1' + rnd(prefix, 11),
+    customer2Phone: 'c2' + rnd(prefix, 11),
+    outlet1Id: null,
+    outlet2Id: null,
+    serviceBlueprint1Id: null,
+    serviceBlueprint2Id: null
+  }
+
+  it('Preparing for service-membership test', testDoneFn => {
+    let { promisifyApiCall } = require('./lib');
+
+    Promise.resolve()
+      .then(() => promisifyApiCall({}, addOrganization, {
+        apiKey,
+        name: orgName,
+        primaryBusinessAddress: orgBusinessAddress,
+        phone: orgPhone,
+        email: orgEmail
+      }))
+      .then(({ organizationId }) => membershipTest.organizationId = organizationId)
+
+      .then(() => promisifyApiCall({}, addCustomer, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        fullName: customerFullName,
+        phone: membershipTest.customer1Phone
+      }))
+      .then(({ customerId }) => membershipTest.customer1Id = customerId)
+
+      .then(() => promisifyApiCall({}, addCustomer, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        fullName: customerFullName,
+        phone: membershipTest.customer2Phone
+      }))
+      .then(({ customerId }) => membershipTest.customer2Id = customerId)
+
+      .then(() => promisifyApiCall({}, addOutlet, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        name: outletName,
+        physicalAddress: outletPhysicalAddress,
+        phone: outletPhone,
+        contactPersonName: outletContactPersonName
+      }))
+      .then(({ outletId }) => membershipTest.outlet1Id = outletId)
+
+      .then(() => promisifyApiCall({}, addOutlet, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        name: outletName,
+        physicalAddress: outletPhysicalAddress,
+        phone: outletPhone,
+        contactPersonName: outletContactPersonName
+      }))
+      .then(({ outletId }) => membershipTest.outlet2Id = outletId)
+
+      // longstanding ServiceBlueprint1
+      .then(() => promisifyApiCall({}, addServiceBlueprint, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        name: "Long 1",
+        defaultVat: 2,
+        defaultSalePrice: 250,
+        isLongstanding: true,
+        serviceDuration: {
+          months: 1,
+          days: 7
+        },
+        isEmployeeAssignable: true,
+        isCustomerRequired: true,
+        isRefundable: false,
+        avtivateInAllOutlets: true
+      }))
+      .then(({ serviceBlueprintId }) => membershipTest.serviceBlueprint1Id = serviceBlueprintId)
+
+      // longstanding ServiceBlueprint2
+      .then(() => promisifyApiCall({}, addServiceBlueprint, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        name: "Long 2",
+        defaultVat: 2,
+        defaultSalePrice: 250,
+        isLongstanding: true,
+        serviceDuration: {
+          months: 1,
+          days: 7
+        },
+        isEmployeeAssignable: true,
+        isCustomerRequired: true,
+        isRefundable: false,
+        avtivateInAllOutlets: true
+      }))
+      .then(({ serviceBlueprintId }) => membershipTest.serviceBlueprint2Id = serviceBlueprintId)
+
+      // get active service list (outlet1)
+      .then(() => promisifyApiCall({}, getActiveServiceList, {
+        apiKey,
+        outletId: membershipTest.outlet1Id,
+        searchString: ''
+      }))
+      .then((body) => {
+        membershipTest.outlet1ServiceList = body.serviceList;
+      })
+
+      // get active service list (outlet2)
+      .then(() => promisifyApiCall({}, getActiveServiceList, {
+        apiKey,
+        outletId: membershipTest.outlet2Id,
+        searchString: ''
+      }))
+      .then((body) => {
+        membershipTest.outlet2ServiceList = body.serviceList;
+      })
+
+      // add sale - outlet 1, customer 1, service 1
+      .then(() => { longstandingService = membershipTest.outlet1ServiceList.find(i => i.serviceBlueprint.name === 'Long 1'); return Promise.resolve() })
+      .then(() => promisifyApiCall({}, addSales, {
+        apiKey,
+        outletId: membershipTest.outlet1Id,
+        customerId: membershipTest.customer1Id,
+        productList: [],
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }))
+      .then((body) => { })
+
+      // add sale - outlet 1, customer 1, service 2
+      .then(() => { longstandingService = membershipTest.outlet1ServiceList.find(i => i.serviceBlueprint.name === 'Long 2'); return Promise.resolve() })
+      .then(() => promisifyApiCall({}, addSales, {
+        apiKey,
+        outletId: membershipTest.outlet1Id,
+        customerId: membershipTest.customer1Id,
+        productList: [],
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }))
+      .then((body) => { })
+
+      // add sale - outlet 1, customer 2, service 2
+      .then(() => { longstandingService = membershipTest.outlet1ServiceList.find(i => i.serviceBlueprint.name === 'Long 2'); return Promise.resolve() })
+      .then(() => promisifyApiCall({}, addSales, {
+        apiKey,
+        outletId: membershipTest.outlet1Id,
+        customerId: membershipTest.customer2Id,
+        productList: [],
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }))
+      .then((body) => { })
+
+      // add sale - outlet 2, customer 1, service 1
+      .then(() => { longstandingService = membershipTest.outlet2ServiceList.find(i => i.serviceBlueprint.name === 'Long 1'); return Promise.resolve() })
+      .then(() => promisifyApiCall({}, addSales, {
+        apiKey,
+        outletId: membershipTest.outlet2Id,
+        customerId: membershipTest.customer1Id,
+        productList: [],
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }))
+      .then((body) => { })
+
+      // add sale - outlet 2, customer 2, service 1
+      .then(() => { longstandingService = membershipTest.outlet2ServiceList.find(i => i.serviceBlueprint.name === 'Long 1'); return Promise.resolve() })
+      .then(() => promisifyApiCall({}, addSales, {
+        apiKey,
+        outletId: membershipTest.outlet2Id,
+        customerId: membershipTest.customer2Id,
+        productList: [],
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }))
+      .then((body) => { })
+
+      .then(() => {
+        // console.log('final test object', membershipTest);
+        testDoneFn();
+      });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: null,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByServiceBlueprint: false,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(5);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, outlet: 1)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: null,
+        outletId: membershipTest.outlet1Id,
+        customerId: null,
+
+        shouldFilterByServiceBlueprint: false,
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: false,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(3);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, outlet: 1, customer: 1)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: null,
+        outletId: membershipTest.outlet1Id,
+        customerId: membershipTest.customer1Id,
+
+        shouldFilterByServiceBlueprint: false,
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: true,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(2);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, outlet: 1, customer: 2)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: null,
+        outletId: membershipTest.outlet1Id,
+        customerId: membershipTest.customer2Id,
+
+        shouldFilterByServiceBlueprint: false,
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: true,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(1);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, customer: 1)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: null,
+        outletId: null,
+        customerId: membershipTest.customer1Id,
+
+        shouldFilterByServiceBlueprint: false,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: true,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(3);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, serviceBlueprint: 1)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: membershipTest.serviceBlueprint1Id,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByServiceBlueprint: true,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(3);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, serviceBlueprint: 2)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: membershipTest.serviceBlueprint2Id,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByServiceBlueprint: true,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(2);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, outlet: 1, customer: 1, serviceBlueprint: 1)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: membershipTest.serviceBlueprint1Id,
+        outletId: membershipTest.outlet1Id,
+        customerId: membershipTest.customer1Id,
+
+        shouldFilterByServiceBlueprint: true,
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: true,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(1);
+      testDoneFn();
+    });
+
+  });
+
+  // Service Membership - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

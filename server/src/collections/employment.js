@@ -24,6 +24,9 @@ exports.EmploymentCollection = class extends Collection {
         PRIV_MODIFY_SALES: Joi.boolean().required(),
         PRIV_ALLOW_FLAT_DISCOUNT: Joi.boolean().required(),
 
+        PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: Joi.boolean().required(),
+        PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: Joi.boolean().required(),
+
         PRIV_VIEW_SALES_RETURN: Joi.boolean().required(),
         PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
 
@@ -31,6 +34,8 @@ exports.EmploymentCollection = class extends Collection {
         PRIV_VIEW_ALL_SERVICES: Joi.boolean().required(),
         PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: Joi.boolean().required(),
         PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: Joi.boolean().required(),
+        PRIV_VIEW_ALL_SERVICE_BLUEPRINTS: Joi.boolean().required(),
+        PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS: Joi.boolean().required(),
         PRIV_TRANSFER_ALL_INVENTORIES: Joi.boolean().required(),
         PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: Joi.boolean().required(),
         PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS: Joi.boolean().required(),
@@ -81,6 +86,9 @@ exports.EmploymentCollection = class extends Collection {
       "PRIV_MODIFY_SALES",
       "PRIV_ALLOW_FLAT_DISCOUNT",
 
+      "PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS",
+      "PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS",
+
       "PRIV_VIEW_SALES_RETURN",
       "PRIV_MODIFY_SALES_RETURN",
 
@@ -88,6 +96,8 @@ exports.EmploymentCollection = class extends Collection {
       "PRIV_VIEW_ALL_SERVICES",
       "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS",
       "PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS",
+      "PRIV_VIEW_ALL_SERVICE_BLUEPRINTS",
+      "PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS",
       "PRIV_TRANSFER_ALL_INVENTORIES",
       "PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES",
       "PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS",

@@ -10,7 +10,7 @@ let { rnd } = require('../test/lib');
 
 const phonePrefix = '+800';
 const emailPrefix = 'mail';
-const commonPassword = '12345678';
+const commonPassword = 'johndoe1pass';
 
 // --------------------------------------------------------------
 
@@ -232,6 +232,9 @@ const createEmployee = async ({ apiKey, organizationId }) => {
       PRIV_MODIFY_SALES: true,
       PRIV_ALLOW_FLAT_DISCOUNT: true,
 
+      PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: true,
+      PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: true,
+
       PRIV_VIEW_SALES_RETURN: true,
       PRIV_MODIFY_SALES_RETURN: true,
 
@@ -293,6 +296,8 @@ const createSales = async ({ apiKey, outletId, productList }) => {
     customerId: null,
 
     productList,
+    serviceList: [],
+
     serviceList: [],
 
     payment: {

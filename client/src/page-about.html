@@ -20,13 +20,13 @@
 
     <style include="shared-styles">
 
-
       paper-tabs.view-selector {
         --paper-tabs: {
           background-color: var(--app-primary-color);
           color: white;
         }
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -48,7 +48,7 @@
           <br>
           <div>
             <span class="grey">[[verses.about.logoAndFaviconBy]]
-              <a href="https://www.flaticon.com/authors/madebyoliver">Madebyoliver</a> [[verses.general.from]] www.flaticon.com </span>
+              <a href="https://www.flaticon.com/authors/madebyoliver">Madebyoliver</a>, www.flaticon.com </span>
           </div>
           <br>
           <div>
@@ -70,7 +70,9 @@
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 2)]]">
         <div class="card">
           <div>
-            [[verses.about.sendYourQuestionsTo]] [[contactEmail]].
+            [[verses.about.sendYourQuestionsTo]]
+            <a href="[[contactEmail]]">[[contactEmail]]</a>
+            [[verses.general.or]] +880 1770 947908
           </div>
         </div>
       </template>
@@ -86,8 +88,22 @@
 
       static get properties() {
         return {
-          contactEmail: { type: String, value: 'care@lipi.live' },
-          paperTabSelectedViewIndex: { type: Number, value: 0 }
+          authorWebsite: {
+            type: String,
+            value: 'anvilglobaldynamics.com'
+          },
+          authorName: {
+            type: String,
+            value: 'Anvil Global Dynamics'
+          },
+          contactEmail: { 
+            type: String, 
+            value: 'care@anvil.live' 
+          },
+          paperTabSelectedViewIndex: { 
+            type: Number, 
+            value: 0 
+          }
         };
       }
 

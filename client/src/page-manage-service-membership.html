@@ -1,0 +1,481 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="elem-customer-selector.html">
+<link rel="import" href="elem-outlet-selector.html">
+<link rel="import" href="elem-service-blueprint-selector.html">
+
+<dom-module id="page-manage-service-membership">
+  <template>
+    <style include="shared-styles">
+
+      .service-conteiner {
+        /* border: 1px solid red; */
+        margin-top: 10px;
+      }
+
+      .service-title {
+        font-weight: bold;
+      }
+
+      .service-description {
+        font-size: 15px;
+      }
+
+      .expiring-datetime-container {
+        padding: 6px;
+        margin-top: 6px;
+      }
+
+      .expired {
+        background-color: var(--app-button-danger);
+        color: var(--app-button-label-danger);
+      }
+
+      .not-expired {
+        background-color: var(--app-button-secondary);
+        color: var(--app-button-label-secondary);
+      }
+
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <!-- dates selection - start -->
+      <div class="card horizontal layout center">
+        <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+        <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+      </div>
+      <!-- dates selection - end -->
+
+      <!-- service blueprint search - start -->
+      <template is="dom-if" if="[[!isSearchingServiceBlueprint]]">
+        <div class="card vertical layout">
+          <div class="horizontal layout center wrap">
+            <div class="flex">
+              <template is="dom-if" if="[[!serviceBlueprint]]">
+                [[verses.serviceMembership.noServiceBlueprintSelected]]
+              </template>
+              <template is="dom-if" if="[[serviceBlueprint]]">
+                [[verses.serviceMembership.serviceBlueprint]]:
+                <b>[[serviceBlueprint.name]]</b>
+              </template>
+            </div>
+            <div class="horizontal layout center">
+              <template is="dom-if" if="[[serviceBlueprint]]">
+                <paper-button raised class="danger" on-tap="removeServiceBlueprintTapped">[[verses.serviceMembership.remove]]</paper-button>
+              </template>
+              <paper-button raised class="secondary" on-tap="changeServiceBlueprintTapped">[[verses.serviceMembership.change]]</paper-button>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <elem-service-blueprint-selector page="{{self}}" class$="[[$if(isSearchingServiceBlueprint, '', 'hidden')]]"></elem-service-blueprint-selector>
+      <!-- service blueprint search - end -->
+
+      <!-- customer search - start -->
+      <template is="dom-if" if="[[!isSearchingCustomer]]">
+        <div class="card vertical layout">
+          <div class="horizontal layout center wrap">
+            <div class="flex">
+              <template is="dom-if" if="[[!customer]]">
+                [[verses.serviceMembership.noCustomerSelected]]
+              </template>
+              <template is="dom-if" if="[[customer]]">
+                [[verses.general.customer]]:
+                <b>[[customer.fullName]]</b> ([[customer.phone]])
+                <br>[[verses.general.balance]]:
+                <b>[[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</b>
+              </template>
+            </div>
+            <div class="horizontal layout center">
+              <template is="dom-if" if="[[customer]]">
+                <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.serviceMembership.remove]]</paper-button>
+              </template>
+              <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.serviceMembership.change]]</paper-button>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+      <!-- customer search - end -->
+
+      <!-- outlet search - start -->
+      <template is="dom-if" if="[[!isSearchingOutlet]]">
+        <div class="card vertical layout">
+          <div class="horizontal layout center">
+            <div class="flex">
+              <template is="dom-if" if="[[!outlet]]">
+                [[verses.serviceMembership.noOutletSelected]]
+              </template>
+              <template is="dom-if" if="[[outlet]]">
+                [[verses.general.outlet]]:
+                <b>[[outlet.name]]</b> ([[outlet.phone]])
+                <br>[[verses.general.address]]:
+                <b>[[outlet.physicalAddress]]</b>
+              </template>
+            </div>
+            <template is="dom-if" if="[[outlet]]">
+              <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.serviceMembership.remove]]</paper-button>
+            </template>
+            <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.serviceMembership.change]]</paper-button>
+          </div>
+        </div>
+      </template>
+
+      <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
+      <!-- outlet search - end -->
+
+      <paper-button raised class="primary" on-tap="filterTapped">[[verses.general.filter]]</paper-button>
+
+      <template is="dom-if" if="{{!serviceMembershipList.length}}">
+        <div class="card">
+          [[verses.serviceMembership.noServiceMembershipFound]]
+        </div>
+      </template>
+
+      <!-- service membership list view - start -->
+      <template is="dom-if" if="{{serviceMembershipList.length}}">
+
+        <div class="card vertical layout">
+
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          </template>
+
+          <div class="list">
+            <!-- service membership - start -->
+            <template is="dom-repeat" items="[[serviceMembershipList]]" as="serviceMembership">
+              <div class="horizontal layout item center">
+                <div class="vertical layout flex">
+                  <div class="service-conteiner">
+
+                    <div class="service-title">[[verses.serviceMembership.serviceMembershipNumber]]:
+                      [[serviceMembership.id]]</div>
+                    <div class="service-description">[[verses.serviceMembership.customer]]:
+                      [[serviceMembership.customerDetails.fullName]], [[serviceMembership.customerDetails.phone]]</div>
+                    <div class="service-description">[[verses.serviceMembership.serviceBlueprint]]:
+                      [[serviceMembership.serviceBlueprintDetails.name]]</div>
+
+                    <div class$="expiring-datetime-container [[$serviceMembershipExpiryStatus(serviceMembership.expiringDatetimeStamp)]]">
+                      [[verses.serviceMembership.expiringDatetime]]: [[$mkDate(serviceMembership.expiringDatetimeStamp,
+                      'hh:mmtt dd-MMM-yyyy')]]
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </template>
+            <!-- service membership - end -->
+          </div>
+
+          <div class="pagination">
+            [[verses.general.showing]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          </template>
+
+        </div>
+
+      </template>
+      <!-- service membership list view - end -->
+
+    </div>
+  </template>
+
+  <script>
+    class PageManageServiceMembership extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-manage-service-membership';
+      }
+
+      static get properties() {
+        return {
+          outletId: {
+            type: String,
+            value: null
+          },
+          shouldFilterByServiceBlueprint: {
+            type: Boolean,
+            value: false
+          },
+          shouldFilterByOutlet: {
+            type: Boolean,
+            value: false
+          },
+          shouldFilterByCustomer: {
+            type: Boolean,
+            value: false
+          },
+          fromDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date.setMonth(date.getMonth() - 1);
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          toDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date.setMonth(date.getMonth() + 1);
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          isSearchingServiceBlueprint: {
+            type: Boolean,
+            value: false
+          },
+          serviceBlueprint: {
+            type: Object,
+            value: null,
+            observer: 'serviceBlueprintChanged'
+          },
+          isSearchingCustomer: {
+            type: Boolean,
+            value: false
+          },
+          customer: {
+            type: Object,
+            value: null,
+            observer: 'customerChanged'
+          },
+          isSearchingOutlet: {
+            type: Boolean,
+            value: false
+          },
+          outlet: {
+            type: Object,
+            value: null,
+            observer: 'outletChanged'
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.serviceMembership.serviceMembershipTitle);
+        if (!this._ensureAccess()) return;
+        this._processServiceMembershipList(() => {
+          if ('outlet' in this.params) {
+            this.isSearchingOutlet = true;
+            this.elem('elem-outlet-selector').forceSelect(this.params.outlet);
+          }
+          this.self = this;
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS']
+        });
+      }
+
+      _fetchServiceMembershipList(cbfn) {
+        if (!this.fromDate) {
+          this.resetProperties('fromDate');
+        }
+        if (!this.toDate) {
+          this.resetProperties('toDate');
+        }
+
+        let fromDate = new Date(this.fromDate).getTime();
+        let toDate = new Date(this.toDate).getTime();
+
+        let customerId = null;
+        if (this.customer) {
+          customerId = this.customer.id;
+          this.shouldFilterByCustomer = true;
+        } else {
+          this.shouldFilterByCustomer = false;
+        }
+
+        let outletId = null;
+        if (this.outlet) {
+          outletId = this.outlet.id;
+          this.shouldFilterByOutlet = true;
+        } else {
+          this.shouldFilterByOutlet = false;
+        }
+
+        let serviceBlueprintId = null;
+        if (this.serviceBlueprint) {
+          serviceBlueprintId = this.serviceBlueprint.id;
+          this.shouldFilterByServiceBlueprint = true;
+        } else {
+          this.shouldFilterByServiceBlueprint = false;
+        }
+
+        let data = {
+          organizationId: this.app.organization.id,
+
+          serviceBlueprintId,
+          outletId,
+          customerId,
+
+          shouldFilterByServiceBlueprint: this.shouldFilterByServiceBlueprint,
+          shouldFilterByOutlet: this.shouldFilterByOutlet,
+          shouldFilterByCustomer: this.shouldFilterByCustomer,
+
+          fromDate,
+          toDate,
+
+          paginate: this.paginate
+        };
+
+        this.app.callGetServiceMembershipListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.serviceMembershipList);
+        });
+      }
+
+      customerChanged() {
+        if (!this.customer) return;
+        this.app.storeInSession('last-selected-customer', this.customer);
+      }
+
+      outletChanged() {
+        if (!this.outlet) return;
+        this.app.storeInSession('last-selected-outlet', this.outlet);
+      }
+
+      serviceBlueprintChanged() {
+        if (!this.serviceBlueprint) return;
+        this.app.storeInSession('last-selected-service-blueprint', this.serviceBlueprint);
+      }
+
+      _processServiceMembershipList(cbfn) {
+        this._fetchServiceMembershipList(newSalesList => {
+          this.serviceMembershipList = newSalesList;
+          cbfn();
+        });
+      }
+
+      _customerSelected(customer) {
+        this.customer = customer;
+        this.isSearchingCustomer = false;
+      }
+
+      _outletSelected(outlet) {
+        this.outlet = outlet;
+        this.isSearchingOutlet = false;
+      }
+
+      _serviceBlueprintSelected(serviceBlueprint) {
+        this.serviceBlueprint = serviceBlueprint;
+        this.isSearchingServiceBlueprint = false;
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processServiceMembershipList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processServiceMembershipList(() => this.isReady = true);
+      }
+
+      // region: ui  ===========================
+
+      changeCustomerTapped(e = null) {
+        this.isSearchingCustomer = true;
+      }
+
+      changeOutletTapped(e = null) {
+        this.isSearchingOutlet = true;
+      }
+
+      changeServiceBlueprintTapped(e = null) {
+        this.isSearchingServiceBlueprint = true;
+      }
+
+      removeCustomerTapped(e = null) {
+        this.customer = null;
+        this.app.storeInSession('last-selected-customer', null);
+      }
+
+      removeOutletTapped(e = null) {
+        this.outlet = null;
+        this.app.storeInSession('last-selected-outlet', null);
+      }
+
+      removeServiceBlueprintTapped(e = null) {
+        this.serviceBlueprint = null;
+        this.app.storeInSession('last-selected-service-blueprint', null);
+      }
+
+      filterTapped(e = null) {
+        this.isReady = false;
+        this._processServiceMembershipList(() => {
+          this.isReady = true;
+        });
+      }
+
+      $serviceMembershipExpiryStatus(expiringDatetimeStamp) {
+        let currentDatetimeStamp = (new Date()).getTime();
+        if (currentDatetimeStamp <= parseInt(expiringDatetimeStamp)) {
+          return 'not-expired';
+        } else {
+          return 'expired';
+        }
+      }
+
+    }
+
+    window.customElements.define(PageManageServiceMembership.is, PageManageServiceMembership);
+  </script>
+</dom-module>

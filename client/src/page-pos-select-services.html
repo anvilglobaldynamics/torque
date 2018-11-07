@@ -110,7 +110,6 @@
                 </div>
 
                 <div class="horizontal layout wrap center">
-                  <!-- TODO: emplooyee button -->
                   <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
                 </div>
               </div>
@@ -208,7 +207,8 @@
             let { name, defaultVat, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration } = service.serviceBlueprint;
             service.isSelected = false;
             let vatValue = defaultVat;
-            Object.assign(service, { name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration });
+            let assignedEmploymentId = null;
+            Object.assign(service, { name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration });
             return service;
           });
 
@@ -233,9 +233,9 @@
       }
 
       _addServiceToSelectedServiceList({ service }) {
-        let { id, name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration } = service;
+        let { id, name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration } = service;
         let minSalePrice = salePrice;
-        this.push('selectedServiceList', { id, name, minSalePrice, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration });
+        this.push('selectedServiceList', { id, name, minSalePrice, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration });
         this.selectedServiceCount = this.selectedServiceList.length;
       }
 
