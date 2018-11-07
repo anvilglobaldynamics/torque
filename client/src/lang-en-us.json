@@ -78,6 +78,8 @@
     "noDataFound": "No Data Found",
     "changeWallet": "Change Wallet",
     "activatedModules": "Activated Modules",
+    "moduleDescriptionLineOne": "Different Modules add different features and functionalities to Lipi. Below listed modules are currently activated;",
+    "moduleDescriptionLineTwo": "To add more features to Lipi, contact us at +880 1770 947908 or mail us at care@anvil.live",
     "productModule": "Product Module",
     "serviceModule": "Service Module",
     "gymModule": "Gym Module"

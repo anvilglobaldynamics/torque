@@ -78,6 +78,8 @@
     "noDataFound": "কোন তথ্য পাওয়া যায়নি",
     "changeWallet": "Change Wallet",
     "activatedModules": "সক্রিয় মডিউলগুলো",
+    "moduleDescriptionLineOne": "ভিন্ন মডিউল লিপি তে বিভিন্ন কার্যকারিতা যোগ করে। নিচে বর্তমানে সক্রিয় মডিউল গুলো উল্লেখিত;",
+    "moduleDescriptionLineTwo": "লিপি তে আরো ফীচার এবং কার্যকারিতা যোগ করতে আমাদের সাথে যোগাযোগ করুন এই নম্বরে +880 1770 947908 অথবা care@anvil.live এ মেইল লিখুন ",
     "productModule": "প্রোডাক্ট মডিউল",
     "serviceModule": "সেবা মডিউল",
     "gymModule": "জিমনেসিয়াম মডিউল"
