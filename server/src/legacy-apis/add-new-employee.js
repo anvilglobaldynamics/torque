@@ -88,7 +88,8 @@ exports.AddNewEmployeeApi = class extends phoneVerificationRequestMixin(userComm
   }
 
   handle({ body }) {
-    let { fullName, phone, password, organizationId, role, designation, companyProvidedId, privileges, aPackage } = body;
+    let { fullName, phone, password, organizationId, role, designation, companyProvidedId, privileges } = body;
+    let { aPackage } = this.interimData;
     this._checkOrganizationPackageEmployeeLimit({ organizationId, aPackage }, () => {
       this._createUser({ fullName, phone, password }, (userId) => {
         this._hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {

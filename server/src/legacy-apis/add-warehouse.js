@@ -53,7 +53,8 @@ exports.AddWarehouseApi = class extends inventoryCommonMixin(LegacyApi) {
   }
 
   handle({ body }) {
-    let { name, organizationId, physicalAddress, phone, contactPersonName, aPackage } = body;
+    let { name, organizationId, physicalAddress, phone, contactPersonName } = body;
+    let { aPackage } = this.interimData;
     this._checkOrganizationPackageWarehouseLimit({ organizationId, aPackage }, () => {
       this._createWarehouse({ name, organizationId, physicalAddress, phone, contactPersonName }, (warehouseId) => {
         this._createStandardInventories({ inventoryContainerId: warehouseId, inventoryContainerType: "warehouse", organizationId }, () => {

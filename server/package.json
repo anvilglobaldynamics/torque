@@ -35,7 +35,8 @@
     "start": "node start.js",
     "dev": "nodemon start.js",
     "dev-imported": "nodemon start.js --db torque-imported",
-    "test": "mocha --timeout 10000"
+    "test": "mocha --timeout 10000",
+    "test-bail": "mocha --timeout 10000 --bail"
   },
   "private": true
 }
