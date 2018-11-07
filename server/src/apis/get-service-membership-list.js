@@ -76,6 +76,8 @@ exports.GetServiceMembershipListApi = class extends Api {
     }
   }
 
+  // FIXME: This method is not working as intended. Currently switching to naive approach.
+  // Will come back and fix this at a later time.
   async _findServiceMembershipList({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId }) {
     // console.log({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId })
 
@@ -152,6 +154,60 @@ exports.GetServiceMembershipListApi = class extends Api {
       }
       if ('serviceDetailsArray' in serviceMembership) {
         delete serviceMembership['serviceDetailsArray'];
+      }
+    });
+
+    return serviceMembershipList;
+  }
+
+  async _findServiceMembershipListNaive({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId }) {
+
+    let outletIdList;
+    if (shouldFilterByOutlet) {
+      outletIdList = [outletId];
+    } else {
+      outletIdList = (await this.database.outlet.listByOrganizationId({ organizationId })).map(outlet => outlet.id);
+    }
+
+    let serviceMembershipList = await this.database.serviceMembership._find({
+      "expiringDatetimeStamp": {
+        $gte: fromDate,
+        $lte: toDate
+      }
+    });
+
+    // console.log('length: After time query', serviceMembershipList.length)
+    serviceMembershipList.forEach(serviceMembership => console.log(new Date(serviceMembership.expiringDatetimeStamp)))
+
+    for (let serviceMembership of serviceMembershipList) {
+      serviceMembership.salesDetails = await this.database.sales.findById({ id: serviceMembership.salesId });
+      serviceMembership.serviceDetails = await this.database.service.findById({ id: serviceMembership.serviceId });
+    }
+    if (shouldFilterByServiceBlueprint) {
+      serviceMembershipList = serviceMembershipList.filter(serviceMembership => {
+        return serviceMembership.serviceDetails.serviceBlueprintId === serviceBlueprintId;
+      });
+    }
+    if (shouldFilterByCustomer) {
+      serviceMembershipList = serviceMembershipList.filter(serviceMembership => {
+        return serviceMembership.customerId === customerId;
+      });
+    }
+
+    serviceMembershipList = serviceMembershipList.filter(serviceMembership => {
+      // console.log(outletIdList, serviceMembership.salesDetails.outletId, outletIdList.includes(serviceMembership.salesDetails.outletId))
+      return outletIdList.includes(serviceMembership.salesDetails.outletId);
+    });
+
+    // console.log('serviceMembershipList', JSON.stringify(serviceMembershipList, null, 2));
+
+    // NOTE: Cleaning up intermediary variables
+    serviceMembershipList.forEach(serviceMembership => {
+      if ('salesDetails' in serviceMembership) {
+        delete serviceMembership['salesDetails'];
+      }
+      if ('serviceDetails' in serviceMembership) {
+        delete serviceMembership['serviceDetails'];
       }
     });
 
