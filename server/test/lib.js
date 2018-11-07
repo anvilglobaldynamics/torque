@@ -11,7 +11,7 @@ let testStartDatetimeStamp = (new Date).getTime();
 exports.promisifyApiCall = (context, method, ...args) => {
   return new Promise((success, fail) => {
     args.push((res) => {
-      if (res.hasError){
+      if (res.hasError) {
         return fail(res);
       }
       return success(res);
@@ -1045,19 +1045,19 @@ exports.validateServiceBlueprintSchema = (doc) => {
 
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-  
+
     organizationId: Joi.number().max(999999999999999).required(),
     name: Joi.string().min(1).max(64).required(),
-  
+
     defaultVat: Joi.number().min(0).max(999999999999999).required(),
     defaultSalePrice: Joi.number().min(0).max(999999999999999).required(),
-    
+
     isLongstanding: Joi.boolean().required(),
     serviceDuration: Joi.object().allow(null).required().keys({
       months: Joi.number().min(0).max(999999999999999).required(),
       days: Joi.number().min(0).max(999999999999999).required(),
     }),
-  
+
     isEmployeeAssignable: Joi.boolean().required(),
     isCustomerRequired: Joi.boolean().required(),
     isRefundable: Joi.boolean().required(),
@@ -1074,7 +1074,7 @@ exports.validateServiceSchema = (doc) => {
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
     createdByUserId: Joi.number().max(999999999999999).required(),
-  
+
     serviceBlueprintId: Joi.number().max(999999999999999).required(),
     outletId: Joi.number().max(999999999999999).required(),
 
@@ -1089,7 +1089,7 @@ exports.validateServiceSchema = (doc) => {
 
       defaultVat: Joi.number().min(0).max(999999999999999).required(),
       defaultSalePrice: Joi.number().min(0).max(999999999999999).required(),
-      
+
       isLongstanding: Joi.boolean().required(),
       serviceDuration: Joi.object().allow(null).required().keys({
         months: Joi.number().min(0).max(999999999999999).required(),
@@ -1101,7 +1101,7 @@ exports.validateServiceSchema = (doc) => {
       isRefundable: Joi.boolean().required(),
       isDeleted: Joi.boolean().required()
     }),
-    
+
     salePrice: Joi.number().min(0).max(999999999999999).required(),
     isAvailable: Joi.boolean().required()
   });
@@ -1253,12 +1253,12 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       isDeleted: Joi.boolean().required(),
-    
+
       fullName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       organizationId: Joi.number().max(999999999999999).required(),
       changeWalletBalance: Joi.number().max(999999999999999).required(),
-      
+
       withdrawalHistory: Joi.array().items(
         Joi.object().keys({
           creditedDatetimeStamp: Joi.number().max(999999999999999).required(),
@@ -1286,28 +1286,28 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
 
         productBlueprint: Joi.object().keys({
           id: Joi.number().max(999999999999999).required(),
-  
+
           createdDatetimeStamp: Joi.number().max(999999999999999).required(),
           lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-        
+
           name: Joi.string().min(1).max(64).required(),
           organizationId: Joi.number().max(999999999999999).required(),
           unit: Joi.string().max(64).required(),
           defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
           defaultDiscountValue: Joi.number().when(
-            'defaultDiscountType', { 
-              is: 'percent', 
-              then: Joi.number().min(0).max(100).required(), 
-              otherwise: Joi.number().max(999999999999999).required() 
+            'defaultDiscountType', {
+              is: 'percent',
+              then: Joi.number().min(0).max(100).required(),
+              otherwise: Joi.number().max(999999999999999).required()
             }
           ),
           defaultPurchasePrice: Joi.number().max(999999999999999).required(),
           defaultVat: Joi.number().max(999999999999999).required(),
           defaultSalePrice: Joi.number().max(999999999999999).required(),
-          
+
           isDeleted: Joi.boolean().required(),
           isReturnable: Joi.boolean().required()
-        
+
         })
       })
     ),
@@ -1325,32 +1325,32 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
           createdDatetimeStamp: Joi.number().max(999999999999999).required(),
           lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
           createdByUserId: Joi.number().max(999999999999999).required(),
-        
+
           serviceBlueprintId: Joi.number().max(999999999999999).required(),
           outletId: Joi.number().max(999999999999999).required(),
-          
+
           salePrice: Joi.number().min(0).max(999999999999999).required(),
           isAvailable: Joi.boolean().required()
         }),
 
         serviceBlueprint: Joi.object().keys({
           id: Joi.number().max(999999999999999).required(),
-          
+
           createdDatetimeStamp: Joi.number().max(999999999999999).required(),
           lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-        
+
           name: Joi.string().min(1).max(64).required(),
           organizationId: Joi.number().max(999999999999999).required(),
-        
+
           defaultVat: Joi.number().min(0).max(999999999999999).required(),
           defaultSalePrice: Joi.number().min(0).max(999999999999999).required(),
-          
+
           isLongstanding: Joi.boolean().required(),
           serviceDuration: Joi.object().allow(null).required().keys({
             months: Joi.number().min(0).max(999999999999999).required(),
             days: Joi.number().min(0).max(999999999999999).required(),
           }),
-        
+
           isEmployeeAssignable: Joi.boolean().required(),
           isCustomerRequired: Joi.boolean().required(),
           isRefundable: Joi.boolean().required(),
@@ -1393,22 +1393,26 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
 exports.validateServiceMembershipSchemaWhenListObj = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
-  
+
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
     createdByUserId: Joi.number().max(999999999999999).required(),
-  
+
     customerId: Joi.number().max(999999999999999).required(),
     customerDetails: Joi.object().required().keys({
       fullName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
     }),
 
+    serviceBlueprintDetails: Joi.object().keys({
+      name: Joi.string().min(1).max(64).required(),
+    }),
+
     salesId: Joi.number().max(999999999999999).required(),
     serviceId: Joi.number().max(999999999999999).required(),
-  
+
     expiringDatetimeStamp: Joi.number().max(999999999999999).required(),
-  
+
     isDiscarded: Joi.boolean().required(),
     discardReason: Joi.string().allow('').max(128).required(),
     isDeleted: Joi.boolean().required()

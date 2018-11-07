@@ -77,8 +77,26 @@ exports.GetServiceMembershipListApi = class extends Api {
   }
 
   async _findServiceMembershipList({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId }) {
+    // console.log({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId })
 
-    let aggregateQuery = [];
+    let aggregateQuery = [
+      {
+        $lookup: {
+          from: 'service',
+          localField: 'serviceId',
+          foreignField: 'id',
+          as: 'serviceDetailsArray'
+        },
+      },
+      {
+        $lookup: {
+          from: 'service-blueprint',
+          localField: 'serviceDetailsArray.0.serviceBlueprintId',
+          foreignField: 'id',
+          as: 'serviceBlueprintDetailsArray'
+        },
+      }
+    ];
 
     // NOTE: handling - organizationId, outletId, shouldFilterByOutlet
     {
@@ -87,7 +105,6 @@ exports.GetServiceMembershipListApi = class extends Api {
         query = { "salesDetailsArray.outletId": outletId };
       } else {
         let outletIdList = (await this.database.outlet.listByOrganizationId({ organizationId })).map(outlet => outlet.id);
-        console.log(organizationId, outletIdList)
         query = { "salesDetailsArray.outletId": { $in: outletIdList } };
       }
       aggregateQuery = aggregateQuery.concat([
@@ -99,7 +116,6 @@ exports.GetServiceMembershipListApi = class extends Api {
             as: 'salesDetailsArray'
           },
         },
-        { "$unwind": "$salesDetailsArray" },
         { "$match": query },
       ]);
     }
@@ -117,15 +133,6 @@ exports.GetServiceMembershipListApi = class extends Api {
     {
       if (shouldFilterByServiceBlueprint) {
         aggregateQuery = aggregateQuery.concat([
-          {
-            $lookup: {
-              from: 'service',
-              localField: 'serviceId',
-              foreignField: 'id',
-              as: 'serviceDetailsArray'
-            },
-          },
-          { "$unwind": "$serviceDetailsArray" },
           { "$match": { "serviceDetailsArray.serviceBlueprintId": serviceBlueprintId } },
         ]);
       }
@@ -143,8 +150,9 @@ exports.GetServiceMembershipListApi = class extends Api {
       },
     ]);
 
+    // console.log('aggregateQuery', JSON.stringify(aggregateQuery, null, 2));
     let serviceMembershipList = await this.database.engine.getDatabaseHandle().collection('service-membership').aggregate(aggregateQuery).toArray();
-    console.log(serviceMembershipList);
+    // console.log('serviceMembershipList', JSON.stringify(serviceMembershipList, null, 2));
 
     // NOTE: Cleaning up intermediary variables
     serviceMembershipList.forEach(serviceMembership => {
@@ -154,25 +162,72 @@ exports.GetServiceMembershipListApi = class extends Api {
       if ('serviceDetailsArray' in serviceMembership) {
         delete serviceMembership['serviceDetailsArray'];
       }
+      if ('serviceBlueprintDetailsArray' in serviceMembership) {
+        serviceMembership.serviceBlueprintDetails = {
+          name: serviceMembership.serviceBlueprintDetailsArray[0].name
+        };
+        delete serviceMembership['serviceBlueprintDetailsArray'];
+      }
+
     });
 
     return serviceMembershipList;
+  }
 
-    // return await this.database.serviceMembership._find({});
-    // // let serviceMembershipList = await this.database.engine.getDatabaseHandle().collection('service-membership').find({}).toArray();   
-    //   .aggregate([
-    //     {
-    //       $lookup: {
-    //         from: 'sales',
-    //         localField: 'salesId',
-    //         foreignField: 'id',
-    //         as: 'salesDetailsArray'
-    //       },
-    //     },
-    //     { "$unwind": "$salesDetailsArray" },
-    //     { "$match": { "salesDetailsArray.outletId": outletId } },
-    //   ])
-    //   .toArray();
+  // NOTE: This method was written as an alternative to _findServiceMembershipList.
+  // Currently letting it remain here in case the mongodb complex queries don't work for some reason.
+  async _findServiceMembershipListNaive({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId }) {
+
+    let outletIdList;
+    if (shouldFilterByOutlet) {
+      outletIdList = [outletId];
+    } else {
+      outletIdList = (await this.database.outlet.listByOrganizationId({ organizationId })).map(outlet => outlet.id);
+    }
+
+    let serviceMembershipList = await this.database.serviceMembership._find({
+      "expiringDatetimeStamp": {
+        $gte: fromDate,
+        $lte: toDate
+      }
+    });
+
+    // console.log('length: After time query', serviceMembershipList.length)
+    serviceMembershipList.forEach(serviceMembership => console.log(new Date(serviceMembership.expiringDatetimeStamp)))
+
+    for (let serviceMembership of serviceMembershipList) {
+      serviceMembership.salesDetails = await this.database.sales.findById({ id: serviceMembership.salesId });
+      serviceMembership.serviceDetails = await this.database.service.findById({ id: serviceMembership.serviceId });
+    }
+    if (shouldFilterByServiceBlueprint) {
+      serviceMembershipList = serviceMembershipList.filter(serviceMembership => {
+        return serviceMembership.serviceDetails.serviceBlueprintId === serviceBlueprintId;
+      });
+    }
+    if (shouldFilterByCustomer) {
+      serviceMembershipList = serviceMembershipList.filter(serviceMembership => {
+        return serviceMembership.customerId === customerId;
+      });
+    }
+
+    serviceMembershipList = serviceMembershipList.filter(serviceMembership => {
+      // console.log(outletIdList, serviceMembership.salesDetails.outletId, outletIdList.includes(serviceMembership.salesDetails.outletId))
+      return outletIdList.includes(serviceMembership.salesDetails.outletId);
+    });
+
+    // console.log('serviceMembershipList', JSON.stringify(serviceMembershipList, null, 2));
+
+    // NOTE: Cleaning up intermediary variables
+    serviceMembershipList.forEach(serviceMembership => {
+      if ('salesDetails' in serviceMembership) {
+        delete serviceMembership['salesDetails'];
+      }
+      if ('serviceDetails' in serviceMembership) {
+        delete serviceMembership['serviceDetails'];
+      }
+    });
+
+    return serviceMembershipList;
   }
 
   async handle({ body }) {
@@ -185,7 +240,6 @@ exports.GetServiceMembershipListApi = class extends Api {
     await this._verifyServiceBlueprintIfNeeded({ serviceBlueprintId, shouldFilterByServiceBlueprint });
 
     let serviceMembershipList = await this._findServiceMembershipList({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId });
-    // let serviceMembershipList = await this.database.serviceMembership._find({});
 
     await this._combineCustomerData({ serviceMembershipList });
 
