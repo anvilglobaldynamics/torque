@@ -78,6 +78,8 @@
     "noDataFound": "কোন তথ্য পাওয়া যায়নি",
     "changeWallet": "Change Wallet",
     "activatedModules": "সক্রিয় মডিউলগুলো",
+    "moduleDescriptionLineOne": "ভিন্ন মডিউল লিপি তে বিভিন্ন কার্যকারিতা যোগ করে। নিচে বর্তমানে সক্রিয় মডিউল গুলো উল্লেখিত;",
+    "moduleDescriptionLineTwo": "লিপি তে আরো ফীচার এবং কার্যকারিতা যোগ করতে আমাদের সাথে যোগাযোগ করুন এই নম্বরে +880 1770 947908 অথবা care@anvil.live এ মেইল লিখুন ",
     "productModule": "প্রোডাক্ট মডিউল",
     "serviceModule": "সেবা মডিউল",
     "gymModule": "জিমনেসিয়াম মডিউল"
@@ -117,6 +119,7 @@
     "serviceBlueprints": "সেবা পরিকল্পনা",
     "sales": "বিক্রয় রেকর্ড",
     "salesReturn": "বিক্রয় ফেরত রেকর্ড",
+    "serviceMembership": "সেবার সদস্যপদ",
     "customers": "গ্রাহক",
     "salesReport": "বিক্রয় রিপোর্টস",
     "inventoryReport": "পণ্য তালিকা রিপোর্টস",
@@ -298,15 +301,16 @@
     "avtivateInAllOutlets": "এই সেবাটি কি সকল দোকানে প্রাপ্য?",
     "whatIsServiceBlueprintMessage": "সেবার পরিকল্পনা একটু সেবার নকশা। প্রতি সেবার জন্য একবারই সেবার পরিকল্পনা তৈরি করতে হবে। সেবার পরিকল্পনায় দেয়া তথ্য সেবা সংক্রান্ত কাজে ব্যবহত হবে।",
     "createServiceBlueprint": "নতুন সেবা পরিকল্পনা তৈরি করুন",
-    "updateServiceBlueprint": "সেবা পরিকল্পনা আপডেট করুন"
+    "updateServiceBlueprint": "সেবা পরিকল্পনা আপডেট করুন",
+    "serviceBlueprintCreated": "সেবা পরিকল্পনা তৈরি হয়েছে"
   },
   "customerSelector": {
-    "customerNameOrPhoneInput": "গ্রাহকের নাম বা ফোন",
+    "customerNameOrPhoneInput": "নাম বা ফোন",
     "customerNameOrPhoneInputError": "গ্রাহকের নাম বা ফোন লিখুন"
   },
   "outletSelector": {
     "outlets": "দোকান",
-    "outletNameOrPhoneInput": "দোকানের নাম বা ফোন",
+    "outletNameOrPhoneInput": "নাম বা ফোন",
     "outletNameOrPhoneInputError": "দোকানের নাম বা ফোন লিখুন"
   },
   "commonEmploymentDetails": {
@@ -373,9 +377,9 @@
   },
   "about": {
     "about": "বিষয়ে",
-    "tos": "TOS/Privacy",
-    "contactUs": "আমাদের যোগাযোগ করুন",
-    "projectBy": "এই প্রজেক্ট পরিচালিত হয়",
+    "tos": "শর্তাবলী",
+    "contactUs": "যোগাযোগ করুন",
+    "projectBy": "এই প্রজেক্ট তৈরি এবং পরিচালনা করে",
     "logoAndFaviconBy": "লোগো নেয়া হয়েছে",
     "sendYourQuestionsTo": "আপনার প্রশ্ন, অভিযোগ এবং প্রশংসা পাঠান"
   },
@@ -615,7 +619,10 @@
     "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
     "thisWillBeACreditSale": "এটি একটি বাকি বিক্রি হবে। অতিরিক্ত অর্থ গ্রহণ বিক্রয় পৃষ্ঠায় গিয়ে করতে পারবেন।",
     "selectService": "সেবা নির্বাচন করুন",
-    "serviceRequiresCustomerSelection": "এই সেবাটি বিক্রির জন্য একজন ক্রেতা নির্বাচন প্রয়োজন"
+    "serviceRequiresCustomerSelection": "এই সেবাটি বিক্রির জন্য একজন ক্রেতা নির্বাচন প্রয়োজন",
+
+    "assignedEmployee": "দায়িত্ব দেন",
+    "assignEmployee": "দায়িত্ব দেয়া"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",
@@ -633,6 +640,7 @@
     "sales": "বিক্রয়",
     "soldTo": "গ্রাহক",
     "products": "পণ্য",
+    "services": "সেবা",
     "total": "মোট",
     "discountedAmount": "ছাড়ের পরিমান",
     "vat": "ভ্যাট",
@@ -787,5 +795,34 @@
     "searchForServicerInput": "সেবার নাম",
     "availability": "লভ্যতা",
     "modificationComplete": "দোকানে সেবার লভ্যতা পরিবর্তন শেষ"
+  },
+  "assignEmployeeService": {
+    "assignEmployeeServiceTitle": "সেবার দায়িত্বে কর্মচারী",
+    "clearEmployeeLabel": "সেবার দায়িত্ব মুছে ফেলুন"
+  },
+  "serviceMembership": {
+    "serviceMembershipTitle": "সেবার সদস্যপদ",
+    "noServiceMembershipFound": "কোনো সেবা সদস্যপদের রেকর্ড পাওয়া যায় নি।",
+
+    "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
+    "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি",
+    "noServiceBlueprintSelected": "কোন সেবার সদস্যপদ নির্বাচন করা হয়নি",
+
+    "change": "পরিবর্তন",
+    "remove": "সরান",
+
+    "serviceMembershipNumber": "সদস্যপদ নং",
+    "expiringDatetime": "মেয়াদ",
+    "customer": "ক্রেতা",
+
+    "serviceBlueprint": "সেবার সদস্যপদ"
+  },
+  "serviceBlueprintSelector": {
+    "serviceBlueprintNameOrPhoneInput": "নাম দিয়ে খুজুন",
+    "serviceBlueprintNameOrPhoneInputError": "বৈধ নাম লিখুন",
+    "serviceBlueprints": "সেবার সদস্যপদ"
+  },  
+  "salesReceipt": {
+    "goodsTitle": "পণ্য / সেবা"
   }
 }

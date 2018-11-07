@@ -61,11 +61,13 @@
        * @returns 
        */
       $mkDate(date, format = 'MMM d, yyyy') {
-        try {
-          return (new XDate(date)).toString(format);
-        } catch (ex) {
-          console.error(ex);
-          return 'INVALID DATE';
+        if (date) {
+          try {
+            return (new XDate(date)).toString(format);
+          } catch (ex) {
+            console.error(ex);
+            return 'INVALID DATE';
+          }
         }
       }
 

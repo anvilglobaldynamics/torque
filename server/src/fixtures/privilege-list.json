@@ -20,6 +20,14 @@
     "name": "Modify all sales"
   },
   {
+    "code": "PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS",
+    "name": "View all service memberships"
+  },
+  {
+    "code": "PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS",
+    "name": "Modify all service memberships"
+  },
+  {
     "code": "PRIV_ALLOW_FLAT_DISCOUNT",
     "name": "Allow flat discount"
   },
@@ -40,8 +48,16 @@
     "name": "View all services"
   },
   {
+    "code": "PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS",
+    "name": "View all product blueprints"
+  },
+  {
     "code": "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS",
     "name": "Modify all product blueprints"
+  },
+  {
+    "code": "PRIV_VIEW_ALL_SERVICE_BLUEPRINTS",
+    "name": "View all service blueprints"
   },
   {
     "code": "PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS",

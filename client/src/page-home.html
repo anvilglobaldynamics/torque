@@ -165,17 +165,24 @@
 
       </div>
 
+      <!-- active module - start -->
       <div class="vertical layout wrap">
         <div class="card flex info-panel">
           <div class="title">[[verses.general.activatedModules]]</div>
+          <div class="module-description">[[verses.general.moduleDescriptionLineOne]]</div>
+
           <ul>
             <template is="dom-repeat" items="[[organization.activeModuleCodeList]]" as="activeModuleCode">
               <li>[[$getModuleDisplayName(activeModuleCode, selectedLanguageIdentifier)]]</li>
             </template>
           </ul>
+
+          <div class="module-description">[[verses.general.moduleDescriptionLineTwo]]</div>
         </div>
       </div>
+      <!-- active module - start -->
 
+      <!-- active package - start -->
       <div class="vertical layout wrap">
         <div class="card flex info-panel">
           <div class="title">[[verses.home.activatedPackage]]: [[aPackage.name]] ([[aPackage.code]])</div>
@@ -210,6 +217,7 @@
           </div>
         </template>
       </div>
+      <!-- active package - end -->
 
     </div>
   </template>

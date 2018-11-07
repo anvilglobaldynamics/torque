@@ -20,7 +20,7 @@ exports.GetServiceBlueprintListApi = class extends Api {
     return [{
       organizationBy: "organizationId",
       privilegeList: [
-        "PRIV_VIEW_ALL_INVENTORIES"
+        "PRIV_VIEW_ALL_SERVICE_BLUEPRINTS"
       ]
     }];
   }

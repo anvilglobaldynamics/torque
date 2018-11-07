@@ -87,6 +87,7 @@ exports.GetSalesListApi = class extends Api {
       target: 'customer'
     });
     map.forEach((customer, sales) => sales.customer = customer);
+
     let productList = salesList.reduce(((productList, sale) => productList.concat(sale.productList)), []);
     map = await this.crossmap({
       source: productList,
@@ -100,6 +101,20 @@ exports.GetSalesListApi = class extends Api {
       target: 'productBlueprint'
     });
     map.forEach((productBlueprint, soldProduct) => soldProduct.productBlueprint = productBlueprint);
+
+    let serviceList = salesList.reduce(((serviceList, sale) => serviceList.concat(sale.serviceList)), []);
+    map = await this.crossmap({
+      source: serviceList,
+      sourceKey: 'serviceId',
+      target: 'service'
+    });
+    map.forEach((service, soldService) => soldService.service = service);
+    map = await this.crossmap({
+      source: serviceList,
+      sourceKeyFn: (soldService) => soldService.service.serviceBlueprintId,
+      target: 'serviceBlueprint'
+    });
+    map.forEach((serviceBlueprint, soldService) => soldService.serviceBlueprint = serviceBlueprint);
   }
 
   async handle({ body }) {

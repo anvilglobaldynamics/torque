@@ -60,9 +60,36 @@
         font-size: 11px;
       }
 
+      .service-info {
+        flex: 1;
+        /* border: 1px solid blue; */
+      }
+
+      .service-title {
+        font-weight: bold;
+      }
+
+      .service-vat-detail {
+        font-size: 11px;
+        margin-left: 6px;
+      }
+
       .service-customer-required {
         font-size: 11px;
         font-weight: bold;
+      }
+
+      .employee-icon-container {
+        padding: 10px;
+      }
+
+      .employee-icon-container-active {
+        padding: 10px;
+        color: var(--app-button-primary);
+      }
+
+      .assign-icon {
+        margin-right: 4px;
       }
 
       .m-top-16{
@@ -168,9 +195,27 @@
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
                 
-                <div>
-                  <span class="product-title">[[service.name]]</span>
-                  <span class="product-discount-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                <div class="horizontal layout center">
+                  <div class="service-info">
+                    <span class="service-title">[[service.name]]</span>
+                    <span class="service-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                  </div>
+                  
+                  <template is="dom-if" if="{{service.isEmployeeAssignable}}" >
+
+                    <template is="dom-if" if="{{service.assignedEmploymentId}}">
+                      <div class="employee-icon-container-active">
+                        <iron-icon icon="icons:account-circle" class="assign-icon" on-tap="assignEmployeeTapped"></iron-icon>[[verses.pos.assignedEmployee]]
+                      </div>
+                    </template>
+
+                    <template is="dom-if" if="{{!service.assignedEmploymentId}}">
+                      <div class="employee-icon-container">
+                        <iron-icon icon="icons:account-circle" class="assign-icon" on-tap="assignEmployeeTapped"></iron-icon>[[verses.pos.assignEmployee]]
+                      </div>
+                    </template>
+
+                  </template>
                 </div>
 
                 <template is="dom-if" if="{{service.isCustomerRequired}}">
@@ -574,10 +619,10 @@
         });
 
         let serviceList = this.serviceList.map(service => {
-          let { id, salePrice, vatValue } = service;
+          console.log(service);
+          let { id, salePrice, vatValue, assignedEmploymentId } = service;
           let serviceId = id;
           let vatPercentage = vatValue;
-          let assignedEmploymentId = null; // TODO: assignedEmploymentId
           return { serviceId, salePrice, vatPercentage, assignedEmploymentId };
         });
 
@@ -678,6 +723,11 @@
 
       isValidCreditSale(customer, totalBilled, paidAmount) {
         return (customer && totalBilled > paidAmount);
+      }
+
+      assignEmployeeTapped(e) {
+        let { id } = e.model.service;
+        return this.app.navigateTo(`/pos-assign-employee-service/service:${id}`);
       }
 
       // region: misc =================================

@@ -38,7 +38,7 @@ const { GetActivatedPackageListApi } = require('./apis/get-activated-package-lis
 let { AddNewEmployeeApi } = require('./legacy-apis/add-new-employee');
 let { FindUserApi } = require('./legacy-apis/find-user');
 let { HireUserAsEmployeeApi } = require('./legacy-apis/hire-user-as-employee');
-let { GetEmployeeListApi } = require('./legacy-apis/get-employee-list');
+const { GetEmployeeListApi } = require('./apis/get-employee-list');
 let { GetEmployeeApi } = require('./legacy-apis/get-employee');
 let { EditEmploymentApi } = require('./legacy-apis/edit-employment');
 let { FireEmployeeApi } = require('./legacy-apis/fire-employee');
@@ -89,6 +89,7 @@ const { AddAdditionalPaymentApi } = require('./apis/add-additional-payment');
 const { GetSalesApi } = require('./apis/get-sales');
 const { GetSalesListApi } = require('./apis/get-sales-list');
 const { DiscardSalesApi } = require('./apis/discard-sales');
+const { GetServiceMembershipListApi } = require('./apis/get-service-membership-list');
 
 const { AddSalesReturnApi } = require('./apis/add-sales-return');
 let { GetSalesReturnApi } = require('./legacy-apis/get-sales-return');
@@ -313,6 +314,7 @@ class Program {
     server.registerPostApi('/api/add-additional-payment', AddAdditionalPaymentApi);
     server.registerPostApi('/api/get-sales', GetSalesApi);
     server.registerPostApi('/api/get-sales-list', GetSalesListApi);
+    server.registerPostApi('/api/get-service-membership-list', GetServiceMembershipListApi);
     server.registerPostApi('/api/discard-sales', DiscardSalesApi);
     server.registerPostApi('/api/add-sales-return', AddSalesReturnApi);
     server.registerPostApi('/api/get-sales-return', GetSalesReturnApi);
