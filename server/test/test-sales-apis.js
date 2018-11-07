@@ -115,7 +115,7 @@ let longstandingServiceBlueprintId = null;
 let longstandingService = null;
 let longstandingServiceSaleId = null;
 
-describe.only('Sales', _ => {
+describe('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
