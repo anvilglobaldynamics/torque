@@ -14,7 +14,7 @@ const { OutgoingSmsCollection } = require('./collections/outgoing-sms');
 const { OutletCollection } = require('./collections/outlet');
 const { PasswordResetRequestCollection } = require('./collections/password-reset-request');
 const { PhoneVerificationRequestCollection } = require('./collections/phone-verification-request');
-const { ProductCategoryCollection } = require('./collections/product-category');
+const { ProductBlueprintCollection } = require('./collections/product-blueprint');
 const { ProductCollection } = require('./collections/product');
 const { SalesReturnCollection } = require('./collections/sales-return');
 const { SalesCollection } = require('./collections/sales');
@@ -24,6 +24,10 @@ const { WarehouseCollection } = require('./collections/warehouse');
 const { ProductAcquisitionCollection } = require('./collections/product-acquisition');
 const { ProductTransferCollection } = require('./collections/product-transfer');
 const { PackageActivationCollection } = require('./collections/package-activation');
+const { ServiceBlueprintCollection } = require('./collections/service-blueprint');
+const { ServiceCollection } = require('./collections/service');
+const { ServiceMembershipCollection } = require('./collections/service-membership');
+const { ModuleActivationCollection } = require('./collections/module-activation');
 
 class DatabaseService {
 
@@ -44,7 +48,7 @@ class DatabaseService {
     this.outlet = new OutletCollection(this.engine, this);
     this.passwordResetRequest = new PasswordResetRequestCollection(this.engine, this);
     this.phoneVerificationRequest = new PhoneVerificationRequestCollection(this.engine, this);
-    this.productCategory = new ProductCategoryCollection(this.engine, this);
+    this.productBlueprint = new ProductBlueprintCollection(this.engine, this);
     this.product = new ProductCollection(this.engine, this);
     this.salesReturn = new SalesReturnCollection(this.engine, this);
     this.sales = new SalesCollection(this.engine, this);
@@ -54,6 +58,10 @@ class DatabaseService {
     this.productAcquisition = new ProductAcquisitionCollection(this.engine, this);
     this.productTransfer = new ProductTransferCollection(this.engine, this);
     this.packageActivation = new PackageActivationCollection(this.engine, this);
+    this.serviceBlueprint = new ServiceBlueprintCollection(this.engine, this);
+    this.service = new ServiceCollection(this.engine, this);
+    this.serviceMembership = new ServiceMembershipCollection(this.engine, this);
+    this.moduleActivation = new ModuleActivationCollection(this.engine, this);
     /** @type {[Collection]} */
     this.collectionList = Object.keys(this).filter(key => this[key] instanceof Collection).map(key => this[key]);
   }

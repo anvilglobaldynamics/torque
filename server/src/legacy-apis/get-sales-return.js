@@ -29,12 +29,14 @@ exports.GetSalesReturnApi = class extends collectionCommonMixin(LegacyApi) {
         {
           from: "sales",
           query: ({ salesId }) => ({ id: salesId }),
-          select: "outletId"
+          select: "outletId",
+          errorCode: "SALES_INVALID"
         },
         {
           from: "outlet",
           query: ({ outletId }) => ({ id: outletId }),
-          select: "organizationId"
+          select: "organizationId",
+          errorCode: "OUTLET_INVALID"
         }
       ],
       privilegeList: [
@@ -50,18 +52,18 @@ exports.GetSalesReturnApi = class extends collectionCommonMixin(LegacyApi) {
     });
   }
 
-  _fetchProductCategoryData({ salesReturn }, cbfn) {
+  _fetchProductBlueprintData({ salesReturn }, cbfn) {
     let productIdList = salesReturn.returnedProductList.map(product => product.productId);
     this.legacyDatabase.product.findByIdList({ idList: productIdList }, (err, productList) => {
-      let productCategoryIdList = productList.map(product => product.productCategoryId);
-      this.legacyDatabase.productCategory.listByIdList({ idList: productCategoryIdList }, (err, productCategoryList) => {
+      let productBlueprintIdList = productList.map(product => product.productBlueprintId);
+      this.legacyDatabase.productBlueprint.listByIdList({ idList: productBlueprintIdList }, (err, productBlueprintList) => {
         productList.forEach(product => {
-          let productCategory = productCategoryList.find(productCategory => productCategory.id === product.productCategoryId);
+          let productBlueprint = productBlueprintList.find(productBlueprint => productBlueprint.id === product.productBlueprintId);
           let matchingProduct = salesReturn.returnedProductList.find(salesReturnProduct => salesReturnProduct.productId === product.id);
 
-          matchingProduct.productCategoryId = productCategory.id;
-          matchingProduct.productCategoryName = productCategory.name;
-          matchingProduct.productCategoryIsReturnable = productCategory.isReturnable;
+          matchingProduct.productBlueprintId = productBlueprint.id;
+          matchingProduct.productBlueprintName = productBlueprint.name;
+          matchingProduct.productBlueprintIsReturnable = productBlueprint.isReturnable;
         });
         return cbfn(salesReturn);
       });
@@ -71,7 +73,7 @@ exports.GetSalesReturnApi = class extends collectionCommonMixin(LegacyApi) {
   handle({ body }) {
     let { salesReturnId } = body;
     this._getSalesReturn({ salesReturnId }, (salesReturn) => {
-      this._fetchProductCategoryData({ salesReturn }, (salesReturn) => {
+      this._fetchProductBlueprintData({ salesReturn }, (salesReturn) => {
         this.success({ salesReturn });
       });
     });

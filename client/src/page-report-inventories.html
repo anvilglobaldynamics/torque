@@ -176,7 +176,7 @@
                   <template is="dom-repeat" items="[[aggregatedInventoryDetail.aggregatedProductList]]" as="aggregatedProduct">
                     <tr>
                       <td class="cell">
-                        [[aggregatedProduct.product.productCategory.name]]
+                        [[aggregatedProduct.product.productBlueprint.name]]
                         <div class="product-detail">Added On: [[$mkDate(aggregatedProduct.addedDatetimeStamp, 'dd/MM/yy')]]</div>
                         <div class="product-detail">Acquired On: [[$mkDate(aggregatedProduct.acquiredDatetimeStamp, 'dd/MM/yy')]]</div>
                       </td>

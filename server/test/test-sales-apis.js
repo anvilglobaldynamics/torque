@@ -10,13 +10,14 @@ let {
   loginUser,
   addOrganization,
   addOutlet,
-  addProductCategory,
+  addProductBlueprint,
   addProductToInventory,
   addCustomer,
   getCustomer,
   getOutlet,
+  addServiceBlueprint,
   validateInventorySchema,
-  validateProductCategorySchema,
+  validateProductBlueprintSchema,
   validateProductSchema,
   validateGenericApiFailureResponse,
   validateGenericApiSuccessResponse,
@@ -28,8 +29,17 @@ let {
   validateSalesSchema,
   validateSalesSchemaWhenListObj,
 
+  validateGetActiveServiceListApiSuccessResponse,
+  validateServiceSchema,
+
+  validateGetServiceMembershipListApiSuccessResponse,
+  validateServiceMembershipSchemaWhenListObj,
+
   validateGetCustomerApiSuccessResponse,
-  validateCustomerSchema
+  validateCustomerSchema,
+
+  getActiveServiceList,
+  addSales
 } = require('./lib');
 
 const prefix = 's';
@@ -49,7 +59,7 @@ const outletName = "Test Outlet";
 const outletPhysicalAddress = "Test Outlet Address";
 const outletContactPersonName = "Test Outlet Person";
 
-const productCategoryName = "test product category";
+const productBlueprintName = "test product blueprint";
 
 const customerFullName = "A Test Customer";
 const customerPhone = 'c' + rnd(prefix, 11);
@@ -58,14 +68,14 @@ const openingBalance = '500';
 let apiKey = null;
 let organizationId = null;
 let outletId = null;
-let productCategoryId = null;
+let productBlueprintId = null;
 let customerId = null;
 let salesId = null;
 let salesData = null;
 
 let outletInventoryProductList = null;
 let outletInventoryMatchingProductList = null;
-let outletInventoryMatchingProductCategoryList = null;
+let outletInventoryMatchingProductBlueprintList = null;
 
 let outletDefaultInventoryId = null;
 let outletReturnedInventoryId = null;
@@ -80,10 +90,30 @@ let invalidOutletId = generateInvalidId();
 let invalidProductId = generateInvalidId();
 let invalidCustomerId = generateInvalidId();
 let invalidSalesId = generateInvalidId();
+let invalidEmployeeId = generateInvalidId();
 
 let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
+
+let monthsLaterDate = new Date();
+monthsLaterDate.setMonth(monthsLaterDate.getMonth() + 3);
+monthsLaterDate = monthsLaterDate.getTime();
+
+let monthsEarlierDate = new Date();
+monthsEarlierDate.setMonth(monthsEarlierDate.getMonth() - 3);
+monthsEarlierDate = monthsEarlierDate.getTime();
+
+let customerRef1 = null;
+
+let basicServiceBlueprintId = null;
+let basicService = null;
+let basicServiceSaleId = null;
+let customerAndEmployeeServiceBlueprintId = null;
+let customerAndEmployeeService = null;
+let longstandingServiceBlueprintId = null;
+let longstandingService = null;
+let longstandingServiceSaleId = null;
 
 describe('Sales', _ => {
 
@@ -119,10 +149,10 @@ describe('Sales', _ => {
                 outletDefaultInventoryId = data.defaultInventory.id;
                 outletReturnedInventoryId = data.returnedInventory.id;
                 outletDamagedInventoryId = data.damagedInventory.id;
-                addProductCategory({
+                addProductBlueprint({
                   apiKey,
                   organizationId,
-                  name: productCategoryName,
+                  name: productBlueprintName,
                   unit: "box",
                   defaultDiscountType: "percent",
                   defaultDiscountValue: 10,
@@ -131,12 +161,12 @@ describe('Sales', _ => {
                   defaultSalePrice: 112,
                   isReturnable: true
                 }, (data) => {
-                  productCategoryId = data.productCategoryId;
+                  productBlueprintId = data.productBlueprintId;
                   addProductToInventory({
                     apiKey,
                     inventoryId: outletDefaultInventoryId,
                     productList: [
-                      { productCategoryId, purchasePrice: 99, salePrice: 200, count: 100 }
+                      { productBlueprintId, purchasePrice: 99, salePrice: 200, count: 100 }
                     ]
                   }, (data) => {
                     addCustomer({
@@ -150,7 +180,55 @@ describe('Sales', _ => {
                         apiKey, customerId
                       }, (data) => {
                         customerData = data.customer;
-                        testDoneFn();
+                        addServiceBlueprint({
+                          apiKey,
+                          organizationId,
+                          name: "1st service blueprint",
+                          defaultVat: 2,
+                          defaultSalePrice: 250,
+                          isLongstanding: false,
+                          serviceDuration: null,
+                          isEmployeeAssignable: false,
+                          isCustomerRequired: false,
+                          isRefundable: false,
+                          avtivateInAllOutlets: true
+                        }, (data) => {
+                          basicServiceBlueprintId = data.serviceBlueprintId;
+                          addServiceBlueprint({
+                            apiKey,
+                            organizationId,
+                            name: "2nd service blueprint",
+                            defaultVat: 2,
+                            defaultSalePrice: 250,
+                            isLongstanding: false,
+                            serviceDuration: null,
+                            isEmployeeAssignable: true,
+                            isCustomerRequired: true,
+                            isRefundable: false,
+                            avtivateInAllOutlets: true
+                          }, (data) => {
+                            customerAndEmployeeServiceBlueprintId = data.serviceBlueprintId;
+                            addServiceBlueprint({
+                              apiKey,
+                              organizationId,
+                              name: "3rd long service blueprint",
+                              defaultVat: 2,
+                              defaultSalePrice: 250,
+                              isLongstanding: true,
+                              serviceDuration: {
+                                months: 1,
+                                days: 7
+                              },
+                              isEmployeeAssignable: true,
+                              isCustomerRequired: true,
+                              isRefundable: false,
+                              avtivateInAllOutlets: true
+                            }, (data) => {
+                              longstandingServiceBlueprintId = data.serviceBlueprintId;
+                              testDoneFn();
+                            });
+                          });
+                        });
                       });
                     });
                   });
@@ -178,7 +256,7 @@ describe('Sales', _ => {
       expect(body.aggregatedProductList[0]).to.have.property('productId');
 
       outletInventoryProductList = body.aggregatedProductList;
-      outletInventoryMatchingProductCategoryList = outletInventoryProductList.map(_product => _product.product.productCategory);
+      outletInventoryMatchingProductBlueprintList = outletInventoryProductList.map(_product => _product.product.productBlueprint);
 
       testDoneFn();
     });
@@ -198,23 +276,25 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
+        serviceList: [],
+
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         }
@@ -228,7 +308,7 @@ describe('Sales', _ => {
 
   });
 
-  it('api/add-sales (Invalid empty productList)', testDoneFn => {
+  it('api/add-sales (Invalid empty productList and serviceList)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -239,16 +319,18 @@ describe('Sales', _ => {
 
         productList: [],
 
+        serviceList: [],
+
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         }
@@ -256,7 +338,7 @@ describe('Sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).to.equal('VALIDATION_ERROR');
+      expect(body.error.code).to.equal('NO_PRODUCT_OR_SERVICE_SELECTED');
       testDoneFn();
     });
 
@@ -275,23 +357,25 @@ describe('Sales', _ => {
           {
             productId: invalidProductId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
+        serviceList: [],
+
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         }
@@ -300,6 +384,51 @@ describe('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).to.equal('PRODUCT_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Invalid discountType)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: outletInventoryProductList[0].productId,
+            count: 2,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
+            vatPercentage: 5,
+          }
+        ],
+
+        serviceList: [],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: 'something',
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('VALIDATION_ERROR');
       testDoneFn();
     });
 
@@ -318,23 +447,25 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
+        serviceList: [],
+
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         }
@@ -347,7 +478,7 @@ describe('Sales', _ => {
 
   });
 
-  it('api/add-sales (Ivalid payment)', testDoneFn => {
+  it('api/add-sales (Invalid payment)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -360,12 +491,14 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
+
+        serviceList: [],
 
         payment: {}
       }
@@ -391,23 +524,25 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
+        serviceList: [],
+
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 0,
-          changeAmount: (0 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (0 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         }
@@ -434,23 +569,25 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
+        serviceList: [],
+
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         }
@@ -477,23 +614,25 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 2,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
+        serviceList: [],
+
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-          discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+          discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 1300,
-          changeAmount: (300 - (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)))),
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: true,
           paymentMethod: 'cash'
         }
@@ -612,6 +751,7 @@ describe('Sales', _ => {
 
         fromDate,
         toDate: (new Date()).getTime(),
+        includeExtendedInformation: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -960,21 +1100,23 @@ describe('Sales', _ => {
           {
             productId: outletInventoryProductList[0].productId,
             count: 3,
-            discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
-            discountValue: outletInventoryMatchingProductCategoryList[0].defaultDiscountValue,
-            salePrice: outletInventoryMatchingProductCategoryList[0].defaultSalePrice,
+            discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
+            discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
             vatPercentage: 5,
           }
         ],
 
+        serviceList: [],
+
         payment: {
-          totalAmount: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2),
-          vatAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100)),
-          discountType: outletInventoryMatchingProductCategoryList[0].defaultDiscountType,
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
           discountValue: 0,
-          discountedAmount: ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)),
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
           serviceChargeAmount: 0,
-          totalBilled: (outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductCategoryList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductCategoryList[0].defaultSalePrice * 2) * (5 / 100))),
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 30, // out of total billed 212.799999999
           changeAmount: 0,
           shouldSaveChangeInAccount: true,
@@ -1081,7 +1223,6 @@ describe('Sales', _ => {
 
   });
 
-  let customerRef1 = null;
   it('api/get-customer (to verify impact of add-additional-payment)', testDoneFn => {
 
     callApi('api/get-customer', {
@@ -1142,8 +1283,915 @@ describe('Sales', _ => {
 
   });
 
-
   // AddAdditionalPayment tests - end
+
+  // Service Sales - start
+
+  it('api/get-active-service-list (Valid)', testDoneFn => {
+
+    callApi('api/get-active-service-list', {
+      json: {
+        apiKey,
+        outletId,
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetActiveServiceListApiSuccessResponse(body);
+      body.serviceList.forEach(service => {
+        validateServiceSchema(service);
+      });
+
+      basicService = body.serviceList.find(service => service.serviceBlueprintId === basicServiceBlueprintId);
+      customerAndEmployeeService = body.serviceList.find(service => service.serviceBlueprintId === customerAndEmployeeServiceBlueprintId);
+      longstandingService = body.serviceList.find(service => service.serviceBlueprintId === longstandingServiceBlueprintId);
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Invalid employee assignment)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: basicService.id,
+            salePrice: basicService.salePrice,
+            vatPercentage: basicService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: 99
+          }
+        ],
+
+        payment: {
+          totalAmount: basicService.salePrice,
+          vatAmount: (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)),
+          paidAmount: 1000,
+          changeAmount: (1000 - (basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('CANT_ASSIGN_EMPLOYEE_TO_SERVICE');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Valid, basic service)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: basicService.id,
+            salePrice: basicService.salePrice,
+            vatPercentage: basicService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+
+        payment: {
+          totalAmount: basicService.salePrice,
+          vatAmount: (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)),
+          paidAmount: 1000,
+          changeAmount: (1000 - (basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddSalesApiSuccessResponse(body);
+      basicServiceSaleId = body.salesId;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales (Valid service sale)', testDoneFn => {
+
+    callApi('api/get-sales', {
+      json: {
+        apiKey,
+        salesId: basicServiceSaleId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetSalesApiSuccessResponse(body);
+      validateSalesSchema(body.sales);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Invalid no customer)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: customerAndEmployeeService.id,
+            salePrice: customerAndEmployeeService.salePrice,
+            vatPercentage: customerAndEmployeeService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+
+        payment: {
+          totalAmount: customerAndEmployeeService.salePrice,
+          vatAmount: (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('SERVICE_REQUIRES_CUSTOMER');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Invalid assigned employee)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: customerAndEmployeeService.id,
+            salePrice: customerAndEmployeeService.salePrice,
+            vatPercentage: customerAndEmployeeService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: invalidEmployeeId
+          }
+        ],
+
+        payment: {
+          totalAmount: customerAndEmployeeService.salePrice,
+          vatAmount: (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('ASSIGNED_EMPLOYEE_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Invalid customerId longstandingService)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal('SERVICE_REQUIRES_CUSTOMER');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Valid longstandingService)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddSalesApiSuccessResponse(body);
+      longstandingServiceSaleId = body.salesId;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/discard-sales (Valid)', testDoneFn => {
+
+    callApi('api/discard-sales', {
+      json: {
+        apiKey,
+        salesId: longstandingServiceSaleId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales (Valid discard check)', testDoneFn => {
+
+    callApi('api/get-sales', {
+      json: {
+        apiKey,
+        salesId: longstandingServiceSaleId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetSalesApiSuccessResponse(body);
+      validateSalesSchema(body.sales);
+
+      expect(body.sales).to.have.property('isDiscarded').that.equals(true);
+      testDoneFn();
+    });
+
+  });
+
+  // Service Sales - end
+
+  it('api/get-sales-list (Valid only organization Id and includeExtendedInformation)', testDoneFn => {
+
+    callApi('api/get-sales-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate,
+        toDate: (new Date()).getTime(),
+        includeExtendedInformation: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetSalesListApiSuccessResponse(body);
+      body.salesList.forEach(sales => {
+        validateSalesSchemaWhenListObj(sales);
+      });
+      testDoneFn();
+    });
+
+  });
+
+  // Service Membership - start
+
+  it('api/get-service-membership-list (Valid no filter. Only one entry. (created above))', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId,
+        serviceBlueprintId: null,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByServiceBlueprint: false,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      testDoneFn();
+    });
+
+  });
+
+  let membershipTest = {
+    organizationId,
+    customer1Id: null,
+    customer2Id: null,
+    customer1Phone: 'c1' + rnd(prefix, 11),
+    customer2Phone: 'c2' + rnd(prefix, 11),
+    outlet1Id: null,
+    outlet2Id: null,
+    serviceBlueprint1Id: null,
+    serviceBlueprint2Id: null
+  }
+
+  it('Preparing for service-membership test', testDoneFn => {
+    let { promisifyApiCall } = require('./lib');
+
+    Promise.resolve()
+      .then(() => promisifyApiCall({}, addOrganization, {
+        apiKey,
+        name: orgName,
+        primaryBusinessAddress: orgBusinessAddress,
+        phone: orgPhone,
+        email: orgEmail
+      }))
+      .then(({ organizationId }) => membershipTest.organizationId = organizationId)
+
+      .then(() => promisifyApiCall({}, addCustomer, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        fullName: customerFullName,
+        phone: membershipTest.customer1Phone
+      }))
+      .then(({ customerId }) => membershipTest.customer1Id = customerId)
+
+      .then(() => promisifyApiCall({}, addCustomer, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        fullName: customerFullName,
+        phone: membershipTest.customer2Phone
+      }))
+      .then(({ customerId }) => membershipTest.customer2Id = customerId)
+
+      .then(() => promisifyApiCall({}, addOutlet, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        name: outletName,
+        physicalAddress: outletPhysicalAddress,
+        phone: outletPhone,
+        contactPersonName: outletContactPersonName
+      }))
+      .then(({ outletId }) => membershipTest.outlet1Id = outletId)
+
+      .then(() => promisifyApiCall({}, addOutlet, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        name: outletName,
+        physicalAddress: outletPhysicalAddress,
+        phone: outletPhone,
+        contactPersonName: outletContactPersonName
+      }))
+      .then(({ outletId }) => membershipTest.outlet2Id = outletId)
+
+      // longstanding ServiceBlueprint1
+      .then(() => promisifyApiCall({}, addServiceBlueprint, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        name: "Long 1",
+        defaultVat: 2,
+        defaultSalePrice: 250,
+        isLongstanding: true,
+        serviceDuration: {
+          months: 1,
+          days: 7
+        },
+        isEmployeeAssignable: true,
+        isCustomerRequired: true,
+        isRefundable: false,
+        avtivateInAllOutlets: true
+      }))
+      .then(({ serviceBlueprintId }) => membershipTest.serviceBlueprint1Id = serviceBlueprintId)
+
+      // longstanding ServiceBlueprint2
+      .then(() => promisifyApiCall({}, addServiceBlueprint, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        name: "Long 2",
+        defaultVat: 2,
+        defaultSalePrice: 250,
+        isLongstanding: true,
+        serviceDuration: {
+          months: 1,
+          days: 7
+        },
+        isEmployeeAssignable: true,
+        isCustomerRequired: true,
+        isRefundable: false,
+        avtivateInAllOutlets: true
+      }))
+      .then(({ serviceBlueprintId }) => membershipTest.serviceBlueprint2Id = serviceBlueprintId)
+
+      // get active service list (outlet1)
+      .then(() => promisifyApiCall({}, getActiveServiceList, {
+        apiKey,
+        outletId: membershipTest.outlet1Id,
+        searchString: ''
+      }))
+      .then((body) => {
+        membershipTest.outlet1ServiceList = body.serviceList;
+      })
+
+      // get active service list (outlet2)
+      .then(() => promisifyApiCall({}, getActiveServiceList, {
+        apiKey,
+        outletId: membershipTest.outlet2Id,
+        searchString: ''
+      }))
+      .then((body) => {
+        membershipTest.outlet2ServiceList = body.serviceList;
+      })
+
+      // add sale - outlet 1, customer 1, service 1
+      .then(() => { longstandingService = membershipTest.outlet1ServiceList.find(i => i.serviceBlueprint.name === 'Long 1'); return Promise.resolve() })
+      .then(() => promisifyApiCall({}, addSales, {
+        apiKey,
+        outletId: membershipTest.outlet1Id,
+        customerId: membershipTest.customer1Id,
+        productList: [],
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }))
+      .then((body) => { })
+
+      // add sale - outlet 1, customer 1, service 2
+      .then(() => { longstandingService = membershipTest.outlet1ServiceList.find(i => i.serviceBlueprint.name === 'Long 2'); return Promise.resolve() })
+      .then(() => promisifyApiCall({}, addSales, {
+        apiKey,
+        outletId: membershipTest.outlet1Id,
+        customerId: membershipTest.customer1Id,
+        productList: [],
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }))
+      .then((body) => { })
+
+      // add sale - outlet 1, customer 2, service 2
+      .then(() => { longstandingService = membershipTest.outlet1ServiceList.find(i => i.serviceBlueprint.name === 'Long 2'); return Promise.resolve() })
+      .then(() => promisifyApiCall({}, addSales, {
+        apiKey,
+        outletId: membershipTest.outlet1Id,
+        customerId: membershipTest.customer2Id,
+        productList: [],
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }))
+      .then((body) => { })
+
+      // add sale - outlet 2, customer 1, service 1
+      .then(() => { longstandingService = membershipTest.outlet2ServiceList.find(i => i.serviceBlueprint.name === 'Long 1'); return Promise.resolve() })
+      .then(() => promisifyApiCall({}, addSales, {
+        apiKey,
+        outletId: membershipTest.outlet2Id,
+        customerId: membershipTest.customer1Id,
+        productList: [],
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }))
+      .then((body) => { })
+
+      // add sale - outlet 2, customer 2, service 1
+      .then(() => { longstandingService = membershipTest.outlet2ServiceList.find(i => i.serviceBlueprint.name === 'Long 1'); return Promise.resolve() })
+      .then(() => promisifyApiCall({}, addSales, {
+        apiKey,
+        outletId: membershipTest.outlet2Id,
+        customerId: membershipTest.customer2Id,
+        productList: [],
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: null
+          }
+        ],
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        }
+      }))
+      .then((body) => { })
+
+      .then(() => {
+        // console.log('final test object', membershipTest);
+        testDoneFn();
+      });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: null,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByServiceBlueprint: false,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(5);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, outlet: 1)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: null,
+        outletId: membershipTest.outlet1Id,
+        customerId: null,
+
+        shouldFilterByServiceBlueprint: false,
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: false,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(3);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, outlet: 1, customer: 1)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: null,
+        outletId: membershipTest.outlet1Id,
+        customerId: membershipTest.customer1Id,
+
+        shouldFilterByServiceBlueprint: false,
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: true,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(2);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, outlet: 1, customer: 2)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: null,
+        outletId: membershipTest.outlet1Id,
+        customerId: membershipTest.customer2Id,
+
+        shouldFilterByServiceBlueprint: false,
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: true,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(1);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, customer: 1)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: null,
+        outletId: null,
+        customerId: membershipTest.customer1Id,
+
+        shouldFilterByServiceBlueprint: false,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: true,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(3);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, serviceBlueprint: 1)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: membershipTest.serviceBlueprint1Id,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByServiceBlueprint: true,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(3);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, serviceBlueprint: 2)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: membershipTest.serviceBlueprint2Id,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByServiceBlueprint: true,
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(2);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-service-membership-list (Filters: orgnization, outlet: 1, customer: 1, serviceBlueprint: 1)', testDoneFn => {
+
+    callApi('api/get-service-membership-list', {
+      json: {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        serviceBlueprintId: membershipTest.serviceBlueprint1Id,
+        outletId: membershipTest.outlet1Id,
+        customerId: membershipTest.customer1Id,
+
+        shouldFilterByServiceBlueprint: true,
+        shouldFilterByOutlet: true,
+        shouldFilterByCustomer: true,
+
+        fromDate: monthsEarlierDate,
+        toDate: monthsLaterDate
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetServiceMembershipListApiSuccessResponse(body);
+      body.serviceMembershipList.forEach(serviceMembership => {
+        validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      });
+      expect(body.serviceMembershipList.length).to.equal(1);
+      testDoneFn();
+    });
+
+  });
+
+  // Service Membership - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

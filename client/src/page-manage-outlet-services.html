@@ -1,0 +1,310 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-manage-outlet-services">
+  <template>
+    <style include="shared-styles">
+
+      .service-blueprint {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding-left: 4px;
+        padding-right: 4px;
+        margin: 4px 0px;
+      }
+
+      .service-blueprint .service-blueprint-name {
+        display: inline-block;
+        margin-top: 10px;
+        width: 70%;
+        max-height: 100px;
+        overflow: auto;
+      }
+
+      .service-blueprint paper-checkbox {
+        margin-bottom: 10px;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card vertical layout">
+        <div class="p-16 horizontal layout center">
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.manageServices.searchForServiceInputError]] label=[[verses.manageServices.searchForServicerInput]] on-keypress="searchFieldKeypressed"></paper-input>
+          
+          <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
+          
+          <paper-button raised class="primary" on-tap="searchTapped">
+            [[verses.general.search]]
+          </paper-button>
+        </div>
+      </div>
+
+      <template is="dom-if" if="{{!serviceBlueprintList.length}}">
+        <div class="card">
+          [[verses.manageServices.noServicesFound]]
+        </div>
+      </template>
+
+      <template is="dom-if" if="{{serviceBlueprintList.length}}">
+
+        <div class="card vertical layout">
+
+          <template is="dom-repeat" items="[[serviceBlueprintList]]" as="serviceBlueprint">
+            <div class="service-blueprint horizontal layout"> 
+              <div class="service-blueprint-name">[[serviceBlueprint.name]]</div>
+              <paper-checkbox checked="{{serviceBlueprint.isActive}}">[[verses.manageServices.availability]]</paper-checkbox>
+            </div>
+          </template>
+
+        </div>
+
+      </template>
+
+      <div class="lone-controls">
+        <paper-button raised class="primary" on-tap="confirmTapped">
+          [[verses.manageServices.confirmUpdate]]
+        </paper-button>
+      </div>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageManageOutletServices extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-manage-outlet-services';
+      }
+
+      static get properties() {
+        return {
+          searchString: {
+            type: String,
+            value: ''
+          },
+          outlet: {
+            type: Object,
+            value: null
+          },
+          serviceBlueprintList: {
+            type: Array,
+            value: []
+          },
+          outletServiceList: {
+            type: Array,
+            value: []
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.manageServices.manageServicesTitle);
+        if ('outlet' in this.params) {
+          if (!this._ensureAccess()) return;
+          this._processServicesLists(() => {
+            this.isReady = true;
+          });
+        }
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS']
+        });
+      }
+
+      _fetchServiceBlueprintList(cbfn) {
+        let data = { organizationId: this.app.organization.id, searchString: this.searchString };
+
+        this.app.callGetServiceBlueprintListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.serviceBlueprintList);
+        });
+      }
+
+      _fetchOutletServiceList(cbfn) {
+        let data = { outletId: parseInt(this.params.outlet), searchString: this.searchString };
+
+        this.app.callGetActiveServiceListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.serviceList);
+        });
+      }
+
+      _crossMatchServiceBlueprintListWithOutletServiceList(cbfn) {
+        this.serviceBlueprintList.forEach((serviceBlueprint, index) => {
+          let outletActiveService = this.outletServiceList.find(outletService => outletService.serviceBlueprintId === serviceBlueprint.id);
+          if (outletActiveService) {
+            this.set(`serviceBlueprintList.${index}.isActive`, true);
+            this.set(`serviceBlueprintList.${index}.wasActive`, true);
+          } else {
+            this.set(`serviceBlueprintList.${index}.isActive`, false);
+            this.set(`serviceBlueprintList.${index}.wasActive`, false);
+          }
+        });
+
+        cbfn();
+      }
+
+      _processServicesLists(cbfn) {
+        this._fetchServiceBlueprintList(serviceBlueprintList => {
+          this.serviceBlueprintList = serviceBlueprintList;
+          this._fetchOutletServiceList(serviceList => {
+            this.outletServiceList = serviceList;
+            this._crossMatchServiceBlueprintListWithOutletServiceList(_ => {
+              cbfn();
+            })
+          });
+        });
+      }
+
+      modifyAvailabilityOfServiceInOutletApi(serviceBlueprintsToBeActivatedList, serviceBlueprintsToBeDeactivatedList, cbfn) {
+        let fnActivate = (cbfn) => {
+          if (serviceBlueprintsToBeActivatedList.length) {
+            let data = { 
+              organizationId: parseInt(this.app.organization.id),
+
+              action: 'mark-as-available',
+
+              performActionForAllServices: false,
+              serviceBlueprintList: serviceBlueprintsToBeActivatedList,
+
+              performActionOnAllOutlets: false,
+              outletIdList: [parseInt(this.params.outlet)]
+            };
+
+            this.app.callModifyAvailabilityOfServiceListInOutletListApi(data, (err, response) => {
+              if (err) return;
+              if (response.hasError) return this.onApiError(response.error);
+              return cbfn();
+            });
+          } else {
+            return cbfn();
+          }
+        }
+
+        let fnDeactivate = (cbfn) => {
+          if (serviceBlueprintsToBeDeactivatedList.length) {
+            let data = { 
+              organizationId: parseInt(this.app.organization.id),
+
+              action: 'mark-as-unavailable',
+
+              performActionForAllServices: false,
+              serviceBlueprintList: serviceBlueprintsToBeDeactivatedList,
+
+              performActionOnAllOutlets: false,
+              outletIdList: [parseInt(this.params.outlet)]
+            };
+
+            this.app.callModifyAvailabilityOfServiceListInOutletListApi(data, (err, response) => {
+              if (err) return;
+              if (response.hasError) return this.onApiError(response.error);
+              return cbfn();
+            });
+          } else {
+            return cbfn();
+          }
+        }
+
+        fnActivate(_ => {
+          fnDeactivate(_ => {
+            cbfn();
+          });
+        });
+      }
+
+      // region: ui  ===========================
+
+      confirmTapped(e = null) {
+        let serviceBlueprintsToBeActivatedList = [];
+        let serviceBlueprintsToBeDeactivatedList = [];
+
+        this.serviceBlueprintList.forEach(serviceBlueprint => {
+          if (serviceBlueprint.wasActive && !serviceBlueprint.isActive) {
+            serviceBlueprintsToBeDeactivatedList.push({
+              serviceBlueprintId: serviceBlueprint.id,
+              salePrice: serviceBlueprint.defaultSalePrice
+            });
+          }
+
+          if (!serviceBlueprint.wasActive && serviceBlueprint.isActive) {
+            serviceBlueprintsToBeActivatedList.push({
+              serviceBlueprintId: serviceBlueprint.id,
+              salePrice: serviceBlueprint.defaultSalePrice
+            });
+          }
+        });
+
+        if (serviceBlueprintsToBeActivatedList.length || serviceBlueprintsToBeDeactivatedList.length) {
+          this.modifyAvailabilityOfServiceInOutletApi(serviceBlueprintsToBeActivatedList, serviceBlueprintsToBeDeactivatedList, () => {
+            let message = this.app.verses.manageServices.modificationComplete;
+            this.app.showToast(message, _ => {
+              this.isReady = false; 
+              this._processServicesLists(() => this.isReady = true);
+            });
+          });
+        }
+      }
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
+      searchCancelTapped(e = null) {
+        this.searchString = '';
+      }
+
+      searchTapped(e = null) {
+        this.set('paginate.offset', 0);
+        this._processServicesLists(() => this.isReady = true);
+      }
+
+      // region: misc =================================
+    }
+
+    window.customElements.define(PageManageOutletServices.is, PageManageOutletServices);
+  </script>
+</dom-module>

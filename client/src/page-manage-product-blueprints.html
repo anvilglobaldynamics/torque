@@ -1,0 +1,269 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="product-blueprint">
+  <template>
+    <style include="shared-styles">
+    </style>
+
+    <div class="layout vertical" id="wrapper">
+      <div class="list">
+        <div class="horizontal layout item center">
+          <div class="vertical layout flex">
+            <div class="inventory-product-important-detail-container">[[productBlueprint.name]]</div>
+            <div class="inventory-product-price-container">[[verses.productBlueprint.buyingPrice]]: [[productBlueprint.defaultPurchasePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productBlueprint.unit]]</div>
+            <div class="inventory-product-price-container">[[verses.productBlueprint.sellingPrice]]: [[productBlueprint.defaultSalePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productBlueprint.unit]]</div>
+          </div>
+          <div class="horizontal layout wrap">
+            <paper-button class="secondary" on-tap="editTapped" raised>
+              [[verses.general.edit]]
+            </paper-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+    class ProductBlueprint extends FxElement.mixin(TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'product-blueprint';
+      }
+
+      static get properties() {
+        return {
+          page: {
+            type: Object,
+            value: null,
+            observer: 'pageChanged'
+          },
+          productBlueprint: {
+            type: Object,
+            value: null
+          }
+        };
+      }
+
+      pageChanged() {
+        if (!this.page) return;
+        this.useLanguageServices();
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.useLanguageServices();
+      }
+
+      // region: ui  ===========================
+
+      editTapped(e) {
+        return this.app.navigateTo(`/edit-product-blueprint/product-blueprint:${this.productBlueprint.id}`);
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(ProductBlueprint.is, ProductBlueprint);
+  </script>
+</dom-module>
+
+<dom-module id="page-manage-product-blueprints">
+  <template>
+    <style include="shared-styles">
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card helpful-tips">
+        [[verses.productBlueprint.whatIsProductBlueprintMessage]]
+      </div>
+
+      <div class="card vertical layout">
+        <div class="p-16 horizontal layout center">
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.productBlueprint.searchForProductBlueprintInputError]] label=[[verses.productBlueprint.searchForProductBlueprintInput]] on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
+          <paper-button raised class="primary" on-tap="searchTapped">
+            [[verses.general.search]]
+          </paper-button>
+        </div>
+      </div>
+
+      <template is="dom-if" if="[[!productBlueprintList.length]]">
+        <div class="card">
+          [[verses.productBlueprint.noProductBlueprintFound]]
+        </div>
+      </template>
+
+      <template is="dom-if" if="{{productBlueprintList.length}}">
+
+        <div class="card vertical layout">
+
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          </template>
+
+          <template is="dom-repeat" items="[[productBlueprintList]]" as="productBlueprint">
+            <product-blueprint product-blueprint="[[productBlueprint]]" app="[[app]]"></product-blueprint>
+          </template>
+
+          <div class="pagination">
+            [[verses.general.loaded]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          </template>
+
+        </div>
+
+      </template>
+
+      <div class="lone-controls">
+        <paper-button class="secondary" on-tap="bulkImportTapped" raised>
+          <iron-icon icon="file-upload" class="button-icon"></iron-icon>
+          [[verses.productBlueprint.bulkImport]]
+        </paper-button>
+        <paper-button raised class="primary" on-tap="createTapped">
+          <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
+          [[verses.productBlueprint.createNewProductBlueprint]]
+        </paper-button>
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+    class PageManageProductBlueprints extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-manage-product-blueprints';
+      }
+
+      static get properties() {
+        return {
+          searchString: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.productBlueprint.manageProductBlueprintsTitle);
+        if (!this._ensureAccess()) return;
+        this._processProductBlueprintList(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.productBlueprintList = [];
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS']
+        });
+      }
+
+      _fetchProductBlueprintList(cbfn) {
+        let data = { organizationId: this.app.organization.id, searchString: this.searchString, paginate: this.paginate };
+        this.app.callGetProductBlueprintListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.productBlueprintList);
+        });
+      }
+
+      _processProductBlueprintList(cbfn) {
+        this._fetchProductBlueprintList(productBlueprintList => {
+          this.productBlueprintList = productBlueprintList;
+          return cbfn();
+        });
+      }
+
+      // region: ui  ===========================
+
+      createTapped(e = null) {
+        return this.app.navigateTo('/edit-product-blueprint');
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processProductBlueprintList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processProductBlueprintList(() => this.isReady = true);
+      }
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
+      searchCancelTapped(e = null) {
+        this.searchString = '';
+      }
+
+      searchTapped(e = null) {
+        this.set('paginate.offset', 0);
+        this._processProductBlueprintList(() => this.isReady = true);
+      }
+
+      bulkImportTapped(e = null) {
+        return this.app.navigateTo('/bulk-import-product-blueprints');
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageManageProductBlueprints.is, PageManageProductBlueprints);
+  </script>
+</dom-module>

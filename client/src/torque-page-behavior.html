@@ -96,12 +96,12 @@
 
       checkPrivilege(privilege) {
         if (!(privilege in this.app.organization.employment.privileges)) {
-          throw new Error(`No such privilege ""${privilege}.`);
+          throw new Error(`No such privilege "${privilege}".`);
         }
         return this.app.organization.employment.privileges[privilege];
       }
 
-      accessControl({ authLevel, privilegeList = [] }) {
+      accessControl({ authLevel, privilegeList = [], moduleList = [] }) {
         const authLevelList = ['authenticated', 'organization-selected'];
         if (authLevelList.indexOf(authLevel) === -1) throw new Error("Invalid accessControl authLevel.");
         if (authLevel === 'authenticated' || authLevel === 'organization-selected') {
@@ -117,8 +117,21 @@
           }
           let unmetPrivilegeList = privilegeList.filter(privilege => !this.checkPrivilege(privilege));
           if (unmetPrivilegeList.length > 0) {
-            this.app.navigateTo('/error403/unmet:' + unmetPrivilegeList.join(','));
+            this.app.navigateTo('/error403/privilege:' + unmetPrivilegeList.join(','));
             return false;
+          }
+          if (moduleList.length > 0) {
+            if (!this.hasModule) return console.error('DEV_ERROR torque-common-behavior is required.');
+            try {
+              this.ensureModule(...moduleList);
+            } catch (ex) {
+              if (ex.code === 'UNMET_MODULE') {
+                this.app.navigateTo('/error403/module:' + ex.module);
+              } else {
+                this.app.showModalDialog(ex.message);
+              }
+              return false;
+            }
           }
         }
         return true;

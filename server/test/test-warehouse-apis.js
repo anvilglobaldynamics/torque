@@ -9,7 +9,7 @@ let {
   registerUser,
   loginUser,
   addOrganization,
-  addProductCategory,
+  addProductBlueprint,
   validateWarehouseSchema,
   validateEmbeddedInventorySchema,
 
@@ -46,7 +46,7 @@ const warehousePhone4 = 'w4' + rnd(prefix, 11);
 let apiKey = null;
 let adminApiKey = null;
 let organizationId = null;
-let productCategoryId = null;
+let productBlueprintId = null;
 let warehouseList = null;
 let warehouseToBeModified = null;
 let warehouseToBeFilledId = null;
@@ -74,10 +74,10 @@ describe('Warehouse', _ => {
             email: orgEmail
           }, (data) => {
             organizationId = data.organizationId;
-            addProductCategory({
+            addProductBlueprint({
               apiKey,
               organizationId,
-              name: "test product category",
+              name: "test product blueprint",
               unit: "box",
               defaultDiscountType: "percent",
               defaultDiscountValue: 10,
@@ -86,7 +86,7 @@ describe('Warehouse', _ => {
               defaultSalePrice: 111,
               isReturnable: true
             }, (data) => {
-              productCategoryId = data.productCategoryId;
+              productBlueprintId = data.productBlueprintId;
               testDoneFn();
             });
           });
@@ -378,7 +378,7 @@ describe('Warehouse', _ => {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
         productList: [
-          { productCategoryId, purchasePrice: 100, salePrice: 200, count: 10 }
+          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 10 }
         ]
       }
     }, (err, response, body) => {

@@ -46,7 +46,7 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
     }
   }
 
-  async __getAggregatedProductList({ productList }) {
+  async __getAggregatedProductListWithoutAcquisitionDetails({ productList }) {
     (await this.crossmap({
       source: productList,
       sourceKey: 'productId',
@@ -57,12 +57,16 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
     });
     (await this.crossmap({
       source: productList,
-      sourceKeyFn: (doc => doc.product.productCategoryId),
-      target: 'productCategory',
-      onError: (product) => { throw new CodedError("PRODUCT_CATEGORY_INVALID", "Invalid ProductCategory"); }
-    })).forEach((productCategory, _product) => {
-      _product.product.productCategory = productCategory;
+      sourceKeyFn: (doc => doc.product.productBlueprintId),
+      target: 'productBlueprint',
+      onError: (product) => { throw new CodedError("PRODUCT_BLUEPRINT_INVALID", "Invalid ProductBlueprint"); }
+    })).forEach((productBlueprint, _product) => {
+      _product.product.productBlueprint = productBlueprint;
     });
+  }
+
+  async __getAggregatedProductList({ productList }) {
+    await this.__getAggregatedProductListWithoutAcquisitionDetails({ productList });
     let productAcquisitionList = await this.database.productAcquisition.listByProductIdList({ productIdList: productList.map(product => product.productId) });
     productList.forEach(product => {
       let productAcquisition = productAcquisitionList.find(productAcquisition =>

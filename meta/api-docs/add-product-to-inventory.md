@@ -13,7 +13,7 @@ method: `POST`
 
   productList: Joi.array().min(1).items(
     Joi.object().keys({
-      productCategoryId: Joi.number().max(999999999999999).required(),
+      productBlueprintId: Joi.number().max(999999999999999).required(),
       purchasePrice: Joi.number().max(999999999999999).required(),
       salePrice: Joi.number().max(999999999999999).required(),
       count: Joi.number().max(999999999999999).required()
@@ -38,7 +38,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: INVENTORY_INVALID } // inventory could not be found
-{ code: PRODUCT_CATEGORY_INVALID } // productCategoryId could not be found
+{ code: PRODUCT_BLUEPRINT_INVALID } // productBlueprintId could not be found
 ```
 
 ### response (on success):

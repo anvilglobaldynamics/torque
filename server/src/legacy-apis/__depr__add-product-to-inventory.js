@@ -19,7 +19,7 @@ exports.AddProductToInventoryApi = class extends productCommonMixin(collectionCo
 
       productList: Joi.array().min(1).items(
         Joi.object().keys({
-          productCategoryId: Joi.number().max(999999999999999).required(),
+          productBlueprintId: Joi.number().max(999999999999999).required(),
           purchasePrice: Joi.number().max(999999999999999).required(),
           salePrice: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required()
@@ -37,7 +37,7 @@ exports.AddProductToInventoryApi = class extends productCommonMixin(collectionCo
         errorCode: "INVENTORY_INVALID"
       },
       privilegeList: [
-        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
       ]
     }];
   }
@@ -45,8 +45,8 @@ exports.AddProductToInventoryApi = class extends productCommonMixin(collectionCo
   _addProductToInventory({ inventoryId, productList }, cbfn) {
     Promise.all(productList.map(product => {
       return new Promise((accept, reject) => {
-        let { productCategoryId, purchasePrice, salePrice, count } = product;
-        this.legacyDatabase.product.create({ productCategoryId, purchasePrice, salePrice }, (err, productId) => {
+        let { productBlueprintId, purchasePrice, salePrice, count } = product;
+        this.legacyDatabase.product.create({ productBlueprintId, purchasePrice, salePrice }, (err, productId) => {
           if (err) return reject(err);
           this.legacyDatabase.inventory.addProduct({ inventoryId }, { productId, count }, (err, wasUpdated) => {
             if (!this._ensureUpdate(err, wasUpdated, "inventory")) return;
@@ -63,7 +63,7 @@ exports.AddProductToInventoryApi = class extends productCommonMixin(collectionCo
 
   handle({ body, userId }) {
     let { inventoryId, productList } = body;
-    this._verifyProductCategoriesExist({ productList }, () => {
+    this._verifyProductBlueprintsExist({ productList }, () => {
       this._addProductToInventory({ inventoryId, productList }, () => {
         this.success({ status: "success" });
       });

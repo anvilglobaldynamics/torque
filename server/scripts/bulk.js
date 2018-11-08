@@ -10,7 +10,7 @@ let { rnd } = require('../test/lib');
 
 const phonePrefix = '+800';
 const emailPrefix = 'mail';
-const commonPassword = '12345678';
+const commonPassword = 'johndoe1pass';
 
 // --------------------------------------------------------------
 
@@ -27,11 +27,15 @@ const outletCount = {
   min: 3,
   max: 40
 };
-const productCategoryCount = {
+const productBlueprintCount = {
   min: 5,
   max: 200
 };
-const productCountPerCategory = {
+const serviceBlueprintCount = {
+  min: 5,
+  max: 200
+};
+const productCountPerBlueprint = {
   min: 1,
   max: 1000
 };
@@ -128,13 +132,13 @@ const createOrganization = async ({ apiKey }, db) => {
   return { organizationId };
 }
 
-const createProductCategory = async ({ apiKey, organizationId }) => {
-  console.log('should create productCategory');
+const createProductBlueprint = async ({ apiKey, organizationId }) => {
+  console.log('should create productBlueprint');
 
-  let { productCategoryId } = await callApi('api/add-product-category', {
+  let { productBlueprintId } = await callApi('api/add-product-blueprint', {
     apiKey,
     organizationId,
-    name: pickOne(nounList) + " Category " + (uid++),
+    name: pickOne(nounList) + " Blueprint " + (uid++),
     unit: "kg",
     defaultDiscountType: "percent",
     defaultDiscountValue: 10,
@@ -144,7 +148,27 @@ const createProductCategory = async ({ apiKey, organizationId }) => {
     isReturnable: true
   });
 
-  return { productCategoryId };
+  return { productBlueprintId };
+}
+
+const createServiceBlueprint = async ({ apiKey, organizationId }) => {
+  console.log('should create serviceBlueprint');
+
+  let { serviceBlueprintId } = await callApi('api/add-service-blueprint', {
+    apiKey,
+    organizationId,
+    name: pickOne(nounList) + " Blueprint " + (uid++),
+    defaultVat: 15,
+    defaultSalePrice: 250,
+    isLongstanding: false,
+    serviceDuration: null,
+    isEmployeeAssignable: true,
+    isCustomerRequired: true,
+    isRefundable: true,
+    avtivateInAllOutlets: true
+  });
+
+  return { serviceBlueprintId };
 }
 
 const createWarehouse = async ({ apiKey, organizationId }) => {
@@ -208,13 +232,20 @@ const createEmployee = async ({ apiKey, organizationId }) => {
       PRIV_MODIFY_SALES: true,
       PRIV_ALLOW_FLAT_DISCOUNT: true,
 
+      PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: true,
+      PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: true,
+
       PRIV_VIEW_SALES_RETURN: true,
       PRIV_MODIFY_SALES_RETURN: true,
 
       PRIV_VIEW_ALL_INVENTORIES: true,
-      PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
+      PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
       PRIV_TRANSFER_ALL_INVENTORIES: true,
       PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
+
+      PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
+      PRIV_VIEW_ALL_SERVICES: true,
+      PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS: true,
 
       PRIV_VIEW_ALL_OUTLETS: true,
       PRIV_MODIFY_ALL_OUTLETS: true,
@@ -234,14 +265,14 @@ const createEmployee = async ({ apiKey, organizationId }) => {
   return { employeeId };
 }
 
-const createProduct = async ({ apiKey, organizationId, outletId, productCategoryId, outletDefaultInventoryId, count }) => {
+const createProduct = async ({ apiKey, organizationId, outletId, productBlueprintId, outletDefaultInventoryId, count }) => {
   console.log('should create product');
 
   let results = await callApi('api/add-product-to-inventory', {
     apiKey,
     inventoryId: outletDefaultInventoryId,
     productList: [
-      { productCategoryId, purchasePrice: 100, salePrice: 200, count }
+      { productBlueprintId, purchasePrice: 100, salePrice: 200, count }
     ]
   });
 
@@ -265,6 +296,9 @@ const createSales = async ({ apiKey, outletId, productList }) => {
     customerId: null,
 
     productList,
+    serviceList: [],
+
+    serviceList: [],
 
     payment: {
       totalAmount: 0,
@@ -312,18 +346,24 @@ const generateBulkData = async () => {
       outletList.push({ outletId, outletDefaultInventoryId });
     }
 
-    let productCategoryIdList = [];
-    for (let i = 0; i < getSolidCount(productCategoryCount); i++) {
-      let { productCategoryId } = await createProductCategory({ apiKey, organizationId });
-      productCategoryIdList.push(productCategoryId);
+    let productBlueprintIdList = [];
+    for (let i = 0; i < getSolidCount(productBlueprintCount); i++) {
+      let { productBlueprintId } = await createProductBlueprint({ apiKey, organizationId });
+      productBlueprintIdList.push(productBlueprintId);
+    }
+
+    let serviceBlueprintIdList = [];
+    for (let i = 0; i < getSolidCount(serviceBlueprintCount); i++) {
+      let { serviceBlueprintId } = await createServiceBlueprint({ apiKey, organizationId });
+      serviceBlueprintIdList.push(serviceBlueprintId);
     }
 
     for (let outlet of outletList) {
       let { outletId, outletDefaultInventoryId } = outlet
       let productList = [];
-      for (let productCategoryId of productCategoryIdList) {
-        let count = getSolidCount(productCountPerCategory);
-        let { productId } = await createProduct({ apiKey, organizationId, outletId, productCategoryId, outletDefaultInventoryId, count });
+      for (let productBlueprintId of productBlueprintIdList) {
+        let count = getSolidCount(productCountPerBlueprint);
+        let { productId } = await createProduct({ apiKey, organizationId, outletId, productBlueprintId, outletDefaultInventoryId, count });
         productList.push({ productId, count });
       }
       // add sales -

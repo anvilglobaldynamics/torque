@@ -1,7 +1,7 @@
 This API handles;
 * Get inventory details to populate inventory management view (page 9). Includes the product[] array.
 * Also provides array relatedProductList
-* Also provides array relatedProductCategoryList
+* Also provides array relatedProductBlueprintList
 
 url: `api/get-aggregated-inventory-details`
 
@@ -57,11 +57,11 @@ Possible Error Codes:
 
     product: Joi.object().keys({
       id: Joi.number().max(999999999999999).required(),
-      productCategoryId: Joi.number().max(999999999999999).required(),
+      productBlueprintId: Joi.number().max(999999999999999).required(),
       purchasePrice: Joi.number().max(999999999999999).required(),
       salePrice: Joi.number().max(999999999999999).required(),
       
-      productCategory: Joi.object().keys({
+      productBlueprint: Joi.object().keys({
         id: Joi.number().max(999999999999999).required(),
         createdDatetimeStamp: Joi.number().max(999999999999999).required(),
         lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),

@@ -152,7 +152,7 @@ class Server {
         let { ApiClass } = route;
         this.logger.info('WS', `${message.path} ${message.requestUid}`);
         if (ApiClass.prototype instanceof LegacyApi) {
-          let api = new ApiClass(this, this.legacyDatabase, this.logger, null, null, ws, 'ws', message.requestUid, message.consumerId);
+          let api = new ApiClass(this, this.database, this.legacyDatabase, this.logger, null, null, ws, 'ws', message.requestUid, message.consumerId);
           api._prehandlePostOrWsApi(message.body);
         } else {
           let api = new ApiClass(this, this.database, this.logger, null, null, ws, 'ws', message.requestUid, message.consumerId);
@@ -222,7 +222,7 @@ class Server {
     this._expressApp.get(path, jsonParser, (req, res) => {
       this.logger.info('GET', req.url);
       if (ApiClass.prototype instanceof LegacyApi) {
-        let api = new ApiClass(this, this.legacyDatabase, this.logger, req, res, null, 'get');
+        let api = new ApiClass(this, this.database, this.legacyDatabase, this.logger, req, res, null, 'get');
         api._prehandleGetApi();
       } else {
         throw new Error("Async APIs are not yet supported.");
@@ -234,7 +234,7 @@ class Server {
     this._expressApp.post(path, jsonParser, (req, res) => {
       this.logger.info('POST', req.url);
       if (ApiClass.prototype instanceof LegacyApi) {
-        let api = new ApiClass(this, this.legacyDatabase, this.logger, req, res, null, 'post');
+        let api = new ApiClass(this, this.database, this.legacyDatabase, this.logger, req, res, null, 'post');
         api._prehandlePostOrWsApi(req.body);
       } else {
         let api = new ApiClass(this, this.database, this.logger, req, res, null, 'post');

@@ -116,6 +116,17 @@
           <!-- content-item - end -->
 
           <!-- content-item - start -->
+          <div class="content-item" on-tap="manageOutletServicesTapped">
+            <div class="icon">
+              <iron-icon src="../../images/icons/support.png"></iron-icon>
+            </div>
+            <div class="type title uppercase">[[verses.outlet.manageOutletServicesTitle]]</div>
+            <div class="type caption secondary">[[verses.outlet.manageOutletServices]]</div>
+            <paper-ripple></paper-ripple>
+          </div>
+          <!-- content-item - end -->
+
+          <!-- content-item - start -->
           <div class="content-item" on-tap="viewInventoryTapped" data-key="defaultInventory">
             <div class="icon">
               <iron-icon src="../../images/icons/package-right.png"></iron-icon>
@@ -277,6 +288,10 @@
 
       manageSalesTapped(e) {
         return this.app.navigateTo(`/manage-sales/outlet:${this.outlet.id}`);
+      }
+
+      manageOutletServicesTapped(e) {
+        return this.app.navigateTo(`/manage-outlet-services/outlet:${this.outlet.id}`);
       }
 
       // region: misc =================================

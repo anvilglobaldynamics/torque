@@ -17,26 +17,30 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     return salesList;
   }
 
-  async _processASinglePayment({ userId, payment, customer, newPayment }) {
+  async _processASinglePayment({ userId, payment, customer, paymentListEntry }) {
     // NOTE: At this point, all of above fields are validated and completely trustworthy.
 
     // NOTE: since paidAmount includes changeAmount, we confirmed after discussion.
-    let paidAmountWithoutChange = (newPayment.paidAmount - newPayment.changeAmount);
+    let paidAmountWithoutChange = (paymentListEntry.paidAmount - paymentListEntry.changeAmount);
 
-    if (newPayment.paymentMethod === 'change-wallet') {
+    if (paymentListEntry.paymentMethod === 'change-wallet') {
       await this._deductFromChangeWalletAsPayment({ customer, amount: paidAmountWithoutChange });
     }
 
     payment.totalPaidAmount += paidAmountWithoutChange;
     let wasChangeSavedInChangeWallet = false;
-    if (newPayment.changeAmount && newPayment.shouldSaveChangeInAccount) {
+    if (paymentListEntry.changeAmount && paymentListEntry.shouldSaveChangeInAccount) {
+      if (!customer) {
+        throw new CodedError("CUSTOMER_REQUIRED_TO_SAVE_CHANGE", "Customer is required to save change in change wallet.");
+      }
+
       wasChangeSavedInChangeWallet = true;
-      await this._addChangeToChangeWallet({ customer, amount: newPayment.changeAmount });
+      await this._addChangeToChangeWallet({ customer, amount: paymentListEntry.changeAmount });
     }
 
     let {
       paymentMethod, paidAmount, changeAmount
-    } = newPayment;
+    } = paymentListEntry;
 
     payment.paymentList.push({
       createdDatetimeStamp: Date.now(),

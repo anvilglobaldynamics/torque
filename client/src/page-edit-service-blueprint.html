@@ -1,0 +1,296 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-service-blueprint">
+  <template>
+    <style include="shared-styles">
+
+      .editServiceBlueprintForm--serviceDuration {
+        margin-left: 6px;
+        margin-right: 6px;
+        width: 48%;
+      }
+
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="editServiceBlueprintForm" on-keypress="genericFormSubmitionKeypress">
+        <form>
+
+          <div class="card vertical layout">
+            <paper-input class="editServiceBlueprintForm--name" value="{{editServiceBlueprintForm.name}}" required minlength="3" maxlength="64" error-message=[[verses.serviceBlueprint.serviceBlueprintNameInputError]] label=[[verses.serviceBlueprint.serviceBlueprintNameInput]]></paper-input>
+
+            <paper-input class="editServiceBlueprintForm--defaultVat" value="{{editServiceBlueprintForm.defaultVat}}" type="number" required min="0" max="100" error-message=[[verses.serviceBlueprint.defaultVatInputError]] label=[[verses.serviceBlueprint.defaultVatInput]]>
+              <div slot="suffix">%</div>
+            </paper-input>
+
+            <paper-input class="editServiceBlueprintForm--defaultSalePrice" step="0.01" value="{{editServiceBlueprintForm.defaultSalePrice}}" type="number" required min="0" error-message=[[verses.serviceBlueprint.serviceBlueprintDefaultSalePriceInputError]] label=[[verses.serviceBlueprint.serviceBlueprintDefaultSalePriceInput]]>
+              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+            </paper-input>
+
+            <paper-checkbox checked="{{editServiceBlueprintForm.isLongstanding}}" on-change="isServiceLongstandingInputChanged">[[verses.serviceBlueprint.isServiceLongstanding]]</paper-checkbox>
+
+            <div class="horizontal layout">
+              <paper-input class="editServiceBlueprintForm--serviceDuration" hidden="[[!editServiceBlueprintForm.isLongstanding]]" value="{{editServiceBlueprintForm.serviceDuration.months}}" type="number" required min="0" max="12" error-message=[[verses.serviceBlueprint.serviceDurationMonthsInputError]] label=[[verses.serviceBlueprint.serviceDurationMonthsInput]]></paper-input>
+              <paper-input class="editServiceBlueprintForm--serviceDuration" hidden="[[!editServiceBlueprintForm.isLongstanding]]" value="{{editServiceBlueprintForm.serviceDuration.days}}" type="number" required min="0" max="31" error-message=[[verses.serviceBlueprint.serviceDurationDaysInputError]] label=[[verses.serviceBlueprint.serviceDurationDaysInput]]></paper-input>
+            </div>
+
+            <paper-checkbox checked="{{editServiceBlueprintForm.isCustomerRequired}}" on-change="isCustomerRequiredInputChanged">[[verses.serviceBlueprint.isCustomerRequired]]</paper-checkbox>
+
+            <paper-checkbox checked="{{editServiceBlueprintForm.isEmployeeAssignable}}">[[verses.serviceBlueprint.isEmployeeAssignable]]</paper-checkbox>
+
+            <paper-checkbox checked="{{editServiceBlueprintForm.isRefundable}}">[[verses.serviceBlueprint.isRefundable]]</paper-checkbox>
+
+            <paper-checkbox hidden="[[editMode]]" checked="{{editServiceBlueprintForm.avtivateInAllOutlets}}">[[verses.serviceBlueprint.avtivateInAllOutlets]]</paper-checkbox>
+
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editServiceBlueprintForm--submit" on-tap="createServiceBlueprintTapped">[[verses.serviceBlueprint.createServiceBlueprint]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editServiceBlueprintForm--submit" on-tap="updateServiceBlueprintTapped">[[verses.serviceBlueprint.updateServiceBlueprint]]</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageEditServiceBlueprint extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-edit-service-blueprint';
+      }
+
+      static get properties() {
+        return {
+          editMode: {
+            type: Boolean,
+            value: false
+          },
+          editingServiceBlueprint: {
+            type: Object,
+            value: null
+          },
+          editServiceBlueprintForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  name: "Gym Membership",
+                  defaultVat: 5,
+                  defaultSalePrice: 5000,
+                  isLongstanding: true,
+                  serviceDuration: {
+                    months: 1,
+                    days: 7
+                  },
+                  isEmployeeAssignable: true,
+                  isCustomerRequired: true,
+                  isRefundable: true,
+                  avtivateInAllOutlets: true
+                };
+              } else {
+                return {
+                  name: "",
+                  defaultVat: 0,
+                  defaultSalePrice: 0,
+                  isLongstanding: false,
+                  serviceDuration: {
+                    months: 0,
+                    days: 0
+                  },
+                  isEmployeeAssignable: false,
+                  isCustomerRequired: false,
+                  isRefundable: true,
+                  avtivateInAllOutlets: false
+                };
+              }
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        if ('service-blueprint' in this.params) {
+          this.editMode = true;
+          this.app.pushPageTitle(this.app.verses.serviceBlueprint.editServiceBlueprintTitle);
+        } else {
+          this.editMode = false;
+          this.app.pushPageTitle(this.app.verses.serviceBlueprint.addServiceBlueprintTitle);
+        }
+        if (!this._ensureAccess()) return;
+        this._processGetServiceBlueprintList(() => {
+          if (this.editMode) {
+            this._processGetServiceBlueprint();
+            this.isReady = true;
+          } else {
+            this.delay(300, () => {
+              this.isReady = true;
+            });
+          }
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editServiceBlueprintForm');
+        this.removeAutoValidation('#editServiceBlueprintForm paper-input');
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS']
+        });
+      }
+
+      // region: editServiceBlueprint =================================
+
+      _processGetServiceBlueprintList(cbfn) {
+        let data = {
+          organizationId: this.app.organization.id
+        };
+        this.app.callGetServiceBlueprintListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this._serviceBlueprintList = response.serviceBlueprintList;
+          cbfn();
+        });
+      }
+
+      _processGetServiceBlueprint() {
+        let serviceBlueprint = this._serviceBlueprintList.find(serviceBlueprint => {
+          return serviceBlueprint.id === parseInt(this.params['service-blueprint']);
+        });
+        this.editingServiceBlueprint = serviceBlueprint;
+        let { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = serviceBlueprint;
+
+        if(!isLongstanding) {
+          serviceDuration = { months: 0, days: 0 };
+        }
+        this.editServiceBlueprintForm = { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable };
+      }
+
+      _processCreateServiceBlueprint({ name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets }) {
+        if (!isLongstanding) {
+          serviceDuration = null;
+        }
+
+        let data = {
+          name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets,
+          organizationId: this.app.organization.id,
+        };
+
+        this.app.callAddServiceBlueprintApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editServiceBlueprintForm');
+          let message = this.app.verses.serviceBlueprint.serviceBlueprintCreated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      _processUpdateServiceBlueprint({ name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable }) {
+        if (!isLongstanding) {
+          serviceDuration = null;
+        }
+        
+        let data = {
+          name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable,
+          serviceBlueprintId: this.editingServiceBlueprint.id
+        };
+
+        this.app.callEditServiceBlueprintApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editServiceBlueprintForm');
+          let message = this.app.verses.serviceBlueprint.serviceBlueprintUpdated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-service-blueprints');
+      }
+
+      createServiceBlueprintTapped(e = null) {
+        this.elemAll('#editServiceBlueprintForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editServiceBlueprintForm').validate()) return;
+
+        let { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets } = this.editServiceBlueprintForm;
+        this._processCreateServiceBlueprint({ name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets });
+      }
+
+      updateServiceBlueprintTapped(e = null) {
+        this.elemAll('#editServiceBlueprintForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editServiceBlueprintForm').validate()) return;
+
+        let { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = this.editServiceBlueprintForm;
+        this._processUpdateServiceBlueprint({ name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable });
+      }
+
+      isServiceLongstandingInputChanged(e = null) {
+        if (this.editServiceBlueprintForm.isLongstanding) {
+          this.set('editServiceBlueprintForm.isCustomerRequired', true);
+        }
+      }
+
+      isCustomerRequiredInputChanged(e = null) {
+        if (this.editServiceBlueprintForm.isLongstanding) {
+          this.set('editServiceBlueprintForm.isCustomerRequired', true);
+        }
+      }
+
+      $isServiceLongstanding() {
+        return !this.editServiceBlueprintForm.isLongstandin;
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageEditServiceBlueprint.is, PageEditServiceBlueprint);
+  </script>
+</dom-module>

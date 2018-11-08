@@ -184,24 +184,37 @@
 
           <table class="product-table">
             <tr>
-              <th>[[verses.general.product]]</th>
+              <th>[[verses.salesReceipt.goodsTitle]]</th>
               <th>[[verses.general.quantity]]</th>
               <th>[[verses.general.unitPrice]]</th>
               <th>[[verses.general.price]]</th>
             </tr>
+
             <template is="dom-repeat" items="{{sales.productList}}" as="product">
               <tr>
                 <td>
-                  [[product.productCategoryName]]
+                  [[product.productBlueprintName]]
                   <template is="dom-if" if="[[product.returnedProductCount]]">
                     <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
                   </template>
                 </td>
                 <td class="quantitive-cell">[[product.count]] [[product.unit]]</td>
                 <td class="monetary-cell">[[product.salePrice]] [[app.settings.monetaryUnit]]</td>
-                <td class="monetary-cell">[[$calculateIndividualPrice(product)]] [[app.settings.monetaryUnit]]</td>
+                <td class="monetary-cell">[[$calculateIndividualProductPrice(product)]] [[app.settings.monetaryUnit]]</td>
               </tr>
             </template>
+
+            <template is="dom-repeat" items="{{sales.serviceList}}" as="service">
+              <tr>
+                <td>
+                  [[service.serviceBlueprintName]]
+                </td>
+                <td class="quantitive-cell">1</td>
+                <td class="monetary-cell">[[service.salePrice]] [[app.settings.monetaryUnit]]</td>
+                <td class="monetary-cell">[[$calculateIndividualServicePrice(service)]] [[app.settings.monetaryUnit]]</td>
+              </tr>
+            </template>
+
             <tr>
               <th rowspan="7" colspan="2" style="border:none;"></th>
               <th>[[verses.pos.totalAmount]]</th>
@@ -405,13 +418,18 @@
 
       // region: ui  ===========================
 
-      $calculateIndividualPrice(product) {
+      $calculateIndividualProductPrice(product) {
         let { salePrice, count, discountType, discountValue } = product;
         if (discountType === 'percent') {
           salePrice -= salePrice * (discountValue / 100);
         } else if (discountType === 'fixed') {
           salePrice -= discountValue;
         }
+        return this.$round(salePrice);
+      }
+
+      $calculateIndividualServicePrice(service) {
+        let { salePrice } = service; 
         return this.$round(salePrice);
       }
 

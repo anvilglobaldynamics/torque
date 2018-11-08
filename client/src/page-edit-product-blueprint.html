@@ -1,0 +1,272 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-product-blueprint">
+  <template>
+    <style include="shared-styles">
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="editProductBlueprintForm" on-keypress="genericFormSubmitionKeypress">
+        <form>
+
+          <div class="card vertical layout">
+            <paper-input class="editProductBlueprintForm--name" value="{{editProductBlueprintForm.name}}" required minlength="3" error-message=[[verses.productBlueprint.productBlueprintNameInputError]] label=[[verses.productBlueprint.productBlueprintNameInput]]></paper-input>
+            <paper-input class="editProductBlueprintForm--unit" value="{{editProductBlueprintForm.unit}}" required minlength="1" error-message=[[verses.productBlueprint.productBlueprintUnitInputError]] label=[[verses.productBlueprint.productBlueprintUnitInput]]></paper-input>
+
+            <paper-input class="editProductBlueprintForm--defaultPurchasePrice" step="0.01" value="{{editProductBlueprintForm.defaultPurchasePrice}}" type="number" required min="0" error-message=[[verses.productBlueprint.defaultPurchasePriceInputError]] label=[[verses.productBlueprint.defaultPurchasePriceInput]]>
+              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+            </paper-input>
+            <paper-input class="editProductBlueprintForm--defaultVat" value="{{editProductBlueprintForm.defaultVat}}" type="number" required min="0" max="100" error-message=[[verses.productBlueprint.defaultVatInputError]] label=[[verses.productBlueprint.defaultVatInput]]>
+              <div slot="suffix">%</div>
+            </paper-input>
+            <paper-input class="editProductBlueprintForm--defaultSalePrice" step="0.01" value="{{editProductBlueprintForm.defaultSalePrice}}" type="number" required min="0" error-message=[[verses.productBlueprint.productBlueprintDefaultSalePriceInputError]] label=[[verses.productBlueprint.productBlueprintDefaultSalePriceInput]]>
+              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+            </paper-input>
+
+            <div class="vartical layout">
+              <paper-dropdown-menu label=[[verses.productBlueprint.defaultDiscountType]] class="mr-4" style="width: 100%">
+                <paper-listbox slot="dropdown-content" selected="{{editProductBlueprintForm.defaultDiscountType}}" attr-for-selected="name">
+                  <paper-item name="percent">[[verses.general.percentage]]</paper-item>
+                  <paper-item name="fixed">[[verses.general.fixedValue]]</paper-item>
+                </paper-listbox>
+              </paper-dropdown-menu>
+
+              <template is="dom-if" if="[[$equals(editProductBlueprintForm.defaultDiscountType, 'percent')]]">
+                <paper-input class="editProductBlueprintForm--defaultDiscountValue flex" value="{{editProductBlueprintForm.defaultDiscountValue}}" type="number" required min="0" max="100" on-input="genericDiscountValueInputChanged" error-message=[[verses.productBlueprint.defaultDiscountValueInputError]] label=[[verses.productBlueprint.defaultDiscountValueInput]]>
+                  <div slot="suffix">%</div>
+                </paper-input>
+              </template>
+
+              <template is="dom-if" if="[[$equals(editProductBlueprintForm.defaultDiscountType, 'fixed')]]">
+                <paper-input class="editProductBlueprintForm--defaultDiscountValue flex" value="{{editProductBlueprintForm.defaultDiscountValue}}" type="number" required min="0" max="[[calculateSalePriceAfterVat()]]" on-input="genericDiscountValueInputChanged" error-message=[[verses.productBlueprint.defaultDiscountValueInputError]] label=[[verses.productBlueprint.defaultDiscountValueInput]]>
+                  <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                </paper-input>
+              </template>
+
+            </div>
+
+            <paper-checkbox checked="{{editProductBlueprintForm.isReturnable}}">[[verses.productBlueprint.isProductReturnable]]</paper-checkbox>
+
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editProductBlueprintForm--submit" on-tap="createProductBlueprintTapped">[[verses.productBlueprint.createProductBlueprint]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editProductBlueprintForm--submit" on-tap="updateProductBlueprintTapped">[[verses.productBlueprint.updateProductBlueprint]]</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageEditProductBlueprint extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-edit-product-blueprint';
+      }
+
+      static get properties() {
+        return {
+          editMode: {
+            type: Boolean,
+            value: false
+          },
+          editingProductBlueprint: {
+            type: Object,
+            value: null
+          },
+          editProductBlueprintForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  name: "Bottoms",
+                  unit: "pcs",
+                  defaultDiscountType: "percent",
+                  defaultDiscountValue: 5,
+                  defaultPurchasePrice: 400,
+                  defaultVat: 15,
+                  defaultSalePrice: 500,
+                  isReturnable: true
+                };
+              } else {
+                return {
+                  name: "",
+                  unit: "",
+                  defaultDiscountType: "percent",
+                  defaultDiscountValue: 0,
+                  defaultPurchasePrice: 0,
+                  defaultVat: 0,
+                  defaultSalePrice: 0,
+                  isReturnable: false
+                };
+              }
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        if ('product-blueprint' in this.params) {
+          this.editMode = true;
+          this.app.pushPageTitle(this.app.verses.productBlueprint.editProductBlueprintTitle);
+        } else {
+          this.editMode = false;
+          this.app.pushPageTitle(this.app.verses.productBlueprint.addProductBlueprintTitle);
+        }
+        if (!this._ensureAccess()) return;
+        this._processGetProductBlueprintList(() => {
+          if (this.editMode) {
+            this._processGetProductBlueprint();
+            this.isReady = true;
+          } else {
+            this.delay(300, () => {
+              this.isReady = true;
+            });
+          }
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editProductBlueprintForm');
+        this.removeAutoValidation('#editProductBlueprintForm paper-input');
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS']
+        });
+      }
+
+      // region: editProductBlueprint =================================
+
+      _processGetProductBlueprintList(cbfn) {
+        let data = {
+          organizationId: this.app.organization.id
+        };
+        this.app.callGetProductBlueprintListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this._productBlueprintList = response.productBlueprintList;
+          cbfn();
+        });
+      }
+
+      _processGetProductBlueprint() {
+        let productBlueprint = this._productBlueprintList.find(productBlueprint => {
+          return productBlueprint.id === parseInt(this.params['product-blueprint']);
+        });
+        this.editingProductBlueprint = productBlueprint;
+        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productBlueprint;
+        this.editProductBlueprintForm = { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
+      }
+
+      _processCreateProductBlueprint({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+        let data = {
+          name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
+          organizationId: this.app.organization.id,
+        };
+        this.app.callAddProductBlueprintApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editProductBlueprintForm');
+          let message = this.app.verses.productBlueprint.productBlueprintCreated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      _processUpdateProductBlueprint({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+        let data = {
+          name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
+          productBlueprintId: this.editingProductBlueprint.id
+        };
+
+        this.app.callEditProductBlueprintApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editProductBlueprintForm');
+          let message = this.app.verses.productBlueprint.productBlueprintUpdated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-product-blueprints');
+      }
+
+      createProductBlueprintTapped(e = null) {
+        this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editProductBlueprintForm').validate()) return;
+
+        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
+        this._processCreateProductBlueprint({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+      }
+
+      updateProductBlueprintTapped(e = null) {
+        this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editProductBlueprintForm').validate()) return;
+
+        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
+        this._processUpdateProductBlueprint({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+      }
+
+      genericDiscountValueInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+      }
+
+      calculateSalePriceAfterVat() {
+        return (parseFloat(this.editProductBlueprintForm.defaultSalePrice) + parseFloat(this.editProductBlueprintForm.defaultSalePrice) * parseFloat(this.editProductBlueprintForm.defaultVat)/100);
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageEditProductBlueprint.is, PageEditProductBlueprint);
+  </script>
+</dom-module>

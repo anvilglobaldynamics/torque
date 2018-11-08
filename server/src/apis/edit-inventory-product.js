@@ -31,7 +31,7 @@ exports.EditInventoryProductApi = class extends Api.mixin(ProductMixin, Inventor
         errorCode: "INVENTORY_INVALID"
       },
       privilegeList: [
-        "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES"
+        "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
       ]
     }];
   }

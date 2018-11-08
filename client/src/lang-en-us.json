@@ -76,7 +76,13 @@
     "errorMessageBody": "Error Occurred, Please contact Lipi representative.",
     "errorMessageTitle": "Error",
     "noDataFound": "No Data Found",
-    "changeWallet": "Change Wallet"
+    "changeWallet": "Change Wallet",
+    "activatedModules": "Activated Modules",
+    "moduleDescriptionLineOne": "Different Modules add different features and functionalities to Lipi. Below listed modules are currently activated;",
+    "moduleDescriptionLineTwo": "To add more features to Lipi, contact us at +880 1770 947908 or mail us at care@anvil.live",
+    "productModule": "Product Module",
+    "serviceModule": "Service Module",
+    "gymModule": "Gym Module"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -109,9 +115,11 @@
     "employees": "Employees",
     "outlets": "Outlets",
     "warehouses": "Warehouses",
-    "productCategories": "Product Categories",
+    "productBlueprints": "Product Blueprints",
+    "serviceBlueprints": "Service Blueprints",
     "sales": "Sales Records",
     "salesReturn": "Sales Return Records",
+    "serviceMembership": "Service Memberships",
     "customers": "Customers",
     "salesReport": "Sales Report",
     "inventoryReport": "Inventories Report",
@@ -222,52 +230,85 @@
     "defaultInventoryName": "Default",
     "returnedInventoryName": "Returned",
     "damagedInventoryName": "Damaged",
-    "noOutletFound": "No Outlet has been created in your Organization."
+    "noOutletFound": "No Outlet has been created in your Organization.",
+    "manageOutletServicesTitle": "Manage Services",
+    "manageOutletServices": "Manage Services provided in this Outlet"
   },
-  "productCategory": {
-    "manageProductCategoriesTitle": "Manage Product Categories",
-    "editProductCategoryTitle": "Edit Product Category",
-    "addProductCategoryTitle": "Add Product Category",
-    "noProductCategoryFound": "No product category found.",
-    "parentNameNotifierStart": "The Product Category will be available under category - ",
+  "productBlueprint": {
+    "manageProductBlueprintsTitle": "Manage Product Blueprints",
+    "editProductBlueprintTitle": "Edit Product Blueprint",
+    "addProductBlueprintTitle": "Add Product Blueprint",
+    "noProductBlueprintFound": "No product blueprint found.",
+    "parentNameNotifierStart": "The Product Blueprint will be available under blueprint - ",
     "parentNameNotifierEnd": "",
-    "productCategoryNameInput": "Name of your Product Category",
-    "productCategoryNameInputError": "Enter a valid name",
-    "productCategoryUnitInput": "Specify unit (i.e. kg, pcs etc)",
-    "productCategoryUnitInputError": "Enter a valid name",
+    "productBlueprintNameInput": "Name of your Product Blueprint",
+    "productBlueprintNameInputError": "Enter a valid name",
+    "productBlueprintUnitInput": "Specify unit (i.e. kg, pcs etc)",
+    "productBlueprintUnitInputError": "Enter a valid name",
     "defaultPurchasePriceInput": "Default Purchase Price",
     "defaultPurchasePriceInputError": "Enter a valid amount",
     "defaultVatInput": "Default VAT",
     "defaultVatInputError": "Enter a valid number",
-    "productCategoryDefaultSalePriceInput": "Default Sale Price",
-    "productCategoryDefaultSalePriceInputError": "Enter a valid number",
+    "productBlueprintDefaultSalePriceInput": "Default Sale Price",
+    "productBlueprintDefaultSalePriceInputError": "Enter a valid number",
     "isProductReturnable": "Customer can return this product",
     "defaultDiscountType": "Default Discount Type",
     "defaultDiscountValueInput": "Default Discount Value",
     "defaultDiscountValueInputError": "Enter a valid number",
-    "createProductCategory": "Create Product Category",
-    "updateProductCategory": "Update Product Category",
-    "productCategoryCreated": "New product Category has been created.",
-    "productCategoryUpdated": "Product Category has been updated.",
+    "createProductBlueprint": "Create Product Blueprint",
+    "updateProductBlueprint": "Update Product Blueprint",
+    "productBlueprintCreated": "New product Blueprint has been created.",
+    "productBlueprintUpdated": "Product Blueprint has been updated.",
     "buyingPrice": "Buying Price",
     "sellingPrice": "Selling Price",
     "moveHere": "Move Here",
-    "subCategory": "Sub Category",
+    "subBlueprint": "Sub Blueprint",
     "moveToRoot": "Move To Root",
-    "createNewProductCategory": "Create New Product Category",
-    "searchForProductCategoryInput": "Product Category name",
-    "searchForProductCategoryInputError": "Error in Search for Product Category",
-    "bulkImport": "Bulk Product Category Creation",
-
-    "whatIsProductCategoryMessage": "Product Category is the blueprint of a Product. Product Category needs to be added only once for a Product. Information of Product Category will be reused in all Product related tasks."
+    "createNewProductBlueprint": "Create New Product Blueprint",
+    "searchForProductBlueprintInput": "Product Blueprint name",
+    "searchForProductBlueprintInputError": "Error in Search for Product Blueprint",
+    "bulkImport": "Bulk Product Blueprint Creation",
+    "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
+  },
+  "serviceBlueprint": {
+    "manageServiceBlueprintsTitle": "Manage Service Blueprints",
+    "sellingPrice": "Selling Price",
+    "searchForServiceBlueprintInput": "Service Blueprint name",
+    "searchForServiceBlueprintInputError": "Error in Search for Service Blueprint",
+    "noServiceBlueprintFound": "No Service Blueprint found.",
+    "createNewServiceBlueprint": "Create New Service Blueprint",
+    "addServiceBlueprintTitle": "Add Service Blueprint",
+    "editServiceBlueprintTitle": "Edit Service Blueprint",
+    "serviceBlueprintNameInput": "Service Blueprint Name",
+    "serviceBlueprintNameInputError": "Provide a valid Service Blueprint Name",
+    "defaultVatInput": "Default VAT",
+    "defaultVatInputError": "Default VAT should be 0-100",
+    "serviceBlueprintDefaultSalePriceInput": "Default Sale Price",
+    "serviceBlueprintDefaultSalePriceInputError": "Provide a valid Default Sale Price",
+    "isServiceLongstanding": "Is this Service Longstanding? (Service is active for days or months)",
+    "isCustomerRequired": "Is Customer data required? (Longstanding Services require Customer data)",
+    "serviceDuration": "Duration",
+    "serviceDurationMonths": "Months",
+    "serviceDurationDays": "Days",
+    "serviceDurationMonthsInput": "Duration Month",
+    "serviceDurationMonthsInputError": "Valid is 0-12",
+    "serviceDurationDaysInput": "Duration Days",
+    "serviceDurationDaysInputError": "Valid is 0-31",
+    "isEmployeeAssignable": "Should an Employee be assigned?",
+    "isRefundable": "Is this Service Refundable?",
+    "avtivateInAllOutlets": "Should this service be made available in all Outlets?",
+    "whatIsServiceBlueprintMessage": "Service Blueprint is the planning of a Service. Service Blueprint needs to be added only once for a Service. Information of Service Blueprint will be reused in all Service related tasks.",
+    "createServiceBlueprint": "Create Service Blueprint",
+    "updateServiceBlueprint": "Update Service Blueprint",
+    "serviceBlueprintCreated": "Service Blueprint Created"
   },
   "customerSelector": {
-    "customerNameOrPhoneInput": "Customer name or phone.",
+    "customerNameOrPhoneInput": "By name or phone.",
     "customerNameOrPhoneInputError": "Enter a name or phone"
   },
   "outletSelector": {
-    "outlets": "Outlets",
-    "outletNameOrPhoneInput": "Outlet by name or phone.",
+    "outlets": "Outlet",
+    "outletNameOrPhoneInput": "By name or phone.",
     "outletNameOrPhoneInputError": "Enter a name or phone"
   },
   "commonEmploymentDetails": {
@@ -321,20 +362,20 @@
     "addProductsTitle": "Add Products",
     "addProducts": "Add Products",
     "productAddedToInventory": "Product(s) were successfully added to the inventory.",
-    "productCategory": "Product Category",
+    "productBlueprint": "Product Blueprint",
     "count": "Count",
     "sellFor": "Sell",
     "purchasedFor": "Purchase",
-    "noProductCategoryFound": "No product category found. Add as \"Product Catogory\" first to add it as a Product to this inventory."
+    "noProductBlueprintFound": "No product blueprint found. Add as \"Product Catogory\" first to add it as a Product to this inventory."
   },
   "addProducts": {
-    "searchInputLabel": "Product Category Name",
+    "searchInputLabel": "Product Blueprint Name",
     "searchInputError": "Error in Search",
-    "selectedProducts": "Selected Product Category"
+    "selectedProducts": "Selected Product Blueprint"
   },
   "about": {
     "about": "About",
-    "tos": "TOS/Privacy",
+    "tos": "Terms & Conditions",
     "contactUs": "Contact Us",
     "projectBy": "This project is created and maintained by",
     "logoAndFaviconBy": "logo and favicon icon made by",
@@ -450,10 +491,11 @@
     "billed": "Billed",
     "paid": "Paid",
     "products": "product(s)",
-    "noCustomerSelected": "No customer selected (Anonymous Sale Return)",
+    "services": "service(s)",
+    "noCustomerSelected": "No customer selected (Anonymous Sale)",
     "removeCustomer": "Remove Customer",
     "changeCustomer": "Change Customer",
-    "noOutletSelected": "No outlet selected (Anonymous Sale Return)",
+    "noOutletSelected": "No outlet selected (Anonymous Sale)",
     "removeOutlet": "Remove Outlet",
     "changeOutlet": "Change Outlet",
     "salesTitle": "Sales",
@@ -461,6 +503,7 @@
     "outletId": "Outlet ID",
     "customerId": "Customer ID",
     "productList": "Product List",
+    "serviceList": "Service List",
     "salePrice": "Sale Price",
     "payment": "Payment",
     "totalBilled": "Total Billed",
@@ -483,8 +526,10 @@
     "receiptTitle": "Sales Receipt ",
     "printedBy": "Printed By",
     "soldBy": "Sold By",
-
-    "productReturn": "Return Product"
+    "productReturn": "Return Product",
+    "service": "Service",
+    "discardQuestion": "Discard this Sale?",
+    "discardMessage": "Once discarded, this sale will not be considered in any report or calculation. Service Membership(s) sold in this sale (if any) will also be discarded."
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",
@@ -531,7 +576,7 @@
     "backToDashboard": "Back to Dashboard.",
     "403": "403",
     "accessDenied": "Access Denied.",
-    "accessDeniedDescription": "You do not have access to this page/content."
+    "accessDeniedDescription": "You do not have access to this feature."
   },
   "pos": {
     "posPageTitle": "New Sales",
@@ -551,6 +596,7 @@
     "vatAmount": "Vat Amount",
     "serviceChargeInput": "Service Charge Amount",
     "serviceChargeInputError": "Enter a valid number",
+    "totalSalePrice": "Total Sale Price",
     "totalAmount": "Total Amount",
     "totalBilled": "Total Billed",
     "previousCustomerBalance": "Previous Customer Balance",
@@ -569,7 +615,12 @@
     "allowCreditSaleMessage": "Save this amount as due in customer's account.",
     "creditSaleHint": " The paid amount is less than total amount billed. In order to do a credit sale, you need to select/create a customer and allow credit sale.",
     "paymentMethod": "Payment Method",
-    "thisWillBeACreditSale": "This will be a Credit Sale. Additional Payment can be collected later from View Sales Page."
+    "thisWillBeACreditSale": "This will be a Credit Sale. Additional Payment can be collected later from View Sales Page.",
+    "selectService": "Select Service",
+    "serviceRequiresCustomerSelection": "This Service requires a customer selection",
+
+    "assignedEmployee": "assigned",
+    "assignEmployee": "assign"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
@@ -588,6 +639,7 @@
     "sales": "Sales",
     "soldTo": "Sold To",
     "products": "product(s)",
+    "services": "service(s)",
     "total": "Total",
     "discountedAmount": "Discounted Amount",
     "vat": "VAT",
@@ -616,9 +668,18 @@
     "confirmSelection": "Confirm Selection",
     "acquiredOn": "Acquired On",
     "addedOn": "Added On",
-    "noProductFoundInOutlet": "No products found. Go back and products to the Outlet's default inventory.",
+    "noProductFoundInOutlet": "No products found. Go back and add products to the Outlet's default inventory.",
     "searchForProductInput": "Product Name",
     "searchForProductInputError": "Error in Search"
+  },
+  "posSelectService": {
+    "posSelectServiceTitle": "Select Services",
+    "searchForServiceInput": "Service Name",
+    "searchForServiceInputError": "Error in Search",
+    "noServiceFoundInOutlet": "No services found. Go back and activate services in the Outlet.",
+    "sale": "Sale",
+    "deselectAllSelected": "Deselect All Selected",
+    "confirmSelection": "Confirm Selection"
   },
   "settings": {
     "settingsTitle": "Settings",
@@ -659,7 +720,6 @@
     "sellingPrice": "Selling Price",
     "acquiredOn": "Acquired On",
     "addedOn": "Added On",
-
     "transferInventoryHelp": "Product can be transfered between inventories. You can start selecting product(s) to be transfered by clicking below.",
     "selectProductsToTransfer": "Start Selecting Products to Transfer",
     "stopSelectingProductsToTransfer": "Stop Selecting Products to Transfer"
@@ -670,23 +730,23 @@
     "recheckVerificationStatus": "Recheck Verification Status",
     "useDifferentOrganization": "Use a different organization"
   },
-  "bulkImportProductCategory": {
-    "pageTitle": "Product Category Bulk Import",
-    "downloadSectionTip": "Download the template file, we will be creating multiple Product Categories at once using this file;",
+  "bulkImportProductBlueprint": {
+    "pageTitle": "Product Blueprint Bulk Import",
+    "downloadSectionTip": "Download the template file, we will be creating multiple Product Blueprints at once using this file;",
     "downloadButtonLabel": "Download File",
-    "instructionOne": "1. The downloaded file: 'Lipi Product Category Bulk Upload CSV.csv', is a CSV format file, you can use any Spreadsheet software to view and update this file. It should look like this: ",
-    "instructionTwo": "2. Enter a unique product category Name like so;",
-    "instructionThree": "3. Enter a Unit of the product category, example: kg, piece or box;",
-    "instructionFour": "4. Enter Purchase Price, Sale Price and VAT percentage of the product category;",
+    "instructionOne": "1. The downloaded file: 'Lipi Product Blueprint Bulk Upload CSV.csv', is a CSV format file, you can use any Spreadsheet software to view and update this file. It should look like this: ",
+    "instructionTwo": "2. Enter a unique product blueprint Name like so;",
+    "instructionThree": "3. Enter a Unit of the product blueprint, example: kg, piece or box;",
+    "instructionFour": "4. Enter Purchase Price, Sale Price and VAT percentage of the product blueprint;",
     "instructionFive": "5. Enter either 'percent' or 'fixed' as Discount Type, and the amount under Discount Amount;",
-    "instructionSix": "6. Under Returnable enter 'yes' if customers can return this product category, 'no' if not;",
+    "instructionSix": "6. Under Returnable enter 'yes' if customers can return this product blueprint, 'no' if not;",
     "instructionSeven": "7. All the fields must be entered, like below, or else Lipi will not accept this file;",
-    "uploadSectionTip": "Upload the CSV file containing Product Category data;",
+    "uploadSectionTip": "Upload the CSV file containing Product Blueprint data;",
     "uploadButtonLabel": "Upload File",
-    "successfullyImported": "Import Successful, total product categories created",
+    "successfullyImported": "Import Successful, total product blueprints created",
     "rowsIgnored": "Following rows had to be ignored",
     "row": "Row",
-    "nameUsed": "Product Category with this name already exists",
+    "nameUsed": "Product Blueprint with this name already exists",
     "errorOccurred": "Error Occurred, resolve and try again",
     "unknownErrorWhileReadingFile": "Unknown error while reading file",
     "multipleFilesSelectedTitle": "Multiple files selected",
@@ -714,7 +774,7 @@
     "amountInputError": "Enter the amount",
     "withdraw": "Withdraw",
     "customerBalanceUpdated": "Customer's change wallet balance has been updated."
-  },  
+  },
   "editProduct": {
     "editProductTitle": "Edit Product",
     "updateProduct": "Update Product",
@@ -723,5 +783,45 @@
     "sellForInput": "Sell Price",
     "sellForInputError": "Enter a valid sell price",
     "productUpdated": "Product has been updated"
+  },
+  "manageServices": {
+    "manageOutletServicesTitle": "Manage Services",
+    "manageOutletServices": "Manage Services provided in this Outlet",
+    "manageServicesTitle": "Manage Outlet Services",
+    "confirmUpdate": "Confirm Services Availability Update",
+    "noServicesFound": "No Services Found",
+    "searchForServiceInputError": "Valid Service Name",
+    "searchForServicerInput": "Service Name",
+    "availability": "Availability",
+    "modificationComplete": "Outlet Service Availability Modification(s) Complete"
+  },
+  "assignEmployeeService": {
+    "assignEmployeeServiceTitle": "Assign Employee To Service",
+    "clearEmployeeLabel": "Clear Selected Employee"
+  },
+  "serviceMembership": {
+    "serviceMembershipTitle": "Service Memberships",
+    "noServiceMembershipFound": "No Service Membership Record Found.",
+
+    "noCustomerSelected": "No customer selected",
+    "noOutletSelected": "No outlet selected",
+    "noServiceBlueprintSelected": "No service blueprint selected",
+
+    "change": "Change",
+    "remove": "Remove",
+
+    "serviceMembershipNumber": "Membership Number",
+    "expiringDatetime": "Expiry",
+    "customer": "Customer",
+
+    "serviceBlueprint": "Service blueprint"
+  },
+  "serviceBlueprintSelector": {
+    "serviceBlueprintNameOrPhoneInput": "By name.",
+    "serviceBlueprintNameOrPhoneInputError": "Enter valid Service blueprint name",
+    "serviceBlueprints": "Service Blueprint"
+  },
+  "salesReceipt": {
+    "goodsTitle": "Product / Service"
   }
 }

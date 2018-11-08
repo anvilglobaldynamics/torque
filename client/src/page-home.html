@@ -117,7 +117,8 @@
             <div class="">[[verses.general.email]]: [[user.email]]</div>
           </template>
           <div class="">[[verses.general.phone]]: [[user.phone]]</div>
-          <div class="">[[verses.general.designation]]: [[organization.employment.designation]] ([[organization.employment.role]])</div>
+          <div class="">[[verses.general.designation]]: [[organization.employment.designation]]
+            ([[organization.employment.role]])</div>
 
         </div>
         <div class="card flex info-panel">
@@ -128,7 +129,7 @@
           </template>
           <div class="">[[verses.general.phone]]: [[organization.phone]]</div>
           <div class="">[[verses.general.address]]: [[organization.primaryBusinessAddress]]</div>
-          
+
         </div>
       </div>
 
@@ -137,7 +138,8 @@
         <div class="horizontal layout wrap">
           <div class="card flex metrics-box">
             <div class="value">[[$translateNumber(metrics.totalNumberOfSalesToday, selectedLanguageIdentifier)]]</div>
-            <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesToday, 'countable', selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
+            <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesToday, 'countable',
+              selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
             <div class="item-description">[[verses.home.soldToday]]</div>
           </div>
           <div class="card flex metrics-box">
@@ -150,7 +152,8 @@
         <div class="horizontal layout wrap">
           <div class="card flex metrics-box">
             <div class="value">[[$translateNumber(metrics.totalNumberOfSalesThisMonth, selectedLanguageIdentifier)]]</div>
-            <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable', selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
+            <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable',
+              selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
             <div class="item-description">[[verses.home.soldThisMonth]]</div>
           </div>
           <div class="card flex metrics-box">
@@ -162,15 +165,33 @@
 
       </div>
 
+      <!-- active module - start -->
       <div class="vertical layout wrap">
         <div class="card flex info-panel">
-          <div class="title">[[verses.home.activatedPackage]]: [[package.name]] ([[package.code]])</div>
-          <!-- <div class="">Activated On: [[$mkDate(package.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div> -->
-          <div class="">[[verses.home.expirationDate]]: [[$mkDate(package.expirationDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
+          <div class="title">[[verses.general.activatedModules]]</div>
+          <div class="module-description">[[verses.general.moduleDescriptionLineOne]]</div>
+
+          <ul>
+            <template is="dom-repeat" items="[[organization.activeModuleCodeList]]" as="activeModuleCode">
+              <li>[[$getModuleDisplayName(activeModuleCode, selectedLanguageIdentifier)]]</li>
+            </template>
+          </ul>
+
+          <div class="module-description">[[verses.general.moduleDescriptionLineTwo]]</div>
+        </div>
+      </div>
+      <!-- active module - start -->
+
+      <!-- active package - start -->
+      <div class="vertical layout wrap">
+        <div class="card flex info-panel">
+          <div class="title">[[verses.home.activatedPackage]]: [[aPackage.name]] ([[aPackage.code]])</div>
+          <!-- <div class="">Activated On: [[$mkDate(aPackage.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div> -->
+          <div class="">[[verses.home.expirationDate]]: [[$mkDate(aPackage.expirationDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
           <div class="">[[verses.home.allows]]:
-            <span>[[package.limits.maximumEmployees]] [[verses.home.employees]],</span>
-            <span>[[package.limits.maximumOutlets]] [[verses.home.outlets]],</span>
-            <span>[[package.limits.maximumWarehouses]] [[verses.home.warehouses]].</span>
+            <span>[[aPackage.limits.maximumEmployees]] [[verses.home.employees]],</span>
+            <span>[[aPackage.limits.maximumOutlets]] [[verses.home.outlets]],</span>
+            <span>[[aPackage.limits.maximumWarehouses]] [[verses.home.warehouses]].</span>
           </div>
           <template is="dom-if" if="[[!packageActivationList.length]]">
             <div class="button-row">
@@ -183,7 +204,8 @@
             <div class="title" style="margin-top: 24px;">[[verses.home.activationHistory]]</div>
             <template is="dom-repeat" items="[[packageActivationList]]" as="packageActivation">
               <div style="margin-bottom: 24px;">
-                <div>[[verses.home.activatedPackage]]: [[packageActivation.packageDetail.name]] ([[packageActivation.packageDetail.code]])</div>
+                <div>[[verses.home.activatedPackage]]: [[packageActivation.packageDetail.name]]
+                  ([[packageActivation.packageDetail.code]])</div>
                 <div class="">[[verses.home.activatedOn]]: [[$mkDate(packageActivation.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
                 <div class="">[[verses.home.allows]]:
                   <span>[[packageActivation.packageDetail.limits.maximumEmployees]] [[verses.home.employees]],</span>
@@ -195,6 +217,7 @@
           </div>
         </template>
       </div>
+      <!-- active package - end -->
 
     </div>
   </template>
@@ -311,7 +334,7 @@
           date.setMonth(date.getMonth() + duration.months);
           date.setDate(date.getDate() + duration.days);
           let expirationDatetimeStamp = date.getTime();
-          this.package = {
+          this.aPackage = {
             code, name, limits, duration,
             createdDatetimeStamp,
             expirationDatetimeStamp
@@ -425,6 +448,12 @@
             }
           });
         });
+      }
+
+      $getModuleDisplayName(moduleCode, selectedLanguageIdentifier = null) {
+        if (moduleCode === 'MOD_PRODUCT') return this.app.verses.general.productModule;
+        if (moduleCode === 'MOD_SERVICE') return this.app.verses.general.serviceModule;
+        if (moduleCode === 'MOD_GYM') return this.app.verses.general.gymModule;
       }
 
       // region: misc =================================

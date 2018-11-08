@@ -30,13 +30,21 @@ exports.HireUserAsEmployeeApi = class extends userCommonMixin(collectionCommonMi
         PRIV_MODIFY_SALES: Joi.boolean().required(),
         PRIV_ALLOW_FLAT_DISCOUNT: Joi.boolean().required(),
 
+        PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: Joi.boolean().required(),
+        PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: Joi.boolean().required(),
+
         PRIV_VIEW_SALES_RETURN: Joi.boolean().required(),
         PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
 
         PRIV_VIEW_ALL_INVENTORIES: Joi.boolean().required(),
-        PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: Joi.boolean().required(),
+        PRIV_VIEW_ALL_SERVICES: Joi.boolean().required(),
+        PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: Joi.boolean().required(),
+        PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: Joi.boolean().required(),
+        PRIV_VIEW_ALL_SERVICE_BLUEPRINTS: Joi.boolean().required(),
+        PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS: Joi.boolean().required(),
         PRIV_TRANSFER_ALL_INVENTORIES: Joi.boolean().required(),
         PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: Joi.boolean().required(),
+        PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS: Joi.boolean().required(),
 
         PRIV_VIEW_ALL_OUTLETS: Joi.boolean().required(),
         PRIV_MODIFY_ALL_OUTLETS: Joi.boolean().required(),
@@ -95,7 +103,8 @@ exports.HireUserAsEmployeeApi = class extends userCommonMixin(collectionCommonMi
   }
 
   handle({ body }) {
-    let { userId, organizationId, role, designation, companyProvidedId, privileges, aPackage } = body;
+    let { userId, organizationId, role, designation, companyProvidedId, privileges } = body;
+    let { aPackage } = this.interimData;
     this._checkOrganizationPackageEmployeeLimit({ organizationId, aPackage }, () => {
       this._findUserById({ userId }, (user) => {
         this._checkIfUserEmployed({ userId, organizationId }, () => {

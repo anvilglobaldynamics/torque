@@ -25,7 +25,8 @@ exports.verses = {
     userInvalid: "Invalid User could not be found."
   },
   adminCommon: {
-    packageInvalid: "Invalid Package could not be found."
+    packageInvalid: "Invalid Package. Package could not be found.",
+    moduleInvalid: "Invalid Module. Module could not be found."
   },
   organizationCommon: {
     organizationInvalid: "Organization could not be found during access control.",

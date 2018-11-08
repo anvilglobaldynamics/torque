@@ -48,30 +48,30 @@ it('api/delete-customer (Invalid): ', testDoneFn => {
 
 });
 
-// from test-product-category-apis.js =
+// from test-product-blueprint-apis.js =
 
-it.skip('api/delete-product-category (Invalid productCategoryId)', testDoneFn => {
+it.skip('api/delete-product-blueprint (Invalid productBlueprintId)', testDoneFn => {
 
-  callApi('api/delete-product-category', {
+  callApi('api/delete-product-blueprint', {
     json: {
       apiKey,
-      productCategoryId: invalidProductCategoryId
+      productBlueprintId: invalidProductBlueprintId
     }
   }, (err, response, body) => {
     expect(response.statusCode).to.equal(200);
     validateGenericApiFailureResponse(body);
-    expect(body.error.code).equal('PRODUCT_CATEGORY_INVALID');
+    expect(body.error.code).equal('PRODUCT_BLUEPRINT_INVALID');
     testDoneFn();
   })
 
 });
 
-it.skip('api/delete-product-category (Valid)', testDoneFn => {
+it.skip('api/delete-product-blueprint (Valid)', testDoneFn => {
 
-  callApi('api/delete-product-category', {
+  callApi('api/delete-product-blueprint', {
     json: {
       apiKey,
-      productCategoryId: productCategoryTwo.id
+      productBlueprintId: productBlueprintTwo.id
     }
   }, (err, response, body) => {
     expect(response.statusCode).to.equal(200);
@@ -81,40 +81,40 @@ it.skip('api/delete-product-category (Valid)', testDoneFn => {
 
 });
 
-it.skip('api/get-product-category-list (Valid deletion check)', testDoneFn => {
+it.skip('api/get-product-blueprint-list (Valid deletion check)', testDoneFn => {
 
-  callApi('api/get-product-category-list', {
+  callApi('api/get-product-blueprint-list', {
     json: {
       apiKey,
       organizationId
     }
   }, (err, response, body) => {
     expect(response.statusCode).to.equal(200);
-    validateGetProductCategoryListApiSuccessResponse(body);
-    body.productCategoryList.forEach(productCategory => {
-      validateProductCategorySchema(productCategory);
+    validateGetProductBlueprintListApiSuccessResponse(body);
+    body.productBlueprintList.forEach(productBlueprint => {
+      validateProductBlueprintSchema(productBlueprint);
     });
 
-    let oldList = productCategoryList;
-    productCategoryList = body.productCategoryList;
-    expect(productCategoryList.length + 1).to.equal(oldList.length);
+    let oldList = productBlueprintList;
+    productBlueprintList = body.productBlueprintList;
+    expect(productBlueprintList.length + 1).to.equal(oldList.length);
 
     testDoneFn();
   });
 
 });
 
-it.skip('api/delete-product-category (Invalid parent deletetion)', testDoneFn => {
+it.skip('api/delete-product-blueprint (Invalid parent deletetion)', testDoneFn => {
 
-  callApi('api/delete-product-category', {
+  callApi('api/delete-product-blueprint', {
     json: {
       apiKey,
-      productCategoryId: productCategoryOne.id
+      productBlueprintId: productBlueprintOne.id
     }
   }, (err, response, body) => {
     expect(response.statusCode).to.equal(200);
     validateGenericApiFailureResponse(body);
-    expect(body.error.code).equal('PRODUCT_CATEGORY_NOT_CHILDLESS');
+    expect(body.error.code).equal('PRODUCT_BLUEPRINT_NOT_CHILDLESS');
     testDoneFn();
   })
 

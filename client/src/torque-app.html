@@ -31,6 +31,7 @@
 <link rel="import" href="torque-db-behavior.html">
 <link rel="import" href="torque-http-behavior.html">
 <link rel="import" href="torque-language-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
 
 <link rel="import" href="elem-not-ready.html">
 
@@ -63,8 +64,13 @@
 <link rel="lazy-import" href="page-manage-warehouses.html">
 <link rel="lazy-import" href="page-edit-warehouse.html">
 <link rel="lazy-import" href="page-view-warehouse.html">
-<link rel="lazy-import" href="page-manage-product-categories.html">
-<link rel="lazy-import" href="page-edit-product-category.html">
+<link rel="lazy-import" href="page-manage-product-blueprints.html">
+<link rel="lazy-import" href="page-edit-product-blueprint.html">
+
+<link rel="lazy-import" href="page-manage-service-blueprints.html">
+<link rel="lazy-import" href="page-edit-service-blueprint.html">
+<link rel="lazy-import" href="page-manage-outlet-services.html">
+
 <link rel="lazy-import" href="page-view-inventory.html">
 <link rel="lazy-import" href="page-edit-product.html">
 <link rel="lazy-import" href="page-add-products.html">
@@ -77,12 +83,15 @@
 <link rel="lazy-import" href="page-report-inventories.html">
 <link rel="lazy-import" href="page-report-select-inventories.html">
 <link rel="lazy-import" href="page-pos-select-products.html">
+<link rel="lazy-import" href="page-pos-assign-employee-service.html">
+<link rel="lazy-import" href="page-pos-select-services.html">
 <link rel="lazy-import" href="page-manage-sales.html">
 <link rel="lazy-import" href="page-view-sales.html">
 <link rel="lazy-import" href="page-manage-sales-return.html">
 <link rel="lazy-import" href="page-edit-sales-return.html">
+<link rel="lazy-import" href="page-manage-service-membership.html">
 <link rel="lazy-import" href="page-view-sales-return.html">
-<link rel="lazy-import" href="page-bulk-import-product-categories.html">
+<link rel="lazy-import" href="page-bulk-import-product-blueprints.html">
 
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
@@ -210,7 +219,8 @@
             <a name="home" href="#/home">[[verses.sidebar.home]]</a>
             <hr class="sidebar-divider">
 
-            <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.productCategories]]</a>
+            <a name="manage-product-blueprints" href="#/manage-product-blueprints">[[verses.sidebar.productBlueprints]]</a>
+            <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
             <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
             <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
             <hr class="sidebar-divider">
@@ -226,6 +236,7 @@
 
             <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
             <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
+            <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
             <hr class="sidebar-divider">
 
             <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
@@ -297,8 +308,11 @@
           <page-manage-warehouses name="manage-warehouses"></page-manage-warehouses>
           <page-view-warehouse name="view-warehouse"></page-view-warehouse>
           <page-edit-warehouse name="edit-warehouse"></page-edit-warehouse>
-          <page-manage-product-categories name="manage-product-categories"></page-manage-product-categories>
-          <page-edit-product-category name="edit-product-category"></page-edit-product-category>
+          <page-manage-product-blueprints name="manage-product-blueprints"></page-manage-product-blueprints>
+          <page-edit-product-blueprint name="edit-product-blueprint"></page-edit-product-blueprint>
+          <page-manage-service-blueprints name="manage-service-blueprints"></page-manage-service-blueprints>
+          <page-edit-service-blueprint name="edit-service-blueprint"></page-edit-service-blueprint>
+          <page-manage-outlet-services name="manage-outlet-services"></page-manage-outlet-services>
           <page-view-inventory name="view-inventory"></page-view-inventory>
           <page-edit-product name="edit-product"></page-edit-product>
           <page-add-products name="add-products"></page-add-products>
@@ -311,13 +325,16 @@
           <page-report-inventories name="report-inventories"></page-report-inventories>
           <page-report-select-inventories name="report-select-inventories"></page-report-select-inventories>
           <page-pos-select-products name="pos-select-products"></page-pos-select-products>
+          <page-pos-select-services name="pos-select-services"></page-pos-select-services>
+          <page-pos-assign-employee-service name="pos-assign-employee-service"></page-pos-assign-employee-service>
           <page-manage-sales name="manage-sales"></page-manage-sales>
           <page-view-sales name="view-sales"></page-view-sales>
           <page-manage-sales-return name="manage-sales-return"></page-manage-sales-return>
           <page-edit-sales-return name="edit-sales-return"></page-edit-sales-return>
+          <page-manage-service-membership name="manage-service-membership"></page-manage-service-membership>
           <page-view-sales-return name="view-sales-return"></page-view-sales-return>
           <page-print-sales-receipt name="print-sales-receipt"></page-print-sales-receipt>
-          <page-bulk-import-product-categories name="bulk-import-product-categories"></page-bulk-import-product-categories>
+          <page-bulk-import-product-blueprints name="bulk-import-product-blueprints"></page-bulk-import-product-blueprints>
         </iron-pages>
 
         <div class="footer">
@@ -349,7 +366,7 @@
   <script>
     let localDocument = document.currentScript.ownerDocument;
 
-    class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior, TorqueLanguageBehavior) {
+    class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior, TorqueLanguageBehavior, TorqueCommonBehavior) {
 
       static get is() { return 'torque-app'; }
 
@@ -359,7 +376,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":130,"datetimeStamp":1539667221109}');
+              return JSON.parse('{"build":135,"datetimeStamp":1541589179213}');
               '%__deploy-end'
             }
           },
@@ -547,7 +564,7 @@
           }
         });
         this.serviceManager.on('success', (event) => {
-          console.log("SSS")
+          'pass'
         });
         (window.torqueWebsocketIndicatorStatusReceivedFn = (status) => {
           if (!window.torqueMasterOptions.allowWebsockets || !this.settings.shouldUseWebsockets) {

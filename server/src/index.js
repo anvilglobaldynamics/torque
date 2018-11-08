@@ -38,7 +38,7 @@ const { GetActivatedPackageListApi } = require('./apis/get-activated-package-lis
 let { AddNewEmployeeApi } = require('./legacy-apis/add-new-employee');
 let { FindUserApi } = require('./legacy-apis/find-user');
 let { HireUserAsEmployeeApi } = require('./legacy-apis/hire-user-as-employee');
-let { GetEmployeeListApi } = require('./legacy-apis/get-employee-list');
+const { GetEmployeeListApi } = require('./apis/get-employee-list');
 let { GetEmployeeApi } = require('./legacy-apis/get-employee');
 let { EditEmploymentApi } = require('./legacy-apis/edit-employment');
 let { FireEmployeeApi } = require('./legacy-apis/fire-employee');
@@ -63,11 +63,18 @@ let { GetWarehouseApi } = require('./legacy-apis/get-warehouse');
 let { EditWarehouseApi } = require('./legacy-apis/edit-warehouse');
 const { DeleteWarehouseApi } = require('./apis/delete-warehouse');
 
-const { AddProductCategoryApi } = require('./apis/add-product-category');
-const { BulkImportProductCategoriesApi } = require('./apis/bulk-import-product-categories');
-const { GetProductCategoryListApi } = require('./apis/get-product-category-list');
-const { EditProductCategoryApi } = require('./apis/edit-product-category');
-let { DeleteProductCategoryApi } = require('./legacy-apis/delete-product-category');
+const { AddProductBlueprintApi } = require('./apis/add-product-blueprint');
+const { BulkImportProductBlueprintsApi } = require('./apis/bulk-import-product-blueprints');
+const { GetProductBlueprintListApi } = require('./apis/get-product-blueprint-list');
+const { EditProductBlueprintApi } = require('./apis/edit-product-blueprint');
+let { DeleteProductBlueprintApi } = require('./legacy-apis/delete-product-blueprint');
+
+const { AddServiceBlueprintApi } = require('./apis/add-service-blueprint');
+const { GetServiceBlueprintListApi } = require('./apis/get-service-blueprint-list');
+const { EditServiceBlueprintApi } = require('./apis/edit-service-blueprint');
+const { GetActiveServiceListApi } = require('./apis/get-active-service-list');
+const { ModifyAvailabilityOfServiceListInOutletListApi } = require('./apis/modify-availability-of-service-list-in-outlet-list');
+const { EditOutletServiceApi } = require('./apis/edit-outlet-service');
 
 const { GetInventoryListApi } = require('./apis/get-inventory-list');
 const { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-inventory-details');
@@ -79,9 +86,10 @@ const { GetProductApi } = require('./apis/get-product');
 
 const { AddSalesApi } = require('./apis/add-sales');
 const { AddAdditionalPaymentApi } = require('./apis/add-additional-payment');
-let { GetSalesApi } = require('./legacy-apis/get-sales');
+const { GetSalesApi } = require('./apis/get-sales');
 const { GetSalesListApi } = require('./apis/get-sales-list');
-let { DiscardSalesApi } = require('./legacy-apis/discard-sales');
+const { DiscardSalesApi } = require('./apis/discard-sales');
+const { GetServiceMembershipListApi } = require('./apis/get-service-membership-list');
 
 const { AddSalesReturnApi } = require('./apis/add-sales-return');
 let { GetSalesReturnApi } = require('./legacy-apis/get-sales-return');
@@ -104,6 +112,9 @@ let { AdminSetUserBanningStatusApi } = require('./legacy-apis/admin-set-user-ban
 const { AdminGetOrganizationApi } = require('./apis/admin-get-organization');
 const { AdminAssignPackageToOrganizationApi } = require('./apis/admin-assign-package-to-organization');
 const { AdminListOrganizationPackagesApi } = require('./apis/admin-list-organization-packages');
+const { AdminGetModuleListApi } = require('./apis/admin-get-module-list');
+const { AdminListOrganizationModulesApi } = require('./apis/admin-list-organization-modules');
+const { AdminSetModuleActivationStatusApi } = require('./apis/admin-set-module-activation-status');
 
 let { FixtureCollection } = require('./legacy-collections/fixture');
 let { UserCollection } = require('./legacy-collections/user');
@@ -115,7 +126,7 @@ let { EmploymentCollection } = require('./legacy-collections/employment');
 let { CustomerCollection } = require('./legacy-collections/customer');
 let { OutletCollection } = require('./legacy-collections/outlet');
 let { WarehouseCollection } = require('./legacy-collections/warehouse');
-let { ProductCategoryCollection } = require('./legacy-collections/product-category');
+let { ProductBlueprintCollection } = require('./legacy-collections/product-blueprint');
 let { PasswordResetRequestCollection } = require('./legacy-collections/password-reset-request');
 let { InventoryCollection } = require('./legacy-collections/inventory');
 let { ProductCollection } = require('./legacy-collections/product');
@@ -214,7 +225,7 @@ class Program {
     legacyDatabase.registerCollection('customer', CustomerCollection);
     legacyDatabase.registerCollection('outlet', OutletCollection);
     legacyDatabase.registerCollection('warehouse', WarehouseCollection);
-    legacyDatabase.registerCollection('productCategory', ProductCategoryCollection);
+    legacyDatabase.registerCollection('productBlueprint', ProductBlueprintCollection);
     legacyDatabase.registerCollection('passwordResetRequest', PasswordResetRequestCollection);
     legacyDatabase.registerCollection('inventory', InventoryCollection);
     legacyDatabase.registerCollection('product', ProductCollection);
@@ -281,11 +292,11 @@ class Program {
     server.registerPostApi('/api/get-warehouse', GetWarehouseApi);
     server.registerPostApi('/api/edit-warehouse', EditWarehouseApi);
     server.registerPostApi('/api/delete-warehouse', DeleteWarehouseApi);
-    server.registerPostApi('/api/add-product-category', AddProductCategoryApi);
-    server.registerPostApi('/api/bulk-import-product-categories', BulkImportProductCategoriesApi);
-    server.registerPostApi('/api/get-product-category-list', GetProductCategoryListApi);
-    server.registerPostApi('/api/edit-product-category', EditProductCategoryApi);
-    server.registerPostApi('/api/delete-product-category', DeleteProductCategoryApi);
+    server.registerPostApi('/api/add-product-blueprint', AddProductBlueprintApi);
+    server.registerPostApi('/api/bulk-import-product-blueprints', BulkImportProductBlueprintsApi);
+    server.registerPostApi('/api/get-product-blueprint-list', GetProductBlueprintListApi);
+    server.registerPostApi('/api/edit-product-blueprint', EditProductBlueprintApi);
+    server.registerPostApi('/api/delete-product-blueprint', DeleteProductBlueprintApi);
     server.registerPostApi('/api/user-reset-password--request', UserResetPasswordRequestApi);
     server.registerPostApi('/api/user-reset-password--get-token-info', UserResetPasswordGetTokenInfoApi);
     server.registerPostApi('/api/user-reset-password--confirm', UserResetPasswordConfirmApi);
@@ -303,6 +314,7 @@ class Program {
     server.registerPostApi('/api/add-additional-payment', AddAdditionalPaymentApi);
     server.registerPostApi('/api/get-sales', GetSalesApi);
     server.registerPostApi('/api/get-sales-list', GetSalesListApi);
+    server.registerPostApi('/api/get-service-membership-list', GetServiceMembershipListApi);
     server.registerPostApi('/api/discard-sales', DiscardSalesApi);
     server.registerPostApi('/api/add-sales-return', AddSalesReturnApi);
     server.registerPostApi('/api/get-sales-return', GetSalesReturnApi);
@@ -325,6 +337,15 @@ class Program {
     server.registerPostApi('/api/admin-get-package-list', AdminGetPackageListApi);
     server.registerPostApi('/api/admin-assign-package-to-organization', AdminAssignPackageToOrganizationApi);
     server.registerPostApi('/api/admin-list-organization-packages', AdminListOrganizationPackagesApi);
+    server.registerPostApi('/api/add-service-blueprint', AddServiceBlueprintApi);
+    server.registerPostApi('/api/get-service-blueprint-list', GetServiceBlueprintListApi);
+    server.registerPostApi('/api/edit-service-blueprint', EditServiceBlueprintApi);
+    server.registerPostApi('/api/get-active-service-list', GetActiveServiceListApi);
+    server.registerPostApi('/api/modify-availability-of-service-list-in-outlet-list', ModifyAvailabilityOfServiceListInOutletListApi);
+    server.registerPostApi('/api/edit-outlet-service', EditOutletServiceApi);
+    server.registerPostApi('/api/admin-get-module-list', AdminGetModuleListApi);
+    server.registerPostApi('/api/admin-list-organization-modules', AdminListOrganizationModulesApi);
+    server.registerPostApi('/api/admin-set-module-activation-status', AdminSetModuleActivationStatusApi);
   }
 
 }

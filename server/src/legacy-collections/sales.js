@@ -37,6 +37,15 @@ exports.SalesCollection = class extends LegacyCollection {
         })
       ),
 
+      serviceList: Joi.array().required().items(
+        Joi.object().keys({
+          serviceId: Joi.number().max(999999999999999).required(),
+          salePrice: Joi.number().min(0).max(999999999999999).required(),
+          vatPercentage: Joi.number().min(0).max(999999999999999).required(),
+          assignedEmploymentId: Joi.number().max(999999999999999).allow(null).required()
+        })
+      ),
+
       payment: Joi.object().required().keys({
         totalAmount: Joi.number().max(999999999999999).required(),
         vatAmount: Joi.number().max(999999999999999).required(),

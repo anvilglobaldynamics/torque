@@ -33,6 +33,10 @@ exports.GetSalesListApi = class extends Api {
       organizationBy: "organizationId",
       privilegeList: [
         "PRIV_VIEW_SALES"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
+        "MOD_SERVICE",
       ]
     }];
   }
@@ -83,6 +87,7 @@ exports.GetSalesListApi = class extends Api {
       target: 'customer'
     });
     map.forEach((customer, sales) => sales.customer = customer);
+
     let productList = salesList.reduce(((productList, sale) => productList.concat(sale.productList)), []);
     map = await this.crossmap({
       source: productList,
@@ -92,10 +97,24 @@ exports.GetSalesListApi = class extends Api {
     map.forEach((product, soldProduct) => soldProduct.product = product);
     map = await this.crossmap({
       source: productList,
-      sourceKeyFn: (soldProduct) => soldProduct.product.productCategoryId,
-      target: 'productCategory'
+      sourceKeyFn: (soldProduct) => soldProduct.product.productBlueprintId,
+      target: 'productBlueprint'
     });
-    map.forEach((productCategory, soldProduct) => soldProduct.productCategory = productCategory);
+    map.forEach((productBlueprint, soldProduct) => soldProduct.productBlueprint = productBlueprint);
+
+    let serviceList = salesList.reduce(((serviceList, sale) => serviceList.concat(sale.serviceList)), []);
+    map = await this.crossmap({
+      source: serviceList,
+      sourceKey: 'serviceId',
+      target: 'service'
+    });
+    map.forEach((service, soldService) => soldService.service = service);
+    map = await this.crossmap({
+      source: serviceList,
+      sourceKeyFn: (soldService) => soldService.service.serviceBlueprintId,
+      target: 'serviceBlueprint'
+    });
+    map.forEach((serviceBlueprint, soldService) => soldService.serviceBlueprint = serviceBlueprint);
   }
 
   async handle({ body }) {

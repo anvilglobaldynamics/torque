@@ -43,13 +43,18 @@ class Api {
     this._socket = socket;
     this._channel = channel;
     this._requestUid = requestUid;
-    this.__paginationCache = null;
     this._consumerId = consumerId;
+    this.__paginationCache = null;
+    this.interimData = {
+      organization: null, // NOTE: populated from accessControl
+      aPackage: null // NOTE: populated from package subscription
+    }
+    this.verses = null;
     this.__assignFailsafeLanguageFeature();
   }
 
   __assignFailsafeLanguageFeature() {
-    // NOTE: necessary to avoid some errors in production.
+    // NOTE: necessary in order to avoid some errors in production.
     this.clientLanguage = 'en-us';
     this.verses = languageCache[this.clientLanguage];
   }
@@ -85,6 +90,7 @@ class Api {
       {
         privilegeList: [ ...list of privileges ]
         organizationBy: "keyName" or <function> or <object>
+        moduleCodeList: [ ...list of module codes ]
       }
     ]
 
@@ -265,7 +271,7 @@ class Api {
     let aPackage = await this.database.fixture.findPackageByCode({ packageCode: packageActivation.packageCode });
     throwOnFalsy(aPackage, "DEV_ERROR", "package is missing");
     // Below is for future references, useful when limiting number of employees, etc.
-    body.aPackage = aPackage;
+    this.interimData.aPackage = aPackage;
     let { createdDatetimeStamp } = packageActivation;
     let { duration } = aPackage;
     let date = new Date(createdDatetimeStamp);
@@ -386,8 +392,18 @@ class Api {
       }
       let queryObjectArray = organizationBy;
       for (let queryObject of queryObjectArray) {
-        let { from, query, select } = queryObject;
-        query = query(body);
+        let { from, query: queryFn, select } = queryObject;
+        let query = queryFn(body);
+        if (Object.keys(query).length === 0) {
+          throw new CodedError("DEV_ERROR", "accessControl: Query is invalid.");
+        } else if (Object.keys(query).length > 1) {
+          throw new CodedError("DEV_ERROR", "accessControl: Multikey query is not yet supported.");
+        } else {
+          let key = Object.keys(query).pop();
+          if (typeof (query[key]) === 'undefined') {
+            query = queryFn(this.interimData);
+          }
+        }
         let doc = await this.database.engine.findOne(from, query);
         if (!doc || !(select in doc)) {
           if ('errorCode' in queryObject) {
@@ -395,9 +411,9 @@ class Api {
             throw new CodedError(queryObject.errorCode, message);
           }
         }
-        body[select] = doc[select];
+        this.interimData[select] = doc[select];
       }
-      let id = body[queryObjectArray[queryObjectArray.length - 1].select];
+      let id = this.interimData[queryObjectArray[queryObjectArray.length - 1].select];
       organization = await this.database.organization.findById({ id });
       throwOnFalsy(organization, "ORGANIZATION_INVALID", this.verses.organizationCommon.organizationInvalid);
     }
@@ -405,8 +421,18 @@ class Api {
   }
 
   /** @private */
+  async __processModuleActivationValidation({ organization, rule }) {
+    // NOTE: this assignment has direct impact on module related validations.
+    this.interimData.organization = organization;
+    let { moduleList } = rule;
+    if (!moduleList || moduleList.length === 0) return;
+    await this.ensureModule(...moduleList);
+  }
+
+  /** @private */
   async __processAccessControlRule(userId, body, rule) {
     let organization = await this.__getOrganizationForAccessControlRule(userId, body, rule);
+    await this.__processModuleActivationValidation({ organization, rule });
     let organizationId = organization.id;
     let employment = await this.database.employment.getLatestActiveEmploymentOfUserInOrganization({ userId, organizationId });
     if (!employment || !employment.isActive) {
@@ -417,7 +443,7 @@ class Api {
     if (unmetPrivileges.length > 0) {
       let message = this.verses.accessControlCommon.accessControlUnmetPrivileges;
       message += unmetPrivileges.join(', ') + ".";
-      err = new CodedError("ACCESS_CONTROL_UNMET_PRIVILEGES", message);
+      let err = new CodedError("ACCESS_CONTROL_UNMET_PRIVILEGES", message);
       err.privileges = unmetPrivileges;
       throw err;
     }
@@ -486,6 +512,54 @@ class Api {
       err.code = 'PHONE_ALREADY_IN_USE';
     }
     return err;
+  }
+
+  // region: utility ==========================
+
+  async hasModule(...moduleCodeClauseList) {
+    try {
+      return await this.ensureModule(...moduleCodeClauseList);
+    } catch (ex) {
+      if (ex.code === 'UNMET_MODULE') {
+        return false;
+      }
+      throw ex;
+    }
+  }
+
+  async ensureModule(...moduleCodeClauseList) {
+    const moduleList = await this.database.fixture.getModuleList();
+    let { organization } = this.interimData;
+    throwOnFalsy(organization, "NO_ORGANIZATION_TO_LOOKUP_MODULE", "This API does not resolve an organization and so can not use modules.");
+
+    let err = null;
+    const didAnyPass = moduleCodeClauseList.some(moduleCodeClause => {
+      let innerErr = null;
+      moduleCodeClause.split('+').forEach(moduleCode => {
+        const isModuleValid = moduleList.find(aModule => aModule.code === moduleCode);
+        throwOnFalsy(isModuleValid, "DEV_ERROR", `"${moduleCode}" is not a valid module code.`);
+
+        const isModuleActivated = (organization.activeModuleCodeList.includes(moduleCode));
+        if (!isModuleActivated) {
+          innerErr = new CodedError("UNMET_MODULE", `This feature requires "${moduleCode}" module which is not activated for this organization.`);
+          innerErr.moduleCodeClause = moduleCodeClause;
+        }
+      });
+      if (innerErr) {
+        err = innerErr;
+        return false;
+      }
+      return true;
+    });
+
+    if (!didAnyPass) {
+      if (!err) {
+        err = new CodedError("DEV_ERROR", "Invalid arguments for ensureModule().");
+      }
+      throw err;
+    }
+
+    return true;
   }
 
   // region: utility ==========================

@@ -224,7 +224,7 @@
 
           let productList = aggregatedProductList.map(product => {
             let { purchasePrice, salePrice } = product.product;
-            let { name, unit, defaultDiscountType, defaultDiscountValue, defaultVat } = product.product.productCategory;
+            let { name, unit, defaultDiscountType, defaultDiscountValue, defaultVat } = product.product.productBlueprint;
             product.isSelected = false;
             let discountType = defaultDiscountType;
             let discountValue = defaultDiscountValue;
@@ -232,7 +232,6 @@
             Object.assign(product, { name, unit, purchasePrice, salePrice, discountType, discountValue, vatValue });
             return product;
           });
-          productList.sort((a, b) => b.count - a.count);
 
           let previousSavedSelectedProductList = this.app.getFromSession('pos-selected-product-list') || [];
 
@@ -283,7 +282,6 @@
       // region: ui  ===========================
 
       selectProductsTapped(e = null) {
-        this.elemAll('pos-select-product').forEach(el => el.listProductsToAdd(productList));
         this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
         this.selectedProductList = [];
         this.selectedProductCount = 0;

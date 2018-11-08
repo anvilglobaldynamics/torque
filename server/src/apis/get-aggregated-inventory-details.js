@@ -34,11 +34,11 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
     }];
   }
 
-  async __searchAggregatedProductList({ aggregatedProductList, searchString }) {
+  __searchAggregatedProductList({ aggregatedProductList, searchString }) {
     aggregatedProductList = aggregatedProductList.filter(aggregatedProduct => {
       searchString = this.escapeRegExp(searchString);
       let regex = new RegExp(searchString, 'g');
-      return regex.test(aggregatedProduct.product.productCategory.name);
+      return regex.test(aggregatedProduct.product.productBlueprint.name);
     });
 
     return aggregatedProductList;
@@ -54,7 +54,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
     let aggregatedProductList = await this.__getAggregatedProductList({ productList: clonedProductList });
 
     if (searchString) {
-      aggregatedProductList = await this.__searchAggregatedProductList({ aggregatedProductList, searchString });
+      aggregatedProductList = this.__searchAggregatedProductList({ aggregatedProductList, searchString });
     }
 
     return {

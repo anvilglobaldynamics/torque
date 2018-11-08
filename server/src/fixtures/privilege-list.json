@@ -20,6 +20,14 @@
     "name": "Modify all sales"
   },
   {
+    "code": "PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS",
+    "name": "View all service memberships"
+  },
+  {
+    "code": "PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS",
+    "name": "Modify all service memberships"
+  },
+  {
     "code": "PRIV_ALLOW_FLAT_DISCOUNT",
     "name": "Allow flat discount"
   },
@@ -36,8 +44,24 @@
     "name": "View all inventories"
   },
   {
-    "code": "PRIV_MODIFY_ALL_PRODUCT_CATEGORIES",
-    "name": "Modify all product categories"
+    "code": "PRIV_VIEW_ALL_SERVICES",
+    "name": "View all services"
+  },
+  {
+    "code": "PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS",
+    "name": "View all product blueprints"
+  },
+  {
+    "code": "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS",
+    "name": "Modify all product blueprints"
+  },
+  {
+    "code": "PRIV_VIEW_ALL_SERVICE_BLUEPRINTS",
+    "name": "View all service blueprints"
+  },
+  {
+    "code": "PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS",
+    "name": "Modify all service blueprints"
   },
   {
     "code": "PRIV_TRANSFER_ALL_INVENTORIES",
@@ -46,6 +70,10 @@
   {
     "code": "PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES",
     "name": "Add products to all inventories"
+  },
+  {
+    "code": "PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS",
+    "name": "Activate all services in all outlets"
   },
   {
     "code": "PRIV_VIEW_ALL_OUTLETS",

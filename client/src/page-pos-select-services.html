@@ -1,0 +1,322 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-pos-select-services">
+  <template>
+    <style include="shared-styles">
+    
+    .confirm-discard-button-group paper-button {
+      width: 100%;
+      margin: 5px;
+    }
+    
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <!-- service search area - start -->
+      <div class="card vertical layout">
+        <div class="p-16 horizontal layout center">
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="[[verses.posSelectService.searchForServiceInputError]]" label="[[verses.posSelectService.searchForServiceInput]]" on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
+          <paper-button raised class="primary" on-tap="searchTapped">
+            [[verses.general.search]]
+          </paper-button>
+        </div>
+      </div>
+      <!-- service search area - end -->
+
+      <template is="dom-if" if="{{!serviceList.length}}">
+        <div class="card">
+          [[verses.posSelectService.noServiceFoundInOutlet]]
+        </div>
+      </template>
+
+      <!-- all service list - start -->
+      <template is="dom-if" if="{{serviceList.length}}">
+        <div class="card vertical layout">
+
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          </template>
+
+          <div class="list">
+            <template is="dom-repeat" items="[[serviceList]]" as="service">
+              <template is="dom-if" if="[[!service.isSelected]]">
+
+                <div class="horizontal layout item center">
+                  <div class="flex" style="min-width: 128px;">
+                    <div class="inventory-product-important-detail-container">[[service.name]]</div>
+                    <div class="inventory-product-price-container">[[verses.posSelectService.sale]]: [[service.salePrice]][[app.settings.monetaryUnit]]</div>
+                  </div>
+
+                  <div class="horizontal layout wrap center">
+                    <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+                  </div>
+                </div>
+
+              </template>
+            </template>
+          </div>
+
+          <div class="pagination">
+            [[verses.general.loaded]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          </template>
+
+        </div>
+      </template>
+      <!-- all service list - end -->
+
+      <!-- selected service list - start -->
+      <template is="dom-if" if="{{selectedServiceList.length}}">
+        <div class="card vertical layout">
+          <div class="list">
+            <template is="dom-repeat" items="[[selectedServiceList]]" as="service">
+              <div class="horizontal layout item center">
+                <div class="flex" style="min-width: 128px;">
+
+                  <div class="inventory-product-important-detail-container">[[service.name]]</div>
+                  <div class="inventory-product-price-container">[[verses.posSelectService.sale]]: [[service.salePrice]][[app.settings.monetaryUnit]]</div>
+
+                </div>
+
+                <div class="horizontal layout wrap center">
+                  <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div class="vertical confirm-discard-button-group">
+            <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectService.deselectAllSelected]]</paper-button>
+            <paper-button raised class="btn primary" on-tap="selectServicesTapped">[[verses.posSelectService.confirmSelection]]</paper-button>
+          </div>
+        </div>
+      </template>
+      <!-- selected service list - end -->
+
+    </div>
+  </template>
+
+  <script>
+    class PageSelectServices extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-pos-select-services';
+      }
+
+      static get properties() {
+        return {
+          searchString: {
+            type: String,
+            value: ''
+          },
+          selectedServiceCount: {
+            type: Number,
+            value: 0
+          },
+          selectedServiceList: {
+            type: Array,
+            value: () => []
+          }
+        };
+      }
+
+      // region: core ===========================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.posSelectService.posSelectServiceTitle);
+        if (!this._ensureAccess()) return;
+        if (!('outlet' in this.params)) {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processOutletServices(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_ALL_SERVICES']
+        });
+      }
+
+      _fetchOutletServiceList(cbfn) {
+        let data = { outletId: parseInt(this.params.outlet), searchString: this.searchString, paginate: this.paginate };
+
+        this.app.callGetActiveServiceListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.serviceList);
+        });
+      }
+
+      _processOutletServices(cbfn) {
+        this._fetchOutletServiceList(serviceList => {
+
+          this.serviceList = serviceList.map(service => {
+            let { salePrice } = service;
+            let { name, defaultVat, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration } = service.serviceBlueprint;
+            service.isSelected = false;
+            let vatValue = defaultVat;
+            let assignedEmploymentId = null;
+            Object.assign(service, { name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration });
+            return service;
+          });
+
+          let previousSavedSelectedServiceList = this.app.getFromSession('pos-selected-service-list') || [];
+
+          if (this.selectedServiceList.length > 0 || previousSavedSelectedServiceList.length > 0) {
+            if (previousSavedSelectedServiceList.length > 0 && this.selectedServiceList.length === 0) {
+              this.selectedServiceCount = previousSavedSelectedServiceList.length;
+              this.selectedServiceList = previousSavedSelectedServiceList;
+            }
+
+            this.selectedServiceList.forEach(previousService => {
+              let service = this.serviceList.find(service => service.id === previousService.id);
+              if (service) {
+                service.isSelected = true;
+              }
+            })
+          }
+
+          cbfn();
+        });
+      }
+
+      _addServiceToSelectedServiceList({ service }) {
+        let { id, name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration } = service;
+        let minSalePrice = salePrice;
+        this.push('selectedServiceList', { id, name, minSalePrice, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration });
+        this.selectedServiceCount = this.selectedServiceList.length;
+      }
+
+      _removeServiceFromSelectedServiceList({ service }) {
+        this.selectedServiceList.forEach((selectedProduct, index) => {
+          if (selectedProduct.id === service.id) {
+            this.splice('selectedServiceList', index, 1);
+          }
+        });
+
+        this.serviceList.forEach((serviceInList, index) => {
+          if (serviceInList.id === service.id) {
+            this.set(`serviceList.${index}.isSelected`, false);
+          }
+        });
+
+        this.selectedServiceCount = this.selectedServiceList.length;
+      }
+
+      // region: ui ===========================
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processOutletServices(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processOutletServices(() => this.isReady = true);
+      }
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
+      searchCancelTapped(e = null) {
+        this.searchString = '';
+      }
+
+      searchTapped(e = null) {
+        this.set('paginate.offset', 0);
+        this._processOutletServices(() => this.isReady = true);
+      }
+
+      selectTapped(e) {
+        e.model.set('service.isSelected', true);
+        let { service } = e.model;
+        this._addServiceToSelectedServiceList({ service });
+      }
+
+      deselectTapped(e) {
+        let { service } = e.model;
+        this._removeServiceFromSelectedServiceList({ service });
+      }
+
+      selectServicesTapped(e = null) {
+        this.app.storeInSession('pos-selected-service-list', this.selectedServiceList);
+        this.selectedServiceList = [];
+        this.selectedServiceCount = 0;
+        this.backButtonOnTopBarPressed();
+      }
+
+      deselectAllTapped(e) {
+        this.serviceList.forEach((service, index) => this.set(`serviceList.${index}.isSelected`, false));
+        this.selectedServiceList = [];
+        this.selectedServiceCount = 0;
+        this.app.storeInSession('pos-selected-service-list', this.selectedServiceList);
+      }
+
+      // region: misc ===========================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.selectedServiceList = [];
+        this.selectedServiceCount = 0;
+        this.app.navigateToPreviousUrl(`/pos`);
+      }
+
+    }
+
+    window.customElements.define(PageSelectServices.is, PageSelectServices);
+  </script>
+</dom-module>

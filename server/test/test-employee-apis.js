@@ -49,6 +49,45 @@ const orgName = "Test Organization";
 const orgBusinessAddress = "My Address";
 const orgPhone = 'o1' + rnd(prefix, 11);
 
+const privilegeObject = {
+  PRIV_VIEW_USERS: true,
+  PRIV_MODIFY_USERS: true,
+
+  PRIV_ACCESS_POS: true,
+  PRIV_VIEW_SALES: true,
+  PRIV_MODIFY_SALES: true,
+  PRIV_ALLOW_FLAT_DISCOUNT: true,
+
+  PRIV_VIEW_SALES_RETURN: true,
+  PRIV_MODIFY_SALES_RETURN: true,
+
+  PRIV_VIEW_ALL_INVENTORIES: true,
+  PRIV_VIEW_ALL_SERVICES: true,
+  PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
+  PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
+  PRIV_VIEW_ALL_SERVICE_BLUEPRINTS: true,
+  PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS: true,
+  PRIV_TRANSFER_ALL_INVENTORIES: true,
+  PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
+  PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS: true,
+
+  PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: true,
+  PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: true,
+
+  PRIV_VIEW_ALL_OUTLETS: true,
+  PRIV_MODIFY_ALL_OUTLETS: true,
+
+  PRIV_VIEW_ALL_WAREHOUSES: true,
+  PRIV_MODIFY_ALL_WAREHOUSES: true,
+
+  PRIV_VIEW_ORGANIZATION_STATISTICS: true,
+  PRIV_MODIFY_ORGANIZATION: true,
+
+  PRIV_VIEW_CUSTOMER: true,
+  PRIV_MODIFY_CUSTOMER: true,
+  PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
+};
+
 let apiKey = null;
 let organizationId = null;
 let employeeId = null;
@@ -131,36 +170,7 @@ describe('Employee', _ => {
         role: "Joi.string().max(1024).required()",
         designation: "Joi.string().max(1024).required()",
         companyProvidedId: "abc123",
-        privileges: {
-          PRIV_VIEW_USERS: true,
-          PRIV_MODIFY_USERS: true,
-
-          PRIV_ACCESS_POS: true,
-          PRIV_VIEW_SALES: true,
-          PRIV_MODIFY_SALES: true,
-          PRIV_ALLOW_FLAT_DISCOUNT: true,
-
-          PRIV_VIEW_SALES_RETURN: true,
-          PRIV_MODIFY_SALES_RETURN: true,
-
-          PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
-          PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
-
-          PRIV_VIEW_ALL_OUTLETS: true,
-          PRIV_MODIFY_ALL_OUTLETS: true,
-
-          PRIV_VIEW_ALL_WAREHOUSES: true,
-          PRIV_MODIFY_ALL_WAREHOUSES: true,
-
-          PRIV_VIEW_ORGANIZATION_STATISTICS: true,
-          PRIV_MODIFY_ORGANIZATION: true,
-
-          PRIV_VIEW_CUSTOMER: true,
-          PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
-        }
+        privileges: privilegeObject
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -181,36 +191,7 @@ describe('Employee', _ => {
         role: "Joi.string().max(1024).required()",
         designation: "Joi.string().max(1024).required()",
         companyProvidedId: "abc123",
-        privileges: {
-          PRIV_VIEW_USERS: true,
-          PRIV_MODIFY_USERS: true,
-
-          PRIV_ACCESS_POS: true,
-          PRIV_VIEW_SALES: true,
-          PRIV_MODIFY_SALES: true,
-          PRIV_ALLOW_FLAT_DISCOUNT: true,
-
-          PRIV_VIEW_SALES_RETURN: true,
-          PRIV_MODIFY_SALES_RETURN: true,
-
-          PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
-          PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
-
-          PRIV_VIEW_ALL_OUTLETS: true,
-          PRIV_MODIFY_ALL_OUTLETS: true,
-
-          PRIV_VIEW_ALL_WAREHOUSES: true,
-          PRIV_MODIFY_ALL_WAREHOUSES: true,
-
-          PRIV_VIEW_ORGANIZATION_STATISTICS: true,
-          PRIV_MODIFY_ORGANIZATION: true,
-
-          PRIV_VIEW_CUSTOMER: true,
-          PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
-        }
+        privileges: privilegeObject
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -294,36 +275,7 @@ describe('Employee', _ => {
         role: "Joi.string().max(1024).required()",
         designation: "Joi.string().max(1024).required()",
         companyProvidedId: "abc123",
-        privileges: {
-          PRIV_VIEW_USERS: true,
-          PRIV_MODIFY_USERS: true,
-
-          PRIV_ACCESS_POS: true,
-          PRIV_VIEW_SALES: true,
-          PRIV_MODIFY_SALES: true,
-          PRIV_ALLOW_FLAT_DISCOUNT: true,
-
-          PRIV_VIEW_SALES_RETURN: true,
-          PRIV_MODIFY_SALES_RETURN: true,
-
-          PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
-          PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
-
-          PRIV_VIEW_ALL_OUTLETS: true,
-          PRIV_MODIFY_ALL_OUTLETS: true,
-
-          PRIV_VIEW_ALL_WAREHOUSES: true,
-          PRIV_MODIFY_ALL_WAREHOUSES: true,
-
-          PRIV_VIEW_ORGANIZATION_STATISTICS: true,
-          PRIV_MODIFY_ORGANIZATION: true,
-
-          PRIV_VIEW_CUSTOMER: true,
-          PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
-        }
+        privileges: privilegeObject
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -344,36 +296,7 @@ describe('Employee', _ => {
         role: "Joi.string().max(1024).required()",
         designation: "Joi.string().max(1024).required()",
         companyProvidedId: "abc123",
-        privileges: {
-          PRIV_VIEW_USERS: true,
-          PRIV_MODIFY_USERS: true,
-
-          PRIV_ACCESS_POS: true,
-          PRIV_VIEW_SALES: true,
-          PRIV_MODIFY_SALES: true,
-          PRIV_ALLOW_FLAT_DISCOUNT: true,
-
-          PRIV_VIEW_SALES_RETURN: true,
-          PRIV_MODIFY_SALES_RETURN: true,
-
-          PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
-          PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
-
-          PRIV_VIEW_ALL_OUTLETS: true,
-          PRIV_MODIFY_ALL_OUTLETS: true,
-
-          PRIV_VIEW_ALL_WAREHOUSES: true,
-          PRIV_MODIFY_ALL_WAREHOUSES: true,
-
-          PRIV_VIEW_ORGANIZATION_STATISTICS: true,
-          PRIV_MODIFY_ORGANIZATION: true,
-
-          PRIV_VIEW_CUSTOMER: true,
-          PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
-        }
+        privileges: privilegeObject
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -504,36 +427,7 @@ describe('Employee', _ => {
         designation: "Joi.string().max(1024).required()",
         companyProvidedId: "abc123",
 
-        privileges: {
-          PRIV_VIEW_USERS: true,
-          PRIV_MODIFY_USERS: true,
-
-          PRIV_ACCESS_POS: true,
-          PRIV_VIEW_SALES: true,
-          PRIV_MODIFY_SALES: true,
-          PRIV_ALLOW_FLAT_DISCOUNT: true,
-
-          PRIV_VIEW_SALES_RETURN: true,
-          PRIV_MODIFY_SALES_RETURN: true,
-
-          PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
-          PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
-
-          PRIV_VIEW_ALL_OUTLETS: true,
-          PRIV_MODIFY_ALL_OUTLETS: true,
-
-          PRIV_VIEW_ALL_WAREHOUSES: true,
-          PRIV_MODIFY_ALL_WAREHOUSES: true,
-
-          PRIV_VIEW_ORGANIZATION_STATISTICS: true,
-          PRIV_MODIFY_ORGANIZATION: true,
-
-          PRIV_VIEW_CUSTOMER: true,
-          PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
-        }
+        privileges: privilegeObject
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -559,36 +453,7 @@ describe('Employee', _ => {
         designation: "Joi.string().max(1024).required()",
         companyProvidedId: "abc123",
 
-        privileges: {
-          PRIV_VIEW_USERS: true,
-          PRIV_MODIFY_USERS: true,
-
-          PRIV_ACCESS_POS: true,
-          PRIV_VIEW_SALES: true,
-          PRIV_MODIFY_SALES: true,
-          PRIV_ALLOW_FLAT_DISCOUNT: true,
-
-          PRIV_VIEW_SALES_RETURN: true,
-          PRIV_MODIFY_SALES_RETURN: true,
-
-          PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
-          PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
-
-          PRIV_VIEW_ALL_OUTLETS: true,
-          PRIV_MODIFY_ALL_OUTLETS: true,
-
-          PRIV_VIEW_ALL_WAREHOUSES: true,
-          PRIV_MODIFY_ALL_WAREHOUSES: true,
-
-          PRIV_VIEW_ORGANIZATION_STATISTICS: true,
-          PRIV_MODIFY_ORGANIZATION: true,
-
-          PRIV_VIEW_CUSTOMER: true,
-          PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
-        }
+        privileges: privilegeObject
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -614,36 +479,7 @@ describe('Employee', _ => {
         designation: "Joi.string().max(1024).required()",
         companyProvidedId: "abc123",
 
-        privileges: {
-          PRIV_VIEW_USERS: true,
-          PRIV_MODIFY_USERS: true,
-
-          PRIV_ACCESS_POS: true,
-          PRIV_VIEW_SALES: true,
-          PRIV_MODIFY_SALES: true,
-          PRIV_ALLOW_FLAT_DISCOUNT: true,
-
-          PRIV_VIEW_SALES_RETURN: true,
-          PRIV_MODIFY_SALES_RETURN: true,
-
-          PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
-          PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
-
-          PRIV_VIEW_ALL_OUTLETS: true,
-          PRIV_MODIFY_ALL_OUTLETS: true,
-
-          PRIV_VIEW_ALL_WAREHOUSES: true,
-          PRIV_MODIFY_ALL_WAREHOUSES: true,
-
-          PRIV_VIEW_ORGANIZATION_STATISTICS: true,
-          PRIV_MODIFY_ORGANIZATION: true,
-
-          PRIV_VIEW_CUSTOMER: true,
-          PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
-        }
+        privileges: privilegeObject
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -660,6 +496,25 @@ describe('Employee', _ => {
       json: {
         apiKey,
         organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetEmployeeListApiSuccessResponse(body);
+      body.employeeList.forEach(employee => {
+        validateEmploymentSchema(employee);
+      });
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-employee-list (Valid searchString)', testDoneFn => {
+
+    callApi('api/get-employee-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: 'user'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -846,36 +701,7 @@ describe('Employee', _ => {
         role: "Joi.string().max(1024).required()",
         designation: "Joi.string().max(1024).required()",
         companyProvidedId: "abc123",
-        privileges: {
-          PRIV_VIEW_USERS: true,
-          PRIV_MODIFY_USERS: true,
-
-          PRIV_ACCESS_POS: true,
-          PRIV_VIEW_SALES: true,
-          PRIV_MODIFY_SALES: true,
-          PRIV_ALLOW_FLAT_DISCOUNT: true,
-
-          PRIV_VIEW_SALES_RETURN: true,
-          PRIV_MODIFY_SALES_RETURN: true,
-
-          PRIV_VIEW_ALL_INVENTORIES: true,
-          PRIV_MODIFY_ALL_PRODUCT_CATEGORIES: true,
-          PRIV_TRANSFER_ALL_INVENTORIES: true,
-          PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
-
-          PRIV_VIEW_ALL_OUTLETS: true,
-          PRIV_MODIFY_ALL_OUTLETS: true,
-
-          PRIV_VIEW_ALL_WAREHOUSES: true,
-          PRIV_MODIFY_ALL_WAREHOUSES: true,
-
-          PRIV_VIEW_ORGANIZATION_STATISTICS: true,
-          PRIV_MODIFY_ORGANIZATION: true,
-
-          PRIV_VIEW_CUSTOMER: true,
-          PRIV_MODIFY_CUSTOMER: true,
-          PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
-        }
+        privileges: privilegeObject
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

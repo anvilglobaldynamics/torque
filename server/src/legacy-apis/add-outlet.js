@@ -53,7 +53,8 @@ exports.AddOutletApi = class extends inventoryCommonMixin(LegacyApi) {
   }
 
   handle({ body }) {
-    let { name, organizationId, physicalAddress, phone, contactPersonName, aPackage } = body;
+    let { name, organizationId, physicalAddress, phone, contactPersonName } = body;
+    let { aPackage } = this.interimData;
     this._checkOrganizationPackageOutletLimit({ organizationId, aPackage }, () => {
       this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName }, (outletId) => {
         this._createStandardInventories({ inventoryContainerId: outletId, inventoryContainerType: "outlet", organizationId }, () => {

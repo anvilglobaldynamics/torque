@@ -76,7 +76,13 @@
     "errorMessageBody": "ত্রুটি ত্রুটি দেখা দিয়েছে, লিপি প্রতিনিধির সাথে যোগাযোগ করুন",
     "errorMessageTitle": "ত্রুটি",
     "noDataFound": "কোন তথ্য পাওয়া যায়নি",
-    "changeWallet": "Change Wallet"
+    "changeWallet": "Change Wallet",
+    "activatedModules": "সক্রিয় মডিউলগুলো",
+    "moduleDescriptionLineOne": "ভিন্ন মডিউল লিপি তে বিভিন্ন কার্যকারিতা যোগ করে। নিচে বর্তমানে সক্রিয় মডিউল গুলো উল্লেখিত;",
+    "moduleDescriptionLineTwo": "লিপি তে আরো ফীচার এবং কার্যকারিতা যোগ করতে আমাদের সাথে যোগাযোগ করুন এই নম্বরে +880 1770 947908 অথবা care@anvil.live এ মেইল লিখুন ",
+    "productModule": "প্রোডাক্ট মডিউল",
+    "serviceModule": "সেবা মডিউল",
+    "gymModule": "জিমনেসিয়াম মডিউল"
   },
   "login": {
     "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
@@ -109,9 +115,11 @@
     "employees": "কর্মচারী",
     "outlets": "দোকান",
     "warehouses": "গুদাম",
-    "productCategories": "পণ্যের ধরন",
+    "productBlueprints": "পণ্যের পরিকল্পনা",
+    "serviceBlueprints": "সেবা পরিকল্পনা",
     "sales": "বিক্রয় রেকর্ড",
     "salesReturn": "বিক্রয় ফেরত রেকর্ড",
+    "serviceMembership": "সেবার সদস্যপদ",
     "customers": "গ্রাহক",
     "salesReport": "বিক্রয় রিপোর্টস",
     "inventoryReport": "পণ্য তালিকা রিপোর্টস",
@@ -224,52 +232,85 @@
     "defaultInventoryName": "প্রধান",
     "returnedInventoryName": "ফেরৎ",
     "damagedInventoryName": "ক্ষতিগ্রস্ত",
-    "noOutletFound": "আপনার সংস্থার কোনো দোকান তৈরি করা হয়নি।"
+    "noOutletFound": "আপনার সংস্থার কোনো দোকান তৈরি করা হয়নি।",
+    "manageOutletServicesTitle": "সেবা পরিচালনা",
+    "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন"
   },
-  "productCategory": {
-    "manageProductCategoriesTitle": "পণ্যের ধরন পরিচালনা",
-    "editProductCategoryTitle": "পণ্যের ধরন সম্পাদনা করুন",
-    "addProductCategoryTitle": "পণ্যের ধরন যুক্ত করুন",
-    "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি।",
-    "parentNameNotifierStart": "নতুন পণ্যের ধরণটি যুক্ত করা হবে",
-    "parentNameNotifierEnd": " পণ্যের ধরণের অধীনে। ",
-    "productCategoryNameInput": "পণ্যের ধরণের নাম",
-    "productCategoryNameInputError": "একটি সঠিক নাম লিখুন",
-    "productCategoryUnitInput": "একক নির্দিষ্ট করুন (যেমন কেজি, পিস্)",
-    "productCategoryUnitInputError": "একটি সঠিক একক লিখুন",
+  "productBlueprint": {
+    "manageProductBlueprintsTitle": "পণ্যের পরিকল্পনা পরিচালনা",
+    "editProductBlueprintTitle": "পণ্যের পরিকল্পনা সম্পাদনা করুন",
+    "addProductBlueprintTitle": "পণ্যের পরিকল্পনা যুক্ত করুন",
+    "noProductBlueprintFound": "কোনো পণ্যের পরিকল্পনা পাওয়া যায় নি।",
+    "parentNameNotifierStart": "নতুন পণ্যের পরিকল্পনাটি যুক্ত করা হবে",
+    "parentNameNotifierEnd": " পণ্যের পরিকল্পনার অধীনে। ",
+    "productBlueprintNameInput": "পণ্যের পরিকল্পনার নাম",
+    "productBlueprintNameInputError": "একটি সঠিক নাম লিখুন",
+    "productBlueprintUnitInput": "একক নির্দিষ্ট করুন (যেমন কেজি, পিস্)",
+    "productBlueprintUnitInputError": "একটি সঠিক একক লিখুন",
     "defaultPurchasePriceInput": "ক্রয় মূল্য",
     "defaultPurchasePriceInputError": "একটি সঠিক অংক লিখুন",
     "defaultVatInput": "ভ্যাট",
     "defaultVatInputError": "একটি সঠিক অংক লিখুন",
-    "productCategoryDefaultSalePriceInput": "বিক্রয় মূল্য",
-    "productCategoryDefaultSalePriceInputError": "একটি সঠিক অংক লিখুন",
-    "isProductReturnable": "গ্রাহক এই ধরণের পণ্য ফেরত দিতে পারবে।",
+    "productBlueprintDefaultSalePriceInput": "বিক্রয় মূল্য",
+    "productBlueprintDefaultSalePriceInputError": "একটি সঠিক অংক লিখুন",
+    "isProductReturnable": "গ্রাহক এই পরিকল্পনার পণ্য ফেরত দিতে পারবে।",
     "defaultDiscountType": "ছাড় এর ধরণ",
     "defaultDiscountValueInput": "ছাড় পরিমান",
     "defaultDiscountValueInputError": "একটি সঠিক অংক লিখুন",
-    "createProductCategory": "পণ্যের ধরণ যুক্ত করুন",
-    "updateProductCategory": "পণ্যের ধরণ আপডেট করুন",
-    "productCategoryCreated": "নতুন পণ্যের ধরণ যুক্ত করা হয়েছে।",
-    "productCategoryUpdated": "পণ্যের ধরণ আপডেট করা হয়েছে।",
+    "createProductBlueprint": "পণ্যের পরিকল্পনা যুক্ত করুন",
+    "updateProductBlueprint": "পণ্যের পরিকল্পনা আপডেট করুন",
+    "productBlueprintCreated": "নতুন পণ্যের পরিকল্পনা যুক্ত করা হয়েছে।",
+    "productBlueprintUpdated": "পণ্যের পরিকল্পনা আপডেট করা হয়েছে।",
     "buyingPrice": "ক্রয় মূল্য",
     "sellingPrice": "বিক্রয় মূল্য",
     "moveHere": "এখানে সরান",
-    "subCategory": "উপ বিভাগ",
+    "subBlueprint": "উপ বিভাগ",
     "moveToRoot": "বাহিরে সরান",
-    "createNewProductCategory": "নতুন পণ্য ধরণ তৈরি করুন",
-    "searchForProductCategoryInput": "পণ্য তালিকার নাম",
-    "searchForProductCategoryInputError": "পণ্য তালিকার সন্ধানে ত্রুটি",
-    "bulkImport": "একাধিক পণ্যের ধরন তৈরি",
-
-    "whatIsProductCategoryMessage": "পণ্যের ধরণ একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের ধরণ তৈরি করতে হবে। পণ্যের ধরণে দেয়া তথ্য পণ্য সংক্রান্ত কাজে ব্যবহত হবে।"
+    "createNewProductBlueprint": "নতুন পণ্য পরিকল্পনা তৈরি করুন",
+    "searchForProductBlueprintInput": "পণ্য পরিকল্পনার নাম",
+    "searchForProductBlueprintInputError": "পণ্য পরিকল্পনার সন্ধানে ত্রুটি",
+    "bulkImport": "একাধিক পণ্যের পরিকল্পনা তৈরি",
+    "whatIsProductBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত কাজে ব্যবহত হবে।"
+  },
+  "serviceBlueprint": {
+    "manageServiceBlueprintsTitle": "সেবা পরিকল্পনা পরিচালনা",
+    "sellingPrice": "বিক্রয় মূল্য",
+    "searchForServiceBlueprintInput": "সেবা পরিকল্পনার নাম",
+    "searchForServiceBlueprintInputError": "সেবা পরিকল্পনার সন্ধানে ত্রুটি",
+    "noServiceBlueprintFound": "কোনো সেবা পরিকল্পনা পাওয়া যায় নি।",
+    "createNewServiceBlueprint": "নতুন সেবা পরিকল্পনা তৈরি করুন",
+    "addServiceBlueprintTitle": "সেবা পরিকল্পনা যুক্ত করুন",
+    "editServiceBlueprintTitle": "সেবা পরিকল্পনা সম্পাদনা করুন",
+    "serviceBlueprintNameInput": "সেবা পরিকল্পনার নাম",
+    "serviceBlueprintNameInputError": "একটি সঠিক সেবা পরিকল্পনার নাম লিখুন",
+    "defaultVatInput": "ভ্যাট",
+    "defaultVatInputError": "ভ্যাট হবে ০ থেকে ১০০ এর মধ্যে",
+    "serviceBlueprintDefaultSalePriceInput": "বিক্রয় মূল্য",
+    "serviceBlueprintDefaultSalePriceInputError": "একটি সঠিক অংক লিখুন",
+    "isServiceLongstanding": "এই সেবাটি কি দীর্ঘস্থায়ী? (সেবাটি দিন অথবা মাসব্যাপি সক্রিয় থাকবে)",
+    "isCustomerRequired": "ক্রেতা সংযোগ করা কি প্রয়োজন? (দীর্ঘস্থায়ী সেবাগুলোতে ক্রেতা সংযোগ অনিবার্য)",
+    "serviceDuration": "স্থায়িত্বের কাল",
+    "serviceDurationMonths": "মাস",
+    "serviceDurationDays": "দিন",
+    "serviceDurationMonthsInput": "স্থায়িত্বের মাস",
+    "serviceDurationMonthsInputError": "সঠিক হবে 0-12",
+    "serviceDurationDaysInput": "স্থায়িত্বের দিন",
+    "serviceDurationDaysInputError": "সঠিক হবে 0-31",
+    "isEmployeeAssignable": "একজন কর্মচারীকে দায়িত্ব দেয়া হবে?",
+    "isRefundable": "এই সেবাটি কি ফেরতযোগ্য?",
+    "avtivateInAllOutlets": "এই সেবাটি কি সকল দোকানে প্রাপ্য?",
+    "whatIsServiceBlueprintMessage": "সেবার পরিকল্পনা একটু সেবার নকশা। প্রতি সেবার জন্য একবারই সেবার পরিকল্পনা তৈরি করতে হবে। সেবার পরিকল্পনায় দেয়া তথ্য সেবা সংক্রান্ত কাজে ব্যবহত হবে।",
+    "createServiceBlueprint": "নতুন সেবা পরিকল্পনা তৈরি করুন",
+    "updateServiceBlueprint": "সেবা পরিকল্পনা আপডেট করুন",
+    "serviceBlueprintCreated": "সেবা পরিকল্পনা তৈরি হয়েছে"
   },
   "customerSelector": {
-    "customerNameOrPhoneInput": "গ্রাহকের নাম বা ফোন",
+    "customerNameOrPhoneInput": "নাম বা ফোন",
     "customerNameOrPhoneInputError": "গ্রাহকের নাম বা ফোন লিখুন"
   },
   "outletSelector": {
     "outlets": "দোকান",
-    "outletNameOrPhoneInput": "দোকানের নাম বা ফোন",
+    "outletNameOrPhoneInput": "নাম বা ফোন",
     "outletNameOrPhoneInputError": "দোকানের নাম বা ফোন লিখুন"
   },
   "commonEmploymentDetails": {
@@ -323,22 +364,22 @@
     "addProductsTitle": "পণ্য যুক্ত করুন",
     "addProducts": "পণ্য যুক্ত করুন",
     "productAddedToInventory": "পণ্য সফলভাবে তালিকাতে যুক্ত করা হয়েছে।",
-    "productCategory": "পণ্যের ধরন",
+    "productBlueprint": "পণ্যের পরিকল্পনা",
     "count": "গণনা",
     "sellFor": "বিক্রয় মূল্য",
     "purchasedFor": "ক্রয় মূল্য",
-    "noProductCategoryFound": "কোনো পণ্যের ধরন পাওয়া যায় নি। প্রথমে পণ্যটি একটি \"পণ্যের ধরণ\" হিসেবে যোগ করুন, এর পর এই পণ্য তালিকায় পণ্য হিসেবে যোগ করুন।"
+    "noProductBlueprintFound": "কোনো পণ্যের পরিকল্পনা পাওয়া যায় নি। প্রথমে পণ্যটি একটি \"পণ্যের পরিকল্পনা\" হিসেবে যোগ করুন, এর পর এই পণ্য তালিকায় পণ্য হিসেবে যোগ করুন।"
   },
   "addProducts": {
-    "searchInputLabel": "পণ্যের ধরণের নাম",
+    "searchInputLabel": "পণ্যের পরিকল্পনার নাম",
     "searchInputError": "পণ্য সন্ধানে ত্রূটি হয়েছে",
     "selectedProducts": "বাছাইকৃত পণ্য তালিকা"
   },
   "about": {
     "about": "বিষয়ে",
-    "tos": "TOS/Privacy",
-    "contactUs": "আমাদের যোগাযোগ করুন",
-    "projectBy": "এই প্রজেক্ট পরিচালিত হয়",
+    "tos": "শর্তাবলী",
+    "contactUs": "যোগাযোগ করুন",
+    "projectBy": "এই প্রজেক্ট তৈরি এবং পরিচালনা করে",
     "logoAndFaviconBy": "লোগো নেয়া হয়েছে",
     "sendYourQuestionsTo": "আপনার প্রশ্ন, অভিযোগ এবং প্রশংসা পাঠান"
   },
@@ -451,7 +492,8 @@
     "salesId": "বিক্রয় নং",
     "billed": "বিল",
     "paid": "প্রদত্ত",
-    "products": "পণ্য",
+    "products": "টি পণ্য",
+    "services": "টি সেবা",
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
     "removeCustomer": "গ্রাহক সরান",
     "changeCustomer": "গ্রাহক পরিবর্তন করুন",
@@ -463,6 +505,7 @@
     "outletId": "দোকান আইডি",
     "customerId": "গ্রাহক আইডি",
     "productList": "পণ্য তালিকা",
+    "serviceList": "সেবা তালিকা",
     "salePrice": "বিক্রয় মূল্য",
     "payment": "টাকা প্রদান",
     "totalBilled": "মোট বিল",
@@ -485,8 +528,10 @@
     "receiptTitle": "বিক্রয় রসিদ",
     "printedBy": "প্রিন্ট করেছেন",
     "soldBy": "বিক্রয়কারী",
-
-    "productReturn": "পণ্য ফেরত"
+    "productReturn": "পণ্য ফেরত",
+    "service": "সেবা",
+    "discardQuestion": "এই বিক্রি বাতিল?",
+    "discardMessage": "বাতিল করা হলে কোনো রিপোর্ট কিংবা হিসেবে এই বিক্রি ধরা হবে না। বিক্রয়কৃত সেবা সদস্যপদ (যদি থাকে) বাতিল হয়ে যাবে।"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
@@ -532,8 +577,8 @@
     "contentCouldNotBeFound": "অনুরোধকৃত বিষয়বস্তু পাওয়া যায়নি",
     "backToDashboard": "ড্যাশবোর্ডে ফিরে যান।",
     "403": "৪০৩",
-    "accessDenied": "অনুমতি নেই",
-    "accessDeniedDescription": "আপনার অ্যাডমিন আপনাকে এই পৃষ্ঠার অনুমতি দেয় নাই। "
+    "accessDenied": "এক্সেস নেই",
+    "accessDeniedDescription": "আপনার এই ফীচারটির এক্সেস নাই। "
   },
   "pos": {
     "posPageTitle": "নতুন বিক্রয়",
@@ -553,6 +598,7 @@
     "vatAmount": "ভ্যাট পরিমান",
     "serviceChargeInput": "সার্ভিস চার্জ",
     "serviceChargeInputError": "একটি সঠিক নম্বর লিখুন",
+    "totalSalePrice": "মোট বিক্রয় মূল্য",
     "totalAmount": "মোট পরিমান",
     "totalBilled": "মোট বিল",
     "previousCustomerBalance": "পূর্ববর্তী গ্রাহক ব্যালেন্স",
@@ -571,7 +617,12 @@
     "allowCreditSaleMessage": "এই টাকা গ্রাহকের একাউন্টএ বকেয়া হিসাবে জমা রাখা হোক।",
     "creditSaleHint": "প্রদত্ত পরিমান, মোট প্রদেয় পরিমানের চেয়ে কম এন্ট্রি দেওয়া হয়েছে। একটি ক্রেডিট বিক্রয় করার জন্য, আপনাকে একটি গ্রাহক নির্বাচন বা যুক্ত করতে হবে এবং ক্রেডিট বিক্রয় অনুমোদন করতে হবে। ",
     "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
-    "thisWillBeACreditSale": "এটি একটি বাকি বিক্রি হবে। অতিরিক্ত অর্থ গ্রহণ বিক্রয় পৃষ্ঠায় গিয়ে করতে পারবেন।"
+    "thisWillBeACreditSale": "এটি একটি বাকি বিক্রি হবে। অতিরিক্ত অর্থ গ্রহণ বিক্রয় পৃষ্ঠায় গিয়ে করতে পারবেন।",
+    "selectService": "সেবা নির্বাচন করুন",
+    "serviceRequiresCustomerSelection": "এই সেবাটি বিক্রির জন্য একজন ক্রেতা নির্বাচন প্রয়োজন",
+
+    "assignedEmployee": "দায়িত্ব দেন",
+    "assignEmployee": "দায়িত্ব দেয়া"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",
@@ -589,6 +640,7 @@
     "sales": "বিক্রয়",
     "soldTo": "গ্রাহক",
     "products": "পণ্য",
+    "services": "সেবা",
     "total": "মোট",
     "discountedAmount": "ছাড়ের পরিমান",
     "vat": "ভ্যাট",
@@ -609,7 +661,7 @@
     "confirmSelection": "নির্বাচন নিশ্চিত করুন"
   },
   "posSelectProduct": {
-    "posSelectProductTitle": "পণ্য নির্বাচন করুন",
+    "posSelectProductTitle": "পণ্য নির্বাচন",
     "purchase": "ক্রয়",
     "sale": "বিক্রয়",
     "count": "গণনা",
@@ -620,6 +672,15 @@
     "noProductFoundInOutlet": "কোনো পণ্য পাওয়া যায়নি। পেছনে গিয়ে দোকানের প্রধান পণ্য তালিকায় পণ্য যোগ করুন।",
     "searchForProductInput": "পণ্যের নাম দিয়ে অনুসন্ধান",
     "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি"
+  },
+  "posSelectService": {
+    "posSelectServiceTitle": "সেবা নির্বাচন",
+    "searchForServiceInput": "সেবার নাম দিয়ে অনুসন্ধান",
+    "searchForServiceInputError": "সেবার সন্ধানে ত্রুটি",
+    "noServiceFoundInOutlet": "কোনো সেবা পাওয়া যায়নি। পেছনে গিয়ে দোকানে সেবা উপলব্ধ করুন।",
+    "sale": "বিক্রয়",
+    "deselectAllSelected": "সকল নির্বাচন সরিয়ে ফেলুন",
+    "confirmSelection": "নির্বাচন নিশ্চিত করুন"
   },
   "settings": {
     "settingsTitle": "সেটিংস",
@@ -660,7 +721,6 @@
     "sellingPrice": "বিক্রয় মূল্য",
     "acquiredOn": "খরিদ হয়েছে",
     "addedOn": "যুক্ত হয়েছে",
-
     "transferInventoryHelp": "একটি পণ্য তালিকা থেকে অন্য পণ্য তালিকায় পণ্য সরাতে পারেন। পণ্য বাছাই শুরু করতে নিচে ক্লিক করুন।",
     "selectProductsToTransfer": "সরানোর জন্য পণ্য বাছাই শুরু করুন",
     "stopSelectingProductsToTransfer": "সরানোর জন্য পণ্য বাছাই বন্ধ করুন"
@@ -671,23 +731,23 @@
     "recheckVerificationStatus": "প্যাকেজ স্থিতি পুনরায় যাচাই করুন",
     "useDifferentOrganization": "ভিন্ন সংস্থা ব্যবহার করুন"
   },
-  "bulkImportProductCategory": {
-    "pageTitle": "একাধিক পণ্যের ধরন তৈরি",
-    "downloadSectionTip": "ফাইলটি সংগ্রহ করুন, আমরা এই ফাইলটি ব্যবহার করে একাধিক পণ্যের ধরণ একসাথে তৈরি করবো;",
+  "bulkImportProductBlueprint": {
+    "pageTitle": "একাধিক পণ্যের পরিকল্পনা তৈরি",
+    "downloadSectionTip": "ফাইলটি সংগ্রহ করুন, আমরা এই ফাইলটি ব্যবহার করে একাধিক পণ্যের পরিকল্পনা একসাথে তৈরি করবো;",
     "downloadButtonLabel": "ফাইল সংগ্রহ করুন",
-    "instructionOne": "১. সংগ্রহীত ফাইলটি: 'Lipi Product Category Bulk Upload CSV.csv', একটি CSV (সি এস ভি) জাতীয় ফাইল, যেকোনো স্প্রেডশীট সফটওয়্যার ব্যবহার করে আপনি ফাইলটি দেখতে এবং পাল্টাতে পারবেন। ফাইলটি দেখতে এরকম হবে;",
-    "instructionTwo": "২. পণ্য ধরণের একটি নাম (Name) দিন যেটি আগে ব্যবহত হয়নি, এভাবে;",
-    "instructionThree": "৩. পণ্য ধরণের একটি একক (Unit) দিন, যেমন: কেজি, পিস অথবা বাক্স;",
-    "instructionFour": "৪. পণ্য ধরণের কেনা দাম (Purchase Price), বিক্রি দাম (Sale Price) এবং ভ্যাট শতাংশ (VAT) দিন, এভাবে;",
+    "instructionOne": "১. সংগ্রহীত ফাইলটি: 'Lipi Product Blueprint Bulk Upload CSV.csv', একটি CSV (সি এস ভি) জাতীয় ফাইল, যেকোনো স্প্রেডশীট সফটওয়্যার ব্যবহার করে আপনি ফাইলটি দেখতে এবং পাল্টাতে পারবেন। ফাইলটি দেখতে এরকম হবে;",
+    "instructionTwo": "২. পণ্য পরিকল্পনার একটি নাম (Name) দিন যেটি আগে ব্যবহত হয়নি, এভাবে;",
+    "instructionThree": "৩. পণ্য পরিকল্পনার একটি একক (Unit) দিন, যেমন: কেজি, পিস অথবা বাক্স;",
+    "instructionFour": "৪. পণ্য পরিকল্পনার কেনা দাম (Purchase Price), বিক্রি দাম (Sale Price) এবং ভ্যাট শতাংশ (VAT) দিন, এভাবে;",
     "instructionFive": "৫. ছাড় এর ধরণ দিন Discount Type এর নিচে, শতাংশ ছাড় হলে percent লিখুন, নির্ধারিত অর্থ ছাড় হলে fixed লিখুন। এবং ছাড় এর পরিমান দিন Discount Amount এর নিচে, এভাবে;",
     "instructionSix": "৬. Returnable এর নিচে yes (হ্যা) দিন যদি পণ্য ফেরতযোগ্য হয়ে, no (না) দিন যদি নয়;",
     "instructionSeven": "৭. সকল স্থান পূরণ থাকতে হবে, নাহলে লিপি ফাইলটি গ্রহণ করবে না;",
-    "uploadSectionTip": "পণ্যের ধরণ ধারণকারী CSV ফাইলটি জমা করুন;",
+    "uploadSectionTip": "পণ্যের পরিকল্পনা ধারণকারী CSV ফাইলটি জমা করুন;",
     "uploadButtonLabel": "ফাইল জমা করুন",
-    "successfullyImported": "ফাইল পড়তে সফল, মোট পণ্যের ধরণ তৈরি হয়েছে",
+    "successfullyImported": "ফাইল পড়তে সফল, মোট পণ্যের পরিকল্পনা তৈরি হয়েছে",
     "rowsIgnored": "নিম্নলিখিত সারিগুলো উপেক্ষা করা হয়েছে",
     "row": "সারি",
-    "nameUsed": "এই নামের পণ্য ধরণ ইতিমধ্যে আছে",
+    "nameUsed": "এই নামের পণ্য পরিকল্পনা ইতিমধ্যে আছে",
     "errorOccurred": "ত্রুটি দেখা দিয়েছে, সমাধান করুন এবং আবার চেষ্টা করুন",
     "unknownErrorWhileReadingFile": "ফাইল পড়ার সময় অপ্রত্যাশিত ত্রুটি দেখা দিয়েছে",
     "multipleFilesSelectedTitle": "একাধিক ফাইল নির্বাচিত",
@@ -724,5 +784,45 @@
     "sellForInput": "বিক্রয় মূল্য",
     "sellForInputError": "একটি বৈধ বিক্রয়মূল্য লিখুন",
     "productUpdated": "পণ্য আপডেট করা হয়েছে"
+  },
+  "manageServices": {
+    "manageOutletServicesTitle": "সেবা পরিচালনা",
+    "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন",
+    "manageServicesTitle": "দোকানের সেবা পরিচালনা",
+    "confirmUpdate": "সেবা লভ্যতা আপডেট নিশ্চিত করুন",
+    "noServicesFound": "কোন সেবা পাওয়া যায়নি",
+    "searchForServiceInputError": "বৈধ সেবার নাম",
+    "searchForServicerInput": "সেবার নাম",
+    "availability": "লভ্যতা",
+    "modificationComplete": "দোকানে সেবার লভ্যতা পরিবর্তন শেষ"
+  },
+  "assignEmployeeService": {
+    "assignEmployeeServiceTitle": "সেবার দায়িত্বে কর্মচারী",
+    "clearEmployeeLabel": "সেবার দায়িত্ব মুছে ফেলুন"
+  },
+  "serviceMembership": {
+    "serviceMembershipTitle": "সেবার সদস্যপদ",
+    "noServiceMembershipFound": "কোনো সেবা সদস্যপদের রেকর্ড পাওয়া যায় নি।",
+
+    "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
+    "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি",
+    "noServiceBlueprintSelected": "কোন সেবার সদস্যপদ নির্বাচন করা হয়নি",
+
+    "change": "পরিবর্তন",
+    "remove": "সরান",
+
+    "serviceMembershipNumber": "সদস্যপদ নং",
+    "expiringDatetime": "মেয়াদ",
+    "customer": "ক্রেতা",
+
+    "serviceBlueprint": "সেবার সদস্যপদ"
+  },
+  "serviceBlueprintSelector": {
+    "serviceBlueprintNameOrPhoneInput": "নাম দিয়ে খুজুন",
+    "serviceBlueprintNameOrPhoneInputError": "বৈধ নাম লিখুন",
+    "serviceBlueprints": "সেবার সদস্যপদ"
+  },  
+  "salesReceipt": {
+    "goodsTitle": "পণ্য / সেবা"
   }
 }
