@@ -15,6 +15,7 @@ exports.ServiceMembershipCollection = class extends Collection {
       customerId: Joi.number().max(999999999999999).required(),
       salesId: Joi.number().max(999999999999999).required(),
       serviceId: Joi.number().max(999999999999999).required(),
+      assignedEmploymentId: Joi.number().max(999999999999999).allow(null).required(),
     
       expiringDatetimeStamp: Joi.number().max(999999999999999).required(),
     
@@ -55,6 +56,7 @@ exports.ServiceMembershipCollection = class extends Collection {
     customerId,
     salesId,
     serviceId,
+    assignedEmploymentId,
     expiringDatetimeStamp
   }) {
     return await this._insert({
@@ -65,6 +67,7 @@ exports.ServiceMembershipCollection = class extends Collection {
       customerId,
       salesId,
       serviceId,
+      assignedEmploymentId,
     
       expiringDatetimeStamp,
     
