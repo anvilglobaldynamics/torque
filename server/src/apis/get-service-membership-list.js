@@ -76,6 +76,22 @@ exports.GetServiceMembershipListApi = class extends Api {
     }
   }
 
+  async _combineAssignedEmployeeData({ serviceMembershipList }) {
+    for (let i = 0; i < serviceMembershipList.length; i++) {
+      if (serviceMembershipList[i].assignedEmploymentId) {
+        let employee = await this.database.employment.findById({ id: serviceMembershipList[i].assignedEmploymentId });
+        throwOnFalsy(employee, "EMPLOYEE_INVALID", "Employee data unavailable / invalid.");
+        let user = await this.database.user.findById({ id: employee.userId });
+        throwOnFalsy(user, "USER_INVALID", "User data unavailable / invalid.");
+        serviceMembershipList[i].assignedEmployeeDetails = { fullName: user.fullName, phone: user.phone };
+      } else {
+        serviceMembershipList[i].assignedEmployeeDetails = null;
+      }
+
+      console.log(serviceMembershipList[i].assignedEmployeeDetails);
+    }
+  }
+
   async _findServiceMembershipList({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId }) {
     // console.log({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId })
 
@@ -242,6 +258,7 @@ exports.GetServiceMembershipListApi = class extends Api {
     let serviceMembershipList = await this._findServiceMembershipList({ serviceBlueprintId, outletId, customerId, shouldFilterByServiceBlueprint, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, organizationId });
 
     await this._combineCustomerData({ serviceMembershipList });
+    await this._combineAssignedEmployeeData({ serviceMembershipList });
 
     return { serviceMembershipList };
   }
