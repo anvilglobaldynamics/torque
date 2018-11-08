@@ -87,8 +87,6 @@ exports.GetServiceMembershipListApi = class extends Api {
       } else {
         serviceMembershipList[i].assignedEmployeeDetails = null;
       }
-
-      console.log(serviceMembershipList[i].assignedEmployeeDetails);
     }
   }
 

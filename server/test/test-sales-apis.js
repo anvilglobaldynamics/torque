@@ -66,6 +66,7 @@ const customerPhone = 'c' + rnd(prefix, 11);
 const openingBalance = '500';
 
 let apiKey = null;
+let userId = null;
 let organizationId = null;
 let outletId = null;
 let productBlueprintId = null;
@@ -115,13 +116,14 @@ let longstandingServiceBlueprintId = null;
 let longstandingService = null;
 let longstandingServiceSaleId = null;
 
-describe.only('Sales', _ => {
+describe('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
       registerUser({
         password, fullName, phone
-      }, _ => {
+      }, (data) => {
+        userId = data.userId;
         loginUser({
           emailOrPhone: phone, password
         }, (data) => {
@@ -1559,7 +1561,7 @@ describe.only('Sales', _ => {
             serviceId: longstandingService.id,
             salePrice: longstandingService.salePrice,
             vatPercentage: longstandingService.serviceBlueprint.defaultVat,
-            assignedEmploymentId: null
+            assignedEmploymentId: userId
           }
         ],
 

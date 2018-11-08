@@ -204,14 +204,14 @@
                   <template is="dom-if" if="{{service.isEmployeeAssignable}}" >
 
                     <template is="dom-if" if="{{service.assignedEmploymentId}}">
-                      <div class="employee-icon-container-active">
-                        <iron-icon icon="icons:account-circle" class="assign-icon" on-tap="assignEmployeeTapped"></iron-icon>[[verses.pos.assignedEmployee]]
+                      <div class="employee-icon-container-active" on-tap="assignEmployeeTapped">
+                        <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignedEmployee]]
                       </div>
                     </template>
 
                     <template is="dom-if" if="{{!service.assignedEmploymentId}}">
-                      <div class="employee-icon-container">
-                        <iron-icon icon="icons:account-circle" class="assign-icon" on-tap="assignEmployeeTapped"></iron-icon>[[verses.pos.assignEmployee]]
+                      <div class="employee-icon-container" on-tap="assignEmployeeTapped">
+                        <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignEmployee]]
                       </div>
                     </template>
 
