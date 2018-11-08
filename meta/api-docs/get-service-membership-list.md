@@ -60,12 +60,13 @@ Possible Error Codes:
         phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       }),
 
+      salesId: Joi.number().max(999999999999999).required(),
+      serviceId: Joi.number().max(999999999999999).required(),
       serviceBlueprintDetails: Joi.object().keys({
         name: Joi.string().min(1).max(64).required(),
       }),
 
-      salesId: Joi.number().max(999999999999999).required(),
-      serviceId: Joi.number().max(999999999999999).required(),
+      assignedEmploymentId: Joi.number().max(999999999999999).allow(null).required(),
 
       expiringDatetimeStamp: Joi.number().max(999999999999999).required(),
 

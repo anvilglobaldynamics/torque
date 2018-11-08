@@ -1578,7 +1578,6 @@ describe.only('Sales', _ => {
         }
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateAddSalesApiSuccessResponse(body);
       longstandingServiceSaleId = body.salesId;
