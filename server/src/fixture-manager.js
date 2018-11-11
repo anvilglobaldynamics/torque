@@ -33,7 +33,7 @@ class FixtureManager {
       {
         name: "package-list",
         path: "./src/fixtures/package-list.json",
-        version: 11
+        version: 12
       },
       {
         name: "module-list",
