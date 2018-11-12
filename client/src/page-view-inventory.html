@@ -201,9 +201,14 @@
       </template>
 
       <!-- add products trigger -->
-      <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
-        <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
-      </template>
+      <div class="card">
+        <div>
+          [[verses.inventory.addToInventoryHelp]]
+        </div>
+        <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
+          <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
+        </template>
+      </div>
 
       <!-- transfer products trigger -->
       <div class="card">
