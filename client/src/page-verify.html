@@ -31,18 +31,23 @@
       <iron-form id="verify-form">
         <form>
           <div class="card vertical layout">
+            
             <template is="dom-if" if="[[$equals(what, 'phone')]]">
               <div class="page-small--header">[[verses.verify.verifyPhoneNumberHeader]]</div>
-              <paper-textarea class="verifyForm--verificationToken" value="{{verifyForm.verificationToken}}" required minlength="64" error-message="[[verses.verify.verificationTokenInputError]]" label="[[verses.verify.verificationTokenInput]]" rows="3"></paper-textarea>
+              <div class="help-text">[[verses.verify.verificationToken]]</div>
+              <paper-textarea class="verifyForm--verificationToken" value="{{verifyForm.verificationToken}}" required minlength="64" error-message="[[verses.verify.verificationTokenInputError]]" label="[[verses.verify.verificationTokenInput]]" rows="2"></paper-textarea>
             </template>
-            <div class="horizontal layout button-row end">
-              <paper-button raised class="primary" on-tap="resendSmsTapped">[[verses.verify.resendSms]]</paper-button>
+
+            <div class="vertical layout button-row">
+              <paper-button raised class="primary" style="margin: 4px;" on-tap="resendSmsTapped">[[verses.verify.resendSms]]</paper-button>
               <div class="flex"></div>
-              <paper-button raised class="primary" on-tap="verifyTapped">[[verses.verify.verify]]</paper-button>
+              <paper-button raised class="primary" style="margin: 4px;" on-tap="verifyTapped">[[verses.verify.verify]]</paper-button>
             </div>
+            
             <div class="horizontal layout button-row extended center-center">
               <div class="link primary" on-tap="registerTapped">[[verses.verify.dontHaveAccount]]</div>
             </div>
+
           </div>
         </form>
       </iron-form>

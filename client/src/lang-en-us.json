@@ -700,8 +700,9 @@
     "phoneNowVerified": "Your phone is now verified.",
     "phoneCouldNotBeVerified": "Your phone could not be verified. Make sure the verification code is correct.",
     "verifyPhoneNumberHeader": "VERIFY PHONE NUMBER",
-    "verificationTokenInput": "Enter the verification token we sent to your phone.",
-    "verificationTokenInputError": "Enter the verification token we sent to your phone.",
+    "verificationToken": "Enter the verification token we sent to your phone.",
+    "verificationTokenInput": "Verification token.",
+    "verificationTokenInputError": "Enter valid verification token.",
     "resendSms": "RESEND SMS",
     "verify": "Verify",
     "dontHaveAccount": "Don't have an account?"

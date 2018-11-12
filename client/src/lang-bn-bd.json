@@ -701,8 +701,9 @@
     "phoneNowVerified": "আপনার ফোন যাচাই করা হয়েছে।",
     "phoneCouldNotBeVerified": "আপনার ফোন যাচাই করা যায়নি। নিশ্চিতকরণ যাচাই কোডটি সঠিক কিনা দেখুন।",
     "verifyPhoneNumberHeader": "ফোন নম্বর যাচাইকরণ",
-    "verificationTokenInput": "আপনার ফোনে পাঠানো যাচাইকরণ টোকেনটি লিখুন।",
-    "verificationTokenInputError": "আপনার ফোনে পাঠানো যাচাইকরণ টোকেনটি লিখুন।",
+    "verificationToken": "আপনার ফোনে পাঠানো যাচাইকরণ টোকেনটি লিখুন।",
+    "verificationTokenInput": "যাচাইকরণ টোকেনটি।",
+    "verificationTokenInputError": "সঠিক যাচাইকরণ টোকেনটি।",
     "resendSms": "এসএমএস আবার পাঠান",
     "verify": "যাচাই করুন",
     "dontHaveAccount": "অ্যাকাউন্ট নেই?"
