@@ -89,7 +89,7 @@ describe('Dashboard', _ => {
       json: {
         apiKey: adminApiKey,
         organizationId,
-        packageCode: "SE03",
+        packageCode: "R-SE03",
         paymentReference: "joi test"
       }
     }, (err, response, body) => {
