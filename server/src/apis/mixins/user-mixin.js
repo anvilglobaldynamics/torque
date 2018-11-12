@@ -5,6 +5,7 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-e
 exports.UserMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async __getUser({ userId }) {
+    // issue 472 case
     let user = await this.database.user.findById({ id: userId });
     throwOnFalsy(user, "USER_INVALID", "User could not be found");
     return { user };

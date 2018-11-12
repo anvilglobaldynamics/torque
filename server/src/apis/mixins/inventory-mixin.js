@@ -4,6 +4,7 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-e
 /** @param {typeof Api} SuperApiClass */
 exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
 
+  // issue 472 case
   async __getInventory({ inventoryId }) {
     let inventory = await this.database.inventory.findById({ id: inventoryId });
     throwOnFalsy(inventory, "INVENTORY_INVALID", "inventory could not be found");
@@ -34,8 +35,10 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
   async __getInventoryContainerDetails({ inventory }) {
     let inventoryContainer;
     if (inventory.inventoryContainerType === "outlet") {
+      // issue 472 case
       inventoryContainer = await this.database.outlet.findById({ id: inventory.inventoryContainerId });
     } else {
+      // issue 472 case
       inventoryContainer = await this.database.warehouse.findById({ id: inventory.inventoryContainerId });
     }
     throwOnFalsy(inventoryContainer, "INVENTORY_CONTAINER_INVALID", "inventory container could not be found");

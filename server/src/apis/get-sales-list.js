@@ -61,6 +61,7 @@ exports.GetSalesListApi = class extends Api {
 
   async __verifyOutletIfNeeded({ outletId, shouldFilterByOutlet }) {
     if (shouldFilterByOutlet) {
+      // issue 472 case
       let doc = await this.database.outlet.findById({ id: outletId });
       throwOnFalsy(doc, "OUTLET_INVALID", "Outlet not found.");
     }
@@ -68,13 +69,16 @@ exports.GetSalesListApi = class extends Api {
 
   async __verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer }) {
     if (shouldFilterByCustomer) {
+      // issue 472 case
       let doc = await this.database.customer.findById({ id: customerId });
       throwOnFalsy(doc, "CUSTOMER_INVALID", "Customer not found.");
     }
   }
 
   async __getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }) {
+    // issue 472 case
     let outletIdList = (await this.database.outlet.listByOrganizationId({ organizationId })).map(outlet => outlet.id);
+    // issue 472 case
     let salesList = await this.database.sales.listByFilters({ outletIdList, organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate });
     return salesList;
   }

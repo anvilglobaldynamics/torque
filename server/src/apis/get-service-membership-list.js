@@ -50,6 +50,7 @@ exports.GetServiceMembershipListApi = class extends Api {
 
   async _verifyOutletIfNeeded({ outletId, shouldFilterByOutlet }) {
     if (shouldFilterByOutlet) {
+      // issue 472 case
       let doc = await this.database.outlet.findById({ id: outletId });
       throwOnFalsy(doc, "OUTLET_INVALID", "Outlet not found.");
     }
@@ -57,6 +58,7 @@ exports.GetServiceMembershipListApi = class extends Api {
 
   async _verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer }) {
     if (shouldFilterByCustomer) {
+      // issue 472 case
       let doc = await this.database.customer.findById({ id: customerId });
       throwOnFalsy(doc, "CUSTOMER_INVALID", "Customer not found.");
     }
@@ -64,6 +66,7 @@ exports.GetServiceMembershipListApi = class extends Api {
 
   async _verifyServiceBlueprintIfNeeded({ serviceBlueprintId, shouldFilterByServiceBlueprint }) {
     if (shouldFilterByServiceBlueprint) {
+      // issue 472 case
       let doc = await this.database.serviceBlueprint.findById({ id: serviceBlueprintId });
       throwOnFalsy(doc, "SERVICE_BLUEPRINT_INVALID", "Service blueprint not found.");
     }
@@ -71,6 +74,7 @@ exports.GetServiceMembershipListApi = class extends Api {
 
   async _combineCustomerData({ serviceMembershipList }) {
     for (let i = 0; i < serviceMembershipList.length; i++) {
+      // issue 472 case
       let { fullName, phone } = await this.database.customer.findById({ id: serviceMembershipList[i].customerId });
       serviceMembershipList[i].customerDetails = { fullName, phone };
     }
@@ -79,8 +83,10 @@ exports.GetServiceMembershipListApi = class extends Api {
   async _combineAssignedEmployeeData({ serviceMembershipList }) {
     for (let i = 0; i < serviceMembershipList.length; i++) {
       if (serviceMembershipList[i].assignedEmploymentId) {
+        // issue 472 case
         let employee = await this.database.employment.findById({ id: serviceMembershipList[i].assignedEmploymentId });
         throwOnFalsy(employee, "EMPLOYEE_INVALID", "Employee data unavailable / invalid.");
+        // issue 472 case
         let user = await this.database.user.findById({ id: employee.userId });
         throwOnFalsy(user, "USER_INVALID", "User data unavailable / invalid.");
         serviceMembershipList[i].assignedEmployeeDetails = { fullName: user.fullName, phone: user.phone };
@@ -210,7 +216,9 @@ exports.GetServiceMembershipListApi = class extends Api {
     serviceMembershipList.forEach(serviceMembership => console.log(new Date(serviceMembership.expiringDatetimeStamp)))
 
     for (let serviceMembership of serviceMembershipList) {
+      // issue 472 case
       serviceMembership.salesDetails = await this.database.sales.findById({ id: serviceMembership.salesId });
+      // issue 472 case
       serviceMembership.serviceDetails = await this.database.service.findById({ id: serviceMembership.serviceId });
     }
     if (shouldFilterByServiceBlueprint) {

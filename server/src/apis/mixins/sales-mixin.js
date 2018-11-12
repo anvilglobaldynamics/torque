@@ -4,6 +4,7 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-e
 /** @param {typeof Api} SuperApiClass */
 exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
 
+  // issue 472 case
   async _getSales({ salesId }) {
     let sales = await this.database.sales.findById({ id: salesId });
     throwOnFalsy(sales, "SALES_INVALID", "Sales not found");

@@ -4,6 +4,7 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-e
 /** @param {typeof Api} SuperApiClass */
 exports.ProductMixin = (SuperApiClass) => class extends SuperApiClass {
 
+  // issue 472 case
   async __getProduct({ productId }) {
     let product = await this.database.product.findById({ id: productId });
     throwOnFalsy(product, "PRODUCT_INVALID", "product not found");

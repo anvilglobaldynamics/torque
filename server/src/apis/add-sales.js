@@ -87,6 +87,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
 
   _reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList }) {
     for (let product of productList) {
+      // issue 472 case
       let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
       if (!foundProduct) {
         throw new CodedError("PRODUCT_INVALID", "product could not be found in source inventory");
@@ -130,6 +131,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
   async _findCustomerIfSelected({ customerId }) {
     let customer = null;
     if (customerId) {
+      // issue 472 case
       customer = await this.database.customer.findById({ id: customerId });
       if (!customer) {
         throw new CodedError("CUSTOMER_INVALID", "Customer not found.");
@@ -139,8 +141,10 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
   }
 
   async _validateServiceAndCheckRequirements({ serviceListObj, customer }) {
+    // issue 473 case
     let service = await this.database.service.findById({ id: serviceListObj.serviceId });
     throwOnFalsy(service, "SERVICE_INVALID", "Service could not be found.");
+    // issue 473 case
     let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: service.serviceBlueprintId });
     throwOnFalsy(serviceBlueprint, "SERVICE_INVALID", "Service could not be found.");
 
@@ -159,7 +163,9 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
   }
 
   async _createServiceMembership({ createdByUserId, serviceListObj, customerId, salesId }) {
+    // issue 472 case
     let service = await this.database.service.findById({ id: serviceListObj.serviceId });
+    // issue 472 case
     let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: service.serviceBlueprintId });
 
     if (serviceBlueprint.isLongstanding) {
@@ -184,6 +190,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     await this._validateBillingAndPayment({ productList, payment, paymentListEntry, customer });
 
     if (productList.length) {
+      // issue 472 case
       let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
       this._reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList });
       await this.database.inventory.setProductList({ id: outletDefaultInventory.id }, { productList: outletDefaultInventory.productList });
