@@ -39,7 +39,10 @@ exports.EditServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin)
         errorCode: "PRODUCT_BLUEPRINT_INVALID"
       },
       privilegeList: [
-        "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
+        "PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS"
+      ],
+      moduleList: [
+        "MOD_SERVICE",
       ]
     }];
   }

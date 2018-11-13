@@ -26,6 +26,9 @@ exports.GetActiveServiceListApi = class extends Api {
       },
       privilegeList: [
         "PRIV_VIEW_ALL_SERVICES"
+      ],
+      moduleList: [
+        "MOD_SERVICE",
       ]
     }];
   }
