@@ -22,7 +22,7 @@ const changedPhone = '9' + rnd(prefix, 11);
 
 let apiKey = null;
 
-describe('user apis (1)', _ => {
+describe.only('user apis (1)', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -38,7 +38,8 @@ describe('user apis (1)', _ => {
       json: {
         password,
         phone,
-        fullName
+        fullName,
+        hasAgreedToToc: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200)
@@ -50,13 +51,34 @@ describe('user apis (1)', _ => {
 
   });
 
+  it('api/user-register (Valid, Did not agree)', testDoneFn => {
+
+    callApi('api/user-register', {
+      json: {
+        password,
+        phone,
+        fullName,
+        hasAgreedToToc: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('VALIDATION_ERROR');
+
+      testDoneFn();
+    })
+
+  });
+
   it('api/user-register (Valid, Not Unique phone)', testDoneFn => {
 
     callApi('api/user-register', {
       json: {
         password,
         phone,
-        fullName
+        fullName,
+        hasAgreedToToc: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -75,7 +97,8 @@ describe('user apis (1)', _ => {
       json: {
         password: 'short',
         phone,
-        fullName
+        fullName,
+        hasAgreedToToc: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

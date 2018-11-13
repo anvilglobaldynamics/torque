@@ -65,6 +65,7 @@ exports.terminateServer = (callback) => {
 // ===================================== User
 
 exports.registerUser = (data, callback) => {
+  data.hasAgreedToToc = true;
   callApi('api/user-register', {
     json: data
   }, (err, response, body) => {

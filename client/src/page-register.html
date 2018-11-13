@@ -120,8 +120,8 @@
 
       // region: register =================================
 
-      _processUserRegister({ fullName, phone, password }) {
-        let data = { fullName, phone, password };
+      _processUserRegister({ fullName, phone, password, hasAgreedToToc }) {
+        let data = { fullName, phone, password, hasAgreedToToc };
         this.app.callUserRegisterApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'registerForm');
@@ -152,7 +152,7 @@
         }
 
         let { fullName, phone, password } = this.registerForm;
-        this._processUserRegister({ fullName, phone, password });
+        this._processUserRegister({ fullName, phone, password, hasAgreedToToc: this.agreesToToc });
       }
 
       viewTocTapped(e = null) {
