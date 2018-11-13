@@ -33,6 +33,9 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
       },
       privilegeList: [
         "PRIV_VIEW_ALL_INVENTORIES"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

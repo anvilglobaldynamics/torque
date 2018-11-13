@@ -28,6 +28,9 @@ exports.DeleteProductBlueprintApi = class extends collectionCommonMixin(LegacyAp
       },
       privilegeList: [
         "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

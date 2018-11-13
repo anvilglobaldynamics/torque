@@ -30,6 +30,9 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
       },
       privilegeList: [
         "PRIV_VIEW_ALL_INVENTORIES"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

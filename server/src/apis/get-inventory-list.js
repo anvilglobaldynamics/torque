@@ -21,6 +21,9 @@ exports.GetInventoryListApi = class extends Api {
       organizationBy: "organizationId",
       privilegeList: [
         "PRIV_VIEW_ALL_INVENTORIES"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

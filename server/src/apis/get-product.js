@@ -28,6 +28,9 @@ exports.GetProductApi = class extends Api.mixin(ProductMixin, InventoryMixin) {
       },
       privilegeList: [
         "PRIV_VIEW_ALL_INVENTORIES"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

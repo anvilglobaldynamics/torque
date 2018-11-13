@@ -41,6 +41,9 @@ exports.GetSalesReturnApi = class extends collectionCommonMixin(LegacyApi) {
       ],
       privilegeList: [
         "PRIV_VIEW_SALES_RETURN"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }
