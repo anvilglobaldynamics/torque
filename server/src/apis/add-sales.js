@@ -141,10 +141,10 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
   }
 
   async _validateServiceAndCheckRequirements({ serviceListObj, customer }) {
-    // issue 473 case
+    // issue 472 case
     let service = await this.database.service.findById({ id: serviceListObj.serviceId });
     throwOnFalsy(service, "SERVICE_INVALID", "Service could not be found.");
-    // issue 473 case
+    // issue 472 case
     let serviceBlueprint = await this.database.serviceBlueprint.findById({ id: service.serviceBlueprintId });
     throwOnFalsy(serviceBlueprint, "SERVICE_INVALID", "Service could not be found.");
 

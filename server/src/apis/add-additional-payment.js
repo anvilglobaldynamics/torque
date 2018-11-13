@@ -48,7 +48,7 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
   }
 
   async _getCustomer({ customerId }) {
-    // issue 473 case
+    // issue 472 case
     let customer = await this.database.customer.findById({ id: customerId });
     throwOnFalsy(customer, "CUSTOMER_INVALID", "Customer not found.");
     return customer;
