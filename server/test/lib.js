@@ -1494,7 +1494,8 @@ exports.validateUserSchema = (doc) => {
     isDeleted: Joi.boolean().required(),
     isPhoneVerified: Joi.boolean().required(),
     isEmailVerified: Joi.boolean().required(),
-    isBanned: Joi.boolean().required()
+    isBanned: Joi.boolean().required(),
+    agreedToTocDatetimeStamp: Joi.number().max(999999999999999).allow(null).required()
   });
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;

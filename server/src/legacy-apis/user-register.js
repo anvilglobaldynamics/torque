@@ -22,8 +22,10 @@ exports.UserRegisterApi = class extends userCommonMixin(emailVerificationRequest
   }
 
   handle({ body }) {
-    let { fullName, phone, password } = body;
-    this._createUser({ fullName, phone, password }, (userId) => {
+    let { fullName, phone, password, hasAgreedToToc } = body;
+    let agreedToTocDatetimeStamp = null;
+    if (hasAgreedToToc) agreedToTocDatetimeStamp = Date.now();
+    this._createUser({ fullName, phone, password, agreedToTocDatetimeStamp }, (userId) => {
       this._createPhoneVerificationRequest({ phone, userId }, (verificationLink) => {
         this._sendPhoneVerificationSms({ phone, verificationLink });
         this.success({ status: "success", userId });

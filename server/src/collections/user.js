@@ -21,7 +21,8 @@ exports.UserCollection = class extends Collection {
       isDeleted: Joi.boolean().required(),
       isPhoneVerified: Joi.boolean().required(),
       isEmailVerified: Joi.boolean().required(),
-      isBanned: Joi.boolean().required()
+      isBanned: Joi.boolean().required(),
+      agreedToTocDatetimeStamp: Joi.number().max(999999999999999).allow(null).required()
     });
   }
 
@@ -34,7 +35,7 @@ exports.UserCollection = class extends Collection {
     ];
   }
 
-  async create({ phone, fullName, passwordHash }) {
+  async create({ phone, fullName, passwordHash, agreedToTocDatetimeStamp }) {
     return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
@@ -49,7 +50,8 @@ exports.UserCollection = class extends Collection {
       isDeleted: false,
       isPhoneVerified: false,
       isEmailVerified: false,
-      isBanned: false
+      isBanned: false,
+      agreedToTocDatetimeStamp
     });
   }
 

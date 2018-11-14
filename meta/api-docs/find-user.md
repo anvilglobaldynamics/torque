@@ -54,7 +54,8 @@ Possible Error Codes:
     isPhoneVerified: Joi.boolean().required(),
     isEmailVerified: Joi.boolean().required(),
     isDeleted: Joi.boolean().required(),
-    isBanned: Joi.boolean().required()
+    isBanned: Joi.boolean().required(),
+    agreedToTocDatetimeStamp: Joi.number().max(999999999999999).allow(null).required()
   });
 }
 ```

@@ -55,6 +55,7 @@ Possible Error Codes:
     physicalAddress: String
     emergencyContact: String
     bloodGroup: String
+    agreedToTocDatetimeStamp: Number
   },
 }
 ```

@@ -34,7 +34,8 @@ exports.UserCollection = class extends LegacyCollection {
       isDeleted: Joi.boolean().required(),
       isPhoneVerified: Joi.boolean().required(),
       isEmailVerified: Joi.boolean().required(),
-      isBanned: Joi.boolean().required()
+      isBanned: Joi.boolean().required(),
+      agreedToTocDatetimeStamp: Joi.number().max(999999999999999).allow(null).required()
     });
 
     this.uniqueKeyDefList = [
@@ -45,7 +46,7 @@ exports.UserCollection = class extends LegacyCollection {
     ]
   }
 
-  create({ phone, fullName, passwordHash }, cbfn) {
+  create({ phone, fullName, passwordHash, agreedToTocDatetimeStamp  }, cbfn) {
     let user = {
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
@@ -60,7 +61,8 @@ exports.UserCollection = class extends LegacyCollection {
       isDeleted: false,
       isPhoneVerified: false,
       isEmailVerified: false,
-      isBanned: false
+      isBanned: false,
+      agreedToTocDatetimeStamp
     }
     this._insert(user, (err, id) => {
       return cbfn(err, id);
