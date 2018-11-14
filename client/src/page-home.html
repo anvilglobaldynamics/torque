@@ -249,7 +249,6 @@
         this.app.currentPageIsModal = false;
         this.app.pushPageTitle(this.app.verses.titleBar.home);
         if (!this._ensureAccess()) return;
-        if (!this._ensureHasAgreedUpdatedToc()) return;
         this.onUserChange(this.app.user);
         this.onOrganizationChange(this.app.organization);
         this.onSettingsChange(this.app.settings);
@@ -270,14 +269,6 @@
         return this.accessControl({
           authLevel: 'authenticated'
         });
-      }
-
-      _ensureHasAgreedUpdatedToc() {
-        if (!this.app.user.agreedToTocDatetimeStamp || this.app.user.agreedToTocDatetimeStamp < this.app.tocVersionUpdatedDatetimeStamp) {
-          this.app.navigateTo('/toc/from:dashboard');
-          return false;
-        }
-        return true;
       }
 
       _computeWarnings() {
