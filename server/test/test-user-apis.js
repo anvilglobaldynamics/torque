@@ -130,6 +130,7 @@ describe('user apis (1)', _ => {
       // expect(body.warning).to.include('You have less than 24 hours to verify your email address.');
       expect(body.warning).to.include(`You have less than 1 hour to verify your phone number "${phone}".`);
       expect(body).to.have.property('user').that.is.an('object')
+      expect(body.user).to.have.property('agreedToTocDatetimeStamp').that.is.a('number')
 
       apiKey = body.apiKey;
       testDoneFn();
