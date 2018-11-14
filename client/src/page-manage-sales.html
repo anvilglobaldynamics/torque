@@ -139,7 +139,13 @@
                     </div>
                     <div class="description-time">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
                     <div class="description">[[verses.sales.billed]]: [[$round(sale.payment.totalBilled)]] [[app.settings.monetaryUnit]], [[verses.sales.paid]]: [[$round(sale.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</div>
-                    <div class="description">[[sale.productList.length]] [[verses.sales.products]]</div>
+
+                    <template is="dom-if" if="{{sale.productList.length}}">
+                      <span class="description">[[sale.productList.length]] [[verses.sales.products]]</span>
+                    </template>
+                    <template is="dom-if" if="{{sale.serviceList.length}}">
+                      <span class="description">[[sale.serviceList.length]] [[verses.sales.services]]</span>
+                    </template>
                     
                   </div>
                 </div>
