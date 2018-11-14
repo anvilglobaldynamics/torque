@@ -123,6 +123,7 @@
     } else {
       window.mode = 'production';
     }
+    window.mode = 'development';
     Polymer = {
       sanitizeDOMValue: (value, name, type, node) => {
         if (type === 'property' && typeof (value) === 'string' && (['href', 'class'].indexOf(name) > -1)) {
