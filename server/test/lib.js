@@ -477,7 +477,8 @@ exports.validateAddOrganizationApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
-    organizationId: Joi.number().required()
+    organizationId: Joi.number().required(),
+    employmentId: Joi.number().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);

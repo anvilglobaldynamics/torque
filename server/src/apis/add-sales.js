@@ -154,7 +154,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
 
     if (serviceListObj.assignedEmploymentId) {
       let employee = await this.database.employment.findById({ id: serviceListObj.assignedEmploymentId });
-      throwOnFalsy(employee, "ASSIGNED_EMPLOYEE_INVALID", "Service could not be found.");
+      throwOnFalsy(employee, "ASSIGNED_EMPLOYEE_INVALID", "Employee could not be found.");
     }
   }
 

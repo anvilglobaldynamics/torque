@@ -68,6 +68,7 @@ const openingBalance = '500';
 let apiKey = null;
 let userId = null;
 let organizationId = null;
+let employmentId = null;
 let outletId = null;
 let productBlueprintId = null;
 let customerId = null;
@@ -136,6 +137,7 @@ describe('Sales', _ => {
             email: orgEmail
           }, (data) => {
             organizationId = data.organizationId;
+            employmentId = data.employmentId;
             addOutlet({
               apiKey,
               organizationId,
@@ -1561,7 +1563,7 @@ describe('Sales', _ => {
             serviceId: longstandingService.id,
             salePrice: longstandingService.salePrice,
             vatPercentage: longstandingService.serviceBlueprint.defaultVat,
-            assignedEmploymentId: userId
+            assignedEmploymentId: employmentId
           }
         ],
 
