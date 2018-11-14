@@ -82,7 +82,10 @@
     "moduleDescriptionLineTwo": "To add more features to Lipi, contact us at +880 1770 947908 or mail us at care@anvil.live",
     "productModule": "Product Module",
     "serviceModule": "Service Module",
-    "gymModule": "Gym Module"
+    "gymModule": "Gym Module",
+    "retail": "Retail",
+    "service": "Service",
+    "both": "Both"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -182,6 +185,9 @@
   "organization": {
     "addOrganizationTitle": "Add Organization",
     "isNotOneOutletOrg": "This organization has more than one outlets.",
+
+    "industryCategory": "Organization's Industry Category",
+
     "nameOfYourOrganization": "Name of your Organization",
     "pleaseEnterAValidName": "Enter a valid name.",
     "emailInput": "Your email address (Optional)",
