@@ -346,19 +346,15 @@
 
       _printAndGoBack() {
         window.setTimeout(() => {
-          // HACK - rudimentary detection of platform. Switch to better ones if
-          // technology allows.
-          if (window.innerWidth < 570) {
-            // android
-            // window.print is not blocking here. so we cannot go back automatically.
-            window.print();
-          } else {
-            // pc
-            // window.print is blocking here.
-            window.print();
+
+          const threshold = 300;
+          let then = Date.now();
+          window.print();
+          let now = Date.now();
+          if (now - then > threshold){
             window.history.back();
           }
-          // HACK - end
+          
         }, 100);
       }
 
