@@ -193,9 +193,7 @@
   "organization": {
     "addOrganizationTitle": "সংস্থা তৈরি করুন",
     "isNotOneOutletOrg": "এই সংস্থার একের বেশি দোকান আছে।",
-
-    "industryCategory": "সংস্থার শিল্প বিভাগ",
-
+    "industryCategory": "সংস্থার শিল্পের ধরণ",
     "nameOfYourOrganization": "আপনার সংস্থার নাম",
     "pleaseEnterAValidName": "সঠিক নাম লিখুন",
     "emailInput": "আপনার ইমেইল (ঐচ্ছিক)",

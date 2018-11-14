@@ -106,7 +106,8 @@ const createUser = async ({ phone }) => {
   let { userId } = data = await callApi('api/user-register', {
     phone,
     password: commonPassword,
-    fullName: pickOne(nameList)
+    fullName: pickOne(nameList),
+    hasAgreedToToc: true
   });
   let { apiKey } = await callApi('api/user-login', {
     emailOrPhone: phone,
@@ -126,7 +127,7 @@ const createOrganization = async ({ apiKey }, db) => {
     phone: makePhoneNumber(),
     email: makeEmailId()
   });
-  let packageActivationId = await db.packageActivation.create({ packageCode: 'U01', organizationId, createdByAdminName: 'default', paymentReference: 'n/aaaa' });
+  let packageActivationId = await db.packageActivation.create({ packageCode: 'R-U01', organizationId, createdByAdminName: 'default', paymentReference: 'n/aaaa' });
   let result = await db.organization.setPackageActivationId({ id: organizationId }, { packageActivationId });
 
   return { organizationId };
@@ -226,36 +227,37 @@ const createEmployee = async ({ apiKey, organizationId }) => {
     privileges: {
       PRIV_VIEW_USERS: true,
       PRIV_MODIFY_USERS: true,
-
+    
       PRIV_ACCESS_POS: true,
       PRIV_VIEW_SALES: true,
       PRIV_MODIFY_SALES: true,
       PRIV_ALLOW_FLAT_DISCOUNT: true,
-
-      PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: true,
-      PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: true,
-
+    
       PRIV_VIEW_SALES_RETURN: true,
       PRIV_MODIFY_SALES_RETURN: true,
-
+    
       PRIV_VIEW_ALL_INVENTORIES: true,
+      PRIV_VIEW_ALL_SERVICES: true,
       PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
+      PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
+      PRIV_VIEW_ALL_SERVICE_BLUEPRINTS: true,
+      PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS: true,
       PRIV_TRANSFER_ALL_INVENTORIES: true,
       PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
-
-      PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
-      PRIV_VIEW_ALL_SERVICES: true,
       PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS: true,
-
+    
+      PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: true,
+      PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: true,
+    
       PRIV_VIEW_ALL_OUTLETS: true,
       PRIV_MODIFY_ALL_OUTLETS: true,
-
+    
       PRIV_VIEW_ALL_WAREHOUSES: true,
       PRIV_MODIFY_ALL_WAREHOUSES: true,
-
+    
       PRIV_VIEW_ORGANIZATION_STATISTICS: true,
       PRIV_MODIFY_ORGANIZATION: true,
-
+    
       PRIV_VIEW_CUSTOMER: true,
       PRIV_MODIFY_CUSTOMER: true,
       PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
