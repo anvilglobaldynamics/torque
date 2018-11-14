@@ -346,8 +346,19 @@
 
       _printAndGoBack() {
         window.setTimeout(() => {
-          window.print();
-          window.history.back();
+          // HACK - rudimentary detection of platform. Switch to better ones if
+          // technology allows.
+          if (window.innerWidth < 570) {
+            // android
+            // window.print is not blocking here. so we cannot go back automatically.
+            window.print();
+          } else {
+            // pc
+            // window.print is blocking here.
+            window.print();
+            window.history.back();
+          }
+          // HACK - end
         }, 100);
       }
 
@@ -429,7 +440,7 @@
       }
 
       $calculateIndividualServicePrice(service) {
-        let { salePrice } = service; 
+        let { salePrice } = service;
         return this.$round(salePrice);
       }
 
