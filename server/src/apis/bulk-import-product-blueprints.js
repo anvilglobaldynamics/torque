@@ -22,6 +22,9 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       organizationBy: "organizationId",
       privilegeList: [
         "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

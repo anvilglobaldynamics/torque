@@ -32,6 +32,9 @@ exports.EditInventoryProductApi = class extends Api.mixin(ProductMixin, Inventor
       },
       privilegeList: [
         "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

@@ -31,6 +31,9 @@ exports.EditWarehouseApi = class extends collectionCommonMixin(LegacyApi) {
       },
       privilegeList: [
         "PRIV_MODIFY_ALL_WAREHOUSES"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

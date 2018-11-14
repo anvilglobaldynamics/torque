@@ -38,6 +38,9 @@ exports.ModifyAvailabilityOfServiceListInOutletListApi = class extends Api.mixin
       organizationBy: "organizationId",
       privilegeList: [
         "PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS"
+      ],
+      moduleList: [
+        "MOD_SERVICE",
       ]
     }];
   }

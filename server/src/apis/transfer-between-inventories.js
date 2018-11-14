@@ -42,7 +42,12 @@ exports.TransferBetweenInventoriesApi = class extends Api {
           select: "organizationId",
           errorCode: "TO_INVENTORY_INVALID"
         },
-        privilegeList: ["PRIV_TRANSFER_ALL_INVENTORIES"]
+        privilegeList: [
+          "PRIV_TRANSFER_ALL_INVENTORIES"
+        ],
+        moduleList: [
+          "MOD_PRODUCT",
+        ]
       }
     ];
   }
