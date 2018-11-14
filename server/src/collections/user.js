@@ -133,4 +133,12 @@ exports.UserCollection = class extends Collection {
     });
   }
 
+  async setAgreedToTocDatetimeStamp({ id }, { agreedToTocDatetimeStamp }) {
+    return await this._update({ id }, {
+      $set: {
+        agreedToTocDatetimeStamp
+      }
+    });
+  }
+
 }

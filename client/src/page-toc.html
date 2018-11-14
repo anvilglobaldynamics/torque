@@ -134,7 +134,18 @@
       // region: ui =================================
 
       agreeTapped() {
-        this.app.navigateTo('/register')
+        if (this.params.from && this.params.from === 'dashboard') {
+          let data = {};
+          this.app.callUserAgreeToTocApi(data, (err, response) => {
+            if (err) return;
+            if (response.hasError) return this.onApiError(response.error);
+            this.app.user.agreedToTocDatetimeStamp = response.agreedToTocDatetimeStamp;
+            this.app.saveUser(this.app.user);
+            this.app.navigateTo('/home');
+          });
+        } else {
+          this.app.navigateTo('/register');
+        }
       }
 
       // region: misc =================================
