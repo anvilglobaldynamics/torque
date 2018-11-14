@@ -28,8 +28,9 @@ exports.AddOrganizationApi = class extends Api {
   }
 
   async _setUserAsOwner({ userId, organizationId }) {
-    let res = await this.database.employment.addOwner({ userId, organizationId });
-    throwOnFalsy(res, "UNABLE_TO_SET_EMPLOYMNET", "Unable to set employment for unknown reasons");
+    let employmentId = await this.database.employment.addOwner({ userId, organizationId });
+    throwOnFalsy(employmentId, "UNABLE_TO_SET_EMPLOYMNET", "Unable to set employment for unknown reasons");
+    return employmentId;
   }
 
   async _setTrialPackage({ organizationId }) {
@@ -73,11 +74,11 @@ exports.AddOrganizationApi = class extends Api {
     await this._validatedactiveModuleCodeList({ activeModuleCodeList });
 
     let organizationId = await this._createOrganization({ name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList });
-    await this._setUserAsOwner({ userId, organizationId });
+    let employmentId = await this._setUserAsOwner({ userId, organizationId });
     await this._setTrialPackage({ organizationId });
     await this._addModuleActivation({ organizationId, activeModuleCodeList });
 
-    return { status: "success", organizationId };
+    return { status: "success", organizationId, employmentId };
   }
 
 }

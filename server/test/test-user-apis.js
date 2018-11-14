@@ -38,7 +38,8 @@ describe('user apis (1)', _ => {
       json: {
         password,
         phone,
-        fullName
+        fullName,
+        hasAgreedToToc: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200)
@@ -50,13 +51,34 @@ describe('user apis (1)', _ => {
 
   });
 
+  it('api/user-register (Valid, Did not agree)', testDoneFn => {
+
+    callApi('api/user-register', {
+      json: {
+        password,
+        phone,
+        fullName,
+        hasAgreedToToc: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error.code).to.equal('VALIDATION_ERROR');
+
+      testDoneFn();
+    })
+
+  });
+
   it('api/user-register (Valid, Not Unique phone)', testDoneFn => {
 
     callApi('api/user-register', {
       json: {
         password,
         phone,
-        fullName
+        fullName,
+        hasAgreedToToc: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -75,7 +97,8 @@ describe('user apis (1)', _ => {
       json: {
         password: 'short',
         phone,
-        fullName
+        fullName,
+        hasAgreedToToc: true
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -107,6 +130,7 @@ describe('user apis (1)', _ => {
       // expect(body.warning).to.include('You have less than 24 hours to verify your email address.');
       expect(body.warning).to.include(`You have less than 1 hour to verify your phone number "${phone}".`);
       expect(body).to.have.property('user').that.is.an('object')
+      expect(body.user).to.have.property('agreedToTocDatetimeStamp').that.is.a('number')
 
       apiKey = body.apiKey;
       testDoneFn();

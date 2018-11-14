@@ -82,7 +82,8 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
         'emergencyContact',
         'bloodGroup',
         'isEmailVerified',
-        'isPhoneVerified'
+        'isPhoneVerified',
+        'agreedToTocDatetimeStamp'
       ])
     }
   }

@@ -501,6 +501,11 @@
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('add-additional-payment', data, cbfn);
       }
+
+      callUserAgreeToTocApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('user-agree-to-toc', data, cbfn);
+      }
     }
 
   })();

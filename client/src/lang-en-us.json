@@ -111,6 +111,12 @@
     "passwordInput": "A minimum 8 digit password",
     "passwordInputError": "Enter a password at least 8 characters long.",
     "alreadyHaveAccount": "Already have an account?",
+    "tocNotRead": "You must read the Terms and Conditions before you proceed.",
+    "tocNotAgreed": "You must agree to the Terms and Conditions before you proceed.",
+    "tocLinkPart1": "Please read the ",
+    "tocLinkPart2": "The Terms and Conditions",
+    "tocLinkPart3": " before you register.",
+    "tocCheckbox": "I have read, understood and agree to the Terms and Conditions above.",
     "nowAUserOfTorque": "You are now a user of Torque. You now may log in."
   },
   "sidebar": {
