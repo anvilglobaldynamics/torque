@@ -26,6 +26,9 @@ exports.DeleteWarehouseApi = class extends Api {
       },
       privilegeList: [
         "PRIV_MODIFY_ALL_WAREHOUSES"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

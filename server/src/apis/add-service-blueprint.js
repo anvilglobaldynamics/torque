@@ -37,6 +37,9 @@ exports.AddServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin, 
       organizationBy: "organizationId",
       privilegeList: [
         "PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS"
+      ],
+      moduleList: [
+        "MOD_SERVICE",
       ]
     }];
   }

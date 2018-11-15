@@ -26,6 +26,9 @@ exports.AddWarehouseApi = class extends inventoryCommonMixin(LegacyApi) {
       organizationBy: "organizationId",
       privilegeList: [
         "PRIV_MODIFY_ALL_WAREHOUSES"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

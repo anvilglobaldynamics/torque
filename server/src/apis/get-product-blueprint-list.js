@@ -21,6 +21,9 @@ exports.GetProductBlueprintListApi = class extends Api {
       organizationBy: "organizationId",
       privilegeList: [
         "PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

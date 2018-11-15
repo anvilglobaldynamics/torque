@@ -48,6 +48,9 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
       ],
       privilegeList: [
         "PRIV_MODIFY_SALES_RETURN"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

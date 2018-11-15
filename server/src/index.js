@@ -25,6 +25,7 @@ let { UserEditProfileApi } = require('./legacy-apis/user-edit-profile');
 let { UserSetEmailApi } = require('./legacy-apis/user-set-email');
 let { UserResendVerificationSmsApi } = require('./legacy-apis/user-resend-verification-sms');
 let { UserResendVerificationEmailApi } = require('./legacy-apis/user-resend-verification-email');
+const { UserAgreeToTocApi } = require('./apis/user-agree-to-toc');
 
 let { UserResetPasswordRequestApi } = require('./legacy-apis/user-reset-password--request');
 let { UserResetPasswordGetTokenInfoApi } = require('./legacy-apis/user-reset-password--get-token-info');
@@ -272,6 +273,7 @@ class Program {
     server.registerPostApi('/api/user-set-email', UserSetEmailApi);
     server.registerPostApi('/api/user-resend-verification-sms', UserResendVerificationSmsApi);
     server.registerPostApi('/api/user-resend-verification-email', UserResendVerificationEmailApi);
+    server.registerPostApi('/api/user-agree-to-toc', UserAgreeToTocApi);
     server.registerPostApi('/api/add-organization', AddOrganizationApi);
     server.registerPostApi('/api/get-organization-list', GetOrganizationListApi);
     server.registerPostApi('/api/edit-organization', EditOrganizationApi);

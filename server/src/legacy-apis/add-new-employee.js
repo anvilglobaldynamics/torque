@@ -96,7 +96,7 @@ exports.AddNewEmployeeApi = class extends phoneVerificationRequestMixin(userComm
     let { fullName, phone, password, organizationId, role, designation, companyProvidedId, privileges } = body;
     let { aPackage } = this.interimData;
     this._checkOrganizationPackageEmployeeLimit({ organizationId, aPackage }, () => {
-      this._createUser({ fullName, phone, password }, (userId) => {
+      this._createUser({ fullName, phone, password, agreedToTocDatetimeStamp: null }, (userId) => {
         this._hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {
           this._createPhoneVerificationRequest({ phone, userId }, (verificationLink) => {
             this._sendPhoneVerificationSms({ phone, verificationLink });

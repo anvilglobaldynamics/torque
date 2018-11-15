@@ -180,6 +180,11 @@
                     <div class="service-description">[[verses.serviceMembership.serviceBlueprint]]:
                       [[serviceMembership.serviceBlueprintDetails.name]]</div>
 
+                    <template is="dom-if" if="[[serviceMembership.assignedEmploymentId]]">
+                      <div class="service-description">[[verses.serviceMembership.assignedEmployee]]:
+                        [[serviceMembership.assignedEmployeeDetails.fullName]], [[serviceMembership.assignedEmployeeDetails.phone]]</div>
+                    </template>
+
                     <div class$="expiring-datetime-container [[$serviceMembershipExpiryStatus(serviceMembership.expiringDatetimeStamp)]]">
                       [[verses.serviceMembership.expiringDatetime]]: [[$mkDate(serviceMembership.expiringDatetimeStamp,
                       'hh:mmtt dd-MMM-yyyy')]]

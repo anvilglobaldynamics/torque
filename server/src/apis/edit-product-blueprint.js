@@ -41,6 +41,9 @@ exports.EditProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin)
       },
       privilegeList: [
         "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

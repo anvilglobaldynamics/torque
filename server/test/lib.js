@@ -65,6 +65,7 @@ exports.terminateServer = (callback) => {
 // ===================================== User
 
 exports.registerUser = (data, callback) => {
+  data.hasAgreedToToc = true;
   callApi('api/user-register', {
     json: data
   }, (err, response, body) => {
@@ -476,7 +477,8 @@ exports.validateAddOrganizationApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
-    organizationId: Joi.number().required()
+    organizationId: Joi.number().required(),
+    employmentId: Joi.number().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -1398,18 +1400,24 @@ exports.validateServiceMembershipSchemaWhenListObj = (doc) => {
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
     createdByUserId: Joi.number().max(999999999999999).required(),
 
+    salesId: Joi.number().max(999999999999999).required(),
+
     customerId: Joi.number().max(999999999999999).required(),
     customerDetails: Joi.object().required().keys({
       fullName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
     }),
 
+    serviceId: Joi.number().max(999999999999999).required(),
     serviceBlueprintDetails: Joi.object().keys({
       name: Joi.string().min(1).max(64).required(),
     }),
 
-    salesId: Joi.number().max(999999999999999).required(),
-    serviceId: Joi.number().max(999999999999999).required(),
+    assignedEmploymentId: Joi.number().max(999999999999999).allow(null).required(),
+    assignedEmployeeDetails: Joi.object().allow(null).required().keys({
+      fullName: Joi.string().min(1).max(64).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    }),
 
     expiringDatetimeStamp: Joi.number().max(999999999999999).required(),
 
@@ -1487,7 +1495,8 @@ exports.validateUserSchema = (doc) => {
     isDeleted: Joi.boolean().required(),
     isPhoneVerified: Joi.boolean().required(),
     isEmailVerified: Joi.boolean().required(),
-    isBanned: Joi.boolean().required()
+    isBanned: Joi.boolean().required(),
+    agreedToTocDatetimeStamp: Joi.number().max(999999999999999).allow(null).required()
   });
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;

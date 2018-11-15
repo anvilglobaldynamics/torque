@@ -21,6 +21,9 @@ exports.GetServiceBlueprintListApi = class extends Api {
       organizationBy: "organizationId",
       privilegeList: [
         "PRIV_VIEW_ALL_SERVICE_BLUEPRINTS"
+      ],
+      moduleList: [
+        "MOD_SERVICE",
       ]
     }];
   }

@@ -82,7 +82,10 @@
     "moduleDescriptionLineTwo": "To add more features to Lipi, contact us at +880 1770 947908 or mail us at care@anvil.live",
     "productModule": "Product Module",
     "serviceModule": "Service Module",
-    "gymModule": "Gym Module"
+    "gymModule": "Gym Module",
+    "retail": "Retail",
+    "service": "Service",
+    "both": "Both"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -108,6 +111,12 @@
     "passwordInput": "A minimum 8 digit password",
     "passwordInputError": "Enter a password at least 8 characters long.",
     "alreadyHaveAccount": "Already have an account?",
+    "tocNotRead": "You must read the Terms and Conditions before you proceed.",
+    "tocNotAgreed": "You must agree to the Terms and Conditions before you proceed.",
+    "tocLinkPart1": "Please read the ",
+    "tocLinkPart2": "The Terms and Conditions",
+    "tocLinkPart3": " before you register.",
+    "tocCheckbox": "I have read, understood and agree to the Terms and Conditions above.",
     "nowAUserOfTorque": "You are now a user of Torque. You now may log in."
   },
   "sidebar": {
@@ -182,6 +191,9 @@
   "organization": {
     "addOrganizationTitle": "Add Organization",
     "isNotOneOutletOrg": "This organization has more than one outlets.",
+
+    "industryCategory": "Industry Category of Organization",
+
     "nameOfYourOrganization": "Name of your Organization",
     "pleaseEnterAValidName": "Enter a valid name.",
     "emailInput": "Your email address (Optional)",
@@ -700,8 +712,9 @@
     "phoneNowVerified": "Your phone is now verified.",
     "phoneCouldNotBeVerified": "Your phone could not be verified. Make sure the verification code is correct.",
     "verifyPhoneNumberHeader": "VERIFY PHONE NUMBER",
-    "verificationTokenInput": "Enter the verification token we sent to your phone.",
-    "verificationTokenInputError": "Enter the verification token we sent to your phone.",
+    "verificationToken": "Enter the verification token we sent to your phone.",
+    "verificationTokenInput": "Verification token.",
+    "verificationTokenInputError": "Enter valid verification token.",
     "resendSms": "RESEND SMS",
     "verify": "Verify",
     "dontHaveAccount": "Don't have an account?"
@@ -720,6 +733,7 @@
     "sellingPrice": "Selling Price",
     "acquiredOn": "Acquired On",
     "addedOn": "Added On",
+    "addToInventoryHelp": "Products added to Inventory will not increase the count of existing similar products, instead will be a new Batch. Today's date will be used as 'Added-On date' for the new Batch of products.",
     "transferInventoryHelp": "Product can be transfered between inventories. You can start selecting product(s) to be transfered by clicking below.",
     "selectProductsToTransfer": "Start Selecting Products to Transfer",
     "stopSelectingProductsToTransfer": "Stop Selecting Products to Transfer"
@@ -814,7 +828,8 @@
     "expiringDatetime": "Expiry",
     "customer": "Customer",
 
-    "serviceBlueprint": "Service blueprint"
+    "serviceBlueprint": "Service",
+    "assignedEmployee": "Assigned"
   },
   "serviceBlueprintSelector": {
     "serviceBlueprintNameOrPhoneInput": "By name.",

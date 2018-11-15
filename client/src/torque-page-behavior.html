@@ -109,6 +109,10 @@
             this.app.navigateTo('/login');
             return false;
           }
+          if (!this.app.user.agreedToTocDatetimeStamp || this.app.user.agreedToTocDatetimeStamp < this.app.tocVersionUpdatedDatetimeStamp) {
+            this.app.navigateTo('/toc/from:dashboard');
+            return false;
+          }
         }
         if (authLevel === 'organization-selected') {
           if (!this.app.organization) {

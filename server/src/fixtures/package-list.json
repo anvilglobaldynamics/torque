@@ -1,7 +1,7 @@
 [
   {
-    "code": "U01",
-    "name": "Internal Unlimited Package",
+    "code": "R-U01",
+    "name": "Internal Unlimited Retail Package",
     "price": 0,
     "duration": {
       "months": 12,
@@ -14,8 +14,8 @@
     }
   },
   {
-    "code": "T01",
-    "name": "Enterprise Trial Package",
+    "code": "R-T01",
+    "name": "Enterprise Trial Retail Package",
     "price": 0,
     "duration": {
       "months": 0,
@@ -28,8 +28,8 @@
     }
   },
   {
-    "code": "D01",
-    "name": "Enterprise Demo Package",
+    "code": "R-D01",
+    "name": "Enterprise Demo Retail Package",
     "price": 0,
     "duration": {
       "months": 0,
@@ -42,8 +42,8 @@
     }
   },
   {
-    "code": "SE03",
-    "name": "Small Enterprise 3 Month Package",
+    "code": "R-SE03",
+    "name": "Small Enterprise 3 Month Retail Package",
     "price": 6000,
     "duration": {
       "months": 3,
@@ -56,8 +56,8 @@
     }
   },
   {
-    "code": "SE06",
-    "name": "Small Enterprise 6 Month Package",
+    "code": "R-SE06",
+    "name": "Small Enterprise 6 Month Retail Package",
     "price": 11000,
     "duration": {
       "months": 6,
@@ -70,8 +70,8 @@
     }
   },
   {
-    "code": "SE12",
-    "name": "Small Enterprise 12 Month Package",
+    "code": "R-SE12",
+    "name": "Small Enterprise 12 Month Retail Package",
     "price": 21000,
     "duration": {
       "months": 12,
@@ -84,8 +84,8 @@
     }
   },
   {
-    "code": "ME03",
-    "name": "Medium Enterprise 3 Month Package",
+    "code": "R-ME03",
+    "name": "Medium Enterprise 3 Month Retail Package",
     "price": 18000,
     "duration": {
       "months": 3,
@@ -98,8 +98,8 @@
     }
   },
   {
-    "code": "ME06",
-    "name": "Medium Enterprise 6 Month Package",
+    "code": "R-ME06",
+    "name": "Medium Enterprise 6 Month Retail Package",
     "price": 34000,
     "duration": {
       "months": 6,
@@ -112,8 +112,8 @@
     }
   },
   {
-    "code": "ME12",
-    "name": "Medium Enterprise 12 Month Package",
+    "code": "R-ME12",
+    "name": "Medium Enterprise 12 Month Retail Package",
     "price": 66000,
     "duration": {
       "months": 12,
@@ -123,6 +123,124 @@
       "maximumOutlets": 6,
       "maximumWarehouses": 3,
       "maximumEmployees": 14
+    }
+  },
+
+  {
+    "code": "S-U01",
+    "name": "Internal Unlimited Service Package",
+    "price": 0,
+    "duration": {
+      "months": 12,
+      "days": 1
+    },
+    "limits": {
+      "maximumOutlets": 99999,
+      "maximumEmployees": 99999
+    }
+  },
+  {
+    "code": "S-T01",
+    "name": "Enterprise Trial Service Package",
+    "price": 0,
+    "duration": {
+      "months": 0,
+      "days": 1
+    },
+    "limits": {
+      "maximumOutlets": 1,
+      "maximumEmployees": 10
+    }
+  },
+  {
+    "code": "S-D01",
+    "name": "Enterprise Demo Service Package",
+    "price": 0,
+    "duration": {
+      "months": 0,
+      "days": 14
+    },
+    "limits": {
+      "maximumOutlets": 1,
+      "maximumEmployees": 10
+    }
+  },
+  {
+    "code": "S-SE03",
+    "name": "Small Enterprise 3 Month Service Package",
+    "price": 6000,
+    "duration": {
+      "months": 3,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 1,
+      "maximumEmployees": 10
+    }
+  },
+  {
+    "code": "S-SE06",
+    "name": "Small Enterprise 6 Month Service Package",
+    "price": 11000,
+    "duration": {
+      "months": 6,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 1,
+      "maximumEmployees": 10
+    }
+  },
+  {
+    "code": "S-SE12",
+    "name": "Small Enterprise 12 Month Service Package",
+    "price": 21000,
+    "duration": {
+      "months": 12,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 1,
+      "maximumEmployees": 10
+    }
+  },
+  {
+    "code": "S-ME03",
+    "name": "Medium Enterprise 3 Month Service Package",
+    "price": 18000,
+    "duration": {
+      "months": 3,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 3,
+      "maximumEmployees": 30
+    }
+  },
+  {
+    "code": "S-ME06",
+    "name": "Medium Enterprise 6 Month Service Package",
+    "price": 34000,
+    "duration": {
+      "months": 6,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 3,
+      "maximumEmployees": 30
+    }
+  },
+  {
+    "code": "S-ME12",
+    "name": "Medium Enterprise 12 Month Service Package",
+    "price": 66000,
+    "duration": {
+      "months": 12,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 3,
+      "maximumEmployees": 30
     }
   }
 ]

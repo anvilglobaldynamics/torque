@@ -58,12 +58,13 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
     });
   }
 
-  _createUser({ fullName, phone, password }, cbfn) {
+  _createUser({ fullName, phone, password, agreedToTocDatetimeStamp }, cbfn) {
     let passwordHash = this._makeHash(password);
     let user = {
       fullName,
       phone,
-      passwordHash
+      passwordHash,
+      agreedToTocDatetimeStamp
     }
     this.legacyDatabase.user.create(user, (err, userId) => {
       if (err) return this.fail(err);

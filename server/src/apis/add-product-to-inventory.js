@@ -35,6 +35,9 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin
       },
       privilegeList: [
         "PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

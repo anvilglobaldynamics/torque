@@ -346,8 +346,15 @@
 
       _printAndGoBack() {
         window.setTimeout(() => {
+
+          const threshold = 300;
+          let then = Date.now();
           window.print();
-          window.history.back();
+          let now = Date.now();
+          if (now - then > threshold){
+            window.history.back();
+          }
+          
         }, 100);
       }
 
@@ -429,7 +436,7 @@
       }
 
       $calculateIndividualServicePrice(service) {
-        let { salePrice } = service; 
+        let { salePrice } = service;
         return this.$round(salePrice);
       }
 

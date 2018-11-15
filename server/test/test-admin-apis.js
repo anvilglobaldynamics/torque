@@ -391,7 +391,7 @@ describe('Admin', _ => {
       json: {
         apiKey,
         organizationId: org1id,
-        packageCode: "SE03",
+        packageCode: "R-SE03",
         paymentReference: "joi test"
       }
     }, (err, response, body) => {
@@ -427,7 +427,7 @@ describe('Admin', _ => {
       json: {
         apiKey,
         organizationId: invalidOrganizationId,
-        packageCode: "SE03",
+        packageCode: "R-SE03",
         paymentReference: "joi test"
       }
     }, (err, response, body) => {
@@ -462,7 +462,7 @@ describe('Admin', _ => {
       json: {
         apiKey,
         organizationId: org1id,
-        packageCode: "SE12",
+        packageCode: "R-SE12",
         paymentReference: "joi test"
       }
     }, (err, response, body) => {

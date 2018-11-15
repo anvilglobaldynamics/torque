@@ -22,6 +22,9 @@ exports.GetWarehouseListApi = class extends LegacyApi {
       organizationBy: "organizationId",
       privilegeList: [
         "PRIV_VIEW_ALL_WAREHOUSES"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

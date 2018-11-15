@@ -28,6 +28,9 @@ exports.GetWarehouseApi = class extends collectionCommonMixin(inventoryCommonMix
       },
       privilegeList: [
         "PRIV_VIEW_ALL_WAREHOUSES"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

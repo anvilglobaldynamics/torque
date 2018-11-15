@@ -154,7 +154,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
 
     if (serviceListObj.assignedEmploymentId) {
       let employee = await this.database.employment.findById({ id: serviceListObj.assignedEmploymentId });
-      throwOnFalsy(employee, "ASSIGNED_EMPLOYEE_INVALID", "Service could not be found.");
+      throwOnFalsy(employee, "ASSIGNED_EMPLOYEE_INVALID", "Employee could not be found.");
     }
   }
 
@@ -167,7 +167,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
       date.setMonth(date.getMonth() + serviceBlueprint.serviceDuration.months);
       date.setDate(date.getDate() + serviceBlueprint.serviceDuration.days);
       let expiringDatetimeStamp = date.getTime();
-      let res = await this.database.serviceMembership.create({ createdByUserId, customerId, salesId, serviceId: service.id , expiringDatetimeStamp });
+      let res = await this.database.serviceMembership.create({ createdByUserId, customerId, salesId, serviceId: service.id , assignedEmploymentId: serviceListObj.assignedEmploymentId, expiringDatetimeStamp });
     }
   }
 

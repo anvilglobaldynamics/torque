@@ -34,7 +34,7 @@ exports.GetUserDisplayInformationApi = class extends Api.mixin(UserMixin) {
 
     let employmentList = await this.database.employment.listEmploymentOfUserInOrganization({ userId, organizationId });
     if (employmentList.length === 0) {
-      throw new CodedError("EMPLOYEE_INVALID", "The use is not employed by this organization");
+      throw new CodedError("EMPLOYEE_INVALID", "The user is not employed by this organization");
     }
     let employment = employmentList[0];
 

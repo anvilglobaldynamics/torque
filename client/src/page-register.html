@@ -20,7 +20,11 @@
 
 <dom-module id="page-register">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+      .toc{
+      margin-top: 8px;
+    }
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -33,6 +37,13 @@
             <paper-input class="registerForm--fullName" value="{{registerForm.fullName}}" required minlength="3" error-message="[[verses.register.fullnameInputError]]" label="[[verses.register.fullnameInput]]"></paper-input>
             <paper-input class="registerForm--phone" value="{{registerForm.phone}}" required minlength="11" maxlength="15" error-message="[[verses.register.phoneInputError]]" label="[[verses.register.phoneInput]]"></paper-input>
             <paper-input class="registerForm--password" value="{{registerForm.password}}" required minlength="8" error-message="[[verses.register.passwordInputError]]" label="[[verses.register.passwordInput]]" type="password"></paper-input>
+
+            <div class="toc">[[verses.register.tocLinkPart1]]<a class="link primary" on-tap="viewTocTapped">[[verses.register.tocLinkPart2]]</a>[[verses.register.tocLinkPart3]]</div>
+
+            <template is="dom-if" if="[[hasClickedTheToc]]">
+              <paper-checkbox checked="{{agreesToToc}}">[[verses.register.tocCheckbox]]</paper-checkbox>
+            </template>
+
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary registerForm--submit" on-tap="registerTapped">[[verses.register.register]]</paper-button>
@@ -54,6 +65,14 @@
 
       static get properties() {
         return {
+          agreesToToc: {
+            type: Boolean,
+            value: false
+          },
+          hasClickedTheToc: {
+            type: Boolean,
+            value: false
+          },
           registerForm: {
             type: Object,
             value: _ => {
@@ -101,8 +120,8 @@
 
       // region: register =================================
 
-      _processUserRegister({ fullName, phone, password }) {
-        let data = { fullName, phone, password };
+      _processUserRegister({ fullName, phone, password, hasAgreedToToc }) {
+        let data = { fullName, phone, password, hasAgreedToToc };
         this.app.callUserRegisterApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'registerForm');
@@ -124,27 +143,21 @@
         this.elemAll('#registerForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#registerForm').validate()) return;
 
-        // REGION: Willingly improper coding practices - start
-        // NOTE: This section will be removed in full release
-        let title, message;
-        if (this.selectedLanguageIdentifier === 'en-us') {
-          title = "Terms of Service";
-          message = "By registering for this beta release of our app, you hereby\
-         grant us full copyright over any data you provide us. We take no liability\
-          for the collection, storage, distribution, manipulation of your data. This applies to only our beta\
-          release. After the beta testing phase, we will help you migrate your data\
-          to our more professionally maintained Terms of Services and Privacy Policy.";
-        } else {
-          title = "সেবা পাবার শর্ত";
-          message = "আমাদের অ্যাপ্লিকেশনটির এই বিটা রিলিজের জন্য নিবন্ধন করে, আপনি আপনার দ্বারা সরবরাহিত যেকোনো ডাটার সম্পূর্ণ কপিরাইট আমাদের প্রদান করবেন । আমরা আপনার ডাটার সংগ্রহ, সঞ্চয়, বিতরণ, সঞ্চালনের জন্য কোনো ভাবেই দায়বদ্ধ নই। এটি কেবলমাত্র আমাদের বিটা রিলিজের ক্ষেত্রে প্রযোজ্য। বিটা টেস্টিং ফেজের পরে, আমাদের পেশাগতভাবে পরিচালিত পরিষেবার শর্তাবলী এবং গোপনীয়তা নীতিতে আপনার ডাটা স্থানান্তর করা হবে।";
+        if (!this.hasClickedTheToc) {
+          return this.app.showModalDialog(this.verses.general.sorry, this.verses.register.tocNotRead);
         }
-        this.app.showModalConfirmation(title, message, (answer) => {
-          if (!answer) return;
-          let { fullName, phone, password } = this.registerForm;
-          this._processUserRegister({ fullName, phone, password });
-        })
-        // REGION: Willingly improper coding practices - end
 
+        if (!this.agreesToToc) {
+          return this.app.showModalDialog(this.verses.general.sorry, this.verses.register.tocNotAgreed);
+        }
+
+        let { fullName, phone, password } = this.registerForm;
+        this._processUserRegister({ fullName, phone, password, hasAgreedToToc: this.agreesToToc });
+      }
+
+      viewTocTapped(e = null) {
+        this.hasClickedTheToc = true;
+        this.app.navigateTo('/toc/from:register');
       }
 
       // region: misc =================================

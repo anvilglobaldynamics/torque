@@ -36,6 +36,9 @@ exports.EditOutletServiceApi = class extends Api.mixin(ServiceMixin) {
       ],
       privilegeList: [
         "PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS"
+      ],
+      moduleList: [
+        "MOD_SERVICE",
       ]
     }];
   }
