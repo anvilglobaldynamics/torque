@@ -35,6 +35,9 @@
             <paper-textarea class="editOutletForm--physicalAddress" value="{{editOutletForm.physicalAddress}}" required minlength="8" error-message=[[verses.outlet.physicalAddressInputError]] label=[[verses.outlet.physicalAddressInput]] rows="4"></paper-textarea>
             <paper-input class="editOutletForm--contactPersonName" value="{{editOutletForm.contactPersonName}}" required minlength="3" error-message=[[verses.outlet.contactPersonNameInputError]] label=[[verses.outlet.contactPersonNameInput]]></paper-input>
             <paper-input class="editOutletForm--phone" value="{{editOutletForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.outlet.contactPhoneOfContactPersonError]] label=[[verses.outlet.contactPhoneOfContactPerson]]></paper-input>
+
+            <paper-button raised class="primary" on-tap="selectLocationTapped">[[verses.outlet.selectLocation]]</paper-button>
+
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editOutletForm--submit" on-tap="createOutletTapped">[[verses.outlet.createOutlet]]</paper-button>
@@ -189,6 +192,10 @@
       }
 
       // region: ui =================================
+
+      selectLocationTapped(e = null){
+        this.app.navigateTo('/select-geolocation');
+      }
 
       backButtonOnTopBarPressed(e = null) {
         this.app.navigateToPreviousUrl('/manage-outlets');

@@ -1,0 +1,120 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<!-- <page-select-geolocation name="select-geolocation"></page-select-geolocation> -->
+
+<dom-module id="page-select-geolocation">
+  <template>
+    <style include="shared-styles">
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      SADSADSASADASDASDSAD
+
+    </div>
+
+    <div class="map"></div>
+
+  </template>
+
+  <script>
+    class PageSelectGeolocation extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-select-geolocation';
+      }
+
+      static get properties() {
+        return {
+
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        if (!this._ensureAccess()) return;
+        this.isReady = true;
+        this.delay(100, () => {
+
+          this._initiateMap();
+        })
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: []
+        });
+      }
+
+      // region: maps =================================
+
+      _initiateMap() {
+
+        var myLatLng = { lat: -25.363, lng: 131.044 };
+
+        console.log(this.elem('.map'))
+
+        // Create a map object and specify the DOM element
+        // for display.
+        var map = new google.maps.Map(this.elem('.map'), {
+          center: myLatLng,
+          zoom: 4
+        });
+
+        // Create a marker and set its position.
+        var marker = new google.maps.Marker({
+          map: map,
+          position: myLatLng,
+          title: 'Hello World!'
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-outlets');
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageSelectGeolocation.is, PageSelectGeolocation);
+  </script>
+</dom-module>
