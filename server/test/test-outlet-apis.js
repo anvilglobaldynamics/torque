@@ -97,7 +97,8 @@ describe('Outlet', _ => {
         name: "My Outlet",
         physicalAddress: "batcave address",
         phone: outletPhone,
-        contactPersonName: "test contact person name"
+        contactPersonName: "test contact person name",
+        location: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -116,7 +117,8 @@ describe('Outlet', _ => {
         name: "My Outlet 2",
         physicalAddress: "batcave address new",
         phone: outletPhone3,
-        contactPersonName: "test contact person name"
+        contactPersonName: "test contact person name",
+        location: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -136,7 +138,8 @@ describe('Outlet', _ => {
         name: "My Outlet 2",
         physicalAddress: "batcave address new",
         phone: outletPhone3,
-        contactPersonName: "test contact person name"
+        contactPersonName: "test contact person name",
+        location: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -156,7 +159,8 @@ describe('Outlet', _ => {
         name: "My Outlet",
         physicalAddress: "batcave address",
         phone: outletPhone,
-        contactPersonName: "test contact person name"
+        contactPersonName: "test contact person name",
+        location: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -251,7 +255,8 @@ describe('Outlet', _ => {
         name: "My Outlet",
         physicalAddress: "batcave address",
         phone: outletPhone2,
-        contactPersonName: "new test contact person name"
+        contactPersonName: "new test contact person name",
+        location: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -271,7 +276,8 @@ describe('Outlet', _ => {
         name: "My Outlet",
         physicalAddress: "batcave address",
         phone: outletPhone2,
-        contactPersonName: "new test contact person name"
+        contactPersonName: "new test contact person name",
+        location: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

@@ -15,6 +15,10 @@ exports.OutletCollection = class extends Collection {
       physicalAddress: Joi.string().min(1).max(128).required(),
       contactPersonName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      location: Joi.object().keys({
+        lat: Joi.number().required(),
+        lng: Joi.number().required()
+      }).required().allow(null),
       isDeleted: Joi.boolean().required()
     });
   }
@@ -35,7 +39,7 @@ exports.OutletCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ name, organizationId, physicalAddress, phone, contactPersonName }) {
+  async create({ name, organizationId, physicalAddress, phone, contactPersonName, location }) {
     return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
@@ -44,14 +48,15 @@ exports.OutletCollection = class extends Collection {
       physicalAddress,
       phone,
       contactPersonName,
+      location,
       isDeleted: false
     });
   }
 
-  async setDetails({ id }, { name, physicalAddress, phone, contactPersonName }) {
+  async setDetails({ id }, { name, physicalAddress, phone, contactPersonName, location }) {
     return await this._update({ id }, {
       $set: {
-        name, physicalAddress, phone, contactPersonName
+        name, physicalAddress, phone, contactPersonName, location
       }
     });
   }
