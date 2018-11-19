@@ -44,7 +44,11 @@
 
             <template is="dom-if" if="[[editOutletForm.location]]">
               <!-- [[editOutletForm.location.lat]] [[editOutletForm.location.lng]] -->
+              <div>Showing your location below - </div>
               <good-map api-key="AIzaSyBHyZPlDJnRD9dOXcSbCm6O7sAT0ph6_pg" latitude="[[editOutletForm.location.lat]]" longitude="[[editOutletForm.location.lng]]" zoom="14" map-options='{"mapTypeId": "roadmap"}'></good-map>
+            </template>
+            <template is="dom-if" if="[[!editOutletForm.location]]">
+              <div>No location provided</div>
             </template>
             <paper-button raised class="secondary" on-tap="selectLocationTapped">[[verses.outlet.selectLocation]]</paper-button>
 
@@ -172,13 +176,13 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.editingOutlet = response.outlet;
-          let { name, phone, contactPersonName, physicalAddress } = this.editingOutlet;
-          this.editOutletForm = { name, phone, contactPersonName, physicalAddress };
+          let { name, phone, contactPersonName, physicalAddress, location } = this.editingOutlet;
+          this.editOutletForm = { name, phone, contactPersonName, physicalAddress, location };
           cbfn();
         });
       }
 
-      _processCreateOutlet({ name, phone, contactPersonName, physicalAddress }) {
+      _processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location }) {
         let organizationId;
         if ('fromOrganizationCreatePage' in this.params) {
           organizationId = this.params.fromOrganizationCreatePage;
@@ -186,7 +190,7 @@
           organizationId = this.app.organization.id;
         }
         let data = {
-          name, phone, contactPersonName, physicalAddress,
+          name, phone, contactPersonName, physicalAddress, location,
           organizationId
         };
         this.app.callAddOutletApi(data, (err, response) => {
@@ -203,9 +207,9 @@
         });
       }
 
-      _processUpdateOutlet({ name, phone, contactPersonName, physicalAddress }) {
+      _processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location }) {
         let data = {
-          name, phone, contactPersonName, physicalAddress,
+          name, phone, contactPersonName, physicalAddress, location,
           outletId: this.editingOutlet.id
         };
         this.app.callEditOutletApi(data, (err, response) => {
@@ -236,16 +240,16 @@
         this.elemAll('#editOutletForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editOutletForm').validate()) return;
 
-        let { name, phone, contactPersonName, physicalAddress } = this.editOutletForm;
-        this._processCreateOutlet({ name, phone, contactPersonName, physicalAddress });
+        let { name, phone, contactPersonName, physicalAddress, location } = this.editOutletForm;
+        this._processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location });
       }
 
       updateOutletTapped(e = null) {
         this.elemAll('#editOutletForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editOutletForm').validate()) return;
 
-        let { name, phone, contactPersonName, physicalAddress } = this.editOutletForm;
-        this._processUpdateOutlet({ name, phone, contactPersonName, physicalAddress });
+        let { name, phone, contactPersonName, physicalAddress, location } = this.editOutletForm;
+        this._processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location });
       }
 
       // region: misc =================================
