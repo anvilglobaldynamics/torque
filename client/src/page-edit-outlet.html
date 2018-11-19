@@ -6,6 +6,7 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/good-map/good-map.html">
 
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
@@ -22,6 +23,11 @@
 <dom-module id="page-edit-outlet">
   <template>
     <style include="shared-styles">
+      good-map {
+        display: block;
+        height: 300px;
+        margin-bottom: 8px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -36,7 +42,11 @@
             <paper-input class="editOutletForm--contactPersonName" value="{{editOutletForm.contactPersonName}}" required minlength="3" error-message=[[verses.outlet.contactPersonNameInputError]] label=[[verses.outlet.contactPersonNameInput]]></paper-input>
             <paper-input class="editOutletForm--phone" value="{{editOutletForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.outlet.contactPhoneOfContactPersonError]] label=[[verses.outlet.contactPhoneOfContactPerson]]></paper-input>
 
-            <paper-button raised class="primary" on-tap="selectLocationTapped">[[verses.outlet.selectLocation]]</paper-button>
+            <template is="dom-if" if="[[editOutletForm.location]]">
+              <!-- [[editOutletForm.location.lat]] [[editOutletForm.location.lng]] -->
+              <good-map api-key="AIzaSyBHyZPlDJnRD9dOXcSbCm6O7sAT0ph6_pg" latitude="[[editOutletForm.location.lat]]" longitude="[[editOutletForm.location.lng]]" zoom="14" map-options='{"mapTypeId": "roadmap"}'></good-map>
+            </template>
+            <paper-button raised class="secondary" on-tap="selectLocationTapped">[[verses.outlet.selectLocation]]</paper-button>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -75,14 +85,16 @@
                   name: 'Gulshan Showroom',
                   phone: '01700000011',
                   contactPersonName: 'Johns Apparel',
-                  physicalAddress: 'Road 50\nThis Town'
+                  physicalAddress: 'Road 56, Gulshan, Dhaka',
+                  location: null
                 };
               } else {
                 return {
                   name: '',
                   phone: '',
                   contactPersonName: '',
-                  physicalAddress: ''
+                  physicalAddress: '',
+                  location: null
                 };
               }
             }
@@ -111,10 +123,12 @@
         if (!this._ensureAccess()) return;
         if (this.editMode) {
           this._processGetOutlet(() => {
+            this._loadLocation();
             this.isReady = true;
           });
         } else {
           this.delay(300, () => {
+            this._loadLocation();
             this.isReady = true;
           });
         }
@@ -125,6 +139,19 @@
         this.app.popPageTitle();
         this.resetProperties('editOutletForm');
         this.removeAutoValidation('#editOutletForm paper-input');
+      }
+
+      _loadLocation() {
+        let location = sessionStorage.getItem('page-select-geolocation:location');
+        try {
+          location = JSON.parse(location);
+        } catch (ex) {
+          'pass'
+        }
+        if (location) {
+          this.set('editOutletForm.location', location);
+          sessionStorage.setItem('page-select-geolocation:location', null);
+        }
       }
 
       _ensureAccess() {
@@ -193,7 +220,11 @@
 
       // region: ui =================================
 
-      selectLocationTapped(e = null){
+      selectLocationTapped(e = null) {
+        sessionStorage.setItem('page-select-geolocation:address', this.editOutletForm.physicalAddress || '');
+        if (this.editOutletForm.location) {
+          sessionStorage.setItem('page-select-geolocation:location', JSON.stringify(this.editOutletForm.location));
+        }
         this.app.navigateTo('/select-geolocation');
       }
 

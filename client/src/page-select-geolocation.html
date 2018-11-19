@@ -6,6 +6,7 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/good-map/good-map.html">
 
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
@@ -19,22 +20,39 @@
 
 <link rel="import" href="shared-styles.html">
 
-<!-- <page-select-geolocation name="select-geolocation"></page-select-geolocation> -->
-
 <dom-module id="page-select-geolocation">
   <template>
     <style include="shared-styles">
+      good-map {
+        display: block;
+        height: 70vh;
+      }
+
+      @media (min-width: 960px) {
+        good-map {
+          max-height: 500px;
+        }
+      }
+
+      .padded {
+        margin-left: 6px;
+        margin-right: 6px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      SADSADSASADASDASDSAD
+      <div class="horizontal layout center padded">
+        <paper-icon-button icon="icons:explore" on-tap="locateTapped"></paper-icon-button>
+        <paper-input class="flex" label="Approximate Address" value="{{address}}"></paper-input>
+        <paper-icon-button icon="icons:search" on-tap="searchTapped"></paper-icon-button>
+      </div>
+
+      <good-map on-google-map-ready="mapReady" api-key="AIzaSyBHyZPlDJnRD9dOXcSbCm6O7sAT0ph6_pg" latitude="30" longitude="-100" zoom="14" map-options='{"mapTypeId": "roadmap"}'></good-map>
 
     </div>
-
-    <div class="map"></div>
 
   </template>
 
@@ -47,7 +65,14 @@
 
       static get properties() {
         return {
-
+          selectedLocation: {
+            type: String,
+            value: () => null
+          },
+          marker: {
+            type: Object,
+            value: () => null
+          }
         };
       }
 
@@ -59,13 +84,12 @@
       }
 
       onNavigateIn() {
-        this.app.shouldShowSaveButton = false;
+        this.app.shouldShowSaveButton = true;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
         if (!this._ensureAccess()) return;
         this.isReady = true;
         this.delay(100, () => {
-
           this._initiateMap();
         })
       }
@@ -84,31 +108,129 @@
 
       // region: maps =================================
 
+      mapReady(e = null) {
+        // NOTE: this callback is completely unreliable.
+        console.log("mapReady");
+      }
+
+      _setOrSpawnMarker(location) {
+        if (!this.marker) {
+          this.marker = new google.maps.Marker({
+            position: location,
+            map: this.map,
+            draggable: true
+          });
+          google.maps.event.addListener(this.marker, 'dragend', (event) => {
+            this._markerLocationUpdated();
+          });
+        } else {
+          this.marker.setPosition(location);
+        }
+        this._markerLocationUpdated()
+      }
+
+      _searchByAddress() {
+        let geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': this.address }, (results, status) => {
+          if (status == google.maps.GeocoderStatus.OK) {
+            this.map.setCenter(results[0].geometry.location);
+            this._setOrSpawnMarker(results[0].geometry.location);
+          }
+        });
+      }
+
+      _setLocationUsingDevice() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            this.map.setCenter(pos);
+            this._setOrSpawnMarker(pos);
+          }, () => {
+            this.app.showModalDialog("Sorry.", "Failed to access GPS Data.");
+          });
+        } else {
+          this.app.showModalDialog("Sorry.", "Your browser/device does not support geolocation.");
+        }
+
+      }
+
+      _markerLocationUpdated() {
+        let currentLocation = this.marker.getPosition();
+        let lat = currentLocation.lat(); //latitude
+        let lng = currentLocation.lng(); //longitude
+        this.set('selectedLocation', { lat, lng });
+
+        let geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ location: currentLocation }, (results, status) => {
+          if (status == google.maps.GeocoderStatus.OK) {
+            this.address = results[0].formatted_address;
+          }
+        });
+
+      }
+
       _initiateMap() {
+        console.log('_initiateMap');
+        this.map = this.elem('good-map').map;
+        this.address = sessionStorage.getItem('page-select-geolocation:address') || 'Dhaka';
 
-        var myLatLng = { lat: -25.363, lng: 131.044 };
+        let previousLocation = sessionStorage.getItem('page-select-geolocation:location');
+        try {
+          previousLocation = JSON.parse(previousLocation);
+        } catch (ex) {
+          'pass'
+        }
 
-        console.log(this.elem('.map'))
+        let doOnMapReady = () => {
+          console.log('_initiateMap->mapLoaded');
 
-        // Create a map object and specify the DOM element
-        // for display.
-        var map = new google.maps.Map(this.elem('.map'), {
-          center: myLatLng,
-          zoom: 4
-        });
+          if (previousLocation) {
+            console.log('_initiateMap->setting previous location', previousLocation);
+            this.map.setCenter(previousLocation);
+            this._setOrSpawnMarker(previousLocation);
+          } else {
+            console.log('_initiateMap->_searchByAddress', this.address);
+            this._searchByAddress();
+          }
 
-        // Create a marker and set its position.
-        var marker = new google.maps.Marker({
-          map: map,
-          position: myLatLng,
-          title: 'Hello World!'
-        });
+          google.maps.event.addListener(this.map, 'click', (event) => {
+            let clickedLocation = event.latLng;
+            this._setOrSpawnMarker(clickedLocation);
+          });
+        }
+
+        if (this.isMapReady) {
+          doOnMapReady();
+        } else {
+          google.maps.event.addListener(this.map, 'idle', (event) => {
+            google.maps.event.clearListeners(this.map, 'idle');
+            this.isMapReady = true;
+            doOnMapReady();
+          });
+        }
+
       }
 
       // region: ui =================================
 
+      locateTapped(e = null) {
+        this._setLocationUsingDevice();
+      }
+
+      searchTapped(e = null) {
+        this._searchByAddress();
+      }
+
       backButtonOnTopBarPressed(e = null) {
-        this.app.navigateToPreviousUrl('/manage-outlets');
+        this.app.navigateToPreviousUrl('/edit-outlet');
+      }
+
+      saveButtonOnTopBarPressed(e) {
+        sessionStorage.setItem('page-select-geolocation:location', JSON.stringify(this.selectedLocation));
+        this.app.navigateToPreviousUrl('/edit-outlet');
       }
 
       // region: misc =================================
