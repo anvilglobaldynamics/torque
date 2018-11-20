@@ -420,6 +420,11 @@
     "customerNameInputError": "Enter a valid name",
     "customerNumberInput": "Contact Number",
     "customerNumberInputError": "Enter a valid phone number",
+
+    "emailAddressInput": "Email Address (Optional)",
+    "emailAddressInputError": "Enter valid email address",
+    "addressInput": "Physical Address (Optional)",
+
     "openingBalance": "Opening Balance",
     "openingBalanceError": "Enter an amount as opening balance",
     "createCustomer": "Create Customer",
