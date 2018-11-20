@@ -83,7 +83,9 @@ describe('Customer', _ => {
         apiKey,
         organizationId: invalidOrganizationId,
         fullName: "A Test Customer",
-        phone: customerPhone
+        phone: customerPhone,
+        email: null,
+        address: ''
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -101,7 +103,9 @@ describe('Customer', _ => {
         apiKey,
         organizationId: organizationId,
         fullName: "1st Test Customer",
-        phone: customerPhone
+        phone: customerPhone,
+        email: null,
+        address: ''
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -118,7 +122,9 @@ describe('Customer', _ => {
         apiKey,
         organizationId: organizationId,
         fullName: "2nd Test Customer",
-        phone: customerPhone2
+        phone: customerPhone2,
+        email: null,
+        address: ''
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -135,7 +141,9 @@ describe('Customer', _ => {
         apiKey,
         organizationId: secondOrganizationId,
         fullName: "2nd Test Customer",
-        phone: customerPhone2
+        phone: customerPhone2,
+        email: null,
+        address: ''
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -152,7 +160,9 @@ describe('Customer', _ => {
         apiKey,
         organizationId: organizationId,
         fullName: "A Test Customer",
-        phone: customerPhone
+        phone: customerPhone,
+        email: null,
+        address: ''
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -170,7 +180,9 @@ describe('Customer', _ => {
         apiKey,
         organizationId: organizationId,
         fullName: "",
-        phone: customerPhone
+        phone: customerPhone,
+        email: null,
+        address: ''
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -188,7 +200,9 @@ describe('Customer', _ => {
         apiKey,
         organizationId: "abc",
         fullName: "A Test Customer",
-        phone: customerPhone
+        phone: customerPhone,
+        email: null,
+        address: ''
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -206,7 +220,9 @@ describe('Customer', _ => {
         apiKey,
         organizationId: organizationId,
         fullName: "A Test Customer",
-        phone: "this is invalid"
+        phone: "this is invalid",
+        email: null,
+        address: ''
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -290,6 +306,8 @@ describe('Customer', _ => {
         customerId: firstCustomer.id,
         fullName: "A Test Customer",
         phone: customerPhone2,
+        email: null,
+        address: ''
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -308,6 +326,8 @@ describe('Customer', _ => {
         customerId: firstCustomer.id,
         fullName: "A Test Customer",
         phone: updatedCustomerPhone,
+        email: null,
+        address: ''
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -325,6 +345,8 @@ describe('Customer', _ => {
         customerId: invalidCustomerId,
         fullName: "A Test Customer",
         phone: updatedCustomerPhone,
+        email: null,
+        address: ''
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -391,7 +413,9 @@ describe('Customer', _ => {
         apiKey,
         organizationId,
         fullName: 'Sample Customer' + index,
-        phone: (basePhone + index)
+        phone: (basePhone + index),
+        email: null,
+        address: ''
       }, (data) => {
         return accept();
       });

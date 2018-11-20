@@ -177,7 +177,9 @@ describe('Sales', _ => {
                       apiKey,
                       organizationId,
                       fullName: customerFullName,
-                      phone: customerPhone
+                      phone: customerPhone,
+                      email: null,
+                      address: ''
                     }, (data) => {
                       customerId = data.customerId;
                       getCustomer({
@@ -1711,7 +1713,9 @@ describe('Sales', _ => {
         apiKey,
         organizationId: membershipTest.organizationId,
         fullName: customerFullName,
-        phone: membershipTest.customer1Phone
+        phone: membershipTest.customer1Phone,
+        email: null,
+        address: ''
       }))
       .then(({ customerId }) => membershipTest.customer1Id = customerId)
 
@@ -1719,7 +1723,9 @@ describe('Sales', _ => {
         apiKey,
         organizationId: membershipTest.organizationId,
         fullName: customerFullName,
-        phone: membershipTest.customer2Phone
+        phone: membershipTest.customer2Phone,
+        email: null,
+        address: ''
       }))
       .then(({ customerId }) => membershipTest.customer2Id = customerId)
 
