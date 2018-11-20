@@ -48,7 +48,7 @@ const { GetUserDisplayInformationApi } = require('./apis/get-user-display-inform
 const { AddCustomerApi } = require('./apis/add-customer');
 let { GetCustomerApi } = require('./legacy-apis/get-customer');
 const { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
-let { EditCustomerApi } = require('./legacy-apis/edit-customer');
+const { EditCustomerApi } = require('./apis/edit-customer');
 const { WithdrawFromChangeWalletBalanceApi } = require('./apis/withdraw-from-change-wallet-balance');
 let { DeleteCustomerApi } = require('./legacy-apis/delete-customer');
 
