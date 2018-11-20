@@ -245,7 +245,16 @@
     "noOutletFound": "আপনার সংস্থার কোনো দোকান তৈরি করা হয়নি।",
     "manageOutletServicesTitle": "সেবা পরিচালনা",
     "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন",
-    "selectLocation": "অবস্থান নির্বাচন করুন"
+
+    "selectLocationButton": "মানচিত্রে অবস্থান চিহ্নিত করুন",
+    "showingLocationOnMap": "নীচের মানচিত্রে অবস্থান দেখানো হচ্ছে",
+    "noLocationOnMap": "এখনো অবস্থান মানচিত্রে চিহ্নিত করা হয়নি।"
+  },
+  "selectGeolocation": {
+    "selectGeolocationTitle": "মানচিত্রে অবস্থান",
+    "physicalAddress": "ঠিকানা",
+    "currentLocation": "এখন যেখানে আছেন",
+    "saveLocation": "অবস্থান নিচিত করুন"
   },
   "productBlueprint": {
     "manageProductBlueprintsTitle": "পণ্যের পরিকল্পনা পরিচালনা",

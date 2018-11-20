@@ -23,6 +23,10 @@
 <dom-module id="page-select-geolocation">
   <template>
     <style include="shared-styles">
+      .map-initiators {
+        padding-bottom: 6px;
+      }
+
       good-map {
         display: block;
         height: 70vh;
@@ -44,10 +48,20 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="horizontal layout center padded">
-        <paper-icon-button icon="icons:explore" on-tap="locateTapped"></paper-icon-button>
-        <paper-input class="flex" label="Approximate Address" value="{{address}}"></paper-input>
-        <paper-icon-button icon="icons:search" on-tap="searchTapped"></paper-icon-button>
+      <div class="map-initiators">
+        <div class="horizontal layout center padded">
+          <paper-input class="flex" label="[[verses.selectGeolocation.physicalAddress]]" value="{{address}}"></paper-input>
+          <paper-icon-button icon="icons:search" on-tap="searchTapped"></paper-icon-button>
+        </div>
+        <div class="horizontal layout">
+          <paper-button style="width: 50%;" raised class="secondary" on-tap="locateTapped">
+            [[verses.selectGeolocation.currentLocation]]
+          </paper-button>
+
+          <paper-button style="width: 50%;" raised class="primary" on-tap="saveButtonPressed">
+            [[verses.selectGeolocation.saveLocation]]  
+          </paper-button>
+        </div>
       </div>
 
       <good-map on-google-map-ready="mapReady" api-key="AIzaSyBHyZPlDJnRD9dOXcSbCm6O7sAT0ph6_pg" latitude="30" longitude="-100" zoom="14" map-options='{"mapTypeId": "roadmap"}'></good-map>
@@ -84,10 +98,11 @@
       }
 
       onNavigateIn() {
-        this.app.shouldShowSaveButton = true;
+        this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
         if (!this._ensureAccess()) return;
+        this.app.pushPageTitle(this.app.verses.selectGeolocation.selectGeolocationTitle);
         this.isReady = true;
         const fn = () => {
           if (this.isGoogleReady) {
@@ -107,7 +122,7 @@
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
-          privilegeList: []
+          privilegeList: ['PRIV_MODIFY_ALL_OUTLETS']
         });
       }
 
@@ -224,7 +239,7 @@
         this.app.navigateToPreviousUrl('/edit-outlet');
       }
 
-      saveButtonOnTopBarPressed(e) {
+      saveButtonPressed(e) {
         sessionStorage.setItem('page-select-geolocation:location', JSON.stringify(this.selectedLocation));
         this.app.navigateToPreviousUrl('/edit-outlet');
       }

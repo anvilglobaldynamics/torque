@@ -23,6 +23,10 @@
 <dom-module id="page-edit-outlet">
   <template>
     <style include="shared-styles">
+      .location-msg {
+        padding: 6px;
+      }
+
       good-map {
         display: block;
         height: 300px;
@@ -38,19 +42,21 @@
         <form>
           <div class="card vertical layout">
             <paper-input class="editOutletForm--name" value="{{editOutletForm.name}}" required minlength="3" error-message=[[verses.outlet.nameOfOutletInputError]] label=[[verses.outlet.nameOfOutletInput]]></paper-input>
-            <paper-textarea class="editOutletForm--physicalAddress" value="{{editOutletForm.physicalAddress}}" required minlength="8" error-message=[[verses.outlet.physicalAddressInputError]] label=[[verses.outlet.physicalAddressInput]] rows="4"></paper-textarea>
+            <paper-textarea class="editOutletForm--physicalAddress" value="{{editOutletForm.physicalAddress}}" required minlength="8" error-message=[[verses.outlet.physicalAddressInputError]] label=[[verses.outlet.physicalAddressInput]] rows="3"></paper-textarea>
             <paper-input class="editOutletForm--contactPersonName" value="{{editOutletForm.contactPersonName}}" required minlength="3" error-message=[[verses.outlet.contactPersonNameInputError]] label=[[verses.outlet.contactPersonNameInput]]></paper-input>
             <paper-input class="editOutletForm--phone" value="{{editOutletForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.outlet.contactPhoneOfContactPersonError]] label=[[verses.outlet.contactPhoneOfContactPerson]]></paper-input>
 
+            <!-- map location section - start -->
             <template is="dom-if" if="[[editOutletForm.location]]">
-              <!-- [[editOutletForm.location.lat]] [[editOutletForm.location.lng]] -->
-              <div>Showing your location below - </div>
+              <div class="location-msg">[[verses.outlet.showingLocationOnMap]]:</div>
               <good-map on-google-map-ready="mapReady" api-key="AIzaSyBHyZPlDJnRD9dOXcSbCm6O7sAT0ph6_pg" latitude="[[editOutletForm.location.lat]]" longitude="[[editOutletForm.location.lng]]" zoom="14" map-options='{"mapTypeId": "roadmap"}'></good-map>
             </template>
+
             <template is="dom-if" if="[[!editOutletForm.location]]">
-              <div>No location provided</div>
+              <div class="location-msg">[[verses.outlet.noLocationOnMap]]</div>
             </template>
-            <paper-button raised class="secondary" on-tap="selectLocationTapped">[[verses.outlet.selectLocation]]</paper-button>
+            <paper-button raised class="secondary" on-tap="selectLocationTapped">[[verses.outlet.selectLocationButton]]</paper-button>
+            <!-- map location section - end -->
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>

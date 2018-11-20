@@ -245,7 +245,17 @@
     "noOutletFound": "No Outlet has been created in your Organization.",
     "manageOutletServicesTitle": "Manage Services",
     "manageOutletServices": "Manage Services provided in this Outlet",
-    "selectLocation": "Select Location"
+
+    "selectLocationButton": "Set Location on Map",
+    "showingLocationOnMap": "Showing your location on Map below",
+    "noLocationOnMap": "Location has not been set on Map yet."
+
+  },
+  "selectGeolocation": {
+    "selectGeolocationTitle": "Set Map Location",
+    "physicalAddress": "Physical Address",
+    "currentLocation": "Current Location",
+    "saveLocation": "Save Location"
   },
   "productBlueprint": {
     "manageProductBlueprintsTitle": "Manage Product Blueprints",
