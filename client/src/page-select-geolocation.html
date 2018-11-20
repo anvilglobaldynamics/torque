@@ -89,9 +89,14 @@
         this.useLanguageServices();
         if (!this._ensureAccess()) return;
         this.isReady = true;
-        this.delay(100, () => {
-          this._initiateMap();
-        })
+        const fn = () => {
+          if (this.isGoogleReady) {
+            this._initiateMap();
+          } else {
+            this.delay(100, fn);
+          }
+        }
+        fn();
       }
 
       onNavigateOut() {
@@ -109,8 +114,11 @@
       // region: maps =================================
 
       mapReady(e = null) {
-        // NOTE: this callback is completely unreliable.
+        // NOTE: this callback is completely unreliable. This isn't called
+        // everytime good-map is initialized. It's only called when google
+        // maps is initialized. (i.e. only once in the app's lifecycle)
         console.log("mapReady");
+        this.isGoogleReady = true;
       }
 
       _setOrSpawnMarker(location) {
@@ -184,33 +192,21 @@
           'pass'
         }
 
-        let doOnMapReady = () => {
-          console.log('_initiateMap->mapLoaded');
+        console.log('_initiateMap->mapLoaded');
 
-          if (previousLocation) {
-            console.log('_initiateMap->setting previous location', previousLocation);
-            this.map.setCenter(previousLocation);
-            this._setOrSpawnMarker(previousLocation);
-          } else {
-            console.log('_initiateMap->_searchByAddress', this.address);
-            this._searchByAddress();
-          }
-
-          google.maps.event.addListener(this.map, 'click', (event) => {
-            let clickedLocation = event.latLng;
-            this._setOrSpawnMarker(clickedLocation);
-          });
-        }
-
-        if (this.isMapReady) {
-          doOnMapReady();
+        if (previousLocation) {
+          console.log('_initiateMap->setting previous location', previousLocation);
+          this.map.setCenter(previousLocation);
+          this._setOrSpawnMarker(previousLocation);
         } else {
-          google.maps.event.addListener(this.map, 'idle', (event) => {
-            google.maps.event.clearListeners(this.map, 'idle');
-            this.isMapReady = true;
-            doOnMapReady();
-          });
+          console.log('_initiateMap->_searchByAddress', this.address);
+          this._searchByAddress();
         }
+
+        google.maps.event.addListener(this.map, 'click', (event) => {
+          let clickedLocation = event.latLng;
+          this._setOrSpawnMarker(clickedLocation);
+        });
 
       }
 

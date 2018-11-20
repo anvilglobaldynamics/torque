@@ -45,7 +45,7 @@
             <template is="dom-if" if="[[editOutletForm.location]]">
               <!-- [[editOutletForm.location.lat]] [[editOutletForm.location.lng]] -->
               <div>Showing your location below - </div>
-              <good-map api-key="AIzaSyBHyZPlDJnRD9dOXcSbCm6O7sAT0ph6_pg" latitude="[[editOutletForm.location.lat]]" longitude="[[editOutletForm.location.lng]]" zoom="14" map-options='{"mapTypeId": "roadmap"}'></good-map>
+              <good-map on-google-map-ready="mapReady" api-key="AIzaSyBHyZPlDJnRD9dOXcSbCm6O7sAT0ph6_pg" latitude="[[editOutletForm.location.lat]]" longitude="[[editOutletForm.location.lng]]" zoom="14" map-options='{"mapTypeId": "roadmap"}'></good-map>
             </template>
             <template is="dom-if" if="[[!editOutletForm.location]]">
               <div>No location provided</div>
@@ -145,6 +145,15 @@
         this.removeAutoValidation('#editOutletForm paper-input');
       }
 
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_ALL_OUTLETS']
+        });
+      }
+
+      // region: map =================================
+
       _loadLocation() {
         let location = sessionStorage.getItem('page-select-geolocation:location');
         try {
@@ -156,13 +165,39 @@
           this.set('editOutletForm.location', location);
           sessionStorage.setItem('page-select-geolocation:location', null);
         }
+
+        const fn = () => {
+          if (this.isGoogleReady) {
+            this._initiateMap();
+          } else {
+            this.delay(100, fn);
+          }
+        }
+        fn();
       }
 
-      _ensureAccess() {
-        return this.accessControl({
-          authLevel: 'organization-selected',
-          privilegeList: ['PRIV_MODIFY_ALL_OUTLETS']
-        });
+      mapReady(e = null) {
+        // NOTE: this callback is completely unreliable. This isn't called
+        // everytime good-map is initialized. It's only called when google
+        // maps is initialized. (i.e. only once in the app's lifecycle)
+        console.log("mapReady");
+        this.isGoogleReady = true;
+      }
+
+      _initiateMap() {
+        console.log('_initiateMap')
+        if (this.editOutletForm.location) {
+          if (!this.marker) {
+            this.marker = new google.maps.Marker({
+              position: this.editOutletForm.location,
+              map: this.elem('good-map').map,
+              draggable: false
+            });
+          } else {
+            this.marker.setPosition(this.editOutletForm.location);
+          }
+          this.elem('good-map').map.setCenter(this.editOutletForm.location);
+        }
       }
 
       // region: editOutlet =================================
