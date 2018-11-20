@@ -420,6 +420,11 @@
     "customerNameInputError": "একটি সঠিক নাম লিখুন",
     "customerNumberInput": "যোগাযোগের নম্বর",
     "customerNumberInputError": "একটি সঠিক ফোন নম্বর লিখুন",
+
+    "emailAddressInput": "ইমেল (ঐচ্ছিক)",
+    "emailAddressInputError": "বৈধ ইমেইল লিখুন",
+    "addressInput": "ঠিকানা (ঐচ্ছিক)",
+
     "openingBalance": "প্রার্থমিক ব্যালেন্স",
     "openingBalanceError": "প্রার্থমিক ব্যালেন্স হিসাবে একটি পরিমান লিখুন",
     "createCustomer": "গ্রাহক যুক্ত করুন",
