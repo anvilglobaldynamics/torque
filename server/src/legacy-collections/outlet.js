@@ -30,7 +30,7 @@ exports.OutletCollection = class extends LegacyCollection {
       location: Joi.object().keys({
         lat: Joi.number().required(),
         lng: Joi.number().required()
-      }).required().allow(null),
+      }).required(),
       isDeleted: Joi.boolean().required()
     });
 

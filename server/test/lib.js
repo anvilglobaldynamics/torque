@@ -130,7 +130,6 @@ exports.getWarehouse = (data, callback) => {
 // ===================================== Outlet
 
 exports.addOutlet = (data, callback) => {
-  if (!data.location) data.location = null;
   callApi('api/add-outlet', {
     json: data
   }, (err, response, body) => {
@@ -552,7 +551,7 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
       location: Joi.object().keys({
         lat: Joi.number().required(),
         lng: Joi.number().required()
-      }).required().allow(null),
+      }).required(),
 
       isDeleted: Joi.boolean().required()
     }),
@@ -933,7 +932,7 @@ exports.validateOutletSchema = (doc) => {
     location: Joi.object().keys({
       lat: Joi.number().required(),
       lng: Joi.number().required()
-    }).required().allow(null),
+    }).required(),
 
     isDeleted: Joi.boolean().required()
   });

@@ -16,7 +16,7 @@ method: `POST`
   location: Joi.object().keys({
     lat: Joi.number().required(),
     lng: Joi.number().required()
-  }).required().allow(null)
+  }).required()
 }
 ```
 
