@@ -166,7 +166,9 @@ describe('Sales Return', _ => {
                           apiKey,
                           organizationId,
                           fullName: customerFullName,
-                          phone: customerPhone
+                          phone: customerPhone,
+                          email: null,
+                          address: ''
                         }, (data) => {
                           customerId = data.customerId;
                           getCustomer({

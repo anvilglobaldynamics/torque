@@ -48,9 +48,15 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
-        <div>[[customer.fullName]]</div>
+        <div><b>[[customer.fullName]]</b></div>
         <div>[[verses.general.balance]]: [[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</div>
         <div>[[verses.general.number]]: [[customer.phone]]</div>
+        <template is="dom-if" if="[[customer.email]]">
+          <div>[[verses.general.email]]: [[customer.email]]</div>
+        </template>
+        <template is="dom-if" if="[[customer.address]]">
+          <div>[[verses.general.address]]: [[customer.address]]</div>
+        </template>
       </div>
 
       <template is="dom-if" if="[[customer.changeWalletBalance]]">
