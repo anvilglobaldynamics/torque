@@ -101,6 +101,7 @@ describe('Outlet', _ => {
         location: null
       }
     }, (err, response, body) => {
+      console.log(body)
       expect(response.statusCode).to.equal(200);
       validateAddOutletApiSuccessResponse(body);
       testDoneFn();

@@ -92,4 +92,17 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
     return productList;
   }
 
+  async __createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type, name }) {
+    let inventory = {
+      inventoryContainerId, inventoryContainerType, organizationId, type, name, allowManualTransfer: true
+    }
+    return await this.database.inventory.create(inventory);
+  }
+
+  async __createStandardInventories({ inventoryContainerId, inventoryContainerType, organizationId }) {
+    await this.__createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'default', name: 'Default' });
+    await this.__createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'returned', name: 'Returned' });
+    await this.__createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'damaged', name: 'Damaged' });
+  }
+
 }
