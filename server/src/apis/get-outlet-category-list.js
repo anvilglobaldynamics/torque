@@ -13,8 +13,7 @@ exports.GetOutletCategoryListApi = class extends Api {
   }
 
   async handle({ body }) {
-    // let packageList = await this.database.fixture.getPackageList();
-    let categoryList = [];
+    let categoryList = await this.database.fixture.getOutletCategoryList() ;
     return { categoryList };
   }
 
