@@ -15,6 +15,7 @@ let {
   validateAddOutletApiSuccessResponse,
   validateGenericApiFailureResponse,
   validateGetOutletListApiSuccessResponse,
+  validateGetOutletCategoryListApiSuccessResponse,
   validateGetOutletApiSuccessResponse,
   validateGenericApiSuccessResponse,
   validateAddProductToInventoryApiSuccessResponse
@@ -48,7 +49,7 @@ let outletToBeFilledId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidOutletId = generateInvalidId();
 
-describe('Outlet', _ => {
+describe.only('Outlet', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -87,6 +88,39 @@ describe('Outlet', _ => {
       });
     });
   });
+
+  // get outlet category list - start
+
+  it('api/get-outlet-category-list (Invalid apiKey)', testDoneFn => {
+
+    callApi('api/get-outlet-category-list', {
+      json: {
+        apiKey: 'sixtyfoursixtyfoursixtyfoursixtyfoursixtyfoursixtyfoursixtyfour1'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('APIKEY_INVALID');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-outlet-category-list (Valid)', testDoneFn => {
+
+    callApi('api/get-outlet-category-list', {
+      json: {
+        apiKey
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetOutletCategoryListApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  // get outlet category list - end
 
   it('api/add-outlet (Invalid categoryCode)', testDoneFn => {
 
