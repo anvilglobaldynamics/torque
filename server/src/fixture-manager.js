@@ -39,6 +39,11 @@ class FixtureManager {
         name: "module-list",
         path: "./src/fixtures/module-list.json",
         version: 1
+      },
+      {
+        name: "outlet-category-list",
+        path: "./src/fixtures/outlet-category-list.json",
+        version: 1
       }
     ];
 

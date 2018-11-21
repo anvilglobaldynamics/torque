@@ -39,6 +39,7 @@ Possible Error Codes:
 { code: APIKEY_INVALID } // the api key is invalid
 { code: OUTLET_INVALID } // outlet not found
 { code: PHONE_ALREADY_IN_USE } // the phone number is already associated with another organization
+{ code: CATEGORY_INVALID }
 ```
 
 ### response (on success):

@@ -11,4 +11,8 @@ exports.OutletMixin = (SuperApiClass) => class extends SuperApiClass {
     }
   }
 
+  async __checkIfCategoryCodeExists({ categoryCode }) {
+    return await this.database.fixture.findOutletCategoryByCode({ categoryCode });
+  }
+
 }

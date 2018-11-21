@@ -2,8 +2,9 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const { OutletMixin } = require('./mixins/outlet-mixin');
 
-exports.EditOutletApi = class extends Api {
+exports.EditOutletApi = class extends Api.mixin(OutletMixin) {
 
   get autoValidates() { return true; }
 
@@ -46,7 +47,10 @@ exports.EditOutletApi = class extends Api {
 
   async handle({ body }) {
     let { outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode } = body;
-    // TODO: check if categoryCode is valid
+
+    let categoryExists =await this.__checkIfCategoryCodeExists({ categoryCode });
+    throwOnFalsy(categoryExists, "CATEGORY_INVALID", "Category code is invalid.");
+
     await this._updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode });
     return { status: "success" };
   }

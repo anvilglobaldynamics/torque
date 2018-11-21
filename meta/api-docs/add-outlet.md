@@ -39,6 +39,7 @@ Possible Error Codes:
 { code: ORGANIZATION_INVALID } // the organization id is invalid
 { code: PHONE_ALREADY_IN_USE } // the phone number is already associated with another organization
 { code: ORGANIZATION_PACKAGE_MAX_OUTLET_LIMIT_REACHED }
+{ code: CATEGORY_INVALID }
 ```
 
 ### response (on success):

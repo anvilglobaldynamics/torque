@@ -1,0 +1,10 @@
+[
+  {
+    "code": "CAT_GENERAL",
+    "name": "General shop"
+  },
+  {
+    "code": "CAT_PHARMACY",
+    "name": "Pharmacy (shop)"
+  }
+]

@@ -3,8 +3,9 @@ const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
 const { extract } = require('../utils/extract');
 const { InventoryMixin } = require('./mixins/inventory-mixin');
+const { OutletMixin } = require('./mixins/outlet-mixin');
 
-exports.AddOutletApi = class extends Api.mixin(InventoryMixin) {
+exports.AddOutletApi = class extends Api.mixin(InventoryMixin, OutletMixin) {
 
   get autoValidates() { return true; }
 
@@ -52,7 +53,10 @@ exports.AddOutletApi = class extends Api.mixin(InventoryMixin) {
     let { name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode } = body;
     let { aPackage } = this.interimData;
     await this._checkOrganizationPackageOutletLimit({ organizationId, aPackage });
-    // TODO: check if categoryCode is valid
+
+    let categoryExists =await this.__checkIfCategoryCodeExists({ categoryCode });
+    throwOnFalsy(categoryExists, "CATEGORY_INVALID", "Category code is invalid.");
+
     let outletId = await this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode });
     await this.__createStandardInventories({ inventoryContainerId: outletId, inventoryContainerType: "outlet", organizationId });
     return { status: "success", outletId }
