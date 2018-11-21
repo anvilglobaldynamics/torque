@@ -49,7 +49,7 @@
             <!-- map location section - start -->
             <template is="dom-if" if="[[editOutletForm.location]]">
               <div class="location-msg">[[verses.outlet.showingLocationOnMap]]:</div>
-              <good-map on-google-map-ready="mapReady" api-key="AIzaSyBHyZPlDJnRD9dOXcSbCm6O7sAT0ph6_pg" latitude="[[editOutletForm.location.lat]]" longitude="[[editOutletForm.location.lng]]" zoom="16" map-options='{"mapTypeId": "roadmap"}'></good-map>
+              <good-map on-google-map-ready="mapReady" api-key="AIzaSyBHyZPlDJnRD9dOXcSbCm6O7sAT0ph6_pg" latitude="[[editOutletForm.location.lat]]" longitude="[[editOutletForm.location.lng]]" zoom="16" map-options='{"mapTypeId": "roadmap", "disableDefaultUI": true, "gestureHandling": "none"}'></good-map>
             </template>
 
             <template is="dom-if" if="[[!editOutletForm.location]]">
