@@ -48,7 +48,7 @@ let outletToBeFilledId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidOutletId = generateInvalidId();
 
-describe.only('Outlet', _ => {
+describe('Outlet', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -105,6 +105,28 @@ describe.only('Outlet', _ => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equals('CATEGORY_INVALID');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-outlet (Invalid categoryCode)', testDoneFn => {
+
+    callApi('api/add-outlet', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "My Outlet",
+        physicalAddress: "batcave address",
+        phone: outletPhone,
+        contactPersonName: "test contact person name",
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 1234
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VALIDATION_ERROR');
       testDoneFn();
     })
 
