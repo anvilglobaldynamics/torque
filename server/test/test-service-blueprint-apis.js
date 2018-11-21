@@ -75,7 +75,8 @@ describe('Service', _ => {
               physicalAddress: orgBusinessAddress,
               phone: orgPhone,
               contactPersonName: outletContactPersonName,
-              location: { lat: 24.3776992, lng: 88.62483509999993 }
+              location: { lat: 24.3776992, lng: 88.62483509999993 },
+              categoryCode: 'CAT_GENERAL'
             }, (data) => {
               outletId = data.outletId;
               addOutlet({
@@ -85,7 +86,8 @@ describe('Service', _ => {
                 physicalAddress: orgBusinessAddress,
                 phone: orgPhone,
                 contactPersonName: outletContactPersonName,
-                location: { lat: 24.3776992, lng: 88.62483509999993 }
+                location: { lat: 24.3776992, lng: 88.62483509999993 },
+                categoryCode: 'CAT_GENERAL'
               }, (data) => {
                 outletTwoId = data.outletId;
                 testDoneFn();

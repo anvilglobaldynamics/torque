@@ -48,7 +48,7 @@ let outletToBeFilledId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidOutletId = generateInvalidId();
 
-describe.only('Outlet', _ => {
+describe('Outlet', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
