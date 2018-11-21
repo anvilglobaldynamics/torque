@@ -55,7 +55,7 @@ exports.OutletCollection = class extends Collection {
     });
   }
 
-  async setDetails({ id }, { name, physicalAddress, phone, contactPersonName, location }) {
+  async setDetails({ id }, { name, physicalAddress, phone, contactPersonName, location, categoryCode }) {
     return await this._update({ id }, {
       $set: {
         name, physicalAddress, phone, contactPersonName, location, categoryCode

@@ -20,7 +20,8 @@ exports.EditOutletApi = class extends Api {
       location: Joi.object().keys({
         lat: Joi.number().required(),
         lng: Joi.number().required()
-      }).required()
+      }).required(),
+      categoryCode: Joi.string().required()
     });
   }
 
@@ -38,14 +39,15 @@ exports.EditOutletApi = class extends Api {
     }];
   }
 
-  async _updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location }) {
-    let res = await this.database.outlet.setDetails({ id: outletId}, {name, physicalAddress, phone, contactPersonName, location });
+  async _updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode }) {
+    let res = await this.database.outlet.setDetails({ id: outletId}, {name, physicalAddress, phone, contactPersonName, location, categoryCode });
     this.ensureUpdate('outlet', res);
   }
 
   async handle({ body }) {
-    let { outletId, name, physicalAddress, phone, contactPersonName, location } = body;
-    await this._updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location });
+    let { outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode } = body;
+    // TODO: check if categoryCode is valid
+    await this._updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode });
     return { status: "success" };
   }
 
