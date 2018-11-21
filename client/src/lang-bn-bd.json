@@ -247,6 +247,7 @@
     "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন",
 
     "selectLocationButton": "মানচিত্রে অবস্থান চিহ্নিত করুন",
+    "locationInvalidDialog": "মানচিত্রে একটি সঠিক অবস্থান নির্বাচন করুন।",
     "showingLocationOnMap": "নীচের মানচিত্রে অবস্থান দেখানো হচ্ছে",
     "noLocationOnMap": "এখনো অবস্থান মানচিত্রে চিহ্নিত করা হয়নি।"
   },

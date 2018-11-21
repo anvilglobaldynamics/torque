@@ -104,7 +104,7 @@
                   phone: '',
                   contactPersonName: '',
                   physicalAddress: '',
-                  location: { lat: 24.3776992, lng: 88.62483509999993 }
+                  location: null
                 };
               }
             }
@@ -282,6 +282,10 @@
         if (!this.elem('#editOutletForm').validate()) return;
 
         let { name, phone, contactPersonName, physicalAddress, location } = this.editOutletForm;
+        if (!location) {
+          this.app.showModalDialog(this.app.verses.general.sorry, this.app.verses.outlet.locationInvalidDialog);
+          return;
+        }
         this._processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location });
       }
 
@@ -290,6 +294,10 @@
         if (!this.elem('#editOutletForm').validate()) return;
 
         let { name, phone, contactPersonName, physicalAddress, location } = this.editOutletForm;
+        if (!location) {
+          this.app.showModalDialog(this.app.verses.general.sorry, this.app.verses.outlet.locationInvalidDialog);
+          return;
+        }
         this._processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location });
       }
 
