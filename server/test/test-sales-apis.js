@@ -144,7 +144,8 @@ describe('Sales', _ => {
               name: outletName,
               physicalAddress: outletPhysicalAddress,
               phone: outletPhone,
-              contactPersonName: outletContactPersonName
+              contactPersonName: outletContactPersonName,
+              location: { lat: 24.3776992, lng: 88.62483509999993 }
             }, (data) => {
               outletId = data.outletId;
               getOutlet({
@@ -1729,7 +1730,8 @@ describe('Sales', _ => {
         name: outletName,
         physicalAddress: outletPhysicalAddress,
         phone: outletPhone,
-        contactPersonName: outletContactPersonName
+        contactPersonName: outletContactPersonName,
+        location: { lat: 24.3776992, lng: 88.62483509999993 }
       }))
       .then(({ outletId }) => membershipTest.outlet1Id = outletId)
 
@@ -1739,7 +1741,8 @@ describe('Sales', _ => {
         name: outletName,
         physicalAddress: outletPhysicalAddress,
         phone: outletPhone,
-        contactPersonName: outletContactPersonName
+        contactPersonName: outletContactPersonName,
+        location: { lat: 24.3776992, lng: 88.62483509999993 }
       }))
       .then(({ outletId }) => membershipTest.outlet2Id = outletId)
 

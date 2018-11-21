@@ -547,6 +547,12 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
       physicalAddress: Joi.string().required(),
       contactPersonName: Joi.string().required(),
       phone: Joi.string().required(),
+
+      location: Joi.object().keys({
+        lat: Joi.number().required(),
+        lng: Joi.number().required()
+      }).required(),
+
       isDeleted: Joi.boolean().required()
     }),
 
@@ -922,6 +928,11 @@ exports.validateOutletSchema = (doc) => {
     physicalAddress: Joi.string().min(1).max(128).required(),
     contactPersonName: Joi.string().min(1).max(64).required(),
     phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+
+    location: Joi.object().keys({
+      lat: Joi.number().required(),
+      lng: Joi.number().required()
+    }).required(),
 
     isDeleted: Joi.boolean().required()
   });

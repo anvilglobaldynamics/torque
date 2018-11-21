@@ -112,7 +112,8 @@ describe('Sales Return', _ => {
               name: outletName,
               physicalAddress: outletPhysicalAddress,
               phone: outletPhone,
-              contactPersonName: outletContactPersonName
+              contactPersonName: outletContactPersonName,
+              location: { lat: 24.3776992, lng: 88.62483509999993 }
             }, (data) => {
               outletId = data.outletId;
               getOutlet({

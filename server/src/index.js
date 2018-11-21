@@ -52,10 +52,10 @@ let { EditCustomerApi } = require('./legacy-apis/edit-customer');
 const { WithdrawFromChangeWalletBalanceApi } = require('./apis/withdraw-from-change-wallet-balance');
 let { DeleteCustomerApi } = require('./legacy-apis/delete-customer');
 
-let { AddOutletApi } = require('./legacy-apis/add-outlet');
+const { AddOutletApi } = require('./apis/add-outlet');
 let { GetOutletListApi } = require('./legacy-apis/get-outlet-list');
 let { GetOutletApi } = require('./legacy-apis/get-outlet');
-let { EditOutletApi } = require('./legacy-apis/edit-outlet');
+const { EditOutletApi } = require('./apis/edit-outlet');
 const { DeleteOutletApi } = require('./apis/delete-outlet');
 
 let { AddWarehouseApi } = require('./legacy-apis/add-warehouse');

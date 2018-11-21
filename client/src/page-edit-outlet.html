@@ -6,6 +6,7 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/good-map/good-map.html">
 
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
@@ -22,6 +23,15 @@
 <dom-module id="page-edit-outlet">
   <template>
     <style include="shared-styles">
+      .location-msg {
+        padding: 6px;
+      }
+
+      good-map {
+        display: block;
+        height: 300px;
+        margin-bottom: 8px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -32,9 +42,22 @@
         <form>
           <div class="card vertical layout">
             <paper-input class="editOutletForm--name" value="{{editOutletForm.name}}" required minlength="3" error-message=[[verses.outlet.nameOfOutletInputError]] label=[[verses.outlet.nameOfOutletInput]]></paper-input>
-            <paper-textarea class="editOutletForm--physicalAddress" value="{{editOutletForm.physicalAddress}}" required minlength="8" error-message=[[verses.outlet.physicalAddressInputError]] label=[[verses.outlet.physicalAddressInput]] rows="4"></paper-textarea>
+            <paper-textarea class="editOutletForm--physicalAddress" value="{{editOutletForm.physicalAddress}}" required minlength="8" error-message=[[verses.outlet.physicalAddressInputError]] label=[[verses.outlet.physicalAddressInput]] rows="3"></paper-textarea>
             <paper-input class="editOutletForm--contactPersonName" value="{{editOutletForm.contactPersonName}}" required minlength="3" error-message=[[verses.outlet.contactPersonNameInputError]] label=[[verses.outlet.contactPersonNameInput]]></paper-input>
             <paper-input class="editOutletForm--phone" value="{{editOutletForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.outlet.contactPhoneOfContactPersonError]] label=[[verses.outlet.contactPhoneOfContactPerson]]></paper-input>
+
+            <!-- map location section - start -->
+            <template is="dom-if" if="[[editOutletForm.location]]">
+              <div class="location-msg">[[verses.outlet.showingLocationOnMap]]:</div>
+              <good-map on-google-map-ready="mapReady" api-key="AIzaSyBHyZPlDJnRD9dOXcSbCm6O7sAT0ph6_pg" latitude="[[editOutletForm.location.lat]]" longitude="[[editOutletForm.location.lng]]" zoom="16" map-options='{"mapTypeId": "roadmap", "disableDefaultUI": true, "gestureHandling": "none"}'></good-map>
+            </template>
+
+            <template is="dom-if" if="[[!editOutletForm.location]]">
+              <div class="location-msg">[[verses.outlet.noLocationOnMap]]</div>
+            </template>
+            <paper-button raised class="secondary" on-tap="selectLocationTapped">[[verses.outlet.selectLocationButton]]</paper-button>
+            <!-- map location section - end -->
+
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editOutletForm--submit" on-tap="createOutletTapped">[[verses.outlet.createOutlet]]</paper-button>
@@ -72,14 +95,16 @@
                   name: 'Gulshan Showroom',
                   phone: '01700000011',
                   contactPersonName: 'Johns Apparel',
-                  physicalAddress: 'Road 50\nThis Town'
+                  physicalAddress: 'Road 56, Gulshan, Dhaka',
+                  location: { lat: 24.3776992, lng: 88.62483509999993 }
                 };
               } else {
                 return {
                   name: '',
                   phone: '',
                   contactPersonName: '',
-                  physicalAddress: ''
+                  physicalAddress: '',
+                  location: null
                 };
               }
             }
@@ -108,10 +133,12 @@
         if (!this._ensureAccess()) return;
         if (this.editMode) {
           this._processGetOutlet(() => {
+            this._loadLocation();
             this.isReady = true;
           });
         } else {
           this.delay(300, () => {
+            this._loadLocation();
             this.isReady = true;
           });
         }
@@ -131,6 +158,54 @@
         });
       }
 
+      // region: map =================================
+
+      _loadLocation() {
+        let location = sessionStorage.getItem('page-select-geolocation:location');
+        try {
+          location = JSON.parse(location);
+        } catch (ex) {
+          'pass'
+        }
+        if (location) {
+          this.set('editOutletForm.location', location);
+          sessionStorage.setItem('page-select-geolocation:location', null);
+        }
+
+        const fn = () => {
+          if (this.isGoogleReady) {
+            this._initiateMap();
+          } else {
+            this.delay(100, fn);
+          }
+        }
+        fn();
+      }
+
+      mapReady(e = null) {
+        // NOTE: this callback is completely unreliable. This isn't called
+        // everytime good-map is initialized. It's only called when google
+        // maps is initialized. (i.e. only once in the app's lifecycle)
+        console.log("mapReady");
+        this.isGoogleReady = true;
+      }
+
+      _initiateMap() {
+        console.log('_initiateMap')
+        if (this.editOutletForm.location) {
+          if (!this.marker) {
+            this.marker = new google.maps.Marker({
+              position: this.editOutletForm.location,
+              map: this.elem('good-map').map,
+              draggable: false
+            });
+          } else {
+            this.marker.setPosition(this.editOutletForm.location);
+          }
+          this.elem('good-map').map.setCenter(this.editOutletForm.location);
+        }
+      }
+
       // region: editOutlet =================================
 
       _processGetOutlet(cbfn) {
@@ -142,13 +217,13 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.editingOutlet = response.outlet;
-          let { name, phone, contactPersonName, physicalAddress } = this.editingOutlet;
-          this.editOutletForm = { name, phone, contactPersonName, physicalAddress };
+          let { name, phone, contactPersonName, physicalAddress, location } = this.editingOutlet;
+          this.editOutletForm = { name, phone, contactPersonName, physicalAddress, location };
           cbfn();
         });
       }
 
-      _processCreateOutlet({ name, phone, contactPersonName, physicalAddress }) {
+      _processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location }) {
         let organizationId;
         if ('fromOrganizationCreatePage' in this.params) {
           organizationId = this.params.fromOrganizationCreatePage;
@@ -156,7 +231,7 @@
           organizationId = this.app.organization.id;
         }
         let data = {
-          name, phone, contactPersonName, physicalAddress,
+          name, phone, contactPersonName, physicalAddress, location,
           organizationId
         };
         this.app.callAddOutletApi(data, (err, response) => {
@@ -173,9 +248,9 @@
         });
       }
 
-      _processUpdateOutlet({ name, phone, contactPersonName, physicalAddress }) {
+      _processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location }) {
         let data = {
-          name, phone, contactPersonName, physicalAddress,
+          name, phone, contactPersonName, physicalAddress, location,
           outletId: this.editingOutlet.id
         };
         this.app.callEditOutletApi(data, (err, response) => {
@@ -190,6 +265,14 @@
 
       // region: ui =================================
 
+      selectLocationTapped(e = null) {
+        sessionStorage.setItem('page-select-geolocation:address', this.editOutletForm.physicalAddress || '');
+        if (this.editOutletForm.location) {
+          sessionStorage.setItem('page-select-geolocation:location', JSON.stringify(this.editOutletForm.location));
+        }
+        this.app.navigateTo('/select-geolocation');
+      }
+
       backButtonOnTopBarPressed(e = null) {
         this.app.navigateToPreviousUrl('/manage-outlets');
       }
@@ -198,16 +281,24 @@
         this.elemAll('#editOutletForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editOutletForm').validate()) return;
 
-        let { name, phone, contactPersonName, physicalAddress } = this.editOutletForm;
-        this._processCreateOutlet({ name, phone, contactPersonName, physicalAddress });
+        let { name, phone, contactPersonName, physicalAddress, location } = this.editOutletForm;
+        if (!location) {
+          this.app.showModalDialog(this.app.verses.general.sorry, this.app.verses.outlet.locationInvalidDialog);
+          return;
+        }
+        this._processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location });
       }
 
       updateOutletTapped(e = null) {
         this.elemAll('#editOutletForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editOutletForm').validate()) return;
 
-        let { name, phone, contactPersonName, physicalAddress } = this.editOutletForm;
-        this._processUpdateOutlet({ name, phone, contactPersonName, physicalAddress });
+        let { name, phone, contactPersonName, physicalAddress, location } = this.editOutletForm;
+        if (!location) {
+          this.app.showModalDialog(this.app.verses.general.sorry, this.app.verses.outlet.locationInvalidDialog);
+          return;
+        }
+        this._processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location });
       }
 
       // region: misc =================================

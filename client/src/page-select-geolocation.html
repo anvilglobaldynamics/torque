@@ -1,0 +1,253 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/good-map/good-map.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-select-geolocation">
+  <template>
+    <style include="shared-styles">
+      .map-initiators {
+        padding-bottom: 6px;
+      }
+
+      good-map {
+        display: block;
+        height: 70vh;
+      }
+
+      @media (min-width: 960px) {
+        good-map {
+          max-height: 500px;
+        }
+      }
+
+      .padded {
+        margin-left: 6px;
+        margin-right: 6px;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="map-initiators">
+        <div class="horizontal layout center padded">
+          <paper-input class="flex" label="[[verses.selectGeolocation.physicalAddress]]" value="{{address}}"></paper-input>
+          <paper-icon-button icon="icons:search" on-tap="searchTapped"></paper-icon-button>
+        </div>
+        <div class="horizontal layout">
+          <paper-button style="width: 50%;" raised class="secondary" on-tap="locateTapped">
+            [[verses.selectGeolocation.currentLocation]]
+          </paper-button>
+
+          <paper-button style="width: 50%;" raised class="primary" on-tap="saveButtonPressed">
+            [[verses.selectGeolocation.saveLocation]]  
+          </paper-button>
+        </div>
+      </div>
+
+      <good-map on-google-map-ready="mapReady" api-key="AIzaSyBHyZPlDJnRD9dOXcSbCm6O7sAT0ph6_pg" latitude="30" longitude="-100" zoom="14" map-options='{"mapTypeId": "roadmap", "streetViewControl": false, "fullscreenControl": false}'></good-map>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageSelectGeolocation extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-select-geolocation';
+      }
+
+      static get properties() {
+        return {
+          selectedLocation: {
+            type: String,
+            value: () => null
+          },
+          marker: {
+            type: Object,
+            value: () => null
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        if (!this._ensureAccess()) return;
+        this.app.pushPageTitle(this.app.verses.selectGeolocation.selectGeolocationTitle);
+        this.isReady = true;
+        const fn = () => {
+          if (this.isGoogleReady) {
+            this._initiateMap();
+          } else {
+            this.delay(100, fn);
+          }
+        }
+        fn();
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_ALL_OUTLETS']
+        });
+      }
+
+      // region: maps =================================
+
+      mapReady(e = null) {
+        // NOTE: this callback is completely unreliable. This isn't called
+        // everytime good-map is initialized. It's only called when google
+        // maps is initialized. (i.e. only once in the app's lifecycle)
+        console.log("mapReady");
+        this.isGoogleReady = true;
+      }
+
+      _setOrSpawnMarker(location) {
+        if (!this.marker) {
+          this.marker = new google.maps.Marker({
+            position: location,
+            map: this.map,
+            draggable: true
+          });
+          google.maps.event.addListener(this.marker, 'dragend', (event) => {
+            this._markerLocationUpdated();
+          });
+        } else {
+          this.marker.setPosition(location);
+        }
+        this._markerLocationUpdated()
+      }
+
+      _searchByAddress() {
+        let geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': this.address }, (results, status) => {
+          if (status == google.maps.GeocoderStatus.OK) {
+            this.map.setCenter(results[0].geometry.location);
+            this._setOrSpawnMarker(results[0].geometry.location);
+          }
+        });
+      }
+
+      _setLocationUsingDevice() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            this.map.setCenter(pos);
+            this._setOrSpawnMarker(pos);
+          }, () => {
+            this.app.showModalDialog("Sorry.", "Failed to access GPS Data.");
+          });
+        } else {
+          this.app.showModalDialog("Sorry.", "Your browser/device does not support geolocation.");
+        }
+
+      }
+
+      _markerLocationUpdated() {
+        let currentLocation = this.marker.getPosition();
+        let lat = currentLocation.lat(); //latitude
+        let lng = currentLocation.lng(); //longitude
+        this.set('selectedLocation', { lat, lng });
+
+        let geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ location: currentLocation }, (results, status) => {
+          if (status == google.maps.GeocoderStatus.OK) {
+            this.address = results[0].formatted_address;
+          }
+        });
+
+      }
+
+      _initiateMap() {
+        console.log('_initiateMap');
+        this.map = this.elem('good-map').map;
+        this.address = sessionStorage.getItem('page-select-geolocation:address') || 'Dhaka';
+
+        let previousLocation = sessionStorage.getItem('page-select-geolocation:location');
+        try {
+          previousLocation = JSON.parse(previousLocation);
+        } catch (ex) {
+          'pass'
+        }
+
+        console.log('_initiateMap->mapLoaded');
+
+        if (previousLocation) {
+          console.log('_initiateMap->setting previous location', previousLocation);
+          this.map.setCenter(previousLocation);
+          this._setOrSpawnMarker(previousLocation);
+        } else {
+          console.log('_initiateMap->_searchByAddress', this.address);
+          this._searchByAddress();
+        }
+
+        google.maps.event.addListener(this.map, 'click', (event) => {
+          let clickedLocation = event.latLng;
+          this._setOrSpawnMarker(clickedLocation);
+        });
+
+      }
+
+      // region: ui =================================
+
+      locateTapped(e = null) {
+        this._setLocationUsingDevice();
+      }
+
+      searchTapped(e = null) {
+        this._searchByAddress();
+      }
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/edit-outlet');
+      }
+
+      saveButtonPressed(e) {
+        sessionStorage.setItem('page-select-geolocation:location', JSON.stringify(this.selectedLocation));
+        this.app.navigateToPreviousUrl('/edit-outlet');
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageSelectGeolocation.is, PageSelectGeolocation);
+  </script>
+</dom-module>

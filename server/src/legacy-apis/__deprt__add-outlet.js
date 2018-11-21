@@ -17,7 +17,11 @@ exports.AddOutletApi = class extends inventoryCommonMixin(LegacyApi) {
       organizationId: Joi.number().max(999999999999999).required(),
       physicalAddress: Joi.string().min(1).max(128).required(),
       contactPersonName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required()
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      location: Joi.object().keys({
+        lat: Joi.number().required(),
+        lng: Joi.number().required()
+      }).required()
     });
   }
 
@@ -30,9 +34,9 @@ exports.AddOutletApi = class extends inventoryCommonMixin(LegacyApi) {
     }];
   }
 
-  _createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName }, cbfn) {
+  _createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location }, cbfn) {
     let outlet = {
-      name, organizationId, physicalAddress, phone, contactPersonName
+      name, organizationId, physicalAddress, phone, contactPersonName, location
     }
     this.legacyDatabase.outlet.create(outlet, (err, outletId) => {
       if (err) return this.fail(err);
@@ -53,10 +57,10 @@ exports.AddOutletApi = class extends inventoryCommonMixin(LegacyApi) {
   }
 
   handle({ body }) {
-    let { name, organizationId, physicalAddress, phone, contactPersonName } = body;
+    let { name, organizationId, physicalAddress, phone, contactPersonName, location } = body;
     let { aPackage } = this.interimData;
     this._checkOrganizationPackageOutletLimit({ organizationId, aPackage }, () => {
-      this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName }, (outletId) => {
+      this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location }, (outletId) => {
         this._createStandardInventories({ inventoryContainerId: outletId, inventoryContainerType: "outlet", organizationId }, () => {
           this.success({ status: "success", outletId });
         });

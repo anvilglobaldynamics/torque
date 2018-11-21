@@ -17,7 +17,11 @@ exports.EditOutletApi = class extends collectionCommonMixin(LegacyApi) {
       name: Joi.string().min(1).max(64).required(),
       physicalAddress: Joi.string().min(1).max(128).required(),
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
-      contactPersonName: Joi.string().min(1).max(64).required()
+      contactPersonName: Joi.string().min(1).max(64).required(),
+      location: Joi.object().keys({
+        lat: Joi.number().required(),
+        lng: Joi.number().required()
+      }).required()
     });
   }
 
@@ -35,16 +39,16 @@ exports.EditOutletApi = class extends collectionCommonMixin(LegacyApi) {
     }];
   }
 
-  _updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName }, cbfn) {
-    this.legacyDatabase.outlet.update({ outletId }, { name, physicalAddress, phone, contactPersonName }, (err, wasUpdated) => {
+  _updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location }, cbfn) {
+    this.legacyDatabase.outlet.update({ outletId }, { name, physicalAddress, phone, contactPersonName, location }, (err, wasUpdated) => {
       if (!this._ensureUpdate(err, wasUpdated, "outlet")) return;
       return cbfn();
     });
   }
 
   handle({ body, userId }) {
-    let { outletId, name, physicalAddress, phone, contactPersonName } = body;
-    this._updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName }, _ => {
+    let { outletId, name, physicalAddress, phone, contactPersonName, location } = body;
+    this._updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location }, _ => {
       this.success({ status: "success" });
     });
   }
