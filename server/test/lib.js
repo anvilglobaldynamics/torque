@@ -552,6 +552,7 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
         lat: Joi.number().required(),
         lng: Joi.number().required()
       }).required(),
+      categoryCode: Joi.string().required(),
 
       isDeleted: Joi.boolean().required()
     }),
@@ -936,6 +937,7 @@ exports.validateOutletSchema = (doc) => {
       lat: Joi.number().required(),
       lng: Joi.number().required()
     }).required(),
+    categoryCode: Joi.string().required(),
 
     isDeleted: Joi.boolean().required()
   });

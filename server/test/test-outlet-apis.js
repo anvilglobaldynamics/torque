@@ -98,7 +98,8 @@ describe.only('Outlet', _ => {
         physicalAddress: "batcave address",
         phone: outletPhone,
         contactPersonName: "test contact person name",
-        location: { lat: 24.3776992, lng: 88.62483509999993 }
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -118,7 +119,8 @@ describe.only('Outlet', _ => {
         physicalAddress: "batcave address new",
         phone: outletPhone3,
         contactPersonName: "test contact person name",
-        location: { lat: 24.3776992, lng: 88.62483509999993 }
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -139,7 +141,8 @@ describe.only('Outlet', _ => {
         physicalAddress: "batcave address new",
         phone: outletPhone3,
         contactPersonName: "test contact person name",
-        location: { lat: 24.3776992, lng: 88.62483509999993 }
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -160,7 +163,8 @@ describe.only('Outlet', _ => {
         physicalAddress: "batcave address",
         phone: outletPhone,
         contactPersonName: "test contact person name",
-        location: { lat: 24.3776992, lng: 88.62483509999993 }
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -256,7 +260,8 @@ describe.only('Outlet', _ => {
         physicalAddress: "batcave address",
         phone: outletPhone2,
         contactPersonName: "new test contact person name",
-        location: { lat: 24.3776992, lng: 88.62483509999993 }
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -277,7 +282,8 @@ describe.only('Outlet', _ => {
         physicalAddress: "batcave address",
         phone: outletPhone2,
         contactPersonName: "new test contact person name",
-        location: { lat: 24.3776992, lng: 88.62483509999993 }
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

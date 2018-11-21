@@ -20,7 +20,8 @@ exports.AddOutletApi = class extends Api.mixin(InventoryMixin) {
       location: Joi.object().keys({
         lat: Joi.number().required(),
         lng: Joi.number().required()
-      }).required()
+      }).required(),
+      categoryCode: Joi.string().required()
     });
   }
 
@@ -33,9 +34,9 @@ exports.AddOutletApi = class extends Api.mixin(InventoryMixin) {
     }];
   }
 
-  async _createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location }) {
+  async _createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode }) {
     let outlet = {
-      name, organizationId, physicalAddress, phone, contactPersonName, location
+      name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode
     }
     return await this.database.outlet.create(outlet);
   }
@@ -48,10 +49,11 @@ exports.AddOutletApi = class extends Api.mixin(InventoryMixin) {
   }
 
   async handle({ body }) {
-    let { name, organizationId, physicalAddress, phone, contactPersonName, location } = body;
+    let { name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode } = body;
     let { aPackage } = this.interimData;
     await this._checkOrganizationPackageOutletLimit({ organizationId, aPackage });
-    let outletId = await this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location });
+    // TODO: check if categoryCode is valid
+    let outletId = await this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode });
     await this.__createStandardInventories({ inventoryContainerId: outletId, inventoryContainerType: "outlet", organizationId });
     return { status: "success", outletId }
   }

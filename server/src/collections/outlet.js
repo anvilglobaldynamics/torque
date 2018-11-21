@@ -19,6 +19,7 @@ exports.OutletCollection = class extends Collection {
         lat: Joi.number().required(),
         lng: Joi.number().required()
       }).required(),
+      categoryCode: Joi.string().required(),
       isDeleted: Joi.boolean().required()
     });
   }
@@ -39,7 +40,7 @@ exports.OutletCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ name, organizationId, physicalAddress, phone, contactPersonName, location }) {
+  async create({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode }) {
     return await this._insert({
       createdDatetimeStamp: (new Date).getTime(),
       lastModifiedDatetimeStamp: (new Date).getTime(),
@@ -49,6 +50,7 @@ exports.OutletCollection = class extends Collection {
       phone,
       contactPersonName,
       location,
+      categoryCode,
       isDeleted: false
     });
   }
@@ -56,7 +58,7 @@ exports.OutletCollection = class extends Collection {
   async setDetails({ id }, { name, physicalAddress, phone, contactPersonName, location }) {
     return await this._update({ id }, {
       $set: {
-        name, physicalAddress, phone, contactPersonName, location
+        name, physicalAddress, phone, contactPersonName, location, categoryCode
       }
     });
   }
