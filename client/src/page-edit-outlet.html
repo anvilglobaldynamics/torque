@@ -46,6 +46,14 @@
             <paper-input class="editOutletForm--contactPersonName" value="{{editOutletForm.contactPersonName}}" required minlength="3" error-message=[[verses.outlet.contactPersonNameInputError]] label=[[verses.outlet.contactPersonNameInput]]></paper-input>
             <paper-input class="editOutletForm--phone" value="{{editOutletForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.outlet.contactPhoneOfContactPersonError]] label=[[verses.outlet.contactPhoneOfContactPerson]]></paper-input>
 
+            <paper-dropdown-menu class="full-width-paper-dropdown editOutletForm--categoryCode" label=[[verses.outlet.categoryCodeDropdown]] class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{editOutletForm.categoryCode}}" attr-for-selected="code">
+                <template is="dom-repeat" items="[[outletCategoryList]]" as="outletCategory">
+                  <paper-item code="[[outletCategory.code]]">[[outletCategory.name]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+
             <!-- map location section - start -->
             <template is="dom-if" if="[[editOutletForm.location]]">
               <div class="location-msg">[[verses.outlet.showingLocationOnMap]]:</div>
@@ -96,7 +104,8 @@
                   phone: '01700000011',
                   contactPersonName: 'Johns Apparel',
                   physicalAddress: 'Road 56, Gulshan, Dhaka',
-                  location: { lat: 24.3776992, lng: 88.62483509999993 }
+                  location: { lat: 24.3776992, lng: 88.62483509999993 },
+                  categoryCode: 'CAT_GENERAL'
                 };
               } else {
                 return {
@@ -104,7 +113,8 @@
                   phone: '',
                   contactPersonName: '',
                   physicalAddress: '',
-                  location: null
+                  location: null,
+                  categoryCode: 'CAT_GENERAL'
                 };
               }
             }
@@ -133,13 +143,17 @@
         if (!this._ensureAccess()) return;
         if (this.editMode) {
           this._processGetOutlet(() => {
-            this._loadLocation();
-            this.isReady = true;
+            this.fetchOutletCategoryList(() => {
+              this._loadLocation();
+              this.isReady = true;
+            });
           });
         } else {
           this.delay(300, () => {
-            this._loadLocation();
-            this.isReady = true;
+            this.fetchOutletCategoryList(() => {
+              this._loadLocation();
+              this.isReady = true;
+            });
           });
         }
       }
@@ -208,22 +222,30 @@
 
       // region: editOutlet =================================
 
+      fetchOutletCategoryList (cbfn) {
+        let data = {};
+        this.app.callGetOutletCategoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.outletCategoryList = response.categoryList;
+          cbfn();
+        });
+      }
+      
       _processGetOutlet(cbfn) {
         let outletId = parseInt(this.params.outlet);
-        let data = {
-          outletId
-        };
+        let data = { outletId };
         this.app.callGetOutletApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.editingOutlet = response.outlet;
-          let { name, phone, contactPersonName, physicalAddress, location } = this.editingOutlet;
-          this.editOutletForm = { name, phone, contactPersonName, physicalAddress, location };
+          let { name, phone, contactPersonName, physicalAddress, location, categoryCode } = this.editingOutlet;
+          this.editOutletForm = { name, phone, contactPersonName, physicalAddress, location, categoryCode };
           cbfn();
         });
       }
 
-      _processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location }) {
+      _processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode }) {
         let organizationId;
         if ('fromOrganizationCreatePage' in this.params) {
           organizationId = this.params.fromOrganizationCreatePage;
@@ -231,7 +253,7 @@
           organizationId = this.app.organization.id;
         }
         let data = {
-          name, phone, contactPersonName, physicalAddress, location,
+          name, phone, contactPersonName, physicalAddress, location, categoryCode,
           organizationId
         };
         this.app.callAddOutletApi(data, (err, response) => {
@@ -248,9 +270,9 @@
         });
       }
 
-      _processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location }) {
+      _processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode }) {
         let data = {
-          name, phone, contactPersonName, physicalAddress, location,
+          name, phone, contactPersonName, physicalAddress, location, categoryCode,
           outletId: this.editingOutlet.id
         };
         this.app.callEditOutletApi(data, (err, response) => {
@@ -281,24 +303,24 @@
         this.elemAll('#editOutletForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editOutletForm').validate()) return;
 
-        let { name, phone, contactPersonName, physicalAddress, location } = this.editOutletForm;
+        let { name, phone, contactPersonName, physicalAddress, location, categoryCode } = this.editOutletForm;
         if (!location) {
           this.app.showModalDialog(this.app.verses.general.sorry, this.app.verses.outlet.locationInvalidDialog);
           return;
         }
-        this._processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location });
+        this._processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode });
       }
 
       updateOutletTapped(e = null) {
         this.elemAll('#editOutletForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editOutletForm').validate()) return;
 
-        let { name, phone, contactPersonName, physicalAddress, location } = this.editOutletForm;
+        let { name, phone, contactPersonName, physicalAddress, location, categoryCode } = this.editOutletForm;
         if (!location) {
           this.app.showModalDialog(this.app.verses.general.sorry, this.app.verses.outlet.locationInvalidDialog);
           return;
         }
-        this._processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location });
+        this._processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode });
       }
 
       // region: misc =================================
