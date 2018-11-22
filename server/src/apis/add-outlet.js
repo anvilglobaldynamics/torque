@@ -54,7 +54,7 @@ exports.AddOutletApi = class extends Api.mixin(InventoryMixin, OutletMixin) {
     let { aPackage } = this.interimData;
     await this._checkOrganizationPackageOutletLimit({ organizationId, aPackage });
 
-    let categoryExists =await this.__checkIfCategoryCodeExists({ categoryCode });
+    let categoryExists = await this.__checkIfCategoryCodeExists({ categoryCode });
     throwOnFalsy(categoryExists, "CATEGORY_INVALID", "Category code is invalid.");
 
     let outletId = await this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode });
