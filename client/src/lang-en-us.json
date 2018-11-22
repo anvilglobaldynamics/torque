@@ -244,7 +244,21 @@
     "damagedInventoryName": "Damaged",
     "noOutletFound": "No Outlet has been created in your Organization.",
     "manageOutletServicesTitle": "Manage Services",
-    "manageOutletServices": "Manage Services provided in this Outlet"
+    "manageOutletServices": "Manage Services provided in this Outlet",
+
+    "categoryCodeDropdown": "Outlet Category",
+
+    "selectLocationButton": "Set Location on Map",
+    "locationInvalidDialog": "Please select a valid location on the map.",
+    "showingLocationOnMap": "Showing your location on Map below",
+    "noLocationOnMap": "Location has not been set on Map yet."
+
+  },
+  "selectGeolocation": {
+    "selectGeolocationTitle": "Set Map Location",
+    "physicalAddress": "Physical Address",
+    "currentLocation": "Current Location",
+    "saveLocation": "Save Location"
   },
   "productBlueprint": {
     "manageProductBlueprintsTitle": "Manage Product Blueprints",
@@ -420,6 +434,11 @@
     "customerNameInputError": "Enter a valid name",
     "customerNumberInput": "Contact Number",
     "customerNumberInputError": "Enter a valid phone number",
+
+    "emailAddressInput": "Email Address (Optional)",
+    "emailAddressInputError": "Enter valid email address",
+    "addressInput": "Physical Address (Optional)",
+
     "openingBalance": "Opening Balance",
     "openingBalanceError": "Enter an amount as opening balance",
     "createCustomer": "Create Customer",

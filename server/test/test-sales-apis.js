@@ -144,7 +144,9 @@ describe('Sales', _ => {
               name: outletName,
               physicalAddress: outletPhysicalAddress,
               phone: outletPhone,
-              contactPersonName: outletContactPersonName
+              contactPersonName: outletContactPersonName,
+              location: { lat: 24.3776992, lng: 88.62483509999993 },
+              categoryCode: 'CAT_GENERAL'
             }, (data) => {
               outletId = data.outletId;
               getOutlet({
@@ -177,7 +179,9 @@ describe('Sales', _ => {
                       apiKey,
                       organizationId,
                       fullName: customerFullName,
-                      phone: customerPhone
+                      phone: customerPhone,
+                      email: null,
+                      address: ''
                     }, (data) => {
                       customerId = data.customerId;
                       getCustomer({
@@ -1711,7 +1715,9 @@ describe('Sales', _ => {
         apiKey,
         organizationId: membershipTest.organizationId,
         fullName: customerFullName,
-        phone: membershipTest.customer1Phone
+        phone: membershipTest.customer1Phone,
+        email: null,
+        address: ''
       }))
       .then(({ customerId }) => membershipTest.customer1Id = customerId)
 
@@ -1719,7 +1725,9 @@ describe('Sales', _ => {
         apiKey,
         organizationId: membershipTest.organizationId,
         fullName: customerFullName,
-        phone: membershipTest.customer2Phone
+        phone: membershipTest.customer2Phone,
+        email: null,
+        address: ''
       }))
       .then(({ customerId }) => membershipTest.customer2Id = customerId)
 
@@ -1729,7 +1737,9 @@ describe('Sales', _ => {
         name: outletName,
         physicalAddress: outletPhysicalAddress,
         phone: outletPhone,
-        contactPersonName: outletContactPersonName
+        contactPersonName: outletContactPersonName,
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }))
       .then(({ outletId }) => membershipTest.outlet1Id = outletId)
 
@@ -1739,7 +1749,9 @@ describe('Sales', _ => {
         name: outletName,
         physicalAddress: outletPhysicalAddress,
         phone: outletPhone,
-        contactPersonName: outletContactPersonName
+        contactPersonName: outletContactPersonName,
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }))
       .then(({ outletId }) => membershipTest.outlet2Id = outletId)
 

@@ -45,18 +45,19 @@ let { EditEmploymentApi } = require('./legacy-apis/edit-employment');
 let { FireEmployeeApi } = require('./legacy-apis/fire-employee');
 const { GetUserDisplayInformationApi } = require('./apis/get-user-display-information');
 
-let { AddCustomerApi } = require('./legacy-apis/add-customer');
+const { AddCustomerApi } = require('./apis/add-customer');
 let { GetCustomerApi } = require('./legacy-apis/get-customer');
 const { GetCustomerSummaryListApi } = require('./apis/get-customer-summary-list');
-let { EditCustomerApi } = require('./legacy-apis/edit-customer');
+const { EditCustomerApi } = require('./apis/edit-customer');
 const { WithdrawFromChangeWalletBalanceApi } = require('./apis/withdraw-from-change-wallet-balance');
 let { DeleteCustomerApi } = require('./legacy-apis/delete-customer');
 
-let { AddOutletApi } = require('./legacy-apis/add-outlet');
+const { AddOutletApi } = require('./apis/add-outlet');
 let { GetOutletListApi } = require('./legacy-apis/get-outlet-list');
 let { GetOutletApi } = require('./legacy-apis/get-outlet');
-let { EditOutletApi } = require('./legacy-apis/edit-outlet');
+const { EditOutletApi } = require('./apis/edit-outlet');
 const { DeleteOutletApi } = require('./apis/delete-outlet');
+const { GetOutletCategoryListApi } = require('./apis/get-outlet-category-list');
 
 let { AddWarehouseApi } = require('./legacy-apis/add-warehouse');
 let { GetWarehouseListApi } = require('./legacy-apis/get-warehouse-list');
@@ -289,6 +290,7 @@ class Program {
     server.registerPostApi('/api/get-outlet', GetOutletApi);
     server.registerPostApi('/api/edit-outlet', EditOutletApi);
     server.registerPostApi('/api/delete-outlet', DeleteOutletApi);
+    server.registerPostApi('/api/get-outlet-category-list', GetOutletCategoryListApi);
     server.registerPostApi('/api/add-warehouse', AddWarehouseApi);
     server.registerPostApi('/api/get-warehouse-list', GetWarehouseListApi);
     server.registerPostApi('/api/get-warehouse', GetWarehouseApi);

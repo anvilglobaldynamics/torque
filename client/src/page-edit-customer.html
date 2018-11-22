@@ -21,9 +21,7 @@
 
 <dom-module id="page-edit-customer">
   <template>
-    <style include="shared-styles">
-
-    </style>
+    <style include="shared-styles"></style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -31,13 +29,19 @@
       <iron-form id="editCustomerForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
+            
             <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message=[[verses.customer.customerNameInputError]] label=[[verses.customer.customerNameInput]]></paper-input>
             <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.customer.customerNumberInputError]] label=[[verses.customer.customerNumberInput]]></paper-input>
+
+            <paper-input class="editCustomerForm--email" value="{{editCustomerForm.email}}" pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.customer.emailAddressInputError]] label=[[verses.customer.emailAddressInput]]></paper-input>
+            <paper-textarea class="editCustomerForm--address" value="{{editCustomerForm.address}}" label=[[verses.customer.addressInput]] rows="3"></paper-textarea>
+
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editCustomerForm--submit" on-tap="createCustomerTapped">[[verses.customer.createCustomer]]</paper-button>
               <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editCustomerForm--submit" on-tap="updateCustomerTapped">[[verses.customer.updateCustomer]]</paper-button>
             </div>
+
           </div>
         </form>
       </iron-form>
@@ -67,12 +71,16 @@
               if (mode === 'development') {
                 return {
                   fullName: 'Rahim Karim',
-                  phone: '01700000011'
+                  phone: '01700000011',
+                  email: 'rahim@gmail.com',
+                  address: 'house road block code 1213 city country'
                 };
               } else {
                 return {
                   fullName: '',
-                  phone: ''
+                  phone: '',
+                  email: null,
+                  address: ''
                 };
               }
             }
@@ -135,15 +143,15 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.editingCustomer = response.customer;
-          let { fullName, phone } = this.editingCustomer;
-          this.editCustomerForm = { fullName, phone };
+          let { fullName, phone, email, address } = this.editingCustomer;
+          this.editCustomerForm = { fullName, phone, email, address };
           cbfn();
         });
       }
 
-      _processCreateCustomer({ fullName, phone }) {
+      _processCreateCustomer({ fullName, phone, email, address }) {
         let data = {
-          fullName, phone,
+          fullName, phone, email, address,
           organizationId: this.app.organization.id
         };
         this.app.callAddCustomerApi(data, (err, response) => {
@@ -157,9 +165,9 @@
         });
       }
 
-      _processUpdateCustomer({ fullName, phone }) {
+      _processUpdateCustomer({ fullName, phone, email, address }) {
         let data = {
-          fullName, phone,
+          fullName, phone, email, address,
           customerId: this.editingCustomer.id
         };
         this.app.callEditCustomerApi(data, (err, response) => {
@@ -182,16 +190,16 @@
         this.elemAll('#editCustomerForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editCustomerForm').validate()) return;
 
-        let { fullName, phone } = this.editCustomerForm;
-        this._processCreateCustomer({ fullName, phone });
+        let { fullName, phone, email, address } = this.editCustomerForm;
+        this._processCreateCustomer({ fullName, phone, email, address });
       }
 
       updateCustomerTapped(e = null) {
         this.elemAll('#editCustomerForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editCustomerForm').validate()) return;
 
-        let { fullName, phone } = this.editCustomerForm;
-        this._processUpdateCustomer({ fullName, phone });
+        let { fullName, phone, email, address } = this.editCustomerForm;
+        this._processUpdateCustomer({ fullName, phone, email, address });
       }
 
       // region: misc =================================

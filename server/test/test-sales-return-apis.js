@@ -112,7 +112,9 @@ describe('Sales Return', _ => {
               name: outletName,
               physicalAddress: outletPhysicalAddress,
               phone: outletPhone,
-              contactPersonName: outletContactPersonName
+              contactPersonName: outletContactPersonName,
+              location: { lat: 24.3776992, lng: 88.62483509999993 },
+              categoryCode: 'CAT_GENERAL'
             }, (data) => {
               outletId = data.outletId;
               getOutlet({
@@ -165,7 +167,9 @@ describe('Sales Return', _ => {
                           apiKey,
                           organizationId,
                           fullName: customerFullName,
-                          phone: customerPhone
+                          phone: customerPhone,
+                          email: null,
+                          address: ''
                         }, (data) => {
                           customerId = data.customerId;
                           getCustomer({

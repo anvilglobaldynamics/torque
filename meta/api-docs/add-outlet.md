@@ -12,7 +12,12 @@ method: `POST`
   organizationId: Joi.number().max(999999999999999).required(),
   physicalAddress: Joi.string().min(1).max(128).required(),
   contactPersonName: Joi.string().min(1).max(64).required(),
-  phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required()
+  phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+  location: Joi.object().keys({
+    lat: Joi.number().required(),
+    lng: Joi.number().required()
+  }).required(),
+  categoryCode: Joi.string().required()
 }
 ```
 
@@ -34,6 +39,7 @@ Possible Error Codes:
 { code: ORGANIZATION_INVALID } // the organization id is invalid
 { code: PHONE_ALREADY_IN_USE } // the phone number is already associated with another organization
 { code: ORGANIZATION_PACKAGE_MAX_OUTLET_LIMIT_REACHED }
+{ code: CATEGORY_INVALID }
 ```
 
 ### response (on success):

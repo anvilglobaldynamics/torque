@@ -41,9 +41,9 @@ let outletTwoId = null;
 
 let invalidOrganizationId = generateInvalidId();
 let invalidProductBlueprintId = generateInvalidId();
-let invalidOutletId = generateInvalidId(); 
+let invalidOutletId = generateInvalidId();
 let invalidServiceBlueprintId = generateInvalidId();
-let invalidServiceId = generateInvalidId(); 
+let invalidServiceId = generateInvalidId();
 
 let serviceBlueprintToBeEdited = null;
 let serviceBlueprintToBeActivated = null;
@@ -74,7 +74,9 @@ describe('Service', _ => {
               name: outletName,
               physicalAddress: orgBusinessAddress,
               phone: orgPhone,
-              contactPersonName: outletContactPersonName
+              contactPersonName: outletContactPersonName,
+              location: { lat: 24.3776992, lng: 88.62483509999993 },
+              categoryCode: 'CAT_GENERAL'
             }, (data) => {
               outletId = data.outletId;
               addOutlet({
@@ -83,7 +85,9 @@ describe('Service', _ => {
                 name: outletTwoName,
                 physicalAddress: orgBusinessAddress,
                 phone: orgPhone,
-                contactPersonName: outletContactPersonName
+                contactPersonName: outletContactPersonName,
+                location: { lat: 24.3776992, lng: 88.62483509999993 },
+                categoryCode: 'CAT_GENERAL'
               }, (data) => {
                 outletTwoId = data.outletId;
                 testDoneFn();
@@ -103,15 +107,15 @@ describe('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        
+
         name: "1st service blueprint",
-      
+
         defaultVat: 110,
         defaultSalePrice: 250,
-        
+
         isLongstanding: false,
         serviceDuration: null,
-      
+
         isEmployeeAssignable: false,
         isCustomerRequired: false,
         isRefundable: false,
@@ -132,15 +136,15 @@ describe('Service', _ => {
       json: {
         apiKey,
         organizationId: invalidOrganizationId,
-        
+
         name: "1st service blueprint",
-      
+
         defaultVat: 10,
         defaultSalePrice: 250,
-        
+
         isLongstanding: false,
         serviceDuration: null,
-      
+
         isEmployeeAssignable: false,
         isCustomerRequired: false,
         isRefundable: false,
@@ -161,15 +165,15 @@ describe('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        
+
         name: "1st service blueprint",
-      
+
         defaultVat: 2,
         defaultSalePrice: 250,
-        
+
         isLongstanding: false,
         serviceDuration: null,
-      
+
         isEmployeeAssignable: false,
         isCustomerRequired: false,
         isRefundable: false,
@@ -189,15 +193,15 @@ describe('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        
+
         name: "1st service blueprint",
-      
+
         defaultVat: 2,
         defaultSalePrice: 250,
-        
+
         isLongstanding: false,
         serviceDuration: null,
-      
+
         isEmployeeAssignable: false,
         isCustomerRequired: false,
         isRefundable: false,
@@ -218,15 +222,15 @@ describe('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        
+
         name: "2nd service blueprint",
-      
+
         defaultVat: 10,
         defaultSalePrice: 250,
-        
+
         isLongstanding: false,
         serviceDuration: null,
-      
+
         isEmployeeAssignable: true,
         isCustomerRequired: true,
         isRefundable: true,
@@ -246,15 +250,15 @@ describe('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        
+
         name: "3rd service blueprint",
-      
+
         defaultVat: 2,
         defaultSalePrice: 250,
-        
+
         isLongstanding: true,
         serviceDuration: null,
-      
+
         isEmployeeAssignable: true,
         isCustomerRequired: true,
         isRefundable: true,
@@ -275,18 +279,18 @@ describe('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        
+
         name: "3rd service blueprint",
-      
+
         defaultVat: 2,
         defaultSalePrice: 250,
-        
+
         isLongstanding: false,
         serviceDuration: {
           months: 1,
           days: 7
         },
-      
+
         isEmployeeAssignable: true,
         isCustomerRequired: true,
         isRefundable: true,
@@ -307,18 +311,18 @@ describe('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        
+
         name: "3rd service blueprint",
-      
+
         defaultVat: 2,
         defaultSalePrice: 8600,
-        
+
         isLongstanding: true,
         serviceDuration: {
           months: 1,
           days: 7
         },
-      
+
         isEmployeeAssignable: true,
         isCustomerRequired: false,
         isRefundable: true,
@@ -339,18 +343,18 @@ describe('Service', _ => {
       json: {
         apiKey,
         organizationId,
-        
+
         name: "3rd service blueprint",
-      
+
         defaultVat: 2,
         defaultSalePrice: 8600,
-        
+
         isLongstanding: true,
         serviceDuration: {
           months: 1,
           days: 7
         },
-      
+
         isEmployeeAssignable: true,
         isCustomerRequired: true,
         isRefundable: true,
@@ -772,7 +776,7 @@ describe('Service', _ => {
 
         performActionForAllServices: true,
         serviceBlueprintList: [],
-      
+
         performActionOnAllOutlets: true,
         outletIdList: []
       }
@@ -799,7 +803,7 @@ describe('Service', _ => {
             something: "something"
           }
         ],
-      
+
         performActionOnAllOutlets: true,
         outletIdList: []
       }
@@ -827,7 +831,7 @@ describe('Service', _ => {
             salePrice: 999
           }
         ],
-      
+
         performActionOnAllOutlets: true,
         outletIdList: []
       }
@@ -850,7 +854,7 @@ describe('Service', _ => {
 
         performActionForAllServices: true,
         serviceBlueprintList: [],
-      
+
         performActionOnAllOutlets: false,
         outletIdList: [invalidOutletId]
       }
@@ -873,7 +877,7 @@ describe('Service', _ => {
 
         performActionForAllServices: false,
         serviceBlueprintList: [],
-      
+
         performActionOnAllOutlets: false,
         outletIdList: []
       }
@@ -896,7 +900,7 @@ describe('Service', _ => {
 
         performActionForAllServices: true,
         serviceBlueprintList: [],
-      
+
         performActionOnAllOutlets: true,
         outletIdList: [1]
       }
@@ -924,7 +928,7 @@ describe('Service', _ => {
             salePrice: 100
           }
         ],
-      
+
         performActionOnAllOutlets: true,
         outletIdList: []
       }
@@ -952,7 +956,7 @@ describe('Service', _ => {
             salePrice: serviceBlueprintToBeActivated.defaultSalePrice
           }
         ],
-      
+
         performActionOnAllOutlets: false,
         outletIdList: [outletId]
       }
@@ -980,7 +984,7 @@ describe('Service', _ => {
             salePrice: serviceBlueprintToBeActivated.defaultSalePrice
           }
         ],
-      
+
         performActionOnAllOutlets: false,
         outletIdList: [outletId]
       }
@@ -1046,7 +1050,7 @@ describe('Service', _ => {
 
         performActionForAllServices: true,
         serviceBlueprintList: [],
-      
+
         performActionOnAllOutlets: false,
         outletIdList: [outletTwoId]
       }
@@ -1117,7 +1121,7 @@ describe('Service', _ => {
             salePrice: serviceBlueprintToBeActivated.defaultSalePrice
           }
         ],
-      
+
         performActionOnAllOutlets: true,
         outletIdList: []
       }
@@ -1139,7 +1143,7 @@ describe('Service', _ => {
 
         performActionForAllServices: true,
         serviceBlueprintList: [],
-      
+
         performActionOnAllOutlets: true,
         outletIdList: []
       }
@@ -1166,7 +1170,7 @@ describe('Service', _ => {
             salePrice: serviceBlueprintToBeActivated.defaultSalePrice
           }
         ],
-      
+
         performActionOnAllOutlets: false,
         outletIdList: [outletId]
       }
@@ -1210,7 +1214,7 @@ describe('Service', _ => {
 
         performActionForAllServices: true,
         serviceBlueprintList: [],
-      
+
         performActionOnAllOutlets: true,
         outletIdList: []
       }

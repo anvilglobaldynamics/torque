@@ -532,6 +532,16 @@ exports.validateGetOutletListApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateGetOutletCategoryListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    categoryList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateGetOutletApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
@@ -547,6 +557,13 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
       physicalAddress: Joi.string().required(),
       contactPersonName: Joi.string().required(),
       phone: Joi.string().required(),
+
+      location: Joi.object().keys({
+        lat: Joi.number().required(),
+        lng: Joi.number().required()
+      }).required(),
+      categoryCode: Joi.string().required(),
+
       isDeleted: Joi.boolean().required()
     }),
 
@@ -895,6 +912,9 @@ exports.validateCustomerSchema = (doc) => {
 
     fullName: Joi.string().min(1).max(64).required(),
     phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    email: Joi.string().email().min(3).max(30).allow(null).required(),
+    address: Joi.string().min(1).max(128).allow('').required(),
+
     organizationId: Joi.number().max(999999999999999).required(),
     changeWalletBalance: Joi.number().max(999999999999999).required(),
 
@@ -922,6 +942,12 @@ exports.validateOutletSchema = (doc) => {
     physicalAddress: Joi.string().min(1).max(128).required(),
     contactPersonName: Joi.string().min(1).max(64).required(),
     phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+
+    location: Joi.object().keys({
+      lat: Joi.number().required(),
+      lng: Joi.number().required()
+    }).required(),
+    categoryCode: Joi.string().required(),
 
     isDeleted: Joi.boolean().required()
   });
@@ -1260,6 +1286,8 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       organizationId: Joi.number().max(999999999999999).required(),
       changeWalletBalance: Joi.number().max(999999999999999).required(),
+      email: Joi.string().email().min(3).max(30).allow(null).required(),
+      address: Joi.string().min(1).max(128).allow('').required(),
 
       withdrawalHistory: Joi.array().items(
         Joi.object().keys({

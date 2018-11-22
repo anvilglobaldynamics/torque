@@ -244,7 +244,20 @@
     "damagedInventoryName": "ক্ষতিগ্রস্ত",
     "noOutletFound": "আপনার সংস্থার কোনো দোকান তৈরি করা হয়নি।",
     "manageOutletServicesTitle": "সেবা পরিচালনা",
-    "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন"
+    "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন",
+
+    "categoryCodeDropdown": "দোকানের ধরন",
+
+    "selectLocationButton": "মানচিত্রে অবস্থান চিহ্নিত করুন",
+    "locationInvalidDialog": "মানচিত্রে একটি সঠিক অবস্থান নির্বাচন করুন।",
+    "showingLocationOnMap": "নীচের মানচিত্রে অবস্থান দেখানো হচ্ছে",
+    "noLocationOnMap": "এখনো অবস্থান মানচিত্রে চিহ্নিত করা হয়নি।"
+  },
+  "selectGeolocation": {
+    "selectGeolocationTitle": "মানচিত্রে অবস্থান",
+    "physicalAddress": "ঠিকানা",
+    "currentLocation": "এখন যেখানে আছেন",
+    "saveLocation": "অবস্থান নিশ্চিত করুন"
   },
   "productBlueprint": {
     "manageProductBlueprintsTitle": "পণ্যের পরিকল্পনা পরিচালনা",
@@ -420,6 +433,11 @@
     "customerNameInputError": "একটি সঠিক নাম লিখুন",
     "customerNumberInput": "যোগাযোগের নম্বর",
     "customerNumberInputError": "একটি সঠিক ফোন নম্বর লিখুন",
+
+    "emailAddressInput": "ইমেল (ঐচ্ছিক)",
+    "emailAddressInputError": "বৈধ ইমেইল লিখুন",
+    "addressInput": "ঠিকানা (ঐচ্ছিক)",
+
     "openingBalance": "প্রার্থমিক ব্যালেন্স",
     "openingBalanceError": "প্রার্থমিক ব্যালেন্স হিসাবে একটি পরিমান লিখুন",
     "createCustomer": "গ্রাহক যুক্ত করুন",

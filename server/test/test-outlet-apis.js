@@ -15,6 +15,7 @@ let {
   validateAddOutletApiSuccessResponse,
   validateGenericApiFailureResponse,
   validateGetOutletListApiSuccessResponse,
+  validateGetOutletCategoryListApiSuccessResponse,
   validateGetOutletApiSuccessResponse,
   validateGenericApiSuccessResponse,
   validateAddProductToInventoryApiSuccessResponse
@@ -88,6 +89,83 @@ describe('Outlet', _ => {
     });
   });
 
+  // get outlet category list - start
+
+  it('api/get-outlet-category-list (Invalid apiKey)', testDoneFn => {
+
+    callApi('api/get-outlet-category-list', {
+      json: {
+        apiKey: 'sixtyfoursixtyfoursixtyfoursixtyfoursixtyfoursixtyfoursixtyfour1'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('APIKEY_INVALID');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/get-outlet-category-list (Valid)', testDoneFn => {
+
+    callApi('api/get-outlet-category-list', {
+      json: {
+        apiKey
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetOutletCategoryListApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  // get outlet category list - end
+
+  it('api/add-outlet (Invalid categoryCode)', testDoneFn => {
+
+    callApi('api/add-outlet', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "My Outlet",
+        physicalAddress: "batcave address",
+        phone: outletPhone,
+        contactPersonName: "test contact person name",
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'INVALID'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('CATEGORY_INVALID');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-outlet (Invalid categoryCode)', testDoneFn => {
+
+    callApi('api/add-outlet', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "My Outlet",
+        physicalAddress: "batcave address",
+        phone: outletPhone,
+        contactPersonName: "test contact person name",
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 1234
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VALIDATION_ERROR');
+      testDoneFn();
+    })
+
+  });
+
   it('api/add-outlet (Valid)', testDoneFn => {
 
     callApi('api/add-outlet', {
@@ -97,7 +175,9 @@ describe('Outlet', _ => {
         name: "My Outlet",
         physicalAddress: "batcave address",
         phone: outletPhone,
-        contactPersonName: "test contact person name"
+        contactPersonName: "test contact person name",
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -116,7 +196,9 @@ describe('Outlet', _ => {
         name: "My Outlet 2",
         physicalAddress: "batcave address new",
         phone: outletPhone3,
-        contactPersonName: "test contact person name"
+        contactPersonName: "test contact person name",
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -136,7 +218,9 @@ describe('Outlet', _ => {
         name: "My Outlet 2",
         physicalAddress: "batcave address new",
         phone: outletPhone3,
-        contactPersonName: "test contact person name"
+        contactPersonName: "test contact person name",
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -156,7 +240,9 @@ describe('Outlet', _ => {
         name: "My Outlet",
         physicalAddress: "batcave address",
         phone: outletPhone,
-        contactPersonName: "test contact person name"
+        contactPersonName: "test contact person name",
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -251,7 +337,9 @@ describe('Outlet', _ => {
         name: "My Outlet",
         physicalAddress: "batcave address",
         phone: outletPhone2,
-        contactPersonName: "new test contact person name"
+        contactPersonName: "new test contact person name",
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -271,7 +359,9 @@ describe('Outlet', _ => {
         name: "My Outlet",
         physicalAddress: "batcave address",
         phone: outletPhone2,
-        contactPersonName: "new test contact person name"
+        contactPersonName: "new test contact person name",
+        location: { lat: 24.3776992, lng: 88.62483509999993 },
+        categoryCode: 'CAT_GENERAL'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
