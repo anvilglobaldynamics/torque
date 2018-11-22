@@ -532,6 +532,16 @@ exports.validateGetOutletListApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateGetOutletCategoryListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    categoryList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateGetOutletApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
@@ -552,6 +562,7 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
         lat: Joi.number().required(),
         lng: Joi.number().required()
       }).required(),
+      categoryCode: Joi.string().required(),
 
       isDeleted: Joi.boolean().required()
     }),
@@ -936,6 +947,7 @@ exports.validateOutletSchema = (doc) => {
       lat: Joi.number().required(),
       lng: Joi.number().required()
     }).required(),
+    categoryCode: Joi.string().required(),
 
     isDeleted: Joi.boolean().required()
   });

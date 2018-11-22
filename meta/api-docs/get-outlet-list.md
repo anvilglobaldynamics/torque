@@ -45,6 +45,12 @@ Possible Error Codes:
       contactPersonName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
 
+      location: Joi.object().keys({
+        lat: Joi.number().required(),
+        lng: Joi.number().required()
+      }).required(),
+      categoryCode: Joi.string().required(),
+
       isDeleted: Joi.boolean().required()
     });
   )

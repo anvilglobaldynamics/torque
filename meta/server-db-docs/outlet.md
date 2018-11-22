@@ -14,6 +14,7 @@ Joi.object().keys({
     lat: Joi.number().required(),
     lng: Joi.number().required()
   }).required(),
+  categoryCode: Joi.string().required(),
   isDeleted: Joi.boolean().required()
 });
 ```

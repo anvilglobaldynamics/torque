@@ -2,8 +2,9 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const { OutletMixin } = require('./mixins/outlet-mixin');
 
-exports.EditOutletApi = class extends Api {
+exports.EditOutletApi = class extends Api.mixin(OutletMixin) {
 
   get autoValidates() { return true; }
 
@@ -20,7 +21,8 @@ exports.EditOutletApi = class extends Api {
       location: Joi.object().keys({
         lat: Joi.number().required(),
         lng: Joi.number().required()
-      }).required()
+      }).required(),
+      categoryCode: Joi.string().required()
     });
   }
 
@@ -38,14 +40,18 @@ exports.EditOutletApi = class extends Api {
     }];
   }
 
-  async _updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location }) {
-    let res = await this.database.outlet.setDetails({ id: outletId}, {name, physicalAddress, phone, contactPersonName, location });
+  async _updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode }) {
+    let res = await this.database.outlet.setDetails({ id: outletId}, {name, physicalAddress, phone, contactPersonName, location, categoryCode });
     this.ensureUpdate('outlet', res);
   }
 
   async handle({ body }) {
-    let { outletId, name, physicalAddress, phone, contactPersonName, location } = body;
-    await this._updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location });
+    let { outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode } = body;
+
+    let categoryExists =await this.__checkIfCategoryCodeExists({ categoryCode });
+    throwOnFalsy(categoryExists, "CATEGORY_INVALID", "Category code is invalid.");
+
+    await this._updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode });
     return { status: "success" };
   }
 
