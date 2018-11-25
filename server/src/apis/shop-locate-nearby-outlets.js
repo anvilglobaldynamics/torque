@@ -39,7 +39,7 @@ exports.ShopLocateNearbyOutletsApi = class extends Api {
   }
 
   async _listOutletsByIdAndOptionallyCategoryCode({ outletIdList, categoryCode }) {
-    console.log(categoryCode,outletIdList)
+    console.log(categoryCode, outletIdList)
     if (categoryCode) {
       return await this.database.outlet.listByIdListAndCategoryCode({ idList: outletIdList, categoryCode });
     } else {

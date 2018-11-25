@@ -164,6 +164,36 @@ describe.only('Shop : Geolocation', _ => {
       // body.serviceMembershipList.forEach(serviceMembership => {
       //   validateServiceMembershipSchemaWhenListObj(serviceMembership);
       // });
+      expect(body.outletList.length).to.equal(2);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/shop-locate-nearby-outlets', testDoneFn => {
+
+    callApi('api/shop-locate-nearby-outlets', {
+      json: {
+        northEast: {
+          lat: 1,
+          lng: 1,
+        },
+        southWest: {
+          lat: 5,
+          lng: 5,
+        },
+        categoryCode: null,
+        productName: ''
+      }
+    }, (err, response, body) => {
+      // console.log(require('util').inspect(body, { depth: null }));
+      console.dir(body, { depth: null })
+      expect(response.statusCode).to.equal(200);
+      // validateGetServiceMembershipListApiSuccessResponse(body);
+      // body.serviceMembershipList.forEach(serviceMembership => {
+      //   validateServiceMembershipSchemaWhenListObj(serviceMembership);
+      // });
+      expect(body.outletList.length).to.equal(1);
       testDoneFn();
     });
 
