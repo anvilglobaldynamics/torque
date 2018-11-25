@@ -41,14 +41,19 @@ exports.EditOutletApi = class extends Api.mixin(OutletMixin) {
   }
 
   async _updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode }) {
-    let res = await this.database.outlet.setDetails({ id: outletId}, {name, physicalAddress, phone, contactPersonName, location, categoryCode });
+    let res = await this.database.outlet.setDetails({ id: outletId }, { name, physicalAddress, phone, contactPersonName, location, categoryCode });
     this.ensureUpdate('outlet', res);
+  }
+
+  async _updateGeolocationCache({ outletId, location }) {
+    let res = await this.database.cacheOutletGeolocation.setLocationByOutletId({ outletId }, { location });
+    this.ensureUpdate('cache-outlet-geolocation', res);
   }
 
   async handle({ body }) {
     let { outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode } = body;
 
-    let categoryExists =await this.__checkIfCategoryCodeExists({ categoryCode });
+    let categoryExists = await this.__checkIfCategoryCodeExists({ categoryCode });
     throwOnFalsy(categoryExists, "CATEGORY_INVALID", "Category code is invalid.");
 
     await this._updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode });
