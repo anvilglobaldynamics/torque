@@ -69,7 +69,7 @@ const openingBalance = '500';
 let apiKey = null;
 
 
-describe.only('Shop : Geolocation', _ => {
+describe.skip('Shop : Geolocation', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
