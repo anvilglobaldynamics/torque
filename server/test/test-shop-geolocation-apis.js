@@ -154,7 +154,7 @@ describe.only('Shop : Geolocation', _ => {
           lng: 20,
         },
         categoryCode: null,
-        productName: ''
+        searchString: ''
       }
     }, (err, response, body) => {
       // console.log(require('util').inspect(body, { depth: null }));
@@ -183,7 +183,7 @@ describe.only('Shop : Geolocation', _ => {
           lng: 5,
         },
         categoryCode: null,
-        productName: ''
+        searchString: ''
       }
     }, (err, response, body) => {
       // console.log(require('util').inspect(body, { depth: null }));
