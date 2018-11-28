@@ -152,7 +152,7 @@ describe.only('Shop : Geolocation', _ => {
       // longstanding ServiceBlueprint1
       .then(() => promisifyApiCall({}, addServiceBlueprint, {
         apiKey,
-        organizationId: membershipTest.organizationId,
+        organizationId: geometricTest.organizationId,
         name: "Long 1",
         defaultVat: 2,
         defaultSalePrice: 250,
@@ -166,12 +166,12 @@ describe.only('Shop : Geolocation', _ => {
         isRefundable: false,
         avtivateInAllOutlets: true
       }))
-      .then(({ serviceBlueprintId }) => membershipTest.serviceBlueprint1Id = serviceBlueprintId)
+      .then(({ serviceBlueprintId }) => geometricTest.serviceBlueprint1Id = serviceBlueprintId)
 
       // longstanding ServiceBlueprint2
       .then(() => promisifyApiCall({}, addServiceBlueprint, {
         apiKey,
-        organizationId: membershipTest.organizationId,
+        organizationId: geometricTest.organizationId,
         name: "Long 2",
         defaultVat: 2,
         defaultSalePrice: 250,
@@ -185,12 +185,12 @@ describe.only('Shop : Geolocation', _ => {
         isRefundable: false,
         avtivateInAllOutlets: true
       }))
-      .then(({ serviceBlueprintId }) => membershipTest.serviceBlueprint2Id = serviceBlueprintId)
+      .then(({ serviceBlueprintId }) => geometricTest.serviceBlueprint2Id = serviceBlueprintId)
 
       // ProductBlueprint1
       .then(() => promisifyApiCall({}, addProductBlueprint, {
         apiKey,
-        organizationId: membershipTest.organizationId,
+        organizationId: geometricTest.organizationId,
         name: "Poor Shoes",
         unit: "box",
         defaultDiscountType: "percent",
@@ -200,12 +200,12 @@ describe.only('Shop : Geolocation', _ => {
         defaultSalePrice: 112,
         isReturnable: true
       }))
-      .then(({ productBlueprintId }) => membershipTest.productBlueprint1Id = productBlueprintId)
+      .then(({ productBlueprintId }) => geometricTest.productBlueprint1Id = productBlueprintId)
 
       // ProductBlueprint1
       .then(() => promisifyApiCall({}, addProductBlueprint, {
         apiKey,
-        organizationId: membershipTest.organizationId,
+        organizationId: geometricTest.organizationId,
         name: "Poor Clothes",
         unit: "box",
         defaultDiscountType: "percent",
@@ -215,12 +215,12 @@ describe.only('Shop : Geolocation', _ => {
         defaultSalePrice: 112,
         isReturnable: true
       }))
-      .then(({ productBlueprintId }) => membershipTest.productBlueprint2Id = productBlueprintId)
+      .then(({ productBlueprintId }) => geometricTest.productBlueprint2Id = productBlueprintId)
 
       // ProductBlueprint1
       .then(() => promisifyApiCall({}, addProductBlueprint, {
         apiKey,
-        organizationId: membershipTest.organizationId,
+        organizationId: geometricTest.organizationId,
         name: "Rich Clothes",
         unit: "box",
         defaultDiscountType: "percent",
@@ -230,7 +230,7 @@ describe.only('Shop : Geolocation', _ => {
         defaultSalePrice: 112,
         isReturnable: true
       }))
-      .then(({ productBlueprintId }) => membershipTest.productBlueprint3Id = productBlueprintId)
+      .then(({ productBlueprintId }) => geometricTest.productBlueprint3Id = productBlueprintId)
 
       .catch(ex => console.error(ex))
 
@@ -241,7 +241,7 @@ describe.only('Shop : Geolocation', _ => {
 
   });
 
-  it('api/shop-locate-nearby-outlets', testDoneFn => {
+  it('api/shop-locate-nearby-outlets (Geometry)', testDoneFn => {
 
     callApi('api/shop-locate-nearby-outlets', {
       json: {
@@ -257,8 +257,7 @@ describe.only('Shop : Geolocation', _ => {
         searchString: ''
       }
     }, (err, response, body) => {
-      // console.log(require('util').inspect(body, { depth: null }));
-      console.dir(body, { depth: null })
+      // console.dir(body, { depth: null });
       expect(response.statusCode).to.equal(200);
       validateShopLocateNearbyOutletsApiSuccessResponse(body);
       body.outletList.forEach(outlet => {
@@ -270,7 +269,7 @@ describe.only('Shop : Geolocation', _ => {
 
   });
 
-  it('api/shop-locate-nearby-outlets', testDoneFn => {
+  it('api/shop-locate-nearby-outlets (Geometry)', testDoneFn => {
 
     callApi('api/shop-locate-nearby-outlets', {
       json: {
@@ -286,13 +285,208 @@ describe.only('Shop : Geolocation', _ => {
         searchString: ''
       }
     }, (err, response, body) => {
-      // console.log(require('util').inspect(body, { depth: null }));
-      console.dir(body, { depth: null })
+      // console.dir(body, { depth: null });
       expect(response.statusCode).to.equal(200);
-      // validateGetServiceMembershipListApiSuccessResponse(body);
-      // body.serviceMembershipList.forEach(serviceMembership => {
-      //   validateServiceMembershipSchemaWhenListObj(serviceMembership);
-      // });
+      validateShopLocateNearbyOutletsApiSuccessResponse(body);
+      body.outletList.forEach(outlet => {
+        validateOutletReturnedByShopLocateNearbyOutletsApi(outlet);
+      });
+      expect(body.outletList.length).to.equal(1);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/shop-locate-nearby-outlets (Geometry)', testDoneFn => {
+
+    callApi('api/shop-locate-nearby-outlets', {
+      json: {
+        northEast: {
+          lat: 1,
+          lng: 1,
+        },
+        southWest: {
+          lat: 2,
+          lng: 2,
+        },
+        categoryCode: null,
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      // console.dir(body, { depth: null });
+      expect(response.statusCode).to.equal(200);
+      validateShopLocateNearbyOutletsApiSuccessResponse(body);
+      body.outletList.forEach(outlet => {
+        validateOutletReturnedByShopLocateNearbyOutletsApi(outlet);
+      });
+      expect(body.outletList.length).to.equal(0);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/shop-locate-nearby-outlets (Geometry + categoryCode)', testDoneFn => {
+
+    callApi('api/shop-locate-nearby-outlets', {
+      json: {
+        northEast: {
+          lat: 1,
+          lng: 1,
+        },
+        southWest: {
+          lat: 12,
+          lng: 20,
+        },
+        categoryCode: 'CAT_GYM',
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      // console.dir(body, { depth: null });
+      expect(response.statusCode).to.equal(200);
+      validateShopLocateNearbyOutletsApiSuccessResponse(body);
+      body.outletList.forEach(outlet => {
+        validateOutletReturnedByShopLocateNearbyOutletsApi(outlet);
+      });
+      expect(body.outletList.length).to.equal(1);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/shop-locate-nearby-outlets (Geometry + categoryCode (invalid))', testDoneFn => {
+
+    callApi('api/shop-locate-nearby-outlets', {
+      json: {
+        northEast: {
+          lat: 1,
+          lng: 1,
+        },
+        southWest: {
+          lat: 12,
+          lng: 20,
+        },
+        categoryCode: 'CAT_XXX',
+        searchString: ''
+      }
+    }, (err, response, body) => {
+      // console.dir(body, { depth: null });
+      expect(response.statusCode).to.equal(200);
+      validateShopLocateNearbyOutletsApiSuccessResponse(body);
+      body.outletList.forEach(outlet => {
+        validateOutletReturnedByShopLocateNearbyOutletsApi(outlet);
+      });
+      expect(body.outletList.length).to.equal(0);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/shop-locate-nearby-outlets (Geometry + searchString)', testDoneFn => {
+
+    callApi('api/shop-locate-nearby-outlets', {
+      json: {
+        northEast: {
+          lat: 1,
+          lng: 1,
+        },
+        southWest: {
+          lat: 12,
+          lng: 20,
+        },
+        categoryCode: null,
+        searchString: 'POoR'
+      }
+    }, (err, response, body) => {
+      // console.dir(body, { depth: null });
+      expect(response.statusCode).to.equal(200);
+      validateShopLocateNearbyOutletsApiSuccessResponse(body);
+      body.outletList.forEach(outlet => {
+        validateOutletReturnedByShopLocateNearbyOutletsApi(outlet);
+      });
+      expect(body.outletList.length).to.equal(2);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/shop-locate-nearby-outlets (Geometry + searchString)', testDoneFn => {
+
+    callApi('api/shop-locate-nearby-outlets', {
+      json: {
+        northEast: {
+          lat: 1,
+          lng: 1,
+        },
+        southWest: {
+          lat: 12,
+          lng: 20,
+        },
+        categoryCode: null,
+        searchString: 'Long'
+      }
+    }, (err, response, body) => {
+      // console.dir(body, { depth: null });
+      expect(response.statusCode).to.equal(200);
+      validateShopLocateNearbyOutletsApiSuccessResponse(body);
+      body.outletList.forEach(outlet => {
+        validateOutletReturnedByShopLocateNearbyOutletsApi(outlet);
+      });
+      expect(body.outletList.length).to.equal(2);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/shop-locate-nearby-outlets (Geometry + searchString (invalid))', testDoneFn => {
+
+    callApi('api/shop-locate-nearby-outlets', {
+      json: {
+        northEast: {
+          lat: 1,
+          lng: 1,
+        },
+        southWest: {
+          lat: 12,
+          lng: 20,
+        },
+        categoryCode: null,
+        searchString: 'POoRSADAD'
+      }
+    }, (err, response, body) => {
+      // console.dir(body, { depth: null });
+      expect(response.statusCode).to.equal(200);
+      validateShopLocateNearbyOutletsApiSuccessResponse(body);
+      body.outletList.forEach(outlet => {
+        validateOutletReturnedByShopLocateNearbyOutletsApi(outlet);
+      });
+      expect(body.outletList.length).to.equal(0);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/shop-locate-nearby-outlets (Geometry + categoryCode + searchString)', testDoneFn => {
+
+    callApi('api/shop-locate-nearby-outlets', {
+      json: {
+        northEast: {
+          lat: 1,
+          lng: 1,
+        },
+        southWest: {
+          lat: 12,
+          lng: 20,
+        },
+        categoryCode: 'CAT_GYM',
+        searchString: 'Long'
+      }
+    }, (err, response, body) => {
+      // console.dir(body, { depth: null });
+      expect(response.statusCode).to.equal(200);
+      validateShopLocateNearbyOutletsApiSuccessResponse(body);
+      body.outletList.forEach(outlet => {
+        validateOutletReturnedByShopLocateNearbyOutletsApi(outlet);
+      });
       expect(body.outletList.length).to.equal(1);
       testDoneFn();
     });

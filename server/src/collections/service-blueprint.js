@@ -106,13 +106,9 @@ exports.ServiceBlueprintCollection = class extends Collection {
     let query = {
       organizationId: { $in: organizationIdList }
     };
-    if (searchString) {
-      searchString = this.escapeRegExp(searchString);
-      let searchRegex = new RegExp(searchString, 'i');
-      query.$or = [
-        { name: searchRegex }
-      ];
-    }
+    searchString = this.escapeRegExp(searchString.toLowerCase());
+    let searchRegex = new RegExp(searchString, 'i');
+    query.name = searchRegex;
     return await this._find(query);
   }
 

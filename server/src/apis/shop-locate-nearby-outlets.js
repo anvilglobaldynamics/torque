@@ -55,6 +55,7 @@ exports.ShopLocateNearbyOutletsApi = class extends Api {
   }
 
   async _appendOrganizationNameToOutletList({ outletList }) {
+
     let map = await this.crossmap({
       source: outletList,
       sourceKey: 'organizationId',
