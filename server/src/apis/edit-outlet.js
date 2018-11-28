@@ -57,6 +57,7 @@ exports.EditOutletApi = class extends Api.mixin(OutletMixin) {
     throwOnFalsy(categoryExists, "CATEGORY_INVALID", "Category code is invalid.");
 
     await this._updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode });
+    await this._updateGeolocationCache({ outletId, location });
     return { status: "success" };
   }
 
