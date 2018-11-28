@@ -42,7 +42,8 @@ let {
   addSales,
   getAsyncDatabase,
   validateShopLocateNearbyOutletsApiSuccessResponse,
-  validateOutletReturnedByShopLocateNearbyOutletsApi
+  validateOutletReturnedByShopLocateNearbyOutletsApi,
+  validateShopGetOutletDetailsApiSuccessResponse
 } = require('./lib');
 
 let { promisifyApiCall } = require('./lib');
@@ -488,6 +489,22 @@ describe.only('Shop : Geolocation', _ => {
         validateOutletReturnedByShopLocateNearbyOutletsApi(outlet);
       });
       expect(body.outletList.length).to.equal(1);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/shop-get-outlet-details', testDoneFn => {
+
+    callApi('api/shop-get-outlet-details', {
+      json: {
+        outletId: geometricTest.outlet1Id
+      }
+    }, (err, response, body) => {
+      // console.dir(body, { depth: null });
+      expect(response.statusCode).to.equal(200);
+      validateShopGetOutletDetailsApiSuccessResponse(body);
+      // expect(body.outletList.length).to.equal(1);
       testDoneFn();
     });
 

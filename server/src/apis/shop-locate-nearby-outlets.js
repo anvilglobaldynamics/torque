@@ -72,8 +72,6 @@ exports.ShopLocateNearbyOutletsApi = class extends Api {
       outletList = await this._filterOutletListBySearchString({ outletList, searchString });
     }
     await this._appendOrganizationNameToOutletList({ outletList });
-    // console.log(outletIdList)
-    // console.dir(outletIdList, { depth: null, showHidden: false })
     let finalOutletList = outletList.map(outlet => extract(outlet, ['id', 'organizationName', 'name', 'categoryCode', 'location']));
     return {
       outletList: finalOutletList
