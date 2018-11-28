@@ -54,6 +54,15 @@ exports.ShopLocateNearbyOutletsApi = class extends Api {
     return outletList.filter(outlet => organizationIdList.indexOf(outlet.organizationId) > -1);
   }
 
+  async _appendOrganizationNameToOutletList({ outletList }) {
+    let map = await this.crossmap({
+      source: outletList,
+      sourceKey: 'organizationId',
+      target: 'organization'
+    });
+    map.forEach((organization, outlet) => outlet.organizationName = organization.name);
+  }
+
   async handle({ body }) {
     let { northEast, southWest, categoryCode, searchString } = body;
     let outletGeolocationList = await this._listOutletGeolocationByBoundingRectangle({ northEast, southWest });
@@ -62,11 +71,11 @@ exports.ShopLocateNearbyOutletsApi = class extends Api {
     if (searchString.length > 0) {
       outletList = await this._filterOutletListBySearchString({ outletList, searchString });
     }
+    await this._appendOrganizationNameToOutletList({ outletList });
     // console.log(outletIdList)
     // console.dir(outletIdList, { depth: null, showHidden: false })
-    let finalOutletList = outletList.map(outlet => extract(outlet, ['name', 'location', 'id', 'categoryCode']));
+    let finalOutletList = outletList.map(outlet => extract(outlet, ['id', 'organizationName', 'name', 'categoryCode', 'location']));
     return {
-      status: "success",
       outletList: finalOutletList
     }
   }

@@ -854,6 +854,33 @@ exports.validateAdminGetModuleListApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateShopLocateNearbyOutletsApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    outletList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+
+exports.validateOutletReturnedByShopLocateNearbyOutletsApi = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    name: Joi.string().min(1).max(64).required(),
+    organizationName: Joi.string().min(1).max(64).required(),
+    categoryCode: Joi.string().required(),
+    location: Joi.object().keys({
+      lat: Joi.number().required(),
+      lng: Joi.number().required()
+    }).required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateAdminListOrganizationModulesApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),

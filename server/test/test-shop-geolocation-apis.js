@@ -40,8 +40,12 @@ let {
 
   getActiveServiceList,
   addSales,
-  getAsyncDatabase
+  getAsyncDatabase,
+  validateShopLocateNearbyOutletsApiSuccessResponse,
+  validateOutletReturnedByShopLocateNearbyOutletsApi
 } = require('./lib');
+
+let { promisifyApiCall } = require('./lib');
 
 const prefix = 's';
 
@@ -92,13 +96,26 @@ describe.only('Shop : Geolocation', _ => {
     organizationId: null,
     outlet1Id: null,
     outlet2Id: null,
+    serviceBlueprint1Id: null,
+    serviceBlueprint2Id: null,
   }
 
+  let backupData = null;
+
+  it('Database: Backup & Delete', testDoneFn => {
+    Promise.resolve()
+      .then(() => getAsyncDatabase().engine.find(getAsyncDatabase().cacheOutletGeolocation.name, {}))
+      .then((_data) => {
+        backupData = _data;
+        return getAsyncDatabase().engine.deleteMany(getAsyncDatabase().cacheOutletGeolocation.name, {});
+      })
+      .catch(ex => console.error(ex))
+      .then(testDoneFn())
+  });
+
   it('Preparing for geometric test', testDoneFn => {
-    let { promisifyApiCall } = require('./lib');
 
     Promise.resolve()
-      .then(() => getAsyncDatabase().engine.deleteMany(getAsyncDatabase().cacheOutletGeolocation.name, {}))
       .then(() => promisifyApiCall({}, addOrganization, {
         apiKey,
         name: orgName,
@@ -132,6 +149,89 @@ describe.only('Shop : Geolocation', _ => {
       }))
       .then(({ outletId }) => geometricTest.outlet2Id = outletId)
 
+      // longstanding ServiceBlueprint1
+      .then(() => promisifyApiCall({}, addServiceBlueprint, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        name: "Long 1",
+        defaultVat: 2,
+        defaultSalePrice: 250,
+        isLongstanding: true,
+        serviceDuration: {
+          months: 1,
+          days: 7
+        },
+        isEmployeeAssignable: true,
+        isCustomerRequired: true,
+        isRefundable: false,
+        avtivateInAllOutlets: true
+      }))
+      .then(({ serviceBlueprintId }) => membershipTest.serviceBlueprint1Id = serviceBlueprintId)
+
+      // longstanding ServiceBlueprint2
+      .then(() => promisifyApiCall({}, addServiceBlueprint, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        name: "Long 2",
+        defaultVat: 2,
+        defaultSalePrice: 250,
+        isLongstanding: true,
+        serviceDuration: {
+          months: 1,
+          days: 7
+        },
+        isEmployeeAssignable: true,
+        isCustomerRequired: true,
+        isRefundable: false,
+        avtivateInAllOutlets: true
+      }))
+      .then(({ serviceBlueprintId }) => membershipTest.serviceBlueprint2Id = serviceBlueprintId)
+
+      // ProductBlueprint1
+      .then(() => promisifyApiCall({}, addProductBlueprint, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        name: "Poor Shoes",
+        unit: "box",
+        defaultDiscountType: "percent",
+        defaultDiscountValue: 10,
+        defaultPurchasePrice: 99,
+        defaultVat: 3,
+        defaultSalePrice: 112,
+        isReturnable: true
+      }))
+      .then(({ productBlueprintId }) => membershipTest.productBlueprint1Id = productBlueprintId)
+
+      // ProductBlueprint1
+      .then(() => promisifyApiCall({}, addProductBlueprint, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        name: "Poor Clothes",
+        unit: "box",
+        defaultDiscountType: "percent",
+        defaultDiscountValue: 10,
+        defaultPurchasePrice: 99,
+        defaultVat: 3,
+        defaultSalePrice: 112,
+        isReturnable: true
+      }))
+      .then(({ productBlueprintId }) => membershipTest.productBlueprint2Id = productBlueprintId)
+
+      // ProductBlueprint1
+      .then(() => promisifyApiCall({}, addProductBlueprint, {
+        apiKey,
+        organizationId: membershipTest.organizationId,
+        name: "Rich Clothes",
+        unit: "box",
+        defaultDiscountType: "percent",
+        defaultDiscountValue: 10,
+        defaultPurchasePrice: 99,
+        defaultVat: 3,
+        defaultSalePrice: 112,
+        isReturnable: true
+      }))
+      .then(({ productBlueprintId }) => membershipTest.productBlueprint3Id = productBlueprintId)
+
       .catch(ex => console.error(ex))
 
       .then(() => {
@@ -160,10 +260,10 @@ describe.only('Shop : Geolocation', _ => {
       // console.log(require('util').inspect(body, { depth: null }));
       console.dir(body, { depth: null })
       expect(response.statusCode).to.equal(200);
-      // validateGetServiceMembershipListApiSuccessResponse(body);
-      // body.serviceMembershipList.forEach(serviceMembership => {
-      //   validateServiceMembershipSchemaWhenListObj(serviceMembership);
-      // });
+      validateShopLocateNearbyOutletsApiSuccessResponse(body);
+      body.outletList.forEach(outlet => {
+        validateOutletReturnedByShopLocateNearbyOutletsApi(outlet);
+      });
       expect(body.outletList.length).to.equal(2);
       testDoneFn();
     });
@@ -197,6 +297,13 @@ describe.only('Shop : Geolocation', _ => {
       testDoneFn();
     });
 
+  });
+
+  it('Database: Restore', testDoneFn => {
+    Promise.resolve()
+      .then(() => getAsyncDatabase().engine.insertManyRaw(getAsyncDatabase().cacheOutletGeolocation.name, backupData))
+      .catch(ex => console.error(ex))
+      .then(testDoneFn())
   });
 
   // Geometric Test - end
