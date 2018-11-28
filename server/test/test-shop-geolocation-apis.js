@@ -93,7 +93,7 @@ describe.only('Shop : Geolocation', _ => {
   // Geometric Test - end
 
   let geometricTest = {
-    organizationId: null,
+    organization1Id: null,
     outlet1Id: null,
     outlet2Id: null,
     serviceBlueprint1Id: null,
@@ -123,11 +123,11 @@ describe.only('Shop : Geolocation', _ => {
         phone: orgPhone,
         email: orgEmail
       }))
-      .then(({ organizationId }) => geometricTest.organizationId = organizationId)
+      .then(({ organizationId }) => geometricTest.organization1Id = organizationId)
 
       .then(() => promisifyApiCall({}, addOutlet, {
         apiKey,
-        organizationId: geometricTest.organizationId,
+        organizationId: geometricTest.organization1Id,
         name: outletName,
         physicalAddress: outletPhysicalAddress,
         phone: outletPhone,
@@ -139,7 +139,7 @@ describe.only('Shop : Geolocation', _ => {
 
       .then(() => promisifyApiCall({}, addOutlet, {
         apiKey,
-        organizationId: geometricTest.organizationId,
+        organizationId: geometricTest.organization1Id,
         name: outletName,
         physicalAddress: outletPhysicalAddress,
         phone: outletPhone,
@@ -152,7 +152,7 @@ describe.only('Shop : Geolocation', _ => {
       // longstanding ServiceBlueprint1
       .then(() => promisifyApiCall({}, addServiceBlueprint, {
         apiKey,
-        organizationId: geometricTest.organizationId,
+        organizationId: geometricTest.organization1Id,
         name: "Long 1",
         defaultVat: 2,
         defaultSalePrice: 250,
@@ -171,7 +171,7 @@ describe.only('Shop : Geolocation', _ => {
       // longstanding ServiceBlueprint2
       .then(() => promisifyApiCall({}, addServiceBlueprint, {
         apiKey,
-        organizationId: geometricTest.organizationId,
+        organizationId: geometricTest.organization1Id,
         name: "Long 2",
         defaultVat: 2,
         defaultSalePrice: 250,
@@ -190,7 +190,7 @@ describe.only('Shop : Geolocation', _ => {
       // ProductBlueprint1
       .then(() => promisifyApiCall({}, addProductBlueprint, {
         apiKey,
-        organizationId: geometricTest.organizationId,
+        organizationId: geometricTest.organization1Id,
         name: "Poor Shoes",
         unit: "box",
         defaultDiscountType: "percent",
@@ -205,7 +205,7 @@ describe.only('Shop : Geolocation', _ => {
       // ProductBlueprint1
       .then(() => promisifyApiCall({}, addProductBlueprint, {
         apiKey,
-        organizationId: geometricTest.organizationId,
+        organizationId: geometricTest.organization1Id,
         name: "Poor Clothes",
         unit: "box",
         defaultDiscountType: "percent",
@@ -220,7 +220,7 @@ describe.only('Shop : Geolocation', _ => {
       // ProductBlueprint1
       .then(() => promisifyApiCall({}, addProductBlueprint, {
         apiKey,
-        organizationId: geometricTest.organizationId,
+        organizationId: geometricTest.organization1Id,
         name: "Rich Clothes",
         unit: "box",
         defaultDiscountType: "percent",
