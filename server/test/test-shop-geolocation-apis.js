@@ -91,9 +91,9 @@ describe.only('Shop : Geolocation', _ => {
     });
   });
 
-  // Geometric Test - end
+  // Geometric & Outlet Details Test - start
 
-  let geometricTest = {
+  let suite1Data = {
     organization1Id: null,
     outlet1Id: null,
     outlet2Id: null,
@@ -124,11 +124,11 @@ describe.only('Shop : Geolocation', _ => {
         phone: orgPhone,
         email: orgEmail
       }))
-      .then(({ organizationId }) => geometricTest.organization1Id = organizationId)
+      .then(({ organizationId }) => suite1Data.organization1Id = organizationId)
 
       .then(() => promisifyApiCall({}, addOutlet, {
         apiKey,
-        organizationId: geometricTest.organization1Id,
+        organizationId: suite1Data.organization1Id,
         name: outletName,
         physicalAddress: outletPhysicalAddress,
         phone: outletPhone,
@@ -136,11 +136,11 @@ describe.only('Shop : Geolocation', _ => {
         location: { lat: 4, lng: 5 },
         categoryCode: 'CAT_GENERAL'
       }))
-      .then(({ outletId }) => geometricTest.outlet1Id = outletId)
+      .then(({ outletId }) => suite1Data.outlet1Id = outletId)
 
       .then(() => promisifyApiCall({}, addOutlet, {
         apiKey,
-        organizationId: geometricTest.organization1Id,
+        organizationId: suite1Data.organization1Id,
         name: outletName,
         physicalAddress: outletPhysicalAddress,
         phone: outletPhone,
@@ -148,12 +148,12 @@ describe.only('Shop : Geolocation', _ => {
         location: { lat: 5, lng: 6 },
         categoryCode: 'CAT_GYM'
       }))
-      .then(({ outletId }) => geometricTest.outlet2Id = outletId)
+      .then(({ outletId }) => suite1Data.outlet2Id = outletId)
 
       // longstanding ServiceBlueprint1
       .then(() => promisifyApiCall({}, addServiceBlueprint, {
         apiKey,
-        organizationId: geometricTest.organization1Id,
+        organizationId: suite1Data.organization1Id,
         name: "Long 1",
         defaultVat: 2,
         defaultSalePrice: 250,
@@ -167,12 +167,12 @@ describe.only('Shop : Geolocation', _ => {
         isRefundable: false,
         avtivateInAllOutlets: true
       }))
-      .then(({ serviceBlueprintId }) => geometricTest.serviceBlueprint1Id = serviceBlueprintId)
+      .then(({ serviceBlueprintId }) => suite1Data.serviceBlueprint1Id = serviceBlueprintId)
 
       // longstanding ServiceBlueprint2
       .then(() => promisifyApiCall({}, addServiceBlueprint, {
         apiKey,
-        organizationId: geometricTest.organization1Id,
+        organizationId: suite1Data.organization1Id,
         name: "Long 2",
         defaultVat: 2,
         defaultSalePrice: 250,
@@ -186,12 +186,12 @@ describe.only('Shop : Geolocation', _ => {
         isRefundable: false,
         avtivateInAllOutlets: true
       }))
-      .then(({ serviceBlueprintId }) => geometricTest.serviceBlueprint2Id = serviceBlueprintId)
+      .then(({ serviceBlueprintId }) => suite1Data.serviceBlueprint2Id = serviceBlueprintId)
 
       // ProductBlueprint1
       .then(() => promisifyApiCall({}, addProductBlueprint, {
         apiKey,
-        organizationId: geometricTest.organization1Id,
+        organizationId: suite1Data.organization1Id,
         name: "Poor Shoes",
         unit: "box",
         defaultDiscountType: "percent",
@@ -201,12 +201,12 @@ describe.only('Shop : Geolocation', _ => {
         defaultSalePrice: 112,
         isReturnable: true
       }))
-      .then(({ productBlueprintId }) => geometricTest.productBlueprint1Id = productBlueprintId)
+      .then(({ productBlueprintId }) => suite1Data.productBlueprint1Id = productBlueprintId)
 
       // ProductBlueprint2
       .then(() => promisifyApiCall({}, addProductBlueprint, {
         apiKey,
-        organizationId: geometricTest.organization1Id,
+        organizationId: suite1Data.organization1Id,
         name: "Poor Clothes",
         unit: "box",
         defaultDiscountType: "percent",
@@ -216,12 +216,12 @@ describe.only('Shop : Geolocation', _ => {
         defaultSalePrice: 112,
         isReturnable: true
       }))
-      .then(({ productBlueprintId }) => geometricTest.productBlueprint2Id = productBlueprintId)
+      .then(({ productBlueprintId }) => suite1Data.productBlueprint2Id = productBlueprintId)
 
       // ProductBlueprint3
       .then(() => promisifyApiCall({}, addProductBlueprint, {
         apiKey,
-        organizationId: geometricTest.organization1Id,
+        organizationId: suite1Data.organization1Id,
         name: "Rich Clothes",
         unit: "box",
         defaultDiscountType: "percent",
@@ -231,20 +231,20 @@ describe.only('Shop : Geolocation', _ => {
         defaultSalePrice: 112,
         isReturnable: true
       }))
-      .then(({ productBlueprintId }) => geometricTest.productBlueprint3Id = productBlueprintId)
+      .then(({ productBlueprintId }) => suite1Data.productBlueprint3Id = productBlueprintId)
 
       // outlet1DefaultInventory
       .then(() => promisifyApiCall({}, getOutlet, {
-        apiKey, outletId: geometricTest.outlet1Id
+        apiKey, outletId: suite1Data.outlet1Id
       }))
-      .then(({ defaultInventory }) => geometricTest.outlet1DefaultInventoryId = defaultInventory.id)
+      .then(({ defaultInventory }) => suite1Data.outlet1DefaultInventoryId = defaultInventory.id)
 
       // Product
       .then(() => promisifyApiCall({}, addProductToInventory, {
         apiKey,
-        inventoryId:  geometricTest.outlet1DefaultInventoryId,
+        inventoryId:  suite1Data.outlet1DefaultInventoryId,
         productList: [
-          { productBlueprintId: geometricTest.productBlueprint3Id, purchasePrice: 99, salePrice: 200, count: 100 }
+          { productBlueprintId: suite1Data.productBlueprint3Id, purchasePrice: 99, salePrice: 200, count: 100 }
         ]
       }))
       .then((data) => 'pass')
@@ -252,7 +252,7 @@ describe.only('Shop : Geolocation', _ => {
       .catch(ex => console.error(ex))
 
       .then(() => {
-        // console.log('final test object', geometricTest);
+        // console.log('final test object', suite1Data);
         testDoneFn();
       });
 
@@ -514,13 +514,15 @@ describe.only('Shop : Geolocation', _ => {
 
     callApi('api/shop-get-outlet-details', {
       json: {
-        outletId: geometricTest.outlet1Id
+        outletId: suite1Data.outlet1Id
       }
     }, (err, response, body) => {
-      console.dir(body, { depth: null });
+      // console.dir(body, { depth: null });
       expect(response.statusCode).to.equal(200);
       validateShopGetOutletDetailsApiSuccessResponse(body);
-      // expect(body.outletList.length).to.equal(1);
+      expect(body.otherOutletList.length).to.equal(1);
+      expect(body.outletProductList.length).to.equal(1);
+      expect(body.outletServiceList.length).to.equal(2);
       testDoneFn();
     });
 
@@ -533,7 +535,7 @@ describe.only('Shop : Geolocation', _ => {
       .then(testDoneFn())
   });
 
-  // Geometric Test - end
+  // Geometric & Outlet Details Test - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
