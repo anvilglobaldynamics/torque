@@ -35,6 +35,8 @@ exports.ShopGetOutletDetailsApi = class extends Api.mixin(InventoryMixin, Servic
     let inventory = await this.__getOutletDefaultInventory({ outletId });
     let outletProductList = inventory.productList
     await this.__getAggregatedProductListWithoutAcquisitionDetails({ productList: outletProductList });
+    outletProductList.forEach(outletProduct => outletProduct.productBlueprintName = outletProduct.product.productBlueprint.name);
+    outletProductList.forEach(outletProduct => outletProduct.salePrice = outletProduct.product.salePrice);
 
     let outletServiceList = (await this.database.service.listAvailableByOutletId({ outletId }))
       .map(service => ({ serviceId: service.id }));

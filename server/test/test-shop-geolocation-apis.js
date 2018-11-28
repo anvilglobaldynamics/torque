@@ -203,7 +203,7 @@ describe.only('Shop : Geolocation', _ => {
       }))
       .then(({ productBlueprintId }) => geometricTest.productBlueprint1Id = productBlueprintId)
 
-      // ProductBlueprint1
+      // ProductBlueprint2
       .then(() => promisifyApiCall({}, addProductBlueprint, {
         apiKey,
         organizationId: geometricTest.organization1Id,
@@ -218,7 +218,7 @@ describe.only('Shop : Geolocation', _ => {
       }))
       .then(({ productBlueprintId }) => geometricTest.productBlueprint2Id = productBlueprintId)
 
-      // ProductBlueprint1
+      // ProductBlueprint3
       .then(() => promisifyApiCall({}, addProductBlueprint, {
         apiKey,
         organizationId: geometricTest.organization1Id,
@@ -232,6 +232,22 @@ describe.only('Shop : Geolocation', _ => {
         isReturnable: true
       }))
       .then(({ productBlueprintId }) => geometricTest.productBlueprint3Id = productBlueprintId)
+
+      // outlet1DefaultInventory
+      .then(() => promisifyApiCall({}, getOutlet, {
+        apiKey, outletId: geometricTest.outlet1Id
+      }))
+      .then(({ defaultInventory }) => geometricTest.outlet1DefaultInventoryId = defaultInventory.id)
+
+      // Product
+      .then(() => promisifyApiCall({}, addProductToInventory, {
+        apiKey,
+        inventoryId:  geometricTest.outlet1DefaultInventoryId,
+        productList: [
+          { productBlueprintId: geometricTest.productBlueprint3Id, purchasePrice: 99, salePrice: 200, count: 100 }
+        ]
+      }))
+      .then((data) => 'pass')
 
       .catch(ex => console.error(ex))
 
@@ -501,7 +517,7 @@ describe.only('Shop : Geolocation', _ => {
         outletId: geometricTest.outlet1Id
       }
     }, (err, response, body) => {
-      // console.dir(body, { depth: null });
+      console.dir(body, { depth: null });
       expect(response.statusCode).to.equal(200);
       validateShopGetOutletDetailsApiSuccessResponse(body);
       // expect(body.outletList.length).to.equal(1);
