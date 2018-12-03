@@ -189,7 +189,7 @@
         if (location) {
           this.set('editOutletForm.location', location);
           sessionStorage.setItem('page-select-geolocation:location', null);
-        }        
+        }
 
         const fn = () => {
           if (this.isGoogleReady) {
@@ -227,7 +227,7 @@
 
       // region: editOutlet =================================
 
-      fetchOutletCategoryList (cbfn) {
+      fetchOutletCategoryList(cbfn) {
         let data = {};
         this.app.callGetOutletCategoryListApi(data, (err, response) => {
           if (err) return;
@@ -236,7 +236,7 @@
           cbfn();
         });
       }
-      
+
       _processGetOutlet(cbfn) {
         if (this.shouldSkipFetchingOutletOnce) {
           this.shouldSkipFetchingOutletOnce = false;
