@@ -39,17 +39,18 @@ exports.CacheOutletGeolocationCollection = class extends Collection {
       outletId,
       location: {
         type: 'Point',
-        coordinates: [lat, lng]
+        coordinates: [lng, lat]
       }
     });
   }
 
   async setLocationByOutletId({ outletId }, { location }) {
+    let { lat, lng } = location;
     return await this._update({ outletId }, {
       $set: {
         location: {
           type: 'Point',
-          coordinates: [lat, lng]
+          coordinates: [lng, lat]
         }
       }
     });
