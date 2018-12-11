@@ -3,9 +3,7 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
-const { generateRandomString } = require('./../utils/random-string');
-
-const PHONE_VERIFICATION_WINDOW = 1 * 60 * 60 * 1000;
+const { arrayUnique } = require('./../utils/array');
 
 exports.ShopLocateNearbyOutletsApi = class extends Api {
 
@@ -26,7 +24,7 @@ exports.ShopLocateNearbyOutletsApi = class extends Api {
         lng: Joi.number().required(),
       }).required(),
       categoryCode: Joi.string().min(0).max(128).allow(null),
-      productName: Joi.string().min(0).max(128).allow('')
+      searchString: Joi.string().min(3).max(128).allow('')
     });
   }
 
@@ -39,7 +37,6 @@ exports.ShopLocateNearbyOutletsApi = class extends Api {
   }
 
   async _listOutletsByIdAndOptionallyCategoryCode({ outletIdList, categoryCode }) {
-    console.log(categoryCode, outletIdList)
     if (categoryCode) {
       return await this.database.outlet.listByIdListAndCategoryCode({ idList: outletIdList, categoryCode });
     } else {
@@ -47,16 +44,36 @@ exports.ShopLocateNearbyOutletsApi = class extends Api {
     }
   }
 
+  async _filterOutletListBySearchString({ outletList, searchString }) {
+    let organizationIdList = outletList.map(outlet => outlet.organizationId);
+    organizationIdList = arrayUnique(organizationIdList);
+    let productBlueprintList = await this.database.productBlueprint.listByOrganizationIdListAndSearchString({ organizationIdList, searchString });
+    let servicetBlueprintList = await this.database.serviceBlueprint.listByOrganizationIdListAndSearchString({ organizationIdList, searchString });
+    organizationIdList = [].concat(productBlueprintList.map(i => i.organizationId), servicetBlueprintList.map(i => i.organizationId));
+    organizationIdList = arrayUnique(organizationIdList);
+    return outletList.filter(outlet => organizationIdList.indexOf(outlet.organizationId) > -1);
+  }
+
+  async _appendOrganizationNameToOutletList({ outletList }) {
+    let map = await this.crossmap({
+      source: outletList,
+      sourceKey: 'organizationId',
+      target: 'organization'
+    });
+    map.forEach((organization, outlet) => outlet.organizationName = organization.name);
+  }
+
   async handle({ body }) {
-    let { northEast, southWest, categoryCode, productName } = body;
+    let { northEast, southWest, categoryCode, searchString } = body;
     let outletGeolocationList = await this._listOutletGeolocationByBoundingRectangle({ northEast, southWest });
     let outletIdList = outletGeolocationList.map(outletGeolocation => outletGeolocation.outletId);
     let outletList = await this._listOutletsByIdAndOptionallyCategoryCode({ outletIdList, categoryCode });
-    // console.log(outletIdList)
-    // console.dir(outletIdList, { depth: null, showHidden: false })
-    let finalOutletList = outletList.map(outlet => extract(outlet, ['name', 'location', 'id', 'categoryCode']));
+    if (searchString.length > 0) {
+      outletList = await this._filterOutletListBySearchString({ outletList, searchString });
+    }
+    await this._appendOrganizationNameToOutletList({ outletList });
+    let finalOutletList = outletList.map(outlet => extract(outlet, ['id', 'organizationName', 'name', 'categoryCode', 'location']));
     return {
-      status: "success",
       outletList: finalOutletList
     }
   }

@@ -6,7 +6,7 @@ exports.GetOutletCategoryListApi = class extends Api {
 
   get autoValidates() { return true; }
 
-  get requiresAuthentication() { return true; }
+  get requiresAuthentication() { return false; }
 
   get requestSchema() {
     return Joi.object().keys({});

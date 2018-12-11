@@ -10,19 +10,19 @@ exports.ServiceBlueprintCollection = class extends Collection {
     return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-    
+
       organizationId: Joi.number().max(999999999999999).required(),
       name: Joi.string().min(1).max(64).required(),
-    
+
       defaultVat: Joi.number().min(0).max(999999999999999).required(),
       defaultSalePrice: Joi.number().min(0).max(999999999999999).required(),
-      
+
       isLongstanding: Joi.boolean().required(),
       serviceDuration: Joi.object().allow(null).required().keys({
         months: Joi.number().min(0).max(999999999999999).required(),
         days: Joi.number().min(0).max(999999999999999).required(),
       }),
-    
+
       isEmployeeAssignable: Joi.boolean().required(),
       isCustomerRequired: Joi.boolean().required(),
       isRefundable: Joi.boolean().required(),
@@ -51,7 +51,7 @@ exports.ServiceBlueprintCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ 
+  async create({
     organizationId,
     name,
     defaultVat,
@@ -99,6 +99,16 @@ exports.ServiceBlueprintCollection = class extends Collection {
         { name: searchRegex }
       ];
     }
+    return await this._find(query);
+  }
+
+  async listByOrganizationIdListAndSearchString({ organizationIdList, searchString }) {
+    let query = {
+      organizationId: { $in: organizationIdList }
+    };
+    searchString = this.escapeRegExp(searchString.toLowerCase());
+    let searchRegex = new RegExp(searchString, 'i');
+    query.name = searchRegex;
     return await this._find(query);
   }
 

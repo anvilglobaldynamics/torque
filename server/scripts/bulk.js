@@ -197,7 +197,9 @@ const createOutlet = async ({ apiKey, organizationId }) => {
     name: pickOne(nounList),
     physicalAddress: 'Really Not Important',
     phone: makePhoneNumber(),
-    contactPersonName: pickOne(nameList)
+    contactPersonName: pickOne(nameList),
+    location: { lat: 24.3776992, lng: 88.62483509999993 },
+    categoryCode: 'CAT_GENERAL'
   });
 
   let body = await callApi('api/get-outlet', {

@@ -12,6 +12,37 @@
     "name": "Pharmacy"
   },
   {
+    "code": "CAT_SALON",
+    "name": "Men's Salon"
+  },
+  {
+    "code": "CAT_PARLOUR",
+    "name": "Women's Parlour"
+  },
+  {
+    "code": "CAT_GYM",
+    "name": "Gym"
+  },
+  {
+    "code": "CAT_CLOTHES",
+    "name": "Clothes Shop"
+  },
+  {
+    "code": "CAT_SHOE",
+    "name": "Shoe Shop"
+  },
+  {
+    "code": "CAT_HARDWARE",
+    "name": "Hardware Shop"
+  },
+  {
+    "code": "CAT_OPTICS",
+    "name": "Optics Shop"
+  },
+
+
+
+  {
     "code": "CAT_JEWELLERY",
     "name": "Jewellery Shop"
   },
@@ -22,14 +53,6 @@
   {
     "code": "CAT_FLOWER",
     "name": "Flower Shop"
-  },
-  {
-    "code": "CAT_CLOTHES",
-    "name": "Clothes Shop"
-  },
-  {
-    "code": "CAT_SHOE",
-    "name": "Shoe Shop"
   },
   {
     "code": "CAT_PETROLEUM",
@@ -48,29 +71,16 @@
     "name": "Stationery Shop"
   },
   {
-    "code": "CAT_HARDWARE",
-    "name": "Hardware Shop"
-  },
-  {
-    "code": "CAT_OPTICS",
-    "name": "Optics Shop"
-  },
-
-  {
     "code": "CAT_BEAUTY",
     "name": "Beauty Salon"
   },
   {
-    "code": "CAT_SALON",
-    "name": "Men's Salon"
+    "code": "CAT_YOGA",
+    "name": "Yoga"
   },
   {
-    "code": "CAT_PARLOUR",
-    "name": "Women's Parlour"
-  },
-  {
-    "code": "CAT_GYM",
-    "name": "Gym"
+    "code": "CAT_MUSIC",
+    "name": "Music Class"
   },
   {
     "code": "CAT_DANCE",

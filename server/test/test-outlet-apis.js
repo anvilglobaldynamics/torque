@@ -49,7 +49,7 @@ let outletToBeFilledId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidOutletId = generateInvalidId();
 
-describe('Outlet', _ => {
+describe.only('Outlet', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -95,12 +95,12 @@ describe('Outlet', _ => {
 
     callApi('api/get-outlet-category-list', {
       json: {
-        apiKey: 'sixtyfoursixtyfoursixtyfoursixtyfoursixtyfoursixtyfoursixtyfour1'
+        apiKey
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).equals('APIKEY_INVALID');
+      expect(body.error.code).equals('VALIDATION_ERROR');
       testDoneFn();
     })
 
@@ -109,9 +109,7 @@ describe('Outlet', _ => {
   it('api/get-outlet-category-list (Valid)', testDoneFn => {
 
     callApi('api/get-outlet-category-list', {
-      json: {
-        apiKey
-      }
+      json: {}
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetOutletCategoryListApiSuccessResponse(body);
