@@ -198,7 +198,7 @@ const createOutlet = async ({ apiKey, organizationId }) => {
     physicalAddress: 'Really Not Important',
     phone: makePhoneNumber(),
     contactPersonName: pickOne(nameList),
-    location: { lat: 24.3776992, lng: 88.62483509999993 },
+    location: { lat: 23.7945153, lng: 90.4139857 },
     categoryCode: 'CAT_GENERAL'
   });
 
