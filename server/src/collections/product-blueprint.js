@@ -99,4 +99,14 @@ exports.ProductBlueprintCollection = class extends Collection {
     return await this._find(query);
   }
 
+  async listByOrganizationIdListAndSearchString({ organizationIdList, searchString }) {
+    let query = {
+      organizationId: { $in: organizationIdList }
+    };
+    searchString = this.escapeRegExp(searchString.toLowerCase());
+    let searchRegex = new RegExp(searchString, 'i');
+    query.name = searchRegex;
+    return await this._find(query);
+  }
+
 }

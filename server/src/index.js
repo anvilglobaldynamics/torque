@@ -104,6 +104,9 @@ let { GetRoleListApi } = require('./legacy-apis/get-role-list');
 let { GetPrivilegeListApi } = require('./legacy-apis/get-privilege-list');
 const { AdminGetPackageListApi } = require('./apis/admin-get-package-list');
 
+const { ShopLocateNearbyOutletsApi } = require('./apis/shop-locate-nearby-outlets');
+const { ShopGetOutletDetailsApi } = require('./apis/shop-get-outlet-details');
+
 let { InternalStatusApi } = require('./legacy-apis/internal--status');
 
 let { AdminLoginApi } = require('./legacy-apis/admin-login');
@@ -350,6 +353,8 @@ class Program {
     server.registerPostApi('/api/admin-get-module-list', AdminGetModuleListApi);
     server.registerPostApi('/api/admin-list-organization-modules', AdminListOrganizationModulesApi);
     server.registerPostApi('/api/admin-set-module-activation-status', AdminSetModuleActivationStatusApi);
+    server.registerPostApi('/api/shop-locate-nearby-outlets', ShopLocateNearbyOutletsApi);
+    server.registerPostApi('/api/shop-get-outlet-details', ShopGetOutletDetailsApi);
   }
 
 }

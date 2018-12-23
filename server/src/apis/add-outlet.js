@@ -42,6 +42,10 @@ exports.AddOutletApi = class extends Api.mixin(InventoryMixin, OutletMixin) {
     return await this.database.outlet.create(outlet);
   }
 
+  async _createGeolocationCache({ outletId, location }) {
+    return await this.database.cacheOutletGeolocation.create({ outletId, location });
+  }
+
   async _checkOrganizationPackageOutletLimit({ organizationId, aPackage }) {
     let outletList = await this.database.outlet.listByOrganizationId({ organizationId });
     if (outletList.length == aPackage.limits.maximumOutlets) {
@@ -58,6 +62,9 @@ exports.AddOutletApi = class extends Api.mixin(InventoryMixin, OutletMixin) {
     throwOnFalsy(categoryExists, "CATEGORY_INVALID", "Category code is invalid.");
 
     let outletId = await this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode });
+
+    await this._createGeolocationCache({ outletId, location });
+
     await this.__createStandardInventories({ inventoryContainerId: outletId, inventoryContainerType: "outlet", organizationId });
     return { status: "success", outletId }
   }

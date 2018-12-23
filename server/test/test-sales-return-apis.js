@@ -113,7 +113,7 @@ describe('Sales Return', _ => {
               physicalAddress: outletPhysicalAddress,
               phone: outletPhone,
               contactPersonName: outletContactPersonName,
-              location: { lat: 24.3776992, lng: 88.62483509999993 },
+              location: { lat: 23.7945153, lng: 90.4139857 },
               categoryCode: 'CAT_GENERAL'
             }, (data) => {
               outletId = data.outletId;

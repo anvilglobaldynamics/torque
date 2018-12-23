@@ -1,10 +1,10 @@
 {
-  "name": "লিপি (Lipi)",
-  "short_name": "লিপি (Lipi)",
+  "name": "Lipi",
+  "short_name": "Lipi",
   "start_url": "./?homescreen=1",
   "display": "standalone",
-  "theme_color": "#E65100",
-  "background_color": "#E65100",
+  "theme_color": "#009688",
+  "background_color": "#009688",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",

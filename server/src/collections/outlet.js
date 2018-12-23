@@ -85,4 +85,12 @@ exports.OutletCollection = class extends Collection {
     return await this._find(query);
   }
 
+
+  async listByIdListAndCategoryCode({ idList, categoryCode }) {
+    return await this._find({
+      id: { $in: idList },
+      categoryCode
+    });
+  }
+
 }

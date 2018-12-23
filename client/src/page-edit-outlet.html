@@ -104,7 +104,7 @@
                   phone: '01700000011',
                   contactPersonName: 'Johns Apparel',
                   physicalAddress: 'Road 56, Gulshan, Dhaka',
-                  location: { lat: 24.3776992, lng: 88.62483509999993 },
+                  location: { lat: 23.7945153, lng: 90.4139857 },
                   categoryCode: 'CAT_GENERAL'
                 };
               } else {
@@ -150,6 +150,9 @@
           });
         } else {
           this.delay(300, () => {
+            if (this.shouldSkipFetchingOutletOnce) {
+              this.shouldSkipFetchingOutletOnce = false;
+            }
             this.fetchOutletCategoryList(() => {
               this._loadLocation();
               this.isReady = true;
@@ -161,7 +164,9 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.app.popPageTitle();
-        this.resetProperties('editOutletForm');
+        if (!this.shouldSkipFetchingOutletOnce) {
+          this.resetProperties('editOutletForm');
+        }
         this.removeAutoValidation('#editOutletForm paper-input');
       }
 
@@ -222,7 +227,7 @@
 
       // region: editOutlet =================================
 
-      fetchOutletCategoryList (cbfn) {
+      fetchOutletCategoryList(cbfn) {
         let data = {};
         this.app.callGetOutletCategoryListApi(data, (err, response) => {
           if (err) return;
@@ -231,8 +236,12 @@
           cbfn();
         });
       }
-      
+
       _processGetOutlet(cbfn) {
+        if (this.shouldSkipFetchingOutletOnce) {
+          this.shouldSkipFetchingOutletOnce = false;
+          return cbfn();
+        }
         let outletId = parseInt(this.params.outlet);
         let data = { outletId };
         this.app.callGetOutletApi(data, (err, response) => {
@@ -292,6 +301,7 @@
         if (this.editOutletForm.location) {
           sessionStorage.setItem('page-select-geolocation:location', JSON.stringify(this.editOutletForm.location));
         }
+        this.shouldSkipFetchingOutletOnce = true;
         this.app.navigateTo('/select-geolocation');
       }
 
