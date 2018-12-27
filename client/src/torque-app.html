@@ -245,7 +245,9 @@
             <hr class="sidebar-divider">
 
             <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
-            <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
+            <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
+              <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
+            </template>
             <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
               <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
             </template>
