@@ -222,7 +222,9 @@
             <hr class="sidebar-divider">
 
             <a name="manage-product-blueprints" href="#/manage-product-blueprints">[[verses.sidebar.productBlueprints]]</a>
-            <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
+            <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
+              <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
+            </template>
             <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
             <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
             <hr class="sidebar-divider">
@@ -654,6 +656,7 @@
         this.callUserLogoutApi({}, (err, response) => {
           this.removeUser();
           this.navigateTo('/login');
+          window.location.reload();
         })
       }
 
