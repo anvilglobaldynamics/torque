@@ -43,6 +43,10 @@ const salesCountPerOutlet = {
   min: 1,
   max: 10
 };
+const customerCount = {
+  min: 20,
+  max: 100
+};
 
 const getSolidCount = (item) => {
   if (typeof item === 'number') return item;
@@ -186,6 +190,21 @@ const createWarehouse = async ({ apiKey, organizationId }) => {
 
   return { warehouseId };
 
+}
+
+const createCustomer = async ({ apiKey, organizationId }) => {
+  console.log('should create customer');
+
+  let { customerId } = await callApi('api/add-customer', {
+    apiKey,
+    organizationId,
+    fullName: pickOne(nameList),
+    phone: makePhoneNumber(),
+    email: makeEmailId(),
+    address: pickOne(nameList)
+  });
+
+  return { customerId };
 }
 
 const createOutlet = async ({ apiKey, organizationId }) => {
@@ -382,6 +401,10 @@ const generateBulkData = async () => {
         } while (amount--);
         let { salesId } = await createSales({ apiKey, outletId, productList: sellingProductList });
       }
+    }
+
+    for (let i = 0; i < getSolidCount(customerCount); i++) {
+      let { customerId } = await createCustomer({ apiKey, organizationId });
     }
 
   }
