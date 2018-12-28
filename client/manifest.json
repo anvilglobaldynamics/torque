@@ -7,7 +7,7 @@
   "orientation": "portrait",
 
   "theme_color": "#009688",
-  "background_color": "#009688",
+  "background_color": "#B2DFDB",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",
