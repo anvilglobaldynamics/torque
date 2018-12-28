@@ -21,11 +21,27 @@
 <dom-module id="page-login">
   <template>
     <style include="shared-styles">
+
+    .logo-learn-more-container {
+      /* border: 1px solid red; */
+    }
+
+    .lipi-learn-more-link {
+      font-size: 12px;
+      padding-top: 6px;
+      text-decoration: none;
+    }
+    
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page-small layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="logo-learn-more-container vertical layout center">
+        <img src="../images/logo.png" class="lipi-logo-image" height="100" width="100">
+        <a class="link primary lipi-learn-more-link" href="https://anvilglobaldynamics.com/lipi" target="_blank">Learn more about Lipi</a>
+      </div>
 
       <iron-form id="loginForm" on-keypress="genericFormSubmitionKeypress">
         <form>
