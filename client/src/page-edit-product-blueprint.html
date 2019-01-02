@@ -175,7 +175,8 @@
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
-          privilegeList: ['PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS']
+          privilegeList: ['PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS'],
+          moduleList: ['MOD_PRODUCT']
         });
       }
 

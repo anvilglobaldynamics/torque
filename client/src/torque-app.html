@@ -221,10 +221,16 @@
             <a name="home" href="#/home">[[verses.sidebar.home]]</a>
             <hr class="sidebar-divider">
 
-            <a name="manage-product-blueprints" href="#/manage-product-blueprints">[[verses.sidebar.productBlueprints]]</a>
-            <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
+            <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
+              <a name="manage-product-blueprints" href="#/manage-product-blueprints">[[verses.sidebar.productBlueprints]]</a>
+            </template>
+            <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
+              <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
+            </template>
             <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
-            <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
+            <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
+              <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
+            </template>
             <hr class="sidebar-divider">
 
             <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
@@ -233,12 +239,18 @@
 
 
             <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
-            <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
+            <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
+              <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
+            </template>
             <hr class="sidebar-divider">
 
             <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
-            <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
-            <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
+            <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
+              <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
+            </template>
+            <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
+              <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
+            </template>
             <hr class="sidebar-divider">
 
             <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
@@ -654,6 +666,7 @@
         this.callUserLogoutApi({}, (err, response) => {
           this.removeUser();
           this.navigateTo('/login');
+          window.location.reload();
         })
       }
 

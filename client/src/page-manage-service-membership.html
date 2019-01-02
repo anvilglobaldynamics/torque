@@ -321,7 +321,8 @@
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
-          privilegeList: ['PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS']
+          privilegeList: ['PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS'],
+          moduleList: ['MOD_SERVICE']
         });
       }
 

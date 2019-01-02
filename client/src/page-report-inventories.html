@@ -265,7 +265,8 @@
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
-          privilegeList: ['PRIV_VIEW_ALL_INVENTORIES']
+          privilegeList: ['PRIV_VIEW_ALL_INVENTORIES'],
+          moduleList: ['MOD_PRODUCT']
         });
       }
 
