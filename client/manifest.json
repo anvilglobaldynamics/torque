@@ -1,15 +1,23 @@
 {
   "name": "Lipi",
   "short_name": "Lipi",
+
   "start_url": "./?homescreen=1",
   "display": "standalone",
+  "orientation": "portrait",
+
   "theme_color": "#009688",
-  "background_color": "#009688",
+  "background_color": "#B2DFDB",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "images/manifest/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ]
 }
