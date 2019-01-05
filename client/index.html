@@ -106,6 +106,9 @@
     window.torqueMasterOptions = {
       allowWebsockets: true
     };
+    window.torqueCache = {
+      ignorableApiCallCount: 0
+    }
   </script>
   <script>
     if ('serviceWorker' in navigator && window.location.href.indexOf('pwa.') > -1) {

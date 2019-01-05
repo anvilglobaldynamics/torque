@@ -186,10 +186,13 @@
       }
 
       .top-nav-spinner {
+        width: 120px;
+        height: 120px;
+        --paper-spinner-stroke-width: 12px;
         --paper-spinner-color: #009688;
         position: fixed;
-        top: 50vh;
-        left: 50vw;
+        top: calc(50vh - 60px);
+        left: calc(50vw - 60px);
       }
 
       .top-nav-spinner-container {
@@ -602,14 +605,8 @@
 
       _intializeServiceManager() {
         this.serviceManager.on('service-change', (event) => {
-          let count = event.detail.activeCount;
-          if (count === 0) {
-            window.setTimeout(() => {
-              this.activeServiceCount = event.detail.activeCount;
-            }, 1000)
-          } else {
-            this.activeServiceCount = event.detail.activeCount;
-          }
+          let count = event.detail.activeCount - window.torqueCache.ignorableApiCallCount;
+          this.activeServiceCount = count;
         });
         this.serviceManager.on('error', (event) => {
           try {
