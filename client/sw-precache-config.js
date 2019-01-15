@@ -15,6 +15,7 @@ module.exports = {
     'bower_components/webcomponentsjs/webcomponents-loader.js',
     'manifest.json',
     'src/*.json',
+    "images/**/*",
   ],
   runtimeCaching: [
     {
