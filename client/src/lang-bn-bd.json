@@ -1,6 +1,10 @@
 {
   "root": {
-    "rightsReserved": "সর্বস্বত্ব সংরক্ষিত"
+    "rightsReserved": "সর্বস্বত্ব সংরক্ষিত",
+    "networkErrorGoOffline": "অফলাইন মোড",
+    "networkErrorTGotIt": "ঠিক আছে",
+    "networkErrorTitle": "ইন্টারনেট সংযোগ",
+    "networkErrorContent": "আপনার ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়ে আছে। ইন্টারনেটে সংযুক্ত হয়ে আবার চেষ্টা করুন। "
   },
   "general": {
     "or": "বা",
@@ -852,7 +856,7 @@
     "serviceBlueprintNameOrPhoneInput": "নাম দিয়ে খুজুন",
     "serviceBlueprintNameOrPhoneInputError": "বৈধ নাম লিখুন",
     "serviceBlueprints": "সেবার সদস্যপদ"
-  },  
+  },
   "salesReceipt": {
     "goodsTitle": "পণ্য / সেবা"
   }

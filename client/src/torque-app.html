@@ -373,6 +373,17 @@
           <page-select-geolocation name="select-geolocation"></page-select-geolocation>
         </iron-pages>
 
+        <paper-dialog id="network-dialog" modal style="z-index: -999999">
+          <h2>[[verses.root.networkErrorTitle]]</h2>
+          <paper-dialog-scrollable>
+            <div class="dialog-text">[[verses.root.networkErrorContent]]</div>
+          </paper-dialog-scrollable>
+          <div class="buttons">
+            <paper-button on-click="networkErrorGoToOfflineModeTapped">[[verses.root.networkErrorGoOffline]]</paper-button>
+            <paper-button on-click="networkErrorGotItTapped" autofocus>[[verses.root.networkErrorTGotIt]]</paper-button>
+          </div>
+        </paper-dialog>
+
         <div class="footer">
           <div>
             <img src="../images/icons/en-us.png" data-key="en-us" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'en-us')]]" on-tap="languageIconTapped">
@@ -414,7 +425,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":149,"datetimeStamp":1547552185723}');
+              return JSON.parse('{"build":152,"datetimeStamp":1547555250341}');
               '%__deploy-end'
             }
           },
@@ -461,6 +472,13 @@
           tocVersionUpdatedDatetimeStamp: {
             type: Number,
             value: 1542184791941
+          },
+          networkErrorDialog: {
+            type: Object,
+            value: () => ({
+              title: 'No Title',
+              label: 'No message'
+            })
           }
         };
       }
@@ -604,17 +622,32 @@
         this.onSettingsChange();
       }
 
+      networkErrorGotItTapped() {
+        this.$['network-dialog'].close();
+      }
+
+      networkErrorGoToOfflineModeTapped() {
+        this.$['network-dialog'].close();
+        alert("Should take user to offline mode!");
+      }
+
       _intializeServiceManager() {
         this.serviceManager.on('service-change', (event) => {
           let count = event.detail.activeCount - window.torqueCache.ignorableApiCallCount;
           this.activeServiceCount = count;
         });
         this.serviceManager.on('error', (event) => {
+          let shouldPromptForOfflineMode = true;
           try {
-            if (event.path[0].url.indexOf('user-assert-api-key') > -1) return;
-            this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
+            if (event.path[0].url.indexOf('user-assert-api-key') > -1) {
+              shouldPromptForOfflineMode = false;
+            }
           } catch (ex) {
-            this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
+            'pass'
+          }
+          if (shouldPromptForOfflineMode) {
+            this._patchForPolymerModalDialogIssue();
+            this.$['network-dialog'].open();
           }
         });
         this.serviceManager.on('success', (event) => {

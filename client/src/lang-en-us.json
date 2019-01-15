@@ -1,6 +1,10 @@
 {
   "root": {
-    "rightsReserved": "All Rights Reserved."
+    "rightsReserved": "All Rights Reserved.",
+    "networkErrorGoOffline": "Offline mode",
+    "networkErrorTGotIt": "Got It",
+    "networkErrorTitle": "Network error",
+    "networkErrorContent": "Make sure you are connected to the internet and try again"
   },
   "general": {
     "or": "or",
