@@ -185,8 +185,25 @@
         margin-top: 4px;
       }
 
+      .top-nav-spinner-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.438);
+        z-index: 9999999;
+      }
+
       .top-nav-spinner {
-        --paper-spinner-color: white;
+        width: 120px;
+        height: 120px;
+        position: fixed;
+        top: calc(50vh - 60px);
+        left: calc(50vw - 60px);
+        z-index: 99999999;
+        --paper-spinner-stroke-width: 12px;
+        --paper-spinner-color: #009688;
       }
 
       .language-active {
@@ -261,6 +278,12 @@
         </div>
       </app-drawer>
 
+      <template is="dom-if" if="[[$and(activeServiceCount, topSpinnerEnabled)]]">
+        <div class="top-nav-spinner-container">
+          <paper-spinner-lite active="" class="top-nav-spinner"></paper-spinner-lite>
+        </div>
+      </template>
+
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
 
@@ -276,9 +299,6 @@
               <div style$="[[$computePageTitleFontSize(pageTitleList.length)]]">[[$getPageTitle(pageTitleList.length)]]</div>
               <div class="title-line-2">[[organization.name]]</div>
             </div>
-            <template is="dom-if" if="[[$and(activeServiceCount, topSpinnerEnabled)]]">
-              <paper-spinner-lite active="" class="top-nav-spinner"></paper-spinner-lite>
-            </template>
             <template is="dom-if" if="[[shouldShowPrintButton]]">
               <paper-icon-button icon="print" on-click="printButtonOnTopBarPressed"></paper-icon-button>
             </template>
@@ -384,7 +404,9 @@
 
     class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior, TorqueLanguageBehavior, TorqueCommonBehavior) {
 
-      static get is() { return 'torque-app'; }
+      static get is() {
+        return 'torque-app';
+      }
 
       static get properties() {
         return {
@@ -392,7 +414,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":145,"datetimeStamp":1546424825211}');
+              return JSON.parse('{"build":146,"datetimeStamp":1546669343194}');
               '%__deploy-end'
             }
           },
@@ -495,8 +517,17 @@
           this.callUserAssertApiKeyApi({}, (err, response) => {
             if (err) return;
             if (response.hasError) return this.logoutTapped();
-            let { apiKey, warning, sessionId, user } = response;
-            Object.assign(user, { apiKey, warning, sessionId });
+            let {
+              apiKey,
+              warning,
+              sessionId,
+              user
+            } = response;
+            Object.assign(user, {
+              apiKey,
+              warning,
+              sessionId
+            });
             this.saveUser(user);
           });
         }
@@ -555,7 +586,9 @@
       }
 
       _fillDatabase() {
-        this.db.upsert('settings', (({ which }) => which === 'only'), (doc => doc), {
+        this.db.upsert('settings', (({
+          which
+        }) => which === 'only'), (doc => doc), {
           which: 'only',
           shouldUseWebsockets: true,
           monetaryUnit: 'BDT'
@@ -573,7 +606,8 @@
 
       _intializeServiceManager() {
         this.serviceManager.on('service-change', (event) => {
-          this.activeServiceCount = event.detail.activeCount;
+          let count = event.detail.activeCount - window.torqueCache.ignorableApiCallCount;
+          this.activeServiceCount = count;
         });
         this.serviceManager.on('error', (event) => {
           try {

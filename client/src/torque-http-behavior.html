@@ -175,7 +175,11 @@
 
       callUserAssertApiKeyApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
-        this.callCombinedJsonApi('user-assert-api-key', data, cbfn);
+        window.torqueCache.ignorableApiCallCount += 1;
+        this.callCombinedJsonApi('user-assert-api-key', data, (...args)=>{
+          window.torqueCache.ignorableApiCallCount -= 1;
+          cbfn(...args);
+        });
       }
 
       callUserLogoutApi(data, cbfn) {
