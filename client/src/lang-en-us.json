@@ -723,6 +723,8 @@
     "others": "Others",
     "useWebsockets": "Use Websockets",
     "useWebsocketsDetail": "If checked, the app will try to use websockets.",
+    "backgroundSync": "Select Outlet for Offline Mode",
+    "backgroundSyncDetail": "If selected, the app will be able to enable 'Offline Mode' for current organization.",
     "monetaryUnit": "Monetary Unit",
     "monetaryUnitDetail": "Note: Changing the monetary unit does not affect your sales.",
     "moreOptionsForthcoming": "More options are forthcoming.",

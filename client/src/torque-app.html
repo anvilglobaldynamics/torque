@@ -412,6 +412,7 @@
 
   <script>
     let localDocument = document.currentScript.ownerDocument;
+    const backgroundSyncThreshold = 1 * 1000;
 
     class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior, TorqueLanguageBehavior, TorqueCommonBehavior) {
 
@@ -479,6 +480,10 @@
               title: 'No Title',
               label: 'No message'
             })
+          },
+          shouldAttempBackgroundSync: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -527,6 +532,7 @@
         this.initiateLanguageServices();
         this.pushPageTitle(this.brandName);
         this._notifyResizeHack();
+        window.setTimeout(() => this._initiateBackgroundSync(), backgroundSyncThreshold);
         this.delay(5000, () => this._assertApiKey());
       }
 
@@ -609,7 +615,8 @@
         }) => which === 'only'), (doc => doc), {
           which: 'only',
           shouldUseWebsockets: true,
-          monetaryUnit: 'BDT'
+          monetaryUnit: 'BDT',
+          backgroundSyncMetaMap: {}
         });
       }
 
@@ -762,18 +769,29 @@
 
       // ====================== delegated callbacks =============================
 
+      onFundamentalComponentChange() {
+        if (this.user && this.settings && this.organization) {
+          this.shouldAttempBackgroundSync = true;
+        } else {
+          this.shouldAttempBackgroundSync = false;
+        }
+      }
+
       onUserChange() {
         this.user = this.loadUser();
+        this.onFundamentalComponentChange();
         this._proxyToActivePage('onUserChange', this.user);
       }
 
       onSettingsChange() {
         this.settings = this.loadSettings();
+        this.onFundamentalComponentChange();
         this._proxyToActivePage('onSettingsChange', this.settings);
       }
 
       onOrganizationChange() {
         this.organization = this.loadOrganization();
+        this.onFundamentalComponentChange();
         this._proxyToActivePage('onOrganizationChange', this.organization);
       }
 
@@ -808,6 +826,26 @@
           window.sessionStorage.removeItem(key);
         }
         return JSON.parse(value);
+      }
+
+      // ====================== background Sync =============================
+
+      _processBackgroundSync(cbfn) {
+        if (!this.shouldAttempBackgroundSync) return cbfn(false);
+        return cbfn(true);
+      }
+
+      _initiateBackgroundSync() {
+        this._processBackgroundSync((wasDone) => {
+          // console.log("_processBackgroundSync() result:", wasDone);
+          // console.log("Subs")
+          window.setTimeout(() => this._initiateBackgroundSync(), backgroundSyncThreshold);
+        });
+      }
+
+      $shouldShowBackgroundSyncInformation(shouldAttempBackgroundSync, settings) {
+        if (!shouldAttempBackgroundSync) return false;
+        console.log(settings)
       }
 
       // ====================== utilities =============================

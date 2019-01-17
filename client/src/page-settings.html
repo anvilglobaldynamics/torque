@@ -6,6 +6,17 @@
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
@@ -55,6 +66,7 @@
       <!-- View Index 0 Start -->
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 0)]]">
+
         <div class="card vertical layout">
           <div class="option">
             <paper-checkbox on-change="settingsChanged" checked="{{shouldUseWebsockets}}">[[verses.settings.useWebsockets]]</paper-checkbox>
@@ -62,8 +74,23 @@
               [[verses.settings.useWebsocketsDetail]]
             </div>
           </div>
-
         </div>
+
+        <div class="card vertical layout">
+          <div class="option">
+            <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.backgroundSync]]">
+              <paper-listbox slot="dropdown-content" on-iron-select="backgroundSyncDropdownSelected" selected="{{outletIdForBackgroundSync}}">
+                <template is="dom-repeat" items="[[outletList]]" as="outlet">
+                  <paper-item data-id="[[outlet.id]]">[[outlet.name]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+            <div class="note">
+              [[verses.settings.backgroundSyncDetail]]
+            </div>
+          </div>
+        </div>
+
       </template>
 
       <!-- View Index 0 End -->
@@ -109,10 +136,27 @@
 
       static get properties() {
         return {
-          paperTabSelectedViewIndex: { type: Number, value: 0, observer: '_paperTabSelectedViewIndexChanged' },
-          shouldUseWebsockets: { type: Boolean, value: true },
-          monetaryUnit: { type: String, value: 'BDT' },
-          minimumProductQuantity: { type: Number, value: 5 }
+          paperTabSelectedViewIndex: {
+            type: Number,
+            value: 0,
+            observer: '_paperTabSelectedViewIndexChanged'
+          },
+          shouldUseWebsockets: {
+            type: Boolean,
+            value: true
+          },
+          monetaryUnit: {
+            type: String,
+            value: 'BDT'
+          },
+          minimumProductQuantity: {
+            type: Number,
+            value: 5
+          },
+          outletIdForBackgroundSync: {
+            type: Number,
+            value: null
+          }
         };
       }
 
@@ -155,13 +199,14 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.paperTabSelectedViewIndex = 0;
-        let settings = this.app.db.find('settings', (({ which }) => which === 'only'))[0];
+        let settings = this._getNormalizedSettings();
         this.shouldUseWebsockets = settings.shouldUseWebsockets;
         this.monetaryUnit = settings.monetaryUnit;
         this.minimumProductQuantity = settings.minimumProductQuantity;
+        this.outletIdForBackgroundSync = settings.backgroundSyncMetaMap[this.app.organization.id];
         this._loadLastPaperTabSelectedViewIndex();
         if (!this._ensureAccess()) return;
-        this.delay(300, () => {
+        this._processOutletList(() => {
           this.isReady = true;
         });
       }
@@ -177,13 +222,63 @@
         });
       }
 
-      // region: general settinggs =================================
+      // region: general settings =================================
+
+      _getNormalizedSettings() {
+        let settings = this.app.db.find('settings', (({
+          which
+        }) => which === 'only'))[0];
+
+        if (!settings.backgroundSyncMetaMap) {
+          settings.backgroundSyncMetaMap = {};
+        }
+        if (!this.app.organization) {
+          throw new Error("Organization is not loaded!");
+        }
+        if (!(this.app.organization.id in settings.backgroundSyncMetaMap)) {
+          settings.backgroundSyncMetaMap[this.app.organization.id] = null;
+        }
+        return settings;
+      }
+
+
+      _fetchOutletList(cbfn) {
+        let data = {
+          organizationId: this.app.organization.id
+        };
+        this.app.callGetOutletListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.outletList);
+        });
+      }
+
+      _processOutletList(cbfn) {
+        this._fetchOutletList(newOutletList => {
+          this.outletList = newOutletList;
+          console.log(this.outletList)
+          cbfn();
+        });
+      }
+
+      backgroundSyncDropdownSelected() {
+        window.setTimeout(() => {
+          this.settingsChanged();
+        }, 100);
+      }
 
       settingsChanged(e) {
-        this.app.db.update('settings', ({ which }) => which === 'only', (doc) => {
+        console.log(this.outletIdForBackgroundSync)
+        let settings = this._getNormalizedSettings();
+        settings.backgroundSyncMetaMap[this.app.organization.id] = this.outletIdForBackgroundSync;
+        this.app.db.update('settings', ({
+          which
+        }) => which === 'only', (doc) => {
           doc.shouldUseWebsockets = this.shouldUseWebsockets;
           doc.monetaryUnit = this.monetaryUnit;
           doc.minimumProductQuantity = this.minimumProductQuantity;
+          doc.backgroundSyncMetaMap = settings.backgroundSyncMetaMap;
           return doc
         });
       }
