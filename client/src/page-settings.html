@@ -78,13 +78,16 @@
 
         <div class="card vertical layout">
           <div class="option">
-            <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.backgroundSync]]">
-              <paper-listbox slot="dropdown-content" on-iron-select="backgroundSyncDropdownSelected" selected="{{outletIdForBackgroundSync}}">
-                <template is="dom-repeat" items="[[outletList]]" as="outlet">
-                  <paper-item data-id="[[outlet.id]]">[[outlet.name]]</paper-item>
-                </template>
-              </paper-listbox>
-            </paper-dropdown-menu>
+            <div class="horizontal layout center">
+              <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.backgroundSync]]">
+                <paper-listbox slot="dropdown-content" on-iron-select="backgroundSyncDropdownSelected" selected="{{outletIndexForBackgroundSync}}">
+                  <template is="dom-repeat" items="[[outletList]]" as="outlet">
+                    <paper-item data-id="[[outlet.id]]">[[outlet.name]]</paper-item>
+                  </template>
+                </paper-listbox>
+              </paper-dropdown-menu>
+              <paper-icon-button hidden="[[$notSelected(outletIndexForBackgroundSync)]]" icon="clear" on-tap="cancelTapped"></paper-icon-button>
+            </div>
             <div class="note">
               [[verses.settings.backgroundSyncDetail]]
             </div>
@@ -153,7 +156,7 @@
             type: Number,
             value: 5
           },
-          outletIdForBackgroundSync: {
+          outletIndexForBackgroundSync: {
             type: Number,
             value: null
           }
@@ -203,7 +206,7 @@
         this.shouldUseWebsockets = settings.shouldUseWebsockets;
         this.monetaryUnit = settings.monetaryUnit;
         this.minimumProductQuantity = settings.minimumProductQuantity;
-        this.outletIdForBackgroundSync = settings.backgroundSyncMetaMap[this.app.organization.id];
+        this.outletIndexForBackgroundSync = null;
         this._loadLastPaperTabSelectedViewIndex();
         if (!this._ensureAccess()) return;
         this._processOutletList(() => {
@@ -257,7 +260,10 @@
       _processOutletList(cbfn) {
         this._fetchOutletList(newOutletList => {
           this.outletList = newOutletList;
-          console.log(this.outletList)
+
+          let settings = this._getNormalizedSettings();
+          let id = settings.backgroundSyncMetaMap[this.app.organization.id];
+          this.outletIndexForBackgroundSync = this.outletList.findIndex(outlet => outlet.id === id);
           cbfn();
         });
       }
@@ -268,10 +274,20 @@
         }, 100);
       }
 
+      cancelTapped() {
+        this.outletIndexForBackgroundSync = null;
+        window.setTimeout(() => {
+          this.settingsChanged();
+        }, 100);
+      }
+
       settingsChanged(e) {
-        console.log(this.outletIdForBackgroundSync)
         let settings = this._getNormalizedSettings();
-        settings.backgroundSyncMetaMap[this.app.organization.id] = this.outletIdForBackgroundSync;
+        let id = null;
+        if (this.outletList.length > 0 && this.outletIndexForBackgroundSync !== null && (typeof this.outletIndexForBackgroundSync) !== 'undefined') {
+          id = this.outletList[this.outletIndexForBackgroundSync].id;
+        }
+        settings.backgroundSyncMetaMap[this.app.organization.id] = id;
         this.app.db.update('settings', ({
           which
         }) => which === 'only', (doc) => {
@@ -295,6 +311,10 @@
             this.paperTabSelectedViewIndex -= 1;
           }
         }
+      }
+
+      $notSelected(val) {
+        return (typeof (val) === 'undefined' || val === null || val < 0);
       }
 
     }
