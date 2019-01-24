@@ -308,6 +308,8 @@
                 <paper-item on-tap="homeTapped">[[verses.topMenu.home]]</paper-item>
                 <paper-item on-tap="switchOrganizationTapped">[[verses.topMenu.switchOrganization]]</paper-item>
                 <paper-item on-tap="reloadTapped">[[verses.topMenu.reload]]</paper-item>
+                <!-- FIXME: Remove offline toggle switch after testing -->
+                <paper-item on-tap="goOfflineTapped">Go Offline (Debug Only)</paper-item>
                 <paper-item on-tap="logoutTapped">[[verses.topMenu.logout]]</paper-item>
               </paper-listbox>
             </paper-menu-button>
@@ -412,7 +414,7 @@
 
   <script>
     let localDocument = document.currentScript.ownerDocument;
-    const backgroundSyncThreshold = 1 * 1000;
+    const backgroundSyncThreshold = 10 * 1000;
 
     class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior, TorqueLanguageBehavior, TorqueCommonBehavior) {
 
@@ -482,6 +484,10 @@
             })
           },
           shouldAttempBackgroundSync: {
+            type: Boolean,
+            value: false
+          },
+          isInOfflineMode: {
             type: Boolean,
             value: false
           }
@@ -607,6 +613,9 @@
         this.db.defineCollection({
           name: 'organization'
         });
+        this.db.defineCollection({
+          name: 'offline-data'
+        });
       }
 
       _fillDatabase() {
@@ -618,15 +627,33 @@
             monetaryUnit: 'BDT',
             backgroundSyncMetaMap: {}
           });
+
+        this.db.upsert('offline-data', (({
+          which
+        }) => which === 'only'), (doc => doc), {
+            which: 'only',
+            offlineModeInitiatedDatetimeStamp: null,
+            lastFetchedDatetimeStamp: null,
+            cache: {
+              getOutlet: null,
+              getAggregatedInventoryDetails: null,
+              getActiveServiceList: null,
+            },
+            data: {
+              unsyncedSalesList: []
+            }
+          });
       }
 
       _setUpDatabaseObservers() {
         this.db.observe('user', (...args) => this.onUserChange(...args));
         this.db.observe('organization', (...args) => this.onOrganizationChange(...args));
         this.db.observe('settings', (...args) => this.onSettingsChange(...args));
+        this.db.observe('offline-data', (...args) => this.onOfflineDataChange(...args));
         this.onUserChange();
         this.onOrganizationChange();
         this.onSettingsChange();
+        this.onOfflineDataChange();
       }
 
       networkErrorGotItTapped() {
@@ -731,6 +758,19 @@
 
       // ======================  events =============================
 
+      goOfflineTapped() {
+        if (!this.offlineData || !this.offlineData.lastFetchedDatetimeStamp) {
+          // TODO: Translate
+          this.showAlertMessage("Sorry!", "Unable to enable offline mode. Next time you are online, make sure to select an outlet for offline mode.");
+          return;
+        }
+        this.db.update('offline-data', (({ which }) => which === 'only'), data => {
+          data.offlineModeInitiatedDatetimeStamp = Date.now();
+          return data;
+        });
+        this.navigateTo(`/home`);
+      }
+
       websocketConnectivityIndicatorIconTapped(e = null) {
         this.settings.shouldUseWebsockets = !this.settings.shouldUseWebsockets;
         window.torqueWebsocketIndicatorStatusReceivedFn('closed');
@@ -797,6 +837,31 @@
         this._proxyToActivePage('onOrganizationChange', this.organization);
       }
 
+      onOfflineDataChange() {
+        this.offlineData = this.loadOfflineData();
+        console.log('onOfflineDataChange', this.offlineData)
+        if (this.offlineData.offlineModeInitiatedDatetimeStamp) {
+          this.isInOfflineMode = true;
+        } else {
+          this.isInOfflineMode = false;
+        }
+        console.log('this.isInOfflineMode', this.isInOfflineMode)
+        this._proxyToActivePage('onOfflineDataChange', this.offlineData);
+        // model = {
+        //   which: 'only',
+        //   offlineModeInitiatedDatetimeStamp: null,
+        //   lastFetchedDatetimeStamp: null,
+        //   cache: {
+        //     getOutlet: null,
+        //     getAggregatedInventoryDetails: null,
+        //     getActiveServiceList: null,
+        //   },
+        //   data: {
+        //     unsyncedSalesList: []
+        //   }
+        // }
+      }
+
       // ====================== shortcuts =============================
 
       homeTapped(e = null) {
@@ -834,12 +899,68 @@
 
       _processBackgroundSync(cbfn) {
         if (!this.shouldAttempBackgroundSync) return cbfn(false);
-        return cbfn(true);
+        if (this.isInOfflineMode) return cbfn(false);
+        this.app = this;
+        let settings = this._getNormalizedSettings();
+        let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+        if (this.$notSelected(defaultOutletId)) return cbfn(false);
+
+        const onApiError = (error) => {
+          return cbfn(false);
+        }
+
+        const _backgroundSyncGetOutlet = (outletId, cbfn) => {
+          let data = { outletId };
+          this.app.callGetOutletApi(data, (err, response) => {
+            if (err) return;
+            if (response.hasError) return onApiError(response.error);
+            return cbfn(response);
+          });
+        }
+
+        const _backgroundSyncGetAggregatedInventoryDetailsApi = (inventoryId, cbfn) => {
+          let data = { inventoryId };
+          this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
+            if (err) return;
+            if (response.hasError) return onApiError(response.error);
+            return cbfn(response);
+          });
+        }
+
+        const _backgroundSyncGetActiveServiceListApi = (outletId, cbfn) => {
+          let data = { outletId };
+          this.app.callGetActiveServiceListApi(data, (err, response) => {
+            if (err) return;
+            if (response.hasError) return onApiError(response.error);
+            return cbfn(response);
+          });
+        }
+
+        _backgroundSyncGetOutlet(defaultOutletId, (getOutletResponse) => {
+          let inventoryId = getOutletResponse.defaultInventory.id;
+          _backgroundSyncGetAggregatedInventoryDetailsApi(inventoryId, (getAggregatedInventoryDetailsResponse) => {
+            _backgroundSyncGetActiveServiceListApi(defaultOutletId, (getActiveServiceListResponse) => {
+              // console.log(getOutletResponse);
+              // console.log(getAggregatedInventoryDetailsResponse);
+              // console.log(getActiveServiceListResponse);
+
+              this.db.update('offline-data', (({ which }) => which === 'only'), data => {
+                data.lastFetchedDatetimeStamp = Date.now();
+                data.cache.getOutlet = getOutletResponse;
+                data.cache.getAggregatedInventoryDetails = getAggregatedInventoryDetailsResponse;
+                data.cache.getActiveServiceList = getActiveServiceListResponse;
+                return data;
+              });
+              return cbfn(true);
+            });
+          });
+        });
+
       }
 
       _initiateBackgroundSync() {
         this._processBackgroundSync((wasDone) => {
-          // console.log("_processBackgroundSync() result:", wasDone);
+          console.log("_processBackgroundSync() result:", wasDone);
           // console.log("Subs")
           window.setTimeout(() => this._initiateBackgroundSync(), backgroundSyncThreshold);
         });
