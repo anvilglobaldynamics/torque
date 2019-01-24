@@ -227,24 +227,6 @@
 
       // region: general settings =================================
 
-      _getNormalizedSettings() {
-        let settings = this.app.db.find('settings', (({
-          which
-        }) => which === 'only'))[0];
-
-        if (!settings.backgroundSyncMetaMap) {
-          settings.backgroundSyncMetaMap = {};
-        }
-        if (!this.app.organization) {
-          throw new Error("Organization is not loaded!");
-        }
-        if (!(this.app.organization.id in settings.backgroundSyncMetaMap)) {
-          settings.backgroundSyncMetaMap[this.app.organization.id] = null;
-        }
-        return settings;
-      }
-
-
       _fetchOutletList(cbfn) {
         let data = {
           organizationId: this.app.organization.id
@@ -283,9 +265,14 @@
 
       settingsChanged(e) {
         let settings = this._getNormalizedSettings();
+
         let id = null;
-        if (this.outletList.length > 0 && this.outletIndexForBackgroundSync !== null && (typeof this.outletIndexForBackgroundSync) !== 'undefined') {
-          id = this.outletList[this.outletIndexForBackgroundSync].id;
+        try {
+          if (this.outletList.length > 0 && this.outletIndexForBackgroundSync !== null && (typeof this.outletIndexForBackgroundSync) !== 'undefined') {
+            id = this.outletList[this.outletIndexForBackgroundSync].id;
+          }
+        } catch (ex) {
+          'pass'
         }
         settings.backgroundSyncMetaMap[this.app.organization.id] = id;
         this.app.db.update('settings', ({
@@ -311,10 +298,6 @@
             this.paperTabSelectedViewIndex -= 1;
           }
         }
-      }
-
-      $notSelected(val) {
-        return (typeof (val) === 'undefined' || val === null || val < 0);
       }
 
     }

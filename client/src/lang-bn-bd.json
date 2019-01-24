@@ -192,6 +192,8 @@
     "employees": "কর্মচারী",
     "outlets": "দোকান",
     "warehouses": "গুদাম",
+    "promptForDefaultOutlet": "লিপি অফলিনে ব্যবহার করতে চাইলে অফলাইন মোডের জন্য দোকান সিলেক্ট করুন",
+    "promptForDefaultOutletGoButton": "দোকান সিলেক্ট করুন",
     "viewActivationHistory": "সক্রিয়করণ ইতিহাস দেখুন"
   },
   "organization": {
@@ -249,9 +251,7 @@
     "noOutletFound": "আপনার সংস্থার কোনো দোকান তৈরি করা হয়নি।",
     "manageOutletServicesTitle": "সেবা পরিচালনা",
     "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন",
-
     "categoryCodeDropdown": "দোকানের ধরন",
-
     "selectLocationButton": "মানচিত্রে অবস্থান চিহ্নিত করুন",
     "locationInvalidDialog": "মানচিত্রে একটি সঠিক অবস্থান নির্বাচন করুন।",
     "showingLocationOnMap": "নীচের মানচিত্রে অবস্থান দেখানো হচ্ছে",
@@ -437,11 +437,9 @@
     "customerNameInputError": "একটি সঠিক নাম লিখুন",
     "customerNumberInput": "যোগাযোগের নম্বর",
     "customerNumberInputError": "একটি সঠিক ফোন নম্বর লিখুন",
-
     "emailAddressInput": "ইমেল (ঐচ্ছিক)",
     "emailAddressInputError": "বৈধ ইমেইল লিখুন",
     "addressInput": "ঠিকানা (ঐচ্ছিক)",
-
     "openingBalance": "প্রার্থমিক ব্যালেন্স",
     "openingBalanceError": "প্রার্থমিক ব্যালেন্স হিসাবে একটি পরিমান লিখুন",
     "createCustomer": "গ্রাহক যুক্ত করুন",
@@ -652,7 +650,6 @@
     "thisWillBeACreditSale": "এটি একটি বাকি বিক্রি হবে। অতিরিক্ত অর্থ গ্রহণ বিক্রয় পৃষ্ঠায় গিয়ে করতে পারবেন।",
     "selectService": "সেবা নির্বাচন করুন",
     "serviceRequiresCustomerSelection": "এই সেবাটি বিক্রির জন্য একজন ক্রেতা নির্বাচন প্রয়োজন",
-
     "assignedEmployee": "দায়িত্ব দেন",
     "assignEmployee": "দায়িত্ব দেয়া"
   },
@@ -839,18 +836,14 @@
   "serviceMembership": {
     "serviceMembershipTitle": "সেবার সদস্যপদ",
     "noServiceMembershipFound": "কোনো সেবা সদস্যপদের রেকর্ড পাওয়া যায় নি।",
-
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
     "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি",
     "noServiceBlueprintSelected": "কোন সেবার সদস্যপদ নির্বাচন করা হয়নি",
-
     "change": "পরিবর্তন",
     "remove": "সরান",
-
     "serviceMembershipNumber": "সদস্যপদ নং",
     "expiringDatetime": "মেয়াদ",
     "customer": "ক্রেতা",
-
     "serviceBlueprint": "সেবা",
     "assignedEmployee": "দায়িত্বে"
   },

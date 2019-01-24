@@ -613,11 +613,11 @@
         this.db.upsert('settings', (({
           which
         }) => which === 'only'), (doc => doc), {
-          which: 'only',
-          shouldUseWebsockets: true,
-          monetaryUnit: 'BDT',
-          backgroundSyncMetaMap: {}
-        });
+            which: 'only',
+            shouldUseWebsockets: true,
+            monetaryUnit: 'BDT',
+            backgroundSyncMetaMap: {}
+          });
       }
 
       _setUpDatabaseObservers() {
@@ -770,11 +770,13 @@
       // ====================== delegated callbacks =============================
 
       onFundamentalComponentChange() {
-        if (this.user && this.settings && this.organization) {
+        let allComponentsReady = this.user && this.settings && this.organization;
+        if (allComponentsReady) {
           this.shouldAttempBackgroundSync = true;
         } else {
           this.shouldAttempBackgroundSync = false;
         }
+        this._proxyToActivePage('onFundamentalComponentChange', {});
       }
 
       onUserChange() {
