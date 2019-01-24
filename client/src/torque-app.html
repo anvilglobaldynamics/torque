@@ -254,7 +254,6 @@
             <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
             <hr class="sidebar-divider">
 
-
             <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
             <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
               <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
@@ -309,7 +308,7 @@
                 <paper-item on-tap="switchOrganizationTapped">[[verses.topMenu.switchOrganization]]</paper-item>
                 <paper-item on-tap="reloadTapped">[[verses.topMenu.reload]]</paper-item>
                 <!-- FIXME: Remove offline toggle switch after testing -->
-                <paper-item on-tap="goOfflineTapped">Go Offline (Debug Only)</paper-item>
+                <paper-item on-tap="goOfflineTapped">Toggle Offline Mode (Debug Only)</paper-item>
                 <paper-item on-tap="logoutTapped">[[verses.topMenu.logout]]</paper-item>
               </paper-listbox>
             </paper-menu-button>
@@ -718,6 +717,24 @@
       // ====================== navigation =============================
 
       _pageNameChanged() {
+        if (this.isInOfflineMode) {
+          const allowedPageNameList = [
+            'pos',
+            'pos-select-products',
+            'pos-select-services',
+            'print-sales-receipt'
+          ];
+          if (allowedPageNameList.indexOf(this.pageName) === -1) {
+            this.app = this;
+            let settings = this._getNormalizedSettings();
+            let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+            if (defaultOutletId) {
+              this.navigateTo(`/pos/outlet:${defaultOutletId}`);
+              return
+            }
+          }
+        }
+        console.log(this.pageName)
         let qualifiedName = 'page-' + this.pageName + '.html';
         let matchingEl = Array.from(localDocument.querySelectorAll('link[rel="lazy-import"]')).find(el => {
           return el.href.indexOf(qualifiedName) > -1;
@@ -764,8 +781,9 @@
           this.showAlertMessage("Sorry!", "Unable to enable offline mode. Next time you are online, make sure to select an outlet for offline mode.");
           return;
         }
+        let date = (this.isInOfflineMode ? null : Date.now())
         this.db.update('offline-data', (({ which }) => which === 'only'), data => {
-          data.offlineModeInitiatedDatetimeStamp = Date.now();
+          data.offlineModeInitiatedDatetimeStamp = date;
           return data;
         });
         this.navigateTo(`/home`);
