@@ -717,6 +717,7 @@
       // ====================== navigation =============================
 
       _pageNameChanged() {
+        console.log('_pageNameChanged(): pre-route this.pageName =', this.pageName);
         if (this.isInOfflineMode) {
           const allowedPageNameList = [
             'pos',
@@ -734,7 +735,6 @@
             }
           }
         }
-        console.log(this.pageName)
         let qualifiedName = 'page-' + this.pageName + '.html';
         let matchingEl = Array.from(localDocument.querySelectorAll('link[rel="lazy-import"]')).find(el => {
           return el.href.indexOf(qualifiedName) > -1;

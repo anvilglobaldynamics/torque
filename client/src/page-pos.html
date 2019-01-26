@@ -95,53 +95,66 @@
       .m-top-16{
         margin-top: 16px;
       }
+
+      .card.warning {
+        background: #FFD54F;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <!-- customer selector - start -->
-      <template is="dom-if" if="[[!isSearchingCustomer]]">
-        <div class="card vertical layout">
-          <div class="horizontal layout center">
-            <div class="flex">
-              <template is="dom-if" if="[[!customer]]">
-                <div class="type secondary body">[[verses.pos.noCustomerSelected]]</div>
-              </template>
-              <template is="dom-if" if="[[customer]]">
-                <div>
-                  <div class="type title capitalize">[[customer.fullName]]</div>
-                  <div class="horizontal layout wrap">
-                    <div class="horizontal layout center m-right-8">
-                      <iron-icon icon="hardware:smartphone" class="icon secondary small m-right-8"></iron-icon>
-                      <div class="type body secondary">[[customer.phone]]</div>
-                    </div>
-                    <div class="horizontal layout center">
-                      <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
-                      <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </div>
-          </div>
-          <div class="horizontal layout end-justified m-top-16">
-            <template is="dom-if" if="[[customer]]">
-              <paper-button raised class="danger btn btn-default" on-tap="removeCustomerTapped">
-                [[verses.pos.removeCustomer]]
-              </paper-button>
-            </template>
-            <paper-button raised class="secondary btn btn-default" on-tap="changeCustomerTapped">
-              [[verses.pos.changeCustomer]]
-            </paper-button>
-            <paper-button raised class="btn secondary" on-tap="createCustomerTapped">
-              [[verses.pos.createCustomer]]
-            </paper-button>
-          </div>
+      <template is="dom-if" if="[[isInOfflineMode]]">
+        <div class="card warning vertical layout">
+          <!-- TODO: Translate -->
+          You are currently operating in offline mode. Certain features might not be available.
         </div>
       </template>
-      <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+
+      <!-- customer selector - start -->
+      <template is="dom-if" if="[[!isInOfflineMode]]">
+        <template is="dom-if" if="[[!isSearchingCustomer]]">
+          <div class="card vertical layout">
+            <div class="horizontal layout center">
+              <div class="flex">
+                <template is="dom-if" if="[[!customer]]">
+                  <div class="type secondary body">[[verses.pos.noCustomerSelected]]</div>
+                </template>
+                <template is="dom-if" if="[[customer]]">
+                  <div>
+                    <div class="type title capitalize">[[customer.fullName]]</div>
+                    <div class="horizontal layout wrap">
+                      <div class="horizontal layout center m-right-8">
+                        <iron-icon icon="hardware:smartphone" class="icon secondary small m-right-8"></iron-icon>
+                        <div class="type body secondary">[[customer.phone]]</div>
+                      </div>
+                      <div class="horizontal layout center">
+                        <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
+                        <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
+            <div class="horizontal layout end-justified m-top-16">
+              <template is="dom-if" if="[[customer]]">
+                <paper-button raised class="danger btn btn-default" on-tap="removeCustomerTapped">
+                  [[verses.pos.removeCustomer]]
+                </paper-button>
+              </template>
+              <paper-button raised class="secondary btn btn-default" on-tap="changeCustomerTapped">
+                [[verses.pos.changeCustomer]]
+              </paper-button>
+              <paper-button raised class="btn secondary" on-tap="createCustomerTapped">
+                [[verses.pos.createCustomer]]
+              </paper-button>
+            </div>
+          </div>
+        </template>
+        <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+      </template>
       <!-- customer selector - end -->
 
       <!-- selected product list - start -->
@@ -197,14 +210,14 @@
             <template is="dom-repeat" items="[[serviceList]]" as="service">
               <div class="horizontal layout item center">
                 <div class="vertical layout flex">
-                  
+
                   <div class="horizontal layout center">
                     <div class="service-info">
                       <span class="service-title">[[service.name]]</span>
                       <span class="service-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
                     </div>
-                    
-                    <template is="dom-if" if="{{service.isEmployeeAssignable}}" >
+
+                    <template is="dom-if" if="{{service.isEmployeeAssignable}}">
 
                       <template is="dom-if" if="{{service.assignedEmploymentId}}">
                         <div class="employee-icon-container-active" on-tap="assignEmployeeTapped">
@@ -229,7 +242,7 @@
                     <paper-input class="flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" auto-validate></paper-input>
                     <div class="description">[[app.settings.monetaryUnit]]</div>
                   </div>
-                  
+
                 </div>
               </div>
             </template>
@@ -412,6 +425,10 @@
             type: Object,
             value: null,
             observer: 'customerChanged'
+          },
+          isInOfflineMode: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -427,6 +444,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
+        this.onOfflineDataChange();
         this.app.pushPageTitle(this.app.verses.pos.posPageTitle);
         if (!'outlet' in this.params) {
           return this.app.showModalDialog(this.app.verses.general.sorry, this.app.verses.general.somethingWentWrong, () => {
@@ -495,13 +513,27 @@
         });
       }
 
-      _processGetOutletDefaultInventoryId(cbfn) {
+      _processGetOutletDefaultInventoryIdOnline(cbfn) {
         let data = { outletId: this.params.outlet };
         this.app.callGetOutletApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           return cbfn(response.defaultInventory.id);
         });
+      }
+
+      _processGetOutletDefaultInventoryIdOffline(cbfn) {
+        window.setTimeout(() => {
+          cbfn(this.app.offlineData.cache.getOutlet.defaultInventory.id);
+        }, 10);
+      }
+
+      _processGetOutletDefaultInventoryId(cbfn) {
+        if (this.isInOfflineMode) {
+          this._processGetOutletDefaultInventoryIdOffline(cbfn);
+        } else {
+          this._processGetOutletDefaultInventoryIdOnline(cbfn);
+        }
       }
 
       // main payment calculation method
@@ -738,6 +770,12 @@
 
       productListOrServiceListHasElement(productListLength, serviceListLength) {
         return (productListLength || serviceListLength);
+      }
+
+      // region: offline sales =================================
+
+      onOfflineDataChange() {
+        this.isInOfflineMode = this.app.isInOfflineMode;
       }
 
     }
