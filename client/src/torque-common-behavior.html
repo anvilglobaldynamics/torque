@@ -180,6 +180,19 @@
         return (typeof (val) === 'undefined' || val === null || val < 0);
       }
 
+      _paginateOfflineData(list) {
+        let { limit, offset } = this.paginate;
+        let totalCount = list.length;
+
+        list = list.slice(offset, (offset + limit));
+
+        return [list, {
+          offset,
+          limit: list.length,
+          totalCount
+        }];
+      }
+
     }
   })();
 

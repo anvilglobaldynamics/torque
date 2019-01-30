@@ -236,15 +236,9 @@
             });
           }
 
-          response.pagination = {
-            offset: 0,
-            limit: response.aggregatedProductList.length,
-            totalCount: response.aggregatedProductList.length
-          };
+          ([response.aggregatedProductList, response.pagination] = this._paginateOfflineData(response.aggregatedProductList));
 
-          // console.log(response)
           this.pagination = response.pagination;
-          this.paginate = response.pagination;
           cbfn(response);
         }, 100);
       }
