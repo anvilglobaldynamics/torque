@@ -24,12 +24,10 @@
 <dom-module id="page-pos-select-services">
   <template>
     <style include="shared-styles">
-    
-    .confirm-discard-button-group paper-button {
-      width: 100%;
-      margin: 5px;
-    }
-    
+      .confirm-discard-button-group paper-button {
+        width: 100%;
+        margin: 5px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -147,6 +145,10 @@
           selectedServiceList: {
             type: Array,
             value: () => []
+          },
+          isInOfflineMode: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -162,6 +164,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
+        this.onOfflineDataChange();
         this.app.pushPageTitle(this.app.verses.posSelectService.posSelectServiceTitle);
         if (!this._ensureAccess()) return;
         if (!('outlet' in this.params)) {
@@ -188,19 +191,48 @@
         });
       }
 
-      _fetchOutletServiceList(cbfn) {
+      _fetchOutletServiceListOnline(cbfn) {
         let data = { outletId: parseInt(this.params.outlet), searchString: this.searchString, paginate: this.paginate };
 
         this.app.callGetActiveServiceListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.pagination = response.pagination;
-          return cbfn(response.serviceList);
+          return cbfn(response);
         });
       }
 
+      _fetchOutletServiceListOffline(cbfn) {
+        window.setTimeout(() => {
+          // console.log(this.app.offlineData.cache.getActiveServiceList)
+          let response = JSON.parse(JSON.stringify(this.app.offlineData.cache.getActiveServiceList));
+
+          let searchString = String(this.searchString);
+          if (searchString.length > 0) {
+            searchString = searchString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            let regex = new RegExp(searchString, 'g');
+            response.serviceList = response.serviceList.filter(product => {
+              return regex.test(product.product.productBlueprint.name);
+            });
+          }
+
+          ([response.serviceList, response.pagination] = this._paginateOfflineData(response.serviceList));
+
+          this.pagination = response.pagination;
+          cbfn(response);
+        }, 100);
+      }
+
+      _fetchOutletServiceList(cbfn) {
+        if (this.isInOfflineMode) {
+          this._fetchOutletServiceListOffline(cbfn);
+        } else {
+          this._fetchOutletServiceListOnline(cbfn);
+        }
+      }
+
       _processOutletServices(cbfn) {
-        this._fetchOutletServiceList(serviceList => {
+        this._fetchOutletServiceList(({ serviceList }) => {
 
           this.serviceList = serviceList.map(service => {
             let { salePrice } = service;
@@ -313,6 +345,12 @@
         this.selectedServiceList = [];
         this.selectedServiceCount = 0;
         this.app.navigateToPreviousUrl(`/pos`);
+      }
+
+      // region: offline sales =================================
+
+      onOfflineDataChange() {
+        this.isInOfflineMode = this.app.isInOfflineMode;
       }
 
     }
