@@ -9,4 +9,3 @@ let mainProgram = new Program({
   await mainProgram.initiateServer();
   console.log('(program)> Server Initiated Completely.')
 })();
-
