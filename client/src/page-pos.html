@@ -239,56 +239,58 @@
       <!-- selected product list - end -->
 
       <!-- selected service list - start -->
-      <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
-        <div class="card vertical layout">
-          <div class="list">
+      <template is="dom-if" if="[[!isInOfflineMode]]">
+        <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
+          <div class="card vertical layout">
+            <div class="list">
 
-            <template is="dom-repeat" items="[[serviceList]]" as="service">
-              <div class="horizontal layout item center">
-                <div class="vertical layout flex">
+              <template is="dom-repeat" items="[[serviceList]]" as="service">
+                <div class="horizontal layout item center">
+                  <div class="vertical layout flex">
 
-                  <div class="horizontal layout center">
-                    <div class="service-info">
-                      <span class="service-title">[[service.name]]</span>
-                      <span class="service-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                    <div class="horizontal layout center">
+                      <div class="service-info">
+                        <span class="service-title">[[service.name]]</span>
+                        <span class="service-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                      </div>
+
+                      <template is="dom-if" if="{{service.isEmployeeAssignable}}">
+
+                        <template is="dom-if" if="{{service.assignedEmploymentId}}">
+                          <div class="employee-icon-container-active" on-tap="assignEmployeeTapped">
+                            <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignedEmployee]]
+                          </div>
+                        </template>
+
+                        <template is="dom-if" if="{{!service.assignedEmploymentId}}">
+                          <div class="employee-icon-container" on-tap="assignEmployeeTapped">
+                            <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignEmployee]]
+                          </div>
+                        </template>
+
+                      </template>
                     </div>
 
-                    <template is="dom-if" if="{{service.isEmployeeAssignable}}">
-
-                      <template is="dom-if" if="{{service.assignedEmploymentId}}">
-                        <div class="employee-icon-container-active" on-tap="assignEmployeeTapped">
-                          <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignedEmployee]]
-                        </div>
-                      </template>
-
-                      <template is="dom-if" if="{{!service.assignedEmploymentId}}">
-                        <div class="employee-icon-container" on-tap="assignEmployeeTapped">
-                          <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignEmployee]]
-                        </div>
-                      </template>
-
+                    <template is="dom-if" if="{{service.isCustomerRequired}}">
+                      <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
                     </template>
+
+                    <div class="horizontal layout center">
+                      <paper-input class="flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" auto-validate></paper-input>
+                      <div class="description">[[app.settings.monetaryUnit]]</div>
+                    </div>
+
                   </div>
-
-                  <template is="dom-if" if="{{service.isCustomerRequired}}">
-                    <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
-                  </template>
-
-                  <div class="horizontal layout center">
-                    <paper-input class="flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" auto-validate></paper-input>
-                    <div class="description">[[app.settings.monetaryUnit]]</div>
-                  </div>
-
                 </div>
+              </template>
+
+              <div class="select-product-button-container">
+                <paper-button raised class="btn primary" on-tap="addServiceTapped">[[verses.pos.selectService]]</paper-button>
               </div>
-            </template>
 
-            <div class="select-product-button-container">
-              <paper-button raised class="btn primary" on-tap="addServiceTapped">[[verses.pos.selectService]]</paper-button>
             </div>
-
           </div>
-        </div>
+        </template>
       </template>
       <!-- selected service list - end -->
 
