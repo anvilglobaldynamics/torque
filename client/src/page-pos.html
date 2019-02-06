@@ -863,21 +863,49 @@
         delete unsyncedSales.createdDatetimeStamp;
 
         this.app.callAddSalesApi(unsyncedSales, (err, response) => {
-          if (err) return;
+          if (err) return cbfn(err, null, null);
           if (response.hasError) {
-            // should allow discard? should auto delete?
-            return this.onApiError(response.error);
+            return this.onApiError(response.error, null, () => {
+              return cbfn(null, response.error, null);
+            });
           }
-          cbfn(response);
+          cbfn(null, null, response);
         });
       }
 
-      submitOfflineSalesTapped(e) {
-        let unsyncedSales = this.offlineData.data.unsyncedSalesList[e.model.index];
+      submitAllOfflineSalesTapped(e) {
+        let list = this.offlineData.data.unsyncedSalesList;
+        let left = list.length;
+        const submitNext = () => {
+          if (!left) {
+            if (this.isInOfflineMode) {
+              this.app.toggleOfflineMode();
+            }
+            return;
+          }
 
-        this._submitAnOfflineSales(unsyncedSales, (res) => {
-          console.log("AAAA")
-        });
+          left -= 1;
+          let unsyncedSales = list[left];
+
+          this._submitAnOfflineSales(unsyncedSales, (networkError, validationError, response) => {
+            if (networkError) {
+              return;
+            }
+            if (validationError) return submitNext();
+
+            this.app.db.update('offline-data', (({ which }) => which === 'only'), offlineData => {
+              let index = offlineData.data.unsyncedSalesList.findIndex(sales => sales.id === unsyncedSales.id);
+              if (index > -1) {
+                offlineData.data.unsyncedSalesList.splice(index, 1);
+              }
+              return offlineData;
+            });
+
+            submitNext();
+          });
+
+        }
+        submitNext();
       }
 
       isDiscountTypePercent(discountType) {

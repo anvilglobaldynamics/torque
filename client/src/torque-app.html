@@ -308,7 +308,7 @@
                 <paper-item on-tap="switchOrganizationTapped">[[verses.topMenu.switchOrganization]]</paper-item>
                 <paper-item on-tap="reloadTapped">[[verses.topMenu.reload]]</paper-item>
                 <!-- FIXME: Remove offline toggle switch after testing -->
-                <paper-item on-tap="goOfflineTapped">Toggle Offline Mode (Debug Only)</paper-item>
+                <paper-item on-tap="toggleOfflineMode">Toggle Offline Mode (Debug Only)</paper-item>
                 <paper-item on-tap="logoutTapped">[[verses.topMenu.logout]]</paper-item>
               </paper-listbox>
             </paper-menu-button>
@@ -776,7 +776,7 @@
 
       // ======================  events =============================
 
-      goOfflineTapped() {
+      toggleOfflineMode() {
         if (!this.offlineData || !this.offlineData.lastFetchedDatetimeStamp) {
           // TODO: Translate
           this.showAlertMessage("Sorry!", "Unable to enable offline mode. Next time you are online, make sure to select an outlet for offline mode.");
@@ -787,6 +787,15 @@
           data.offlineModeInitiatedDatetimeStamp = date;
           return data;
         });
+
+        // TODO: Refactor
+        this.app = this;
+        let settings = this._getNormalizedSettings();
+        let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+        if (defaultOutletId) {
+          this.navigateTo(`/pos/outlet:${defaultOutletId}`);
+          return
+        }
         this.navigateTo(`/home`);
       }
 
