@@ -112,6 +112,42 @@
         </div>
       </template>
 
+      <template is="dom-if" if="[[offlineData.data.unsyncedSalesList.length]]">
+        <div class="card vertical layout">
+
+          <!-- TODO: Translate -->
+          <div class="horizontal layout center">
+            <div class="flex">You have [[offlineData.data.unsyncedSalesList.length]] offline sales. Please submit them when you have internet connection.</div>
+            <paper-button raised class="btn btn-default neutral" on-tap="toggleAllOfflineSalesTapped">
+              View
+            </paper-button>
+            <paper-button raised class="primary btn btn-default" on-tap="submitAllOfflineSalesTapped">
+              Sync
+            </paper-button>
+          </div>
+
+          <template is="dom-if" if="[[shouldExpandOfflineSalesList]]">
+            <div class="list m-top-16">
+              <template is="dom-repeat" items="[[offlineData.data.unsyncedSalesList]]" as="unsyncedSales">
+                <div class="horizontal layout item center">
+                  <div class="flex">
+                    <b>[[unsyncedSales.id]]</b> <br>
+                    Created: [[$mkDate(unsyncedSales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]
+                  </div>
+                  <paper-button raised class="btn btn-default" on-tap="printOfflineSalesTapped">
+                    Print
+                  </paper-button>
+                  <paper-button raised class="btn btn-default neutral" on-tap="discardOfflineSalesTapped">
+                    Discard
+                  </paper-button>
+                </div>
+              </template>
+            </div>
+          </template>
+
+        </div>
+      </template>
+
       <!-- customer selector - start -->
       <template is="dom-if" if="[[!isInOfflineMode]]">
         <template is="dom-if" if="[[!isSearchingCustomer]]">
@@ -429,6 +465,10 @@
           isInOfflineMode: {
             type: Boolean,
             value: false
+          },
+          shouldExpandOfflineSalesList: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -642,35 +682,77 @@
         };
       }
 
-      _processAddSales({ outletId, payment }, cbfn) {
+      _processAddSalesOnline(data, cbfn) {
+        this.app.callAddSalesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          cbfn(response);
+        });
+      }
+
+      _processAddSalesOffline(salesData, cbfn) {
+        console.log("salesData", salesData);
+        this.app.db.update('offline-data', (({ which }) => which === 'only'), offlineData => {
+          if (!offlineData.data.unsyncedSalesIdSeed) offlineData.data.unsyncedSalesIdSeed = 0;
+          offlineData.data.unsyncedSalesIdSeed += 1;
+          salesData.id = 'OFFLINE-' + offlineData.data.unsyncedSalesIdSeed;
+          salesData.createdDatetimeStamp = Date.now();
+          offlineData.data.unsyncedSalesList.push(salesData);
+          return offlineData;
+        });
+        cbfn({ salesId: salesData.id });
+      }
+
+      _processAddSales(cbfn) {
+        let outletId = this.params.outlet;
+        let payment = this.payment;
+
         let customerId = null;
         if (this.customer) {
           customerId = this.customer.id;
         }
 
         let productList = this.productList.map(product => {
-          let { productId, selectedCount, discountType, discountValue, salePrice, vatValue } = product;
+          // console.log(product);
+          let { name, productId, selectedCount, discountType, discountValue, salePrice, vatValue } = product;
           let vatPercentage = vatValue;
-          return { productId, count: selectedCount, discountType, discountValue, salePrice, vatPercentage };
+          let finalProduct = { productId, count: selectedCount, discountType, discountValue, salePrice, vatPercentage };
+          if (this.isInOfflineMode) {
+            finalProduct.productBlueprintName = name;
+            finalProduct.returnedProductCount = 0;
+            finalProduct.count = parseInt(String(finalProduct.count));
+          }
+          return finalProduct;
         });
 
         let serviceList = this.serviceList.map(service => {
-          console.log(service);
-          let { id, salePrice, vatValue, assignedEmploymentId } = service;
+          // console.log(service);
+          let { id, salePrice, vatValue, assignedEmploymentId, name } = service;
           let serviceId = id;
           let vatPercentage = vatValue;
-          return { serviceId, salePrice, vatPercentage, assignedEmploymentId };
+          let finalService = { serviceId, salePrice, vatPercentage, assignedEmploymentId };
+          if (this.isInOfflineMode) {
+            finalService.serviceBlueprintName = name;
+          }
+          return finalService;
         });
 
         let data = {
           customerId, outletId, productList, serviceList, payment
         };
 
-        this.app.callAddSalesApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          cbfn(response);
-        });
+        // Remove after offline sales is working perfectly.
+        // this.app.callAddSalesApi(data, (err, response) => {
+        //   if (err) return;
+        //   if (response.hasError) return this.onApiError(response.error);
+        //   cbfn(response);
+        // });
+
+        if (this.isInOfflineMode) {
+          this._processAddSalesOffline(data, cbfn);
+        } else {
+          this._processAddSalesOnline(data, cbfn);
+        }
       }
 
       _resetSales() {
@@ -730,7 +812,7 @@
       }
 
       saveSaleTapped(e = null) {
-        this._processAddSales({ outletId: this.params.outlet, payment: this.payment }, ({ salesId }) => {
+        this._processAddSales(({ salesId }) => {
           let message = this.app.verses.pos.newSalesAdded;
           this.app.showToast(message, _ => {
             this._resetSales();
@@ -739,9 +821,60 @@
       }
 
       saveSaleAndPrintTapped(e = null) {
-        this._processAddSales({ outletId: this.params.outlet, payment: this.payment }, ({ salesId }) => {
+        this._processAddSales(({ salesId }) => {
           this._resetSales();
           return this.app.navigateTo(`/print-sales-receipt/sales:${salesId}/from:pos`);
+        });
+      }
+
+      toggleAllOfflineSalesTapped(e = null) {
+        this.shouldExpandOfflineSalesList = !this.shouldExpandOfflineSalesList;
+      }
+
+      printOfflineSalesTapped(e) {
+        return this.app.navigateTo(`/print-sales-receipt/sales:${e.model.unsyncedSales.id}/from:pos`);
+      }
+
+      discardOfflineSalesTapped(e) {
+        let salesId = e.model.unsyncedSales.id;
+        this.app.db.update('offline-data', (({ which }) => which === 'only'), offlineData => {
+          let index = offlineData.data.unsyncedSalesList.findIndex(sales => sales.id === salesId);
+          if (index > -1) {
+            offlineData.data.unsyncedSalesList.splice(index, 1);
+          }
+          return offlineData;
+        });
+      }
+
+      _submitAnOfflineSales(unsyncedSales, cbfn) {
+        unsyncedSales = JSON.parse(JSON.stringify(unsyncedSales));
+
+        // Remove temporarily added properties (that were required for offline preview)
+        unsyncedSales.productList.forEach(product => {
+          delete product.productBlueprintName;
+          delete product.returnedProductCount;
+        });
+        unsyncedSales.serviceList.forEach(service => {
+          delete service.serviceBlueprintName;
+        });
+        delete unsyncedSales.id;
+        delete unsyncedSales.createdDatetimeStamp;
+
+        this.app.callAddSalesApi(unsyncedSales, (err, response) => {
+          if (err) return;
+          if (response.hasError) {
+            // should allow discard? should auto delete?
+            return this.onApiError(response.error);
+          }
+          cbfn(response);
+        });
+      }
+
+      submitOfflineSalesTapped(e) {
+        let unsyncedSales = this.offlineData.data.unsyncedSalesList[e.model.index];
+
+        this._submitAnOfflineSales(unsyncedSales, (res) => {
+          console.log("AAAA")
         });
       }
 
@@ -776,6 +909,7 @@
 
       onOfflineDataChange() {
         this.isInOfflineMode = this.app.isInOfflineMode;
+        this.offlineData = this.app.offlineData;
       }
 
     }
