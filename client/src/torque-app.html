@@ -927,6 +927,18 @@
           return cbfn(false);
         }
 
+        const _backgroundSyncGetUserDisplayInformation = (cbfn) => {
+          let data = {
+            organizationId: this.organization.id,
+            userId: this.user.id
+          };
+          this.app.callGetUserDisplayInformationApi(data, (err, response) => {
+            if (err) return;
+            if (response.hasError) return this.onApiError(response.error);
+            return cbfn(response);
+          });
+        }
+
         const _backgroundSyncGetOutlet = (outletId, cbfn) => {
           let data = { outletId };
           this.app.callGetOutletApi(data, (err, response) => {
@@ -958,18 +970,21 @@
           let inventoryId = getOutletResponse.defaultInventory.id;
           _backgroundSyncGetAggregatedInventoryDetailsApi(inventoryId, (getAggregatedInventoryDetailsResponse) => {
             _backgroundSyncGetActiveServiceListApi(defaultOutletId, (getActiveServiceListResponse) => {
-              // console.log(getOutletResponse);
-              // console.log(getAggregatedInventoryDetailsResponse);
-              // console.log(getActiveServiceListResponse);
+              _backgroundSyncGetUserDisplayInformation((getUserDisplayInformationResponse) => {
+                // console.log(getOutletResponse);
+                // console.log(getAggregatedInventoryDetailsResponse);
+                // console.log(getActiveServiceListResponse);
 
-              this.db.update('offline-data', (({ which }) => which === 'only'), data => {
-                data.lastFetchedDatetimeStamp = Date.now();
-                data.cache.getOutlet = getOutletResponse;
-                data.cache.getAggregatedInventoryDetails = getAggregatedInventoryDetailsResponse;
-                data.cache.getActiveServiceList = getActiveServiceListResponse;
-                return data;
+                this.db.update('offline-data', (({ which }) => which === 'only'), data => {
+                  data.lastFetchedDatetimeStamp = Date.now();
+                  data.cache.getOutlet = getOutletResponse;
+                  data.cache.getAggregatedInventoryDetails = getAggregatedInventoryDetailsResponse;
+                  data.cache.getActiveServiceList = getActiveServiceListResponse;
+                  data.cache.getUserDisplayInformation = getUserDisplayInformationResponse;
+                  return data;
+                });
+                return cbfn(true);
               });
-              return cbfn(true);
             });
           });
         });
