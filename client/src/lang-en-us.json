@@ -4,7 +4,8 @@
     "networkErrorGoOffline": "Offline mode",
     "networkErrorTGotIt": "Got It",
     "networkErrorTitle": "Network error",
-    "networkErrorContent": "Make sure you are connected to the internet and try again"
+    "networkErrorContent": "Make sure you are connected to the internet and try again",
+    "unableToGoOffline": "Unable to enable offline mode. Next time you are online, make sure to select an outlet for offline mode."
   },
   "general": {
     "or": "or",
@@ -89,7 +90,8 @@
     "gymModule": "Gym Module",
     "retail": "Retail",
     "service": "Service",
-    "both": "Both"
+    "both": "Both",
+    "print": "Print"
   },
   "login": {
     "forgotPassword": "Forgot your Password?",
@@ -197,9 +199,7 @@
   "organization": {
     "addOrganizationTitle": "Add Organization",
     "isNotOneOutletOrg": "This organization has more than one outlets.",
-
     "industryCategory": "Industry Category of Organization",
-
     "nameOfYourOrganization": "Name of your Organization",
     "pleaseEnterAValidName": "Enter a valid name.",
     "emailInput": "Your email address (Optional)",
@@ -251,14 +251,11 @@
     "noOutletFound": "No Outlet has been created in your Organization.",
     "manageOutletServicesTitle": "Manage Services",
     "manageOutletServices": "Manage Services provided in this Outlet",
-
     "categoryCodeDropdown": "Outlet Category",
-
     "selectLocationButton": "Set Location on Map",
     "locationInvalidDialog": "Please select a valid location on the map.",
     "showingLocationOnMap": "Showing location on Map below",
     "noLocationOnMap": "Location has not been set on Map yet."
-
   },
   "selectGeolocation": {
     "selectGeolocationTitle": "Set Map Location",
@@ -440,11 +437,9 @@
     "customerNameInputError": "Enter a valid name",
     "customerNumberInput": "Contact Number",
     "customerNumberInputError": "Enter a valid phone number",
-
     "emailAddressInput": "Email Address (Optional)",
     "emailAddressInputError": "Enter valid email address",
     "addressInput": "Physical Address (Optional)",
-
     "openingBalance": "Opening Balance",
     "openingBalanceError": "Enter an amount as opening balance",
     "createCustomer": "Create Customer",
@@ -655,7 +650,12 @@
     "thisWillBeACreditSale": "This will be a Credit Sale. Additional Payment can be collected later from View Sales Page.",
     "selectService": "Select Service",
     "serviceRequiresCustomerSelection": "This Service requires a customer selection",
-
+    "offlineModeWarning": "You are currently operating in offline mode. Certain features might not be available.",
+    "disallowCreditSale": "Credit sales is not allowed in offline mode.",
+    "goOnline": "Go Online",
+    "offlineSaleCountMessagePart1": "You have ",
+    "offlineSaleCountMessagePart2": " offline sales. Please submit them when you have internet connection.",
+    "submitOfflineSales": "Sync",
     "assignedEmployee": "assigned",
     "assignEmployee": "assign"
   },
@@ -726,7 +726,7 @@
     "useWebsockets": "Use Websockets",
     "useWebsocketsDetail": "If checked, the app will try to use websockets.",
     "backgroundSync": "Select Outlet for Offline Mode",
-    "backgroundSyncDetail": "If selected, the app will be able to enable 'Offline Mode' for current organization.",
+    "backgroundSyncDetail": "If selected, the app will be able to enable 'Offline Mode' for current organization. Please note that your overall data usage might increase if you enable this feature.",
     "monetaryUnit": "Monetary Unit",
     "monetaryUnitDetail": "Note: Changing the monetary unit does not affect your sales.",
     "moreOptionsForthcoming": "More options are forthcoming.",
@@ -843,18 +843,14 @@
   "serviceMembership": {
     "serviceMembershipTitle": "Service Memberships",
     "noServiceMembershipFound": "No Service Membership Record Found.",
-
     "noCustomerSelected": "No customer selected",
     "noOutletSelected": "No outlet selected",
     "noServiceBlueprintSelected": "No service blueprint selected",
-
     "change": "Change",
     "remove": "Remove",
-
     "serviceMembershipNumber": "Membership Number",
     "expiringDatetime": "Expiry",
     "customer": "Customer",
-
     "serviceBlueprint": "Service",
     "assignedEmployee": "Assigned"
   },

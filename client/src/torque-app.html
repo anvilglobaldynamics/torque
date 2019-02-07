@@ -782,8 +782,7 @@
 
       toggleOfflineMode() {
         if (!this.offlineData || !this.offlineData.lastFetchedDatetimeStamp) {
-          // TODO: Translate
-          this.showAlertMessage("Sorry!", "Unable to enable offline mode. Next time you are online, make sure to select an outlet for offline mode.");
+          this.showAlertMessage(this.verses.general.sorry, this.verses.root.unableToGoOffline);
           return;
         }
         let date = (this.isInOfflineMode ? null : Date.now())

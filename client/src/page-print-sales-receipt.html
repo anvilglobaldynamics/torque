@@ -428,8 +428,7 @@
         let sales = offlineData.data.unsyncedSalesList.find(sales => sales.id === salesId);
         // console.log({ sales });
         if (!sales) {
-          // TODO: Translate
-          this.app.showModalDialog("Sorry!", "Something went wrong.");
+          this.app.showModalDialog(this.app.verses.general.sorry, this.app.verses.general.somethingWentWrong);
           return;
         }
         sales.payment.totalPaidAmount = parseFloat(sales.payment.paidAmount);
@@ -445,7 +444,7 @@
         cbfn();
       }
 
-      _processSales(cbfn) {        
+      _processSales(cbfn) {
         if ((String(this.params.sales).indexOf('OFFLINE') > -1)) {
           this._processSalesOffline(cbfn);
         } else {

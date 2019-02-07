@@ -107,10 +107,9 @@
 
       <template is="dom-if" if="[[isInOfflineMode]]">
         <div class="card warning horizontal layout center">
-          <!-- TODO: Translate -->
-          <div class="flex">You are currently operating in offline mode. Certain features might not be available.</div>
+          <div class="flex">[[verses.pos.offlineModeWarning]]</div>
           <paper-button raised class="primary btn btn-default slim" on-tap="goOnlineTapped">
-            Go Online
+            [[verses.pos.goOnline]]
           </paper-button>
         </div>
       </template>
@@ -118,14 +117,13 @@
       <template is="dom-if" if="[[offlineData.data.unsyncedSalesList.length]]">
         <div class="card vertical layout">
 
-          <!-- TODO: Translate -->
           <div class="horizontal layout center">
-            <div class="flex">You have [[offlineData.data.unsyncedSalesList.length]] offline sales. Please submit them when you have internet connection.</div>
+            <div class="flex">[[verses.pos.offlineSaleCountMessagePart1]] [[offlineData.data.unsyncedSalesList.length]] [[verses.pos.offlineSaleCountMessagePart2]]</div>
             <paper-button raised class="btn btn-default neutral" on-tap="toggleAllOfflineSalesTapped">
-              View
+              [[verses.general.view]]
             </paper-button>
             <paper-button raised class="primary btn btn-default" on-tap="submitAllOfflineSalesTapped">
-              Sync
+              [[verses.pos.submitOfflineSales]]
             </paper-button>
           </div>
 
@@ -138,10 +136,10 @@
                     Created: [[$mkDate(unsyncedSales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]
                   </div>
                   <paper-button raised class="btn btn-default slim" on-tap="printOfflineSalesTapped">
-                    Print
+                    [[verses.general.print]]
                   </paper-button>
                   <paper-button raised class="btn btn-default neutral slim" on-tap="discardOfflineSalesTapped">
-                    Discard
+                    [[verses.general.discard]]
                   </paper-button>
                 </div>
               </template>
@@ -696,8 +694,8 @@
       }
 
       _processAddSalesOffline(salesData, cbfn) {
-        if (salesData.payment.totalBilled>salesData.payment.paidAmount){
-          this.app.showModalDialog("Sorry!", "Credit sales is not allowed in offline mode.");
+        if (salesData.payment.totalBilled > salesData.payment.paidAmount) {
+          this.app.showModalDialog(this.verses.general.sorry, this.verses.pos.disallowCreditSale);
           return;
         }
         // console.log("salesData", salesData);

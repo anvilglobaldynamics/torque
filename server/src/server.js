@@ -232,14 +232,16 @@ class Server {
 
   registerPostApi(path, ApiClass) {
     this._expressApp.post(path, jsonParser, (req, res) => {
-      this.logger.info('POST', req.url);
-      if (ApiClass.prototype instanceof LegacyApi) {
-        let api = new ApiClass(this, this.database, this.legacyDatabase, this.logger, req, res, null, 'post');
-        api._prehandlePostOrWsApi(req.body);
-      } else {
-        let api = new ApiClass(this, this.database, this.logger, req, res, null, 'post');
-        api._prehandle(req.body);
-      }
+      setTimeout(() => {
+        this.logger.info('POST', req.url);
+        if (ApiClass.prototype instanceof LegacyApi) {
+          let api = new ApiClass(this, this.database, this.legacyDatabase, this.logger, req, res, null, 'post');
+          api._prehandlePostOrWsApi(req.body);
+        } else {
+          let api = new ApiClass(this, this.database, this.logger, req, res, null, 'post');
+          api._prehandle(req.body);
+        }
+      }, 500)
     });
     this._wsApiList.push({
       path,
