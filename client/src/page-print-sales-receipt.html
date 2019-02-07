@@ -432,6 +432,7 @@
           this.app.showModalDialog("Sorry!", "Something went wrong.");
           return;
         }
+        sales.payment.totalPaidAmount = parseFloat(sales.payment.paidAmount);
         sales.payment.dueAmount = this._calculateDue(sales);
         sales.payment.createdDatetimeStamp = sales.createdDatetimeStamp;
         sales.payment.paymentList = [sales.payment];
@@ -444,8 +445,8 @@
         cbfn();
       }
 
-      _processSales(cbfn) {
-        if (this.isInOfflineMode) {
+      _processSales(cbfn) {        
+        if ((String(this.params.sales).indexOf('OFFLINE') > -1)) {
           this._processSalesOffline(cbfn);
         } else {
           this._processSalesOnline(cbfn);
