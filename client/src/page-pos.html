@@ -117,14 +117,17 @@
       <template is="dom-if" if="[[offlineData.data.unsyncedSalesList.length]]">
         <div class="card vertical layout">
 
-          <div class="horizontal layout center">
-            <div class="flex">[[verses.pos.offlineSaleCountMessagePart1]] [[offlineData.data.unsyncedSalesList.length]] [[verses.pos.offlineSaleCountMessagePart2]]</div>
-            <paper-button raised class="btn btn-default neutral" on-tap="toggleAllOfflineSalesTapped">
-              [[verses.general.view]]
-            </paper-button>
-            <paper-button raised class="primary btn btn-default" on-tap="submitAllOfflineSalesTapped">
-              [[verses.pos.submitOfflineSales]]
-            </paper-button>
+          <div class="vertical layout">
+            <div class="flex">[[offlineData.data.unsyncedSalesList.length]] [[verses.pos.offlineSaleCountMessage]]</div>
+            <div class="horizontal layout">
+              <paper-button raised class="secondary btn" style="width: 100%;" on-tap="toggleAllOfflineSalesTapped">
+                [[verses.pos.showHideButton]]
+              </paper-button>
+
+              <paper-button raised class="primary btn" style="width: 100%;" on-tap="submitAllOfflineSalesTapped">
+                [[verses.pos.submitOfflineSales]]
+              </paper-button>
+            </div>
           </div>
 
           <template is="dom-if" if="[[shouldExpandOfflineSalesList]]">
@@ -133,14 +136,18 @@
                 <div class="horizontal layout item center">
                   <div class="flex">
                     <b>[[unsyncedSales.id]]</b> <br>
-                    Created: [[$mkDate(unsyncedSales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]
+                    [[verses.pos.createdOfflineSaleDatetime]]: [[$mkDate(unsyncedSales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
                   </div>
-                  <paper-button raised class="btn btn-default slim" on-tap="printOfflineSalesTapped">
-                    [[verses.general.print]]
-                  </paper-button>
-                  <paper-button raised class="btn btn-default neutral slim" on-tap="discardOfflineSalesTapped">
-                    [[verses.general.discard]]
-                  </paper-button>
+
+                  <div class="vertical layout">
+                    <paper-button raised class="secondary btn btn-default slim" on-tap="printOfflineSalesTapped">
+                      [[verses.general.print]]
+                    </paper-button>
+                    <paper-button raised class="danger btn btn-default slim" style="margin-top: 6px;" on-tap="discardOfflineSalesTapped">
+                      [[verses.general.discard]]
+                    </paper-button>
+                  </div>
+
                 </div>
               </template>
             </div>

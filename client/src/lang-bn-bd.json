@@ -655,9 +655,10 @@
     "offlineModeWarning": "আপনি বর্তমানে অফলাইন মোডে আছেন। লিপির ক্ষমতা এখন সীমাবদ্ধ।",
     "disallowCreditSale": "অফলাইন মোডে ক্রেডিট সেল করার অনুমতি নেই।",
     "goOnline": "অফলাইন মোড",
-    "submitOfflineSales": "অনলাইনে পাঠান",
-    "offlineSaleCountMessagePart1": "আপনার ",
-    "offlineSaleCountMessagePart2": " টি অফলাইন সেল আছে। ইন্টারনেট সংযোগ পেলে এই সেলগুলি অনলাইনে পাঠান।",
+    "submitOfflineSales": "দাখিল করুন",
+    "offlineSaleCountMessage": " টি অফলাইন বিক্রি আছে। ইন্টারনেট সংযোগ পেলে এই বিক্রি গুলো দাখিল করুন।",
+    "showHideButton": "দেখুন",
+    "createdOfflineSaleDatetime": "তৈরি",
     "assignedEmployee": "দায়িত্ব দেন",
     "assignEmployee": "দায়িত্ব দেয়া"
   },

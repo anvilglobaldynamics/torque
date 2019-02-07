@@ -653,9 +653,10 @@
     "offlineModeWarning": "You are currently in 'offline mode'. Certain features are not available now.",
     "disallowCreditSale": "Credit sales is not allowed in offline mode.",
     "goOnline": "Go Online",
-    "offlineSaleCountMessagePart1": "You have ",
-    "offlineSaleCountMessagePart2": " offline sales. Please submit them when you have internet connection.",
+    "offlineSaleCountMessage": " offline sales. Please sync when you have internet connection.",
+    "showHideButton": "Show/Hide",
     "submitOfflineSales": "Sync",
+    "createdOfflineSaleDatetime": "Created",
     "assignedEmployee": "assigned",
     "assignEmployee": "assign"
   },
