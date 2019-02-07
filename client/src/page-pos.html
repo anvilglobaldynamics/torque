@@ -97,7 +97,7 @@
       }
 
       .card.warning {
-        background: #FFD54F;
+        background: #FFF59D;
       }
     </style>
 
@@ -106,9 +106,9 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <template is="dom-if" if="[[isInOfflineMode]]">
-        <div class="card warning horizontal layout center">
+        <div class="card warning vertical layout">
           <div class="flex">[[verses.pos.offlineModeWarning]]</div>
-          <paper-button raised class="primary btn btn-default slim" on-tap="goOnlineTapped">
+          <paper-button raised class="primary btn" on-tap="goOnlineTapped">
             [[verses.pos.goOnline]]
           </paper-button>
         </div>

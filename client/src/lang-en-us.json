@@ -650,7 +650,7 @@
     "thisWillBeACreditSale": "This will be a Credit Sale. Additional Payment can be collected later from View Sales Page.",
     "selectService": "Select Service",
     "serviceRequiresCustomerSelection": "This Service requires a customer selection",
-    "offlineModeWarning": "You are currently operating in offline mode. Certain features might not be available.",
+    "offlineModeWarning": "You are currently in 'offline mode'. Certain features are not available now.",
     "disallowCreditSale": "Credit sales is not allowed in offline mode.",
     "goOnline": "Go Online",
     "offlineSaleCountMessagePart1": "You have ",
