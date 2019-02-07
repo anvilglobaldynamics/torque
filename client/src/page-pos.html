@@ -106,9 +106,12 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <template is="dom-if" if="[[isInOfflineMode]]">
-        <div class="card warning vertical layout">
+        <div class="card warning horizontal layout center">
           <!-- TODO: Translate -->
-          You are currently operating in offline mode. Certain features might not be available.
+          <div class="flex">You are currently operating in offline mode. Certain features might not be available.</div>
+          <paper-button raised class="primary btn btn-default slim" on-tap="goOnlineTapped">
+            Go Online
+          </paper-button>
         </div>
       </template>
 
@@ -134,10 +137,10 @@
                     <b>[[unsyncedSales.id]]</b> <br>
                     Created: [[$mkDate(unsyncedSales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]
                   </div>
-                  <paper-button raised class="btn btn-default" on-tap="printOfflineSalesTapped">
+                  <paper-button raised class="btn btn-default slim" on-tap="printOfflineSalesTapped">
                     Print
                   </paper-button>
-                  <paper-button raised class="btn btn-default neutral" on-tap="discardOfflineSalesTapped">
+                  <paper-button raised class="btn btn-default neutral slim" on-tap="discardOfflineSalesTapped">
                     Discard
                   </paper-button>
                 </div>
@@ -693,7 +696,11 @@
       }
 
       _processAddSalesOffline(salesData, cbfn) {
-        console.log("salesData", salesData);
+        if (salesData.payment.totalBilled>salesData.payment.paidAmount){
+          this.app.showModalDialog("Sorry!", "Credit sales is not allowed in offline mode.");
+          return;
+        }
+        // console.log("salesData", salesData);
         this.app.db.update('offline-data', (({ which }) => which === 'only'), offlineData => {
           if (!offlineData.data.unsyncedSalesIdSeed) offlineData.data.unsyncedSalesIdSeed = 0;
           offlineData.data.unsyncedSalesIdSeed += 1;
@@ -742,13 +749,6 @@
         let data = {
           customerId, outletId, productList, serviceList, payment
         };
-
-        // Remove after offline sales is working perfectly.
-        // this.app.callAddSalesApi(data, (err, response) => {
-        //   if (err) return;
-        //   if (response.hasError) return this.onApiError(response.error);
-        //   cbfn(response);
-        // });
 
         if (this.isInOfflineMode) {
           this._processAddSalesOffline(data, cbfn);
@@ -871,6 +871,12 @@
           }
           cbfn(null, null, response);
         });
+      }
+
+      goOnlineTapped() {
+        if (this.isInOfflineMode) {
+          this.app.toggleOfflineMode();
+        }
       }
 
       submitAllOfflineSalesTapped(e) {

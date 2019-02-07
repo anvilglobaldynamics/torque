@@ -380,7 +380,9 @@
             <div class="dialog-text">[[verses.root.networkErrorContent]]</div>
           </paper-dialog-scrollable>
           <div class="buttons">
-            <paper-button on-click="networkErrorGoToOfflineModeTapped">[[verses.root.networkErrorGoOffline]]</paper-button>
+            <template is="dom-if" if="[[!isInOfflineMode]]">
+              <paper-button on-click="networkErrorGoToOfflineModeTapped">[[verses.root.networkErrorGoOffline]]</paper-button>
+            </template>
             <paper-button on-click="networkErrorGotItTapped" autofocus>[[verses.root.networkErrorTGotIt]]</paper-button>
           </div>
         </paper-dialog>
@@ -413,7 +415,7 @@
 
   <script>
     let localDocument = document.currentScript.ownerDocument;
-    const backgroundSyncThreshold = 10 * 1000;
+    const backgroundSyncThreshold = 20 * 1000;
 
     class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior, TorqueLanguageBehavior, TorqueCommonBehavior) {
 
@@ -637,6 +639,7 @@
               getOutlet: null,
               getAggregatedInventoryDetails: null,
               getActiveServiceList: null,
+              getUserDisplayInformation: null
             },
             data: {
               unsyncedSalesIdSeed: 0,
@@ -662,13 +665,14 @@
 
       networkErrorGoToOfflineModeTapped() {
         this.$['network-dialog'].close();
-        alert("Should take user to offline mode!");
+        this.toggleOfflineMode();
       }
 
       _intializeServiceManager() {
         this.serviceManager.on('service-change', (event) => {
           let count = event.detail.activeCount - window.torqueCache.ignorableApiCallCount;
-          this.activeServiceCount = count;
+          // console.log('activeServiceCount', count);
+          this.activeServiceCount = Math.max(count, 0);
         });
         this.serviceManager.on('error', (event) => {
           let shouldPromptForOfflineMode = true;
@@ -718,7 +722,7 @@
       // ====================== navigation =============================
 
       _pageNameChanged() {
-        console.log('_pageNameChanged(): pre-route this.pageName =', this.pageName);
+        // console.log('_pageNameChanged(): pre-route this.pageName =', this.pageName);
         if (this.isInOfflineMode) {
           const allowedPageNameList = [
             'pos',
@@ -867,13 +871,13 @@
 
       onOfflineDataChange() {
         this.offlineData = this.loadOfflineData();
-        console.log('onOfflineDataChange', this.offlineData)
+        // console.log('onOfflineDataChange', this.offlineData);
         if (this.offlineData.offlineModeInitiatedDatetimeStamp) {
           this.isInOfflineMode = true;
         } else {
           this.isInOfflineMode = false;
         }
-        console.log('this.isInOfflineMode', this.isInOfflineMode)
+        // console.log('this.isInOfflineMode', this.isInOfflineMode)
         this._proxyToActivePage('onOfflineDataChange', this.offlineData);
         // model = {
         //   which: 'only',
@@ -883,8 +887,10 @@
         //     getOutlet: null,
         //     getAggregatedInventoryDetails: null,
         //     getActiveServiceList: null,
+        //     getUserDisplayInformation: null
         //   },
         //   data: {
+        //     unsyncedSalesIdSeed: 0
         //     unsyncedSalesList: []
         //   }
         // }
@@ -942,7 +948,9 @@
             organizationId: this.organization.id,
             userId: this.user.id
           };
+          window.torqueCache.ignorableApiCallCount += 1;
           this.app.callGetUserDisplayInformationApi(data, (err, response) => {
+            window.torqueCache.ignorableApiCallCount -= 1;
             if (err) return;
             if (response.hasError) return this.onApiError(response.error);
             return cbfn(response);
@@ -951,7 +959,9 @@
 
         const _backgroundSyncGetOutlet = (outletId, cbfn) => {
           let data = { outletId };
+          window.torqueCache.ignorableApiCallCount += 1;
           this.app.callGetOutletApi(data, (err, response) => {
+            window.torqueCache.ignorableApiCallCount -= 1;
             if (err) return;
             if (response.hasError) return onApiError(response.error);
             return cbfn(response);
@@ -960,7 +970,9 @@
 
         const _backgroundSyncGetAggregatedInventoryDetailsApi = (inventoryId, cbfn) => {
           let data = { inventoryId };
+          window.torqueCache.ignorableApiCallCount += 1;
           this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
+            window.torqueCache.ignorableApiCallCount -= 1;
             if (err) return;
             if (response.hasError) return onApiError(response.error);
             return cbfn(response);
@@ -969,7 +981,9 @@
 
         const _backgroundSyncGetActiveServiceListApi = (outletId, cbfn) => {
           let data = { outletId };
+          window.torqueCache.ignorableApiCallCount += 1;
           this.app.callGetActiveServiceListApi(data, (err, response) => {
+            window.torqueCache.ignorableApiCallCount -= 1;
             if (err) return;
             if (response.hasError) return onApiError(response.error);
             return cbfn(response);
@@ -981,9 +995,6 @@
           _backgroundSyncGetAggregatedInventoryDetailsApi(inventoryId, (getAggregatedInventoryDetailsResponse) => {
             _backgroundSyncGetActiveServiceListApi(defaultOutletId, (getActiveServiceListResponse) => {
               _backgroundSyncGetUserDisplayInformation((getUserDisplayInformationResponse) => {
-                // console.log(getOutletResponse);
-                // console.log(getAggregatedInventoryDetailsResponse);
-                // console.log(getActiveServiceListResponse);
 
                 this.db.update('offline-data', (({ which }) => which === 'only'), data => {
                   data.lastFetchedDatetimeStamp = Date.now();
@@ -994,6 +1005,7 @@
                   return data;
                 });
                 return cbfn(true);
+
               });
             });
           });
@@ -1003,15 +1015,9 @@
 
       _initiateBackgroundSync() {
         this._processBackgroundSync((wasDone) => {
-          console.log("_processBackgroundSync() result:", wasDone);
-          // console.log("Subs")
+          // console.log("_processBackgroundSync() result:", wasDone);
           window.setTimeout(() => this._initiateBackgroundSync(), backgroundSyncThreshold);
         });
-      }
-
-      $shouldShowBackgroundSyncInformation(shouldAttempBackgroundSync, settings) {
-        if (!shouldAttempBackgroundSync) return false;
-        console.log(settings)
       }
 
       // ====================== utilities =============================
