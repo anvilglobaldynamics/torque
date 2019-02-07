@@ -194,8 +194,8 @@
     "employees": "কর্মচারী",
     "outlets": "দোকান",
     "warehouses": "গুদাম",
-    "promptForDefaultOutlet": "লিপি অফলিনে ব্যবহার করতে চাইলে অফলাইন মোডের জন্য দোকান সিলেক্ট করুন",
-    "promptForDefaultOutletGoButton": "দোকান সিলেক্ট করুন",
+    "promptForDefaultOutlet": "অফলাইন কাজ; লিপি অফলাইনে ব্যবহার করতে চাইলে অফলাইন মোডের জন্য দোকান বেছে নিন।",
+    "promptForDefaultOutletGoButton": "দোকান বেছে নিন",
     "viewActivationHistory": "সক্রিয়করণ ইতিহাস দেখুন"
   },
   "organization": {

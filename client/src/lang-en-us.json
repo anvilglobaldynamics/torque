@@ -192,8 +192,8 @@
     "employees": "Employees",
     "outlets": "Outlets",
     "warehouses": "Warehouses",
-    "promptForDefaultOutlet": "You have not selected an outlet for offline mode. Selecting an outlet for offline mode will enable you to carry on selling during network outtages.",
-    "promptForDefaultOutletGoButton": "Set an outlet",
+    "promptForDefaultOutlet": "Offline Mode; You can select an Outlet If you want to continue using Lipi during network outage.",
+    "promptForDefaultOutletGoButton": "Select an outlet",
     "viewActivationHistory": "View Activation History"
   },
   "organization": {
