@@ -148,7 +148,7 @@
 
       <div class="report">
         <div class="header vertical layout">
-          <div class="name">[[verses.sales.receiptTitle]] #[[sales.id]]</div>
+          <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.id]]</div>
           <div class="horizontal layout">
             <div>
               <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
@@ -169,12 +169,12 @@
         <div class="body">
 
           <template is="dom-if" if="{{sales.isDiscarded}}">
-            <div><b>[[verses.sales.warnDiscared]]</b></div>
+            <div><b>[[verses.salesReceipt.warnDiscared]]</b></div>
           </template>
 
           <div class="horizontal layout customer-area">
             <template is="dom-if" if="{{sales.customerId}}">
-              <div><b>[[verses.customer.customerName]]:</b> [[customer.fullName]]</div>
+              <div><b>[[verses.salesReceipt.customerName]]:</b> [[customer.fullName]]</div>
               <div class="flex"></div>
               <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
             </template>
@@ -195,7 +195,7 @@
                 <td>
                   [[product.productBlueprintName]]
                   <template is="dom-if" if="[[product.returnedProductCount]]">
-                    <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
+                    <div>[[verses.salesReceipt.returnedCount]]: [[product.returnedProductCount]]</div>
                   </template>
                 </td>
                 <td class="quantitive-cell">[[product.count]] [[product.unit]]</td>
@@ -217,45 +217,45 @@
 
             <tr>
               <th rowspan="7" colspan="2" style="border:none;"></th>
-              <th>[[verses.pos.totalAmount]]</th>
+              <th>[[verses.salesReceipt.totalAmount]]</th>
               <th class="monetary-cell">[[$round(sales.payment.totalAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
-              <th>[[verses.pos.vatAmount]]</th>
+              <th>[[verses.salesReceipt.vatAmount]]</th>
               <th class="monetary-cell">[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
-              <th>[[verses.pos.discountedAmount]]</th>
+              <th>[[verses.salesReceipt.discountedAmount]]</th>
               <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
-              <th>[[verses.pos.serviceChargeInput]]</th>
+              <th>[[verses.salesReceipt.serviceChargeInput]]</th>
               <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
-              <th>[[verses.pos.totalBilled]]</th>
+              <th>[[verses.salesReceipt.totalBilled]]</th>
               <th class="monetary-cell">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <tr>
-              <th>[[verses.sales.totalPaid]]</th>
+              <th>[[verses.salesReceipt.totalPaid]]</th>
               <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</th>
             </tr>
             <template is="dom-if" if="[[sales.payment.dueAmount]]">
               <tr>
-                <th>[[verses.additionalPayment.dueAmount]]</th>
+                <th>[[verses.salesReceipt.dueAmount]]</th>
                 <th class="monetary-cell">[[$round(sales.payment.dueAmount)]] [[app.settings.monetaryUnit]]</th>
               </tr>
             </template>
           </table>
 
-          <div class="section-header"><b>[[verses.sales.payment]]</b></div>
+          <div class="section-header"><b>[[verses.salesReceipt.payment]]</b></div>
 
           <table class="payment-table">
             <tr>
               <th>[[verses.general.date]]</th>
-              <th>[[verses.sales.paymentMethod]]</th>
-              <th>[[verses.pos.paidAmountInput]]</th>
-              <th>[[verses.sales.changeAmount]]</th>
+              <th>[[verses.salesReceipt.paymentMethod]]</th>
+              <th>[[verses.salesReceipt.paidAmountInput]]</th>
+              <th>[[verses.salesReceipt.changeAmount]]</th>
             </tr>
             <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
               <tr>
@@ -272,12 +272,12 @@
 
         <div class="footer horizontal layout">
           <div>
-            <div class="author-title">[[verses.sales.printedBy]]: [[app.user.fullName]]</div>
+            <div class="author-title">[[verses.salesReceipt.printedBy]]: [[app.user.fullName]]</div>
             <div>[[app.organization.employment.designation]] [[app.organization.employment.companyProvidedId]]</div>
           </div>
           <div class="flex"></div>
           <div class="footer-sold-by">
-            <div class="author-title">[[verses.sales.soldBy]]: [[soldByUser.fullName]]</div>
+            <div class="author-title">[[verses.salesReceipt.soldBy]]: [[soldByUser.fullName]]</div>
             <div>[[soldByUser.designation]] [[soldByUser.companyProvidedId]]</div>
             <!-- <div>[[soldByUser.phone]]</div> -->
           </div>
@@ -317,7 +317,7 @@
         this.app.shouldShowPrintButton = true;
         this.useLanguageServices();
         this.onOfflineDataChange();
-        this.app.pushPageTitle(this.verses.sales.receiptTitle);
+        this.app.pushPageTitle(this.verses.salesReceipt.receiptTitle);
         if (!this._ensureAccess()) return;
         if (!('sales' in this.params)) {
           let message = this.app.verses.general.pageCannotBeDisplayed;
