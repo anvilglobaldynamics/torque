@@ -53,7 +53,9 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
         paidAmount: Joi.number().max(999999999999999).required(),
         changeAmount: Joi.number().max(999999999999999).required(),
         shouldSaveChangeInAccount: Joi.boolean().required()
-      })
+      }),
+
+      wasOfflineSale: Joi.boolean().optional().default(false)
 
     });
   }

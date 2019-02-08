@@ -52,6 +52,7 @@ Joi.object().keys({
     )
   }),
 
+  wasOfflineSale: Joi.boolean().optional().default(false),
   isModified: Joi.boolean().required(),
   isDeleted: Joi.boolean().required(),
   isDiscarded: Joi.boolean().required()
