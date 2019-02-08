@@ -316,6 +316,7 @@
         this.app.currentPageIsModal = true;
         this.app.shouldShowPrintButton = true;
         this.useLanguageServices();
+        this.onOfflineDataChange();
         this.app.pushPageTitle(this.verses.sales.receiptTitle);
         if (!this._ensureAccess()) return;
         if (!('sales' in this.params)) {
@@ -351,10 +352,10 @@
           let then = Date.now();
           window.print();
           let now = Date.now();
-          if (now - then > threshold){
+          if (now - then > threshold) {
             window.history.back();
           }
-          
+
         }, 100);
       }
 
@@ -398,7 +399,7 @@
         });
       }
 
-      _processSales(cbfn) {
+      _processSalesOnline(cbfn) {
         this._fetchSales(({ sales }) => {
           sales.payment.dueAmount = this._calculateDue(sales);
           this.sales = sales;
@@ -417,6 +418,38 @@
             });
           });
         });
+      }
+
+      _processSalesOffline(cbfn) {
+        let offlineData = this.app.db.find('offline-data', (({ which }) => which === 'only'))[0];
+        // console.log({ offlineData });
+
+        let salesId = String(this.params.sales);
+        let sales = offlineData.data.unsyncedSalesList.find(sales => sales.id === salesId);
+        // console.log({ sales });
+        if (!sales) {
+          this.app.showModalDialog(this.app.verses.general.sorry, this.app.verses.general.somethingWentWrong);
+          return;
+        }
+        sales.payment.totalPaidAmount = parseFloat(sales.payment.paidAmount);
+        sales.payment.dueAmount = this._calculateDue(sales);
+        sales.payment.createdDatetimeStamp = sales.createdDatetimeStamp;
+        sales.payment.paymentList = [sales.payment];
+        this.sales = sales;
+
+        this.outlet = offlineData.cache.getOutlet.outlet;
+
+        this.soldByUser = offlineData.cache.getUserDisplayInformation.userDisplayInformation;
+
+        cbfn();
+      }
+
+      _processSales(cbfn) {
+        if ((String(this.params.sales).indexOf('OFFLINE') > -1)) {
+          this._processSalesOffline(cbfn);
+        } else {
+          this._processSalesOnline(cbfn);
+        }
       }
 
       _calculateDue(sales) {
@@ -453,7 +486,11 @@
         return [left, right].join('.');
       }
 
+      // region: offline sales =================================
 
+      onOfflineDataChange() {
+        this.isInOfflineMode = this.app.isInOfflineMode;
+      }
 
     }
 

@@ -6,6 +6,17 @@
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
@@ -55,6 +66,7 @@
       <!-- View Index 0 Start -->
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 0)]]">
+
         <div class="card vertical layout">
           <div class="option">
             <paper-checkbox on-change="settingsChanged" checked="{{shouldUseWebsockets}}">[[verses.settings.useWebsockets]]</paper-checkbox>
@@ -62,8 +74,26 @@
               [[verses.settings.useWebsocketsDetail]]
             </div>
           </div>
-
         </div>
+
+        <div class="card vertical layout">
+          <div class="option">
+            <div class="horizontal layout center">
+              <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.backgroundSync]]">
+                <paper-listbox slot="dropdown-content" on-iron-select="backgroundSyncDropdownSelected" selected="{{outletIndexForBackgroundSync}}">
+                  <template is="dom-repeat" items="[[outletList]]" as="outlet">
+                    <paper-item data-id="[[outlet.id]]">[[outlet.name]]</paper-item>
+                  </template>
+                </paper-listbox>
+              </paper-dropdown-menu>
+              <paper-icon-button hidden="[[$notSelected(outletIndexForBackgroundSync)]]" icon="clear" on-tap="cancelTapped"></paper-icon-button>
+            </div>
+            <div class="note">
+              [[verses.settings.backgroundSyncDetail]]
+            </div>
+          </div>
+        </div>
+
       </template>
 
       <!-- View Index 0 End -->
@@ -109,10 +139,27 @@
 
       static get properties() {
         return {
-          paperTabSelectedViewIndex: { type: Number, value: 0, observer: '_paperTabSelectedViewIndexChanged' },
-          shouldUseWebsockets: { type: Boolean, value: true },
-          monetaryUnit: { type: String, value: 'BDT' },
-          minimumProductQuantity: { type: Number, value: 5 }
+          paperTabSelectedViewIndex: {
+            type: Number,
+            value: 0,
+            observer: '_paperTabSelectedViewIndexChanged'
+          },
+          shouldUseWebsockets: {
+            type: Boolean,
+            value: true
+          },
+          monetaryUnit: {
+            type: String,
+            value: 'BDT'
+          },
+          minimumProductQuantity: {
+            type: Number,
+            value: 5
+          },
+          outletIndexForBackgroundSync: {
+            type: Number,
+            value: null
+          }
         };
       }
 
@@ -155,13 +202,14 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.paperTabSelectedViewIndex = 0;
-        let settings = this.app.db.find('settings', (({ which }) => which === 'only'))[0];
+        let settings = this._getNormalizedSettings();
         this.shouldUseWebsockets = settings.shouldUseWebsockets;
         this.monetaryUnit = settings.monetaryUnit;
         this.minimumProductQuantity = settings.minimumProductQuantity;
+        this.outletIndexForBackgroundSync = null;
         this._loadLastPaperTabSelectedViewIndex();
         if (!this._ensureAccess()) return;
-        this.delay(300, () => {
+        this._processOutletList(() => {
           this.isReady = true;
         });
       }
@@ -177,13 +225,63 @@
         });
       }
 
-      // region: general settinggs =================================
+      // region: general settings =================================
+
+      _fetchOutletList(cbfn) {
+        let data = {
+          organizationId: this.app.organization.id
+        };
+        this.app.callGetOutletListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.outletList);
+        });
+      }
+
+      _processOutletList(cbfn) {
+        this._fetchOutletList(newOutletList => {
+          this.outletList = newOutletList;
+
+          let settings = this._getNormalizedSettings();
+          let id = settings.backgroundSyncMetaMap[this.app.organization.id];
+          this.outletIndexForBackgroundSync = this.outletList.findIndex(outlet => outlet.id === id);
+          cbfn();
+        });
+      }
+
+      backgroundSyncDropdownSelected() {
+        window.setTimeout(() => {
+          this.settingsChanged();
+        }, 100);
+      }
+
+      cancelTapped() {
+        this.outletIndexForBackgroundSync = null;
+        window.setTimeout(() => {
+          this.settingsChanged();
+        }, 100);
+      }
 
       settingsChanged(e) {
-        this.app.db.update('settings', ({ which }) => which === 'only', (doc) => {
+        let settings = this._getNormalizedSettings();
+
+        let id = null;
+        try {
+          if (this.outletList.length > 0 && this.outletIndexForBackgroundSync !== null && (typeof this.outletIndexForBackgroundSync) !== 'undefined') {
+            id = this.outletList[this.outletIndexForBackgroundSync].id;
+          }
+        } catch (ex) {
+          'pass'
+        }
+        settings.backgroundSyncMetaMap[this.app.organization.id] = id;
+        this.app.db.update('settings', ({
+          which
+        }) => which === 'only', (doc) => {
           doc.shouldUseWebsockets = this.shouldUseWebsockets;
           doc.monetaryUnit = this.monetaryUnit;
           doc.minimumProductQuantity = this.minimumProductQuantity;
+          doc.backgroundSyncMetaMap = settings.backgroundSyncMetaMap;
           return doc
         });
       }

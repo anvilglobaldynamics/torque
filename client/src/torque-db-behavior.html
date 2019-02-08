@@ -32,6 +32,11 @@
         return db.find('organization', (({ which }) => which === 'only'))[0] || null;
       }
 
+      loadOfflineData() {
+        let db = this.db || this.app.db;
+        return db.find('offline-data', (({ which }) => which === 'only'))[0] || null;
+      }
+
       saveOrganization(organization) {
         let db = this.db || this.app.db;
         Object.assign(organization, {

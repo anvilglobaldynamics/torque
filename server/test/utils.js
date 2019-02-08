@@ -6,6 +6,9 @@ let genUrl = exports.genUrl = (path) => {
 }
 
 exports.callApi = (...args) => {
+  // if (args[0]==='api/add-sales'){
+  //   args[1].json.wasOfflineSale = true;
+  // }
   args[0] = genUrl(args[0]);
   request.post(...args);
 }

@@ -1328,6 +1328,7 @@ exports.validateSalesSchema = (doc) => {
       )
     }),
 
+    wasOfflineSale: Joi.boolean().required(),
     isModified: Joi.boolean().required(),
     isDeleted: Joi.boolean().required(),
     isDiscarded: Joi.boolean().required()
@@ -1483,6 +1484,7 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
       )
     }),
 
+    wasOfflineSale: Joi.boolean().required(),
     isModified: Joi.boolean().required(),
     isDeleted: Joi.boolean().required(),
     isDiscarded: Joi.boolean().required()

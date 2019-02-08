@@ -1,6 +1,11 @@
 {
   "root": {
-    "rightsReserved": "সর্বস্বত্ব সংরক্ষিত"
+    "rightsReserved": "সর্বস্বত্ব সংরক্ষিত",
+    "networkErrorGoOffline": "অফলাইন মোড",
+    "networkErrorTGotIt": "ঠিক আছে",
+    "networkErrorTitle": "ইন্টারনেট সংযোগ",
+    "networkErrorContent": "আপনার ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়ে আছে। ইন্টারনেটে সংযুক্ত হয়ে আবার চেষ্টা করুন। ",
+    "unableToGoOffline": "অফলাইন মোড সক্ষম করতে অক্ষম। পরের বার আপনি অনলাইনে থাকবেন, অফলাইন মোডের জন্য একটি আউটলেট নির্বাচন করতে ভুলবেন না।"
   },
   "general": {
     "or": "বা",
@@ -14,7 +19,7 @@
     "search": "খোঁজ",
     "select": "বাছাই",
     "selected": "বাছাইকৃত",
-    "deselect": "বাছাই সরান",
+    "deselect": "বাতিল",
     "address": "ঠিকানা",
     "comingSoon": "শীঘ্রই আসছে",
     "confirm": "নিশ্চিত করুন",
@@ -85,7 +90,8 @@
     "gymModule": "জিমনেসিয়াম মডিউল",
     "retail": "পণ্য বিক্রয়",
     "service": "সেবা বিক্রয়",
-    "both": "উভয়"
+    "both": "উভয়",
+    "print": "প্রিন্ট"
   },
   "login": {
     "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
@@ -188,6 +194,8 @@
     "employees": "কর্মচারী",
     "outlets": "দোকান",
     "warehouses": "গুদাম",
+    "promptForDefaultOutlet": "অফলাইন কাজ; লিপি অফলাইনে ব্যবহার করতে চাইলে দোকান বেছে নিন।",
+    "promptForDefaultOutletGoButton": "দোকান বেছে নিন",
     "viewActivationHistory": "সক্রিয়করণ ইতিহাস দেখুন"
   },
   "organization": {
@@ -245,9 +253,7 @@
     "noOutletFound": "আপনার সংস্থার কোনো দোকান তৈরি করা হয়নি।",
     "manageOutletServicesTitle": "সেবা পরিচালনা",
     "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন",
-
     "categoryCodeDropdown": "দোকানের ধরন",
-
     "selectLocationButton": "মানচিত্রে অবস্থান চিহ্নিত করুন",
     "locationInvalidDialog": "মানচিত্রে একটি সঠিক অবস্থান নির্বাচন করুন।",
     "showingLocationOnMap": "নীচের মানচিত্রে অবস্থান দেখানো হচ্ছে",
@@ -433,11 +439,9 @@
     "customerNameInputError": "একটি সঠিক নাম লিখুন",
     "customerNumberInput": "যোগাযোগের নম্বর",
     "customerNumberInputError": "একটি সঠিক ফোন নম্বর লিখুন",
-
     "emailAddressInput": "ইমেল (ঐচ্ছিক)",
     "emailAddressInputError": "বৈধ ইমেইল লিখুন",
     "addressInput": "ঠিকানা (ঐচ্ছিক)",
-
     "openingBalance": "প্রার্থমিক ব্যালেন্স",
     "openingBalanceError": "প্রার্থমিক ব্যালেন্স হিসাবে একটি পরিমান লিখুন",
     "createCustomer": "গ্রাহক যুক্ত করুন",
@@ -648,7 +652,13 @@
     "thisWillBeACreditSale": "এটি একটি বাকি বিক্রি হবে। অতিরিক্ত অর্থ গ্রহণ বিক্রয় পৃষ্ঠায় গিয়ে করতে পারবেন।",
     "selectService": "সেবা নির্বাচন করুন",
     "serviceRequiresCustomerSelection": "এই সেবাটি বিক্রির জন্য একজন ক্রেতা নির্বাচন প্রয়োজন",
-
+    "offlineModeWarning": "আপনি বর্তমানে অফলাইন মোডে আছেন। লিপির ক্ষমতা এখন সীমাবদ্ধ।",
+    "disallowCreditSale": "অফলাইন মোডে ক্রেডিট সেল করার অনুমতি নেই।",
+    "goOnline": "অনলাইন মোড",
+    "submitOfflineSales": "দাখিল করুন",
+    "offlineSaleCountMessage": " টি অফলাইন বিক্রি আছে। ইন্টারনেট সংযোগ পেলে এই বিক্রি গুলো দাখিল করুন।",
+    "showHideButton": "দেখুন",
+    "createdOfflineSaleDatetime": "তৈরি",
     "assignedEmployee": "দায়িত্ব দেন",
     "assignEmployee": "দায়িত্ব দেয়া"
   },
@@ -717,6 +727,8 @@
     "others": "অন্যান্য",
     "useWebsockets": "ওয়েবসকেট ব্যবহার করুন",
     "useWebsocketsDetail": "যদি চেক করা থাকে তবে অ্যাপ্লিকেশন ওয়েবসকেট ব্যবহার করার চেষ্টা করবে।",
+    "backgroundSync": "অফলাইনে ব্যবহার করতে দোকান বেছে নিন",
+    "backgroundSyncDetail": "লিপি 'অফলাইন মোড' এই সংস্থার জন্য চালু হয়ে যাবে। যদি আপনি অফলাইন মোড চালু করেন তবে আপনার ডেটা ব্যবহার বাড়বে।",
     "monetaryUnit": "মুদ্রা",
     "monetaryUnitDetail": "নোট: আর্থিক মুদ্রা পরিবর্তন আপনার বিক্রয় প্রভাবিত করে না।",
     "moreOptionsForthcoming": "আরো সেটিংস আসন্ন।",
@@ -833,18 +845,14 @@
   "serviceMembership": {
     "serviceMembershipTitle": "সেবার সদস্যপদ",
     "noServiceMembershipFound": "কোনো সেবা সদস্যপদের রেকর্ড পাওয়া যায় নি।",
-
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
     "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি",
     "noServiceBlueprintSelected": "কোন সেবার সদস্যপদ নির্বাচন করা হয়নি",
-
     "change": "পরিবর্তন",
     "remove": "সরান",
-
     "serviceMembershipNumber": "সদস্যপদ নং",
     "expiringDatetime": "মেয়াদ",
     "customer": "ক্রেতা",
-
     "serviceBlueprint": "সেবা",
     "assignedEmployee": "দায়িত্বে"
   },
@@ -852,7 +860,7 @@
     "serviceBlueprintNameOrPhoneInput": "নাম দিয়ে খুজুন",
     "serviceBlueprintNameOrPhoneInputError": "বৈধ নাম লিখুন",
     "serviceBlueprints": "সেবার সদস্যপদ"
-  },  
+  },
   "salesReceipt": {
     "goodsTitle": "পণ্য / সেবা"
   }

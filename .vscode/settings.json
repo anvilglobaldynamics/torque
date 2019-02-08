@@ -1,4 +1,4 @@
 {
-    "html.format.wrapLineLength": 0,
+    "html.format.wrapLineLength": 480,
     "editor.tabSize": 2
 }

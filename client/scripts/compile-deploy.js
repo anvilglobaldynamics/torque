@@ -24,17 +24,17 @@ const runPolymerBuild = () => {
 }
 
 const publishPwa = () => {
-  let res = shell.exec('gcloud app deploy pwa.yaml --quiet --project anvil-primary');
+  let res = shell.exec('gcloud app deploy app-pwa.yaml --quiet --project anvil-primary');
   if (res.code !== 0) {
-    shell.echo('Error: gcloud app deploy pwa.yaml --quiet --project anvil-primary failed');
+    shell.echo('Error: gcloud app deploy app-pwa.yaml --quiet --project anvil-primary failed');
     shell.exit(1);
   }
 }
 
 const publishMain = () => {
-  let res = shell.exec('gcloud app deploy app.yaml --quiet --project anvil-primary');
+  let res = shell.exec('gcloud app deploy app-fallback.yaml --quiet --project anvil-primary');
   if (res.code !== 0) {
-    shell.echo('Error: gcloud app deploy app.yaml --quiet --project anvil-primary failed');
+    shell.echo('Error: gcloud app deploy app-fallback.yaml --quiet --project anvil-primary failed');
     shell.exit(1);
   }
 }

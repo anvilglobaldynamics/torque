@@ -111,12 +111,26 @@
     }
   </script>
   <script>
-    if ('serviceWorker' in navigator && window.location.href.indexOf('pwa.') > -1) {
+    const tryInstallingServiceWorker = ('serviceWorker' in navigator) &&
+      (window.location.href.indexOf('fallback.lipi.live') === -1) &&
+      (!(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'));
+    if (tryInstallingServiceWorker) {
       window.addEventListener('load', function () {
         navigator.serviceWorker.register('service-worker.js', {
           scope: Polymer.rootPath,
         });
       });
+    } else {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+          //returns installed service workers
+          if (registrations.length) {
+            for (let registration of registrations) {
+              registration.unregister();
+            }
+          }
+        });
+      }
     }
   </script>
   <script>

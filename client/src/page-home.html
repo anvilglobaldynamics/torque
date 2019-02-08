@@ -109,6 +109,16 @@
         </template>
       </template>
 
+      <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
+        <div class="card">
+          [[verses.home.promptForDefaultOutlet]]
+          <br>
+          <div class="button-row">
+            <paper-button raised class="secondary" on-tap="selectDefaultOutletTapped">[[verses.home.promptForDefaultOutletGoButton]]</paper-button>
+          </div>
+        </div>
+      </template>
+
       <div class="vertical layout wrap">
         <div class="card flex info-panel">
 
@@ -242,6 +252,16 @@
       constructor() {
         super();
         this.confirmPageReady();
+      }
+
+      onFundamentalComponentChange(allComponentsReady) {
+        this.shouldPromptForDefaultOutlet = false;
+        if (!allComponentsReady) return;
+        let settings = this._getNormalizedSettings();
+        let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+        if (this.$notSelected(defaultOutletId)) {
+          this.shouldPromptForDefaultOutlet = true;
+        }
       }
 
       onNavigateIn() {
@@ -454,6 +474,10 @@
         if (moduleCode === 'MOD_PRODUCT') return this.app.verses.general.productModule;
         if (moduleCode === 'MOD_SERVICE') return this.app.verses.general.serviceModule;
         if (moduleCode === 'MOD_GYM') return this.app.verses.general.gymModule;
+      }
+
+      selectDefaultOutletTapped(e = null) {
+        return this.app.navigateTo('/settings');
       }
 
       // region: misc =================================

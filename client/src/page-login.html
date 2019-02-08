@@ -22,7 +22,7 @@
   <template>
     <style include="shared-styles">
 
-    .logo-learn-more-container {
+      .logo-learn-more-container {
       /* border: 1px solid red; */
     }
 
@@ -51,7 +51,7 @@
 
             <paper-input class="loginForm--emailOrPhone" value="{{loginForm.emailOrPhone}}" required minlength="3" error-message="[[verses.login.emailOrPhoneInputError]]" label="[[verses.login.emailOrPhoneInput]]"></paper-input>
             <paper-input class="loginForm--password" value="{{loginForm.password}}" required minlength="8" error-message="[[verses.login.passwordInputError]]" label="[[verses.login.passwordInput]]" type="password"></paper-input>
-            
+
             <div class="horizontal layout button-row end">
               <div class="link primary" style="margin: 5px;" on-tap="forgotPasswordTapped">[[verses.login.forgotPassword]]</div>
               <div class="flex"></div>
@@ -108,6 +108,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.useLanguageServices();
+        this.disableOfflineMode()
         this.delay(300, () => {
           this.isReady = true;
         });
@@ -189,6 +190,14 @@
       }
 
       // region: misc =================================
+
+      // region: offline sales =================================
+
+      disableOfflineMode() {
+        if (this.app.isInOfflineMode) {
+          this.app.toggleOfflineMode();
+        }
+      }
 
     }
 
