@@ -57,7 +57,7 @@ exports.SalesCollection = class extends Collection {
         )
       }),
 
-      wasOfflineSale: Joi.boolean().optional().default(false),
+      wasOfflineSale: Joi.boolean().required(),
       isModified: Joi.boolean().required(),
       isDeleted: Joi.boolean().required(),
       isDiscarded: Joi.boolean().required()

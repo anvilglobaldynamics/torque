@@ -209,7 +209,9 @@ describe('Sales Return', _ => {
                                   changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
                                   shouldSaveChangeInAccount: false,
                                   paymentMethod: 'cash'
-                                }
+                                },
+
+                                wasOfflineSale: false
                               }, (data) => {
                                 salesId = data.salesId;
                                 addSales({
@@ -239,7 +241,9 @@ describe('Sales Return', _ => {
                                     changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[1].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100)))),
                                     shouldSaveChangeInAccount: false,
                                     paymentMethod: 'cash'
-                                  }
+                                  },
+
+                                  wasOfflineSale: false
                                 }, (data) => {
                                   sales2Id = data.salesId;
                                   getSales({

@@ -46,7 +46,7 @@ method: `POST`
     shouldSaveChangeInAccount: Joi.boolean().required()
   }),
 
-  wasOfflineSale: Joi.boolean().optional().default(false)
+  wasOfflineSale: Joi.boolean().required()
 }
 ```
 
