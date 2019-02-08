@@ -686,6 +686,7 @@
       }
 
       _processAddSalesOnline(data, cbfn) {
+        data.wasOfflineSale = false;
         this.app.callAddSalesApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -860,6 +861,7 @@
         delete unsyncedSales.id;
         delete unsyncedSales.createdDatetimeStamp;
 
+        unsyncedSales.wasOfflineSale = true;
         this.app.callAddSalesApi(unsyncedSales, (err, response) => {
           if (err) return cbfn(err, null, null);
           if (response.hasError) {
