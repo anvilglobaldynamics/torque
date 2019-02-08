@@ -241,7 +241,7 @@ class Server {
           let api = new ApiClass(this, this.database, this.logger, req, res, null, 'post');
           api._prehandle(req.body);
         }
-      }, 500)
+      }, 1)
     });
     this._wsApiList.push({
       path,
