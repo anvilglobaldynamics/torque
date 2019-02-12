@@ -80,6 +80,7 @@
 <link rel="lazy-import" href="page-edit-customer.html">
 <link rel="lazy-import" href="page-withdraw-from-change-wallet-balance.html">
 <link rel="lazy-import" href="page-pos.html">
+<link rel="lazy-import" href="page-print-sales-receipt.html">
 <link rel="lazy-import" href="page-report-sales.html">
 <link rel="lazy-import" href="page-report-inventories.html">
 <link rel="lazy-import" href="page-report-select-inventories.html">
@@ -185,8 +186,25 @@
         margin-top: 4px;
       }
 
+      .top-nav-spinner-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.438);
+        z-index: 9999999;
+      }
+
       .top-nav-spinner {
-        --paper-spinner-color: white;
+        width: 120px;
+        height: 120px;
+        position: fixed;
+        top: calc(50vh - 60px);
+        left: calc(50vw - 60px);
+        z-index: 99999999;
+        --paper-spinner-stroke-width: 12px;
+        --paper-spinner-color: #009688;
       }
 
       .language-active {
@@ -237,7 +255,6 @@
             <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
             <hr class="sidebar-divider">
 
-
             <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
             <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
               <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
@@ -261,6 +278,12 @@
         </div>
       </app-drawer>
 
+      <template is="dom-if" if="[[$and(activeServiceCount, topSpinnerEnabled)]]">
+        <div class="top-nav-spinner-container">
+          <paper-spinner-lite active="" class="top-nav-spinner"></paper-spinner-lite>
+        </div>
+      </template>
+
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
 
@@ -269,25 +292,24 @@
             <template is="dom-if" if="[[!currentPageIsModal]]">
               <paper-icon-button icon="shared-icons:menu" drawer-toggle=""></paper-icon-button>
             </template>
-            <template is="dom-if" if="[[currentPageIsModal]]">
+            <template is="dom-if" if="[[$and(currentPageIsModal,currentPageAllowsBackButton)]]">
               <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
             </template>
             <div main-title="" class="flex vertical layout">
               <div style$="[[$computePageTitleFontSize(pageTitleList.length)]]">[[$getPageTitle(pageTitleList.length)]]</div>
               <div class="title-line-2">[[organization.name]]</div>
             </div>
-            <template is="dom-if" if="[[$and(activeServiceCount, topSpinnerEnabled)]]">
-              <paper-spinner-lite active="" class="top-nav-spinner"></paper-spinner-lite>
-            </template>
             <template is="dom-if" if="[[shouldShowPrintButton]]">
               <paper-icon-button icon="print" on-click="printButtonOnTopBarPressed"></paper-icon-button>
             </template>
             <paper-menu-button horizontal-align="right">
               <paper-icon-button icon="icons:apps" slot="dropdown-trigger"></paper-icon-button>
               <paper-listbox slot="dropdown-content" selected="-1">
-                <paper-item on-tap="homeTapped">[[verses.topMenu.home]]</paper-item>
-                <paper-item on-tap="switchOrganizationTapped">[[verses.topMenu.switchOrganization]]</paper-item>
+                <paper-item on-tap="homeTapped" hidden="[[isInOfflineMode]]">[[verses.topMenu.home]]</paper-item>
+                <paper-item on-tap="switchOrganizationTapped" hidden="[[isInOfflineMode]]">[[verses.topMenu.switchOrganization]]</paper-item>
                 <paper-item on-tap="reloadTapped">[[verses.topMenu.reload]]</paper-item>
+                <!-- FIXME: Remove offline toggle switch after testing -->
+                <paper-item on-tap="toggleOfflineMode">Toggle Offline Mode (Debug Only)</paper-item>
                 <paper-item on-tap="logoutTapped">[[verses.topMenu.logout]]</paper-item>
               </paper-listbox>
             </paper-menu-button>
@@ -353,6 +375,19 @@
           <page-select-geolocation name="select-geolocation"></page-select-geolocation>
         </iron-pages>
 
+        <paper-dialog id="network-dialog" modal style="z-index: -999999">
+          <h2>[[verses.root.networkErrorTitle]]</h2>
+          <paper-dialog-scrollable>
+            <div class="dialog-text">[[verses.root.networkErrorContent]]</div>
+          </paper-dialog-scrollable>
+          <div class="buttons">
+            <template is="dom-if" if="[[!isInOfflineMode]]">
+              <paper-button on-click="networkErrorGoToOfflineModeTapped">[[verses.root.networkErrorGoOffline]]</paper-button>
+            </template>
+            <paper-button on-click="networkErrorGotItTapped" autofocus>[[verses.root.networkErrorTGotIt]]</paper-button>
+          </div>
+        </paper-dialog>
+
         <div class="footer">
           <div>
             <img src="../images/icons/en-us.png" data-key="en-us" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'en-us')]]" on-tap="languageIconTapped">
@@ -381,10 +416,13 @@
 
   <script>
     let localDocument = document.currentScript.ownerDocument;
+    const backgroundSyncThreshold = 20 * 1000;
 
     class TorqueApp extends FxApp.mixin(FxCommonBehavior, FxPageManagerBehavior, FxDialogBehavior, TorqueDbBehavior, TorqueHttpBehavior, TorqueLanguageBehavior, TorqueCommonBehavior) {
 
-      static get is() { return 'torque-app'; }
+      static get is() {
+        return 'torque-app';
+      }
 
       static get properties() {
         return {
@@ -392,7 +430,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":145,"datetimeStamp":1546424825211}');
+              return JSON.parse('{"build":157,"datetimeStamp":1549958684847}');
               '%__deploy-end'
             }
           },
@@ -420,6 +458,10 @@
             type: Boolean,
             value: false
           },
+          currentPageAllowsBackButton: {
+            type: Boolean,
+            value: true
+          },
           activeServiceCount: {
             type: Number,
             value: 0
@@ -439,6 +481,21 @@
           tocVersionUpdatedDatetimeStamp: {
             type: Number,
             value: 1542184791941
+          },
+          networkErrorDialog: {
+            type: Object,
+            value: () => ({
+              title: 'No Title',
+              label: 'No message'
+            })
+          },
+          shouldAttempBackgroundSync: {
+            type: Boolean,
+            value: false
+          },
+          isInOfflineMode: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -487,6 +544,7 @@
         this.initiateLanguageServices();
         this.pushPageTitle(this.brandName);
         this._notifyResizeHack();
+        window.setTimeout(() => this._initiateBackgroundSync(), backgroundSyncThreshold);
         this.delay(5000, () => this._assertApiKey());
       }
 
@@ -495,8 +553,17 @@
           this.callUserAssertApiKeyApi({}, (err, response) => {
             if (err) return;
             if (response.hasError) return this.logoutTapped();
-            let { apiKey, warning, sessionId, user } = response;
-            Object.assign(user, { apiKey, warning, sessionId });
+            let {
+              apiKey,
+              warning,
+              sessionId,
+              user
+            } = response;
+            Object.assign(user, {
+              apiKey,
+              warning,
+              sessionId
+            });
             this.saveUser(user);
           });
         }
@@ -552,35 +619,78 @@
         this.db.defineCollection({
           name: 'organization'
         });
+        this.db.defineCollection({
+          name: 'offline-data'
+        });
       }
 
       _fillDatabase() {
-        this.db.upsert('settings', (({ which }) => which === 'only'), (doc => doc), {
-          which: 'only',
-          shouldUseWebsockets: true,
-          monetaryUnit: 'BDT'
-        });
+        this.db.upsert('settings', (({
+          which
+        }) => which === 'only'), (doc => doc), {
+            which: 'only',
+            shouldUseWebsockets: true,
+            monetaryUnit: 'BDT',
+            backgroundSyncMetaMap: {}
+          });
+
+        this.db.upsert('offline-data', (({
+          which
+        }) => which === 'only'), (doc => doc), {
+            which: 'only',
+            offlineModeInitiatedDatetimeStamp: null,
+            lastFetchedDatetimeStamp: null,
+            cache: {
+              getOutlet: null,
+              getAggregatedInventoryDetails: null,
+              getActiveServiceList: null,
+              getUserDisplayInformation: null
+            },
+            data: {
+              unsyncedSalesIdSeed: 0,
+              unsyncedSalesList: []
+            }
+          });
       }
 
       _setUpDatabaseObservers() {
         this.db.observe('user', (...args) => this.onUserChange(...args));
         this.db.observe('organization', (...args) => this.onOrganizationChange(...args));
         this.db.observe('settings', (...args) => this.onSettingsChange(...args));
+        this.db.observe('offline-data', (...args) => this.onOfflineDataChange(...args));
         this.onUserChange();
         this.onOrganizationChange();
         this.onSettingsChange();
+        this.onOfflineDataChange();
+      }
+
+      networkErrorGotItTapped() {
+        this.$['network-dialog'].close();
+      }
+
+      networkErrorGoToOfflineModeTapped() {
+        this.$['network-dialog'].close();
+        this.toggleOfflineMode();
       }
 
       _intializeServiceManager() {
         this.serviceManager.on('service-change', (event) => {
-          this.activeServiceCount = event.detail.activeCount;
+          let count = event.detail.activeCount - window.torqueCache.ignorableApiCallCount;
+          // console.log('activeServiceCount', count);
+          this.activeServiceCount = Math.max(count, 0);
         });
         this.serviceManager.on('error', (event) => {
+          let shouldPromptForOfflineMode = true;
           try {
-            if (event.path[0].url.indexOf('user-assert-api-key') > -1) return;
-            this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
+            if (event.path[0].url.indexOf('user-assert-api-key') > -1) {
+              shouldPromptForOfflineMode = false;
+            }
           } catch (ex) {
-            this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
+            'pass'
+          }
+          if (shouldPromptForOfflineMode) {
+            this._patchForPolymerModalDialogIssue();
+            this.$['network-dialog'].open();
           }
         });
         this.serviceManager.on('success', (event) => {
@@ -617,6 +727,26 @@
       // ====================== navigation =============================
 
       _pageNameChanged() {
+        // console.log('_pageNameChanged(): pre-route this.pageName =', this.pageName);
+        if (this.isInOfflineMode) {
+          const allowedPageNameList = [
+            'login',
+            'pos',
+            'error404',
+            'pos-select-products',
+            'pos-select-services',
+            'print-sales-receipt'
+          ];
+          if (allowedPageNameList.indexOf(this.pageName) === -1) {
+            this.app = this;
+            let settings = this._getNormalizedSettings();
+            let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+            if (defaultOutletId) {
+              this.navigateTo(`/pos/outlet:${defaultOutletId}`);
+              return
+            }
+          }
+        }
         let qualifiedName = 'page-' + this.pageName + '.html';
         let matchingEl = Array.from(localDocument.querySelectorAll('link[rel="lazy-import"]')).find(el => {
           return el.href.indexOf(qualifiedName) > -1;
@@ -657,6 +787,28 @@
 
       // ======================  events =============================
 
+      toggleOfflineMode() {
+        if (!this.offlineData || !this.offlineData.lastFetchedDatetimeStamp) {
+          this.showAlertMessage(this.verses.general.sorry, this.verses.root.unableToGoOffline);
+          return;
+        }
+        let date = (this.isInOfflineMode ? null : Date.now())
+        this.db.update('offline-data', (({ which }) => which === 'only'), data => {
+          data.offlineModeInitiatedDatetimeStamp = date;
+          return data;
+        });
+
+        // TODO: Refactor
+        this.app = this;
+        let settings = this._getNormalizedSettings();
+        let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+        if (defaultOutletId) {
+          this.navigateTo(`/pos/outlet:${defaultOutletId}`);
+          return
+        }
+        this.navigateTo(`/home`);
+      }
+
       websocketConnectivityIndicatorIconTapped(e = null) {
         this.settings.shouldUseWebsockets = !this.settings.shouldUseWebsockets;
         window.torqueWebsocketIndicatorStatusReceivedFn('closed');
@@ -695,19 +847,60 @@
 
       // ====================== delegated callbacks =============================
 
+      onFundamentalComponentChange() {
+        let allComponentsReady = this.user && this.settings && this.organization;
+        if (allComponentsReady) {
+          this.shouldAttempBackgroundSync = true;
+        } else {
+          this.shouldAttempBackgroundSync = false;
+        }
+        this._proxyToActivePage('onFundamentalComponentChange', {});
+      }
+
       onUserChange() {
         this.user = this.loadUser();
+        this.onFundamentalComponentChange();
         this._proxyToActivePage('onUserChange', this.user);
       }
 
       onSettingsChange() {
         this.settings = this.loadSettings();
+        this.onFundamentalComponentChange();
         this._proxyToActivePage('onSettingsChange', this.settings);
       }
 
       onOrganizationChange() {
         this.organization = this.loadOrganization();
+        this.onFundamentalComponentChange();
         this._proxyToActivePage('onOrganizationChange', this.organization);
+      }
+
+      onOfflineDataChange() {
+        this.offlineData = this.loadOfflineData();
+        // console.log('onOfflineDataChange', this.offlineData);
+        if (this.offlineData.offlineModeInitiatedDatetimeStamp) {
+          this.isInOfflineMode = true;
+        } else {
+          this.isInOfflineMode = false;
+        }
+        // console.log('this.isInOfflineMode', this.isInOfflineMode)
+        this._proxyToActivePage('onOfflineDataChange', this.offlineData);
+
+        // model = {
+        //   which: 'only',
+        //   offlineModeInitiatedDatetimeStamp: null,
+        //   lastFetchedDatetimeStamp: null,
+        //   cache: {
+        //     getOutlet: null,
+        //     getAggregatedInventoryDetails: null,
+        //     getActiveServiceList: null,
+        //     getUserDisplayInformation: null
+        //   },
+        //   data: {
+        //     unsyncedSalesIdSeed: 0
+        //     unsyncedSalesList: []
+        //   }
+        // }
       }
 
       // ====================== shortcuts =============================
@@ -741,6 +934,97 @@
           window.sessionStorage.removeItem(key);
         }
         return JSON.parse(value);
+      }
+
+      // ====================== background Sync =============================
+
+      _processBackgroundSync(cbfn) {
+        if (!this.shouldAttempBackgroundSync) return cbfn(false);
+        if (this.isInOfflineMode) return cbfn(false);
+        this.app = this;
+        let settings = this._getNormalizedSettings();
+        let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+        if (this.$notSelected(defaultOutletId)) return cbfn(false);
+
+        const onApiError = (error) => {
+          return cbfn(false);
+        }
+
+        const _backgroundSyncGetUserDisplayInformation = (cbfn) => {
+          let data = {
+            organizationId: this.organization.id,
+            userId: this.user.id
+          };
+          window.torqueCache.ignorableApiCallCount += 1;
+          this.app.callGetUserDisplayInformationApi(data, (err, response) => {
+            window.torqueCache.ignorableApiCallCount -= 1;
+            if (err) return;
+            if (response.hasError) return this.onApiError(response.error);
+            return cbfn(response);
+          });
+        }
+
+        const _backgroundSyncGetOutlet = (outletId, cbfn) => {
+          let data = { outletId };
+          window.torqueCache.ignorableApiCallCount += 1;
+          this.app.callGetOutletApi(data, (err, response) => {
+            window.torqueCache.ignorableApiCallCount -= 1;
+            if (err) return;
+            if (response.hasError) return onApiError(response.error);
+            return cbfn(response);
+          });
+        }
+
+        const _backgroundSyncGetAggregatedInventoryDetailsApi = (inventoryId, cbfn) => {
+          let data = { inventoryId };
+          window.torqueCache.ignorableApiCallCount += 1;
+          this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
+            window.torqueCache.ignorableApiCallCount -= 1;
+            if (err) return;
+            if (response.hasError) return onApiError(response.error);
+            return cbfn(response);
+          });
+        }
+
+        const _backgroundSyncGetActiveServiceListApi = (outletId, cbfn) => {
+          let data = { outletId };
+          window.torqueCache.ignorableApiCallCount += 1;
+          this.app.callGetActiveServiceListApi(data, (err, response) => {
+            window.torqueCache.ignorableApiCallCount -= 1;
+            if (err) return;
+            if (response.hasError) return onApiError(response.error);
+            return cbfn(response);
+          });
+        }
+
+        _backgroundSyncGetOutlet(defaultOutletId, (getOutletResponse) => {
+          let inventoryId = getOutletResponse.defaultInventory.id;
+          _backgroundSyncGetAggregatedInventoryDetailsApi(inventoryId, (getAggregatedInventoryDetailsResponse) => {
+            _backgroundSyncGetActiveServiceListApi(defaultOutletId, (getActiveServiceListResponse) => {
+              _backgroundSyncGetUserDisplayInformation((getUserDisplayInformationResponse) => {
+
+                this.db.update('offline-data', (({ which }) => which === 'only'), data => {
+                  data.lastFetchedDatetimeStamp = Date.now();
+                  data.cache.getOutlet = getOutletResponse;
+                  data.cache.getAggregatedInventoryDetails = getAggregatedInventoryDetailsResponse;
+                  data.cache.getActiveServiceList = getActiveServiceListResponse;
+                  data.cache.getUserDisplayInformation = getUserDisplayInformationResponse;
+                  return data;
+                });
+                return cbfn(true);
+
+              });
+            });
+          });
+        });
+
+      }
+
+      _initiateBackgroundSync() {
+        this._processBackgroundSync((wasDone) => {
+          // console.log("_processBackgroundSync() result:", wasDone);
+          window.setTimeout(() => this._initiateBackgroundSync(), backgroundSyncThreshold);
+        });
       }
 
       // ====================== utilities =============================

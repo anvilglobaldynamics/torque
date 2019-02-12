@@ -63,7 +63,7 @@
         this.isReady = false;
       }
 
-      onApiError(error, form) {
+      onApiError(error, form, cbfn = null) {
         if ((error.code === "VALIDATION_ERROR") && form) {
           let missingError = null;
           let { details: errorList } = error;
@@ -87,10 +87,10 @@
             el.errorMessage = message;
           }
           if (missingError) {
-            return this.app.showModalDialog("Sorry!", missingError.message);
+            return this.app.showModalDialog("Sorry!", missingError.message, cbfn);
           }
         } else {
-          return this.app.showModalDialog("Sorry!", error.message);
+          return this.app.showModalDialog("Sorry!", error.message, cbfn);
         }
       }
 

@@ -159,6 +159,40 @@
         }
       }
 
+      _getNormalizedSettings() {
+        let settings = this.app.db.find('settings', (({
+          which
+        }) => which === 'only'))[0];
+
+        if (!settings.backgroundSyncMetaMap) {
+          settings.backgroundSyncMetaMap = {};
+        }
+        if (!this.app.organization) {
+          throw new Error("Organization is not loaded!");
+        }
+        if (!(this.app.organization.id in settings.backgroundSyncMetaMap)) {
+          settings.backgroundSyncMetaMap[this.app.organization.id] = null;
+        }
+        return settings;
+      }
+
+      $notSelected(val) {
+        return (typeof (val) === 'undefined' || val === null || val < 0);
+      }
+
+      _paginateOfflineData(list) {
+        let { limit, offset } = this.paginate;
+        let totalCount = list.length;
+
+        list = list.slice(offset, (offset + limit));
+
+        return [list, {
+          offset,
+          limit: list.length,
+          totalCount
+        }];
+      }
+
     }
   })();
 

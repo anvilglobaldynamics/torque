@@ -92,8 +92,12 @@
         margin-right: 4px;
       }
 
-      .m-top-16{
+      .m-top-16 {
         margin-top: 16px;
+      }
+
+      .card.warning {
+        background: #FFF59D;
       }
     </style>
 
@@ -101,47 +105,100 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <!-- customer selector - start -->
-      <template is="dom-if" if="[[!isSearchingCustomer]]">
+      <template is="dom-if" if="[[isInOfflineMode]]">
+        <div class="card warning vertical layout">
+          <div class="flex">[[verses.pos.offlineModeWarning]]</div>
+          <paper-button raised class="primary btn" on-tap="goOnlineTapped">
+            [[verses.pos.goOnline]]
+          </paper-button>
+        </div>
+      </template>
+
+      <template is="dom-if" if="[[offlineData.data.unsyncedSalesList.length]]">
         <div class="card vertical layout">
-          <div class="horizontal layout center">
-            <div class="flex">
-              <template is="dom-if" if="[[!customer]]">
-                <div class="type secondary body">[[verses.pos.noCustomerSelected]]</div>
-              </template>
-              <template is="dom-if" if="[[customer]]">
-                <div>
-                  <div class="type title capitalize">[[customer.fullName]]</div>
-                  <div class="horizontal layout wrap">
-                    <div class="horizontal layout center m-right-8">
-                      <iron-icon icon="hardware:smartphone" class="icon secondary small m-right-8"></iron-icon>
-                      <div class="type body secondary">[[customer.phone]]</div>
-                    </div>
-                    <div class="horizontal layout center">
-                      <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
-                      <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
-                    </div>
+
+          <div class="vertical layout">
+            <div class="flex">[[offlineData.data.unsyncedSalesList.length]] [[verses.pos.offlineSaleCountMessage]]</div>
+            <div class="horizontal layout">
+              <paper-button raised class="secondary btn" style="width: 100%;" on-tap="toggleAllOfflineSalesTapped">
+                [[verses.pos.showHideButton]]
+              </paper-button>
+
+              <paper-button raised class="primary btn" style="width: 100%;" on-tap="submitAllOfflineSalesTapped">
+                [[verses.pos.submitOfflineSales]]
+              </paper-button>
+            </div>
+          </div>
+
+          <template is="dom-if" if="[[shouldExpandOfflineSalesList]]">
+            <div class="list m-top-16">
+              <template is="dom-repeat" items="[[offlineData.data.unsyncedSalesList]]" as="unsyncedSales">
+                <div class="horizontal layout item center">
+                  <div class="flex">
+                    <b>[[unsyncedSales.id]]</b> <br>
+                    [[verses.pos.createdOfflineSaleDatetime]]: [[$mkDate(unsyncedSales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
                   </div>
+
+                  <div class="vertical layout">
+                    <paper-button raised class="secondary btn btn-default slim" on-tap="printOfflineSalesTapped">
+                      [[verses.general.print]]
+                    </paper-button>
+                    <paper-button raised class="danger btn btn-default slim" style="margin-top: 6px;" on-tap="discardOfflineSalesTapped">
+                      [[verses.general.discard]]
+                    </paper-button>
+                  </div>
+
                 </div>
               </template>
             </div>
-          </div>
-          <div class="horizontal layout end-justified m-top-16">
-            <template is="dom-if" if="[[customer]]">
-              <paper-button raised class="danger btn btn-default" on-tap="removeCustomerTapped">
-                [[verses.pos.removeCustomer]]
-              </paper-button>
-            </template>
-            <paper-button raised class="secondary btn btn-default" on-tap="changeCustomerTapped">
-              [[verses.pos.changeCustomer]]
-            </paper-button>
-            <paper-button raised class="btn secondary" on-tap="createCustomerTapped">
-              [[verses.pos.createCustomer]]
-            </paper-button>
-          </div>
+          </template>
+
         </div>
       </template>
-      <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+
+      <!-- customer selector - start -->
+      <template is="dom-if" if="[[!isInOfflineMode]]">
+        <template is="dom-if" if="[[!isSearchingCustomer]]">
+          <div class="card vertical layout">
+            <div class="horizontal layout center">
+              <div class="flex">
+                <template is="dom-if" if="[[!customer]]">
+                  <div class="type secondary body">[[verses.pos.noCustomerSelected]]</div>
+                </template>
+                <template is="dom-if" if="[[customer]]">
+                  <div>
+                    <div class="type title capitalize">[[customer.fullName]]</div>
+                    <div class="horizontal layout wrap">
+                      <div class="horizontal layout center m-right-8">
+                        <iron-icon icon="hardware:smartphone" class="icon secondary small m-right-8"></iron-icon>
+                        <div class="type body secondary">[[customer.phone]]</div>
+                      </div>
+                      <div class="horizontal layout center">
+                        <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
+                        <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
+            <div class="horizontal layout end-justified m-top-16">
+              <template is="dom-if" if="[[customer]]">
+                <paper-button raised class="danger btn btn-default" on-tap="removeCustomerTapped">
+                  [[verses.pos.removeCustomer]]
+                </paper-button>
+              </template>
+              <paper-button raised class="secondary btn btn-default" on-tap="changeCustomerTapped">
+                [[verses.pos.changeCustomer]]
+              </paper-button>
+              <paper-button raised class="btn secondary" on-tap="createCustomerTapped">
+                [[verses.pos.createCustomer]]
+              </paper-button>
+            </div>
+          </div>
+        </template>
+        <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+      </template>
       <!-- customer selector - end -->
 
       <!-- selected product list - start -->
@@ -190,56 +247,58 @@
       <!-- selected product list - end -->
 
       <!-- selected service list - start -->
-      <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
-        <div class="card vertical layout">
-          <div class="list">
+      <template is="dom-if" if="[[!isInOfflineMode]]">
+        <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
+          <div class="card vertical layout">
+            <div class="list">
 
-            <template is="dom-repeat" items="[[serviceList]]" as="service">
-              <div class="horizontal layout item center">
-                <div class="vertical layout flex">
-                  
-                  <div class="horizontal layout center">
-                    <div class="service-info">
-                      <span class="service-title">[[service.name]]</span>
-                      <span class="service-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
+              <template is="dom-repeat" items="[[serviceList]]" as="service">
+                <div class="horizontal layout item center">
+                  <div class="vertical layout flex">
+
+                    <div class="horizontal layout center">
+                      <div class="service-info">
+                        <span class="service-title">[[service.name]]</span>
+                        <span class="service-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                      </div>
+
+                      <template is="dom-if" if="{{service.isEmployeeAssignable}}">
+
+                        <template is="dom-if" if="{{service.assignedEmploymentId}}">
+                          <div class="employee-icon-container-active" on-tap="assignEmployeeTapped">
+                            <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignedEmployee]]
+                          </div>
+                        </template>
+
+                        <template is="dom-if" if="{{!service.assignedEmploymentId}}">
+                          <div class="employee-icon-container" on-tap="assignEmployeeTapped">
+                            <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignEmployee]]
+                          </div>
+                        </template>
+
+                      </template>
                     </div>
-                    
-                    <template is="dom-if" if="{{service.isEmployeeAssignable}}" >
 
-                      <template is="dom-if" if="{{service.assignedEmploymentId}}">
-                        <div class="employee-icon-container-active" on-tap="assignEmployeeTapped">
-                          <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignedEmployee]]
-                        </div>
-                      </template>
-
-                      <template is="dom-if" if="{{!service.assignedEmploymentId}}">
-                        <div class="employee-icon-container" on-tap="assignEmployeeTapped">
-                          <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignEmployee]]
-                        </div>
-                      </template>
-
+                    <template is="dom-if" if="{{service.isCustomerRequired}}">
+                      <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
                     </template>
-                  </div>
 
-                  <template is="dom-if" if="{{service.isCustomerRequired}}">
-                    <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
-                  </template>
+                    <div class="horizontal layout center">
+                      <paper-input class="flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" auto-validate></paper-input>
+                      <div class="description">[[app.settings.monetaryUnit]]</div>
+                    </div>
 
-                  <div class="horizontal layout center">
-                    <paper-input class="flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" auto-validate></paper-input>
-                    <div class="description">[[app.settings.monetaryUnit]]</div>
                   </div>
-                  
                 </div>
+              </template>
+
+              <div class="select-product-button-container">
+                <paper-button raised class="btn primary" on-tap="addServiceTapped">[[verses.pos.selectService]]</paper-button>
               </div>
-            </template>
 
-            <div class="select-product-button-container">
-              <paper-button raised class="btn primary" on-tap="addServiceTapped">[[verses.pos.selectService]]</paper-button>
             </div>
-
           </div>
-        </div>
+        </template>
       </template>
       <!-- selected service list - end -->
 
@@ -412,6 +471,14 @@
             type: Object,
             value: null,
             observer: 'customerChanged'
+          },
+          isInOfflineMode: {
+            type: Boolean,
+            value: false
+          },
+          shouldExpandOfflineSalesList: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -427,6 +494,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
+        this.onOfflineDataChange();
         this.app.pushPageTitle(this.app.verses.pos.posPageTitle);
         if (!'outlet' in this.params) {
           return this.app.showModalDialog(this.app.verses.general.sorry, this.app.verses.general.somethingWentWrong, () => {
@@ -467,6 +535,7 @@
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.app.currentPageAllowsBackButton = true;
         this.app.popPageTitle();
       }
 
@@ -495,13 +564,27 @@
         });
       }
 
-      _processGetOutletDefaultInventoryId(cbfn) {
+      _processGetOutletDefaultInventoryIdOnline(cbfn) {
         let data = { outletId: this.params.outlet };
         this.app.callGetOutletApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           return cbfn(response.defaultInventory.id);
         });
+      }
+
+      _processGetOutletDefaultInventoryIdOffline(cbfn) {
+        window.setTimeout(() => {
+          cbfn(this.app.offlineData.cache.getOutlet.defaultInventory.id);
+        }, 10);
+      }
+
+      _processGetOutletDefaultInventoryId(cbfn) {
+        if (this.isInOfflineMode) {
+          this._processGetOutletDefaultInventoryIdOffline(cbfn);
+        } else {
+          this._processGetOutletDefaultInventoryIdOnline(cbfn);
+        }
       }
 
       // main payment calculation method
@@ -610,35 +693,75 @@
         };
       }
 
-      _processAddSales({ outletId, payment }, cbfn) {
+      _processAddSalesOnline(data, cbfn) {
+        data.wasOfflineSale = false;
+        this.app.callAddSalesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          cbfn(response);
+        });
+      }
+
+      _processAddSalesOffline(salesData, cbfn) {
+        if (salesData.payment.totalBilled > salesData.payment.paidAmount) {
+          this.app.showModalDialog(this.verses.general.sorry, this.verses.pos.disallowCreditSale);
+          return;
+        }
+        // console.log("salesData", salesData);
+        this.app.db.update('offline-data', (({ which }) => which === 'only'), offlineData => {
+          if (!offlineData.data.unsyncedSalesIdSeed) offlineData.data.unsyncedSalesIdSeed = 0;
+          offlineData.data.unsyncedSalesIdSeed += 1;
+          salesData.id = 'OFFLINE-' + offlineData.data.unsyncedSalesIdSeed;
+          salesData.createdDatetimeStamp = Date.now();
+          offlineData.data.unsyncedSalesList.push(salesData);
+          return offlineData;
+        });
+        cbfn({ salesId: salesData.id });
+      }
+
+      _processAddSales(cbfn) {
+        let outletId = this.params.outlet;
+        let payment = this.payment;
+
         let customerId = null;
         if (this.customer) {
           customerId = this.customer.id;
         }
 
         let productList = this.productList.map(product => {
-          let { productId, selectedCount, discountType, discountValue, salePrice, vatValue } = product;
+          // console.log(product);
+          let { name, productId, selectedCount, discountType, discountValue, salePrice, vatValue } = product;
           let vatPercentage = vatValue;
-          return { productId, count: selectedCount, discountType, discountValue, salePrice, vatPercentage };
+          let finalProduct = { productId, count: selectedCount, discountType, discountValue, salePrice, vatPercentage };
+          if (this.isInOfflineMode) {
+            finalProduct.productBlueprintName = name;
+            finalProduct.returnedProductCount = 0;
+            finalProduct.count = parseInt(String(finalProduct.count));
+          }
+          return finalProduct;
         });
 
         let serviceList = this.serviceList.map(service => {
-          console.log(service);
-          let { id, salePrice, vatValue, assignedEmploymentId } = service;
+          // console.log(service);
+          let { id, salePrice, vatValue, assignedEmploymentId, name } = service;
           let serviceId = id;
           let vatPercentage = vatValue;
-          return { serviceId, salePrice, vatPercentage, assignedEmploymentId };
+          let finalService = { serviceId, salePrice, vatPercentage, assignedEmploymentId };
+          if (this.isInOfflineMode) {
+            finalService.serviceBlueprintName = name;
+          }
+          return finalService;
         });
 
         let data = {
           customerId, outletId, productList, serviceList, payment
         };
 
-        this.app.callAddSalesApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          cbfn(response);
-        });
+        if (this.isInOfflineMode) {
+          this._processAddSalesOffline(data, cbfn);
+        } else {
+          this._processAddSalesOnline(data, cbfn);
+        }
       }
 
       _resetSales() {
@@ -698,7 +821,7 @@
       }
 
       saveSaleTapped(e = null) {
-        this._processAddSales({ outletId: this.params.outlet, payment: this.payment }, ({ salesId }) => {
+        this._processAddSales(({ salesId }) => {
           let message = this.app.verses.pos.newSalesAdded;
           this.app.showToast(message, _ => {
             this._resetSales();
@@ -707,10 +830,96 @@
       }
 
       saveSaleAndPrintTapped(e = null) {
-        this._processAddSales({ outletId: this.params.outlet, payment: this.payment }, ({ salesId }) => {
+        this._processAddSales(({ salesId }) => {
           this._resetSales();
           return this.app.navigateTo(`/print-sales-receipt/sales:${salesId}/from:pos`);
         });
+      }
+
+      toggleAllOfflineSalesTapped(e = null) {
+        this.shouldExpandOfflineSalesList = !this.shouldExpandOfflineSalesList;
+      }
+
+      printOfflineSalesTapped(e) {
+        return this.app.navigateTo(`/print-sales-receipt/sales:${e.model.unsyncedSales.id}/from:pos`);
+      }
+
+      discardOfflineSalesTapped(e) {
+        let salesId = e.model.unsyncedSales.id;
+        this.app.db.update('offline-data', (({ which }) => which === 'only'), offlineData => {
+          let index = offlineData.data.unsyncedSalesList.findIndex(sales => sales.id === salesId);
+          if (index > -1) {
+            offlineData.data.unsyncedSalesList.splice(index, 1);
+          }
+          return offlineData;
+        });
+      }
+
+      _submitAnOfflineSales(unsyncedSales, cbfn) {
+        unsyncedSales = JSON.parse(JSON.stringify(unsyncedSales));
+
+        // Remove temporarily added properties (that were required for offline preview)
+        unsyncedSales.productList.forEach(product => {
+          delete product.productBlueprintName;
+          delete product.returnedProductCount;
+        });
+        unsyncedSales.serviceList.forEach(service => {
+          delete service.serviceBlueprintName;
+        });
+        delete unsyncedSales.id;
+        delete unsyncedSales.createdDatetimeStamp;
+
+        unsyncedSales.wasOfflineSale = true;
+        this.app.callAddSalesApi(unsyncedSales, (err, response) => {
+          if (err) return cbfn(err, null, null);
+          if (response.hasError) {
+            return this.onApiError(response.error, null, () => {
+              return cbfn(null, response.error, null);
+            });
+          }
+          cbfn(null, null, response);
+        });
+      }
+
+      goOnlineTapped() {
+        if (this.isInOfflineMode) {
+          this.app.toggleOfflineMode();
+        }
+      }
+
+      submitAllOfflineSalesTapped(e) {
+        let list = this.offlineData.data.unsyncedSalesList;
+        let left = list.length;
+        const submitNext = () => {
+          if (!left) {
+            if (this.isInOfflineMode) {
+              this.app.toggleOfflineMode();
+            }
+            return;
+          }
+
+          left -= 1;
+          let unsyncedSales = list[left];
+
+          this._submitAnOfflineSales(unsyncedSales, (networkError, validationError, response) => {
+            if (networkError) {
+              return;
+            }
+            if (validationError) return submitNext();
+
+            this.app.db.update('offline-data', (({ which }) => which === 'only'), offlineData => {
+              let index = offlineData.data.unsyncedSalesList.findIndex(sales => sales.id === unsyncedSales.id);
+              if (index > -1) {
+                offlineData.data.unsyncedSalesList.splice(index, 1);
+              }
+              return offlineData;
+            });
+
+            submitNext();
+          });
+
+        }
+        submitNext();
       }
 
       isDiscountTypePercent(discountType) {
@@ -738,6 +947,20 @@
 
       productListOrServiceListHasElement(productListLength, serviceListLength) {
         return (productListLength || serviceListLength);
+      }
+
+      // region: offline sales =================================
+
+      onOfflineDataChange() {
+        this.isInOfflineMode = this.app.isInOfflineMode;
+        this.offlineData = this.app.offlineData;
+
+        // NOTE: Willingly written in an expressive manner
+        if (this.isInOfflineMode) {
+          this.app.currentPageAllowsBackButton = false;
+        } else {
+          this.app.currentPageAllowsBackButton = true;
+        }
       }
 
     }

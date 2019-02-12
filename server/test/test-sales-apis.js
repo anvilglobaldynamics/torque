@@ -305,7 +305,9 @@ describe('Sales', _ => {
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -341,7 +343,9 @@ describe('Sales', _ => {
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false        
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -386,7 +390,9 @@ describe('Sales', _ => {
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -431,7 +437,9 @@ describe('Sales', _ => {
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -476,7 +484,9 @@ describe('Sales', _ => {
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -508,7 +518,9 @@ describe('Sales', _ => {
 
         serviceList: [],
 
-        payment: {}
+        payment: {},
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -553,7 +565,9 @@ describe('Sales', _ => {
           changeAmount: (0 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -598,7 +612,9 @@ describe('Sales', _ => {
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -643,7 +659,9 @@ describe('Sales', _ => {
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: true,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -1129,7 +1147,9 @@ describe('Sales', _ => {
           changeAmount: 0,
           shouldSaveChangeInAccount: true,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -1352,7 +1372,9 @@ describe('Sales', _ => {
           changeAmount: (1000 - (basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -1395,7 +1417,9 @@ describe('Sales', _ => {
           changeAmount: (1000 - (basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -1454,7 +1478,9 @@ describe('Sales', _ => {
           changeAmount: 1000 - (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -1497,7 +1523,9 @@ describe('Sales', _ => {
           changeAmount: 1000 - (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -1540,7 +1568,9 @@ describe('Sales', _ => {
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -1583,7 +1613,9 @@ describe('Sales', _ => {
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -1840,7 +1872,9 @@ describe('Sales', _ => {
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }))
       .then((body) => { })
 
@@ -1871,7 +1905,9 @@ describe('Sales', _ => {
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }))
       .then((body) => { })
 
@@ -1902,7 +1938,9 @@ describe('Sales', _ => {
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }))
       .then((body) => { })
 
@@ -1933,7 +1971,9 @@ describe('Sales', _ => {
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }))
       .then((body) => { })
 
@@ -1964,7 +2004,9 @@ describe('Sales', _ => {
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        }
+        },
+
+        wasOfflineSale: false
       }))
       .then((body) => { })
 

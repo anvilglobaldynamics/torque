@@ -335,7 +335,9 @@ const createSales = async ({ apiKey, outletId, productList }) => {
       changeAmount: 0,
       shouldSaveChangeInAccount: false,
       paymentMethod: 'cash'
-    }
+    },
+
+    wasOfflineSale: false
   });
 
   return { salesId };
