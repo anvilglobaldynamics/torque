@@ -348,7 +348,7 @@
       _printAndGoBack() {
         window.setTimeout(() => {
 
-          const threshold = 300;
+          const threshold = 2000;
           let then = Date.now();
           window.print();
           let now = Date.now();
@@ -356,7 +356,7 @@
             window.history.back();
           }
 
-        }, 100);
+        }, 500);
       }
 
       _fetchSales(cbfn) {

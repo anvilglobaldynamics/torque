@@ -80,6 +80,7 @@
 <link rel="lazy-import" href="page-edit-customer.html">
 <link rel="lazy-import" href="page-withdraw-from-change-wallet-balance.html">
 <link rel="lazy-import" href="page-pos.html">
+<link rel="lazy-import" href="page-print-sales-receipt.html">
 <link rel="lazy-import" href="page-report-sales.html">
 <link rel="lazy-import" href="page-report-inventories.html">
 <link rel="lazy-import" href="page-report-select-inventories.html">
@@ -291,7 +292,7 @@
             <template is="dom-if" if="[[!currentPageIsModal]]">
               <paper-icon-button icon="shared-icons:menu" drawer-toggle=""></paper-icon-button>
             </template>
-            <template is="dom-if" if="[[currentPageIsModal]]">
+            <template is="dom-if" if="[[$and(currentPageIsModal,currentPageAllowsBackButton)]]">
               <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
             </template>
             <div main-title="" class="flex vertical layout">
@@ -304,8 +305,8 @@
             <paper-menu-button horizontal-align="right">
               <paper-icon-button icon="icons:apps" slot="dropdown-trigger"></paper-icon-button>
               <paper-listbox slot="dropdown-content" selected="-1">
-                <paper-item on-tap="homeTapped">[[verses.topMenu.home]]</paper-item>
-                <paper-item on-tap="switchOrganizationTapped">[[verses.topMenu.switchOrganization]]</paper-item>
+                <paper-item on-tap="homeTapped" hidden="[[isInOfflineMode]]">[[verses.topMenu.home]]</paper-item>
+                <paper-item on-tap="switchOrganizationTapped" hidden="[[isInOfflineMode]]">[[verses.topMenu.switchOrganization]]</paper-item>
                 <paper-item on-tap="reloadTapped">[[verses.topMenu.reload]]</paper-item>
                 <!-- FIXME: Remove offline toggle switch after testing -->
                 <paper-item on-tap="toggleOfflineMode">Toggle Offline Mode (Debug Only)</paper-item>
@@ -429,7 +430,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":153,"datetimeStamp":1549605907408}');
+              return JSON.parse('{"build":157,"datetimeStamp":1549958684847}');
               '%__deploy-end'
             }
           },
@@ -456,6 +457,10 @@
           currentPageIsModal: {
             type: Boolean,
             value: false
+          },
+          currentPageAllowsBackButton: {
+            type: Boolean,
+            value: true
           },
           activeServiceCount: {
             type: Number,
@@ -727,6 +732,7 @@
           const allowedPageNameList = [
             'login',
             'pos',
+            'error404',
             'pos-select-products',
             'pos-select-services',
             'print-sales-receipt'
@@ -879,7 +885,7 @@
         }
         // console.log('this.isInOfflineMode', this.isInOfflineMode)
         this._proxyToActivePage('onOfflineDataChange', this.offlineData);
-        
+
         // model = {
         //   which: 'only',
         //   offlineModeInitiatedDatetimeStamp: null,
