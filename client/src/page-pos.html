@@ -92,7 +92,7 @@
         margin-right: 4px;
       }
 
-      .m-top-16{
+      .m-top-16 {
         margin-top: 16px;
       }
 
@@ -535,6 +535,7 @@
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.app.currentPageAllowsBackButton = true;
         this.app.popPageTitle();
       }
 
@@ -953,6 +954,13 @@
       onOfflineDataChange() {
         this.isInOfflineMode = this.app.isInOfflineMode;
         this.offlineData = this.app.offlineData;
+
+        // NOTE: Willingly written in an expressive manner
+        if (this.isInOfflineMode) {
+          this.app.currentPageAllowsBackButton = false;
+        } else {
+          this.app.currentPageAllowsBackButton = true;
+        }
       }
 
     }

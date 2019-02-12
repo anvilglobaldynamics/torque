@@ -291,7 +291,7 @@
             <template is="dom-if" if="[[!currentPageIsModal]]">
               <paper-icon-button icon="shared-icons:menu" drawer-toggle=""></paper-icon-button>
             </template>
-            <template is="dom-if" if="[[currentPageIsModal]]">
+            <template is="dom-if" if="[[$and(currentPageIsModal,currentPageAllowsBackButton)]]">
               <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
             </template>
             <div main-title="" class="flex vertical layout">
@@ -304,8 +304,8 @@
             <paper-menu-button horizontal-align="right">
               <paper-icon-button icon="icons:apps" slot="dropdown-trigger"></paper-icon-button>
               <paper-listbox slot="dropdown-content" selected="-1">
-                <paper-item on-tap="homeTapped">[[verses.topMenu.home]]</paper-item>
-                <paper-item on-tap="switchOrganizationTapped">[[verses.topMenu.switchOrganization]]</paper-item>
+                <paper-item on-tap="homeTapped" hidden="[[isInOfflineMode]]">[[verses.topMenu.home]]</paper-item>
+                <paper-item on-tap="switchOrganizationTapped" hidden="[[isInOfflineMode]]">[[verses.topMenu.switchOrganization]]</paper-item>
                 <paper-item on-tap="reloadTapped">[[verses.topMenu.reload]]</paper-item>
                 <!-- FIXME: Remove offline toggle switch after testing -->
                 <paper-item on-tap="toggleOfflineMode">Toggle Offline Mode (Debug Only)</paper-item>
@@ -456,6 +456,10 @@
           currentPageIsModal: {
             type: Boolean,
             value: false
+          },
+          currentPageAllowsBackButton: {
+            type: Boolean,
+            value: true
           },
           activeServiceCount: {
             type: Number,
@@ -727,6 +731,7 @@
           const allowedPageNameList = [
             'login',
             'pos',
+            'error404',
             'pos-select-products',
             'pos-select-services',
             'print-sales-receipt'
@@ -879,7 +884,7 @@
         }
         // console.log('this.isInOfflineMode', this.isInOfflineMode)
         this._proxyToActivePage('onOfflineDataChange', this.offlineData);
-        
+
         // model = {
         //   which: 'only',
         //   offlineModeInitiatedDatetimeStamp: null,
