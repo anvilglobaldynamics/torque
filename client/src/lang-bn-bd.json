@@ -94,6 +94,7 @@
     "print": "প্রিন্ট"
   },
   "login": {
+    "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
     "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
     "dontHaveAccount": "অ্যাকাউন্ট নেই?",
     "login": "লগইন",

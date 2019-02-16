@@ -94,6 +94,7 @@
     "print": "Print"
   },
   "login": {
+    "learnMoreAboutLipi": "Learn more about Lipi",
     "forgotPassword": "Forgot your Password?",
     "dontHaveAccount": "Don't have an account?",
     "login": "LOGIN",
