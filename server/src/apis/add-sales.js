@@ -169,7 +169,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
       date.setMonth(date.getMonth() + serviceBlueprint.serviceDuration.months);
       date.setDate(date.getDate() + serviceBlueprint.serviceDuration.days);
       let expiringDatetimeStamp = date.getTime();
-      let res = await this.database.serviceMembership.create({ createdByUserId, customerId, salesId, serviceId: service.id , assignedEmploymentId: serviceListObj.assignedEmploymentId, expiringDatetimeStamp });
+      let res = await this.database.serviceMembership.create({ createdByUserId, customerId, salesId, serviceId: service.id, assignedEmploymentId: serviceListObj.assignedEmploymentId, expiringDatetimeStamp });
     }
   }
 
