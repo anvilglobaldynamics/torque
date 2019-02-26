@@ -91,6 +91,7 @@
     "retail": "Retail",
     "service": "Service",
     "both": "Both",
+    "optional": "(Optional)",
     "print": "Print"
   },
   "login": {

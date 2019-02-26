@@ -763,6 +763,37 @@ describe('Sales', _ => {
 
   });
 
+  it('api/get-sales-list (Valid sales Id)', testDoneFn => {
+
+    callApi('api/get-sales-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        fromDate,
+        toDate: (new Date()).getTime(),
+        includeExtendedInformation: true,
+
+        searchString: String(salesId)
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetSalesListApiSuccessResponse(body);
+      body.salesList.forEach(sales => {
+        validateSalesSchemaWhenListObj(sales);
+      });
+      expect(body.salesList.length).to.equal(1);
+      expect(body.salesList[0].id).to.equal(salesId);
+      testDoneFn();
+    });
+
+  });
+
   it('api/get-sales-list (Valid only organization Id)', testDoneFn => {
 
     callApi('api/get-sales-list', {

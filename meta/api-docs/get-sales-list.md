@@ -19,7 +19,8 @@ method: `POST`
   fromDate: Joi.number().max(999999999999999).required(),
   toDate: Joi.number().max(999999999999999).required(),
 
-  includeExtendedInformation: Joi.boolean().optional()
+  includeExtendedInformation: Joi.boolean().optional(),
+  searchString: Joi.string().min(0).max(64).allow('').optional() // NOTE: searchString is currently used for salesId. We can extend it for other purposes later
 }
 ```
 
@@ -227,3 +228,7 @@ Possible Error Codes:
 
 ### db changes:
 updates no collection in db.
+
+### NOTE:
+
+if `searchString` is present and it is an ID, other filters are ignored as sales#id is unique.

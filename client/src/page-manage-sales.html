@@ -49,15 +49,20 @@
         color: red;
       }
 
+      .min-input{
+        min-width: 200px;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="card horizontal layout center">
-        <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
-        <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+      <div class="card horizontal layout center wrap">
+        <paper-input class="flex min-input" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+        <paper-input class="flex min-input" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+        <paper-input class="flex min-input" value="{{salesNumberToSearch}}" label="[[verses.sales.salesId]] [[verses.general.optional]]" type="text"></paper-input>
       </div>
 
       <template is="dom-if" if="[[!isSearchingCustomer]]">
@@ -303,6 +308,10 @@
           toDate,
           paginate: this.paginate
         };
+
+        if (this.salesNumberToSearch){
+          data.searchString = this.salesNumberToSearch;
+        }
 
         this.app.callGetSalesListApi(data, (err, response) => {
           if (err) return;

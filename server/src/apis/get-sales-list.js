@@ -24,7 +24,8 @@ exports.GetSalesListApi = class extends Api {
       fromDate: Joi.number().max(999999999999999).required(),
       toDate: Joi.number().max(999999999999999).required(),
 
-      includeExtendedInformation: Joi.boolean().optional()
+      includeExtendedInformation: Joi.boolean().optional(),
+      searchString: Joi.string().min(0).max(64).allow('').optional()
     });
   }
 
@@ -73,9 +74,9 @@ exports.GetSalesListApi = class extends Api {
     }
   }
 
-  async __getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }) {
+  async __getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, searchString }) {
     let outletIdList = (await this.database.outlet.listByOrganizationId({ organizationId })).map(outlet => outlet.id);
-    let salesList = await this.database.sales.listByFilters({ outletIdList, organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate });
+    let salesList = await this.database.sales.listByFilters({ outletIdList, organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, searchString });
     return salesList;
   }
 
@@ -118,11 +119,11 @@ exports.GetSalesListApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, includeExtendedInformation } = body;
+    let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, includeExtendedInformation, searchString } = body;
     toDate = this.__getExtendedToDate(toDate);
     await this.__verifyOutletIfNeeded({ outletId, shouldFilterByOutlet });
     await this.__verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer });
-    let salesList = await this.__getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate });
+    let salesList = await this.__getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, searchString });
     await this.__includeExtendedInformationIfNeeded({ salesList, includeExtendedInformation });
     return { salesList };
   }

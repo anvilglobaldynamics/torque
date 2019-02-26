@@ -10,7 +10,7 @@ exports.SalesCollection = class extends Collection {
     return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-      
+
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
 
@@ -121,27 +121,43 @@ exports.SalesCollection = class extends Collection {
     });
   }
 
-  async listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }) {
-    let query = {
-      $and: [
-        {
-          outletId: { $in: outletIdList }
-        },
-        {
-          createdDatetimeStamp: {
-            $gte: fromDate,
-            $lte: toDate
-          }
-        }
-      ]
-    };
+  async listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, searchString }) {
 
-    if (shouldFilterByOutlet) {
-      query.$and.push({ outletId });
+    let filterBySalesId = null;
+    if (searchString) {
+      if (parseInt(searchString) >= 0) {
+        filterBySalesId = parseInt(searchString);
+      }
     }
 
-    if (shouldFilterByCustomer) {
-      query.$and.push({ customerId });
+    let query = { $and: [] };
+
+    // NOTE: If filterBySalesId is present, other filters must not take any affect.
+    if (filterBySalesId) {
+
+      query.$and.push({ id: filterBySalesId });
+
+    } else {
+
+      query.$and.push({
+        outletId: { $in: outletIdList }
+      });
+
+      query.$and.push({
+        createdDatetimeStamp: {
+          $gte: fromDate,
+          $lte: toDate
+        }
+      });
+
+      if (shouldFilterByOutlet) {
+        query.$and.push({ outletId });
+      }
+
+      if (shouldFilterByCustomer) {
+        query.$and.push({ customerId });
+      }
+
     }
 
     return await this._find(query);
