@@ -109,7 +109,8 @@
         }
         if (!organization) {
           console.error(new Error("DEV_ERROR unable to locate organization object"));
-          return false;
+          return true;
+          // return false;
         }
         if (!('activeModuleCodeList' in organization)) {
           // TRANSLATE
@@ -148,6 +149,17 @@
       }
 
       hasModule(...moduleCodeClauseList) {
+        try {
+          return this.ensureModule(...moduleCodeClauseList);
+        } catch (ex) {
+          if (ex.code === 'UNMET_MODULE') {
+            return false;
+          }
+          throw ex;
+        }
+      }
+
+      hasModuleWithOrganization(organization, ...moduleCodeClauseList) {
         try {
           return this.ensureModule(...moduleCodeClauseList);
         } catch (ex) {

@@ -239,14 +239,14 @@
             <a name="home" href="#/home">[[verses.sidebar.home]]</a>
             <hr class="sidebar-divider">
 
-            <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
+            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
               <a name="manage-product-blueprints" href="#/manage-product-blueprints">[[verses.sidebar.productBlueprints]]</a>
             </template>
-            <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
+            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
               <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
             </template>
             <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
-            <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
+            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
               <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
             </template>
             <hr class="sidebar-divider">
@@ -256,16 +256,16 @@
             <hr class="sidebar-divider">
 
             <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
-            <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
+            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
               <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
             </template>
             <hr class="sidebar-divider">
 
             <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
-            <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
+            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
               <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
             </template>
-            <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
+            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
               <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
             </template>
             <hr class="sidebar-divider">
