@@ -161,7 +161,14 @@
         _loadLanguage(identifier);
       }
 
+      $round(number) {
+        const epsilon = 0.0000000000000001;
+        number = (number || 0) + epsilon;
+        return (Math.round(number * 100) / 100);
+      }
+
       $translateNumber(number, selectedLanguageIdentifier) {
+        number = this.$round(number);
         if (!selectedLanguageIdentifier) return number;
         let def = _knownLanguageList.find(entry => entry.identifier === selectedLanguageIdentifier);
         return def.numeralFn(number);
