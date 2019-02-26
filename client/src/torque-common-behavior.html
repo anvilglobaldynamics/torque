@@ -47,9 +47,8 @@
       }
 
       $round(number) {
-        if (!number) {
-          number = 0;
-        }
+        const epsilon = 0.0000000000000001;
+        number = (number || 0) + epsilon;
         return (Math.round(number * 100) / 100);
       }
 
