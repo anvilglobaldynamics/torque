@@ -46,7 +46,7 @@ exports.GetActiveServiceListApi = class extends Api {
 
   _searchCombineServiceList({ serviceList, searchString }) {
     serviceList = serviceList.filter(service => {
-      searchString = this.escapeRegExp(searchString);
+      searchString = this.escapeRegExp(searchString.toLowerCase());
       let regex = new RegExp(searchString, 'i');
       return regex.test(service.serviceBlueprint.name);
     });

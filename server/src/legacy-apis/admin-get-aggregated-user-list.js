@@ -20,7 +20,7 @@ exports.AdminGetAggregatedUserListApi = class extends organizationCommonMixin(co
   }
 
   _getAggregatedUserList({ userSearchString }, cbfn) {
-    userSearchString = this.escapeRegExp(userSearchString);
+    userSearchString = this.escapeRegExp(userSearchString.toLowerCase());
     let userSearchRegex = new RegExp(userSearchString, 'i');
     this.legacyDatabase.user.findByCommonFields({ userSearchRegex }, (err, userList) => {
       if (err) return this.fail(err);
