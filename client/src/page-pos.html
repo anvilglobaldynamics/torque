@@ -322,28 +322,31 @@
             </div>
 
             <div class="individual-calculation-field-container">
+              <template is="dom-if" if="[[checkPrivilege('PRIV_ALLOW_FLAT_DISCOUNT')]]">
 
-              <div class="vertical layout">
+                <div class="vertical layout">
 
-                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discountType]]" class="mr-4">
-                  <paper-listbox slot="dropdown-content" selected="{{payment.discountType}}" attr-for-selected="name">
-                    <paper-item name="percent">[[verses.general.percentage]]</paper-item>
-                    <paper-item name="fixed">[[verses.general.fixedValue]]</paper-item>
-                  </paper-listbox>
-                </paper-dropdown-menu>
+                  <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discountType]]" class="mr-4">
+                    <paper-listbox slot="dropdown-content" selected="{{payment.discountType}}" attr-for-selected="name">
+                      <paper-item name="percent">[[verses.general.percentage]]</paper-item>
+                      <paper-item name="fixed">[[verses.general.fixedValue]]</paper-item>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
 
-                <template is="dom-if" if="[[$equals(payment.discountType, 'percent')]]">
-                  <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" max="100" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
-                    <div slot="suffix">%</div>
-                  </paper-input>
-                </template>
-                <template is="dom-if" if="[[$equals(payment.discountType, 'fixed')]]">
-                  <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" max="[[totalBilledCopy]]" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
-                    <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-                  </paper-input>
-                </template>
+                  <template is="dom-if" if="[[$equals(payment.discountType, 'percent')]]">
+                    <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" max="100" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
+                      <div slot="suffix">%</div>
+                    </paper-input>
+                  </template>
+                  <template is="dom-if" if="[[$equals(payment.discountType, 'fixed')]]">
+                    <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" max="[[totalBilledCopy]]" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
+                      <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                    </paper-input>
+                  </template>
 
-              </div>
+                </div>
+
+              </template>
 
               <br> [[verses.pos.discountedAmount]]:
               <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
