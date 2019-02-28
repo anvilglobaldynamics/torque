@@ -47,9 +47,8 @@
       }
 
       $round(number) {
-        if (!number) {
-          number = 0;
-        }
+        const epsilon = 0.0000000000000001;
+        number = (number || 0) + epsilon;
         return (Math.round(number * 100) / 100);
       }
 
@@ -110,7 +109,8 @@
         }
         if (!organization) {
           console.error(new Error("DEV_ERROR unable to locate organization object"));
-          return false;
+          return true;
+          // return false;
         }
         if (!('activeModuleCodeList' in organization)) {
           // TRANSLATE
@@ -159,10 +159,25 @@
         }
       }
 
+      hasModuleWithOrganization(organization, ...moduleCodeClauseList) {
+        try {
+          return this.ensureModule(...moduleCodeClauseList);
+        } catch (ex) {
+          if (ex.code === 'UNMET_MODULE') {
+            return false;
+          }
+          throw ex;
+        }
+      }
+
       _getNormalizedSettings() {
         let settings = this.app.db.find('settings', (({
           which
         }) => which === 'only'))[0];
+
+        if (!settings.defaultPrinterFormat) {
+          settings.defaultPrinterFormat = 'a4';
+        }
 
         if (!settings.backgroundSyncMetaMap) {
           settings.backgroundSyncMetaMap = {};

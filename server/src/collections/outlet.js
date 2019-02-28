@@ -70,7 +70,7 @@ exports.OutletCollection = class extends Collection {
   async listByOrganizationIdAndSearchString({ organizationId, searchString }) {
     let query = { organizationId };
     if (searchString) {
-      searchString = this.escapeRegExp(searchString);
+      searchString = this.escapeRegExp(searchString.toLowerCase());
       let searchRegex = new RegExp(searchString, 'i');
       query.$or = [
         { name: searchRegex },

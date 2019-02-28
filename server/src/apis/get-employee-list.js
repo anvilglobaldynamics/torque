@@ -46,7 +46,7 @@ exports.GetEmployeeListApi = class extends Api {
 
   _searchCombineEmployeeList({ employeeList, searchString }) {
     employeeList = employeeList.filter(employee => {
-      searchString = this.escapeRegExp(searchString);
+      searchString = this.escapeRegExp(searchString.toLowerCase());
       let regex = new RegExp(searchString, 'i');
       return regex.test(employee.userDetails.fullName);
     });

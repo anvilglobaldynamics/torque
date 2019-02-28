@@ -136,9 +136,14 @@
         text-align: center;
       }
 
-      .body {
+      .body-a4 {
         /* NOTE: A4 page - header - footer - page margin */
         min-height: calc(297mm - 38mm - 20mm - 34mm);
+      }
+
+      .body-slim {
+        /* NOTE: A4 page - header - footer - page margin */
+        /* min-height: calc(297mm - 38mm - 20mm - 34mm); */
       }
     </style>
 
@@ -146,147 +151,288 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="report">
-        <div class="header vertical layout">
-          <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.id]]</div>
-          <div class="horizontal layout">
+      <!-- REGION: slim receipt - start -->
+      <template is="dom-if" if="[[$equals(defaultPrinterFormat, 'slim')]]">
+        <div class="report">
+          <div class="header vertical layout">
+            <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.id]]</div>
             <div>
               <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
               <div>[[app.organization.primaryBusinessAddress]]</div>
               <div>[[app.organization.email]]</div>
               <div>[[app.organization.phone]]</div>
             </div>
-            <div class="flex"></div>
-            <div style="text-align: right;">
+            <div>
               <div class="author-title">[[verses.general.outlet]]: [[outlet.name]]</div>
               <div>[[outlet.physicalAddress]]</div>
               <div>[[outlet.contactPersonName]]</div>
               <div>[[outlet.phone]]</div>
             </div>
           </div>
+
+          <div class="body body-slim">
+
+            <template is="dom-if" if="{{sales.isDiscarded}}">
+              <div><b>[[verses.salesReceipt.warnDiscared]]</b></div>
+            </template>
+
+            <div class="vertical layout customer-area">
+              <template is="dom-if" if="{{sales.customerId}}">
+                <div><b>[[verses.salesReceipt.customerName]]:</b> [[customer.fullName]]</div>
+                <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
+              </template>
+              <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
+            </div>
+
+            <table class="product-table">
+              <tr>
+                <th>[[verses.salesReceipt.goodsTitle]]</th>
+                <th>[[verses.general.quantity]]</th>
+                <!-- <th>[[verses.general.unitPrice]]</th> -->
+                <th>[[verses.general.price]]</th>
+              </tr>
+
+              <template is="dom-repeat" items="{{sales.productList}}" as="product">
+                <tr>
+                  <td>
+                    [[product.productBlueprintName]]
+                    <template is="dom-if" if="[[product.returnedProductCount]]">
+                      <div>[[verses.salesReceipt.returnedCount]]: [[product.returnedProductCount]]</div>
+                    </template>
+                  </td>
+                  <td class="quantitive-cell">[[product.count]] [[product.unit]]</td>
+                  <!-- <td class="monetary-cell">[[product.salePrice]] [[app.settings.monetaryUnit]]</td> -->
+                  <td class="monetary-cell">[[$calculateIndividualProductPrice(product)]] [[app.settings.monetaryUnit]]</td>
+                </tr>
+              </template>
+
+              <template is="dom-repeat" items="{{sales.serviceList}}" as="service">
+                <tr>
+                  <td>
+                    [[service.serviceBlueprintName]]
+                  </td>
+                  <td class="quantitive-cell">1</td>
+                  <!-- <td class="monetary-cell">[[service.salePrice]] [[app.settings.monetaryUnit]]</td> -->
+                  <td class="monetary-cell">[[$calculateIndividualServicePrice(service)]] [[app.settings.monetaryUnit]]</td>
+                </tr>
+              </template>
+
+              <tr>
+                <th colspan="2">[[verses.salesReceipt.totalAmount]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.totalAmount)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+              <tr>
+                <th colspan="2">[[verses.salesReceipt.vatAmount]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+              <tr>
+                <th colspan="2">[[verses.salesReceipt.discountedAmount]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+              <tr>
+                <th colspan="2">[[verses.salesReceipt.serviceChargeInput]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+              <tr>
+                <th colspan="2">[[verses.salesReceipt.totalBilled]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+              <tr>
+                <th colspan="2">[[verses.salesReceipt.totalPaid]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+              <template is="dom-if" if="[[sales.payment.dueAmount]]">
+                <tr>
+                  <th colspan="2">[[verses.salesReceipt.dueAmount]]</th>
+                  <th class="monetary-cell">[[$round(sales.payment.dueAmount)]] [[app.settings.monetaryUnit]]</th>
+                </tr>
+              </template>
+            </table>
+
+            <div class="section-header"><b>[[verses.salesReceipt.payment]]</b></div>
+
+            <table class="payment-table">
+              <tr>
+                <th>[[verses.general.date]]</th>
+                <!-- <th>[[verses.salesReceipt.paymentMethod]]</th> -->
+                <th>[[verses.salesReceipt.paidAmountInput]]</th>
+                <th>[[verses.salesReceipt.changeAmount]]</th>
+              </tr>
+              <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
+                <tr>
+                  <td class="centered-cell">[[$mkDate(payment.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</td>
+                  <td class="monetary-cell">[[$round(payment.paidAmount)]] [[app.settings.monetaryUnit]] ([[payment.paymentMethod]])</td>
+                  <td class="monetary-cell">[[$round(payment.changeAmount)]] [[app.settings.monetaryUnit]]</td>
+                </tr>
+              </template>
+            </table>
+
+          </div>
+          <!-- /div.body -->
+
+          <div class="footer vertical layout">
+            <div>
+              <div class="author-title">[[verses.salesReceipt.printedBy]]: [[app.user.fullName]]</div>
+              <div>[[app.organization.employment.designation]] [[app.organization.employment.companyProvidedId]]</div>
+            </div>
+            <div class="footer-sold-by-slim">
+              <div class="author-title">[[verses.salesReceipt.soldBy]]: [[soldByUser.fullName]]</div>
+              <div>[[soldByUser.designation]] [[soldByUser.companyProvidedId]]</div>
+              <!-- <div>[[soldByUser.phone]]</div> -->
+            </div>
+          </div>
+
         </div>
+        <!-- /div.report -->
+      </template>
+      <!-- REGION: slim receipt - end -->
 
-        <div class="body">
-
-          <template is="dom-if" if="{{sales.isDiscarded}}">
-            <div><b>[[verses.salesReceipt.warnDiscared]]</b></div>
-          </template>
-
-          <div class="horizontal layout customer-area">
-            <template is="dom-if" if="{{sales.customerId}}">
-              <div><b>[[verses.salesReceipt.customerName]]:</b> [[customer.fullName]]</div>
+      <!-- REGION: a4 receipt - start -->
+      <template is="dom-if" if="[[$equals(defaultPrinterFormat, 'a4')]]">
+        <div class="report">
+          <div class="header vertical layout">
+            <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.id]]</div>
+            <div class="horizontal layout">
+              <div>
+                <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
+                <div>[[app.organization.primaryBusinessAddress]]</div>
+                <div>[[app.organization.email]]</div>
+                <div>[[app.organization.phone]]</div>
+              </div>
               <div class="flex"></div>
-              <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
+              <div style="text-align: right;">
+                <div class="author-title">[[verses.general.outlet]]: [[outlet.name]]</div>
+                <div>[[outlet.physicalAddress]]</div>
+                <div>[[outlet.contactPersonName]]</div>
+                <div>[[outlet.phone]]</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="body body-a4">
+
+            <template is="dom-if" if="{{sales.isDiscarded}}">
+              <div><b>[[verses.salesReceipt.warnDiscared]]</b></div>
             </template>
+
+            <div class="horizontal layout customer-area">
+              <template is="dom-if" if="{{sales.customerId}}">
+                <div><b>[[verses.salesReceipt.customerName]]:</b> [[customer.fullName]]</div>
+                <div class="flex"></div>
+                <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
+              </template>
+              <div class="flex"></div>
+              <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
+            </div>
+
+            <table class="product-table">
+              <tr>
+                <th>[[verses.salesReceipt.goodsTitle]]</th>
+                <th>[[verses.general.quantity]]</th>
+                <th>[[verses.general.unitPrice]]</th>
+                <th>[[verses.general.price]]</th>
+              </tr>
+
+              <template is="dom-repeat" items="{{sales.productList}}" as="product">
+                <tr>
+                  <td>
+                    [[product.productBlueprintName]]
+                    <template is="dom-if" if="[[product.returnedProductCount]]">
+                      <div>[[verses.salesReceipt.returnedCount]]: [[product.returnedProductCount]]</div>
+                    </template>
+                  </td>
+                  <td class="quantitive-cell">[[product.count]] [[product.unit]]</td>
+                  <td class="monetary-cell">[[product.salePrice]] [[app.settings.monetaryUnit]]</td>
+                  <td class="monetary-cell">[[$calculateIndividualProductPrice(product)]] [[app.settings.monetaryUnit]]</td>
+                </tr>
+              </template>
+
+              <template is="dom-repeat" items="{{sales.serviceList}}" as="service">
+                <tr>
+                  <td>
+                    [[service.serviceBlueprintName]]
+                  </td>
+                  <td class="quantitive-cell">1</td>
+                  <td class="monetary-cell">[[service.salePrice]] [[app.settings.monetaryUnit]]</td>
+                  <td class="monetary-cell">[[$calculateIndividualServicePrice(service)]] [[app.settings.monetaryUnit]]</td>
+                </tr>
+              </template>
+
+              <tr>
+                <th rowspan="7" colspan="2" style="border:none;"></th>
+                <th>[[verses.salesReceipt.totalAmount]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.totalAmount)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+              <tr>
+                <th>[[verses.salesReceipt.vatAmount]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+              <tr>
+                <th>[[verses.salesReceipt.discountedAmount]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+              <tr>
+                <th>[[verses.salesReceipt.serviceChargeInput]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+              <tr>
+                <th>[[verses.salesReceipt.totalBilled]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+              <tr>
+                <th>[[verses.salesReceipt.totalPaid]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</th>
+              </tr>
+              <template is="dom-if" if="[[sales.payment.dueAmount]]">
+                <tr>
+                  <th>[[verses.salesReceipt.dueAmount]]</th>
+                  <th class="monetary-cell">[[$round(sales.payment.dueAmount)]] [[app.settings.monetaryUnit]]</th>
+                </tr>
+              </template>
+            </table>
+
+            <div class="section-header"><b>[[verses.salesReceipt.payment]]</b></div>
+
+            <table class="payment-table">
+              <tr>
+                <th>[[verses.general.date]]</th>
+                <th>[[verses.salesReceipt.paymentMethod]]</th>
+                <th>[[verses.salesReceipt.paidAmountInput]]</th>
+                <th>[[verses.salesReceipt.changeAmount]]</th>
+              </tr>
+              <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
+                <tr>
+                  <td class="centered-cell">[[$mkDate(payment.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</td>
+                  <td class="centered-cell">[[payment.paymentMethod]]</td>
+                  <td class="monetary-cell">[[$round(payment.paidAmount)]] [[app.settings.monetaryUnit]]</td>
+                  <td class="monetary-cell">[[$round(payment.changeAmount)]] [[app.settings.monetaryUnit]]</td>
+                </tr>
+              </template>
+            </table>
+
+          </div>
+          <!-- /div.body -->
+
+          <div class="footer horizontal layout">
+            <div>
+              <div class="author-title">[[verses.salesReceipt.printedBy]]: [[app.user.fullName]]</div>
+              <div>[[app.organization.employment.designation]] [[app.organization.employment.companyProvidedId]]</div>
+            </div>
             <div class="flex"></div>
-            <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
+            <div class="footer-sold-by">
+              <div class="author-title">[[verses.salesReceipt.soldBy]]: [[soldByUser.fullName]]</div>
+              <div>[[soldByUser.designation]] [[soldByUser.companyProvidedId]]</div>
+              <!-- <div>[[soldByUser.phone]]</div> -->
+            </div>
           </div>
-
-          <table class="product-table">
-            <tr>
-              <th>[[verses.salesReceipt.goodsTitle]]</th>
-              <th>[[verses.general.quantity]]</th>
-              <th>[[verses.general.unitPrice]]</th>
-              <th>[[verses.general.price]]</th>
-            </tr>
-
-            <template is="dom-repeat" items="{{sales.productList}}" as="product">
-              <tr>
-                <td>
-                  [[product.productBlueprintName]]
-                  <template is="dom-if" if="[[product.returnedProductCount]]">
-                    <div>[[verses.salesReceipt.returnedCount]]: [[product.returnedProductCount]]</div>
-                  </template>
-                </td>
-                <td class="quantitive-cell">[[product.count]] [[product.unit]]</td>
-                <td class="monetary-cell">[[product.salePrice]] [[app.settings.monetaryUnit]]</td>
-                <td class="monetary-cell">[[$calculateIndividualProductPrice(product)]] [[app.settings.monetaryUnit]]</td>
-              </tr>
-            </template>
-
-            <template is="dom-repeat" items="{{sales.serviceList}}" as="service">
-              <tr>
-                <td>
-                  [[service.serviceBlueprintName]]
-                </td>
-                <td class="quantitive-cell">1</td>
-                <td class="monetary-cell">[[service.salePrice]] [[app.settings.monetaryUnit]]</td>
-                <td class="monetary-cell">[[$calculateIndividualServicePrice(service)]] [[app.settings.monetaryUnit]]</td>
-              </tr>
-            </template>
-
-            <tr>
-              <th rowspan="7" colspan="2" style="border:none;"></th>
-              <th>[[verses.salesReceipt.totalAmount]]</th>
-              <th class="monetary-cell">[[$round(sales.payment.totalAmount)]] [[app.settings.monetaryUnit]]</th>
-            </tr>
-            <tr>
-              <th>[[verses.salesReceipt.vatAmount]]</th>
-              <th class="monetary-cell">[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</th>
-            </tr>
-            <tr>
-              <th>[[verses.salesReceipt.discountedAmount]]</th>
-              <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</th>
-            </tr>
-            <tr>
-              <th>[[verses.salesReceipt.serviceChargeInput]]</th>
-              <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</th>
-            </tr>
-            <tr>
-              <th>[[verses.salesReceipt.totalBilled]]</th>
-              <th class="monetary-cell">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</th>
-            </tr>
-            <tr>
-              <th>[[verses.salesReceipt.totalPaid]]</th>
-              <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</th>
-            </tr>
-            <template is="dom-if" if="[[sales.payment.dueAmount]]">
-              <tr>
-                <th>[[verses.salesReceipt.dueAmount]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.dueAmount)]] [[app.settings.monetaryUnit]]</th>
-              </tr>
-            </template>
-          </table>
-
-          <div class="section-header"><b>[[verses.salesReceipt.payment]]</b></div>
-
-          <table class="payment-table">
-            <tr>
-              <th>[[verses.general.date]]</th>
-              <th>[[verses.salesReceipt.paymentMethod]]</th>
-              <th>[[verses.salesReceipt.paidAmountInput]]</th>
-              <th>[[verses.salesReceipt.changeAmount]]</th>
-            </tr>
-            <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
-              <tr>
-                <td class="centered-cell">[[$mkDate(payment.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</td>
-                <td class="centered-cell">[[payment.paymentMethod]]</td>
-                <td class="monetary-cell">[[$round(payment.paidAmount)]] [[app.settings.monetaryUnit]]</td>
-                <td class="monetary-cell">[[$round(payment.changeAmount)]] [[app.settings.monetaryUnit]]</td>
-              </tr>
-            </template>
-          </table>
 
         </div>
-        <!-- /div.body -->
-
-        <div class="footer horizontal layout">
-          <div>
-            <div class="author-title">[[verses.salesReceipt.printedBy]]: [[app.user.fullName]]</div>
-            <div>[[app.organization.employment.designation]] [[app.organization.employment.companyProvidedId]]</div>
-          </div>
-          <div class="flex"></div>
-          <div class="footer-sold-by">
-            <div class="author-title">[[verses.salesReceipt.soldBy]]: [[soldByUser.fullName]]</div>
-            <div>[[soldByUser.designation]] [[soldByUser.companyProvidedId]]</div>
-            <!-- <div>[[soldByUser.phone]]</div> -->
-          </div>
-        </div>
-
-      </div>
-      <!-- /div.report -->
+        <!-- /div.report -->
+      </template>
+      <!-- REGION: a4 receipt - end -->
 
     </div>
+
   </template>
 
   <script>
@@ -312,6 +458,7 @@
       }
 
       onNavigateIn() {
+        this.defaultPrinterFormat = this.app.settings.defaultPrinterFormat;
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.app.shouldShowPrintButton = true;
@@ -346,6 +493,7 @@
       }
 
       _printAndGoBack() {
+        return
         window.setTimeout(() => {
 
           const threshold = 2000;
@@ -492,6 +640,11 @@
         this.isInOfflineMode = this.app.isInOfflineMode;
       }
 
+      // region: offline sales =================================
+
+      $equals(a, b) {
+        return a === b;
+      }
     }
 
     window.customElements.define(PagePrintSalesReceipt.is, PagePrintSalesReceipt);

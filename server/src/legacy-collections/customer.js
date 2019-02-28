@@ -108,7 +108,7 @@ exports.CustomerCollection = class extends LegacyCollection {
   listByOrganizationIdAndSearchString({ organizationId, searchString }, cbfn) {
     let query = { organizationId, isDeleted: false };
     if (searchString) {
-      searchString = this.escapeRegExp(searchString);
+      searchString = this.escapeRegExp(searchString.toLowerCase());
       let searchRegex = new RegExp(searchString, 'i');
       query.$or = [
         { fullName: searchRegex },
