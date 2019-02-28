@@ -96,6 +96,10 @@
         margin-top: 16px;
       }
 
+      .m-bottom-18 {
+        margin-bottom: 18px;
+      }
+
       .card.warning {
         background: #FFF59D;
       }
@@ -324,7 +328,7 @@
             <div class="individual-calculation-field-container">
               <template is="dom-if" if="[[checkPrivilege('PRIV_ALLOW_FLAT_DISCOUNT')]]">
 
-                <div class="vertical layout">
+                <div class="vertical layout m-bottom-18">
 
                   <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discountType]]" class="mr-4">
                     <paper-listbox slot="dropdown-content" selected="{{payment.discountType}}" attr-for-selected="name">
@@ -348,7 +352,7 @@
 
               </template>
 
-              <br> [[verses.pos.discountedAmount]]:
+              [[verses.pos.discountedAmount]]:
               <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
 
             </div>
