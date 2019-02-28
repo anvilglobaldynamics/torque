@@ -432,7 +432,7 @@
   },
   "customer": {
     "editCustomerTitle": "Edit Customer",
-    "changeWalletBalanceTip": "Unpaid Change Amount from sales are stoed in Customer Account Balance. You can withdraw it by clicking below.",
+    "changeWalletBalanceTip": "Unpaid Change Amount from sales are stored in Customer Account Balance. You can withdraw it by clicking below.",
     "withdrawFromChangeWalletBalance": "Withdraw",
     "addCustomerTitle": "Add Customer",
     "customerNameInput": "Name of your customer.",
