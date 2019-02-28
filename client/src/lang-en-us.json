@@ -522,6 +522,7 @@
   "sales": {
     "manageSalesTitle": "Sales Record",
     "salesId": "Sales Number",
+    "salesIdNote": "(Optional. Other Filters will be ignored)",
     "billed": "Billed",
     "paid": "Paid",
     "products": "product(s)",
