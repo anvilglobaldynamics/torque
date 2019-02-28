@@ -248,15 +248,15 @@ const createEmployee = async ({ apiKey, organizationId }) => {
     privileges: {
       PRIV_VIEW_USERS: true,
       PRIV_MODIFY_USERS: true,
-    
+
       PRIV_ACCESS_POS: true,
       PRIV_VIEW_SALES: true,
       PRIV_MODIFY_SALES: true,
       PRIV_ALLOW_FLAT_DISCOUNT: true,
-    
+
       PRIV_VIEW_SALES_RETURN: true,
       PRIV_MODIFY_SALES_RETURN: true,
-    
+
       PRIV_VIEW_ALL_INVENTORIES: true,
       PRIV_VIEW_ALL_SERVICES: true,
       PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
@@ -266,19 +266,19 @@ const createEmployee = async ({ apiKey, organizationId }) => {
       PRIV_TRANSFER_ALL_INVENTORIES: true,
       PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
       PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS: true,
-    
+
       PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: true,
       PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: true,
-    
+
       PRIV_VIEW_ALL_OUTLETS: true,
       PRIV_MODIFY_ALL_OUTLETS: true,
-    
+
       PRIV_VIEW_ALL_WAREHOUSES: true,
       PRIV_MODIFY_ALL_WAREHOUSES: true,
-    
+
       PRIV_VIEW_ORGANIZATION_STATISTICS: true,
       PRIV_MODIFY_ORGANIZATION: true,
-    
+
       PRIV_VIEW_CUSTOMER: true,
       PRIV_MODIFY_CUSTOMER: true,
       PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true

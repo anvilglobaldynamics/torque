@@ -32,8 +32,6 @@
 <dom-module id="page-settings">
   <template>
     <style include="shared-styles">
-
-
       paper-tabs.view-selector {
         --paper-tabs: {
           background-color: var(--app-primary-color);
@@ -90,6 +88,22 @@
             </div>
             <div class="note">
               [[verses.settings.backgroundSyncDetail]]
+            </div>
+          </div>
+        </div>
+
+        <div class="card vertical layout">
+          <div class="option">
+            <div class="horizontal layout center">
+              <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.defaultPrinterFormat]]">
+                <paper-listbox slot="dropdown-content" on-iron-select="defaultPrinterFormatDropdownSelected" selected="{{indexOfDefaultPrinterFormat}}">
+                  <paper-item data-id="a4">[[verses.settings.defaultPrinterFormatA4]]</paper-item>
+                  <paper-item data-id="slim">[[verses.settings.defaultPrinterFormatSlim]]</paper-item>
+                </paper-listbox>
+              </paper-dropdown-menu>
+            </div>
+            <div class="note">
+              [[verses.settings.defaultPrinterFormatDetail]]
             </div>
           </div>
         </div>
@@ -159,6 +173,17 @@
           outletIndexForBackgroundSync: {
             type: Number,
             value: null
+          },
+          printerFormatOptionList: {
+            type: Array,
+            value: [
+              'a4',
+              'slim'
+            ]
+          },
+          indexOfDefaultPrinterFormat: {
+            type: Number,
+            value: null
           }
         };
       }
@@ -207,6 +232,7 @@
         this.monetaryUnit = settings.monetaryUnit;
         this.minimumProductQuantity = settings.minimumProductQuantity;
         this.outletIndexForBackgroundSync = null;
+        this.indexOfDefaultPrinterFormat = this.printerFormatOptionList.indexOf(settings.defaultPrinterFormat);
         this._loadLastPaperTabSelectedViewIndex();
         if (!this._ensureAccess()) return;
         this._processOutletList(() => {
@@ -256,6 +282,12 @@
         }, 100);
       }
 
+      defaultPrinterFormatDropdownSelected() {
+        window.setTimeout(() => {
+          this.settingsChanged();
+        }, 100);
+      }
+
       cancelTapped() {
         this.outletIndexForBackgroundSync = null;
         window.setTimeout(() => {
@@ -265,6 +297,7 @@
 
       settingsChanged(e) {
         let settings = this._getNormalizedSettings();
+        console.log(this.indexOfDefaultPrinterFormat)
 
         let id = null;
         try {
@@ -275,6 +308,7 @@
           'pass'
         }
         settings.backgroundSyncMetaMap[this.app.organization.id] = id;
+
         this.app.db.update('settings', ({
           which
         }) => which === 'only', (doc) => {
@@ -282,6 +316,7 @@
           doc.monetaryUnit = this.monetaryUnit;
           doc.minimumProductQuantity = this.minimumProductQuantity;
           doc.backgroundSyncMetaMap = settings.backgroundSyncMetaMap;
+          doc.defaultPrinterFormat = this.printerFormatOptionList[this.indexOfDefaultPrinterFormat];
           return doc
         });
       }

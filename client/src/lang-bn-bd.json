@@ -91,6 +91,7 @@
     "retail": "পণ্য বিক্রয়",
     "service": "সেবা বিক্রয়",
     "both": "উভয়",
+    "optional": "(ঐচ্ছিক)",
     "print": "প্রিন্ট"
   },
   "login": {
@@ -734,7 +735,11 @@
     "monetaryUnitDetail": "নোট: আর্থিক মুদ্রা পরিবর্তন আপনার বিক্রয় প্রভাবিত করে না।",
     "moreOptionsForthcoming": "আরো সেটিংস আসন্ন।",
     "minimumProductQuantity": "নূন্যতম পণ্য পরিমান",
-    "minimumProductQuantityDetail": "এই সংখ্যাটির নীচে পণ্য গণনা লাল রঙে দেখানো হবে।"
+    "minimumProductQuantityDetail": "এই সংখ্যাটির নীচে পণ্য গণনা লাল রঙে দেখানো হবে।",
+    "defaultPrinterFormat": "রসিদের জন্য ডিফল্ট প্রিন্টার",
+    "defaultPrinterFormatA4": "A4",
+    "defaultPrinterFormatSlim": "Slim (POS)",
+    "defaultPrinterFormatDetail": "রসিদের জন্য ডিফল্ট প্রিন্টার নির্বাচন করুন"
   },
   "verify": {
     "verificationModalTitle": "যাচাইকরণ এসএমএস পাঠানো হয়েছে",
@@ -879,6 +884,7 @@
     "serviceChargeInput": "সার্ভিস চার্জ",
     "totalBilled": "মোট বিল",
     "paidAmountInput": "পরিশোধিত পরিমান",
+    "changeAmount": "ফেরত পরিমান",
     "dueAmount": "বাকি অর্থ"
   }
 }
