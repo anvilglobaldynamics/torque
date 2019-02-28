@@ -175,6 +175,10 @@
           which
         }) => which === 'only'))[0];
 
+        if (!settings.defaultPrinterFormat) {
+          settings.defaultPrinterFormat = 'a4';
+        }
+
         if (!settings.backgroundSyncMetaMap) {
           settings.backgroundSyncMetaMap = {};
         }
