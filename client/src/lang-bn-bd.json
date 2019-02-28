@@ -884,6 +884,7 @@
     "serviceChargeInput": "সার্ভিস চার্জ",
     "totalBilled": "মোট বিল",
     "paidAmountInput": "পরিশোধিত পরিমান",
+    "changeAmount": "ফেরত পরিমান",
     "dueAmount": "বাকি অর্থ"
   }
 }
