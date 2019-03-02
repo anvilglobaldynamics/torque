@@ -77,8 +77,6 @@ describe('Product Blueprint', _ => {
         organizationId,
         name: "1st product blueprint",
         unit: "kg",
-        defaultDiscountType: "percent",
-        defaultDiscountValue: 10,
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
@@ -100,8 +98,6 @@ describe('Product Blueprint', _ => {
         organizationId,
         name: "1st product blueprint",
         unit: "kg",
-        defaultDiscountType: "percent",
-        defaultDiscountValue: 10,
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
@@ -123,8 +119,6 @@ describe('Product Blueprint', _ => {
         organizationId,
         name: "2nd product blueprint",
         unit: "kg",
-        defaultDiscountType: "fixed",
-        defaultDiscountValue: 11,
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
@@ -146,8 +140,6 @@ describe('Product Blueprint', _ => {
         organizationId: invalidOrganizationId,
         name: "invalid product blueprint",
         unit: "kg",
-        defaultDiscountType: "percent",
-        defaultDiscountValue: 10,
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
@@ -247,30 +239,6 @@ describe('Product Blueprint', _ => {
 
   });
 
-  it('api/add-product-blueprint (Invalid fixed defaultDiscountValue)', testDoneFn => {
-
-    callApi('api/add-product-blueprint', {
-      json: {
-        apiKey,
-        organizationId,
-        name: "1st product blueprint",
-        unit: "kg",
-        defaultDiscountType: "fixed",
-        defaultDiscountValue: 114,
-        defaultPurchasePrice: 99,
-        defaultVat: 2,
-        defaultSalePrice: 111,
-        isReturnable: true
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiFailureResponse(body);
-      expect(body.error.code).equal('DISCOUNT_VALUE_INVALID');
-      testDoneFn();
-    })
-
-  });
-
   // EDIT
 
   it('api/edit-product-blueprint (Valid)', testDoneFn => {
@@ -281,8 +249,6 @@ describe('Product Blueprint', _ => {
         productBlueprintId: productBlueprintOne.id,
         name: "new 1st product blueprint name", // modification
         unit: "kg",
-        defaultDiscountType: "percent",
-        defaultDiscountValue: 10,
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
@@ -304,8 +270,6 @@ describe('Product Blueprint', _ => {
         productBlueprintId: productBlueprintOne.id,
         name: "2nd product blueprint", // copy modification
         unit: "kg",
-        defaultDiscountType: "percent",
-        defaultDiscountValue: 10,
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
@@ -328,8 +292,6 @@ describe('Product Blueprint', _ => {
 
         name: "new product blueprint name", // modification
         unit: "kg",
-        defaultDiscountType: "percent",
-        defaultDiscountValue: 10,
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
