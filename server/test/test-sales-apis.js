@@ -117,7 +117,7 @@ let longstandingServiceBlueprintId = null;
 let longstandingService = null;
 let longstandingServiceSaleId = null;
 
-describe('Sales', _ => {
+describe.skip('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
