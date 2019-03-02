@@ -42,7 +42,7 @@ exports.AddProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin) 
 
   async handle({ body }) {
     let { organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
-    this._checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat });
+    let productBlueprintId = await this._createProductBlueprint({ organizationId, name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
     let productBlueprintId = await this._createProductBlueprint({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
     return { status: "success", productBlueprintId };
   }
