@@ -16,14 +16,6 @@ exports.AddProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin) 
 
       name: Joi.string().min(1).max(64).required(),
       unit: Joi.string().max(64).required(),
-      defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
-      defaultDiscountValue: Joi.number().when(
-        'defaultDiscountType', {
-          is: 'percent',
-          then: Joi.number().min(0).max(100).required(),
-          otherwise: Joi.number().max(999999999999999).required()
-        }
-      ),
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
@@ -41,9 +33,8 @@ exports.AddProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin) 
   }
 
   async handle({ body }) {
-    let { organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
+    let { organizationId, name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
     let productBlueprintId = await this._createProductBlueprint({ organizationId, name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
-    let productBlueprintId = await this._createProductBlueprint({ organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
     return { status: "success", productBlueprintId };
   }
 

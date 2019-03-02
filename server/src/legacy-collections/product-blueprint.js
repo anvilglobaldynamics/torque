@@ -25,14 +25,6 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
       name: Joi.string().min(1).max(64).required(),
       organizationId: Joi.number().max(999999999999999).required(),
       unit: Joi.string().max(64).required(),
-      defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
-      defaultDiscountValue: Joi.number().when(
-        'defaultDiscountType', {
-          is: 'percent',
-          then: Joi.number().min(0).max(100).required(),
-          otherwise: Joi.number().max(999999999999999).required()
-        }
-      ),
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
@@ -59,7 +51,7 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
   /**
    * 
    * 
-   * @param {any} { organizationId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } 
+   * @param {any} { organizationId, name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } 
    * @param {any} cbfn 
    */
   create(data, cbfn) {
@@ -67,8 +59,6 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
       organizationId,
       name,
       unit,
-      defaultDiscountType,
-      defaultDiscountValue,
       defaultPurchasePrice,
       defaultVat,
       defaultSalePrice,
@@ -80,8 +70,6 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
       organizationId,
       name,
       unit,
-      defaultDiscountType,
-      defaultDiscountValue,
       defaultPurchasePrice,
       defaultVat,
       defaultSalePrice,
@@ -106,10 +94,10 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
     this._find({ id: { $in: idList } }, cbfn);
   }
 
-  update({ productBlueprintId }, { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
+  update({ productBlueprintId }, { name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
     let modifications = {
       $set: {
-        name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
+        name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
       }
     }
     this._update({ id: productBlueprintId }, modifications, cbfn);
