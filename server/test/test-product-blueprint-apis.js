@@ -386,7 +386,7 @@ describe('Product Blueprint', _ => {
 
   });
 
-  it('api/bulk-import-product-blueprints (Valid and unique)', testDoneFn => {
+  it.skip('api/bulk-import-product-blueprints (Valid and unique)', testDoneFn => {
 
     callApi('api/bulk-import-product-blueprints', {
       json: {
@@ -407,7 +407,7 @@ describe('Product Blueprint', _ => {
 
   });
 
-  it('api/bulk-import-product-blueprints (Valid but not unique)', testDoneFn => {
+  it.skip('api/bulk-import-product-blueprints (Valid but not unique)', testDoneFn => {
 
     callApi('api/bulk-import-product-blueprints', {
       json: {
@@ -433,7 +433,7 @@ describe('Product Blueprint', _ => {
 
   });
 
-  it('api/bulk-import-product-blueprints (Invalid)', testDoneFn => {
+  it.skip('api/bulk-import-product-blueprints (Invalid)', testDoneFn => {
 
     callApi('api/bulk-import-product-blueprints', {
       json: {
@@ -456,7 +456,7 @@ describe('Product Blueprint', _ => {
 
   });
 
-  it('api/bulk-import-product-blueprints (Invalid)', testDoneFn => {
+  it.skip('api/bulk-import-product-blueprints (Invalid)', testDoneFn => {
 
     callApi('api/bulk-import-product-blueprints', {
       json: {
