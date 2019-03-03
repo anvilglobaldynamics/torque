@@ -30,8 +30,6 @@ exports.SalesCollection = class extends LegacyCollection {
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required(),
-          discountType: Joi.string().max(1024).required(),
-          discountValue: Joi.number().max(999999999999999).required(),
           salePrice: Joi.number().max(999999999999999).required(),
           vatPercentage: Joi.number().max(999999999999999).required(),
         })

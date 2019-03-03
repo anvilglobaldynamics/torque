@@ -87,7 +87,10 @@ let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
 fromDate = fromDate.getTime();
 
-describe.skip('Sales Return', _ => {
+let placeholderDefaultDiscountType = 'percent';
+let placeholderDefaultDiscountValue = 5;
+
+describe('Sales Return', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -128,8 +131,6 @@ describe.skip('Sales Return', _ => {
                   organizationId,
                   name: "test product blueprint",
                   unit: "box",
-                  defaultDiscountType: "percent",
-                  defaultDiscountValue: 10,
                   defaultPurchasePrice: 99,
                   defaultVat: 3,
                   defaultSalePrice: 111,
@@ -141,8 +142,6 @@ describe.skip('Sales Return', _ => {
                     organizationId,
                     name: "non returnable product blueprint",
                     unit: "box",
-                    defaultDiscountType: "percent",
-                    defaultDiscountValue: 10,
                     defaultPurchasePrice: 99,
                     defaultVat: 3,
                     defaultSalePrice: 111,
@@ -190,8 +189,6 @@ describe.skip('Sales Return', _ => {
                                   {
                                     productId: outletInventoryProductList[0].productId,
                                     count: 2,
-                                    discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
-                                    discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
                                     salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
                                     vatPercentage: 5
                                   }
@@ -200,13 +197,13 @@ describe.skip('Sales Return', _ => {
                                 payment: {
                                   totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
                                   vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
-                                  discountType: outletInventoryMatchingProductBlueprintList[0].defaultDiscountType,
-                                  discountValue: outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue,
-                                  discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)),
+                                  discountType: placeholderDefaultDiscountType,
+                                  discountValue: placeholderDefaultDiscountValue,
+                                  discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
                                   serviceChargeAmount: 0,
-                                  totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+                                  totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
                                   paidAmount: 300,
-                                  changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[0].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+                                  changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
                                   shouldSaveChangeInAccount: false,
                                   paymentMethod: 'cash'
                                 },
@@ -222,8 +219,6 @@ describe.skip('Sales Return', _ => {
                                     {
                                       productId: outletInventoryProductList[1].productId,
                                       count: 2,
-                                      discountType: outletInventoryMatchingProductBlueprintList[1].defaultDiscountType,
-                                      discountValue: outletInventoryMatchingProductBlueprintList[1].defaultDiscountValue,
                                       salePrice: outletInventoryMatchingProductBlueprintList[1].defaultSalePrice,
                                       vatPercentage: 5
                                     }
@@ -232,13 +227,13 @@ describe.skip('Sales Return', _ => {
                                   payment: {
                                     totalAmount: (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2),
                                     vatAmount: ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100)),
-                                    discountType: outletInventoryMatchingProductBlueprintList[1].defaultDiscountType,
-                                    discountValue: outletInventoryMatchingProductBlueprintList[1].defaultDiscountValue,
-                                    discountedAmount: ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[1].defaultDiscountValue / 100)),
+                                    discountType: placeholderDefaultDiscountType,
+                                    discountValue: placeholderDefaultDiscountValue,
+                                    discountedAmount: ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
                                     serviceChargeAmount: 0,
-                                    totalBilled: (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[1].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100))),
+                                    totalBilled: (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100))),
                                     paidAmount: 300,
-                                    changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (outletInventoryMatchingProductBlueprintList[1].defaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100)))),
+                                    changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100)))),
                                     shouldSaveChangeInAccount: false,
                                     paymentMethod: 'cash'
                                   },
