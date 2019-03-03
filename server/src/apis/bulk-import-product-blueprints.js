@@ -36,8 +36,6 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       Joi.number().max(999999999999999).required(), // defaultPurchasePrice
       Joi.number().max(999999999999999).required(), //defaultSalePrice
       Joi.number().max(999999999999999).required(), // defaultVat
-      Joi.string().valid('percent', 'fixed').required(), //defaultDiscountType
-      Joi.number().max(999999999999999).required(), // defaultDiscountValue (MUST be validated separately)
       Joi.string().valid('Yes', 'No').required() // is converted into isReturnable
     );
   }
@@ -52,18 +50,18 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       err.cellNumber = cellNumber;
       throw err;
     }
-    value[7] = (value[7] === 'Yes');
+    value[5] = (value[5] === 'Yes');
     return value;
   }
 
   _convertRowToProductBlueprint(row) {
     let [
       name, unit, defaultPurchasePrice, defaultSalePrice,
-      defaultVat, defaultDiscountType, defaultDiscountValue, isReturnable
+      defaultVat, isReturnable
     ] = row;
     return {
       name, unit, defaultPurchasePrice, defaultSalePrice,
-      defaultVat, defaultDiscountType, defaultDiscountValue, isReturnable
+      defaultVat, isReturnable
     }
   }
 
@@ -77,7 +75,6 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       try {
         rowList[i] = this._validateAgainstRowSchema(rowList[i]);
         let productBlueprint = this._convertRowToProductBlueprint(rowList[i]);
-        this._checkIfDiscountValueIsValid(productBlueprint);
         productBlueprintList.push(productBlueprint);
       } catch (err) {
         err.rowNumber = i + 1;
