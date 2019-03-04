@@ -15,8 +15,6 @@ method: `POST`
     Joi.number().max(999999999999999).required(), // defaultPurchasePrice
     Joi.number().max(999999999999999).required(), //defaultSalePrice
     Joi.number().max(999999999999999).required(), // defaultVat
-    Joi.string().valid('percent', 'fixed').required(), //defaultDiscountType
-    Joi.number().max(999999999999999).required(), // defaultDiscountValue (MUST be validated separately)
     Joi.string().valid('Yes', 'No').required() // is converted into isReturnable
   )
 }
