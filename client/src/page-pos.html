@@ -605,13 +605,15 @@
         // reducing to find totalProductAmount
         let totalProductAmount = 0;
         totalProductAmount = this.productList.reduce((sum, product) => {
-          let { salePrice, selectedCount,  vatValue } = product;
+          let { salePrice, selectedCount, vatValue } = product;
+
+          let salePriceForAllSelected = parseFloat(salePrice * selectedCount);
 
           // adding product vat value to to total vatAmount
-          vatAmount += salePrice * (vatValue / 100);
+          vatAmount += salePriceForAllSelected * (vatValue / 100);
 
           // the sum to be set as totalProductAmount
-          return parseFloat(sum) + parseFloat(salePrice * selectedCount);
+          return parseFloat(sum) + salePriceForAllSelected;
         }, 0);
 
         // reducing to find totalServiceAmount
@@ -629,20 +631,18 @@
         // totalAmount of service and product sale price(s)
         totalAmount = parseFloat(totalProductAmount) + parseFloat(totalServiceAmount);
 
-        // updating totalBilled with calculated totalAmount and vatAmount
-        totalBilled = totalAmount + vatAmount;
-        this.totalBilledCopy = totalBilled;
-
         // overall discount calculation
         if (discountValue) {
           if (discountType === 'percent') {
-            discountedAmount = totalBilled * (discountValue / 100)
-            totalBilled -= discountedAmount;
+            discountedAmount = totalAmount * (discountValue / 100);
           } else if (discountType === 'fixed') {
             discountedAmount = discountValue;
-            totalBilled -= discountedAmount;
           }
         }
+
+        // updating totalBilled with calculated totalAmount, vatAmount and discountedAmount
+        totalBilled = totalAmount + vatAmount - discountedAmount;
+        this.totalBilledCopy = totalBilled;
 
         // service charge calculation
         if (serviceChargeAmount) {
@@ -719,7 +719,7 @@
 
         let productList = this.productList.map(product => {
           // console.log(product);
-          let { name, productId, selectedCount,  salePrice, vatValue } = product;
+          let { name, productId, selectedCount, salePrice, vatValue } = product;
           let vatPercentage = vatValue;
           let finalProduct = { productId, count: selectedCount, salePrice, vatPercentage };
           if (this.isInOfflineMode) {
