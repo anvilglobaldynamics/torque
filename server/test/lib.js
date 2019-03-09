@@ -389,14 +389,6 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
           name: Joi.string().required(),
           organizationId: Joi.number().required(),
           unit: Joi.string().required(),
-          defaultDiscountType: Joi.string().required(),
-          defaultDiscountValue: Joi.number().when(
-            'defaultDiscountType', {
-              is: 'percent',
-              then: Joi.number().required(),
-              otherwise: Joi.number().required()
-            }
-          ),
           defaultPurchasePrice: Joi.number().required(),
           defaultVat: Joi.number().required(),
           defaultSalePrice: Joi.number().required(),
@@ -450,14 +442,6 @@ exports.validateReportInventoryDetailsApiSuccessResponse = (doc) => {
               name: Joi.string().required(),
               organizationId: Joi.number().required(),
               unit: Joi.string().required(),
-              defaultDiscountType: Joi.string().required(),
-              defaultDiscountValue: Joi.number().when(
-                'defaultDiscountType', {
-                  is: 'percent',
-                  then: Joi.number().required(),
-                  otherwise: Joi.number().required()
-                }
-              ),
               defaultPurchasePrice: Joi.number().required(),
               defaultVat: Joi.number().required(),
               defaultSalePrice: Joi.number().required(),
@@ -1119,14 +1103,6 @@ exports.validateProductBlueprintSchema = (doc) => {
     name: Joi.string().min(1).max(64).required(),
     organizationId: Joi.number().max(999999999999999).required(),
     unit: Joi.string().max(64).required(),
-    defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
-    defaultDiscountValue: Joi.number().when(
-      'defaultDiscountType', {
-        is: 'percent',
-        then: Joi.number().min(0).max(100).required(),
-        otherwise: Joi.number().max(999999999999999).required()
-      }
-    ),
     defaultPurchasePrice: Joi.number().max(999999999999999).required(),
     defaultVat: Joi.number().max(999999999999999).required(),
     defaultSalePrice: Joi.number().max(999999999999999).required(),
@@ -1281,8 +1257,6 @@ exports.validateSalesSchema = (doc) => {
         productBlueprintIsReturnable: Joi.boolean().required(),
         count: Joi.number().max(999999999999999).required(),
         returnedProductCount: Joi.number().max(999999999999999).required(),
-        discountType: Joi.string().max(1024).required(),
-        discountValue: Joi.number().max(999999999999999).required(),
         salePrice: Joi.number().max(999999999999999).required(),
         vatPercentage: Joi.number().max(999999999999999).required(),
       })
@@ -1374,8 +1348,6 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
       Joi.object().keys({
         productId: Joi.number().max(999999999999999).required(),
         count: Joi.number().max(999999999999999).required(),
-        discountType: Joi.string().max(1024).required(),
-        discountValue: Joi.number().max(999999999999999).required(),
         salePrice: Joi.number().max(999999999999999).required(),
         vatPercentage: Joi.number().max(999999999999999).required(),
 
@@ -1395,14 +1367,6 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
           name: Joi.string().min(1).max(64).required(),
           organizationId: Joi.number().max(999999999999999).required(),
           unit: Joi.string().max(64).required(),
-          defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
-          defaultDiscountValue: Joi.number().when(
-            'defaultDiscountType', {
-              is: 'percent',
-              then: Joi.number().min(0).max(100).required(),
-              otherwise: Joi.number().max(999999999999999).required()
-            }
-          ),
           defaultPurchasePrice: Joi.number().max(999999999999999).required(),
           defaultVat: Joi.number().max(999999999999999).required(),
           defaultSalePrice: Joi.number().max(999999999999999).required(),
@@ -1621,14 +1585,6 @@ exports.validateAggregatedProductScema = (doc) => {
         name: Joi.string().min(1).max(64).required(),
         organizationId: Joi.number().max(999999999999999).required(),
         unit: Joi.string().max(64).required(),
-        defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
-        defaultDiscountValue: Joi.number().when(
-          'defaultDiscountType', {
-            is: 'percent',
-            then: Joi.number().min(0).max(100).required(),
-            otherwise: Joi.number().max(999999999999999).required()
-          }
-        ),
         defaultPurchasePrice: Joi.number().max(999999999999999).required(),
         defaultVat: Joi.number().max(999999999999999).required(),
         defaultSalePrice: Joi.number().max(999999999999999).required(),

@@ -493,7 +493,6 @@
       }
 
       _printAndGoBack() {
-        return
         window.setTimeout(() => {
 
           const threshold = 2000;
@@ -607,12 +606,7 @@
       // region: ui  ===========================
 
       $calculateIndividualProductPrice(product) {
-        let { salePrice, count, discountType, discountValue } = product;
-        if (discountType === 'percent') {
-          salePrice -= salePrice * (discountValue / 100);
-        } else if (discountType === 'fixed') {
-          salePrice -= discountValue;
-        }
+        let { salePrice, count } = product;
         return this.$round(salePrice);
       }
 

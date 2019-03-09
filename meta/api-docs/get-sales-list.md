@@ -82,8 +82,6 @@ Possible Error Codes:
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required(),
-          discountType: Joi.string().max(1024).required(),
-          discountValue: Joi.number().max(999999999999999).required(),
           salePrice: Joi.number().max(999999999999999).required(),
 
           product: Joi.object().keys({
@@ -102,14 +100,6 @@ Possible Error Codes:
             name: Joi.string().min(1).max(64).required(),
             organizationId: Joi.number().max(999999999999999).required(),
             unit: Joi.string().max(64).required(),
-            defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
-            defaultDiscountValue: Joi.number().when(
-              'defaultDiscountType', { 
-                is: 'percent', 
-                then: Joi.number().min(0).max(100).required(), 
-                otherwise: Joi.number().max(999999999999999).required() 
-              }
-            ),
             defaultPurchasePrice: Joi.number().max(999999999999999).required(),
             defaultVat: Joi.number().max(999999999999999).required(),
             defaultSalePrice: Joi.number().max(999999999999999).required(),
@@ -202,8 +192,6 @@ Possible Error Codes:
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required(),
-          discountType: Joi.string().max(1024).required(),
-          discountValue: Joi.number().max(999999999999999).required(),
           salePrice: Joi.number().max(999999999999999).required(),
           productBlueprint: Joi.object().required()
         })
