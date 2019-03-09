@@ -458,7 +458,7 @@
       }
 
       onNavigateIn() {
-        this.defaultPrinterFormat = this.app.settings.defaultPrinterFormat;
+        this.defaultPrinterFormat = this.app.settings.defaultPrinterFormat || 'a4';
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.app.shouldShowPrintButton = true;
