@@ -51,9 +51,7 @@
         margin-bottom: 10px;
       }
 
-      .move-to-inventory-help {
-
-      }
+      .move-to-inventory-help {}
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -96,7 +94,7 @@
 
             <template is="dom-repeat" items="[[productList]]" as="product">
               <template is="dom-if" if="[[!product.isSelected]]">
-                
+
                 <div class="horizontal layout item center">
                   <div class="vertical layout flex">
                     <div class="inventory-product-important-detail-container">[[product.name]]</div>
@@ -116,7 +114,7 @@
 
                   <!-- select -->
                   <template is="dom-if" if="[[isProductSelectionForInitiated]]">
-                    <template is="dom-if" if="[[product.count]]">                    
+                    <template is="dom-if" if="[[product.count]]">
                       <paper-button raised class="secondary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
                     </template>
                   </template>
@@ -165,10 +163,10 @@
                   <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
                 </div>
 
-                <template is="dom-if" if="[[product.count]]">                    
-                  
+                <template is="dom-if" if="[[product.count]]">
+
                   <template is="dom-if" if="[[product.isSelected]]">
-                    <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" on-input="genericSelectedCountInputChanged" min="1" max="[[product.count]]" label="[[verses.general.count]]">
+                    <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" min="1" max="[[product.count]]" label="[[verses.general.count]]">
                       <div slot="suffix">&nbsp;[[product.unit]]</div>
                     </paper-input>
                     <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
@@ -286,7 +284,7 @@
           });
           return;
         }
-        if(this.searchString !== '') this.set('searchString', '');
+        if (this.searchString !== '') this.set('searchString', '');
         this.isProductSelectionForInitiated = false;
         this._processInventory(() => {
           this._fetchInventoryList(() => {
@@ -415,7 +413,7 @@
       selectTapped(e) {
         e.model.set('product.selectedCount', 1);
         e.model.set('product.isSelected', true);
-        
+
         let { product } = e.model;
         this._addProductToSelectedProductList({ product });
       }

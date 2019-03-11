@@ -223,7 +223,7 @@
                   </div>
                   <div class="horizontal layout center">
                     <div class="description">[[product.selectedCount]] [[product.unit]] @&nbsp;</div>
-                    <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" auto-validate min="[[product.minSalePrice]]"></paper-input>
+                    <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" type="number" auto-validate min="[[product.minSalePrice]]"></paper-input>
                     <div class="description">[[app.settings.monetaryUnit]]</div>
                   </div>
                 </div>
@@ -277,7 +277,7 @@
                     </template>
 
                     <div class="horizontal layout center">
-                      <paper-input class="flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" auto-validate></paper-input>
+                      <paper-input class="flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" type="number" auto-validate></paper-input>
                       <div class="description">[[app.settings.monetaryUnit]]</div>
                     </div>
 
@@ -327,12 +327,12 @@
                   </paper-dropdown-menu>
 
                   <template is="dom-if" if="[[$equals(payment.discountType, 'percent')]]">
-                    <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" max="100" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
+                    <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-change="genericPaymentInputChanged" type="number" required min="0" max="100" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
                       <div slot="suffix">%</div>
                     </paper-input>
                   </template>
                   <template is="dom-if" if="[[$equals(payment.discountType, 'fixed')]]">
-                    <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" max="[[totalBilledCopy]]" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
+                    <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-change="genericPaymentInputChanged" type="number" required min="0" max="[[totalBilledCopy]]" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
                       <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                     </paper-input>
                   </template>
@@ -348,7 +348,7 @@
 
             <div class="individual-calculation-field-container">
 
-              <paper-input class="payment--serviceChargeAmount" value="{{payment.serviceChargeAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.serviceChargeInputError]]" label="[[verses.pos.serviceChargeInput]]">
+              <paper-input class="payment--serviceChargeAmount" value="{{payment.serviceChargeAmount}}" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.serviceChargeInputError]]" label="[[verses.pos.serviceChargeInput]]">
                 <div slot="suffix">[[app.settings.monetaryUnit]]</div>
               </paper-input>
 
@@ -381,7 +381,7 @@
               </paper-dropdown-menu>
 
               <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
-                <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+                <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
                   <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                 </paper-input>
               </template>

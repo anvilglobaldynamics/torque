@@ -24,7 +24,6 @@
 <dom-module id="page-add-products">
   <template>
     <style include="shared-styles">
-
       .container-card {
         border: 1px solid #eee;
         background-color: #f7f7f7;
@@ -55,14 +54,13 @@
         margin: 5px;
       }
 
-      .in-page-header{
+      .in-page-header {
         margin-top: 4px;
         margin-bottom: 4px;
         font-weight: bold;
         /* text-align: center;
         text-decoration: underline; */
       }
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -159,13 +157,13 @@
               <div class="horizontal layout item center">
                 <div class="product-title">[[productBlueprint.name]]</div>
                 <div class="product-blueprint-numeric">
-                  <paper-input class$="small-input id-[[productBlueprint.id]]" value="{{productBlueprint.count}}" type="number" min="0" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" label=[[productBlueprint.unit]]></paper-input>
+                  <paper-input class$="small-input id-[[productBlueprint.id]]" value="{{productBlueprint.count}}" type="number" min="0" on-change="genericNumericInputChanged" label=[[productBlueprint.unit]]></paper-input>
                 </div>
                 <div class="product-blueprint-numeric">
-                  <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="[[productBlueprint.purchasePrice]]" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" value="{{productBlueprint.salePrice}}" type="number"></paper-input>
+                  <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="[[productBlueprint.purchasePrice]]" on-change="genericNumericInputChanged" value="{{productBlueprint.salePrice}}" type="number"></paper-input>
                 </div>
                 <div class="product-blueprint-numeric">
-                  <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="0" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
+                  <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="0" on-change="genericNumericInputChanged" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
                 </div>
               </div>
             </div>
