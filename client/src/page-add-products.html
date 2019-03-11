@@ -350,6 +350,9 @@
       productBlueprintInputChanged(e) {
         let index = parseInt(String(e.model.index));
         let productBlueprint = this.productBlueprintList[index];
+        if (productBlueprint.count === '') {
+          productBlueprint.count = '0';
+        }
         this.unshift('selectedProductBlueprintList', productBlueprint);
         this.splice('productBlueprintList', index, 1);
         window.setTimeout(() => {
