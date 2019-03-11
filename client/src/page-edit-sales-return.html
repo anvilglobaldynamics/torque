@@ -42,9 +42,9 @@
             <div>[[verses.salesReturn.soldCount]]: [[productToBeReturned.count]]</div>
             <div>[[verses.salesReturn.returnCount]]: [[productToBeReturned.returnedProductCount]]</div>
             
-            <paper-input class="salesReturnForm--productReturnCount" value="{{salesReturnForm.productReturnCount}}" type="number" required min="1" max="[[maxAllowedReturnCount(productToBeReturned.count, productToBeReturned.returnedProductCount)]]" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" error-message=[[verses.salesReturn.productReturnCountInputError]] label=[[verses.salesReturn.productReturnCountInput]]></paper-input>
+            <paper-input class="salesReturnForm--productReturnCount" value="{{salesReturnForm.productReturnCount}}" type="number" required min="1" max="[[maxAllowedReturnCount(productToBeReturned.count, productToBeReturned.returnedProductCount)]]" on-change="genericNumericInputChanged" error-message=[[verses.salesReturn.productReturnCountInputError]] label=[[verses.salesReturn.productReturnCountInput]]></paper-input>
             
-            <paper-input class="salesReturnForm--creditedAmount" value="{{salesReturnForm.creditedAmount}}" type="number" required min="0" max="[[maxAllowedCreditAmount(productToBeReturned.count, productToBeReturned.returnedProductCount, productToBeReturned.salePrice)]]" on-input="genericNumericInputChanged" on-change="genericNumericInputChanged" error-message=[[verses.salesReturn.creditedAmountInputError]] label=[[verses.salesReturn.creditedAmountInput]]>
+            <paper-input class="salesReturnForm--creditedAmount" value="{{salesReturnForm.creditedAmount}}" type="number" required min="0" max="[[maxAllowedCreditAmount(productToBeReturned.count, productToBeReturned.returnedProductCount, productToBeReturned.salePrice)]]" on-change="genericNumericInputChanged" error-message=[[verses.salesReturn.creditedAmountInputError]] label=[[verses.salesReturn.creditedAmountInput]]>
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
 

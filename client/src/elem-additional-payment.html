@@ -66,7 +66,7 @@
           </paper-dropdown-menu>
 
           <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
-            <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" min="1" on-input="genericPaymentInputChanged" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.additionalPayment.paidAmountInputError]]" label="[[verses.additionalPayment.paidAmountInput]]">
+            <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" min="1" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.additionalPayment.paidAmountInputError]]" label="[[verses.additionalPayment.paidAmountInput]]">
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
           </template>
