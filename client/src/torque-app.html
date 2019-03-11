@@ -819,6 +819,7 @@
       logoutTapped(e = null) {
         this.callUserLogoutApi({}, (err, response) => {
           this.removeUser();
+          window.sessionStorage.clear();
           this.navigateTo('/login');
           window.location.reload();
         })
