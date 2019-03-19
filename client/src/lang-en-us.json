@@ -871,23 +871,24 @@
     "serviceBlueprints": "Service Blueprint"
   },
   "salesReceipt": {
-    "goodsTitle": "Product / Service",
+    "goodsTitle": "Item",
+    "quantity": "Qty",
     "receiptTitle": "Sales Receipt ",
     "warnDiscared": "WARNING! This sale has been discarded.",
     "returnedCount": "Returned Count",
-    "totalPaid": "Total Paid Amount",
+    "totalPaid": "Total Paid",
     "payment": "Payment",
-    "paymentMethod": "Payment Method",
+    "paymentMethod": "Method",
     "printedBy": "Printed By",
     "soldBy": "Sold By",
     "customerName": "Customer Name",
-    "totalAmount": "Total Amount",
-    "vatAmount": "Vat Amount",
-    "discountedAmount": "Discounted Amount",
-    "serviceChargeInput": "Service Charge Amount",
+    "totalAmount": "Total",
+    "vatAmount": "VAT",
+    "discountedAmount": "Discounted",
+    "serviceChargeInput": "Service Charge",
     "totalBilled": "Total Billed",
-    "paidAmountInput": "Paid Amount",
-    "changeAmount": "Change Amount",
-    "dueAmount": "Due amount"
+    "paidAmountInput": "Paid",
+    "changeAmount": "Change",
+    "dueAmount": "Due"
   }
 }
