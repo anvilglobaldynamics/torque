@@ -27,6 +27,7 @@
 <dom-module id="page-print-sales-receipt">
   <template>
     <style include="shared-styles">
+      /* common - start */
       @media print {
 
         .filter-toggle-region,
@@ -38,113 +39,114 @@
         .report {
           margin-top: -48px;
         }
+
+        .filter-toggle-region {
+          text-align: right;
+          margin-right: 8px;
+          margin-bottom: 8px;
+        }
+
+        .ml-8 {
+          margin-left: 8px;
+        }
       }
 
       .report {
         background-color: white;
+      }
+
+      /* common - end */
+
+      /* a4 - start */
+      .a4-report {
         padding: 12px;
         width: calc(100% - 24px);
       }
 
-      .report .author-title {
+      .a4-report .author-title {
         font-weight: bold;
       }
 
-      .report .header {
+      .a4-report .header {
         padding-bottom: 4px;
         border-bottom: 1px solid black;
       }
 
-      .report .header .name {
+      .a4-report .header .name {
         font-size: 30px;
         text-align: center;
       }
 
-      .report .header .date {
+      .a4-report .header .date {
         font-size: 15px;
         text-align: center;
       }
 
-      .report .body {}
+      .a4-report .body {
+        /* NOTE: A4 page - header - footer - page margin */
+        min-height: calc(297mm - 38mm - 20mm - 34mm);
+      }
 
-      .report .body .item {
+      .a4-report .body .item {
         margin-bottom: 8px;
         margin-top: 8px;
         padding-bottom: 8px;
         border-bottom: 1px dotted rgb(131, 131, 131);
       }
 
-      .filter-toggle-region {
-        text-align: right;
-        margin-right: 8px;
-        margin-bottom: 8px;
-      }
-
-      .ml-8 {
-        margin-left: 8px;
-      }
-
-      .product-table,
-      .payment-table {
+      .a4-report .product-table,
+      .a4-report .payment-table {
         width: 100%;
         border-collapse: collapse;
       }
 
       /* table.product-table, */
-      .product-table th,
-      .product-table td,
-      .payment-table th,
-      .payment-table td {
+      .a4-report .product-table th,
+      .a4-report .product-table td,
+      .a4-report .payment-table th,
+      .a4-report .payment-table td {
         border: 1px solid black;
       }
 
-      .product-table {
+      .a4-report .product-table {
         margin-top: 18px;
       }
 
-      .monetary-cell {
+      .a4-report .monetary-cell {
         text-align: right;
         padding-right: 4px;
       }
 
-      .quantitive-cell {
+      .a4-report .quantitive-cell {
         text-align: right;
         padding-right: 4px;
       }
 
-      .section-header {
+      .a4-report .section-header {
         text-align: center;
         text-decoration: underline;
         margin-top: 18px;
         margin-bottom: 8px;
       }
 
-      .footer {
+      .a4-report .footer {
         margin-top: 8px;
         margin-bottom: 8px;
       }
 
-      .footer-sold-by {
+      .a4-report .footer-sold-by {
         text-align: right;
       }
 
-      .customer-area {
+      .a4-report .customer-area {
         margin-top: 4px;
       }
 
-      .centered-cell {
+      .a4-report .centered-cell {
         text-align: center;
       }
 
-      .body-a4 {
-        /* NOTE: A4 page - header - footer - page margin */
-        min-height: calc(297mm - 38mm - 20mm - 34mm);
-      }
-
-      .body-slim {
-        /* NOTE: A4 page - header - footer - page margin */
-        /* min-height: calc(297mm - 38mm - 20mm - 34mm); */
-      }
+      /* a4 - end */
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -153,7 +155,7 @@
 
       <!-- REGION: slim receipt - start -->
       <template is="dom-if" if="[[$equals(defaultPrinterFormat, 'slim')]]">
-        <div class="report">
+        <div class="slim-report report">
           <div class="header vertical layout">
             <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.id]]</div>
             <div>
@@ -170,7 +172,7 @@
             </div>
           </div>
 
-          <div class="body body-slim">
+          <div class="body">
 
             <template is="dom-if" if="{{sales.isDiscarded}}">
               <div><b>[[verses.salesReceipt.warnDiscared]]</b></div>
@@ -289,7 +291,7 @@
 
       <!-- REGION: a4 receipt - start -->
       <template is="dom-if" if="[[$equals(defaultPrinterFormat, 'a4')]]">
-        <div class="report">
+        <div class="a4-report report">
           <div class="header vertical layout">
             <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.id]]</div>
             <div class="horizontal layout">
@@ -309,7 +311,7 @@
             </div>
           </div>
 
-          <div class="body body-a4">
+          <div class="body">
 
             <template is="dom-if" if="{{sales.isDiscarded}}">
               <div><b>[[verses.salesReceipt.warnDiscared]]</b></div>
@@ -475,7 +477,7 @@
         }
         this._processSales(_ => {
           this.isReady = true;
-          this._printAndGoBack();
+          // this._printAndGoBack();
         });
       }
 
