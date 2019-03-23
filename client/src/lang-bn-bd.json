@@ -872,23 +872,24 @@
     "serviceBlueprints": "সেবার সদস্যপদ"
   },
   "salesReceipt": {
-    "goodsTitle": "পণ্য / সেবা",
+    "goodsTitle": "পণ্য/সেবা",
+    "quantity": "পরিমান",
     "receiptTitle": "বিক্রয় রসিদ",
     "warnDiscared": "সতর্কবার্তা! এই বিক্রয় রেকর্ড বাতিল করা হয়েছে।",
     "returnedCount": "ফেরৎ গণনা",
     "totalPaid": "মোট পরিশোধিত",
     "payment": "টাকা প্রদান",
-    "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
+    "paymentMethod": "পদ্ধতি",
     "printedBy": "প্রিন্ট করেছেন",
     "soldBy": "বিক্রয়কারী",
     "customerName": "গ্রাহকের নাম",
-    "totalAmount": "মোট পরিমান",
-    "vatAmount": "ভ্যাট পরিমান",
-    "discountedAmount": "ছাড়ের পরিমান",
+    "totalAmount": "মোট",
+    "vatAmount": "ভ্যাট",
+    "discountedAmount": "ছাড়",
     "serviceChargeInput": "সার্ভিস চার্জ",
     "totalBilled": "মোট বিল",
-    "paidAmountInput": "পরিশোধিত পরিমান",
-    "changeAmount": "ফেরত পরিমান",
+    "paidAmountInput": "পরিশোধিত",
+    "changeAmount": "ফেরত",
     "dueAmount": "বাকি অর্থ"
   }
 }
