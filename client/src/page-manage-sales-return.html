@@ -61,9 +61,9 @@
               </template>
             </div>
             <template is="dom-if" if="[[customer]]">
-              <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.salesReturn.removeCustomer]]</paper-button>
+              <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.general.remove]]</paper-button>
             </template>
-            <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.salesReturn.changeCustomer]]</paper-button>
+            <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.general.select]]</paper-button>
           </div>
         </div>
       </template>
@@ -84,9 +84,9 @@
               </template>
             </div>
             <template is="dom-if" if="[[outlet]]">
-              <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.salesReturn.removeOutlet]]</paper-button>
+              <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.general.remove]]</paper-button>
             </template>
-            <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.salesReturn.changeOutlet]]</paper-button>
+            <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.general.select]]</paper-button>
           </div>
         </div>
       </template>

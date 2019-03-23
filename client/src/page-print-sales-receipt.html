@@ -27,6 +27,7 @@
 <dom-module id="page-print-sales-receipt">
   <template>
     <style include="shared-styles">
+      /* common - start */
       @media print {
 
         .filter-toggle-region,
@@ -38,113 +39,200 @@
         .report {
           margin-top: -48px;
         }
+
+        .filter-toggle-region {
+          text-align: right;
+          margin-right: 8px;
+          margin-bottom: 8px;
+        }
+
+        .ml-8 {
+          margin-left: 8px;
+        }
       }
 
       .report {
         background-color: white;
+      }
+
+      /* common - end */
+
+      /* a4 - start */
+      .a4-report {
         padding: 12px;
         width: calc(100% - 24px);
       }
 
-      .report .author-title {
+      .a4-report .author-title {
         font-weight: bold;
       }
 
-      .report .header {
+      .a4-report .header {
         padding-bottom: 4px;
         border-bottom: 1px solid black;
       }
 
-      .report .header .name {
+      .a4-report .header .name {
         font-size: 30px;
         text-align: center;
       }
 
-      .report .header .date {
+      .a4-report .header .date {
         font-size: 15px;
         text-align: center;
       }
 
-      .report .body {}
+      .a4-report .body {
+        /* NOTE: A4 page - header - footer - page margin */
+        min-height: calc(297mm - 38mm - 20mm - 34mm);
+      }
 
-      .report .body .item {
+      .a4-report .body .item {
         margin-bottom: 8px;
         margin-top: 8px;
         padding-bottom: 8px;
         border-bottom: 1px dotted rgb(131, 131, 131);
       }
 
-      .filter-toggle-region {
-        text-align: right;
-        margin-right: 8px;
-        margin-bottom: 8px;
-      }
-
-      .ml-8 {
-        margin-left: 8px;
-      }
-
-      .product-table,
-      .payment-table {
+      .a4-report .product-table,
+      .a4-report .payment-table {
         width: 100%;
         border-collapse: collapse;
       }
 
       /* table.product-table, */
-      .product-table th,
-      .product-table td,
-      .payment-table th,
-      .payment-table td {
+      .a4-report .product-table th,
+      .a4-report .product-table td,
+      .a4-report .payment-table th,
+      .a4-report .payment-table td {
         border: 1px solid black;
       }
 
-      .product-table {
+      .a4-report .product-table {
         margin-top: 18px;
       }
 
-      .monetary-cell {
+      .a4-report .monetary-cell {
         text-align: right;
         padding-right: 4px;
       }
 
-      .quantitive-cell {
+      .a4-report .quantitive-cell {
         text-align: right;
         padding-right: 4px;
       }
 
-      .section-header {
+      .a4-report .section-header {
         text-align: center;
         text-decoration: underline;
         margin-top: 18px;
         margin-bottom: 8px;
       }
 
-      .footer {
+      .a4-report .footer {
         margin-top: 8px;
         margin-bottom: 8px;
       }
 
-      .footer-sold-by {
+      .a4-report .footer-sold-by {
         text-align: right;
       }
 
-      .customer-area {
+      .a4-report .customer-area {
         margin-top: 4px;
       }
 
-      .centered-cell {
+      .a4-report .centered-cell {
         text-align: center;
       }
 
-      .body-a4 {
-        /* NOTE: A4 page - header - footer - page margin */
-        min-height: calc(297mm - 38mm - 20mm - 34mm);
+      /* a4 - end */
+
+      /* slim - start */
+
+      .slim-report {
+        font-size: 10px;
       }
 
-      .body-slim {
-        /* NOTE: A4 page - header - footer - page margin */
-        /* min-height: calc(297mm - 38mm - 20mm - 34mm); */
+      .slim-report .author-title {
+        font-weight: bold;
       }
+
+      .slim-report .header {
+        padding-bottom: 4px;
+        border-bottom: 1px solid black;
+      }
+
+      .slim-report .header .name {
+        font-size: 16px;
+        text-align: center;
+      }
+
+      .slim-report .header .date {
+        font-size: 10px;
+        text-align: center;
+      }
+
+      .slim-report .body .item {
+        margin-bottom: 8px;
+        margin-top: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px dotted rgb(131, 131, 131);
+      }
+
+      .slim-report .product-table,
+      .slim-report .payment-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      /* table.product-table, */
+      .slim-report .product-table th,
+      .slim-report .product-table td,
+      .slim-report .payment-table th,
+      .slim-report .payment-table td {
+        border: 1px solid black;
+      }
+
+      .slim-report .product-table {
+        /* margin-top: 18px; */
+      }
+
+      .slim-report .monetary-cell {
+        text-align: right;
+        padding-right: 4px;
+      }
+
+      .slim-report .quantitive-cell {
+        text-align: right;
+        padding-right: 4px;
+      }
+
+      .slim-report .section-header {
+        text-align: center;
+        /* text-decoration: underline; */
+        margin-top: 18px;
+        margin-bottom: 8px;
+      }
+
+      .slim-report .footer {
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+
+      .slim-report .footer-sold-by {
+        text-align: right;
+      }
+
+      .slim-report .customer-area {
+        margin-top: 4px;
+      }
+
+      .slim-report .centered-cell {
+        text-align: center;
+      }
+
+      /* slim - end */
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -153,12 +241,13 @@
 
       <!-- REGION: slim receipt - start -->
       <template is="dom-if" if="[[$equals(defaultPrinterFormat, 'slim')]]">
-        <div class="report">
+        <div class="slim-report report">
           <div class="header vertical layout">
             <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.id]]</div>
+            <div class="date"><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
             <div>
               <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
-              <div>[[app.organization.primaryBusinessAddress]]</div>
+              <!-- <div>[[app.organization.primaryBusinessAddress]]</div> -->
               <div>[[app.organization.email]]</div>
               <div>[[app.organization.phone]]</div>
             </div>
@@ -170,7 +259,7 @@
             </div>
           </div>
 
-          <div class="body body-slim">
+          <div class="body">
 
             <template is="dom-if" if="{{sales.isDiscarded}}">
               <div><b>[[verses.salesReceipt.warnDiscared]]</b></div>
@@ -181,15 +270,14 @@
                 <div><b>[[verses.salesReceipt.customerName]]:</b> [[customer.fullName]]</div>
                 <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
               </template>
-              <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
             </div>
 
             <table class="product-table">
               <tr>
                 <th>[[verses.salesReceipt.goodsTitle]]</th>
-                <th>[[verses.general.quantity]]</th>
+                <th>[[verses.salesReceipt.quantity]]</th>
                 <!-- <th>[[verses.general.unitPrice]]</th> -->
-                <th>[[verses.general.price]]</th>
+                <th>[[verses.general.price]] [[app.settings.monetaryUnit]]</th>
               </tr>
 
               <template is="dom-repeat" items="{{sales.productList}}" as="product">
@@ -202,7 +290,7 @@
                   </td>
                   <td class="quantitive-cell">[[product.count]] [[product.unit]]</td>
                   <!-- <td class="monetary-cell">[[product.salePrice]] [[app.settings.monetaryUnit]]</td> -->
-                  <td class="monetary-cell">[[$calculateIndividualProductPrice(product)]] [[app.settings.monetaryUnit]]</td>
+                  <td class="monetary-cell">[[$calculateIndividualProductPrice(product)]] </td>
                 </tr>
               </template>
 
@@ -213,56 +301,57 @@
                   </td>
                   <td class="quantitive-cell">1</td>
                   <!-- <td class="monetary-cell">[[service.salePrice]] [[app.settings.monetaryUnit]]</td> -->
-                  <td class="monetary-cell">[[$calculateIndividualServicePrice(service)]] [[app.settings.monetaryUnit]]</td>
+                  <td class="monetary-cell">[[$calculateIndividualServicePrice(service)]]</td>
                 </tr>
               </template>
 
               <tr>
                 <th colspan="2">[[verses.salesReceipt.totalAmount]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.totalAmount)]] [[app.settings.monetaryUnit]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.totalAmount)]] </th>
               </tr>
               <tr>
                 <th colspan="2">[[verses.salesReceipt.vatAmount]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.vatAmount)]]</th>
               </tr>
               <tr>
                 <th colspan="2">[[verses.salesReceipt.discountedAmount]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]]</th>
               </tr>
               <tr>
                 <th colspan="2">[[verses.salesReceipt.serviceChargeInput]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]]</th>
               </tr>
               <tr>
                 <th colspan="2">[[verses.salesReceipt.totalBilled]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.totalBilled)]]</th>
               </tr>
               <tr>
                 <th colspan="2">[[verses.salesReceipt.totalPaid]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]]</th>
               </tr>
               <template is="dom-if" if="[[sales.payment.dueAmount]]">
                 <tr>
                   <th colspan="2">[[verses.salesReceipt.dueAmount]]</th>
-                  <th class="monetary-cell">[[$round(sales.payment.dueAmount)]] [[app.settings.monetaryUnit]]</th>
+                  <th class="monetary-cell">[[$round(sales.payment.dueAmount)]]</th>
                 </tr>
               </template>
             </table>
 
-            <div class="section-header"><b>[[verses.salesReceipt.payment]]</b></div>
+            <div class="section-header"><b>[[verses.salesReceipt.payment]] ([[app.settings.monetaryUnit]])</b></div>
 
             <table class="payment-table">
               <tr>
                 <th>[[verses.general.date]]</th>
-                <!-- <th>[[verses.salesReceipt.paymentMethod]]</th> -->
                 <th>[[verses.salesReceipt.paidAmountInput]]</th>
+                <th>[[verses.salesReceipt.paymentMethod]]</th>
                 <th>[[verses.salesReceipt.changeAmount]]</th>
               </tr>
               <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
                 <tr>
                   <td class="centered-cell">[[$mkDate(payment.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</td>
-                  <td class="monetary-cell">[[$round(payment.paidAmount)]] [[app.settings.monetaryUnit]] ([[payment.paymentMethod]])</td>
-                  <td class="monetary-cell">[[$round(payment.changeAmount)]] [[app.settings.monetaryUnit]]</td>
+                  <td class="monetary-cell">[[$round(payment.paidAmount)]] </td>
+                  <td class="monetary-cell"> [[payment.paymentMethod]]</td>
+                  <td class="monetary-cell">[[$round(payment.changeAmount)]] </td>
                 </tr>
               </template>
             </table>
@@ -272,13 +361,10 @@
 
           <div class="footer vertical layout">
             <div>
-              <div class="author-title">[[verses.salesReceipt.printedBy]]: [[app.user.fullName]]</div>
-              <div>[[app.organization.employment.designation]] [[app.organization.employment.companyProvidedId]]</div>
+              <div class="author-title">[[verses.salesReceipt.printedBy]]: [[app.user.fullName]], [[app.organization.employment.designation]] [[app.organization.employment.companyProvidedId]]</div>
             </div>
             <div class="footer-sold-by-slim">
-              <div class="author-title">[[verses.salesReceipt.soldBy]]: [[soldByUser.fullName]]</div>
-              <div>[[soldByUser.designation]] [[soldByUser.companyProvidedId]]</div>
-              <!-- <div>[[soldByUser.phone]]</div> -->
+              <div class="author-title">[[verses.salesReceipt.soldBy]]: [[soldByUser.fullName]], [[soldByUser.designation]] [[soldByUser.companyProvidedId]]</div>
             </div>
           </div>
 
@@ -289,7 +375,7 @@
 
       <!-- REGION: a4 receipt - start -->
       <template is="dom-if" if="[[$equals(defaultPrinterFormat, 'a4')]]">
-        <div class="report">
+        <div class="a4-report report">
           <div class="header vertical layout">
             <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.id]]</div>
             <div class="horizontal layout">
@@ -309,7 +395,7 @@
             </div>
           </div>
 
-          <div class="body body-a4">
+          <div class="body">
 
             <template is="dom-if" if="{{sales.isDiscarded}}">
               <div><b>[[verses.salesReceipt.warnDiscared]]</b></div>
@@ -458,7 +544,7 @@
       }
 
       onNavigateIn() {
-        this.defaultPrinterFormat = this.app.settings.defaultPrinterFormat;
+        this.defaultPrinterFormat = this.app.settings.defaultPrinterFormat || 'a4';
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.app.shouldShowPrintButton = true;
@@ -493,7 +579,6 @@
       }
 
       _printAndGoBack() {
-        return
         window.setTimeout(() => {
 
           const threshold = 2000;
@@ -607,12 +692,7 @@
       // region: ui  ===========================
 
       $calculateIndividualProductPrice(product) {
-        let { salePrice, count, discountType, discountValue } = product;
-        if (discountType === 'percent') {
-          salePrice -= salePrice * (discountValue / 100);
-        } else if (discountType === 'fixed') {
-          salePrice -= discountValue;
-        }
+        let { salePrice, count } = product;
         return this.$round(salePrice);
       }
 

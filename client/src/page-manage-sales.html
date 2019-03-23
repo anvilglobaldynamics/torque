@@ -59,9 +59,12 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="card horizontal layout center wrap">
-        <paper-input class="flex min-input" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
-        <paper-input class="flex min-input" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+      <div class="card vertical layout">
+        <div class="horizontal layout center">
+          <paper-input class="flex min-input" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+          <paper-input class="flex min-input" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+        </div>
+
         <paper-input class="flex min-input" value="{{salesNumberToSearch}}" label="[[verses.sales.salesId]] [[verses.sales.salesIdNote]]" type="text"></paper-input>
       </div>
 
@@ -81,9 +84,9 @@
             </div>
             <div class="horizontal layout center">
               <template is="dom-if" if="[[customer]]">
-                <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.sales.removeCustomer]]</paper-button>
+                <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.general.remove]]</paper-button>
               </template>
-              <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.sales.changeCustomer]]</paper-button>
+              <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.general.select]]</paper-button>
             </div>
           </div>
         </div>
@@ -105,9 +108,9 @@
               </template>
             </div>
             <template is="dom-if" if="[[outlet]]">
-              <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.sales.removeOutlet]]</paper-button>
+              <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.general.remove]]</paper-button>
             </template>
-            <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.sales.changeOutlet]]</paper-button>
+            <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.general.select]]</paper-button>
           </div>
         </div>
       </template>

@@ -49,28 +49,6 @@
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
 
-            <div class="vartical layout">
-              <paper-dropdown-menu label=[[verses.productBlueprint.defaultDiscountType]] class="mr-4" style="width: 100%">
-                <paper-listbox slot="dropdown-content" selected="{{editProductBlueprintForm.defaultDiscountType}}" attr-for-selected="name">
-                  <paper-item name="percent">[[verses.general.percentage]]</paper-item>
-                  <paper-item name="fixed">[[verses.general.fixedValue]]</paper-item>
-                </paper-listbox>
-              </paper-dropdown-menu>
-
-              <template is="dom-if" if="[[$equals(editProductBlueprintForm.defaultDiscountType, 'percent')]]">
-                <paper-input class="editProductBlueprintForm--defaultDiscountValue flex" value="{{editProductBlueprintForm.defaultDiscountValue}}" type="number" required min="0" max="100" on-input="genericDiscountValueInputChanged" error-message=[[verses.productBlueprint.defaultDiscountValueInputError]] label=[[verses.productBlueprint.defaultDiscountValueInput]]>
-                  <div slot="suffix">%</div>
-                </paper-input>
-              </template>
-
-              <template is="dom-if" if="[[$equals(editProductBlueprintForm.defaultDiscountType, 'fixed')]]">
-                <paper-input class="editProductBlueprintForm--defaultDiscountValue flex" value="{{editProductBlueprintForm.defaultDiscountValue}}" type="number" required min="0" max="[[calculateSalePriceAfterVat()]]" on-input="genericDiscountValueInputChanged" error-message=[[verses.productBlueprint.defaultDiscountValueInputError]] label=[[verses.productBlueprint.defaultDiscountValueInput]]>
-                  <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-                </paper-input>
-              </template>
-
-            </div>
-
             <paper-checkbox checked="{{editProductBlueprintForm.isReturnable}}">[[verses.productBlueprint.isProductReturnable]]</paper-checkbox>
 
             <div class="horizontal layout button-row end">
@@ -110,8 +88,6 @@
                 return {
                   name: "Bottoms",
                   unit: "pcs",
-                  defaultDiscountType: "percent",
-                  defaultDiscountValue: 5,
                   defaultPurchasePrice: 400,
                   defaultVat: 15,
                   defaultSalePrice: 500,
@@ -121,8 +97,6 @@
                 return {
                   name: "",
                   unit: "",
-                  defaultDiscountType: "percent",
-                  defaultDiscountValue: 0,
                   defaultPurchasePrice: 0,
                   defaultVat: 0,
                   defaultSalePrice: 0,
@@ -199,13 +173,13 @@
           return productBlueprint.id === parseInt(this.params['product-blueprint']);
         });
         this.editingProductBlueprint = productBlueprint;
-        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productBlueprint;
-        this.editProductBlueprintForm = { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
+        let { name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productBlueprint;
+        this.editProductBlueprintForm = { name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
       }
 
-      _processCreateProductBlueprint({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+      _processCreateProductBlueprint({ name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
         let data = {
-          name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
+          name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
           organizationId: this.app.organization.id,
         };
         this.app.callAddProductBlueprintApi(data, (err, response) => {
@@ -218,9 +192,9 @@
         });
       }
 
-      _processUpdateProductBlueprint({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+      _processUpdateProductBlueprint({ name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
         let data = {
-          name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
+          name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
           productBlueprintId: this.editingProductBlueprint.id
         };
 
@@ -244,16 +218,16 @@
         this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editProductBlueprintForm').validate()) return;
 
-        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
-        this._processCreateProductBlueprint({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+        let { name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
+        this._processCreateProductBlueprint({ name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
       }
 
       updateProductBlueprintTapped(e = null) {
         this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editProductBlueprintForm').validate()) return;
 
-        let { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
-        this._processUpdateProductBlueprint({ name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+        let { name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
+        this._processUpdateProductBlueprint({ name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
       }
 
       genericDiscountValueInputChanged(e) {

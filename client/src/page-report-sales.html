@@ -28,6 +28,7 @@
   <template>
     <style include="shared-styles">
       @media print {
+
         .filter-toggle-region,
         .filter-toggle-region paper-toggle-button,
         .filter-region {
@@ -111,9 +112,9 @@
               </div>
               <div class="horizontal layout center">
                 <template is="dom-if" if="[[customer]]">
-                  <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.salesReport.removeCustomer]]</paper-button>
+                  <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.general.remove]]</paper-button>
                 </template>
-                <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.salesReport.changeCustomer]]</paper-button>
+                <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.general.select]]</paper-button>
               </div>
             </div>
           </div>
@@ -135,9 +136,9 @@
                 </template>
               </div>
               <template is="dom-if" if="[[outlet]]">
-                <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.salesReport.removeOutlet]]</paper-button>
+                <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.general.remove]]</paper-button>
               </template>
-              <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.salesReport.changeOutlet]]</paper-button>
+              <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.general.select]]</paper-button>
             </div>
           </div>
         </template>
@@ -219,7 +220,7 @@
                   </template>
 
                   <div class="description">
-                    <strong>[[verses.salesReport.total]]:</strong> 
+                    <strong>[[verses.salesReport.total]]:</strong>
                     <template is="dom-if" if="[[sales.productList.length]]">
                       [[sales.productList.length]] [[verses.salesReport.products]]
                     </template>
@@ -487,12 +488,7 @@
       }
 
       $calculateIndividuallyDiscountedSalePrice(product) {
-        let { salePrice, count, discountType, discountValue } = product;
-        if (discountType === 'percent') {
-          salePrice -= salePrice * (discountValue / 100);
-        } else if (discountType === 'fixed') {
-          salePrice -= discountValue;
-        }
+        let { salePrice, count } = product;
         return salePrice;
       }
 

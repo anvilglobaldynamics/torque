@@ -145,8 +145,6 @@ const createProductBlueprint = async ({ apiKey, organizationId }) => {
     organizationId,
     name: pickOne(nounList) + " Blueprint " + (uid++),
     unit: "kg",
-    defaultDiscountType: "percent",
-    defaultDiscountValue: 10,
     defaultPurchasePrice: 120,
     defaultVat: 15,
     defaultSalePrice: 190,
@@ -306,8 +304,6 @@ const createSales = async ({ apiKey, outletId, productList }) => {
   console.log('should create sales');
 
   productList.forEach(product => {
-    product.discountType = 'fixed';
-    product.discountValue = 0;
     product.salePrice = 200
     product.vatPercentage = 5;
   });

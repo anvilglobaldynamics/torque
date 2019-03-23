@@ -120,7 +120,7 @@
                   <div class="inventory-product-added-date-container">[[verses.posSelectProduct.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div> -->
                 </div>
                 <div class="horizontal layout wrap center">
-                  <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" on-change="genericSelectedCountInputChanged" on-input="genericSelectedCountInputChanged" type="number" min="1" max="[[product.maxAllowedCount]]" label="[[verses.posSelectProduct.count]]">
+                  <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" on-change="genericSelectedCountInputChanged" type="number" min="1" max="[[product.maxAllowedCount]]" label="[[verses.posSelectProduct.count]]">
                     <div slot="suffix">&nbsp;[[product.unit]]</div>
                   </paper-input>
                   <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
@@ -258,12 +258,10 @@
 
           let productList = aggregatedProductList.map(product => {
             let { purchasePrice, salePrice } = product.product;
-            let { name, unit, defaultDiscountType, defaultDiscountValue, defaultVat } = product.product.productBlueprint;
+            let { name, unit,  defaultVat } = product.product.productBlueprint;
             product.isSelected = false;
-            let discountType = defaultDiscountType;
-            let discountValue = defaultDiscountValue;
             let vatValue = defaultVat;
-            Object.assign(product, { name, unit, purchasePrice, salePrice, discountType, discountValue, vatValue });
+            Object.assign(product, { name, unit, purchasePrice, salePrice, vatValue });
             return product;
           });
 
@@ -289,11 +287,11 @@
       }
 
       _addProductToSelectedProductList({ product }) {
-        let { productId, name, selectedCount, count, salePrice, discountType, discountValue, vatValue, unit } = product;
+        let { productId, name, selectedCount, count, salePrice, vatValue, unit } = product;
         let maxAllowedCount = count;
         selectedCount = parseFloat(String(selectedCount));
         let minSalePrice = salePrice;
-        this.push('selectedProductList', { productId, name, selectedCount, maxAllowedCount, salePrice, discountType, discountValue, vatValue, minSalePrice, unit });
+        this.push('selectedProductList', { productId, name, selectedCount, maxAllowedCount, salePrice, vatValue, minSalePrice, unit });
         this.selectedProductCount = this.selectedProductList.length;
       }
 

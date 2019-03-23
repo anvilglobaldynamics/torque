@@ -16,14 +16,6 @@ exports.EditProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin)
 
       name: Joi.string().min(1).max(64).required(),
       unit: Joi.string().max(64).required(),
-      defaultDiscountType: Joi.string().valid('percent', 'fixed').required(),
-      defaultDiscountValue: Joi.number().when(
-        'defaultDiscountType', {
-          is: 'percent',
-          then: Joi.number().min(0).max(100).required(),
-          otherwise: Joi.number().max(999999999999999).required()
-        }
-      ),
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
@@ -48,15 +40,14 @@ exports.EditProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin)
     }];
   }
 
-  async _updateProductBlueprint({ productBlueprintId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
-    let result = await this.database.productBlueprint.setDetails({ id: productBlueprintId }, { name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+  async _updateProductBlueprint({ productBlueprintId, name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+    let result = await this.database.productBlueprint.setDetails({ id: productBlueprintId }, { name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
     this.ensureUpdate(result, 'product-blueprint');
   }
 
   async handle({ body }) {
-    let { productBlueprintId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
-    await this._checkIfDiscountValueIsValid({ defaultDiscountType, defaultDiscountValue, defaultSalePrice, defaultVat });
-    await this._updateProductBlueprint({ productBlueprintId, name, unit, defaultDiscountType, defaultDiscountValue, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+    let { productBlueprintId, name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
+    await this._updateProductBlueprint({ productBlueprintId, name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
     return { status: "success" };
   }
 
