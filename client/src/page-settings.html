@@ -49,6 +49,10 @@
         font-size: smaller;
         color: #616161;
       }
+
+      .error {
+        color: red;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -116,10 +120,11 @@
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 1)]]">
         <div class="card vertical layout">
           <div class="option">
-            <paper-input on-input="settingsChanged" value="{{monetaryUnit}}" label="[[verses.settings.monetaryUnit]]"></paper-input>
+            <paper-input on-change="monetaryUnitChanged" on-input="monetaryUnitChanged" value="{{monetaryUnit}}" label="[[verses.settings.monetaryUnit]]"></paper-input>
             <div class="note">
               [[verses.settings.monetaryUnitDetail]]
             </div>
+            <div class="error">[[moneytaryUnitError]]</div>
           </div>
 
           <div class="option">
@@ -161,6 +166,10 @@
           shouldUseWebsockets: {
             type: Boolean,
             value: true
+          },
+          moneytaryUnitError: {
+            type: String,
+            value: ''
           },
           monetaryUnit: {
             type: String,
@@ -295,6 +304,16 @@
         }, 100);
       }
 
+      monetaryUnitChanged() {
+        console.log('this.monetaryUnit', `!${this.monetaryUnit}!`)
+        if (this.monetaryUnit === '') {
+          this.moneytaryUnitError = 'Monetary Unit is Not allowed to be empty'
+        } else {
+          this.moneytaryUnitError = '';
+          this.settingsChanged();
+        }
+      }
+
       settingsChanged(e) {
         let settings = this._getNormalizedSettings();
 
@@ -307,6 +326,11 @@
           'pass'
         }
         settings.backgroundSyncMetaMap[this.app.organization.id] = id;
+
+        if (this.monetaryUnit === '') {
+          this.monetaryUnit = 'BDT';
+          this.moneytaryUnitError = '';
+        }
 
         this.app.db.update('settings', ({
           which
