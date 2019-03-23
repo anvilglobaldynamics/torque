@@ -305,9 +305,8 @@
       }
 
       monetaryUnitChanged() {
-        console.log('this.monetaryUnit', `!${this.monetaryUnit}!`)
-        if (this.monetaryUnit === '') {
-          this.moneytaryUnitError = 'Monetary Unit is Not allowed to be empty'
+        if (this.monetaryUnit.length < 1 || this.monetaryUnit.length > 3) {
+          this.moneytaryUnitError = 'Monetary Unit should be 3 characters.';
         } else {
           this.moneytaryUnitError = '';
           this.settingsChanged();
