@@ -279,6 +279,8 @@
     "productBlueprintNameInputError": "একটি সঠিক নাম লিখুন",
     "productBlueprintUnitInput": "একক নির্দিষ্ট করুন (যেমন কেজি, পিস্)",
     "productBlueprintUnitInputError": "একটি সঠিক একক লিখুন",
+    "identifierCodeInput": "সনাক্তকরণ কোড",
+    "identifierCodeInputError": "একটি সঠিক সনাক্তকরণ কোড লিখুন",
     "defaultPurchasePriceInput": "ক্রয় মূল্য",
     "defaultPurchasePriceInputError": "একটি সঠিক অংক লিখুন",
     "defaultVatInput": "ভ্যাট",

@@ -77,6 +77,7 @@ describe('Product Blueprint', _ => {
         organizationId,
         name: "1st product blueprint",
         unit: "kg",
+        identifierCode: '',
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
@@ -98,6 +99,7 @@ describe('Product Blueprint', _ => {
         organizationId,
         name: "1st product blueprint",
         unit: "kg",
+        identifierCode: '',
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
@@ -119,6 +121,7 @@ describe('Product Blueprint', _ => {
         organizationId,
         name: "2nd product blueprint",
         unit: "kg",
+        identifierCode: '',
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
@@ -140,6 +143,7 @@ describe('Product Blueprint', _ => {
         organizationId: invalidOrganizationId,
         name: "invalid product blueprint",
         unit: "kg",
+        identifierCode: '',
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
@@ -249,6 +253,7 @@ describe('Product Blueprint', _ => {
         productBlueprintId: productBlueprintOne.id,
         name: "new 1st product blueprint name", // modification
         unit: "kg",
+        identifierCode: '',
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
@@ -270,6 +275,7 @@ describe('Product Blueprint', _ => {
         productBlueprintId: productBlueprintOne.id,
         name: "2nd product blueprint", // copy modification
         unit: "kg",
+        identifierCode: '',
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
@@ -292,6 +298,7 @@ describe('Product Blueprint', _ => {
 
         name: "new product blueprint name", // modification
         unit: "kg",
+        identifierCode: '',
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
@@ -355,8 +362,8 @@ describe('Product Blueprint', _ => {
         apiKey,
         organizationId,
         rowList: [
-          ["Should Be Unique 1", "pc", 300, 500, 10, "Yes"],
-          ["Should Be Unique 2", "haali", 10, 10, 10, "No"]
+          ["Should Be Unique 1", "pc", 300, 500, 10, '', "Yes"],
+          ["Should Be Unique 2", "haali", 10, 10, 10, '', "No"]
         ]
       }
     }, (err, response, body) => {
@@ -376,8 +383,8 @@ describe('Product Blueprint', _ => {
         apiKey,
         organizationId,
         rowList: [
-          ["Should Be Unique 3", "pc", 300, 500, 10, "Yes"],
-          ["Should Be Unique 2", "haali", 10, 10, 10, "No"]
+          ["Should Be Unique 3", "pc", 300, 500, 10, '', "Yes"],
+          ["Should Be Unique 2", "haali", 10, 10, 10, '', "No"]
         ]
       }
     }, (err, response, body) => {
@@ -402,17 +409,17 @@ describe('Product Blueprint', _ => {
         apiKey,
         organizationId,
         rowList: [
-          ["Should Be Unique 4", "pc", 300, 500, 10, "FFYes"],
-          ["Should Be Unique 5", "haali", 10, 10, 10, "No"]
+          ["Should Be Unique 4", "pc", 300, 500, 10, '', "FFYes"],
+          ["Should Be Unique 5", "haali", 10, 10, 10, '', "No"]
         ]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).to.equal('MODIFIED_VALIDATION_ERROR');
-      expect(body.error.message).to.equal('Cell #6 must be one of [Yes, No]');
+      expect(body.error.message).to.equal('Cell #7 must be one of [Yes, No]');
       expect(body.error.rowNumber).to.equal(1);
-      expect(body.error.cellNumber).to.equal(6);
+      expect(body.error.cellNumber).to.equal(7);
       testDoneFn();
     })
 
@@ -425,8 +432,8 @@ describe('Product Blueprint', _ => {
         apiKey,
         organizationId,
         rowList: [
-          ["Should Be Unique 5", "pc", 300, 500, 10, "Yes"],
-          ["", "haali", 10, 10, 10, "No"]
+          ["Should Be Unique 5", "pc", 300, 500, 10, '', "Yes"],
+          ["", "haali", 10, 10, 10, '', "No"]
         ]
       }
     }, (err, response, body) => {

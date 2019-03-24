@@ -163,6 +163,7 @@ describe('Sales', _ => {
                   organizationId,
                   name: productBlueprintName,
                   unit: "box",
+                  identifierCode: '',
                   defaultPurchasePrice: 99,
                   defaultVat: 3,
                   defaultSalePrice: 112,
