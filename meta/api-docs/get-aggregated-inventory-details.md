@@ -68,6 +68,7 @@ Possible Error Codes:
         name: Joi.string().min(1).max(64).required(),
         organizationId: Joi.number().max(999999999999999).required(),
         unit: Joi.string().max(64).required(),
+        identifierCode: Joi.string().max(64).allow('').required(),
         defaultPurchasePrice: Joi.number().max(999999999999999).required(),
         defaultVat: Joi.number().max(999999999999999).required(),
         defaultSalePrice: Joi.number().max(999999999999999).required(),
