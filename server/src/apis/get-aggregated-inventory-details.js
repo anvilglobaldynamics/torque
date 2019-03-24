@@ -16,7 +16,8 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
   get requestSchema() {
     return Joi.object().keys({
       inventoryId: Joi.number().max(999999999999999).required(),
-      searchString: Joi.string().min(0).max(64).allow('').optional()
+      searchString: Joi.string().min(0).max(64).allow('').optional(),
+      includeZeroCountProducts: Joi.boolean().default(true).optional()
     });
   }
 
@@ -47,8 +48,12 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
     return aggregatedProductList;
   }
 
+  __removeZeroCountProducts({ aggregatedProductList }) {
+    return aggregatedProductList.filter(aggregatedProduct => aggregatedProduct.count > 0);
+  }
+
   async handle({ body }) {
-    let { inventoryId, searchString } = body;
+    let { inventoryId, searchString, includeZeroCountProducts } = body;
     let inventory = await this.__getInventory({ inventoryId });
     let inventoryContainerDetails = await this.__getInventoryContainerDetails({ inventory });
     let productList = inventory.productList;
@@ -58,6 +63,10 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
 
     if (searchString) {
       aggregatedProductList = this.__searchAggregatedProductList({ aggregatedProductList, searchString });
+    }
+
+    if (!includeZeroCountProducts) {
+      aggregatedProductList = this.__removeZeroCountProducts({aggregatedProductList});
     }
 
     return {

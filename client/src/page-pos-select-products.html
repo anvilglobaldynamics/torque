@@ -213,7 +213,7 @@
       _fetchInventoryDetailsOnline(cbfn) {
         let inventoryId = parseInt(this.params.inventory);
         this.inventoryId = inventoryId;
-        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate };
+        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate, includeZeroCountProducts: false };
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -258,7 +258,7 @@
 
           let productList = aggregatedProductList.map(product => {
             let { purchasePrice, salePrice } = product.product;
-            let { name, unit,  defaultVat } = product.product.productBlueprint;
+            let { name, unit, defaultVat } = product.product.productBlueprint;
             product.isSelected = false;
             let vatValue = defaultVat;
             Object.assign(product, { name, unit, purchasePrice, salePrice, vatValue });
