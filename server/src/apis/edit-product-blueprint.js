@@ -46,8 +46,16 @@ exports.EditProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin)
     this.ensureUpdate(result, 'product-blueprint');
   }
 
+  async __ensureIdentifierCodeIsUnique({ identifierCode, organizationId, productBlueprintId }) {
+    if (identifierCode.length === 0) return;
+    let existingBlueprintList = await this.database.productBlueprint._find({ identifierCode, organizationId, id: { $ne: productBlueprintId } });
+    console.log(organizationId, existingBlueprintList)
+    throwOnTruthy(existingBlueprintList.length > 0, "INVALID_IDENTIFIER_CODE", "The identifier code is already in use by another product blueprint.");
+  }
+
   async handle({ body }) {
     let { productBlueprintId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
+    await this.__ensureIdentifierCodeIsUnique({ identifierCode, organizationId: this.interimData.organization.id, productBlueprintId });
     await this._updateProductBlueprint({ productBlueprintId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
     return { status: "success" };
   }
