@@ -94,7 +94,8 @@
 <link rel="lazy-import" href="page-manage-service-membership.html">
 <link rel="lazy-import" href="page-view-sales-return.html">
 <link rel="lazy-import" href="page-bulk-import-product-blueprints.html">
-<link rel="lazy-import" href="page-select-geolocation.html">
+<link rel="lazy-import" href="page-select-geolocation.html"> 
+<link rel="lazy-import" href="page-scan-identifier-code.html"> 
 
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
@@ -122,6 +123,8 @@
         --app-button-label-danger: #c62828;
         --app-button-neutral: #CFD8DC;
         --app-button-label-neutral: #263238;
+        --app-button-alternative: #f4ff56;
+        --app-button-label-alternative: #067e24;
 
         display: block;
       }
@@ -373,6 +376,7 @@
           <page-print-sales-receipt name="print-sales-receipt"></page-print-sales-receipt>
           <page-bulk-import-product-blueprints name="bulk-import-product-blueprints"></page-bulk-import-product-blueprints>
           <page-select-geolocation name="select-geolocation"></page-select-geolocation>
+          <page-scan-identifier-code name="scan-identifier-code"></page-scan-identifier-code>
         </iron-pages>
 
         <paper-dialog id="network-dialog" modal style="z-index: -999999">

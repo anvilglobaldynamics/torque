@@ -45,6 +45,9 @@
           <paper-button raised class="primary" on-tap="searchTapped">
             [[verses.general.search]]
           </paper-button>
+          <paper-button raised class="alternative" on-tap="identifierCodeScanTapped">
+            [[verses.general.scan]]
+          </paper-button>
         </div>
       </div>
 
@@ -266,6 +269,8 @@
           });
 
           let previousSavedSelectedProductList = this.app.getFromSession('pos-selected-product-list') || [];
+          let listFromPos = this.app.extractFromSession('pos-scanned-product-list') || [];
+          previousSavedSelectedProductList = previousSavedSelectedProductList.concat(listFromPos);
 
           if (this.selectedProductList.length > 0 || previousSavedSelectedProductList.length > 0) {
             if (previousSavedSelectedProductList.length > 0 && this.selectedProductList.length === 0) {
@@ -312,6 +317,10 @@
       }
 
       // region: ui  ===========================
+
+      identifierCodeScanTapped(e = null) {
+        this.app.navigateTo(`/scan-identifier-code/inventory:${this.params.inventory}`);
+      }
 
       selectProductsTapped(e = null) {
         this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
