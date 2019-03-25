@@ -17,6 +17,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
     return Joi.object().keys({
       inventoryId: Joi.number().max(999999999999999).required(),
       searchString: Joi.string().min(0).max(64).allow('').optional(),
+      identifierCode: Joi.string().min(0).max(64).allow('').optional(),
       includeZeroCountProducts: Joi.boolean().default(true).optional()
     });
   }
@@ -44,7 +45,6 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
       let regex = new RegExp(searchString, 'gi');
       return regex.test(aggregatedProduct.product.productBlueprint.name);
     });
-
     return aggregatedProductList;
   }
 
@@ -52,8 +52,15 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
     return aggregatedProductList.filter(aggregatedProduct => aggregatedProduct.count > 0);
   }
 
+  __filterAggregatedProductListWithIdentifierCode({ aggregatedProductList, identifierCode }) {
+    aggregatedProductList = aggregatedProductList.filter(aggregatedProduct => {
+      return (aggregatedProduct.product.productBlueprint.identifierCode === identifierCode);
+    });
+    return aggregatedProductList;
+  }
+
   async handle({ body }) {
-    let { inventoryId, searchString, includeZeroCountProducts } = body;
+    let { inventoryId, searchString, includeZeroCountProducts, identifierCode } = body;
     let inventory = await this.__getInventory({ inventoryId });
     let inventoryContainerDetails = await this.__getInventoryContainerDetails({ inventory });
     let productList = inventory.productList;
@@ -66,7 +73,11 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
     }
 
     if (!includeZeroCountProducts) {
-      aggregatedProductList = this.__removeZeroCountProducts({aggregatedProductList});
+      aggregatedProductList = this.__removeZeroCountProducts({ aggregatedProductList });
+    }
+
+    if (identifierCode) {
+      aggregatedProductList = this.__filterAggregatedProductListWithIdentifierCode({ aggregatedProductList, identifierCode });
     }
 
     return {

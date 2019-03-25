@@ -12,6 +12,7 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
   inventoryId: Joi.number().max(999999999999999).required(),
+  identifierCode: Joi.string().min(0).max(64).allow('').optional(),
   searchString: Joi.string().min(0).max(64).allow('').optional()
 }
 ```
