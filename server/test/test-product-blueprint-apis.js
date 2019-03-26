@@ -91,6 +91,73 @@ describe('Product Blueprint', _ => {
 
   });
 
+  it('api/add-product-blueprint (Invalid, identifierCode too long)', testDoneFn => {
+
+    callApi('api/add-product-blueprint', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "1st product blueprint with identifierCode",
+        unit: "kg",
+        identifierCode: (new Array(65)).fill('A').join(''),
+        defaultPurchasePrice: 99,
+        defaultVat: 2,
+        defaultSalePrice: 111,
+        isReturnable: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-product-blueprint (Valid, with identifierCode)', testDoneFn => {
+
+    callApi('api/add-product-blueprint', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "1st product blueprint with identifierCode 2",
+        unit: "kg",
+        identifierCode: (new Array(8)).fill('A').join(''),
+        defaultPurchasePrice: 99,
+        defaultVat: 2,
+        defaultSalePrice: 111,
+        isReturnable: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddProductBlueprintApiSuccessResponse(body);
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-product-blueprint (Invalid, with duplicate identifierCode)', testDoneFn => {
+
+    callApi('api/add-product-blueprint', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "1st product blueprint with identifierCode 3",
+        unit: "kg",
+        identifierCode: (new Array(8)).fill('A').join(''),
+        defaultPurchasePrice: 99,
+        defaultVat: 2,
+        defaultSalePrice: 111,
+        isReturnable: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      testDoneFn();
+    })
+
+  });
+
+
   it('api/add-product-blueprint (Invalid copy name)', testDoneFn => {
 
     callApi('api/add-product-blueprint', {
