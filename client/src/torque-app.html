@@ -983,7 +983,7 @@
         }
 
         const _backgroundSyncGetAggregatedInventoryDetailsApi = (inventoryId, cbfn) => {
-          let data = { inventoryId };
+          let data = { inventoryId, includeZeroCountProducts: false  };
           window.torqueCache.ignorableApiCallCount += 1;
           this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
             window.torqueCache.ignorableApiCallCount -= 1;

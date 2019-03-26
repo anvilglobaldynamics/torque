@@ -309,7 +309,7 @@
       _fetchInventoryDetails(cbfn) {
         let inventoryId = parseInt(this.params.inventory);
         this.inventoryId = inventoryId;
-        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate };
+        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate, includeZeroCountProducts: false, sortOrder: 'date-added-ascending'  };
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -329,7 +329,7 @@
             Object.assign(product, { name, unit, purchasePrice, salePrice });
             return product;
           });
-          productList.sort((a, b) => b.count - a.count);
+          // productList.sort((a, b) => b.count - a.count);
 
           this.selectedProductList.forEach(previousProduct => {
             let product = productList.find(product => product.productId === previousProduct.productId);

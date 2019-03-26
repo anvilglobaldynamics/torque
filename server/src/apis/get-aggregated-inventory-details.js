@@ -18,7 +18,8 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
       inventoryId: Joi.number().max(999999999999999).required(),
       searchString: Joi.string().min(0).max(64).allow('').optional(),
       identifierCode: Joi.string().min(0).max(64).allow('').optional(),
-      includeZeroCountProducts: Joi.boolean().default(true).optional()
+      includeZeroCountProducts: Joi.boolean().default(true).optional(),
+      sortOrder: Joi.string().default('id-ascending').valid('id-ascending', 'date-added-ascending').optional()
     });
   }
 
@@ -60,7 +61,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
   }
 
   async handle({ body }) {
-    let { inventoryId, searchString, includeZeroCountProducts, identifierCode } = body;
+    let { inventoryId, searchString, includeZeroCountProducts, identifierCode, sortOrder } = body;
     let inventory = await this.__getInventory({ inventoryId });
     let inventoryContainerDetails = await this.__getInventoryContainerDetails({ inventory });
     let productList = inventory.productList;
@@ -78,6 +79,10 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
 
     if (identifierCode) {
       aggregatedProductList = this.__filterAggregatedProductListWithIdentifierCode({ aggregatedProductList, identifierCode });
+    }
+
+    if (sortOrder === 'date-added-ascending') {
+      aggregatedProductList.sort((a, b) => a.addedDatetimeStamp - b.addedDatetimeStamp);
     }
 
     return {
