@@ -146,6 +146,7 @@ const createProductBlueprint = async ({ apiKey, organizationId }) => {
     name: pickOne(nounList) + " Blueprint " + (uid++),
     unit: "kg",
     defaultPurchasePrice: 120,
+    identifierCode: '',
     defaultVat: 15,
     defaultSalePrice: 190,
     isReturnable: true

@@ -36,6 +36,7 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       Joi.number().max(999999999999999).required(), // defaultPurchasePrice
       Joi.number().max(999999999999999).required(), //defaultSalePrice
       Joi.number().max(999999999999999).required(), // defaultVat
+      Joi.string().max(64).allow('').required(), // identifierCode
       Joi.string().valid('Yes', 'No').required() // is converted into isReturnable
     );
   }
@@ -50,19 +51,25 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       err.cellNumber = cellNumber;
       throw err;
     }
-    value[5] = (value[5] === 'Yes');
+    value[6] = (value[6] === 'Yes');
     return value;
   }
 
   _convertRowToProductBlueprint(row) {
     let [
       name, unit, defaultPurchasePrice, defaultSalePrice,
-      defaultVat, isReturnable
+      defaultVat, identifierCode, isReturnable
     ] = row;
     return {
-      name, unit, defaultPurchasePrice, defaultSalePrice,
+      name, unit, identifierCode, defaultPurchasePrice, defaultSalePrice,
       defaultVat, isReturnable
     }
+  }
+
+  async __ensureIdentifierCodeIsUnique({ identifierCode, organizationId }) {
+    if (identifierCode.length === 0) return;
+    let existingBlueprintList = await this.database.productBlueprint._find({ identifierCode, organizationId });
+    throwOnTruthy(existingBlueprintList.length > 0, "INVALID_IDENTIFIER_CODE", "The identifier code is already in use by another product blueprint.");
   }
 
   async handle({ body }) {
@@ -89,6 +96,7 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       let productBlueprint = productBlueprintList[i];
       try {
         productBlueprint.organizationId = organizationId;
+        await this.__ensureIdentifierCodeIsUnique({ identifierCode: productBlueprint.identifierCode, organizationId });
         await this._createProductBlueprint(productBlueprint);
         successfulCount += 1;
       } catch (err) {
