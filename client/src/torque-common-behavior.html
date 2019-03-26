@@ -108,7 +108,7 @@
           'pass'
         }
         if (!organization) {
-          console.error(new Error("DEV_ERROR unable to locate organization object"));
+          console.warn(new Error("DEV_ERROR unable to locate organization object"))
           return true;
           // return false;
         }
