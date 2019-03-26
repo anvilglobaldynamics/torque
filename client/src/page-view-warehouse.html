@@ -29,6 +29,14 @@
       margin: 5px;
     }
 
+    .inventory-title {
+      font-size: 16px;
+    }
+
+    .inventory-description {
+      font-size: 14px;
+    }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -52,22 +60,22 @@
         <div class="list">
           <div class="horizontal layout item center">
             <div class="vertical layout flex">
-              <div class="title">[[verses.warehouse.defaultInventoryName]] [[verses.warehouse.inventory]]</div>
-              <div class="description">[[verses.warehouse.goToDefaultInventory]]</div>
+              <div class="inventory-title">[[verses.warehouse.defaultInventoryName]] [[verses.warehouse.inventory]]</div>
+              <div class="inventory-description">[[verses.warehouse.goToDefaultInventory]]</div>
             </div>
             <paper-button raised class="primary" on-tap="viewInventoryTapped" data-key="defaultInventory">[[verses.general.view]]</paper-button>
           </div>
           <div class="horizontal layout item center">
             <div class="vertical layout flex">
-              <div class="title">[[verses.warehouse.returnedInventoryName]] [[verses.warehouse.inventory]]</div>
-              <div class="description">[[verses.warehouse.goToReturnedInventory]]</div>
+              <div class="inventory-title">[[verses.warehouse.returnedInventoryName]] [[verses.warehouse.inventory]]</div>
+              <div class="inventory-description">[[verses.warehouse.goToReturnedInventory]]</div>
             </div>
             <paper-button raised class="secondary" on-tap="viewInventoryTapped" data-key="returnedInventory">[[verses.general.view]]</paper-button>
           </div>
           <div class="horizontal layout item center">
             <div class="vertical layout flex">
-              <div class="title">[[verses.warehouse.damagedInventoryName]] [[verses.warehouse.inventory]]</div>
-              <div class="description">[[verses.warehouse.goToDamagedInventory]]</div>
+              <div class="inventory-title">[[verses.warehouse.damagedInventoryName]] [[verses.warehouse.inventory]]</div>
+              <div class="inventory-description">[[verses.warehouse.goToDamagedInventory]]</div>
             </div>
             <paper-button raised class="secondary" on-tap="viewInventoryTapped" data-key="damagedInventory">[[verses.general.view]]</paper-button>
           </div>
