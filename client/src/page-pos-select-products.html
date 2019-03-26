@@ -216,7 +216,7 @@
       _fetchInventoryDetailsOnline(cbfn) {
         let inventoryId = parseInt(this.params.inventory);
         this.inventoryId = inventoryId;
-        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate, includeZeroCountProducts: false };
+        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate, includeZeroCountProducts: false, sortOrder: 'date-added-ascending' };
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
