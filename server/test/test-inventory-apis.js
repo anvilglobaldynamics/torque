@@ -535,7 +535,7 @@ describe('Inventory', _ => {
     });
 
   });
-  
+
   it('api/get-product (Valid product modification check)', testDoneFn => {
 
     callApi('api/get-product', {
@@ -585,7 +585,7 @@ describe('Inventory', _ => {
 
       validateReportInventoryDetailsApiSuccessResponse(body);
 
-      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails =>  {
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails => {
         aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
           validateAggregatedProductScema(aggregatedProduct);
         });
@@ -613,7 +613,7 @@ describe('Inventory', _ => {
 
       validateReportInventoryDetailsApiSuccessResponse(body);
 
-      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails =>  {
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails => {
         aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
           validateAggregatedProductScema(aggregatedProduct);
         });
@@ -657,6 +657,101 @@ describe('Inventory', _ => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equals('VALIDATION_ERROR');
+      testDoneFn();
+    });
+
+  });
+
+  // Region: includeZeroCountProducts test - start
+
+  let includeZeroCountProductsProductId = null;
+
+  it('api/add-product-to-inventory (Valid warehouse)', testDoneFn => {
+    callApi('api/add-product-to-inventory', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId,
+        productList: [
+          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 10 },
+        ]
+      }
+    }, (err, response, body) => {
+      includeZeroCountProductsProductId = body.insertedProductList[0].productId;
+      expect(response.statusCode).to.equal(200);
+      validateAddProductToInventoryApiSuccessResponse(body);
+      testDoneFn();
+    });
+  });
+
+  it('api/get-aggregated-inventory-details (Valid, Checking Current Status, Warehouse)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      body.aggregatedProductList.reverse();
+      expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(includeZeroCountProductsProductId);
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(10);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/transfer-between-inventories (Valid Warehouse to Outlet)', testDoneFn => {
+
+    callApi('api/transfer-between-inventories', {
+      json: {
+        apiKey,
+        fromInventoryId: warehouseDefaultInventoryId,
+        toInventoryId: outletDefaultInventoryId,
+        productList: [
+          { productId: includeZeroCountProductsProductId, count: 10 }
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-aggregated-inventory-details (Valid modification check, Warehouse)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      body.aggregatedProductList.reverse();
+      expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(includeZeroCountProductsProductId);
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(0);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-aggregated-inventory-details (Valid modification check, Warehouse)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId,
+        includeZeroCountProducts: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      body.aggregatedProductList.reverse();
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      expect(body.aggregatedProductList[0]).to.have.property('productId').that.not.equals(includeZeroCountProductsProductId);
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.not.equals(10);
       testDoneFn();
     });
 
