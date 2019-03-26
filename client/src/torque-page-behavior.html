@@ -94,7 +94,8 @@
         }
       }
 
-      checkPrivilege(privilege) {
+      // TODO: move method hasPrivilege to file torque-common-behavior.html
+      hasPrivilege(privilege) {
         if (!(privilege in this.app.organization.employment.privileges)) {
           throw new Error(`No such privilege "${privilege}".`);
         }
@@ -119,7 +120,7 @@
             this.app.navigateTo('/manage-organizations');
             return false;
           }
-          let unmetPrivilegeList = privilegeList.filter(privilege => !this.checkPrivilege(privilege));
+          let unmetPrivilegeList = privilegeList.filter(privilege => !this.hasPrivilege(privilege));
           if (unmetPrivilegeList.length > 0) {
             this.app.navigateTo('/error403/privilege:' + unmetPrivilegeList.join(','));
             return false;
