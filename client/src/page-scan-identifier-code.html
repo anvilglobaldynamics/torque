@@ -145,6 +145,7 @@
         this.onOfflineDataChange();
         this.app.pushPageTitle('Scan Products'); // this.app.pushPageTitle(this.app.verses.posSelectProduct.posSelectProductTitle);
         if (!this._ensureAccess()) return;
+        this.selectedProductList = this.app.getFromSession('pos-selected-product-list') || [];
         this.isReady = true;
         window.setTimeout(() => {
           let x = this.elem('#identifierCodeInput').focus();
@@ -224,6 +225,7 @@
             return;
           }
 
+          // NOTE: The following calculation is to ensure products are selected from adjacent batches
           let selectedCount = 0;
           let calculatedMaxCount = 0;
           let product;
@@ -231,20 +233,20 @@
             calculatedMaxCount += product.count;
             let foundProduct = this.selectedProductList.find(selectedProduct => selectedProduct.productId === product.productId);
             if (!foundProduct) break;
-            selectedCount += foundProduct.selectedCount;
+            selectedCount += parseFloat(foundProduct.selectedCount);
             if (selectedCount < calculatedMaxCount) break;
           }
-
           if (selectedCount === calculatedMaxCount) {
             this.lastErrorMessage = 'No matching products';
             return;
           }
+          // NOTE: end
 
           product = this._prepareProductForInsertion({ product });
 
           let foundProduct = this.selectedProductList.find(selectedProduct => selectedProduct.productId === product.productId);
           if (foundProduct) {
-            foundProduct.selectedCount += 1;
+            foundProduct.selectedCount = parseFloat(foundProduct.selectedCount) + 1;
           } else {
             product.selectedCount = 1;
             this.selectedProductList.push(product);
@@ -267,16 +269,11 @@
       }
 
       selectProductsTapped(e = null) {
-        this.app.storeInSession('pos-scanned-product-list', this.selectedProductList);
-        this.selectedProductList = [];
-        this.selectedProductCount = 0;
+        this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
         this.app.navigateToPreviousUrl(`/pos-select-product`);
       }
 
       backButtonOnTopBarPressed(e = null) {
-        this.selectedProductList = [];
-        this.selectedProductCount = 0;
-        this.app.storeInSession('pos-scanned-product-list', this.selectedProductList);
         this.app.navigateToPreviousUrl(`/pos-select-product`);
       }
 

@@ -269,9 +269,6 @@
           });
 
           let previousSavedSelectedProductList = this.app.getFromSession('pos-selected-product-list') || [];
-          let scannedProductList = this.app.extractFromSession('pos-scanned-product-list') || [];
-          console.log('scannedProductList', scannedProductList)
-          previousSavedSelectedProductList = previousSavedSelectedProductList.concat(scannedProductList);
 
           if (this.selectedProductList.length > 0 || previousSavedSelectedProductList.length > 0) {
             if (previousSavedSelectedProductList.length > 0 && this.selectedProductList.length === 0) {
