@@ -317,6 +317,12 @@
           }
           rowIndex += 1;
         }
+        // since null is not acceptable for identifierCode
+        rawRowList.forEach(rawRow => {
+          if (rawRow[5] === null) { 
+            rawRow[5] = ''; 
+          }
+        })
         cbfn(null, rawRowList);
       }
 
