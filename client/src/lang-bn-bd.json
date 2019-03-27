@@ -796,7 +796,7 @@
     "instructionThree": "৩. পণ্য পরিকল্পনার একটি একক (Unit) দিন, যেমন: কেজি, পিস অথবা বাক্স;",
     "instructionFour": "৪. পণ্য পরিকল্পনার কেনা দাম (Purchase Price), বিক্রি দাম (Sale Price) এবং ভ্যাট শতাংশ (VAT) দিন, এভাবে;",
     "instructionFive": "৫. Returnable এর নিচে yes (হ্যা) দিন যদি পণ্য ফেরতযোগ্য হয়ে, no (না) দিন যদি নয়;",
-    "instructionSix": "৬. Returnable এর নিচে yes (হ্যা) দিন যদি পণ্য ফেরতযোগ্য হয়ে, no (না) দিন যদি নয়;",
+    "instructionSix": "৬. Barcode এর নিচে পণ্যের বারকোড নম্বর দিন (অথবা খালি রাখতে পারেন);",
     "instructionLast": "৭. সকল স্থান পূরণ থাকতে হবে, নাহলে লিপি ফাইলটি গ্রহণ করবে না;",
     "uploadSectionTip": "পণ্যের পরিকল্পনা ধারণকারী CSV ফাইলটি জমা করুন;",
     "uploadButtonLabel": "ফাইল জমা করুন",
