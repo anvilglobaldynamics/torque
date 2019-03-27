@@ -174,7 +174,7 @@
       <!-- payment details - end -->
 
       <!-- additional-payment - start -->
-      <template is="dom-if" if="[[hasPrivilege('PRIV_ACCESS_POS')]]">
+      <template is="dom-if" if="[[hasPrivilege('PRIV_ACCESS_POS', organization)]]">
         <template is="dom-if" if="[[$shouldTakeAdditionalPayment(sales.payment.totalBilled, sales.payment.totalPaidAmount)]]">
           <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[self]]" customer="[[customer]]" is-from-view-sales-page></elem-additional-paymentt>
         </template>
@@ -218,6 +218,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
+        this.onOrganizationChange(this.app.organization);
         this.app.pushPageTitle(this.app.verses.sales.salesTitle);
         if (!this._ensureAccess()) return;
         if (!('sales' in this.params)) {
@@ -242,6 +243,10 @@
           authLevel: 'organization-selected',
           privilegeList: ['PRIV_VIEW_SALES']
         });
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
       }
 
       _fetchSales(cbfn) {
