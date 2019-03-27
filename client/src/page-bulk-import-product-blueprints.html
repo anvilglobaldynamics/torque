@@ -209,8 +209,8 @@
               "Purchase Price",
               "Sale Price",
               "VAT",
-              "Identifier Code",
-              "Returnable"
+              "Returnable",
+              "Barcode"
             ]
           }
         };
@@ -319,8 +319,11 @@
         }
         // since null is not acceptable for identifierCode
         rawRowList.forEach(rawRow => {
-          if (rawRow[5] === null) { 
-            rawRow[5] = ''; 
+          if (rawRow[6] === null) {
+            rawRow[6] = '';
+          }
+          if (typeof (rawRow[6]) !== 'string') {
+            rawRow[6] = String(rawRow[6]);
           }
         })
         cbfn(null, rawRowList);

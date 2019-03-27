@@ -36,8 +36,8 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       Joi.number().max(999999999999999).required(), // defaultPurchasePrice
       Joi.number().max(999999999999999).required(), //defaultSalePrice
       Joi.number().max(999999999999999).required(), // defaultVat
-      Joi.string().max(64).allow('').required(), // identifierCode
-      Joi.string().valid('Yes', 'No').required() // is converted into isReturnable
+      Joi.string().valid('Yes', 'No').required(), // is converted into isReturnable
+      Joi.string().max(64).allow('').required() // identifierCode
     );
   }
 
@@ -51,14 +51,14 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       err.cellNumber = cellNumber;
       throw err;
     }
-    value[6] = (value[6] === 'Yes');
+    value[5] = (value[5] === 'Yes');
     return value;
   }
 
   _convertRowToProductBlueprint(row) {
     let [
       name, unit, defaultPurchasePrice, defaultSalePrice,
-      defaultVat, identifierCode, isReturnable
+      defaultVat, isReturnable, identifierCode
     ] = row;
     return {
       name, unit, identifierCode, defaultPurchasePrice, defaultSalePrice,
