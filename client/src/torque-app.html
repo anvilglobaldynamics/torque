@@ -224,6 +224,12 @@
         overflow-y: auto;
       }
 
+      .sidebar-logo-image {
+        padding-top: 20px;
+        height: 60px;
+        width: 60px;
+      }
+
       .sidebar-divider {
         border: 0;
         height: 0;
@@ -236,7 +242,9 @@
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]" style$="[[$invisibleUnless(user)]]">
         <div class="app-drawer-wrapper">
-          <app-toolbar>Torque</app-toolbar>
+          <app-toolbar class="sidebar-title">
+            <img class="sidebar-logo-image" src="../images/logo.png">
+          </app-toolbar>
           <iron-selector selected="[[pageName]]" attr-for-selected="name" class="drawer-list" role="navigation">
 
             <a name="home" href="#/home">[[verses.sidebar.home]]</a>

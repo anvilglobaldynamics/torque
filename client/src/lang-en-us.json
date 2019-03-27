@@ -127,9 +127,10 @@
     "tocLinkPart2": "The Terms and Conditions",
     "tocLinkPart3": " before you register.",
     "tocCheckbox": "I have read, understood and agree to the Terms and Conditions above.",
-    "nowAUserOfTorque": "You are now a user of Torque. You now may log in."
+    "nowAUserOfTorque": "You are now a user of Lipi. You now may log in."
   },
   "sidebar": {
+    "lipiName": "Lipi",
     "home": "Home",
     "employees": "Employees",
     "outlets": "Outlets",
