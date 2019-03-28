@@ -720,7 +720,8 @@
     "addedOn": "যুক্ত হয়েছে",
     "noProductFoundInOutlet": "কোনো পণ্য পাওয়া যায়নি। পেছনে গিয়ে দোকানের প্রধান পণ্য তালিকায় পণ্য যোগ করুন।",
     "searchForProductInput": "পণ্যের নাম দিয়ে অনুসন্ধান",
-    "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি"
+    "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি",
+    "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন"
   },
   "posSelectService": {
     "posSelectServiceTitle": "সেবা নির্বাচন",
