@@ -1,5 +1,5 @@
 # torque
-The best POS and inventory management system money can buy.
+A lightweight and robust 360 degree business management solution for retail and service based businesses that is always live and accessible from everywhere.
 
 # Instructions for developers
 
