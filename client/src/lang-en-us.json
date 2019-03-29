@@ -17,6 +17,7 @@
     "thankYou": "Thank you.",
     "listIsEmpty": "List is Empty.",
     "search": "Search",
+    "scan": "Scan",
     "select": "Select",
     "remove": "Remove",
     "selected": "Selected",
@@ -126,9 +127,10 @@
     "tocLinkPart2": "The Terms and Conditions",
     "tocLinkPart3": " before you register.",
     "tocCheckbox": "I have read, understood and agree to the Terms and Conditions above.",
-    "nowAUserOfTorque": "You are now a user of Torque. You now may log in."
+    "nowAUserOfTorque": "You are now a user of Lipi. You now may log in."
   },
   "sidebar": {
+    "lipiName": "Lipi",
     "home": "Home",
     "employees": "Employees",
     "outlets": "Outlets",
@@ -277,6 +279,8 @@
     "productBlueprintNameInputError": "Enter a valid name",
     "productBlueprintUnitInput": "Specify unit (i.e. kg, pcs etc)",
     "productBlueprintUnitInputError": "Enter a valid name",
+    "identifierCodeInput": "Identifier Code",
+    "identifierCodeInputError": "Enter a valid identifier code.",
     "defaultPurchasePriceInput": "Default Purchase Price",
     "defaultPurchasePriceInputError": "Enter a valid amount",
     "defaultVatInput": "Default VAT",
@@ -567,7 +571,8 @@
     "productReturn": "Return Product",
     "service": "Service",
     "discardQuestion": "Discard this Sale?",
-    "discardMessage": "Once discarded, this sale will not be considered in any report or calculation. Service Membership(s) sold in this sale (if any) will also be discarded."
+    "discardMessage": "Once discarded, this sale will not be considered in any report or calculation. Service Membership(s) sold in this sale (if any) will also be discarded.",
+    "dueAmount": "Due amount"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",
@@ -714,7 +719,8 @@
     "addedOn": "Added On",
     "noProductFoundInOutlet": "No products found. Go back and add products to the Outlet's default inventory.",
     "searchForProductInput": "Product Name",
-    "searchForProductInputError": "Error in Search"
+    "searchForProductInputError": "Error in Search",
+    "scanButtonHelp": "Use code scanner to select multiple products quickly"
   },
   "posSelectService": {
     "posSelectServiceTitle": "Select Services",
@@ -791,7 +797,8 @@
     "instructionThree": "3. Enter a Unit of the product blueprint, example: kg, piece or box;",
     "instructionFour": "4. Enter Purchase Price, Sale Price and VAT percentage of the product blueprint;",
     "instructionFive": "5. Under Returnable enter 'yes' if customers can return this product blueprint, 'no' if not;",
-    "instructionSix": "6. All the fields must be entered, like below, or else Lipi will not accept this file;",
+    "instructionSix": "6. Under Barcode enter the product's barcode number (you can leave it empty);",
+    "instructionLast": "7. All the fields must be entered, like below, or else Lipi will not accept this file;",
     "uploadSectionTip": "Upload the CSV file containing Product Blueprint data;",
     "uploadButtonLabel": "Upload File",
     "successfullyImported": "Import Successful, total product blueprints created",
@@ -890,5 +897,14 @@
     "paidAmountInput": "Paid",
     "changeAmount": "Change",
     "dueAmount": "Due"
+  },
+  "scan": {
+    "pageTitle": "Scan Product(s)",
+    "active": "SCANNING ACTIVE",
+    "activeMessage": "Start scanning products using the attached barcode scanning device.",
+    "countMessagePart1": "Total Scanned so far: ",
+    "countMessagePart2": " product(s)",
+    "noMatchingProductsError": "Last scanned product not found",
+    "lastScanned": "Last scanned: "
   }
 }

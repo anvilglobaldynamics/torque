@@ -109,6 +109,7 @@
         </template>
       </template>
 
+      <!-- default outlet selection prompt - start -->
       <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
         <div class="card">
           [[verses.home.promptForDefaultOutlet]]
@@ -118,7 +119,9 @@
           </div>
         </div>
       </template>
+      <!-- default outlet selection prompt - end -->
 
+      <!-- user and organization information - start -->
       <div class="vertical layout wrap">
         <div class="card flex info-panel">
 
@@ -127,8 +130,7 @@
             <div class="">[[verses.general.email]]: [[user.email]]</div>
           </template>
           <div class="">[[verses.general.phone]]: [[user.phone]]</div>
-          <div class="">[[verses.general.designation]]: [[organization.employment.designation]]
-            ([[organization.employment.role]])</div>
+          <div class="">[[verses.general.designation]]: [[organization.employment.designation]] ([[organization.employment.role]])</div>
 
         </div>
         <div class="card flex info-panel">
@@ -142,38 +144,40 @@
 
         </div>
       </div>
+      <!-- user and organization information - end -->
 
-      <div>
+      <!-- organization statistics - start -->
+      <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ORGANIZATION_STATISTICS', organization)]]">
 
-        <div class="horizontal layout wrap">
-          <div class="card flex metrics-box">
-            <div class="value">[[$translateNumber(metrics.totalNumberOfSalesToday, selectedLanguageIdentifier)]]</div>
-            <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesToday, 'countable',
-              selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
-            <div class="item-description">[[verses.home.soldToday]]</div>
-          </div>
-          <div class="card flex metrics-box">
-            <div class="value">[[$translateNumber(metrics.totalAmountSoldToday, selectedLanguageIdentifier)]]</div>
-            <div class="unit">[[settings.monetaryUnit]]</div>
-            <div class="item-description">[[verses.home.soldToday]]</div>
-          </div>
+      <!-- metrics - start -->
+      <div class="horizontal layout wrap">
+        <div class="card flex metrics-box">
+          <div class="value">[[$translateNumber(metrics.totalNumberOfSalesToday, selectedLanguageIdentifier)]]</div>
+          <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesToday, 'countable',
+            selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
+          <div class="item-description">[[verses.home.soldToday]]</div>
         </div>
-
-        <div class="horizontal layout wrap">
-          <div class="card flex metrics-box">
-            <div class="value">[[$translateNumber(metrics.totalNumberOfSalesThisMonth, selectedLanguageIdentifier)]]</div>
-            <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable',
-              selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
-            <div class="item-description">[[verses.home.soldThisMonth]]</div>
-          </div>
-          <div class="card flex metrics-box">
-            <div class="value">[[$translateNumber(metrics.totalAmountSoldThisMonth, selectedLanguageIdentifier)]]</div>
-            <div class="unit">[[settings.monetaryUnit]]</div>
-            <div class="item-description">[[verses.home.soldThisMonth]]</div>
-          </div>
+        <div class="card flex metrics-box">
+          <div class="value">[[$translateNumber(metrics.totalAmountSoldToday, selectedLanguageIdentifier)]]</div>
+          <div class="unit">[[settings.monetaryUnit]]</div>
+          <div class="item-description">[[verses.home.soldToday]]</div>
         </div>
-
       </div>
+
+      <div class="horizontal layout wrap">
+        <div class="card flex metrics-box">
+          <div class="value">[[$translateNumber(metrics.totalNumberOfSalesThisMonth, selectedLanguageIdentifier)]]</div>
+          <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable',
+            selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
+          <div class="item-description">[[verses.home.soldThisMonth]]</div>
+        </div>
+        <div class="card flex metrics-box">
+          <div class="value">[[$translateNumber(metrics.totalAmountSoldThisMonth, selectedLanguageIdentifier)]]</div>
+          <div class="unit">[[settings.monetaryUnit]]</div>
+          <div class="item-description">[[verses.home.soldThisMonth]]</div>
+        </div>
+      </div>
+      <!-- metrics - end -->
 
       <!-- active module - start -->
       <div class="vertical layout wrap">
@@ -190,7 +194,7 @@
           <div class="module-description">[[verses.general.moduleDescriptionLineTwo]]</div>
         </div>
       </div>
-      <!-- active module - start -->
+      <!-- active module - end -->
 
       <!-- active package - start -->
       <div class="vertical layout wrap">
@@ -228,6 +232,9 @@
         </template>
       </div>
       <!-- active package - end -->
+
+      </template>
+      <!-- organization statistics - end -->
 
     </div>
   </template>
@@ -274,9 +281,13 @@
         this.onSettingsChange(this.app.settings);
         this.useLanguageServices();
         this._processOrganizationList(() => {
-          this._processDashboardSummary(() => {
+          if (this.hasPrivilege('PRIV_VIEW_ORGANIZATION_STATISTICS')) {
+            this._processDashboardSummary(() => {
+              this.isReady = true;
+            });
+          } else {
             this.isReady = true;
-          });
+          }
         });
       }
 

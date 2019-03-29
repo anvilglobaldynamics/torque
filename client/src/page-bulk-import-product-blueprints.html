@@ -77,7 +77,7 @@
         <div class="card-text-container">
           [[verses.bulkImportProductBlueprint.downloadSectionTip]]
         </div>
-        
+
         <paper-button raised class="primary" style="width: 100%; margin-top: 12px;" on-tap="downloadCsvTapped">
           <iron-icon class="button-icon" icon="icons:file-download"></iron-icon>
           [[verses.bulkImportProductBlueprint.downloadButtonLabel]]
@@ -132,6 +132,13 @@
               </div>
             </li>
 
+            <li>
+              [[verses.bulkImportProductBlueprint.instructionLast]]
+              <div class="instruction-image-container">
+                <img class="instruction-image" src="../images/bulk-product-blueprint-instruction/instruction-last.png">
+              </div>
+            </li>
+
           </ul>
         </div>
       </div>
@@ -158,9 +165,9 @@
           <div class="success-message">
             [[verses.bulkImportProductBlueprint.successfullyImported]]: [[results.successfulCount]]
           </div>
-          
+
           <template is="dom-if" if="[[results.ignoredRowList.length]]">
-              [[verses.bulkImportProductBlueprint.rowsIgnored]]:
+            [[verses.bulkImportProductBlueprint.rowsIgnored]]:
             <ul class="ignored-row-list">
               <template is="dom-repeat" items="[[results.ignoredRowList]]">
                 <li>[[verses.bulkImportProductBlueprint.row]] #[[item.rowNumber]]
@@ -209,7 +216,8 @@
               "Purchase Price",
               "Sale Price",
               "VAT",
-              "Returnable"
+              "Returnable",
+              "Barcode"
             ]
           }
         };
@@ -312,10 +320,19 @@
         let rowIndex = 1;
         for (let rawRow of rawRowList) {
           if (!isArray(rawRow) || rawRow.length !== this.headerList.length) {
-            return cbfn(makeError(rowIndex + " " + this.app.verses.bulkImportProductBlueprint.missingCellsInRow ));
+            return cbfn(makeError(rowIndex + " " + this.app.verses.bulkImportProductBlueprint.missingCellsInRow));
           }
           rowIndex += 1;
         }
+        // since null is not acceptable for identifierCode
+        rawRowList.forEach(rawRow => {
+          if (rawRow[6] === null) {
+            rawRow[6] = '';
+          }
+          if (typeof (rawRow[6]) !== 'string') {
+            rawRow[6] = String(rawRow[6]);
+          }
+        })
         cbfn(null, rawRowList);
       }
 

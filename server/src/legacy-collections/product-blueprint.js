@@ -25,6 +25,7 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
       name: Joi.string().min(1).max(64).required(),
       organizationId: Joi.number().max(999999999999999).required(),
       unit: Joi.string().max(64).required(),
+      identifierCode: Joi.string().max(64).allow('').required(),
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
@@ -51,7 +52,7 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
   /**
    * 
    * 
-   * @param {any} { organizationId, name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } 
+   * @param {any} { organizationId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } 
    * @param {any} cbfn 
    */
   create(data, cbfn) {
@@ -59,6 +60,7 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
       organizationId,
       name,
       unit,
+      identifierCode,
       defaultPurchasePrice,
       defaultVat,
       defaultSalePrice,
@@ -70,6 +72,7 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
       organizationId,
       name,
       unit,
+      identifierCode,
       defaultPurchasePrice,
       defaultVat,
       defaultSalePrice,
@@ -94,10 +97,10 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
     this._find({ id: { $in: idList } }, cbfn);
   }
 
-  update({ productBlueprintId }, { name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
+  update({ productBlueprintId }, { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
     let modifications = {
       $set: {
-        name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
+        name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
       }
     }
     this._update({ id: productBlueprintId }, modifications, cbfn);

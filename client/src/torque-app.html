@@ -94,7 +94,8 @@
 <link rel="lazy-import" href="page-manage-service-membership.html">
 <link rel="lazy-import" href="page-view-sales-return.html">
 <link rel="lazy-import" href="page-bulk-import-product-blueprints.html">
-<link rel="lazy-import" href="page-select-geolocation.html">
+<link rel="lazy-import" href="page-select-geolocation.html"> 
+<link rel="lazy-import" href="page-scan-identifier-code.html"> 
 
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
@@ -122,6 +123,8 @@
         --app-button-label-danger: #c62828;
         --app-button-neutral: #CFD8DC;
         --app-button-label-neutral: #263238;
+        --app-button-alternative: #f4ff56;
+        --app-button-label-alternative: #067e24;
 
         display: block;
       }
@@ -221,6 +224,12 @@
         overflow-y: auto;
       }
 
+      .sidebar-logo-image {
+        padding-top: 20px;
+        height: 60px;
+        width: 60px;
+      }
+
       .sidebar-divider {
         border: 0;
         height: 0;
@@ -233,7 +242,9 @@
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]" style$="[[$invisibleUnless(user)]]">
         <div class="app-drawer-wrapper">
-          <app-toolbar>Torque</app-toolbar>
+          <app-toolbar class="sidebar-title">
+            <img class="sidebar-logo-image" src="../images/logo.png">
+          </app-toolbar>
           <iron-selector selected="[[pageName]]" attr-for-selected="name" class="drawer-list" role="navigation">
 
             <a name="home" href="#/home">[[verses.sidebar.home]]</a>
@@ -373,6 +384,7 @@
           <page-print-sales-receipt name="print-sales-receipt"></page-print-sales-receipt>
           <page-bulk-import-product-blueprints name="bulk-import-product-blueprints"></page-bulk-import-product-blueprints>
           <page-select-geolocation name="select-geolocation"></page-select-geolocation>
+          <page-scan-identifier-code name="scan-identifier-code"></page-scan-identifier-code>
         </iron-pages>
 
         <paper-dialog id="network-dialog" modal style="z-index: -999999">
@@ -431,7 +443,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":162,"datetimeStamp":1553355272528}');
+              return JSON.parse('{"build":165,"datetimeStamp":1553854968627}');
               '%__deploy-end'
             }
           },
@@ -979,7 +991,7 @@
         }
 
         const _backgroundSyncGetAggregatedInventoryDetailsApi = (inventoryId, cbfn) => {
-          let data = { inventoryId };
+          let data = { inventoryId, includeZeroCountProducts: false  };
           window.torqueCache.ignorableApiCallCount += 1;
           this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
             window.torqueCache.ignorableApiCallCount -= 1;

@@ -1,0 +1,283 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-scan-identifier-code">
+  <template>
+    <style include="shared-styles">
+      .confirm-discard-button-group paper-button {
+        width: 100%;
+        margin: 5px;
+      }
+
+      .low-product-count-div {
+        color: red;
+      }
+
+      .error {
+        text-align: center;
+        color: red;
+      }
+
+      .success {
+        text-align: center;
+      }
+
+      .big-scanning {
+        font-size: 24px;
+        text-align: center;
+      }
+
+      .scanning-card {
+        background: #A5D6A7;
+      }
+
+      #identifierCodeInput {
+        text-align: center;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card vertical layout scanning-card">
+        <div class="big-scanning">[[verses.scan.active]]</div>
+        <div class="p-16 horizontal layout center">
+          <paper-input id="identifierCodeInput" no-label-float class="flex" value="{{identifierCode}}" on-change="identifierCodeEntered" on-blur="identifierCodeInputBlurred" on-focus="identifierCodeInputFocused"></paper-input>
+        </div>
+        <div class="success">
+          [[verses.scan.activeMessage]]
+        </div>
+      </div>
+
+      <div class="card vertical layout">
+        <template is="dom-if" if="[[lastErrorMessage]]">
+          <div class="error">[[lastErrorMessage]]</div>
+          <br>
+        </template>
+        <template is="dom-if" if="[[lastSuccessMessage]]">
+          <div class="success">[[lastSuccessMessage]]</div>
+          <br>
+        </template>
+        <div class="success">[[verses.scan.countMessagePart1]] <b>[[selectedProductCount]]</b> [[verses.scan.countMessagePart2]]</div>
+      </div>
+
+      <div class="card vertical layout">
+        <div class="vertical confirm-discard-button-group">
+          <paper-button raised class="btn primary" on-tap="selectProductsTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
+        </div>
+      </div>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageScanIdentifierCode extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-scan-identifier-code';
+      }
+
+      static get properties() {
+        return {
+          selectedProductCount: {
+            type: Number,
+            value: 0
+          },
+          selectedProductList: {
+            type: Array,
+            value: () => []
+          },
+          isInOfflineMode: {
+            type: Boolean,
+            value: false
+          },
+          isScanningEnabled: {
+            type: Boolean,
+            value: false
+          },
+          identifierCode: {
+            type: String,
+            value: ''
+          },
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        this.onOfflineDataChange();
+        this.app.pushPageTitle(this.app.verses.scan.pageTitle);
+        if (!this._ensureAccess()) return;
+        this.selectedProductList = this.app.getFromSession('pos-selected-product-list') || [];
+        this.isReady = true;
+        window.setTimeout(() => {
+          let x = this.elem('#identifierCodeInput').focus();
+        }, 200);
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.selectedProductList = [];
+        this.selectedProductCount = 0;
+        this.lastErrorMessage = '';
+        this.lastSuccessMessage = '';
+        this.isScanningEnabled = false;
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_ALL_INVENTORIES']
+        });
+      }
+
+      _fetchProductMatchingIdentifierCodeOnline(cbfn) {
+        let inventoryId = parseInt(this.params.inventory);
+        this.inventoryId = inventoryId;
+        let data = { inventoryId, includeZeroCountProducts: false, identifierCode: this.identifierCode };
+        this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _fetchProductMatchingIdentifierCode(cbfn) {
+        if (this.isInOfflineMode) {
+          // FIXME: Remove or Implement
+          // this._fetchProductMatchingIdentifierCodeOffline(cbfn);
+        } else {
+          this._fetchProductMatchingIdentifierCodeOnline(cbfn);
+        }
+      }
+
+      _prepareProductForInsertion({ product }) {
+        let { productId, name, selectedCount, count, salePrice, vatValue, unit } = product;
+        let maxAllowedCount = count;
+        selectedCount = parseFloat(String(selectedCount));
+        let minSalePrice = salePrice;
+        return { productId, name, selectedCount, maxAllowedCount, salePrice, vatValue, minSalePrice, unit };
+      }
+
+      _fetchProduct(cbfn) {
+        this._fetchProductMatchingIdentifierCode(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
+          let productList = aggregatedProductList.map(product => {
+            let { purchasePrice, salePrice } = product.product;
+            let { name, unit, defaultVat } = product.product.productBlueprint;
+            product.isSelected = false;
+            let vatValue = defaultVat;
+            Object.assign(product, { name, unit, purchasePrice, salePrice, vatValue });
+            return product;
+          });
+          cbfn(productList);
+        });
+      }
+
+      // region: ui  ===========================
+
+      identifierCodeEntered(e) {
+        this.lastSuccessMessage = '';
+        this.lastErrorMessage = '';
+        if (this.identifierCode.length === 0) return;
+        this._fetchProduct((productList) => {
+          this.identifierCode = '';
+          if (productList.length === 0) {
+            this.lastErrorMessage = this.verses.scan.noMatchingProductsError;
+            return;
+          }
+
+          // NOTE: The following calculation is to ensure products are selected from adjacent batches
+          let selectedCount = 0;
+          let calculatedMaxCount = 0;
+          let product;
+          for (product of productList) {
+            calculatedMaxCount += product.count;
+            let foundProduct = this.selectedProductList.find(selectedProduct => selectedProduct.productId === product.productId);
+            if (!foundProduct) break;
+            selectedCount += parseFloat(foundProduct.selectedCount);
+            if (selectedCount < calculatedMaxCount) break;
+          }
+          if (selectedCount === calculatedMaxCount) {
+            this.lastErrorMessage = this.verses.scan.noMatchingProductsError;
+            return;
+          }
+          // NOTE: end
+
+          product = this._prepareProductForInsertion({ product });
+
+          let foundProduct = this.selectedProductList.find(selectedProduct => selectedProduct.productId === product.productId);
+          if (foundProduct) {
+            foundProduct.selectedCount = parseFloat(foundProduct.selectedCount) + 1;
+          } else {
+            product.selectedCount = 1;
+            this.selectedProductList.push(product);
+          }
+          this.selectedProductCount += 1;
+          this.lastSuccessMessage = `${this.verses.scan.lastScanned} "${product.name}"`;
+        })
+      }
+
+      identifierCodeInputBlurred(e) {
+        this.isScanningEnabled = false;
+        window.setTimeout(() => {
+          let x = this.elem('#identifierCodeInput').focus();
+        }, 50);
+      }
+
+      identifierCodeInputFocused(e) {
+        this.isScanningEnabled = true;
+      }
+
+      selectProductsTapped(e = null) {
+        this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
+        this.app.navigateToPreviousUrl(`/pos-select-product`);
+      }
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl(`/pos-select-product`);
+      }
+
+      // region: misc =================================
+
+      // region: offline sales =================================
+
+      onOfflineDataChange() {
+        this.isInOfflineMode = this.app.isInOfflineMode;
+      }
+
+    }
+
+    window.customElements.define(PageScanIdentifierCode.is, PageScanIdentifierCode);
+  </script>
+</dom-module>

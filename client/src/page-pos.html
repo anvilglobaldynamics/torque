@@ -315,7 +315,7 @@
             </div>
 
             <div class="individual-calculation-field-container">
-              <template is="dom-if" if="[[checkPrivilege('PRIV_ALLOW_FLAT_DISCOUNT')]]">
+              <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLAT_DISCOUNT', organization)]]">
 
                 <div class="vertical layout m-bottom-18">
 
@@ -491,6 +491,7 @@
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
         this.onOfflineDataChange();
+        this.onOrganizationChange(this.app.organization);
         this.app.pushPageTitle(this.app.verses.pos.posPageTitle);
         if (!'outlet' in this.params) {
           return this.app.showModalDialog(this.app.verses.general.sorry, this.app.verses.general.somethingWentWrong, () => {
@@ -540,6 +541,10 @@
           authLevel: 'organization-selected',
           privilegeList: ['PRIV_ACCESS_POS']
         });
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
       }
 
       // region: pos =================================

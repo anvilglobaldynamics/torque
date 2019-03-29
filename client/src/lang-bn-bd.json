@@ -17,6 +17,7 @@
     "thankYou": "ধন্যবাদ",
     "listIsEmpty": "তালিকা খালি।",
     "search": "খোঁজ",
+    "scan": "স্ক্যান",
     "select": "বাছাই",
     "remove": "সরান",
     "selected": "বাছাইকৃত",
@@ -129,6 +130,7 @@
     "nowAUserOfTorque": "আপনি এখন লিপির একটি ব্যবহারকারী। আপনি এখন লগ ইন করতে পারেন।"
   },
   "sidebar": {
+    "lipiName": "লিপি",
     "home": "হোম",
     "employees": "কর্মচারী",
     "outlets": "দোকান",
@@ -279,6 +281,8 @@
     "productBlueprintNameInputError": "একটি সঠিক নাম লিখুন",
     "productBlueprintUnitInput": "একক নির্দিষ্ট করুন (যেমন কেজি, পিস্)",
     "productBlueprintUnitInputError": "একটি সঠিক একক লিখুন",
+    "identifierCodeInput": "সনাক্তকরণ কোড",
+    "identifierCodeInputError": "একটি সঠিক সনাক্তকরণ কোড লিখুন",
     "defaultPurchasePriceInput": "ক্রয় মূল্য",
     "defaultPurchasePriceInputError": "একটি সঠিক অংক লিখুন",
     "defaultVatInput": "ভ্যাট",
@@ -569,7 +573,8 @@
     "productReturn": "পণ্য ফেরত",
     "service": "সেবা",
     "discardQuestion": "এই বিক্রি বাতিল?",
-    "discardMessage": "বাতিল করা হলে কোনো রিপোর্ট কিংবা হিসেবে এই বিক্রি ধরা হবে না। বিক্রয়কৃত সেবা সদস্যপদ (যদি থাকে) বাতিল হয়ে যাবে।"
+    "discardMessage": "বাতিল করা হলে কোনো রিপোর্ট কিংবা হিসেবে এই বিক্রি ধরা হবে না। বিক্রয়কৃত সেবা সদস্যপদ (যদি থাকে) বাতিল হয়ে যাবে।",
+    "dueAmount": "বাকি অর্থ"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
@@ -714,8 +719,9 @@
     "acquiredOn": "খরিদ হয়েছে",
     "addedOn": "যুক্ত হয়েছে",
     "noProductFoundInOutlet": "কোনো পণ্য পাওয়া যায়নি। পেছনে গিয়ে দোকানের প্রধান পণ্য তালিকায় পণ্য যোগ করুন।",
-    "searchForProductInput": "পণ্যের নাম দিয়ে অনুসন্ধান",
-    "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি"
+    "searchForProductInput": "পণ্যের নাম",
+    "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি",
+    "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন"
   },
   "posSelectService": {
     "posSelectServiceTitle": "সেবা নির্বাচন",
@@ -792,7 +798,8 @@
     "instructionThree": "৩. পণ্য পরিকল্পনার একটি একক (Unit) দিন, যেমন: কেজি, পিস অথবা বাক্স;",
     "instructionFour": "৪. পণ্য পরিকল্পনার কেনা দাম (Purchase Price), বিক্রি দাম (Sale Price) এবং ভ্যাট শতাংশ (VAT) দিন, এভাবে;",
     "instructionFive": "৫. Returnable এর নিচে yes (হ্যা) দিন যদি পণ্য ফেরতযোগ্য হয়ে, no (না) দিন যদি নয়;",
-    "instructionSix": "৬. সকল স্থান পূরণ থাকতে হবে, নাহলে লিপি ফাইলটি গ্রহণ করবে না;",
+    "instructionSix": "৬. Barcode এর নিচে পণ্যের বারকোড নম্বর দিন (অথবা খালি রাখতে পারেন);",
+    "instructionLast": "৭. সকল স্থান পূরণ থাকতে হবে, নাহলে লিপি ফাইলটি গ্রহণ করবে না;",
     "uploadSectionTip": "পণ্যের পরিকল্পনা ধারণকারী CSV ফাইলটি জমা করুন;",
     "uploadButtonLabel": "ফাইল জমা করুন",
     "successfullyImported": "ফাইল পড়তে সফল, মোট পণ্যের পরিকল্পনা তৈরি হয়েছে",
@@ -891,5 +898,14 @@
     "paidAmountInput": "পরিশোধিত",
     "changeAmount": "ফেরত",
     "dueAmount": "বাকি অর্থ"
+  },
+  "scan": {
+    "pageTitle": "পণ্য স্ক্যান করুন",
+    "active": "স্ক্যানিং সক্রিয়",
+    "activeMessage": "সংযুক্ত বারকোড স্ক্যানিং ডিভাইস ব্যবহার করে পণ্য স্ক্যান শুরু করুন।",
+    "countMessagePart1": "মোট স্ক্যান করা হয়েছে: ",
+    "countMessagePart2": " টি পণ্য",
+    "noMatchingProductsError": "সর্বশেষ স্ক্যান করা পণ্য পাওয়া যায়নি",
+    "lastScanned": "সর্বশেষ স্ক্যান হয়েছে: "
   }
 }

@@ -16,7 +16,10 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
   get requestSchema() {
     return Joi.object().keys({
       inventoryId: Joi.number().max(999999999999999).required(),
-      searchString: Joi.string().min(0).max(64).allow('').optional()
+      searchString: Joi.string().min(0).max(64).allow('').optional(),
+      identifierCode: Joi.string().min(0).max(64).allow('').optional(),
+      includeZeroCountProducts: Joi.boolean().default(true).optional(),
+      sortOrder: Joi.string().default('id-ascending').valid('id-ascending', 'date-added-ascending').optional()
     });
   }
 
@@ -43,12 +46,22 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
       let regex = new RegExp(searchString, 'gi');
       return regex.test(aggregatedProduct.product.productBlueprint.name);
     });
+    return aggregatedProductList;
+  }
 
+  __removeZeroCountProducts({ aggregatedProductList }) {
+    return aggregatedProductList.filter(aggregatedProduct => aggregatedProduct.count > 0);
+  }
+
+  __filterAggregatedProductListWithIdentifierCode({ aggregatedProductList, identifierCode }) {
+    aggregatedProductList = aggregatedProductList.filter(aggregatedProduct => {
+      return (aggregatedProduct.product.productBlueprint.identifierCode === identifierCode);
+    });
     return aggregatedProductList;
   }
 
   async handle({ body }) {
-    let { inventoryId, searchString } = body;
+    let { inventoryId, searchString, includeZeroCountProducts, identifierCode, sortOrder } = body;
     let inventory = await this.__getInventory({ inventoryId });
     let inventoryContainerDetails = await this.__getInventoryContainerDetails({ inventory });
     let productList = inventory.productList;
@@ -58,6 +71,18 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
 
     if (searchString) {
       aggregatedProductList = this.__searchAggregatedProductList({ aggregatedProductList, searchString });
+    }
+
+    if (!includeZeroCountProducts) {
+      aggregatedProductList = this.__removeZeroCountProducts({ aggregatedProductList });
+    }
+
+    if (identifierCode) {
+      aggregatedProductList = this.__filterAggregatedProductListWithIdentifierCode({ aggregatedProductList, identifierCode });
+    }
+
+    if (sortOrder === 'date-added-ascending') {
+      aggregatedProductList.sort((a, b) => a.addedDatetimeStamp - b.addedDatetimeStamp);
     }
 
     return {

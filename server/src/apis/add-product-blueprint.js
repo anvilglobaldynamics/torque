@@ -16,6 +16,7 @@ exports.AddProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin) 
 
       name: Joi.string().min(1).max(64).required(),
       unit: Joi.string().max(64).required(),
+      identifierCode: Joi.string().max(64).allow('').required(),
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
@@ -32,9 +33,16 @@ exports.AddProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin) 
     }];
   }
 
+  async __ensureIdentifierCodeIsUnique({ identifierCode, organizationId }) {
+    if (identifierCode.length === 0)  return;
+    let existingBlueprintList = await this.database.productBlueprint._find({ identifierCode, organizationId });
+    throwOnTruthy(existingBlueprintList.length > 0, "INVALID_IDENTIFIER_CODE", "The identifier code is already in use by another product blueprint.");
+  }
+
   async handle({ body }) {
-    let { organizationId, name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
-    let productBlueprintId = await this._createProductBlueprint({ organizationId, name, unit, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+    let { organizationId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
+    await this.__ensureIdentifierCodeIsUnique({ identifierCode, organizationId });
+    let productBlueprintId = await this._createProductBlueprint({ organizationId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
     return { status: "success", productBlueprintId };
   }
 

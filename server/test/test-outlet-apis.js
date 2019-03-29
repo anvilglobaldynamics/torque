@@ -73,6 +73,7 @@ describe('Outlet', _ => {
               organizationId,
               name: "test product blueprint",
               unit: "box",
+              identifierCode: '',
               defaultPurchasePrice: 99,
               defaultVat: 3,
               defaultSalePrice: 111,

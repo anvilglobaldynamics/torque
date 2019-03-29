@@ -38,6 +38,16 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <div class="card horizontal layout center" style="background: #FFF59D;">
+        <div>
+          [[verses.posSelectProduct.scanButtonHelp]]
+        </div>
+        <div class="flex"></div>
+        <paper-button raised class="primary" on-tap="identifierCodeScanTapped">
+          [[verses.general.scan]]
+        </paper-button>
+      </div>
+
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
           <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="[[verses.posSelectProduct.searchForProductInputError]]" label="[[verses.posSelectProduct.searchForProductInput]]" on-keypress="searchFieldKeypressed"></paper-input>
@@ -213,7 +223,7 @@
       _fetchInventoryDetailsOnline(cbfn) {
         let inventoryId = parseInt(this.params.inventory);
         this.inventoryId = inventoryId;
-        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate };
+        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate, includeZeroCountProducts: false, sortOrder: 'date-added-ascending' };
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -258,7 +268,7 @@
 
           let productList = aggregatedProductList.map(product => {
             let { purchasePrice, salePrice } = product.product;
-            let { name, unit,  defaultVat } = product.product.productBlueprint;
+            let { name, unit, defaultVat } = product.product.productBlueprint;
             product.isSelected = false;
             let vatValue = defaultVat;
             Object.assign(product, { name, unit, purchasePrice, salePrice, vatValue });
@@ -312,6 +322,13 @@
       }
 
       // region: ui  ===========================
+
+      identifierCodeScanTapped(e = null) {
+        this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
+        this.selectedProductList = [];
+        this.selectedProductCount = 0;
+        this.app.navigateTo(`/scan-identifier-code/inventory:${this.params.inventory}`);
+      }
 
       selectProductsTapped(e = null) {
         this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
