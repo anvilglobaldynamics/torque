@@ -899,6 +899,7 @@
     "dueAmount": "Due"
   },
   "scan": {
+    "pageTitle": "Scan Product(s)",
     "active": "SCANNING ACTIVE",
     "activeMessage": "Start scanning products using the attached barcode scanning device.",
     "countMessagePart1": "Total Scanned so far: ",
