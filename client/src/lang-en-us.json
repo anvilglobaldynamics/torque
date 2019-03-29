@@ -720,7 +720,7 @@
     "noProductFoundInOutlet": "No products found. Go back and add products to the Outlet's default inventory.",
     "searchForProductInput": "Product Name",
     "searchForProductInputError": "Error in Search",
-    "scanButtonHelp": "You can use a code scanner to select multiple products quickly by scanning there codes."
+    "scanButtonHelp": "Use code scanner to select multiple products quickly"
   },
   "posSelectService": {
     "posSelectServiceTitle": "Select Services",

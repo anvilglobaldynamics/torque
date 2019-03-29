@@ -32,16 +32,21 @@
       .low-product-count-div {
         color: red;
       }
-
-      .scan-button {
-        width: 100%;
-        margin: 5px;
-      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card horizontal layout center" style="background: #FFF59D;">
+        <div>
+          [[verses.posSelectProduct.scanButtonHelp]]
+        </div>
+        <div class="flex"></div>
+        <paper-button raised class="primary" on-tap="identifierCodeScanTapped">
+          [[verses.general.scan]]
+        </paper-button>
+      </div>
 
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
@@ -51,15 +56,6 @@
             [[verses.general.search]]
           </paper-button>
         </div>
-      </div>
-
-      <div class="card" style="background: #FFF59D;">
-        <div>
-          [[verses.posSelectProduct.scanButtonHelp]]
-        </div>
-        <paper-button raised class="primary scan-button" on-tap="identifierCodeScanTapped">
-          [[verses.general.scan]]
-        </paper-button>
       </div>
 
       <template is="dom-if" if="{{!productList.length}}">
