@@ -65,11 +65,9 @@
         <div class="p-16 horizontal layout center">
           <paper-input id="identifierCodeInput" no-label-float class="flex" value="{{identifierCode}}" on-change="identifierCodeEntered" on-blur="identifierCodeInputBlurred" on-focus="identifierCodeInputFocused"></paper-input>
         </div>
-        <template is="dom-if" if="[[isScanningEnabled]]">
-          <div class="success">
-            [[verses.scan.activeMessage]]
-          </div>
-        </template>
+        <div class="success">
+          [[verses.scan.activeMessage]]
+        </div>
       </div>
 
       <div class="card vertical layout">
@@ -231,7 +229,7 @@
             if (selectedCount < calculatedMaxCount) break;
           }
           if (selectedCount === calculatedMaxCount) {
-            this.lastErrorMessage =  this.verses.scan.noMatchingProductsError;
+            this.lastErrorMessage = this.verses.scan.noMatchingProductsError;
             return;
           }
           // NOTE: end
