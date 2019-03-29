@@ -897,5 +897,13 @@
     "paidAmountInput": "Paid",
     "changeAmount": "Change",
     "dueAmount": "Due"
+  },
+  "scan": {
+    "active": "SCANNING ACTIVE",
+    "activeMessage": "Start scanning products using the attached barcode scanning device.",
+    "countMessagePart1": " Scanned so far - ",
+    "countMessagePart2": " products. ",
+    "noMatchingProductsError": "No Matching Products",
+    "lastScanned": "Last scanned: "
   }
 }

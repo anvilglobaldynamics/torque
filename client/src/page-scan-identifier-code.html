@@ -61,13 +61,13 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout scanning-card">
-        <div class="big-scanning">SCANNING ACTIVE</div>
+        <div class="big-scanning">[[verses.scan.active]]</div>
         <div class="p-16 horizontal layout center">
           <paper-input id="identifierCodeInput" no-label-float class="flex" value="{{identifierCode}}" on-change="identifierCodeEntered" on-blur="identifierCodeInputBlurred" on-focus="identifierCodeInputFocused"></paper-input>
         </div>
         <template is="dom-if" if="[[isScanningEnabled]]">
           <div class="success">
-            Start scanning products using the attached barcode scanning device.
+            [[verses.scan.activeMessage]]
           </div>
         </template>
         <template is="dom-if" if="[[!isScanningEnabled]]">
@@ -85,7 +85,7 @@
         <template is="dom-if" if="[[lastSuccessMessage]]">
           <div class="success">[[lastSuccessMessage]]</div>
         </template>
-        <div class="success">Scanned so far - [[selectedProductCount]] products.</div>
+        <div class="success">[[verses.scan.countMessagePart1]][[selectedProductCount]][[verses.scan.countMessagePart2]]</div>
       </div>
 
       <div class="card vertical layout">
@@ -142,7 +142,7 @@
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
         this.onOfflineDataChange();
-        this.app.pushPageTitle('Scan Products'); // this.app.pushPageTitle(this.app.verses.posSelectProduct.posSelectProductTitle);
+        this.app.pushPageTitle(this.app.verses.scan.pageTitle);
         if (!this._ensureAccess()) return;
         this.selectedProductList = this.app.getFromSession('pos-selected-product-list') || [];
         this.isReady = true;
@@ -220,7 +220,7 @@
         this._fetchProduct((productList) => {
           this.identifierCode = '';
           if (productList.length === 0) {
-            this.lastErrorMessage = 'No matching products';
+            this.lastErrorMessage = this.verses.scan.noMatchingProductsError;
             return;
           }
 
@@ -236,7 +236,7 @@
             if (selectedCount < calculatedMaxCount) break;
           }
           if (selectedCount === calculatedMaxCount) {
-            this.lastErrorMessage = 'No matching products';
+            this.lastErrorMessage =  this.verses.scan.noMatchingProductsError;
             return;
           }
           // NOTE: end
@@ -251,7 +251,7 @@
             this.selectedProductList.push(product);
           }
           this.selectedProductCount += 1;
-          this.lastSuccessMessage = `Last scanned: "${product.name}"`;
+          this.lastSuccessMessage = `${this.verses.scan.lastScanned} "${product.name}"`;
           console.log({ product });
         })
       }
