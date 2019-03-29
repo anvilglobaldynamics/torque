@@ -900,12 +900,12 @@
     "dueAmount": "বাকি অর্থ"
   },
   "scan": {
+    "pageTitle": "পণ্য স্ক্যান করুন",
     "active": "স্ক্যানিং সক্রিয়",
     "activeMessage": "সংযুক্ত বারকোড স্ক্যানিং ডিভাইস ব্যবহার করে পণ্য স্ক্যান শুরু করুন।",
-    "countMessagePart1": " স্ক্যান করা হয়েছে - ",
-    "countMessagePart2": " টি পণ্য ",
-    "pageTitle": "পণ্য স্ক্যান করুন",
-    "noMatchingProductsError": "পণ্য পাওয়া যায়নি",
-    "lastScanned": "স্ক্যান করা হয়েছে: "
+    "countMessagePart1": "মোট স্ক্যান করা হয়েছে: ",
+    "countMessagePart2": " টি পণ্য",
+    "noMatchingProductsError": "সর্বশেষ স্ক্যান করা পণ্য পাওয়া যায়নি",
+    "lastScanned": "সর্বশেষ স্ক্যান হয়েছে: "
   }
 }
