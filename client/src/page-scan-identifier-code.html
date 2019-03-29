@@ -81,11 +81,13 @@
       <div class="card vertical layout">
         <template is="dom-if" if="[[lastErrorMessage]]">
           <div class="error">[[lastErrorMessage]]</div>
+          <br>
         </template>
         <template is="dom-if" if="[[lastSuccessMessage]]">
           <div class="success">[[lastSuccessMessage]]</div>
+          <br>
         </template>
-        <div class="success">[[verses.scan.countMessagePart1]][[selectedProductCount]][[verses.scan.countMessagePart2]]</div>
+        <div class="success">[[verses.scan.countMessagePart1]] <b>[[selectedProductCount]]</b> [[verses.scan.countMessagePart2]]</div>
       </div>
 
       <div class="card vertical layout">
@@ -213,7 +215,6 @@
       // region: ui  ===========================
 
       identifierCodeEntered(e) {
-        console.log("Entered: ", this.identifierCode, this.identifierCode.length);
         this.lastSuccessMessage = '';
         this.lastErrorMessage = '';
         if (this.identifierCode.length === 0) return;
@@ -252,7 +253,6 @@
           }
           this.selectedProductCount += 1;
           this.lastSuccessMessage = `${this.verses.scan.lastScanned} "${product.name}"`;
-          console.log({ product });
         })
       }
 
