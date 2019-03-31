@@ -37,6 +37,7 @@ Possible Error Codes:
   moduleActivationList: Joi.array().items(Joi.object().keys({
     id: Joi.number().optional(),
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
     deactivatedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
     moduleCode: Joi.string().required(),
     organizationId: Joi.number().max(999999999999999).required(),
