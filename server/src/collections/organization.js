@@ -33,8 +33,6 @@ exports.OrganizationCollection = class extends Collection {
 
   async create({ name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       createdByUserId: userId,
       name,
       primaryBusinessAddress,
