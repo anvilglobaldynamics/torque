@@ -30,8 +30,6 @@ exports.OutgoingSmsCollection = class extends Collection {
 
   async create({ from, to, content }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       from, to, content,
       status: 'pending',
       isDeleted: false
