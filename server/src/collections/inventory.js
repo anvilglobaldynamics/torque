@@ -46,8 +46,6 @@ exports.InventoryCollection = class extends Collection {
 
   async create({ inventoryContainerId, inventoryContainerType, organizationId, type, name, allowManualTransfer }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       name,
       organizationId,
       inventoryContainerId,
