@@ -202,6 +202,10 @@ class LegacyCollection {
   }
 
   _insert(doc, cbfn) {
+    if ('createdDatetimeStamp' in doc) return cbfn(new Error("DevError: createdDatetimeStamp must not be set manually."));
+    if ('lastModifiedDatetimeStamp' in doc) return cbfn(new Error("DevError: lastModifiedDatetimeStamp must not be set manually."));
+    doc.createdDatetimeStamp = Date.now();
+    doc.lastModifiedDatetimeStamp = Date.now();
     this.__validateDocument(doc, false, (err) => {
       if (err) return cbfn(err);
       this.legacyDatabase.autoGenerateKey(this.collectionName, (err, id) => {
@@ -217,6 +221,12 @@ class LegacyCollection {
   }
 
   _update(query, modifications, cbfn) {
+    if (!('$set' in modifications)) {
+      modifications.$set = {};
+    }
+    if ('createdDatetimeStamp' in modifications.$set) return cbfn(new Error("DevError: createdDatetimeStamp must not be set manually."));
+    if ('lastModifiedDatetimeStamp' in modifications.$set) return cbfn(new Error("DevError: lastModifiedDatetimeStamp must not be set manually."));
+    modifications.$set.lastModifiedDatetimeStamp = Date.now();
     return this.__updateOneSafe(query, modifications, cbfn);
     // return this.legacyDatabase.updateOne(this.collectionName, query, modifications, cbfn);
   }
@@ -225,7 +235,8 @@ class LegacyCollection {
     this._find(query, (err, docList) => {
       if (err) return cbfn(err);
       Promise.all(docList.map(doc => new Promise((accept, reject) => {
-        this._update({ id: doc.id }, modifications, (err, wasSuccessful) => {
+        const clone = (obj) => JSON.parse(JSON.stringify(obj));
+        this._update({ id: doc.id }, clone(modifications), (err, wasSuccessful) => {
           if (err) return reject(err);
           return accept();
         });

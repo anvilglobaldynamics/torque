@@ -922,7 +922,10 @@ exports.validateAdminListOrganizationModulesApiSuccessResponse = (doc) => {
     hasError: Joi.boolean().required().equal(false),
     moduleActivationList: Joi.array().items(Joi.object().keys({
       id: Joi.number().optional(),
+
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
       deactivatedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       moduleCode: Joi.string().required(),
       organizationId: Joi.number().max(999999999999999).required(),
@@ -1025,6 +1028,8 @@ exports.validatePackageActivationSchema = (doc) => {
     id: Joi.number().max(999999999999999).required(),
 
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
     packageCode: Joi.string().required(),
     organizationId: Joi.number().max(999999999999999).required(),
     createdByAdminName: Joi.string().min(1).max(64).required(),
