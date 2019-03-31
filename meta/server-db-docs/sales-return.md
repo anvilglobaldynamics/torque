@@ -4,6 +4,7 @@ This collection contains an sales return
 ```js
 Joi.object().keys({
   createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+  lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
   
   salesId: Joi.number().max(999999999999999).required(),
   isDeleted: Joi.boolean().required(),

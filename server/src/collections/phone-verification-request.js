@@ -11,6 +11,7 @@ exports.PhoneVerificationRequestCollection = class extends Collection {
       forPhone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       forUserId: Joi.number().max(999999999999999).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       verifiedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       origin: Joi.string().max(1024).required(),
       verificationToken: Joi.string().min(64).max(64).required(),
@@ -55,7 +56,6 @@ exports.PhoneVerificationRequestCollection = class extends Collection {
       forUserId: userId,
       origin,
       verificationToken,
-      createdDatetimeStamp: (new Date()).getTime(),
       verifiedDatetimeStamp: null,
       isVerificationComplete: false
     });

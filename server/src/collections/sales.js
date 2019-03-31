@@ -87,9 +87,6 @@ exports.SalesCollection = class extends Collection {
 
   async create({ outletId, customerId, productList, serviceList, payment, wasOfflineSale = false }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
-
       outletId,
       customerId,
       productList,

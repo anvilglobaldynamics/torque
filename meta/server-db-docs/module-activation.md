@@ -4,6 +4,7 @@ This collection contains a module-activation
 ```js
 Joi.object().keys({
   createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+  lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
   deactivatedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
   moduleCode: Joi.string().required(),
   organizationId: Joi.number().max(999999999999999).required(),

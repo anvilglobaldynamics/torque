@@ -44,6 +44,7 @@ Possible Error Codes:
   organizationPackageDetails: Joi.object().allow(null).keys({
     packageActivation: Joi.object().required().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       packageCode: Joi.string().required(),
       organizationId: Joi.number().max(999999999999999).required(),
       isDiscarded: Joi.boolean().required()

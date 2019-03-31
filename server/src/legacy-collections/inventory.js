@@ -58,8 +58,6 @@ exports.InventoryCollection = class extends LegacyCollection {
 
   create({ inventoryContainerId, inventoryContainerType, organizationId, type, name, allowManualTransfer }, cbfn) {
     let doc = {
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       name,
       organizationId,
       inventoryContainerId,

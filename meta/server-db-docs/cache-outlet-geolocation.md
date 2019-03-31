@@ -3,6 +3,8 @@ This collection contains a cache of outlet geolocations for fast lookup and inde
 ## signature
 ```js
 Joi.object().keys({
+  createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+  lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
   outletId: Joi.number().required(),
   location: Joi.object().keys({
     type: Joi.string().valid("Point"),

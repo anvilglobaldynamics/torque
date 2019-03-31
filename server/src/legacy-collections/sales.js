@@ -97,9 +97,6 @@ exports.SalesCollection = class extends LegacyCollection {
 
   create({ outletId, customerId, productList, payment }, cbfn) {
     let doc = {
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
-
       outletId,
       customerId,
       productList,

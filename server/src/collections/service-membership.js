@@ -60,8 +60,6 @@ exports.ServiceMembershipCollection = class extends Collection {
     expiringDatetimeStamp
   }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       createdByUserId,
     
       customerId,

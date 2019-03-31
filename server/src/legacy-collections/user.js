@@ -48,8 +48,6 @@ exports.UserCollection = class extends LegacyCollection {
 
   create({ phone, fullName, passwordHash, agreedToTocDatetimeStamp  }, cbfn) {
     let user = {
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       passwordHash,
       email: null,
       phone,
