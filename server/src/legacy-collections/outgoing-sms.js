@@ -42,8 +42,6 @@ exports.OutgoingSmsCollection = class extends LegacyCollection {
 
   create({ from, to, content }, cbfn) {
     let doc = {
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       from, to, content,
       status: 'pending',
       isDeleted: false
