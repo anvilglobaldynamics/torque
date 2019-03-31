@@ -11,6 +11,7 @@ exports.AdminSessionCollection = class extends Collection {
       username: Joi.string().max(1024).required(),
       apiKey: Joi.string().length(64).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       terminatedDatetimeStamp: Joi.number().max(999999999999999).required().allow(null),
       terminatedBy: Joi.string().allow('').max(64).required(),
       hasExpired: Joi.boolean().required()
@@ -41,7 +42,6 @@ exports.AdminSessionCollection = class extends Collection {
     return await this._insert({
       username,
       apiKey,
-      createdDatetimeStamp: (new Date).getTime(),
       terminatedDatetimeStamp: null,
       terminatedBy: '',
       hasExpired: false
