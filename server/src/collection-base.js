@@ -164,6 +164,10 @@ class Collection {
   }
 
   async _insert(doc) {
+    if ('createdDatetimeStamp' in doc) throw new CodedError("DevError: createdDatetimeStamp must not be set manually.");
+    if ('lastModifiedDatetimeStamp' in doc) throw new CodedError("DevError: lastModifiedDatetimeStamp must not be set manually.");
+    doc.createdDatetimeStamp = Date.now();
+    doc.lastModifiedDatetimeStamp = Date.now();
     await this.__validateDocument(doc, false);
     return await this._db.insertOne(this.name, doc);
   }
@@ -174,6 +178,12 @@ class Collection {
   }
 
   async _update(query, modifications) {
+    if (!('$set' in modifications)) {
+      modifications.$set = {};
+    }
+    if ('createdDatetimeStamp' in modifications.$set) throw new CodedError("DevError: createdDatetimeStamp must not be set manually.");
+    if ('lastModifiedDatetimeStamp' in modifications.$set) throw new CodedError("DevError: lastModifiedDatetimeStamp must not be set manually.");
+    modifications.$set.lastModifiedDatetimeStamp = Date.now();
     return await this.__updateOneSafe(query, modifications);
   }
 
