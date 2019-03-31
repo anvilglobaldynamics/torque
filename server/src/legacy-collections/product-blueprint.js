@@ -67,8 +67,6 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
       isReturnable
     } = data;
     let doc = {
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       organizationId,
       name,
       unit,
