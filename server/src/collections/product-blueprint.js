@@ -52,8 +52,6 @@ exports.ProductBlueprintCollection = class extends Collection {
     defaultSalePrice,
     isReturnable }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       organizationId,
       name,
       unit,
