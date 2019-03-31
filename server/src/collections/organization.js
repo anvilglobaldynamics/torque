@@ -73,7 +73,7 @@ exports.OrganizationCollection = class extends Collection {
     });
   }
 
-  async setactiveModuleCodeList({ id }, { activeModuleCodeList }) {
+  async setActiveModuleCodeList({ id }, { activeModuleCodeList }) {
     return await this._update({ id }, {
       $set: {
         activeModuleCodeList
