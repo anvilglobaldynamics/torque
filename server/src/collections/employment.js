@@ -131,8 +131,6 @@ exports.EmploymentCollection = class extends Collection {
 
   async addOwner({ organizationId, userId }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       userId,
       organizationId,
       designation: 'Owner',
@@ -145,8 +143,6 @@ exports.EmploymentCollection = class extends Collection {
 
   async addRegularEmployee({ userId, organizationId, role, designation, companyProvidedId, privileges }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       userId,
       organizationId,
       designation,
