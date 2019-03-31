@@ -54,7 +54,6 @@ exports.AdminSessionCollection = class extends LegacyCollection {
     let doc = {
       username,
       apiKey,
-      createdDatetimeStamp: (new Date).getTime(),
       terminatedDatetimeStamp: null,
       terminatedBy: '',
       hasExpired: false
