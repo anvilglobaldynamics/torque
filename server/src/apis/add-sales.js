@@ -40,6 +40,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
       payment: Joi.object().required().keys({
         totalAmount: Joi.number().max(999999999999999).required(), // means total sale price of all products
         vatAmount: Joi.number().max(999999999999999).required(),
+        discountPresetId: Joi.number().max(999999999999999).allow(null).required(),
         discountType: Joi.string().valid('percent', 'fixed').required(),
         discountValue: Joi.number().max(999999999999999).required(),
         discountedAmount: Joi.number().max(999999999999999).required(),
@@ -109,13 +110,13 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
   */
   _standardizePayment({ originalPayment }) {
     let {
-      totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount,
+      totalAmount, vatAmount, discountPresetId, discountType, discountValue, discountedAmount, serviceChargeAmount,
       totalBilled,
       paymentMethod, paidAmount, changeAmount, shouldSaveChangeInAccount
     } = originalPayment;
 
     let payment = {
-      totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount,
+      totalAmount, vatAmount, discountPresetId, discountType, discountValue, discountedAmount, serviceChargeAmount,
       totalBilled,
       paymentList: [], totalPaidAmount: 0
     }

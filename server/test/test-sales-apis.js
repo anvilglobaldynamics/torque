@@ -296,6 +296,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -334,6 +335,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -379,6 +381,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -424,6 +427,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: 'something',
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -469,6 +473,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -546,6 +551,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -591,6 +597,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -636,6 +643,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -1153,6 +1161,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: 0,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -1378,6 +1387,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: basicService.salePrice,
           vatAmount: (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1423,6 +1433,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: basicService.salePrice,
           vatAmount: (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1484,6 +1495,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: customerAndEmployeeService.salePrice,
           vatAmount: (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1529,6 +1541,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: customerAndEmployeeService.salePrice,
           vatAmount: (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1574,6 +1587,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1619,6 +1633,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1878,6 +1893,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1911,6 +1927,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1944,6 +1961,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1977,6 +1995,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -2010,6 +2029,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
