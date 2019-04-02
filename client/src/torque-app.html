@@ -94,8 +94,8 @@
 <link rel="lazy-import" href="page-manage-service-membership.html">
 <link rel="lazy-import" href="page-view-sales-return.html">
 <link rel="lazy-import" href="page-bulk-import-product-blueprints.html">
-<link rel="lazy-import" href="page-select-geolocation.html"> 
-<link rel="lazy-import" href="page-scan-identifier-code.html"> 
+<link rel="lazy-import" href="page-select-geolocation.html">
+<link rel="lazy-import" href="page-scan-identifier-code.html">
 
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
@@ -753,12 +753,17 @@
           ];
           if (allowedPageNameList.indexOf(this.pageName) === -1) {
             this.app = this;
-            let settings = this._getNormalizedSettings();
-            let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
-            if (defaultOutletId) {
-              this.navigateTo(`/pos/outlet:${defaultOutletId}`);
-              return
-            }
+            try {
+              let settings = this._getNormalizedSettings();
+              let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+              if (defaultOutletId) {
+                this.navigateTo(`/pos/outlet:${defaultOutletId}`);
+                return
+              }
+            } catch (ex){
+              // Organization is not loaded yet but somehow isInOfflineMode is true
+              'pass'
+            }            
           }
         }
         let qualifiedName = 'page-' + this.pageName + '.html';
@@ -869,7 +874,7 @@
         } else {
           this.shouldAttempBackgroundSync = false;
         }
-        this._proxyToActivePage('onFundamentalComponentChange', {});
+        this._proxyToActivePage('onFundamentalComponentChange', allComponentsReady);
       }
 
       onUserChange() {
@@ -991,7 +996,7 @@
         }
 
         const _backgroundSyncGetAggregatedInventoryDetailsApi = (inventoryId, cbfn) => {
-          let data = { inventoryId, includeZeroCountProducts: false  };
+          let data = { inventoryId, includeZeroCountProducts: false };
           window.torqueCache.ignorableApiCallCount += 1;
           this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
             window.torqueCache.ignorableApiCallCount -= 1;
