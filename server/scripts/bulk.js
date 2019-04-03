@@ -325,6 +325,7 @@ const createSales = async ({ apiKey, outletId, productList }) => {
     payment: {
       totalAmount: 0,
       vatAmount: 0,
+      discountPresetId: null,
       discountType: 'fixed',
       discountValue: 0,
       discountedAmount: 0,
