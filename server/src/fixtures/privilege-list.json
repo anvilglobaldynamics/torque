@@ -32,6 +32,10 @@
     "name": "Allow flat discount"
   },
   {
+    "code": "PRIV_MODIFY_DISCOUNT_PRESETS",
+    "name": "Create or modify discount presets"
+  },
+  {
     "code": "PRIV_VIEW_SALES_RETURN",
     "name": "View all sales returns"
   },
