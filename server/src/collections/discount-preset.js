@@ -55,4 +55,8 @@ exports.DiscountPresetCollection = class extends Collection {
     return await this._find({ organizationId });
   }
 
+  async findByIdAndOrganizationId({ id, organizationId }) {
+    return await this._findOne({ id, organizationId });
+  }
+
 }

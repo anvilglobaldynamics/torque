@@ -2,9 +2,8 @@ const { Api } = require('../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
 const { extract } = require('../utils/extract');
-const { DiscountPresetMixin } = require('./mixins/service-blueprint-mixin');
 
-exports.EditDiscountPresetApi = class extends Api.mixin(DiscountPresetMixin) {
+exports.EditDiscountPresetApi = class extends Api {
 
   get autoValidates() { return true; }
 
@@ -35,6 +34,9 @@ exports.EditDiscountPresetApi = class extends Api.mixin(DiscountPresetMixin) {
   }
 
   async _updateDiscountPreset({ discountPresetId, name, discountType, discountValue }) {
+    if (discountType === 'percent' && discountValue > 100) {
+      throw new CodedError("INVALID_DISCOUNT", "Discount percent can not be more than 100");
+    }
     let result = await this.database.discountPreset.setDetails({ id: discountPresetId }, { name, discountType, discountValue });
     this.ensureUpdate(result, 'discount-preset');
     return;

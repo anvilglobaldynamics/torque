@@ -2,10 +2,8 @@ const { Api } = require('../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
 const { extract } = require('../utils/extract');
-const { DiscountPresetMixin } = require('./mixins/service-blueprint-mixin');
-const { ServiceMixin } = require('./mixins/service-mixin');
 
-exports.AddDiscountPresetApi = class extends Api.mixin(DiscountPresetMixin, ServiceMixin) {
+exports.AddDiscountPresetApi = class extends Api {
 
   get autoValidates() { return true; }
 
@@ -14,7 +12,7 @@ exports.AddDiscountPresetApi = class extends Api.mixin(DiscountPresetMixin, Serv
   get requestSchema() {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
-    
+
       name: Joi.string().min(1).max(64).required(),
       discountType: Joi.string().valid('percent', 'fixed').required(),
       discountValue: Joi.number().max(999999999999999).required(),
@@ -28,11 +26,14 @@ exports.AddDiscountPresetApi = class extends Api.mixin(DiscountPresetMixin, Serv
         "PRIV_MODIFY_DISCOUNT_PRESETS"
       ]
     }];
-  } 
+  }
 
   async handle({ body }) {
     let { organizationId, name, discountType, discountValue } = body;
-    let discountPresetId = await this.database.discountPreset.create({ organizationId, name, discountType, discountValue });   
+    if (discountType === 'percent' && discountValue > 100) {
+      throw new CodedError("INVALID_DISCOUNT", "Discount percent can not be more than 100");
+    }
+    let discountPresetId = await this.database.discountPreset.create({ organizationId, name, discountType, discountValue });
     return { status: "success", discountPresetId };
   }
 
