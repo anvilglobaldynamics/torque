@@ -75,11 +75,19 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     }];
   }
 
-  async _validateBillingAndPayment({ productList, payment, paymentListEntry, customer }) {
+  async _validateBillingAndPayment({ productList, payment, paymentListEntry, customer, organizationId }) {
     // TODO: should check if adding product(s) salePrice and modifiers (discountedAmount, serviceChargeAmount) equals totalBilled
     // throw new CodedError("BILL_INACCURATE", "Bill is mathematically inaccurate");
     // Also should validate the new payment portion. i.e. paidAmount > changeAmount etc
     // Also, if paymentMethod is 'change-wallet' then customer must exist
+    if (payment.discountPresetId !== null) {
+      let discountPreset = await this.database.discountPreset.findByIdAndOrganizationId({ id: payment.discountPresetId, organizationId });
+      throwOnFalsy(discountPreset, "DISCOUNT_PRESET_INVALID", "The discount preset is invalid");
+      if (payment.discountType !== discountPreset.discountType || payment.discountValue !== discountPreset.discountValue) {
+        throw new CodedError("DISCOUNT_CALCULATION_INVALID", "Discount calculation is not valid");
+      }
+    }
+
     if (payment.totalBilled > (payment.totalPaidAmount + paymentListEntry.paidAmount)) {
       throwOnFalsy(customer, "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "Credit sale is not allowed without a registered cutomer.");
     }
@@ -182,7 +190,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     let customer = await this._findCustomerIfSelected({ customerId });
 
     let { payment, paymentListEntry } = this._standardizePayment({ originalPayment });
-    await this._validateBillingAndPayment({ productList, payment, paymentListEntry, customer });
+    await this._validateBillingAndPayment({ productList, payment, paymentListEntry, customer, organizationId: this.interimData.organization.id });
 
     if (productList.length) {
       let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
