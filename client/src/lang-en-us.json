@@ -146,7 +146,8 @@
     "profile": "Profile",
     "settings": "Settings",
     "about": "About",
-    "logout": "Logout"
+    "logout": "Logout",
+    "manageDiscountPresets": "Discounts"
   },
   "titleBar": {
     "home": "Home",
@@ -906,5 +907,45 @@
     "countMessagePart2": " product(s)",
     "noMatchingProductsError": "Last scanned product not found",
     "lastScanned": "Last scanned: "
+  },
+  "discountPreset": {
+    "pageTitle": "Discount Presets",
+
+    "editDiscountPresetTitle": "Edit Discount Preset",
+    "addDiscountPresetTitle": "Add Discount Preset",
+    "noDiscountPresetFound": "No discount preset found.",
+
+    "parentNameNotifierStart": "The Product Blueprint will be available under blueprint - ",
+    "parentNameNotifierEnd": "",
+    "productBlueprintNameInput": "Name of your Product Blueprint",
+    "productBlueprintNameInputError": "Enter a valid name",
+    "productBlueprintUnitInput": "Specify unit (i.e. kg, pcs etc)",
+    "productBlueprintUnitInputError": "Enter a valid name",
+    "identifierCodeInput": "Identifier Code",
+    "identifierCodeInputError": "Enter a valid identifier code.",
+    "defaultPurchasePriceInput": "Default Purchase Price",
+    "defaultPurchasePriceInputError": "Enter a valid amount",
+    "defaultVatInput": "Default VAT",
+    "defaultVatInputError": "Enter a valid number",
+    "productBlueprintDefaultSalePriceInput": "Default Sale Price",
+    "productBlueprintDefaultSalePriceInputError": "Enter a valid number",
+    "isProductReturnable": "Customer can return this product",
+    "defaultDiscountType": "Default Discount Type",
+    "defaultDiscountValueInput": "Default Discount Value",
+    "defaultDiscountValueInputError": "Enter a valid number",
+    "createProductBlueprint": "Create Product Blueprint",
+    "updateProductBlueprint": "Update Product Blueprint",
+    "productBlueprintCreated": "New product Blueprint has been created.",
+    "productBlueprintUpdated": "Product Blueprint has been updated.",
+    "buyingPrice": "Buying Price",
+    "sellingPrice": "Selling Price",
+    "moveHere": "Move Here",
+    "subBlueprint": "Sub Blueprint",
+    "moveToRoot": "Move To Root",
+    "createNewProductBlueprint": "Create New Product Blueprint",
+    "searchForProductBlueprintInput": "Product Blueprint name",
+    "searchForProductBlueprintInputError": "Error in Search for Product Blueprint",
+    "bulkImport": "Bulk Product Blueprint Creation",
+    "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
   }
 }
