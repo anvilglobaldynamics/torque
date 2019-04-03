@@ -22,7 +22,7 @@ exports.GetDiscountPresetListApi = class extends Api {
     }];
   }
 
-  async __DiscountPresetList({ organizationId }) {
+  async __getDiscountPresetList({ organizationId }) {
     let discountPresetList = await this.database.discountPreset.listByOrganizationId({ organizationId });
     return discountPresetList;
   }

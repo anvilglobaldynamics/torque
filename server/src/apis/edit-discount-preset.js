@@ -22,7 +22,7 @@ exports.EditDiscountPresetApi = class extends Api {
   get accessControl() {
     return [{
       organizationBy: {
-        from: "discountPreset",
+        from: "discount-preset",
         query: ({ discountPresetId }) => ({ id: discountPresetId }),
         select: "organizationId",
         errorCode: "DISCOUNT_PRESET_INVALID"
