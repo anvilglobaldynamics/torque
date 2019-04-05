@@ -33,8 +33,6 @@ exports.OrganizationCollection = class extends Collection {
 
   async create({ name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       createdByUserId: userId,
       name,
       primaryBusinessAddress,
@@ -75,7 +73,7 @@ exports.OrganizationCollection = class extends Collection {
     });
   }
 
-  async setactiveModuleCodeList({ id }, { activeModuleCodeList }) {
+  async setActiveModuleCodeList({ id }, { activeModuleCodeList }) {
     return await this._update({ id }, {
       $set: {
         activeModuleCodeList

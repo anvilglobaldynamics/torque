@@ -37,8 +37,6 @@ exports.WarehouseCollection = class extends Collection {
 
   async create({ name, organizationId, physicalAddress, phone, contactPersonName }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       name,
       organizationId,
       physicalAddress,

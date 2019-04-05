@@ -40,6 +40,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
       payment: Joi.object().required().keys({
         totalAmount: Joi.number().max(999999999999999).required(), // means total sale price of all products
         vatAmount: Joi.number().max(999999999999999).required(),
+        discountPresetId: Joi.number().max(999999999999999).allow(null).required(),
         discountType: Joi.string().valid('percent', 'fixed').required(),
         discountValue: Joi.number().max(999999999999999).required(),
         discountedAmount: Joi.number().max(999999999999999).required(),
@@ -74,11 +75,19 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     }];
   }
 
-  async _validateBillingAndPayment({ productList, payment, paymentListEntry, customer }) {
+  async _validateBillingAndPayment({ productList, payment, paymentListEntry, customer, organizationId }) {
     // TODO: should check if adding product(s) salePrice and modifiers (discountedAmount, serviceChargeAmount) equals totalBilled
     // throw new CodedError("BILL_INACCURATE", "Bill is mathematically inaccurate");
     // Also should validate the new payment portion. i.e. paidAmount > changeAmount etc
     // Also, if paymentMethod is 'change-wallet' then customer must exist
+    if (payment.discountPresetId !== null) {
+      let discountPreset = await this.database.discountPreset.findByIdAndOrganizationId({ id: payment.discountPresetId, organizationId });
+      throwOnFalsy(discountPreset, "DISCOUNT_PRESET_INVALID", "The discount preset is invalid");
+      if (payment.discountType !== discountPreset.discountType || payment.discountValue !== discountPreset.discountValue) {
+        throw new CodedError("DISCOUNT_CALCULATION_INVALID", "Discount calculation is not valid");
+      }
+    }
+
     if (payment.totalBilled > (payment.totalPaidAmount + paymentListEntry.paidAmount)) {
       throwOnFalsy(customer, "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "Credit sale is not allowed without a registered cutomer.");
     }
@@ -109,13 +118,13 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
   */
   _standardizePayment({ originalPayment }) {
     let {
-      totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount,
+      totalAmount, vatAmount, discountPresetId, discountType, discountValue, discountedAmount, serviceChargeAmount,
       totalBilled,
       paymentMethod, paidAmount, changeAmount, shouldSaveChangeInAccount
     } = originalPayment;
 
     let payment = {
-      totalAmount, vatAmount, discountType, discountValue, discountedAmount, serviceChargeAmount,
+      totalAmount, vatAmount, discountPresetId, discountType, discountValue, discountedAmount, serviceChargeAmount,
       totalBilled,
       paymentList: [], totalPaidAmount: 0
     }
@@ -181,7 +190,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     let customer = await this._findCustomerIfSelected({ customerId });
 
     let { payment, paymentListEntry } = this._standardizePayment({ originalPayment });
-    await this._validateBillingAndPayment({ productList, payment, paymentListEntry, customer });
+    await this._validateBillingAndPayment({ productList, payment, paymentListEntry, customer, organizationId: this.interimData.organization.id });
 
     if (productList.length) {
       let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });

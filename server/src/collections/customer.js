@@ -55,8 +55,6 @@ exports.CustomerCollection = class extends Collection {
 
   async create({ organizationId, fullName, phone, email, address }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       fullName,
       organizationId,
       phone,

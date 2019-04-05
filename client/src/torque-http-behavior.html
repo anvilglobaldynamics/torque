@@ -514,6 +514,27 @@
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('user-agree-to-toc', data, cbfn);
       }
+
+      callGetDiscountPresetListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-discount-preset-list', data, cbfn);
+      }
+
+      callAddDiscountPresetApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-discount-preset', data, cbfn);
+      }
+
+      callEditDiscountPresetApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-discount-preset', data, cbfn);
+      }
+
+      callDeleteDiscountPresetApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('delete-discount-preset', data, cbfn);
+      }
+
     }
 
   })();

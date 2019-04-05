@@ -96,6 +96,8 @@
 <link rel="lazy-import" href="page-bulk-import-product-blueprints.html">
 <link rel="lazy-import" href="page-select-geolocation.html"> 
 <link rel="lazy-import" href="page-scan-identifier-code.html"> 
+<link rel="lazy-import" href="page-manage-discount-presets.html"> 
+<link rel="lazy-import" href="page-edit-discount-preset.html"> 
 
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
@@ -266,6 +268,9 @@
             <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
             <hr class="sidebar-divider">
 
+            <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>
+            <hr class="sidebar-divider">
+
             <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
             <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
               <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
@@ -385,6 +390,8 @@
           <page-bulk-import-product-blueprints name="bulk-import-product-blueprints"></page-bulk-import-product-blueprints>
           <page-select-geolocation name="select-geolocation"></page-select-geolocation>
           <page-scan-identifier-code name="scan-identifier-code"></page-scan-identifier-code>
+          <page-manage-discount-presets name="manage-discount-presets"></page-manage-discount-presets>
+          <page-edit-discount-preset name="edit-discount-preset"></page-edit-discount-preset>
         </iron-pages>
 
         <paper-dialog id="network-dialog" modal style="z-index: -999999">

@@ -53,8 +53,6 @@ exports.ServiceCollection = class extends Collection {
 
   async create({ createdByUserId, serviceBlueprintId, outletId, salePrice }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       createdByUserId,
     
       serviceBlueprintId,

@@ -8,6 +8,8 @@ exports.CacheOutletGeolocationCollection = class extends Collection {
 
   get joiSchema() {
     return Joi.object().keys({
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       outletId: Joi.number().required(),
       location: Joi.object().keys({
         type: Joi.string().valid("Point"),

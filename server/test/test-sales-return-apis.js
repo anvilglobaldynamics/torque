@@ -199,6 +199,7 @@ describe('Sales Return', _ => {
                                 payment: {
                                   totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
                                   vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+                                  discountPresetId: null,
                                   discountType: placeholderDefaultDiscountType,
                                   discountValue: placeholderDefaultDiscountValue,
                                   discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -229,6 +230,7 @@ describe('Sales Return', _ => {
                                   payment: {
                                     totalAmount: (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2),
                                     vatAmount: ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100)),
+                                    discountPresetId: null,
                                     discountType: placeholderDefaultDiscountType,
                                     discountValue: placeholderDefaultDiscountValue,
                                     discountedAmount: ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),

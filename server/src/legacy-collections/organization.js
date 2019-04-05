@@ -47,8 +47,6 @@ exports.OrganizationCollection = class extends LegacyCollection {
   */
   __depr__create({ name, primaryBusinessAddress, phone, email }, cbfn) {
     let user = {
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       name,
       primaryBusinessAddress,
       phone,

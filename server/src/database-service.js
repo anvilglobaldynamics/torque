@@ -28,6 +28,7 @@ const { ServiceBlueprintCollection } = require('./collections/service-blueprint'
 const { ServiceCollection } = require('./collections/service');
 const { ServiceMembershipCollection } = require('./collections/service-membership');
 const { ModuleActivationCollection } = require('./collections/module-activation');
+const { DiscountPresetCollection } = require('./collections/discount-preset');
 const { CacheOutletGeolocationCollection } = require('./collections/cache-outlet-geolocation');
 
 class DatabaseService {
@@ -63,6 +64,7 @@ class DatabaseService {
     this.service = new ServiceCollection(this.engine, this);
     this.serviceMembership = new ServiceMembershipCollection(this.engine, this);
     this.moduleActivation = new ModuleActivationCollection(this.engine, this);
+    this.discountPreset = new DiscountPresetCollection(this.engine, this);
     this.cacheOutletGeolocation = new CacheOutletGeolocationCollection(this.engine, this);
     /** @type {[Collection]} */
     this.collectionList = Object.keys(this).filter(key => this[key] instanceof Collection).map(key => this[key]);

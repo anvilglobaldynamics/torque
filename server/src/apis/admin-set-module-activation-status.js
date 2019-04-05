@@ -22,7 +22,7 @@ exports.AdminSetModuleActivationStatusApi = class extends Api {
   }
 
   async _updateOrganizationactiveModuleCodeList({ organizationId, activeModuleCodeList }) {
-    let result = await this.database.organization.setactiveModuleCodeList({ id: organizationId }, { activeModuleCodeList });
+    let result = await this.database.organization.setActiveModuleCodeList({ id: organizationId }, { activeModuleCodeList });
     this.ensureUpdate('organization', result);
   }
 

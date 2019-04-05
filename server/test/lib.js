@@ -378,14 +378,18 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
 
       product: Joi.object().keys({
         id: Joi.number().required(),
+
+        createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+        lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
         productBlueprintId: Joi.number().required(),
         purchasePrice: Joi.number().required(),
         salePrice: Joi.number().required(),
 
         productBlueprint: Joi.object().keys({
           id: Joi.number().required(),
-          createdDatetimeStamp: Joi.number().required(),
-          lastModifiedDatetimeStamp: Joi.number().required(),
+          createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+          lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
           name: Joi.string().required(),
           organizationId: Joi.number().required(),
           unit: Joi.string().required(),
@@ -432,14 +436,18 @@ exports.validateReportInventoryDetailsApiSuccessResponse = (doc) => {
 
           product: Joi.object().keys({
             id: Joi.number().required(),
+
+            createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+            lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
             productBlueprintId: Joi.number().required(),
             purchasePrice: Joi.number().required(),
             salePrice: Joi.number().required(),
 
             productBlueprint: Joi.object().keys({
               id: Joi.number().required(),
-              createdDatetimeStamp: Joi.number().required(),
-              lastModifiedDatetimeStamp: Joi.number().required(),
+              createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+              lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
               name: Joi.string().required(),
               organizationId: Joi.number().required(),
               unit: Joi.string().required(),
@@ -537,8 +545,8 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
     outlet: Joi.object().keys({
       id: Joi.number().required(),
 
-      createdDatetimeStamp: Joi.number().required(),
-      lastModifiedDatetimeStamp: Joi.number().required(),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
       name: Joi.string().required(),
       organizationId: Joi.number().required(),
@@ -556,8 +564,8 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
     }),
 
     defaultInventory: Joi.object().keys({
-      createdDatetimeStamp: Joi.number().required(),
-      lastModifiedDatetimeStamp: Joi.number().required(),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
       id: Joi.number().required(),
       name: Joi.string().required(),
@@ -565,8 +573,8 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
     }),
 
     returnedInventory: Joi.object().keys({
-      createdDatetimeStamp: Joi.number().required(),
-      lastModifiedDatetimeStamp: Joi.number().required(),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
       id: Joi.number().required(),
       name: Joi.string().required(),
@@ -574,8 +582,8 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
     }),
 
     damagedInventory: Joi.object().keys({
-      createdDatetimeStamp: Joi.number().required(),
-      lastModifiedDatetimeStamp: Joi.number().required(),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
       id: Joi.number().required(),
       name: Joi.string().required(),
@@ -594,8 +602,8 @@ exports.validateGetWarehouseApiSuccessResponse = (doc) => {
     warehouse: Joi.object().keys({
       id: Joi.number().required(),
 
-      createdDatetimeStamp: Joi.number().required(),
-      lastModifiedDatetimeStamp: Joi.number().required(),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
       name: Joi.string().required(),
       organizationId: Joi.number().required(),
@@ -606,8 +614,8 @@ exports.validateGetWarehouseApiSuccessResponse = (doc) => {
     }),
 
     defaultInventory: Joi.object().keys({
-      createdDatetimeStamp: Joi.number().required(),
-      lastModifiedDatetimeStamp: Joi.number().required(),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
       id: Joi.number().required(),
       name: Joi.string().required(),
@@ -615,8 +623,8 @@ exports.validateGetWarehouseApiSuccessResponse = (doc) => {
     }),
 
     returnedInventory: Joi.object().keys({
-      createdDatetimeStamp: Joi.number().required(),
-      lastModifiedDatetimeStamp: Joi.number().required(),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
       id: Joi.number().required(),
       name: Joi.string().required(),
@@ -624,8 +632,8 @@ exports.validateGetWarehouseApiSuccessResponse = (doc) => {
     }),
 
     damagedInventory: Joi.object().keys({
-      createdDatetimeStamp: Joi.number().required(),
-      lastModifiedDatetimeStamp: Joi.number().required(),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
       id: Joi.number().required(),
       name: Joi.string().required(),
@@ -914,7 +922,10 @@ exports.validateAdminListOrganizationModulesApiSuccessResponse = (doc) => {
     hasError: Joi.boolean().required().equal(false),
     moduleActivationList: Joi.array().items(Joi.object().keys({
       id: Joi.number().optional(),
+
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
       deactivatedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       moduleCode: Joi.string().required(),
       organizationId: Joi.number().max(999999999999999).required(),
@@ -1017,6 +1028,8 @@ exports.validatePackageActivationSchema = (doc) => {
     id: Joi.number().max(999999999999999).required(),
 
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
     packageCode: Joi.string().required(),
     organizationId: Joi.number().max(999999999999999).required(),
     createdByAdminName: Joi.string().min(1).max(64).required(),
@@ -1058,6 +1071,7 @@ exports.validateOrganizationSchema = (doc) => {
 
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
     createdByUserId: Joi.number().max(999999999999999).required(),
     name: Joi.string().min(1).max(64).required(),
     primaryBusinessAddress: Joi.string().min(1).max(128).required(),
@@ -1080,6 +1094,7 @@ exports.validateOrganizationSchema = (doc) => {
 exports.validateWarehouseSchema = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
+
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
@@ -1151,6 +1166,7 @@ exports.validateServiceSchema = (doc) => {
 
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
     createdByUserId: Joi.number().max(999999999999999).required(),
 
     serviceBlueprintId: Joi.number().max(999999999999999).required(),
@@ -1190,6 +1206,9 @@ exports.validateServiceSchema = (doc) => {
 exports.validateProductSchema = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
+
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
     productBlueprintId: Joi.number().max(999999999999999).required(),
     purchasePrice: Joi.number().max(999999999999999).required(),
@@ -1285,6 +1304,7 @@ exports.validateSalesSchema = (doc) => {
     payment: Joi.object().required().keys({
       totalAmount: Joi.number().max(999999999999999).required(),
       vatAmount: Joi.number().max(999999999999999).required(),
+      discountPresetId: Joi.number().max(999999999999999).allow(null).required(),
       discountType: Joi.string().max(1024).required(),
       discountValue: Joi.number().max(999999999999999).required(),
       discountedAmount: Joi.number().max(999999999999999).required(),
@@ -1356,6 +1376,10 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
 
         product: Joi.object().keys({
           id: Joi.number().max(999999999999999).required(),
+
+          createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+          lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
           productBlueprintId: Joi.number().max(999999999999999).required(),
           purchasePrice: Joi.number().max(999999999999999).required(),
           salePrice: Joi.number().max(999999999999999).required()
@@ -1432,6 +1456,7 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
     payment: Joi.object().required().keys({
       totalAmount: Joi.number().max(999999999999999).required(),
       vatAmount: Joi.number().max(999999999999999).required(),
+      discountPresetId: Joi.number().max(999999999999999).allow(null).required(),
       discountType: Joi.string().max(1024).required(),
       discountValue: Joi.number().max(999999999999999).required(),
       discountedAmount: Joi.number().max(999999999999999).required(),
@@ -1467,6 +1492,7 @@ exports.validateServiceMembershipSchemaWhenListObj = (doc) => {
 
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
     createdByUserId: Joi.number().max(999999999999999).required(),
 
     salesId: Joi.number().max(999999999999999).required(),
@@ -1504,6 +1530,7 @@ exports.validateSalesReturnSchema = (doc) => {
     id: Joi.number().max(999999999999999).required(),
 
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
     salesId: Joi.number().max(999999999999999).required(),
     returnedProductList: Joi.array().items(
@@ -1529,6 +1556,7 @@ exports.validateSalesReturnSchemaWhenListObj = (doc) => {
     id: Joi.number().max(999999999999999).required(),
 
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
     salesId: Joi.number().max(999999999999999).required(),
     returnedProductList: Joi.array().items(
@@ -1549,6 +1577,7 @@ exports.validateSalesReturnSchemaWhenListObj = (doc) => {
 exports.validateUserSchema = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
+
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
@@ -1577,15 +1606,21 @@ exports.validateAggregatedProductScema = (doc) => {
     count: Joi.number().max(999999999999999).required(),
     acquiredDatetimeStamp: Joi.number().max(999999999999999).required(),
     addedDatetimeStamp: Joi.number().max(999999999999999).required(),
-    "product": Joi.object().keys({
+    product: Joi.object().keys({
       id: Joi.number().max(999999999999999).required(),
+
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
       productBlueprintId: Joi.number().max(999999999999999).required(),
       purchasePrice: Joi.number().max(999999999999999).required(),
       salePrice: Joi.number().max(999999999999999).required(),
-      "productBlueprint": Joi.object().keys({
+      productBlueprint: Joi.object().keys({
         id: Joi.number().max(999999999999999).required(),
+
         createdDatetimeStamp: Joi.number().max(999999999999999).required(),
         lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
         name: Joi.string().min(1).max(64).required(),
         organizationId: Joi.number().max(999999999999999).required(),
         unit: Joi.string().max(64).required(),
@@ -1605,6 +1640,7 @@ exports.validateAggregatedProductScema = (doc) => {
 exports.validateEmploymentSchema = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
+
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
@@ -1632,6 +1668,8 @@ exports.validateEmploymentSchema = (doc) => {
       PRIV_VIEW_SALES: Joi.boolean().required(),
       PRIV_MODIFY_SALES: Joi.boolean().required(),
       PRIV_ALLOW_FLAT_DISCOUNT: Joi.boolean().required(),
+
+      PRIV_MODIFY_DISCOUNT_PRESETS: Joi.boolean().required(),
 
       PRIV_VIEW_SALES_RETURN: Joi.boolean().required(),
       PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
@@ -1664,6 +1702,44 @@ exports.validateEmploymentSchema = (doc) => {
     }),
 
     isActive: Joi.boolean().required()
+  });
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateAddDiscountPresetApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    discountPresetId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetDiscountPresetListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    discountPresetList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateDiscountPresetSchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
+    name: Joi.string().min(1).max(64).required(),
+    organizationId: Joi.number().max(999999999999999).required(),
+    discountType: Joi.string().valid('percent', 'fixed').required(),
+    discountValue: Joi.number().max(999999999999999).required(),
+
+    isDeleted: Joi.boolean().required()
   });
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;

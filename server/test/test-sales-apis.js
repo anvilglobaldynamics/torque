@@ -39,7 +39,11 @@ let {
   validateCustomerSchema,
 
   getActiveServiceList,
-  addSales
+  addSales,
+
+  validateGetDiscountPresetListApiSuccessResponse,
+  validateDiscountPresetSchema,
+  validateAddDiscountPresetApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -120,7 +124,10 @@ let longstandingServiceSaleId = null;
 let placeholderDefaultDiscountType = 'percent';
 let placeholderDefaultDiscountValue = 5;
 
-describe('Sales', _ => {
+let validDiscountPresetId = null;
+let validDiscountPresetId2 = null;
+
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -296,6 +303,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -334,6 +342,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -345,7 +354,7 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
-        wasOfflineSale: false        
+        wasOfflineSale: false
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -379,6 +388,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -424,6 +434,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: 'something',
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -469,6 +480,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -546,6 +558,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -591,6 +604,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -636,6 +650,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -1153,6 +1168,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: 0,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -1378,6 +1394,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: basicService.salePrice,
           vatAmount: (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1423,6 +1440,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: basicService.salePrice,
           vatAmount: (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1484,6 +1502,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: customerAndEmployeeService.salePrice,
           vatAmount: (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1529,6 +1548,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: customerAndEmployeeService.salePrice,
           vatAmount: (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1574,6 +1594,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1619,6 +1640,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1878,6 +1900,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1911,6 +1934,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1944,6 +1968,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -1977,6 +2002,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -2010,6 +2036,7 @@ describe('Sales', _ => {
         payment: {
           totalAmount: longstandingService.salePrice,
           vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: null,
           discountType: 'percent',
           discountValue: 0,
           discountedAmount: 0,
@@ -2265,6 +2292,241 @@ describe('Sales', _ => {
   });
 
   // Service Membership - end
+
+  // Discount Preset - start
+
+  it('api/add-discount-preset (Invalid)', testDoneFn => {
+
+    callApi('api/add-discount-preset', {
+      json: {
+        apiKey,
+        organizationId, name: 'I know its invalid 100', discountType: 'percent', discountValue: 5000
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-discount-preset (Invalid)', testDoneFn => {
+
+    callApi('api/add-discount-preset', {
+      json: {
+        apiKey,
+        organizationId: -2, name: 'I know its invalid 100', discountType: 'percent', discountValue: 5000
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-discount-preset (Valid)', testDoneFn => {
+
+    callApi('api/add-discount-preset', {
+      json: {
+        apiKey,
+        organizationId, name: 'Test 100', discountType: 'percent', discountValue: 5
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddDiscountPresetApiSuccessResponse(body);
+      validDiscountPresetId = body.discountPresetId;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/edit-discount-preset (Valid)', testDoneFn => {
+
+    callApi('api/edit-discount-preset', {
+      json: {
+        apiKey,
+        discountPresetId: validDiscountPresetId, name: 'Test 100', discountType: 'percent', discountValue: 10
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-discount-preset (Valid)', testDoneFn => {
+
+    callApi('api/add-discount-preset', {
+      json: {
+        apiKey,
+        organizationId, name: 'Test 200', discountType: 'percent', discountValue: 5
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddDiscountPresetApiSuccessResponse(body);
+      validDiscountPresetId2 = body.discountPresetId;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-discount-preset-list (Valid)', testDoneFn => {
+
+    callApi('api/get-discount-preset-list', {
+      json: {
+        apiKey,
+        organizationId
+      }
+    }, (err, response, body) => {
+      console.log(body)
+      expect(response.statusCode).to.equal(200);
+      validateGetDiscountPresetListApiSuccessResponse(body);
+
+      body.discountPresetList.forEach(outlet => {
+        validateDiscountPresetSchema(outlet);
+      });
+      let discountPresetList = body.discountPresetList;
+      expect(discountPresetList.length).to.equal(2);
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/delete-discount-preset (Valid)', testDoneFn => {
+
+    callApi('api/delete-discount-preset', {
+      json: {
+        apiKey,
+        discountPresetId: validDiscountPresetId2
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-discount-preset-list (Valid)', testDoneFn => {
+
+    callApi('api/get-discount-preset-list', {
+      json: {
+        apiKey,
+        organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetDiscountPresetListApiSuccessResponse(body);
+
+      body.discountPresetList.forEach(outlet => {
+        validateDiscountPresetSchema(outlet);
+      });
+      let discountPresetList = body.discountPresetList;
+      expect(discountPresetList.length).to.equal(1);
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Valid, testing discountPresetId)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: employmentId
+          }
+        ],
+
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: validDiscountPresetId,
+          discountType: 'percent',
+          discountValue: 10,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        },
+
+        wasOfflineSale: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddSalesApiSuccessResponse(body);
+      longstandingServiceSaleId = body.salesId;
+      testDoneFn();
+    });
+
+  });
+
+
+  it('api/add-sales (Invalid, testing discountPresetId)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId,
+
+        productList: [],
+
+        serviceList: [
+          {
+            serviceId: longstandingService.id,
+            salePrice: longstandingService.salePrice,
+            vatPercentage: longstandingService.serviceBlueprint.defaultVat,
+            assignedEmploymentId: employmentId
+          }
+        ],
+
+        payment: {
+          totalAmount: longstandingService.salePrice,
+          vatAmount: (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100)),
+          discountPresetId: validDiscountPresetId,
+          discountType: 'percent',
+          discountValue: 150,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          paidAmount: 1000,
+          changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        },
+
+        wasOfflineSale: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal("DISCOUNT_CALCULATION_INVALID");
+      testDoneFn();
+    });
+
+  });
+
+
+  // Discount Preset - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

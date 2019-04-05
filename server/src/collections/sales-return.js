@@ -9,6 +9,7 @@ exports.SalesReturnCollection = class extends Collection {
   get joiSchema() {
     return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
       salesId: Joi.number().max(999999999999999).required(),
       returnedProductList: Joi.array().min(1).items(
@@ -43,8 +44,6 @@ exports.SalesReturnCollection = class extends Collection {
 
   async create({ salesId, returnedProductList, creditedAmount, shouldSaveReturnableInChangeWallet }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-
       salesId,
       returnedProductList,
       creditedAmount,

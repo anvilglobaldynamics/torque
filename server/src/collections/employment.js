@@ -24,6 +24,8 @@ exports.EmploymentCollection = class extends Collection {
         PRIV_MODIFY_SALES: Joi.boolean().required(),
         PRIV_ALLOW_FLAT_DISCOUNT: Joi.boolean().required(),
 
+        PRIV_MODIFY_DISCOUNT_PRESETS: Joi.boolean().required(),
+
         PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: Joi.boolean().required(),
         PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: Joi.boolean().required(),
 
@@ -86,6 +88,8 @@ exports.EmploymentCollection = class extends Collection {
       "PRIV_MODIFY_SALES",
       "PRIV_ALLOW_FLAT_DISCOUNT",
 
+      "PRIV_MODIFY_DISCOUNT_PRESETS",
+
       "PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS",
       "PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS",
 
@@ -131,8 +135,6 @@ exports.EmploymentCollection = class extends Collection {
 
   async addOwner({ organizationId, userId }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       userId,
       organizationId,
       designation: 'Owner',
@@ -145,8 +147,6 @@ exports.EmploymentCollection = class extends Collection {
 
   async addRegularEmployee({ userId, organizationId, role, designation, companyProvidedId, privileges }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       userId,
       organizationId,
       designation,

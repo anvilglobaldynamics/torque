@@ -15,8 +15,8 @@ method: `POST`
     Joi.number().max(999999999999999).required(), // defaultPurchasePrice
     Joi.number().max(999999999999999).required(), //defaultSalePrice
     Joi.number().max(999999999999999).required(), // defaultVat
-    Joi.string().max(64).allow('').required(), // identifierCode
-    Joi.string().valid('Yes', 'No').required() // is converted into isReturnable
+    Joi.string().valid('Yes', 'No').required(), // is converted into isReturnable
+    Joi.string().max(64).allow('').required() // identifierCode
   )
 }
 ```
