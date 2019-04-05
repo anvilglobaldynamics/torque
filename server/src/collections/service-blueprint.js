@@ -63,8 +63,6 @@ exports.ServiceBlueprintCollection = class extends Collection {
     isRefundable
   }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       organizationId,
       name,
       defaultVat,

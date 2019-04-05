@@ -59,8 +59,6 @@ exports.CustomerCollection = class extends LegacyCollection {
 
   create({ organizationId, fullName, phone }, cbfn) {
     let customer = {
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       fullName,
       organizationId,
       phone,

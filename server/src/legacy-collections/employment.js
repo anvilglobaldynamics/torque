@@ -186,8 +186,6 @@ exports.EmploymentCollection = class extends LegacyCollection {
 
   employNewEmployeeAsOwner({ userId, organizationId }, cbfn) {
     let user = {
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       userId,
       organizationId,
       designation: 'Owner',
@@ -241,8 +239,6 @@ exports.EmploymentCollection = class extends LegacyCollection {
 
   hireExistingUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, cbfn) {
     let user = {
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       userId,
       organizationId,
       designation,

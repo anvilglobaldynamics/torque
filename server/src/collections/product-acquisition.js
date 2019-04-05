@@ -8,6 +8,7 @@ exports.ProductAcquisitionCollection = class extends Collection {
   get joiSchema() {
     return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       isDeleted: Joi.boolean().required(),
       createdByUserId: Joi.number().max(999999999999999).required(),
 
@@ -42,7 +43,6 @@ exports.ProductAcquisitionCollection = class extends Collection {
 
   async create({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
       isDeleted: false,
       createdByUserId,
       acquiredDatetimeStamp,

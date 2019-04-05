@@ -52,8 +52,6 @@ exports.OutletCollection = class extends LegacyCollection {
 
   create({ name, organizationId, physicalAddress, phone, contactPersonName, location }, cbfn) {
     let doc = {
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       name,
       organizationId,
       physicalAddress,

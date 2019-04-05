@@ -9,6 +9,7 @@ exports.ModuleActivationCollection = class extends Collection {
   get joiSchema() {
     return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       deactivatedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       moduleCode: Joi.string().required(),
       organizationId: Joi.number().max(999999999999999).required(),
@@ -28,7 +29,6 @@ exports.ModuleActivationCollection = class extends Collection {
 
   async create({ moduleCode, organizationId, createdByAdminName, paymentReference }) {
     return await this._insert({
-      createdDatetimeStamp: Date.now(),
       deactivatedDatetimeStamp: null,
       moduleCode,
       organizationId,

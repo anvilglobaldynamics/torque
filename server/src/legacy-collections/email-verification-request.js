@@ -24,6 +24,7 @@ exports.EmailVerificationRequestCollection = class extends LegacyCollection {
       forEmail: Joi.string().email().required().min(3).max(30),
       forUserId: Joi.number().max(999999999999999).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       verifiedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       origin: Joi.string().max(1024).required(),
       verificationToken: Joi.string().min(64).max(64).required(),
@@ -57,7 +58,6 @@ exports.EmailVerificationRequestCollection = class extends LegacyCollection {
       forUserId: userId,
       origin,
       verificationToken,
-      createdDatetimeStamp: (new Date).getTime(),
       verifiedDatetimeStamp: null,
       isVerificationComplete: false
     }

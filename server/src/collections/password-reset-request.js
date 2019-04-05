@@ -12,6 +12,7 @@ exports.PasswordResetRequestCollection = class extends Collection {
       forEmail: Joi.string().email().min(3).max(30).allow(null).required(),
       forPhone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       confirmedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       origin: Joi.string().max(1024).required(),
       confirmationToken: Joi.string().min(64).max(64).required(),
@@ -57,7 +58,6 @@ exports.PasswordResetRequestCollection = class extends Collection {
       forUserId: userId,
       origin,
       confirmationToken,
-      createdDatetimeStamp: (new Date).getTime(),
       confirmedDatetimeStamp: null,
       isPasswordResetComplete: false
     });

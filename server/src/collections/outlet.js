@@ -42,8 +42,6 @@ exports.OutletCollection = class extends Collection {
 
   async create({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       name,
       organizationId,
       physicalAddress,

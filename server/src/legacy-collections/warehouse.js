@@ -48,8 +48,6 @@ exports.WarehouseCollection = class extends LegacyCollection {
 
   create({ name, organizationId, physicalAddress, phone, contactPersonName }, cbfn) {
     let doc = {
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       name,
       organizationId,
       physicalAddress,

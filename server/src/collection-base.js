@@ -164,6 +164,10 @@ class Collection {
   }
 
   async _insert(doc) {
+    if ('createdDatetimeStamp' in doc) throw new CodedError("DevError:", "createdDatetimeStamp must not be set manually.");
+    if ('lastModifiedDatetimeStamp' in doc) throw new CodedError("DevError:", "lastModifiedDatetimeStamp must not be set manually.");
+    doc.createdDatetimeStamp = Date.now();
+    doc.lastModifiedDatetimeStamp = Date.now();
     await this.__validateDocument(doc, false);
     return await this._db.insertOne(this.name, doc);
   }
@@ -174,13 +178,20 @@ class Collection {
   }
 
   async _update(query, modifications) {
+    if (!('$set' in modifications)) {
+      modifications.$set = {};
+    }
+    if ('createdDatetimeStamp' in modifications.$set) throw new CodedError("DevError:", "createdDatetimeStamp must not be set manually.");
+    if ('lastModifiedDatetimeStamp' in modifications.$set) throw new CodedError("DevError:", "lastModifiedDatetimeStamp must not be set manually.");
+    modifications.$set.lastModifiedDatetimeStamp = Date.now();
     return await this.__updateOneSafe(query, modifications);
   }
 
   async _updateMany(query, modifications) {
     let docList = await this._find(query);
     if (docList.length === 0) return false;
-    await Promise.all(docList.map(doc => this._update({ id: doc.id }, modifications)));
+    const clone = (obj) => JSON.parse(JSON.stringify(obj));
+    await Promise.all(docList.map(doc => this._update({ id: doc.id }, clone(modifications))));
     return true;
   }
 

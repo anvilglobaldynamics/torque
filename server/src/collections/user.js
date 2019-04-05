@@ -37,8 +37,6 @@ exports.UserCollection = class extends Collection {
 
   async create({ phone, fullName, passwordHash, agreedToTocDatetimeStamp }) {
     return await this._insert({
-      createdDatetimeStamp: (new Date).getTime(),
-      lastModifiedDatetimeStamp: (new Date).getTime(),
       passwordHash,
       email: null,
       phone,
