@@ -30,6 +30,7 @@ Joi.object().keys({
   payment: Joi.object().required().keys({
     totalAmount: Joi.number().max(999999999999999).required(),
     vatAmount: Joi.number().max(999999999999999).required(),
+    discountPresetId: Joi.number().max(999999999999999).allow(null).required(),
     discountType: Joi.string().valid('percent', 'fixed').required(),
     discountValue: Joi.number().max(999999999999999).required(),
     discountedAmount: Joi.number().max(999999999999999).required(),

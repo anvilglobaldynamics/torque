@@ -1304,6 +1304,7 @@ exports.validateSalesSchema = (doc) => {
     payment: Joi.object().required().keys({
       totalAmount: Joi.number().max(999999999999999).required(),
       vatAmount: Joi.number().max(999999999999999).required(),
+      discountPresetId: Joi.number().max(999999999999999).allow(null).required(),
       discountType: Joi.string().max(1024).required(),
       discountValue: Joi.number().max(999999999999999).required(),
       discountedAmount: Joi.number().max(999999999999999).required(),
@@ -1455,6 +1456,7 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
     payment: Joi.object().required().keys({
       totalAmount: Joi.number().max(999999999999999).required(),
       vatAmount: Joi.number().max(999999999999999).required(),
+      discountPresetId: Joi.number().max(999999999999999).allow(null).required(),
       discountType: Joi.string().max(1024).required(),
       discountValue: Joi.number().max(999999999999999).required(),
       discountedAmount: Joi.number().max(999999999999999).required(),
@@ -1667,6 +1669,8 @@ exports.validateEmploymentSchema = (doc) => {
       PRIV_MODIFY_SALES: Joi.boolean().required(),
       PRIV_ALLOW_FLAT_DISCOUNT: Joi.boolean().required(),
 
+      PRIV_MODIFY_DISCOUNT_PRESETS: Joi.boolean().required(),
+
       PRIV_VIEW_SALES_RETURN: Joi.boolean().required(),
       PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
 
@@ -1698,6 +1702,44 @@ exports.validateEmploymentSchema = (doc) => {
     }),
 
     isActive: Joi.boolean().required()
+  });
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateAddDiscountPresetApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    discountPresetId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetDiscountPresetListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    discountPresetList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateDiscountPresetSchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
+    name: Joi.string().min(1).max(64).required(),
+    organizationId: Joi.number().max(999999999999999).required(),
+    discountType: Joi.string().valid('percent', 'fixed').required(),
+    discountValue: Joi.number().max(999999999999999).required(),
+
+    isDeleted: Joi.boolean().required()
   });
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;

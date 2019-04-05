@@ -1,0 +1,240 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-discount-preset">
+  <template>
+    <style include="shared-styles">
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="editDiscountPresetForm" on-keypress="genericFormSubmitionKeypress">
+        <form>
+          <div class="card vertical layout">
+            <paper-input class="editDiscountPresetForm--name" value="{{editDiscountPresetForm.name}}" required minlength="3" error-message=[[verses.discountPreset.discountPresetNameInputError]] label=[[verses.discountPreset.discountPresetNameInput]]></paper-input>
+
+            <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.discountPreset.discountType]]" class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{editDiscountPresetForm.discountType}}" attr-for-selected="name">
+                <paper-item name="percent">[[verses.general.percentage]]</paper-item>
+                <paper-item name="fixed">[[verses.general.fixedValue]]</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+
+            <template is="dom-if" if="[[$equals(editDiscountPresetForm.discountType, 'percent')]]">
+              <paper-input class="editDiscountPresetForm--discountValue flex" on-change="genericDiscountValueInputChanged"  value="{{editDiscountPresetForm.discountValue}}" type="number" required min="0" max="100" label="[[verses.discountPreset.discountValueInput]]">
+                <div slot="suffix">%</div>
+              </paper-input>
+            </template>
+            <template is="dom-if" if="[[$equals(editDiscountPresetForm.discountType, 'fixed')]]">
+              <paper-input class="editDiscountPresetForm--discountValue flex" on-change="genericDiscountValueInputChanged" value="{{editDiscountPresetForm.discountValue}}" type="number" required min="0" label="[[verses.discountPreset.discountValueInput]]">
+                <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+              </paper-input>
+            </template>
+
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editDiscountPresetForm--submit" on-tap="createDiscountPresetTapped">[[verses.discountPreset.createDiscountPreset]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editDiscountPresetForm--submit" on-tap="updateDiscountPresetTapped">[[verses.discountPreset.updateDiscountPreset]]</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageEditDiscountPreset extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-edit-discount-preset';
+      }
+
+      static get properties() {
+        return {
+          editMode: {
+            type: Boolean,
+            value: false
+          },
+          editingDiscountPreset: {
+            type: Object,
+            value: null
+          },
+          editDiscountPresetForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  name: "10% Off Everything",
+                  discountType: 'percent',
+                  discountValue: 10,
+                };
+              } else {
+                return {
+                  name: "",
+                  discountType: 'percent',
+                  discountValue: 0,
+                };
+              }
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        if ('discount-preset' in this.params) {
+          this.editMode = true;
+          this.app.pushPageTitle(this.app.verses.discountPreset.editDiscountPresetTitle);
+        } else {
+          this.editMode = false;
+          this.app.pushPageTitle(this.app.verses.discountPreset.addDiscountPresetTitle);
+        }
+        if (!this._ensureAccess()) return;
+        this._processGetDiscountPresetList(() => {
+          if (this.editMode) {
+            this._processGetDiscountPreset();
+            this.isReady = true;
+          } else {
+            this.delay(300, () => {
+              this.isReady = true;
+            });
+          }
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editDiscountPresetForm');
+        this.removeAutoValidation('#editDiscountPresetForm paper-input');
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_DISCOUNT_PRESETS']
+        });
+      }
+
+      // region: editDiscountPreset =================================
+
+      _processGetDiscountPresetList(cbfn) {
+        let data = {
+          organizationId: this.app.organization.id
+        };
+        this.app.callGetDiscountPresetListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this._discountPresetList = response.discountPresetList;
+          cbfn();
+        });
+      }
+
+      _processGetDiscountPreset() {
+        let discountPreset = this._discountPresetList.find(discountPreset => {
+          return discountPreset.id === parseInt(this.params['discount-preset']);
+        });
+        this.editingDiscountPreset = discountPreset;
+        let { name, discountType, discountValue } = discountPreset;
+        this.editDiscountPresetForm = { name, discountType, discountValue };
+      }
+
+      _processCreateDiscountPreset({ name, discountType, discountValue }) {
+        let data = {
+          name, discountType, discountValue,
+          organizationId: this.app.organization.id,
+        };
+        this.app.callAddDiscountPresetApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editDiscountPresetForm');
+          let message = this.app.verses.discountPreset.discountPresetCreated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      _processUpdateDiscountPreset({ name, discountType, discountValue }) {
+        let data = {
+          name, discountType, discountValue,
+          discountPresetId: this.editingDiscountPreset.id
+        };
+
+        this.app.callEditDiscountPresetApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editDiscountPresetForm');
+          let message = this.app.verses.discountPreset.discountPresetUpdated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-discount-presets');
+      }
+
+      createDiscountPresetTapped(e = null) {
+        this.elemAll('#editDiscountPresetForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editDiscountPresetForm').validate()) return;
+
+        let { name, discountType, discountValue } = this.editDiscountPresetForm;
+        this._processCreateDiscountPreset({ name, discountType, discountValue });
+      }
+
+      updateDiscountPresetTapped(e = null) {
+        this.elemAll('#editDiscountPresetForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editDiscountPresetForm').validate()) return;
+
+        let { name, discountType, discountValue } = this.editDiscountPresetForm;
+        this._processUpdateDiscountPreset({ name, discountType, discountValue });
+      }
+
+      genericDiscountValueInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageEditDiscountPreset.is, PageEditDiscountPreset);
+  </script>
+</dom-module>

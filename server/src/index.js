@@ -104,6 +104,11 @@ let { GetRoleListApi } = require('./legacy-apis/get-role-list');
 let { GetPrivilegeListApi } = require('./legacy-apis/get-privilege-list');
 const { AdminGetPackageListApi } = require('./apis/admin-get-package-list');
 
+const { AddDiscountPresetApi } = require('./apis/add-discount-preset');
+const { EditDiscountPresetApi } = require('./apis/edit-discount-preset');
+const { DeleteDiscountPresetApi } = require('./apis/delete-discount-preset');
+const { GetDiscountPresetListApi } = require('./apis/get-discount-preset-list');
+
 const { ShopLocateNearbyOutletsApi } = require('./apis/shop-locate-nearby-outlets');
 const { ShopGetOutletDetailsApi } = require('./apis/shop-get-outlet-details');
 
@@ -335,6 +340,10 @@ class Program {
     server.registerPostApi('/api/edit-employment', EditEmploymentApi);
     server.registerPostApi('/api/fire-employee', FireEmployeeApi);
     server.registerPostApi('/api/get-user-display-information', GetUserDisplayInformationApi);
+    server.registerPostApi('/api/add-discount-preset', AddDiscountPresetApi);
+    server.registerPostApi('/api/edit-discount-preset', EditDiscountPresetApi);
+    server.registerPostApi('/api/delete-discount-preset', DeleteDiscountPresetApi);
+    server.registerPostApi('/api/get-discount-preset-list', GetDiscountPresetListApi);
     server.registerPostApi('/api/admin-login', AdminLoginApi);
     server.registerPostApi('/api/admin-get-outgoing-sms-list', AdminGetOutgoingSmsListApi);
     server.registerPostApi('/api/admin-set-outgoing-sms-status', AdminSetOutgoingSmsStatusApi);

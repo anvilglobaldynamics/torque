@@ -146,7 +146,8 @@
     "profile": "Profile",
     "settings": "Settings",
     "about": "About",
-    "logout": "Logout"
+    "logout": "Logout",
+    "manageDiscountPresets": "Discounts"
   },
   "titleBar": {
     "home": "Home",
@@ -906,5 +907,23 @@
     "countMessagePart2": " product(s)",
     "noMatchingProductsError": "Last scanned product not found",
     "lastScanned": "Last scanned: "
+  },
+  "discountPreset": {
+    "pageTitle": "Discount Presets",
+    "editDiscountPresetTitle": "Edit Discount Preset",
+    "addDiscountPresetTitle": "Add Discount Preset",
+    "noDiscountPresetFound": "No discount preset found.",
+    "discountType": "Discount Type",
+    "discountValueInput": "Discount Value",
+    "discountAmount": "Discount",
+    "createDiscountPreset": "Create Discount Preset",
+    "updateDiscountPreset": "Update Discount Preset",
+    "discountPresetCreated": "New Discount Preset has been created.",
+    "discountPresetUpdated": "Discount Preset has been updated.",
+    "createNewDiscountPreset": "Create New Discount Preset",
+    "discountPresetDeleted": "Discount Preset has been deleted.",
+    "deleteQuestion": "Delete discount preset?",
+    "deleteQuestionMessage": "Are you sure you want to delete this discount preset",
+    "discountPresetNameInput": "Discount Preset Name"
   }
 }
