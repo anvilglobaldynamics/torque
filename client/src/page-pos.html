@@ -318,7 +318,7 @@
               <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLAT_DISCOUNT', organization)]]">
 
                 <div class="vertical layout m-bottom-18">
-
+                  <!-- 
                   <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discountType]]" class="mr-4">
                     <paper-listbox slot="dropdown-content" selected="{{payment.discountType}}" attr-for-selected="name">
                       <paper-item name="percent">[[verses.general.percentage]]</paper-item>
@@ -335,7 +335,25 @@
                     <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-change="genericPaymentInputChanged" type="number" required min="0" max="[[totalBilledCopy]]" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
                       <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                     </paper-input>
-                  </template>
+                  </template> -->
+
+
+                  <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discountType]]" class="mr-4">
+                    <paper-listbox slot="dropdown-content" selected="{{selectedDiscountPreset}}" attr-for-selected="name">
+                      <paper-item name="--no-discount">No Discount</paper-item>
+                      <template is="dom-repeat" items="[[discountPresetList]]" as="discountPreset">
+                        <paper-item name="[[discountPreset.id]]">
+                          <div class="name">[[discountPreset.name]]</div>
+                          <template is="dom-if" if="[[$equals(discountPreset.discountType, 'percent')]]">
+                            <div>[[verses.discountPreset.discountAmount]]: [[discountPreset.discountValue]]%</div>
+                          </template>
+                          <template is="dom-if" if="[[$equals(discountPreset.discountType, 'fixed')]]">
+                            <div>[[verses.discountPreset.discountAmount]]: [[discountPreset.discountValue]] [[app.settings.monetaryUnit]]</div>
+                          </template>
+                        </paper-item>
+                      </template>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
 
                 </div>
 
@@ -475,6 +493,11 @@
           shouldExpandOfflineSalesList: {
             type: Boolean,
             value: false
+          },
+          selectedDiscountPreset: {
+            type: String,
+            value: '--no-discount',
+            observer: 'selectedDiscountPresetChanged'
           }
         };
       }
@@ -499,6 +522,7 @@
           });
         }
         if (!this._ensureAccess()) return;
+        this.selectedDiscountPreset = '--no-discount';
         this.delay(0, () => {
           this.self = this;
           let customerId = this.app.extractFromSession('last-created-customer');
@@ -525,6 +549,9 @@
 
           this._calculatePayment();
         });
+        this._processDiscountPresetList(() => {
+
+        });
         this.delay(300, () => {
           this.isReady = true;
         });
@@ -548,6 +575,23 @@
       }
 
       // region: pos =================================
+
+      selectedDiscountPresetChanged() {
+        console.log(this.selectedDiscountPreset);
+        if (this.selectedDiscountPreset === '--no-discount') {
+          this.payment.discountPresetId = null;
+          this.payment.discountType = 'percent';
+          this.payment.discountValue = '0';
+        } else {
+          let key = parseInt(String(this.selectedDiscountPreset));
+          console.log(this.discountPresetList, key);
+          let discountPreset = this.discountPresetList.find(discountPreset => discountPreset.id === key);
+          this.payment.discountPresetId = discountPreset.id;
+          this.payment.discountType = discountPreset.discountType;
+          this.payment.discountValue = discountPreset.discountValue;
+        }
+        this._calculatePayment();
+      }
 
       customerChanged() {
         if (!this.customer) return;
@@ -588,6 +632,22 @@
         }
       }
 
+      _fetchDiscountPresetList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetDiscountPresetListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.discountPresetList);
+        });
+      }
+
+      _processDiscountPresetList(cbfn) {
+        this._fetchDiscountPresetList(discountPresetList => {
+          this.discountPresetList = discountPresetList;
+          return cbfn();
+        });
+      }
+
       // main payment calculation method
       _calculatePayment() {
         let {
@@ -602,6 +662,7 @@
           paymentMethod,
           paidAmount,
           changeAmount,
+          discountPresetId
         } = this.payment;
 
         // setting vatAmount to default value of 0 before calculating vatAmount on a loop
@@ -637,6 +698,7 @@
         totalAmount = parseFloat(totalProductAmount) + parseFloat(totalServiceAmount);
 
         // overall discount calculation
+        console.log(discountType, discountValue)
         if (discountValue) {
           if (discountType === 'percent') {
             discountedAmount = totalAmount * (discountValue / 100);
@@ -671,6 +733,8 @@
           }
         }
 
+        console.log({ discountedAmount })
+
         // returning updated payment info
         this.payment = {
           totalAmount,
@@ -683,7 +747,8 @@
           paidAmount,
           changeAmount,
           shouldSaveChangeInAccount,
-          paymentMethod
+          paymentMethod,
+          discountPresetId
         };
       }
 
@@ -759,6 +824,7 @@
       }
 
       _resetSales() {
+        this.selectedDiscountPreset = '--no-discount';
         this.app.extractFromSession('pos-selected-product-list');
         this.app.extractFromSession('pos-selected-service-list');
         this.app.extractFromSession('last-selected-customer');

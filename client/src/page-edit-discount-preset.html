@@ -34,24 +34,26 @@
 
       <iron-form id="editDiscountPresetForm" on-keypress="genericFormSubmitionKeypress">
         <form>
-
           <div class="card vertical layout">
             <paper-input class="editDiscountPresetForm--name" value="{{editDiscountPresetForm.name}}" required minlength="3" error-message=[[verses.discountPreset.discountPresetNameInputError]] label=[[verses.discountPreset.discountPresetNameInput]]></paper-input>
-            <paper-input class="editDiscountPresetForm--unit" value="{{editDiscountPresetForm.unit}}" required minlength="1" error-message=[[verses.discountPreset.discountPresetUnitInputError]] label=[[verses.discountPreset.discountPresetUnitInput]]></paper-input>
 
-            <paper-input class="editDiscountPresetForm--defaultPurchasePrice" step="0.01" value="{{editDiscountPresetForm.defaultPurchasePrice}}" type="number" required min="0" error-message=[[verses.discountPreset.defaultPurchasePriceInputError]] label=[[verses.discountPreset.defaultPurchasePriceInput]]>
-              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-            </paper-input>
-            <paper-input class="editDiscountPresetForm--defaultVat" value="{{editDiscountPresetForm.defaultVat}}" type="number" required min="0" max="100" error-message=[[verses.discountPreset.defaultVatInputError]] label=[[verses.discountPreset.defaultVatInput]]>
-              <div slot="suffix">%</div>
-            </paper-input>
-            <paper-input class="editDiscountPresetForm--defaultSalePrice" step="0.01" value="{{editDiscountPresetForm.defaultSalePrice}}" type="number" required min="0" error-message=[[verses.discountPreset.discountPresetDefaultSalePriceInputError]] label=[[verses.discountPreset.discountPresetDefaultSalePriceInput]]>
-              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-            </paper-input>
+            <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.discountPreset.discountType]]" class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{editDiscountPresetForm.discountType}}" attr-for-selected="name">
+                <paper-item name="percent">[[verses.general.percentage]]</paper-item>
+                <paper-item name="fixed">[[verses.general.fixedValue]]</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
 
-            <paper-input class="editDiscountPresetForm--identifierCode" value="{{editDiscountPresetForm.identifierCode}}" minlength="0" maxlength="64" error-message=[[verses.discountPreset.identifierCodeInputError]] label="[[verses.discountPreset.identifierCodeInput]] [[verses.general.optional]]"></paper-input>
-
-            <paper-checkbox checked="{{editDiscountPresetForm.isReturnable}}">[[verses.discountPreset.isProductReturnable]]</paper-checkbox>
+            <template is="dom-if" if="[[$equals(editDiscountPresetForm.discountType, 'percent')]]">
+              <paper-input class="editDiscountPresetForm--discountValue flex" on-change="genericDiscountValueInputChanged"  value="{{editDiscountPresetForm.discountValue}}" type="number" required min="0" max="100" label="[[verses.discountPreset.discountValueInput]]">
+                <div slot="suffix">%</div>
+              </paper-input>
+            </template>
+            <template is="dom-if" if="[[$equals(editDiscountPresetForm.discountType, 'fixed')]]">
+              <paper-input class="editDiscountPresetForm--discountValue flex" on-change="genericDiscountValueInputChanged" value="{{editDiscountPresetForm.discountValue}}" type="number" required min="0" label="[[verses.discountPreset.discountValueInput]]">
+                <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+              </paper-input>
+            </template>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -88,23 +90,15 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  name: "Bottoms",
-                  unit: "pcs",
-                  identifierCode: '',
-                  defaultPurchasePrice: 400,
-                  defaultVat: 15,
-                  defaultSalePrice: 500,
-                  isReturnable: true
+                  name: "10% Off Everything",
+                  discountType: 'percent',
+                  discountValue: 10,
                 };
               } else {
                 return {
                   name: "",
-                  unit: "",
-                  identifierCode: '',
-                  defaultPurchasePrice: 0,
-                  defaultVat: 0,
-                  defaultSalePrice: 0,
-                  isReturnable: false
+                  discountType: 'percent',
+                  discountValue: 0,
                 };
               }
             }
@@ -153,8 +147,7 @@
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
-          privilegeList: ['PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS'],
-          moduleList: ['MOD_PRODUCT']
+          privilegeList: ['PRIV_MODIFY_DISCOUNT_PRESETS']
         });
       }
 
@@ -177,13 +170,13 @@
           return discountPreset.id === parseInt(this.params['discount-preset']);
         });
         this.editingDiscountPreset = discountPreset;
-        let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = discountPreset;
-        this.editDiscountPresetForm = { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
+        let { name, discountType, discountValue } = discountPreset;
+        this.editDiscountPresetForm = { name, discountType, discountValue };
       }
 
-      _processCreateDiscountPreset({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+      _processCreateDiscountPreset({ name, discountType, discountValue }) {
         let data = {
-          name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
+          name, discountType, discountValue,
           organizationId: this.app.organization.id,
         };
         this.app.callAddDiscountPresetApi(data, (err, response) => {
@@ -196,9 +189,9 @@
         });
       }
 
-      _processUpdateDiscountPreset({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+      _processUpdateDiscountPreset({ name, discountType, discountValue }) {
         let data = {
-          name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
+          name, discountType, discountValue,
           discountPresetId: this.editingDiscountPreset.id
         };
 
@@ -222,24 +215,20 @@
         this.elemAll('#editDiscountPresetForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editDiscountPresetForm').validate()) return;
 
-        let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editDiscountPresetForm;
-        this._processCreateDiscountPreset({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+        let { name, discountType, discountValue } = this.editDiscountPresetForm;
+        this._processCreateDiscountPreset({ name, discountType, discountValue });
       }
 
       updateDiscountPresetTapped(e = null) {
         this.elemAll('#editDiscountPresetForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editDiscountPresetForm').validate()) return;
 
-        let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editDiscountPresetForm;
-        this._processUpdateDiscountPreset({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+        let { name, discountType, discountValue } = this.editDiscountPresetForm;
+        this._processUpdateDiscountPreset({ name, discountType, discountValue });
       }
 
       genericDiscountValueInputChanged(e) {
         this.enforceMinMaxOnPaperInput(e);
-      }
-
-      calculateSalePriceAfterVat() {
-        return (parseFloat(this.editDiscountPresetForm.defaultSalePrice) + parseFloat(this.editDiscountPresetForm.defaultSalePrice) * parseFloat(this.editDiscountPresetForm.defaultVat) / 100);
       }
 
       // region: misc =================================

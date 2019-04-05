@@ -911,48 +911,20 @@
   },
   "discountPreset": {
     "pageTitle": "ডিসকাউন্টস",
-
-
-
-
-
-    "editDiscountPresetTitle": "পণ্যের পরিকল্পনা সম্পাদনা করুন",
-    "addDiscountPresetTitle": "পণ্যের পরিকল্পনা যুক্ত করুন",
-    "noDiscountPresetFound": "কোনো পণ্যের পরিকল্পনা পাওয়া যায় নি।",
-
-
-    
-    "parentNameNotifierStart": "নতুন পণ্যের পরিকল্পনাটি যুক্ত করা হবে",
-    "parentNameNotifierEnd": " পণ্যের পরিকল্পনার অধীনে। ",
-    "productBlueprintNameInput": "পণ্যের পরিকল্পনার নাম",
-    "productBlueprintNameInputError": "একটি সঠিক নাম লিখুন",
-    "productBlueprintUnitInput": "একক নির্দিষ্ট করুন (যেমন কেজি, পিস্)",
-    "productBlueprintUnitInputError": "একটি সঠিক একক লিখুন",
-    "identifierCodeInput": "সনাক্তকরণ কোড",
-    "identifierCodeInputError": "একটি সঠিক সনাক্তকরণ কোড লিখুন",
-    "defaultPurchasePriceInput": "ক্রয় মূল্য",
-    "defaultPurchasePriceInputError": "একটি সঠিক অংক লিখুন",
-    "defaultVatInput": "ভ্যাট",
-    "defaultVatInputError": "একটি সঠিক অংক লিখুন",
-    "productBlueprintDefaultSalePriceInput": "বিক্রয় মূল্য",
-    "productBlueprintDefaultSalePriceInputError": "একটি সঠিক অংক লিখুন",
-    "isProductReturnable": "গ্রাহক এই পরিকল্পনার পণ্য ফেরত দিতে পারবে।",
-    "defaultDiscountType": "ছাড় এর ধরণ",
-    "defaultDiscountValueInput": "ছাড় পরিমান",
-    "defaultDiscountValueInputError": "একটি সঠিক অংক লিখুন",
-    "createProductBlueprint": "পণ্যের পরিকল্পনা যুক্ত করুন",
-    "updateProductBlueprint": "পণ্যের পরিকল্পনা আপডেট করুন",
-    "productBlueprintCreated": "নতুন পণ্যের পরিকল্পনা যুক্ত করা হয়েছে।",
-    "productBlueprintUpdated": "পণ্যের পরিকল্পনা আপডেট করা হয়েছে।",
-    "buyingPrice": "ক্রয় মূল্য",
-    "sellingPrice": "বিক্রয় মূল্য",
-    "moveHere": "এখানে সরান",
-    "subBlueprint": "উপ বিভাগ",
-    "moveToRoot": "বাহিরে সরান",
-    "createNewProductBlueprint": "নতুন পণ্য পরিকল্পনা তৈরি করুন",
-    "searchForProductBlueprintInput": "পণ্য পরিকল্পনার নাম",
-    "searchForProductBlueprintInputError": "পণ্য পরিকল্পনার সন্ধানে ত্রুটি",
-    "bulkImport": "একাধিক পণ্যের পরিকল্পনা তৈরি",
-    "whatIsProductBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত কাজে ব্যবহত হবে।"
+    "editDiscountPresetTitle": "ডিসকাউন্ট প্রিসেট এডিট করুন",
+    "addDiscountPresetTitle": "ডিসকাউন্ট প্রিসেট যোগ করুন",
+    "noDiscountPresetFound": "কোনো ডিসকাউন্ট প্রিসেট পাওয়া যায়নি। ",
+    "discountType": "ছাড়ের ধরণ",
+    "discountValueInput": "ছাড়ের পরিমান",
+    "discountAmount": "ছাড়ের পরিমান",
+    "createDiscountPreset": "ডিসকাউন্ট প্রিসেট তৈরি করুন",
+    "updateDiscountPreset": "ডিসকাউন্ট প্রিসেট পরিবর্তন করুন ",
+    "discountPresetCreated": "নতুন ডিসকাউন্ট প্রিসেট তৈরি করা হয়েছে।",
+    "discountPresetUpdated": "ডিসকাউন্ট প্রিসেট পরিবর্তন করা হয়েছে। ",
+    "createNewDiscountPreset": "নতুন ডিসকাউন্ট প্রিসেট তৈরি করুন",
+    "discountPresetDeleted": "ডিসকাউন্ট প্রিসেট মুছে ফেলা হয়েছে ",
+    "deleteQuestion": "ডিসকাউন্ট প্রিসেট মুছে ফেলা হবে?",
+    "deleteQuestionMessage": "আপনি কি ডিসকাউন্ট প্রিসেটটি মুছে ফেলতে চান?",
+    "discountPresetNameInput": "ডিসকাউন্ট প্রিসেটের নাম "
   }
 }

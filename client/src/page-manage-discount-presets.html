@@ -23,19 +23,29 @@
 <dom-module id="discount-preset">
   <template>
     <style include="shared-styles">
+      .name {
+        font-weight: bold;
+      }
     </style>
 
     <div class="layout vertical" id="wrapper">
       <div class="list">
         <div class="horizontal layout item center">
           <div class="vertical layout flex">
-            <div class="inventory-product-important-detail-container">[[discountPreset.name]]</div>
-            <div class="inventory-product-price-container">[[verses.discountPreset.buyingPrice]]: [[discountPreset.defaultPurchasePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[discountPreset.unit]]</div>
-            <div class="inventory-product-price-container">[[verses.discountPreset.sellingPrice]]: [[discountPreset.defaultSalePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[discountPreset.unit]]</div>
+            <div class="name">[[discountPreset.name]]</div>
+            <template is="dom-if" if="[[$equals(discountPreset.discountType, 'percent')]]">
+              <div>[[verses.discountPreset.discountAmount]]: [[discountPreset.discountValue]]%</div>
+            </template>
+            <template is="dom-if" if="[[$equals(discountPreset.discountType, 'fixed')]]">
+              <div>[[verses.discountPreset.discountAmount]]: [[discountPreset.discountValue]] [[app.settings.monetaryUnit]]</div>
+            </template>
           </div>
           <div class="horizontal layout wrap">
             <paper-button class="secondary" on-tap="editTapped" raised>
               [[verses.general.edit]]
+            </paper-button>
+            <paper-button raised class="danger m-0" on-tap="deleteTapped">
+              [[verses.general.delete]]
             </paper-button>
           </div>
         </div>
@@ -45,7 +55,7 @@
   </template>
 
   <script>
-    class DiscountPreset extends FxElement.mixin(TorqueLanguageBehavior) {
+    class DiscountPreset extends FxElement.mixin(TorqueLanguageBehavior, TorqueCommonBehavior, FxCommonBehavior) {
 
       static get is() {
         return 'discount-preset';
@@ -67,6 +77,7 @@
 
       pageChanged() {
         if (!this.page) return;
+        console.log(this.page)
         this.useLanguageServices();
       }
 
@@ -81,6 +92,10 @@
 
       editTapped(e) {
         return this.app.navigateTo(`/edit-discount-preset/discount-preset:${this.discountPreset.id}`);
+      }
+
+      deleteTapped(e) {
+        this.page._deleteDiscountPreset(this.discountPreset.id);
       }
 
       // region: misc =================================
@@ -115,7 +130,7 @@
           </template>
 
           <template is="dom-repeat" items="[[discountPresetList]]" as="discountPreset">
-            <discount-preset discount-preset="[[discountPreset]]" app="[[app]]"></discount-preset>
+            <discount-preset discount-preset="[[discountPreset]]" app="[[app]]" page="[[page]]"></discount-preset>
           </template>
 
           <div class="pagination">
@@ -163,6 +178,7 @@
       }
 
       onNavigateIn() {
+        this.page = this;
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.useLanguageServices();
@@ -201,6 +217,23 @@
         this._fetchDiscountPresetList(discountPresetList => {
           this.discountPresetList = discountPresetList;
           return cbfn();
+        });
+      }
+
+      _deleteDiscountPreset(discountPresetId) {
+        let data = {
+          discountPresetId
+        };
+        this.app.showModalConfirmation(this.verses.discountPreset.deleteQuestion, this.verses.discountPreset.deleteQuestionMessage, (answer) => {
+          if (!answer) return;
+          this.app.callDeleteDiscountPresetApi(data, (err, response) => {
+            if (err) return;
+            if (response.hasError) return this.onApiError(response.error, 'editDiscountPresetForm');
+            let message = this.app.verses.discountPreset.discountPresetDeleted;
+            this.app.showToast(message, _ => {
+              this._processDiscountPresetList(() => null);
+            });
+          });
         });
       }
 
