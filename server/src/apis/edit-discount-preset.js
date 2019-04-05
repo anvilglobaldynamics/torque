@@ -35,7 +35,7 @@ exports.EditDiscountPresetApi = class extends Api {
 
   async _updateDiscountPreset({ discountPresetId, name, discountType, discountValue }) {
     if (discountType === 'percent' && discountValue > 100) {
-      throw new CodedError("INVALID_DISCOUNT", "Discount percent can not be more than 100");
+      throw new CodedError("DISCOUNT_PRESET_INVALID", "Discount percent can not be more than 100");
     }
     let result = await this.database.discountPreset.setDetails({ id: discountPresetId }, { name, discountType, discountValue });
     this.ensureUpdate(result, 'discount-preset');

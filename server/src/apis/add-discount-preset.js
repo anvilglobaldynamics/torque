@@ -31,7 +31,7 @@ exports.AddDiscountPresetApi = class extends Api {
   async handle({ body }) {
     let { organizationId, name, discountType, discountValue } = body;
     if (discountType === 'percent' && discountValue > 100) {
-      throw new CodedError("INVALID_DISCOUNT", "Discount percent can not be more than 100");
+      throw new CodedError("DISCOUNT_PRESET_INVALID", "Discount percent can not be more than 100");
     }
     let discountPresetId = await this.database.discountPreset.create({ organizationId, name, discountType, discountValue });
     return { status: "success", discountPresetId };
