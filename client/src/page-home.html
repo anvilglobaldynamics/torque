@@ -408,7 +408,7 @@
 
       setEmailTapped(e = null) {
         let message = this.app.verses.home.pleaseSetYourEmail;
-        this.app.showModalInput(this.app.verses.home.setYourEmail, message, 'john@example.com', email => {
+        this.app.showModalInput(this.app.verses.home.setYourEmail, message, '', email => {
           if (!email) return;
           email = email.toLowerCase();
           this._processSetEmailApi({ email }, status => {
