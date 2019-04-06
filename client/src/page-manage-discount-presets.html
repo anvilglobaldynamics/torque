@@ -41,12 +41,8 @@
             </template>
           </div>
           <div class="horizontal layout wrap">
-            <paper-button class="secondary" on-tap="editTapped" raised>
-              [[verses.general.edit]]
-            </paper-button>
-            <paper-button raised class="danger m-0" on-tap="deleteTapped">
-              [[verses.general.delete]]
-            </paper-button>
+            <paper-icon-button class="button-icon" icon="icons:create" on-tap="editTapped"></paper-icon-button>
+            <paper-icon-button class="button-icon" icon="icons:delete" on-tap="deleteTapped"></paper-icon-button>
           </div>
         </div>
       </div>
