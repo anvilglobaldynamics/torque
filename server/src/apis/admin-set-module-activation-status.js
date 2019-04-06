@@ -26,6 +26,13 @@ exports.AdminSetModuleActivationStatusApi = class extends Api {
     this.ensureUpdate('organization', result);
   }
 
+  async _remotelyTerminateSessionOfUsersInOrganization({ organizationId }) {
+    let employmentList = await this.database.employment.listByOrganizationId({ organizationId });
+    for (let employment of employmentList) {
+      await this.database.sesssion.expireByUserId({ userId: employment.userId });
+    }
+  }
+
   async _checkIfModuleExists({ moduleCode }) {
     return await this.database.fixture.findModuleByCode({ moduleCode });
   }
@@ -58,6 +65,7 @@ exports.AdminSetModuleActivationStatusApi = class extends Api {
       activeModuleCodeList.splice(activeModuleCodeList.indexOf(moduleCode), 1);
     }
     await this._updateOrganizationactiveModuleCodeList({ organizationId, activeModuleCodeList });
+    await this._remotelyTerminateSessionOfUsersInOrganization({ organizationId });
 
     return { status: "success" };
   }
