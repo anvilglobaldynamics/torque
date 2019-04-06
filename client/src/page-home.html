@@ -413,7 +413,7 @@
           email = email.toLowerCase();
           this._processSetEmailApi({ email }, status => {
             let message = email + " " + this.app.verses.home.emailHasBeenSet;
-            this.app.showModalDialog(this.app.verses.homeemailIsSet, message, () => {
+            this.app.showModalDialog(this.app.verses.home.emailIsSet, message, () => {
               this.app.logoutTapped();
             });
           })
