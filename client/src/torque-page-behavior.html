@@ -97,10 +97,10 @@
       // TODO: move method hasPrivilege to file torque-common-behavior.html
       hasPrivilege(privilege, organization = null) {
         // NOTE: Below checks for availability of organization during a call to hasPrivilege
-        if (!this.app || !this.app.organization || this.app.organization || this.app.organization.privileges) {
-          return true; 
+        if (!(this.app && this.app.organization && this.app.organization.employment)) {
+          return false;
         }
-        
+
         if (!(privilege in this.app.organization.employment.privileges)) {
           throw new Error(`No such privilege "${privilege}".`);
         }
