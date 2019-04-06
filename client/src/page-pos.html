@@ -319,28 +319,6 @@
 
                 <div class="vertical layout m-bottom-18">
 
-                  <!-- 
-                  NOTE: Remove after making sure feature is correctly implemented.
-
-                  <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discountType]]" class="mr-4">
-                    <paper-listbox slot="dropdown-content" selected="{{payment.discountType}}" attr-for-selected="name">
-                      <paper-item name="percent">[[verses.general.percentage]]</paper-item>
-                      <paper-item name="fixed">[[verses.general.fixedValue]]</paper-item>
-                    </paper-listbox>
-                  </paper-dropdown-menu>
-
-                  <template is="dom-if" if="[[$equals(payment.discountType, 'percent')]]">
-                    <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-change="genericPaymentInputChanged" type="number" required min="0" max="100" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
-                      <div slot="suffix">%</div>
-                    </paper-input>
-                  </template>
-                  <template is="dom-if" if="[[$equals(payment.discountType, 'fixed')]]">
-                    <paper-input class="payment--discountValue flex" value="{{payment.discountValue}}" on-change="genericPaymentInputChanged" type="number" required min="0" max="[[totalBilledCopy]]" error-message="[[verses.pos.discountValueInputError]]" label="[[verses.pos.discountValueInput]]">
-                      <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-                    </paper-input>
-                  </template> 
-                  -->
-
                   <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discount]]" class="mr-4">
                     <paper-listbox slot="dropdown-content" selected="{{selectedDiscountPreset}}" attr-for-selected="name">
                       <paper-item name="--no-discount">No Discount</paper-item>
@@ -580,14 +558,12 @@
       // region: pos =================================
 
       selectedDiscountPresetChanged() {
-        console.log(this.selectedDiscountPreset);
         if (this.selectedDiscountPreset === '--no-discount') {
           this.payment.discountPresetId = null;
           this.payment.discountType = 'percent';
           this.payment.discountValue = '0';
         } else {
           let key = parseInt(String(this.selectedDiscountPreset));
-          console.log(this.discountPresetList, key);
           let discountPreset = this.discountPresetList.find(discountPreset => discountPreset.id === key);
           this.payment.discountPresetId = discountPreset.id;
           this.payment.discountType = discountPreset.discountType;
