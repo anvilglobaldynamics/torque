@@ -73,8 +73,6 @@ class Logger {
     // TODO: queing mechanism.
     if (this._mirrorFilePath) {
       fslib.writeFileSync(this._mirrorFilePath, this._stringify([entry]), { encoding: 'utf8', flag: 'a' });
-    } else {
-      console.log(this._stringify([entry]));
     }
   }
 
