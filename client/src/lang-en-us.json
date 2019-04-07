@@ -94,7 +94,8 @@
     "service": "Service",
     "both": "Both",
     "optional": "(Optional)",
-    "print": "Print"
+    "print": "Print",
+    "showFilters": "Filters"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -674,7 +675,6 @@
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
-    "showFilters": "Show Filters",
     "salePrice": "Sale Price",
     "noCustomerSelected": "No customer selected (Anonymous Sale)",
     "removeCustomer": "Remove Customer",
@@ -698,7 +698,6 @@
   },
   "inventoriesReport": {
     "inventoriesReportTitle": "Inventories Report",
-    "showFilters": "Show Filters",
     "showSalesProductDetails": "Show Sales and Product Details",
     "author": "Author",
     "noProductInInventory": "There's no product in this Inventory.",
