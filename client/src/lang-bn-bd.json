@@ -871,7 +871,8 @@
     "expiringDatetime": "মেয়াদ",
     "customer": "ক্রেতা",
     "serviceBlueprint": "সেবা",
-    "assignedEmployee": "দায়িত্বে"
+    "assignedEmployee": "দায়িত্বে",
+    "dateFilterHelpfulTip": "যেই সদস্যপদ গুলো এই তারিখ গুলোর মাঝে শেষ হয়ে যাবে"
   },
   "serviceBlueprintSelector": {
     "serviceBlueprintNameOrPhoneInput": "নাম দিয়ে খুজুন",

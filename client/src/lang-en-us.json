@@ -870,7 +870,8 @@
     "expiringDatetime": "Expiry",
     "customer": "Customer",
     "serviceBlueprint": "Service",
-    "assignedEmployee": "Assigned"
+    "assignedEmployee": "Assigned",
+    "dateFilterHelpfulTip": "Membership's expiring within these dates"
   },
   "serviceBlueprintSelector": {
     "serviceBlueprintNameOrPhoneInput": "By name.",
