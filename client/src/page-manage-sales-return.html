@@ -7,6 +7,7 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
@@ -26,73 +27,82 @@
 <dom-module id="page-manage-sales-return">
   <template>
     <style include="shared-styles">
-    
       .description {
-          font-size: 15px;
-        }
+        font-size: 15px;
+      }
 
       .description-time {
         font-size: 12px;
       }
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="card horizontal layout center">
-        <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
-        <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+      <div class="filter-toggle-region horizontal layout center">
+        <div class="flex"></div>
+        <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.general.showFilters]]</paper-toggle-button>
       </div>
 
-      <template is="dom-if" if="[[!isSearchingCustomer]]">
-        <div class="card vertical layout">
-          <div class="horizontal layout center">
-            <div class="flex">
-              <template is="dom-if" if="[[!customer]]">
-                [[verses.salesReturn.noCustomerSelected]]
-              </template>
+      <div class="filter-region" hidden="[[!shouldShowFilters]]">
+
+        <div class="card horizontal layout center">
+          <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+          <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+        </div>
+
+        <template is="dom-if" if="[[!isSearchingCustomer]]">
+          <div class="card vertical layout">
+            <div class="horizontal layout center">
+              <div class="flex">
+                <template is="dom-if" if="[[!customer]]">
+                  [[verses.salesReturn.noCustomerSelected]]
+                </template>
+                <template is="dom-if" if="[[customer]]">
+                  [[verses.general.customer]]:
+                  <b>[[customer.fullName]]</b> ([[customer.phone]])
+                  <br>[[verses.general.balance]]:
+                  <b>[[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</b>
+                </template>
+              </div>
               <template is="dom-if" if="[[customer]]">
-                [[verses.general.customer]]:
-                <b>[[customer.fullName]]</b> ([[customer.phone]])
-                <br>[[verses.general.balance]]:
-                <b>[[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</b>
+                <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.general.remove]]</paper-button>
               </template>
+              <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.general.select]]</paper-button>
             </div>
-            <template is="dom-if" if="[[customer]]">
-              <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.general.remove]]</paper-button>
-            </template>
-            <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.general.select]]</paper-button>
           </div>
-        </div>
-      </template>
-      <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+        </template>
+        <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
 
-      <template is="dom-if" if="[[!isSearchingOutlet]]">
-        <div class="card vertical layout">
-          <div class="horizontal layout center">
-            <div class="flex">
-              <template is="dom-if" if="[[!outlet]]">
-                [[verses.salesReturn.noOutletSelected]]
-              </template>
+        <template is="dom-if" if="[[!isSearchingOutlet]]">
+          <div class="card vertical layout">
+            <div class="horizontal layout center">
+              <div class="flex">
+                <template is="dom-if" if="[[!outlet]]">
+                  [[verses.salesReturn.noOutletSelected]]
+                </template>
+                <template is="dom-if" if="[[outlet]]">
+                  [[verses.general.outlet]]:
+                  <b>[[outlet.name]]</b> ([[outlet.phone]])
+                  <br>[[verses.general.address]]:
+                  <b>[[outlet.physicalAddress]]</b>
+                </template>
+              </div>
               <template is="dom-if" if="[[outlet]]">
-                [[verses.general.outlet]]:
-                <b>[[outlet.name]]</b> ([[outlet.phone]])
-                <br>[[verses.general.address]]:
-                <b>[[outlet.physicalAddress]]</b>
+                <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.general.remove]]</paper-button>
               </template>
+              <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.general.select]]</paper-button>
             </div>
-            <template is="dom-if" if="[[outlet]]">
-              <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.general.remove]]</paper-button>
-            </template>
-            <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.general.select]]</paper-button>
           </div>
-        </div>
-      </template>
-      <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
+        </template>
+        <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
-      <paper-button raised class="primary" on-tap="filterTapped">[[verses.general.filter]]</paper-button>
+        <div class="horizontal layout">
+          <paper-button raised class="primary flex" on-tap="filterTapped">[[verses.general.filter]]</paper-button>
+        </div>
+
+      </div>
 
       <template is="dom-if" if="{{!salesReturnList.length}}">
         <div class="card">
@@ -117,11 +127,11 @@
                   <div class="description-time">[[$mkDate(saleReturn.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
                   <div class="description">[[verses.salesReturn.credited]]: [[$round(saleReturn.creditedAmount)]] [[app.settings.monetaryUnit]]</div>
                   <div class="description">[[verses.salesReturn.returnedCount]]: [[saleReturn.returnedProductList.length]]</div>
-                
+
                 </div>
                 <paper-button raised class="secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
               </div>
-          
+
             </template>
           </div>
 
@@ -243,7 +253,7 @@
 
         let fromDate = new Date(this.fromDate).getTime();
         let toDate = new Date(this.toDate).getTime();
-        
+
         let customerId = null;
         if (this.customer) {
           customerId = this.customer.id;
