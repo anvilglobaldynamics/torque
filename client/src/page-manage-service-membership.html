@@ -63,9 +63,12 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <!-- dates selection - start -->
-      <div class="card horizontal layout center">
-        <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
-        <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+      <div class="card vertical layout">
+        [[verses.serviceMembership.dateFilterHelpfulTip]]
+        <div class="horizontal layout center">
+          <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+          <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+        </div>
       </div>
       <!-- dates selection - end -->
 
