@@ -25,7 +25,7 @@ class EmailService {
       {
         name: 'en-us--email-verification',
         path: './src/templates/email/en-us--email-verification.html',
-        subject: `Your email verification code for ${branding.shortName}`
+        subject: `Verify your email for ${branding.shortName}`
       },
       {
         name: 'en-us--password-reset',
@@ -40,7 +40,7 @@ class EmailService {
       {
         name: 'bn-bd--email-verification',
         path: './src/templates/email/bn-bd--email-verification.html',
-        subject: `Your email verification code for ${branding.shortName}`
+        subject: `Verify your email for ${branding.shortName}`
       },
       {
         name: 'bn-bd--password-reset',

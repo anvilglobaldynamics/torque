@@ -677,7 +677,6 @@
         totalAmount = parseFloat(totalProductAmount) + parseFloat(totalServiceAmount);
 
         // overall discount calculation
-        console.log(discountType, discountValue)
         if (discountValue) {
           if (discountType === 'percent') {
             discountedAmount = totalAmount * (discountValue / 100);
@@ -712,8 +711,6 @@
           }
         }
 
-        console.log({ discountedAmount })
-
         // returning updated payment info
         this.payment = {
           totalAmount,
@@ -745,7 +742,6 @@
           this.app.showModalDialog(this.verses.general.sorry, this.verses.pos.disallowCreditSale);
           return;
         }
-        // console.log("salesData", salesData);
         this.app.db.update('offline-data', (({ which }) => which === 'only'), offlineData => {
           if (!offlineData.data.unsyncedSalesIdSeed) offlineData.data.unsyncedSalesIdSeed = 0;
           offlineData.data.unsyncedSalesIdSeed += 1;
@@ -767,7 +763,6 @@
         }
 
         let productList = this.productList.map(product => {
-          // console.log(product);
           let { name, productId, selectedCount, salePrice, vatValue } = product;
           let vatPercentage = vatValue;
           let finalProduct = { productId, count: selectedCount, salePrice, vatPercentage };
@@ -780,7 +775,6 @@
         });
 
         let serviceList = this.serviceList.map(service => {
-          // console.log(service);
           let { id, salePrice, vatValue, assignedEmploymentId, name } = service;
           let serviceId = id;
           let vatPercentage = vatValue;
