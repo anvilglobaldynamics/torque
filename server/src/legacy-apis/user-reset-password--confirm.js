@@ -14,7 +14,7 @@ exports.UserResetPasswordConfirmApi = class extends userCommonMixin(collectionCo
 
   get requestSchema() {
     return Joi.object().keys({
-      uniqueToken: Joi.string().length(64).required(),
+      uniqueToken: Joi.string().length(16).required(),
       newPassword: Joi.string().min(8).max(30).required()
     });
   }

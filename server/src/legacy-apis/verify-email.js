@@ -29,7 +29,7 @@ exports.VerifyEmailApi = class extends LegacyApi {
     if (!('link' in params)) {
       return this._showFailed('Invalid url format.');
     }
-    let { error, value: verificationToken } = this.validate(params.link, Joi.string().length(64).required());
+    let { error, value: verificationToken } = this.validate(params.link, Joi.string().length(16).required());
     if (error) {
       let message = 'Verification token is not complete. Please make sure you copy the entire link.'
       return this._showFailed(message, error);

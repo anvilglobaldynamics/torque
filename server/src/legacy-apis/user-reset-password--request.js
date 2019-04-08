@@ -63,7 +63,7 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Legacy
   }
 
   _createPasswordResetRequest({ userId, email, phone }, cbfn) {
-    let confirmationToken = generateRandomString(64);
+    let confirmationToken = generateRandomString(16);
     this.legacyDatabase.passwordResetRequest.isConfirmationTokenUnique(confirmationToken, (err, isUnique) => {
       if (err) return this.fail(err);
       if (!isUnique) return this._createPasswordResetRequest({ userId, email, phone }, cbfn);
