@@ -626,7 +626,7 @@
     "accessDeniedDescription": "You do not have access to this feature."
   },
   "pos": {
-    "posPageTitle": "New Sales",
+    "posPageTitle": "POS",
     "newSalesAdded": "New Sales has been added.",
     "noCustomerSelected": "No customer selected (Anonymous Sale)",
     "removeCustomer": "Remove",
