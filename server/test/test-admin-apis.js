@@ -44,7 +44,7 @@ let org1id = null;
 let org2id = null;
 let packageActivationId = null;
 
-describe.skip('Admin', _ => {
+describe('Admin', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -292,7 +292,6 @@ describe.skip('Admin', _ => {
           userId
         }
       }, (err, response, body) => {
-        console.log(body)
         expect(response.statusCode).to.equal(200);
         expect(body).to.have.property('hasError').that.equals(false);
         expect(body).to.have.property('status').that.equals('success');

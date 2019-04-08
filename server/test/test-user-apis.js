@@ -22,7 +22,7 @@ const changedPhone = '9' + rnd(prefix, 11);
 
 let apiKey = null;
 
-describe.only('user apis (1)', _ => {
+describe('user apis (1)', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -121,7 +121,6 @@ describe.only('user apis (1)', _ => {
         password
       }
     }, (err, response, body) => {
-      console.log(body)
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('status').that.equals('success');
