@@ -925,7 +925,7 @@
     "discountPresetUpdated": "ডিসকাউন্ট প্রিসেট পরিবর্তন করা হয়েছে। ",
     "createNewDiscountPreset": "নতুন ডিসকাউন্ট প্রিসেট তৈরি করুন",
     "discountPresetDeleted": "ডিসকাউন্ট প্রিসেট মুছে ফেলা হয়েছে ",
-    "deleteQuestion": "ডিসকাউন্ট প্রিসেট মুছে ফেলা হবে?",
+    "deleteQuestion": "প্রিসেট মুছে ফেলুন?",
     "deleteQuestionMessage": "আপনি কি ডিসকাউন্ট প্রিসেটটি মুছে ফেলতে চান?",
     "discountPresetNameInput": "ডিসকাউন্ট প্রিসেটের নাম "
   }
