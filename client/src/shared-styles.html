@@ -27,6 +27,7 @@
       }
 
       @media (min-width: 960px) {
+
         .page,
         .page-small {
           padding: 24px 0;
@@ -64,6 +65,7 @@
           text-align: center;
           margin: 12px 0 0 0;
         }
+
         .button-row>* {
           margin: 0 0 8px 0;
           width: calc(100%);
@@ -82,6 +84,7 @@
           text-align: center;
           margin: 8px 8px 0 8px;
         }
+
         .lone-controls>* {
           margin: 0 0 8px 0;
           width: calc(100% - 32px);
@@ -132,6 +135,7 @@
           -webkit-align-items: center;
           align-items: center;
         }
+
         .list .item .content {
           -ms-flex: 1 1 0.000000001px;
           -webkit-flex: 1;
@@ -209,7 +213,7 @@
         background-color: var(--app-button-alternative);
       }
 
-      paper-button.slim{
+      paper-button.slim {
         padding-top: 4px;
         padding-bottom: 4px;
       }
@@ -264,7 +268,7 @@
         color: gray;
         font-size: 13px;
       }
-      
+
       .person-name-container {
         font-size: 16px;
       }
@@ -318,13 +322,26 @@
 
       /* ============= helpers ============= */
 
+      .filter-toggle-region {
+        text-align: right;
+        margin-top: 8px;
+        margin-right: 8px;
+        margin-bottom: 8px;
+        font-size: 18px;
+      }
+
+      @media (max-width: 480px) {
+        .filter-toggle-region {
+          margin-top: 8px;
+        }
+      }
+
       /* ============= not sure why ??? ============= */
 
       paper-icon-button {
         min-width: 40px;
         max-width: 40px;
       }
-
     </style>
   </template>
 </dom-module>

@@ -127,7 +127,7 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
-describe.only('Sales', _ => {
+describe('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -2380,7 +2380,6 @@ describe.only('Sales', _ => {
         organizationId
       }
     }, (err, response, body) => {
-      console.log(body)
       expect(response.statusCode).to.equal(200);
       validateGetDiscountPresetListApiSuccessResponse(body);
 

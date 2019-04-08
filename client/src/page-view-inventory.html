@@ -209,16 +209,18 @@
       </div>
 
       <!-- transfer products trigger -->
-      <div class="card">
-        <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
-          <div class="mb-4">[[verses.inventory.transferInventoryHelp]]</div>
-          <paper-button raised style="width: 100%;" class="secondary" on-tap="selectProductsToTransferTapped">[[verses.inventory.selectProductsToTransfer]]</paper-button>
-        </template>
+      <template is="dom-if" if="[[hasPrivilege('PRIV_TRANSFER_ALL_INVENTORIES', organization)]]">
+        <div class="card">
+          <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
+            <div class="mb-4">[[verses.inventory.transferInventoryHelp]]</div>
+            <paper-button raised style="width: 100%;" class="secondary" on-tap="selectProductsToTransferTapped">[[verses.inventory.selectProductsToTransfer]]</paper-button>
+          </template>
 
-        <template is="dom-if" if="[[isProductSelectionForInitiated]]">
-          <paper-button raised style="width: 100%;" class="danger" on-tap="cancelTransferTapped">[[verses.inventory.stopSelectingProductsToTransfer]]</paper-button>
-        </template>
-      </div>
+          <template is="dom-if" if="[[isProductSelectionForInitiated]]">
+            <paper-button raised style="width: 100%;" class="danger" on-tap="cancelTransferTapped">[[verses.inventory.stopSelectingProductsToTransfer]]</paper-button>
+          </template>
+        </div>
+      </template>
 
     </div>
 
@@ -275,6 +277,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
+        this.onOrganizationChange(this.app.organization);
         this.app.pushPageTitle(this.app.verses.inventory.inventoryTitle);
         if (!this._ensureAccess()) return;
         if (!('inventory' in this.params)) {
@@ -304,6 +307,10 @@
           authLevel: 'organization-selected',
           privilegeList: ['PRIV_VIEW_ALL_INVENTORIES']
         });
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
       }
 
       _fetchInventoryDetails(cbfn) {

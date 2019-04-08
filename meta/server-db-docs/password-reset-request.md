@@ -10,7 +10,7 @@ Joi.object().keys({
   lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
   confirmedDatetimeStamp: Joi.number().max(999999999999999).required(),
   origin: Joi.string().max(1024).required(),
-  confirmationToken: Joi.string().min(64).max(64).required(),
+  confirmationToken: Joi.string().length(16).required(),
   isPasswordResetComplete: Joi.boolean().required(),
 });
 ```

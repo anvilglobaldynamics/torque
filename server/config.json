@@ -34,12 +34,12 @@
     "enabled": false,
     "publicKey": "pubkey-000000000000000",
     "privateKey": "key-000000000000000",
-    "domain": "mg.torque.live",
-    "from": "Torque Team <postmaster@mg.torque.live>"
+    "domain": "mg.anvil.live",
+    "from": "Anvil Global Dynamic Ltd. <postmaster@mg.anvil.live>"
   },
   "sms": {
     "enabled": false,
-    "from": "TORQUE TEAM"
+    "from": "Anvil"
   },
   "admin": {
     "list": [

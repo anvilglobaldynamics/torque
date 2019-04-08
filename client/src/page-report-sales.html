@@ -72,12 +72,6 @@
         padding-bottom: 8px;
         border-bottom: 1px dotted rgb(131, 131, 131);
       }
-
-      .filter-toggle-region {
-        text-align: right;
-        margin-right: 8px;
-        margin-bottom: 8px;
-      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -86,7 +80,7 @@
 
       <div class="filter-toggle-region horizontal layout center">
         <div class="flex"></div>
-        <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.salesReport.showFilters]]</paper-toggle-button>
+        <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.general.showFilters]]</paper-toggle-button>
       </div>
 
       <div class="filter-region" hidden="[[!shouldShowFilters]]">

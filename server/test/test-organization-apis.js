@@ -435,7 +435,7 @@ describe('Organization', _ => {
 
   });
 
-  it('api/get-organization-list (Valid modification check, MOD_GYM)', testDoneFn => {
+  it('api/get-organization-list (User will be logged out)', testDoneFn => {
 
     callApi('api/get-organization-list', {
       json: {
@@ -443,20 +443,40 @@ describe('Organization', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      validateGetOrganizationListApiSuccessResponse(body);
-
-      body.organizationList.forEach(organization => {
-        validateResponseOrganizationSchema(organization);
-      });
-
-      let organization = body.organizationList.find(organization => organization.id === org1id);
-      expect(organization.activeModuleCodeList.sort()).to.deep.equal(['MOD_PRODUCT', 'MOD_SERVICE', 'MOD_GYM'].sort());
+      validateGenericApiFailureResponse(body);
 
       testDoneFn();
     });
-
   });
 
+  it('api/get-organization-list (Valid modification check, MOD_GYM)', testDoneFn => {
+
+    loginUser({
+      emailOrPhone: phone, password
+    }, (data) => {
+      apiKey = data.apiKey;
+
+      callApi('api/get-organization-list', {
+        json: {
+          apiKey,
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        validateGetOrganizationListApiSuccessResponse(body);
+
+        body.organizationList.forEach(organization => {
+          validateResponseOrganizationSchema(organization);
+        });
+
+        let organization = body.organizationList.find(organization => organization.id === org1id);
+        expect(organization.activeModuleCodeList.sort()).to.deep.equal(['MOD_PRODUCT', 'MOD_SERVICE', 'MOD_GYM'].sort());
+
+        testDoneFn();
+      });
+
+    });
+
+  });
   // --- Module Section - end
 
   it('END', testDoneFn => {
