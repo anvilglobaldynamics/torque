@@ -173,7 +173,7 @@
               <strong>[[verses.salesReport.particulars]]</strong>
             </div>
             <div>
-              <strong>[[verses.salesReport.billedAmount]]</strong>
+              <strong>[[verses.salesReport.billedAmount]] ([[app.settings.monetaryUnit]])</strong>
             </div>
           </div>
           <template is="dom-repeat" items="[[salesList]]" as="sales">
@@ -238,7 +238,7 @@
                 </template>
 
               </div>
-              <div class="description">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</div>
+              <div class="description">[[$round(sales.payment.totalBilled)]]</div>
             </div>
           </template>
           <div class="horizontal layout center item wrap">
@@ -246,7 +246,7 @@
               <strong>[[verses.salesReport.total]]</strong>
             </div>
             <div>
-              <strong>[[salesSummary.billedAmountSum]] [[app.settings.monetaryUnit]]</strong>
+              <strong>[[salesSummary.billedAmountSum]]</strong>
             </div>
           </div>
         </div>
