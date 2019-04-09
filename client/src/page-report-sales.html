@@ -233,7 +233,7 @@
                   </template>
                   <template is="dom-if" if="[[sales.payment.serviceChargeAmount]]">
                     <div class="description">
-                      <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]]%</div>
+                      <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</div>
                   </template>
                 </template>
 
