@@ -675,7 +675,8 @@
     "showHideButton": "দেখুন",
     "createdOfflineSaleDatetime": "তৈরি",
     "assignedEmployee": "দায়িত্ব দেন",
-    "assignEmployee": "দায়িত্ব দেয়া"
+    "assignEmployee": "দায়িত্ব দেয়া",
+    "noDiscountApplicable": "প্রযোজ্য নয়"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",

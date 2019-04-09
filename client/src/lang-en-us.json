@@ -673,7 +673,8 @@
     "submitOfflineSales": "Sync",
     "createdOfflineSaleDatetime": "Created",
     "assignedEmployee": "assigned",
-    "assignEmployee": "assign"
+    "assignEmployee": "assign",
+    "noDiscountApplicable": "Not Applicable"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
