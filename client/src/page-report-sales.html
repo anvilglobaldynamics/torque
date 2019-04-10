@@ -50,8 +50,12 @@
         font-weight: bold;
       }
 
-      .report .header {
+      .hr {
         border-bottom: 1px solid black;
+      }
+
+      .hr-mt {
+        margin-top: 18px;
       }
 
       .report .header .name {
@@ -67,9 +71,9 @@
       .report .body {}
 
       .report .body .item {
-        margin-bottom: 8px;
-        margin-top: 8px;
-        padding-bottom: 8px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        padding-bottom: 4px;
         border-bottom: 1px dotted rgb(131, 131, 131);
       }
     </style>
@@ -152,22 +156,45 @@
         <div class="header vertical layout">
           <div class="name">[[verses.salesReport.salesReportTitle]]</div>
           <div class="date"> [[$mkDate(fromDate, 'dd MMM yyyy')]] [[verses.general.to]] [[$mkDate(toDate, 'dd MMM yyyy')]]</div>
-          <div class="horizontal layout wrap">
-            <div>
-              <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
-              <div>[[app.organization.primaryBusinessAddress]]</div>
-              <div>[[app.organization.email]]</div>
-              <div>[[app.organization.phone]]</div>
-            </div>
-            <div class="flex"></div>
-            <div>
-              <div class="author-title">[[verses.salesReport.author]]: [[app.user.fullName]]</div>
-              <div>[[app.organization.employment.designation]]</div>
-              <div>[[app.organization.employment.companyProvidedId]]</div>
-            </div>
-          </div>
         </div>
         <div class="body">
+          <!-- Summary - Start -->
+          <div class="hr hr-mt"></div>
+          <div class="horizontal layout center item wrap">
+            <div class="flex">
+              <strong>[[verses.salesReport.total]] [[verses.salesReport.billedAmount]]</strong>
+            </div>
+            <div>
+              <strong>[[salesSummary.billedAmountSum]] [[app.settings.monetaryUnit]]</strong>
+            </div>
+          </div>
+          <div class="horizontal layout center item wrap">
+            <div class="flex">
+              <strong>[[verses.salesReport.discountedAmount]]</strong>
+            </div>
+            <div>
+              <strong>[[salesSummary.billedAmountSum]] [[app.settings.monetaryUnit]]</strong>
+            </div>
+          </div>
+          <div class="horizontal layout center item wrap">
+            <div class="flex">
+              <strong>[[verses.salesReport.vat]]</strong>
+            </div>
+            <div>
+              <strong>[[salesSummary.billedAmountSum]] [[app.settings.monetaryUnit]]</strong>
+            </div>
+          </div>
+          <div class="horizontal layout center item wrap">
+            <div class="flex">
+              <strong>[[verses.salesReport.serviceCharge]]</strong>
+            </div>
+            <div>
+              <strong>[[salesSummary.billedAmountSum]] [[app.settings.monetaryUnit]]</strong>
+            </div>
+          </div>
+          <!-- Summary - End -->
+          <!-- Detailed - Start -->
+          <div class="hr hr-mt"></div>
           <div class="horizontal layout center item wrap">
             <div class="flex">
               <strong>[[verses.salesReport.particulars]]</strong>
@@ -241,12 +268,23 @@
               <div class="description">[[$round(sales.payment.totalBilled)]]</div>
             </div>
           </template>
-          <div class="horizontal layout center item wrap">
+          <!-- <div class="horizontal layout center item wrap">
             <div class="flex">
               <strong>[[verses.salesReport.total]]</strong>
             </div>
             <div>
               <strong>[[salesSummary.billedAmountSum]]</strong>
+            </div>
+          </div> -->
+          <!-- Detailed - End -->
+        </div>
+        <div class="vertical layout">
+          <div class="horizontal layout wrap">
+            <div class="flex"></div>
+            <div>
+              <div class="author-title">[[verses.salesReport.author]]: [[app.user.fullName]]</div>
+              <div>[[app.organization.employment.designation]]</div>
+              <div>[[app.organization.employment.companyProvidedId]]</div>
             </div>
           </div>
         </div>
