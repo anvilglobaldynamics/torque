@@ -179,4 +179,43 @@ exports.SalesCollection = class extends Collection {
     return await this._find(query);
   }
 
+
+  async listByFiltersForCollectionReport({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }) {
+
+    let filterBySalesId = null;
+
+    let query = { $and: [] };
+
+    // NOTE: If filterBySalesId is present, other filters must not take any affect.
+    if (filterBySalesId) {
+
+      query.$and.push({ id: filterBySalesId });
+
+    } else {
+
+      query.$and.push({
+        outletId: { $in: outletIdList }
+      });
+
+      query.$and.push({
+        'payment.paymentList.createdDatetimeStamp': {
+          $gte: fromDate,
+          $lte: toDate
+        }
+      });
+
+      if (shouldFilterByOutlet) {
+        query.$and.push({ outletId });
+      }
+
+      if (shouldFilterByCustomer) {
+        query.$and.push({ customerId });
+      }
+
+    }
+
+    return await this._find(query);
+  }
+
+
 }
