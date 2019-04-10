@@ -691,12 +691,13 @@
     "billedAmount": "Billed Amount",
     "sales": "Sales",
     "soldTo": "Sold To",
-    "products": "product(s)",
-    "services": "service(s)",
+    "products": "Product(s)",
+    "services": "Service(s)",
     "total": "Total",
-    "discountedAmount": "Discounted Amount",
+    "discountedAmount": "Discount",
     "vat": "VAT",
     "serviceCharge": "Service Charge",
+    "dueAmount": "Due",
     "previousBalance": "Previous Balance"
   },
   "inventoriesReport": {

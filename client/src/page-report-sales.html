@@ -200,6 +200,14 @@
               <strong>[[salesSummary.serviceChargeAmountSum]]</strong>
             </div>
           </div>
+          <div class="horizontal layout center item wrap">
+            <div class="flex">
+              [[verses.salesReport.dueAmount]]
+            </div>
+            <div>
+              <strong>[[salesSummary.dueAmountSum]]</strong>
+            </div>
+          </div>
           <!-- Summary - End -->
           <!-- Detailed - Start -->
           <div class="hr hr-mt"></div>
@@ -269,6 +277,10 @@
                   <template is="dom-if" if="[[sales.payment.serviceChargeAmount]]">
                     <div class="description">
                       <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</div>
+                  </template>
+                  <template is="dom-if" if="[[sales.payment.dueAmount]]">
+                    <div class="description">
+                      <strong>[[verses.salesReport.dueAmount]]: </strong>[[$round(sales.payment.dueAmount)]] [[app.settings.monetaryUnit]]</div>
                   </template>
                 </template>
 
@@ -465,12 +477,16 @@
 
       _processSalesList(cbfn) {
         this._fetchSalesList(newSalesList => {
+          newSalesList.forEach(sales => {
+            sales.payment.dueAmount = (Math.max(sales.payment.totalBilled - sales.payment.totalPaidAmount, 0));
+          });
           this.salesList = newSalesList;
           this.salesSummary = {
             billedAmountSum: (newSalesList.reduce((sum, sales) => (sum + sales.payment.totalBilled), 0)),
             discountedAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.discountedAmount || 0)), 0)),
             vatAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.vatAmount || 0)), 0)),
-            serviceChargeAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.serviceChargeAmount || 0)), 0))
+            serviceChargeAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.serviceChargeAmount || 0)), 0)),
+            dueAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.dueAmount || 0)), 0))
           }
           cbfn();
         });

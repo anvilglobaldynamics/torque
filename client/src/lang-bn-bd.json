@@ -695,9 +695,10 @@
     "products": "পণ্য",
     "services": "সেবা",
     "total": "মোট",
-    "discountedAmount": "ছাড়ের পরিমান",
+    "discountedAmount": "ছাড়",
     "vat": "ভ্যাট",
     "serviceCharge": "সেবা মূল্য",
+    "dueAmount": "বাকি",
     "previousBalance": "পূর্বের হিসাব"
   },
   "inventoriesReport": {
