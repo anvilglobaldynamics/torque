@@ -82,6 +82,7 @@
 <link rel="lazy-import" href="page-pos.html">
 <link rel="lazy-import" href="page-print-sales-receipt.html">
 <link rel="lazy-import" href="page-report-sales.html">
+<link rel="lazy-import" href="page-report-collections.html">
 <link rel="lazy-import" href="page-report-inventories.html">
 <link rel="lazy-import" href="page-report-select-inventories.html">
 <link rel="lazy-import" href="page-pos-select-products.html">
@@ -272,6 +273,7 @@
             <hr class="sidebar-divider">
 
             <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
+            <a name="report-collections" href="#/report-collections">[[verses.sidebar.collectionReport]]</a>
             <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
               <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
             </template>
@@ -375,6 +377,7 @@
           <page-withdraw-from-change-wallet-balance name="withdraw-from-change-wallet-balance"></page-withdraw-from-change-wallet-balance>
           <page-pos name="pos"></page-pos>
           <page-report-sales name="report-sales"></page-report-sales>
+          <page-report-collections name="report-collections"></page-report-collections>
           <page-report-inventories name="report-inventories"></page-report-inventories>
           <page-report-select-inventories name="report-select-inventories"></page-report-select-inventories>
           <page-pos-select-products name="pos-select-products"></page-pos-select-products>

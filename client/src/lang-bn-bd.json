@@ -143,6 +143,7 @@
     "serviceMembership": "সেবার সদস্যপদ",
     "customers": "গ্রাহক",
     "salesReport": "বিক্রয় রিপোর্টস",
+    "collectionReport": "সংগ্রহ রিপোর্ট",
     "inventoryReport": "পণ্য তালিকা রিপোর্টস",
     "profile": "প্রোফাইল",
     "settings": "সেটিংস",
@@ -930,5 +931,23 @@
     "deleteQuestion": "প্রিসেট মুছে ফেলুন?",
     "deleteQuestionMessage": "আপনি কি ডিসকাউন্ট প্রিসেটটি মুছে ফেলতে চান?",
     "discountPresetNameInput": "ডিসকাউন্ট প্রিসেটের নাম "
+  },
+  "collectionReport": {
+    "collectionReportTitle": "সংগ্রহ বিবরণ",
+    "collectedAmount": "সংগৃহীত পরিমাণ",
+    "sales": "বিক্রয়",
+    "collectedBy": "সংগ্রহকারী",
+    "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
+    "allPaymentMethods": "সব",
+
+    "author": "রচক",
+    "particulars": "বিবরণ",
+    "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
+    "removeCustomer": "গ্রাহক সরান",
+    "changeCustomer": "গ্রাহক পরিবর্তন করুন",
+    "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি",
+    "removeOutlet": "দোকান সরান",
+    "changeOutlet": "দোকান পরিবর্তন করুন",
+    "total": "মোট"
   }
 }

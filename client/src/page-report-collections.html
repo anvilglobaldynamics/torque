@@ -1,0 +1,474 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="elem-customer-selector.html">
+<link rel="import" href="elem-outlet-selector.html">
+
+<dom-module id="page-report-collections">
+  <template>
+    <style include="shared-styles">
+      @media print {
+
+        .filter-toggle-region,
+        .filter-toggle-region paper-toggle-button,
+        .filter-region {
+          display: none;
+        }
+
+        .report {
+          margin-top: -48px;
+        }
+      }
+
+      .report {
+        background-color: white;
+        padding: 12px;
+        width: calc(100% - 24px);
+      }
+
+      .report .author-title {
+        font-weight: bold;
+      }
+
+      .hr {
+        border-bottom: 1px solid black;
+      }
+
+      .hr-mt {
+        margin-top: 18px;
+      }
+
+      .report .header .name {
+        font-size: 30px;
+        text-align: center;
+      }
+
+      .report .header .date {
+        font-size: 15px;
+        text-align: center;
+      }
+
+      .report .body {}
+
+      .report .body .item {
+        margin-top: 4px;
+        margin-bottom: 4px;
+        padding-bottom: 4px;
+        border-bottom: 1px dotted rgb(131, 131, 131);
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="filter-toggle-region horizontal layout center">
+        <div class="flex"></div>
+        <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.general.showFilters]]</paper-toggle-button>
+      </div>
+
+      <div class="filter-region" hidden="[[!shouldShowFilters]]">
+
+        <div class="card horizontal layout center">
+          <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+          <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+        </div>
+
+        <template is="dom-if" if="[[!isSearchingCustomer]]">
+          <div class="card vertical layout">
+            <div class="horizontal layout center wrap">
+              <div class="flex">
+                <template is="dom-if" if="[[!customer]]">
+                  [[verses.collectionReport.noCustomerSelected]]
+                </template>
+                <template is="dom-if" if="[[customer]]">
+                  [[verses.general.customer]]:
+                  <b>[[customer.fullName]]</b> ([[customer.phone]])
+                  <br> [[verses.general.balance]]:
+                  <b>[[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</b>
+                </template>
+              </div>
+              <div class="horizontal layout center">
+                <template is="dom-if" if="[[customer]]">
+                  <paper-button raised class="danger" on-tap="removeCustomerTapped">[[verses.general.remove]]</paper-button>
+                </template>
+                <paper-button raised class="secondary" on-tap="changeCustomerTapped">[[verses.general.select]]</paper-button>
+              </div>
+            </div>
+          </div>
+        </template>
+        <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+
+        <template is="dom-if" if="[[!isSearchingOutlet]]">
+          <div class="card vertical layout">
+            <div class="horizontal layout center">
+              <div class="flex">
+                <template is="dom-if" if="[[!outlet]]">
+                  [[verses.collectionReport.noOutletSelected]]
+                </template>
+                <template is="dom-if" if="[[outlet]]">
+                  [[verses.general.outlet]]:
+                  <b>[[outlet.name]]</b> ([[outlet.phone]])
+                  <br> [[verses.general.address]]:
+                  <b>[[outlet.physicalAddress]]</b>
+                </template>
+              </div>
+              <template is="dom-if" if="[[outlet]]">
+                <paper-button raised class="danger" on-tap="removeOutletTapped">[[verses.general.remove]]</paper-button>
+              </template>
+              <paper-button raised class="secondary" on-tap="changeOutletTapped">[[verses.general.select]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
+
+        <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.collectionReport.paymentMethod]]" class="mr-4">
+          <paper-listbox slot="dropdown-content" selected="{{paymentMethod}}" attr-for-selected="name">
+            <paper-item name="all">[[verses.collectionReport.allPaymentMethods]]</paper-item>
+            <paper-item name="cash">[[verses.general.cash]]</paper-item>
+            <paper-item name="card">[[verses.general.card]]</paper-item>
+            <paper-item name="digital">[[verses.general.digital]]</paper-item>
+            <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+
+        <div class="lone-controls">
+          <paper-button raised class="primary" on-tap="filterTapped">
+            <iron-icon class="button-icon" icon="icons:find-in-page"></iron-icon>
+            [[verses.general.filter]]
+          </paper-button>
+        </div>
+
+      </div>
+
+      <div class="report">
+        <div class="header vertical layout">
+          <div class="name">[[verses.collectionReport.collectionReportTitle]]</div>
+          <div class="date"> [[$mkDate(fromDate, 'dd MMM yyyy')]] [[verses.general.to]] [[$mkDate(toDate, 'dd MMM yyyy')]]</div>
+        </div>
+        <div class="body">
+          <!-- Summary - Start -->
+          <div class="hr hr-mt"></div>
+          <div class="horizontal layout center item wrap">
+            <div class="flex">
+              <strong>[[verses.collectionReport.total]]</strong>
+            </div>
+            <div>
+              <strong>[[app.settings.monetaryUnit]]</strong>
+            </div>
+          </div>
+          <div class="horizontal layout center item wrap">
+            <div class="flex">
+              [[verses.collectionReport.collectedAmount]]
+            </div>
+            <div>
+              <strong>[[collectionSummary.collectedAmountSum]]</strong>
+            </div>
+          </div>
+          <!-- Summary - End -->
+          <!-- Detailed - Start -->
+          <div class="hr hr-mt"></div>
+          <div class="horizontal layout center item wrap">
+            <div class="flex">
+              <strong>[[verses.collectionReport.particulars]]</strong>
+            </div>
+            <div>
+              <strong>[[verses.collectionReport.collectedAmount]] ([[app.settings.monetaryUnit]])</strong>
+            </div>
+          </div>
+          <template is="dom-repeat" items="[[collectionList]]" as="collection">
+            <div class="horizontal layout center item wrap">
+              <div class="flex">
+                <div class="id">
+                  <strong>[[verses.collectionReport.sales]] #[[collection.salesId]]</strong> [[$mkDate(collection.collectedDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]
+                </div>
+                <div class="description">
+                  <strong>[[verses.collectionReport.collectedBy]]: </strong>[[collection.collectedByUser.fullName]] ([[collection.collectedByUser.phone]])
+                </div>
+                <div class="description">
+                  <strong>[[verses.collectionReport.paymentMethod]]: </strong>[[collection.paymentMethod]]
+                </div>
+              </div>
+              <div class="description">[[$round(collection.collectedAmount)]]</div>
+            </div>
+          </template>
+          <!-- Detailed - End -->
+        </div>
+        <div class="vertical layout">
+          <div class="horizontal layout wrap">
+            <div class="flex"></div>
+            <div>
+              <div class="author-title">[[verses.collectionReport.author]]: [[app.user.fullName]]</div>
+              <div>[[app.organization.employment.designation]]</div>
+              <div>[[app.organization.employment.companyProvidedId]]</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+    class PageReportCollections extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-report-collections';
+      }
+
+      static get properties() {
+        return {
+          shouldShowFilters: {
+            type: Boolean,
+            value: false
+          },
+          outletId: {
+            type: String,
+            value: null
+          },
+          shouldFilterByOutlet: {
+            type: Boolean,
+            value: false
+          },
+          shouldFilterByCustomer: {
+            type: Boolean,
+            value: false
+          },
+          fromDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date.setMonth(date.getMonth() - 1);
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          toDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          isSearchingCustomer: {
+            type: Boolean,
+            value: false
+          },
+          customer: {
+            type: Object,
+            value: null,
+            observer: 'customerChanged'
+          },
+          isSearchingOutlet: {
+            type: Boolean,
+            value: false
+          },
+          outlet: {
+            type: Object,
+            value: null,
+            observer: 'outletChanged'
+          },
+          paymentMethod: {
+            type: String,
+            value: 'all'
+          },
+          showProductDetails: {
+            type: Boolean,
+            value: true
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.app.shouldShowPrintButton = true;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.collectionReport.collectionReportTitle);
+        if (!this._ensureAccess()) return;
+        this._processCollectionList(() => {
+          console.log(this.app.organization);
+          if ('outlet' in this.params) {
+            this.isSearchingOutlet = true;
+            this.elem('elem-outlet-selector').forceSelect(this.params.outlet);
+          }
+          this.self = this;
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.shouldShowPrintButton = false;
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_SALES']
+        });
+      }
+
+      _fetchCollectionList(cbfn) {
+        if (!this.fromDate) {
+          this.resetProperties('fromDate');
+        }
+        if (!this.toDate) {
+          this.resetProperties('toDate');
+        }
+
+        let fromDate = new Date(this.fromDate).getTime();
+        let toDate = new Date(this.toDate).getTime();
+        let customerId = null;
+        if (this.customer) {
+          customerId = this.customer.id;
+          this.shouldFilterByCustomer = true;
+        } else {
+          this.shouldFilterByCustomer = false;
+        }
+
+        let outletId = null;
+        if (this.outlet) {
+          outletId = this.outlet.id;
+          this.shouldFilterByOutlet = true;
+        } else {
+          this.shouldFilterByOutlet = false;
+        }
+
+        let data = {
+          organizationId: this.app.organization.id,
+          outletId,
+          customerId,
+          shouldFilterByOutlet: this.shouldFilterByOutlet,
+          shouldFilterByCustomer: this.shouldFilterByCustomer,
+          fromDate,
+          toDate,
+          paymentMethod: (this.paymentMethod === 'all' ? null : (this.paymentMethod || null))
+        };
+
+        this.app.callReportCollectionDetailsApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.collectionList);
+        });
+      }
+
+      customerChanged() {
+        if (!this.customer) return;
+        this.app.storeInSession('last-selected-customer', this.customer);
+      }
+
+      outletChanged() {
+        if (!this.outlet) return;
+        this.app.storeInSession('last-selected-outlet', this.outlet);
+      }
+
+      _processCollectionList(cbfn) {
+        this._fetchCollectionList(newCollectionList => {
+          this.collectionList = newCollectionList;
+          this.collectionSummary = {
+            collectedAmountSum: (newCollectionList.reduce((sum, collection) => (sum + collection.collectedAmount), 0))
+          }
+          cbfn();
+        });
+      }
+
+      _customerSelected(customer) {
+        this.customer = customer;
+        this.isSearchingCustomer = false;
+      }
+
+      _outletSelected(outlet) {
+        this.outlet = outlet;
+        this.isSearchingOutlet = false;
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processCollectionList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processCollectionList(() => this.isReady = true);
+      }
+
+      // region: ui  ===========================
+
+      changeCustomerTapped(e = null) {
+        this.isSearchingCustomer = true;
+      }
+
+      changeOutletTapped(e = null) {
+        this.isSearchingOutlet = true;
+      }
+
+      removeCustomerTapped(e = null) {
+        this.customer = null;
+        this.app.storeInSession('last-selected-customer', null);
+      }
+
+      removeOutletTapped(e = null) {
+        this.outlet = null;
+        this.app.storeInSession('last-selected-outlet', null);
+      }
+
+      viewTapped(e) {
+        let { sale } = e.model;
+        return this.app.navigateTo(`/view-collection/collection:${sale.id}`);
+      }
+
+      filterTapped(e = null) {
+        this.isReady = false;
+        this._processCollectionList(() => {
+          this.isReady = true;
+        });
+      }
+
+      $calculateIndividuallyDiscountedSalePrice(product) {
+        let { salePrice, count } = product;
+        return salePrice;
+      }
+
+      printButtonOnTopBarPressed(e = null) {
+        window.print();
+      }
+
+    }
+
+    window.customElements.define(PageReportCollections.is, PageReportCollections);
+  </script>
+</dom-module>
