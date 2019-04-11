@@ -19,6 +19,8 @@ exports.ReportCollectionDetailsApi = class extends Api {
       shouldFilterByOutlet: Joi.boolean().required(),
       shouldFilterByCustomer: Joi.boolean().required(),
 
+      paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet', null).required(),
+
       fromDate: Joi.number().max(999999999999999).required(),
       toDate: Joi.number().max(999999999999999).required()
     });
@@ -71,27 +73,66 @@ exports.ReportCollectionDetailsApi = class extends Api {
 
   async __getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }) {
     let outletIdList = (await this.database.outlet.listByOrganizationId({ organizationId })).map(outlet => outlet.id);
-    let salesList = await this.database.sales.listByFiltersForCollectionReport({ outletIdList, organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, searchString });
+    let salesList = await this.database.sales.listByFiltersForCollectionReport({ outletIdList, organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate });
     return salesList;
   }
 
-  async __includeCustomerInformation({ salesList }) {
+  async __includeUserInformation({ collectionList }) {
     let map = await this.crossmap({
-      source: salesList,
-      sourceKey: 'customerId',
-      target: 'customer'
+      source: collectionList,
+      sourceKey: 'collectedByUserId',
+      target: 'user'
     });
-    map.forEach((customer, sales) => sales.customer = customer);
+    map.forEach((user, collection) => {
+      let { fullName, phone } = user;
+      collection.collectedByUser = {
+        fullName, phone
+      }
+    });
+  }
+
+  __prepareCollectionDetails({ salesList }) {
+    let collectionList = []
+    salesList.forEach(sales => {
+      sales.payment.paymentList.forEach(payment => {
+        collectionList.push({
+          salesId: sales.id,
+          collectedAmount: payment.paidAmount,
+          collectedByUserId: payment.acceptedByUserId,
+          collectedDatetimeStamp: payment.createdDatetimeStamp,
+          paymentMethod: payment.paymentMethod
+        });
+      });
+    });
+    return collectionList;
+  }
+
+  // NOTE: This is needed in order to avoid the initial payment taken during the creation
+  // of a sale outside current boundary
+  __filterByDateRange({ fromDate, toDate, collectionList }) {
+    return collectionList.filter((collection) => {
+      return fromDate <= collection.collectedDatetimeStamp && collection.collectedDatetimeStamp <= toDate;
+    });
+  }
+
+  __filterByPaymentMethod({ paymentMethod, collectionList }) {
+    if (paymentMethod === null) return collectionList;
+    return collectionList.filter((collection) => {
+      return collection.paymentMethod === paymentMethod;
+    });
   }
 
   async handle({ body }) {
-    let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate} = body;
+    let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, paymentMethod } = body;
     toDate = this.__getExtendedToDate(toDate);
     await this.__verifyOutletIfNeeded({ outletId, shouldFilterByOutlet });
     await this.__verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer });
     let salesList = await this.__getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate });
-    await this.__includeCustomerInformation({ salesList });
-    return { salesList };
+    let collectionList = this.__prepareCollectionDetails({ salesList });
+    collectionList = this.__filterByDateRange({ fromDate, toDate, collectionList });
+    collectionList = this.__filterByPaymentMethod({ paymentMethod, collectionList });
+    await this.__includeUserInformation({ collectionList });
+    return { collectionList };
   }
 
 }

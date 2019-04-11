@@ -1744,3 +1744,31 @@ exports.validateDiscountPresetSchema = (doc) => {
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
 }
+
+
+exports.validateReportCollectionDetailsApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    collectionList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateCollectionSchema = (doc) => {
+  let schema = Joi.object().keys({
+    salesId: Joi.number().max(999999999999999).required(),
+    collectedAmount: Joi.number().max(999999999999999).required(),
+    collectedByUserId: Joi.number().max(999999999999999).required(),
+    collectedDatetimeStamp: Joi.number().max(999999999999999).required(),
+    collectedByUser: Joi.object().keys({
+      fullName: Joi.string().min(1).max(64).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    }),    
+    paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required()
+  });
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+

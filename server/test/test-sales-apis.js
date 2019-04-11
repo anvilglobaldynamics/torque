@@ -43,7 +43,10 @@ let {
 
   validateGetDiscountPresetListApiSuccessResponse,
   validateDiscountPresetSchema,
-  validateAddDiscountPresetApiSuccessResponse
+  validateAddDiscountPresetApiSuccessResponse,
+
+  validateReportCollectionDetailsApiSuccessResponse,
+  validateCollectionSchema
 } = require('./lib');
 
 const prefix = 's';
@@ -127,7 +130,7 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
-describe('Sales', _ => {
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -1724,6 +1727,67 @@ describe('Sales', _ => {
     });
 
   });
+
+  // Collection Report - Start
+
+  it('api/report-collection-details (Valid)', testDoneFn => {
+
+    callApi('api/report-collection-details', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        paymentMethod: null,
+
+        fromDate: monthsEarlierDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateReportCollectionDetailsApiSuccessResponse(body);
+      body.collectionList.forEach(doc => {
+        validateCollectionSchema(doc);
+      });
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-collection-details (Valid, paymentMethod Filter)', testDoneFn => {
+
+    callApi('api/report-collection-details', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        paymentMethod: 'cash',
+
+        fromDate: monthsEarlierDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateReportCollectionDetailsApiSuccessResponse(body);
+      body.collectionList.forEach(doc => {
+        expect(doc.paymentMethod).to.equal('cash')
+        validateCollectionSchema(doc);
+      });
+      testDoneFn();
+    });
+
+  });
+
+  // Collection Report - End
 
   // Service Membership - start
 
