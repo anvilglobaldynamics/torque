@@ -24,7 +24,7 @@
 <link rel="import" href="elem-customer-selector.html">
 <link rel="import" href="elem-outlet-selector.html">
 
-<dom-module id="page-report-sales">
+<dom-module id="page-report-collections">
   <template>
     <style include="shared-styles">
       @media print {
@@ -99,7 +99,7 @@
             <div class="horizontal layout center wrap">
               <div class="flex">
                 <template is="dom-if" if="[[!customer]]">
-                  [[verses.salesReport.noCustomerSelected]]
+                  [[verses.collectionReport.noCustomerSelected]]
                 </template>
                 <template is="dom-if" if="[[customer]]">
                   [[verses.general.customer]]:
@@ -124,7 +124,7 @@
             <div class="horizontal layout center">
               <div class="flex">
                 <template is="dom-if" if="[[!outlet]]">
-                  [[verses.salesReport.noOutletSelected]]
+                  [[verses.collectionReport.noOutletSelected]]
                 </template>
                 <template is="dom-if" if="[[outlet]]">
                   [[verses.general.outlet]]:
@@ -142,8 +142,17 @@
         </template>
         <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
+        <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.collectionReport.paymentMethod]]" class="mr-4">
+          <paper-listbox slot="dropdown-content" selected="{{paymentMethod}}" attr-for-selected="name">
+            <paper-item name="all">[[verses.collectionReport.allPaymentMethods]]</paper-item>
+            <paper-item name="cash">[[verses.general.cash]]</paper-item>
+            <paper-item name="card">[[verses.general.card]]</paper-item>
+            <paper-item name="digital">[[verses.general.digital]]</paper-item>
+            <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+
         <div class="lone-controls">
-          <paper-checkbox checked="{{showProductDetails}}">[[verses.salesReport.showSalesProductDetails]]</paper-checkbox>
           <paper-button raised class="primary" on-tap="filterTapped">
             <iron-icon class="button-icon" icon="icons:find-in-page"></iron-icon>
             [[verses.general.filter]]
@@ -154,7 +163,7 @@
 
       <div class="report">
         <div class="header vertical layout">
-          <div class="name">[[verses.salesReport.salesReportTitle]]</div>
+          <div class="name">[[verses.collectionReport.collectionReportTitle]]</div>
           <div class="date"> [[$mkDate(fromDate, 'dd MMM yyyy')]] [[verses.general.to]] [[$mkDate(toDate, 'dd MMM yyyy')]]</div>
         </div>
         <div class="body">
@@ -162,7 +171,7 @@
           <div class="hr hr-mt"></div>
           <div class="horizontal layout center item wrap">
             <div class="flex">
-              <strong>[[verses.salesReport.total]]</strong>
+              <strong>[[verses.collectionReport.total]]</strong>
             </div>
             <div>
               <strong>[[app.settings.monetaryUnit]]</strong>
@@ -170,42 +179,10 @@
           </div>
           <div class="horizontal layout center item wrap">
             <div class="flex">
-              [[verses.salesReport.billedAmount]]
+              [[verses.collectionReport.collectedAmount]]
             </div>
             <div>
-              <strong>[[salesSummary.billedAmountSum]]</strong>
-            </div>
-          </div>
-          <div class="horizontal layout center item wrap">
-            <div class="flex">
-              [[verses.salesReport.discountedAmount]]
-            </div>
-            <div>
-              <strong>[[salesSummary.discountedAmountSum]]</strong>
-            </div>
-          </div>
-          <div class="horizontal layout center item wrap">
-            <div class="flex">
-              [[verses.salesReport.vat]]
-            </div>
-            <div>
-              <strong>[[salesSummary.vatAmountSum]]</strong>
-            </div>
-          </div>
-          <div class="horizontal layout center item wrap">
-            <div class="flex">
-              [[verses.salesReport.serviceCharge]]
-            </div>
-            <div>
-              <strong>[[salesSummary.serviceChargeAmountSum]]</strong>
-            </div>
-          </div>
-          <div class="horizontal layout center item wrap">
-            <div class="flex">
-              [[verses.salesReport.dueAmount]]
-            </div>
-            <div>
-              <strong>[[salesSummary.dueAmountSum]]</strong>
+              <strong>[[collectionSummary.collectedAmountSum]]</strong>
             </div>
           </div>
           <!-- Summary - End -->
@@ -213,96 +190,35 @@
           <div class="hr hr-mt"></div>
           <div class="horizontal layout center item wrap">
             <div class="flex">
-              <strong>[[verses.salesReport.particulars]]</strong>
+              <strong>[[verses.collectionReport.particulars]]</strong>
             </div>
             <div>
-              <strong>[[verses.salesReport.billedAmount]] ([[app.settings.monetaryUnit]])</strong>
+              <strong>[[verses.collectionReport.collectedAmount]] ([[app.settings.monetaryUnit]])</strong>
             </div>
           </div>
-          <template is="dom-repeat" items="[[salesList]]" as="sales">
+          <template is="dom-repeat" items="[[collectionList]]" as="collection">
             <div class="horizontal layout center item wrap">
               <div class="flex">
                 <div class="id">
-                  <strong>[[verses.salesReport.sales]] #[[sales.id]]</strong> [[$mkDate(sales.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]
+                  <strong>[[verses.collectionReport.sales]] #[[collection.salesId]]</strong> [[$mkDate(collection.collectedDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]
                 </div>
-                <template is="dom-if" if="[[sales.customer]]">
-                  <div class="description">
-                    <strong>[[verses.salesReport.soldTo]]: </strong>[[sales.customer.fullName]] ([[sales.customer.phone]])
-                  </div>
-                </template>
-
-                <template is="dom-if" if="[[!showProductDetails]]">
-                  <template is="dom-if" if="[[sales.productList.length]]">
-                    <div class="description">[[sales.productList.length]] [[verses.salesReport.products]]</div>
-                  </template>
-
-                  <template is="dom-if" if="[[sales.serviceList.length]]">
-                    <div class="description">[[sales.serviceList.length]] [[verses.salesReport.services]]</div>
-                  </template>
-                </template>
-
-                <template is="dom-if" if="[[showProductDetails]]">
-                  <template is="dom-if" if="[[sales.productList.length]]">
-                    <strong>[[verses.salesReport.products]]:</strong>
-                    <template is="dom-repeat" items="[[sales.productList]]" as="product">
-                      <div class="description">[[product.productBlueprint.name]]: [[product.count]] [[product.productBlueprint.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]</div>
-                    </template>
-                  </template>
-
-                  <template is="dom-if" if="[[sales.serviceList.length]]">
-                    <strong>[[verses.salesReport.services]]:</strong>
-                    <template is="dom-repeat" items="[[sales.serviceList]]" as="service">
-                      <div class="description">[[service.serviceBlueprint.name]]: [[service.salePrice]] [[app.settings.monetaryUnit]]</div>
-                    </template>
-                  </template>
-
-                  <div class="description">
-                    <strong>[[verses.salesReport.total]]:</strong>
-                    <template is="dom-if" if="[[sales.productList.length]]">
-                      [[sales.productList.length]] [[verses.salesReport.products]]
-                    </template>
-                    <template is="dom-if" if="[[sales.serviceList.length]]">
-                      [[sales.serviceList.length]] [[verses.salesReport.services]]
-                    </template>
-                  </div>
-
-                  <template is="dom-if" if="[[sales.payment.discountedAmount]]">
-                    <div class="description">
-                      <strong>[[verses.salesReport.discountedAmount]]: </strong>[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</div>
-                  </template>
-                  <template is="dom-if" if="[[sales.payment.vatAmount]]">
-                    <div class="description">
-                      <strong>[[verses.salesReport.vat]]: </strong>[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</div>
-                  </template>
-                  <template is="dom-if" if="[[sales.payment.serviceChargeAmount]]">
-                    <div class="description">
-                      <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</div>
-                  </template>
-                  <template is="dom-if" if="[[sales.payment.dueAmount]]">
-                    <div class="description">
-                      <strong>[[verses.salesReport.dueAmount]]: </strong>[[$round(sales.payment.dueAmount)]] [[app.settings.monetaryUnit]]</div>
-                  </template>
-                </template>
-
+                <div class="description">
+                  <strong>[[verses.collectionReport.collectedBy]]: </strong>[[collection.collectedByUser.fullName]] ([[collection.collectedByUser.phone]])
+                </div>
+                <div class="description">
+                  <strong>[[verses.collectionReport.paymentMethod]]: </strong>[[collection.paymentMethod]]
+                </div>
               </div>
-              <div class="description">[[$round(sales.payment.totalBilled)]]</div>
+              <div class="description">[[$round(collection.collectedAmount)]]</div>
             </div>
           </template>
-          <!-- <div class="horizontal layout center item wrap">
-            <div class="flex">
-              <strong>[[verses.salesReport.total]]</strong>
-            </div>
-            <div>
-              <strong>[[salesSummary.billedAmountSum]]</strong>
-            </div>
-          </div> -->
           <!-- Detailed - End -->
         </div>
         <div class="vertical layout">
           <div class="horizontal layout wrap">
             <div class="flex"></div>
             <div>
-              <div class="author-title">[[verses.salesReport.author]]: [[app.user.fullName]]</div>
+              <div class="author-title">[[verses.collectionReport.author]]: [[app.user.fullName]]</div>
               <div>[[app.organization.employment.designation]]</div>
               <div>[[app.organization.employment.companyProvidedId]]</div>
             </div>
@@ -314,9 +230,9 @@
   </template>
 
   <script>
-    class PageReportSales extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+    class PageReportCollections extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
       static get is() {
-        return 'page-report-sales';
+        return 'page-report-collections';
       }
 
       static get properties() {
@@ -374,6 +290,10 @@
             value: null,
             observer: 'outletChanged'
           },
+          paymentMethod: {
+            type: String,
+            value: 'all'
+          },
           showProductDetails: {
             type: Boolean,
             value: true
@@ -393,9 +313,9 @@
         this.app.currentPageIsModal = false;
         this.app.shouldShowPrintButton = true;
         this.useLanguageServices();
-        this.app.pushPageTitle(this.app.verses.salesReport.salesReportTitle);
+        this.app.pushPageTitle(this.app.verses.collectionReport.collectionReportTitle);
         if (!this._ensureAccess()) return;
-        this._processSalesList(() => {
+        this._processCollectionList(() => {
           console.log(this.app.organization);
           if ('outlet' in this.params) {
             this.isSearchingOutlet = true;
@@ -419,7 +339,7 @@
         });
       }
 
-      _fetchSalesList(cbfn) {
+      _fetchCollectionList(cbfn) {
         if (!this.fromDate) {
           this.resetProperties('fromDate');
         }
@@ -453,15 +373,14 @@
           shouldFilterByCustomer: this.shouldFilterByCustomer,
           fromDate,
           toDate,
-          // paginate: this.paginate,
-          includeExtendedInformation: true
+          paymentMethod: (this.paymentMethod === 'all' ? null : (this.paymentMethod || null))
         };
 
-        this.app.callGetSalesListApi(data, (err, response) => {
+        this.app.callReportCollectionDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.pagination = response.pagination;
-          return cbfn(response.salesList);
+          return cbfn(response.collectionList);
         });
       }
 
@@ -475,18 +394,11 @@
         this.app.storeInSession('last-selected-outlet', this.outlet);
       }
 
-      _processSalesList(cbfn) {
-        this._fetchSalesList(newSalesList => {
-          newSalesList.forEach(sales => {
-            sales.payment.dueAmount = (Math.max(sales.payment.totalBilled - sales.payment.totalPaidAmount, 0));
-          });
-          this.salesList = newSalesList;
-          this.salesSummary = {
-            billedAmountSum: (newSalesList.reduce((sum, sales) => (sum + sales.payment.totalBilled), 0)),
-            discountedAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.discountedAmount || 0)), 0)),
-            vatAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.vatAmount || 0)), 0)),
-            serviceChargeAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.serviceChargeAmount || 0)), 0)),
-            dueAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.dueAmount || 0)), 0))
+      _processCollectionList(cbfn) {
+        this._fetchCollectionList(newCollectionList => {
+          this.collectionList = newCollectionList;
+          this.collectionSummary = {
+            collectedAmountSum: (newCollectionList.reduce((sum, collection) => (sum + collection.collectedAmount), 0))
           }
           cbfn();
         });
@@ -505,13 +417,13 @@
       showMoreTapped(e = null) {
         this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
         this.isReady = false;
-        this._processSalesList(() => this.isReady = true);
+        this._processCollectionList(() => this.isReady = true);
       }
 
       showPreviousTapped(e = null) {
         this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
         this.isReady = false;
-        this._processSalesList(() => this.isReady = true);
+        this._processCollectionList(() => this.isReady = true);
       }
 
       // region: ui  ===========================
@@ -536,12 +448,12 @@
 
       viewTapped(e) {
         let { sale } = e.model;
-        return this.app.navigateTo(`/view-sales/sales:${sale.id}`);
+        return this.app.navigateTo(`/view-collection/collection:${sale.id}`);
       }
 
       filterTapped(e = null) {
         this.isReady = false;
-        this._processSalesList(() => {
+        this._processCollectionList(() => {
           this.isReady = true;
         });
       }
@@ -557,6 +469,6 @@
 
     }
 
-    window.customElements.define(PageReportSales.is, PageReportSales);
+    window.customElements.define(PageReportCollections.is, PageReportCollections);
   </script>
 </dom-module>
