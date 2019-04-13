@@ -76,6 +76,10 @@
         padding-bottom: 4px;
         border-bottom: 1px dotted rgb(131, 131, 131);
       }
+
+      .date-span {
+        font-size: 12px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -142,15 +146,17 @@
         </template>
         <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
-        <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.collectionReport.paymentMethod]]" class="mr-4">
-          <paper-listbox slot="dropdown-content" selected="{{paymentMethod}}" attr-for-selected="name">
-            <paper-item name="all">[[verses.collectionReport.allPaymentMethods]]</paper-item>
-            <paper-item name="cash">[[verses.general.cash]]</paper-item>
-            <paper-item name="card">[[verses.general.card]]</paper-item>
-            <paper-item name="digital">[[verses.general.digital]]</paper-item>
-            <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
-          </paper-listbox>
-        </paper-dropdown-menu>
+        <div class="card vertical layout">
+          <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.collectionReport.paymentMethod]]" class="mr-4">
+            <paper-listbox slot="dropdown-content" selected="{{paymentMethod}}" attr-for-selected="name">
+              <paper-item name="all">[[verses.collectionReport.allPaymentMethods]]</paper-item>
+              <paper-item name="cash">[[verses.general.cash]]</paper-item>
+              <paper-item name="card">[[verses.general.card]]</paper-item>
+              <paper-item name="digital">[[verses.general.digital]]</paper-item>
+              <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </div>
 
         <div class="lone-controls">
           <paper-button raised class="primary" on-tap="filterTapped">
@@ -200,7 +206,7 @@
             <div class="horizontal layout center item wrap">
               <div class="flex">
                 <div class="id">
-                  <strong>[[verses.collectionReport.sales]] #[[collection.salesId]]</strong> [[$mkDate(collection.collectedDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]
+                  <strong>[[verses.collectionReport.sales]] #[[collection.salesId]]</strong><span class="date-span"> [[$mkDate(collection.collectedDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</span>
                 </div>
                 <div class="description">
                   <strong>[[verses.collectionReport.collectedBy]]: </strong>[[collection.collectedByUser.fullName]] ([[collection.collectedByUser.phone]])

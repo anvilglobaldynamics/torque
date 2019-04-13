@@ -689,7 +689,7 @@
     "showSalesProductDetails": "Show Sales and Product Details",
     "author": "Author",
     "particulars": "Particulars",
-    "billedAmount": "Billed Amount",
+    "billedAmount": "Billed",
     "sales": "Sales",
     "soldTo": "Sold To",
     "products": "Product(s)",
@@ -933,12 +933,11 @@
   },
   "collectionReport": {
     "collectionReportTitle": "Collection Report",
-    "collectedAmount": "Collected Amount",
+    "collectedAmount": "Collected",
     "sales": "Sales",
     "collectedBy": "Collected By",
     "paymentMethod": "Payment Method",
     "allPaymentMethods": "All",
-
     "author": "Author",
     "particulars": "Particulars",
     "noCustomerSelected": "No customer selected (Anonymous Sale)",
@@ -948,6 +947,5 @@
     "removeOutlet": "Remove Outlet",
     "changeOutlet": "Change Outlet",
     "total": "Total"
-
   }
 }

@@ -690,7 +690,7 @@
     "showSalesProductDetails": "বিক্রয় এবং পণ্যের বিবরণ দেখান হোক",
     "author": "রচক",
     "particulars": "বিবরণ",
-    "billedAmount": "বিল পরিমান",
+    "billedAmount": "বিল",
     "sales": "বিক্রয়",
     "soldTo": "গ্রাহক",
     "products": "পণ্য",
@@ -934,12 +934,11 @@
   },
   "collectionReport": {
     "collectionReportTitle": "সংগ্রহ বিবরণ",
-    "collectedAmount": "সংগৃহীত পরিমাণ",
+    "collectedAmount": "সংগৃহীত",
     "sales": "বিক্রয়",
     "collectedBy": "সংগ্রহকারী",
     "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
-    "allPaymentMethods": "সব",
-
+    "allPaymentMethods": "সকল",
     "author": "রচক",
     "particulars": "বিবরণ",
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
