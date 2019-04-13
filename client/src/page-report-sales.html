@@ -73,8 +73,12 @@
       .report .body .item {
         margin-top: 4px;
         margin-bottom: 4px;
-        padding-bottom: 4px;
+      }
+
+      .ul {
+        height: 1px;
         border-bottom: 1px dotted rgb(131, 131, 131);
+        margin-bottom: 3px;
       }
     </style>
 
@@ -168,6 +172,7 @@
               <strong>[[app.settings.monetaryUnit]]</strong>
             </div>
           </div>
+          <div class="ul"></div>
           <div class="horizontal layout center item wrap">
             <div class="flex">
               [[verses.salesReport.billedAmount]]
@@ -176,6 +181,7 @@
               <strong>[[salesSummary.billedAmountSum]]</strong>
             </div>
           </div>
+          <div class="ul"></div>
           <div class="horizontal layout center item wrap">
             <div class="flex">
               [[verses.salesReport.discountedAmount]]
@@ -184,6 +190,7 @@
               <strong>[[salesSummary.discountedAmountSum]]</strong>
             </div>
           </div>
+          <div class="ul"></div>
           <div class="horizontal layout center item wrap">
             <div class="flex">
               [[verses.salesReport.vat]]
@@ -192,6 +199,7 @@
               <strong>[[salesSummary.vatAmountSum]]</strong>
             </div>
           </div>
+          <div class="ul"></div>
           <div class="horizontal layout center item wrap">
             <div class="flex">
               [[verses.salesReport.serviceCharge]]
@@ -200,6 +208,7 @@
               <strong>[[salesSummary.serviceChargeAmountSum]]</strong>
             </div>
           </div>
+          <div class="ul"></div>
           <div class="horizontal layout center item wrap">
             <div class="flex">
               [[verses.salesReport.dueAmount]]
@@ -220,6 +229,7 @@
             </div>
           </div>
           <template is="dom-repeat" items="[[salesList]]" as="sales">
+            <div class="ul"></div>
             <div class="horizontal layout center item wrap">
               <div class="flex">
                 <div class="id">

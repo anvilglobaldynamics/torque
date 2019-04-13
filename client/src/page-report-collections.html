@@ -73,8 +73,12 @@
       .report .body .item {
         margin-top: 4px;
         margin-bottom: 4px;
-        padding-bottom: 4px;
+      }
+
+      .ul {
+        height: 1px;
         border-bottom: 1px dotted rgb(131, 131, 131);
+        margin-bottom: 3px;
       }
 
       .date-span {
@@ -183,6 +187,7 @@
               <strong>[[app.settings.monetaryUnit]]</strong>
             </div>
           </div>
+          <div class="ul"></div>
           <div class="horizontal layout center item wrap">
             <div class="flex">
               [[verses.collectionReport.collectedAmount]]
@@ -203,6 +208,7 @@
             </div>
           </div>
           <template is="dom-repeat" items="[[collectionList]]" as="collection">
+            <div class="ul"></div>
             <div class="horizontal layout center item wrap">
               <div class="flex">
                 <div class="id">
