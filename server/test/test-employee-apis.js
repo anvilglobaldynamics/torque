@@ -362,7 +362,7 @@ describe('Employee', _ => {
     callApi('api/find-user', {
       json: {
         apiKey,
-        emailOrPhone: 'test@test.com'
+        emailOrPhone: 'unusedemail@email.com'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
