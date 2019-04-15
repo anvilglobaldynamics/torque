@@ -143,6 +143,7 @@
     "serviceMembership": "Service Memberships",
     "customers": "Customers",
     "salesReport": "Sales Report",
+    "collectionReport": "Collection Report",
     "inventoryReport": "Inventories Report",
     "profile": "Profile",
     "settings": "Settings",
@@ -626,7 +627,7 @@
     "accessDeniedDescription": "You do not have access to this feature."
   },
   "pos": {
-    "posPageTitle": "New Sales",
+    "posPageTitle": "POS",
     "newSalesAdded": "New Sales has been added.",
     "noCustomerSelected": "No customer selected (Anonymous Sale)",
     "removeCustomer": "Remove",
@@ -673,7 +674,8 @@
     "submitOfflineSales": "Sync",
     "createdOfflineSaleDatetime": "Created",
     "assignedEmployee": "assigned",
-    "assignEmployee": "assign"
+    "assignEmployee": "assign",
+    "noDiscountApplicable": "Not Applicable"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
@@ -687,15 +689,16 @@
     "showSalesProductDetails": "Show Sales and Product Details",
     "author": "Author",
     "particulars": "Particulars",
-    "billedAmount": "Billed Amount",
+    "billedAmount": "Billed",
     "sales": "Sales",
     "soldTo": "Sold To",
-    "products": "product(s)",
-    "services": "service(s)",
+    "products": "Product(s)",
+    "services": "Service(s)",
     "total": "Total",
-    "discountedAmount": "Discounted Amount",
+    "discountedAmount": "Discount",
     "vat": "VAT",
     "serviceCharge": "Service Charge",
+    "dueAmount": "Due",
     "previousBalance": "Previous Balance"
   },
   "inventoriesReport": {
@@ -927,5 +930,22 @@
     "deleteQuestion": "Delete discount preset?",
     "deleteQuestionMessage": "Are you sure you want to delete this discount preset",
     "discountPresetNameInput": "Discount Preset Name"
+  },
+  "collectionReport": {
+    "collectionReportTitle": "Collection Report",
+    "collectedAmount": "Collected",
+    "sales": "Sales",
+    "collectedBy": "Collected By",
+    "paymentMethod": "Payment Method",
+    "allPaymentMethods": "All",
+    "author": "Author",
+    "particulars": "Particulars",
+    "noCustomerSelected": "No customer selected (Anonymous Sale)",
+    "removeCustomer": "Remove Customer",
+    "changeCustomer": "Change Customer",
+    "noOutletSelected": "No outlet selected (Anonymous Sale)",
+    "removeOutlet": "Remove Outlet",
+    "changeOutlet": "Change Outlet",
+    "total": "Total"
   }
 }

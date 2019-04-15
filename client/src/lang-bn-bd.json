@@ -143,6 +143,7 @@
     "serviceMembership": "সেবার সদস্যপদ",
     "customers": "গ্রাহক",
     "salesReport": "বিক্রয় রিপোর্টস",
+    "collectionReport": "সংগ্রহ রিপোর্ট",
     "inventoryReport": "পণ্য তালিকা রিপোর্টস",
     "profile": "প্রোফাইল",
     "settings": "সেটিংস",
@@ -628,7 +629,7 @@
     "accessDeniedDescription": "আপনার এই ফীচারটির এক্সেস নাই। "
   },
   "pos": {
-    "posPageTitle": "নতুন বিক্রয়",
+    "posPageTitle": "বিক্রয়কেন্দ্র",
     "newSalesAdded": "নতুন বিক্রয় যুক্ত করা হয়েছে।",
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
     "removeCustomer": "সরান",
@@ -675,7 +676,8 @@
     "showHideButton": "দেখুন",
     "createdOfflineSaleDatetime": "তৈরি",
     "assignedEmployee": "দায়িত্ব দেন",
-    "assignEmployee": "দায়িত্ব দেয়া"
+    "assignEmployee": "দায়িত্ব দেয়া",
+    "noDiscountApplicable": "প্রযোজ্য নয়"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",
@@ -688,15 +690,16 @@
     "showSalesProductDetails": "বিক্রয় এবং পণ্যের বিবরণ দেখান হোক",
     "author": "রচক",
     "particulars": "বিবরণ",
-    "billedAmount": "বিল পরিমান",
+    "billedAmount": "বিল",
     "sales": "বিক্রয়",
     "soldTo": "গ্রাহক",
     "products": "পণ্য",
     "services": "সেবা",
     "total": "মোট",
-    "discountedAmount": "ছাড়ের পরিমান",
+    "discountedAmount": "ছাড়",
     "vat": "ভ্যাট",
     "serviceCharge": "সেবা মূল্য",
+    "dueAmount": "বাকি",
     "previousBalance": "পূর্বের হিসাব"
   },
   "inventoriesReport": {
@@ -928,5 +931,22 @@
     "deleteQuestion": "প্রিসেট মুছে ফেলুন?",
     "deleteQuestionMessage": "আপনি কি ডিসকাউন্ট প্রিসেটটি মুছে ফেলতে চান?",
     "discountPresetNameInput": "ডিসকাউন্ট প্রিসেটের নাম "
+  },
+  "collectionReport": {
+    "collectionReportTitle": "সংগ্রহ বিবরণ",
+    "collectedAmount": "সংগৃহীত",
+    "sales": "বিক্রয়",
+    "collectedBy": "সংগ্রহকারী",
+    "paymentMethod": "মূল্যপরিশোধ পদ্ধতি",
+    "allPaymentMethods": "সকল",
+    "author": "রচক",
+    "particulars": "বিবরণ",
+    "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
+    "removeCustomer": "গ্রাহক সরান",
+    "changeCustomer": "গ্রাহক পরিবর্তন করুন",
+    "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি",
+    "removeOutlet": "দোকান সরান",
+    "changeOutlet": "দোকান পরিবর্তন করুন",
+    "total": "মোট"
   }
 }

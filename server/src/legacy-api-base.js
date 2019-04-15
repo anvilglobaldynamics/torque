@@ -14,7 +14,7 @@ const languageCache = {
   'bn-bd': require('./languages/bn-bd').verses
 };
 
-const SESSION_DURATION_LIMIT = 15 * 24 * 60 * 60 * 1000;
+const SESSION_DURATION_LIMIT = 12 * 60 * 60 * 1000;
 
 const _restrictedErrorCodeList = [
   "INTERNAL_SERVER_ERROR"

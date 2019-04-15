@@ -321,7 +321,7 @@
 
                   <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discount]]" class="mr-4">
                     <paper-listbox slot="dropdown-content" selected="{{selectedDiscountPreset}}" attr-for-selected="name">
-                      <paper-item name="--no-discount">No Discount</paper-item>
+                      <paper-item name="--no-discount">[[verses.pos.noDiscountApplicable]]</paper-item>
                       <template is="dom-repeat" items="[[discountPresetList]]" as="discountPreset">
                         <paper-item name="[[discountPreset.id]]">
                           <div class="name">[[discountPreset.name]]</div>
