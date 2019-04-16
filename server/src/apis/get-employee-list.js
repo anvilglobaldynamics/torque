@@ -44,6 +44,7 @@ exports.GetEmployeeListApi = class extends Api {
     return employeeList;
   }
 
+  // TODO: add search by phone number feature
   _searchCombineEmployeeList({ employeeList, searchString }) {
     employeeList = employeeList.filter(employee => {
       searchString = this.escapeRegExp(searchString.toLowerCase());
