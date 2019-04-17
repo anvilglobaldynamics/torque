@@ -186,7 +186,11 @@
           throw new Error("Organization is not loaded!");
         }
         if (!(this.app.organization.id in settings.backgroundSyncMetaMap)) {
-          settings.backgroundSyncMetaMap[this.app.organization.id] = null;
+          settings.backgroundSyncMetaMap[this.app.organization.id] = { 
+            outletId: null,
+            backgroundSync: false,
+            bypassHomepage: false
+          };
         }
         return settings;
       }

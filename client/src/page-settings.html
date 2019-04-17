@@ -279,8 +279,8 @@
           this.outletList = newOutletList;
 
           let settings = this._getNormalizedSettings();
-          let id = settings.backgroundSyncMetaMap[this.app.organization.id];
-          this.outletIndexForBackgroundSync = this.outletList.findIndex(outlet => outlet.id === id);
+          let outletId = settings.backgroundSyncMetaMap[this.app.organization.id].outletId;
+          this.outletIndexForBackgroundSync = this.outletList.findIndex(outlet => outlet.id === outletId);
           cbfn();
         });
       }
@@ -316,15 +316,16 @@
       settingsChanged(e) {
         let settings = this._getNormalizedSettings();
 
-        let id = null;
+        let outletId = null;
         try {
           if (this.outletList.length > 0 && this.outletIndexForBackgroundSync !== null && (typeof this.outletIndexForBackgroundSync) !== 'undefined') {
-            id = this.outletList[this.outletIndexForBackgroundSync].id;
+            outletId = this.outletList[this.outletIndexForBackgroundSync].id;
           }
         } catch (ex) {
           'pass'
         }
-        settings.backgroundSyncMetaMap[this.app.organization.id] = id;
+        settings.backgroundSyncMetaMap[this.app.organization.id].outletId = outletId;
+        console.log(settings)
 
         if (this.monetaryUnit === '') {
           this.monetaryUnit = 'BDT';

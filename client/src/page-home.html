@@ -265,7 +265,7 @@
         this.shouldPromptForDefaultOutlet = false;
         if (!allComponentsReady) return;
         let settings = this._getNormalizedSettings();
-        let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+        let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id].outletId;
         if (this.$notSelected(defaultOutletId)) {
           this.shouldPromptForDefaultOutlet = true;
         }
