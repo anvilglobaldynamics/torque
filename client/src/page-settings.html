@@ -279,7 +279,7 @@
           this.outletList = newOutletList;
 
           let settings = this._getNormalizedSettings();
-          let outletId = settings.backgroundSyncMetaMap[this.app.organization.id].outletId;
+          let outletId = settings.defaultOutletMetaMap[this.app.organization.id].outletId;
           this.outletIndexForBackgroundSync = this.outletList.findIndex(outlet => outlet.id === outletId);
           cbfn();
         });
@@ -324,7 +324,7 @@
         } catch (ex) {
           'pass'
         }
-        settings.backgroundSyncMetaMap[this.app.organization.id].outletId = outletId;
+        settings.defaultOutletMetaMap[this.app.organization.id].outletId = outletId;
         console.log(settings)
 
         if (this.monetaryUnit === '') {
@@ -338,7 +338,7 @@
           doc.shouldUseWebsockets = this.shouldUseWebsockets;
           doc.monetaryUnit = this.monetaryUnit;
           doc.minimumProductQuantity = this.minimumProductQuantity;
-          doc.backgroundSyncMetaMap = settings.backgroundSyncMetaMap;
+          doc.defaultOutletMetaMap = settings.defaultOutletMetaMap;
           doc.defaultPrinterFormat = this.printerFormatOptionList[this.indexOfDefaultPrinterFormat];
           return doc
         });
