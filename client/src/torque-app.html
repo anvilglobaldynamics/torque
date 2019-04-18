@@ -978,6 +978,7 @@
         let defaultOutletMeta = settings.defaultOutletMetaMap[this.app.organization.id];
         let defaultOutletId = defaultOutletMeta.outletId;
         if (this.$notSelected(defaultOutletId)) return cbfn(false);
+        if (!defaultOutletMeta.allowBackgroundSync) return cbfn(false);
 
         const onApiError = (error) => {
           return cbfn(false);

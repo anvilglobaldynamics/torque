@@ -140,7 +140,7 @@
       selectTapped(e) {
         let { organization } = e.model;
         this.app.saveOrganization(organization);
-        return this.app.navigateTo('/home');
+        return this.app.navigateTo('/home/bypassable:yes');
       }
 
       // region: misc =================================
