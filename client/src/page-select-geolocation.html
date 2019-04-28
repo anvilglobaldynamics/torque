@@ -132,7 +132,7 @@
         // NOTE: this callback is completely unreliable. This isn't called
         // everytime good-map is initialized. It's only called when google
         // maps is initialized. (i.e. only once in the app's lifecycle)
-        console.log("mapReady");
+
         this.isGoogleReady = true;
       }
 
@@ -196,7 +196,6 @@
       }
 
       _initiateMap() {
-        console.log('_initiateMap');
         this.map = this.elem('good-map').map;
         this.address = sessionStorage.getItem('page-select-geolocation:address') || 'Dhaka';
 
@@ -207,14 +206,10 @@
           'pass'
         }
 
-        console.log('_initiateMap->mapLoaded');
-
         if (previousLocation) {
-          console.log('_initiateMap->setting previous location', previousLocation);
           this.map.setCenter(previousLocation);
           this._setOrSpawnMarker(previousLocation);
         } else {
-          console.log('_initiateMap->_searchByAddress', this.address);
           this._searchByAddress();
         }
 

@@ -234,7 +234,6 @@
 
       _fetchInventoryDetailsOffline(cbfn) {
         window.setTimeout(() => {
-          // console.log(this.app.offlineData.cache.getAggregatedInventoryDetails)
           let response = JSON.parse(JSON.stringify(this.app.offlineData.cache.getAggregatedInventoryDetails));
 
           let searchString = String(this.searchString);

@@ -204,7 +204,6 @@
 
       _fetchOutletServiceListOffline(cbfn) {
         window.setTimeout(() => {
-          // console.log(this.app.offlineData.cache.getActiveServiceList)
           let response = JSON.parse(JSON.stringify(this.app.offlineData.cache.getActiveServiceList));
 
           let searchString = String(this.searchString);
