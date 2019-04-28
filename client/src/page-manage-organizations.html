@@ -140,6 +140,7 @@
       selectTapped(e) {
         let { organization } = e.model;
         this.app.saveOrganization(organization);
+        this.app.wasLastNavigationBypassed = false;
         return this.app.navigateTo('/home/bypassable:yes');
       }
 

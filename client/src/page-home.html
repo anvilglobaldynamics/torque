@@ -281,11 +281,12 @@
         this.onSettingsChange(this.app.settings);
         this.useLanguageServices();
         this._processOrganizationList(() => {
-          if ('bypassable' in this.params && this.params.bypassable === 'yes') {
+          if ('bypassable' in this.params && this.params.bypassable === 'yes' && !this.app.wasLastNavigationBypassed) {
             try {
               let settings = this._getNormalizedSettings();
               let { outletId, bypassHomepage } = settings.defaultOutletMetaMap[this.app.organization.id];
               if (bypassHomepage) {
+                this.app.wasLastNavigationBypassed = true;
                 this.app.navigateTo(`/pos/outlet:${outletId}`);
                 return;
               }
