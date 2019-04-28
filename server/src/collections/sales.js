@@ -56,6 +56,8 @@ exports.SalesCollection = class extends Collection {
         )
       }),
 
+      assistedByEmployeeId: Joi.number().min(0).max(999999999999999).allow(null).required(),
+
       wasOfflineSale: Joi.boolean().required(),
       isModified: Joi.boolean().required(),
       isDeleted: Joi.boolean().required(),
@@ -86,12 +88,13 @@ exports.SalesCollection = class extends Collection {
   // NOTE: commented out, because currently we don't support deleting sales.
   // get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ outletId, customerId, productList, serviceList, payment, wasOfflineSale = false }) {
+  async create({ outletId, customerId, productList, serviceList, payment, assistedByEmployeeId, wasOfflineSale = false }) {
     return await this._insert({
       outletId,
       customerId,
       productList,
       serviceList,
+      assistedByEmployeeId,
       payment,
 
       wasOfflineSale,

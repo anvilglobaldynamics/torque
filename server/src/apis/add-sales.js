@@ -36,7 +36,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
           assignedEmploymentId: Joi.number().max(999999999999999).allow(null).required()
         })
       ),
-
+      
       payment: Joi.object().required().keys({
         totalAmount: Joi.number().max(999999999999999).required(), // means total sale price of all products
         vatAmount: Joi.number().max(999999999999999).required(),
@@ -46,13 +46,15 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
         discountedAmount: Joi.number().max(999999999999999).required(),
         serviceChargeAmount: Joi.number().max(999999999999999).required(),
         totalBilled: Joi.number().max(999999999999999).required(), // this is the final amount customer has to pay (regardless of the method)
-
+        
         // NOTE: below is a single payment.
         paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
         paidAmount: Joi.number().max(999999999999999).required(),
         changeAmount: Joi.number().max(999999999999999).required(),
         shouldSaveChangeInAccount: Joi.boolean().required()
       }),
+      
+      assistedByEmployeeId: Joi.number().min(0).max(999999999999999).allow(null).required(),
 
       wasOfflineSale: Joi.boolean().required()
 
@@ -181,7 +183,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
   }
 
   async handle({ userId, body }) {
-    let { outletId, customerId, productList, serviceList, payment: originalPayment } = body;
+    let { outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment } = body;
 
     if (!productList.length && !serviceList.length) {
       throw new CodedError("NO_PRODUCT_OR_SERVICE_SELECTED", "Both productList and serviceList can not be empty.");
@@ -206,7 +208,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
 
     payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
 
-    let salesId = await this.database.sales.create({ outletId, customerId, productList, serviceList, payment });
+    let salesId = await this.database.sales.create({ outletId, customerId, productList, serviceList, assistedByEmployeeId, payment });
 
     if (serviceList.length) {
       for (let i = 0; i < serviceList.length; i++) {
