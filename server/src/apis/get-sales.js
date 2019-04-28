@@ -90,6 +90,13 @@ exports.GetSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin, Servic
     });
   }
 
+  async __addDiscountPresetName({ sales }) {
+    sales.payment.discountPresetName = '';
+    if (sales.payment.discountPresetId === null) return;
+    let discountPreset = await this.database.discountPreset.findById({ id: sales.payment.discountPresetId });
+    sales.payment.discountPresetName = discountPreset.name;
+  }
+
   async handle({ body }) {
     let { salesId } = body;
 
@@ -99,6 +106,8 @@ exports.GetSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin, Servic
     await this._addProductBlueprintData({ sales });
 
     await this._addServiceBlueprintData({ sales });
+
+    await this.__addDiscountPresetName({ sales });
 
     return {
       sales
