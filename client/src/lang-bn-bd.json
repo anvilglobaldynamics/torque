@@ -951,5 +951,8 @@
     "removeOutlet": "দোকান সরান",
     "changeOutlet": "দোকান পরিবর্তন করুন",
     "total": "মোট"
+  },
+  "posAssignEmployeeService": {
+    "searchFieldTips": "নাম অথবা ফোন দিয়ে খুজুন"
   }
 }

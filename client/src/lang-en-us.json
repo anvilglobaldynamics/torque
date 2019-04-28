@@ -950,5 +950,8 @@
     "removeOutlet": "Remove Outlet",
     "changeOutlet": "Change Outlet",
     "total": "Total"
+  },
+  "posAssignEmployeeService": {
+    "searchFieldTips": "Serch by name or phone"
   }
 }
