@@ -123,7 +123,7 @@ exports.GetSalesListApi = class extends Api {
     let discountedSalesList = salesList.filter(sales => sales.payment.discountPresetId !== null);
     let map = await this.crossmap({
       source: discountedSalesList,
-      sourceKey: (sales) => sales.payment.discountPresetId,
+      sourceKeyFn: (sales) => sales.payment.discountPresetId,
       target: 'discountPreset'
     });
     map.forEach((discountPreset, sales) => sales.payment.discountPresetName = discountPreset.name);
