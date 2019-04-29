@@ -70,7 +70,7 @@
           <paper-button class="primary flex" on-tap="outgoingSmsesTapped">Outgoing SMSes</paper-button>
         </div>
         <div class="card vertical layout flex center">
-
+            <paper-button class="primary flex" on-tap="outgoingEmailsTapped">Outgoing Emails</paper-button>
         </div>
         <div class="card vertical layout flex center">
 
@@ -139,6 +139,11 @@
       outgoingSmsesTapped(e = null) {
         this.app.navigateTo('/outgoing-smses');
       }
+
+      outgoingEmailsTapped(e = null) {
+        this.app.navigateTo('/outgoing-emails');
+      }
+      
       // region: misc =================================
 
     }

@@ -44,7 +44,7 @@ let org1id = null;
 let org2id = null;
 let packageActivationId = null;
 
-describe('Admin', _ => {
+describe.only('Admin', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -221,6 +221,119 @@ describe('Admin', _ => {
     });
 
   });
+
+  // -- outgoing-email - start
+
+  let outgoingEmailList = [];
+
+  it.skip('api/admin-get-outgoing-email-list (Valid Date)', testDoneFn => {
+
+    let dateString = new Date().toISOString().slice(0, 10);
+    let date = new Date(dateString).getTime();
+
+    callApi('api/admin-get-outgoing-email-list', {
+      json: {
+        apiKey,
+        date
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('outgoingEmailList').that.is.an('array');
+      expect(body.outgoingEmailList.length > 0).to.equal(true);
+      expect(body.outgoingEmailList.some(outgoingEmail => {
+        return outgoingEmail.to === phone;
+      })).to.equal(true);
+      outgoingEmailList = body.outgoingEmailList;
+      testDoneFn();
+    });
+
+  });
+
+  it.skip('api/admin-set-outgoing-email-status (Valid SMS Id, status: sent)', testDoneFn => {
+
+    let status = 'sent';
+    let outgoingEmailId = outgoingEmailList.find(outgoingEmail => outgoingEmail.to === phone).id;
+
+    callApi('api/admin-set-outgoing-email-status', {
+      json: {
+        apiKey,
+        status,
+        outgoingEmailId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    });
+
+  });
+
+  it.skip('api/admin-set-outgoing-email-status (Valid SMS Id, status: random)', testDoneFn => {
+
+    let status = 'random';
+    let outgoingEmailId = outgoingEmailList.find(outgoingEmail => outgoingEmail.to === phone).id;
+
+    callApi('api/admin-set-outgoing-email-status', {
+      json: {
+        apiKey,
+        status,
+        outgoingEmailId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('VALIDATION_ERROR');
+      testDoneFn();
+    });
+
+  });
+
+  it.skip('api/admin-set-outgoing-email-status (Invalid SMS Id, status: sent)', testDoneFn => {
+
+    let status = 'sent';
+    let outgoingEmailId = 9559599;
+
+    callApi('api/admin-set-outgoing-email-status', {
+      json: {
+        apiKey,
+        status,
+        outgoingEmailId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('OUTGOING_SMS_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it.skip('api/admin-set-outgoing-email-status (Invalid apiKey)', testDoneFn => {
+
+    let status = 'sent';
+    let outgoingEmailId = outgoingEmailList.find(outgoingEmail => outgoingEmail.to === phone).id;
+
+    callApi('api/admin-set-outgoing-email-status', {
+      json: {
+        apiKey: apiKey.split('').reverse().join(''),
+        status,
+        outgoingEmailId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body).to.have.property('error');
+      expect(body.error).to.have.property('code').that.equals('APIKEY_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  // -- outgoing-email - end
 
   it('api/admin-get-aggregated-user-list (phone)', testDoneFn => {
 

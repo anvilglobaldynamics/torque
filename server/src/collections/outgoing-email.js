@@ -31,7 +31,7 @@ exports.OutgoingEmailCollection = class extends Collection {
 
   async create({ from, to, subject, html, status = 'pending' }) {
     return await this._insert({
-      from, to, content,
+      from, to, 
       subject, html, status,
       isDeleted: false
     });

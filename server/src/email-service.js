@@ -114,21 +114,18 @@ class EmailService {
       }
     });
 
-    let status = 'pending';
-    {
+    { // handle logging of email in a new scope
+      let status = 'pending';
+
       let [err, isDeveloperError, response, finalBody] = results;
       if (!err && !isDeveloperError && response.message === 'Queued. Thank you.') {
         status = 'sent';
       }
-    }
 
-    await this.database.outgoingEmail.create({
-      from,
-      to,
-      subject,
-      html,
-      status
-    })
+      let newData = { status };
+      Object.assign(newData, data);
+      await this.database.outgoingEmail.create(newData);
+    }
 
     return results;
   }
