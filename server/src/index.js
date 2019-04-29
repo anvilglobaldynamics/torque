@@ -117,7 +117,7 @@ let { InternalStatusApi } = require('./legacy-apis/internal--status');
 
 let { AdminLoginApi } = require('./legacy-apis/admin-login');
 let { AdminGetOutgoingSmsListApi } = require('./apis/admin-get-outgoing-sms-list');
-let { AdminSetOutgoingSmsStatusApi } = require('./legacy-apis/admin-set-outgoing-sms-status');
+let { AdminSetOutgoingSmsStatusApi } = require('./apis/admin-set-outgoing-sms-status');
 let { AdminGetAggregatedUserListApi } = require('./legacy-apis/admin-get-aggregated-user-list');
 let { AdminSetUserBanningStatusApi } = require('./legacy-apis/admin-set-user-banning-status');
 const { AdminGetOrganizationApi } = require('./apis/admin-get-organization');

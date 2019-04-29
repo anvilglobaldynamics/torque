@@ -195,7 +195,7 @@ describe('Admin', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('GENERIC_UPDATE_FAILURE');
+      expect(body.error).to.have.property('code').that.equals('OUTGOING_SMS_INVALID');
       testDoneFn();
     });
 
