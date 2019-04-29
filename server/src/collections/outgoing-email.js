@@ -2,9 +2,9 @@
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
-exports.OutgoingSmsCollection = class extends Collection {
+exports.OutgoingEmailCollection = class extends Collection {
 
-  get name() { return 'outgoing-sms'; }
+  get name() { return 'outgoing-email'; }
 
   get joiSchema() {
     return Joi.object().keys({

@@ -11,6 +11,7 @@ const { FixtureCollection } = require('./collections/fixture');
 const { InventoryCollection } = require('./collections/inventory');
 const { OrganizationCollection } = require('./collections/organization');
 const { OutgoingSmsCollection } = require('./collections/outgoing-sms');
+const { OutgoingEmailCollection } = require('./collections/outgoing-email');
 const { OutletCollection } = require('./collections/outlet');
 const { PasswordResetRequestCollection } = require('./collections/password-reset-request');
 const { PhoneVerificationRequestCollection } = require('./collections/phone-verification-request');
@@ -47,6 +48,7 @@ class DatabaseService {
     this.inventory = new InventoryCollection(this.engine, this);
     this.organization = new OrganizationCollection(this.engine, this);
     this.outgoingSms = new OutgoingSmsCollection(this.engine, this);
+    this.outgoingEmail = new OutgoingEmailCollection(this.engine, this);
     this.outlet = new OutletCollection(this.engine, this);
     this.passwordResetRequest = new PasswordResetRequestCollection(this.engine, this);
     this.phoneVerificationRequest = new PhoneVerificationRequestCollection(this.engine, this);
