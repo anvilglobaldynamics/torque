@@ -48,6 +48,7 @@
         "passwordHash": "59e234948786e33955c5d86e8a4e9951172b1abbab437e8193e7ee1ad3f42b41",
         "rights": {
           "sendOutgoingSms": true,
+          "sendOutgoingEmail": true,
           "viewUsersAndOrganizations": true,
           "banUsers": true
         }
@@ -57,6 +58,7 @@
         "passwordHash": "59e234948786e33955c5d86e8a4e9951172b1abbab437e8193e7ee1ad3f42b41",
         "rights": {
           "sendOutgoingSms": true,
+          "sendOutgoingEmail": true,
           "viewUsersAndOrganizations": true,
           "banUsers": true
         }
