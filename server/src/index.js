@@ -118,6 +118,8 @@ let { InternalStatusApi } = require('./legacy-apis/internal--status');
 let { AdminLoginApi } = require('./legacy-apis/admin-login');
 let { AdminGetOutgoingSmsListApi } = require('./apis/admin-get-outgoing-sms-list');
 let { AdminSetOutgoingSmsStatusApi } = require('./apis/admin-set-outgoing-sms-status');
+let { AdminGetOutgoingEmailListApi } = require('./apis/admin-get-outgoing-email-list');
+let { AdminSetOutgoingEmailStatusApi } = require('./apis/admin-set-outgoing-email-status');
 let { AdminGetAggregatedUserListApi } = require('./legacy-apis/admin-get-aggregated-user-list');
 let { AdminSetUserBanningStatusApi } = require('./legacy-apis/admin-set-user-banning-status');
 const { AdminGetOrganizationApi } = require('./apis/admin-get-organization');
@@ -187,7 +189,7 @@ class Program {
       database = new DatabaseService(config.db);
       legacyDatabase = new LegacyDatabase(config.db);
       logger = new Logger(config.log, this.muteLogger);
-      emailService = new EmailService(config, mode);
+      emailService = new EmailService(config, mode, database);
       smsService = new SmsService(config, legacyDatabase);
       templateManager = new TemplateManager(config);
       fixtureManager = new FixtureManager(config);
@@ -349,6 +351,8 @@ class Program {
     server.registerPostApi('/api/admin-login', AdminLoginApi);
     server.registerPostApi('/api/admin-get-outgoing-sms-list', AdminGetOutgoingSmsListApi);
     server.registerPostApi('/api/admin-set-outgoing-sms-status', AdminSetOutgoingSmsStatusApi);
+    server.registerPostApi('/api/admin-get-outgoing-email-list', AdminGetOutgoingEmailListApi);
+    server.registerPostApi('/api/admin-set-outgoing-email-status', AdminSetOutgoingEmailStatusApi);
     server.registerPostApi('/api/admin-get-aggregated-user-list', AdminGetAggregatedUserListApi);
     server.registerPostApi('/api/admin-set-user-banning-status', AdminSetUserBanningStatusApi);
     server.registerPostApi('/api/admin-get-organization', AdminGetOrganizationApi);
