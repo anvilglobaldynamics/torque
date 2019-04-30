@@ -95,7 +95,7 @@ class EmailService {
   async sendMail({ to, subject, html } = {}) {
     let actualTo = to;
     if (this.mode !== 'production') {
-      actualTo = 'shafayet.sayem@gmail.com';
+      actualTo = 'ignore@anvil.live';
     }
     let data = {
       from: this.from,
