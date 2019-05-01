@@ -204,8 +204,8 @@
     "employees": "কর্মচারী",
     "outlets": "দোকান",
     "warehouses": "গুদাম",
-    "promptForDefaultOutlet": "অফলাইন কাজ; লিপি অফলাইনে ব্যবহার করতে চাইলে দোকান বেছে নিন",
-    "promptForDefaultOutletGoButton": "দোকান বেছে নিন",
+    "promptForDefaultOutlet": "নিয়মিত ব্যবহৃত দোকান; নিয়মিত ব্যবহার এর জন্য দোকান বাছাই করলে দ্রুত বিক্রয়কেন্দ্রে যেতে পারবেন এবং লিপি অফলাইনে ব্যবহার করতে পারবেন",
+    "promptForDefaultOutletGoButton": "দোকান বাছাই",
     "viewActivationHistory": "সক্রিয়করণ ইতিহাস দেখুন"
   },
   "organization": {
@@ -419,9 +419,10 @@
     "selectedProducts": "বাছাইকৃত পণ্য তালিকা"
   },
   "about": {
-    "about": "বিষয়ে",
+    "aboutUsTitle": "আমাদের কথা",
+    "about": "সম্পর্কিত",
     "tos": "শর্তাবলী",
-    "contactUs": "যোগাযোগ করুন",
+    "contactUs": "যোগাযোগ",
     "projectBy": "এই প্রজেক্ট তৈরি এবং পরিচালনা করে",
     "logoAndFaviconBy": "লোগো নেয়া হয়েছে",
     "sendYourQuestionsTo": "আপনার প্রশ্ন, অভিযোগ এবং প্রশংসা পাঠান"
@@ -746,10 +747,10 @@
     "useWebsockets": "ওয়েবসকেট ব্যবহার করুন",
     "useWebsocketsDetail": "যদি চেক করা থাকে তবে অ্যাপ্লিকেশন ওয়েবসকেট ব্যবহার করার চেষ্টা করবে।",
     "takeToDefaultOutlet": "সরাসরি বিক্রয়কেন্দ্র খুলুন",
-    "takeToDefaultOutletDetail": "লগ ইন করার সময় ড্যাশবোর্ডের পরিবর্তে ডিফল্ট আউটলেটের বিক্রয়কেন্দ্র খুলুন।",
+    "takeToDefaultOutletDetail": "লগইন এর পর নিয়মিত ব্যবহৃত দোকানের বিক্রয়কেন্দ্রে যান সরাসরি।",
     "useBackgroundSync": "'অফলাইন মোড' চালু করুন",
-    "useBackgroundSyncDetails": "লিপি 'অফলাইন মোড' এই সংস্থার জন্য চালু হয়ে যাবে। যদি আপনি অফলাইন মোড চালু করেন তবে আপনার ডেটা ব্যবহার বাড়বে।",
-    "defaultOutletSelection": "ডিফল্ট আউটলেট",
+    "useBackgroundSyncDetails": "'অফলাইন মোড' এর মাধ্যমে লিপি ব্যবহার করতে পারবেন নেট না থাকলেও। যদি অফলাইন মোড চালু করেন তবে আপনার ডেটা ব্যবহার বাড়বে।",
+    "defaultOutletSelection": "আউটলেট বাছাই",
     "monetaryUnit": "মুদ্রা",
     "monetaryUnitDetail": "নোট: আর্থিক মুদ্রা পরিবর্তন আপনার বিক্রয় প্রভাবিত করে না।",
     "moreOptionsForthcoming": "আরো সেটিংস আসন্ন।",

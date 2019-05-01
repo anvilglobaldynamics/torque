@@ -202,8 +202,8 @@
     "employees": "Employees",
     "outlets": "Outlets",
     "warehouses": "Warehouses",
-    "promptForDefaultOutlet": "Offline Mode; You can select an Outlet If you want to continue using Lipi during network outage",
-    "promptForDefaultOutletGoButton": "Select an outlet",
+    "promptForDefaultOutlet": "Regularly Used Outlet; Selecting a regularly used outlet lets you quickly jump to POS after login and use lipi during network outage",
+    "promptForDefaultOutletGoButton": "Select outlet",
     "viewActivationHistory": "View Activation History"
   },
   "organization": {
@@ -417,9 +417,10 @@
     "selectedProducts": "Selected Product Blueprint"
   },
   "about": {
+    "aboutUsTitle": "About",
     "about": "About",
     "tos": "Terms & Conditions",
-    "contactUs": "Contact Us",
+    "contactUs": "Contact",
     "projectBy": "This project is created and maintained by",
     "logoAndFaviconBy": "logo and favicon icon made by",
     "sendYourQuestionsTo": "Send your questions, complaints and praises to"
@@ -745,10 +746,10 @@
     "useWebsockets": "Use Websockets",
     "useWebsocketsDetail": "If checked, the app will try to use websockets.",
     "takeToDefaultOutlet": "Directly open POS",
-    "takeToDefaultOutletDetail": "Open default outlet's POS instead of Dashboard when I log in.",
+    "takeToDefaultOutletDetail": "Directly go to regularly used outlet's POS after login instead of dashboard.",
     "useBackgroundSync": "Enable 'Offline Mode'",
-    "useBackgroundSyncDetails": "If selected, 'Offline Mode' will be available for current organization. Please note that your data usage will increase if you enable this feature.",
-    "defaultOutletSelection": "Select Default Outlet",
+    "useBackgroundSyncDetails": "'Offline Mode' lets you keep using regularly used outlet's POS during network outage. Note that data usage will increase if you enable this feature.",
+    "defaultOutletSelection": "Select Outlet",
     "monetaryUnit": "Monetary Unit",
     "monetaryUnitDetail": "Note: Changing the monetary unit does not affect your sales.",
     "moreOptionsForthcoming": "More options are forthcoming.",

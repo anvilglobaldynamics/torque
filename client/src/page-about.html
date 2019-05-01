@@ -42,18 +42,12 @@
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 0)]]">
         <div class="card">
           <div>[[verses.about.projectBy]]
-            <a href="[[authorWebsite]]">[[authorName]]</a>
-          </div>
-          <br>
-          <br>
-          <div>
-            <span class="grey">[[verses.about.logoAndFaviconBy]]
-              <a href="https://www.flaticon.com/authors/madebyoliver">Madebyoliver</a>, www.flaticon.com </span>
+            <a href="[[app.authorWebsite]]">[[app.authorName]]</a>
           </div>
           <br>
           <div>
             <br>&copy; 2017.
-            <a href="[[authorWebsite]]">[[authorName]]</a>.
+            <a href="[[app.authorWebsite]]">[[app.authorName]]</a>.
             <br> [[verses.root.rightsReserved]]
             <br>
           </div>
@@ -88,14 +82,6 @@
 
       static get properties() {
         return {
-          authorWebsite: {
-            type: String,
-            value: 'anvilglobaldynamics.com'
-          },
-          authorName: {
-            type: String,
-            value: 'Anvil Global Dynamics'
-          },
           contactEmail: { 
             type: String, 
             value: 'care@anvil.live' 
@@ -126,6 +112,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.about.aboutUsTitle);
         this.delay(300, () => {
           this.isReady = true;
         });
