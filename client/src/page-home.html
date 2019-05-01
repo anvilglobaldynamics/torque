@@ -149,89 +149,89 @@
       <!-- organization statistics - start -->
       <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ORGANIZATION_STATISTICS', organization)]]">
 
-      <!-- metrics - start -->
-      <div class="horizontal layout wrap">
-        <div class="card flex metrics-box">
-          <div class="value">[[$translateNumber(metrics.totalNumberOfSalesToday, selectedLanguageIdentifier)]]</div>
-          <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesToday, 'countable',
-            selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
-          <div class="item-description">[[verses.home.todayInovices]]</div>
-        </div>
-        <div class="card flex metrics-box">
-          <div class="value">[[$translateNumber(metrics.totalAmountSoldToday, selectedLanguageIdentifier)]]</div>
-          <div class="unit">[[settings.monetaryUnit]]</div>
-          <div class="item-description">[[verses.home.salesToday]]</div>
-        </div>
-      </div>
-
-      <div class="horizontal layout wrap">
-        <div class="card flex metrics-box">
-          <div class="value">[[$translateNumber(metrics.totalNumberOfSalesThisMonth, selectedLanguageIdentifier)]]</div>
-          <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable',
-            selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
-          <div class="item-description">[[verses.home.thisMonthInovices]]</div>
-        </div>
-        <div class="card flex metrics-box">
-          <div class="value">[[$translateNumber(metrics.totalAmountSoldThisMonth, selectedLanguageIdentifier)]]</div>
-          <div class="unit">[[settings.monetaryUnit]]</div>
-          <div class="item-description">[[verses.home.salesThisMonth]]</div>
-        </div>
-      </div>
-      <!-- metrics - end -->
-
-      <!-- active module - start -->
-      <div class="vertical layout wrap">
-        <div class="card flex info-panel">
-          <div class="title">[[verses.general.activatedModules]]</div>
-          <div class="module-description">[[verses.general.moduleDescriptionLineOne]]</div>
-
-          <ul>
-            <template is="dom-repeat" items="[[organization.activeModuleCodeList]]" as="activeModuleCode">
-              <li>[[$getModuleDisplayName(activeModuleCode, selectedLanguageIdentifier)]]</li>
-            </template>
-          </ul>
-
-          <div class="module-description">[[verses.general.moduleDescriptionLineTwo]]</div>
-        </div>
-      </div>
-      <!-- active module - end -->
-
-      <!-- active package - start -->
-      <div class="vertical layout wrap">
-        <div class="card flex info-panel">
-          <div class="title">[[verses.home.activatedPackage]]: [[aPackage.name]] ([[aPackage.code]])</div>
-          <!-- <div class="">Activated On: [[$mkDate(aPackage.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div> -->
-          <div class="">[[verses.home.expirationDate]]: [[$mkDate(aPackage.expirationDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
-          <div class="">[[verses.home.allows]]:
-            <span>[[aPackage.limits.maximumEmployees]] [[verses.home.employees]],</span>
-            <span>[[aPackage.limits.maximumOutlets]] [[verses.home.outlets]],</span>
-            <span>[[aPackage.limits.maximumWarehouses]] [[verses.home.warehouses]].</span>
+        <!-- metrics - start -->
+        <div class="horizontal layout wrap">
+          <div class="card flex metrics-box">
+            <div class="value">[[$translateNumber(metrics.totalNumberOfSalesToday, selectedLanguageIdentifier)]]</div>
+            <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesToday, 'countable',
+              selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
+            <div class="item-description">[[verses.home.todayInovices]]</div>
           </div>
-          <template is="dom-if" if="[[!packageActivationList.length]]">
-            <div class="button-row">
-              <paper-button raised class="secondary" on-tap="viewActicationHistoryTapped">[[verses.home.viewActivationHistory]]</paper-button>
-            </div>
-          </template>
+          <div class="card flex metrics-box">
+            <div class="value">[[$translateNumber(metrics.totalAmountSoldToday, selectedLanguageIdentifier)]]</div>
+            <div class="unit">[[settings.monetaryUnit]]</div>
+            <div class="item-description">[[verses.home.salesToday]]</div>
+          </div>
         </div>
-        <template is="dom-if" if="[[packageActivationList.length]]">
+
+        <div class="horizontal layout wrap">
+          <div class="card flex metrics-box">
+            <div class="value">[[$translateNumber(metrics.totalNumberOfSalesThisMonth, selectedLanguageIdentifier)]]</div>
+            <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable',
+              selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
+            <div class="item-description">[[verses.home.thisMonthInovices]]</div>
+          </div>
+          <div class="card flex metrics-box">
+            <div class="value">[[$translateNumber(metrics.totalAmountSoldThisMonth, selectedLanguageIdentifier)]]</div>
+            <div class="unit">[[settings.monetaryUnit]]</div>
+            <div class="item-description">[[verses.home.salesThisMonth]]</div>
+          </div>
+        </div>
+        <!-- metrics - end -->
+
+        <!-- active module - start -->
+        <div class="vertical layout wrap">
           <div class="card flex info-panel">
-            <div class="title" style="margin-top: 24px;">[[verses.home.activationHistory]]</div>
-            <template is="dom-repeat" items="[[packageActivationList]]" as="packageActivation">
-              <div style="margin-bottom: 24px;">
-                <div>[[verses.home.activatedPackage]]: [[packageActivation.packageDetail.name]]
-                  ([[packageActivation.packageDetail.code]])</div>
-                <div class="">[[verses.home.activatedOn]]: [[$mkDate(packageActivation.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
-                <div class="">[[verses.home.allows]]:
-                  <span>[[packageActivation.packageDetail.limits.maximumEmployees]] [[verses.home.employees]],</span>
-                  <span>[[packageActivation.packageDetail.limits.maximumOutlets]] [[verses.home.outlets]],</span>
-                  <span>[[packageActivation.packageDetail.limits.maximumWarehouses]] [[verses.home.warehouses]].</span>
-                </div>
+            <div class="title">[[verses.general.activatedModules]]</div>
+            <div class="module-description">[[verses.general.moduleDescriptionLineOne]]</div>
+
+            <ul>
+              <template is="dom-repeat" items="[[organization.activeModuleCodeList]]" as="activeModuleCode">
+                <li>[[$getModuleDisplayName(activeModuleCode, selectedLanguageIdentifier)]]</li>
+              </template>
+            </ul>
+
+            <div class="module-description">[[verses.general.moduleDescriptionLineTwo]]</div>
+          </div>
+        </div>
+        <!-- active module - end -->
+
+        <!-- active package - start -->
+        <div class="vertical layout wrap">
+          <div class="card flex info-panel">
+            <div class="title">[[verses.home.activatedPackage]]: [[aPackage.name]] ([[aPackage.code]])</div>
+            <!-- <div class="">Activated On: [[$mkDate(aPackage.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div> -->
+            <div class="">[[verses.home.expirationDate]]: [[$mkDate(aPackage.expirationDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
+            <div class="">[[verses.home.allows]]:
+              <span>[[aPackage.limits.maximumEmployees]] [[verses.home.employees]],</span>
+              <span>[[aPackage.limits.maximumOutlets]] [[verses.home.outlets]],</span>
+              <span>[[aPackage.limits.maximumWarehouses]] [[verses.home.warehouses]].</span>
+            </div>
+            <template is="dom-if" if="[[!packageActivationList.length]]">
+              <div class="button-row">
+                <paper-button raised class="secondary" on-tap="viewActicationHistoryTapped">[[verses.home.viewActivationHistory]]</paper-button>
               </div>
             </template>
           </div>
-        </template>
-      </div>
-      <!-- active package - end -->
+          <template is="dom-if" if="[[packageActivationList.length]]">
+            <div class="card flex info-panel">
+              <div class="title" style="margin-top: 24px;">[[verses.home.activationHistory]]</div>
+              <template is="dom-repeat" items="[[packageActivationList]]" as="packageActivation">
+                <div style="margin-bottom: 24px;">
+                  <div>[[verses.home.activatedPackage]]: [[packageActivation.packageDetail.name]]
+                    ([[packageActivation.packageDetail.code]])</div>
+                  <div class="">[[verses.home.activatedOn]]: [[$mkDate(packageActivation.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
+                  <div class="">[[verses.home.allows]]:
+                    <span>[[packageActivation.packageDetail.limits.maximumEmployees]] [[verses.home.employees]],</span>
+                    <span>[[packageActivation.packageDetail.limits.maximumOutlets]] [[verses.home.outlets]],</span>
+                    <span>[[packageActivation.packageDetail.limits.maximumWarehouses]] [[verses.home.warehouses]].</span>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
+        <!-- active package - end -->
 
       </template>
       <!-- organization statistics - end -->
@@ -265,7 +265,7 @@
         this.shouldPromptForDefaultOutlet = false;
         if (!allComponentsReady) return;
         let settings = this._getNormalizedSettings();
-        let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+        let defaultOutletId = settings.defaultOutletMetaMap[this.app.organization.id].outletId;
         if (this.$notSelected(defaultOutletId)) {
           this.shouldPromptForDefaultOutlet = true;
         }
@@ -281,6 +281,19 @@
         this.onSettingsChange(this.app.settings);
         this.useLanguageServices();
         this._processOrganizationList(() => {
+          if ('bypassable' in this.params && this.params.bypassable === 'yes' && !this.app.wasLastNavigationBypassed) {
+            try {
+              let settings = this._getNormalizedSettings();
+              let { outletId, bypassHomepage } = settings.defaultOutletMetaMap[this.app.organization.id];
+              if (bypassHomepage) {
+                this.app.wasLastNavigationBypassed = true;
+                this.app.navigateTo(`/pos/outlet:${outletId}`);
+                return;
+              }
+            } catch (ex) {
+              'pass'
+            }
+          }
           if (this.hasPrivilege('PRIV_VIEW_ORGANIZATION_STATISTICS')) {
             this._processDashboardSummary(() => {
               this.isReady = true;

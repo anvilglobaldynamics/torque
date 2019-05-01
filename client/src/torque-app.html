@@ -95,10 +95,10 @@
 <link rel="lazy-import" href="page-manage-service-membership.html">
 <link rel="lazy-import" href="page-view-sales-return.html">
 <link rel="lazy-import" href="page-bulk-import-product-blueprints.html">
-<link rel="lazy-import" href="page-select-geolocation.html"> 
-<link rel="lazy-import" href="page-scan-identifier-code.html"> 
-<link rel="lazy-import" href="page-manage-discount-presets.html"> 
-<link rel="lazy-import" href="page-edit-discount-preset.html"> 
+<link rel="lazy-import" href="page-select-geolocation.html">
+<link rel="lazy-import" href="page-scan-identifier-code.html">
+<link rel="lazy-import" href="page-manage-discount-presets.html">
+<link rel="lazy-import" href="page-edit-discount-preset.html">
 
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
@@ -654,7 +654,7 @@
             which: 'only',
             shouldUseWebsockets: true,
             monetaryUnit: 'BDT',
-            backgroundSyncMetaMap: {},
+            defaultOutletMetaMap: {},
             defaultPrinterFormat: 'a4'
           });
 
@@ -765,15 +765,16 @@
             this.app = this;
             try {
               let settings = this._getNormalizedSettings();
-              let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+              let defaultOutletMeta = settings.defaultOutletMetaMap[this.app.organization.id];
+              let defaultOutletId = defaultOutletMeta.outletId;
               if (defaultOutletId) {
                 this.navigateTo(`/pos/outlet:${defaultOutletId}`);
                 return
               }
-            } catch (ex){
+            } catch (ex) {
               // Organization is not loaded yet but somehow isInOfflineMode is true
               'pass'
-            }            
+            }
           }
         }
         let qualifiedName = 'page-' + this.pageName + '.html';
@@ -830,7 +831,8 @@
         // TODO: Refactor
         this.app = this;
         let settings = this._getNormalizedSettings();
-        let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+        let defaultOutletMeta = settings.defaultOutletMetaMap[this.app.organization.id];
+        let defaultOutletId = defaultOutletMeta.outletId;
         if (defaultOutletId) {
           this.navigateTo(`/pos/outlet:${defaultOutletId}`);
           return
@@ -973,8 +975,10 @@
         if (this.isInOfflineMode) return cbfn(false);
         this.app = this;
         let settings = this._getNormalizedSettings();
-        let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+        let defaultOutletMeta = settings.defaultOutletMetaMap[this.app.organization.id];
+        let defaultOutletId = defaultOutletMeta.outletId;
         if (this.$notSelected(defaultOutletId)) return cbfn(false);
+        if (!defaultOutletMeta.allowBackgroundSync) return cbfn(false);
 
         const onApiError = (error) => {
           return cbfn(false);

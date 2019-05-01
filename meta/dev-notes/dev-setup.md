@@ -13,12 +13,13 @@
 2. navigate to `torque/server` directory.
 3. run `npm install`
 4. navigate to `torque/client` directory.
-5. run `bower install`
+5. run `npm install`
+6. run `bower install`
 
 # Running Projects
 1. run `mongod` on a terminal and keep it running. (use `mongod --dbpath /path` for custom path)
 2. navigate to `torque/server` directory.
-3. run `npm start` (recommended) or `nodemon start.js` or `node start.js` on a separate terminal and keep it running. Server now should be running on `localhost:8540`.
+3. run `npm start` (recommended) or `node start.js` on a separate terminal and keep it running. Server now should be running on `localhost:8540`. (Alternatively use `npm run dev` or `nodemon start.js` to start the server and restart it every time you change the code.)
 4. navigate to `torque/client` directory.
 5. run `npm start` on a separate terminal and keep it running. Client now should be running on `localhost:8545`.
 
