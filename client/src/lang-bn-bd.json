@@ -419,9 +419,10 @@
     "selectedProducts": "বাছাইকৃত পণ্য তালিকা"
   },
   "about": {
-    "about": "বিষয়ে",
+    "aboutUsTitle": "আমাদের কথা",
+    "about": "সম্পর্কিত",
     "tos": "শর্তাবলী",
-    "contactUs": "যোগাযোগ করুন",
+    "contactUs": "যোগাযোগ",
     "projectBy": "এই প্রজেক্ট তৈরি এবং পরিচালনা করে",
     "logoAndFaviconBy": "লোগো নেয়া হয়েছে",
     "sendYourQuestionsTo": "আপনার প্রশ্ন, অভিযোগ এবং প্রশংসা পাঠান"

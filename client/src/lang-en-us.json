@@ -417,9 +417,10 @@
     "selectedProducts": "Selected Product Blueprint"
   },
   "about": {
+    "aboutUsTitle": "About",
     "about": "About",
     "tos": "Terms & Conditions",
-    "contactUs": "Contact Us",
+    "contactUs": "Contact",
     "projectBy": "This project is created and maintained by",
     "logoAndFaviconBy": "logo and favicon icon made by",
     "sendYourQuestionsTo": "Send your questions, complaints and praises to"
