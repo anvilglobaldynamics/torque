@@ -90,20 +90,16 @@
               </paper-dropdown-menu>
               <paper-icon-button hidden="[[$notSelected(outletIndexForBackgroundSync)]]" icon="clear" on-tap="cancelTapped"></paper-icon-button>
             </div>
-            <!-- <div class="note">
-              // NOTE: Remove if not necessary
-              [[verses.settings.defaultOutletSelectionDetail]]
-            </div> -->
 
             <div class="option">
-              <paper-checkbox on-change="settingsChanged" checked="{{bypassHomepage}}">[[verses.settings.takeToDefaultOutlet]]</paper-checkbox>
+              <paper-checkbox on-change="settingsChanged" checked="{{bypassHomepage}}" disabled="[[$notSelected(outletIndexForBackgroundSync)]]">[[verses.settings.takeToDefaultOutlet]]</paper-checkbox>
               <div class="note">
                 [[verses.settings.takeToDefaultOutletDetail]]
               </div>
             </div>
 
             <div class="option">
-              <paper-checkbox on-change="settingsChanged" checked="{{allowBackgroundSync}}">[[verses.settings.useBackgroundSync]]</paper-checkbox>
+              <paper-checkbox on-change="settingsChanged" checked="{{allowBackgroundSync}}" disabled="[[$notSelected(outletIndexForBackgroundSync)]]">[[verses.settings.useBackgroundSync]]</paper-checkbox>
               <div class="note">
                 [[verses.settings.useBackgroundSyncDetails]]
               </div>
