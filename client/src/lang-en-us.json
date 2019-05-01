@@ -202,8 +202,8 @@
     "employees": "Employees",
     "outlets": "Outlets",
     "warehouses": "Warehouses",
-    "promptForDefaultOutlet": "Offline Mode; You can select an Outlet If you want to continue using Lipi during network outage",
-    "promptForDefaultOutletGoButton": "Select an outlet",
+    "promptForDefaultOutlet": "Regularly Used Outlet; Selecting a regularly used outlet lets you quickly jump to POS after login and use lipi during network outage",
+    "promptForDefaultOutletGoButton": "Select outlet",
     "viewActivationHistory": "View Activation History"
   },
   "organization": {
@@ -747,7 +747,7 @@
     "takeToDefaultOutletDetail": "Open default outlet's POS instead of Dashboard when I log in.",
     "useBackgroundSync": "Enable 'Offline Mode'",
     "useBackgroundSyncDetails": "If selected, 'Offline Mode' will be available for current organization. Please note that your data usage will increase if you enable this feature.",
-    "defaultOutletSelection": "Select Default Outlet",
+    "defaultOutletSelection": "Select Outlet",
     "monetaryUnit": "Monetary Unit",
     "monetaryUnitDetail": "Note: Changing the monetary unit does not affect your sales.",
     "moreOptionsForthcoming": "More options are forthcoming.",

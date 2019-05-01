@@ -204,8 +204,8 @@
     "employees": "কর্মচারী",
     "outlets": "দোকান",
     "warehouses": "গুদাম",
-    "promptForDefaultOutlet": "অফলাইন কাজ; লিপি অফলাইনে ব্যবহার করতে চাইলে দোকান বেছে নিন",
-    "promptForDefaultOutletGoButton": "দোকান বেছে নিন",
+    "promptForDefaultOutlet": "নিয়মিত ব্যবহৃত দোকান; নিয়মিত ব্যবহার এর জন্য দোকান বাছাই করলে দ্রুত বিক্রয়কেন্দ্রে যেতে পারবেন এবং লিপি অফলাইনে ব্যবহার করতে পারবেন",
+    "promptForDefaultOutletGoButton": "দোকান বাছাই",
     "viewActivationHistory": "সক্রিয়করণ ইতিহাস দেখুন"
   },
   "organization": {
@@ -748,7 +748,7 @@
     "takeToDefaultOutletDetail": "লগ ইন করার সময় ড্যাশবোর্ডের পরিবর্তে ডিফল্ট আউটলেটের বিক্রয়কেন্দ্র খুলুন।",
     "useBackgroundSync": "'অফলাইন মোড' চালু করুন",
     "useBackgroundSyncDetails": "লিপি 'অফলাইন মোড' এই সংস্থার জন্য চালু হয়ে যাবে। যদি আপনি অফলাইন মোড চালু করেন তবে আপনার ডেটা ব্যবহার বাড়বে।",
-    "defaultOutletSelection": "ডিফল্ট আউটলেট",
+    "defaultOutletSelection": "আউটলেট বাছাই",
     "monetaryUnit": "মুদ্রা",
     "monetaryUnitDetail": "নোট: আর্থিক মুদ্রা পরিবর্তন আপনার বিক্রয় প্রভাবিত করে না।",
     "moreOptionsForthcoming": "আরো সেটিংস আসন্ন।",
