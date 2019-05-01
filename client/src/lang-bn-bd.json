@@ -864,7 +864,8 @@
   },
   "assignEmployeeService": {
     "assignEmployeeServiceTitle": "সেবার দায়িত্বে কর্মচারী",
-    "clearEmployeeLabel": "সেবার দায়িত্ব মুছে ফেলুন"
+    "clearEmployeeLabel": "সেবার দায়িত্ব মুছে ফেলুন",
+    "searchFieldTips": "নাম অথবা ফোন দিয়ে খুজুন"
   },
   "serviceMembership": {
     "serviceMembershipTitle": "সেবার সদস্যপদ",

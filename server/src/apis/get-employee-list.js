@@ -49,7 +49,7 @@ exports.GetEmployeeListApi = class extends Api {
     employeeList = employeeList.filter(employee => {
       searchString = this.escapeRegExp(searchString.toLowerCase());
       let regex = new RegExp(searchString, 'i');
-      return regex.test(employee.userDetails.fullName);
+      return regex.test(employee.userDetails.fullName) || regex.test(employee.userDetails.phone);
     });
 
     return employeeList;

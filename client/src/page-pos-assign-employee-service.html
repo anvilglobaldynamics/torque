@@ -56,6 +56,18 @@
       </div>
 
       <div class="card vertical layout">
+        <div class="horizontal layout center">
+          <paper-input class="flex" value="{{searchString}}" label="[[verses.assignEmployeeService.searchFieldTips]]"></paper-input>
+          <template is="dom-if" if="{{searchString.length}}">
+            <paper-icon-button icon="clear" on-tap="cancelSearchStringTapped"></paper-icon-button>
+          </template>
+        </div>
+        <paper-button raised class="primary" on-tap="searchTapped">
+          <iron-icon icon="search" class="m-right-8"></iron-icon>[[verses.general.search]]
+        </paper-button>
+      </div>
+
+      <div class="card vertical layout">
 
         <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
           <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
@@ -103,7 +115,12 @@
       }
 
       static get properties() {
-        return {};
+        return {
+          searchString: {
+            type:String,
+            value: ''
+          }
+        };
       }
 
       // region: core =================================
@@ -135,6 +152,7 @@
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.searchString  = '';
         this.app.popPageTitle();
       }
       
@@ -147,7 +165,7 @@
       }
 
       _fetchEmployeeList(cbfn) {
-        let data = { organizationId: this.app.organization.id, paginate: this.paginate };
+        let data = { organizationId: this.app.organization.id, searchString: this.searchString, paginate: this.paginate };
         this.app.callGetEmployeeListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -219,6 +237,15 @@
 
         this.app.storeInSession('pos-selected-service-list', previousSavedSelectedServiceList);
         this.app.navigateToPreviousUrl(`/pos`);
+      }
+
+      cancelSearchStringTapped(){
+        this.searchString = '';
+      }
+
+      searchTapped(){
+        this.isReady = false;
+        this._processEmployeeList(() => this.isReady = true);
       }
 
       // region: misc =================================

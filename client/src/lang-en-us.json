@@ -863,7 +863,8 @@
   },
   "assignEmployeeService": {
     "assignEmployeeServiceTitle": "Assign Employee To Service",
-    "clearEmployeeLabel": "Clear Selected Employee"
+    "clearEmployeeLabel": "Clear Selected Employee",
+    "searchFieldTips": "Serch by name or phone"
   },
   "serviceMembership": {
     "serviceMembershipTitle": "Service Memberships",
