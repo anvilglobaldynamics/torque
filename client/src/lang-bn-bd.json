@@ -952,5 +952,10 @@
     "removeOutlet": "দোকান সরান",
     "changeOutlet": "দোকান পরিবর্তন করুন",
     "total": "মোট"
+  },
+  "assignAssistedByEmployee": {
+    "assignAssistedByEmployeeTitle": "সহায়ক কর্মচারী",
+    "clearEmployeeLabel": "সেবার দায়িত্ব মুছে ফেলুন",
+    "searchFieldTips": "নাম অথবা ফোন দিয়ে খুজুন"
   }
 }

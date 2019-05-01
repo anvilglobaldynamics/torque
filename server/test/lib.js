@@ -1325,6 +1325,8 @@ exports.validateSalesSchema = (doc) => {
       )
     }),
 
+    assistedByEmployeeId: Joi.number().min(0).max(999999999999999).allow(null).required(),
+
     wasOfflineSale: Joi.boolean().required(),
     isModified: Joi.boolean().required(),
     isDeleted: Joi.boolean().required(),
@@ -1476,6 +1478,8 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
         })
       )
     }),
+
+    assistedByEmployeeId: Joi.number().min(0).max(999999999999999).allow(null).required(),
 
     wasOfflineSale: Joi.boolean().required(),
     isModified: Joi.boolean().required(),

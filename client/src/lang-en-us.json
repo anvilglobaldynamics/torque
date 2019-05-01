@@ -951,5 +951,10 @@
     "removeOutlet": "Remove Outlet",
     "changeOutlet": "Change Outlet",
     "total": "Total"
+  },
+  "assignAssistedByEmployee": {
+    "assignAssistedByEmployeeTitle": "Assisted By Employee",
+    "clearEmployeeLabel": "Clear Selected Employee",
+    "searchFieldTips": "Serch by name or phone"
   }
 }

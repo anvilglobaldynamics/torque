@@ -85,6 +85,10 @@ Possible Error Codes:
       changeAmount: Joi.number().max(999999999999999).required()
     }),
 
+    assistedByEmployeeId: Joi.number().min(0).max(999999999999999).allow(null).required(),
+
+    wasOfflineSale: Joi.boolean().required(),
+
     isModified: Joi.boolean().required()
   });
 }

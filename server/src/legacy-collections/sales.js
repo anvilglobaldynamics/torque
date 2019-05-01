@@ -68,6 +68,8 @@ exports.SalesCollection = class extends LegacyCollection {
         )
       }),
 
+      assistedByEmployeeId: Joi.number().min(0).max(999999999999999).allow(null).required(),
+
       wasOfflineSale: Joi.boolean().required(),
       isModified: Joi.boolean().required(),
       isDeleted: Joi.boolean().required(),
@@ -96,11 +98,12 @@ exports.SalesCollection = class extends LegacyCollection {
     ];
   }
 
-  create({ outletId, customerId, productList, payment }, cbfn) {
+  create({ outletId, customerId, productList, payment, assistedByEmployeeId }, cbfn) {
     let doc = {
       outletId,
       customerId,
       productList,
+      assistedByEmployeeId,
       payment,
 
       isModified: false,

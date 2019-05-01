@@ -211,6 +211,8 @@ describe('Sales Return', _ => {
                                   paymentMethod: 'cash'
                                 },
 
+                                assistedByEmployeeId: null,
+
                                 wasOfflineSale: false
                               }, (data) => {
                                 salesId = data.salesId;
@@ -241,6 +243,8 @@ describe('Sales Return', _ => {
                                     shouldSaveChangeInAccount: false,
                                     paymentMethod: 'cash'
                                   },
+
+                                  assistedByEmployeeId: null,
 
                                   wasOfflineSale: false
                                 }, (data) => {

@@ -1,0 +1,219 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-pos-assign-assisted-by-employee">
+  <template>
+    <style include="shared-styles">
+      .service-title {
+        font-weight: bold;
+      }
+
+      .duration-text {
+        font-size: 12px;
+      }
+
+      .already-selected {
+        font-weight: bold;
+        font-size: 12px;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <template is="dom-if" if="{{assignedAssistedByEmployee}}">
+        <div class="card vertical layout">
+          <paper-button raised class="danger" style="margin-top: 10px;" on-tap="clearEmployeeTapped">[[verses.assignAssistedByEmployee.clearEmployeeLabel]]</paper-button>
+        </div>
+      </template>
+
+      <div class="card vertical layout">
+        <div class="horizontal layout center">
+          <paper-input class="flex" value="{{searchString}}" label="[[verses.assignAssistedByEmployee.searchFieldTips]]"></paper-input>
+          <template is="dom-if" if="{{searchString.length}}">
+            <paper-icon-button icon="clear" on-tap="cancelSearchStringTapped"></paper-icon-button>
+          </template>
+        </div>
+        <paper-button raised class="primary" on-tap="searchTapped">
+          <iron-icon icon="search" class="m-right-8"></iron-icon>[[verses.general.search]]
+        </paper-button>
+      </div>
+
+      <div class="card vertical layout">
+
+        <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+          <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+        </template>
+
+        <div class="list">
+          <template is="dom-repeat" items="[[employeeList]]" as="employee">
+            <div class="horizontal layout item center">
+
+              <div class="vertical layout flex">
+                <div class="person-name-container">[[verses.general.name]]: [[employee.userDetails.fullName]]</div>
+                <div class="person-phone-container">[[verses.general.phone]]: [[employee.userDetails.phone]]</div>
+                <div class="person-detail-container">[[verses.employee.companyProvidedId]]: [[employee.companyProvidedId]]</div>
+                <div class="person-detail-container">[[verses.employee.designation]] : [[employee.designation]], [[verses.employee.role]]: [[employee.role]]</div>
+              </div>
+
+              <template is="dom-if" if="[[!employee.isSelected]]">
+                <paper-button raised class="secondary" on-tap="selectEmployeeTapped">[[verses.general.select]]</paper-button>
+              </template>
+
+            </div>
+          </template>
+        </div>
+
+        <div class="pagination">
+          [[verses.general.showing]]
+          <span class="limit">[[pagination.limit]]</span>
+          [[verses.general.itemsOutOf]]
+          <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+          <span class="offset">#[[$inc(pagination.offset)]]</span>.
+        </div>
+        <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+          <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+        </template>
+
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+    class PagePosAssignAssistedByEmployee extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-pos-assign-assisted-by-employee';
+      }
+
+      static get properties() {
+        return {
+          searchString: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.assignAssistedByEmployee.assignAssistedByEmployeeTitle);
+        if (!this._ensureAccess()) return;
+        this._processCurrentlySelected(() => {
+          this._processEmployeeList(() => {
+            this.isReady = true;
+          });
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.searchString = '';
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_USERS'],
+          moduleList: []
+        });
+      }
+
+      _fetchEmployeeList(cbfn) {
+        let data = { organizationId: this.app.organization.id, searchString: this.searchString, paginate: this.paginate };
+        this.app.callGetEmployeeListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.employeeList);
+        });
+      }
+
+      _processEmployeeList(cbfn) {
+        this._fetchEmployeeList(newEmployeeList => {
+          this.employeeList = newEmployeeList;
+          for (let i = 0; i < this.employeeList.length; i++) {
+            if (this.assignedAssistedByEmployee && this.employeeList[i].id === this.assignedAssistedByEmployee.id) {
+              this.employeeList[i].isSelected = true;
+            }
+          }
+          cbfn();
+        });
+      }
+
+      _processCurrentlySelected(cbfn) {
+        this.assignedAssistedByEmployee = this.app.getFromSession('pos-assigned-assisted-by-employee');
+        console.log('assignedAssistedByEmployee', this.assignedAssistedByEmployee);
+        cbfn();
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processEmployeeList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processEmployeeList(() => this.isReady = true);
+      }
+
+      // region: ui  =================================
+
+      selectEmployeeTapped(e) {
+        let employee = e.model.employee;
+        this.app.storeInSession('pos-assigned-assisted-by-employee', employee);
+        this.app.navigateToPreviousUrl(`/pos`);
+      }
+
+      clearEmployeeTapped(e = null) {
+        this.app.extractFromSession('pos-assigned-assisted-by-employee');
+        this.app.navigateToPreviousUrl(`/pos`);
+      }
+
+      cancelSearchStringTapped() {
+        this.searchString = '';
+      }
+
+      searchTapped() {
+        this.isReady = false;
+        this._processEmployeeList(() => this.isReady = true);
+      }
+
+      // region: misc =================================
+    }
+
+    window.customElements.define(PagePosAssignAssistedByEmployee.is, PagePosAssignAssistedByEmployee);
+  </script>
+</dom-module>
