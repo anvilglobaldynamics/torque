@@ -24,6 +24,7 @@ const adminUsername = "default";
 const adminPassword = "johndoe1pass";
 
 const phone = rnd(prefix, 11);
+const email = `${rnd(prefix)}@rmail.com`;
 const password = "123545678";
 const fullName = "Test " + rnd(prefix, 11);
 const fullName2 = "Test " + rnd(prefix, 11).split('').reverse().join('');
@@ -44,7 +45,7 @@ let org1id = null;
 let org2id = null;
 let packageActivationId = null;
 
-describe.only('Admin', _ => {
+describe('Admin', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -224,9 +225,33 @@ describe.only('Admin', _ => {
 
   // -- outgoing-email - start
 
+  // ================================================== Edit Profile
+
+  it('api/user-edit-profile', testDoneFn => {
+
+    callApi('api/user-edit-profile', {
+      json: {
+        apiKey: apiKeyOfUserToBan,
+        fullName: fullName,
+        email: email,
+        phone: phone,
+        nid: '',
+        physicalAddress: '',
+        emergencyContact: '',
+        bloodGroup: ''
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
   let outgoingEmailList = [];
 
-  it.skip('api/admin-get-outgoing-email-list (Valid Date)', testDoneFn => {
+  it('api/admin-get-outgoing-email-list (Valid Date)', testDoneFn => {
 
     let dateString = new Date().toISOString().slice(0, 10);
     let date = new Date(dateString).getTime();
@@ -242,7 +267,7 @@ describe.only('Admin', _ => {
       expect(body).to.have.property('outgoingEmailList').that.is.an('array');
       expect(body.outgoingEmailList.length > 0).to.equal(true);
       expect(body.outgoingEmailList.some(outgoingEmail => {
-        return outgoingEmail.to === phone;
+        return outgoingEmail.to === email;
       })).to.equal(true);
       outgoingEmailList = body.outgoingEmailList;
       testDoneFn();
@@ -250,10 +275,10 @@ describe.only('Admin', _ => {
 
   });
 
-  it.skip('api/admin-set-outgoing-email-status (Valid SMS Id, status: sent)', testDoneFn => {
+  it('api/admin-set-outgoing-email-status (Valid SMS Id, status: sent)', testDoneFn => {
 
     let status = 'sent';
-    let outgoingEmailId = outgoingEmailList.find(outgoingEmail => outgoingEmail.to === phone).id;
+    let outgoingEmailId = outgoingEmailList.find(outgoingEmail => outgoingEmail.to === email).id;
 
     callApi('api/admin-set-outgoing-email-status', {
       json: {
@@ -270,10 +295,10 @@ describe.only('Admin', _ => {
 
   });
 
-  it.skip('api/admin-set-outgoing-email-status (Valid SMS Id, status: random)', testDoneFn => {
+  it('api/admin-set-outgoing-email-status (Valid SMS Id, status: random)', testDoneFn => {
 
     let status = 'random';
-    let outgoingEmailId = outgoingEmailList.find(outgoingEmail => outgoingEmail.to === phone).id;
+    let outgoingEmailId = outgoingEmailList.find(outgoingEmail => outgoingEmail.to === email).id;
 
     callApi('api/admin-set-outgoing-email-status', {
       json: {
@@ -291,7 +316,7 @@ describe.only('Admin', _ => {
 
   });
 
-  it.skip('api/admin-set-outgoing-email-status (Invalid SMS Id, status: sent)', testDoneFn => {
+  it('api/admin-set-outgoing-email-status (Invalid SMS Id, status: sent)', testDoneFn => {
 
     let status = 'sent';
     let outgoingEmailId = 9559599;
@@ -306,16 +331,16 @@ describe.only('Admin', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(true);
       expect(body).to.have.property('error');
-      expect(body.error).to.have.property('code').that.equals('OUTGOING_SMS_INVALID');
+      expect(body.error).to.have.property('code').that.equals('OUTGOING_EMAIL_INVALID');
       testDoneFn();
     });
 
   });
 
-  it.skip('api/admin-set-outgoing-email-status (Invalid apiKey)', testDoneFn => {
+  it('api/admin-set-outgoing-email-status (Invalid apiKey)', testDoneFn => {
 
     let status = 'sent';
-    let outgoingEmailId = outgoingEmailList.find(outgoingEmail => outgoingEmail.to === phone).id;
+    let outgoingEmailId = outgoingEmailList.find(outgoingEmail => outgoingEmail.to === email).id;
 
     callApi('api/admin-set-outgoing-email-status', {
       json: {
