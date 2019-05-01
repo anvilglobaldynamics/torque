@@ -677,9 +677,10 @@
     "offlineSaleCountMessage": " টি অফলাইন বিক্রি আছে। ইন্টারনেট সংযোগ পেলে এই বিক্রি গুলো দাখিল করুন।",
     "showHideButton": "দেখুন",
     "createdOfflineSaleDatetime": "তৈরি",
-    "assignedEmployee": "দায়িত্ব দেন",
-    "assignEmployee": "দায়িত্ব দেয়া",
-    "noDiscountApplicable": "প্রযোজ্য নয়"
+    "assignedEmployee": "দায়িত্ব দেয়া",
+    "assignEmployee": "দায়িত্ব দেন",
+    "noDiscountApplicable": "প্রযোজ্য নয়",
+    "assistedEmployee": "সহায়তায়"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",
@@ -867,7 +868,7 @@
   "assignEmployeeService": {
     "assignEmployeeServiceTitle": "সেবার দায়িত্বে কর্মচারী",
     "clearEmployeeLabel": "সেবার দায়িত্ব মুছে ফেলুন",
-    "searchFieldTips": "নাম অথবা ফোন দিয়ে খুজুন"
+    "searchFieldTips": "নাম অথবা ফোন"
   },
   "serviceMembership": {
     "serviceMembershipTitle": "সেবার সদস্যপদ",
@@ -957,7 +958,7 @@
   },
   "assignAssistedByEmployee": {
     "assignAssistedByEmployeeTitle": "সহায়ক কর্মচারী",
-    "clearEmployeeLabel": "সেবার দায়িত্ব মুছে ফেলুন",
-    "searchFieldTips": "নাম অথবা ফোন দিয়ে খুজুন"
+    "clearEmployeeLabel": "সহায়ক কর্মচারী মুছে ফেলুন",
+    "searchFieldTips": "নাম অথবা ফোন"
   }
 }

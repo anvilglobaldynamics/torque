@@ -675,9 +675,10 @@
     "showHideButton": "Show/Hide",
     "submitOfflineSales": "Sync",
     "createdOfflineSaleDatetime": "Created",
-    "assignedEmployee": "assigned",
-    "assignEmployee": "assign",
-    "noDiscountApplicable": "Not Applicable"
+    "assignedEmployee": "Assigned",
+    "assignEmployee": "Assign",
+    "noDiscountApplicable": "Not Applicable",
+    "assistedEmployee": "Assisted by"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
@@ -866,7 +867,7 @@
   "assignEmployeeService": {
     "assignEmployeeServiceTitle": "Assign Employee To Service",
     "clearEmployeeLabel": "Clear Selected Employee",
-    "searchFieldTips": "Serch by name or phone"
+    "searchFieldTips": "Name or phone"
   },
   "serviceMembership": {
     "serviceMembershipTitle": "Service Memberships",
@@ -957,6 +958,6 @@
   "assignAssistedByEmployee": {
     "assignAssistedByEmployeeTitle": "Assisted By Employee",
     "clearEmployeeLabel": "Clear Selected Employee",
-    "searchFieldTips": "Serch by name or phone"
+    "searchFieldTips": "Name or phone"
   }
 }

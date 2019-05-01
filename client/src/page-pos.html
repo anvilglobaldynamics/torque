@@ -353,13 +353,13 @@
 
               <template is="dom-if" if="{{assignedAssistedByEmployee}}">
                 <div class="employee-icon-container-active" on-tap="assignAssistedByEmployeeTapped">
-                  <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignedEmployee]]
+                  <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
                 </div>
               </template>
 
               <template is="dom-if" if="{{!assignedAssistedByEmployee}}">
                 <div class="employee-icon-container" on-tap="assignAssistedByEmployeeTapped">
-                  <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignEmployee]]
+                  <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
                 </div>
               </template>
 

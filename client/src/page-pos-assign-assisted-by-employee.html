@@ -53,10 +53,11 @@
           <template is="dom-if" if="{{searchString.length}}">
             <paper-icon-button icon="clear" on-tap="cancelSearchStringTapped"></paper-icon-button>
           </template>
+
+          <paper-button raised class="primary" on-tap="searchTapped">
+            [[verses.general.search]]
+          </paper-button>
         </div>
-        <paper-button raised class="primary" on-tap="searchTapped">
-          <iron-icon icon="search" class="m-right-8"></iron-icon>[[verses.general.search]]
-        </paper-button>
       </div>
 
       <div class="card vertical layout">
