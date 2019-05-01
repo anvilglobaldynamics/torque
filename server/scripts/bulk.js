@@ -187,8 +187,13 @@ const createWarehouse = async ({ apiKey, organizationId }) => {
     contactPersonName: pickOne(nameList)
   });
 
-  return { warehouseId };
+  let body = await callApi('api/get-warehouse', {
+    apiKey,
+    warehouseId
+  });
+  let warehouseDefaultInventoryId = body.defaultInventory.id;
 
+  return { warehouseId, warehouseDefaultInventoryId };
 }
 
 const createCustomer = async ({ apiKey, organizationId }) => {
@@ -289,12 +294,26 @@ const createEmployee = async ({ apiKey, organizationId }) => {
   return { employeeId };
 }
 
-const createProduct = async ({ apiKey, organizationId, outletId, productBlueprintId, outletDefaultInventoryId, count }) => {
-  console.log('should create product');
+const createOutletProduct = async ({ apiKey, organizationId, outletId, productBlueprintId, outletDefaultInventoryId, count }) => {
+  console.log('should create outlet product');
 
   let results = await callApi('api/add-product-to-inventory', {
     apiKey,
     inventoryId: outletDefaultInventoryId,
+    productList: [
+      { productBlueprintId, purchasePrice: 100, salePrice: 200, count }
+    ]
+  });
+
+  return { productId: results.insertedProductList[0].productId };
+}
+
+const createWarehouseProduct = async ({ apiKey, organizationId, warehouseId, productBlueprintId, warehouseDefaultInventoryId, count }) => {
+  console.log('should create warehouse product');
+
+  let results = await callApi('api/add-product-to-inventory', {
+    apiKey,
+    inventoryId: warehouseDefaultInventoryId,
     productList: [
       { productBlueprintId, purchasePrice: 100, salePrice: 200, count }
     ]
@@ -363,8 +382,10 @@ const generateBulkData = async () => {
       let { employeeId } = await createEmployee({ apiKey, organizationId });
     }
 
+    let warehouseList = [];
     for (let i = 0; i < getSolidCount(warehouseCount); i++) {
-      let { warehouseId } = await createWarehouse({ apiKey, organizationId });
+      let { warehouseId, warehouseDefaultInventoryId } = await createWarehouse({ apiKey, organizationId });
+      warehouseList.push({ warehouseId, warehouseDefaultInventoryId });
     }
 
     let outletList = [];
@@ -385,12 +406,20 @@ const generateBulkData = async () => {
       serviceBlueprintIdList.push(serviceBlueprintId);
     }
 
+    for (let warehouse of warehouseList) {
+      let { warehouseId, warehouseDefaultInventoryId } = warehouse;
+      for (let productBlueprintId of productBlueprintIdList) {
+        let count = getSolidCount(productCountPerBlueprint);
+        await createWarehouseProduct({ apiKey, organizationId, warehouseId, productBlueprintId, warehouseDefaultInventoryId, count });
+      }
+    }
+
     for (let outlet of outletList) {
       let { outletId, outletDefaultInventoryId } = outlet
       let productList = [];
       for (let productBlueprintId of productBlueprintIdList) {
         let count = getSolidCount(productCountPerBlueprint);
-        let { productId } = await createProduct({ apiKey, organizationId, outletId, productBlueprintId, outletDefaultInventoryId, count });
+        let { productId } = await createOutletProduct({ apiKey, organizationId, outletId, productBlueprintId, outletDefaultInventoryId, count });
         productList.push({ productId, count });
       }
       // add sales -
