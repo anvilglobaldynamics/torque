@@ -163,6 +163,7 @@ Possible Error Codes:
         totalAmount: Joi.number().max(999999999999999).required(),
         vatAmount: Joi.number().max(999999999999999).required(),
         discountPresetId: Joi.number().max(999999999999999).allow(null).required(),
+        discountPresetName: Joi.string().min(0).max(64).allow('').required(),
         discountType: Joi.string().max(1024).required(),
         discountValue: Joi.number().max(999999999999999).required(),
         discountedAmount: Joi.number().max(999999999999999).required(),
