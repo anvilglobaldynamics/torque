@@ -702,7 +702,6 @@
       _intializeServiceManager() {
         this.serviceManager.on('service-change', (event) => {
           let count = event.detail.activeCount - window.torqueCache.ignorableApiCallCount;
-          // console.log('activeServiceCount', count);
           this.activeServiceCount = Math.max(count, 0);
         });
         this.serviceManager.on('error', (event) => {
@@ -753,7 +752,6 @@
       // ====================== navigation =============================
 
       _pageNameChanged() {
-        // console.log('_pageNameChanged(): pre-route this.pageName =', this.pageName);
         if (this.isInOfflineMode) {
           const allowedPageNameList = [
             'login',
@@ -911,13 +909,11 @@
 
       onOfflineDataChange() {
         this.offlineData = this.loadOfflineData();
-        // console.log('onOfflineDataChange', this.offlineData);
         if (this.offlineData.offlineModeInitiatedDatetimeStamp) {
           this.isInOfflineMode = true;
         } else {
           this.isInOfflineMode = false;
         }
-        // console.log('this.isInOfflineMode', this.isInOfflineMode)
         this._proxyToActivePage('onOfflineDataChange', this.offlineData);
 
         // model = {
@@ -1058,7 +1054,6 @@
 
       _initiateBackgroundSync() {
         this._processBackgroundSync((wasDone) => {
-          // console.log("_processBackgroundSync() result:", wasDone);
           window.setTimeout(() => this._initiateBackgroundSync(), backgroundSyncInterval);
         });
       }
