@@ -337,6 +337,8 @@ const createSales = async ({ apiKey, outletId, productList }) => {
       paymentMethod: 'cash'
     },
 
+    assistedByEmployeeId: null,
+
     wasOfflineSale: false
   });
 

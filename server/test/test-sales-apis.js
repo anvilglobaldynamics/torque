@@ -318,6 +318,8 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
+        assistedByEmployeeId: null,
+
         wasOfflineSale: false
       }
     }, (err, response, body) => {
@@ -356,6 +358,8 @@ describe('Sales', _ => {
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         },
+
+        assistedByEmployeeId: null,
 
         wasOfflineSale: false
       }
@@ -403,6 +407,8 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
+        assistedByEmployeeId: null,
+
         wasOfflineSale: false
       }
     }, (err, response, body) => {
@@ -448,6 +454,8 @@ describe('Sales', _ => {
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         },
+
+        assistedByEmployeeId: null,
 
         wasOfflineSale: false
       }
@@ -495,6 +503,8 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
+        assistedByEmployeeId: null,
+
         wasOfflineSale: false
       }
     }, (err, response, body) => {
@@ -526,6 +536,8 @@ describe('Sales', _ => {
         serviceList: [],
 
         payment: {},
+
+        assistedByEmployeeId: null,
 
         wasOfflineSale: false
       }
@@ -573,6 +585,8 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
+        assistedByEmployeeId: null,
+
         wasOfflineSale: false
       }
     }, (err, response, body) => {
@@ -619,6 +633,8 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
+        assistedByEmployeeId: null,
+
         wasOfflineSale: false
       }
     }, (err, response, body) => {
@@ -664,6 +680,8 @@ describe('Sales', _ => {
           shouldSaveChangeInAccount: true,
           paymentMethod: 'cash'
         },
+
+        assistedByEmployeeId: null,
 
         wasOfflineSale: false
       }
@@ -1183,6 +1201,8 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
+        assistedByEmployeeId: null,
+
         wasOfflineSale: false
       }
     }, (err, response, body) => {
@@ -1409,6 +1429,8 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
+        assistedByEmployeeId: null,
+
         wasOfflineSale: false
       }
     }, (err, response, body) => {
@@ -1454,6 +1476,8 @@ describe('Sales', _ => {
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         },
+
+        assistedByEmployeeId: null,
 
         wasOfflineSale: false
       }
@@ -1517,6 +1541,8 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
+        assistedByEmployeeId: null,
+
         wasOfflineSale: false
       }
     }, (err, response, body) => {
@@ -1562,6 +1588,8 @@ describe('Sales', _ => {
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         },
+
+        assistedByEmployeeId: null,
 
         wasOfflineSale: false
       }
@@ -1609,6 +1637,8 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
+        assistedByEmployeeId: null,
+
         wasOfflineSale: false
       }
     }, (err, response, body) => {
@@ -1654,6 +1684,8 @@ describe('Sales', _ => {
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         },
+
+        assistedByEmployeeId: null,
 
         wasOfflineSale: false
       }
@@ -1976,6 +2008,8 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
+        assistedByEmployeeId: null,
+
         wasOfflineSale: false
       }))
       .then((body) => { })
@@ -2009,6 +2043,8 @@ describe('Sales', _ => {
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         },
+
+        assistedByEmployeeId: null,
 
         wasOfflineSale: false
       }))
@@ -2044,6 +2080,8 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
+        assistedByEmployeeId: null,
+
         wasOfflineSale: false
       }))
       .then((body) => { })
@@ -2078,6 +2116,8 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
+        assistedByEmployeeId: null,
+
         wasOfflineSale: false
       }))
       .then((body) => { })
@@ -2111,6 +2151,8 @@ describe('Sales', _ => {
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         },
+
+        assistedByEmployeeId: null,
 
         wasOfflineSale: false
       }))
@@ -2530,6 +2572,8 @@ describe('Sales', _ => {
           paymentMethod: 'cash'
         },
 
+        assistedByEmployeeId: null,
+
         wasOfflineSale: false
       }
     }, (err, response, body) => {
@@ -2576,6 +2620,8 @@ describe('Sales', _ => {
           shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
         },
+
+        assistedByEmployeeId: null,
 
         wasOfflineSale: false
       }

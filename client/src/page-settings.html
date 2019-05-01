@@ -79,19 +79,29 @@
         </div>
 
         <div class="card vertical layout">
+          <div>[[verses.home.promptForDefaultOutlet]]</div>
+          <div class="horizontal layout center">
+            <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.defaultOutletSelection]]">
+              <paper-listbox slot="dropdown-content" on-iron-select="backgroundSyncDropdownSelected" selected="{{outletIndexForBackgroundSync}}">
+                <template is="dom-repeat" items="[[outletList]]" as="outlet">
+                  <paper-item data-id="[[outlet.id]]">[[outlet.name]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+            <paper-icon-button hidden="[[$notSelected(outletIndexForBackgroundSync)]]" icon="clear" on-tap="cancelTapped"></paper-icon-button>
+          </div>
+
           <div class="option">
-            <div class="horizontal layout center">
-              <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.backgroundSync]]">
-                <paper-listbox slot="dropdown-content" on-iron-select="backgroundSyncDropdownSelected" selected="{{outletIndexForBackgroundSync}}">
-                  <template is="dom-repeat" items="[[outletList]]" as="outlet">
-                    <paper-item data-id="[[outlet.id]]">[[outlet.name]]</paper-item>
-                  </template>
-                </paper-listbox>
-              </paper-dropdown-menu>
-              <paper-icon-button hidden="[[$notSelected(outletIndexForBackgroundSync)]]" icon="clear" on-tap="cancelTapped"></paper-icon-button>
-            </div>
+            <paper-checkbox on-change="settingsChanged" checked="{{bypassHomepage}}" disabled="[[$notSelected(outletIndexForBackgroundSync)]]">[[verses.settings.takeToDefaultOutlet]]</paper-checkbox>
             <div class="note">
-              [[verses.settings.backgroundSyncDetail]]
+              [[verses.settings.takeToDefaultOutletDetail]]
+            </div>
+          </div>
+
+          <div class="option">
+            <paper-checkbox on-change="settingsChanged" checked="{{allowBackgroundSync}}" disabled="[[$notSelected(outletIndexForBackgroundSync)]]">[[verses.settings.useBackgroundSync]]</paper-checkbox>
+            <div class="note">
+              [[verses.settings.useBackgroundSyncDetails]]
             </div>
           </div>
         </div>
@@ -279,8 +289,9 @@
           this.outletList = newOutletList;
 
           let settings = this._getNormalizedSettings();
-          let id = settings.backgroundSyncMetaMap[this.app.organization.id];
-          this.outletIndexForBackgroundSync = this.outletList.findIndex(outlet => outlet.id === id);
+          let { outletId, allowBackgroundSync, bypassHomepage } = settings.defaultOutletMetaMap[this.app.organization.id];
+          this.outletIndexForBackgroundSync = this.outletList.findIndex(outlet => outlet.id === outletId);
+          Object.assign(this, { allowBackgroundSync, bypassHomepage });
           cbfn();
         });
       }
@@ -316,15 +327,17 @@
       settingsChanged(e) {
         let settings = this._getNormalizedSettings();
 
-        let id = null;
+        let outletId = null;
         try {
           if (this.outletList.length > 0 && this.outletIndexForBackgroundSync !== null && (typeof this.outletIndexForBackgroundSync) !== 'undefined') {
-            id = this.outletList[this.outletIndexForBackgroundSync].id;
+            outletId = this.outletList[this.outletIndexForBackgroundSync].id;
           }
         } catch (ex) {
           'pass'
         }
-        settings.backgroundSyncMetaMap[this.app.organization.id] = id;
+        // settings.defaultOutletMetaMap[this.app.organization.id].outletId = outletId;
+        let { allowBackgroundSync, bypassHomepage } = this;
+        Object.assign(settings.defaultOutletMetaMap[this.app.organization.id], { outletId, allowBackgroundSync, bypassHomepage });
 
         if (this.monetaryUnit === '') {
           this.monetaryUnit = 'BDT';
@@ -337,7 +350,7 @@
           doc.shouldUseWebsockets = this.shouldUseWebsockets;
           doc.monetaryUnit = this.monetaryUnit;
           doc.minimumProductQuantity = this.minimumProductQuantity;
-          doc.backgroundSyncMetaMap = settings.backgroundSyncMetaMap;
+          doc.defaultOutletMetaMap = settings.defaultOutletMetaMap;
           doc.defaultPrinterFormat = this.printerFormatOptionList[this.indexOfDefaultPrinterFormat];
           return doc
         });

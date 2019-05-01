@@ -20,44 +20,36 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="page-pos-assign-employee-service">
+<dom-module id="page-pos-assign-assisted-by-employee">
   <template>
     <style include="shared-styles">
-    
-    .service-title {
-      font-weight: bold;
-    }
+      .service-title {
+        font-weight: bold;
+      }
 
-    .duration-text {
-      font-size: 12px;
-    }
-    
-    .already-selected {
-      font-weight: bold;
-      font-size: 12px;
-    }
+      .duration-text {
+        font-size: 12px;
+      }
 
+      .already-selected {
+        font-weight: bold;
+        font-size: 12px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="card vertical layout">
-        <div class="service-title">[[service.name]]</div>
-        <div>[[verses.serviceBlueprint.sellingPrice]]: [[service.minSalePrice]] [[app.settings.monetaryUnit]]</div>
-        <template is="dom-if" if="[[service.isLongstanding]]">
-          <div class="duration-text">[[verses.serviceBlueprint.serviceDuration]]: [[service.serviceDuration.months]] [[verses.serviceBlueprint.serviceDurationMonths]], [[service.serviceDuration.days]] [[verses.serviceBlueprint.serviceDurationDays]]</div>
-        </template>
-
-        <template is="dom-if" if="{{service.assignedEmploymentId}}">
-          <paper-button raised class="danger" style="margin-top: 10px;" on-tap="clearEmployeeTapped">[[verses.assignEmployeeService.clearEmployeeLabel]]</paper-button>
-        </template>
-      </div>
+      <template is="dom-if" if="{{assignedAssistedByEmployee}}">
+        <div class="card vertical layout">
+          <paper-button raised class="danger" style="margin-top: 10px;" on-tap="clearEmployeeTapped">[[verses.assignAssistedByEmployee.clearEmployeeLabel]]</paper-button>
+        </div>
+      </template>
 
       <div class="card vertical layout">
         <div class="horizontal layout center">
-          <paper-input class="flex" value="{{searchString}}" label="[[verses.assignEmployeeService.searchFieldTips]]"></paper-input>
+          <paper-input class="flex" value="{{searchString}}" label="[[verses.assignAssistedByEmployee.searchFieldTips]]"></paper-input>
           <template is="dom-if" if="{{searchString.length}}">
             <paper-icon-button icon="clear" on-tap="cancelSearchStringTapped"></paper-icon-button>
           </template>
@@ -84,7 +76,7 @@
                 <div class="person-detail-container">[[verses.employee.companyProvidedId]]: [[employee.companyProvidedId]]</div>
                 <div class="person-detail-container">[[verses.employee.designation]] : [[employee.designation]], [[verses.employee.role]]: [[employee.role]]</div>
               </div>
-              
+
               <template is="dom-if" if="[[!employee.isSelected]]">
                 <paper-button raised class="secondary" on-tap="selectEmployeeTapped">[[verses.general.select]]</paper-button>
               </template>
@@ -110,15 +102,15 @@
   </template>
 
   <script>
-    class PagePosAssignEmployeeService extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+    class PagePosAssignAssistedByEmployee extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
       static get is() {
-        return 'page-pos-assign-employee-service';
+        return 'page-pos-assign-assisted-by-employee';
       }
 
       static get properties() {
         return {
           searchString: {
-            type:String,
+            type: String,
             value: ''
           }
         };
@@ -135,16 +127,9 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
-        this.app.pushPageTitle(this.app.verses.assignEmployeeService.assignEmployeeServiceTitle);
+        this.app.pushPageTitle(this.app.verses.assignAssistedByEmployee.assignAssistedByEmployeeTitle);
         if (!this._ensureAccess()) return;
-        if (!('service' in this.params)) {
-          let message = this.app.verses.general.pageCannotBeDisplayed;
-          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
-            this.app.navigateTo('/home');
-          });
-          return;
-        }
-        this._processService(() => {
+        this._processCurrentlySelected(() => {
           this._processEmployeeList(() => {
             this.isReady = true;
           });
@@ -153,15 +138,15 @@
 
       onNavigateOut() {
         super.onNavigateOut();
-        this.searchString  = '';
+        this.searchString = '';
         this.app.popPageTitle();
       }
-      
+
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
           privilegeList: ['PRIV_VIEW_USERS'],
-          moduleList: ['MOD_SERVICE']
+          moduleList: []
         });
       }
 
@@ -178,21 +163,17 @@
       _processEmployeeList(cbfn) {
         this._fetchEmployeeList(newEmployeeList => {
           this.employeeList = newEmployeeList;
-          if (this.service.assignedEmploymentId) {
-            for (let i = 0; i < this.employeeList.length; i++) {
-              if (this.employeeList[i].id === this.service.assignedEmploymentId) {
-                this.employeeList[i].isSelected = true;
-              }
+          for (let i = 0; i < this.employeeList.length; i++) {
+            if (this.assignedAssistedByEmployee && this.employeeList[i].id === this.assignedAssistedByEmployee.id) {
+              this.employeeList[i].isSelected = true;
             }
           }
           cbfn();
         });
       }
 
-      _processService(cbfn) {
-        let serviceId = parseInt(this.params.service);
-        let serviceList = this.app.getFromSession('pos-selected-service-list');
-        this.service = serviceList.find(service => service.id === serviceId);
+      _processCurrentlySelected(cbfn) {
+        this.assignedAssistedByEmployee = this.app.getFromSession('pos-assigned-assisted-by-employee');
         cbfn();
       }
 
@@ -211,39 +192,21 @@
       // region: ui  =================================
 
       selectEmployeeTapped(e) {
-        let { id } = e.model.employee;
-        let serviceId = parseInt(this.params.service);
-        let previousSavedSelectedServiceList = this.app.getFromSession('pos-selected-service-list');
-
-        for (let i = 0; i < previousSavedSelectedServiceList.length; i++) {
-          if (previousSavedSelectedServiceList[i].id === serviceId) {
-            previousSavedSelectedServiceList[i].assignedEmploymentId = id;
-          }
-        }
-
-        this.app.storeInSession('pos-selected-service-list', previousSavedSelectedServiceList);
+        let employee = e.model.employee;
+        this.app.storeInSession('pos-assigned-assisted-by-employee', employee);
         this.app.navigateToPreviousUrl(`/pos`);
       }
 
       clearEmployeeTapped(e = null) {
-        let serviceId = parseInt(this.params.service);
-        let previousSavedSelectedServiceList = this.app.getFromSession('pos-selected-service-list');
-
-        for (let i = 0; i < previousSavedSelectedServiceList.length; i++) {
-          if (previousSavedSelectedServiceList[i].id === serviceId) {
-            previousSavedSelectedServiceList[i].assignedEmploymentId = null;
-          }
-        }
-
-        this.app.storeInSession('pos-selected-service-list', previousSavedSelectedServiceList);
+        this.app.extractFromSession('pos-assigned-assisted-by-employee');
         this.app.navigateToPreviousUrl(`/pos`);
       }
 
-      cancelSearchStringTapped(){
+      cancelSearchStringTapped() {
         this.searchString = '';
       }
 
-      searchTapped(){
+      searchTapped() {
         this.isReady = false;
         this._processEmployeeList(() => this.isReady = true);
       }
@@ -251,6 +214,6 @@
       // region: misc =================================
     }
 
-    window.customElements.define(PagePosAssignEmployeeService.is, PagePosAssignEmployeeService);
+    window.customElements.define(PagePosAssignAssistedByEmployee.is, PagePosAssignAssistedByEmployee);
   </script>
 </dom-module>

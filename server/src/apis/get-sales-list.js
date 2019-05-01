@@ -118,6 +118,17 @@ exports.GetSalesListApi = class extends Api {
     map.forEach((serviceBlueprint, soldService) => soldService.serviceBlueprint = serviceBlueprint);
   }
 
+  async __includeDiscountPresetName({ salesList }) {
+    salesList.forEach(sales => sales.payment.discountPresetName = '');
+    let discountedSalesList = salesList.filter(sales => sales.payment.discountPresetId !== null);
+    let map = await this.crossmap({
+      source: discountedSalesList,
+      sourceKeyFn: (sales) => sales.payment.discountPresetId,
+      target: 'discountPreset'
+    });
+    map.forEach((discountPreset, sales) => sales.payment.discountPresetName = discountPreset.name);
+  }
+
   async handle({ body }) {
     let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, includeExtendedInformation, searchString } = body;
     toDate = this.__getExtendedToDate(toDate);
@@ -125,6 +136,7 @@ exports.GetSalesListApi = class extends Api {
     await this.__verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer });
     let salesList = await this.__getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, searchString });
     await this.__includeExtendedInformationIfNeeded({ salesList, includeExtendedInformation });
+    await this.__includeDiscountPresetName({ salesList });
     return { salesList };
   }
 

@@ -179,14 +179,18 @@
           settings.defaultPrinterFormat = 'a4';
         }
 
-        if (!settings.backgroundSyncMetaMap) {
-          settings.backgroundSyncMetaMap = {};
+        if (!settings.defaultOutletMetaMap) {
+          settings.defaultOutletMetaMap = {};
         }
         if (!this.app.organization) {
           throw new Error("Organization is not loaded!");
         }
-        if (!(this.app.organization.id in settings.backgroundSyncMetaMap)) {
-          settings.backgroundSyncMetaMap[this.app.organization.id] = null;
+        if (!(this.app.organization.id in settings.defaultOutletMetaMap)) {
+          settings.defaultOutletMetaMap[this.app.organization.id] = { 
+            outletId: null,
+            allowBackgroundSync: false,
+            bypassHomepage: false
+          };
         }
         return settings;
       }

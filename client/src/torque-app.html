@@ -87,6 +87,7 @@
 <link rel="lazy-import" href="page-report-select-inventories.html">
 <link rel="lazy-import" href="page-pos-select-products.html">
 <link rel="lazy-import" href="page-pos-assign-employee-service.html">
+<link rel="lazy-import" href="page-pos-assign-assisted-by-employee.html">
 <link rel="lazy-import" href="page-pos-select-services.html">
 <link rel="lazy-import" href="page-manage-sales.html">
 <link rel="lazy-import" href="page-view-sales.html">
@@ -95,10 +96,10 @@
 <link rel="lazy-import" href="page-manage-service-membership.html">
 <link rel="lazy-import" href="page-view-sales-return.html">
 <link rel="lazy-import" href="page-bulk-import-product-blueprints.html">
-<link rel="lazy-import" href="page-select-geolocation.html"> 
-<link rel="lazy-import" href="page-scan-identifier-code.html"> 
-<link rel="lazy-import" href="page-manage-discount-presets.html"> 
-<link rel="lazy-import" href="page-edit-discount-preset.html"> 
+<link rel="lazy-import" href="page-select-geolocation.html">
+<link rel="lazy-import" href="page-scan-identifier-code.html">
+<link rel="lazy-import" href="page-manage-discount-presets.html">
+<link rel="lazy-import" href="page-edit-discount-preset.html">
 
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
@@ -383,6 +384,7 @@
           <page-pos-select-products name="pos-select-products"></page-pos-select-products>
           <page-pos-select-services name="pos-select-services"></page-pos-select-services>
           <page-pos-assign-employee-service name="pos-assign-employee-service"></page-pos-assign-employee-service>
+          <page-pos-assign-assisted-by-employee name="pos-assign-assisted-by-employee"></page-pos-assign-assisted-by-employee>
           <page-manage-sales name="manage-sales"></page-manage-sales>
           <page-view-sales name="view-sales"></page-view-sales>
           <page-manage-sales-return name="manage-sales-return"></page-manage-sales-return>
@@ -471,7 +473,7 @@
           },
           authorName: {
             type: String,
-            value: 'Anvil Global Dynamics'
+            value: 'Anvil Global Dynamics Ltd.'
           },
           authorWebsite: {
             type: String,
@@ -654,7 +656,7 @@
             which: 'only',
             shouldUseWebsockets: true,
             monetaryUnit: 'BDT',
-            backgroundSyncMetaMap: {},
+            defaultOutletMetaMap: {},
             defaultPrinterFormat: 'a4'
           });
 
@@ -700,7 +702,6 @@
       _intializeServiceManager() {
         this.serviceManager.on('service-change', (event) => {
           let count = event.detail.activeCount - window.torqueCache.ignorableApiCallCount;
-          // console.log('activeServiceCount', count);
           this.activeServiceCount = Math.max(count, 0);
         });
         this.serviceManager.on('error', (event) => {
@@ -751,7 +752,6 @@
       // ====================== navigation =============================
 
       _pageNameChanged() {
-        // console.log('_pageNameChanged(): pre-route this.pageName =', this.pageName);
         if (this.isInOfflineMode) {
           const allowedPageNameList = [
             'login',
@@ -765,15 +765,16 @@
             this.app = this;
             try {
               let settings = this._getNormalizedSettings();
-              let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+              let defaultOutletMeta = settings.defaultOutletMetaMap[this.app.organization.id];
+              let defaultOutletId = defaultOutletMeta.outletId;
               if (defaultOutletId) {
                 this.navigateTo(`/pos/outlet:${defaultOutletId}`);
                 return
               }
-            } catch (ex){
+            } catch (ex) {
               // Organization is not loaded yet but somehow isInOfflineMode is true
               'pass'
-            }            
+            }
           }
         }
         let qualifiedName = 'page-' + this.pageName + '.html';
@@ -830,7 +831,8 @@
         // TODO: Refactor
         this.app = this;
         let settings = this._getNormalizedSettings();
-        let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+        let defaultOutletMeta = settings.defaultOutletMetaMap[this.app.organization.id];
+        let defaultOutletId = defaultOutletMeta.outletId;
         if (defaultOutletId) {
           this.navigateTo(`/pos/outlet:${defaultOutletId}`);
           return
@@ -907,13 +909,11 @@
 
       onOfflineDataChange() {
         this.offlineData = this.loadOfflineData();
-        // console.log('onOfflineDataChange', this.offlineData);
         if (this.offlineData.offlineModeInitiatedDatetimeStamp) {
           this.isInOfflineMode = true;
         } else {
           this.isInOfflineMode = false;
         }
-        // console.log('this.isInOfflineMode', this.isInOfflineMode)
         this._proxyToActivePage('onOfflineDataChange', this.offlineData);
 
         // model = {
@@ -973,8 +973,10 @@
         if (this.isInOfflineMode) return cbfn(false);
         this.app = this;
         let settings = this._getNormalizedSettings();
-        let defaultOutletId = settings.backgroundSyncMetaMap[this.app.organization.id];
+        let defaultOutletMeta = settings.defaultOutletMetaMap[this.app.organization.id];
+        let defaultOutletId = defaultOutletMeta.outletId;
         if (this.$notSelected(defaultOutletId)) return cbfn(false);
+        if (!defaultOutletMeta.allowBackgroundSync) return cbfn(false);
 
         const onApiError = (error) => {
           return cbfn(false);
@@ -1052,7 +1054,6 @@
 
       _initiateBackgroundSync() {
         this._processBackgroundSync((wasDone) => {
-          // console.log("_processBackgroundSync() result:", wasDone);
           window.setTimeout(() => this._initiateBackgroundSync(), backgroundSyncInterval);
         });
       }

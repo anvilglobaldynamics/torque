@@ -163,6 +163,7 @@ Possible Error Codes:
         totalAmount: Joi.number().max(999999999999999).required(),
         vatAmount: Joi.number().max(999999999999999).required(),
         discountPresetId: Joi.number().max(999999999999999).allow(null).required(),
+        discountPresetName: Joi.string().min(0).max(64).allow('').required(),
         discountType: Joi.string().max(1024).required(),
         discountValue: Joi.number().max(999999999999999).required(),
         discountedAmount: Joi.number().max(999999999999999).required(),
@@ -171,6 +172,10 @@ Possible Error Codes:
         paidAmount: Joi.number().max(999999999999999).required(),
         changeAmount: Joi.number().max(999999999999999).required()
       }),
+
+      assistedByEmployeeId: Joi.number().min(0).max(999999999999999).allow(null).required(),
+
+      wasOfflineSale: Joi.boolean().required(),
 
       isModified: Joi.boolean().required()
     });

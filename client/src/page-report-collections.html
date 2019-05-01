@@ -328,7 +328,6 @@
         this.app.pushPageTitle(this.app.verses.collectionReport.collectionReportTitle);
         if (!this._ensureAccess()) return;
         this._processCollectionList(() => {
-          console.log(this.app.organization);
           if ('outlet' in this.params) {
             this.isSearchingOutlet = true;
             this.elem('elem-outlet-selector').forceSelect(this.params.outlet);

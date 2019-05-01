@@ -139,7 +139,8 @@
           let { apiKey, warning, sessionId, user } = response;
           Object.assign(user, { apiKey, warning, sessionId });
           this.app.saveUser(user);
-          this.app.navigateTo('/home');
+          this.app.wasLastNavigationBypassed = false;
+          this.app.navigateTo('/home/bypassable:yes');
         });
       }
 

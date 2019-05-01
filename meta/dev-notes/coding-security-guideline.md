@@ -1,7 +1,7 @@
 
 ## mongodb
 
-1. Never use the $where clause.
+1. Never use the `$where` clause.
 
 ## server -> apis
 

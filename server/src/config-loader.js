@@ -58,6 +58,7 @@ class ConfigLoader {
           passwordHash: Joi.string().max(1024).required(),
           rights: Joi.object().keys({
             sendOutgoingSms: Joi.boolean().required(),
+            sendOutgoingEmail: Joi.boolean().required(),
             viewUsersAndOrganizations: Joi.boolean().required(),
             banUsers: Joi.boolean().required(),
           }).required(),

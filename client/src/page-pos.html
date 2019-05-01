@@ -345,11 +345,23 @@
 
             </div>
 
-            <div class="individual-calculation-field-container">
+            <div class="individual-calculation-field-container horizontal layout center">
 
-              <paper-input class="payment--serviceChargeAmount" value="{{payment.serviceChargeAmount}}" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.serviceChargeInputError]]" label="[[verses.pos.serviceChargeInput]]">
+              <paper-input class="payment--serviceChargeAmount flex" value="{{payment.serviceChargeAmount}}" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.serviceChargeInputError]]" label="[[verses.pos.serviceChargeInput]]">
                 <div slot="suffix">[[app.settings.monetaryUnit]]</div>
               </paper-input>
+
+              <template is="dom-if" if="{{assignedAssistedByEmployee}}">
+                <div class="employee-icon-container-active" on-tap="assignAssistedByEmployeeTapped">
+                  <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
+                </div>
+              </template>
+
+              <template is="dom-if" if="{{!assignedAssistedByEmployee}}">
+                <div class="employee-icon-container" on-tap="assignAssistedByEmployeeTapped">
+                  <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
+                </div>
+              </template>
 
             </div>
 
@@ -504,6 +516,7 @@
         }
         if (!this._ensureAccess()) return;
         this.selectedDiscountPreset = '--no-discount';
+        this.assignedAssistedByEmployee = this.app.getFromSession('pos-assigned-assisted-by-employee');
         this.delay(0, () => {
           this.self = this;
           let customerId = this.app.extractFromSession('last-created-customer');
@@ -785,8 +798,10 @@
           return finalService;
         });
 
+        let assistedByEmployeeId = (this.assignedAssistedByEmployee) ? this.assignedAssistedByEmployee.id : null;
+
         let data = {
-          customerId, outletId, productList, serviceList, payment
+          customerId, outletId, productList, serviceList, assistedByEmployeeId, payment
         };
 
         if (this.isInOfflineMode) {
@@ -801,6 +816,7 @@
         this.app.extractFromSession('pos-selected-product-list');
         this.app.extractFromSession('pos-selected-service-list');
         this.app.extractFromSession('last-selected-customer');
+        this.app.extractFromSession('pos-assigned-assisted-by-employee');
         this.resetProperties('payment', 'productList', 'serviceList', 'customer');
         this.app.refreshCurrentPage();
       }
@@ -974,6 +990,10 @@
       assignEmployeeTapped(e) {
         let { id } = e.model.service;
         return this.app.navigateTo(`/pos-assign-employee-service/service:${id}`);
+      }
+
+      assignAssistedByEmployeeTapped() {
+        return this.app.navigateTo(`/pos-assign-assisted-by-employee`);
       }
 
       // region: misc =================================

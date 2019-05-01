@@ -202,8 +202,8 @@
     "employees": "Employees",
     "outlets": "Outlets",
     "warehouses": "Warehouses",
-    "promptForDefaultOutlet": "Offline Mode; You can select an Outlet If you want to continue using Lipi during network outage",
-    "promptForDefaultOutletGoButton": "Select an outlet",
+    "promptForDefaultOutlet": "Regularly Used Outlet; Selecting a regularly used outlet lets you quickly jump to POS after login and use lipi during network outage",
+    "promptForDefaultOutletGoButton": "Select outlet",
     "viewActivationHistory": "View Activation History"
   },
   "organization": {
@@ -417,9 +417,10 @@
     "selectedProducts": "Selected Product Blueprint"
   },
   "about": {
+    "aboutUsTitle": "About",
     "about": "About",
     "tos": "Terms & Conditions",
-    "contactUs": "Contact Us",
+    "contactUs": "Contact",
     "projectBy": "This project is created and maintained by",
     "logoAndFaviconBy": "logo and favicon icon made by",
     "sendYourQuestionsTo": "Send your questions, complaints and praises to"
@@ -577,7 +578,8 @@
     "service": "Service",
     "discardQuestion": "Discard this Sale?",
     "discardMessage": "Once discarded, this sale will not be considered in any report or calculation. Service Membership(s) sold in this sale (if any) will also be discarded.",
-    "dueAmount": "Due amount"
+    "dueAmount": "Due amount",
+    "discountPreset": "Discount Preset"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",
@@ -673,9 +675,10 @@
     "showHideButton": "Show/Hide",
     "submitOfflineSales": "Sync",
     "createdOfflineSaleDatetime": "Created",
-    "assignedEmployee": "assigned",
-    "assignEmployee": "assign",
-    "noDiscountApplicable": "Not Applicable"
+    "assignedEmployee": "Assigned",
+    "assignEmployee": "Assign",
+    "noDiscountApplicable": "Not Applicable",
+    "assistedEmployee": "Assisted by"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
@@ -743,8 +746,11 @@
     "others": "Others",
     "useWebsockets": "Use Websockets",
     "useWebsocketsDetail": "If checked, the app will try to use websockets.",
-    "backgroundSync": "Select Outlet for Offline Mode",
-    "backgroundSyncDetail": "If selected, 'Offline Mode' will be available for current organization. Please note that your data usage will increase if you enable this feature.",
+    "takeToDefaultOutlet": "Directly open POS",
+    "takeToDefaultOutletDetail": "Directly go to regularly used outlet's POS after login instead of dashboard.",
+    "useBackgroundSync": "Enable 'Offline Mode'",
+    "useBackgroundSyncDetails": "'Offline Mode' lets you keep using regularly used outlet's POS during network outage. Note that data usage will increase if you enable this feature.",
+    "defaultOutletSelection": "Select Outlet",
     "monetaryUnit": "Monetary Unit",
     "monetaryUnitDetail": "Note: Changing the monetary unit does not affect your sales.",
     "moreOptionsForthcoming": "More options are forthcoming.",
@@ -860,7 +866,8 @@
   },
   "assignEmployeeService": {
     "assignEmployeeServiceTitle": "Assign Employee To Service",
-    "clearEmployeeLabel": "Clear Selected Employee"
+    "clearEmployeeLabel": "Clear Selected Employee",
+    "searchFieldTips": "Name or phone"
   },
   "serviceMembership": {
     "serviceMembershipTitle": "Service Memberships",
@@ -947,5 +954,10 @@
     "removeOutlet": "Remove Outlet",
     "changeOutlet": "Change Outlet",
     "total": "Total"
+  },
+  "assignAssistedByEmployee": {
+    "assignAssistedByEmployeeTitle": "Assisted By Employee",
+    "clearEmployeeLabel": "Clear Selected Employee",
+    "searchFieldTips": "Name or phone"
   }
 }

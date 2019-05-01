@@ -44,11 +44,12 @@ exports.GetEmployeeListApi = class extends Api {
     return employeeList;
   }
 
+  // TODO: add search by phone number feature
   _searchCombineEmployeeList({ employeeList, searchString }) {
     employeeList = employeeList.filter(employee => {
       searchString = this.escapeRegExp(searchString.toLowerCase());
       let regex = new RegExp(searchString, 'i');
-      return regex.test(employee.userDetails.fullName);
+      return regex.test(employee.userDetails.fullName) || regex.test(employee.userDetails.phone);
     });
 
     return employeeList;

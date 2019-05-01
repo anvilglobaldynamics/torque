@@ -2,17 +2,18 @@
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
-exports.OutgoingSmsCollection = class extends Collection {
+exports.OutgoingEmailCollection = class extends Collection {
 
-  get name() { return 'outgoing-sms'; }
+  get name() { return 'outgoing-email'; }
 
   get joiSchema() {
     return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-      from: Joi.string().min(1).max(15).required(),
-      to: Joi.string().min(1).max(15).required(),
-      content: Joi.string().min(1).max(512).required(),
+      from: Joi.string().min(5).max(64).required(),
+      to: Joi.string().min(5).max(64).required(),
+      subject: Joi.string().min(1).max(1024).required(),
+      html: Joi.string().min(1).max(65536).required(),
       status: Joi.string().valid('pending', 'sent', 'delivered', 'canceled').required(),
       isDeleted: Joi.boolean().required()
     });
@@ -28,10 +29,10 @@ exports.OutgoingSmsCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ from, to, content }) {
+  async create({ from, to, subject, html, status = 'pending' }) {
     return await this._insert({
-      from, to, content,
-      status: 'pending',
+      from, to, 
+      subject, html, status,
       isDeleted: false
     });
   }

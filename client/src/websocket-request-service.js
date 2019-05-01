@@ -74,7 +74,6 @@
       }
 
       connection.addEventListener('close', (e) => {
-        // console.log('socket closed');
         if (host in openConnectionMap) {
           openConnectionMap[host].isOpen = false;
         }
@@ -87,7 +86,6 @@
       });
 
       connection.addEventListener('error', (e) => {
-        // console.log('socket error');
         if (host in openConnectionMap) {
           openConnectionMap[host].isOpen = false;
         }
