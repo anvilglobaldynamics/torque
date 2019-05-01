@@ -7,13 +7,14 @@ let pathlib = require('path');
 
 class EmailService {
 
-  constructor(config, mode) {
+  constructor(config, mode, database) {
     this.config = config;
     this.mode = mode;
     let { privateKey, domain, from, enabled } = config.email;
     this.privateKey = privateKey;
     this.domain = domain;
     this.from = from;
+    this.database = database;
     this.enabled = enabled;
   }
 
@@ -93,16 +94,17 @@ class EmailService {
 
   async sendMail({ to, subject, html } = {}) {
     let actualTo = to;
-    if (this.mode !== 'production') {
-      actualTo = 'shafayet.sayem@gmail.com';
-    }
+    // NOTE: Uncomment in case making sensitive changes to email service.
+    // if (this.mode !== 'production') {
+    //   actualTo = 'ignore@anvil.live';
+    // }
     let data = {
       from: this.from,
       to: actualTo,
       subject,
       html
     };
-    return await new Promise((accept, reject) => {
+    let results = await new Promise((accept, reject) => {
       if (this.enabled) {
         this.mailgun.messages().send(data, function (error, body) {
           return accept([error, false, body, data]);
@@ -112,6 +114,21 @@ class EmailService {
         return accept([error, true, null, data]);
       }
     });
+
+    { // handle logging of email in a new scope
+      let status = 'pending';
+
+      let [err, isDeveloperError, response, finalBody] = results;
+      if (!err && !isDeveloperError && response.message === 'Queued. Thank you.') {
+        status = 'sent';
+      }
+
+      let newData = { status };
+      Object.assign(newData, data);
+      await this.database.outgoingEmail.create(newData);
+    }
+
+    return results;
   }
 
 }
