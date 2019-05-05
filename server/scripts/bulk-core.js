@@ -111,8 +111,9 @@ const callApi = async (path, data) => {
 }
 
 const printApiCallMetrics = () => {
+  console.log("================================================");
   console.log("API Call Metrics");
-  console.log("========================");
+  console.log("================================================");
   for (let path in apiCallMetrics) {
     console.log(path, apiCallMetrics[path].timesCalled);
   }
@@ -402,11 +403,13 @@ const generateBulkData = async (params) => {
   let { userId: ownerUserId, apiKey } = await createUser({ phone: primaryUserPhone });
 
   let reusables = {
-    outletList: []
+    outletList: [],
+    organizationId: null
   }
 
   for (let i = 0; i < getSolidCount(organizationCount); i++) {
     let { organizationId } = await createOrganization({ apiKey }, db);
+    reusables.organizationId = organizationId;
 
     for (let i = 0; i < getSolidCount(employeeCount); i++) {
       let { employeeId } = await createEmployee({ apiKey, organizationId, i });
@@ -480,7 +483,7 @@ const generateBulkData = async (params) => {
   console.log('Done. Primary User and Pass', primaryUserPhone, commonPassword);
 
   // process.exit(0);
-  return { apiKey, primaryUserPhone, commonPassword, reusables }
+  return { apiKey, primaryUserPhone, commonPassword, reusables, ownerUserId }
 }
 
 exports.generateBulkData = generateBulkData;
