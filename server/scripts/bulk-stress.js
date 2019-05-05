@@ -6,7 +6,7 @@ let {
   createEmployee,
   createOutlet,
   callApi,
-  generateBulkData
+  printApiCallMetrics
 } = require('./bulk-core');
 
 let params = {
@@ -21,9 +21,11 @@ let params = {
   customerCount: 50
 };
 
-const _getAggregatedInventoryDetails = async (apiKey, inventoryId) => {
+const _addSales = createSales;
 
-  // console.log('should add product to outlet', i);
+const _getAggregatedInventoryDetails = async ({ apiKey, inventoryId }) => {
+
+  console.log("CALLING get-aggregated-inventory-details");
 
   let results = await callApi('api/get-aggregated-inventory-details', {
     apiKey,
@@ -34,7 +36,7 @@ const _getAggregatedInventoryDetails = async (apiKey, inventoryId) => {
 
 }
 
-const _bulkImportProductBlueprint = async (apiKey, organizationId) => {
+const _bulkImportProductBlueprint = async ({ apiKey, organizationId }) => {
 
   // console.log('should add product to outlet', i);
 
@@ -51,7 +53,7 @@ const _bulkImportProductBlueprint = async (apiKey, organizationId) => {
 
 }
 
-const _getSalesList = async (apiKey, organizationId) => {
+const _getSalesList = async ({ apiKey, organizationId }) => {
 
   // console.log('should add product to outlet', i);
 
@@ -64,7 +66,7 @@ const _getSalesList = async (apiKey, organizationId) => {
     shouldFilterByOutlet: false,
     shouldFilterByCustomer: false,
 
-    fromDate,
+    fromDate: (new Date()).getTime(),
     toDate: (new Date()).getTime(),
     includeExtendedInformation: true,
 
@@ -75,7 +77,7 @@ const _getSalesList = async (apiKey, organizationId) => {
 
 }
 
-const _getServiceMembershipList = async (apiKey, inventoryId) => {
+const _getServiceMembershipList = async ({ apiKey, inventoryId }) => {
 
   console.log('should add product to outlet', i);
 
@@ -90,8 +92,8 @@ const _getServiceMembershipList = async (apiKey, inventoryId) => {
     shouldFilterByOutlet: false,
     shouldFilterByCustomer: false,
 
-    fromDate: monthsEarlierDate,
-    toDate: monthsLaterDate
+    fromDate: (new Date()).getTime() - (30 * 24 * 60 * 60 * 1000),
+    toDate: (new Date()).getTime()
   });
 
   return {};
@@ -113,12 +115,40 @@ const _getServiceMembershipList = async (apiKey, inventoryId) => {
 // }
 
 
+// get - user - display - information
+// get - outlet
+// inv det
+// get - active - service - list
+
+const sleep = (timeout) => {
+  return new Promise(accept => {
+    setTimeout(accept, timeout);
+  });
+}
+
+const simulateOfflineMode = async ({ apiKey, primaryUserPhone, commonPassword, outletList }) => {
+  const delay = 30 * 1000;
+  const times = 12;
+
+  console.log("SIMULATING BACKGROUND SYNC");
+
+  for (let i = 0; i < times; i++) {
+    console.log("SIMULATING BACKGROUND: PASS #", i);
+    await _getAggregatedInventoryDetails({ apiKey, inventoryId: outletList[0].outletDefaultInventoryId });
+  }
+
+
+}
+
 
 (async () => {
   let { apiKey, primaryUserPhone, commonPassword, reusables } = await generateBulkData(params);
-  console.log({ apiKey, primaryUserPhone, commonPassword, reusables });
+  let { outletList } = reusables;
+  console.log({ apiKey, primaryUserPhone, commonPassword, outletList });
 
+  await simulateOfflineMode({ apiKey, primaryUserPhone, commonPassword, outletList });
 
+  printApiCallMetrics();
 
   process.exit(0);
 })().catch(ex => {

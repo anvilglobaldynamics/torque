@@ -1,5 +1,5 @@
 
-let { generateBulkData } = require('./bulk-core');
+let { generateBulkData, printApiCallMetrics } = require('./bulk-core');
 
 let params = {
   organizationCount: 1,
@@ -16,6 +16,8 @@ let params = {
 (async () => {
   let { apiKey, primaryUserPhone, commonPassword } = await generateBulkData(params);
   console.log({ apiKey, primaryUserPhone, commonPassword });
+
+  printApiCallMetrics();
 
   process.exit(0);
 })().catch(ex => {

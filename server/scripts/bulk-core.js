@@ -89,7 +89,11 @@ let uid = 0;
 
 const utils = require('./../test/utils.js');
 
-let callApi = async (path, data) => {
+let apiCallMetrics = {};
+
+const callApi = async (path, data) => {
+  if (!(path in apiCallMetrics)) apiCallMetrics[path] = { timesCalled: 0 };
+  apiCallMetrics[path].timesCalled += 1;
   return await new Promise((accept, reject) => {
     utils.callApi(path, { json: data }, (err, response, body) => {
       if (err) return reject(err);
@@ -104,6 +108,14 @@ let callApi = async (path, data) => {
       return accept(body);
     });
   });
+}
+
+const printApiCallMetrics = () => {
+  console.log("API Call Metrics");
+  console.log("========================");
+  for (let path in apiCallMetrics) {
+    console.log(path, apiCallMetrics[path].timesCalled);
+  }
 }
 
 const createUser = async ({ phone }) => {
@@ -425,20 +437,24 @@ const generateBulkData = async (params) => {
       serviceBlueprintIdList.push(serviceBlueprintId);
     }
 
+    let iA = 0;
     for (let warehouse of warehouseList) {
       let { warehouseId, warehouseDefaultInventoryId } = warehouse;
       for (let productBlueprintId of productBlueprintIdList) {
+        iA += 1;
         let count = getSolidCount(productCountPerBlueprint);
-        await createWarehouseProduct({ apiKey, organizationId, warehouseId, productBlueprintId, warehouseDefaultInventoryId, count, i });
+        await createWarehouseProduct({ apiKey, organizationId, warehouseId, productBlueprintId, warehouseDefaultInventoryId, count, i: iA });
       }
     }
 
+    let iB = 0;
     for (let outlet of outletList) {
       let { outletId, outletDefaultInventoryId } = outlet
       let productList = [];
       for (let productBlueprintId of productBlueprintIdList) {
+        iB += 1;
         let count = getSolidCount(productCountPerBlueprint);
-        let { productId } = await createOutletProduct({ apiKey, organizationId, outletId, productBlueprintId, outletDefaultInventoryId, count, i });
+        let { productId } = await createOutletProduct({ apiKey, organizationId, outletId, productBlueprintId, outletDefaultInventoryId, count, i: iB });
         productList.push({ productId, count });
       }
       // add sales -
@@ -473,3 +489,4 @@ exports.createOutletProduct = createOutletProduct;
 exports.createEmployee = createEmployee;
 exports.createOutlet = createOutlet;
 exports.callApi = callApi;
+exports.printApiCallMetrics = printApiCallMetrics;
