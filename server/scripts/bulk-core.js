@@ -87,7 +87,16 @@ let uid = 0;
 
 // --------------------------------------------------------------
 
-const utils = require('./../test/utils.js');
+let request = require('request');
+
+let genUrl = exports.genUrl = (path) => {
+  return "http://localhost:8540/" + path
+}
+
+_callApi = (...args) => {
+  args[0] = genUrl(args[0]);
+  request.post(...args);
+}
 
 let apiCallMetrics = {};
 
@@ -95,7 +104,7 @@ const callApi = async (path, data) => {
   if (!(path in apiCallMetrics)) apiCallMetrics[path] = { timesCalled: 0 };
   apiCallMetrics[path].timesCalled += 1;
   return await new Promise((accept, reject) => {
-    utils.callApi(path, { json: data }, (err, response, body) => {
+    _callApi(path, { json: data }, (err, response, body) => {
       if (err) return reject(err);
       if (response.statusCode !== 200) {
         console.log(body);
@@ -110,7 +119,7 @@ const callApi = async (path, data) => {
   });
 }
 
-const printApiCallMetrics = () => {
+const printApiCallMetrics = (apiCallMetrics) => {
   console.log("================================================");
   console.log("API Call Metrics");
   console.log("================================================");
@@ -118,6 +127,8 @@ const printApiCallMetrics = () => {
     console.log(path, apiCallMetrics[path].timesCalled);
   }
 }
+
+const getApiCallMetrics = () => { return apiCallMetrics };
 
 const createUser = async ({ phone }) => {
   console.log('should create user', phone, commonPassword);
@@ -135,7 +146,7 @@ const createUser = async ({ phone }) => {
   return { apiKey, userId };
 }
 
-const createOrganization = async ({ apiKey }, db) => {
+const createOrganization = async ({ apiKey }) => {
   console.log('should create organization');
 
   let { organizationId } = await callApi('api/add-organization', {
@@ -145,8 +156,23 @@ const createOrganization = async ({ apiKey }, db) => {
     phone: makePhoneNumber(),
     email: makeEmailId()
   });
-  let packageActivationId = await db.packageActivation.create({ packageCode: 'R-U01', organizationId, createdByAdminName: 'default', paymentReference: 'n/aaaa' });
-  let result = await db.organization.setPackageActivationId({ id: organizationId }, { packageActivationId });
+
+  let adminApiKey = (await callApi('api/admin-login', {
+    username: 'default',
+    password: ''
+  })).apiKey;
+
+  console.log(adminApiKey)
+
+  await callApi('api/admin-assign-package-to-organization', {
+    apiKey: adminApiKey,
+    organizationId,
+    packageCode: "R-U01",
+    paymentReference: "buk-stress"
+  })
+
+  // let packageActivationId = await db.packageActivation.create({ packageCode: 'R-U01', organizationId, createdByAdminName: 'default', paymentReference: 'n/aaaa' });
+  // let result = await db.organization.setPackageActivationId({ id: organizationId }, { packageActivationId });
 
   return { organizationId };
 }
@@ -394,10 +420,10 @@ const generateBulkData = async (params) => {
     customerCount
   } = params;
 
-  let { Program } = require('./../src/index');
-  let mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
-  await mainProgram.initiateServer();
-  let db = mainProgram.exposeDatabaseForTesting();
+  // let { Program } = require('./../src/index');
+  // let mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
+  // await mainProgram.initiateServer();
+  // let db = mainProgram.exposeDatabaseForTesting();
 
   let primaryUserPhone = makePhoneNumber();
   let { userId: ownerUserId, apiKey } = await createUser({ phone: primaryUserPhone });
@@ -409,7 +435,7 @@ const generateBulkData = async (params) => {
   }
 
   for (let i = 0; i < getSolidCount(organizationCount); i++) {
-    let { organizationId } = await createOrganization({ apiKey }, db);
+    let { organizationId } = await createOrganization({ apiKey });
     reusables.organizationId = organizationId;
 
     for (let i = 0; i < getSolidCount(employeeCount); i++) {
@@ -499,3 +525,4 @@ exports.createEmployee = createEmployee;
 exports.createOutlet = createOutlet;
 exports.callApi = callApi;
 exports.printApiCallMetrics = printApiCallMetrics;
+exports.getApiCallMetrics = getApiCallMetrics;

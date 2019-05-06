@@ -6,32 +6,35 @@ let {
   createEmployee,
   createOutlet,
   callApi,
-  printApiCallMetrics
+  printApiCallMetrics,
+  getApiCallMetrics
 } = require('./bulk-core');
 
+// NOTE: Live params
+let params = {
+  organizationCount: 1, // This must be 1. Actual value is controlled by "numOrganizations" in cluster
+  employeeCount: 10,
+  warehouseCount: 2,
+  outletCount: 4,
+  productBlueprintCount: 100,
+  serviceBlueprintCount: 30,
+  productCountPerBlueprint: 10000,
+  salesCountPerOutlet: 40,
+  customerCount: 50
+};
+
+// // NOTE: Locally Testing Params
 // let params = {
 //   organizationCount: 1,
-//   employeeCount: 10,
+//   employeeCount: 2,
 //   warehouseCount: 1,
-//   outletCount: 4,
-//   productBlueprintCount: 100,
-//   serviceBlueprintCount: 30,
-//   productCountPerBlueprint: 1000,
-//   salesCountPerOutlet: 40,
-//   customerCount: 50
+//   outletCount: 2,
+//   productBlueprintCount: 6,
+//   serviceBlueprintCount: 2,
+//   productCountPerBlueprint: 10000,
+//   salesCountPerOutlet: 3,
+//   customerCount: 1
 // };
-
-let params = {
-  organizationCount: 1,
-  employeeCount: 2,
-  warehouseCount: 1,
-  outletCount: 2,
-  productBlueprintCount: 6,
-  serviceBlueprintCount: 2,
-  productCountPerBlueprint: 1000,
-  salesCountPerOutlet: 3,
-  customerCount: 1
-};
 
 const sleep = (timeout) => {
   console.log("SLEEPING", timeout, 'ms');
@@ -39,6 +42,8 @@ const sleep = (timeout) => {
     setTimeout(accept, timeout);
   });
 }
+
+let k = 0;
 
 /* background */
 const _getOutlet = async ({ apiKey, outletId }) => {
@@ -229,14 +234,12 @@ const _transferBetweenInventories = async ({ apiKey, fromInventoryId, toInventor
     fromInventoryId,
     toInventoryId,
     productList
-    // productList: [
-    //   { productId: productToBeTransferred.productId, count: 3 }
-    // ]
   });
   return {};
 }
 
-// add-sales
+// NOTE: Apis called - 
+// add-sales DONE
 // get-sales-list DONE
 // get-sales DONE
 // get-service-membership-list DONE
@@ -247,29 +250,25 @@ const _transferBetweenInventories = async ({ apiKey, fromInventoryId, toInventor
 // transfer-between-inventories DONE
 
 const simulateHeavyApiCalling = async ({ apiKey, primaryUserPhone, commonPassword, userId, organizationId, outletList, productList }) => {
-  const delay = 1 * 1000;
-  const times = 12;
+  const delay = 6 * 60 * 1000;
+  const times = 10;
 
   console.log("HEAVY API CALLING");
 
-  console.log(outletList);
-  console.log(productList)
-  console.log(productList.map(product => ({ productId: product.productId, count: 1 })));
-
   for (let i = 0; i < times; i++) {
     console.log("HEAVY API CALLING: PASS #", i);
-    await _getAggregatedInventoryDetails({ apiKey, inventoryId: outletList[0].outletDefaultInventoryId });
+    await _getAggregatedInventoryDetails({ apiKey, inventoryId: outletList[k].outletDefaultInventoryId });
     let { salesList } = await _getSalesList({ apiKey, organizationId });
     await _getSales({ apiKey, salesId: salesList[0].id });
     await _getServiceMembershipList({ apiKey, organizationId });
-    await _reportInventoryDetails({ apiKey, inventoryId: outletList[0].outletDefaultInventoryId });
+    await _reportInventoryDetails({ apiKey, inventoryId: outletList[k].outletDefaultInventoryId });
     await _reportCollectionDetails({ apiKey, organizationId });
-    await _shopGetOutletDetails({ outletId: outletList[0].outletId });
+    await _shopGetOutletDetails({ outletId: outletList[k].outletId });
     await _bulkImportProductBlueprint({ apiKey, organizationId });
     await _shopLocateNearbyOutlets({});
     await _transferBetweenInventories({
       apiKey,
-      fromInventoryId: outletList[0].outletDefaultInventoryId,
+      fromInventoryId: outletList[k].outletDefaultInventoryId,
       toInventoryId: outletList[1].outletDefaultInventoryId,
       productList: productList.map(product => ({ productId: product.productId, count: 1 }))
     });
@@ -277,7 +276,7 @@ const simulateHeavyApiCalling = async ({ apiKey, primaryUserPhone, commonPasswor
     let sellingProductList = [];
     let product = productList[2];
     sellingProductList.push({ productId: product.productId, count: 1 });
-    await createSales({ apiKey, outletId: outletList[0].outletId, productList: sellingProductList, i });
+    await createSales({ apiKey, outletId: outletList[k].outletId, productList: sellingProductList, i });
     await sleep(delay);
   }
 
@@ -286,35 +285,37 @@ const simulateHeavyApiCalling = async ({ apiKey, primaryUserPhone, commonPasswor
 
 
 const simulateOfflineMode = async ({ apiKey, primaryUserPhone, commonPassword, userId, organizationId, outletList }) => {
-  const delay = 1 * 1000;
+  const delay = 5 * 60 * 1000;
   const times = 12;
 
   console.log("SIMULATING BACKGROUND SYNC");
 
   for (let i = 0; i < times; i++) {
     console.log("SIMULATING BACKGROUND: PASS #", i);
-    await _getAggregatedInventoryDetails({ apiKey, inventoryId: outletList[0].outletDefaultInventoryId });
+    await _getAggregatedInventoryDetails({ apiKey, inventoryId: outletList[k].outletDefaultInventoryId });
     await _getUserDisplayInformation({ apiKey, userId, organizationId });
-    await _getOutlet({ apiKey, outletId: outletList[0].outletId });
-    await _getActiveServiceList({ apiKey, outletId: outletList[0].outletId });
+    await _getOutlet({ apiKey, outletId: outletList[k].outletId });
+    await _getActiveServiceList({ apiKey, outletId: outletList[k].outletId });
     await sleep(delay);
   }
 
   console.log("SIMULATING BACKGROUND SYNC - ENDED");
 }
 
-(async () => {
+exports.run = async ({ noMetrics = false }) => {
   let { apiKey, primaryUserPhone, commonPassword, ownerUserId: userId, reusables } = await generateBulkData(params);
   let { outletList, organizationId, productList } = reusables;
   // console.log({ apiKey, primaryUserPhone, commonPassword, userId, outletList });
 
-  // await simulateOfflineMode({ apiKey, primaryUserPhone, commonPassword, userId, organizationId, outletList });
-  await simulateHeavyApiCalling({ apiKey, primaryUserPhone, commonPassword, userId, organizationId, outletList, productList });
+  await Promise.all([
+    simulateOfflineMode({ apiKey, primaryUserPhone, commonPassword, userId, organizationId, outletList }),
+    simulateHeavyApiCalling({ apiKey, primaryUserPhone, commonPassword, userId, organizationId, outletList, productList })
+  ])
 
-  printApiCallMetrics();
+  if (!noMetrics) {
+    printApiCallMetrics(getApiCallMetrics());
+  }
 
-  process.exit(0);
-})().catch(ex => {
-  console.error(ex);
-  process.exit(0);
-});
+  return getApiCallMetrics();
+}
+
