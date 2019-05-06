@@ -25,10 +25,10 @@ let params = {
   organizationCount: 1,
   employeeCount: 2,
   warehouseCount: 1,
-  outletCount: 1,
+  outletCount: 2,
   productBlueprintCount: 6,
   serviceBlueprintCount: 2,
-  productCountPerBlueprint: 100,
+  productCountPerBlueprint: 1000,
   salesCountPerOutlet: 3,
   customerCount: 1
 };
@@ -74,7 +74,7 @@ const _getActiveServiceList = async ({ apiKey, outletId }) => {
 
 /* background + heavy */
 const _getAggregatedInventoryDetails = async ({ apiKey, inventoryId }) => {
-  console.log("CALLING get-aggregated-inventory-details");
+  console.log("CALLING get-aggregated-inventory-details", inventoryId);
   let results = await callApi('api/get-aggregated-inventory-details', {
     apiKey,
     inventoryId
@@ -93,7 +93,21 @@ const _bulkImportProductBlueprint = async ({ apiKey, organizationId }) => {
     organizationId,
     rowList: [
       ["Should Be Unique 1", "pc", 300, 500, 10, "Yes", ''],
-      ["Should Be Unique 2", "haali", 10, 10, 10, "No", '']
+      ["Should Be Unique 2", "haali", 10, 10, 10, "No", ''],
+      ["Should Be Unique 3", "pc", 300, 500, 10, "Yes", ''],
+      ["Should Be Unique 4", "pc", 300, 500, 10, "No", ''],
+      ["Should Be Unique 5", "pc", 300, 500, 10, "Yes", ''],
+      ["Should Be Unique 6", "pc", 300, 500, 10, "No", ''],
+      ["Should Be Unique 7", "pc", 300, 500, 10, "Yes", ''],
+      ["Should Be Unique 8", "pc", 300, 500, 10, "No", ''],
+      ["Should Be Unique 9", "pc", 300, 500, 10, "Yes", ''],
+      ["Should Be Unique 10", "pc", 300, 500, 10, "No", ''],
+      ["Should Be Unique 11", "pc", 300, 500, 10, "No", ''],
+      ["Should Be Unique 12", "pc", 300, 500, 10, "No", ''],
+      ["Should Be Unique 13", "pc", 300, 500, 10, "No", ''],
+      ["Should Be Unique 14", "pc", 300, 500, 10, "No", ''],
+      ["Should Be Unique 15", "pc", 300, 500, 10, "No", ''],
+      ["Should Be Unique 16", "pc", 300, 500, 10, "No", ''],
     ]
   });
   return {};
@@ -204,11 +218,25 @@ const _shopLocateNearbyOutlets = async ({ }) => {
     categoryCode: null,
     searchString: ''
   });
-  console.log(results)
   return {};
 }
 
+/* heavy */
+const _transferBetweenInventories = async ({ apiKey, fromInventoryId, toInventoryId, productList }) => {
+  console.log("CALLING transfer-between-inventories");
+  let results = await callApi('api/transfer-between-inventories', {
+    apiKey,
+    fromInventoryId,
+    toInventoryId,
+    productList
+    // productList: [
+    //   { productId: productToBeTransferred.productId, count: 3 }
+    // ]
+  });
+  return {};
+}
 
+// add-sales
 // get-sales-list DONE
 // get-sales DONE
 // get-service-membership-list DONE
@@ -216,13 +244,17 @@ const _shopLocateNearbyOutlets = async ({ }) => {
 // report-collection-details DONE
 // shop-get-outlet-details DONE
 // shop-locate-nearby-outlets DONE
-// transfer-between-inventories
+// transfer-between-inventories DONE
 
-const simulateHeavyApiCalling = async ({ apiKey, primaryUserPhone, commonPassword, userId, organizationId, outletList }) => {
+const simulateHeavyApiCalling = async ({ apiKey, primaryUserPhone, commonPassword, userId, organizationId, outletList, productList }) => {
   const delay = 1 * 1000;
   const times = 12;
 
   console.log("HEAVY API CALLING");
+
+  console.log(outletList);
+  console.log(productList)
+  console.log(productList.map(product => ({ productId: product.productId, count: 1 })));
 
   for (let i = 0; i < times; i++) {
     console.log("HEAVY API CALLING: PASS #", i);
@@ -233,11 +265,19 @@ const simulateHeavyApiCalling = async ({ apiKey, primaryUserPhone, commonPasswor
     await _reportInventoryDetails({ apiKey, inventoryId: outletList[0].outletDefaultInventoryId });
     await _reportCollectionDetails({ apiKey, organizationId });
     await _shopGetOutletDetails({ outletId: outletList[0].outletId });
+    await _bulkImportProductBlueprint({ apiKey, organizationId });
     await _shopLocateNearbyOutlets({});
+    await _transferBetweenInventories({
+      apiKey,
+      fromInventoryId: outletList[0].outletDefaultInventoryId,
+      toInventoryId: outletList[1].outletDefaultInventoryId,
+      productList: productList.map(product => ({ productId: product.productId, count: 1 }))
+    });
 
-    // await _getUserDisplayInformation({ apiKey, userId, organizationId });
-    // await _getOutlet({ apiKey, outletId: outletList[0].outletId });
-    // await _getActiveServiceList({ apiKey, outletId: outletList[0].outletId });
+    let sellingProductList = [];
+    let product = productList[2];
+    sellingProductList.push({ productId: product.productId, count: 1 });
+    await createSales({ apiKey, outletId: outletList[0].outletId, productList: sellingProductList, i });
     await sleep(delay);
   }
 
@@ -265,11 +305,11 @@ const simulateOfflineMode = async ({ apiKey, primaryUserPhone, commonPassword, u
 
 (async () => {
   let { apiKey, primaryUserPhone, commonPassword, ownerUserId: userId, reusables } = await generateBulkData(params);
-  let { outletList, organizationId } = reusables;
-  console.log({ apiKey, primaryUserPhone, commonPassword, userId, outletList });
+  let { outletList, organizationId, productList } = reusables;
+  // console.log({ apiKey, primaryUserPhone, commonPassword, userId, outletList });
 
   // await simulateOfflineMode({ apiKey, primaryUserPhone, commonPassword, userId, organizationId, outletList });
-  await simulateHeavyApiCalling({ apiKey, primaryUserPhone, commonPassword, userId, organizationId, outletList });
+  await simulateHeavyApiCalling({ apiKey, primaryUserPhone, commonPassword, userId, organizationId, outletList, productList });
 
   printApiCallMetrics();
 

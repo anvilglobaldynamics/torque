@@ -404,6 +404,7 @@ const generateBulkData = async (params) => {
 
   let reusables = {
     outletList: [],
+    productList: [],
     organizationId: null
   }
 
@@ -452,23 +453,28 @@ const generateBulkData = async (params) => {
 
     let iB = 0;
     for (let outlet of outletList) {
-      let { outletId, outletDefaultInventoryId } = outlet
+      let { outletId, outletDefaultInventoryId } = outlet;
       let productList = [];
       for (let productBlueprintId of productBlueprintIdList) {
         iB += 1;
         let count = getSolidCount(productCountPerBlueprint);
         let { productId } = await createOutletProduct({ apiKey, organizationId, outletId, productBlueprintId, outletDefaultInventoryId, count, i: iB });
         productList.push({ productId, count });
+        if (outletList[0].outletId === outlet.outletId) {
+          reusables.productList.push({ productId, count });
+        }
       }
       // add sales -
       for (let i = 0; i < getSolidCount(salesCountPerOutlet); i++) {
         if (productList.length === 0) break;
-        let amount = getSolidCount({ min: 1, max: Math.min(productList.length, 5) });
+        // let amount = getSolidCount({ min: 1, max: Math.min(productList.length, 5) });
+        let amount = 1;
         if (productList.length === 0) break;
         let sellingProductList = [];
         do {
           if (productList.length === 0) break;
-          sellingProductList.push(productList.pop());
+          let product = productList[0];
+          sellingProductList.push({ productId: product.productId, count: 1 });
         } while (amount--);
         let { salesId } = await createSales({ apiKey, outletId, productList: sellingProductList, i });
       }

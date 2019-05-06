@@ -69,6 +69,8 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
     let clonedProductList = JSON.parse(JSON.stringify(productList));
     let aggregatedProductList = await this.__getAggregatedProductList({ productList: clonedProductList });
 
+    console.log(productList)
+
     if (searchString) {
       aggregatedProductList = this.__searchAggregatedProductList({ aggregatedProductList, searchString });
     }
