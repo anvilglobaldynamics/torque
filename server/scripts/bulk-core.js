@@ -162,8 +162,6 @@ const createOrganization = async ({ apiKey }) => {
     password: ''
   })).apiKey;
 
-  console.log(adminApiKey)
-
   await callApi('api/admin-assign-package-to-organization', {
     apiKey: adminApiKey,
     organizationId,
