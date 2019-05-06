@@ -90,7 +90,7 @@ let uid = 0;
 let request = require('request');
 
 let genUrl = exports.genUrl = (path) => {
-  return "http://localhost:8540/" + path
+  return "https://server.lipi.live/" + path
 }
 
 _callApi = (...args) => {
