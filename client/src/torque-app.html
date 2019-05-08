@@ -842,6 +842,12 @@
 
       websocketConnectivityIndicatorIconTapped(e = null) {
         this.settings.shouldUseWebsockets = !this.settings.shouldUseWebsockets;
+        this.db.update('settings', ({
+          which
+        }) => which === 'only', (doc) => {
+          doc.shouldUseWebsockets = this.settings.shouldUseWebsockets;
+          return doc;
+        });
         window.torqueWebsocketIndicatorStatusReceivedFn('closed');
       }
 
