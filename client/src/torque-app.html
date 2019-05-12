@@ -455,7 +455,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":176,"datetimeStamp":1557300271255}');
+              return JSON.parse('{"build":177,"datetimeStamp":1557643167003}');
               '%__deploy-end'
             }
           },
@@ -617,8 +617,8 @@
 
       _manageProductionVariables() {
         if (mode === 'production') {
-          this.serverHost = 'https://server.lipi.live'
-          this.jsonPostApiPathPrefix = 'https://server.lipi.live/api/';
+          this.serverHost = 'https://single-server.lipi.live'
+          this.jsonPostApiPathPrefix = 'https://single-server.lipi.live/api/';
           this.websocketHost = 'wss://socket.lipi.live';
         } else {
           this.serverHost = 'http://localhost:8540'
