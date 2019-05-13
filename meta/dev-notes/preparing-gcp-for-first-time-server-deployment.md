@@ -6,6 +6,10 @@
 
 # Primary Installation
 
+### Step 0. Log in to Google Compute Engine Instance
+
+If unsure, read https://cloud.google.com/sdk/docs/
+
 ### Step 1. Installing nodejs, certbot, pm2
 Run commands one by one
 ```sh
@@ -59,6 +63,7 @@ Copy content from `config-production.json` and paste in above file. Update path 
 ### Step 5. Run the server
 
 ```
+cd /var/www-serve/torque/server
 pm2 start start.js --name "torque-server"
 pm2 startup systemd
 pm2 save
