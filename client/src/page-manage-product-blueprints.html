@@ -30,7 +30,11 @@
         <div class="horizontal layout item center">
           <div class="vertical layout flex">
             <div class="inventory-product-important-detail-container">[[productBlueprint.name]]</div>
-            <div class="inventory-product-price-container">[[verses.productBlueprint.buyingPrice]]: [[productBlueprint.defaultPurchasePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productBlueprint.unit]]</div>
+
+            <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+              <div class="inventory-product-price-container">[[verses.productBlueprint.buyingPrice]]: [[productBlueprint.defaultPurchasePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productBlueprint.unit]]</div>
+            </template>
+
             <div class="inventory-product-price-container">[[verses.productBlueprint.sellingPrice]]: [[productBlueprint.defaultSalePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productBlueprint.unit]]</div>
           </div>
           <div class="horizontal layout wrap">
@@ -187,6 +191,7 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
+        this.onOrganizationChange(this.app.organization);
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.productBlueprint.manageProductBlueprintsTitle);
         if (!this._ensureAccess()) return;
@@ -207,6 +212,10 @@
           privilegeList: ['PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS'],
           moduleList: ['MOD_PRODUCT']
         });
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
       }
 
       _fetchProductBlueprintList(cbfn) {
