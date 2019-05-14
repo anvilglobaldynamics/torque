@@ -28,7 +28,7 @@ class FixtureManager {
       {
         name: "privilege-list",
         path: "./src/fixtures/privilege-list.json",
-        version: 8
+        version: 9
       },
       {
         name: "package-list",
@@ -43,7 +43,7 @@ class FixtureManager {
       {
         name: "outlet-category-list",
         path: "./src/fixtures/outlet-category-list.json",
-        version: 3
+        version: 4
       }
     ];
 
