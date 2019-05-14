@@ -57,6 +57,7 @@ const privilegeObject = {
   PRIV_VIEW_SALES: true,
   PRIV_MODIFY_SALES: true,
   PRIV_ALLOW_FLAT_DISCOUNT: true,
+  PRIV_VIEW_PURCHASE_PRICE: true,
   PRIV_MODIFY_DISCOUNT_PRESETS: true,
 
   PRIV_VIEW_SALES_RETURN: true,
