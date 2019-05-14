@@ -78,7 +78,7 @@
             }
             // TODO: Translate
             let message = "Your session has expired. You will be automatically logged out. Please log in again.";
-            this.showModalDialog("Sorry!", message, _ => {
+            this.showModalDialog("Session Expired", message, _ => {
               this.logoutTapped();
             });
             return;
