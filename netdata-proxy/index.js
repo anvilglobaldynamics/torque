@@ -3,6 +3,7 @@ const { ConfigLoader } = require('../server/src/config-loader');
 const https = require('https');
 const fs = require('fs');
 const httpProxy = require('http-proxy');
+const cryptolib = require('crypto');
 
 const _getSslDetails = (config) => {
   let { key, cert, caBundle } = config.server.ssl;
@@ -21,9 +22,12 @@ const _getSslDetails = (config) => {
   return { key, cert, ca };
 }
 
-
 const _getConfig = () => {
   return ConfigLoader.getComputedConfig();
+}
+
+const _makeHash = (string) => {
+  return cryptolib.createHash('sha256').update(string).digest("hex");
 }
 
 
@@ -43,8 +47,14 @@ const main = () => {
 
     try {
       const b64auth = ((req.headers.authorization || '').split(' ')[1] || '');
-      const [login, password] = new Buffer(b64auth, 'base64').toString().split(':');
-      if (!(login === 'admin' && password === 'admin')) {
+      const [_username, _password] = new Buffer(b64auth, 'base64').toString().split(':');
+      const _passwordHash = _makeHash(password);
+
+      let admin = config.admin.list.find(({ username, passwordHash }) => {
+        return (username === _username && passwordHash === _passwordHash);
+      });
+
+      if (!admin) {
         throw new Error("Invalid Credentials");
       }
     } catch (ex) {
