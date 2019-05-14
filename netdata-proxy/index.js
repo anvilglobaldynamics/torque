@@ -48,7 +48,7 @@ const main = () => {
     try {
       const b64auth = ((req.headers.authorization || '').split(' ')[1] || '');
       const [_username, _password] = new Buffer(b64auth, 'base64').toString().split(':');
-      const _passwordHash = _makeHash(password);
+      const _passwordHash = _makeHash(_password);
 
       let admin = config.admin.list.find(({ username, passwordHash }) => {
         return (username === _username && passwordHash === _passwordHash);
@@ -58,6 +58,7 @@ const main = () => {
         throw new Error("Invalid Credentials");
       }
     } catch (ex) {
+      console.error(ex);
       res.setHeader('WWW-Authenticate', 'Basic realm="401"') // change this
       res.statusCode = 401;
       res.end('Authentication required.') // custom message
