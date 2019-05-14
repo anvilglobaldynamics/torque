@@ -48,6 +48,7 @@
         </paper-button>
       </div>
 
+      <!-- search area card -->
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
           <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="[[verses.posSelectProduct.searchForProductInputError]]" label="[[verses.posSelectProduct.searchForProductInput]]" on-keypress="searchFieldKeypressed"></paper-input>
@@ -58,12 +59,14 @@
         </div>
       </div>
 
+      <!-- no product card -->
       <template is="dom-if" if="{{!productList.length}}">
         <div class="card">
           [[verses.posSelectProduct.noProductFoundInOutlet]]
         </div>
       </template>
 
+      <!-- looping product - start -->
       <template is="dom-if" if="{{productList.length}}">
 
         <div class="card vertical layout">
@@ -79,7 +82,11 @@
                   <div class="flex" style="min-width: 128px;">
                     <div class="inventory-product-important-detail-container">[[product.name]]</div>
                     <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">[[product.count]] [[product.unit]]</div>
-                    <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+
+                    <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                      <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                    </template>
+
                     <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                     <div class="inventory-product-added-date-container">[[verses.posSelectProduct.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
                     <div class="inventory-product-added-date-container">[[verses.posSelectProduct.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
@@ -114,7 +121,9 @@
 
         </div>
       </template>
+      <!-- looping product - end -->
 
+      <!-- selected product - start -->
       <template is="dom-if" if="{{selectedProductList.length}}">
         <div class="card vertical layout">
 
@@ -124,7 +133,11 @@
                 <div class="flex" style="min-width: 128px;">
                   <div class="inventory-product-important-detail-container">[[product.name]]</div>
                   <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.maxAllowedCount)]]">[[product.maxAllowedCount]] [[product.unit]]</div>
-                  <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+
+                  <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                    <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                  </template>
+
                   <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                   <!-- <div class="inventory-product-added-date-container">[[verses.posSelectProduct.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
                   <div class="inventory-product-added-date-container">[[verses.posSelectProduct.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div> -->
@@ -145,6 +158,7 @@
           </div>
         </div>
       </template>
+      <!-- selected product - end -->
 
     </div>
 
@@ -192,6 +206,7 @@
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
+        this.onOrganizationChange(this.app.organization);
         this.useLanguageServices();
         this.onOfflineDataChange();
         this.app.pushPageTitle(this.app.verses.posSelectProduct.posSelectProductTitle);
@@ -218,6 +233,10 @@
           authLevel: 'organization-selected',
           privilegeList: ['PRIV_VIEW_ALL_INVENTORIES']
         });
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
       }
 
       _fetchInventoryDetailsOnline(cbfn) {
