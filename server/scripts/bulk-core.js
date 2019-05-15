@@ -90,7 +90,8 @@ let uid = 0;
 let request = require('request');
 
 let genUrl = exports.genUrl = (path) => {
-  return "https://single-server.lipi.live/" + path
+  // return "https://single-server.lipi.live/" + path;
+  return "http://localhost:8540/" + path;
 }
 
 _callApi = (...args) => {
@@ -159,7 +160,7 @@ const createOrganization = async ({ apiKey }) => {
 
   let adminApiKey = (await callApi('api/admin-login', {
     username: 'default',
-    password: ''
+    password: commonPassword
   })).apiKey;
 
   await callApi('api/admin-assign-package-to-organization', {
