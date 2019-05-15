@@ -70,15 +70,6 @@
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 0)]]">
 
         <div class="card vertical layout">
-          <div class="option">
-            <paper-checkbox on-change="settingsChanged" checked="{{shouldUseWebsockets}}">[[verses.settings.useWebsockets]]</paper-checkbox>
-            <div class="note">
-              [[verses.settings.useWebsocketsDetail]]
-            </div>
-          </div>
-        </div>
-
-        <div class="card vertical layout">
           <div>[[verses.home.promptForDefaultOutlet]]</div>
           <div class="horizontal layout center">
             <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.defaultOutletSelection]]">
@@ -150,9 +141,20 @@
       <!-- View Index 2 Start -->
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 2)]]">
-        <div class="card vertical layout">
+
+        <!-- <div class="card vertical layout">
           [[verses.settings.moreOptionsForthcoming]]
+        </div> -->
+
+        <div class="card vertical layout">
+          <div class="option">
+            <paper-checkbox on-change="settingsChanged" checked="{{shouldUseWebsockets}}">[[verses.settings.useWebsockets]]</paper-checkbox>
+            <div class="note">
+              [[verses.settings.useWebsocketsDetail]]
+            </div>
+          </div>
         </div>
+
       </template>
 
       <!-- View Index 2 End -->
