@@ -3,14 +3,14 @@ let { generateBulkData, printApiCallMetrics } = require('./bulk-core');
 
 let params = {
   organizationCount: 1,
-  employeeCount: 10,
-  warehouseCount: 3,
-  outletCount: 8,
-  productBlueprintCount: 100,
-  serviceBlueprintCount: 30,
+  employeeCount: 6,
+  warehouseCount: 2,
+  outletCount: 3,
+  productBlueprintCount: 20,
+  serviceBlueprintCount: 5,
   productCountPerBlueprint: 1000,
-  salesCountPerOutlet: 40,
-  customerCount: 50
+  salesCountPerOutlet: 20,
+  customerCount: 5
 };
 
 (async () => {
