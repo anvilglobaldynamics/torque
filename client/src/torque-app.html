@@ -455,7 +455,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":175,"datetimeStamp":1556770605421}');
+              return JSON.parse('{"build":176,"datetimeStamp":1557300271255}');
               '%__deploy-end'
             }
           },
@@ -842,6 +842,12 @@
 
       websocketConnectivityIndicatorIconTapped(e = null) {
         this.settings.shouldUseWebsockets = !this.settings.shouldUseWebsockets;
+        this.db.update('settings', ({
+          which
+        }) => which === 'only', (doc) => {
+          doc.shouldUseWebsockets = this.settings.shouldUseWebsockets;
+          return doc;
+        });
         window.torqueWebsocketIndicatorStatusReceivedFn('closed');
       }
 
