@@ -111,13 +111,16 @@
 
       <!-- default outlet selection prompt - start -->
       <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
-        <div class="card">
-          [[verses.home.promptForDefaultOutlet]]
-          <br>
-          <div class="button-row">
-            <paper-button raised class="secondary" on-tap="selectDefaultOutletTapped">[[verses.home.promptForDefaultOutletGoButton]]</paper-button>
+        <template is="dom-if" if="[[!settings.ui.pageHome.hideDefaultOutletPrompt]]">
+          <div class="card">
+            <paper-icon-button class="ui-card-discard-icon" on-tap="hideDefaultOutletPromptTapped" icon="clear"></paper-icon-button>
+            [[verses.home.promptForDefaultOutlet]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="secondary" on-tap="selectDefaultOutletTapped">[[verses.home.promptForDefaultOutletGoButton]]</paper-button>
+            </div>
           </div>
-        </div>
+        </template>
       </template>
       <!-- default outlet selection prompt - end -->
 
@@ -502,6 +505,10 @@
 
       selectDefaultOutletTapped(e = null) {
         return this.app.navigateTo('/settings');
+      }
+
+      hideDefaultOutletPromptTapped() {
+        this.setUiParameterInSettings('pageHome', 'hideDefaultOutletPrompt', true);
       }
 
       // region: misc =================================
