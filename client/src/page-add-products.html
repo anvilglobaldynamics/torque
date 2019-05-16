@@ -98,7 +98,9 @@
                 <div class="product-header product-title">[[verses.product.productBlueprint]]</div>
                 <div class="product-header product-blueprint-numeric">[[verses.product.count]]</div>
                 <div class="product-header product-blueprint-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
-                <div class="product-header product-blueprint-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+                <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                  <div class="product-header product-blueprint-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+                </template>
               </div>
             </div>
 
@@ -112,9 +114,11 @@
                   <div class="product-blueprint-numeric">
                     <paper-input disabled class="small-input" min="[[productBlueprint.purchasePrice]]" value="{{productBlueprint.salePrice}}" type="number"></paper-input>
                   </div>
-                  <div class="product-blueprint-numeric">
-                    <paper-input disabled class="small-input" min="0" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
-                  </div>
+                  <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                    <div class="product-blueprint-numeric">
+                      <paper-input disabled class="small-input" min="0" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
+                    </div>
+                  </template>
                 </div>
               </div>
             </template>
@@ -148,7 +152,9 @@
               <div class="product-header product-title">[[verses.product.productBlueprint]]</div>
               <div class="product-header product-blueprint-numeric">[[verses.product.count]]</div>
               <div class="product-header product-blueprint-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
-              <div class="product-header product-blueprint-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+              <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                <div class="product-header product-blueprint-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+              </template>
             </div>
           </div>
 
@@ -162,9 +168,11 @@
                 <div class="product-blueprint-numeric">
                   <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="[[productBlueprint.purchasePrice]]" on-change="genericNumericInputChanged" value="{{productBlueprint.salePrice}}" type="number"></paper-input>
                 </div>
-                <div class="product-blueprint-numeric">
-                  <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="0" on-change="genericNumericInputChanged" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
-                </div>
+                <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                  <div class="product-blueprint-numeric">
+                    <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="0" on-change="genericNumericInputChanged" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
+                  </div>
+                </template>
               </div>
             </div>
           </template>
