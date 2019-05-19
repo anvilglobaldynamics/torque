@@ -113,11 +113,11 @@
       <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
         <template is="dom-if" if="[[!settings.ui.pageHome.hideDefaultOutletPrompt]]">
           <div class="card">
-            <paper-icon-button class="ui-card-discard-icon" on-tap="hideDefaultOutletPromptTapped" icon="clear"></paper-icon-button>
             [[verses.home.promptForDefaultOutlet]]
             <br>
             <div class="button-row">
               <paper-button raised class="secondary" on-tap="selectDefaultOutletTapped">[[verses.home.promptForDefaultOutletGoButton]]</paper-button>
+              <paper-button raised class="neutral" on-tap="hideDefaultOutletPromptTapped">[[verses.general.hideCard]]</paper-button>
             </div>
           </div>
         </template>
