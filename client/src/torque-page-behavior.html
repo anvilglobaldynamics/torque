@@ -162,6 +162,17 @@
         });
       }
 
+      setUiParameterInSettings(key, subKey, value) {
+        this.app.db.update('settings', ({
+          which
+        }) => which === 'only', (doc) => {
+          if (!doc.ui) doc.ui = {};
+          if (!doc.ui[key]) doc.ui[key] = {};
+          doc.ui[key][subKey] = value;
+          return doc;
+        });
+      }
+
     }
   })();
 

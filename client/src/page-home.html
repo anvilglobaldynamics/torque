@@ -80,7 +80,7 @@
             <br>
             <div class="button-row">
               <paper-button raised class="primary" on-tap="verifyPhoneTapped">[[verses.home.verifyPhoneNumberManually]]</paper-button>
-              <paper-button raised class="optional" on-tap="resendSmsTapped">[[verses.home.resendSms]]</paper-button>
+              <paper-button raised class="neutral" on-tap="resendSmsTapped">[[verses.home.resendSms]]</paper-button>
             </div>
           </div>
         </template>
@@ -103,7 +103,7 @@
             <br>
             <div class="button-row">
               <paper-button raised class="primary" on-tap="verifyEmailTapped">[[verses.home.verifyEmailManually]]</paper-button>
-              <paper-button raised class="optional" on-tap="resendEmailTapped">[[verses.home.resendEmail]]</paper-button>
+              <paper-button raised class="neutral" on-tap="resendEmailTapped">[[verses.home.resendEmail]]</paper-button>
             </div>
           </div>
         </template>
@@ -111,13 +111,16 @@
 
       <!-- default outlet selection prompt - start -->
       <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
-        <div class="card">
-          [[verses.home.promptForDefaultOutlet]]
-          <br>
-          <div class="button-row">
-            <paper-button raised class="secondary" on-tap="selectDefaultOutletTapped">[[verses.home.promptForDefaultOutletGoButton]]</paper-button>
+        <template is="dom-if" if="[[!settings.ui.pageHome.hideDefaultOutletPrompt]]">
+          <div class="card">
+            [[verses.home.promptForDefaultOutlet]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="secondary" on-tap="selectDefaultOutletTapped">[[verses.home.promptForDefaultOutletGoButton]]</paper-button>
+              <paper-button raised class="neutral" on-tap="hideDefaultOutletPromptTapped">[[verses.general.hideCard]]</paper-button>
+            </div>
           </div>
-        </div>
+        </template>
       </template>
       <!-- default outlet selection prompt - end -->
 
@@ -502,6 +505,10 @@
 
       selectDefaultOutletTapped(e = null) {
         return this.app.navigateTo('/settings');
+      }
+
+      hideDefaultOutletPromptTapped() {
+        this.setUiParameterInSettings('pageHome', 'hideDefaultOutletPrompt', true);
       }
 
       // region: misc =================================
