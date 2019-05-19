@@ -31,7 +31,8 @@
   "scripts": {
     "deploy": "node ./scripts/deploy.js",
     "import": "node ./scripts/import.js",
-    "bulk-gen": "node ./scripts/bulk.js",
+    "bulk-gen": "node ./scripts/bulk-gen.js",
+    "bulk-stress": "node ./scripts/bulk-stress-cluster.js",
     "start": "node start.js",
     "dev": "nodemon start.js",
     "dev-imported": "nodemon start.js --db torque-imported",

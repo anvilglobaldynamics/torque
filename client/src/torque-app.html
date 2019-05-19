@@ -455,7 +455,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":174,"datetimeStamp":1555156324976}');
+              return JSON.parse('{"build":177,"datetimeStamp":1557643167003}');
               '%__deploy-end'
             }
           },
@@ -617,8 +617,8 @@
 
       _manageProductionVariables() {
         if (mode === 'production') {
-          this.serverHost = 'https://server.lipi.live'
-          this.jsonPostApiPathPrefix = 'https://server.lipi.live/api/';
+          this.serverHost = 'https://single-server.lipi.live'
+          this.jsonPostApiPathPrefix = 'https://single-server.lipi.live/api/';
           this.websocketHost = 'wss://socket.lipi.live';
         } else {
           this.serverHost = 'http://localhost:8540'
@@ -657,7 +657,8 @@
             shouldUseWebsockets: true,
             monetaryUnit: 'BDT',
             defaultOutletMetaMap: {},
-            defaultPrinterFormat: 'a4'
+            defaultPrinterFormat: 'a4',
+            ui: {}
           });
 
         this.db.upsert('offline-data', (({
@@ -842,6 +843,12 @@
 
       websocketConnectivityIndicatorIconTapped(e = null) {
         this.settings.shouldUseWebsockets = !this.settings.shouldUseWebsockets;
+        this.db.update('settings', ({
+          which
+        }) => which === 'only', (doc) => {
+          doc.shouldUseWebsockets = this.settings.shouldUseWebsockets;
+          return doc;
+        });
         window.torqueWebsocketIndicatorStatusReceivedFn('closed');
       }
 

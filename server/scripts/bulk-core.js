@@ -14,39 +14,40 @@ const commonPassword = 'johndoe1pass';
 
 // --------------------------------------------------------------
 
-const organizationCount = 1;
-const employeeCount = {
-  min: 0,
-  max: 20
-};
-const warehouseCount = {
-  min: 3,
-  max: 20
-};
-const outletCount = {
-  min: 3,
-  max: 40
-};
-const productBlueprintCount = {
-  min: 5,
-  max: 200
-};
-const serviceBlueprintCount = {
-  min: 5,
-  max: 200
-};
-const productCountPerBlueprint = {
-  min: 1,
-  max: 1000
-};
-const salesCountPerOutlet = {
-  min: 1,
-  max: 10
-};
-const customerCount = {
-  min: 20,
-  max: 100
-};
+// NOTE Variable style 
+// const organizationCount = 1;
+// const employeeCount = {
+//   min: 0,
+//   max: 20
+// };
+// const warehouseCount = {
+//   min: 3,
+//   max: 20
+// };
+// const outletCount = {
+//   min: 3,
+//   max: 40
+// };
+// const productBlueprintCount = {
+//   min: 5,
+//   max: 200
+// };
+// const serviceBlueprintCount = {
+//   min: 5,
+//   max: 200
+// };
+// const productCountPerBlueprint = {
+//   min: 1,
+//   max: 1000
+// };
+// const salesCountPerOutlet = {
+//   min: 1,
+//   max: 10
+// };
+// const customerCount = {
+//   min: 20,
+//   max: 100
+// };
 
 const getSolidCount = (item) => {
   if (typeof item === 'number') return item;
@@ -86,11 +87,25 @@ let uid = 0;
 
 // --------------------------------------------------------------
 
-const utils = require('./../test/utils.js');
+let request = require('request');
 
-let callApi = async (path, data) => {
+let genUrl = exports.genUrl = (path) => {
+  // return "https://single-server.lipi.live/" + path;
+  return "http://localhost:8540/" + path;
+}
+
+_callApi = (...args) => {
+  args[0] = genUrl(args[0]);
+  request.post(...args);
+}
+
+let apiCallMetrics = {};
+
+const callApi = async (path, data) => {
+  if (!(path in apiCallMetrics)) apiCallMetrics[path] = { timesCalled: 0 };
+  apiCallMetrics[path].timesCalled += 1;
   return await new Promise((accept, reject) => {
-    utils.callApi(path, { json: data }, (err, response, body) => {
+    _callApi(path, { json: data }, (err, response, body) => {
       if (err) return reject(err);
       if (response.statusCode !== 200) {
         console.log(body);
@@ -104,6 +119,17 @@ let callApi = async (path, data) => {
     });
   });
 }
+
+const printApiCallMetrics = (apiCallMetrics) => {
+  console.log("================================================");
+  console.log("API Call Metrics");
+  console.log("================================================");
+  for (let path in apiCallMetrics) {
+    console.log(path, apiCallMetrics[path].timesCalled);
+  }
+}
+
+const getApiCallMetrics = () => { return apiCallMetrics };
 
 const createUser = async ({ phone }) => {
   console.log('should create user', phone, commonPassword);
@@ -121,7 +147,7 @@ const createUser = async ({ phone }) => {
   return { apiKey, userId };
 }
 
-const createOrganization = async ({ apiKey }, db) => {
+const createOrganization = async ({ apiKey }) => {
   console.log('should create organization');
 
   let { organizationId } = await callApi('api/add-organization', {
@@ -131,14 +157,27 @@ const createOrganization = async ({ apiKey }, db) => {
     phone: makePhoneNumber(),
     email: makeEmailId()
   });
-  let packageActivationId = await db.packageActivation.create({ packageCode: 'R-U01', organizationId, createdByAdminName: 'default', paymentReference: 'n/aaaa' });
-  let result = await db.organization.setPackageActivationId({ id: organizationId }, { packageActivationId });
+
+  let adminApiKey = (await callApi('api/admin-login', {
+    username: 'default',
+    password: commonPassword
+  })).apiKey;
+
+  await callApi('api/admin-assign-package-to-organization', {
+    apiKey: adminApiKey,
+    organizationId,
+    packageCode: "R-U01",
+    paymentReference: "buk-stress"
+  })
+
+  // let packageActivationId = await db.packageActivation.create({ packageCode: 'R-U01', organizationId, createdByAdminName: 'default', paymentReference: 'n/aaaa' });
+  // let result = await db.organization.setPackageActivationId({ id: organizationId }, { packageActivationId });
 
   return { organizationId };
 }
 
-const createProductBlueprint = async ({ apiKey, organizationId }) => {
-  console.log('should create productBlueprint');
+const createProductBlueprint = async ({ apiKey, organizationId, i }) => {
+  console.log('should create productBlueprint', i);
 
   let { productBlueprintId } = await callApi('api/add-product-blueprint', {
     apiKey,
@@ -155,8 +194,8 @@ const createProductBlueprint = async ({ apiKey, organizationId }) => {
   return { productBlueprintId };
 }
 
-const createServiceBlueprint = async ({ apiKey, organizationId }) => {
-  console.log('should create serviceBlueprint');
+const createServiceBlueprint = async ({ apiKey, organizationId, i }) => {
+  console.log('should create serviceBlueprint', i);
 
   let { serviceBlueprintId } = await callApi('api/add-service-blueprint', {
     apiKey,
@@ -175,8 +214,8 @@ const createServiceBlueprint = async ({ apiKey, organizationId }) => {
   return { serviceBlueprintId };
 }
 
-const createWarehouse = async ({ apiKey, organizationId }) => {
-  console.log('should create warehouse');
+const createWarehouse = async ({ apiKey, organizationId, i }) => {
+  console.log('should create warehouse', i);
 
   let { warehouseId } = await callApi('api/add-warehouse', {
     apiKey,
@@ -187,12 +226,17 @@ const createWarehouse = async ({ apiKey, organizationId }) => {
     contactPersonName: pickOne(nameList)
   });
 
-  return { warehouseId };
+  let body = await callApi('api/get-warehouse', {
+    apiKey,
+    warehouseId
+  });
+  let warehouseDefaultInventoryId = body.defaultInventory.id;
 
+  return { warehouseId, warehouseDefaultInventoryId };
 }
 
-const createCustomer = async ({ apiKey, organizationId }) => {
-  console.log('should create customer');
+const createCustomer = async ({ apiKey, organizationId, i }) => {
+  console.log('should create customer', i);
 
   let { customerId } = await callApi('api/add-customer', {
     apiKey,
@@ -206,8 +250,8 @@ const createCustomer = async ({ apiKey, organizationId }) => {
   return { customerId };
 }
 
-const createOutlet = async ({ apiKey, organizationId }) => {
-  console.log('should create outlet');
+const createOutlet = async ({ apiKey, organizationId, i }) => {
+  console.log('should create outlet', i);
 
   let { outletId } = await callApi('api/add-outlet', {
     apiKey,
@@ -229,8 +273,8 @@ const createOutlet = async ({ apiKey, organizationId }) => {
   return { outletId, outletDefaultInventoryId };
 }
 
-const createEmployee = async ({ apiKey, organizationId }) => {
-  console.log('should create employee');
+const createEmployee = async ({ apiKey, organizationId, i }) => {
+  console.log('should create employee', i);
 
   let { employeeId } = await callApi('api/add-new-employee', {
     apiKey,
@@ -252,6 +296,7 @@ const createEmployee = async ({ apiKey, organizationId }) => {
       PRIV_VIEW_SALES: true,
       PRIV_MODIFY_SALES: true,
       PRIV_ALLOW_FLAT_DISCOUNT: true,
+      PRIV_VIEW_PURCHASE_PRICE: true,
 
       PRIV_MODIFY_DISCOUNT_PRESETS: true,
 
@@ -289,8 +334,8 @@ const createEmployee = async ({ apiKey, organizationId }) => {
   return { employeeId };
 }
 
-const createProduct = async ({ apiKey, organizationId, outletId, productBlueprintId, outletDefaultInventoryId, count }) => {
-  console.log('should create product');
+const createOutletProduct = async ({ apiKey, organizationId, outletId, productBlueprintId, outletDefaultInventoryId, count, i }) => {
+  console.log('should add product to outlet', i);
 
   let results = await callApi('api/add-product-to-inventory', {
     apiKey,
@@ -303,8 +348,22 @@ const createProduct = async ({ apiKey, organizationId, outletId, productBlueprin
   return { productId: results.insertedProductList[0].productId };
 }
 
-const createSales = async ({ apiKey, outletId, productList }) => {
-  console.log('should create sales');
+const createWarehouseProduct = async ({ apiKey, organizationId, warehouseId, productBlueprintId, warehouseDefaultInventoryId, count, i }) => {
+  console.log('should add product to warehouse', i);
+
+  let results = await callApi('api/add-product-to-inventory', {
+    apiKey,
+    inventoryId: warehouseDefaultInventoryId,
+    productList: [
+      { productBlueprintId, purchasePrice: 100, salePrice: 200, count }
+    ]
+  });
+
+  return { productId: results.insertedProductList[0].productId };
+}
+
+const createSales = async ({ apiKey, outletId, productList, i }) => {
+  console.log('should create sales', i);
 
   productList.forEach(product => {
     product.salePrice = 200
@@ -347,79 +406,123 @@ const createSales = async ({ apiKey, outletId, productList }) => {
 
 // --------------------------------------------------------------
 
-const generateBulkData = async () => {
-  let { Program } = require('./../src/index');
-  let mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
-  await mainProgram.initiateServer();
-  let db = mainProgram.exposeDatabaseForTesting();
+const generateBulkData = async (params) => {
+
+  let {
+    organizationCount,
+    employeeCount,
+    warehouseCount,
+    outletCount,
+    productBlueprintCount,
+    serviceBlueprintCount,
+    productCountPerBlueprint,
+    salesCountPerOutlet,
+    customerCount
+  } = params;
+
+  // let { Program } = require('./../src/index');
+  // let mainProgram = new Program({ allowUnsafeApis: false, muteLogger: true });
+  // await mainProgram.initiateServer();
+  // let db = mainProgram.exposeDatabaseForTesting();
 
   let primaryUserPhone = makePhoneNumber();
   let { userId: ownerUserId, apiKey } = await createUser({ phone: primaryUserPhone });
 
+  let reusables = {
+    outletList: [],
+    productList: [],
+    organizationId: null
+  }
+
   for (let i = 0; i < getSolidCount(organizationCount); i++) {
-    let { organizationId } = await createOrganization({ apiKey }, db);
+    let { organizationId } = await createOrganization({ apiKey });
+    reusables.organizationId = organizationId;
 
     for (let i = 0; i < getSolidCount(employeeCount); i++) {
-      let { employeeId } = await createEmployee({ apiKey, organizationId });
+      let { employeeId } = await createEmployee({ apiKey, organizationId, i });
     }
 
+    let warehouseList = [];
     for (let i = 0; i < getSolidCount(warehouseCount); i++) {
-      let { warehouseId } = await createWarehouse({ apiKey, organizationId });
+      let { warehouseId, warehouseDefaultInventoryId } = await createWarehouse({ apiKey, organizationId, i });
+      warehouseList.push({ warehouseId, warehouseDefaultInventoryId });
     }
 
     let outletList = [];
     for (let i = 0; i < getSolidCount(outletCount); i++) {
-      let { outletId, outletDefaultInventoryId } = await createOutlet({ apiKey, organizationId });
+      let { outletId, outletDefaultInventoryId } = await createOutlet({ apiKey, organizationId, i });
       outletList.push({ outletId, outletDefaultInventoryId });
+      reusables.outletList.push({ outletId, outletDefaultInventoryId })
     }
 
     let productBlueprintIdList = [];
     for (let i = 0; i < getSolidCount(productBlueprintCount); i++) {
-      let { productBlueprintId } = await createProductBlueprint({ apiKey, organizationId });
+      let { productBlueprintId } = await createProductBlueprint({ apiKey, organizationId, i });
       productBlueprintIdList.push(productBlueprintId);
     }
 
     let serviceBlueprintIdList = [];
     for (let i = 0; i < getSolidCount(serviceBlueprintCount); i++) {
-      let { serviceBlueprintId } = await createServiceBlueprint({ apiKey, organizationId });
+      let { serviceBlueprintId } = await createServiceBlueprint({ apiKey, organizationId, i });
       serviceBlueprintIdList.push(serviceBlueprintId);
     }
 
+    let iA = 0;
+    for (let warehouse of warehouseList) {
+      let { warehouseId, warehouseDefaultInventoryId } = warehouse;
+      for (let productBlueprintId of productBlueprintIdList) {
+        iA += 1;
+        let count = getSolidCount(productCountPerBlueprint);
+        await createWarehouseProduct({ apiKey, organizationId, warehouseId, productBlueprintId, warehouseDefaultInventoryId, count, i: iA });
+      }
+    }
+
+    let iB = 0;
     for (let outlet of outletList) {
-      let { outletId, outletDefaultInventoryId } = outlet
+      let { outletId, outletDefaultInventoryId } = outlet;
       let productList = [];
       for (let productBlueprintId of productBlueprintIdList) {
+        iB += 1;
         let count = getSolidCount(productCountPerBlueprint);
-        let { productId } = await createProduct({ apiKey, organizationId, outletId, productBlueprintId, outletDefaultInventoryId, count });
+        let { productId } = await createOutletProduct({ apiKey, organizationId, outletId, productBlueprintId, outletDefaultInventoryId, count, i: iB });
         productList.push({ productId, count });
+        if (outletList[0].outletId === outlet.outletId) {
+          reusables.productList.push({ productId, count });
+        }
       }
       // add sales -
       for (let i = 0; i < getSolidCount(salesCountPerOutlet); i++) {
         if (productList.length === 0) break;
-        let amount = getSolidCount({ min: 1, max: Math.min(productList.length, 5) });
+        // let amount = getSolidCount({ min: 1, max: Math.min(productList.length, 5) });
+        let amount = 1;
         if (productList.length === 0) break;
         let sellingProductList = [];
         do {
           if (productList.length === 0) break;
-          sellingProductList.push(productList.pop());
+          let product = productList[0];
+          sellingProductList.push({ productId: product.productId, count: 1 });
         } while (amount--);
-        let { salesId } = await createSales({ apiKey, outletId, productList: sellingProductList });
+        let { salesId } = await createSales({ apiKey, outletId, productList: sellingProductList, i });
       }
     }
 
     for (let i = 0; i < getSolidCount(customerCount); i++) {
-      let { customerId } = await createCustomer({ apiKey, organizationId });
+      let { customerId } = await createCustomer({ apiKey, organizationId, i });
     }
 
   }
 
   console.log('Done. Primary User and Pass', primaryUserPhone, commonPassword);
 
-  process.exit(0);
+  // process.exit(0);
+  return { apiKey, primaryUserPhone, commonPassword, reusables, ownerUserId }
 }
 
-generateBulkData().catch(ex => {
-  console.error(ex);
-  process.exit(0);
-});
-
+exports.generateBulkData = generateBulkData;
+exports.createSales = createSales;
+exports.createOutletProduct = createOutletProduct;
+exports.createEmployee = createEmployee;
+exports.createOutlet = createOutlet;
+exports.callApi = callApi;
+exports.printApiCallMetrics = printApiCallMetrics;
+exports.getApiCallMetrics = getApiCallMetrics;

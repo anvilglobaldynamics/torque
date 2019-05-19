@@ -167,9 +167,13 @@
 
                 <template is="dom-if" if="[[aggregatedInventoryDetail.aggregatedProductList.length]]">
                   <tr>
-                    <th class="cell product-column">[[verses.general.product]]</th>
+                    <th class="cell product-column" align="left">[[verses.general.product]]</th>
                     <th class="cell">[[verses.general.count]]</th> 
-                    <th class="cell">[[verses.general.purchase]]</th>
+                    
+                    <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                      <th class="cell">[[verses.general.purchase]]</th>
+                    </template>
+
                     <th class="cell cell-right">[[verses.general.sale]]</th>
                   </tr>
 
@@ -181,7 +185,11 @@
                         <div class="product-detail">Acquired On: [[$mkDate(aggregatedProduct.acquiredDatetimeStamp, 'dd/MM/yy')]]</div>
                       </td>
                       <td class="cell" align="center">[[aggregatedProduct.count]]</td> 
-                      <td class="cell" align="center">[[aggregatedProduct.product.purchasePrice]]</td>
+                      
+                      <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                        <td class="cell" align="center">[[aggregatedProduct.product.purchasePrice]]</td>
+                      </template>
+
                       <td class="cell cell-right" align="center">[[aggregatedProduct.product.salePrice]]</td>
                     </tr>
                   </template>
@@ -191,9 +199,13 @@
                     <td class="cell cell-bottom" align="center">
                       {{computeTotalProductCount(aggregatedInventoryDetail.aggregatedProductList)}}
                     </td> 
-                    <td class="cell cell-bottom" align="center">
-                      {{computeTotalPurchasePrice(aggregatedInventoryDetail.aggregatedProductList)}}
-                    </td>
+
+                    <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                      <td class="cell cell-bottom" align="center">
+                        {{computeTotalPurchasePrice(aggregatedInventoryDetail.aggregatedProductList)}}
+                      </td>
+                    </template>
+
                     <td class="cell cell-bottom cell-right" align="center">
                       {{computeTotalSalePrice(aggregatedInventoryDetail.aggregatedProductList)}}
                     </td>

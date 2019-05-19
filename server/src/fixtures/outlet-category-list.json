@@ -39,8 +39,10 @@
     "code": "CAT_OPTICS",
     "name": "Optics Shop"
   },
-
-
+  {
+    "code": "CAT_CERAMIC",
+    "name": "Ceramic Shop"
+  },
 
   {
     "code": "CAT_JEWELLERY",
@@ -85,5 +87,10 @@
   {
     "code": "CAT_DANCE",
     "name": "Dance Class"
+  },
+
+  {
+    "code": "CAT_UNSPECIFIED",
+    "name": "Unspecified type"
   }
 ]
