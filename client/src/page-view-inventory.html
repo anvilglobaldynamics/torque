@@ -101,15 +101,21 @@
                     <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
                       [[product.count]] [[product.unit]]
                     </div>
-                    <div class="inventory-product-price-container">[[verses.inventory.buyingPrice]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+
+                    <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                      <div class="inventory-product-price-container">[[verses.inventory.buyingPrice]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                    </template>
+
                     <div class="inventory-product-price-container">[[verses.inventory.sellingPrice]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                     <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
                     <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
                   </div>
 
                   <!-- edit -->
-                  <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
-                    <iron-icon class="button-icon edit-button" icon="icons:create" on-tap="editTapped"></iron-icon>
+                  <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS', organization)]]">
+                    <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
+                      <iron-icon class="button-icon edit-button" icon="icons:create" on-tap="editTapped"></iron-icon>
+                    </template>
                   </template>
 
                   <!-- select -->
@@ -157,7 +163,11 @@
                   <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
                     [[product.count]][[product.unit]]
                   </div>
-                  <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+
+                  <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                    <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                  </template>
+
                   <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                   <div class="inventory-product-added-date-container">[[verses.inventory.acquiredOn]]: [[$mkDate(product.acquiredDatetimeStamp)]]</div>
                   <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
@@ -199,14 +209,16 @@
       </template>
 
       <!-- add products trigger -->
-      <div class="card">
-        <div>
-          [[verses.inventory.addToInventoryHelp]]
+      <template is="dom-if" if="[[hasPrivilege('PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES', organization)]]">
+        <div class="card">
+          <div>
+            [[verses.inventory.addToInventoryHelp]]
+          </div>
+          <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
+            <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
+          </template>
         </div>
-        <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
-          <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
-        </template>
-      </div>
+      </template>
 
       <!-- transfer products trigger -->
       <template is="dom-if" if="[[hasPrivilege('PRIV_TRANSFER_ALL_INVENTORIES', organization)]]">
@@ -456,7 +468,6 @@
         return this.app.navigateTo(`/add-products/inventory:${this.inventoryId}`);
       }
 
-      // TODO:
       selectProductsToTransferTapped(e) {
         this.isProductSelectionForInitiated = true;
       }

@@ -96,9 +96,12 @@
             <div class="container-card">
               <div class="horizontal layout item center">
                 <div class="product-header product-title">[[verses.product.productBlueprint]]</div>
+                <div class="flex"></div>
                 <div class="product-header product-blueprint-numeric">[[verses.product.count]]</div>
                 <div class="product-header product-blueprint-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
-                <div class="product-header product-blueprint-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+                <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                  <div class="product-header product-blueprint-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+                </template>
               </div>
             </div>
 
@@ -106,15 +109,18 @@
               <div class="container-card">
                 <div class="horizontal layout item center">
                   <div class="product-title">[[productBlueprint.name]]</div>
+                  <div class="flex"></div>
                   <div class="product-blueprint-numeric">
                     <paper-input class="small-input" value="{{productBlueprint.count}}" type="number" min="0" on-change="productBlueprintInputChanged" label=[[productBlueprint.unit]]></paper-input>
                   </div>
                   <div class="product-blueprint-numeric">
                     <paper-input disabled class="small-input" min="[[productBlueprint.purchasePrice]]" value="{{productBlueprint.salePrice}}" type="number"></paper-input>
                   </div>
-                  <div class="product-blueprint-numeric">
-                    <paper-input disabled class="small-input" min="0" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
-                  </div>
+                  <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                    <div class="product-blueprint-numeric">
+                      <paper-input disabled class="small-input" min="0" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
+                    </div>
+                  </template>
                 </div>
               </div>
             </template>
@@ -146,9 +152,12 @@
           <div class="container-card">
             <div class="horizontal layout item center">
               <div class="product-header product-title">[[verses.product.productBlueprint]]</div>
+              <div class="flex"></div>
               <div class="product-header product-blueprint-numeric">[[verses.product.count]]</div>
               <div class="product-header product-blueprint-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
-              <div class="product-header product-blueprint-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+              <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                <div class="product-header product-blueprint-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
+              </template>
             </div>
           </div>
 
@@ -156,15 +165,18 @@
             <div class="container-card">
               <div class="horizontal layout item center">
                 <div class="product-title">[[productBlueprint.name]]</div>
+                <div class="flex"></div>
                 <div class="product-blueprint-numeric">
                   <paper-input class$="small-input id-[[productBlueprint.id]]" value="{{productBlueprint.count}}" type="number" min="0" on-change="genericNumericInputChanged" label=[[productBlueprint.unit]]></paper-input>
                 </div>
                 <div class="product-blueprint-numeric">
                   <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="[[productBlueprint.purchasePrice]]" on-change="genericNumericInputChanged" value="{{productBlueprint.salePrice}}" type="number"></paper-input>
                 </div>
-                <div class="product-blueprint-numeric">
-                  <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="0" on-change="genericNumericInputChanged" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
-                </div>
+                <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                  <div class="product-blueprint-numeric">
+                    <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="0" on-change="genericNumericInputChanged" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
+                  </div>
+                </template>
               </div>
             </div>
           </template>
@@ -217,6 +229,7 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.product.addProductsTitle);
         if (!this._ensureAccess()) return;
+        this.onOrganizationChange(this.app.organization);
         if (!('inventory' in this.params)) {
           let message = this.app.verses.general.pageCannotBeDisplayed;
           this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
@@ -362,6 +375,10 @@
       }
 
       // region: misc =================================
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
 
     }
 
