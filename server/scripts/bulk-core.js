@@ -6,6 +6,14 @@ const fslib = require('fs-extra');
 
 let { rnd } = require('../test/lib');
 
+const toTitleCase = (str) => {
+  str = str.toLowerCase().split(' ');
+  for (var i = 0; i < str.length; i++) {
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+  }
+  return str.join(' ');
+};
+
 // --------------------------------------------------------------
 
 const phonePrefix = '+800';
@@ -58,7 +66,7 @@ const getSolidCount = (item) => {
 
 const _loadDataFragment = (name) => {
   let text = fslib.readFileSync(`./scripts/bulk/${name}.txt`, 'utf8');
-  return text.split('\n').filter(line => line.length > 1);
+  return text.split('\n').filter(line => line.length > 1).map(line => toTitleCase(line));
 }
 
 const adjectiveList = _loadDataFragment('adjectives');
@@ -182,7 +190,7 @@ const createProductBlueprint = async ({ apiKey, organizationId, i }) => {
   let { productBlueprintId } = await callApi('api/add-product-blueprint', {
     apiKey,
     organizationId,
-    name: pickOne(nounList) + " Blueprint " + (uid++),
+    name: pickOne(nounList) + " Product Blueprint " + (uid++),
     unit: "kg",
     defaultPurchasePrice: 120,
     identifierCode: '',
@@ -200,7 +208,7 @@ const createServiceBlueprint = async ({ apiKey, organizationId, i }) => {
   let { serviceBlueprintId } = await callApi('api/add-service-blueprint', {
     apiKey,
     organizationId,
-    name: pickOne(nounList) + " Blueprint " + (uid++),
+    name: pickOne(nounList) + " Service Blueprint " + (uid++),
     defaultVat: 15,
     defaultSalePrice: 250,
     isLongstanding: false,
@@ -220,8 +228,8 @@ const createWarehouse = async ({ apiKey, organizationId, i }) => {
   let { warehouseId } = await callApi('api/add-warehouse', {
     apiKey,
     organizationId,
-    name: pickOne(nameList),
-    physicalAddress: pickOne(nameList),
+    name: pickOne(nounList) + " Warehouse " + (uid++),
+    physicalAddress: 'Really not important',
     phone: makePhoneNumber(),
     contactPersonName: pickOne(nameList)
   });
@@ -256,8 +264,8 @@ const createOutlet = async ({ apiKey, organizationId, i }) => {
   let { outletId } = await callApi('api/add-outlet', {
     apiKey,
     organizationId,
-    name: pickOne(nounList),
-    physicalAddress: 'Really Not Important',
+    name: pickOne(nounList) + " Outlet " + (uid++),
+    physicalAddress: 'Really not important',
     phone: makePhoneNumber(),
     contactPersonName: pickOne(nameList),
     location: { lat: 23.7945153, lng: 90.4139857 },
@@ -284,9 +292,9 @@ const createEmployee = async ({ apiKey, organizationId, i }) => {
     password: commonPassword,
 
     organizationId,
-    role: "Joi.string().max(1024).required()",
-    designation: "Joi.string().max(1024).required()",
-    companyProvidedId: "abc123",
+    role: "Untitled Role",
+    designation: "Untitled Designation",
+    companyProvidedId: "No ID",
 
     privileges: {
       PRIV_VIEW_USERS: true,
