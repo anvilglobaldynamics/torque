@@ -259,6 +259,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.app.shouldShowPrintButton = true;
+        this.onOrganizationChange(this.app.organization);
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.inventoriesReport.inventoriesReportTitle);
         if (!this._ensureAccess()) return;
@@ -280,6 +281,10 @@
           privilegeList: ['PRIV_VIEW_ALL_INVENTORIES'],
           moduleList: ['MOD_PRODUCT']
         });
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
       }
 
       _fetchInventoriesData(cbfn) {
