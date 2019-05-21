@@ -272,7 +272,13 @@
     "selectGeolocationTitle": "Set Map Location",
     "physicalAddress": "Physical Address",
     "currentLocation": "Current Location",
-    "saveLocation": "Save Location"
+    "saveLocation": "Save Location",
+
+    "noGpsAccess": "No GPS Access",
+    "failedToAccessGpsData": "Failed to access your GPS location. Kindly allow us to locate you.",
+    "noGpsSupport": "No GPS Support.",
+    "noGeolocationSupport": "Your browser/device does not support geolocation."
+
   },
   "productBlueprint": {
     "manageProductBlueprintsTitle": "Manage Product Blueprints",

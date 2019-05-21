@@ -274,7 +274,12 @@
     "selectGeolocationTitle": "মানচিত্রে অবস্থান",
     "physicalAddress": "ঠিকানা",
     "currentLocation": "এখন যেখানে আছেন",
-    "saveLocation": "অবস্থান নিশ্চিত করুন"
+    "saveLocation": "অবস্থান নিশ্চিত করুন",
+
+    "noGpsAccess": "অনুমতি নেই",
+    "failedToAccessGpsData": "আপনার অবস্থান জানার অনুমতি দেয়া হয়নি। অনুগ্রহপূর্বক অনুমতি দিন।",
+    "noGpsSupport": "ব্যবস্থা নেই",
+    "noGeolocationSupport": "আপনার ডিভাইসে অবস্থান জানার ব্যবস্থা নেই।"
   },
   "productBlueprint": {
     "manageProductBlueprintsTitle": "পণ্যের পরিকল্পনা পরিচালনা",
