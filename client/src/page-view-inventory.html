@@ -311,6 +311,9 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.selectedProductCount = 0;
+        this.selectedProductList = [];
+        this.targetInventoryIndex = 0;
+        this.isProductSelectionForInitiated = false;
         this.app.popPageTitle();
       }
 
