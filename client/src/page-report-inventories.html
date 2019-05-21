@@ -32,6 +32,7 @@
       }
 
       @media print {
+
         .filter-toggle-region,
         .filter-toggle-region paper-toggle-button,
         .filter-region {
@@ -168,8 +169,8 @@
                 <template is="dom-if" if="[[aggregatedInventoryDetail.aggregatedProductList.length]]">
                   <tr>
                     <th class="cell product-column" align="left">[[verses.general.product]]</th>
-                    <th class="cell">[[verses.general.count]]</th> 
-                    
+                    <th class="cell">[[verses.general.count]]</th>
+
                     <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
                       <th class="cell">[[verses.general.purchase]]</th>
                     </template>
@@ -184,8 +185,8 @@
                         <div class="product-detail">Added On: [[$mkDate(aggregatedProduct.addedDatetimeStamp, 'dd/MM/yy')]]</div>
                         <div class="product-detail">Acquired On: [[$mkDate(aggregatedProduct.acquiredDatetimeStamp, 'dd/MM/yy')]]</div>
                       </td>
-                      <td class="cell" align="center">[[aggregatedProduct.count]]</td> 
-                      
+                      <td class="cell" align="center">[[aggregatedProduct.count]]</td>
+
                       <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
                         <td class="cell" align="center">[[aggregatedProduct.product.purchasePrice]]</td>
                       </template>
@@ -198,7 +199,7 @@
                     <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
                     <td class="cell cell-bottom" align="center">
                       {{computeTotalProductCount(aggregatedInventoryDetail.aggregatedProductList)}}
-                    </td> 
+                    </td>
 
                     <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
                       <td class="cell cell-bottom" align="center">
@@ -290,7 +291,7 @@
       _fetchInventoriesData(cbfn) {
         let inventoryIdList = this.inventoriesToBeFetched.map(inventory => inventory.id);
         let data = { inventoryIdList };
-        
+
         if (inventoryIdList.length !== 0) {
           this.app.callReportInventoryDetailsApi(data, (err, response) => {
             if (err) return;
@@ -313,7 +314,7 @@
       }
 
       _processInventoriesReport(cbfn) {
-        let savedInventoryList = this.app.getFromSession('report-selected-inventory-list'); 
+        let savedInventoryList = this.app.getFromSession('report-selected-inventory-list');
 
         if (!savedInventoryList) {
           this._fetchInventoryList((inventoryList) => {
