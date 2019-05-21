@@ -5,7 +5,8 @@
     "networkErrorTGotIt": "Got It",
     "networkErrorTitle": "Network error",
     "networkErrorContent": "Make sure you are connected to the internet and try again",
-    "unableToGoOffline": "Unable to enable offline mode. Next time you are online, make sure to select an outlet for offline mode."
+    "unableToGoOffline": "Unable to enable offline mode. Next time you are online, make sure to select an outlet for offline mode.",
+    "apiErrorHeader": ""
   },
   "general": {
     "or": "or",
@@ -81,7 +82,7 @@
     "email": "Email",
     "designation": "Designation",
     "errorMessageBody": "Error Occurred, Please contact Lipi representative.",
-    "errorMessageTitle": "Error",
+    "errorMessageTitle": "Error Occurred",
     "noDataFound": "No Data Found",
     "activatedModules": "Activated Modules",
     "moduleDescriptionLineOne": "Different Modules add different features and functionalities to Lipi. Below listed modules are currently activated;",

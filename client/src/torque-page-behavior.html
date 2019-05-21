@@ -87,10 +87,10 @@
             el.errorMessage = message;
           }
           if (missingError) {
-            return this.app.showModalDialog("Sorry!", missingError.message, cbfn);
+            return this.app.showModalDialog(this.app.verses.general.errorMessageTitle, missingError.message, cbfn);
           }
         } else {
-          return this.app.showModalDialog("Sorry!", error.message, cbfn);
+          return this.app.showModalDialog(this.app.verses.general.errorMessageTitle, error.message, cbfn);
         }
       }
 
