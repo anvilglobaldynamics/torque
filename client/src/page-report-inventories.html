@@ -72,6 +72,7 @@
 
       .inventory-table {
         width: 100%;
+        font-size: 14px;
       }
 
       .table-title {
@@ -114,6 +115,14 @@
         text-align: right;
         margin-right: 8px;
         margin-bottom: 8px;
+      }
+
+      .price-rate {
+        font-size: 12px;
+      }
+
+      .no-visibility {
+        visibility: hidden;
       }
     </style>
 
@@ -185,13 +194,22 @@
                         <div class="product-detail">Added On: [[$mkDate(aggregatedProduct.addedDatetimeStamp, 'dd/MM/yy')]]</div>
                         <div class="product-detail">Acquired On: [[$mkDate(aggregatedProduct.acquiredDatetimeStamp, 'dd/MM/yy')]]</div>
                       </td>
-                      <td class="cell" align="center">[[aggregatedProduct.count]]</td>
+                      <td class="cell" align="center">
+                        <div>[[aggregatedProduct.count]]</div>
+                        <div class="price-rate no-visibility">-</div>
+                      </td>
 
                       <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                        <td class="cell" align="center">[[aggregatedProduct.product.purchasePrice]]</td>
+                        <td class="cell" align="center">
+                          <div>[[computeTotalPriceOfProduct(aggregatedProduct.product.purchasePrice, aggregatedProduct.count)]]</div>
+                          <div class="price-rate">at [[aggregatedProduct.product.purchasePrice]]</div>
+                        </td>
                       </template>
 
-                      <td class="cell cell-right" align="center">[[aggregatedProduct.product.salePrice]]</td>
+                      <td class="cell cell-right" align="center">
+                        <div>[[computeTotalPriceOfProduct(aggregatedProduct.product.salePrice, aggregatedProduct.count)]]</div>
+                        <div class="price-rate">at [[aggregatedProduct.product.salePrice]]</div>
+                      </td>
                     </tr>
                   </template>
 
@@ -354,7 +372,7 @@
       computeTotalPurchasePrice(productList) {
         let totalPurchasePrice = 0;
         productList.forEach(product => {
-          totalPurchasePrice += product.product.purchasePrice;
+          totalPurchasePrice += product.product.purchasePrice * product.count;
         });
         return totalPurchasePrice;
       }
@@ -362,9 +380,13 @@
       computeTotalSalePrice(productList) {
         let totalSalePrice = 0;
         productList.forEach(product => {
-          totalSalePrice += product.product.salePrice;
+          totalSalePrice += product.product.salePrice * product.count;
         });
         return totalSalePrice;
+      }
+
+      computeTotalPriceOfProduct(count, unitPrice) {
+        return count * unitPrice;
       }
 
     }
