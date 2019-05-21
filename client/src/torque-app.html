@@ -820,7 +820,7 @@
 
       toggleOfflineMode() {
         if (!this.offlineData || !this.offlineData.lastFetchedDatetimeStamp) {
-          this.showAlertMessage(this.verses.general.sorry, this.verses.root.unableToGoOffline);
+          this.showAlertMessage(this.verses.general.errorMessageTitle, this.verses.root.unableToGoOffline);
           return;
         }
         let date = (this.isInOfflineMode ? null : Date.now())

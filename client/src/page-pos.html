@@ -510,7 +510,7 @@
         this.onOrganizationChange(this.app.organization);
         this.app.pushPageTitle(this.app.verses.pos.posPageTitle);
         if (!'outlet' in this.params) {
-          return this.app.showModalDialog(this.app.verses.general.sorry, this.app.verses.general.somethingWentWrong, () => {
+          return this.app.showModalDialog(this.app.verses.general.errorMessageTitle, this.app.verses.general.somethingWentWrong, () => {
             return this.navigateTo('/home');
           });
         }
@@ -752,7 +752,7 @@
 
       _processAddSalesOffline(salesData, cbfn) {
         if (salesData.payment.totalBilled > salesData.payment.paidAmount) {
-          this.app.showModalDialog(this.verses.general.sorry, this.verses.pos.disallowCreditSale);
+          this.app.showModalDialog(this.verses.general.errorMessageTitle, this.verses.pos.disallowCreditSale);
           return;
         }
         this.app.db.update('offline-data', (({ which }) => which === 'only'), offlineData => {
