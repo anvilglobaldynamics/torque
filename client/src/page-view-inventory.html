@@ -210,14 +210,14 @@
 
       <!-- add products trigger -->
       <template is="dom-if" if="[[hasPrivilege('PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES', organization)]]">
-        <div class="card">
-          <div>
-            [[verses.inventory.addToInventoryHelp]]
-          </div>
-          <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
+        <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
+          <div class="card">
+            <div>
+              [[verses.inventory.addToInventoryHelp]]
+            </div>
             <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
-          </template>
-        </div>
+          </div>
+        </template>
       </template>
 
       <!-- transfer products trigger -->
