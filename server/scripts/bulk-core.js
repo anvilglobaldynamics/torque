@@ -66,7 +66,12 @@ const getSolidCount = (item) => {
 
 const _loadDataFragment = (name) => {
   let text = fslib.readFileSync(`./scripts/bulk/${name}.txt`, 'utf8');
-  return text.split('\n').filter(line => line.length > 1).map(line => toTitleCase(line));
+  return text
+    .split('\n')
+    .filter(line => line.length > 1)
+    .map(line => line.replace('\r', ''))
+    .map(line => toTitleCase(line))
+    ;
 }
 
 const adjectiveList = _loadDataFragment('adjectives');
