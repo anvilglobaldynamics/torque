@@ -2,6 +2,7 @@
 const { CodedError } = require('./utils/coded-error');
 const Joi = require('joi');
 const { DatabaseEngine } = require('./database-engine'); // only for intellisense.
+const { escapeRegExp } = require('./utils/escape-regexp');
 
 class Collection {
 

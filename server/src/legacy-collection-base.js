@@ -1,6 +1,7 @@
 
 let Joi = require('joi');
 const { LegacyDatabase } = require('./legacy-database'); // only for syntax highlighting
+const { escapeRegExp } = require('./utils/escape-regexp');
 
 class LegacyCollection {
 

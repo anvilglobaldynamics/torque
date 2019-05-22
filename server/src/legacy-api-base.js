@@ -9,6 +9,8 @@ const { CodedError } = require('./utils/coded-error');
 const ModernApi = require('./api-base').Api;
 const { callbackify } = require('./utils/callbackify');
 
+const { escapeRegExp } = require('./utils/escape-regexp');
+
 const languageCache = {
   'en-us': require('./languages/en-us').verses,
   'bn-bd': require('./languages/bn-bd').verses
