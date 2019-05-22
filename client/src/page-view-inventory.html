@@ -210,14 +210,14 @@
 
       <!-- add products trigger -->
       <template is="dom-if" if="[[hasPrivilege('PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES', organization)]]">
-        <div class="card">
-          <div>
-            [[verses.inventory.addToInventoryHelp]]
-          </div>
-          <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
+        <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
+          <div class="card">
+            <div>
+              [[verses.inventory.addToInventoryHelp]]
+            </div>
             <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
-          </template>
-        </div>
+          </div>
+        </template>
       </template>
 
       <!-- transfer products trigger -->
@@ -311,6 +311,9 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.selectedProductCount = 0;
+        this.selectedProductList = [];
+        this.targetInventoryIndex = 0;
+        this.isProductSelectionForInitiated = false;
         this.app.popPageTitle();
       }
 
@@ -328,7 +331,7 @@
       _fetchInventoryDetails(cbfn) {
         let inventoryId = parseInt(this.params.inventory);
         this.inventoryId = inventoryId;
-        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate, includeZeroCountProducts: false, sortOrder: 'date-added-ascending'  };
+        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate, includeZeroCountProducts: false, sortOrder: 'date-added-ascending' };
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
