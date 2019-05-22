@@ -155,7 +155,7 @@
             });
           } else {
             let message = this.app.verses.verify.phoneCouldNotBeVerified;
-            this.app.showModalDialog(this.app.verses.general.sorry, message, () => { 'pass' });
+            this.app.showModalDialog(this.app.verses.general.verificationUnsuccessful, message, () => { 'pass' });
           }
         });
       }

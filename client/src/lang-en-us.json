@@ -5,7 +5,8 @@
     "networkErrorTGotIt": "Got It",
     "networkErrorTitle": "Network error",
     "networkErrorContent": "Make sure you are connected to the internet and try again",
-    "unableToGoOffline": "Unable to enable offline mode. Next time you are online, make sure to select an outlet for offline mode."
+    "unableToGoOffline": "Unable to enable offline mode. Next time you are online, make sure to select an outlet for offline mode.",
+    "apiErrorHeader": ""
   },
   "general": {
     "or": "or",
@@ -14,7 +15,6 @@
     "hideCard": "Not Now",
     "pressBelowButton": "press below button",
     "pressAboveButton": "press above button",
-    "sorry": "Sorry",
     "thankYou": "Thank you.",
     "listIsEmpty": "List is Empty.",
     "search": "Search",
@@ -82,9 +82,8 @@
     "email": "Email",
     "designation": "Designation",
     "errorMessageBody": "Error Occurred, Please contact Lipi representative.",
-    "errorMessageTitle": "Error",
+    "errorMessageTitle": "Error Occurred",
     "noDataFound": "No Data Found",
-    "changeWallet": "Change Wallet",
     "activatedModules": "Activated Modules",
     "moduleDescriptionLineOne": "Different Modules add different features and functionalities to Lipi. Below listed modules are currently activated;",
     "moduleDescriptionLineTwo": "To add more features to Lipi, contact us at +880 1770 947908 or mail us at care@anvil.live",
@@ -96,7 +95,8 @@
     "both": "Both",
     "optional": "(Optional)",
     "print": "Print",
-    "showFilters": "Filters"
+    "showFilters": "Filters",
+    "verificationUnsuccessful": "Verification Unsuccessful"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -123,7 +123,9 @@
     "passwordInput": "A minimum 8 digit password",
     "passwordInputError": "Password must be at least 8 characters long.",
     "alreadyHaveAccount": "Already have an account?",
+    "tocNotReadHeader": "Read TOC",
     "tocNotRead": "You must read the Terms and Conditions before you proceed.",
+    "tocNotAgreedHeader": "Agree TOC",
     "tocNotAgreed": "You must agree to the Terms and Conditions before you proceed.",
     "tocLinkPart1": "Please read the ",
     "tocLinkPart2": "The Terms and Conditions",
@@ -264,6 +266,7 @@
     "manageOutletServices": "Manage Services provided in this Outlet",
     "categoryCodeDropdown": "Outlet Category",
     "selectLocationButton": "Set Location on Map",
+    "locationInvalidDialogHeader": "Location Invalid",
     "locationInvalidDialog": "Please select a valid location on the map.",
     "showingLocationOnMap": "Showing location on Map below",
     "noLocationOnMap": "Location has not been set on Map yet."
@@ -272,7 +275,13 @@
     "selectGeolocationTitle": "Set Map Location",
     "physicalAddress": "Physical Address",
     "currentLocation": "Current Location",
-    "saveLocation": "Save Location"
+    "saveLocation": "Save Location",
+
+    "noGpsAccess": "No GPS Access",
+    "failedToAccessGpsData": "Failed to access your GPS location. Kindly allow us to locate you.",
+    "noGpsSupport": "No GPS Support.",
+    "noGeolocationSupport": "Your browser/device does not support geolocation."
+
   },
   "productBlueprint": {
     "manageProductBlueprintsTitle": "Manage Product Blueprints",
@@ -442,6 +451,7 @@
     "passwordInput": "Your new password.",
     "retypePasswordInput": "Retype Your new password.",
     "newPasswordSet": "You new password has been set. You can log in now.",
+    "retypeIncorrectHeader": "Wrong Retype",
     "retypeIncorrect": "You incorrectly typed your new password the second time. Please type it again and press confirm."
   },
   "customer": {
@@ -502,6 +512,7 @@
     "emergencyContactInput": "Emergency contact person/number",
     "bloodgroupInput": "Your Bloodgroup (Optional)",
     "saveChanges": "Save Changes",
+    "incorrectSecondPasswordHeader": "Wrong Retype",
     "incorrectSecondPassword": "You incorrectly typed your new password the second time. Please type it again and press confirm.",
     "passwordChanged": "Password has been changed.",
     "profileChanged": "Profile changes have been saved."

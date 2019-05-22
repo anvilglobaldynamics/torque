@@ -797,9 +797,9 @@
           // NOTE: At this point, there is no guarantee that any language *.json file has been loaded.
           // So, translation has to be manual.
           if (this.selectedLanguageIdentifier === 'bn-bd') {
-            this.showAlertMessage("দুঃখিত!", "আপনার ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়ে আছে।");
+            this.showAlertMessage("নেটওয়ার্ক নেই", "আপনার ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়ে আছে।");
           } else {
-            this.showAlertMessage("Sorry!", "Unable to connect to the internet.");
+            this.showAlertMessage("No Network", "Unable to connect to the internet.");
           }
         }
         Polymer.importHref(resolvedPageUrl, successFn, failureFn, true);
@@ -820,7 +820,7 @@
 
       toggleOfflineMode() {
         if (!this.offlineData || !this.offlineData.lastFetchedDatetimeStamp) {
-          this.showAlertMessage(this.verses.general.sorry, this.verses.root.unableToGoOffline);
+          this.showAlertMessage(this.verses.general.errorMessageTitle, this.verses.root.unableToGoOffline);
           return;
         }
         let date = (this.isInOfflineMode ? null : Date.now())

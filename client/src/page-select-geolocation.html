@@ -172,10 +172,10 @@
             this.map.setCenter(pos);
             this._setOrSpawnMarker(pos);
           }, () => {
-            this.app.showModalDialog("Sorry.", "Failed to access GPS Data.");
+            this.app.showModalDialog(this.app.verses.selectGeolocation.noGpsAccess, this.app.verses.selectGeolocation.failedToAccessGpsData);
           });
         } else {
-          this.app.showModalDialog("Sorry.", "Your browser/device does not support geolocation.");
+          this.app.showModalDialog(this.app.verses.selectGeolocation.noGpsSupport, this.app.verses.selectGeolocation.noGeolocationSupport);
         }
 
       }

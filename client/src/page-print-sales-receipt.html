@@ -659,7 +659,7 @@
         let salesId = String(this.params.sales);
         let sales = offlineData.data.unsyncedSalesList.find(sales => sales.id === salesId);
         if (!sales) {
-          this.app.showModalDialog(this.app.verses.general.sorry, this.app.verses.general.somethingWentWrong);
+          this.app.showModalDialog(this.app.verses.general.errorMessageTitle, this.app.verses.general.somethingWentWrong);
           return;
         }
 
