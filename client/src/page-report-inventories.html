@@ -118,7 +118,7 @@
       }
 
       .price-rate {
-        font-size: 12px;
+        font-size: 11px;
       }
 
       .no-visibility {
@@ -202,13 +202,13 @@
                       <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
                         <td class="cell" align="center">
                           <div>[[computeTotalPriceOfProduct(aggregatedProduct.product.purchasePrice, aggregatedProduct.count)]]</div>
-                          <div class="price-rate">at [[aggregatedProduct.product.purchasePrice]]</div>
+                          <div class="price-rate">@ [[aggregatedProduct.product.purchasePrice]]</div>
                         </td>
                       </template>
 
                       <td class="cell cell-right" align="center">
                         <div>[[computeTotalPriceOfProduct(aggregatedProduct.product.salePrice, aggregatedProduct.count)]]</div>
-                        <div class="price-rate">at [[aggregatedProduct.product.salePrice]]</div>
+                        <div class="price-rate">@ [[aggregatedProduct.product.salePrice]]</div>
                       </td>
                     </tr>
                   </template>
