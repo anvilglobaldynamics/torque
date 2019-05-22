@@ -550,8 +550,8 @@ class LegacyApi {
     return errorObject;
   }
 
-  escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  escapeRegExp(str) {
+    return escapeRegExp(str);
   }
 
 }

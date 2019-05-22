@@ -239,8 +239,8 @@ class Collection {
     return await this._delete({ id });
   }
 
-  escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  escapeRegExp(str) {
+    return escapeRegExp(str);
   }
 
   // ================== Integrity Checking ================== //
