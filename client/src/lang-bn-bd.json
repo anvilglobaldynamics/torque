@@ -644,10 +644,11 @@
   "pos": {
     "posPageTitle": "বিক্রয়কেন্দ্র",
     "newSalesAdded": "নতুন বিক্রয় যুক্ত করা হয়েছে।",
+    "customerSelectionCardHeader": "গ্রাহক বাছাই",
     "noCustomerSelected": "কোন গ্রাহক নির্বাচন করা হয়নি",
     "removeCustomer": "সরান",
-    "changeCustomer": "গ্রাহক বাছাই",
-    "createCustomer": "নতুন গ্রাহক",
+    "changeCustomer": "পুরাতন",
+    "createCustomer": "নতুন",
     "count": "গণনা",
     "selectProduct": "পণ্য নির্বাচন করুন",
     "discountType": "ছাড় প্রকার",

@@ -103,6 +103,10 @@
       .card.warning {
         background: #FFF59D;
       }
+
+      .bold-customer-card-title {
+        font-weight: bold;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -166,9 +170,8 @@
           <div class="card vertical layout">
             <div class="horizontal layout center">
               <div class="flex">
-                <template is="dom-if" if="[[!customer]]">
-                  <div class="type secondary body">[[verses.pos.noCustomerSelected]]</div>
-                </template>
+                <div class="bold-customer-card-title">[[verses.pos.customerSelectionCardHeader]]</div>
+
                 <template is="dom-if" if="[[customer]]">
                   <div>
                     <div class="type title capitalize">[[customer.fullName]]</div>
@@ -186,6 +189,7 @@
                 </template>
               </div>
             </div>
+
             <div class="horizontal layout end-justified m-top-16">
               <template is="dom-if" if="[[customer]]">
                 <paper-button raised class="danger btn btn-default" on-tap="removeCustomerTapped">
@@ -817,7 +821,7 @@
         this.app.extractFromSession('pos-selected-service-list');
         this.app.extractFromSession('last-selected-customer');
         this.app.extractFromSession('pos-assigned-assisted-by-employee');
-        this.resetProperties('payment', 'productList', 'serviceList', 'customer');
+        this.resetProperties('payment', 'productList', 'serviceList', 'customer', 'isSearchingCustomer');
         this.app.refreshCurrentPage();
       }
 
