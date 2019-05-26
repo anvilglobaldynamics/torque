@@ -546,6 +546,9 @@
         this._processDiscountPresetList(() => {
 
         });
+        this._fetchWarehouseList((warehouseList) => {
+
+        });
         this.delay(300, () => {
           this.isReady = true;
         });
@@ -824,6 +827,15 @@
       _customerSelected(customer) {
         this.customer = customer;
         this.isSearchingCustomer = false;
+      }
+
+      _fetchWarehouseList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetWarehouseListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.warehouseList);
+        });
       }
 
       // region: ui =================================
