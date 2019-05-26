@@ -77,7 +77,7 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Legacy
 
   _getUserIfValid({ emailOrPhone }, cbfn) {
     this.legacyDatabase.user.findByEmailOrPhone({ emailOrPhone }, (err, user) => {
-      if (!this._ensureDoc(err, user, "USER_NOT_FOUND", "No user matched the email and password combination")) return;
+      if (!this._ensureDoc(err, user, "USER_NOT_FOUND", "No user registered using that email/phone.")) return;
       cbfn(user);
     });
   }

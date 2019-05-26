@@ -144,11 +144,11 @@
         if (!this.elem('#registerForm').validate()) return;
 
         if (!this.hasClickedTheToc) {
-          return this.app.showModalDialog(this.verses.general.sorry, this.verses.register.tocNotRead);
+          return this.app.showModalDialog(this.verses.register.tocNotReadHeader, this.verses.register.tocNotRead);
         }
 
         if (!this.agreesToToc) {
-          return this.app.showModalDialog(this.verses.general.sorry, this.verses.register.tocNotAgreed);
+          return this.app.showModalDialog(this.verses.register.tocNotAgreedHeader, this.verses.register.tocNotAgreed);
         }
 
         let { fullName, phone, password } = this.registerForm;

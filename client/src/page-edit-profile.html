@@ -147,7 +147,7 @@
       _processUserChangePassword({ oldPassword, newPassword, repeatNewPassword }) {
         if (repeatNewPassword !== newPassword) {
           let message = this.app.verses.editProfile.incorrectSecondPassword;
-          return this.app.showModalDialog(this.app.verses.general.sorry, message, () => 'pass');
+          return this.app.showModalDialog(this.app.verses.editProfile.incorrectSecondPasswordHeader, message, () => 'pass');
         }
         let data = { oldPassword, newPassword };
         this.app.callUserChangePasswordApi(data, (err, response) => {

@@ -1,6 +1,7 @@
 
 let Joi = require('joi');
 const { LegacyDatabase } = require('./legacy-database'); // only for syntax highlighting
+const { escapeRegExp } = require('./utils/escape-regexp');
 
 class LegacyCollection {
 
@@ -252,8 +253,8 @@ class LegacyCollection {
     return this.legacyDatabase.deleteOne(this.collectionName, query, cbfn);
   }
 
-  escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  escapeRegExp(str) {
+    return escapeRegExp(str);
   }
 
 }

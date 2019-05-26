@@ -7,6 +7,7 @@ const { CodedError, throwOnFalsy } = require('./utils/coded-error');
 const { Server } = require('./server');
 const { DatabaseService } = require('./database-service');
 const { Logger } = require('./logger');
+const { escapeRegExp } = require('./utils/escape-regexp');
 
 const languageCache = {
   'en-us': require('./languages/en-us').verses,
@@ -617,8 +618,8 @@ class Api {
     return (Math.round(number * 100) / 100);
   }
 
-  escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  escapeRegExp(str) {
+    return escapeRegExp(str);
   }
 
 }

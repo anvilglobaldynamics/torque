@@ -41,9 +41,9 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
   }
 
   __searchAggregatedProductList({ aggregatedProductList, searchString }) {
+    searchString = this.escapeRegExp(searchString.toLowerCase());
     aggregatedProductList = aggregatedProductList.filter(aggregatedProduct => {
-      searchString = this.escapeRegExp(searchString.toLowerCase());
-      let regex = new RegExp(searchString, 'gi');
+      let regex = new RegExp(searchString, 'i');
       return regex.test(aggregatedProduct.product.productBlueprint.name);
     });
     return aggregatedProductList;

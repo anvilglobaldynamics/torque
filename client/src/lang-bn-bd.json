@@ -5,7 +5,8 @@
     "networkErrorTGotIt": "ঠিক আছে",
     "networkErrorTitle": "ইন্টারনেট সংযোগ",
     "networkErrorContent": "আপনার ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়ে আছে। ইন্টারনেটে সংযুক্ত হয়ে আবার চেষ্টা করুন। ",
-    "unableToGoOffline": "অফলাইন মোড সক্ষম করতে অক্ষম। পরের বার আপনি অনলাইনে থাকবেন, অফলাইন মোডের জন্য একটি আউটলেট নির্বাচন করতে ভুলবেন না।"
+    "unableToGoOffline": "অফলাইন মোড সক্ষম করতে অক্ষম। পরের বার আপনি অনলাইনে থাকবেন, অফলাইন মোডের জন্য একটি আউটলেট নির্বাচন করতে ভুলবেন না।",
+    "apiErrorHeader": ""
   },
   "general": {
     "or": "বা",
@@ -14,7 +15,6 @@
     "hideCard": "এখন না",
     "pressBelowButton": "নিচের বাটন চাপুন",
     "pressAboveButton": "উপরের বাটন চাপুন",
-    "sorry": "দুঃখিত",
     "thankYou": "ধন্যবাদ",
     "listIsEmpty": "তালিকা খালি।",
     "search": "খোঁজ",
@@ -81,10 +81,9 @@
     "digital": "ডিজিটাল",
     "email": "ইমেইল",
     "designation": "পদবী",
-    "errorMessageBody": "ত্রুটি ত্রুটি দেখা দিয়েছে, লিপি প্রতিনিধির সাথে যোগাযোগ করুন",
-    "errorMessageTitle": "ত্রুটি",
+    "errorMessageBody": "সমস্যা দেখা দিয়েছে, লিপি প্রতিনিধির সাথে যোগাযোগ করুন",
+    "errorMessageTitle": "সমস্যা হয়েছে",
     "noDataFound": "কোন তথ্য পাওয়া যায়নি",
-    "changeWallet": "Change Wallet",
     "activatedModules": "সক্রিয় মডিউলগুলো",
     "moduleDescriptionLineOne": "ভিন্ন মডিউল লিপি তে বিভিন্ন কার্যকারিতা যোগ করে। নিচে বর্তমানে সক্রিয় মডিউল গুলো উল্লেখিত;",
     "moduleDescriptionLineTwo": "লিপি তে আরো ফীচার এবং কার্যকারিতা যোগ করতে আমাদের সাথে যোগাযোগ করুন এই নম্বরে +880 1770 947908 অথবা care@anvil.live এ মেইল লিখুন ",
@@ -96,7 +95,8 @@
     "both": "উভয়",
     "optional": "(ঐচ্ছিক)",
     "print": "প্রিন্ট",
-    "showFilters": "ফিল্টার"
+    "showFilters": "ফিল্টার",
+    "verificationUnsuccessful": "যাচাই ব্যর্থ"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -123,7 +123,9 @@
     "passwordInput": "সর্বনিম্ন ৮ অক্ষরের পাসওয়ার্ড দিন",
     "passwordInputError": "সর্বনিম্ন ৮ অক্ষরের একটি পাসওয়ার্ড দিন",
     "alreadyHaveAccount": "আপনার কি ইতিমধ্যে একটি একাউন্ট আছে?",
+    "tocNotReadHeader": "শর্তাবলী পড়ুন",
     "tocNotRead": "নিবন্ধন করার আগে আপনাকে অবশ্যই শর্তাবলী পড়তে হবে।",
+    "tocNotAgreedHeader": "সম্মতি দিন",
     "tocNotAgreed": "নিবন্ধন করার আগে আপনাকে অবশ্যই শর্তাবলীতে সম্মত হতে হবে।",
     "tocLinkPart1": "নিবন্ধন করার আগে ",
     "tocLinkPart2": " শর্তাবলী ",
@@ -266,6 +268,7 @@
     "manageOutletServices": "এই দোকানে প্রদত্ত সেবা গুলো পরিচালনা করুন",
     "categoryCodeDropdown": "দোকানের ধরন",
     "selectLocationButton": "মানচিত্রে অবস্থান চিহ্নিত করুন",
+    "locationInvalidDialogHeader": "অবস্থান ভুল",
     "locationInvalidDialog": "মানচিত্রে একটি সঠিক অবস্থান নির্বাচন করুন।",
     "showingLocationOnMap": "নীচের মানচিত্রে অবস্থান দেখানো হচ্ছে",
     "noLocationOnMap": "এখনো অবস্থান মানচিত্রে চিহ্নিত করা হয়নি।"
@@ -274,7 +277,12 @@
     "selectGeolocationTitle": "মানচিত্রে অবস্থান",
     "physicalAddress": "ঠিকানা",
     "currentLocation": "এখন যেখানে আছেন",
-    "saveLocation": "অবস্থান নিশ্চিত করুন"
+    "saveLocation": "অবস্থান নিশ্চিত করুন",
+
+    "noGpsAccess": "অনুমতি নেই",
+    "failedToAccessGpsData": "আপনার অবস্থান জানার অনুমতি দেয়া হয়নি। অনুগ্রহপূর্বক অনুমতি দিন।",
+    "noGpsSupport": "ব্যবস্থা নেই",
+    "noGeolocationSupport": "আপনার ডিভাইসে অবস্থান জানার ব্যবস্থা নেই।"
   },
   "productBlueprint": {
     "manageProductBlueprintsTitle": "পণ্যের পরিকল্পনা পরিচালনা",
@@ -444,6 +452,7 @@
     "passwordInput": "আপনার নতুন পাসওয়ার্ড",
     "retypePasswordInput": "আপনার নতুন পাসওয়ার্ড আবার লিখুন",
     "newPasswordSet": "আপনার নতুন পাসওয়ার্ড সেট করা হয়েছে। আপনি এখন লগ-ইন করতে পারেন।",
+    "retypeIncorrectHeader": "ভুল হয়েছে",
     "retypeIncorrect": "আপনি ভুলভাবে আপনার নতুন পাসওয়ার্ডটি দ্বিতীয় বার লিখেছেন। আবার লিখুন এবং নিশ্চিত করুন।"
   },
   "customer": {
@@ -504,6 +513,7 @@
     "emergencyContactInput": "জরুরী যোগাযোগের নাম/নম্বর",
     "bloodgroupInput": "রক্তের গ্রূপ (ঐচ্ছিক)",
     "saveChanges": "পরিবর্তনগুলো সংরক্ষণ করুন",
+    "incorrectSecondPasswordHeader": "ভুল হয়েছে",
     "incorrectSecondPassword": "আপনি ভুলভাবে আপনার নতুন পাসওয়ার্ডটি দ্বিতীয় বার টাইপ করেছেন। আবার সঠিকভাবে টাইপ করুন।",
     "passwordChanged": "পাসওয়ার্ড পরিবর্তন করা হয়েছে।",
     "profileChanged": "প্রোফাইল পরিবর্তনগুলি সংরক্ষণ করা হয়েছে।"

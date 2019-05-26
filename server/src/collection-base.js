@@ -2,6 +2,7 @@
 const { CodedError } = require('./utils/coded-error');
 const Joi = require('joi');
 const { DatabaseEngine } = require('./database-engine'); // only for intellisense.
+const { escapeRegExp } = require('./utils/escape-regexp');
 
 class Collection {
 
@@ -239,8 +240,8 @@ class Collection {
     return await this._delete({ id });
   }
 
-  escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  escapeRegExp(str) {
+    return escapeRegExp(str);
   }
 
   // ================== Integrity Checking ================== //

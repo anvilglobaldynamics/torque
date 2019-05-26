@@ -461,7 +461,7 @@
               });
             } else {
               let message = this.app.verses.home.emailCouldNotBeVerified;
-              this.app.showModalDialog(this.app.verses.general.sorry, message, () => { 'pass' });
+              this.app.showModalDialog(this.app.verses.general.verificationUnsuccessful, message, () => { 'pass' });
             }
           });
         });
@@ -491,7 +491,7 @@
               });
             } else {
               let message = this.app.verses.home.phoneCouldNotBeVerified;
-              this.app.showModalDialog(this.app.verses.general.sorry, message, () => { 'pass' });
+              this.app.showModalDialog(this.app.verses.general.verificationUnsuccessful, message, () => { 'pass' });
             }
           });
         });
