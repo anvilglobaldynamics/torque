@@ -160,7 +160,7 @@
 
       .slim-report .header {
         padding-bottom: 4px;
-        border-bottom: 1px solid black;
+        /* border-bottom: 1px solid black; */
       }
 
       .slim-report .header .name {
@@ -191,7 +191,7 @@
       .slim-report .product-table td,
       .slim-report .payment-table th,
       .slim-report .payment-table td {
-        border: 1px solid black;
+        /* border: 1px solid black; */
       }
 
       .slim-report .product-table {
@@ -273,7 +273,7 @@
             </div>
 
             <table class="product-table">
-              <tr>
+              <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
                 <th>[[verses.salesReceipt.goodsTitle]]</th>
                 <th>[[verses.salesReceipt.quantity]]</th>
                 <!-- <th>[[verses.general.unitPrice]]</th> -->
@@ -305,42 +305,45 @@
                 </tr>
               </template>
 
-              <tr>
-                <th colspan="2">[[verses.salesReceipt.totalAmount]]</th>
+              <tr style="border-top: 1px solid black;">
+                <th colspan="2" style="text-align: right;">[[verses.salesReceipt.totalAmount]]</th>
                 <th class="monetary-cell">[[$round(sales.payment.totalAmount)]] </th>
               </tr>
               <tr>
-                <th colspan="2">[[verses.salesReceipt.vatAmount]]</th>
+                <th colspan="2" style="text-align: right;">[[verses.salesReceipt.vatAmount]] (+)</th>
                 <th class="monetary-cell">[[$round(sales.payment.vatAmount)]]</th>
               </tr>
               <tr>
-                <th colspan="2">[[verses.salesReceipt.discountedAmount]]</th>
+                <th colspan="2" style="text-align: right;">[[verses.salesReceipt.discountedAmount]] (-)</th>
                 <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]]</th>
               </tr>
-              <tr>
-                <th colspan="2">[[verses.salesReceipt.serviceChargeInput]]</th>
+              <tr style="border-bottom: 1px solid black;">
+                <th colspan="2" style="text-align: right;">[[verses.salesReceipt.serviceChargeInput]] (+)</th>
                 <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]]</th>
               </tr>
               <tr>
-                <th colspan="2">[[verses.salesReceipt.totalBilled]]</th>
+                <th colspan="2" style="text-align: right;">[[verses.salesReceipt.totalBilled]]</th>
                 <th class="monetary-cell">[[$round(sales.payment.totalBilled)]]</th>
               </tr>
               <tr>
-                <th colspan="2">[[verses.salesReceipt.totalPaid]]</th>
+                <th colspan="2" style="text-align: right;">[[verses.salesReceipt.totalPaid]]</th>
                 <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]]</th>
               </tr>
               <template is="dom-if" if="[[sales.payment.dueAmount]]">
                 <tr>
-                  <th colspan="2">[[verses.salesReceipt.dueAmount]]</th>
+                  <th colspan="2" style="text-align: right;">[[verses.salesReceipt.dueAmount]]</th>
                   <th class="monetary-cell">[[$round(sales.payment.dueAmount)]]</th>
                 </tr>
               </template>
+              <tr style="border-bottom: 1px solid black;">
+                <th colspan="3"></th>
+              </tr>
             </table>
 
             <div class="section-header"><b>[[verses.salesReceipt.payment]] ([[app.settings.monetaryUnit]])</b></div>
 
             <table class="payment-table">
-              <tr>
+              <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
                 <th>[[verses.general.date]]</th>
                 <th>[[verses.salesReceipt.paidAmountInput]]</th>
                 <th>[[verses.salesReceipt.paymentMethod]]</th>
@@ -354,6 +357,9 @@
                   <td class="monetary-cell">[[$round(payment.changeAmount)]] </td>
                 </tr>
               </template>
+              <tr style="border-bottom: 1px solid black;">
+                <th colspan="4"></th>
+              </tr>
             </table>
 
           </div>
@@ -561,7 +567,7 @@
         }
         this._processSales(_ => {
           this.isReady = true;
-          this._printAndGoBack();
+          // this._printAndGoBack();
         });
       }
 

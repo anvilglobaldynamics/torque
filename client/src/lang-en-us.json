@@ -914,11 +914,11 @@
     "printedBy": "Printed By",
     "soldBy": "Sold By",
     "customerName": "Customer Name",
-    "totalAmount": "Total",
+    "totalAmount": "Sub Total",
     "vatAmount": "VAT",
     "discountedAmount": "Discounted",
     "serviceChargeInput": "Service Charge",
-    "totalBilled": "Total Billed",
+    "totalBilled": "Total Payable",
     "paidAmountInput": "Paid",
     "changeAmount": "Change",
     "dueAmount": "Due"

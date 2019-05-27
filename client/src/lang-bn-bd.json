@@ -918,7 +918,7 @@
     "vatAmount": "ভ্যাট",
     "discountedAmount": "ছাড়",
     "serviceChargeInput": "সার্ভিস চার্জ",
-    "totalBilled": "মোট বিল",
+    "totalBilled": "পরিশোধনীয়",
     "paidAmountInput": "পরিশোধিত",
     "changeAmount": "ফেরত",
     "dueAmount": "বাকি অর্থ"
