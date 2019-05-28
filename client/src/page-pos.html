@@ -688,10 +688,14 @@
             this._processGetOutletDefaultInventoryIdOnline(cbfn);
           }
         } else {
-          this._processGetWarehouse(({ defaultInventory, warehouse }) => {
-            this._setProductSelectedFromWarehouseId(warehouse.id);
-            return cbfn(defaultInventory.id);
-          });
+          if (this.isInOfflineMode) {
+            return this.app.showModalDialog(this.verses.pos.saleNotValid, this.verses.pos.offlineWarehouseSellNotAllowed);
+          } else {
+            this._processGetWarehouse(({ defaultInventory, warehouse }) => {
+              this._setProductSelectedFromWarehouseId(warehouse.id);
+              return cbfn(defaultInventory.id);
+            });
+          }
         }
       }
 
@@ -872,6 +876,10 @@
         let assistedByEmployeeId = (this.assignedAssistedByEmployee) ? this.assignedAssistedByEmployee.id : null;
 
         let productsSelectedFromWarehouseId = this.productsSelectedFromWarehouseId;
+
+        if (this.isInOfflineMode && productsSelectedFromWarehouseId !== null) {
+          return this.app.showModalDialog(this.verses.pos.saleNotValid, this.verses.pos.offlineWarehouseSellNotAllowed);
+        }
 
         let data = {
           customerId, outletId, productList, serviceList, assistedByEmployeeId, payment,

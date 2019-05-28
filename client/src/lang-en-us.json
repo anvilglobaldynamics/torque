@@ -693,7 +693,9 @@
     "noDiscountApplicable": "Not Applicable",
     "assistedEmployee": "Assisted by",
     "selectProductsFromInventoryContainer": "Select outlet/warehouse to select products from.",
-    "currentOutlet": "Current Outlet"
+    "currentOutlet": "Current Outlet",
+    "saleNotValid": "Sale not valid",
+    "offlineWarehouseSellNotAllowed":"Can not sell products from warehouse when in offline mode."
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
