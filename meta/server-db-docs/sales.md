@@ -5,9 +5,12 @@ This collection contains an sale
 Joi.object().keys({
   createdDatetimeStamp: Joi.number().max(999999999999999).required(),
   lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-  lastModifiedByUserId: Joi.number().max(999999999999999).allow(null).required(),
+  lastModifiedByUserId: Joi.number().max(999999999999999).allow(null).required(), // TODO: Check and make sure it's applied or not
+
   outletId: Joi.number().max(999999999999999).required(),
   customerId: Joi.number().max(999999999999999).allow(null).required(),
+
+  productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
 
   productList: Joi.array().required().items(
     Joi.object().keys({

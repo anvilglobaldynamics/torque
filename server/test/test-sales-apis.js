@@ -319,6 +319,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -360,6 +361,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -408,6 +410,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -456,6 +459,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -504,6 +508,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -538,6 +543,7 @@ describe('Sales', _ => {
         payment: {},
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -586,6 +592,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -634,6 +641,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -682,6 +690,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -1202,6 +1211,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -1430,6 +1440,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -1478,6 +1489,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -1542,6 +1554,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -1590,6 +1603,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -1638,6 +1652,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -1686,6 +1701,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -2009,6 +2025,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }))
@@ -2045,6 +2062,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }))
@@ -2081,6 +2099,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }))
@@ -2117,6 +2136,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }))
@@ -2153,6 +2173,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }))
@@ -2573,6 +2594,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }
@@ -2622,6 +2644,7 @@ describe('Sales', _ => {
         },
 
         assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
 
         wasOfflineSale: false
       }

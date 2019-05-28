@@ -19,6 +19,8 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
 
+      productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
+
       productList: Joi.array().required().items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
@@ -183,7 +185,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
   }
 
   async handle({ userId, body }) {
-    let { outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment } = body;
+    let { outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId } = body;
 
     if (!productList.length && !serviceList.length) {
       throw new CodedError("NO_PRODUCT_OR_SERVICE_SELECTED", "Both productList and serviceList can not be empty.");
@@ -208,7 +210,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
 
     payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
 
-    let salesId = await this.database.sales.create({ outletId, customerId, productList, serviceList, assistedByEmployeeId, payment });
+    let salesId = await this.database.sales.create({ outletId, customerId, productList, serviceList, assistedByEmployeeId, payment, productsSelectedFromWarehouseId });
 
     if (serviceList.length) {
       for (let i = 0; i < serviceList.length; i++) {

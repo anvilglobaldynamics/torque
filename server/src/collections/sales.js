@@ -14,6 +14,8 @@ exports.SalesCollection = class extends Collection {
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
 
+      productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
+
       productList: Joi.array().required().items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
@@ -88,7 +90,7 @@ exports.SalesCollection = class extends Collection {
   // NOTE: commented out, because currently we don't support deleting sales.
   // get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ outletId, customerId, productList, serviceList, payment, assistedByEmployeeId, wasOfflineSale = false }) {
+  async create({ outletId, customerId, productList, serviceList, payment, assistedByEmployeeId, wasOfflineSale = false, productsSelectedFromWarehouseId }) {
     return await this._insert({
       outletId,
       customerId,
@@ -96,6 +98,8 @@ exports.SalesCollection = class extends Collection {
       serviceList,
       assistedByEmployeeId,
       payment,
+
+      productsSelectedFromWarehouseId,
 
       wasOfflineSale,
       isModified: false,

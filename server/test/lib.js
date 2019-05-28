@@ -1270,6 +1270,8 @@ exports.validateSalesSchema = (doc) => {
     outletId: Joi.number().max(999999999999999).required(),
     customerId: Joi.number().max(999999999999999).allow(null).required(),
 
+    productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
+
     productList: Joi.array().required().items(
       Joi.object().keys({
         productId: Joi.number().max(999999999999999).required(),
@@ -1369,6 +1371,8 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
         })
       )
     }),
+
+    productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
 
     productList: Joi.array().required().items(
       Joi.object().keys({
@@ -1772,7 +1776,7 @@ exports.validateCollectionSchema = (doc) => {
     collectedByUser: Joi.object().keys({
       fullName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
-    }),    
+    }),
     paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required()
   });
   let { error, value } = Joi.validate(doc, schema);
