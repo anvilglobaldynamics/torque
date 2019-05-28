@@ -43,6 +43,8 @@ Possible Error Codes:
     outletId: Joi.number().max(999999999999999).required(),
     customerId: Joi.number().max(999999999999999).required(),
 
+    productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
+
     productList: Joi.array().items(
       Joi.object().keys({
         productId: Joi.number().max(999999999999999).required(),
