@@ -55,10 +55,10 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
     }];
   }
 
-  async _returnProducts({ returnedProductList, outletReturnedInventory }) {
+  async _returnProducts({ returnedProductList, returnedInventory }) {
     for (let i = 0; i < returnedProductList.length; i++) {
       let product = returnedProductList[i];
-      await this.database.inventory.addProduct({ id: outletReturnedInventory.id }, { productId: product.productId, count: product.count });
+      await this.database.inventory.addProduct({ id: returnedInventory.id }, { productId: product.productId, count: product.count });
     }
     return;
   }
@@ -76,8 +76,14 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
       await this._addChangeToChangeWallet({ customer, amount: creditedAmount });
     }
 
-    let outletReturnedInventory = await this.__getOutletReturnedInventory({ outletId: sales.outletId });
-    await this._returnProducts({ returnedProductList, outletReturnedInventory });
+    let returnedInventory;
+    if (sales.productsSelectedFromWarehouseId) {
+      returnedInventory = await this.__getWarehouseReturnedInventory({ warehouseId: sales.productsSelectedFromWarehouseId });
+    } else {
+      returnedInventory = await this.__getOutletReturnedInventory({ outletId: sales.outletId });
+    }
+
+    await this._returnProducts({ returnedProductList, returnedInventory });
     let salesReturnId = await this.database.salesReturn.create({ salesId, returnedProductList, creditedAmount, shouldSaveReturnableInChangeWallet });
 
     return { status: "success", salesReturnId };
