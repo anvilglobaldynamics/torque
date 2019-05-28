@@ -34,7 +34,7 @@ exports.AddProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin) 
   }
 
   async __ensureIdentifierCodeIsUnique({ identifierCode, organizationId }) {
-    if (identifierCode.length === 0)  return;
+    if (identifierCode.length === 0) return;
     let existingBlueprintList = await this.database.productBlueprint._find({ identifierCode, organizationId });
     throwOnTruthy(existingBlueprintList.length > 0, "INVALID_IDENTIFIER_CODE", "The identifier code is already in use by another product blueprint.");
   }
