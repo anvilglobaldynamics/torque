@@ -690,7 +690,9 @@
     "assignedEmployee": "Assigned",
     "assignEmployee": "Assign",
     "noDiscountApplicable": "Not Applicable",
-    "assistedEmployee": "Assisted by"
+    "assistedEmployee": "Assisted by",
+    "selectProductsFromInventoryContainer": "Select outlet/warehouse to select products from.",
+    "currentOutlet": "Current Outlet"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",

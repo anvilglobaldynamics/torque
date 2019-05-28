@@ -691,7 +691,9 @@
     "assignedEmployee": "দায়িত্ব দেয়া",
     "assignEmployee": "দায়িত্ব দেন",
     "noDiscountApplicable": "প্রযোজ্য নয়",
-    "assistedEmployee": "সহায়তায়"
+    "assistedEmployee": "সহায়তায়",
+    "selectProductsFromInventoryContainer": "পণ্য নির্বাচন করতে দোকান/গুদাম নির্বাচন করুন।",
+    "currentOutlet": "বর্তমান দোকান"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",
