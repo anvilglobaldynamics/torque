@@ -69,7 +69,7 @@
 
       .a4-report .header {
         padding-bottom: 4px;
-        border-bottom: 1px solid black;
+        /* border-bottom: 1px solid black; */
       }
 
       .a4-report .header .name {
@@ -464,33 +464,33 @@
               </template>
 
               <tr class="tr-border-top">
-                <th rowspan="7" colspan="2" style="border:none;"></th>
-                <th style="text-align: right;">[[verses.salesReceipt.totalAmount]]</th>
+                <!-- <th rowspan="7" colspan="2" style="border:none;"></th> -->
+                <th colspan="3" style="text-align: right;">[[verses.salesReceipt.totalAmount]]</th>
                 <th class="monetary-cell">[[$round(sales.payment.totalAmount)]]</th>
               </tr>
               <tr>
-                <th style="text-align: right;">[[verses.salesReceipt.vatAmount]] (+)</th>
+                <th colspan="3" style="text-align: right;">[[verses.salesReceipt.vatAmount]] (+)</th>
                 <th class="monetary-cell">[[$round(sales.payment.vatAmount)]]</th>
               </tr>
               <tr>
-                <th style="text-align: right;">[[verses.salesReceipt.discountedAmount]] (-)</th>
+                <th colspan="3" style="text-align: right;">[[verses.salesReceipt.discountedAmount]] (-)</th>
                 <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]]</th>
               </tr>
               <tr>
-                <th style="text-align: right;">[[verses.salesReceipt.serviceChargeInput]] (+)</th>
+                <th colspan="3" style="text-align: right;">[[verses.salesReceipt.serviceChargeInput]] (+)</th>
                 <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]]</th>
               </tr>
               <tr>
-                <th style="text-align: right;">[[verses.salesReceipt.totalBilled]]</th>
+                <th colspan="3" style="text-align: right;">[[verses.salesReceipt.totalBilled]]</th>
                 <th class="monetary-cell">[[$round(sales.payment.totalBilled)]]</th>
               </tr>
               <tr>
-                <th style="text-align: right;">[[verses.salesReceipt.totalPaid]]</th>
+                <th colspan="3" style="text-align: right;">[[verses.salesReceipt.totalPaid]]</th>
                 <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]]</th>
               </tr>
               <template is="dom-if" if="[[sales.payment.dueAmount]]">
                 <tr>
-                  <th style="text-align: right;">[[verses.salesReceipt.dueAmount]]</th>
+                  <th colspan="3" style="text-align: right;">[[verses.salesReceipt.dueAmount]]</th>
                   <th class="monetary-cell">[[$round(sales.payment.dueAmount)]]</th>
                 </tr>
               </template>
