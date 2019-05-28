@@ -231,21 +231,23 @@
             </template>
 
             <!-- warehouse selection - start -->
-            <template is="dom-if" if="[[$shouldShowWarehouseSelector(warehouseList.length, productList.length)]]">
-              <div>
+            <template is="dom-if" if="[[hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')]]">
+              <template is="dom-if" if="[[$shouldShowWarehouseSelector(warehouseList.length, productList.length)]]">
+                <div>
 
-                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.selectProductsFromInventoryContainer]]" class="mr-4">
-                  <paper-listbox slot="dropdown-content" selected="{{selectedWarehouse}}" attr-for-selected="name">
-                    <paper-item name="--current-outlet">[[verses.pos.currentOutlet]]</paper-item>
-                    <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
-                      <paper-item name="[[warehouse.id]]">
-                        <div class="name">[[warehouse.name]]</div>
-                      </paper-item>
-                    </template>
-                  </paper-listbox>
-                </paper-dropdown-menu>
+                  <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.selectProductsFromInventoryContainer]]" class="mr-4">
+                    <paper-listbox slot="dropdown-content" selected="{{selectedWarehouse}}" attr-for-selected="name">
+                      <paper-item name="--current-outlet">[[verses.pos.currentOutlet]]</paper-item>
+                      <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
+                        <paper-item name="[[warehouse.id]]">
+                          <div class="name">[[warehouse.name]]</div>
+                        </paper-item>
+                      </template>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
 
-              </div>
+                </div>
+              </template>
             </template>
             <!-- warehouse selection - end -->
 
@@ -595,7 +597,6 @@
       }
 
       selectedWarehouseChanged() {
-        console.log('this.selectedWarehouse', this.selectedWarehouse);
         this.app.storeInSession('pos-selected-warehouse', this.selectedWarehouse);
       }
 

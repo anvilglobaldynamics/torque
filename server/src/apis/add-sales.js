@@ -199,6 +199,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     if (productList.length) {
       let inventoryContainerDefaultInventory;
       if (productsSelectedFromWarehouseId) {
+        await this.ensureModule('MOD_SELL_WAREHOUSE_PRODUCTS');
         inventoryContainerDefaultInventory = await this.__getWarehouseDefaultInventory({ warehouseId: productsSelectedFromWarehouseId });
       } else {
         inventoryContainerDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
