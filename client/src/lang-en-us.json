@@ -644,10 +644,11 @@
   "pos": {
     "posPageTitle": "POS",
     "newSalesAdded": "New Sales has been added.",
+    "customerSelectionCardHeader": "Customer Selection",
     "noCustomerSelected": "No customer selected (Anonymous Sale)",
     "removeCustomer": "Remove",
-    "changeCustomer": "Select Customer",
-    "createCustomer": "New Customer",
+    "changeCustomer": "Old",
+    "createCustomer": "New",
     "count": "Count",
     "selectProduct": "Select Product",
     "discountType": "Discount Type",
