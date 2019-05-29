@@ -19,6 +19,8 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
 
+      productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
+
       productList: Joi.array().required().items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
@@ -36,7 +38,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
           assignedEmploymentId: Joi.number().max(999999999999999).allow(null).required()
         })
       ),
-      
+
       payment: Joi.object().required().keys({
         totalAmount: Joi.number().max(999999999999999).required(), // means total sale price of all products
         vatAmount: Joi.number().max(999999999999999).required(),
@@ -46,14 +48,14 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
         discountedAmount: Joi.number().max(999999999999999).required(),
         serviceChargeAmount: Joi.number().max(999999999999999).required(),
         totalBilled: Joi.number().max(999999999999999).required(), // this is the final amount customer has to pay (regardless of the method)
-        
+
         // NOTE: below is a single payment.
         paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
         paidAmount: Joi.number().max(999999999999999).required(),
         changeAmount: Joi.number().max(999999999999999).required(),
         shouldSaveChangeInAccount: Joi.boolean().required()
       }),
-      
+
       assistedByEmployeeId: Joi.number().min(0).max(999999999999999).allow(null).required(),
 
       wasOfflineSale: Joi.boolean().required()
@@ -96,9 +98,9 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     return;
   }
 
-  _reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList }) {
+  _reduceProductCountFromInventoryContainerDefaultInventory({ inventoryContainerDefaultInventory, productList }) {
     for (let product of productList) {
-      let foundProduct = outletDefaultInventory.productList.find(_product => _product.productId === product.productId);
+      let foundProduct = inventoryContainerDefaultInventory.productList.find(_product => _product.productId === product.productId);
       if (!foundProduct) {
         throw new CodedError("PRODUCT_INVALID", "product could not be found in source inventory");
       }
@@ -183,7 +185,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
   }
 
   async handle({ userId, body }) {
-    let { outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment } = body;
+    let { outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId } = body;
 
     if (!productList.length && !serviceList.length) {
       throw new CodedError("NO_PRODUCT_OR_SERVICE_SELECTED", "Both productList and serviceList can not be empty.");
@@ -195,9 +197,15 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     await this._validateBillingAndPayment({ productList, payment, paymentListEntry, customer, organizationId: this.interimData.organization.id });
 
     if (productList.length) {
-      let outletDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
-      this._reduceProductCountFromOutletDefaultInventory({ outletDefaultInventory, productList });
-      await this.database.inventory.setProductList({ id: outletDefaultInventory.id }, { productList: outletDefaultInventory.productList });
+      let inventoryContainerDefaultInventory;
+      if (productsSelectedFromWarehouseId) {
+        await this.ensureModule('MOD_SELL_WAREHOUSE_PRODUCTS');
+        inventoryContainerDefaultInventory = await this.__getWarehouseDefaultInventory({ warehouseId: productsSelectedFromWarehouseId });
+      } else {
+        inventoryContainerDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
+      }
+      this._reduceProductCountFromInventoryContainerDefaultInventory({ inventoryContainerDefaultInventory, productList });
+      await this.database.inventory.setProductList({ id: inventoryContainerDefaultInventory.id }, { productList: inventoryContainerDefaultInventory.productList });
     }
 
     if (serviceList.length) {
@@ -208,7 +216,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
 
     payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
 
-    let salesId = await this.database.sales.create({ outletId, customerId, productList, serviceList, assistedByEmployeeId, payment });
+    let salesId = await this.database.sales.create({ outletId, customerId, productList, serviceList, assistedByEmployeeId, payment, productsSelectedFromWarehouseId });
 
     if (serviceList.length) {
       for (let i = 0; i < serviceList.length; i++) {

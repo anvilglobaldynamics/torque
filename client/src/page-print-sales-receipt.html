@@ -69,7 +69,7 @@
 
       .a4-report .header {
         padding-bottom: 4px;
-        border-bottom: 1px solid black;
+        /* border-bottom: 1px solid black; */
       }
 
       .a4-report .header .name {
@@ -105,7 +105,7 @@
       .a4-report .product-table td,
       .a4-report .payment-table th,
       .a4-report .payment-table td {
-        border: 1px solid black;
+        /* border: 1px solid black; */
       }
 
       .a4-report .product-table {
@@ -160,7 +160,7 @@
 
       .slim-report .header {
         padding-bottom: 4px;
-        border-bottom: 1px solid black;
+        /* border-bottom: 1px solid black; */
       }
 
       .slim-report .header .name {
@@ -191,7 +191,7 @@
       .slim-report .product-table td,
       .slim-report .payment-table th,
       .slim-report .payment-table td {
-        border: 1px solid black;
+        /* border: 1px solid black; */
       }
 
       .slim-report .product-table {
@@ -233,6 +233,24 @@
       }
 
       /* slim - end */
+
+      .tr-border-top-bottom {
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black;
+      }
+
+      .tr-border-top {
+        border-top: 1px solid black;
+      }
+
+      .tr-border-bottom {
+        border-bottom: 1px solid black;
+      }
+
+      .powered-by-footer {
+        text-align: center;
+        font-style: italic;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -273,7 +291,7 @@
             </div>
 
             <table class="product-table">
-              <tr>
+              <tr class="tr-border-top-bottom">
                 <th>[[verses.salesReceipt.goodsTitle]]</th>
                 <th>[[verses.salesReceipt.quantity]]</th>
                 <!-- <th>[[verses.general.unitPrice]]</th> -->
@@ -305,55 +323,61 @@
                 </tr>
               </template>
 
-              <tr>
-                <th colspan="2">[[verses.salesReceipt.totalAmount]]</th>
+              <tr class="tr-border-top">
+                <th colspan="2" style="text-align: right;">[[verses.salesReceipt.totalAmount]]</th>
                 <th class="monetary-cell">[[$round(sales.payment.totalAmount)]] </th>
               </tr>
               <tr>
-                <th colspan="2">[[verses.salesReceipt.vatAmount]]</th>
+                <th colspan="2" style="text-align: right;">[[verses.salesReceipt.vatAmount]] (+)</th>
                 <th class="monetary-cell">[[$round(sales.payment.vatAmount)]]</th>
               </tr>
               <tr>
-                <th colspan="2">[[verses.salesReceipt.discountedAmount]]</th>
+                <th colspan="2" style="text-align: right;">[[verses.salesReceipt.discountedAmount]] (-)</th>
                 <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]]</th>
               </tr>
-              <tr>
-                <th colspan="2">[[verses.salesReceipt.serviceChargeInput]]</th>
+              <tr class="tr-border-bottom">
+                <th colspan="2" style="text-align: right;">[[verses.salesReceipt.serviceChargeInput]] (+)</th>
                 <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]]</th>
               </tr>
               <tr>
-                <th colspan="2">[[verses.salesReceipt.totalBilled]]</th>
+                <th colspan="2" style="text-align: right;">[[verses.salesReceipt.totalBilled]]</th>
                 <th class="monetary-cell">[[$round(sales.payment.totalBilled)]]</th>
               </tr>
               <tr>
-                <th colspan="2">[[verses.salesReceipt.totalPaid]]</th>
+                <th colspan="2" style="text-align: right;">[[verses.salesReceipt.totalPaid]]</th>
                 <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]]</th>
               </tr>
               <template is="dom-if" if="[[sales.payment.dueAmount]]">
                 <tr>
-                  <th colspan="2">[[verses.salesReceipt.dueAmount]]</th>
+                  <th colspan="2" style="text-align: right;">[[verses.salesReceipt.dueAmount]]</th>
                   <th class="monetary-cell">[[$round(sales.payment.dueAmount)]]</th>
                 </tr>
               </template>
+              <tr class="tr-border-bottom">
+                <th colspan="3"></th>
+              </tr>
             </table>
 
             <div class="section-header"><b>[[verses.salesReceipt.payment]] ([[app.settings.monetaryUnit]])</b></div>
 
             <table class="payment-table">
-              <tr>
+              <tr class="tr-border-top-bottom">
                 <th>[[verses.general.date]]</th>
-                <th>[[verses.salesReceipt.paidAmountInput]]</th>
                 <th>[[verses.salesReceipt.paymentMethod]]</th>
+                <th>[[verses.salesReceipt.paidAmountInput]]</th>
                 <th>[[verses.salesReceipt.changeAmount]]</th>
               </tr>
               <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
                 <tr>
                   <td class="centered-cell">[[$mkDate(payment.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</td>
-                  <td class="monetary-cell">[[$round(payment.paidAmount)]] </td>
                   <td class="monetary-cell"> [[payment.paymentMethod]]</td>
+                  <td class="monetary-cell">[[$round(payment.paidAmount)]]</td>
                   <td class="monetary-cell">[[$round(payment.changeAmount)]] </td>
                 </tr>
               </template>
+              <tr class="tr-border-bottom">
+                <th colspan="4"></th>
+              </tr>
             </table>
 
           </div>
@@ -368,6 +392,8 @@
             </div>
           </div>
 
+          <div class="powered-by-footer">Powered by <span style="font-weight: bold;">Lipi</span>, anvil.live/lipi</div>
+
         </div>
         <!-- /div.report -->
       </template>
@@ -381,7 +407,7 @@
             <div class="horizontal layout">
               <div>
                 <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
-                <div>[[app.organization.primaryBusinessAddress]]</div>
+                <!-- <div>[[app.organization.primaryBusinessAddress]]</div> -->
                 <div>[[app.organization.email]]</div>
                 <div>[[app.organization.phone]]</div>
               </div>
@@ -412,11 +438,11 @@
             </div>
 
             <table class="product-table">
-              <tr>
+              <tr class="tr-border-top-bottom">
                 <th>[[verses.salesReceipt.goodsTitle]]</th>
                 <th>[[verses.general.quantity]]</th>
-                <th>[[verses.general.unitPrice]]</th>
-                <th>[[verses.general.price]]</th>
+                <th>[[verses.general.unitPrice]] [[app.settings.monetaryUnit]]</th>
+                <th>[[verses.general.price]] [[app.settings.monetaryUnit]]</th>
               </tr>
 
               <template is="dom-repeat" items="{{sales.productList}}" as="product">
@@ -428,8 +454,8 @@
                     </template>
                   </td>
                   <td class="quantitive-cell">[[product.count]] [[product.unit]]</td>
-                  <td class="monetary-cell">[[product.salePrice]] [[app.settings.monetaryUnit]]</td>
-                  <td class="monetary-cell">[[$calculateIndividualProductPrice(product)]] [[app.settings.monetaryUnit]]</td>
+                  <td class="monetary-cell">[[product.salePrice]]</td>
+                  <td class="monetary-cell">[[$calculateIndividualProductPrice(product)]]</td>
                 </tr>
               </template>
 
@@ -439,48 +465,51 @@
                     [[service.serviceBlueprintName]]
                   </td>
                   <td class="quantitive-cell">1</td>
-                  <td class="monetary-cell">[[service.salePrice]] [[app.settings.monetaryUnit]]</td>
-                  <td class="monetary-cell">[[$calculateIndividualServicePrice(service)]] [[app.settings.monetaryUnit]]</td>
+                  <td class="monetary-cell">[[service.salePrice]]</td>
+                  <td class="monetary-cell">[[$calculateIndividualServicePrice(service)]]</td>
                 </tr>
               </template>
 
-              <tr>
-                <th rowspan="7" colspan="2" style="border:none;"></th>
-                <th>[[verses.salesReceipt.totalAmount]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.totalAmount)]] [[app.settings.monetaryUnit]]</th>
+              <tr class="tr-border-top">
+                <!-- <th rowspan="7" colspan="2" style="border:none;"></th> -->
+                <th colspan="3" style="text-align: right;">[[verses.salesReceipt.totalAmount]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.totalAmount)]]</th>
               </tr>
               <tr>
-                <th>[[verses.salesReceipt.vatAmount]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</th>
+                <th colspan="3" style="text-align: right;">[[verses.salesReceipt.vatAmount]] (+)</th>
+                <th class="monetary-cell">[[$round(sales.payment.vatAmount)]]</th>
               </tr>
               <tr>
-                <th>[[verses.salesReceipt.discountedAmount]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</th>
+                <th colspan="3" style="text-align: right;">[[verses.salesReceipt.discountedAmount]] (-)</th>
+                <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]]</th>
               </tr>
               <tr>
-                <th>[[verses.salesReceipt.serviceChargeInput]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</th>
+                <th colspan="3" style="text-align: right;">[[verses.salesReceipt.serviceChargeInput]] (+)</th>
+                <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]]</th>
               </tr>
               <tr>
-                <th>[[verses.salesReceipt.totalBilled]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.totalBilled)]] [[app.settings.monetaryUnit]]</th>
+                <th colspan="3" style="text-align: right;">[[verses.salesReceipt.totalBilled]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.totalBilled)]]</th>
               </tr>
               <tr>
-                <th>[[verses.salesReceipt.totalPaid]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</th>
+                <th colspan="3" style="text-align: right;">[[verses.salesReceipt.totalPaid]]</th>
+                <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]]</th>
               </tr>
               <template is="dom-if" if="[[sales.payment.dueAmount]]">
                 <tr>
-                  <th>[[verses.salesReceipt.dueAmount]]</th>
-                  <th class="monetary-cell">[[$round(sales.payment.dueAmount)]] [[app.settings.monetaryUnit]]</th>
+                  <th colspan="3" style="text-align: right;">[[verses.salesReceipt.dueAmount]]</th>
+                  <th class="monetary-cell">[[$round(sales.payment.dueAmount)]]</th>
                 </tr>
               </template>
+              <tr class="tr-border-bottom">
+                <th colspan="4"></th>
+              </tr>
             </table>
 
-            <div class="section-header"><b>[[verses.salesReceipt.payment]]</b></div>
+            <div class="section-header"><b>[[verses.salesReceipt.payment]] ([[app.settings.monetaryUnit]])</b></div>
 
             <table class="payment-table">
-              <tr>
+              <tr class="tr-border-top-bottom">
                 <th>[[verses.general.date]]</th>
                 <th>[[verses.salesReceipt.paymentMethod]]</th>
                 <th>[[verses.salesReceipt.paidAmountInput]]</th>
@@ -490,10 +519,13 @@
                 <tr>
                   <td class="centered-cell">[[$mkDate(payment.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</td>
                   <td class="centered-cell">[[payment.paymentMethod]]</td>
-                  <td class="monetary-cell">[[$round(payment.paidAmount)]] [[app.settings.monetaryUnit]]</td>
-                  <td class="monetary-cell">[[$round(payment.changeAmount)]] [[app.settings.monetaryUnit]]</td>
+                  <td class="monetary-cell">[[$round(payment.paidAmount)]]</td>
+                  <td class="monetary-cell">[[$round(payment.changeAmount)]]</td>
                 </tr>
               </template>
+              <tr class="tr-border-bottom">
+                <th colspan="4"></th>
+              </tr>
             </table>
 
           </div>
@@ -511,6 +543,8 @@
               <!-- <div>[[soldByUser.phone]]</div> -->
             </div>
           </div>
+
+          <div class="powered-by-footer">Powered by <span style="font-weight: bold;">Lipi</span>, anvil.live/lipi</div>
 
         </div>
         <!-- /div.report -->
