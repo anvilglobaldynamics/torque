@@ -62,10 +62,15 @@ exports.TransferBetweenInventoriesApi = class extends Api {
 
   _transfer({ fromInventory, toInventory, productList }) {
     for (let product of productList) {
-      let foundProduct = fromInventory.productList.find(_product => _product.productId === product.productId);
-      if (!foundProduct) {
+
+      let foundProductList = fromInventory.productList.filter(_product => _product.productId === product.productId);
+      if (foundProductList.length === 0) {
         throw new CodedError("PRODUCT_INVALID", "product could not be found in source inventory");
       }
+
+      foundProductList.sort((a, b) => b.count - a.count);
+      let foundProduct = foundProductList[0];
+
       if (foundProduct.count < product.count) {
         throw new CodedError("PRODUCT_INSUFFICIENT", "not enough product(s) in source inventory");
       }

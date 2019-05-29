@@ -234,6 +234,27 @@
               </div>
             </template>
 
+            <!-- warehouse selection - start -->
+            <template is="dom-if" if="[[hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')]]">
+              <template is="dom-if" if="[[$shouldShowWarehouseSelector(warehouseList.length, productList.length)]]">
+                <div>
+
+                  <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.selectProductsFromInventoryContainer]]" class="mr-4">
+                    <paper-listbox slot="dropdown-content" selected="{{selectedWarehouse}}" attr-for-selected="name">
+                      <paper-item name="--current-outlet">[[verses.pos.currentOutlet]]</paper-item>
+                      <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
+                        <paper-item name="[[warehouse.id]]">
+                          <div class="name">[[warehouse.name]]</div>
+                        </paper-item>
+                      </template>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+
+                </div>
+              </template>
+            </template>
+            <!-- warehouse selection - end -->
+
             <div class="select-product-button-container">
               <paper-button raised class="btn primary" on-tap="addProductTapped">[[verses.pos.selectProduct]]</paper-button>
             </div>
@@ -373,6 +394,7 @@
         </div>
       </template>
 
+      <!-- payment area card - start -->
       <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
         <div class="card vertical layout">
           <div class="list">
@@ -433,6 +455,7 @@
           </div>
         </div>
       </template>
+      <!-- payment area card - end -->
       <!-- calculations - end -->
 
     </div>
@@ -453,6 +476,10 @@
             value: () => []
           },
           serviceList: {
+            type: Array,
+            value: () => []
+          },
+          warehouseList: {
             type: Array,
             value: () => []
           },
@@ -495,6 +522,15 @@
             type: String,
             value: '--no-discount',
             observer: 'selectedDiscountPresetChanged'
+          },
+          selectedWarehouse: {
+            type: String,
+            value: '--current-outlet',
+            observer: 'selectedWarehouseChanged'
+          },
+          productsSelectedFromWarehouseId: {
+            type: Number,
+            value: null,
           }
         };
       }
@@ -520,7 +556,12 @@
         }
         if (!this._ensureAccess()) return;
         this.selectedDiscountPreset = '--no-discount';
+
+        this.selectedWarehouse = this.app.getFromSession('pos-selected-warehouse') || '--current-outlet';
+        this.productsSelectedFromWarehouseId = this.app.getFromSession('product-selected-from-warehouse-id') || null;
+
         this.assignedAssistedByEmployee = this.app.getFromSession('pos-assigned-assisted-by-employee');
+
         this.delay(0, () => {
           this.self = this;
           let customerId = this.app.extractFromSession('last-created-customer');
@@ -550,9 +591,24 @@
         this._processDiscountPresetList(() => {
 
         });
+        if (!this.isInOfflineMode) {
+          this._fetchWarehouseList((warehouseList) => {
+            warehouseList.reverse();
+            this.warehouseList = warehouseList;
+          });
+        }
         this.delay(300, () => {
           this.isReady = true;
         });
+      }
+
+      selectedWarehouseChanged() {
+        this.app.storeInSession('pos-selected-warehouse', this.selectedWarehouse);
+      }
+
+      _setProductSelectedFromWarehouseId(id) {
+        this.productsSelectedFromWarehouseId = id;
+        this.app.storeInSession('product-selected-from-warehouse-id', this.productsSelectedFromWarehouseId);
       }
 
       onNavigateOut() {
@@ -605,6 +661,15 @@
         });
       }
 
+      _processGetWarehouse(cbfn) {
+        let data = { warehouseId: this.selectedWarehouse };
+        this.app.callGetWarehouseApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
       _processGetOutletDefaultInventoryIdOnline(cbfn) {
         let data = { outletId: this.params.outlet };
         this.app.callGetOutletApi(data, (err, response) => {
@@ -621,10 +686,22 @@
       }
 
       _processGetOutletDefaultInventoryId(cbfn) {
-        if (this.isInOfflineMode) {
-          this._processGetOutletDefaultInventoryIdOffline(cbfn);
+        if (this.selectedWarehouse === '--current-outlet') {
+          this._setProductSelectedFromWarehouseId(null);
+          if (this.isInOfflineMode) {
+            this._processGetOutletDefaultInventoryIdOffline(cbfn);
+          } else {
+            this._processGetOutletDefaultInventoryIdOnline(cbfn);
+          }
         } else {
-          this._processGetOutletDefaultInventoryIdOnline(cbfn);
+          if (this.isInOfflineMode) {
+            return this.app.showModalDialog(this.verses.pos.saleNotValid, this.verses.pos.offlineWarehouseSellNotAllowed);
+          } else {
+            this._processGetWarehouse(({ defaultInventory, warehouse }) => {
+              this._setProductSelectedFromWarehouseId(warehouse.id);
+              return cbfn(defaultInventory.id);
+            });
+          }
         }
       }
 
@@ -804,8 +881,15 @@
 
         let assistedByEmployeeId = (this.assignedAssistedByEmployee) ? this.assignedAssistedByEmployee.id : null;
 
+        let productsSelectedFromWarehouseId = this.productsSelectedFromWarehouseId;
+
+        if (this.isInOfflineMode && productsSelectedFromWarehouseId !== null) {
+          return this.app.showModalDialog(this.verses.pos.saleNotValid, this.verses.pos.offlineWarehouseSellNotAllowed);
+        }
+
         let data = {
-          customerId, outletId, productList, serviceList, assistedByEmployeeId, payment
+          customerId, outletId, productList, serviceList, assistedByEmployeeId, payment,
+          productsSelectedFromWarehouseId
         };
 
         if (this.isInOfflineMode) {
@@ -817,17 +901,36 @@
 
       _resetSales() {
         this.selectedDiscountPreset = '--no-discount';
+        this.selectedWarehouse = '--current-outlet';
+        this.productsSelectedFromWarehouseId = null;
+
+        this.app.extractFromSession('pos-selected-warehouse');
+        this.app.extractFromSession('product-selected-from-warehouse-id');
+
         this.app.extractFromSession('pos-selected-product-list');
         this.app.extractFromSession('pos-selected-service-list');
+
         this.app.extractFromSession('last-selected-customer');
+
         this.app.extractFromSession('pos-assigned-assisted-by-employee');
+
         this.resetProperties('payment', 'productList', 'serviceList', 'customer', 'isSearchingCustomer');
+
         this.app.refreshCurrentPage();
       }
 
       _customerSelected(customer) {
         this.customer = customer;
         this.isSearchingCustomer = false;
+      }
+
+      _fetchWarehouseList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetWarehouseListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.warehouseList);
+        });
       }
 
       // region: ui =================================
@@ -998,6 +1101,10 @@
 
       assignAssistedByEmployeeTapped() {
         return this.app.navigateTo(`/pos-assign-assisted-by-employee`);
+      }
+
+      $shouldShowWarehouseSelector(warehouseListLength, productListLength) {
+        return (warehouseListLength > 0 && productListLength === 0);
       }
 
       // region: misc =================================

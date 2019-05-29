@@ -12,6 +12,8 @@ method: `POST`
   outletId: Joi.number().max(999999999999999).required(),
   customerId: Joi.number().max(999999999999999).allow(null).required(),
 
+  productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
+
   productList: Joi.array().required().items(
     Joi.object().keys({
       productId: Joi.number().max(999999999999999).required(),
