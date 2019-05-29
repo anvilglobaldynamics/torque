@@ -24,11 +24,25 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
     return outletDefaultInventory;
   }
 
+  async __getWarehouseDefaultInventory({ warehouseId }) {
+    let inventoryList = await this.database.inventory.listByInventoryContainerId({ inventoryContainerId: warehouseId, inventoryContainerType: 'warehouse' });
+    throwOnFalsy(inventoryList.length, "WAREHOUSE_INVENTORY_INVALID", "Invalid Warehouse Or Inventory could not be found");
+    let warehouseDefaultInventory = inventoryList.find(inventory => inventory.type === 'default');
+    return warehouseDefaultInventory;
+  }
+
   async __getOutletReturnedInventory({ outletId }) {
     let inventoryList = await this.database.inventory.listByInventoryContainerId({ inventoryContainerId: outletId, inventoryContainerType: 'outlet' });
     throwOnFalsy(inventoryList.length, "OUTLET_INVENTORY_INVALID", "Invalid Outlet Or Inventory could not be found");
     let outletReturnedInventory = inventoryList.find(inventory => inventory.type === 'returned');
     return outletReturnedInventory;
+  }
+
+  async __getWarehouseReturnedInventory({ warehouseId }) {
+    let inventoryList = await this.database.inventory.listByInventoryContainerId({ inventoryContainerId: warehouseId, inventoryContainerType: 'warehouse' });
+    throwOnFalsy(inventoryList.length, "WAREHOUSE_INVENTORY_INVALID", "Invalid Warehouse Or Inventory could not be found");
+    let warehouseReturnedInventory = inventoryList.find(inventory => inventory.type === 'returned');
+    return warehouseReturnedInventory;
   }
 
   async __getInventoryContainerDetails({ inventory }) {

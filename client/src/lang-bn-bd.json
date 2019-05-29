@@ -89,6 +89,7 @@
     "moduleDescriptionLineTwo": "লিপি তে আরো ফীচার এবং কার্যকারিতা যোগ করতে আমাদের সাথে যোগাযোগ করুন এই নম্বরে +880 1770 947908 অথবা care@anvil.live এ মেইল লিখুন ",
     "productModule": "প্রোডাক্ট মডিউল",
     "serviceModule": "সেবা মডিউল",
+    "sellWarehouseProductModule": "গুদাম-এর পণ্য বিক্রয় মডিউল",
     "gymModule": "জিমনেসিয়াম মডিউল",
     "retail": "পণ্য বিক্রয়",
     "service": "সেবা বিক্রয়",
@@ -278,7 +279,6 @@
     "physicalAddress": "ঠিকানা",
     "currentLocation": "এখন যেখানে আছেন",
     "saveLocation": "অবস্থান নিশ্চিত করুন",
-
     "noGpsAccess": "অনুমতি নেই",
     "failedToAccessGpsData": "আপনার অবস্থান জানার অনুমতি দেয়া হয়নি। অনুগ্রহপূর্বক অনুমতি দিন।",
     "noGpsSupport": "ব্যবস্থা নেই",
@@ -691,7 +691,11 @@
     "assignedEmployee": "দায়িত্ব দেয়া",
     "assignEmployee": "দায়িত্ব দেন",
     "noDiscountApplicable": "প্রযোজ্য নয়",
-    "assistedEmployee": "সহায়তায়"
+    "assistedEmployee": "সহায়তায়",
+    "selectProductsFromInventoryContainer": "পণ্য নির্বাচন করতে দোকান/গুদাম নির্বাচন করুন।",
+    "currentOutlet": "বর্তমান দোকান",
+    "saleNotValid": "বিক্রয় সঠিক নয়",
+    "offlineWarehouseSellNotAllowed": "অফলাইন মোডে গুদাম থেকে পণ্য বিক্রি করতে পারবেন না।"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",

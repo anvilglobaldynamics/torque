@@ -211,7 +211,8 @@ describe('Sales Return', _ => {
                                   paymentMethod: 'cash'
                                 },
 
-                                assistedByEmployeeId: null,
+                                assistedByEmployeeId: null, 
+                                productsSelectedFromWarehouseId: null, 
 
                                 wasOfflineSale: false
                               }, (data) => {
@@ -244,7 +245,8 @@ describe('Sales Return', _ => {
                                     paymentMethod: 'cash'
                                   },
 
-                                  assistedByEmployeeId: null,
+                                  assistedByEmployeeId: null, 
+                                  productsSelectedFromWarehouseId: null, 
 
                                   wasOfflineSale: false
                                 }, (data) => {

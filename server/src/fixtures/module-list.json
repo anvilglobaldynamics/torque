@@ -14,5 +14,9 @@
   {
     "code": "MOD_EMPLOYEE_ATTENDANCE",
     "name": "Unlocks the ability to use extended employee features."
+  },
+  {
+    "code": "MOD_SELL_WAREHOUSE_PRODUCTS",
+    "name": "Unlocks the ability to select products from warehouse to sell from an outlet."
   }
 ]
