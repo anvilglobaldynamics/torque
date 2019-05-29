@@ -692,7 +692,7 @@
     "assignEmployee": "দায়িত্ব দেন",
     "noDiscountApplicable": "প্রযোজ্য নয়",
     "assistedEmployee": "সহায়তায়",
-    "selectProductsFromInventoryContainer": "পণ্য নির্বাচন করতে দোকান/গুদাম নির্বাচন করুন।",
+    "selectProductsFromInventoryContainer": "কোন দোকান/গুদাম থেকে বিক্রি হবে?",
     "currentOutlet": "বর্তমান দোকান",
     "saleNotValid": "বিক্রয় সঠিক নয়",
     "offlineWarehouseSellNotAllowed": "অফলাইন মোডে গুদাম থেকে পণ্য বিক্রি করতে পারবেন না।"
