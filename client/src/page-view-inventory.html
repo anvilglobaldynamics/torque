@@ -111,13 +111,6 @@
                     <div class="inventory-product-added-date-container">[[verses.inventory.addedOn]]: [[$mkDate(product.addedDatetimeStamp)]]</div>
                   </div>
 
-                  <!-- edit -->
-                  <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS', organization)]]">
-                    <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
-                      <iron-icon class="button-icon edit-button" icon="icons:create" on-tap="editTapped"></iron-icon>
-                    </template>
-                  </template>
-
                   <!-- select -->
                   <template is="dom-if" if="[[isProductSelectionForInitiated]]">
                     <template is="dom-if" if="[[product.count]]">
@@ -516,12 +509,7 @@
       genericSelectedCountInputChanged(e) {
         this.enforceMinMaxOnPaperInput(e);
       }
-
-      editTapped(e) {
-        let { product } = e.model;
-        let inventoryId = parseInt(this.params.inventory);
-        return this.app.navigateTo(`/edit-product/product:${product.productId}/inventory:${inventoryId}`);
-      }
+      
 
       // region: misc =================================
 
