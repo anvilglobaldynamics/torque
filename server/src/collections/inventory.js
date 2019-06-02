@@ -55,10 +55,18 @@ exports.InventoryCollection = class extends Collection {
     });
   }
 
-  async addProduct({ id }, { productId, count }) {
+  async pushProduct({ id }, { productId, count }) {
     return await this._update({ id }, {
       $push: {
         productList: { productId, count }
+      }
+    });
+  }
+
+  async increaseProductCount({ id, productId }, { count }) {
+    return await this._update({ id, 'productList.productId': productId }, {
+      $inc: {
+        'productList.$.count': count
       }
     });
   }
