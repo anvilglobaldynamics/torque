@@ -54,8 +54,6 @@ Possible Error Codes:
   aggregatedProductList: Joi.array().keys({
     productId: Joi.number().max(999999999999999).required(),
     count: Joi.number().max(999999999999999).required(),
-    acquiredDatetimeStamp: Joi.number().max(999999999999999).required(),
-    addedDatetimeStamp:  Joi.number().max(999999999999999).required(),
 
     product: Joi.object().keys({
       id: Joi.number().max(999999999999999).required(),

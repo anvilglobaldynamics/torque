@@ -373,8 +373,6 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
     aggregatedProductList: Joi.array().required().items({
       productId: Joi.number().required(),
       count: Joi.number().required(),
-      acquiredDatetimeStamp: Joi.number().required(),
-      addedDatetimeStamp: Joi.number().required(),
 
       product: Joi.object().keys({
         id: Joi.number().required(),
@@ -431,8 +429,6 @@ exports.validateReportInventoryDetailsApiSuccessResponse = (doc) => {
         aggregatedProductList: Joi.array().required().items({
           productId: Joi.number().required(),
           count: Joi.number().required(),
-          acquiredDatetimeStamp: Joi.number().required(),
-          addedDatetimeStamp: Joi.number().required(),
 
           product: Joi.object().keys({
             id: Joi.number().required(),
@@ -1606,8 +1602,6 @@ exports.validateAggregatedProductScema = (doc) => {
   let schema = Joi.object().keys({
     productId: Joi.number().max(999999999999999).required(),
     count: Joi.number().max(999999999999999).required(),
-    acquiredDatetimeStamp: Joi.number().max(999999999999999).required(),
-    addedDatetimeStamp: Joi.number().max(999999999999999).required(),
     product: Joi.object().keys({
       id: Joi.number().max(999999999999999).required(),
 
