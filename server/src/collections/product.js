@@ -49,4 +49,8 @@ exports.ProductCollection = class extends Collection {
     });
   }
 
+  async findByProductBlueprintId({ productBlueprintId }) {
+    return await this._findOne({ productBlueprintId });
+  }
+
 }
