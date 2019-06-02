@@ -19,7 +19,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
       searchString: Joi.string().min(0).max(64).allow('').optional(),
       identifierCode: Joi.string().min(0).max(64).allow('').optional(),
       includeZeroCountProducts: Joi.boolean().default(true).optional(),
-      sortOrder: Joi.string().default('id-ascending').valid('id-ascending', 'product-id-descending').optional()
+      sortOrder: Joi.string().default('product-id-ascending').valid('product-id-ascending', 'product-id-descending').optional()
     });
   }
 
@@ -82,7 +82,9 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
     }
 
     if (sortOrder === 'product-id-descending') {
-      aggregatedProductList.sort((a, b) => a.productId - b.productId);
+      aggregatedProductList.sort((a, b) => b.productId - a.productId);
+    } else if (sortOrder === 'product-id-ascending'){
+      aggregatedProductList.sort((a, b) => a.productId - b.productId); 
     }
 
     return {
