@@ -97,4 +97,15 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
     await this.__createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'damaged', name: 'Damaged' });
   }
 
+  async _pushProductOrIncrementCount({ productId, count, inventoryId }) {
+    let inventory = await this.database.inventory.findById({ id: inventoryId });
+    let inventoryProduct = inventory.productList.find(inventoryProduct => inventoryProduct.productId === productId);
+
+    if (inventoryProduct) {
+      this.ensureUpdate('inventory', await this.database.inventory.increaseProductCount({ id: inventoryId, productId }, { count }));
+    } else {
+      this.ensureUpdate('inventory', await this.database.inventory.pushProduct({ id: inventoryId }, { productId, count }));
+    }
+  }
+
 }
