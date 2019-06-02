@@ -4,8 +4,9 @@ const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
 const { ProductBlueprintMixin } = require('./mixins/product-blueprint-mixin');
+const { InventoryMixin } = require('./mixins/inventory-mixin');
 
-exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin) {
+exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin, InventoryMixin) {
 
   get autoValidates() { return true; }
 
@@ -17,8 +18,8 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin
       productList: Joi.array().min(1).items(
         Joi.object().keys({
           productBlueprintId: Joi.number().max(999999999999999).required(),
-          purchasePrice: Joi.number().max(999999999999999).required(),
-          salePrice: Joi.number().max(999999999999999).required(),
+          purchasePrice: Joi.number().max(999999999999999).required(), // useless
+          salePrice: Joi.number().max(999999999999999).required(), // useless
           count: Joi.number().max(999999999999999).required()
         })
       )
@@ -42,13 +43,28 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin
     }];
   }
 
+  async _findOrCreateProduct({ productBlueprintId }) {
+    let product = await this.database.product.findByProductBlueprintId({ productBlueprintId });
+    if (!product) {
+      let productBlueprint = await this.database.productBlueprint.findById({ id: productBlueprintId });
+      let purchasePrice = productBlueprint.defaultPurchasePrice;
+      let salePrice = productBlueprint.defaultSalePrice;
+      await this.database.product.create({ productBlueprintId, purchasePrice, salePrice });
+      product = await this.database.product.findByProductBlueprintId({ productBlueprintId });
+    }
+    throwOnFalsy(product, "PRODUCT_NOT_FOUND", "Product could not be found");
+    return product;
+  }
+
   async _addProductToInventory({ inventoryId, productList }) {
     let insertedProductList = [];
+
     await Promise.all(productList.map(async product => {
       let { productBlueprintId, purchasePrice, salePrice, count } = product;
-      let productId = await this.database.product.create({ productBlueprintId, purchasePrice, salePrice });
-      insertedProductList.push({ productId, count });
-      this.ensureUpdate('inventory', await this.database.inventory.addProduct({ id: inventoryId }, { productId, count }));
+
+      let { id: productId } = await this._findOrCreateProduct({ productBlueprintId });
+      await this._pushProductOrIncrementCount({ productId, count, inventoryId });
+      await insertedProductList.push({ productId, count });
     }));
     return insertedProductList;
   }
