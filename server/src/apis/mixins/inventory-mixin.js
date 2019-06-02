@@ -108,7 +108,7 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async __createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type, name }) {
     let inventory = {
-      inventoryContainerId, inventoryContainerType, organizationId, type, name, allowManualTransfer: true
+      inventoryContainerId, inventoryContainerType, organizationId, type, name
     }
     return await this.database.inventory.create(inventory);
   }

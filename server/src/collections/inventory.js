@@ -15,7 +15,6 @@ exports.InventoryCollection = class extends Collection {
       type: Joi.string().valid('default', 'returned', 'damaged').required(),
       name: Joi.string().min(1).max(64).required(),
       organizationId: Joi.number().max(999999999999999).required(),
-      allowManualTransfer: Joi.boolean().required(),
       productList: Joi.array().items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
@@ -44,14 +43,13 @@ exports.InventoryCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ inventoryContainerId, inventoryContainerType, organizationId, type, name, allowManualTransfer }) {
+  async create({ inventoryContainerId, inventoryContainerType, organizationId, type, name }) {
     return await this._insert({
       name,
       organizationId,
       inventoryContainerId,
       inventoryContainerType,
       type,
-      allowManualTransfer,
       productList: [],
       isDeleted: false
     });

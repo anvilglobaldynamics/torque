@@ -569,7 +569,6 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
 
       id: Joi.number().required(),
       name: Joi.string().required(),
-      allowManualTransfer: Joi.boolean().required(),
     }),
 
     returnedInventory: Joi.object().keys({
@@ -578,7 +577,6 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
 
       id: Joi.number().required(),
       name: Joi.string().required(),
-      allowManualTransfer: Joi.boolean().required(),
     }),
 
     damagedInventory: Joi.object().keys({
@@ -587,7 +585,6 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
 
       id: Joi.number().required(),
       name: Joi.string().required(),
-      allowManualTransfer: Joi.boolean().required(),
     })
   });
 
@@ -619,7 +616,6 @@ exports.validateGetWarehouseApiSuccessResponse = (doc) => {
 
       id: Joi.number().required(),
       name: Joi.string().required(),
-      allowManualTransfer: Joi.boolean().required(),
     }),
 
     returnedInventory: Joi.object().keys({
@@ -628,7 +624,6 @@ exports.validateGetWarehouseApiSuccessResponse = (doc) => {
 
       id: Joi.number().required(),
       name: Joi.string().required(),
-      allowManualTransfer: Joi.boolean().required(),
     }),
 
     damagedInventory: Joi.object().keys({
@@ -637,7 +632,6 @@ exports.validateGetWarehouseApiSuccessResponse = (doc) => {
 
       id: Joi.number().required(),
       name: Joi.string().required(),
-      allowManualTransfer: Joi.boolean().required(),
     })
   });
 
@@ -1231,7 +1225,6 @@ exports.validateInventorySchema = (doc) => {
     type: Joi.string().valid('default', 'returned', 'damaged').required(),
     name: Joi.string().min(1).max(64).required(),
     organizationId: Joi.number().max(999999999999999).required(),
-    allowManualTransfer: Joi.boolean().required(),
 
     productList: Joi.array().items(
       Joi.object().keys({
@@ -1254,7 +1247,6 @@ exports.validateEmbeddedInventorySchema = (doc) => {
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
     name: Joi.string().min(1).max(64).required(),
-    allowManualTransfer: Joi.boolean().required()
   });
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
