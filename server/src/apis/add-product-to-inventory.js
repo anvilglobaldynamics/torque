@@ -53,15 +53,15 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin
     return insertedProductList;
   }
 
-  async _addAcquisitionRecord({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList }) {
-    await this.database.productAcquisition.create({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList: productList });
+  async _addAcquisitionRecord({ createdByUserId, acquiredDatetimeStamp, inventoryId, productList }) {
+    await this.database.productAcquisition.create({ createdByUserId, acquiredDatetimeStamp, inventoryId, productList: productList });
   }
 
   async handle({ body, userId }) {
     let { inventoryId, productList } = body;
     await this._verifyProductBlueprintsExist({ productList });
     let insertedProductList = await this._addProductToInventory({ inventoryId, productList });
-    await this._addAcquisitionRecord({ createdByUserId: userId, acquiredDatetimeStamp: (new Date).getTime(), partyType: "unspecified", partyName: null, productList: insertedProductList });
+    await this._addAcquisitionRecord({ createdByUserId: userId, acquiredDatetimeStamp: (new Date).getTime(), inventoryId, productList: insertedProductList });
     return { status: "success", insertedProductList };
   }
 

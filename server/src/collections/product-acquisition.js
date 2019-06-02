@@ -13,8 +13,7 @@ exports.ProductAcquisitionCollection = class extends Collection {
       createdByUserId: Joi.number().max(999999999999999).required(),
 
       acquiredDatetimeStamp: Joi.number().max(999999999999999).required(),
-      partyType: Joi.string().valid('unspecified', 'own', 'subsidiary', 'vendor').required(),
-      partyName: Joi.string().min(1).max(64).allow(null).required(),
+      inventoryId: Joi.number().max(999999999999999).required(),
 
       productList: Joi.array().min(1).items(
         Joi.object().keys({
@@ -41,13 +40,12 @@ exports.ProductAcquisitionCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ createdByUserId, acquiredDatetimeStamp, partyType, partyName, productList }) {
+  async create({ createdByUserId, acquiredDatetimeStamp, inventoryId, productList }) {
     return await this._insert({
       isDeleted: false,
       createdByUserId,
       acquiredDatetimeStamp,
-      partyType,
-      partyName,
+      inventoryId,
       productList,
     });
   }
