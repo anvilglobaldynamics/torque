@@ -14,7 +14,7 @@ method: `POST`
   inventoryId: Joi.number().max(999999999999999).required(),
   identifierCode: Joi.string().min(0).max(64).allow('').optional(),
   searchString: Joi.string().min(0).max(64).allow('').optional(),
-  sortOrder: Joi.string().default('product-id-ascending').valid('product-id-ascending', 'product-id-descending').optional()
+  sortOrder: Joi.string().default('blueprint-created-date-ascending').valid('blueprint-created-date-ascending', 'blueprint-created-date-descending').optional()
 }
 ```
 

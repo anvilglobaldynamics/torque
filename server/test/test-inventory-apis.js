@@ -853,7 +853,7 @@ describe('Inventory', _ => {
       json: {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
-        sortOrder: 'product-id-descending'
+        sortOrder: 'blueprint-created-date-descending'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
