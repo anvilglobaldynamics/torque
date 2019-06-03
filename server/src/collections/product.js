@@ -17,7 +17,12 @@ exports.ProductCollection = class extends Collection {
   }
 
   get uniqueKeyDefList() {
-    return [];
+    return [
+      {
+        filters: {},
+        keyList: ['productBlueprintId']
+      }
+    ];
   }
 
   get foreignKeyDefList() {
@@ -42,6 +47,10 @@ exports.ProductCollection = class extends Collection {
         purchasePrice, salePrice
       }
     });
+  }
+
+  async findByProductBlueprintId({ productBlueprintId }) {
+    return await this._findOne({ productBlueprintId });
   }
 
 }

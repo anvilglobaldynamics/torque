@@ -420,7 +420,7 @@
     "count": "Count",
     "sellFor": "Sell",
     "purchasedFor": "Purchase",
-    "noProductBlueprintFound": "No product blueprint found. Add as \"Product Catogory\" first to add it as a Product to this inventory."
+    "noProductBlueprintFound": "No product blueprint found. Add as \"Product Blueprint\" first to add it as a Product to this inventory."
   },
   "addProducts": {
     "searchInputLabel": "Product Blueprint Name",

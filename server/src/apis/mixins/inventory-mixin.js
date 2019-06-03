@@ -81,34 +81,12 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async __getAggregatedProductList({ productList }) {
     await this.__getAggregatedProductListWithoutAcquisitionDetails({ productList });
-    let productAcquisitionList = await this.database.productAcquisition.listByProductIdList({ productIdList: productList.map(product => product.productId) });
-    productList.forEach(product => {
-      let productAcquisition = productAcquisitionList.find(productAcquisition =>
-        productAcquisition.productList.find(_product => _product.productId === product.productId)
-      );
-      if (productAcquisition) {
-        product.acquiredDatetimeStamp = productAcquisition.acquiredDatetimeStamp;
-        product.addedDatetimeStamp = productAcquisition.acquiredDatetimeStamp; // because if not transferred, acquired date is date added
-      } else {
-        product.acquiredDatetimeStamp = 1514821590000;
-        product.addedDatetimeStamp = 1514821590000;
-      }
-    });
-    let productTransferList = await this.database.productTransfer.listByProductIdList({ productIdList: productList.map(product => product.productId) });
-    productList.forEach(product => {
-      let productTransfer = productTransferList.find(productTransfer =>
-        productTransfer.productList.find(_product => _product.productId === product.productId)
-      );
-      if (productTransfer) {
-        product.addedDatetimeStamp = productTransfer.transferredDatetimeStamp;
-      }
-    });
     return productList;
   }
 
   async __createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type, name }) {
     let inventory = {
-      inventoryContainerId, inventoryContainerType, organizationId, type, name, allowManualTransfer: true
+      inventoryContainerId, inventoryContainerType, organizationId, type, name
     }
     return await this.database.inventory.create(inventory);
   }
@@ -117,6 +95,17 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
     await this.__createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'default', name: 'Default' });
     await this.__createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'returned', name: 'Returned' });
     await this.__createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type: 'damaged', name: 'Damaged' });
+  }
+
+  async _pushProductOrIncrementCount({ productId, count, inventoryId }) {
+    let inventory = await this.database.inventory.findById({ id: inventoryId });
+    let inventoryProduct = inventory.productList.find(inventoryProduct => inventoryProduct.productId === productId);
+
+    if (inventoryProduct) {
+      this.ensureUpdate('inventory', await this.database.inventory.increaseProductCount({ id: inventoryId, productId }, { count }));
+    } else {
+      this.ensureUpdate('inventory', await this.database.inventory.pushProduct({ id: inventoryId }, { productId, count }));
+    }
   }
 
 }

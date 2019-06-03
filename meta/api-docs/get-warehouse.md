@@ -50,7 +50,6 @@ Possible Error Codes:
     
     id: Joi.number().max(999999999999999).required(),
     name: Joi.string().min(1).max(64).required(),
-    allowManualTransfer: Joi.boolean().required(),
   }),
   "returnedInventory": Joi.object().keys({
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
@@ -58,7 +57,6 @@ Possible Error Codes:
     
     id: Joi.number().max(999999999999999).required(),
     name: Joi.string().min(1).max(64).required(),
-    allowManualTransfer: Joi.boolean().required(),
   }),
   "damagedInventory": Joi.object().keys({
     createdDatetimeStamp: Joi.number().max(999999999999999).required(),
@@ -66,7 +64,6 @@ Possible Error Codes:
     
     id: Joi.number().max(999999999999999).required(),
     name: Joi.string().min(1).max(64).required(),
-    allowManualTransfer: Joi.boolean().required(),
   })
 }
 ```

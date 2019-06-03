@@ -27,10 +27,10 @@ exports.ProductCollection = class extends LegacyCollection {
       salePrice: Joi.number().max(999999999999999).required()
     });
 
-    this.uniqueDefList = [
+    this.uniqueKeyDefList = [
       {
-        additionalQueryFilters: {},
-        uniqueKeyList: []
+        filters: {},
+        keyList: ['productBlueprintId']
       }
     ];
 

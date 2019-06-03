@@ -184,7 +184,7 @@ describe('Sales', _ => {
                     apiKey,
                     inventoryId: outletDefaultInventoryId,
                     productList: [
-                      { productBlueprintId, purchasePrice: 99, salePrice: 200, count: 100 }
+                      { productBlueprintId, count: 100 }
                     ]
                   }, (data) => {
                     addCustomer({

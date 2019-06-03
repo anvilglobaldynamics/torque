@@ -9,8 +9,7 @@ Joi.object().keys({
   createdByUserId: Joi.number().max(999999999999999).required(),
 
   acquiredDatetimeStamp: Joi.number().max(999999999999999).required(),
-  partyType: Joi.string().valid('unspecified', 'own', 'subsidiary', 'vendor').required(),
-  partyName: Joi.string().min(1).max(64).allow(null).required(),
+  inventoryId: Joi.number().max(999999999999999).required(),
 
   productList: Joi.array().min(1).items(
     Joi.object().keys({

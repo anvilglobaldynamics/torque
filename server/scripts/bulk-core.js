@@ -70,8 +70,7 @@ const _loadDataFragment = (name) => {
     .split('\n')
     .filter(line => line.length > 1)
     .map(line => line.replace('\r', ''))
-    .map(line => toTitleCase(line))
-    ;
+    .map(line => toTitleCase(line));
 }
 
 const adjectiveList = _loadDataFragment('adjectives');
@@ -354,7 +353,7 @@ const createOutletProduct = async ({ apiKey, organizationId, outletId, productBl
     apiKey,
     inventoryId: outletDefaultInventoryId,
     productList: [
-      { productBlueprintId, purchasePrice: 100, salePrice: 200, count }
+      { productBlueprintId, count }
     ]
   });
 
@@ -368,7 +367,7 @@ const createWarehouseProduct = async ({ apiKey, organizationId, warehouseId, pro
     apiKey,
     inventoryId: warehouseDefaultInventoryId,
     productList: [
-      { productBlueprintId, purchasePrice: 100, salePrice: 200, count }
+      { productBlueprintId, count }
     ]
   });
 
@@ -389,6 +388,7 @@ const createSales = async ({ apiKey, outletId, productList, i }) => {
     outletId,
     customerId: null,
 
+    productsSelectedFromWarehouseId: null,
     productList,
     serviceList: [],
 

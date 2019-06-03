@@ -19,7 +19,7 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
       searchString: Joi.string().min(0).max(64).allow('').optional(),
       identifierCode: Joi.string().min(0).max(64).allow('').optional(),
       includeZeroCountProducts: Joi.boolean().default(true).optional(),
-      sortOrder: Joi.string().default('id-ascending').valid('id-ascending', 'date-added-ascending').optional()
+      sortOrder: Joi.string().default('blueprint-created-date-ascending').valid('blueprint-created-date-ascending', 'blueprint-created-date-descending').optional()
     });
   }
 
@@ -81,8 +81,10 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
       aggregatedProductList = this.__filterAggregatedProductListWithIdentifierCode({ aggregatedProductList, identifierCode });
     }
 
-    if (sortOrder === 'date-added-ascending') {
-      aggregatedProductList.sort((a, b) => a.addedDatetimeStamp - b.addedDatetimeStamp);
+    if (sortOrder === 'blueprint-created-date-descending') {
+      aggregatedProductList.sort((a, b) => b.product.productBlueprint.createdDatetimeStamp - a.product.productBlueprint.createdDatetimeStamp);
+    } else if (sortOrder === 'blueprint-created-date-ascending'){
+      aggregatedProductList.sort((a, b) => a.product.productBlueprint.createdDatetimeStamp - b.product.productBlueprint.createdDatetimeStamp); 
     }
 
     return {

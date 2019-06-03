@@ -58,7 +58,7 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
   async _returnProducts({ returnedProductList, returnedInventory }) {
     for (let i = 0; i < returnedProductList.length; i++) {
       let product = returnedProductList[i];
-      await this.database.inventory.addProduct({ id: returnedInventory.id }, { productId: product.productId, count: product.count });
+      await this._pushProductOrIncrementCount({ productId: product.productId, count: product.count, inventoryId: returnedInventory.id });
     }
     return;
   }

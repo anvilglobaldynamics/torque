@@ -27,7 +27,6 @@ exports.InventoryCollection = class extends LegacyCollection {
       type: Joi.string().valid('default', 'returned', 'damaged').required(),
       name: Joi.string().min(1).max(64).required(),
       organizationId: Joi.number().max(999999999999999).required(),
-      allowManualTransfer: Joi.boolean().required(),
       productList: Joi.array().items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
@@ -56,14 +55,13 @@ exports.InventoryCollection = class extends LegacyCollection {
     // to two collections, it's not checked.
   }
 
-  create({ inventoryContainerId, inventoryContainerType, organizationId, type, name, allowManualTransfer }, cbfn) {
+  create({ inventoryContainerId, inventoryContainerType, organizationId, type, name }, cbfn) {
     let doc = {
       name,
       organizationId,
       inventoryContainerId,
       inventoryContainerType,
       type,
-      allowManualTransfer,
       productList: [],
       isDeleted: false
     }
