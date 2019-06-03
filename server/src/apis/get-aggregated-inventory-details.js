@@ -82,9 +82,9 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
     }
 
     if (sortOrder === 'product-id-descending') {
-      aggregatedProductList.sort((a, b) => b.productId - a.productId);
+      aggregatedProductList.sort((a, b) => b.product.productBlueprint.createdDatetimeStamp - a.product.productBlueprint.createdDatetimeStamp);
     } else if (sortOrder === 'product-id-ascending'){
-      aggregatedProductList.sort((a, b) => a.productId - b.productId); 
+      aggregatedProductList.sort((a, b) => a.product.productBlueprint.createdDatetimeStamp - b.product.productBlueprint.createdDatetimeStamp); 
     }
 
     return {
