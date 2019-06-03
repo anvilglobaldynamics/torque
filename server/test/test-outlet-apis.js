@@ -417,7 +417,7 @@ describe('Outlet', _ => {
         apiKey,
         inventoryId: outletDefaultInventoryId,
         productList: [
-          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 10 }
+          { productBlueprintId, count: 10 }
         ]
       }
     }, (err, response, body) => {

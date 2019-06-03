@@ -229,8 +229,8 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
         productList: [
-          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 10 },
-          { productBlueprintId: productBlueprintId2, purchasePrice: 199, salePrice: 300, count: 30 }
+          { productBlueprintId, count: 10 },
+          { productBlueprintId: productBlueprintId2, count: 30 }
         ]
       }
     }, (err, response, body) => {
@@ -246,8 +246,8 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
         productList: [
-          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 5 },
-          { productBlueprintId: productBlueprintId2, purchasePrice: 199, salePrice: 300, count: 5 }
+          { productBlueprintId, count: 5 },
+          { productBlueprintId: productBlueprintId2, count: 5 }
         ]
       }
     }, (err, response, body) => {
@@ -264,7 +264,7 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: invalidInventoryId,
         productList: [
-          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 10 }
+          { productBlueprintId, count: 10 }
         ]
       }
     }, (err, response, body) => {
@@ -285,8 +285,6 @@ describe('Inventory', _ => {
         productList: [
           {
             productBlueprintId: invalidProductBlueprintId,
-            purchasePrice: 100,
-            salePrice: 200,
             count: 10
           }
         ]
@@ -645,7 +643,7 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
         productList: [
-          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 10 },
+          { productBlueprintId, count: 10 },
         ]
       }
     }, (err, response, body) => {
@@ -743,7 +741,7 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
         productList: [
-          { productBlueprintId: productBlueprintId3, purchasePrice: 100, salePrice: 200, count: 10 },
+          { productBlueprintId: productBlueprintId3, count: 10 },
         ]
       }
     }, (err, response, body) => {
@@ -778,7 +776,7 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
         productList: [
-          { productBlueprintId: productBlueprintId4, purchasePrice: 100, salePrice: 200, count: 8 },
+          { productBlueprintId: productBlueprintId4, count: 8 },
         ]
       }
     }, (err, response, body) => {
