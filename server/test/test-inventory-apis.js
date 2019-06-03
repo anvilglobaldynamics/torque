@@ -300,6 +300,25 @@ describe('Inventory', _ => {
 
   });
 
+  it('api/get-aggregated-inventory-details (Valid warehouse; Ensure existing product is being reused.)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      body.aggregatedProductList.forEach(aggregatedProduct => {
+        validateAggregatedProductScema(aggregatedProduct);
+      });
+      expect(body.aggregatedProductList.length).to.equal(2);
+      testDoneFn();
+    });
+
+  });
+
   it('api/get-aggregated-inventory-details (Valid warehouse)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
@@ -314,7 +333,7 @@ describe('Inventory', _ => {
         validateAggregatedProductScema(aggregatedProduct);
       });
       productToBeTransferred = body.aggregatedProductList[0];
-      expect(body.aggregatedProductList[0].count).to.equal(15)
+      expect(body.aggregatedProductList[0].count).to.equal(15);
       expect(body.aggregatedProductList[0].productId).to.not.equal(body.aggregatedProductList[1].productId);
       testDoneFn();
     });
@@ -842,7 +861,7 @@ describe('Inventory', _ => {
       let originalList = body.aggregatedProductList;
       for (let i = 0; i < originalList.length - 1; i++) {
         expect(originalList[i].product.productBlueprint.createdDatetimeStamp)
-        .to.be.not.lessThan(originalList[i + 1].product.productBlueprint.createdDatetimeStamp);
+          .to.be.not.lessThan(originalList[i + 1].product.productBlueprint.createdDatetimeStamp);
       }
       testDoneFn();
     });
