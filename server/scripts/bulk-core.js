@@ -70,8 +70,7 @@ const _loadDataFragment = (name) => {
     .split('\n')
     .filter(line => line.length > 1)
     .map(line => line.replace('\r', ''))
-    .map(line => toTitleCase(line))
-    ;
+    .map(line => toTitleCase(line));
 }
 
 const adjectiveList = _loadDataFragment('adjectives');
@@ -389,6 +388,7 @@ const createSales = async ({ apiKey, outletId, productList, i }) => {
     outletId,
     customerId: null,
 
+    productsSelectedFromWarehouseId: null,
     productList,
     serviceList: [],
 
