@@ -373,8 +373,6 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
     aggregatedProductList: Joi.array().required().items({
       productId: Joi.number().required(),
       count: Joi.number().required(),
-      acquiredDatetimeStamp: Joi.number().required(),
-      addedDatetimeStamp: Joi.number().required(),
 
       product: Joi.object().keys({
         id: Joi.number().required(),
@@ -431,8 +429,6 @@ exports.validateReportInventoryDetailsApiSuccessResponse = (doc) => {
         aggregatedProductList: Joi.array().required().items({
           productId: Joi.number().required(),
           count: Joi.number().required(),
-          acquiredDatetimeStamp: Joi.number().required(),
-          addedDatetimeStamp: Joi.number().required(),
 
           product: Joi.object().keys({
             id: Joi.number().required(),
@@ -569,7 +565,6 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
 
       id: Joi.number().required(),
       name: Joi.string().required(),
-      allowManualTransfer: Joi.boolean().required(),
     }),
 
     returnedInventory: Joi.object().keys({
@@ -578,7 +573,6 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
 
       id: Joi.number().required(),
       name: Joi.string().required(),
-      allowManualTransfer: Joi.boolean().required(),
     }),
 
     damagedInventory: Joi.object().keys({
@@ -587,7 +581,6 @@ exports.validateGetOutletApiSuccessResponse = (doc) => {
 
       id: Joi.number().required(),
       name: Joi.string().required(),
-      allowManualTransfer: Joi.boolean().required(),
     })
   });
 
@@ -619,7 +612,6 @@ exports.validateGetWarehouseApiSuccessResponse = (doc) => {
 
       id: Joi.number().required(),
       name: Joi.string().required(),
-      allowManualTransfer: Joi.boolean().required(),
     }),
 
     returnedInventory: Joi.object().keys({
@@ -628,7 +620,6 @@ exports.validateGetWarehouseApiSuccessResponse = (doc) => {
 
       id: Joi.number().required(),
       name: Joi.string().required(),
-      allowManualTransfer: Joi.boolean().required(),
     }),
 
     damagedInventory: Joi.object().keys({
@@ -637,7 +628,6 @@ exports.validateGetWarehouseApiSuccessResponse = (doc) => {
 
       id: Joi.number().required(),
       name: Joi.string().required(),
-      allowManualTransfer: Joi.boolean().required(),
     })
   });
 
@@ -1231,7 +1221,6 @@ exports.validateInventorySchema = (doc) => {
     type: Joi.string().valid('default', 'returned', 'damaged').required(),
     name: Joi.string().min(1).max(64).required(),
     organizationId: Joi.number().max(999999999999999).required(),
-    allowManualTransfer: Joi.boolean().required(),
 
     productList: Joi.array().items(
       Joi.object().keys({
@@ -1254,7 +1243,6 @@ exports.validateEmbeddedInventorySchema = (doc) => {
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
     name: Joi.string().min(1).max(64).required(),
-    allowManualTransfer: Joi.boolean().required()
   });
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
@@ -1614,8 +1602,6 @@ exports.validateAggregatedProductScema = (doc) => {
   let schema = Joi.object().keys({
     productId: Joi.number().max(999999999999999).required(),
     count: Joi.number().max(999999999999999).required(),
-    acquiredDatetimeStamp: Joi.number().max(999999999999999).required(),
-    addedDatetimeStamp: Joi.number().max(999999999999999).required(),
     product: Joi.object().keys({
       id: Joi.number().max(999999999999999).required(),
 

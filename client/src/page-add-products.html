@@ -98,10 +98,6 @@
                 <div class="product-header product-title">[[verses.product.productBlueprint]]</div>
                 <div class="flex"></div>
                 <div class="product-header product-blueprint-numeric">[[verses.product.count]]</div>
-                <div class="product-header product-blueprint-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
-                <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                  <div class="product-header product-blueprint-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
-                </template>
               </div>
             </div>
 
@@ -113,14 +109,6 @@
                   <div class="product-blueprint-numeric">
                     <paper-input class="small-input" value="{{productBlueprint.count}}" type="number" min="0" on-change="productBlueprintInputChanged" label=[[productBlueprint.unit]]></paper-input>
                   </div>
-                  <div class="product-blueprint-numeric">
-                    <paper-input disabled class="small-input" min="[[productBlueprint.purchasePrice]]" value="{{productBlueprint.salePrice}}" type="number"></paper-input>
-                  </div>
-                  <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                    <div class="product-blueprint-numeric">
-                      <paper-input disabled class="small-input" min="0" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
-                    </div>
-                  </template>
                 </div>
               </div>
             </template>
@@ -154,10 +142,6 @@
               <div class="product-header product-title">[[verses.product.productBlueprint]]</div>
               <div class="flex"></div>
               <div class="product-header product-blueprint-numeric">[[verses.product.count]]</div>
-              <div class="product-header product-blueprint-numeric">[[verses.product.sellFor]] <br> ([[app.settings.monetaryUnit]])</div>
-              <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                <div class="product-header product-blueprint-numeric">[[verses.product.purchasedFor]] <br> ([[app.settings.monetaryUnit]])</div>
-              </template>
             </div>
           </div>
 
@@ -169,14 +153,6 @@
                 <div class="product-blueprint-numeric">
                   <paper-input class$="small-input id-[[productBlueprint.id]]" value="{{productBlueprint.count}}" type="number" min="0" on-change="genericNumericInputChanged" label=[[productBlueprint.unit]]></paper-input>
                 </div>
-                <div class="product-blueprint-numeric">
-                  <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="[[productBlueprint.purchasePrice]]" on-change="genericNumericInputChanged" value="{{productBlueprint.salePrice}}" type="number"></paper-input>
-                </div>
-                <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                  <div class="product-blueprint-numeric">
-                    <paper-input disabled="[[$isDisabled(productBlueprint.count)]]" class="small-input" min="0" on-change="genericNumericInputChanged" value="{{productBlueprint.purchasePrice}}" type="number"></paper-input>
-                  </div>
-                </template>
               </div>
             </div>
           </template>
@@ -269,8 +245,6 @@
 
       _addFieldsToProductBlueprint(productBlueprintList) {
         productBlueprintList.forEach(productBlueprint => {
-          productBlueprint.purchasePrice = productBlueprint.defaultPurchasePrice;
-          productBlueprint.salePrice = productBlueprint.defaultSalePrice;
           productBlueprint.count = 0;
         });
       }
@@ -315,8 +289,6 @@
           if (parseInt(productBlueprint.count) > 0) {
             productList.push({
               productBlueprintId: productBlueprint.id,
-              purchasePrice: parseFloat(productBlueprint.purchasePrice),
-              salePrice: parseFloat(productBlueprint.salePrice),
               count: parseInt(String(productBlueprint.count))
             });
           }

@@ -241,7 +241,7 @@ describe('Shop : Geolocation', _ => {
         apiKey,
         inventoryId:  suite1Data.outlet1DefaultInventoryId,
         productList: [
-          { productBlueprintId: suite1Data.productBlueprint3Id, purchasePrice: 99, salePrice: 200, count: 100 }
+          { productBlueprintId: suite1Data.productBlueprint3Id, count: 100 }
         ]
       }))
       .then((data) => 'pass')

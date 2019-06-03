@@ -14,7 +14,7 @@ method: `POST`
   inventoryId: Joi.number().max(999999999999999).required(),
   identifierCode: Joi.string().min(0).max(64).allow('').optional(),
   searchString: Joi.string().min(0).max(64).allow('').optional(),
-  sortOrder: Joi.string().default('id-ascending').valid('id-ascending', 'date-added-ascending').optional()
+  sortOrder: Joi.string().default('blueprint-created-date-ascending').valid('blueprint-created-date-ascending', 'blueprint-created-date-descending').optional()
 }
 ```
 
@@ -54,8 +54,6 @@ Possible Error Codes:
   aggregatedProductList: Joi.array().keys({
     productId: Joi.number().max(999999999999999).required(),
     count: Joi.number().max(999999999999999).required(),
-    acquiredDatetimeStamp: Joi.number().max(999999999999999).required(),
-    addedDatetimeStamp:  Joi.number().max(999999999999999).required(),
 
     product: Joi.object().keys({
       id: Joi.number().max(999999999999999).required(),

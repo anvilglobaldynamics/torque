@@ -57,6 +57,8 @@ let warehouseId = null;
 let outletId = null;
 let productBlueprintId = null;
 let productBlueprintId2 = null;
+let productBlueprintId3 = null;
+let productBlueprintId4 = null;
 
 let warehouseDefaultInventoryId = null;
 let warehouseReturnedInventoryId = null;
@@ -227,8 +229,8 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
         productList: [
-          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 10 },
-          { productBlueprintId: productBlueprintId2, purchasePrice: 199, salePrice: 300, count: 30 }
+          { productBlueprintId, count: 10 },
+          { productBlueprintId: productBlueprintId2, count: 30 }
         ]
       }
     }, (err, response, body) => {
@@ -244,8 +246,8 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
         productList: [
-          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 5 },
-          { productBlueprintId: productBlueprintId2, purchasePrice: 199, salePrice: 300, count: 5 }
+          { productBlueprintId, count: 5 },
+          { productBlueprintId: productBlueprintId2, count: 5 }
         ]
       }
     }, (err, response, body) => {
@@ -262,7 +264,7 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: invalidInventoryId,
         productList: [
-          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 10 }
+          { productBlueprintId, count: 10 }
         ]
       }
     }, (err, response, body) => {
@@ -283,8 +285,6 @@ describe('Inventory', _ => {
         productList: [
           {
             productBlueprintId: invalidProductBlueprintId,
-            purchasePrice: 100,
-            salePrice: 200,
             count: 10
           }
         ]
@@ -293,6 +293,25 @@ describe('Inventory', _ => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equals('PRODUCT_BLUEPRINT_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-aggregated-inventory-details (Valid warehouse; Ensure existing product is being reused.)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      body.aggregatedProductList.forEach(aggregatedProduct => {
+        validateAggregatedProductScema(aggregatedProduct);
+      });
+      expect(body.aggregatedProductList.length).to.equal(2);
       testDoneFn();
     });
 
@@ -311,8 +330,8 @@ describe('Inventory', _ => {
       body.aggregatedProductList.forEach(aggregatedProduct => {
         validateAggregatedProductScema(aggregatedProduct);
       });
-
       productToBeTransferred = body.aggregatedProductList[0];
+      expect(body.aggregatedProductList[0].count).to.equal(15);
       expect(body.aggregatedProductList[0].productId).to.not.equal(body.aggregatedProductList[1].productId);
       testDoneFn();
     });
@@ -506,80 +525,6 @@ describe('Inventory', _ => {
 
   });
 
-  it('api/edit-inventory-product (Invalid inventoryId)', testDoneFn => {
-
-    callApi('api/edit-inventory-product', {
-      json: {
-        apiKey,
-        productId: productToBeEditedId,
-        inventoryId: invalidInventoryId,
-        purchasePrice: 100,
-        salePrice: 110
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiFailureResponse(body);
-      expect(body.error.code).equals('INVENTORY_INVALID');
-      testDoneFn();
-    });
-
-  });
-
-  it('api/edit-inventory-product (Invalid productId)', testDoneFn => {
-
-    callApi('api/edit-inventory-product', {
-      json: {
-        apiKey,
-        productId: invalidInventoryId,
-        inventoryId: outletDefaultInventoryId,
-        purchasePrice: 100,
-        salePrice: 110
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiFailureResponse(body);
-      expect(body.error.code).equals('PRODUCT_NOT_IN_INVENTORY');
-      testDoneFn();
-    });
-
-  });
-
-  it('api/edit-inventory-product (Valid)', testDoneFn => {
-
-    callApi('api/edit-inventory-product', {
-      json: {
-        apiKey,
-        productId: productToBeEditedId,
-        inventoryId: outletDefaultInventoryId,
-        purchasePrice: 100,
-        salePrice: 210
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiSuccessResponse(body);
-      testDoneFn();
-    });
-
-  });
-
-  it('api/get-product (Valid product modification check)', testDoneFn => {
-
-    callApi('api/get-product', {
-      json: {
-        apiKey,
-        productId: productToBeEditedId,
-        inventoryId: outletDefaultInventoryId,
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGetProductApiSuccessResponse(body);
-      validateProductSchema(body.product);
-      expect(body.product.salePrice).equals(210);
-      testDoneFn();
-    });
-
-  });
-
   it('api/get-aggregated-inventory-details (Valid modification check, Warehouse)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
@@ -698,7 +643,7 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
         productList: [
-          { productBlueprintId, purchasePrice: 100, salePrice: 200, count: 10 },
+          { productBlueprintId, count: 10 },
         ]
       }
     }, (err, response, body) => {
@@ -709,7 +654,7 @@ describe('Inventory', _ => {
     });
   });
 
-  it('api/get-aggregated-inventory-details (Valid, Checking Current Status, Warehouse)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid, Checking Current Status, Warehouse) - 1', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -720,8 +665,8 @@ describe('Inventory', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       body.aggregatedProductList.reverse();
-      expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(includeZeroCountProductsProductId);
-      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(10);
+      expect(body.aggregatedProductList[1]).to.have.property('productId').that.equals(includeZeroCountProductsProductId);
+      expect(body.aggregatedProductList[1]).to.have.property('count').that.equals(20);
       testDoneFn();
     });
 
@@ -735,7 +680,7 @@ describe('Inventory', _ => {
         fromInventoryId: warehouseDefaultInventoryId,
         toInventoryId: outletDefaultInventoryId,
         productList: [
-          { productId: includeZeroCountProductsProductId, count: 10 }
+          { productId: includeZeroCountProductsProductId, count: 20 }
         ]
       }
     }, (err, response, body) => {
@@ -746,7 +691,7 @@ describe('Inventory', _ => {
 
   });
 
-  it('api/get-aggregated-inventory-details (Valid modification check, Warehouse)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid modification check, Warehouse) - 1', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -757,8 +702,8 @@ describe('Inventory', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       body.aggregatedProductList.reverse();
-      expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(includeZeroCountProductsProductId);
-      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(0);
+      expect(body.aggregatedProductList[1]).to.have.property('productId').that.equals(includeZeroCountProductsProductId);
+      expect(body.aggregatedProductList[1]).to.have.property('count').that.equals(0);
       testDoneFn();
     });
 
@@ -796,7 +741,7 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
         productList: [
-          { productBlueprintId: productBlueprintId3, purchasePrice: 100, salePrice: 200, count: 10 },
+          { productBlueprintId: productBlueprintId3, count: 10 },
         ]
       }
     }, (err, response, body) => {
@@ -807,7 +752,7 @@ describe('Inventory', _ => {
     });
   });
 
-  it('api/get-aggregated-inventory-details (Valid, Checking Current Status, Warehouse)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid, Checking Current Status, Warehouse) - 2', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -831,7 +776,7 @@ describe('Inventory', _ => {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
         productList: [
-          { productBlueprintId: productBlueprintId4, purchasePrice: 100, salePrice: 200, count: 8 },
+          { productBlueprintId: productBlueprintId4, count: 8 },
         ]
       }
     }, (err, response, body) => {
@@ -842,7 +787,7 @@ describe('Inventory', _ => {
     });
   });
 
-  it('api/get-aggregated-inventory-details (Valid, Checking Current Status, Warehouse)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid, Checking Current Status, Warehouse) - 3', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -906,14 +851,15 @@ describe('Inventory', _ => {
       json: {
         apiKey,
         inventoryId: warehouseDefaultInventoryId,
-        sortOrder: 'date-added-ascending'
+        sortOrder: 'blueprint-created-date-descending'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       let originalList = body.aggregatedProductList;
       for (let i = 0; i < originalList.length - 1; i++) {
-        expect(originalList[i].addedDatetimeStamp).to.be.not.greaterThan(originalList[i + 1].addedDatetimeStamp);
+        expect(originalList[i].product.productBlueprint.createdDatetimeStamp)
+          .to.be.not.lessThan(originalList[i + 1].product.productBlueprint.createdDatetimeStamp);
       }
       testDoneFn();
     });

@@ -9,8 +9,8 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
         return this.fail(err);
       }
       // let inventory = inventoryList.find(inventory => inventory.type === 'default');
-      // let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-      // let outletDefaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+      // let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name } = inventory;
+      // let outletDefaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name };
       let outletDefaultInventory = inventoryList.find(inventory => inventory.type === 'default');
       return cbfn(outletDefaultInventory);
     })
@@ -25,8 +25,8 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
         return this.fail(err);
       }
       // let inventory = inventoryList.find(inventory => inventory.type === 'default');
-      // let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-      // let outletReturnedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+      // let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name } = inventory;
+      // let outletReturnedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name };
       let outletReturnedInventory = inventoryList.find(inventory => inventory.type === 'returned');
       return cbfn(outletReturnedInventory);
     })
@@ -41,7 +41,7 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
 
   _createInventory({ inventoryContainerId, inventoryContainerType, organizationId, type, name }, cbfn) {
     let inventory = {
-      inventoryContainerId, inventoryContainerType, organizationId, type, name, allowManualTransfer: true
+      inventoryContainerId, inventoryContainerType, organizationId, type, name
     }
     this.legacyDatabase.inventory.create(inventory, (err, inventoryId) => {
       if (err) return this.fail(err);
@@ -82,14 +82,14 @@ exports.inventoryCommonMixin = (SuperApiClass) => class extends SuperApiClass {
       let defaultInventory, returnedInventory, damagedInventory;
       inventoryList.forEach(inventory => {
         if (inventory.type === 'default') {
-          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-          defaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name } = inventory;
+          defaultInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name };
         } else if (inventory.type === 'returned') {
-          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-          returnedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name } = inventory;
+          returnedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name };
         } else if (inventory.type === 'damaged') {
-          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer } = inventory;
-          damagedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name, allowManualTransfer };
+          let { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name } = inventory;
+          damagedInventory = { createdDatetimeStamp, lastModifiedDatetimeStamp, id, name };
         }
       });
       cbfn(defaultInventory, returnedInventory, damagedInventory);
