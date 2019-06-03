@@ -353,7 +353,7 @@ const createOutletProduct = async ({ apiKey, organizationId, outletId, productBl
     apiKey,
     inventoryId: outletDefaultInventoryId,
     productList: [
-      { productBlueprintId, purchasePrice: 100, salePrice: 200, count }
+      { productBlueprintId, count }
     ]
   });
 
@@ -367,7 +367,7 @@ const createWarehouseProduct = async ({ apiKey, organizationId, warehouseId, pro
     apiKey,
     inventoryId: warehouseDefaultInventoryId,
     productList: [
-      { productBlueprintId, purchasePrice: 100, salePrice: 200, count }
+      { productBlueprintId, count }
     ]
   });
 
