@@ -318,7 +318,7 @@
     "subBlueprint": "উপ বিভাগ",
     "moveToRoot": "বাহিরে সরান",
     "createNewProductBlueprint": "নতুন পণ্য পরিকল্পনা তৈরি করুন",
-    "searchForProductBlueprintInput": "পণ্য পরিকল্পনার নাম",
+    "searchForProductBlueprintInput": "নাম বা সনাক্তকরণ কোড",
     "searchForProductBlueprintInputError": "পণ্য পরিকল্পনার সন্ধানে ত্রুটি",
     "bulkImport": "একাধিক পণ্যের পরিকল্পনা তৈরি",
     "whatIsProductBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত সকল কাজে ব্যবহত হবে। বর্তমান পণ্যের পরিকল্পনা পুনঃব্যবহার বা সম্পাদনা করার পরিবর্তে, পণ্য পরিকল্পনায় সামান্যতম ভিন্নতা থাকলেও নতুন পণ্য পরিকল্পনা তৈরি করুন।",
@@ -426,7 +426,7 @@
     "noProductBlueprintFound": "কোনো পণ্যের পরিকল্পনা পাওয়া যায় নি। প্রথমে পণ্যটি একটি \"পণ্যের পরিকল্পনা\" হিসেবে যোগ করুন, এর পর এই পণ্য তালিকায় পণ্য হিসেবে যোগ করুন।"
   },
   "addProducts": {
-    "searchInputLabel": "পণ্যের পরিকল্পনার নাম",
+    "searchInputLabel": "নাম বা সনাক্তকরণ কোড",
     "searchInputError": "পণ্য সন্ধানে ত্রূটি হয়েছে",
     "selectedProducts": "বাছাইকৃত পণ্য তালিকা"
   },
@@ -745,7 +745,7 @@
     "acquiredOn": "খরিদ হয়েছে",
     "addedOn": "যুক্ত হয়েছে",
     "noProductFoundInOutlet": "কোনো পণ্য পাওয়া যায়নি। পেছনে গিয়ে দোকানের প্রধান পণ্য তালিকায় পণ্য যোগ করুন।",
-    "searchForProductInput": "পণ্যের নাম",
+    "searchForProductInput": "নাম বা সনাক্তকরণ কোড",
     "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি",
     "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন"
   },
