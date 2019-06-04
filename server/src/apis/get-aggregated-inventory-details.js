@@ -41,10 +41,12 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
   }
 
   __searchAggregatedProductList({ aggregatedProductList, searchString }) {
-    searchString = this.escapeRegExp(searchString.toLowerCase());
+    let escapedSearchString = this.escapeRegExp(searchString.toLowerCase());
     aggregatedProductList = aggregatedProductList.filter(aggregatedProduct => {
-      let regex = new RegExp(searchString, 'i');
-      return regex.test(aggregatedProduct.product.productBlueprint.name);
+      let regex = new RegExp(escapedSearchString, 'i');
+      let test1 = regex.test(aggregatedProduct.product.productBlueprint.name);
+      let test2 = (aggregatedProduct.product.productBlueprint.identifierCode === searchString);
+      return (test1 || test2);
     });
     return aggregatedProductList;
   }
@@ -83,8 +85,8 @@ exports.GetAggregatedInventoryDetailsApi = class extends Api.mixin(InventoryMixi
 
     if (sortOrder === 'blueprint-created-date-descending') {
       aggregatedProductList.sort((a, b) => b.product.productBlueprint.createdDatetimeStamp - a.product.productBlueprint.createdDatetimeStamp);
-    } else if (sortOrder === 'blueprint-created-date-ascending'){
-      aggregatedProductList.sort((a, b) => a.product.productBlueprint.createdDatetimeStamp - b.product.productBlueprint.createdDatetimeStamp); 
+    } else if (sortOrder === 'blueprint-created-date-ascending') {
+      aggregatedProductList.sort((a, b) => a.product.productBlueprint.createdDatetimeStamp - b.product.productBlueprint.createdDatetimeStamp);
     }
 
     return {
