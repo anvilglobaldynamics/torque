@@ -137,7 +137,7 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
-describe.only('Sales', _ => {
+describe('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -2810,7 +2810,136 @@ describe.only('Sales', _ => {
 
   });
 
+  it('api/user-login', testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: phone,
+        password
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
   it('api/add-sales (Invalid warehouse)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: warehouseInventoryProductList[0].productId,
+            count: 2,
+            salePrice: warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice,
+            vatPercentage: 5,
+          }
+        ],
+
+        serviceList: [],
+
+        payment: {
+          totalAmount: (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        },
+
+        assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: invalidWarehouseId,
+
+        wasOfflineSale: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal("WAREHOUSE_INVENTORY_INVALID");
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Valid)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: warehouseInventoryProductList[0].productId,
+            count: 100,
+            salePrice: warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice,
+            vatPercentage: 5,
+          }
+        ],
+
+        serviceList: [],
+
+        payment: {
+          totalAmount: (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        },
+
+        assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: warehouseId,
+
+        wasOfflineSale: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddSalesApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-aggregated-inventory-details (Warehouse inventory check)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(0);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Invalid zero count)', testDoneFn => {
 
     callApi('api/add-sales', {
       json: {
@@ -2851,10 +2980,9 @@ describe.only('Sales', _ => {
         wasOfflineSale: false
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).to.equal("UNMET_MODULE");
+      expect(body.error.code).to.equal("INSUFFICIENT_PRODUCT");
       testDoneFn();
     });
 
