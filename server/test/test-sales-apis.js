@@ -10,11 +10,13 @@ let {
   loginUser,
   addOrganization,
   addOutlet,
+  addWarehouse,
   addProductBlueprint,
   addProductToInventory,
   addCustomer,
   getCustomer,
   getOutlet,
+  getWarehouse,
   addServiceBlueprint,
   validateInventorySchema,
   validateProductBlueprintSchema,
@@ -77,6 +79,7 @@ let userId = null;
 let organizationId = null;
 let employmentId = null;
 let outletId = null;
+let warehouseId = null;
 let productBlueprintId = null;
 let customerId = null;
 let salesId = null;
@@ -89,6 +92,8 @@ let outletInventoryMatchingProductBlueprintList = null;
 let outletDefaultInventoryId = null;
 let outletReturnedInventoryId = null;
 let outletDamagedInventoryId = null;
+
+let warehouseDefaultInventoryId = null;
 
 let customerData = null;
 
@@ -130,7 +135,7 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
-describe('Sales', _ => {
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -168,84 +173,107 @@ describe('Sales', _ => {
                 outletDefaultInventoryId = data.defaultInventory.id;
                 outletReturnedInventoryId = data.returnedInventory.id;
                 outletDamagedInventoryId = data.damagedInventory.id;
-                addProductBlueprint({
+                addWarehouse({
                   apiKey,
                   organizationId,
-                  name: productBlueprintName,
-                  unit: "box",
-                  identifierCode: '',
-                  defaultPurchasePrice: 99,
-                  defaultVat: 3,
-                  defaultSalePrice: 112,
-                  isReturnable: true
+                  name: "Warehouse Name",
+                  physicalAddress: "11xx Warehouse Physical Address",
+                  phone: 'w1' + rnd(prefix, 11),
+                  contactPersonName: "Warehouse Contact Person Name"
                 }, (data) => {
-                  productBlueprintId = data.productBlueprintId;
-                  addProductToInventory({
-                    apiKey,
-                    inventoryId: outletDefaultInventoryId,
-                    productList: [
-                      { productBlueprintId, count: 100 }
-                    ]
+                  warehouseId = data.warehouseId;
+                  getWarehouse({
+                    apiKey, warehouseId
                   }, (data) => {
-                    addCustomer({
+                    warehouseDefaultInventoryId = data.defaultInventory.id;
+                    addProductBlueprint({
                       apiKey,
                       organizationId,
-                      fullName: customerFullName,
-                      phone: customerPhone,
-                      email: null,
-                      address: ''
+                      name: productBlueprintName,
+                      unit: "box",
+                      identifierCode: '',
+                      defaultPurchasePrice: 99,
+                      defaultVat: 3,
+                      defaultSalePrice: 112,
+                      isReturnable: true
                     }, (data) => {
-                      customerId = data.customerId;
-                      getCustomer({
-                        apiKey, customerId
+                      productBlueprintId = data.productBlueprintId;
+                      addProductToInventory({
+                        apiKey,
+                        inventoryId: outletDefaultInventoryId,
+                        productList: [
+                          { productBlueprintId, count: 100 }
+                        ]
                       }, (data) => {
-                        customerData = data.customer;
-                        addServiceBlueprint({
+                        addProductToInventory({
                           apiKey,
-                          organizationId,
-                          name: "1st service blueprint",
-                          defaultVat: 2,
-                          defaultSalePrice: 250,
-                          isLongstanding: false,
-                          serviceDuration: null,
-                          isEmployeeAssignable: false,
-                          isCustomerRequired: false,
-                          isRefundable: false,
-                          avtivateInAllOutlets: true
+                          inventoryId: warehouseDefaultInventoryId,
+                          productList: [
+                            { productBlueprintId, count: 100 }
+                          ]
                         }, (data) => {
-                          basicServiceBlueprintId = data.serviceBlueprintId;
-                          addServiceBlueprint({
+                          addCustomer({
                             apiKey,
                             organizationId,
-                            name: "2nd service blueprint",
-                            defaultVat: 2,
-                            defaultSalePrice: 250,
-                            isLongstanding: false,
-                            serviceDuration: null,
-                            isEmployeeAssignable: true,
-                            isCustomerRequired: true,
-                            isRefundable: false,
-                            avtivateInAllOutlets: true
+                            fullName: customerFullName,
+                            phone: customerPhone,
+                            email: null,
+                            address: ''
                           }, (data) => {
-                            customerAndEmployeeServiceBlueprintId = data.serviceBlueprintId;
-                            addServiceBlueprint({
-                              apiKey,
-                              organizationId,
-                              name: "3rd long service blueprint",
-                              defaultVat: 2,
-                              defaultSalePrice: 250,
-                              isLongstanding: true,
-                              serviceDuration: {
-                                months: 1,
-                                days: 7
-                              },
-                              isEmployeeAssignable: true,
-                              isCustomerRequired: true,
-                              isRefundable: false,
-                              avtivateInAllOutlets: true
+                            customerId = data.customerId;
+                            getCustomer({
+                              apiKey, customerId
                             }, (data) => {
-                              longstandingServiceBlueprintId = data.serviceBlueprintId;
-                              testDoneFn();
+                              customerData = data.customer;
+                              addServiceBlueprint({
+                                apiKey,
+                                organizationId,
+                                name: "1st service blueprint",
+                                defaultVat: 2,
+                                defaultSalePrice: 250,
+                                isLongstanding: false,
+                                serviceDuration: null,
+                                isEmployeeAssignable: false,
+                                isCustomerRequired: false,
+                                isRefundable: false,
+                                avtivateInAllOutlets: true
+                              }, (data) => {
+                                basicServiceBlueprintId = data.serviceBlueprintId;
+                                addServiceBlueprint({
+                                  apiKey,
+                                  organizationId,
+                                  name: "2nd service blueprint",
+                                  defaultVat: 2,
+                                  defaultSalePrice: 250,
+                                  isLongstanding: false,
+                                  serviceDuration: null,
+                                  isEmployeeAssignable: true,
+                                  isCustomerRequired: true,
+                                  isRefundable: false,
+                                  avtivateInAllOutlets: true
+                                }, (data) => {
+                                  customerAndEmployeeServiceBlueprintId = data.serviceBlueprintId;
+                                  addServiceBlueprint({
+                                    apiKey,
+                                    organizationId,
+                                    name: "3rd long service blueprint",
+                                    defaultVat: 2,
+                                    defaultSalePrice: 250,
+                                    isLongstanding: true,
+                                    serviceDuration: {
+                                      months: 1,
+                                      days: 7
+                                    },
+                                    isEmployeeAssignable: true,
+                                    isCustomerRequired: true,
+                                    isRefundable: false,
+                                    avtivateInAllOutlets: true
+                                  }, (data) => {
+                                    longstandingServiceBlueprintId = data.serviceBlueprintId;
+                                    testDoneFn();
+                                  });
+                                });
+                              });
                             });
                           });
                         });
@@ -2607,7 +2635,6 @@ describe('Sales', _ => {
 
   });
 
-
   it('api/add-sales (Invalid, testing discountPresetId)', testDoneFn => {
 
     callApi('api/add-sales', {
@@ -2657,8 +2684,27 @@ describe('Sales', _ => {
 
   });
 
-
   // Discount Preset - end
+
+  // Region: Sell from warehouse - start
+
+  it('api/get-aggregated-inventory-details (Warehouse inventory check)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(100);
+      testDoneFn();
+    });
+
+  });
+
+  // Region: Sell from warehouse - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
