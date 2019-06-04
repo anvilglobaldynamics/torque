@@ -629,6 +629,42 @@ describe('Admin', _ => {
 
   });
 
+  it('api/admin-set-module-activation-status (Invalid module)', testDoneFn => {
+
+    callApi('api/admin-set-module-activation-status', {
+      json: {
+        apiKey,
+        organizationId: org1id,
+        moduleCode: "Crap",
+        paymentReference: "joi test",
+        action: 'activate'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('MODULE_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-set-module-activation-status (Valid module)', testDoneFn => {
+
+    callApi('api/admin-set-module-activation-status', {
+      json: {
+        apiKey,
+        organizationId: org1id,
+        moduleCode: "MOD_SELL_WAREHOUSE_PRODUCTS",
+        paymentReference: "joi test",
+        action: 'activate'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      testDoneFn();
+    });
+
+  });
+
   // --- Payment System - end
 
   it('END', testDoneFn => {

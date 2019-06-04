@@ -135,7 +135,7 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
-describe.only('Sales', _ => {
+describe('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -2699,6 +2699,58 @@ describe.only('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(100);
+
+      warehouseInventoryProductList = body.aggregatedProductList;
+      warehouseInventoryMatchingProductBlueprintList = warehouseInventoryProductList.map(_product => _product.product.productBlueprint);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Invalid warehouse sell, no module)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: warehouseInventoryProductList[0].productId,
+            count: 2,
+            salePrice: warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice,
+            vatPercentage: 5,
+          }
+        ],
+
+        serviceList: [],
+
+        payment: {
+          totalAmount: (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        },
+
+        assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: warehouseId,
+
+        wasOfflineSale: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal("UNMET_MODULE");
       testDoneFn();
     });
 
