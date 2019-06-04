@@ -152,8 +152,10 @@
         }
 
         if (this.editingEmployee.userId === this.app.user.id) {
-          // TODO: Translate
-          this.app.showModalConfirmation("Please confirm.", "Since you are editing yourself, you will be logged out after saving your changes. Do you wish to save?", (answer) => {
+          this.app.showModalConfirmation(
+            this.app.verses.general.modalConfirmationPleaseConfirm, 
+            this.app.verses.employee.ownEmployementEditConfirmMessage, 
+            (answer) => {
             if (answer) call();
           });
         } else {

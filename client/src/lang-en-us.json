@@ -97,7 +97,8 @@
     "optional": "(Optional)",
     "print": "Print",
     "showFilters": "Filters",
-    "verificationUnsuccessful": "Verification Unsuccessful"
+    "verificationUnsuccessful": "Verification Unsuccessful",
+    "modalConfirmationPleaseConfirm": "Please confirm."
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -320,7 +321,8 @@
     "searchForProductBlueprintInput": "Product Blueprint name",
     "searchForProductBlueprintInputError": "Error in Search for Product Blueprint",
     "bulkImport": "Bulk Product Blueprint Creation",
-    "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
+    "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks. Instead of reusing or editing existing product blueprint, we encourage you to create a new product blueprint incase of slight differnces.",
+    "productBlueprintEditConfirmMessage": "Editing Product Blueprint will update coresponding product throughout the organization. Editing prices will cause calculations to change. Do you want to prceed?"
   },
   "serviceBlueprint": {
     "manageServiceBlueprintsTitle": "Manage Service Blueprints",
@@ -410,7 +412,8 @@
     "fireEmployee": "Fire Employee",
     "fireEmployeeQuestion": "Fire employee?",
     "sureFireThisEmployee": "Are you sure you want to fire this employee?",
-    "sureFireYourself": "Are you sure you want to fire Yourself? You will loose all access to this organization."
+    "sureFireYourself": "Are you sure you want to fire Yourself? You will loose all access to this organization.",
+    "ownEmployementEditConfirmMessage":  "Since you are editing yourself, you will be logged out after saving your changes. Do you wish to save?"
   },
   "product": {
     "addProductsTitle": "Add Products",
