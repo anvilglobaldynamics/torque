@@ -75,6 +75,7 @@ const customerPhone = 'c' + rnd(prefix, 11);
 const openingBalance = '500';
 
 let apiKey = null;
+let adminApiKey = null;
 let userId = null;
 let organizationId = null;
 let employmentId = null;
@@ -101,6 +102,7 @@ let productToBeTransferredId = null;
 
 let invalidOrganizationId = generateInvalidId();
 let invalidOutletId = generateInvalidId();
+let invalidWarehouseId = generateInvalidId();
 let invalidProductId = generateInvalidId();
 let invalidCustomerId = generateInvalidId();
 let invalidSalesId = generateInvalidId();
@@ -135,7 +137,7 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
-describe('Sales', _ => {
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -2748,6 +2750,108 @@ describe('Sales', _ => {
         wasOfflineSale: false
       }
     }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal("UNMET_MODULE");
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-login (Correct)', testDoneFn => {
+
+    callApi('api/admin-login', {
+      json: {
+        username: 'default',
+        password: 'johndoe1pass'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string');
+      expect(body).to.have.property('sessionId').that.is.a('number');
+      expect(body).to.have.property('admin').that.is.an('object');
+      adminApiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/admin-set-module-activation-status (Valid module)', testDoneFn => {
+
+    callApi('api/admin-set-module-activation-status', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: organizationId,
+        moduleCode: "MOD_SELL_WAREHOUSE_PRODUCTS",
+        paymentReference: "joi test",
+        action: 'activate'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(response.statusCode).to.equal(200);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-get-module-list (Valid)', testDoneFn => {
+
+    callApi('api/admin-get-module-list', {
+      json: { apiKey: adminApiKey }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(response.statusCode).to.equal(200);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Invalid warehouse)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: warehouseInventoryProductList[0].productId,
+            count: 2,
+            salePrice: warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice,
+            vatPercentage: 5,
+          }
+        ],
+
+        serviceList: [],
+
+        payment: {
+          totalAmount: (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        },
+
+        assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: warehouseId,
+
+        wasOfflineSale: false
+      }
+    }, (err, response, body) => {
+      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).to.equal("UNMET_MODULE");

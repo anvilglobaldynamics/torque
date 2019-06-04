@@ -665,6 +665,17 @@ describe('Admin', _ => {
 
   });
 
+  it('api/admin-get-module-list (Valid)', testDoneFn => {
+
+    callApi('api/admin-get-module-list', {
+      json: { apiKey }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      testDoneFn();
+    });
+
+  });
+
   // --- Payment System - end
 
   it('END', testDoneFn => {
