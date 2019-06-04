@@ -317,7 +317,7 @@
     "subBlueprint": "Sub Blueprint",
     "moveToRoot": "Move To Root",
     "createNewProductBlueprint": "Create New Product Blueprint",
-    "searchForProductBlueprintInput": "Product Blueprint name",
+    "searchForProductBlueprintInput": "Name or Identifier Code",
     "searchForProductBlueprintInputError": "Error in Search for Product Blueprint",
     "bulkImport": "Bulk Product Blueprint Creation",
     "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
@@ -423,7 +423,7 @@
     "noProductBlueprintFound": "No product blueprint found. Add as \"Product Blueprint\" first to add it as a Product to this inventory."
   },
   "addProducts": {
-    "searchInputLabel": "Product Blueprint Name",
+    "searchInputLabel": "Name or Identifier Code",
     "searchInputError": "Error in Search",
     "selectedProducts": "Selected Product Blueprint"
   },
@@ -743,7 +743,7 @@
     "acquiredOn": "Acquired On",
     "addedOn": "Added On",
     "noProductFoundInOutlet": "No products found. Go back and add products to the Outlet's default inventory.",
-    "searchForProductInput": "Product Name",
+    "searchForProductInput": "Name or Identifier Code",
     "searchForProductInputError": "Error in Search",
     "scanButtonHelp": "Use code scanner to select multiple products quickly"
   },
