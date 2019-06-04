@@ -31,7 +31,7 @@
           <div class="vertical layout flex">
             <div class="inventory-product-important-detail-container">[[productBlueprint.name]]</div>
 
-            <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+            <template is="dom-if" if="[[shouldDisplayPurchasePrice]]">
               <div class="inventory-product-price-container">[[verses.productBlueprint.buyingPrice]]: [[productBlueprint.defaultPurchasePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productBlueprint.unit]]</div>
             </template>
 
@@ -49,7 +49,7 @@
   </template>
 
   <script>
-    class ProductBlueprint extends FxElement.mixin(TorqueLanguageBehavior) {
+    class ProductBlueprint extends FxElement.mixin(TorqueLanguageBehavior, TorqueCommonBehavior) {
 
       static get is() {
         return 'product-blueprint';
@@ -133,7 +133,7 @@
           </template>
 
           <template is="dom-repeat" items="[[productBlueprintList]]" as="productBlueprint">
-            <product-blueprint product-blueprint="[[productBlueprint]]" app="[[app]]"></product-blueprint>
+            <product-blueprint product-blueprint="[[productBlueprint]]" app="[[app]]" should-display-purchase-price="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]"></product-blueprint>
           </template>
 
           <div class="pagination">
