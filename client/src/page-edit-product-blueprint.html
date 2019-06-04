@@ -230,8 +230,15 @@
         this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editProductBlueprintForm').validate()) return;
 
-        let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
-        this._processUpdateProductBlueprint({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+        this.app.showModalConfirmation(
+          this.app.verses.general.modalConfirmationPleaseConfirm, 
+          this.app.verses.productBlueprint.productBlueprintEditConfirmMessage, 
+          (answer) => {
+          if (answer) {
+            let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
+            this._processUpdateProductBlueprint({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+          }
+        });
       }
 
       genericDiscountValueInputChanged(e) {
