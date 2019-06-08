@@ -404,9 +404,9 @@
           </paper-dialog-scrollable>
           <div class="buttons">
             <template is="dom-if" if="[[!isInOfflineMode]]">
-              <paper-button on-click="networkErrorGoToOfflineModeTapped">[[verses.root.networkErrorGoOffline]]</paper-button>
+              <paper-button class="neutral" on-click="networkErrorGoToOfflineModeTapped">[[verses.root.networkErrorGoOffline]]</paper-button>
             </template>
-            <paper-button on-click="networkErrorGotItTapped" autofocus>[[verses.root.networkErrorTGotIt]]</paper-button>
+            <paper-button class="secondary" on-click="networkErrorRetryTapped" autofocus>[[verses.root.networkErrorRetry]]</paper-button>
           </div>
         </paper-dialog>
 
@@ -689,8 +689,15 @@
         this.onOfflineDataChange();
       }
 
-      networkErrorGotItTapped() {
+      networkErrorRetryTapped() {
         this.$['network-dialog'].close();
+
+        // NOTE: We could use this.refreshCurrentPage
+        // however, following is a safer bet since error
+        // may occur during page load.
+        // Regardless, user would have to reload the page
+        // anyway.
+        window.location.reload();
       }
 
       networkErrorGoToOfflineModeTapped() {
