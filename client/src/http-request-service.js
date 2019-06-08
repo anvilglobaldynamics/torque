@@ -10,14 +10,16 @@
     Service
   } = window.ServiceTree;
 
+  const REQUEST_TIMEOUT = 30 * 1000;
+
   class HttpRequestService extends Service {
 
     constructor(method, url, options = {}) {
       super();
       let {
-      headers = {},
+        headers = {},
         responseType = 'text'
-    } = options;
+      } = options;
       Object.assign(this, { method, url, headers, responseType });
       this._hasErrorBeenNotified = false;
     }
@@ -32,9 +34,9 @@
 
     _onLoad() {
       let {
-      status: statusCode,
+        status: statusCode,
         responseText: body
-    } = this._xmlHttpRequest;
+      } = this._xmlHttpRequest;
 
       let error = null;
       if (this.responseType === 'json') {
@@ -160,6 +162,7 @@
     }
 
     request(...args) {
+      console.log("I AM THE ONE!")
       let [body = null, type = null] = args.reverse()
 
       if (type === null) {
@@ -172,8 +175,11 @@
 
       this._xmlHttpRequest = new XMLHttpRequest();
 
+      this._xmlHttpRequest.timeout = REQUEST_TIMEOUT;
+
       this._xmlHttpRequest.onload = (_ => this._onLoad());
       this._xmlHttpRequest.onabort = (_ => this._onAbort());
+      this._xmlHttpRequest.ontimeout = (_ => this._onError());
       this._xmlHttpRequest.upload.onabort = (_ => this._onAbort());
       this._xmlHttpRequest.onerror = (_ => this._onError());
       this._xmlHttpRequest.upload.onerror = (_ => this._onError());
