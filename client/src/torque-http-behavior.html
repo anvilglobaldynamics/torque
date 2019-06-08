@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-http-behavior.html">
 <script src="websocket-request-service.js"></script>
+<script src="http-request-service.js"></script>
 
 <script>
   (function () {
@@ -17,11 +18,28 @@
 
       constructor(...args) {
         super(...args);
+        this.jsonPostApiPathPrefix = 'http://localhost:8000';
         this.websocketHost = 'ws://localhost:8000';
         this.websocketApiPathPrefix = '/api/';
       }
 
       // internals ===================================
+
+      /** @override */
+      callJsonPostApi(path, data, cbfn) {
+        let url = `${this.jsonPostApiPathPrefix}${path}`
+        let service = new HttpRequestService('POST', url, { responseType: 'json' });
+        service.on('end', (event) => {
+          if (event.detail.resolution === 'success') {
+            cbfn(null, event.detail.body);
+          } else {
+            cbfn(event.detail);
+          }
+        });
+        baselib.setImmediate(_ => service.request('json', data));
+        this.serviceManager.manage(service);
+        return service;
+      }
 
       callJsonWebsocketApi(path, data, cbfn) {
         if (!window.torqueMasterOptions.allowWebsockets) {
