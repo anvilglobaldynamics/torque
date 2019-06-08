@@ -40,12 +40,16 @@
         font-size: 12px;
       }
 
+      .sale-status {
+        padding-bottom: 2px;
+      }
+
       .credit-text {
         border: 1px solid red;
-        border-radius: 5px;
-        margin-left: 4px;
+        border-radius: 6px;
+        margin-right: 4px;
         font-size: 13px;
-        padding: 2px;
+        padding: 3px;
         color: red;
       }
 
@@ -149,12 +153,17 @@
                 <div class="vertical layout flex">
                   <div class="sale-conteiner">
 
-                    <div class="title">
-                      [[verses.sales.salesId]]: [[sale.id]]
+                    <div style="font-size: 16px; font-weight: 500;"> [[verses.sales.salesId]]: [[sale.id]] </div>
+
+                    <div class="sale-status">
                       <template is="dom-if" if="[[$isCreditSale(sale.payment.totalBilled, sale.payment.totalPaidAmount)]]">
                         <span class="credit-text"> [[verses.sales.isCredit]] </span>
                       </template>
+                      <template is="dom-if" if="[[sale.isDiscarded]]">
+                        <span class="credit-text"> [[verses.sales.isDiscarded]] </span>
+                      </template>
                     </div>
+
                     <div class="description-time">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
                     <div class="description">[[verses.sales.billed]]: [[$round(sale.payment.totalBilled)]] [[app.settings.monetaryUnit]], [[verses.sales.paid]]: [[$round(sale.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</div>
 
@@ -167,7 +176,9 @@
 
                   </div>
                 </div>
-                <paper-button raised class="secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
+                <paper-button raised class="secondary" on-tap="viewTapped">
+                  [[verses.general.view]]
+                </paper-button>
               </div>
             </template>
           </div>

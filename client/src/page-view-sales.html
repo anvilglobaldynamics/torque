@@ -46,10 +46,10 @@
 
       .credit-text {
         border: 1px solid red;
-        border-radius: 5px;
-        margin-left: 2px;
-        font-size: 14px;
-        padding: 2px;
+        border-radius: 6px;
+        margin-left: 4px;
+        font-size: 13px;
+        padding: 3px;
         color: red;
       }
 
@@ -64,8 +64,11 @@
 
       <div class="card vertical layout">
 
-        <div style="font-weight: bold;">
-          [[verses.sales.salesId]]: [[sales.id]]
+        <div>
+          <span style="font-weight: bold;"> [[verses.sales.salesId]]: [[sales.id]] </span>
+          <template is="dom-if" if="[[sales.isDiscarded]]">
+            <span class="credit-text"> [[verses.sales.isDiscarded]] </span>
+          </template>
         </div>
         <div>[[verses.general.dated]]: [[$mkDate(sales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
         <!-- <div>[[verses.sales.outletId]]: [[sales.outletId]]</div>
@@ -179,9 +182,10 @@
 
       <!-- additional-payment - start -->
       <template is="dom-if" if="[[hasPrivilege('PRIV_ACCESS_POS', organization)]]">
-        <template is="dom-if" if="[[$shouldTakeAdditionalPayment(sales.payment.totalBilled, sales.payment.totalPaidAmount)]]">
-          <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[self]]" customer="[[customer]]" is-from-view-sales-page>
-            </elem-additional-paymentt>
+        <template is="dom-if" if="[[!sales.isDiscarded]]">
+          <template is="dom-if" if="[[$shouldTakeAdditionalPayment(sales.payment.totalBilled, sales.payment.totalPaidAmount)]]">
+            <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[self]]" customer="[[customer]]" is-from-view-sales-page></elem-additional-paymentt>
+          </template>
         </template>
       </template>
       <!-- additional-payment - end -->

@@ -585,6 +585,7 @@
     "soldCount": "বিক্রয় গণনা",
     "returnedCount": "ফেরৎ গণনা",
     "isCredit": "বাকি",
+    "isDiscarded": "বাতিল",
     "printReceipt": "রসিদ প্রিন্ট করুন",
     "warnDiscared": "সতর্কবার্তা! এই বিক্রয় রেকর্ড বাতিল করা হয়েছে।",
     "receiptTitle": "বিক্রয় রসিদ",

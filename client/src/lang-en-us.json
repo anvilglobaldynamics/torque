@@ -585,6 +585,7 @@
     "soldCount": "Sold Count",
     "returnedCount": "Returned Count",
     "isCredit": "Credit",
+    "isDiscarded": "Discarded",
     "printReceipt": "Print Receipt",
     "warnDiscared": "WARNING! This sale has been discarded.",
     "receiptTitle": "Sales Receipt ",

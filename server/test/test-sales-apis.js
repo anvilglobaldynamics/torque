@@ -10,11 +10,13 @@ let {
   loginUser,
   addOrganization,
   addOutlet,
+  addWarehouse,
   addProductBlueprint,
   addProductToInventory,
   addCustomer,
   getCustomer,
   getOutlet,
+  getWarehouse,
   addServiceBlueprint,
   validateInventorySchema,
   validateProductBlueprintSchema,
@@ -73,10 +75,12 @@ const customerPhone = 'c' + rnd(prefix, 11);
 const openingBalance = '500';
 
 let apiKey = null;
+let adminApiKey = null;
 let userId = null;
 let organizationId = null;
 let employmentId = null;
 let outletId = null;
+let warehouseId = null;
 let productBlueprintId = null;
 let customerId = null;
 let salesId = null;
@@ -90,12 +94,15 @@ let outletDefaultInventoryId = null;
 let outletReturnedInventoryId = null;
 let outletDamagedInventoryId = null;
 
+let warehouseDefaultInventoryId = null;
+
 let customerData = null;
 
 let productToBeTransferredId = null;
 
 let invalidOrganizationId = generateInvalidId();
 let invalidOutletId = generateInvalidId();
+let invalidWarehouseId = generateInvalidId();
 let invalidProductId = generateInvalidId();
 let invalidCustomerId = generateInvalidId();
 let invalidSalesId = generateInvalidId();
@@ -168,84 +175,107 @@ describe('Sales', _ => {
                 outletDefaultInventoryId = data.defaultInventory.id;
                 outletReturnedInventoryId = data.returnedInventory.id;
                 outletDamagedInventoryId = data.damagedInventory.id;
-                addProductBlueprint({
+                addWarehouse({
                   apiKey,
                   organizationId,
-                  name: productBlueprintName,
-                  unit: "box",
-                  identifierCode: '',
-                  defaultPurchasePrice: 99,
-                  defaultVat: 3,
-                  defaultSalePrice: 112,
-                  isReturnable: true
+                  name: "Warehouse Name",
+                  physicalAddress: "11xx Warehouse Physical Address",
+                  phone: 'w1' + rnd(prefix, 11),
+                  contactPersonName: "Warehouse Contact Person Name"
                 }, (data) => {
-                  productBlueprintId = data.productBlueprintId;
-                  addProductToInventory({
-                    apiKey,
-                    inventoryId: outletDefaultInventoryId,
-                    productList: [
-                      { productBlueprintId, count: 100 }
-                    ]
+                  warehouseId = data.warehouseId;
+                  getWarehouse({
+                    apiKey, warehouseId
                   }, (data) => {
-                    addCustomer({
+                    warehouseDefaultInventoryId = data.defaultInventory.id;
+                    addProductBlueprint({
                       apiKey,
                       organizationId,
-                      fullName: customerFullName,
-                      phone: customerPhone,
-                      email: null,
-                      address: ''
+                      name: productBlueprintName,
+                      unit: "box",
+                      identifierCode: '',
+                      defaultPurchasePrice: 99,
+                      defaultVat: 3,
+                      defaultSalePrice: 112,
+                      isReturnable: true
                     }, (data) => {
-                      customerId = data.customerId;
-                      getCustomer({
-                        apiKey, customerId
+                      productBlueprintId = data.productBlueprintId;
+                      addProductToInventory({
+                        apiKey,
+                        inventoryId: outletDefaultInventoryId,
+                        productList: [
+                          { productBlueprintId, count: 100 }
+                        ]
                       }, (data) => {
-                        customerData = data.customer;
-                        addServiceBlueprint({
+                        addProductToInventory({
                           apiKey,
-                          organizationId,
-                          name: "1st service blueprint",
-                          defaultVat: 2,
-                          defaultSalePrice: 250,
-                          isLongstanding: false,
-                          serviceDuration: null,
-                          isEmployeeAssignable: false,
-                          isCustomerRequired: false,
-                          isRefundable: false,
-                          avtivateInAllOutlets: true
+                          inventoryId: warehouseDefaultInventoryId,
+                          productList: [
+                            { productBlueprintId, count: 100 }
+                          ]
                         }, (data) => {
-                          basicServiceBlueprintId = data.serviceBlueprintId;
-                          addServiceBlueprint({
+                          addCustomer({
                             apiKey,
                             organizationId,
-                            name: "2nd service blueprint",
-                            defaultVat: 2,
-                            defaultSalePrice: 250,
-                            isLongstanding: false,
-                            serviceDuration: null,
-                            isEmployeeAssignable: true,
-                            isCustomerRequired: true,
-                            isRefundable: false,
-                            avtivateInAllOutlets: true
+                            fullName: customerFullName,
+                            phone: customerPhone,
+                            email: null,
+                            address: ''
                           }, (data) => {
-                            customerAndEmployeeServiceBlueprintId = data.serviceBlueprintId;
-                            addServiceBlueprint({
-                              apiKey,
-                              organizationId,
-                              name: "3rd long service blueprint",
-                              defaultVat: 2,
-                              defaultSalePrice: 250,
-                              isLongstanding: true,
-                              serviceDuration: {
-                                months: 1,
-                                days: 7
-                              },
-                              isEmployeeAssignable: true,
-                              isCustomerRequired: true,
-                              isRefundable: false,
-                              avtivateInAllOutlets: true
+                            customerId = data.customerId;
+                            getCustomer({
+                              apiKey, customerId
                             }, (data) => {
-                              longstandingServiceBlueprintId = data.serviceBlueprintId;
-                              testDoneFn();
+                              customerData = data.customer;
+                              addServiceBlueprint({
+                                apiKey,
+                                organizationId,
+                                name: "1st service blueprint",
+                                defaultVat: 2,
+                                defaultSalePrice: 250,
+                                isLongstanding: false,
+                                serviceDuration: null,
+                                isEmployeeAssignable: false,
+                                isCustomerRequired: false,
+                                isRefundable: false,
+                                avtivateInAllOutlets: true
+                              }, (data) => {
+                                basicServiceBlueprintId = data.serviceBlueprintId;
+                                addServiceBlueprint({
+                                  apiKey,
+                                  organizationId,
+                                  name: "2nd service blueprint",
+                                  defaultVat: 2,
+                                  defaultSalePrice: 250,
+                                  isLongstanding: false,
+                                  serviceDuration: null,
+                                  isEmployeeAssignable: true,
+                                  isCustomerRequired: true,
+                                  isRefundable: false,
+                                  avtivateInAllOutlets: true
+                                }, (data) => {
+                                  customerAndEmployeeServiceBlueprintId = data.serviceBlueprintId;
+                                  addServiceBlueprint({
+                                    apiKey,
+                                    organizationId,
+                                    name: "3rd long service blueprint",
+                                    defaultVat: 2,
+                                    defaultSalePrice: 250,
+                                    isLongstanding: true,
+                                    serviceDuration: {
+                                      months: 1,
+                                      days: 7
+                                    },
+                                    isEmployeeAssignable: true,
+                                    isCustomerRequired: true,
+                                    isRefundable: false,
+                                    avtivateInAllOutlets: true
+                                  }, (data) => {
+                                    longstandingServiceBlueprintId = data.serviceBlueprintId;
+                                    testDoneFn();
+                                  });
+                                });
+                              });
                             });
                           });
                         });
@@ -2607,7 +2637,6 @@ describe('Sales', _ => {
 
   });
 
-
   it('api/add-sales (Invalid, testing discountPresetId)', testDoneFn => {
 
     callApi('api/add-sales', {
@@ -2657,8 +2686,309 @@ describe('Sales', _ => {
 
   });
 
-
   // Discount Preset - end
+
+  // Region: Sell from warehouse - start
+
+  it('api/get-aggregated-inventory-details (Warehouse inventory check)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(100);
+
+      warehouseInventoryProductList = body.aggregatedProductList;
+      warehouseInventoryMatchingProductBlueprintList = warehouseInventoryProductList.map(_product => _product.product.productBlueprint);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Invalid warehouse sell, no module)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: warehouseInventoryProductList[0].productId,
+            count: 2,
+            salePrice: warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice,
+            vatPercentage: 5,
+          }
+        ],
+
+        serviceList: [],
+
+        payment: {
+          totalAmount: (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        },
+
+        assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: warehouseId,
+
+        wasOfflineSale: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal("UNMET_MODULE");
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-login (Correct)', testDoneFn => {
+
+    callApi('api/admin-login', {
+      json: {
+        username: 'default',
+        password: 'johndoe1pass'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string');
+      expect(body).to.have.property('sessionId').that.is.a('number');
+      expect(body).to.have.property('admin').that.is.an('object');
+      adminApiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/admin-set-module-activation-status (Valid module)', testDoneFn => {
+
+    callApi('api/admin-set-module-activation-status', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: organizationId,
+        moduleCode: "MOD_SELL_WAREHOUSE_PRODUCTS",
+        paymentReference: "joi test",
+        action: 'activate'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(response.statusCode).to.equal(200);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-get-module-list (Valid)', testDoneFn => {
+
+    callApi('api/admin-get-module-list', {
+      json: { apiKey: adminApiKey }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(response.statusCode).to.equal(200);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/user-login', testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: phone,
+        password
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-sales (Invalid warehouse)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: warehouseInventoryProductList[0].productId,
+            count: 2,
+            salePrice: warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice,
+            vatPercentage: 5,
+          }
+        ],
+
+        serviceList: [],
+
+        payment: {
+          totalAmount: (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        },
+
+        assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: invalidWarehouseId,
+
+        wasOfflineSale: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal("WAREHOUSE_INVENTORY_INVALID");
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Valid)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: warehouseInventoryProductList[0].productId,
+            count: 100,
+            salePrice: warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice,
+            vatPercentage: 5,
+          }
+        ],
+
+        serviceList: [],
+
+        payment: {
+          totalAmount: (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        },
+
+        assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: warehouseId,
+
+        wasOfflineSale: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddSalesApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-aggregated-inventory-details (Warehouse inventory check)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(0);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales (Invalid zero count)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productId: warehouseInventoryProductList[0].productId,
+            count: 2,
+            salePrice: warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice,
+            vatPercentage: 5,
+          }
+        ],
+
+        serviceList: [],
+
+        payment: {
+          totalAmount: (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
+          discountType: 'percent',
+          discountValue: 0,
+          discountedAmount: 0,
+          serviceChargeAmount: 0,
+          totalBilled: ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        },
+
+        assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: warehouseId,
+
+        wasOfflineSale: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal("INSUFFICIENT_PRODUCT");
+      testDoneFn();
+    });
+
+  });
+
+  // Region: Sell from warehouse - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
