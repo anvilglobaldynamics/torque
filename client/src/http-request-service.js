@@ -162,7 +162,6 @@
     }
 
     request(...args) {
-      console.log("I AM THE ONE!")
       let [body = null, type = null] = args.reverse()
 
       if (type === null) {
