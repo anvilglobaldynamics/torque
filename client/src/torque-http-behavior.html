@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer-fx/fx-http-behavior.html">
 <script src="websocket-request-service.js"></script>
+<script src="http-request-service.js"></script>
 
 <script>
   (function () {
@@ -8,7 +9,7 @@
     let { HttpRequestService, WebsocketRequestService, ServiceManager } = window.ServiceTree;
 
     const WEBSOCKET_DELAY_BEFORE_RETRYING = 60 * 1000;
-    const WEBSOCKET_REQUEST_TIMEOUT = 15 * 1000;
+
     let lastWebsocketFailureTimestamp = 0;
     let possibleLastWebsocketFailureTimestamp = 0;
 
@@ -17,11 +18,28 @@
 
       constructor(...args) {
         super(...args);
+        this.jsonPostApiPathPrefix = 'http://localhost:8000';
         this.websocketHost = 'ws://localhost:8000';
         this.websocketApiPathPrefix = '/api/';
       }
 
       // internals ===================================
+
+      /** @override */
+      callJsonPostApi(path, data, cbfn) {
+        let url = `${this.jsonPostApiPathPrefix}${path}`
+        let service = new HttpRequestService('POST', url, { responseType: 'json' });
+        service.on('end', (event) => {
+          if (event.detail.resolution === 'success') {
+            cbfn(null, event.detail.body);
+          } else {
+            cbfn(event.detail);
+          }
+        });
+        baselib.setImmediate(_ => service.request('json', data));
+        this.serviceManager.manage(service);
+        return service;
+      }
 
       callJsonWebsocketApi(path, data, cbfn) {
         if (!window.torqueMasterOptions.allowWebsockets) {
@@ -101,18 +119,6 @@
         }
       }
 
-      callJsonWebsocketApiWithTimeout(path, data, cbfn) {
-        let timeoutId = window.setTimeout(() => {
-          cbfn(new Error("Websocket Request Timed Out"));
-          cbfn = null;
-          window.torqueWebsocketIndicatorStatusReceivedFn('error');
-        }, WEBSOCKET_REQUEST_TIMEOUT);
-        this.callJsonWebsocketApi(path, data, (err, message) => {
-          window.clearTimeout(timeoutId);
-          if (cbfn) cbfn(err, message);
-        });
-      }
-
       callCombinedJsonApi(path, data, _cbfn) {
         if (this.selectedLanguageIdentifier) {
           data.clientLanguage = this.selectedLanguageIdentifier;
@@ -124,10 +130,12 @@
         if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
           this.callJsonPostApi(path, data, cbfn);
         } else {
-          this.callJsonWebsocketApiWithTimeout(path, data, (err, message) => {
+          this.callJsonWebsocketApi(path, data, (err, message) => {
             if (err) {
               if (mode === 'development') {
-                console.log(`WS_ERROR/api=${path}`, err);
+                if (path !== 'user-assert-api-key') {
+                  console.log(`WS_ERROR/api=${path}`, err);
+                }
               }
               possibleLastWebsocketFailureTimestamp = (new Date).getTime();
               this.callJsonPostApi(path, data, cbfn);
@@ -176,7 +184,7 @@
       callUserAssertApiKeyApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         window.torqueCache.ignorableApiCallCount += 1;
-        this.callCombinedJsonApi('user-assert-api-key', data, (...args)=>{
+        this.callCombinedJsonApi('user-assert-api-key', data, (...args) => {
           window.torqueCache.ignorableApiCallCount -= 1;
           cbfn(...args);
         });

@@ -79,10 +79,11 @@ exports.ProductBlueprintCollection = class extends Collection {
   async listByOrganizationIdAndSearchString({ organizationId, searchString }) {
     let query = { organizationId };
     if (searchString) {
-      searchString = this.escapeRegExp(searchString.toLowerCase());
-      let searchRegex = new RegExp(searchString, 'i');
+      let escapedSearchString = this.escapeRegExp(searchString.toLowerCase());
+      let searchRegex = new RegExp(escapedSearchString, 'i');
       query.$or = [
-        { name: searchRegex }
+        { name: searchRegex },
+        { identifierCode: searchString }
       ];
     }
     return await this._find(query);

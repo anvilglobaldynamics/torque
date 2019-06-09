@@ -3,6 +3,7 @@
     "rightsReserved": "সর্বস্বত্ব সংরক্ষিত",
     "networkErrorGoOffline": "অফলাইন মোড",
     "networkErrorTGotIt": "ঠিক আছে",
+    "networkErrorRetry": "রিলোড করুন",
     "networkErrorTitle": "ইন্টারনেট সংযোগ",
     "networkErrorContent": "আপনার ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়ে আছে। ইন্টারনেটে সংযুক্ত হয়ে আবার চেষ্টা করুন। ",
     "unableToGoOffline": "অফলাইন মোড সক্ষম করতে অক্ষম। পরের বার আপনি অনলাইনে থাকবেন, অফলাইন মোডের জন্য একটি আউটলেট নির্বাচন করতে ভুলবেন না।",
@@ -97,7 +98,8 @@
     "optional": "(ঐচ্ছিক)",
     "print": "প্রিন্ট",
     "showFilters": "ফিল্টার",
-    "verificationUnsuccessful": "যাচাই ব্যর্থ"
+    "verificationUnsuccessful": "যাচাই ব্যর্থ",
+    "modalConfirmationPleaseConfirm": "নিশ্চিত করুন"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -317,10 +319,11 @@
     "subBlueprint": "উপ বিভাগ",
     "moveToRoot": "বাহিরে সরান",
     "createNewProductBlueprint": "নতুন পণ্য পরিকল্পনা তৈরি করুন",
-    "searchForProductBlueprintInput": "পণ্য পরিকল্পনার নাম",
+    "searchForProductBlueprintInput": "নাম বা সনাক্তকরণ কোড",
     "searchForProductBlueprintInputError": "পণ্য পরিকল্পনার সন্ধানে ত্রুটি",
     "bulkImport": "একাধিক পণ্যের পরিকল্পনা তৈরি",
-    "whatIsProductBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত কাজে ব্যবহত হবে।"
+    "whatIsProductBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত সকল কাজে ব্যবহত হবে। বর্তমান পণ্যের পরিকল্পনা পুনঃব্যবহার বা সম্পাদনা করার পরিবর্তে, পণ্য পরিকল্পনায় সামান্যতম ভিন্নতা থাকলেও নতুন পণ্য পরিকল্পনা তৈরি করুন।",
+    "productBlueprintEditConfirmMessage": "পণ্যের পরিকল্পনায় পরিবর্তন করলে সংশ্লিষ্ট পণ্য-ও পরিবর্তন হয়ে যাবে। পণ্যের মূল্য পরিবর্তন করলে হিসেবে পরিবর্তন আসবে। আপনি কি নিশ্চিত করছেন?"
   },
   "serviceBlueprint": {
     "manageServiceBlueprintsTitle": "সেবা পরিকল্পনা পরিচালনা",
@@ -410,7 +413,8 @@
     "fireEmployee": "কর্মচারীকে চাকরিচ্যুত করুন",
     "fireEmployeeQuestion": "চাকরিচ্যুত করা হোক?",
     "sureFireThisEmployee": "আপনি কি নিশ্চিত এই কর্মচারীকে চাকরিচ্যুত করতে চান?",
-    "sureFireYourself": "আপনি কি নিজেকে চাকরিচ্যুত করতে চান? আপনি এই সংস্থার সমস্ত অধিকার হারাবেন।"
+    "sureFireYourself": "আপনি কি নিজেকে চাকরিচ্যুত করতে চান? আপনি এই সংস্থার সমস্ত অধিকার হারাবেন।",
+    "ownEmployementEditConfirmMessage":  "সম্পাদনার পর আপনাকে আবার লগইন করা লাগবে। আপডেট নিশ্চিত?"
   },
   "product": {
     "addProductsTitle": "পণ্য যুক্ত করুন",
@@ -423,7 +427,7 @@
     "noProductBlueprintFound": "কোনো পণ্যের পরিকল্পনা পাওয়া যায় নি। প্রথমে পণ্যটি একটি \"পণ্যের পরিকল্পনা\" হিসেবে যোগ করুন, এর পর এই পণ্য তালিকায় পণ্য হিসেবে যোগ করুন।"
   },
   "addProducts": {
-    "searchInputLabel": "পণ্যের পরিকল্পনার নাম",
+    "searchInputLabel": "নাম বা সনাক্তকরণ কোড",
     "searchInputError": "পণ্য সন্ধানে ত্রূটি হয়েছে",
     "selectedProducts": "বাছাইকৃত পণ্য তালিকা"
   },
@@ -582,6 +586,7 @@
     "soldCount": "বিক্রয় গণনা",
     "returnedCount": "ফেরৎ গণনা",
     "isCredit": "বাকি",
+    "isDiscarded": "বাতিল",
     "printReceipt": "রসিদ প্রিন্ট করুন",
     "warnDiscared": "সতর্কবার্তা! এই বিক্রয় রেকর্ড বাতিল করা হয়েছে।",
     "receiptTitle": "বিক্রয় রসিদ",
@@ -742,7 +747,7 @@
     "acquiredOn": "খরিদ হয়েছে",
     "addedOn": "যুক্ত হয়েছে",
     "noProductFoundInOutlet": "কোনো পণ্য পাওয়া যায়নি। পেছনে গিয়ে দোকানের প্রধান পণ্য তালিকায় পণ্য যোগ করুন।",
-    "searchForProductInput": "পণ্যের নাম",
+    "searchForProductInput": "নাম বা সনাক্তকরণ কোড",
     "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি",
     "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন"
   },

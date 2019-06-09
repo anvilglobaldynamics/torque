@@ -1,6 +1,8 @@
 /* WebsocketRequestService adds WebsocketRequestService to service tree */
 (function () {
 
+  const REQUEST_TIMEOUT = 15 * 1000;
+
   let secondaryNotifyFn = (status) => {
     if (!window.torqueWebsocketIndicatorStatusReceivedFn) return;
     window.torqueWebsocketIndicatorStatusReceivedFn(status);
@@ -124,6 +126,7 @@
         requestUid,
         body: body
       }
+      let isResolved = false;
       this._reuseOrEstablishConnection((err, connection) => {
         if (err) {
           this.emit('error', new StandardEvent({
@@ -142,10 +145,36 @@
               parseError: null
             }
           }));
+          isResolved = true;
           return;
         }
 
-        let messageHandlerFn = (e) => {
+        let messageHandlerFn = (e, wasTimedOut = false) => {
+          if (isResolved) return; // request is already somehow resolved.
+
+          if (wasTimedOut) {
+            this.emit('error', new StandardEvent({
+              name: 'error',
+              detail: {
+                isParseError: false,
+                parseError: null,
+                error: (new Error("Socket request timed out"))
+              }
+            }));
+            this.emit('end', new StandardEvent({
+              name: 'end',
+              detail: {
+                resolution: 'error',
+                isParseError: false,
+                parseError: null,
+                error: (new Error("Socket request timed out"))
+              }
+            }));
+            this._serviceEnd();
+            isResolved = true;
+            return;
+          }
+
           let responseMessage;
           try {
             responseMessage = this._deserialize(e.data);
@@ -166,9 +195,11 @@
               }
             }));
             this._serviceEnd();
+            isResolved = true;
             return;
           }
           if (responseMessage.requestUid === requestMessage.requestUid) {
+            isResolved = true;
             connection.removeEventListener('message', messageHandlerFn);
             this.emit('end', new StandardEvent({
               name: 'end',
@@ -182,6 +213,9 @@
           }
         };
         connection.addEventListener('message', messageHandlerFn);
+        setTimeout(() => {
+          messageHandlerFn(null, true);
+        }, REQUEST_TIMEOUT);
         connection.send(this._serialize(requestMessage));
         this.emit('start', new StandardEvent({
           name: 'start',

@@ -3,6 +3,7 @@
     "rightsReserved": "All Rights Reserved.",
     "networkErrorGoOffline": "Offline mode",
     "networkErrorTGotIt": "Got It",
+    "networkErrorRetry": "Reload",
     "networkErrorTitle": "Network error",
     "networkErrorContent": "Make sure you are connected to the internet and try again",
     "unableToGoOffline": "Unable to enable offline mode. Next time you are online, make sure to select an outlet for offline mode.",
@@ -97,7 +98,8 @@
     "optional": "(Optional)",
     "print": "Print",
     "showFilters": "Filters",
-    "verificationUnsuccessful": "Verification Unsuccessful"
+    "verificationUnsuccessful": "Verification Unsuccessful",
+    "modalConfirmationPleaseConfirm": "Please confirm."
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -317,10 +319,11 @@
     "subBlueprint": "Sub Blueprint",
     "moveToRoot": "Move To Root",
     "createNewProductBlueprint": "Create New Product Blueprint",
-    "searchForProductBlueprintInput": "Product Blueprint name",
+    "searchForProductBlueprintInput": "Name or Identifier Code",
     "searchForProductBlueprintInputError": "Error in Search for Product Blueprint",
     "bulkImport": "Bulk Product Blueprint Creation",
-    "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks."
+    "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks. Instead of reusing or editing existing product blueprint, we encourage you to create a new product blueprint incase of slight differnces.",
+    "productBlueprintEditConfirmMessage": "Editing Product Blueprint will update coresponding product throughout the organization. Editing prices will cause calculations to change. Do you want to prceed?"
   },
   "serviceBlueprint": {
     "manageServiceBlueprintsTitle": "Manage Service Blueprints",
@@ -410,7 +413,8 @@
     "fireEmployee": "Fire Employee",
     "fireEmployeeQuestion": "Fire employee?",
     "sureFireThisEmployee": "Are you sure you want to fire this employee?",
-    "sureFireYourself": "Are you sure you want to fire Yourself? You will loose all access to this organization."
+    "sureFireYourself": "Are you sure you want to fire Yourself? You will loose all access to this organization.",
+    "ownEmployementEditConfirmMessage":  "Since you are editing yourself, you will be logged out after saving your changes. Do you wish to save?"
   },
   "product": {
     "addProductsTitle": "Add Products",
@@ -423,7 +427,7 @@
     "noProductBlueprintFound": "No product blueprint found. Add as \"Product Blueprint\" first to add it as a Product to this inventory."
   },
   "addProducts": {
-    "searchInputLabel": "Product Blueprint Name",
+    "searchInputLabel": "Name or Identifier Code",
     "searchInputError": "Error in Search",
     "selectedProducts": "Selected Product Blueprint"
   },
@@ -582,6 +586,7 @@
     "soldCount": "Sold Count",
     "returnedCount": "Returned Count",
     "isCredit": "Credit",
+    "isDiscarded": "Discarded",
     "printReceipt": "Print Receipt",
     "warnDiscared": "WARNING! This sale has been discarded.",
     "receiptTitle": "Sales Receipt ",
@@ -743,7 +748,7 @@
     "acquiredOn": "Acquired On",
     "addedOn": "Added On",
     "noProductFoundInOutlet": "No products found. Go back and add products to the Outlet's default inventory.",
-    "searchForProductInput": "Product Name",
+    "searchForProductInput": "Name or Identifier Code",
     "searchForProductInputError": "Error in Search",
     "scanButtonHelp": "Use code scanner to select multiple products quickly"
   },
