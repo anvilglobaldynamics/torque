@@ -7,7 +7,7 @@ const { generateRandomString } = require('./../utils/random-string');
 const { SecurityMixin } = require('./mixins/security-mixin');
 const { UserMixin } = require('./mixins/user-mixin');
 
-exports.UserEditProfileApi = class extends Api.mixin(SecurityMixin, UserMixin) {
+exports.UserEditProfileApi = class extends Api.mixin(UserMixin) {
 
   get autoValidates() { return true; }
 
