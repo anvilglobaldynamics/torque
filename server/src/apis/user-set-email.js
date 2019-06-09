@@ -33,7 +33,7 @@ exports.UserSetEmailApi = class extends Api.mixin(SecurityMixin, UserMixin) {
 
 
     let verificationLink = await this._createEmailVerificationRequest({ email, userId });
-    await this._sendEmailVerificationMail({ email, verificationLink });
+    this._sendEmailVerificationMail({ email, verificationLink });
   }
 
   async handle({ userId, body }) {

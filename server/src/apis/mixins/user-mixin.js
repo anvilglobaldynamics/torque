@@ -22,6 +22,7 @@ exports.UserMixin = (SuperApiClass) => class extends SuperApiClass {
     return { verificationLink };
   }
 
+  // NOTE: In most cases there is no reason to await this method
   async _sendPhoneVerificationSms({ phone, verificationLink }) {
     let model = { phone, verificationLink };
     let [err, isDeveloperError, response, finalBody] = await this.server.smsService.sendStoredSms('phone-verification', model, phone);
@@ -54,6 +55,7 @@ exports.UserMixin = (SuperApiClass) => class extends SuperApiClass {
     return { verificationLink };
   }
 
+  // NOTE: In most cases there is no reason to await this method
   async _sendEmailVerificationMail({ email, verificationLink }) {
     let model = { email, verificationLink };
     let clientLanguage = (this.clientLanguage || 'en-us');

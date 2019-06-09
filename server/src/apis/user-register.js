@@ -37,7 +37,7 @@ exports.UserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin) {
     let userId = await this._createUser({ fullName, phone, password, agreedToTocDatetimeStamp });
 
     let verificationLink = await this._createPhoneVerificationRequest({ phone, userId });
-    this._sendPhoneVerificationSms({ phone, verificationLink }) // willingly not awaiting
+    this._sendPhoneVerificationSms({ phone, verificationLink });
 
     return { status: "success", userId };
   }

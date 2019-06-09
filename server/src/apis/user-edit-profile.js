@@ -50,7 +50,7 @@ exports.UserEditProfileApi = class extends Api.mixin(SecurityMixin, UserMixin) {
       this.ensureUpdate('user', result);
 
       let verificationLink = await this._createPhoneVerificationRequest({ phone, userId });
-      this._generatePhoneVerificationLink({ phone, verificationLink });
+      this._sendPhoneVerificationSms({ phone, verificationLink });
     }
 
     return true;
