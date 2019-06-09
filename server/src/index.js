@@ -114,7 +114,7 @@ const { ShopGetOutletDetailsApi } = require('./apis/shop-get-outlet-details');
 
 let { InternalStatusApi } = require('./legacy-apis/internal--status');
 
-let { AdminLoginApi } = require('./legacy-apis/admin-login');
+let { AdminLoginApi } = require('./apis/admin-login');
 let { AdminGetOutgoingSmsListApi } = require('./apis/admin-get-outgoing-sms-list');
 let { AdminSetOutgoingSmsStatusApi } = require('./apis/admin-set-outgoing-sms-status');
 let { AdminGetOutgoingEmailListApi } = require('./apis/admin-get-outgoing-email-list');
