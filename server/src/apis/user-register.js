@@ -3,7 +3,6 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
-const { generateRandomString } = require('./../utils/random-string');
 const { SecurityMixin } = require('./mixins/security-mixin');
 const { UserMixin } = require('./mixins/user-mixin');
 
@@ -28,16 +27,6 @@ exports.UserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin) {
     let passwordHash = this._makeHash(password);
     let userId = await this.database.user.create({ fullName, phone, passwordHash, agreedToTocDatetimeStamp });
     return userId;
-  }
-
-  async _createPhoneVerificationRequest({ phone, userId }) {
-    do {
-      var verificationToken = generateRandomString(16);
-      var isUnique = await this.database.phoneVerificationRequest.isVerificationTokenUnique({ verificationToken });
-    } while (!isUnique);
-    await this.database.phoneVerificationRequest.create({ userId, phone, origin: 'user-register', verificationToken });
-    let verificationLink = this._generatePhoneVerificationLink({ verificationToken });
-    return { verificationLink };
   }
 
   async handle({ body }) {
