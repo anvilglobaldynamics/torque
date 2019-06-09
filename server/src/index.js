@@ -114,13 +114,13 @@ const { ShopGetOutletDetailsApi } = require('./apis/shop-get-outlet-details');
 
 let { InternalStatusApi } = require('./legacy-apis/internal--status');
 
-let { AdminLoginApi } = require('./apis/admin-login');
-let { AdminGetOutgoingSmsListApi } = require('./apis/admin-get-outgoing-sms-list');
-let { AdminSetOutgoingSmsStatusApi } = require('./apis/admin-set-outgoing-sms-status');
-let { AdminGetOutgoingEmailListApi } = require('./apis/admin-get-outgoing-email-list');
-let { AdminSetOutgoingEmailStatusApi } = require('./apis/admin-set-outgoing-email-status');
-let { AdminGetAggregatedUserListApi } = require('./apis/admin-get-aggregated-user-list');
-let { AdminSetUserBanningStatusApi } = require('./apis/admin-set-user-banning-status');
+const { AdminLoginApi } = require('./apis/admin-login');
+const { AdminGetOutgoingSmsListApi } = require('./apis/admin-get-outgoing-sms-list');
+const { AdminSetOutgoingSmsStatusApi } = require('./apis/admin-set-outgoing-sms-status');
+const { AdminGetOutgoingEmailListApi } = require('./apis/admin-get-outgoing-email-list');
+const { AdminSetOutgoingEmailStatusApi } = require('./apis/admin-set-outgoing-email-status');
+const { AdminGetAggregatedUserListApi } = require('./apis/admin-get-aggregated-user-list');
+const { AdminSetUserBanningStatusApi } = require('./apis/admin-set-user-banning-status');
 const { AdminGetOrganizationApi } = require('./apis/admin-get-organization');
 const { AdminAssignPackageToOrganizationApi } = require('./apis/admin-assign-package-to-organization');
 const { AdminListOrganizationPackagesApi } = require('./apis/admin-list-organization-packages');
