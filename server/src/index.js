@@ -14,10 +14,10 @@ const { TemplateManager } = require('./template-manager');
 const { FixtureManager } = require('./fixture-manager');
 const { DatabaseService } = require('./database-service');
 
-let { UserRegisterApi } = require('./legacy-apis/user-register');
+const { UserRegisterApi } = require('./apis/user-register');
 const { UserLoginApi } = require('./apis/user-login');
 const { UserAssertApiKeyApi } = require('./apis/user-assert-api-key');
-let { UserLogoutApi } = require('./legacy-apis/user-logout');
+const { UserLogoutApi } = require('./apis/user-logout');
 let { VerifyEmailApi } = require('./legacy-apis/verify-email');
 let { VerifyPhoneApi } = require('./legacy-apis/verify-phone');
 let { UserChangePasswordApi } = require('./legacy-apis/user-change-password');
