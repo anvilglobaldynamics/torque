@@ -79,5 +79,19 @@
       "maximumOutlets": 1,
       "maximumEmployees": 10
     }
+  },
+  {
+    "code": "R-SGL-01",
+    "name": "Spark Gear Ltd. Retail Package",
+    "price": 0,
+    "duration": {
+      "months": 1,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 1,
+      "maximumWarehouses": 1,
+      "maximumEmployees": 5
+    }
   }
 ]
