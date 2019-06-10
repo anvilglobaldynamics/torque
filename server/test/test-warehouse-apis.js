@@ -181,7 +181,7 @@ describe('Warehouse', _ => {
       json: {
         apiKey: adminApiKey,
         organizationId,
-        packageCode: "R-ME03",
+        packageCode: "R-U01",
         paymentReference: "joi test"
       }
     }, (err, response, body) => {
