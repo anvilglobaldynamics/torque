@@ -1258,6 +1258,7 @@ exports.validateSalesSchema = (doc) => {
     outletId: Joi.number().max(999999999999999).required(),
     customerId: Joi.number().max(999999999999999).allow(null).required(),
 
+    salesNumber: Joi.number().max(999999999999999).required(),
     productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
 
     productList: Joi.array().required().items(
@@ -1360,6 +1361,7 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
       )
     }),
 
+    salesNumber: Joi.number().max(999999999999999).required(),
     productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
 
     productList: Joi.array().required().items(
