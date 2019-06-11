@@ -1758,6 +1758,7 @@ exports.validateReportCollectionDetailsApiSuccessResponse = (doc) => {
 exports.validateCollectionSchema = (doc) => {
   let schema = Joi.object().keys({
     salesId: Joi.number().max(999999999999999).required(),
+    salesNumber: Joi.number().max(999999999999999).required(),
     collectedAmount: Joi.number().max(999999999999999).required(),
     collectedByUserId: Joi.number().max(999999999999999).required(),
     collectedDatetimeStamp: Joi.number().max(999999999999999).required(),

@@ -93,7 +93,7 @@ exports.SalesCollection = class extends Collection {
   // get deletionIndicatorKey() { return 'isDeleted'; }
 
   async create({ organizationId, outletId, customerId, productList, serviceList, payment, assistedByEmployeeId, wasOfflineSale = false, productsSelectedFromWarehouseId }) {
-    let salesNumber = await this.autoGenerateOrganizationSpecificNumber({ organizationId, fieldName: 'sales' });
+    let salesNumber = await this.autoGenerateOrganizationSpecificNumber({ organizationId, fieldName: 'salesNumberSeed' });
     return await this._insert({
       outletId,
       customerId,
@@ -131,19 +131,22 @@ exports.SalesCollection = class extends Collection {
 
   async listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, searchString }) {
 
-    let filterBySalesId = null;
+    let filterBySalesNumber = null;
     if (searchString) {
       if (parseInt(searchString) >= 0) {
-        filterBySalesId = parseInt(searchString);
+        filterBySalesNumber = parseInt(searchString);
       }
     }
 
     let query = { $and: [] };
 
-    // NOTE: If filterBySalesId is present, other filters must not take any affect.
-    if (filterBySalesId) {
+    // NOTE: If filterBySalesNumber is present, other filters must not take any affect.
+    if (filterBySalesNumber) {
 
-      query.$and.push({ id: filterBySalesId });
+      query.$and.push({
+        salesNumber: filterBySalesNumber,
+        outletId: { $in: outletIdList }
+      });
 
     } else {
 
@@ -194,36 +197,25 @@ exports.SalesCollection = class extends Collection {
 
   async listByFiltersForCollectionReport({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }) {
 
-    let filterBySalesId = null;
-
     let query = { $and: [] };
 
-    // NOTE: If filterBySalesId is present, other filters must not take any affect.
-    if (filterBySalesId) {
+    query.$and.push({
+      outletId: { $in: outletIdList }
+    });
 
-      query.$and.push({ id: filterBySalesId });
-
-    } else {
-
-      query.$and.push({
-        outletId: { $in: outletIdList }
-      });
-
-      query.$and.push({
-        'payment.paymentList.createdDatetimeStamp': {
-          $gte: fromDate,
-          $lte: toDate
-        }
-      });
-
-      if (shouldFilterByOutlet) {
-        query.$and.push({ outletId });
+    query.$and.push({
+      'payment.paymentList.createdDatetimeStamp': {
+        $gte: fromDate,
+        $lte: toDate
       }
+    });
 
-      if (shouldFilterByCustomer) {
-        query.$and.push({ customerId });
-      }
+    if (shouldFilterByOutlet) {
+      query.$and.push({ outletId });
+    }
 
+    if (shouldFilterByCustomer) {
+      query.$and.push({ customerId });
     }
 
     return await this._find(query);
