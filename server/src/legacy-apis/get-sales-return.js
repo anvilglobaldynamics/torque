@@ -51,7 +51,11 @@ exports.GetSalesReturnApi = class extends collectionCommonMixin(LegacyApi) {
   _getSalesReturn({ salesReturnId }, cbfn) {
     this.legacyDatabase.salesReturn.findById({ salesReturnId }, (err, salesReturn) => {
       if (!this._ensureDoc(err, salesReturn, "SALES_RETURN_INVALID", "Sales return not found")) return;
-      return cbfn(salesReturn);
+      this.legacyDatabase.sales.findById({ salesId: salesReturn.salesId }, (err, sales) => {
+        if (!this._ensureDoc(err, sales, "SALES_INVALID", "Sales not found")) return;
+        salesReturn.salesNumber = sales.salesNumber;
+        return cbfn(salesReturn);
+      });
     });
   }
 
