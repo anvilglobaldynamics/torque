@@ -1258,6 +1258,7 @@ exports.validateSalesSchema = (doc) => {
     outletId: Joi.number().max(999999999999999).required(),
     customerId: Joi.number().max(999999999999999).allow(null).required(),
 
+    salesNumber: Joi.number().max(999999999999999).required(),
     productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
 
     productList: Joi.array().required().items(
@@ -1360,6 +1361,7 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
       )
     }),
 
+    salesNumber: Joi.number().max(999999999999999).required(),
     productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
 
     productList: Joi.array().required().items(
@@ -1531,6 +1533,8 @@ exports.validateSalesReturnSchema = (doc) => {
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
     salesId: Joi.number().max(999999999999999).required(),
+    salesNumber: Joi.number().max(999999999999999).required(),
+
     returnedProductList: Joi.array().items(
       Joi.object().keys({
         productId: Joi.number().max(999999999999999).required(),
@@ -1557,6 +1561,8 @@ exports.validateSalesReturnSchemaWhenListObj = (doc) => {
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
     salesId: Joi.number().max(999999999999999).required(),
+    salesNumber: Joi.number().max(999999999999999).required(),
+
     returnedProductList: Joi.array().items(
       Joi.object().keys({
         productId: Joi.number().max(999999999999999).required(),
@@ -1756,6 +1762,7 @@ exports.validateReportCollectionDetailsApiSuccessResponse = (doc) => {
 exports.validateCollectionSchema = (doc) => {
   let schema = Joi.object().keys({
     salesId: Joi.number().max(999999999999999).required(),
+    salesNumber: Joi.number().max(999999999999999).required(),
     collectedAmount: Joi.number().max(999999999999999).required(),
     collectedByUserId: Joi.number().max(999999999999999).required(),
     collectedDatetimeStamp: Joi.number().max(999999999999999).required(),

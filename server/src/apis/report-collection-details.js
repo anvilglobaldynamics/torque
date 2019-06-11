@@ -96,6 +96,7 @@ exports.ReportCollectionDetailsApi = class extends Api {
     salesList.forEach(sales => {
       sales.payment.paymentList.forEach(payment => {
         collectionList.push({
+          salesNumber: sales.salesNumber,
           salesId: sales.id,
           collectedAmount: payment.paidAmount,
           collectedByUserId: payment.acceptedByUserId,

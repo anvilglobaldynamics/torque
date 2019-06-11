@@ -20,7 +20,7 @@ method: `POST`
   toDate: Joi.number().max(999999999999999).required(),
 
   includeExtendedInformation: Joi.boolean().optional(),
-  searchString: Joi.string().min(0).max(64).allow('').optional() // NOTE: searchString is currently used for salesId. We can extend it for other purposes later
+  searchString: Joi.string().min(0).max(64).allow('').optional() // NOTE: searchString is currently used for salesNumber. We can extend it for other purposes later
 }
 ```
 
@@ -57,6 +57,7 @@ Possible Error Codes:
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).required(),
 
+      salesNumber: Joi.number().max(999999999999999).required(),
       productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
 
       customer: Joi.object().keys({

@@ -261,7 +261,7 @@
       <template is="dom-if" if="[[$equals(defaultPrinterFormat, 'slim')]]">
         <div class="slim-report report">
           <div class="header vertical layout">
-            <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.id]]</div>
+            <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.salesNumber]]</div>
             <div class="date"><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
             <div>
               <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
@@ -403,7 +403,7 @@
       <template is="dom-if" if="[[$equals(defaultPrinterFormat, 'a4')]]">
         <div class="a4-report report">
           <div class="header vertical layout">
-            <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.id]]</div>
+            <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.salesNumber]]</div>
             <div class="horizontal layout">
               <div>
                 <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>

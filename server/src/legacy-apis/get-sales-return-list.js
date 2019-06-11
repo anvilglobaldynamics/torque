@@ -59,6 +59,10 @@ exports.GetSalesReturnListApi = class extends outletCommonMixin(customerCommonMi
         if (err) return this.fail(err);
         let salesIdList = salesList.map(sales => sales.id);
         this.legacyDatabase.salesReturn.listByFilters({ salesIdList, fromDate, toDate }, (err, salesReturnList) => {
+          salesReturnList.forEach(salesReturn => {
+            let sales = salesList.find(sales => sales.id === salesReturn.salesId);
+            salesReturn.salesNumber = sales.salesNumber;
+          });
           return cbfn(salesReturnList);
         });
       });
