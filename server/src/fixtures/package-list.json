@@ -90,7 +90,7 @@
     },
     "limits": {
       "maximumOutlets": 1,
-      "maximumWarehouses": 1,
+      "maximumWarehouses": 0,
       "maximumEmployees": 5
     }
   }
