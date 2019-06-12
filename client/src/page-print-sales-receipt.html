@@ -726,7 +726,7 @@
 
       $calculateIndividualProductPrice(product) {
         let { salePrice, count } = product;
-        return this.$round(salePrice);
+        return this.$round(salePrice * count);
       }
 
       $calculateIndividualServicePrice(service) {
