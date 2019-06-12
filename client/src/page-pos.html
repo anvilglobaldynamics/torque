@@ -925,6 +925,9 @@
       }
 
       _fetchWarehouseList(cbfn) {
+        if (!this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')) {
+          return cbfn([]);
+        }
         let data = { organizationId: this.app.organization.id };
         this.app.callGetWarehouseListApi(data, (err, response) => {
           if (err) return;
