@@ -724,7 +724,8 @@
     "vat": "VAT",
     "serviceCharge": "Service Charge",
     "dueAmount": "Due",
-    "previousBalance": "Previous Balance"
+    "previousBalance": "Previous Balance",
+    "salesCount": "Sales"
   },
   "inventoriesReport": {
     "inventoriesReportTitle": "Inventories Report",

@@ -723,7 +723,8 @@
     "vat": "ভ্যাট",
     "serviceCharge": "সেবা মূল্য",
     "dueAmount": "বাকি",
-    "previousBalance": "পূর্বের হিসাব"
+    "previousBalance": "পূর্বের হিসাব",
+    "salesCount": "টি বিক্রয়"
   },
   "inventoriesReport": {
     "inventoriesReportTitle": "পণ্য তালিকার বিবরণ",
