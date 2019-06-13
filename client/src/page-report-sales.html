@@ -166,7 +166,7 @@
           <div class="hr hr-mt"></div>
           <div class="horizontal layout center item wrap">
             <div class="flex">
-              <strong>[[verses.salesReport.total]]</strong>
+              <strong>[[verses.salesReport.total]] ([[salesList.length]] [[verses.salesReport.salesCount]])</strong>
             </div>
             <div>
               <strong>[[app.settings.monetaryUnit]]</strong>
@@ -233,7 +233,7 @@
             <div class="horizontal layout center item wrap">
               <div class="flex">
                 <div class="id">
-                  <strong>[[verses.salesReport.sales]] #[[sales.id]]</strong> [[$mkDate(sales.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]
+                  <strong>[[verses.salesReport.sales]] #[[sales.salesNumber]]</strong> [[$mkDate(sales.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]
                 </div>
                 <template is="dom-if" if="[[sales.customer]]">
                   <div class="description">

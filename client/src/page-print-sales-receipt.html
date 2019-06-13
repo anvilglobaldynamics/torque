@@ -261,7 +261,7 @@
       <template is="dom-if" if="[[$equals(defaultPrinterFormat, 'slim')]]">
         <div class="slim-report report">
           <div class="header vertical layout">
-            <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.id]]</div>
+            <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.salesNumber]]</div>
             <div class="date"><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
             <div>
               <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
@@ -307,8 +307,8 @@
                     </template>
                   </td>
                   <td class="quantitive-cell">[[product.count]] [[product.unit]]</td>
-                  <!-- <td class="monetary-cell">[[product.salePrice]] [[app.settings.monetaryUnit]]</td> -->
-                  <td class="monetary-cell">[[$calculateIndividualProductPrice(product)]] </td>
+                  <td class="monetary-cell">[[product.salePrice]] [[app.settings.monetaryUnit]]</td>
+                  <!-- <td class="monetary-cell">[[$calculateIndividualProductPrice(product)]] </td> -->
                 </tr>
               </template>
 
@@ -403,7 +403,7 @@
       <template is="dom-if" if="[[$equals(defaultPrinterFormat, 'a4')]]">
         <div class="a4-report report">
           <div class="header vertical layout">
-            <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.id]]</div>
+            <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.salesNumber]]</div>
             <div class="horizontal layout">
               <div>
                 <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
@@ -726,7 +726,7 @@
 
       $calculateIndividualProductPrice(product) {
         let { salePrice, count } = product;
-        return this.$round(salePrice);
+        return this.$round(salePrice * count);
       }
 
       $calculateIndividualServicePrice(service) {

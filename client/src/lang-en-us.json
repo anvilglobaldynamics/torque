@@ -539,7 +539,7 @@
     "noOutletSelected": "No outlet selected (Anonymous Sale Return)",
     "removeOutlet": "Remove Outlet",
     "changeOutlet": "Change Outlet",
-    "salesId": "Sales Id",
+    "salesId": "Sales Number",
     "credited": "Credited",
     "salesReturnTitle": "Sales Return",
     "creditedAmount": "Credited Amount",
@@ -724,7 +724,8 @@
     "vat": "VAT",
     "serviceCharge": "Service Charge",
     "dueAmount": "Due",
-    "previousBalance": "Previous Balance"
+    "previousBalance": "Previous Balance",
+    "salesCount": "Sales"
   },
   "inventoriesReport": {
     "inventoriesReportTitle": "Inventories Report",

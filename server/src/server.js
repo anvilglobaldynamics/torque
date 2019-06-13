@@ -231,6 +231,7 @@ class Server {
   }
 
   registerPostApi(path, ApiClass) {
+    if (!ApiClass) throw new Error("Expected ApiClass to be not null/undefined");
     this._expressApp.post(path, jsonParser, (req, res) => {
       setTimeout(() => {
         this.logger.info('POST', req.url);

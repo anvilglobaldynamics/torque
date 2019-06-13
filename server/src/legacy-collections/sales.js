@@ -22,10 +22,11 @@ exports.SalesCollection = class extends LegacyCollection {
     this.joiSchema = Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
-      
+
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
-
+      
+      salesNumber: Joi.number().max(999999999999999).required(),
       productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
 
       productList: Joi.array().min(1).items(
@@ -100,22 +101,23 @@ exports.SalesCollection = class extends LegacyCollection {
     ];
   }
 
-  create({ outletId, customerId, productList, payment, assistedByEmployeeId }, cbfn) {
-    let doc = {
-      outletId,
-      customerId,
-      productList,
-      assistedByEmployeeId,
-      payment,
+  // NOTE: No longer safe to use
+  // create({ outletId, customerId, productList, payment, assistedByEmployeeId }, cbfn) {
+  //   let doc = {
+  //     outletId,
+  //     customerId,
+  //     productList,
+  //     assistedByEmployeeId,
+  //     payment,
 
-      isModified: false,
-      isDeleted: false,
-      isDiscarded: false
-    }
-    this._insert(doc, (err, id) => {
-      return cbfn(err, id);
-    });
-  }
+  //     isModified: false,
+  //     isDeleted: false,
+  //     isDiscarded: false
+  //   }
+  //   this._insert(doc, (err, id) => {
+  //     return cbfn(err, id);
+  //   });
+  // }
 
   findById({ salesId }, cbfn) {
     this._findOne({ id: salesId }, cbfn);

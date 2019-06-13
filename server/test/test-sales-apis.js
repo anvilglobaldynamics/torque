@@ -84,6 +84,7 @@ let warehouseId = null;
 let productBlueprintId = null;
 let customerId = null;
 let salesId = null;
+let salesNumber = null;
 let salesData = null;
 
 let outletInventoryProductList = null;
@@ -819,6 +820,7 @@ describe('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetSalesApiSuccessResponse(body);
       validateSalesSchema(body.sales);
+      salesNumber = body.sales.salesNumber;
       testDoneFn();
     });
 
@@ -840,7 +842,7 @@ describe('Sales', _ => {
         toDate: (new Date()).getTime(),
         includeExtendedInformation: true,
 
-        searchString: String(salesId)
+        searchString: String(salesNumber)
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

@@ -265,6 +265,119 @@ describe('user apis (1)', _ => {
 
   });
 
+  it('api/user-login (Correct, Using Changed Email and Changed Password)', testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: changedEmail,
+        password: changedPassword
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string')
+      expect(body).to.have.property('sessionId').that.is.a('number')
+      expect(body).to.have.property('warning').that.is.an('array');
+      // expect(body.warning).to.include('You have less than 24 hours to verify your email address.');
+      // expect(body.warning).to.include(`You have less than 1 hour to verify your phone number "${phone}".`);
+      expect(body).to.have.property('user').that.is.an('object')
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/user-set-email', testDoneFn => {
+
+    callApi('api/user-set-email', {
+      json: {
+        apiKey: apiKey,
+        email: (changedEmail + 'x'),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/verify-email', testDoneFn => {
+
+    getDatabase().find('email-verification-request', { forEmail: (changedEmail + 'x') }, (err, docList) => {
+      if (err) throw err;
+      if (docList.length < 1) throw new Error('Expected doc');
+      let emailVerificationRequest = docList[0];
+
+      require('./utils').callGetApi('verify-email/' + emailVerificationRequest.verificationToken, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.contain('Email Verification Successful')
+        testDoneFn();
+      });
+
+    });
+
+  });
+
+  it('api/user-login (Correct, Using Changed Email and Changed Password)', testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: changedEmail + 'x',
+        password: changedPassword
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string')
+      expect(body).to.have.property('sessionId').that.is.a('number')
+      expect(body).to.have.property('warning').that.is.an('array');
+      // expect(body.warning).to.include('You have less than 24 hours to verify your email address.');
+      // expect(body.warning).to.include(`You have less than 1 hour to verify your phone number "${phone}".`);
+      expect(body).to.have.property('user').that.is.an('object')
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+
+  it('api/user-set-email', testDoneFn => {
+
+    callApi('api/user-set-email', {
+      json: {
+        apiKey: apiKey,
+        email: (changedEmail),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/verify-email', testDoneFn => {
+
+    getDatabase().find('email-verification-request', { forEmail: (changedEmail) }, (err, docList) => {
+      if (err) throw err;
+      if (docList.length < 1) throw new Error('Expected doc');
+      let emailVerificationRequest = docList[0];
+
+      require('./utils').callGetApi('verify-email/' + emailVerificationRequest.verificationToken, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.contain('Email Verification Successful')
+        testDoneFn();
+      });
+
+    });
+
+  });
+
   // ================================================== Login
 
   it('api/user-login (Correct, Using Changed Email and Changed Password)', testDoneFn => {

@@ -539,7 +539,7 @@
     "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি",
     "removeOutlet": "দোকান সরান",
     "changeOutlet": "দোকান পরিবর্তন করুন",
-    "salesId": "বিক্রয় আইডি",
+    "salesId": "বিক্রয় নং",
     "credited": "জমা",
     "salesReturnTitle": "বিক্রয় ফেরত",
     "creditedAmount": "ফেরতকৃত অর্থ",
@@ -723,7 +723,8 @@
     "vat": "ভ্যাট",
     "serviceCharge": "সেবা মূল্য",
     "dueAmount": "বাকি",
-    "previousBalance": "পূর্বের হিসাব"
+    "previousBalance": "পূর্বের হিসাব",
+    "salesCount": "টি বিক্রয়"
   },
   "inventoriesReport": {
     "inventoriesReportTitle": "পণ্য তালিকার বিবরণ",

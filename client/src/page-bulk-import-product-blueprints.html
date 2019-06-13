@@ -291,6 +291,9 @@
       }
 
       _parseCsv(content, cbfn) {
+        // NOTE: The CSV object in question comes from csv.min.js
+        // The file has been heavily customized manually after copying
+        // from vendor.
         return cbfn(null, CSV.parse(content));
       }
 
@@ -332,7 +335,13 @@
           if (typeof (rawRow[6]) !== 'string') {
             rawRow[6] = String(rawRow[6]);
           }
-        })
+        });
+        // Coerce fields that are expected to be number (from string)
+        rawRowList.forEach(rawRow => {
+          rawRow[2] = parseFloat(rawRow[2]);
+          rawRow[3] = parseFloat(rawRow[3]);
+          rawRow[4] = parseFloat(rawRow[4]);
+        });
         cbfn(null, rawRowList);
       }
 
