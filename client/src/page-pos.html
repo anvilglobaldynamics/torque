@@ -601,15 +601,24 @@
             this.warehouseList = warehouseList;
           });
         }
-        this.delay(300, () => {
-          this.isReady = true;
+        this.delay(10, () => {
           if (!this._skipToProductOrServiceSelectionPage()) {
-            this.elem('#sale-and-print-button').scrollIntoView({ block: "end", inline: "nearest" });
-            this.delay(100, () => {
-              this.elem('.payment--paidAmount').click();
-              this.elem('.payment--paidAmount').focus();
+            this.isReady = true;
+            this.delay(300, () => {
+              this.elem('#sale-and-print-button').scrollIntoView({ block: "end", inline: "nearest" });
+              this.delay(100, () => {
+                let input = this.elem('.payment--paidAmount');
+                input.click();
+                this.delay(50, () => {
+                  input.focus();
+                  this.delay(50, () => {
+                    input.inputElement.inputElement.select();
+                  });
+                });
+              });
             });
-          };
+
+          }
         });
       }
 
