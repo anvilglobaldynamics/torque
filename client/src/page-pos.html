@@ -715,6 +715,7 @@
       }
 
       _processDiscountPresetList(cbfn) {
+        if (this.isInOfflineMode) return cbfn(null);
         this._fetchDiscountPresetList(discountPresetList => {
           this.discountPresetList = discountPresetList;
           return cbfn();
