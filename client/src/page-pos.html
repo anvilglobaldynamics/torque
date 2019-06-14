@@ -449,7 +449,7 @@
             </div>
 
             <div class="horizontal layout m-top-16">
-              <paper-button raised class="primary flex" on-tap="saveSaleAndPrintTapped">[[verses.pos.confirmSalesAndPrint]]</paper-button>
+              <paper-button id="sale-and-print-button" raised class="primary flex" on-tap="saveSaleAndPrintTapped">[[verses.pos.confirmSalesAndPrint]]</paper-button>
             </div>
 
           </div>
@@ -599,7 +599,13 @@
         }
         this.delay(300, () => {
           this.isReady = true;
-          this._skipToProductOrServiceSelectionPage();
+          if (!this._skipToProductOrServiceSelectionPage()) {
+            this.elem('#sale-and-print-button').scrollIntoView({ block: "end", inline: "nearest" });
+            this.delay(100, () => {
+              this.elem('.payment--paidAmount').click();
+              this.elem('.payment--paidAmount').focus();
+            });
+          };
         });
       }
 
@@ -637,13 +643,14 @@
           window.isComingFromProductOrServiceSelection = false;
           return;
         }
+        if (this.productList.length > 0 || this.serviceList.length > 0) return;
         if (this.hasModule('MOD_PRODUCT')) {
           this.addProductTapped();
         }
         if (this.hasModule('MOD_SERVICE')) {
           this.addServiceTapped();
         }
-
+        return true;
       }
 
       // region: pos =================================
