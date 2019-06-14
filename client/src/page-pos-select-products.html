@@ -221,6 +221,7 @@
 
       onNavigateOut() {
         super.onNavigateOut();
+        window.isComingFromProductOrServiceSelection = true;
         this.app.popPageTitle();
       }
 

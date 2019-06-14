@@ -599,6 +599,7 @@
         }
         this.delay(300, () => {
           this.isReady = true;
+          this._skipToProductOrServiceSelectionPage();
         });
       }
 
@@ -626,6 +627,23 @@
 
       onOrganizationChange(organization) {
         this.organization = organization;
+      }
+
+      _skipToProductOrServiceSelectionPage() {
+        if (this.app.pageName !== 'pos') return;
+        if (this.hasModule('MOD_PRODUCT') && this.hasModule('MOD_SERVICE')) return;
+        if (this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')) return;
+        if (window.isComingFromProductOrServiceSelection) {
+          window.isComingFromProductOrServiceSelection = false;
+          return;
+        }
+        if (this.hasModule('MOD_PRODUCT')) {
+          this.addProductTapped();
+        }
+        if (this.hasModule('MOD_SERVICE')) {
+          this.addServiceTapped();
+        }
+
       }
 
       // region: pos =================================
