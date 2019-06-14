@@ -376,16 +376,20 @@
                 <div slot="suffix">[[app.settings.monetaryUnit]]</div>
               </paper-input>
 
-              <template is="dom-if" if="{{assignedAssistedByEmployee}}">
-                <div class="employee-icon-container-active" on-tap="assignAssistedByEmployeeTapped">
-                  <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
-                </div>
-              </template>
+              <template is="dom-if" if="{{!isInOfflineMode}}">
 
-              <template is="dom-if" if="{{!assignedAssistedByEmployee}}">
-                <div class="employee-icon-container" on-tap="assignAssistedByEmployeeTapped">
-                  <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
-                </div>
+                <template is="dom-if" if="{{assignedAssistedByEmployee}}">
+                  <div class="employee-icon-container-active" on-tap="assignAssistedByEmployeeTapped">
+                    <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
+                  </div>
+                </template>
+
+                <template is="dom-if" if="{{!assignedAssistedByEmployee}}">
+                  <div class="employee-icon-container" on-tap="assignAssistedByEmployeeTapped">
+                    <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
+                  </div>
+                </template>
+
               </template>
 
             </div>
