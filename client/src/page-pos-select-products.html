@@ -207,6 +207,11 @@
         this.onOfflineDataChange();
         this.app.pushPageTitle(this.app.verses.posSelectProduct.posSelectProductTitle);
         if (!this._ensureAccess()) return;
+        if (window.isComingFromScanIdentifierCode) {
+          window.isComingFromScanIdentifierCode = false;
+          this.backButtonOnTopBarPressed();
+          return;
+        }
         if (!('inventory' in this.params)) {
           let message = this.app.verses.general.pageCannotBeDisplayed;
           this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
