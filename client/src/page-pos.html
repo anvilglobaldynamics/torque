@@ -3,6 +3,7 @@
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
@@ -227,7 +228,8 @@
                   </div>
                   <div class="horizontal layout center">
                     <div class="description">[[product.selectedCount]] [[product.unit]] @&nbsp;</div>
-                    <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" type="number" auto-validate min="[[product.minSalePrice]]"></paper-input>
+                    <!-- <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" type="number" auto-validate min="[[product.minSalePrice]]"></paper-input> -->
+                    <div>[[product.salePrice]]</div>
                     <div class="description">[[app.settings.monetaryUnit]]</div>
                   </div>
                 </div>
@@ -340,30 +342,27 @@
             </div>
 
             <div class="individual-calculation-field-container">
-              <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLAT_DISCOUNT', organization)]]">
 
-                <div class="vertical layout m-bottom-18">
+              <div class="vertical layout m-bottom-18">
 
-                  <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discount]]" class="mr-4">
-                    <paper-listbox slot="dropdown-content" selected="{{selectedDiscountPreset}}" attr-for-selected="name">
-                      <paper-item name="--no-discount">[[verses.pos.noDiscountApplicable]]</paper-item>
-                      <template is="dom-repeat" items="[[discountPresetList]]" as="discountPreset">
-                        <paper-item name="[[discountPreset.id]]">
-                          <div class="name">[[discountPreset.name]]</div>
-                          <template is="dom-if" if="[[$equals(discountPreset.discountType, 'percent')]]">
-                            <div>&nbsp;([[discountPreset.discountValue]]%)</div>
-                          </template>
-                          <template is="dom-if" if="[[$equals(discountPreset.discountType, 'fixed')]]">
-                            <div>&nbsp;([[discountPreset.discountValue]] [[app.settings.monetaryUnit]])</div>
-                          </template>
-                        </paper-item>
-                      </template>
-                    </paper-listbox>
-                  </paper-dropdown-menu>
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discount]]" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{selectedDiscountPreset}}" attr-for-selected="name">
+                    <paper-item name="--no-discount">[[verses.pos.noDiscountApplicable]]</paper-item>
+                    <template is="dom-repeat" items="[[discountPresetList]]" as="discountPreset">
+                      <paper-item name="[[discountPreset.id]]">
+                        <div class="name">[[discountPreset.name]]</div>
+                        <template is="dom-if" if="[[$equals(discountPreset.discountType, 'percent')]]">
+                          <div>&nbsp;([[discountPreset.discountValue]]%)</div>
+                        </template>
+                        <template is="dom-if" if="[[$equals(discountPreset.discountType, 'fixed')]]">
+                          <div>&nbsp;([[discountPreset.discountValue]] [[app.settings.monetaryUnit]])</div>
+                        </template>
+                      </paper-item>
+                    </template>
+                  </paper-listbox>
+                </paper-dropdown-menu>
 
-                </div>
-
-              </template>
+              </div>
 
               [[verses.pos.discountedAmount]]:
               <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
@@ -376,16 +375,20 @@
                 <div slot="suffix">[[app.settings.monetaryUnit]]</div>
               </paper-input>
 
-              <template is="dom-if" if="{{assignedAssistedByEmployee}}">
-                <div class="employee-icon-container-active" on-tap="assignAssistedByEmployeeTapped">
-                  <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
-                </div>
-              </template>
+              <template is="dom-if" if="{{!isInOfflineMode}}">
 
-              <template is="dom-if" if="{{!assignedAssistedByEmployee}}">
-                <div class="employee-icon-container" on-tap="assignAssistedByEmployeeTapped">
-                  <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
-                </div>
+                <template is="dom-if" if="{{assignedAssistedByEmployee}}">
+                  <div class="employee-icon-container-active" on-tap="assignAssistedByEmployeeTapped">
+                    <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
+                  </div>
+                </template>
+
+                <template is="dom-if" if="{{!assignedAssistedByEmployee}}">
+                  <div class="employee-icon-container" on-tap="assignAssistedByEmployeeTapped">
+                    <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
+                  </div>
+                </template>
+
               </template>
 
             </div>
@@ -399,9 +402,31 @@
         <div class="card vertical layout">
           <div class="list">
 
-            <div class="individual-calculation-field-container">
-              [[verses.pos.totalBilled]]:
-              <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
+            <template is="dom-if" if="[[payment.roundedByAmount]]">
+              <div class="individual-calculation-field-container">
+                <div class="horizontal layout center m-top-16">
+                  <div class="flex">
+                    [[verses.sales.totalBillBeforeRounding]]:
+                    <b>{{$round(payment.totalBillBeforeRounding)}} [[app.settings.monetaryUnit]]</b>
+                  </div>
+                </div>
+                <div class="horizontal layout center">
+                  <div class="flex">
+                    [[verses.sales.roundedByAmount]]:
+                    <b>{{$round(payment.roundedByAmount)}} [[app.settings.monetaryUnit]]</b>
+                  </div>
+                  <paper-icon-button on-tap="clearRounderByAmountTapped" icon="clear"></paper-icon-button>
+                </div>
+              </div>
+            </template>
+            <div class="horizontal layout center individual-calculation-field-container">
+              <div class="flex">
+                [[verses.pos.totalBilled]]:
+                <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
+              </div>
+              <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
+                <paper-icon-button on-tap="editTotalBilledTapped" icon="create"></paper-icon-button>
+              </template>
             </div>
 
             <div class="individual-calculation-field-container">
@@ -418,11 +443,10 @@
               </paper-dropdown-menu>
 
               <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
-                <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+                <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
                   <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                 </paper-input>
               </template>
-
 
               <template is="dom-if" if="[[payment.changeAmount]]">
                 <br> [[verses.pos.changeAmount]]:
@@ -449,7 +473,7 @@
             </div>
 
             <div class="horizontal layout m-top-16">
-              <paper-button raised class="primary flex" on-tap="saveSaleAndPrintTapped">[[verses.pos.confirmSalesAndPrint]]</paper-button>
+              <paper-button id="sale-and-print-button" raised class="primary flex" on-tap="saveSaleAndPrintTapped">[[verses.pos.confirmSalesAndPrint]]</paper-button>
             </div>
 
           </div>
@@ -493,6 +517,8 @@
                 discountValue: 0,
                 discountedAmount: 0,
                 serviceChargeAmount: 0,
+                totalBillBeforeRounding: 0,
+                roundedByAmount: 0,
                 totalBilled: null,
                 shouldSaveChangeInAccount: false,
                 paymentMethod: 'cash',
@@ -585,7 +611,6 @@
           if (serviceList) {
             this.serviceList = serviceList;
           }
-
           this._calculatePayment();
         });
         this._processDiscountPresetList(() => {
@@ -597,8 +622,24 @@
             this.warehouseList = warehouseList;
           });
         }
-        this.delay(300, () => {
-          this.isReady = true;
+        this.delay(10, () => {
+          if (!this._skipToProductOrServiceSelectionPage()) {
+            this.isReady = true;
+            this.delay(300, () => {
+              this.elem('#sale-and-print-button').scrollIntoView({ block: "end", inline: "nearest" });
+              this.delay(100, () => {
+                let input = this.elem('.payment--paidAmount');
+                input.click();
+                this.delay(50, () => {
+                  input.focus();
+                  this.delay(50, () => {
+                    input.inputElement.inputElement.select();
+                  });
+                });
+              });
+            });
+
+          }
         });
       }
 
@@ -626,6 +667,24 @@
 
       onOrganizationChange(organization) {
         this.organization = organization;
+      }
+
+      _skipToProductOrServiceSelectionPage() {
+        if (this.app.pageName !== 'pos') return;
+        if (this.hasModule('MOD_PRODUCT') && this.hasModule('MOD_SERVICE')) return;
+        if (this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')) return;
+        if (window.isComingFromProductOrServiceSelection) {
+          window.isComingFromProductOrServiceSelection = false;
+          return;
+        }
+        if (this.productList.length > 0 || this.serviceList.length > 0) return;
+        if (this.hasModule('MOD_PRODUCT')) {
+          this.addProductTapped();
+        }
+        if (this.hasModule('MOD_SERVICE')) {
+          this.addServiceTapped();
+        }
+        return true;
       }
 
       // region: pos =================================
@@ -715,6 +774,7 @@
       }
 
       _processDiscountPresetList(cbfn) {
+        if (this.isInOfflineMode) return cbfn(null);
         this._fetchDiscountPresetList(discountPresetList => {
           this.discountPresetList = discountPresetList;
           return cbfn();
@@ -722,7 +782,7 @@
       }
 
       // main payment calculation method
-      _calculatePayment() {
+      _calculatePayment({ resetRounding = true } = {}) {
         let {
           totalAmount,
           vatAmount,
@@ -730,6 +790,8 @@
           discountValue,
           discountedAmount,
           serviceChargeAmount,
+          totalBillBeforeRounding,
+          roundedByAmount,
           totalBilled,
           shouldSaveChangeInAccount,
           paymentMethod,
@@ -788,6 +850,11 @@
           totalBilled += parseFloat(serviceChargeAmount);
         }
 
+        // take rounding into account
+        if (resetRounding) roundedByAmount = 0;
+        totalBillBeforeRounding = totalBilled;
+        totalBilled = totalBillBeforeRounding - roundedByAmount;
+
         // setting the default paid amount equal to total billed
         if (paymentMethod !== 'cash' && paidAmount < 1) {
           paidAmount = totalBilled;
@@ -813,6 +880,8 @@
           discountValue,
           discountedAmount,
           serviceChargeAmount,
+          totalBillBeforeRounding,
+          roundedByAmount,
           totalBilled,
           paidAmount,
           changeAmount,
@@ -820,6 +889,20 @@
           paymentMethod,
           discountPresetId
         };
+      }
+
+      clearRounderByAmountTapped(e = null) {
+        this.payment.roundedByAmount = 0;
+        this._calculatePayment();
+      }
+
+      editTotalBilledTapped(e = null) {
+        this.app.showModalInput(this.verses.sales.editBill, this.verses.sales.editBillDetails, this.payment.totalBilled, (answer) => {
+          if (parseFloat(answer) > 0) {
+            this.payment.roundedByAmount = Math.max(0, (this.payment.totalBillBeforeRounding - parseFloat(answer)));
+            this._calculatePayment({ resetRounding: false });
+          }
+        });
       }
 
       _processAddSalesOnline(data, cbfn) {
@@ -971,7 +1054,11 @@
 
       genericPaymentInputChanged(e) {
         this.enforceMinMaxOnPaperInput(e);
-        this._calculatePayment();
+        if (e.target.className.indexOf('payment--paidAmount') > -1) {
+          this._calculatePayment({ resetRounding: false });
+        } else {
+          this._calculatePayment();
+        }
       }
 
       backButtonOnTopBarPressed(e = null) {

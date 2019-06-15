@@ -47,6 +47,8 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
         discountValue: Joi.number().max(999999999999999).required(),
         discountedAmount: Joi.number().max(999999999999999).required(),
         serviceChargeAmount: Joi.number().max(999999999999999).required(),
+        totalBillBeforeRounding: Joi.number().max(999999999999999).required(),
+        roundedByAmount: Joi.number().max(999999999999999).required(),
         totalBilled: Joi.number().max(999999999999999).required(), // this is the final amount customer has to pay (regardless of the method)
 
         // NOTE: below is a single payment.
@@ -123,13 +125,13 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
   _standardizePayment({ originalPayment }) {
     let {
       totalAmount, vatAmount, discountPresetId, discountType, discountValue, discountedAmount, serviceChargeAmount,
-      totalBilled,
+      totalBilled, totalBillBeforeRounding, roundedByAmount,
       paymentMethod, paidAmount, changeAmount, shouldSaveChangeInAccount
     } = originalPayment;
 
     let payment = {
       totalAmount, vatAmount, discountPresetId, discountType, discountValue, discountedAmount, serviceChargeAmount,
-      totalBilled,
+      totalBilled, totalBillBeforeRounding, roundedByAmount,
       paymentList: [], totalPaidAmount: 0
     }
 

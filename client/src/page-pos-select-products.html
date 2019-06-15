@@ -81,12 +81,12 @@
                 <div class="horizontal layout item center">
                   <div class="flex" style="min-width: 128px;">
                     <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                    <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">[[product.count]] [[product.unit]]</div>
-
+                    <!-- <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">[[product.count]] [[product.unit]]</div> -->
+                    <!-- 
                     <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
                       <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
-                    </template>
-
+                    </template> 
+                    -->
                     <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                   </div>
                   <div class="horizontal layout wrap center">
@@ -130,16 +130,16 @@
               <div class="horizontal layout item center">
                 <div class="flex" style="min-width: 128px;">
                   <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                  <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.maxAllowedCount)]]">[[product.maxAllowedCount]] [[product.unit]]</div>
+                  <!-- <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.maxAllowedCount)]]">[[product.maxAllowedCount]] [[product.unit]]</div> -->
 
-                  <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                  <!-- <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
                     <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
-                  </template>
+                  </template> -->
 
                   <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                 </div>
-                <div class="horizontal layout wrap center">
-                  <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" on-change="genericSelectedCountInputChanged" type="number" min="1" max="[[product.maxAllowedCount]]" label="[[verses.posSelectProduct.count]]">
+                <div class="horizontal layout center" style="max-width: 220px;">
+                  <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" on-change="genericSelectedCountInputChanged" type="number" min="1" max="99999999999" label="[[verses.posSelectProduct.count]]">
                     <div slot="suffix">&nbsp;[[product.unit]]</div>
                   </paper-input>
                   <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
@@ -207,6 +207,11 @@
         this.onOfflineDataChange();
         this.app.pushPageTitle(this.app.verses.posSelectProduct.posSelectProductTitle);
         if (!this._ensureAccess()) return;
+        if (window.isComingFromScanIdentifierCode) {
+          window.isComingFromScanIdentifierCode = false;
+          this.backButtonOnTopBarPressed();
+          return;
+        }
         if (!('inventory' in this.params)) {
           let message = this.app.verses.general.pageCannotBeDisplayed;
           this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
@@ -221,6 +226,7 @@
 
       onNavigateOut() {
         super.onNavigateOut();
+        window.isComingFromProductOrServiceSelection = true;
         this.app.popPageTitle();
       }
 

@@ -28,7 +28,7 @@ class FixtureManager {
       {
         name: "privilege-list",
         path: "./src/fixtures/privilege-list.json",
-        version: 10
+        version: 12
       },
       {
         name: "package-list",

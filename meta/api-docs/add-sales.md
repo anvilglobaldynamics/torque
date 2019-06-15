@@ -40,6 +40,8 @@ method: `POST`
     discountValue: Joi.number().max(999999999999999).required(),
     discountedAmount: Joi.number().max(999999999999999).required(),
     serviceChargeAmount: Joi.number().max(999999999999999).required(),
+    totalBillBeforeRounding: Joi.number().max(999999999999999).required(),
+    roundedByAmount: Joi.number().max(999999999999999).required(),
     totalBilled: Joi.number().max(999999999999999).required(),
     paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
     paidAmount: Joi.number().max(999999999999999).required(),
