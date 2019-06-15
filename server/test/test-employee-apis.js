@@ -87,7 +87,9 @@ const privilegeObject = {
 
   PRIV_VIEW_CUSTOMER: true,
   PRIV_MODIFY_CUSTOMER: true,
-  PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
+  PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true,
+
+  PRIV_VIEW_REPORTS: true
 };
 
 let apiKey = null;
@@ -100,7 +102,7 @@ let invalidUserId = generateInvalidId();
 let invalidEmploymentId = generateInvalidId();
 let invalidOrganizationId = generateInvalidId();
 
-describe('Employee', _ => {
+describe.only('Employee', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

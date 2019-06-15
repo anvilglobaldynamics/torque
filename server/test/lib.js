@@ -1701,7 +1701,9 @@ exports.validateEmploymentSchema = (doc) => {
 
       PRIV_VIEW_CUSTOMER: Joi.boolean().required(),
       PRIV_MODIFY_CUSTOMER: Joi.boolean().required(),
-      PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: Joi.boolean().required()
+      PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: Joi.boolean().required(),
+
+      PRIV_VIEW_REPORTS: Joi.boolean().required()
     }),
 
     isActive: Joi.boolean().required()
