@@ -307,7 +307,7 @@ const createEmployee = async ({ apiKey, organizationId, i }) => {
       PRIV_ACCESS_POS: true,
       PRIV_VIEW_SALES: true,
       PRIV_MODIFY_SALES: true,
-      PRIV_ALLOW_FLAT_DISCOUNT: true,
+      PRIV_ALLOW_FLEXIBLE_PRICE: false,
       PRIV_VIEW_PURCHASE_PRICE: true,
 
       PRIV_MODIFY_DISCOUNT_PRESETS: true,
