@@ -376,16 +376,20 @@
                 <div slot="suffix">[[app.settings.monetaryUnit]]</div>
               </paper-input>
 
-              <template is="dom-if" if="{{assignedAssistedByEmployee}}">
-                <div class="employee-icon-container-active" on-tap="assignAssistedByEmployeeTapped">
-                  <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
-                </div>
-              </template>
+              <template is="dom-if" if="{{!isInOfflineMode}}">
 
-              <template is="dom-if" if="{{!assignedAssistedByEmployee}}">
-                <div class="employee-icon-container" on-tap="assignAssistedByEmployeeTapped">
-                  <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
-                </div>
+                <template is="dom-if" if="{{assignedAssistedByEmployee}}">
+                  <div class="employee-icon-container-active" on-tap="assignAssistedByEmployeeTapped">
+                    <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
+                  </div>
+                </template>
+
+                <template is="dom-if" if="{{!assignedAssistedByEmployee}}">
+                  <div class="employee-icon-container" on-tap="assignAssistedByEmployeeTapped">
+                    <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
+                  </div>
+                </template>
+
               </template>
 
             </div>
@@ -449,7 +453,7 @@
             </div>
 
             <div class="horizontal layout m-top-16">
-              <paper-button raised class="primary flex" on-tap="saveSaleAndPrintTapped">[[verses.pos.confirmSalesAndPrint]]</paper-button>
+              <paper-button id="sale-and-print-button" raised class="primary flex" on-tap="saveSaleAndPrintTapped">[[verses.pos.confirmSalesAndPrint]]</paper-button>
             </div>
 
           </div>
@@ -597,8 +601,24 @@
             this.warehouseList = warehouseList;
           });
         }
-        this.delay(300, () => {
-          this.isReady = true;
+        this.delay(10, () => {
+          if (!this._skipToProductOrServiceSelectionPage()) {
+            this.isReady = true;
+            this.delay(300, () => {
+              this.elem('#sale-and-print-button').scrollIntoView({ block: "end", inline: "nearest" });
+              this.delay(100, () => {
+                let input = this.elem('.payment--paidAmount');
+                input.click();
+                this.delay(50, () => {
+                  input.focus();
+                  this.delay(50, () => {
+                    input.inputElement.inputElement.select();
+                  });
+                });
+              });
+            });
+
+          }
         });
       }
 
@@ -626,6 +646,24 @@
 
       onOrganizationChange(organization) {
         this.organization = organization;
+      }
+
+      _skipToProductOrServiceSelectionPage() {
+        if (this.app.pageName !== 'pos') return;
+        if (this.hasModule('MOD_PRODUCT') && this.hasModule('MOD_SERVICE')) return;
+        if (this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')) return;
+        if (window.isComingFromProductOrServiceSelection) {
+          window.isComingFromProductOrServiceSelection = false;
+          return;
+        }
+        if (this.productList.length > 0 || this.serviceList.length > 0) return;
+        if (this.hasModule('MOD_PRODUCT')) {
+          this.addProductTapped();
+        }
+        if (this.hasModule('MOD_SERVICE')) {
+          this.addServiceTapped();
+        }
+        return true;
       }
 
       // region: pos =================================
@@ -715,6 +753,7 @@
       }
 
       _processDiscountPresetList(cbfn) {
+        if (this.isInOfflineMode) return cbfn(null);
         this._fetchDiscountPresetList(discountPresetList => {
           this.discountPresetList = discountPresetList;
           return cbfn();
