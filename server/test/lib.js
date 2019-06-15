@@ -1301,6 +1301,8 @@ exports.validateSalesSchema = (doc) => {
       discountValue: Joi.number().max(999999999999999).required(),
       discountedAmount: Joi.number().max(999999999999999).required(),
       serviceChargeAmount: Joi.number().max(999999999999999).required(),
+      totalBillBeforeRounding: Joi.number().max(999999999999999).required(),
+      roundedByAmount: Joi.number().max(999999999999999).required(),
       totalBilled: Joi.number().max(999999999999999).required(),
 
       totalPaidAmount: Joi.number().max(999999999999999).required(),
@@ -1459,6 +1461,8 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
       discountValue: Joi.number().max(999999999999999).required(),
       discountedAmount: Joi.number().max(999999999999999).required(),
       serviceChargeAmount: Joi.number().max(999999999999999).required(),
+      totalBillBeforeRounding: Joi.number().max(999999999999999).required(),
+      roundedByAmount: Joi.number().max(999999999999999).required(),
       totalBilled: Joi.number().max(999999999999999).required(),
 
       totalPaidAmount: Joi.number().max(999999999999999).required(),
