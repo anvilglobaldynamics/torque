@@ -3,6 +3,7 @@
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
@@ -403,9 +404,29 @@
         <div class="card vertical layout">
           <div class="list">
 
-            <div class="individual-calculation-field-container">
-              [[verses.pos.totalBilled]]:
-              <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
+            <template is="dom-if" if="[[payment.roundedByAmount]]">
+              <div class="individual-calculation-field-container">
+                <div class="horizontal layout center m-top-16">
+                  <div class="flex">
+                    Total Bill Before Rounding:
+                    <b>{{$round(payment.totalBillBeforeRounding)}} [[app.settings.monetaryUnit]]</b>
+                  </div>
+                </div>
+                <div class="horizontal layout center">
+                  <div class="flex">
+                    Rounded By Amount:
+                    <b>{{$round(payment.roundedByAmount)}} [[app.settings.monetaryUnit]]</b>
+                  </div>
+                  <paper-icon-button on-tap="clearRounderByAmountTapped" icon="clear"></paper-icon-button>
+                </div>
+              </div>
+            </template>
+            <div class="horizontal layout center individual-calculation-field-container">
+              <div class="flex">
+                [[verses.pos.totalBilled]]:
+                <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
+              </div>
+              <paper-icon-button on-tap="editTotalBilledTapped" icon="create"></paper-icon-button>
             </div>
 
             <div class="individual-calculation-field-container">
@@ -422,11 +443,10 @@
               </paper-dropdown-menu>
 
               <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
-                <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+                <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
                   <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                 </paper-input>
               </template>
-
 
               <template is="dom-if" if="[[payment.changeAmount]]">
                 <br> [[verses.pos.changeAmount]]:
@@ -497,6 +517,8 @@
                 discountValue: 0,
                 discountedAmount: 0,
                 serviceChargeAmount: 0,
+                totalBillBeforeRounding: 0,
+                roundedByAmount: 0,
                 totalBilled: null,
                 shouldSaveChangeInAccount: false,
                 paymentMethod: 'cash',
@@ -589,7 +611,6 @@
           if (serviceList) {
             this.serviceList = serviceList;
           }
-
           this._calculatePayment();
         });
         this._processDiscountPresetList(() => {
@@ -769,6 +790,8 @@
           discountValue,
           discountedAmount,
           serviceChargeAmount,
+          totalBillBeforeRounding,
+          roundedByAmount,
           totalBilled,
           shouldSaveChangeInAccount,
           paymentMethod,
@@ -827,6 +850,10 @@
           totalBilled += parseFloat(serviceChargeAmount);
         }
 
+        // take rounding into account
+        totalBillBeforeRounding = totalBilled;
+        totalBilled = totalBillBeforeRounding - roundedByAmount;
+
         // setting the default paid amount equal to total billed
         if (paymentMethod !== 'cash' && paidAmount < 1) {
           paidAmount = totalBilled;
@@ -844,6 +871,7 @@
           }
         }
 
+
         // returning updated payment info
         this.payment = {
           totalAmount,
@@ -852,6 +880,8 @@
           discountValue,
           discountedAmount,
           serviceChargeAmount,
+          totalBillBeforeRounding,
+          roundedByAmount,
           totalBilled,
           paidAmount,
           changeAmount,
@@ -859,6 +889,20 @@
           paymentMethod,
           discountPresetId
         };
+      }
+
+      clearRounderByAmountTapped(e = null) {
+        this.payment.roundedByAmount = 0;
+        this._calculatePayment();
+      }
+
+      editTotalBilledTapped(e = null) {
+        this.app.showModalInput("Edit Price?", "Are you sure you want to edit price?", this.payment.totalBilled, (answer) => {
+          if (parseFloat(answer) > 0) {
+            this.payment.roundedByAmount = Math.max(0, (this.payment.totalBillBeforeRounding - parseFloat(answer)));
+            this._calculatePayment();
+          }
+        });
       }
 
       _processAddSalesOnline(data, cbfn) {
