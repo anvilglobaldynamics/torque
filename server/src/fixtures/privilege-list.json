@@ -118,5 +118,9 @@
   {
     "code": "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE",
     "name": "Manage customer account balance"
+  },
+  {
+    "code": "PRIV_VIEW_REPORTS",
+    "name": "View all reports"
   }
 ]

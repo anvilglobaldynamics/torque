@@ -54,7 +54,9 @@ exports.EmploymentCollection = class extends Collection {
 
         PRIV_VIEW_CUSTOMER: Joi.boolean().required(),
         PRIV_MODIFY_CUSTOMER: Joi.boolean().required(),
-        PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: Joi.boolean().required()
+        PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: Joi.boolean().required(),
+
+        PRIV_VIEW_REPORTS: Joi.boolean().required()
       }),
       isActive: Joi.boolean().required()
     });
@@ -119,7 +121,9 @@ exports.EmploymentCollection = class extends Collection {
 
       "PRIV_VIEW_CUSTOMER",
       "PRIV_MODIFY_CUSTOMER",
-      "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE"
+      "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE",
+
+      "PRIV_VIEW_REPORTS"
     ];
   }
 

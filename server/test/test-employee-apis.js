@@ -87,7 +87,9 @@ const privilegeObject = {
 
   PRIV_VIEW_CUSTOMER: true,
   PRIV_MODIFY_CUSTOMER: true,
-  PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
+  PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true,
+
+  PRIV_VIEW_REPORTS: true
 };
 
 let apiKey = null;

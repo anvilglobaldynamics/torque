@@ -72,9 +72,11 @@
 
       </template>
 
-      <div class="lone-controls">
-        <paper-button raised class="btn primary" on-tap="createTapped">[[verses.warehouse.createNewWarehouse]]</paper-button>
-      </div>
+      <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_WAREHOUSES', organization)]]">
+        <div class="lone-controls">
+          <paper-button raised class="btn primary" on-tap="createTapped">[[verses.warehouse.createNewWarehouse]]</paper-button>
+        </div>
+      </template>
 
     </div>
   </template>
@@ -103,6 +105,7 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.warehouse.manageWarehouseTitle);
         if (!this._ensureAccess()) return;
+        this.onOrganizationChange(this.app.organization);
         this._processWarehouseList(() => {
           this.isReady = true;
         });
@@ -169,6 +172,12 @@
       posTapped(e) {
         let { warehouse } = e.model;
         return this.app.navigateTo(`/pos/warehouse:${warehouse.id}`);
+      }
+
+      // region: misc =================================
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
       }
     }
 
