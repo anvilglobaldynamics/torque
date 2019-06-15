@@ -82,11 +82,13 @@
         </div>
       </div>
 
-      <div class="card action-button-container">
-        <div class="mb-4">[[verses.warehouse.editWarehouseDetail]]</div>
-        <paper-button raised class="secondary m-0" on-tap="editTapped">[[verses.warehouse.editWarehouse]]</paper-button>
-        <paper-button raised class="danger m-0" on-tap="deleteTapped">[[verses.warehouse.deleteWarehouse]]</paper-button>
-      </div>
+      <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_WAREHOUSES', organization)]]">
+        <div class="card action-button-container">
+          <div class="mb-4">[[verses.warehouse.editWarehouseDetail]]</div>
+          <paper-button raised class="secondary m-0" on-tap="editTapped">[[verses.warehouse.editWarehouse]]</paper-button>
+        </div>
+      </template>
+
     </div>
   </template>
 
@@ -114,6 +116,7 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.warehouse.warehouseTitle);
         if (!this._ensureAccess()) return;
+        this.onOrganizationChange(this.app.organization);
         if (!('warehouse' in this.params)) {
           let message = this.app.verses.general.pageCannotBeDisplayed;
           this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
@@ -197,6 +200,10 @@
       }
 
       // region: misc =================================
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
 
     }
 
