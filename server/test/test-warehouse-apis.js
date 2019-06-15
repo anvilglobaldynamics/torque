@@ -387,7 +387,7 @@ describe('Warehouse', _ => {
     });
   });
 
-  it('api/delete-warehouse (Invalid)', testDoneFn => {
+  it.skip('api/delete-warehouse (Invalid)', testDoneFn => {
 
     callApi('api/delete-warehouse', {
       json: {
@@ -403,7 +403,7 @@ describe('Warehouse', _ => {
 
   });
 
-  it('api/delete-warehouse (Invalid filled)', testDoneFn => {
+  it.skip('api/delete-warehouse (Invalid filled)', testDoneFn => {
 
     callApi('api/delete-warehouse', {
       json: {
@@ -419,7 +419,7 @@ describe('Warehouse', _ => {
 
   });
 
-  it('api/delete-warehouse (Valid)', testDoneFn => {
+  it.skip('api/delete-warehouse (Valid)', testDoneFn => {
 
     callApi('api/delete-warehouse', {
       json: {
@@ -434,7 +434,7 @@ describe('Warehouse', _ => {
 
   });
 
-  it('api/get-warehouse (Deleted)', testDoneFn => {
+  it.skip('api/get-warehouse (Deleted)', testDoneFn => {
 
     callApi('api/get-warehouse', {
       json: {
@@ -447,6 +447,22 @@ describe('Warehouse', _ => {
       expect(body.error.code).equal('WAREHOUSE_INVALID');
       testDoneFn();
     });
+
+  });
+
+  it('api/delete-warehouse (Confirm that API is disabled): ', testDoneFn => {
+
+    callApi('api/delete-warehouse', {
+      json: {
+        apiKey,
+        outletId: warehouseToBeModified.id,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('API_DISABLED');
+      testDoneFn();
+    })
 
   });
 
