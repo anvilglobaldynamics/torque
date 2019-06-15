@@ -228,7 +228,8 @@
                   </div>
                   <div class="horizontal layout center">
                     <div class="description">[[product.selectedCount]] [[product.unit]] @&nbsp;</div>
-                    <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" type="number" auto-validate min="[[product.minSalePrice]]"></paper-input>
+                    <!-- <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" type="number" auto-validate min="[[product.minSalePrice]]"></paper-input> -->
+                    <div>[[product.salePrice]]</div>
                     <div class="description">[[app.settings.monetaryUnit]]</div>
                   </div>
                 </div>
