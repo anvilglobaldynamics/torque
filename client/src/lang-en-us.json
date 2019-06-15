@@ -279,12 +279,10 @@
     "physicalAddress": "Physical Address",
     "currentLocation": "Current Location",
     "saveLocation": "Save Location",
-
     "noGpsAccess": "No GPS Access",
     "failedToAccessGpsData": "Failed to access your GPS location. Kindly allow us to locate you.",
     "noGpsSupport": "No GPS Support.",
     "noGeolocationSupport": "Your browser/device does not support geolocation."
-
   },
   "productBlueprint": {
     "manageProductBlueprintsTitle": "Manage Product Blueprints",
@@ -414,7 +412,7 @@
     "fireEmployeeQuestion": "Fire employee?",
     "sureFireThisEmployee": "Are you sure you want to fire this employee?",
     "sureFireYourself": "Are you sure you want to fire Yourself? You will loose all access to this organization.",
-    "ownEmployementEditConfirmMessage":  "Since you are editing yourself, you will be logged out after saving your changes. Do you wish to save?"
+    "ownEmployementEditConfirmMessage": "Since you are editing yourself, you will be logged out after saving your changes. Do you wish to save?"
   },
   "product": {
     "addProductsTitle": "Add Products",
@@ -597,6 +595,11 @@
     "discardQuestion": "Discard this Sale?",
     "discardMessage": "Once discarded, this sale will not be considered in any report or calculation. Service Membership(s) sold in this sale (if any) will also be discarded.",
     "dueAmount": "Due amount",
+    "lessDueToRounding": "Less",
+    "editBill": "Edit Bill?",
+    "editBillDetails": "Are you sure you want to edit total payable?",
+    "totalBillBeforeRounding": "Total Payable (without Less)",
+    "roundedByAmount": "Less",
     "discountPreset": "Discount Preset"
   },
   "warehouse": {
@@ -700,7 +703,7 @@
     "selectProductsFromInventoryContainer": "Which Outlet/Warehouse you want to sell from?",
     "currentOutlet": "Current Outlet",
     "saleNotValid": "Sale not valid",
-    "offlineWarehouseSellNotAllowed":"Can not sell products from warehouse when in offline mode."
+    "offlineWarehouseSellNotAllowed": "Can not sell products from warehouse when in offline mode."
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
@@ -721,6 +724,7 @@
     "services": "Service(s)",
     "total": "Total",
     "discountedAmount": "Discount",
+    "lessDueToRounding": "Less",
     "vat": "VAT",
     "serviceCharge": "Service Charge",
     "dueAmount": "Due",
@@ -928,6 +932,7 @@
     "totalAmount": "Total Sale Price",
     "vatAmount": "VAT",
     "discountedAmount": "Discounted",
+    "lessDueToRounding": "Less",
     "serviceChargeInput": "Service Charge",
     "totalBilled": "Total Payable",
     "paidAmountInput": "Paid",

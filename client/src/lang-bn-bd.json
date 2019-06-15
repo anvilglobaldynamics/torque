@@ -414,7 +414,7 @@
     "fireEmployeeQuestion": "চাকরিচ্যুত করা হোক?",
     "sureFireThisEmployee": "আপনি কি নিশ্চিত এই কর্মচারীকে চাকরিচ্যুত করতে চান?",
     "sureFireYourself": "আপনি কি নিজেকে চাকরিচ্যুত করতে চান? আপনি এই সংস্থার সমস্ত অধিকার হারাবেন।",
-    "ownEmployementEditConfirmMessage":  "সম্পাদনার পর আপনাকে আবার লগইন করা লাগবে। আপডেট নিশ্চিত?"
+    "ownEmployementEditConfirmMessage": "সম্পাদনার পর আপনাকে আবার লগইন করা লাগবে। আপডেট নিশ্চিত?"
   },
   "product": {
     "addProductsTitle": "পণ্য যুক্ত করুন",
@@ -597,6 +597,11 @@
     "discardQuestion": "এই বিক্রি বাতিল?",
     "discardMessage": "বাতিল করা হলে কোনো রিপোর্ট কিংবা হিসেবে এই বিক্রি ধরা হবে না। বিক্রয়কৃত সেবা সদস্যপদ (যদি থাকে) বাতিল হয়ে যাবে।",
     "dueAmount": "বাকি অর্থ",
+    "lessDueToRounding": "লেস",
+    "editBill": "বিল সম্পাদনা?",
+    "editBillDetails": "আপনি কি বিল সম্পাদনা করতে চান?",
+    "totalBillBeforeRounding": "লেস ব্যাতিত মোট পরিশোধনীয়",
+    "roundedByAmount": "লেস",
     "discountPreset": "ডিসকাউন্ট প্রিসেট"
   },
   "warehouse": {
@@ -720,6 +725,7 @@
     "services": "সেবা",
     "total": "মোট",
     "discountedAmount": "ছাড়",
+    "lessDueToRounding": "লেস",
     "vat": "ভ্যাট",
     "serviceCharge": "সেবা মূল্য",
     "dueAmount": "বাকি",
@@ -927,6 +933,7 @@
     "totalAmount": "মোট বিক্রয় মূল্য",
     "vatAmount": "ভ্যাট",
     "discountedAmount": "ছাড়",
+    "lessDueToRounding": "লেস",
     "serviceChargeInput": "সার্ভিস চার্জ",
     "totalBilled": "মোট পরিশোধনীয়",
     "paidAmountInput": "পরিশোধিত",

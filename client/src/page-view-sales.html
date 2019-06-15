@@ -161,6 +161,9 @@
 
         <div>[[verses.sales.serviceChargeAmount]]: [[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</div>
         <div>[[verses.sales.vat]]: [[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</div>
+        <template is="dom-if" if="[[sales.payment.roundedByAmount]]">
+          <div>[[verses.sales.lessDueToRounding]]: [[sales.payment.roundedByAmount]]</div>
+        </template>
         <div>[[verses.sales.totalPaid]]: [[$round(sales.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</div>
         <template is="dom-if" if="[[$isCreditSale(sales.payment.totalBilled, sales.payment.totalPaidAmount)]]">
           <div>[[verses.sales.dueAmount]]: [[$calculateDue(sales.payment.totalBilled, sales.payment.totalPaidAmount)]]</div>
@@ -184,7 +187,8 @@
       <template is="dom-if" if="[[hasPrivilege('PRIV_ACCESS_POS', organization)]]">
         <template is="dom-if" if="[[!sales.isDiscarded]]">
           <template is="dom-if" if="[[$shouldTakeAdditionalPayment(sales.payment.totalBilled, sales.payment.totalPaidAmount)]]">
-            <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[self]]" customer="[[customer]]" is-from-view-sales-page></elem-additional-paymentt>
+            <elem-additional-payment amount-left-to-pay="[[amountLeftToPay]]" page="[[self]]" customer="[[customer]]" is-from-view-sales-page>
+              </elem-additional-paymentt>
           </template>
         </template>
       </template>

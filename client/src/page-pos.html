@@ -342,30 +342,27 @@
             </div>
 
             <div class="individual-calculation-field-container">
-              <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
 
-                <div class="vertical layout m-bottom-18">
+              <div class="vertical layout m-bottom-18">
 
-                  <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discount]]" class="mr-4">
-                    <paper-listbox slot="dropdown-content" selected="{{selectedDiscountPreset}}" attr-for-selected="name">
-                      <paper-item name="--no-discount">[[verses.pos.noDiscountApplicable]]</paper-item>
-                      <template is="dom-repeat" items="[[discountPresetList]]" as="discountPreset">
-                        <paper-item name="[[discountPreset.id]]">
-                          <div class="name">[[discountPreset.name]]</div>
-                          <template is="dom-if" if="[[$equals(discountPreset.discountType, 'percent')]]">
-                            <div>&nbsp;([[discountPreset.discountValue]]%)</div>
-                          </template>
-                          <template is="dom-if" if="[[$equals(discountPreset.discountType, 'fixed')]]">
-                            <div>&nbsp;([[discountPreset.discountValue]] [[app.settings.monetaryUnit]])</div>
-                          </template>
-                        </paper-item>
-                      </template>
-                    </paper-listbox>
-                  </paper-dropdown-menu>
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discount]]" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{selectedDiscountPreset}}" attr-for-selected="name">
+                    <paper-item name="--no-discount">[[verses.pos.noDiscountApplicable]]</paper-item>
+                    <template is="dom-repeat" items="[[discountPresetList]]" as="discountPreset">
+                      <paper-item name="[[discountPreset.id]]">
+                        <div class="name">[[discountPreset.name]]</div>
+                        <template is="dom-if" if="[[$equals(discountPreset.discountType, 'percent')]]">
+                          <div>&nbsp;([[discountPreset.discountValue]]%)</div>
+                        </template>
+                        <template is="dom-if" if="[[$equals(discountPreset.discountType, 'fixed')]]">
+                          <div>&nbsp;([[discountPreset.discountValue]] [[app.settings.monetaryUnit]])</div>
+                        </template>
+                      </paper-item>
+                    </template>
+                  </paper-listbox>
+                </paper-dropdown-menu>
 
-                </div>
-
-              </template>
+              </div>
 
               [[verses.pos.discountedAmount]]:
               <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
@@ -409,13 +406,13 @@
               <div class="individual-calculation-field-container">
                 <div class="horizontal layout center m-top-16">
                   <div class="flex">
-                    Total Bill Before Rounding:
+                    [[verses.sales.totalBillBeforeRounding]]:
                     <b>{{$round(payment.totalBillBeforeRounding)}} [[app.settings.monetaryUnit]]</b>
                   </div>
                 </div>
                 <div class="horizontal layout center">
                   <div class="flex">
-                    Rounded By Amount:
+                    [[verses.sales.roundedByAmount]]:
                     <b>{{$round(payment.roundedByAmount)}} [[app.settings.monetaryUnit]]</b>
                   </div>
                   <paper-icon-button on-tap="clearRounderByAmountTapped" icon="clear"></paper-icon-button>
@@ -427,7 +424,9 @@
                 [[verses.pos.totalBilled]]:
                 <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
               </div>
-              <paper-icon-button on-tap="editTotalBilledTapped" icon="create"></paper-icon-button>
+              <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
+                <paper-icon-button on-tap="editTotalBilledTapped" icon="create"></paper-icon-button>
+              </template>
             </div>
 
             <div class="individual-calculation-field-container">
@@ -783,7 +782,7 @@
       }
 
       // main payment calculation method
-      _calculatePayment() {
+      _calculatePayment({ resetRounding = true } = {}) {
         let {
           totalAmount,
           vatAmount,
@@ -852,6 +851,7 @@
         }
 
         // take rounding into account
+        if (resetRounding) roundedByAmount = 0;
         totalBillBeforeRounding = totalBilled;
         totalBilled = totalBillBeforeRounding - roundedByAmount;
 
@@ -871,7 +871,6 @@
             changeAmount = 0;
           }
         }
-
 
         // returning updated payment info
         this.payment = {
@@ -898,10 +897,10 @@
       }
 
       editTotalBilledTapped(e = null) {
-        this.app.showModalInput("Edit Price?", "Are you sure you want to edit price?", this.payment.totalBilled, (answer) => {
+        this.app.showModalInput(this.verses.sales.editBill, this.verses.sales.editBillDetails, this.payment.totalBilled, (answer) => {
           if (parseFloat(answer) > 0) {
             this.payment.roundedByAmount = Math.max(0, (this.payment.totalBillBeforeRounding - parseFloat(answer)));
-            this._calculatePayment();
+            this._calculatePayment({ resetRounding: false });
           }
         });
       }
@@ -1055,7 +1054,11 @@
 
       genericPaymentInputChanged(e) {
         this.enforceMinMaxOnPaperInput(e);
-        this._calculatePayment();
+        if (e.target.className.indexOf('payment--paidAmount') > -1) {
+          this._calculatePayment({ resetRounding: false });
+        } else {
+          this._calculatePayment();
+        }
       }
 
       backButtonOnTopBarPressed(e = null) {
