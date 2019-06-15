@@ -161,32 +161,10 @@
         });
       }
 
-      _deleteWarehouse(warehouseId, cbfn) {
-        warehouseId = parseInt(warehouseId);
-        let data = { warehouseId };
-        this.app.callDeleteWarehouseApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response);
-        });
-      }
-
       // region: ui  ===========================
 
       editTapped(e = null) {
         return this.app.navigateTo(`/edit-warehouse/warehouse:${this.warehouse.id}`);
-      }
-
-      deleteTapped(e = null) {
-        let message = this.app.verses.warehouse.deleteWarehouseQuestionPartOne + " " + this.warehouse.name + " " + this.app.verses.warehouse.deleteWarehouseQuestionPartTwo;
-        this.app.showModalConfirmation(this.app.verses.warehouse.deleteWarehouseQuestion, message, (answer) => {
-          if (!answer) return;
-          this._deleteWarehouse(this.warehouse.id, () => {
-            this.app.showToast(this.app.verses.warehouse.warehouseDeleted, () => {
-              this.app.navigateTo(`/manage-warehouses`);
-            });
-          });
-        });
       }
 
       viewInventoryTapped(e = null) {
