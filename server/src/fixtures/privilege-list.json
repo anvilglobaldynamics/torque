@@ -28,8 +28,8 @@
     "name": "Modify all service memberships"
   },
   {
-    "code": "PRIV_ALLOW_FLAT_DISCOUNT",
-    "name": "Allow flat discount"
+    "code": "PRIV_ALLOW_FLEXIBLE_PRICE",
+    "name": "Allow flexible pricing (i.e. rounding in POS)"
   },
   {
     "code": "PRIV_VIEW_PURCHASE_PRICE",

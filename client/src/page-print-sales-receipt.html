@@ -235,7 +235,7 @@
       /* slim - end */
 
       .tr-border-top-bottom {
-        border-top: 1px solid black; 
+        border-top: 1px solid black;
         border-bottom: 1px solid black;
       }
 
@@ -335,6 +335,12 @@
                 <th colspan="2" style="text-align: right;">[[verses.salesReceipt.discountedAmount]] (-)</th>
                 <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]]</th>
               </tr>
+              <template is="dom-if" if="[[sales.payment.roundedByAmount]]">
+                <tr>
+                  <th colspan="2" style="text-align: right;">[[verses.salesReceipt.lessDueToRounding]] (-)</th>
+                  <th class="monetary-cell">[[$round(sales.payment.roundedByAmount)]]</th>
+                </tr>
+              </template>
               <tr class="tr-border-bottom">
                 <th colspan="2" style="text-align: right;">[[verses.salesReceipt.serviceChargeInput]] (+)</th>
                 <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]]</th>
@@ -487,6 +493,12 @@
                 <th colspan="3" style="text-align: right;">[[verses.salesReceipt.serviceChargeInput]] (+)</th>
                 <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]]</th>
               </tr>
+              <template is="dom-if" if="[[sales.payment.roundedByAmount]]">
+                <tr>
+                  <th colspan="3" style="text-align: right;">[[verses.salesReceipt.lessDueToRounding]] (-)</th>
+                  <th class="monetary-cell">[[$round(sales.payment.roundedByAmount)]]</th>
+                </tr>
+              </template>
               <tr>
                 <th colspan="3" style="text-align: right;">[[verses.salesReceipt.totalBilled]]</th>
                 <th class="monetary-cell">[[$round(sales.payment.totalBilled)]]</th>

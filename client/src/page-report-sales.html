@@ -209,6 +209,17 @@
             </div>
           </div>
           <div class="ul"></div>
+          <template is="dom-if" if="[[salesSummary.roundedByAmountSum]]">
+            <div class="horizontal layout center item wrap">
+              <div class="flex">
+                [[verses.salesReport.lessDueToRounding]]
+              </div>
+              <div>
+                <strong>[[salesSummary.roundedByAmountSum]]</strong>
+              </div>
+            </div>
+            <div class="ul"></div>
+          </template>
           <div class="horizontal layout center item wrap">
             <div class="flex">
               [[verses.salesReport.dueAmount]]
@@ -287,6 +298,9 @@
                   <template is="dom-if" if="[[sales.payment.serviceChargeAmount]]">
                     <div class="description">
                       <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</div>
+                  </template>
+                  <template is="dom-if" if="[[sales.payment.roundedByAmount]]">
+                    <div>[[verses.salesReceipt.lessDueToRounding]]: [[sales.payment.roundedByAmount]]</div>
                   </template>
                   <template is="dom-if" if="[[sales.payment.dueAmount]]">
                     <div class="description">
@@ -495,6 +509,7 @@
             discountedAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.discountedAmount || 0)), 0)),
             vatAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.vatAmount || 0)), 0)),
             serviceChargeAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.serviceChargeAmount || 0)), 0)),
+            roundedByAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.roundedByAmount || 0)), 0)),
             dueAmountSum: (newSalesList.reduce((sum, sales) => (sum + (sales.payment.dueAmount || 0)), 0))
           }
           cbfn();
