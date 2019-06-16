@@ -930,6 +930,7 @@
     "printedBy": "প্রিন্ট করেছেন",
     "soldBy": "বিক্রয়কারী",
     "customerName": "গ্রাহকের নাম",
+    "customerPhone": "গ্রাহকের ফোন",
     "totalAmount": "মোট বিক্রয় মূল্য",
     "vatAmount": "ভ্যাট",
     "discountedAmount": "ছাড়",
