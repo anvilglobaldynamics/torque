@@ -173,6 +173,10 @@
         text-align: center;
       }
 
+      .slim-report .header .outlet-block{
+        margin-top: 8px;
+      }
+
       .slim-report .body .item {
         margin-bottom: 8px;
         margin-top: 8px;
@@ -226,6 +230,7 @@
 
       .slim-report .customer-area {
         margin-top: 4px;
+        margin-bottom: 8px;
       }
 
       .slim-report .centered-cell {
@@ -250,6 +255,7 @@
       .powered-by-footer {
         text-align: center;
         font-style: italic;
+        padding-bottom: 8px;
       }
     </style>
 
@@ -261,15 +267,15 @@
       <template is="dom-if" if="[[$equals(defaultPrinterFormat, 'slim')]]">
         <div class="slim-report report">
           <div class="header vertical layout">
-            <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.salesNumber]]</div>
-            <div class="date"><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
+            <div class="name">[[app.organization.name]]</div>
+            <!-- <div class="date"></div> -->
             <div>
-              <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
+              <div class="author-title">[[verses.salesReceipt.receiptTitle]] #[[sales.salesNumber]]</div>
+              <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
               <!-- <div>[[app.organization.primaryBusinessAddress]]</div> -->
-              <div>[[app.organization.email]]</div>
-              <div>[[app.organization.phone]]</div>
+              <!-- <div>[[app.organization.phone]]</div> -->
             </div>
-            <div>
+            <div class="outlet-block">
               <div class="author-title">[[verses.general.outlet]]: [[outlet.name]]</div>
               <div>[[outlet.physicalAddress]]</div>
               <div>[[outlet.contactPersonName]]</div>
@@ -409,13 +415,13 @@
       <template is="dom-if" if="[[$equals(defaultPrinterFormat, 'a4')]]">
         <div class="a4-report report">
           <div class="header vertical layout">
-            <div class="name">[[verses.salesReceipt.receiptTitle]] #[[sales.salesNumber]]</div>
+            <div class="name">[[app.organization.name]]</div>
             <div class="horizontal layout">
               <div>
-                <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
+                <!-- <div class="author-title">[[verses.general.organization]]: </div> -->
                 <!-- <div>[[app.organization.primaryBusinessAddress]]</div> -->
-                <div>[[app.organization.email]]</div>
-                <div>[[app.organization.phone]]</div>
+                <div>[[verses.salesReceipt.receiptTitle]] #[[sales.salesNumber]]</div>
+                <!-- <div>[[app.organization.phone]]</div> -->
               </div>
               <div class="flex"></div>
               <div style="text-align: right;">
