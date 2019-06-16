@@ -92,16 +92,25 @@ exports.TransferBetweenInventoriesApi = class extends Api {
     this.ensureUpdate('inventory', result);
   }
 
-  async _addTransferRecord({ createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList }) {
-    await this.database.productTransfer.create({ createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList });
+  async _addTransferRecord({ createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList, isWithinSameInventoryContainer }) {
+    await this.database.productTransfer.create({ createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList, isWithinSameInventoryContainer });
   }
 
   async handle({ body, userId }) {
     let { fromInventoryId, toInventoryId, productList } = body;
     let { fromInventory, toInventory } = await this._getInventoriesWithId({ fromInventoryId, toInventoryId });
+
+    let isWithinSameInventoryContainer = false;
+    if (fromInventory.inventoryContainerId === toInventory.inventoryContainerId
+      && fromInventory.inventoryContainerType === toInventory.inventoryContainerType) {
+      isWithinSameInventoryContainer = true;
+    }
+
     this._transfer({ fromInventory, toInventory, productList });
     await this._updateInventories({ fromInventory, toInventory });
-    await this._addTransferRecord({ createdByUserId: userId, transferredDatetimeStamp: (new Date).getTime(), fromInventoryId, toInventoryId, productList })
+
+    await this._addTransferRecord({ createdByUserId: userId, transferredDatetimeStamp: (new Date).getTime(), fromInventoryId, toInventoryId, productList, isWithinSameInventoryContainer })
+
     return { status: "success" };
   }
 

@@ -427,7 +427,7 @@ describe('Outlet', _ => {
     });
   });
 
-  it('api/delete-outlet (Invalid outletId)', testDoneFn => {
+  it.skip('api/delete-outlet (Invalid outletId)', testDoneFn => {
 
     callApi('api/delete-outlet', {
       json: {
@@ -443,7 +443,7 @@ describe('Outlet', _ => {
 
   });
 
-  it('api/delete-outlet (Invalid filled outlet)', testDoneFn => {
+  it.skip('api/delete-outlet (Invalid filled outlet)', testDoneFn => {
 
     callApi('api/delete-outlet', {
       json: {
@@ -459,7 +459,7 @@ describe('Outlet', _ => {
 
   });
 
-  it('api/delete-outlet (Valid)', testDoneFn => {
+  it.skip('api/delete-outlet (Valid)', testDoneFn => {
 
     callApi('api/delete-outlet', {
       json: {
@@ -474,7 +474,7 @@ describe('Outlet', _ => {
 
   });
 
-  it('api/get-outlet (Deleted)', testDoneFn => {
+  it.skip('api/get-outlet (Deleted check)', testDoneFn => {
 
     callApi('api/get-outlet', {
       json: {
@@ -487,6 +487,22 @@ describe('Outlet', _ => {
       expect(body.error.code).equals('OUTLET_INVALID');
       testDoneFn();
     });
+
+  });
+
+  it('api/delete-outlet (Confirm that API is disabled): ', testDoneFn => {
+
+    callApi('api/delete-outlet', {
+      json: {
+        apiKey,
+        outletId: outletToBeModified.id,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('API_DISABLED');
+      testDoneFn();
+    })
 
   });
 

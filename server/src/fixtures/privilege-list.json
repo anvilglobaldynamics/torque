@@ -28,8 +28,8 @@
     "name": "Modify all service memberships"
   },
   {
-    "code": "PRIV_ALLOW_FLAT_DISCOUNT",
-    "name": "Allow flat discount"
+    "code": "PRIV_ALLOW_FLEXIBLE_PRICE",
+    "name": "Allow flexible pricing (rounding) in POS"
   },
   {
     "code": "PRIV_VIEW_PURCHASE_PRICE",
@@ -118,5 +118,9 @@
   {
     "code": "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE",
     "name": "Manage customer account balance"
+  },
+  {
+    "code": "PRIV_VIEW_REPORTS",
+    "name": "View all reports"
   }
 ]

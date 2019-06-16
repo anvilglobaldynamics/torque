@@ -48,7 +48,7 @@
       }
 
       .scanning-card {
-        background: #A5D6A7;
+        background: var(--app-button-alternative);
       }
 
       #identifierCodeInput {
@@ -261,6 +261,7 @@
 
       selectProductsTapped(e = null) {
         this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
+        window.isComingFromScanIdentifierCode = true;
         this.app.navigateToPreviousUrl(`/pos-select-product`);
       }
 

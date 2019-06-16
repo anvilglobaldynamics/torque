@@ -72,9 +72,11 @@
         </div>
       </template>
 
-      <div class="lone-controls">
-        <paper-button raised class="btn primary" on-tap="createTapped">[[verses.outlet.createNewOutlet]]</paper-button>
-      </div>
+      <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_OUTLETS', organization)]]">
+        <div class="lone-controls">
+          <paper-button raised class="btn primary" on-tap="createTapped">[[verses.outlet.createNewOutlet]]</paper-button>
+        </div>
+      </template>
 
     </div>
 
@@ -104,6 +106,7 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.outlet.manageOutletTitle);
         if (!this._ensureAccess()) return;
+        this.onOrganizationChange(this.app.organization);
         this._processOutletList(() => {
           this.isReady = true;
         });
@@ -172,6 +175,10 @@
       // }
 
       // region: misc =================================
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
     }
 
     window.customElements.define(PageManageOutlets.is, PageManageOutlets);

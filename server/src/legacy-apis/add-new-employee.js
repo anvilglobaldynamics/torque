@@ -31,7 +31,7 @@ exports.AddNewEmployeeApi = class extends phoneVerificationRequestMixin(userComm
         PRIV_ACCESS_POS: Joi.boolean().required(),
         PRIV_VIEW_SALES: Joi.boolean().required(),
         PRIV_MODIFY_SALES: Joi.boolean().required(),
-        PRIV_ALLOW_FLAT_DISCOUNT: Joi.boolean().required(),
+        PRIV_ALLOW_FLEXIBLE_PRICE: Joi.boolean().required(),
         PRIV_VIEW_PURCHASE_PRICE: Joi.boolean().required(),
 
         PRIV_MODIFY_DISCOUNT_PRESETS: Joi.boolean().required(),
@@ -63,7 +63,9 @@ exports.AddNewEmployeeApi = class extends phoneVerificationRequestMixin(userComm
 
         PRIV_VIEW_CUSTOMER: Joi.boolean().required(),
         PRIV_MODIFY_CUSTOMER: Joi.boolean().required(),
-        PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: Joi.boolean().required()
+        PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: Joi.boolean().required(),
+
+        PRIV_VIEW_REPORTS: Joi.boolean().required()
       })
     });
   }

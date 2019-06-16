@@ -204,6 +204,8 @@ describe('Sales Return', _ => {
                                   discountValue: placeholderDefaultDiscountValue,
                                   discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
                                   serviceChargeAmount: 0,
+                                  totalBillBeforeRounding: 0,
+                                  roundedByAmount: 0,
                                   totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
                                   paidAmount: 300,
                                   changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
@@ -211,8 +213,8 @@ describe('Sales Return', _ => {
                                   paymentMethod: 'cash'
                                 },
 
-                                assistedByEmployeeId: null, 
-                                productsSelectedFromWarehouseId: null, 
+                                assistedByEmployeeId: null,
+                                productsSelectedFromWarehouseId: null,
 
                                 wasOfflineSale: false
                               }, (data) => {
@@ -238,6 +240,8 @@ describe('Sales Return', _ => {
                                     discountValue: placeholderDefaultDiscountValue,
                                     discountedAmount: ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
                                     serviceChargeAmount: 0,
+                                    totalBillBeforeRounding: 0,
+                                    roundedByAmount: 0,
                                     totalBilled: (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100))),
                                     paidAmount: 300,
                                     changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100)))),
@@ -245,8 +249,8 @@ describe('Sales Return', _ => {
                                     paymentMethod: 'cash'
                                   },
 
-                                  assistedByEmployeeId: null, 
-                                  productsSelectedFromWarehouseId: null, 
+                                  assistedByEmployeeId: null,
+                                  productsSelectedFromWarehouseId: null,
 
                                   wasOfflineSale: false
                                 }, (data) => {

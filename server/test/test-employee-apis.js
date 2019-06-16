@@ -56,7 +56,7 @@ const privilegeObject = {
   PRIV_ACCESS_POS: true,
   PRIV_VIEW_SALES: true,
   PRIV_MODIFY_SALES: true,
-  PRIV_ALLOW_FLAT_DISCOUNT: true,
+  PRIV_ALLOW_FLEXIBLE_PRICE: true,
   PRIV_VIEW_PURCHASE_PRICE: true,
   PRIV_MODIFY_DISCOUNT_PRESETS: true,
 
@@ -87,7 +87,9 @@ const privilegeObject = {
 
   PRIV_VIEW_CUSTOMER: true,
   PRIV_MODIFY_CUSTOMER: true,
-  PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
+  PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true,
+
+  PRIV_VIEW_REPORTS: true
 };
 
 let apiKey = null;

@@ -88,17 +88,16 @@
             <div class="inventory-container-view-details">[[verses.outlet.contactNumber]]: [[outlet.phone]]</div>
           </div>
 
-          <paper-menu-button horizontal-align="right" ignore-select id="top-menu">
-            <paper-icon-button icon="menu" slot="dropdown-trigger"></paper-icon-button>
-            <paper-listbox slot="dropdown-content">
-              <paper-item on-tap="editTapped">
-                <iron-icon class="icon medium-small m-right-8" icon="create" class="m-right-8"></iron-icon>[[verses.outlet.editOutlet]]
-              </paper-item>
-              <paper-item on-tap="deleteTapped">
-                <iron-icon class="icon medium-small m-right-8" icon="delete" class="m-right-8"></iron-icon>[[verses.outlet.deleteOutlet]]
-              </paper-item>
-            </paper-listbox>
-          </paper-menu-button>
+          <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_OUTLETS', organization)]]">
+            <paper-menu-button horizontal-align="right" ignore-select id="top-menu">
+              <paper-icon-button icon="menu" slot="dropdown-trigger"></paper-icon-button>
+              <paper-listbox slot="dropdown-content">
+                  <paper-item on-tap="editTapped">
+                    <iron-icon class="icon medium-small m-right-8" icon="create" class="m-right-8"></iron-icon>[[verses.outlet.editOutlet]]
+                  </paper-item>
+              </paper-listbox>
+            </paper-menu-button>
+          </template>
         </div>
 
         <div class="sp"></div>
@@ -210,6 +209,7 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.outlet.outletTitle);
         if (!this._ensureAccess()) return;
+        this.onOrganizationChange(this.app.organization);
         if (!('outlet' in this.params)) {
           let message = this.app.verses.general.pageCannotBeDisplayed;
           this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
@@ -254,34 +254,11 @@
         });
       }
 
-      _deleteOutlet(outletId, cbfn) {
-        outletId = parseInt(outletId);
-        let data = { outletId };
-        this.app.callDeleteOutletApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response);
-        });
-      }
-
       // region: ui  ===========================
 
       editTapped(e = null) {
         this.$['top-menu'].close();
         return this.app.navigateTo(`/edit-outlet/outlet:${this.outlet.id}`);
-      }
-
-      deleteTapped(e = null) {
-        this.$['top-menu'].close();
-        let message = this.app.verses.outlet.deleteOutletQuestionPartOne + " " + this.outlet.name + " " + this.app.verses.outlet.deleteOutletQuestionPartTwo;
-        this.app.showModalConfirmation(this.app.verses.outlet.deleteOutletQuestion, message, (answer) => {
-          if (!answer) return;
-          this._deleteOutlet(this.outlet.id, () => {
-            this.app.showToast(this.app.verses.outlet.outletDeleted, () => {
-              this.app.navigateTo(`/manage-outlets`);
-            });
-          });
-        });
       }
 
       viewInventoryTapped(e = null) {
@@ -303,6 +280,10 @@
       }
 
       // region: misc =================================
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
 
     }
 

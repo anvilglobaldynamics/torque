@@ -274,11 +274,6 @@
         this.callCombinedJsonApi('edit-outlet', data, cbfn);
       }
 
-      callDeleteOutletApi(data, cbfn) {
-        if (!this._applyApiKey(data)) return;
-        this.callCombinedJsonApi('delete-outlet', data, cbfn);
-      }
-
       callGetOutletCategoryListApi(data, cbfn) {
         this.callCombinedJsonApi('get-outlet-category-list', data, cbfn);
       }
@@ -301,11 +296,6 @@
       callEditWarehouseApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('edit-warehouse', data, cbfn);
-      }
-
-      callDeleteWarehouseApi(data, cbfn) {
-        if (!this._applyApiKey(data)) return;
-        this.callCombinedJsonApi('delete-warehouse', data, cbfn);
       }
 
       callGetProductBlueprintListApi(data, cbfn) {

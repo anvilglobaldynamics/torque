@@ -30,7 +30,7 @@ exports.OrganizationCollection = class extends LegacyCollection {
       packageActivationId: Joi.number().max(999999999999999).allow(null).required(),
       isDeleted: Joi.boolean().required(),
       activeModuleCodeList: Joi.array().items(
-        Joi.string().required()
+        Joi.string()
       ).required()
     });
 

@@ -6,6 +6,8 @@ const { extract } = require('./../utils/extract');
 
 exports.DeleteOutletApi = class extends Api {
 
+  get isEnabled() { return false; }
+
   get autoValidates() { return true; }
 
   get requiresAuthentication() { return true; }
