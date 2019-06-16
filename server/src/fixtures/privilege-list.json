@@ -29,7 +29,7 @@
   },
   {
     "code": "PRIV_ALLOW_FLEXIBLE_PRICE",
-    "name": "Allow flexible pricing (i.e. rounding in POS)"
+    "name": "Allow flexible pricing (rounding) in POS"
   },
   {
     "code": "PRIV_VIEW_PURCHASE_PRICE",
