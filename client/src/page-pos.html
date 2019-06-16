@@ -45,6 +45,10 @@
         margin: 8px 0px;
       }
 
+      .individual-calculation-field-container.light {
+        background-color: white;
+      }
+
       .full-width-paper-dropdown {
         width: 100%;
       }
@@ -403,7 +407,7 @@
           <div class="list">
 
             <template is="dom-if" if="[[payment.roundedByAmount]]">
-              <div class="individual-calculation-field-container">
+              <div class="individual-calculation-field-container light">
                 <div class="horizontal layout center m-top-16">
                   <div class="flex">
                     [[verses.sales.totalBillBeforeRounding]]:
@@ -419,7 +423,7 @@
                 </div>
               </div>
             </template>
-            <div class="horizontal layout center individual-calculation-field-container">
+            <div class="horizontal layout center individual-calculation-field-container light">
               <div class="flex">
                 [[verses.pos.totalBilled]]:
                 <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
@@ -429,7 +433,7 @@
               </template>
             </div>
 
-            <div class="individual-calculation-field-container">
+            <div class="individual-calculation-field-container light">
 
               <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4" on-iron-select="paymentMethodSelected">
                 <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
