@@ -629,21 +629,32 @@
         this.delay(10, () => {
           if (!this._skipToProductOrServiceSelectionPage()) {
             this.isReady = true;
-            this.delay(300, () => {
-              this.elem('#sale-and-print-button').scrollIntoView({ block: "end", inline: "nearest" });
-              this.delay(100, () => {
+            this.jumpToPaymentIfPossible();
+          }
+        });
+      }
+
+      jumpToPaymentIfPossible() {
+        this.delay(300, () => {
+          try {
+            this.elem('#sale-and-print-button').scrollIntoView({ block: "end", inline: "nearest" });
+            this.delay(100, () => {
+              try {
                 let input = this.elem('.payment--paidAmount');
                 input.click();
                 this.delay(50, () => {
-                  input.focus();
-                  this.delay(50, () => {
-                    input.inputElement.inputElement.select();
-                  });
+                  try {
+                    input.focus();
+                    this.delay(50, () => {
+                      try {
+                        input.inputElement.inputElement.select();
+                      } catch (ex) { }
+                    });
+                  } catch (ex) { }
                 });
-              });
+              } catch (ex) { }
             });
-
-          }
+          } catch (ex) { }
         });
       }
 
