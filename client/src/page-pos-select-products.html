@@ -38,7 +38,7 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="card horizontal layout center" style="background: #FFF59D;">
+      <div class="card horizontal layout center" style="background: var(--app-button-alternative);">
         <div>
           [[verses.posSelectProduct.scanButtonHelp]]
         </div>
@@ -81,26 +81,14 @@
                 <div class="horizontal layout item center">
                   <div class="flex" style="min-width: 128px;">
                     <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                    <!-- <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">[[product.count]] [[product.unit]]</div> -->
-                    <!-- 
-                    <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                      <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
-                    </template> 
-                    -->
                     <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                   </div>
-                  <div class="horizontal layout wrap center">
-                    <template is="dom-if" if="[[product.count]]">
-                      <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
 
-                      <!-- <template is="dom-if" if="[[product.isSelected]]">
-                        <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" type="number" min="0" max="[[product.count]]" label="[[verses.posSelectProduct.count]]">
-                          <div slot="suffix">&nbsp;[[product.unit]]</div>
-                        </paper-input>
-                        <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
-                      </template> -->
-                    </template>
-                  </div>
+                  <template is="dom-if" if="[[product.count]]">
+                    <paper-button raised class="primary" on-tap="selectTapped">
+                      <iron-icon icon="check"></iron-icon>
+                    </paper-button>
+                  </template>
                 </div>
               </template>
             </template>
@@ -130,19 +118,17 @@
               <div class="horizontal layout item center">
                 <div class="flex" style="min-width: 128px;">
                   <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                  <!-- <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.maxAllowedCount)]]">[[product.maxAllowedCount]] [[product.unit]]</div> -->
-
-                  <!-- <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                    <div class="inventory-product-price-container">[[verses.posSelectProduct.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
-                  </template> -->
-
                   <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                 </div>
+
                 <div class="horizontal layout center" style="max-width: 220px;">
                   <paper-input class="medium-input m-horizontal-4" value="{{product.selectedCount}}" on-change="genericSelectedCountInputChanged" type="number" min="1" max="99999999999" label="[[verses.posSelectProduct.count]]">
                     <div slot="suffix">&nbsp;[[product.unit]]</div>
                   </paper-input>
-                  <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+
+                  <paper-button raised class="danger" on-tap="deselectTapped">
+                    <iron-icon icon="clear"></iron-icon>
+                  </paper-button>
                 </div>
               </div>
             </template>
