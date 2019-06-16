@@ -15,6 +15,7 @@ exports.ProductTransferCollection = class extends Collection {
       transferredDatetimeStamp: Joi.number().max(999999999999999).required(),
       fromInventoryId: Joi.number().max(999999999999999).required(),
       toInventoryId: Joi.number().max(999999999999999).required(),
+      isWithinSameInventoryContainer: Joi.boolean().required(),
 
       productList: Joi.array().min(1).items(
         Joi.object().keys({
@@ -51,7 +52,7 @@ exports.ProductTransferCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList }) {
+  async create({ createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList, isWithinSameInventoryContainer }) {
     return await this._insert({
       isDeleted: false,
       createdByUserId,
@@ -59,6 +60,7 @@ exports.ProductTransferCollection = class extends Collection {
       fromInventoryId,
       toInventoryId,
       productList,
+      isWithinSameInventoryContainer
     });
   }
 
