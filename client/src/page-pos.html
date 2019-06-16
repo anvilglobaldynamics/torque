@@ -102,7 +102,7 @@
       }
 
       .card.warning {
-        background: #FFF59D;
+        background: var(--app-button-alternative);
       }
 
       .bold-customer-card-title {
@@ -399,7 +399,7 @@
 
       <!-- payment area card - start -->
       <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
-        <div class="card vertical layout">
+        <div class="card vertical layout" style="background: var(--app-primary-color-light);">
           <div class="list">
 
             <template is="dom-if" if="[[payment.roundedByAmount]]">
