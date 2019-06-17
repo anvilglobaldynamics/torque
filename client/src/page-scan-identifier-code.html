@@ -108,7 +108,7 @@
 
       static get properties() {
         return {
-          // ============ for pos and product-transfer - start
+          // ============ for pos and transfer-products - start
           selectedProductCount: {
             type: Number,
             value: 0
@@ -117,7 +117,7 @@
             type: Array,
             value: () => []
           },
-          // ============ for pos and product-transfer - end
+          // ============ for pos and transfer-products - end
           // ============ for add-products - start
           selectedProductBlueprintCount: {
             type: Number,
@@ -158,7 +158,7 @@
         this.app.pushPageTitle(this.app.verses.scan.pageTitle);
         if (!this._ensureAccess()) return;
         this.from = this.params.from;
-        if (['add-products', 'pos', 'transfer-product'].indexOf(this.from) === -1) {
+        if (['add-products', 'pos', 'transfer-products'].indexOf(this.from) === -1) {
           throw new Error("DEV_ERROR: Invalid parameter for 'from'");
         }
         this.selectedProductList = this.app.getFromSession('pos-selected-product-list') || [];
@@ -188,7 +188,7 @@
         });
       }
 
-      // region: only pos and transfer-product ===============================
+      // region: only pos and transfer-products ===============================
 
       _fetchProductMatchingIdentifierCodeOnline(cbfn) {
         let inventoryId = parseInt(this.params.inventory);
@@ -348,8 +348,9 @@
           this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
           this.app.navigateToPreviousUrl(`/pos-select-product`);
 
-        } else if (this.from === 'transfer-product') {
-          // TODO:
+        } else if (this.from === 'transfer-products') {
+          this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
+          this.app.navigateToPreviousUrl(`/transfer-products/inventory:${this.params.inventory}`);
         }
       }
 

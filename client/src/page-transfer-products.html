@@ -63,6 +63,16 @@
         [[inventoryContainerName]] - [[inventoryName]]
       </p>
 
+      <div class="card horizontal layout center" style="background: var(--app-button-alternative);">
+        <div>
+          [[verses.general.scanButtonHelp]]
+        </div>
+        <div class="flex"></div>
+        <paper-button raised class="primary" on-tap="identifierCodeScanTapped">
+          [[verses.general.scan]]
+        </paper-button>
+      </div>
+
       <!-- search section -->
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
@@ -160,16 +170,13 @@
                   <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                 </div>
 
-                <template is="dom-if" if="[[product.count]]">
-
-                  <template is="dom-if" if="[[product.isSelected]]">
-                    <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" min="1" max="[[product.count]]" label="[[verses.general.count]]">
-                      <div slot="suffix">&nbsp;[[product.unit]]</div>
-                    </paper-input>
-                    <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
-                  </template>
-
+                <template is="dom-if" if="[[product.isSelected]]">
+                  <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" min="1" max="[[product.count]]" label="[[verses.general.count]]">
+                    <div slot="suffix">&nbsp;[[product.unit]]</div>
+                  </paper-input>
+                  <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
                 </template>
+
               </div>
 
             </template>
@@ -261,6 +268,10 @@
           });
           return;
         }
+        this.selectedProductList = this.app.getFromSession('pos-selected-product-list') || [];
+        this.selectedProductList.forEach(selectedProduct => {
+          selectedProduct.isSelected = true;
+        });
         if (this.searchString !== '') this.set('searchString', '');
         this._processInventory(() => {
           this._fetchInventoryList(() => {
@@ -447,6 +458,11 @@
 
       backButtonOnTopBarPressed(e = null) {
         this.app.navigateToPreviousUrl(`/view-inventory/inventory:${this.inventoryId}`);
+      }
+
+      identifierCodeScanTapped(e = null) {
+        this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
+        this.app.navigateTo(`/scan-identifier-code/from:transfer-products/inventory:${this.params.inventory}`);
       }
 
       // region: misc =================================
