@@ -199,6 +199,8 @@
         return (typeof (val) === 'undefined' || val === null || val < 0);
       }
 
+      $subtract(a, b) { return a - b }
+
       _paginateOfflineData(list) {
         let { limit, offset } = this.paginate;
         let totalCount = list.length;
