@@ -109,13 +109,6 @@
                     <div class="inventory-product-price-container">[[verses.inventory.sellingPrice]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                   </div>
 
-                  <!-- select -->
-                  <template is="dom-if" if="[[isProductSelectionForInitiated]]">
-                    <template is="dom-if" if="[[product.count]]">
-                      <paper-button raised class="secondary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
-                    </template>
-                  </template>
-
                 </div>
 
               </template>
@@ -138,88 +131,21 @@
         </div>
       </template>
 
-      <!-- section shows selected products -->
-      <template is="dom-if" if="[[selectedProductList.length]]">
-        <div class="card vertical layout">
-          <div class="selected-products-text">
-            [[verses.inventory.totalSelectedProducts]]: [[selectedProductCount]]
-          </div>
-
-          <div class="list">
-            <template is="dom-repeat" items="[[selectedProductList]]" as="product">
-
-              <div class="horizontal layout item center">
-                <div class="vertical layout flex">
-                  <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                  <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
-                    [[product.count]][[product.unit]]
-                  </div>
-
-                  <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                    <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
-                  </template>
-
-                  <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
-                </div>
-
-                <template is="dom-if" if="[[product.count]]">
-
-                  <template is="dom-if" if="[[product.isSelected]]">
-                    <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" min="1" max="[[product.count]]" label="[[verses.general.count]]">
-                      <div slot="suffix">&nbsp;[[product.unit]]</div>
-                    </paper-input>
-                    <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
-                  </template>
-
-                </template>
-              </div>
-
-            </template>
-          </div>
-        </div>
-
-        <!-- section handles inventory transfer -->
-        <div class="card vertical layout">
-
-          <div class="move-to-inventory-help">
-            [[verses.inventory.moveSelectedHelp]]
-          </div>
-
-          <paper-dropdown-menu style="width: 100%;">
-            <paper-listbox slot="dropdown-content" selected="{{targetInventoryIndex}}">
-              <template is="dom-repeat" items="[[inventoryList]]" as="inventory">
-                <paper-item data-id="[[inventory.id]]">[[inventory.inventoryContainerName]] - [[inventory.name]]</paper-item>
-              </template>
-            </paper-listbox>
-          </paper-dropdown-menu>
-
-          <paper-button raised class="primary m-0 manage-inventory-button" on-tap="moveSelectedTapped">[[verses.inventory.moveSelected]]</paper-button>
-        </div>
-      </template>
-
       <!-- add products trigger -->
       <template is="dom-if" if="[[hasPrivilege('PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES', organization)]]">
-        <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
-          <div class="card">
-            <div>
-              [[verses.inventory.addToInventoryHelp]]
-            </div>
-            <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
+        <div class="card">
+          <div>
+            [[verses.inventory.addToInventoryHelp]]
           </div>
-        </template>
+          <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
+        </div>
       </template>
 
       <!-- transfer products trigger -->
       <template is="dom-if" if="[[hasPrivilege('PRIV_TRANSFER_ALL_INVENTORIES', organization)]]">
         <div class="card">
-          <template is="dom-if" if="[[!isProductSelectionForInitiated]]">
-            <div class="mb-4">[[verses.inventory.transferInventoryHelp]]</div>
-            <paper-button raised style="width: 100%;" class="secondary" on-tap="selectProductsToTransferTapped">[[verses.inventory.selectProductsToTransfer]]</paper-button>
-          </template>
-
-          <template is="dom-if" if="[[isProductSelectionForInitiated]]">
-            <paper-button raised style="width: 100%;" class="danger" on-tap="cancelTransferTapped">[[verses.inventory.stopSelectingProductsToTransfer]]</paper-button>
-          </template>
+          <div class="mb-4">[[verses.inventory.transferInventoryHelp]]</div>
+          <paper-button raised style="width: 100%;" class="secondary" on-tap="selectProductsToTransferTapped">[[verses.inventory.selectProductsToTransfer]]</paper-button>
         </div>
       </template>
 
@@ -244,25 +170,9 @@
             type: String,
             value: ''
           },
-          selectedProductCount: {
-            type: Number,
-            value: 0
-          },
-          selectedProductList: {
-            type: Array,
-            value: () => []
-          },
           searchString: {
             type: String,
             value: ''
-          },
-          targetInventoryIndex: {
-            type: Number,
-            value: 0
-          },
-          isProductSelectionForInitiated: {
-            type: Boolean,
-            value: false
           }
         };
       }
@@ -289,20 +199,13 @@
           return;
         }
         if (this.searchString !== '') this.set('searchString', '');
-        this.isProductSelectionForInitiated = false;
         this._processInventory(() => {
-          this._fetchInventoryList(() => {
-            this.isReady = true;
-          });
+          this.isReady = true;
         });
       }
 
       onNavigateOut() {
         super.onNavigateOut();
-        this.selectedProductCount = 0;
-        this.selectedProductList = [];
-        this.targetInventoryIndex = 0;
-        this.isProductSelectionForInitiated = false;
         this.app.popPageTitle();
       }
 
@@ -340,133 +243,19 @@
             Object.assign(product, { name, unit, purchasePrice, salePrice });
             return product;
           });
-          // productList.sort((a, b) => b.count - a.count);
-
-          this.selectedProductList.forEach(previousProduct => {
-            let product = productList.find(product => product.productId === previousProduct.productId);
-            if (product) {
-              product.isSelected = true;
-            }
-          })
-
           this.productList = productList;
           cbfn();
         });
       }
 
-      _fetchInventoryList(cbfn) {
-        let data = { organizationId: this.app.organization.id };
-        this.app.callGetInventoryListApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          this.inventoryList = response.inventoryList;
-          return cbfn();
-        });
-      }
-
-      _processMoveProducts({ fromInventoryId, toInventoryId, productList }, cbfn) {
-        let data = { fromInventoryId, toInventoryId, productList };
-        this.app.callTransferBetweenInventoriesApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          return cbfn();
-        });
-      }
-
-      _addProductToSelectedProductList({ product }) {
-        this.push('selectedProductList', product);
-        this.selectedProductCount = this.selectedProductList.length;
-      }
-
-      _removeProductFromSelectedProductList({ product }) {
-        this.selectedProductList.forEach((selectedProduct, index) => {
-          if (selectedProduct.productId === product.productId) {
-            this.splice('selectedProductList', index, 1);
-          }
-        });
-
-        this.productList.forEach((productInList, index) => {
-          if (productInList.productId === product.productId) {
-            this.set(`productList.${index}.isSelected`, false)
-          }
-        });
-
-        this.selectedProductCount = this.selectedProductList.length;
-      }
-
-      _deselectAllFromSelectedProductList() {
-        this.productList.forEach((product, index) => this.set(`productList.${index}.isSelected`, false));
-        this.selectedProductList = [];
-        this.selectedProductCount = 0;
-      }
-
       // region: ui  ===========================
-
-      moveSelectedTapped(e) {
-        let fromInventoryId = parseInt(this.params.inventory, 10);
-        let toInventoryId = this.inventoryList[this.targetInventoryIndex].id;
-        let productList = this.productList.filter(product => product.isSelected).map(product => {
-          if (!('selectedCount' in product)) product.selectedCount = '' + product.count;
-          let { productId, selectedCount } = product;
-          let count = parseInt(selectedCount, 10);
-          return { count, productId };
-        });
-        this._processMoveProducts({ fromInventoryId, toInventoryId, productList }, () => {
-          this.isProductSelectionForInitiated = false;
-          this._deselectAllFromSelectedProductList();
-          let message = this.app.verses.inventory.selectedProductsMoved;
-          this.app.showToast(message, () => {
-            this.app.refreshCurrentPage();
-          });
-        });
-      }
-
-      selectTapped(e) {
-        e.model.set('product.selectedCount', 1);
-        e.model.set('product.isSelected', true);
-
-        let { product } = e.model;
-        this._addProductToSelectedProductList({ product });
-      }
-
-      deselectTapped(e) {
-        let { product } = e.model;
-        this._removeProductFromSelectedProductList({ product });
-      }
-
-      // editTapped(e = null) {
-      //   return this.app.navigateTo(`/edit-inventory/inventory:${this.inventory.id}`);
-      // }
-
-      // deleteTapped(e = null) {
-      //   let message = `Are you sure you want to delete this inventory ${this.inventory.name}. Once deleted, you can not restore this inventory.`;
-      //   this.app.showModalConfirmation("Delete inventory?", message, (answer) => {
-      //     if (!answer) return;
-      //     this._deleteInventory(this.inventory.id, () => {
-      //       this.app.showModalDialog("Successfully deleted.", "The inventory has been deleted", () => {
-      //         this.app.navigateTo(`/manage-inventories`);
-      //       });
-      //     });
-      //   });
-      // }
-
-      // viewInventoryTapped(e = null) {
-      //   let el = e.target;
-      //   let key = el.getAttribute('data-key');
-      //   return this.app.navigateTo(`/view-inventory/inventory:${this[key].id}`);
-      // }
 
       addProductsTapped(e) {
         return this.app.navigateTo(`/add-products/inventory:${this.inventoryId}`);
       }
 
       selectProductsToTransferTapped(e) {
-        this.isProductSelectionForInitiated = true;
-      }
-
-      cancelTransferTapped(e) {
-        this.isProductSelectionForInitiated = false;
-        this._deselectAllFromSelectedProductList();
+        return this.app.navigateTo(`/transfer-products/inventory:${this.inventoryId}`);
       }
 
       $isProductCountLow(count) {
@@ -501,11 +290,6 @@
         this.set('paginate.offset', 0);
         this._processInventory(() => this.isReady = true);
       }
-
-      genericSelectedCountInputChanged(e) {
-        this.enforceMinMaxOnPaperInput(e);
-      }
-      
 
       // region: misc =================================
 
