@@ -99,7 +99,8 @@
     "print": "Print",
     "showFilters": "Filters",
     "verificationUnsuccessful": "Verification Unsuccessful",
-    "modalConfirmationPleaseConfirm": "Please confirm."
+    "modalConfirmationPleaseConfirm": "Please confirm.",
+    "scanButtonHelp": "Use code scanner to select multiple products quickly"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -754,8 +755,7 @@
     "addedOn": "Added On",
     "noProductFoundInOutlet": "No products found. Go back and add products to the Outlet's default inventory.",
     "searchForProductInput": "Name or Identifier Code",
-    "searchForProductInputError": "Error in Search",
-    "scanButtonHelp": "Use code scanner to select multiple products quickly"
+    "searchForProductInputError": "Error in Search"
   },
   "posSelectService": {
     "posSelectServiceTitle": "Select Services",

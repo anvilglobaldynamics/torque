@@ -60,6 +60,16 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <div class="card horizontal layout center" style="background: var(--app-button-alternative);">
+        <div>
+          [[verses.general.scanButtonHelp]]
+        </div>
+        <div class="flex"></div>
+        <paper-button raised class="primary" on-tap="identifierCodeScanTapped">
+          [[verses.general.scan]]
+        </paper-button>
+      </div>
+
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
           <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="[[verses.addProducts.searchInputError]]" label="[[verses.addProducts.searchInputLabel]]" on-keypress="searchFieldKeypressed"></paper-input>
@@ -203,6 +213,8 @@
           });
           return;
         }
+        this.selectedProductBlueprintList = this.app.getFromSession('selected-product-blueprint-list') || [];
+
         this._processProductBlueprintList(_ => {
           this.isReady = true;
         });
@@ -294,6 +306,7 @@
       }
 
       backButtonOnTopBarPressed(e = null) {
+        this.app.extractFromSession('selected-product-blueprint-list') ;
         this.app.navigateToPreviousUrl(`/view-inventory/inventory:${this.params.inventory}`);
       }
 
@@ -345,6 +358,11 @@
         }
         productBlueprint.count = 0;
         this.push('productBlueprintList', productBlueprint);
+      }
+
+      identifierCodeScanTapped(e = null) {
+        this.app.storeInSession('selected-product-blueprint-list', this.selectedProductBlueprintList);
+        this.app.navigateTo(`/scan-identifier-code/from:add-products/inventory:${this.params.inventory}`);
       }
 
       // region: misc =================================
