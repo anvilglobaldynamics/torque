@@ -92,9 +92,9 @@
             <paper-menu-button horizontal-align="right" ignore-select id="top-menu">
               <paper-icon-button icon="menu" slot="dropdown-trigger"></paper-icon-button>
               <paper-listbox slot="dropdown-content">
-                  <paper-item on-tap="editTapped">
-                    <iron-icon class="icon medium-small m-right-8" icon="create" class="m-right-8"></iron-icon>[[verses.outlet.editOutlet]]
-                  </paper-item>
+                <paper-item on-tap="editTapped">
+                  <iron-icon class="icon medium-small m-right-8" icon="create" class="m-right-8"></iron-icon>[[verses.outlet.editOutlet]]
+                </paper-item>
               </paper-listbox>
             </paper-menu-button>
           </template>
@@ -209,6 +209,7 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.outlet.outletTitle);
         if (!this._ensureAccess()) return;
+        this._resetDataInBrowserSession();
         this.onOrganizationChange(this.app.organization);
         if (!('outlet' in this.params)) {
           let message = this.app.verses.general.pageCannotBeDisplayed;
@@ -232,6 +233,11 @@
           authLevel: 'organization-selected',
           privilegeList: ['PRIV_VIEW_ALL_OUTLETS']
         });
+      }
+
+      _resetDataInBrowserSession() {
+        this.app.extractFromSession('selected-product-blueprint-list');
+        this.app.extractFromSession('pos-selected-product-list');
       }
 
       _fetchOutlet(cbfn) {
