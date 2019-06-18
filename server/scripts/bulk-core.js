@@ -191,13 +191,15 @@ const createOrganization = async ({ apiKey }) => {
 const createProductBlueprint = async ({ apiKey, organizationId, i }) => {
   console.log('should create productBlueprint', i);
 
+  let _uid = (uid++);
+
   let { productBlueprintId } = await callApi('api/add-product-blueprint', {
     apiKey,
     organizationId,
-    name: pickOne(nounList) + " Product Blueprint " + (uid++),
+    name: pickOne(nounList) + " Product Blueprint " + _uid,
     unit: "kg",
     defaultPurchasePrice: 120,
-    identifierCode: '',
+    identifierCode: '' + _uid,
     defaultVat: 15,
     defaultSalePrice: 190,
     isReturnable: true
