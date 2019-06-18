@@ -79,7 +79,14 @@
           <div class="success">[[lastSuccessMessage]]</div>
           <br>
         </template>
-        <div class="success">[[verses.scan.countMessagePart1]] <b>[[selectedProductCount]]</b> [[verses.scan.countMessagePart2]]</div>
+        <div class="success">[[verses.scan.countMessagePart1]]
+          <template is="dom-if" if="[[$equals(from, 'add-products')]]">
+            <b>[[selectedProductBlueprintCount]]</b>
+          </template>
+          <template is="dom-if" if="[[!$equals(from, 'add-products')]]">
+            <b>[[selectedProductCount]]</b>
+          </template>
+          [[verses.scan.countMessagePart2]]</div>
       </div>
 
       <div class="card vertical layout">
@@ -101,6 +108,7 @@
 
       static get properties() {
         return {
+          // ============ for pos and transfer-products - start
           selectedProductCount: {
             type: Number,
             value: 0
@@ -109,6 +117,17 @@
             type: Array,
             value: () => []
           },
+          // ============ for pos and transfer-products - end
+          // ============ for add-products - start
+          selectedProductBlueprintCount: {
+            type: Number,
+            value: 0
+          },
+          selectedProductBlueprintList: {
+            type: Array,
+            value: () => []
+          },
+          // ============ for add-products - end
           isInOfflineMode: {
             type: Boolean,
             value: false
@@ -138,7 +157,12 @@
         this.onOfflineDataChange();
         this.app.pushPageTitle(this.app.verses.scan.pageTitle);
         if (!this._ensureAccess()) return;
+        this.from = this.params.from;
+        if (['add-products', 'pos', 'transfer-products'].indexOf(this.from) === -1) {
+          throw new Error("DEV_ERROR: Invalid parameter for 'from'");
+        }
         this.selectedProductList = this.app.getFromSession('pos-selected-product-list') || [];
+        this.selectedProductBlueprintList = this.app.getFromSession('selected-product-blueprint-list') || [];
         this.isReady = true;
         window.setTimeout(() => {
           let x = this.elem('#identifierCodeInput').focus();
@@ -149,6 +173,8 @@
         super.onNavigateOut();
         this.selectedProductList = [];
         this.selectedProductCount = 0;
+        this.selectedProductBlueprintList = [];
+        this.selectedProductBlueprintCount = 0;
         this.lastErrorMessage = '';
         this.lastSuccessMessage = '';
         this.isScanningEnabled = false;
@@ -161,6 +187,8 @@
           privilegeList: ['PRIV_VIEW_ALL_INVENTORIES']
         });
       }
+
+      // region: only pos and transfer-products ===============================
 
       _fetchProductMatchingIdentifierCodeOnline(cbfn) {
         let inventoryId = parseInt(this.params.inventory);
@@ -204,12 +232,8 @@
         });
       }
 
-      // region: ui  ===========================
+      _productIdentifierCodeEntered(e) {
 
-      identifierCodeEntered(e) {
-        this.lastSuccessMessage = '';
-        this.lastErrorMessage = '';
-        if (this.identifierCode.length === 0) return;
         this._fetchProduct((productList) => {
           this.identifierCode = '';
           if (productList.length === 0) {
@@ -248,6 +272,61 @@
         })
       }
 
+      // region: only add-products =================================
+
+      _fetchProductBlueprintMatchingIdentifierCode(cbfn) {
+        if (this.isInOfflineMode) {
+          throw new Error("Dev Error: Accessing this section offline should not be possible");
+        }
+
+        let data = {
+          organizationId: this.app.organization.id,
+          searchString: this.identifierCode
+        };
+        this.app.callGetProductBlueprintListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          let productBlueprint = response.productBlueprintList[0] || null;
+          cbfn(productBlueprint);
+        });
+      }
+
+      _productBlueprintIdentifierCodeEntered(e) {
+        this._fetchProductBlueprintMatchingIdentifierCode((productBlueprint) => {
+          this.identifierCode = '';
+
+          if (!productBlueprint) {
+            this.lastErrorMessage = this.verses.scan.noMatchingProductsError;
+            return;
+          }
+
+          let foundProductBlueprint = this.selectedProductBlueprintList
+            .find(selectedProductBlueprint => selectedProductBlueprint.id === productBlueprint.id);
+
+          if (foundProductBlueprint) {
+            foundProductBlueprint.count = (parseFloat(foundProductBlueprint.count) || 0) + 1;
+          } else {
+            productBlueprint.count = 1;
+            this.selectedProductBlueprintList.push(productBlueprint);
+          }
+          this.selectedProductBlueprintCount += 1;
+          this.lastSuccessMessage = `${this.verses.scan.lastScanned} "${productBlueprint.name}"`;
+        });
+      }
+
+      // region: ui  ===========================
+
+      identifierCodeEntered(e) {
+        this.lastSuccessMessage = '';
+        this.lastErrorMessage = '';
+        if (this.identifierCode.length === 0) return;
+        if (this.from === 'add-products') {
+          this._productBlueprintIdentifierCodeEntered(e);
+        } else {
+          this._productIdentifierCodeEntered(e);
+        }
+      }
+
       identifierCodeInputBlurred(e) {
         this.isScanningEnabled = false;
         window.setTimeout(() => {
@@ -260,9 +339,19 @@
       }
 
       selectProductsTapped(e = null) {
-        this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
-        window.isComingFromScanIdentifierCode = true;
-        this.app.navigateToPreviousUrl(`/pos-select-product`);
+        if (this.from === 'add-products') {
+          this.app.storeInSession('selected-product-blueprint-list', this.selectedProductBlueprintList);
+          this.app.navigateToPreviousUrl(`/add-products/inventory:${this.params.inventory}`);
+
+        } else if (this.from === 'pos') {
+          window.isComingFromScanIdentifierCode = true;
+          this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
+          this.app.navigateToPreviousUrl(`/pos-select-product`);
+
+        } else if (this.from === 'transfer-products') {
+          this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
+          this.app.navigateToPreviousUrl(`/transfer-products/inventory:${this.params.inventory}`);
+        }
       }
 
       backButtonOnTopBarPressed(e = null) {
@@ -270,6 +359,10 @@
       }
 
       // region: misc =================================
+
+      $equals(a, b) {
+        return a === b
+      };
 
       // region: offline sales =================================
 

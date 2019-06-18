@@ -99,7 +99,8 @@
     "print": "প্রিন্ট",
     "showFilters": "ফিল্টার",
     "verificationUnsuccessful": "যাচাই ব্যর্থ",
-    "modalConfirmationPleaseConfirm": "নিশ্চিত করুন"
+    "modalConfirmationPleaseConfirm": "নিশ্চিত করুন",
+    "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -755,8 +756,7 @@
     "addedOn": "যুক্ত হয়েছে",
     "noProductFoundInOutlet": "কোনো পণ্য পাওয়া যায়নি। পেছনে গিয়ে দোকানের প্রধান পণ্য তালিকায় পণ্য যোগ করুন।",
     "searchForProductInput": "নাম বা সনাক্তকরণ কোড",
-    "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি",
-    "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন"
+    "searchForProductInputError": "পণ্যের সন্ধানে ত্রুটি"
   },
   "posSelectService": {
     "posSelectServiceTitle": "সেবা নির্বাচন",

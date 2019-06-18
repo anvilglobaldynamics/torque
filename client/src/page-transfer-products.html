@@ -24,7 +24,7 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="page-view-inventory">
+<dom-module id="page-transfer-products">
   <template>
     <style include="shared-styles">
       paper-dropdown-menu {
@@ -40,6 +40,18 @@
         color: red;
       }
 
+      .edit-button {
+        /* border: 1px solid red; */
+        margin-right: 10px;
+      }
+
+      .selected-products-text {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .move-to-inventory-help {}
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -50,6 +62,16 @@
       <p class="page-subtitle">
         [[inventoryContainerName]] - [[inventoryName]]
       </p>
+
+      <div class="card horizontal layout center" style="background: var(--app-button-alternative);">
+        <div>
+          [[verses.general.scanButtonHelp]]
+        </div>
+        <div class="flex"></div>
+        <paper-button raised class="primary" on-tap="identifierCodeScanTapped">
+          [[verses.general.scan]]
+        </paper-button>
+      </div>
 
       <!-- search section -->
       <div class="card vertical layout">
@@ -97,6 +119,11 @@
                     <div class="inventory-product-price-container">[[verses.inventory.sellingPrice]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                   </div>
 
+                  <!-- select -->
+                  <template is="dom-if" if="[[product.count]]">
+                    <paper-button raised class="secondary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+                  </template>
+
                 </div>
 
               </template>
@@ -119,33 +146,76 @@
         </div>
       </template>
 
-      <!-- add products trigger -->
-      <template is="dom-if" if="[[hasPrivilege('PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES', organization)]]">
-        <div class="card">
-          <div>
-            [[verses.inventory.addToInventoryHelp]]
+      <!-- section shows selected products -->
+      <template is="dom-if" if="[[selectedProductList.length]]">
+        <div class="card vertical layout">
+          <div class="selected-products-text">
+            [[verses.inventory.totalSelectedProducts]]: [[selectedProductCount]]
           </div>
-          <paper-button raised class="primary m-0 manage-inventory-button" on-tap="addProductsTapped">[[verses.inventory.addProducts]]</paper-button>
+
+          <div class="list">
+            <template is="dom-repeat" items="[[selectedProductList]]" as="product">
+
+              <div class="horizontal layout item center">
+                <div class="vertical layout flex">
+                  <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                  <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
+                    [[product.count]][[product.unit]]
+                  </div>
+
+                  <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                    <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                  </template>
+
+                  <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                </div>
+
+                <template is="dom-if" if="[[product.isSelected]]">
+                  <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" min="1" max="[[product.count]]" label="[[verses.general.count]]">
+                    <div slot="suffix">&nbsp;[[product.unit]]</div>
+                  </paper-input>
+                  <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                </template>
+
+              </div>
+
+            </template>
+          </div>
+        </div>
+
+        <!-- section handles inventory transfer -->
+        <div class="card vertical layout">
+
+          <div class="move-to-inventory-help">
+            [[verses.inventory.moveSelectedHelp]]
+          </div>
+
+          <paper-dropdown-menu style="width: 100%;">
+            <paper-listbox slot="dropdown-content" selected="{{targetInventoryIndex}}">
+              <template is="dom-repeat" items="[[inventoryList]]" as="inventory">
+                <paper-item data-id="[[inventory.id]]">[[inventory.inventoryContainerName]] - [[inventory.name]]</paper-item>
+              </template>
+            </paper-listbox>
+          </paper-dropdown-menu>
+
+          <paper-button raised class="primary m-0 manage-inventory-button" on-tap="moveSelectedTapped">[[verses.inventory.moveSelected]]</paper-button>
         </div>
       </template>
 
       <!-- transfer products trigger -->
-      <template is="dom-if" if="[[hasPrivilege('PRIV_TRANSFER_ALL_INVENTORIES', organization)]]">
-        <div class="card">
-          <div class="mb-4">[[verses.inventory.transferInventoryHelp]]</div>
-          <paper-button raised style="width: 100%;" class="secondary" on-tap="selectProductsToTransferTapped">[[verses.inventory.selectProductsToTransfer]]</paper-button>
-        </div>
-      </template>
+      <div class="card">
+        <paper-button raised style="width: 100%;" class="danger" on-tap="cancelTransferTapped">[[verses.inventory.stopSelectingProductsToTransfer]]</paper-button>
+      </div>
 
     </div>
 
   </template>
 
   <script>
-    class PageViewInventory extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+    class PageTransferProducts extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
-        return 'page-view-inventory';
+        return 'page-transfer-products';
       }
 
       static get properties() {
@@ -158,9 +228,21 @@
             type: String,
             value: ''
           },
+          selectedProductCount: {
+            type: Number,
+            value: 0
+          },
+          selectedProductList: {
+            type: Array,
+            value: () => []
+          },
           searchString: {
             type: String,
             value: ''
+          },
+          targetInventoryIndex: {
+            type: Number,
+            value: 0
           }
         };
       }
@@ -186,14 +268,23 @@
           });
           return;
         }
+        this.selectedProductList = this.app.getFromSession('pos-selected-product-list') || [];
+        this.selectedProductList.forEach(selectedProduct => {
+          selectedProduct.isSelected = true;
+        });
         if (this.searchString !== '') this.set('searchString', '');
         this._processInventory(() => {
-          this.isReady = true;
+          this._fetchInventoryList(() => {
+            this.isReady = true;
+          });
         });
       }
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.selectedProductCount = 0;
+        this.selectedProductList = [];
+        this.targetInventoryIndex = 0;
         this.app.popPageTitle();
       }
 
@@ -231,19 +322,101 @@
             Object.assign(product, { name, unit, purchasePrice, salePrice });
             return product;
           });
+          // productList.sort((a, b) => b.count - a.count);
+
+          this.selectedProductList.forEach(previousProduct => {
+            let product = productList.find(product => product.productId === previousProduct.productId);
+            if (product) {
+              product.isSelected = true;
+            }
+          })
+
           this.productList = productList;
           cbfn();
         });
       }
 
-      // region: ui  ===========================
-
-      addProductsTapped(e) {
-        return this.app.navigateTo(`/add-products/inventory:${this.inventoryId}`);
+      _fetchInventoryList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetInventoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.inventoryList = response.inventoryList;
+          return cbfn();
+        });
       }
 
-      selectProductsToTransferTapped(e) {
-        return this.app.navigateTo(`/transfer-products/inventory:${this.inventoryId}`);
+      _processMoveProducts({ fromInventoryId, toInventoryId, productList }, cbfn) {
+        let data = { fromInventoryId, toInventoryId, productList };
+        this.app.callTransferBetweenInventoriesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn();
+        });
+      }
+
+      _addProductToSelectedProductList({ product }) {
+        this.push('selectedProductList', product);
+        this.selectedProductCount = this.selectedProductList.length;
+      }
+
+      _removeProductFromSelectedProductList({ product }) {
+        this.selectedProductList.forEach((selectedProduct, index) => {
+          if (selectedProduct.productId === product.productId) {
+            this.splice('selectedProductList', index, 1);
+          }
+        });
+
+        this.productList.forEach((productInList, index) => {
+          if (productInList.productId === product.productId) {
+            this.set(`productList.${index}.isSelected`, false)
+          }
+        });
+
+        this.selectedProductCount = this.selectedProductList.length;
+      }
+
+      _deselectAllFromSelectedProductList() {
+        this.productList.forEach((product, index) => this.set(`productList.${index}.isSelected`, false));
+        this.selectedProductList = [];
+        this.selectedProductCount = 0;
+      }
+
+      // region: ui  ===========================
+
+      moveSelectedTapped(e) {
+        let fromInventoryId = parseInt(this.params.inventory, 10);
+        let toInventoryId = this.inventoryList[this.targetInventoryIndex].id;
+        let productList = this.productList.filter(product => product.isSelected).map(product => {
+          if (!('selectedCount' in product)) product.selectedCount = '' + product.count;
+          let { productId, selectedCount } = product;
+          let count = parseInt(selectedCount, 10);
+          return { count, productId };
+        });
+        this._processMoveProducts({ fromInventoryId, toInventoryId, productList }, () => {
+          this._deselectAllFromSelectedProductList();
+          let message = this.app.verses.inventory.selectedProductsMoved;
+          this.app.showToast(message, () => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      selectTapped(e) {
+        e.model.set('product.selectedCount', 1);
+        e.model.set('product.isSelected', true);
+
+        let { product } = e.model;
+        this._addProductToSelectedProductList({ product });
+      }
+
+      deselectTapped(e) {
+        let { product } = e.model;
+        this._removeProductFromSelectedProductList({ product });
+      }
+
+      cancelTransferTapped(e) {
+        this.backButtonOnTopBarPressed();
       }
 
       $isProductCountLow(count) {
@@ -279,10 +452,23 @@
         this._processInventory(() => this.isReady = true);
       }
 
+      genericSelectedCountInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+      }
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl(`/view-inventory/inventory:${this.inventoryId}`);
+      }
+
+      identifierCodeScanTapped(e = null) {
+        this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
+        this.app.navigateTo(`/scan-identifier-code/from:transfer-products/inventory:${this.params.inventory}`);
+      }
+
       // region: misc =================================
 
     }
 
-    window.customElements.define(PageViewInventory.is, PageViewInventory);
+    window.customElements.define(PageTransferProducts.is, PageTransferProducts);
   </script>
 </dom-module>
