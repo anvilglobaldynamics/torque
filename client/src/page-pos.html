@@ -1144,7 +1144,13 @@
 
       goOnlineTapped() {
         if (this.isInOfflineMode) {
-          this.app.toggleOfflineMode();
+          this.app.callUserAssertApiKeyApi({}, (err, response) => {
+            if (err) {
+              this.app.showModalDialog(this.verses.root.networkErrorTitle, this.verses.root.networkErrorContent);
+              return;
+            }
+            this.app.toggleOfflineMode();
+          });
         }
       }
 
