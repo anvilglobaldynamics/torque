@@ -143,8 +143,8 @@ exports.EmploymentCollection = class extends Collection {
     return await this._insert({
       userId,
       organizationId,
-      designation: 'Owner',
-      role: 'owner',
+      designation: 'Admin',
+      role: 'admin',
       companyProvidedId: '',
       privileges: this.__generatePrivilegeModel(this.__fullPrivilegeList),
       isActive: true
