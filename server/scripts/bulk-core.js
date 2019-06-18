@@ -325,6 +325,8 @@ const createEmployee = async ({ apiKey, organizationId, i }) => {
       PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
       PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS: true,
 
+      PRIV_VIEW_REPORTS: true,
+
       PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: true,
       PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: true,
 
