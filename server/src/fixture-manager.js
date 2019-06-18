@@ -18,12 +18,12 @@ class FixtureManager {
       {
         name: "designation-list",
         path: "./src/fixtures/designation-list.json",
-        version: 1
+        version: 2
       },
       {
         name: "role-list",
         path: "./src/fixtures/role-list.json",
-        version: 1
+        version: 2
       },
       {
         name: "privilege-list",

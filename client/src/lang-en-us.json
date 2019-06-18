@@ -99,7 +99,8 @@
     "print": "Print",
     "showFilters": "Filters",
     "verificationUnsuccessful": "Verification Unsuccessful",
-    "modalConfirmationPleaseConfirm": "Please confirm."
+    "modalConfirmationPleaseConfirm": "Please confirm.",
+    "scanButtonHelp": "Use code scanner to select multiple products quickly"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -596,8 +597,8 @@
     "discardMessage": "Once discarded, this sale will not be considered in any report or calculation. Service Membership(s) sold in this sale (if any) will also be discarded.",
     "dueAmount": "Due amount",
     "lessDueToRounding": "Less",
-    "editBill": "Edit Bill?",
-    "editBillDetails": "Are you sure you want to edit total payable?",
+    "editBill": "Adjust Total Payable?",
+    "editBillDetails": "You can adjust Total Payable amount here. Both adjusted and original amount will be saved.",
     "totalBillBeforeRounding": "Total Payable (without Less)",
     "roundedByAmount": "Less",
     "discountPreset": "Discount Preset"
@@ -754,8 +755,7 @@
     "addedOn": "Added On",
     "noProductFoundInOutlet": "No products found. Go back and add products to the Outlet's default inventory.",
     "searchForProductInput": "Name or Identifier Code",
-    "searchForProductInputError": "Error in Search",
-    "scanButtonHelp": "Use code scanner to select multiple products quickly"
+    "searchForProductInputError": "Error in Search"
   },
   "posSelectService": {
     "posSelectServiceTitle": "Select Services",

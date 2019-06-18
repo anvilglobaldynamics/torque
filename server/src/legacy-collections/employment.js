@@ -201,8 +201,8 @@ exports.EmploymentCollection = class extends LegacyCollection {
     let user = {
       userId,
       organizationId,
-      designation: 'Owner',
-      role: 'owner',
+      designation: 'Admin',
+      role: 'admin',
       companyProvidedId: '',
       privileges: this.__makePrivilegeModel(true),
       isActive: true

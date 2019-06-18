@@ -40,7 +40,7 @@
 
       <div class="card horizontal layout center" style="background: var(--app-button-alternative);">
         <div>
-          [[verses.posSelectProduct.scanButtonHelp]]
+          [[verses.general.scanButtonHelp]]
         </div>
         <div class="flex"></div>
         <paper-button raised class="primary" on-tap="identifierCodeScanTapped">
@@ -333,7 +333,7 @@
         this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
         this.selectedProductList = [];
         this.selectedProductCount = 0;
-        this.app.navigateTo(`/scan-identifier-code/inventory:${this.params.inventory}`);
+        this.app.navigateTo(`/scan-identifier-code/from:pos/inventory:${this.params.inventory}`);
       }
 
       selectProductsTapped(e = null) {

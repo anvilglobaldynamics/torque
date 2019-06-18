@@ -34,7 +34,7 @@ describe('public apis', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('designationList').that.is.an('array');
-      expect(body.designationList).to.contain('Owner');
+      expect(body.designationList).to.contain('Admin');
       testDoneFn();
     });
 
@@ -66,7 +66,7 @@ describe('public apis', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body).to.have.property('roleList').that.is.an('array');
-      expect(body.roleList).to.contain('owner');
+      expect(body.roleList).to.contain('admin');
       testDoneFn();
     });
 

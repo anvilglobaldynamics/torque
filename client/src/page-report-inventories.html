@@ -187,6 +187,25 @@
                     <th class="cell cell-right">[[verses.general.sale]]</th>
                   </tr>
 
+                  <!-- total - start -->
+                  <tr>
+                    <td class="cell" style="font-weight: bold;">[[verses.general.total]]</td>
+                    <td class="cell" align="center">
+                      {{computeTotalProductCount(aggregatedInventoryDetail.aggregatedProductList)}}
+                    </td>
+
+                    <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                      <td class="cell" align="center">
+                        {{computeTotalPurchasePrice(aggregatedInventoryDetail.aggregatedProductList)}}
+                      </td>
+                    </template>
+
+                    <td class="cell cell-right" align="center">
+                      {{computeTotalSalePrice(aggregatedInventoryDetail.aggregatedProductList)}}
+                    </td>
+                  </tr>
+                  <!-- total - end -->
+
                   <template is="dom-repeat" items="[[aggregatedInventoryDetail.aggregatedProductList]]" as="aggregatedProduct">
                     <tr>
                       <td class="cell">
@@ -211,6 +230,7 @@
                     </tr>
                   </template>
 
+                  <!-- total - start -->
                   <tr>
                     <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
                     <td class="cell cell-bottom" align="center">
@@ -227,6 +247,7 @@
                       {{computeTotalSalePrice(aggregatedInventoryDetail.aggregatedProductList)}}
                     </td>
                   </tr>
+                  <!-- total - end -->
                 </template>
 
                 <template is="dom-if" if="[[!aggregatedInventoryDetail.aggregatedProductList.length]]">

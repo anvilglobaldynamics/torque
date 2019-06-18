@@ -191,13 +191,15 @@ const createOrganization = async ({ apiKey }) => {
 const createProductBlueprint = async ({ apiKey, organizationId, i }) => {
   console.log('should create productBlueprint', i);
 
+  let _uid = (uid++);
+
   let { productBlueprintId } = await callApi('api/add-product-blueprint', {
     apiKey,
     organizationId,
-    name: pickOne(nounList) + " Product Blueprint " + (uid++),
+    name: pickOne(nounList) + " Product Blueprint " + _uid,
     unit: "kg",
     defaultPurchasePrice: 120,
-    identifierCode: '',
+    identifierCode: '' + _uid,
     defaultVat: 15,
     defaultSalePrice: 190,
     isReturnable: true
@@ -324,6 +326,8 @@ const createEmployee = async ({ apiKey, organizationId, i }) => {
       PRIV_TRANSFER_ALL_INVENTORIES: true,
       PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
       PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS: true,
+
+      PRIV_VIEW_REPORTS: true,
 
       PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: true,
       PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: true,
