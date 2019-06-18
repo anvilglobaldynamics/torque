@@ -33,8 +33,6 @@
 
       .product-title {
         /* border: 1px solid red; */
-        min-width: 40%;
-        max-width: 40%;
         max-height: 100px;
         padding-right: 10px;
         overflow: auto;
@@ -42,11 +40,6 @@
 
       .product-header {
         font-size: 13px;
-      }
-
-      .product-blueprint-numeric {
-        min-width: 20%;
-        max-width: 20%;
       }
 
       .add-product-button-container paper-button {
@@ -97,7 +90,7 @@
               <div class="horizontal layout item center">
                 <div class="product-header product-title">[[verses.product.productBlueprint]]</div>
                 <div class="flex"></div>
-                <div class="product-header product-blueprint-numeric">[[verses.product.count]]</div>
+                <div class="product-header mr8">[[verses.product.count]]</div>
               </div>
             </div>
 
@@ -106,9 +99,7 @@
                 <div class="horizontal layout item center">
                   <div class="product-title">[[productBlueprint.name]]</div>
                   <div class="flex"></div>
-                  <div class="product-blueprint-numeric">
-                    <paper-input class="small-input" value="{{productBlueprint.count}}" type="number" min="0" on-change="productBlueprintInputChanged" label=[[productBlueprint.unit]]></paper-input>
-                  </div>
+                  <paper-input class="small-input mr8" value="{{productBlueprint.count}}" type="number" min="0" on-change="productBlueprintInputChanged" label=[[productBlueprint.unit]]></paper-input>
                 </div>
               </div>
             </template>
@@ -117,9 +108,9 @@
 
           <div class="pagination">
             [[verses.general.loaded]]
-            <span class="limit">[[pagination.limit]]</span>
+            <span class="limit">[[productBlueprintList.length]]</span>
             [[verses.general.itemsOutOf]]
-            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="total-count">[[$subtract(pagination.totalCount, selectedProductBlueprintList.length)]]</span> [[verses.general.startingFrom]]
             <span class="offset">#[[$inc(pagination.offset)]]</span>.
           </div>
           <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
@@ -141,7 +132,7 @@
             <div class="horizontal layout item center">
               <div class="product-header product-title">[[verses.product.productBlueprint]]</div>
               <div class="flex"></div>
-              <div class="product-header product-blueprint-numeric">[[verses.product.count]]</div>
+              <div class="product-header mr8">[[verses.product.count]]</div>
             </div>
           </div>
 
@@ -150,9 +141,8 @@
               <div class="horizontal layout item center">
                 <div class="product-title">[[productBlueprint.name]]</div>
                 <div class="flex"></div>
-                <div class="product-blueprint-numeric">
-                  <paper-input class$="small-input id-[[productBlueprint.id]]" value="{{productBlueprint.count}}" type="number" min="0" on-change="genericNumericInputChanged" label=[[productBlueprint.unit]]></paper-input>
-                </div>
+                <paper-input class$="small-input id-[[productBlueprint.id]]" value="{{productBlueprint.count}}" type="number" min="0" on-change="genericNumericInputChanged" label=[[productBlueprint.unit]]></paper-input>
+                <paper-icon-button icon="clear" on-tap="deselectTapped"></paper-icon-button>
               </div>
             </div>
           </template>
@@ -344,6 +334,17 @@
           let el = this.elem(`.id-${productBlueprint.id}`);
           el.focus();
         }, 100);
+      }
+
+      deselectTapped(e) {
+        let { productBlueprint } = e.model;
+        let index = this.selectedProductBlueprintList
+          .findIndex(_productBlueprint => _productBlueprint.id === productBlueprint.id);
+        if (index > -1) {
+          this.splice('selectedProductBlueprintList', index, 1);
+        }
+        productBlueprint.count = 0;
+        this.push('productBlueprintList', productBlueprint);
       }
 
       // region: misc =================================
