@@ -171,7 +171,7 @@
                 </div>
 
                 <template is="dom-if" if="[[product.isSelected]]">
-                  <paper-input class="medium-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" min="1" max="[[product.count]]" label="[[verses.general.count]]">
+                  <paper-input class="small-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" min="1" max="[[product.count]]" label="[[verses.general.count]]">
                     <div slot="suffix">&nbsp;[[product.unit]]</div>
                   </paper-input>
                   <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
