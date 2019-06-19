@@ -271,7 +271,7 @@
             <!-- <div class="date"></div> -->
             <div>
               <div class="author-title">[[verses.salesReceipt.receiptTitle]] #[[sales.salesNumber]]</div>
-              <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
+              <div><b>[[verses.general.date]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
               <!-- <div>[[app.organization.primaryBusinessAddress]]</div> -->
               <!-- <div>[[app.organization.phone]]</div> -->
             </div>
@@ -423,7 +423,7 @@
                 <!-- <div>[[app.organization.phone]]</div> -->
 
                 <div class="author-title">[[verses.salesReceipt.receiptTitle]] #[[sales.salesNumber]]</div>
-                <div><b>[[verses.general.dated]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
+                <div><b>[[verses.general.date]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
                 
                 <template is="dom-if" if="{{sales.customerId}}">
                   <div><b>[[verses.salesReceipt.customerName]]:</b> [[customer.fullName]]</div>
