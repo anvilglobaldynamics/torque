@@ -63,4 +63,16 @@ exports.ProductCategoryCollection = class extends Collection {
     return await this._findOne({ id, organizationId });
   }
 
+  async listByOrganizationIdAndSearchString({ organizationId, searchString }) {
+    let query = { organizationId };
+    if (searchString) {
+      let escapedSearchString = this.escapeRegExp(searchString.toLowerCase());
+      let searchRegex = new RegExp(escapedSearchString, 'i');
+      query.$or = [
+        { name: searchRegex }
+      ];
+    }
+    return await this._find(query);
+  }
+
 }

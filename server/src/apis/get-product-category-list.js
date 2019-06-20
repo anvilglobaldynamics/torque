@@ -28,14 +28,14 @@ exports.GetProductCategoryListApi = class extends Api {
     }];
   }
 
-  async __getProductCategoryList({ organizationId }) {
-    let productCategoryList = await this.database.productCategory.listByOrganizationId({ organizationId });
+  async __getProductCategoryList({ organizationId, searchString }) {
+    let productCategoryList = await this.database.productCategory.listByOrganizationIdAndSearchString({ organizationId, searchString });
     return productCategoryList;
   }
 
   async handle({ body }) {
-    let { organizationId } = body;
-    let productCategoryList = await this.__getProductCategoryList({ organizationId });
+    let { organizationId, searchString } = body;
+    let productCategoryList = await this.__getProductCategoryList({ organizationId, searchString });
     return { productCategoryList };
   }
 
