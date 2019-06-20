@@ -109,6 +109,10 @@ const { EditDiscountPresetApi } = require('./apis/edit-discount-preset');
 const { DeleteDiscountPresetApi } = require('./apis/delete-discount-preset');
 const { GetDiscountPresetListApi } = require('./apis/get-discount-preset-list');
 
+const { AddProductCategoryApi } = require('./apis/add-product-category');
+const { EditProductCategoryApi } = require('./apis/edit-product-category');
+const { GetProductCategoryListApi } = require('./apis/get-product-category-list');
+
 const { ShopLocateNearbyOutletsApi } = require('./apis/shop-locate-nearby-outlets');
 const { ShopGetOutletDetailsApi } = require('./apis/shop-get-outlet-details');
 
@@ -346,6 +350,11 @@ class Program {
     server.registerPostApi('/api/edit-discount-preset', EditDiscountPresetApi);
     server.registerPostApi('/api/delete-discount-preset', DeleteDiscountPresetApi);
     server.registerPostApi('/api/get-discount-preset-list', GetDiscountPresetListApi);
+
+    server.registerPostApi('/api/add-product-category', AddProductCategoryApi);
+    server.registerPostApi('/api/edit-product-category', EditProductCategoryApi);
+    server.registerPostApi('/api/get-product-category-list', GetProductCategoryListApi);
+
     server.registerPostApi('/api/admin-login', AdminLoginApi);
     server.registerPostApi('/api/admin-get-outgoing-sms-list', AdminGetOutgoingSmsListApi);
     server.registerPostApi('/api/admin-set-outgoing-sms-status', AdminSetOutgoingSmsStatusApi);
