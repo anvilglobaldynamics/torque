@@ -1,0 +1,223 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-product-category">
+  <template>
+    <style include="shared-styles">
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="editProductCategoryForm" on-keypress="genericFormSubmitionKeypress">
+        <form>
+
+          <div class="card vertical layout">
+            <paper-input class="editProductCategoryForm--name" value="{{editProductCategoryForm.name}}" required minlength="3" error-message=[[verses.productCategory.productCategoryNameInputError]] label=[[verses.productCategory.productCategoryNameInput]]></paper-input>
+            <paper-input class="editProductCategoryForm--colorCode" value="{{editProductCategoryForm.colorCode}}" required minlength="6" maxlength="6" error-message=[[verses.productCategory.productCategoryUnitInputError]] label=[[verses.productCategory.productCategoryUnitInput]]></paper-input>
+
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editProductCategoryForm--submit" on-tap="createProductCategoryTapped">[[verses.productCategory.createProductCategory]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editProductCategoryForm--submit" on-tap="updateProductCategoryTapped">[[verses.productCategory.updateProductCategory]]</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageEditProductCategory extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-edit-product-category';
+      }
+
+      static get properties() {
+        return {
+          editMode: {
+            type: Boolean,
+            value: false
+          },
+          editingProductCategory: {
+            type: Object,
+            value: null
+          },
+          editProductCategoryForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  name: "Tops and Torso",
+                  colorCode: "000000"
+                };
+              } else {
+                return {
+                  name: "",
+                  colorCode: ""
+                };
+              }
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        if ('product-category' in this.params) {
+          this.editMode = true;
+          this.app.pushPageTitle(this.app.verses.productCategory.editProductCategoryTitle);
+        } else {
+          this.editMode = false;
+          this.app.pushPageTitle(this.app.verses.productCategory.addProductCategoryTitle);
+        }
+        if (!this._ensureAccess()) return;
+        this._processGetProductCategoryList(() => {
+          if (this.editMode) {
+            this._processGetProductCategory();
+            this.isReady = true;
+          } else {
+            this.delay(300, () => {
+              this.isReady = true;
+            });
+          }
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editProductCategoryForm');
+        this.removeAutoValidation('#editProductCategoryForm paper-input');
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS'],
+          moduleList: ['MOD_PRODUCT']
+        });
+      }
+
+      // region: editProductCategory =================================
+
+      _processGetProductCategoryList(cbfn) {
+        let data = {
+          organizationId: this.app.organization.id
+        };
+        this.app.callGetProductCategoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this._productCategoryList = response.productCategoryList;
+          cbfn();
+        });
+      }
+
+      _processGetProductCategory() {
+        let productCategory = this._productCategoryList.find(productCategory => {
+          return productCategory.id === parseInt(this.params['product-category']);
+        });
+        this.editingProductCategory = productCategory;
+        let { name, colorCode } = productCategory;
+        this.editProductCategoryForm = { name, colorCode };
+      }
+
+      _processCreateProductCategory({ name, colorCode }) {
+        let data = {
+          name, colorCode,
+          organizationId: this.app.organization.id,
+        };
+        this.app.callAddProductCategoryApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
+          let message = this.app.verses.productCategory.productCategoryCreated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      _processUpdateProductCategory({ name, colorCode }) {
+        let data = {
+          name, colorCode,
+          productCategoryId: this.editingProductCategory.id
+        };
+
+        this.app.callEditProductCategoryApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
+          let message = this.app.verses.productCategory.productCategoryUpdated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-product-categories');
+      }
+
+      createProductCategoryTapped(e = null) {
+        this.elemAll('#editProductCategoryForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editProductCategoryForm').validate()) return;
+
+        let { name, colorCode } = this.editProductCategoryForm;
+        this._processCreateProductCategory({ name, colorCode });
+      }
+
+      updateProductCategoryTapped(e = null) {
+        this.elemAll('#editProductCategoryForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editProductCategoryForm').validate()) return;
+
+        let { name, colorCode } = this.editProductCategoryForm;
+        this._processUpdateProductCategory({ name, colorCode });
+      }
+
+      genericDiscountValueInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageEditProductCategory.is, PageEditProductCategory);
+  </script>
+</dom-module>
