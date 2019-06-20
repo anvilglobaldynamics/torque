@@ -23,6 +23,9 @@ exports.AddProductCategoryApi = class extends Api {
       organizationBy: "organizationId",
       privilegeList: [
         "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }
