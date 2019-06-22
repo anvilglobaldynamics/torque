@@ -29,7 +29,7 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
-      productCategoryIdList: Joi.array().items(Joi.string()).required(),
+      productCategoryIdList: Joi.array().items(Joi.number()).required(),
       isDeleted: Joi.boolean().required(),
       isReturnable: Joi.boolean().required()
     });

@@ -395,7 +395,7 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
           defaultPurchasePrice: Joi.number().required(),
           defaultVat: Joi.number().required(),
           defaultSalePrice: Joi.number().required(),
-          productCategoryIdList: Joi.array().items(Joi.string()).required(),
+          productCategoryIdList: Joi.array().items(Joi.number()).required(),
           isDeleted: Joi.boolean().required(),
           isReturnable: Joi.boolean().required()
         })
@@ -453,7 +453,7 @@ exports.validateReportInventoryDetailsApiSuccessResponse = (doc) => {
               defaultVat: Joi.number().required(),
               defaultSalePrice: Joi.number().required(),
               isDeleted: Joi.boolean().required(),
-              productCategoryIdList: Joi.array().items(Joi.string()).required(),
+              productCategoryIdList: Joi.array().items(Joi.number()).required(),
               isReturnable: Joi.boolean().required()
             })
           })
@@ -1118,7 +1118,7 @@ exports.validateProductBlueprintSchema = (doc) => {
     defaultSalePrice: Joi.number().max(999999999999999).required(),
 
     isDeleted: Joi.boolean().required(),
-    productCategoryIdList: Joi.array().items(Joi.string()).required(),
+    productCategoryIdList: Joi.array().items(Joi.number()).required(),
     isReturnable: Joi.boolean().required()
   });
   let { error, value } = Joi.validate(doc, schema);
@@ -1402,7 +1402,7 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
           defaultSalePrice: Joi.number().max(999999999999999).required(),
 
           isDeleted: Joi.boolean().required(),
-          productCategoryIdList: Joi.array().items(Joi.string()).required(),
+          productCategoryIdList: Joi.array().items(Joi.number()).required(),
           isReturnable: Joi.boolean().required()
 
         })
@@ -1639,7 +1639,7 @@ exports.validateAggregatedProductScema = (doc) => {
         defaultVat: Joi.number().max(999999999999999).required(),
         defaultSalePrice: Joi.number().max(999999999999999).required(),
         isDeleted: Joi.boolean().required(),
-        productCategoryIdList: Joi.array().items(Joi.string()).required(),
+        productCategoryIdList: Joi.array().items(Joi.number()).required(),
         isReturnable: Joi.boolean().required()
       })
     })
