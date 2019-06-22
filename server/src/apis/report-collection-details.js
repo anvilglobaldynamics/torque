@@ -74,6 +74,7 @@ exports.ReportCollectionDetailsApi = class extends Api {
   async __getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }) {
     let outletIdList = (await this.database.outlet.listByOrganizationId({ organizationId })).map(outlet => outlet.id);
     let salesList = await this.database.sales.listByFiltersForCollectionReport({ outletIdList, organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate });
+    salesList = salesList.filter(sales => !sales.isDiscarded);
     return salesList;
   }
 
