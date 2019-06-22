@@ -29,6 +29,7 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
+      productCategoryIdList: Joi.array().items(Joi.string()).required(),
       isDeleted: Joi.boolean().required(),
       isReturnable: Joi.boolean().required()
     });
@@ -64,6 +65,7 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
       defaultPurchasePrice,
       defaultVat,
       defaultSalePrice,
+      productCategoryIdList,
       isReturnable
     } = data;
     let doc = {
@@ -74,6 +76,7 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
       defaultPurchasePrice,
       defaultVat,
       defaultSalePrice,
+      productCategoryIdList,
       isReturnable,
       isDeleted: false
     }

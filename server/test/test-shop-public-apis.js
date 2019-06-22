@@ -198,6 +198,7 @@ describe('Shop : Geolocation', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 3,
         defaultSalePrice: 112,
+        productCategoryIdList: [],
         isReturnable: true
       }))
       .then(({ productBlueprintId }) => suite1Data.productBlueprint1Id = productBlueprintId)
@@ -212,6 +213,7 @@ describe('Shop : Geolocation', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 3,
         defaultSalePrice: 112,
+        productCategoryIdList: [],
         isReturnable: true
       }))
       .then(({ productBlueprintId }) => suite1Data.productBlueprint2Id = productBlueprintId)
@@ -226,6 +228,7 @@ describe('Shop : Geolocation', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 3,
         defaultSalePrice: 112,
+        productCategoryIdList: [],
         isReturnable: true
       }))
       .then(({ productBlueprintId }) => suite1Data.productBlueprint3Id = productBlueprintId)
@@ -239,7 +242,7 @@ describe('Shop : Geolocation', _ => {
       // Product
       .then(() => promisifyApiCall({}, addProductToInventory, {
         apiKey,
-        inventoryId:  suite1Data.outlet1DefaultInventoryId,
+        inventoryId: suite1Data.outlet1DefaultInventoryId,
         productList: [
           { productBlueprintId: suite1Data.productBlueprint3Id, count: 100 }
         ]

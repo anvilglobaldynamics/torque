@@ -96,6 +96,8 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       let productBlueprint = productBlueprintList[i];
       try {
         productBlueprint.organizationId = organizationId;
+        // FIXME: Update when there is support for category during bulk import
+        productBlueprint.productCategoryIdList = []; 
         await this.__ensureIdentifierCodeIsUnique({ identifierCode: productBlueprint.identifierCode, organizationId });
         await this._createProductBlueprint(productBlueprint);
         successfulCount += 1;

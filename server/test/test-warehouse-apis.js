@@ -83,6 +83,7 @@ describe('Warehouse', _ => {
               defaultPurchasePrice: 99,
               defaultVat: 3,
               defaultSalePrice: 111,
+              productCategoryIdList: [],
               isReturnable: true
             }, (data) => {
               productBlueprintId = data.productBlueprintId;

@@ -17,6 +17,7 @@ exports.ProductBlueprintCollection = class extends Collection {
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
+      productCategoryIdList: Joi.array().items(Joi.string()).required(),
       isDeleted: Joi.boolean().required(),
       isReturnable: Joi.boolean().required()
     });
@@ -50,6 +51,7 @@ exports.ProductBlueprintCollection = class extends Collection {
     defaultPurchasePrice,
     defaultVat,
     defaultSalePrice,
+    productCategoryIdList,
     isReturnable }) {
     return await this._insert({
       organizationId,
@@ -59,6 +61,7 @@ exports.ProductBlueprintCollection = class extends Collection {
       defaultPurchasePrice,
       defaultVat,
       defaultSalePrice,
+      productCategoryIdList,
       isReturnable,
       isDeleted: false
     });
