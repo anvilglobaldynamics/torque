@@ -32,17 +32,17 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
-      
+
       <iron-form id="editProductCategoryForm" on-keypress="genericFormSubmitionKeypress">
         <form>
-          
+
           <div class="card vertical layout">
             <paper-input class="editProductCategoryForm--name" value="{{editProductCategoryForm.name}}" required minlength="3" error-message=[[verses.productCategory.productCategoryNameInputError]] label=[[verses.productCategory.productCategoryNameInput]]></paper-input>
             <div class="horizontal layout">
-              <paper-swatch-picker color="{{editProductCategoryForm.colorCode}}" ></paper-swatch-picker>
+              <paper-swatch-picker color="{{editProductCategoryForm.colorCode}}"></paper-swatch-picker>
               <paper-input class="editProductCategoryForm--colorCode" value="{{editProductCategoryForm.colorCode}}" required minlength="7" maxlength="7" error-message=[[verses.productCategory.productCategoryUnitInputError]] label=[[verses.productCategory.productCategoryUnitInput]]></paper-input>
             </div>
-            
+
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editProductCategoryForm--submit" on-tap="createProductCategoryTapped">[[verses.productCategory.createProductCategory]]</paper-button>
@@ -163,6 +163,7 @@
       }
 
       _processCreateProductCategory({ name, colorCode }) {
+        colorCode = colorCode.replace('#', '');
         let data = {
           name, colorCode,
           organizationId: this.app.organization.id,
@@ -178,6 +179,7 @@
       }
 
       _processUpdateProductCategory({ name, colorCode }) {
+        colorCode = colorCode.replace('#', '');
         let data = {
           name, colorCode,
           productCategoryId: this.editingProductCategory.id
