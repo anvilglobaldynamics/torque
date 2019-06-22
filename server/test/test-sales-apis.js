@@ -1131,6 +1131,24 @@ describe('Sales', _ => {
 
   });
 
+
+  it('api/get-aggregated-inventory-details (Valid. Makes sure discarded products are returned)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: outletDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(98);
+      testDoneFn();
+    });
+
+  });
+
   // WithdrawFromChangeWalletBalanceApi tests - start
 
   it('api/withdraw-from-change-wallet-balance (Invalid customerId)', testDoneFn => {

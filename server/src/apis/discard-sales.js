@@ -3,8 +3,9 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const { InventoryMixin } = require('./mixins/inventory-mixin');
 
-exports.DiscardSalesApi = class extends Api {
+exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin) {
 
   get autoValidates() { return true; }
 
@@ -48,9 +49,29 @@ exports.DiscardSalesApi = class extends Api {
     return;
   }
 
+  async _returnProductsToDefaultInventory({ productList, defaultInventory }) {
+    for (let i = 0; i < productList.length; i++) {
+      let product = productList[i];
+      await this._pushProductOrIncrementCount({ productId: product.productId, count: product.count, inventoryId: defaultInventory.id });
+    }
+    return;
+  }
+
   async handle({ body }) {
     let { salesId } = body;
+
+    let sales = await this.database.sales.findById({ id: salesId });
+    let productList = sales.productList;
+    let defaultInventory;
+    if (sales.productsSelectedFromWarehouseId) {
+      defaultInventory = await this.__getWarehouseDefaultInventory({ warehouseId: sales.productsSelectedFromWarehouseId });
+    } else {
+      defaultInventory = await this.__getOutletDefaultInventory({ outletId: sales.outletId });
+    }
+    this._returnProductsToDefaultInventory({ productList, defaultInventory });
+
     await this._listAndDiscardServiceMembership({ salesId });
+
     await this.database.sales.discard({ id: salesId });
     return { status: 'success' };
   }
