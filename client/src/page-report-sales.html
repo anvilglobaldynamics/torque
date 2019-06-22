@@ -484,7 +484,8 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.pagination = response.pagination;
-          return cbfn(response.salesList);
+          let salesList = response.salesList.filter(sales => !sales.isDiscarded);
+          return cbfn(salesList);
         });
       }
 

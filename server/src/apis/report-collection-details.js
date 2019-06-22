@@ -98,7 +98,7 @@ exports.ReportCollectionDetailsApi = class extends Api {
         collectionList.push({
           salesNumber: sales.salesNumber,
           salesId: sales.id,
-          collectedAmount: payment.paidAmount,
+          collectedAmount: payment.paidAmount - (payment.changeAmount || 0),
           collectedByUserId: payment.acceptedByUserId,
           collectedDatetimeStamp: payment.createdDatetimeStamp,
           paymentMethod: payment.paymentMethod
