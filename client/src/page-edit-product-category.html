@@ -38,9 +38,16 @@
 
           <div class="card vertical layout">
             <paper-input class="editProductCategoryForm--name" value="{{editProductCategoryForm.name}}" required minlength="3" error-message=[[verses.productCategory.productCategoryNameInputError]] label=[[verses.productCategory.productCategoryNameInput]]></paper-input>
-            <div class="horizontal layout">
+            <div class="horizontal layout center mt16">
               <paper-swatch-picker color="{{editProductCategoryForm.colorCode}}"></paper-swatch-picker>
-              <paper-input class="editProductCategoryForm--colorCode" value="{{editProductCategoryForm.colorCode}}" required minlength="7" maxlength="7" error-message=[[verses.productCategory.productCategoryUnitInputError]] label=[[verses.productCategory.productCategoryUnitInput]]></paper-input>
+              <paper-button raised class="primary" on-tap="pickAColorTapped">[[verses.productCategory.pickAColor]]</paper-button>
+            </div>
+
+            <div class="horizontal layout center mt16">
+              <div class="mr8">Preview: </div>
+              <div class="product-category-pillet" style$="background-color: {{editProductCategoryForm.colorCode}}; color: #{{$guessCategoryFontColorCode(editProductCategoryForm.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(editProductCategoryForm.colorCode)}}">
+                [[editProductCategoryForm.name]]
+              </div>
             </div>
 
             <div class="horizontal layout button-row end">
@@ -219,6 +226,14 @@
 
       genericDiscountValueInputChanged(e) {
         this.enforceMinMaxOnPaperInput(e);
+      }
+
+      pickAColorTapped(e = null) {
+        try {
+          this.elem('paper-swatch-picker').shadowRoot.querySelector('paper-menu-button').open()
+        } catch (ex){
+          this.app.showModalDialog("Unable to open color picker.");
+        }
       }
 
       // region: misc =================================

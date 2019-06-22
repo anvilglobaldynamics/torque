@@ -242,11 +242,16 @@
       }
 
       $guessCategoryFontColorCode(colorCode) {
-        let color = hexToRgb(colorCode);
-        let luminance = (0.299 * color.r + 0.587 * color.g + 0.114 * color.b) / 255;
-        if (luminance > 0.5) {
-          return '000000';
-        } else {
+        try {
+          colorCode = colorCode.replace('#', '');
+          let color = hexToRgb(colorCode);
+          let luminance = (0.299 * color.r + 0.587 * color.g + 0.114 * color.b) / 255;
+          if (luminance > 0.5) {
+            return '000000';
+          } else {
+            return 'FFFFFF';
+          }
+        } catch (ex) {
           return 'FFFFFF';
         }
       }
