@@ -67,10 +67,10 @@ exports.ProductBlueprintCollection = class extends Collection {
     });
   }
 
-  async setDetails({ id }, { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+  async setDetails({ id }, { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable }) {
     return await this._update({ id }, {
       $set: {
-        name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
+        name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable
       }
     });
   }

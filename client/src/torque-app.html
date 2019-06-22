@@ -410,6 +410,18 @@
           <page-edit-discount-preset name="edit-discount-preset"></page-edit-discount-preset>
         </iron-pages>
 
+        <paper-dialog id="category-dialog" modal style="z-index: -999999">
+          <h2>Select Category</h2>
+          <paper-dialog-scrollable>
+            <template is="dom-repeat" items="[[_categoryList]]" as="productCategory">
+              <div on-click="categoryDialogSelectTapped" class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; margin: 4px; border: none;">
+                [[productCategory.name]]
+              </div>
+            </template>
+          </paper-dialog-scrollable>
+          <paper-button class="secondary" on-click="categoryDialogCancelTapped" autofocus>Cancel</paper-button>
+        </paper-dialog>
+
         <paper-dialog id="network-dialog" modal style="z-index: -999999">
           <h2>[[verses.root.networkErrorTitle]]</h2>
           <paper-dialog-scrollable>
@@ -956,6 +968,28 @@
         //     unsyncedSalesList: []
         //   }
         // }
+      }
+
+      // ====================== category dialog =============================
+
+      displayCategoryDialog(categoryList, cbfn) {
+        this._categoryDialogCbfn = cbfn;
+        this._categoryList = categoryList;
+        this._patchForPolymerModalDialogIssue();
+        this.elem('#category-dialog').open();
+      }
+
+      categoryDialogCancelTapped(e = null) {
+        this.elem('#category-dialog').close();
+        this._categoryDialogCbfn(null);
+        this._categoryDialogCbfn = null;
+      }
+
+      categoryDialogSelectTapped(e) {
+        this.elem('#category-dialog').close();
+        let { productCategory } = e.model;
+        this._categoryDialogCbfn(productCategory);
+        this._categoryDialogCbfn = null;
       }
 
       // ====================== shortcuts =============================

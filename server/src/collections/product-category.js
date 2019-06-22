@@ -75,4 +75,10 @@ exports.ProductCategoryCollection = class extends Collection {
     return await this._find(query);
   }
 
+
+  async listByOrganizationIdAndIdList({ organizationId, idList }) {
+    let query = { organizationId, id: { $in: idList } };
+    return await this._find(query);
+  }
+
 }
