@@ -171,6 +171,7 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.app.popPageTitle();
+        this.newCategoryInput = '';
         this.resetProperties('editProductBlueprintForm');
         this.removeAutoValidation('#editProductBlueprintForm paper-input');
       }

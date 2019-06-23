@@ -411,7 +411,7 @@
         </iron-pages>
 
         <paper-dialog id="category-dialog" modal style="z-index: -999999">
-          <h2>[[verses.root.selectCategory]]</h2>
+          <h2>[[verses.productCategoryPicker.pickerTitle]]</h2>
           <paper-dialog-scrollable>
             <template is="dom-repeat" items="[[_productCategoryList]]" as="productCategory">
               <div on-click="categoryDialogSelectTapped" class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; margin: 4px; border: none;">
@@ -419,7 +419,9 @@
               </div>
             </template>
           </paper-dialog-scrollable>
-          <paper-button class="secondary style-patch" on-click="categoryDialogCancelTapped" autofocus>[[verses.general.cancel]]</paper-button>
+          <div class="buttons">
+            <paper-button class="secondary" on-click="categoryDialogCancelTapped" autofocus>[[verses.general.cancel]]</paper-button>
+          </div>
         </paper-dialog>
 
         <paper-dialog id="network-dialog" modal style="z-index: -999999">
