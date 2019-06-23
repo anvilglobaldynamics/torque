@@ -135,6 +135,7 @@ describe('Inventory', _ => {
                       defaultPurchasePrice: 99,
                       defaultVat: 3,
                       defaultSalePrice: 111,
+                      productCategoryIdList: [],
                       isReturnable: true
                     }, (data) => {
                       productBlueprintId = data.productBlueprintId;
@@ -147,6 +148,7 @@ describe('Inventory', _ => {
                         defaultPurchasePrice: 199,
                         defaultVat: 3,
                         defaultSalePrice: 300,
+                        productCategoryIdList: [],
                         isReturnable: false
                       }, (data) => {
                         productBlueprintId2 = data.productBlueprintId;
@@ -159,6 +161,7 @@ describe('Inventory', _ => {
                           defaultPurchasePrice: 99,
                           defaultVat: 3,
                           defaultSalePrice: 111,
+                          productCategoryIdList: [],
                           isReturnable: true
                         }, (data) => {
                           productBlueprintId3 = data.productBlueprintId;
@@ -171,6 +174,7 @@ describe('Inventory', _ => {
                             defaultPurchasePrice: 199,
                             defaultVat: 3,
                             defaultSalePrice: 300,
+                            productCategoryIdList: [],
                             isReturnable: false
                           }, (data) => {
                             productBlueprintId4 = data.productBlueprintId;

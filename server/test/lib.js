@@ -395,6 +395,7 @@ exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
           defaultPurchasePrice: Joi.number().required(),
           defaultVat: Joi.number().required(),
           defaultSalePrice: Joi.number().required(),
+          productCategoryIdList: Joi.array().items(Joi.number()).required(),
           isDeleted: Joi.boolean().required(),
           isReturnable: Joi.boolean().required()
         })
@@ -452,6 +453,7 @@ exports.validateReportInventoryDetailsApiSuccessResponse = (doc) => {
               defaultVat: Joi.number().required(),
               defaultSalePrice: Joi.number().required(),
               isDeleted: Joi.boolean().required(),
+              productCategoryIdList: Joi.array().items(Joi.number()).required(),
               isReturnable: Joi.boolean().required()
             })
           })
@@ -635,6 +637,17 @@ exports.validateGetWarehouseApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateAddProductCategoryApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    productCategoryId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateAddProductBlueprintApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
@@ -652,6 +665,16 @@ exports.validateBulkImportProductBlueprintsApiSuccessResponse = (doc) => {
     status: Joi.string().required().equal('success'),
     ignoredRowList: Joi.array().required().allow([]),
     successfulCount: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateGetProductCategoryListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    productCategoryList: Joi.array().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -1100,6 +1123,23 @@ exports.validateWarehouseSchema = (doc) => {
   if (error) throw error;
 }
 
+exports.validateProductCategorySchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
+    name: Joi.string().min(1).max(32).required(),
+    colorCode: Joi.string().length(6).required(),
+    organizationId: Joi.number().max(999999999999999).required(),
+
+    isDeleted: Joi.boolean().required()
+  });
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateProductBlueprintSchema = (doc) => {
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
@@ -1116,6 +1156,7 @@ exports.validateProductBlueprintSchema = (doc) => {
     defaultSalePrice: Joi.number().max(999999999999999).required(),
 
     isDeleted: Joi.boolean().required(),
+    productCategoryIdList: Joi.array().items(Joi.number()).required(),
     isReturnable: Joi.boolean().required()
   });
   let { error, value } = Joi.validate(doc, schema);
@@ -1399,6 +1440,7 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
           defaultSalePrice: Joi.number().max(999999999999999).required(),
 
           isDeleted: Joi.boolean().required(),
+          productCategoryIdList: Joi.array().items(Joi.number()).required(),
           isReturnable: Joi.boolean().required()
 
         })
@@ -1635,6 +1677,7 @@ exports.validateAggregatedProductScema = (doc) => {
         defaultVat: Joi.number().max(999999999999999).required(),
         defaultSalePrice: Joi.number().max(999999999999999).required(),
         isDeleted: Joi.boolean().required(),
+        productCategoryIdList: Joi.array().items(Joi.number()).required(),
         isReturnable: Joi.boolean().required()
       })
     })

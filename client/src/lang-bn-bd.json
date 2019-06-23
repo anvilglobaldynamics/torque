@@ -156,6 +156,7 @@
     "settings": "সেটিংস",
     "about": "আমাদের কথা",
     "logout": "লগ-আউট",
+    "manageProductCategories": "পণ্যের ধরণ",
     "manageDiscountPresets": "ডিসকাউন্টস"
   },
   "titleBar": {
@@ -323,6 +324,9 @@
     "searchForProductBlueprintInput": "নাম বা সনাক্তকরণ কোড",
     "searchForProductBlueprintInputError": "পণ্য পরিকল্পনার সন্ধানে ত্রুটি",
     "bulkImport": "একাধিক পণ্যের পরিকল্পনা তৈরি",
+    "productCategoryNameInput": "পণ্যের ধরণের নাম",
+    "productCategoryNotFound": "ধরণ পাওয়া যায়নি",
+    "productCategoryNotFoundDetails": "এই নামের পণ্যের ধরণ খুঁজে পাওয়া যায়নি",
     "whatIsProductBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত সকল কাজে ব্যবহত হবে। বর্তমান পণ্যের পরিকল্পনা পুনঃব্যবহার বা সম্পাদনা করার পরিবর্তে, পণ্য পরিকল্পনায় সামান্যতম ভিন্নতা থাকলেও নতুন পণ্য পরিকল্পনা তৈরি করুন।",
     "productBlueprintEditConfirmMessage": "পণ্যের পরিকল্পনায় পরিবর্তন করলে সংশ্লিষ্ট পণ্য-ও পরিবর্তন হয়ে যাবে। পণ্যের মূল্য পরিবর্তন করলে হিসেবে পরিবর্তন আসবে। আপনি কি নিশ্চিত করছেন?"
   },
@@ -989,5 +993,27 @@
     "assignAssistedByEmployeeTitle": "সহায়ক কর্মচারী",
     "clearEmployeeLabel": "সহায়ক কর্মচারী মুছে ফেলুন",
     "searchFieldTips": "নাম অথবা ফোন"
+  },
+  "productCategory": {
+    "productCategoriesTitle": "পণ্যের ধরণ",
+    "manageProductCategoriesTitle": "পণ্যের ধরণ পরিচালনা",
+    "editProductCategoryTitle": "পণ্যের ধরণ সম্পাদনা করুন",
+    "addProductCategoryTitle": "পণ্যের ধরণ যুক্ত করুন",
+    "noProductCategoryFound": "কোনো পণ্যের ধরণ পাওয়া যায় নি।",
+    "productCategoryNameInput": "পণ্যের ধরণের নাম",
+    "productCategoryNameInputError": "একটি সঠিক নাম লিখুন",
+    "createProductCategory": "পণ্যের ধরণ যুক্ত করুন",
+    "updateProductCategory": "পণ্যের ধরণ আপডেট করুন",
+    "productCategoryCreated": "নতুন পণ্যের ধরণ যুক্ত করা হয়েছে।",
+    "productCategoryUpdated": "পণ্যের ধরণ আপডেট করা হয়েছে।",
+    "pickAColor": "রং বাছাই করুন",
+    "colorPreview": "নমুনা",
+    "createNewProductCategory": "নতুন পণ্যের ধরণ তৈরি করুন",
+    "searchForProductCategoryInput": "ধরণের নাম দিয়ে খুজুন",
+    "searchForProductCategoryInputError": "পণ্যের ধরণ সন্ধানে ত্রুটি",
+    "whatIsProductCategoryMessage": "পণ্যের ধরণ আপনাকে পণ্য অনুসন্ধান এবং গোছাতে সাহায্য করে। ব্র্যান্ড, মডেল, বৈশিষ্ট্য এবং পণ্যের প্রকারের উপর ভিত্তি করে বিভিন্ন পণ্যের ধরণ তৈরি করার চেষ্টা করুন।"
+  },
+  "productCategoryPicker": {
+    "pickerTitle": "একটি ধরণ নির্বাচন"
   }
 }

@@ -156,6 +156,7 @@
     "settings": "Settings",
     "about": "About",
     "logout": "Logout",
+    "manageProductCategories": "Product Categories",
     "manageDiscountPresets": "Discounts"
   },
   "titleBar": {
@@ -321,6 +322,9 @@
     "searchForProductBlueprintInput": "Name or Identifier Code",
     "searchForProductBlueprintInputError": "Error in Search for Product Blueprint",
     "bulkImport": "Bulk Product Blueprint Creation",
+    "productCategoryNameInput": "Name of Product Category",
+    "productCategoryNotFound": "Category not found",
+    "productCategoryNotFoundDetails": "Unable to find product category with that name",
     "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks. Instead of reusing or editing existing product blueprint, we encourage you to create a new product blueprint incase of slight differnces.",
     "productBlueprintEditConfirmMessage": "Editing Product Blueprint will update coresponding product throughout the organization. Editing prices will cause calculations to change. Do you want to prceed?"
   },
@@ -988,5 +992,27 @@
     "assignAssistedByEmployeeTitle": "Assisted By Employee",
     "clearEmployeeLabel": "Clear Selected Employee",
     "searchFieldTips": "Name or phone"
+  },
+  "productCategory": {
+    "productCategoriesTitle": "Product Categories",
+    "manageProductCategoriesTitle": "Manage Product Categories",
+    "editProductCategoryTitle": "Edit Product Category",
+    "addProductCategoryTitle": "Add Product Category",
+    "noProductCategoryFound": "No product category found.",
+    "productCategoryNameInput": "Name of Product Category",
+    "productCategoryNameInputError": "Enter a valid name",
+    "createProductCategory": "Create Product Category",
+    "updateProductCategory": "Update Product Category",
+    "productCategoryCreated": "New product Category has been created.",
+    "productCategoryUpdated": "Product Category has been updated.",
+    "pickAColor": "Pick a color",
+    "colorPreview": "Preview",
+    "createNewProductCategory": "Create New Product Category",
+    "searchForProductCategoryInput": "Search by Name",
+    "searchForProductCategoryInputError": "Error in Search for Product Category",
+    "whatIsProductCategoryMessage": "Product Category helps you search and organise products. Try to make different product categories based on brand, model, feature and type of product."
+  },
+  "productCategoryPicker": {
+    "pickerTitle": "Select a Category"
   }
 }

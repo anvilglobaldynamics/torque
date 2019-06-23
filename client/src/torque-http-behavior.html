@@ -533,6 +533,21 @@
         this.callCombinedJsonApi('report-collection-details', data, cbfn);
       }
 
+      callGetProductCategoryListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-product-category-list', data, cbfn);
+      }
+
+      callAddProductCategoryApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-product-category', data, cbfn);
+      }
+
+      callEditProductCategoryApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-product-category', data, cbfn);
+      }
+
     }
 
   })();

@@ -135,6 +135,7 @@ describe('Sales Return', _ => {
                   defaultPurchasePrice: 99,
                   defaultVat: 3,
                   defaultSalePrice: 111,
+                  productCategoryIdList: [],
                   isReturnable: true
                 }, (data) => {
                   returnableProductBlueprintId = data.productBlueprintId;
@@ -147,6 +148,7 @@ describe('Sales Return', _ => {
                     defaultPurchasePrice: 99,
                     defaultVat: 3,
                     defaultSalePrice: 111,
+                    productCategoryIdList: [],
                     isReturnable: false
                   }, (data) => {
                     nonReturnableProductBlueprintId = data.productBlueprintId;

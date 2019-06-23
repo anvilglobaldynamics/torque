@@ -11,7 +11,7 @@ exports.ProductCategoryCollection = class extends Collection {
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
-      name: Joi.string().min(1).max(64).required(),
+      name: Joi.string().min(1).max(32).required(),
       colorCode: Joi.string().length(6).required(),
       organizationId: Joi.number().max(999999999999999).required(),
 
@@ -61,6 +61,23 @@ exports.ProductCategoryCollection = class extends Collection {
 
   async findByIdAndOrganizationId({ id, organizationId }) {
     return await this._findOne({ id, organizationId });
+  }
+
+  async listByOrganizationIdAndSearchString({ organizationId, searchString }) {
+    let query = { organizationId };
+    if (searchString) {
+      let escapedSearchString = this.escapeRegExp(searchString.toLowerCase());
+      let searchRegex = new RegExp(escapedSearchString, 'i');
+      query.$or = [
+        { name: searchRegex }
+      ];
+    }
+    return await this._find(query);
+  }
+
+  async listByOrganizationIdAndIdList({ organizationId, idList }) {
+    let query = { organizationId, id: { $in: idList } };
+    return await this._find(query);
   }
 
 }

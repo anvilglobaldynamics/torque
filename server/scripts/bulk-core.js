@@ -202,6 +202,7 @@ const createProductBlueprint = async ({ apiKey, organizationId, i }) => {
     identifierCode: '' + _uid,
     defaultVat: 15,
     defaultSalePrice: 190,
+    productCategoryIdList: [],
     isReturnable: true
   });
 

@@ -81,6 +81,7 @@ describe('Product Blueprint', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
+        productCategoryIdList: [],
         isReturnable: true
       }
     }, (err, response, body) => {
@@ -103,6 +104,7 @@ describe('Product Blueprint', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
+        productCategoryIdList: [],
         isReturnable: true
       }
     }, (err, response, body) => {
@@ -125,6 +127,7 @@ describe('Product Blueprint', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
+        productCategoryIdList: [],
         isReturnable: true
       }
     }, (err, response, body) => {
@@ -147,6 +150,7 @@ describe('Product Blueprint', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
+        productCategoryIdList: [],
         isReturnable: true
       }
     }, (err, response, body) => {
@@ -170,6 +174,7 @@ describe('Product Blueprint', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
+        productCategoryIdList: [],
         isReturnable: true
       }
     }, (err, response, body) => {
@@ -192,6 +197,7 @@ describe('Product Blueprint', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
+        productCategoryIdList: [],
         isReturnable: false
       }
     }, (err, response, body) => {
@@ -214,6 +220,7 @@ describe('Product Blueprint', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
+        productCategoryIdList: [],
         isReturnable: true
       }
     }, (err, response, body) => {
@@ -324,6 +331,7 @@ describe('Product Blueprint', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
+        productCategoryIdList: [],
         isReturnable: false // modification
       }
     }, (err, response, body) => {
@@ -346,6 +354,7 @@ describe('Product Blueprint', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
+        productCategoryIdList: [],
         isReturnable: true
       }
     }, (err, response, body) => {
@@ -369,6 +378,7 @@ describe('Product Blueprint', _ => {
         defaultPurchasePrice: 99,
         defaultVat: 2,
         defaultSalePrice: 111,
+        productCategoryIdList: [],
         isReturnable: false // modification
       }
     }, (err, response, body) => {

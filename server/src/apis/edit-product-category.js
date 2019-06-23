@@ -13,8 +13,8 @@ exports.EditProductCategoryApi = class extends Api {
     return Joi.object().keys({
       productCategoryId: Joi.number().max(999999999999999).required(),
 
-      name: Joi.string().min(1).max(64).required(),
-      colorCode: Joi.string().valid('percent', 'fixed').required(),
+      name: Joi.string().min(1).max(32).required(),
+      colorCode: Joi.string().length(6).required(),
     });
   }
 
@@ -28,6 +28,9 @@ exports.EditProductCategoryApi = class extends Api {
       },
       privilegeList: [
         "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
+      ],
+      moduleList: [
+        "MOD_PRODUCT",
       ]
     }];
   }

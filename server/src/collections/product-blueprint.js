@@ -17,6 +17,7 @@ exports.ProductBlueprintCollection = class extends Collection {
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
+      productCategoryIdList: Joi.array().items(Joi.number()).required(),
       isDeleted: Joi.boolean().required(),
       isReturnable: Joi.boolean().required()
     });
@@ -50,6 +51,7 @@ exports.ProductBlueprintCollection = class extends Collection {
     defaultPurchasePrice,
     defaultVat,
     defaultSalePrice,
+    productCategoryIdList,
     isReturnable }) {
     return await this._insert({
       organizationId,
@@ -59,15 +61,16 @@ exports.ProductBlueprintCollection = class extends Collection {
       defaultPurchasePrice,
       defaultVat,
       defaultSalePrice,
+      productCategoryIdList,
       isReturnable,
       isDeleted: false
     });
   }
 
-  async setDetails({ id }, { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+  async setDetails({ id }, { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable }) {
     return await this._update({ id }, {
       $set: {
-        name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable
+        name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable
       }
     });
   }
