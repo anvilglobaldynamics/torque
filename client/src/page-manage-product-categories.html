@@ -100,6 +100,10 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <div class="card helpful-tips">
+        [[verses.productCategory.whatIsProductCategoryMessage]]
+      </div>
+
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
           <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.productCategory.searchForProductCategoryInputError]] label="[[verses.productCategory.searchForProductCategoryInput]]" on-keypress="searchFieldKeypressed"></paper-input>

@@ -996,6 +996,7 @@
     "searchFieldTips": "নাম অথবা ফোন"
   },
   "productCategory": {
+    "productCategoriesTitle": "পণ্যের ধরণ",
     "manageProductCategoriesTitle": "পণ্যের ধরণ পরিচালনা",
     "editProductCategoryTitle": "পণ্যের ধরণ সম্পাদনা করুন",
     "addProductCategoryTitle": "পণ্যের ধরণ যুক্ত করুন",
@@ -1009,7 +1010,8 @@
     "pickAColor": "রং বাছাই করুন",
     "colorPreview": "নমুনা",
     "createNewProductCategory": "নতুন পণ্যের ধরণ তৈরি করুন",
-    "searchForProductCategoryInput": "ধরণের নাম",
-    "searchForProductCategoryInputError": "পণ্যের ধরণ সন্ধানে ত্রুটি"
+    "searchForProductCategoryInput": "ধরণের নাম দিয়ে খুজুন",
+    "searchForProductCategoryInputError": "পণ্যের ধরণ সন্ধানে ত্রুটি",
+    "whatIsProductCategoryMessage": "whatIsProductCategoryMessagewhatIsProductCategoryMessagewhatIsProductCategoryMessage"
   }
 }

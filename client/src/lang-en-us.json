@@ -995,6 +995,7 @@
     "searchFieldTips": "Name or phone"
   },
   "productCategory": {
+    "productCategoriesTitle": "Product Categories",
     "manageProductCategoriesTitle": "Manage Product Categories",
     "editProductCategoryTitle": "Edit Product Category",
     "addProductCategoryTitle": "Add Product Category",
@@ -1009,6 +1010,7 @@
     "colorPreview": "Preview",
     "createNewProductCategory": "Create New Product Category",
     "searchForProductCategoryInput": "Search by Name",
-    "searchForProductCategoryInputError": "Error in Search for Product Category"
+    "searchForProductCategoryInputError": "Error in Search for Product Category",
+    "whatIsProductCategoryMessage": "whatIsProductCategoryMessagewhatIsProductCategoryMessagewhatIsProductCategoryMessage"
   }
 }

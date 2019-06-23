@@ -56,6 +56,8 @@
 
           <div class="card vertical layout">
 
+            <div class="mb-4" style="font-weight: bold;">[[verses.productCategory.productCategoriesTitle]]:</div>
+
             <div class="horizontal layout wrap">
               <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory" index-as="productCategoryIndex">
                 <div class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; margin: 4px; border: none; display: inline-block;">
@@ -66,8 +68,10 @@
             </div>
 
             <div class="horizontal layout center">
-              <paper-input class="new-category-input flex" value="{{newCategoryInput}}" minlength="3" on-keypress="newCategoryInputChanged" label="[[verses.productBlueprint.productCategoryNameInput]]"></paper-input>
-              <paper-icon-button icon="add-circle" on-tap="newCategoryAddTapped"></paper-icon-button>
+              <paper-input class="new-category-input flex" value="{{newCategoryInput}}" minlength="3" on-keypress="newCategoryInputChanged" label="[[verses.productCategory.searchForProductCategoryInput]]"></paper-input>
+              <paper-button class="secondary" raised icon="search" on-tap="newCategoryAddTapped">
+                <iron-icon icon="search"></iron-icon>
+              </paper-button>
             </div>
           </div>
 
