@@ -1010,7 +1010,7 @@
     "createNewProductCategory": "Create New Product Category",
     "searchForProductCategoryInput": "Search by Name",
     "searchForProductCategoryInputError": "Error in Search for Product Category",
-    "whatIsProductCategoryMessage": "whatIsProductCategoryMessagewhatIsProductCategoryMessagewhatIsProductCategoryMessage"
+    "whatIsProductCategoryMessage": "Product Category helps you search and organise products. Try to make different product categories based on brand, model, feature and type of product."
   },
   "productCategoryPicker": {
     "pickerTitle": "Select a Category"

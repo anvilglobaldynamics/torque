@@ -1011,7 +1011,7 @@
     "createNewProductCategory": "নতুন পণ্যের ধরণ তৈরি করুন",
     "searchForProductCategoryInput": "ধরণের নাম দিয়ে খুজুন",
     "searchForProductCategoryInputError": "পণ্যের ধরণ সন্ধানে ত্রুটি",
-    "whatIsProductCategoryMessage": "whatIsProductCategoryMessagewhatIsProductCategoryMessagewhatIsProductCategoryMessage"
+    "whatIsProductCategoryMessage": "পণ্যের ধরণ আপনাকে পণ্য অনুসন্ধান এবং গোছাতে সাহায্য করে। ব্র্যান্ড, মডেল, বৈশিষ্ট্য এবং পণ্যের প্রকারের উপর ভিত্তি করে বিভিন্ন পণ্যের ধরণ তৈরি করার চেষ্টা করুন।"
   },
   "productCategoryPicker": {
     "pickerTitle": "একটি ধরণ নির্বাচন"
