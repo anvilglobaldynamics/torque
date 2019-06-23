@@ -8,7 +8,9 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  organizationId: Joi.number().max(999999999999999).required()
+  organizationId: Joi.number().max(999999999999999).required(),
+  searchString: Joi.string().min(0).max(64).allow('').optional(),
+  productCategoryIdList: Joi.array().items(Joi.number()).optional() // NOTE: if given a non-empty array, searchString property has no effect
 }
 ```
 
@@ -34,14 +36,14 @@ Possible Error Codes:
 ```js
 {
   "hasError": false,
-  "discountPresetList": Joi.array().items(
+  "productCategoryList": Joi.array().items(
     Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
+      organizationId: Joi.number().max(999999999999999).required(),
       name: Joi.string().min(1).max(64).required(),
       colorCode: Joi.string().length(6).required(),
-      organizationId: Joi.number().max(999999999999999).required(),
 
       isDeleted: Joi.boolean().required()
     });

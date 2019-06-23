@@ -30,7 +30,7 @@ exports.GetProductCategoryListApi = class extends Api {
   }
 
   async __getProductCategoryList({ organizationId, searchString, productCategoryIdList }) {
-    if (productCategoryIdList.length > 0) {
+    if (productCategoryIdList && productCategoryIdList.length > 0) {
       return await this.database.productCategory.listByOrganizationIdAndIdList({ organizationId, idList: productCategoryIdList });
     } else {
       return await this.database.productCategory.listByOrganizationIdAndSearchString({ organizationId, searchString });
