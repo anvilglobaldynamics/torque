@@ -5,7 +5,6 @@
     "networkErrorTGotIt": "Got It",
     "networkErrorRetry": "Reload",
     "networkErrorTitle": "Network error",
-    "selectCategory": "Select Category",
     "networkErrorContent": "Make sure you are connected to the internet and try again",
     "unableToGoOffline": "Unable to enable offline mode. Next time you are online, make sure to select an outlet for offline mode.",
     "apiErrorHeader": ""
@@ -1012,5 +1011,8 @@
     "searchForProductCategoryInput": "Search by Name",
     "searchForProductCategoryInputError": "Error in Search for Product Category",
     "whatIsProductCategoryMessage": "whatIsProductCategoryMessagewhatIsProductCategoryMessagewhatIsProductCategoryMessage"
+  },
+  "productCategoryPicker": {
+    "pickerTitle": "Select a Category"
   }
 }

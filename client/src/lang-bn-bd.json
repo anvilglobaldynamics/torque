@@ -5,7 +5,6 @@
     "networkErrorTGotIt": "ঠিক আছে",
     "networkErrorRetry": "রিলোড করুন",
     "networkErrorTitle": "ইন্টারনেট সংযোগ",
-    "selectCategory":"ধরণ নির্বাচন",
     "networkErrorContent": "আপনার ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়ে আছে। ইন্টারনেটে সংযুক্ত হয়ে আবার চেষ্টা করুন। ",
     "unableToGoOffline": "অফলাইন মোড সক্ষম করতে অক্ষম। পরের বার আপনি অনলাইনে থাকবেন, অফলাইন মোডের জন্য একটি আউটলেট নির্বাচন করতে ভুলবেন না।",
     "apiErrorHeader": ""
@@ -1013,5 +1012,8 @@
     "searchForProductCategoryInput": "ধরণের নাম দিয়ে খুজুন",
     "searchForProductCategoryInputError": "পণ্যের ধরণ সন্ধানে ত্রুটি",
     "whatIsProductCategoryMessage": "whatIsProductCategoryMessagewhatIsProductCategoryMessagewhatIsProductCategoryMessage"
+  },
+  "productCategoryPicker": {
+    "pickerTitle": "একটি ধরণ নির্বাচন"
   }
 }
