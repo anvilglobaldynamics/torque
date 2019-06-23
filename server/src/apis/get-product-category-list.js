@@ -31,7 +31,6 @@ exports.GetProductCategoryListApi = class extends Api {
   }
 
   async __getProductCategoryList({ organizationId, searchString, productCategoryIdList, searchBySearchString }) {
-    console.log(searchBySearchString)
     if (!searchBySearchString) {
       productCategoryIdList = productCategoryIdList || [];
       return await this.database.productCategory.listByOrganizationIdAndIdList({ organizationId, idList: productCategoryIdList });
