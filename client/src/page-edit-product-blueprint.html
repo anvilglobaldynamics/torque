@@ -323,6 +323,7 @@
 
           } else {
             this.app.displayCategoryDialog(productCategoryList, (selectedCategory) => {
+              if (!selectedCategory) return;
               this.push('productCategoryList', selectedCategory);
               this.newCategoryInput = '';
               this.elem('.new-category-input').focus();
