@@ -17,7 +17,7 @@ exports.GetProductCategoryListApi = class extends Api {
       organizationId: Joi.number().max(999999999999999).required(),
       searchString: Joi.string().min(0).max(32).allow('').optional(),
       productCategoryIdList: Joi.array().items(Joi.number()).optional(),
-      searchBySearchString: Joi.boolean().default(false).optional()
+      searchBySearchString: Joi.boolean().default(true).optional()
     });
   }
 
