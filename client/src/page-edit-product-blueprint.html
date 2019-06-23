@@ -65,7 +65,10 @@
               </template>
             </div>
 
-            <paper-input class="new-category-input" value="{{newCategoryInput}}" minlength="3" on-keypress="newCategoryInputChanged" label="[[verses.productBlueprint.productBlueprintNameInput]]"></paper-input>
+            <div class="horizontal layout center">
+              <paper-input class="new-category-input flex" value="{{newCategoryInput}}" minlength="3" on-keypress="newCategoryInputChanged" label="[[verses.productBlueprint.productCategoryNameInput]]"></paper-input>
+              <paper-icon-button icon="add-circle" on-tap="newCategoryAddTapped"></paper-icon-button>
+            </div>
           </div>
 
           <div class="card vertical layout">
@@ -295,20 +298,22 @@
         });
       }
 
-      newCategoryInputChanged(e = null) {
-        e.stopPropagation();
+      _addNewCategory() {
         if (this.newCategoryInput.length === 0) return;
-        if (e.which !== 13) return;
         this._processGetProductCategoryList(this.newCategoryInput, [], (productCategoryList) => {
 
-          productCategoryList = productCategoryList
-            .filter(productCategory =>
-              !this.productCategoryList.find(_productCategory => productCategory.id === _productCategory.id)
-            )
-            .slice(0, 8);
+          try {
+            productCategoryList = productCategoryList
+              .filter(productCategory =>
+                !this.productCategoryList.find(_productCategory => productCategory.id === _productCategory.id)
+              )
+              .slice(0, 8);
+          } catch (ex) {
+            productCategoryList = [];
+          }
 
           if (productCategoryList.length === 0) {
-            this.app.showModalDialog("Category not found", "The product category specified was not found");
+            this.app.showModalDialog(this.verses.productBlueprint.productCategoryNotFound, this.verses.productBlueprint.productCategoryNotFoundDetails);
 
           } else if (productCategoryList.length === 1) {
             this.push('productCategoryList', productCategoryList[0]);
@@ -323,6 +328,16 @@
             });
           }
         });
+      }
+
+      newCategoryAddTapped(e = null) {
+        this._addNewCategory();
+      }
+
+      newCategoryInputChanged(e) {
+        e.stopPropagation();
+        if (e.which !== 13) return;
+        this._addNewCategory();
       }
 
       // region: misc =================================

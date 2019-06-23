@@ -411,15 +411,15 @@
         </iron-pages>
 
         <paper-dialog id="category-dialog" modal style="z-index: -999999">
-          <h2>Select Category</h2>
+          <h2>[[verses.root.selectCategory]]</h2>
           <paper-dialog-scrollable>
-            <template is="dom-repeat" items="[[_categoryList]]" as="productCategory">
+            <template is="dom-repeat" items="[[_productCategoryList]]" as="productCategory">
               <div on-click="categoryDialogSelectTapped" class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; margin: 4px; border: none;">
                 [[productCategory.name]]
               </div>
             </template>
           </paper-dialog-scrollable>
-          <paper-button class="secondary" on-click="categoryDialogCancelTapped" autofocus>Cancel</paper-button>
+          <paper-button class="secondary style-patch" on-click="categoryDialogCancelTapped" autofocus>[[verses.general.cancel]]</paper-button>
         </paper-dialog>
 
         <paper-dialog id="network-dialog" modal style="z-index: -999999">
@@ -970,11 +970,11 @@
         // }
       }
 
-      // ====================== category dialog =============================
+      // ====================== product category dialog =============================
 
       displayCategoryDialog(categoryList, cbfn) {
         this._categoryDialogCbfn = cbfn;
-        this._categoryList = categoryList;
+        this._productCategoryList = categoryList;
         this._patchForPolymerModalDialogIssue();
         this.elem('#category-dialog').open();
       }

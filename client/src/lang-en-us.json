@@ -5,6 +5,7 @@
     "networkErrorTGotIt": "Got It",
     "networkErrorRetry": "Reload",
     "networkErrorTitle": "Network error",
+    "selectCategory": "Select Category",
     "networkErrorContent": "Make sure you are connected to the internet and try again",
     "unableToGoOffline": "Unable to enable offline mode. Next time you are online, make sure to select an outlet for offline mode.",
     "apiErrorHeader": ""
@@ -322,6 +323,9 @@
     "searchForProductBlueprintInput": "Name or Identifier Code",
     "searchForProductBlueprintInputError": "Error in Search for Product Blueprint",
     "bulkImport": "Bulk Product Blueprint Creation",
+    "productCategoryNameInput": "Name of Product Category",
+    "productCategoryNotFound": "Category not found",
+    "productCategoryNotFoundDetails": "Unable to find product category with that name",
     "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks. Instead of reusing or editing existing product blueprint, we encourage you to create a new product blueprint incase of slight differnces.",
     "productBlueprintEditConfirmMessage": "Editing Product Blueprint will update coresponding product throughout the organization. Editing prices will cause calculations to change. Do you want to prceed?"
   },
