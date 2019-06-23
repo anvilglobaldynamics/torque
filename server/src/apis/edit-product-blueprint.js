@@ -20,6 +20,7 @@ exports.EditProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin)
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
+      productCategoryIdList: Joi.array().items(Joi.number()).required(),
       isReturnable: Joi.boolean().required()
     });
   }
@@ -41,8 +42,8 @@ exports.EditProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin)
     }];
   }
 
-  async _updateProductBlueprint({ productBlueprintId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
-    let result = await this.database.productBlueprint.setDetails({ id: productBlueprintId }, { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+  async _updateProductBlueprint({ productBlueprintId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable }) {
+    let result = await this.database.productBlueprint.setDetails({ id: productBlueprintId }, { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable });
     this.ensureUpdate(result, 'product-blueprint');
   }
 
@@ -61,9 +62,9 @@ exports.EditProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin)
   }
 
   async handle({ body }) {
-    let { productBlueprintId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
+    let { productBlueprintId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable } = body;
     await this.__ensureIdentifierCodeIsUnique({ identifierCode, organizationId: this.interimData.organization.id, productBlueprintId });
-    await this._updateProductBlueprint({ productBlueprintId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+    await this._updateProductBlueprint({ productBlueprintId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable });
     await this._updateExistingProduct({ productBlueprintId, purchasePrice: defaultPurchasePrice, salePrice: defaultSalePrice });
     return { status: "success" };
   }

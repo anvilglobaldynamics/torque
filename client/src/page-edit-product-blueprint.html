@@ -52,13 +52,37 @@
             <paper-input class="editProductBlueprintForm--identifierCode" value="{{editProductBlueprintForm.identifierCode}}" minlength="0" maxlength="64" error-message=[[verses.productBlueprint.identifierCodeInputError]] label="[[verses.productBlueprint.identifierCodeInput]] [[verses.general.optional]]"></paper-input>
 
             <paper-checkbox checked="{{editProductBlueprintForm.isReturnable}}">[[verses.productBlueprint.isProductReturnable]]</paper-checkbox>
+          </div>
 
+          <div class="card vertical layout">
+
+            <div class="mb-4" style="font-weight: bold;">[[verses.productCategory.productCategoriesTitle]]:</div>
+
+            <div class="horizontal layout wrap">
+              <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory" index-as="productCategoryIndex">
+                <div class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; margin: 4px; border: none; display: inline-block;">
+                  [[productCategory.name]]
+                  <iron-icon icon="clear" style$="color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; height: 18px; style: margin-top: -12px;" on-tap="deleteProductCategoryTapped"></iron-icon>
+                </div>
+              </template>
+            </div>
+
+            <div class="horizontal layout center">
+              <paper-input class="new-category-input flex" value="{{newCategoryInput}}" minlength="3" on-keypress="newCategoryInputChanged" label="[[verses.productCategory.searchForProductCategoryInput]]"></paper-input>
+              <paper-button class="secondary" raised icon="search" on-tap="newCategoryAddTapped">
+                <iron-icon icon="search"></iron-icon>
+              </paper-button>
+            </div>
+          </div>
+
+          <div class="card vertical layout">
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editProductBlueprintForm--submit" on-tap="createProductBlueprintTapped">[[verses.productBlueprint.createProductBlueprint]]</paper-button>
               <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editProductBlueprintForm--submit" on-tap="updateProductBlueprintTapped">[[verses.productBlueprint.updateProductBlueprint]]</paper-button>
             </div>
           </div>
+
         </form>
       </iron-form>
 
@@ -88,7 +112,7 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  name: "Bottoms",
+                  name: "Attractive Shirt - L",
                   unit: "pcs",
                   identifierCode: '',
                   defaultPurchasePrice: 400,
@@ -123,6 +147,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
+        this.productCategoryList = [];
         if ('product-blueprint' in this.params) {
           this.editMode = true;
           this.app.pushPageTitle(this.app.verses.productBlueprint.editProductBlueprintTitle);
@@ -146,6 +171,7 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.app.popPageTitle();
+        this.newCategoryInput = '';
         this.resetProperties('editProductBlueprintForm');
         this.removeAutoValidation('#editProductBlueprintForm paper-input');
       }
@@ -177,13 +203,19 @@
           return productBlueprint.id === parseInt(this.params['product-blueprint']);
         });
         this.editingProductBlueprint = productBlueprint;
-        let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = productBlueprint;
+        this.productCategoryList = [];
+        let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable } = productBlueprint;
         this.editProductBlueprintForm = { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
+        this._processGetProductCategoryList('', productCategoryIdList, false, (productCategoryList) => {
+          this.productCategoryList = productCategoryList;
+        });
       }
 
       _processCreateProductBlueprint({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+        let productCategoryIdList = this.productCategoryList
+          .map(productCategory => productCategory.id);
         let data = {
-          name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
+          name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable,
           organizationId: this.app.organization.id,
         };
         this.app.callAddProductBlueprintApi(data, (err, response) => {
@@ -197,8 +229,10 @@
       }
 
       _processUpdateProductBlueprint({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+        let productCategoryIdList = this.productCategoryList
+          .map(productCategory => productCategory.id);
         let data = {
-          name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable,
+          name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable,
           productBlueprintId: this.editingProductBlueprint.id
         };
 
@@ -231,14 +265,14 @@
         if (!this.elem('#editProductBlueprintForm').validate()) return;
 
         this.app.showModalConfirmation(
-          this.app.verses.general.modalConfirmationPleaseConfirm, 
-          this.app.verses.productBlueprint.productBlueprintEditConfirmMessage, 
+          this.app.verses.general.modalConfirmationPleaseConfirm,
+          this.app.verses.productBlueprint.productBlueprintEditConfirmMessage,
           (answer) => {
-          if (answer) {
-            let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
-            this._processUpdateProductBlueprint({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
-          }
-        });
+            if (answer) {
+              let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
+              this._processUpdateProductBlueprint({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+            }
+          });
       }
 
       genericDiscountValueInputChanged(e) {
@@ -247,6 +281,70 @@
 
       calculateSalePriceAfterVat() {
         return (parseFloat(this.editProductBlueprintForm.defaultSalePrice) + parseFloat(this.editProductBlueprintForm.defaultSalePrice) * parseFloat(this.editProductBlueprintForm.defaultVat) / 100);
+      }
+
+      // region: product category =================================
+
+      deleteProductCategoryTapped(e) {
+        let { productCategoryIndex } = e.model;
+        this.splice('productCategoryList', productCategoryIndex, 1);
+      }
+
+      _processGetProductCategoryList(searchString, productCategoryIdList, searchBySearchString, cbfn) {
+        let data = {
+          searchString,
+          productCategoryIdList,
+          searchBySearchString,
+          organizationId: this.app.organization.id
+        };
+        this.app.callGetProductCategoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          cbfn(response.productCategoryList);
+        });
+      }
+
+      _addNewCategory() {
+        if (this.newCategoryInput.length === 0) return;
+        this._processGetProductCategoryList(this.newCategoryInput, [], true, (productCategoryList) => {
+
+          try {
+            productCategoryList = productCategoryList
+              .filter(productCategory =>
+                !this.productCategoryList.find(_productCategory => productCategory.id === _productCategory.id)
+              )
+              .slice(0, 8);
+          } catch (ex) {
+            productCategoryList = [];
+          }
+
+          if (productCategoryList.length === 0) {
+            this.app.showModalDialog(this.verses.productBlueprint.productCategoryNotFound, this.verses.productBlueprint.productCategoryNotFoundDetails);
+
+          } else if (productCategoryList.length === 1) {
+            this.push('productCategoryList', productCategoryList[0]);
+            this.newCategoryInput = '';
+            this.elem('.new-category-input').focus();
+
+          } else {
+            this.app.displayCategoryDialog(productCategoryList, (selectedCategory) => {
+              if (!selectedCategory) return;
+              this.push('productCategoryList', selectedCategory);
+              this.newCategoryInput = '';
+              this.elem('.new-category-input').focus();
+            });
+          }
+        });
+      }
+
+      newCategoryAddTapped(e = null) {
+        this._addNewCategory();
+      }
+
+      newCategoryInputChanged(e) {
+        e.stopPropagation();
+        if (e.which !== 13) return;
+        this._addNewCategory();
       }
 
       // region: misc =================================

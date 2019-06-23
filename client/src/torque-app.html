@@ -103,6 +103,9 @@
 <link rel="lazy-import" href="page-manage-discount-presets.html">
 <link rel="lazy-import" href="page-edit-discount-preset.html">
 
+<link rel="lazy-import" href="page-manage-product-categories.html">
+<link rel="lazy-import" href="page-manage-product-category.html">
+
 <link rel="import" href="shared-icons.html">
 <link rel="import" href="shared-styles.html">
 
@@ -273,6 +276,9 @@
             <hr class="sidebar-divider">
 
             <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>
+            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+              <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.manageProductCategories]]</a>
+            </template>
             <hr class="sidebar-divider">
 
             <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
@@ -377,6 +383,8 @@
           <page-manage-customers name="manage-customers"></page-manage-customers>
           <page-view-customer name="view-customer"></page-view-customer>
           <page-edit-customer name="edit-customer"></page-edit-customer>
+          <page-manage-product-categories name="manage-product-categories"></page-manage-product-categories>
+          <page-edit-product-category name="edit-product-category"></page-edit-product-category>
           <page-withdraw-from-change-wallet-balance name="withdraw-from-change-wallet-balance"></page-withdraw-from-change-wallet-balance>
           <page-pos name="pos"></page-pos>
           <page-report-sales name="report-sales"></page-report-sales>
@@ -400,6 +408,20 @@
           <page-manage-discount-presets name="manage-discount-presets"></page-manage-discount-presets>
           <page-edit-discount-preset name="edit-discount-preset"></page-edit-discount-preset>
         </iron-pages>
+
+        <paper-dialog id="category-dialog" modal style="z-index: -999999">
+          <h2>[[verses.productCategoryPicker.pickerTitle]]</h2>
+          <paper-dialog-scrollable>
+            <template is="dom-repeat" items="[[_productCategoryList]]" as="productCategory">
+              <div on-click="categoryDialogSelectTapped" class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; margin: 4px; border: none;">
+                [[productCategory.name]]
+              </div>
+            </template>
+          </paper-dialog-scrollable>
+          <div class="buttons">
+            <paper-button class="secondary" on-click="categoryDialogCancelTapped" autofocus>[[verses.general.cancel]]</paper-button>
+          </div>
+        </paper-dialog>
 
         <paper-dialog id="network-dialog" modal style="z-index: -999999">
           <h2>[[verses.root.networkErrorTitle]]</h2>
@@ -947,6 +969,28 @@
         //     unsyncedSalesList: []
         //   }
         // }
+      }
+
+      // ====================== product category dialog =============================
+
+      displayCategoryDialog(categoryList, cbfn) {
+        this._categoryDialogCbfn = cbfn;
+        this._productCategoryList = categoryList;
+        this._patchForPolymerModalDialogIssue();
+        this.elem('#category-dialog').open();
+      }
+
+      categoryDialogCancelTapped(e = null) {
+        this.elem('#category-dialog').close();
+        this._categoryDialogCbfn(null);
+        this._categoryDialogCbfn = null;
+      }
+
+      categoryDialogSelectTapped(e) {
+        this.elem('#category-dialog').close();
+        let { productCategory } = e.model;
+        this._categoryDialogCbfn(productCategory);
+        this._categoryDialogCbfn = null;
       }
 
       // ====================== shortcuts =============================

@@ -20,6 +20,7 @@ exports.AddProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin) 
       defaultPurchasePrice: Joi.number().max(999999999999999).required(),
       defaultVat: Joi.number().max(999999999999999).required(),
       defaultSalePrice: Joi.number().max(999999999999999).required(),
+      productCategoryIdList: Joi.array().items(Joi.number()).required(),
       isReturnable: Joi.boolean().required()
     });
   }
@@ -40,9 +41,9 @@ exports.AddProductBlueprintApi = class extends Api.mixin(ProductBlueprintMixin) 
   }
 
   async handle({ body }) {
-    let { organizationId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = body;
+    let { organizationId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable } = body;
     await this.__ensureIdentifierCodeIsUnique({ identifierCode, organizationId });
-    let productBlueprintId = await this._createProductBlueprint({ organizationId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+    let productBlueprintId = await this._createProductBlueprint({ organizationId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable });
     return { status: "success", productBlueprintId };
   }
 

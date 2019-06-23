@@ -263,7 +263,7 @@
       // region: ui  ===========================
 
       editTapped(e = null) {
-        this.$['top-menu'].close();
+        this.elem('#top-menu').close();
         return this.app.navigateTo(`/edit-outlet/outlet:${this.outlet.id}`);
       }
 
