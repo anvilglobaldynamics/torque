@@ -201,7 +201,7 @@
         this.productCategoryList = [];
         let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable } = productBlueprint;
         this.editProductBlueprintForm = { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
-        this._processGetProductCategoryList('', productCategoryIdList, (productCategoryList) => {
+        this._processGetProductCategoryList('', productCategoryIdList, false, (productCategoryList) => {
           this.productCategoryList = productCategoryList;
         });
       }
@@ -285,10 +285,11 @@
         this.splice('productCategoryList', productCategoryIndex, 1);
       }
 
-      _processGetProductCategoryList(searchString, productCategoryIdList, cbfn) {
+      _processGetProductCategoryList(searchString, productCategoryIdList, searchBySearchString, cbfn) {
         let data = {
           searchString,
           productCategoryIdList,
+          searchBySearchString,
           organizationId: this.app.organization.id
         };
         this.app.callGetProductCategoryListApi(data, (err, response) => {
@@ -300,7 +301,7 @@
 
       _addNewCategory() {
         if (this.newCategoryInput.length === 0) return;
-        this._processGetProductCategoryList(this.newCategoryInput, [], (productCategoryList) => {
+        this._processGetProductCategoryList(this.newCategoryInput, [], true, (productCategoryList) => {
 
           try {
             productCategoryList = productCategoryList
