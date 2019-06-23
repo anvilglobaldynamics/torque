@@ -11,7 +11,7 @@ exports.ProductCategoryCollection = class extends Collection {
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
-      name: Joi.string().min(1).max(64).required(),
+      name: Joi.string().min(1).max(32).required(),
       colorCode: Joi.string().length(6).required(),
       organizationId: Joi.number().max(999999999999999).required(),
 
@@ -74,7 +74,6 @@ exports.ProductCategoryCollection = class extends Collection {
     }
     return await this._find(query);
   }
-
 
   async listByOrganizationIdAndIdList({ organizationId, idList }) {
     let query = { organizationId, id: { $in: idList } };
