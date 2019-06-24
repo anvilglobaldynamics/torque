@@ -112,7 +112,8 @@
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
-          privilegeList: ['PRIV_MANAGE_CUSTOMER_WALLET_BALANCE']
+          privilegeList: ['PRIV_MANAGE_CUSTOMER_WALLET_BALANCE'],
+          moduleList: ['MOD_CUSTOMER_ACCOUNT_BALANCE']
         });
       }
 

@@ -113,10 +113,14 @@
                   <iron-icon icon="hardware:smartphone" class="icon small"></iron-icon>
                   <div class="type caption-2">[[customer.phone]]</div>
                 </div>
-                <div class="horizontal layout center">
-                  <iron-icon icon="editor:attach-money" class="icon small"></iron-icon>
-                  <div class="type caption-2">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
-                </div>
+
+                <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                  <div class="horizontal layout center">
+                    <iron-icon icon="editor:attach-money" class="icon small"></iron-icon>
+                    <div class="type caption-2">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
+                  </div>
+                </template>
+
               </div>
             </div>
 
