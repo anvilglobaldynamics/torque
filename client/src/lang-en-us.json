@@ -92,6 +92,7 @@
     "serviceModule": "Service Module",
     "sellWarehouseProductModule": "Sell Warehouse Products Module",
     "gymModule": "Gym Module",
+    "customerAccountBalanceModule": "Customer Account Balance Module",
     "retail": "Retail",
     "service": "Service",
     "both": "Both",
