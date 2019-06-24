@@ -50,7 +50,10 @@
       <div class="card vertical layout">
         <div><b>[[customer.fullName]]</b></div>
         <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
-          <div>[[verses.general.balance]]: [[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</div>
+          <div>
+            <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
+            [[verses.general.balance]]: [[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]
+          </div>
         </template>
         <div>[[verses.general.number]]: [[customer.phone]]</div>
         <template is="dom-if" if="[[customer.email]]">

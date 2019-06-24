@@ -64,7 +64,10 @@
                   <div class="person-phone-container">[[verses.general.phone]]: [[customer.phone]]</div>
                   
                   <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
-                    <div class="person-detail-container">[[verses.general.balance]]: [[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</div>
+                    <div class="person-detail-container">
+                      <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
+                      [[verses.general.balance]]: [[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]
+                    </div>
                   </template>
                 </div>
 
