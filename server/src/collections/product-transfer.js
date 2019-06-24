@@ -12,9 +12,13 @@ exports.ProductTransferCollection = class extends Collection {
       isDeleted: Joi.boolean().required(),
       createdByUserId: Joi.number().max(999999999999999).required(),
 
+      productTransferNumber: Joi.number().max(999999999999999).required(),
+
       transferredDatetimeStamp: Joi.number().max(999999999999999).required(),
       fromInventoryId: Joi.number().max(999999999999999).required(),
       toInventoryId: Joi.number().max(999999999999999).required(),
+      organizationId: Joi.number().max(999999999999999).required(),
+
       isWithinSameInventoryContainer: Joi.boolean().required(),
 
       productList: Joi.array().min(1).items(
@@ -52,7 +56,9 @@ exports.ProductTransferCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList, isWithinSameInventoryContainer }) {
+  async create({ organizationId, createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList, isWithinSameInventoryContainer }) {
+    let productTransferNumber = await this.autoGenerateOrganizationSpecificNumber({ organizationId, fieldName: 'productTransferNumberSeed' });
+
     return await this._insert({
       isDeleted: false,
       createdByUserId,
@@ -60,6 +66,8 @@ exports.ProductTransferCollection = class extends Collection {
       fromInventoryId,
       toInventoryId,
       productList,
+      organizationId,
+      productTransferNumber,
       isWithinSameInventoryContainer
     });
   }
@@ -68,5 +76,41 @@ exports.ProductTransferCollection = class extends Collection {
     return await this._find({ 'productList': { $elemMatch: { 'productId': { $in: productIdList } } } });
   }
 
+
+  async listByFilters({ organizationId, fromDate, toDate, searchString }) {
+
+    let filterByProductTransferNumber = null;
+    if (searchString) {
+      if (parseInt(searchString) >= 0) {
+        filterByProductTransferNumber = parseInt(searchString);
+      }
+    }
+
+    let query = { $and: [] };
+
+    // NOTE: If filterByProductTransferNumber is present, other filters must not take any affect.
+    if (filterByProductTransferNumber) {
+
+      query.$and.push({
+        productTransferNumber: filterByProductTransferNumber
+      });
+
+    } else {
+
+      query.$and.push({
+        organizationId
+      });
+
+      query.$and.push({
+        createdDatetimeStamp: {
+          $gte: fromDate,
+          $lte: toDate
+        }
+      });
+
+    }
+
+    return await this._find(query);
+  }
 
 }

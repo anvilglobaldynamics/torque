@@ -75,7 +75,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductBlueprintId = generateInvalidId();
 
-describe('Inventory', _ => {
+describe.only('Inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -470,6 +470,26 @@ describe('Inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-product-transfer-list (Valid)', testDoneFn => {
+
+    callApi('api/get-product-transfer-list', {
+      json: {
+        apiKey,
+        fromDate: Date.now() - 24 * 60 * 60 * 1000,
+        toDate: Date.now(),
+        organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      console.log(JSON.stringify(body));
+      // validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+      // expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
+      // expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(2);
       testDoneFn();
     });
 
