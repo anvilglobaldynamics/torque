@@ -138,7 +138,7 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
-describe('Sales', _ => {
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

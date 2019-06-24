@@ -18,5 +18,9 @@
   {
     "code": "MOD_SELL_WAREHOUSE_PRODUCTS",
     "name": "Unlocks the ability to select products from warehouse to sell from an outlet."
+  },
+  {
+    "code": "MOD_CUSTOMER_ACCOUNT_BALANCE",
+    "name": "Unlocks the ability to save change in customer account balance."
   }
 ]
