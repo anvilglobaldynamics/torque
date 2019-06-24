@@ -86,6 +86,11 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     // throw new CodedError("BILL_INACCURATE", "Bill is mathematically inaccurate");
     // Also should validate the new payment portion. i.e. paidAmount > changeAmount etc
     // Also, if paymentMethod is 'change-wallet' then customer must exist
+
+    if (paymentListEntry.paymentMethod === 'change-wallet' || paymentListEntry.shouldSaveChangeInAccount) {
+      await this.ensureModule('MOD_CUSTOMER_ACCOUNT_BALANCE');
+    }
+
     if (payment.discountPresetId !== null) {
       let discountPreset = await this.database.discountPreset.findByIdAndOrganizationId({ id: payment.discountPresetId, organizationId });
       throwOnFalsy(discountPreset, "DISCOUNT_PRESET_INVALID", "The discount preset is invalid");
