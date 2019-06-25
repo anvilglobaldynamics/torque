@@ -1,0 +1,184 @@
+This API handles get the list of product transfer to populate product transfer lists request.
+
+url: `api/get-product-transfer-list`
+
+method: `POST`
+
+### request: 
+```js
+{
+  organizationId: Joi.number().max(999999999999999).required(),
+
+  fromDate: Joi.number().max(999999999999999).required(),
+  toDate: Joi.number().max(999999999999999).required(),
+
+  searchString: Joi.string().min(0).max(64).allow('').optional() // NOTE: searchString is currently used for productTransferNumber. We can extend it for other purposes later
+}
+```
+
+### response (on error):
+```js
+{
+  "hasError": true,
+  "error": {
+    code,
+    message
+  }
+}
+```
+
+Possible Error Codes:
+```js
+{ code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
+{ code: ORGANIZATION_INVALID } // organization could not be found
+```
+
+### response (on success, without includeExtendedInformation):
+```js
+{
+  "hasError": false,
+
+  "salesList": Joi.array().items(
+    Joi.object().keys({
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedByUserId: Joi.number().max(999999999999999).required(),
+      outletId: Joi.number().max(999999999999999).required(),
+      customerId: Joi.number().max(999999999999999).required(),
+
+      salesNumber: Joi.number().max(999999999999999).required(),
+      productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
+
+      customer: Joi.object().keys({
+        id: Joi.number().max(999999999999999).required(),
+        
+        createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+        lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+        isDeleted: Joi.boolean().required(),
+      
+        fullName: Joi.string().min(1).max(64).required(),
+        phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+        organizationId: Joi.number().max(999999999999999).required(),
+        changeWalletBalance: Joi.number().max(999999999999999).required(),
+        
+        withdrawalHistory: Joi.array().items(
+          Joi.object().keys({
+            creditedDatetimeStamp: Joi.number().max(999999999999999).required(),
+            byUserId: Joi.number().max(999999999999999).required(),
+            amount: Joi.number().max(999999999999999).required()
+          })
+        )
+      }),
+
+      productList: Joi.array().items(
+        Joi.object().keys({
+          productId: Joi.number().max(999999999999999).required(),
+          count: Joi.number().max(999999999999999).required(),
+          salePrice: Joi.number().max(999999999999999).required(),
+
+          product: Joi.object().keys({
+            id: Joi.number().max(999999999999999).required(),
+            productBlueprintId: Joi.number().max(999999999999999).required(),
+            purchasePrice: Joi.number().max(999999999999999).required(),
+            salePrice: Joi.number().max(999999999999999).required()
+          }),
+
+          productBlueprint: Joi.object().keys({
+            id: Joi.number().max(999999999999999).required(),
+    
+            createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+            lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+          
+            name: Joi.string().min(1).max(64).required(),
+            organizationId: Joi.number().max(999999999999999).required(),
+            unit: Joi.string().max(64).required(),
+            identifierCode: Joi.string().max(64).allow('').required(),
+            defaultPurchasePrice: Joi.number().max(999999999999999).required(),
+            defaultVat: Joi.number().max(999999999999999).required(),
+            defaultSalePrice: Joi.number().max(999999999999999).required(),
+            
+            isDeleted: Joi.boolean().required(),
+            isReturnable: Joi.boolean().required()
+          
+          })
+        })
+      ),
+
+      serviceList: Joi.array().required().items(
+        Joi.object().keys({
+          serviceId: Joi.number().max(999999999999999).required(),
+          salePrice: Joi.number().min(0).max(999999999999999).required(),
+          vatPercentage: Joi.number().min(0).max(999999999999999).required(),
+          assignedEmploymentId: Joi.number().max(999999999999999).allow(null).required(),
+
+          service: Joi.object().keys({
+            id: Joi.number().max(999999999999999).required(),
+
+            createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+            lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+            createdByUserId: Joi.number().max(999999999999999).required(),
+          
+            serviceBlueprintId: Joi.number().max(999999999999999).required(),
+            outletId: Joi.number().max(999999999999999).required(),
+            
+            salePrice: Joi.number().min(0).max(999999999999999).required(),
+            isAvailable: Joi.boolean().required()
+          }),
+
+          serviceBlueprint: Joi.object().keys({
+            id: Joi.number().max(999999999999999).required(),
+            
+            createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+            lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+          
+            name: Joi.string().min(1).max(64).required(),
+            organizationId: Joi.number().max(999999999999999).required(),
+          
+            defaultVat: Joi.number().min(0).max(999999999999999).required(),
+            defaultSalePrice: Joi.number().min(0).max(999999999999999).required(),
+            
+            isLongstanding: Joi.boolean().required(),
+            serviceDuration: Joi.object().allow(null).required().keys({
+              months: Joi.number().min(0).max(999999999999999).required(),
+              days: Joi.number().min(0).max(999999999999999).required(),
+            }),
+          
+            isEmployeeAssignable: Joi.boolean().required(),
+            isCustomerRequired: Joi.boolean().required(),
+            isRefundable: Joi.boolean().required(),
+            isDeleted: Joi.boolean().required()
+          })
+        })
+      ),
+
+      payment: Joi.object().keys({
+        totalAmount: Joi.number().max(999999999999999).required(),
+        vatAmount: Joi.number().max(999999999999999).required(),
+        discountPresetId: Joi.number().max(999999999999999).allow(null).required(),
+        discountPresetName: Joi.string().min(0).max(64).allow('').required(),
+        discountType: Joi.string().max(1024).required(),
+        discountValue: Joi.number().max(999999999999999).required(),
+        discountedAmount: Joi.number().max(999999999999999).required(),
+        serviceChargeAmount: Joi.number().max(999999999999999).required(),
+        totalBilled: Joi.number().max(999999999999999).required(),
+        paidAmount: Joi.number().max(999999999999999).required(),
+        changeAmount: Joi.number().max(999999999999999).required()
+      }),
+
+      assistedByEmployeeId: Joi.number().min(0).max(999999999999999).allow(null).required(),
+
+      wasOfflineSale: Joi.boolean().required(),
+
+      isModified: Joi.boolean().required()
+    });
+  )
+}
+```
+
+### db changes:
+updates no collection in db.
+
+### NOTE:
+
+if `searchString` is present and it is a number, other filters are ignored.

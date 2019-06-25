@@ -19,6 +19,7 @@ let {
   validateGenericApiFailureResponse,
   validateGenericApiSuccessResponse,
   validateGetAggregatedInventoryDetailsApiSuccessResponse,
+  validateGetProductTransferListApiSuccessResponse,
   validateReportInventoryDetailsApiSuccessResponse,
   validateAggregatedProductScema,
   validateProductBlueprintSchema,
@@ -60,6 +61,8 @@ let productBlueprintId2 = null;
 let productBlueprintId3 = null;
 let productBlueprintId4 = null;
 
+let productTransferNumber = null;
+
 let warehouseDefaultInventoryId = null;
 let warehouseReturnedInventoryId = null;
 let warehouseDamagedInventoryId = null;
@@ -75,7 +78,7 @@ let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductBlueprintId = generateInvalidId();
 
-describe.only('Inventory', _ => {
+describe('Inventory', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -486,10 +489,30 @@ describe.only('Inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      console.log(JSON.stringify(body, null, 2));
-      // validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
-      // expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
-      // expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(2);
+      validateGetProductTransferListApiSuccessResponse(body);
+      expect(body.productTransferList.length).to.equal(2);
+      expect(body.productTransferList[0].productList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
+      productTransferNumber = body.productTransferList[0].productTransferNumber;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-product-transfer-list (Valid, should return only one result)', testDoneFn => {
+
+    callApi('api/get-product-transfer-list', {
+      json: {
+        apiKey,
+        fromDate: Date.now() - 24 * 60 * 60 * 1000,
+        toDate: Date.now(),
+        organizationId,
+        searchString: String(productTransferNumber)
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetProductTransferListApiSuccessResponse(body);
+      expect(body.productTransferList.length).to.equal(1);
+      expect(body.productTransferList[0].productList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
       testDoneFn();
     });
 

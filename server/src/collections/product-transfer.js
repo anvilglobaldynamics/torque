@@ -92,7 +92,8 @@ exports.ProductTransferCollection = class extends Collection {
     if (filterByProductTransferNumber) {
 
       query.$and.push({
-        productTransferNumber: filterByProductTransferNumber
+        productTransferNumber: filterByProductTransferNumber,
+        organizationId
       });
 
     } else {
