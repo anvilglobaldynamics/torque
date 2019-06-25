@@ -545,7 +545,7 @@
     "noOutletSelected": "কোন দোকান নির্বাচন করা হয়নি",
     "removeOutlet": "দোকান সরান",
     "changeOutlet": "দোকান পরিবর্তন করুন",
-    "salesId": "বিক্রয় নং",
+    "associatedSalesId": "মূল বিক্রয় নং",
     "credited": "জমা",
     "salesReturnTitle": "বিক্রয় ফেরত",
     "creditedAmount": "ফেরতকৃত অর্থ",
