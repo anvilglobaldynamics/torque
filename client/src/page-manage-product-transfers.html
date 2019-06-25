@@ -1,0 +1,267 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-manage-product-transfers">
+  <template>
+    <style include="shared-styles">
+      .product-transfer-conteiner {
+        /* border: 1px solid red; */
+        margin-top: 10px;
+      }
+
+      .description {
+        font-size: 15px;
+      }
+
+      .description-time {
+        font-size: 12px;
+      }
+
+      .product-transfer-status {
+        padding-bottom: 2px;
+      }
+
+      .credit-text {
+        border: 1px solid red;
+        border-radius: 6px;
+        margin-right: 4px;
+        font-size: 13px;
+        padding: 3px;
+        color: red;
+      }
+
+      .min-input {
+        min-width: 200px;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="filter-toggle-region horizontal layout center">
+        <div class="flex"></div>
+        <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.general.showFilters]]</paper-toggle-button>
+      </div>
+
+      <div class="filter-region" hidden="[[!shouldShowFilters]]">
+
+        <div class="card vertical layout">
+          <div class="horizontal layout center">
+            <paper-input class="flex min-input" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+            <paper-input class="flex min-input" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+          </div>
+
+          <paper-input class="flex min-input" value="{{productTransferNumberToSearch}}" label="[[verses.productTransfer.productTransferNumber]] [[verses.productTransfer.exclusionNote]]" type="text"></paper-input>
+        </div>
+
+        <div class="horizontal layout">
+          <paper-button raised class="primary flex" on-tap="filterTapped">[[verses.general.filter]]</paper-button>
+        </div>
+
+      </div>
+
+      <template is="dom-if" if="{{!productTransferList.length}}">
+        <div class="card">
+          [[verses.productTransfer.noProductTransferFound]]
+        </div>
+      </template>
+
+      <template is="dom-if" if="{{productTransferList.length}}">
+
+        <div class="card vertical layout">
+
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          </template>
+
+          <div class="list">
+            <template is="dom-repeat" items="[[productTransferList]]" as="productTransfer">
+              <div class="horizontal layout item center">
+                <div class="vertical layout flex">
+                  <div class="product-transfer-conteiner">
+
+                    <div style="font-size: 16px; font-weight: 500;"> [[verses.productTransfer.productTransferNumber]]: [[productTransfer.productTransferNumber]] </div>
+
+                    <div class="description-time">[[$mkDate(productTransfer.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+
+                    <div class="description">[[verses.general.from]]: [[productTransfer.fromInventory.inventoryContainer.name]] - [[productTransfer.fromInventory.name]]</div>
+                    <div class="description">[[verses.general.to]]: [[productTransfer.toInventory.inventoryContainer.name]] - [[productTransfer.toInventory.name]]</div>
+                    <span class="description">[[verses.general.total]] [[productTransfer.productList.length]] [[verses.general.products]]</span>
+
+                  </div>
+                </div>
+                <paper-button raised class="secondary" on-tap="viewTapped">
+                  [[verses.general.view]]
+                </paper-button>
+              </div>
+            </template>
+          </div>
+
+          <div class="pagination">
+            [[verses.general.showing]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          </template>
+
+        </div>
+
+      </template>
+
+    </div>
+  </template>
+
+  <script>
+    class PageManageProductTransfer extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-manage-product-transfers';
+      }
+
+      static get properties() {
+        return {
+          fromDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date.setDate(date.getDate() - 1);
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          toDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.productTransfer.manageProductTransferTitle);
+        if (!this._ensureAccess()) return;
+        this._processProductTransferList(() => {
+          this.self = this;
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_ALL_INVENTORIES']
+        });
+      }
+
+      _fetchProductTransferList(cbfn) {
+        if (!this.fromDate) {
+          this.resetProperties('fromDate');
+        }
+        if (!this.toDate) {
+          this.resetProperties('toDate');
+        }
+
+        let fromDate = new Date(this.fromDate).getTime();
+        let toDate = new Date(this.toDate).getTime();
+
+        let data = {
+          organizationId: this.app.organization.id,
+          fromDate,
+          toDate,
+          paginate: this.paginate
+        };
+
+        if (this.productTransferNumberToSearch) {
+          data.searchString = this.productTransferNumberToSearch;
+        }
+
+        this.app.callGetProductTransferListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.productTransferList);
+        });
+      }
+
+      _processProductTransferList(cbfn) {
+        this._fetchProductTransferList(newProductTransferList => {
+          this.productTransferList = newProductTransferList;
+          cbfn();
+        });
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processProductTransferList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processProductTransferList(() => this.isReady = true);
+      }
+
+      // region: ui  ===========================
+
+      viewTapped(e) {
+        let { productTransfer } = e.model;
+        return this.app.navigateTo(`/view-product-transfer/product-transfer:${productTransfer.productTransferNumber}`);
+      }
+
+      filterTapped(e = null) {
+        this.isReady = false;
+        this._processProductTransferList(() => {
+          this.isReady = true;
+        });
+      }
+
+    }
+
+    window.customElements.define(PageManageProductTransfer.is, PageManageProductTransfer);
+  </script>
+</dom-module>

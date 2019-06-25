@@ -69,6 +69,7 @@
     "id": "ID",
     "discard": "Discard",
     "product": "Product",
+    "products": "Product(s)",
     "quantity": "Quantity",
     "unitPrice": "Unit Price",
     "price": "Price",
@@ -157,6 +158,7 @@
     "about": "About",
     "logout": "Logout",
     "manageProductCategories": "Product Categories",
+    "manageProductTransfer":"Product Transfer Records",
     "manageDiscountPresets": "Discounts"
   },
   "titleBar": {
@@ -1014,5 +1016,12 @@
   },
   "productCategoryPicker": {
     "pickerTitle": "Select a Category"
+  },
+  "productTransfer": {
+    "manageProductTransferTitle": "Product Transfer Records",
+    "productTransferNumber":"Product Transfer Number",
+    "exclusionNote": "(Optional. Other Filters will be ignored)",
+    "noProductTransferFound":"No Product Transfer Found",
+    "productTransferTitle": "Product Transfer Details"
   }
 }
