@@ -57,7 +57,14 @@ exports.GetProductTransferListApi = class extends Api.mixin(InventoryMixin) {
       sourceKey: 'createdByUserId',
       target: 'user'
     });
-    map.forEach((user, productTransfer) => productTransfer.createdByUser = user);
+    map.forEach((user, productTransfer) => {
+      productTransfer.createdByUser = extract(user, [
+        'id',
+        'fullName',
+        'email',
+        'phone',
+      ])
+    });
 
     // get product and productBlueprint
     let productList = productTransferList.reduce(((productList, productTransfer) => productList.concat(productTransfer.productList)), []);
