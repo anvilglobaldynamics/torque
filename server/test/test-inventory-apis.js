@@ -486,7 +486,7 @@ describe.only('Inventory', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      console.log(JSON.stringify(body));
+      console.log(JSON.stringify(body, null, 2));
       // validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
       // expect(body.aggregatedProductList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
       // expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(2);

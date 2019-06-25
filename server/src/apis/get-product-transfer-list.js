@@ -3,8 +3,9 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const { InventoryMixin } = require('./mixins/inventory-mixin');
 
-exports.GetProductTransferListApi = class extends Api {
+exports.GetProductTransferListApi = class extends Api.mixin(InventoryMixin) {
 
   get autoValidates() { return true; }
 
@@ -50,13 +51,15 @@ exports.GetProductTransferListApi = class extends Api {
   }
 
   async __includeExtendedInformation({ productTransferList }) {
+    // get createdByUser
     let map = await this.crossmap({
       source: productTransferList,
       sourceKey: 'createdByUserId',
       target: 'user'
     });
-    map.forEach((user, productTransfer) => productTransfer.user = user);
+    map.forEach((user, productTransfer) => productTransfer.createdByUser = user);
 
+    // get product and productBlueprint
     let productList = productTransferList.reduce(((productList, productTransfer) => productList.concat(productTransfer.productList)), []);
     map = await this.crossmap({
       source: productList,
@@ -70,6 +73,50 @@ exports.GetProductTransferListApi = class extends Api {
       target: 'productBlueprint'
     });
     map.forEach((productBlueprint, soldProduct) => soldProduct.productBlueprint = productBlueprint);
+
+    // get fromInventory
+    map = await this.crossmap({
+      source: productTransferList,
+      sourceKey: 'fromInventoryId',
+      target: 'inventory'
+    });
+    map.forEach((fromInventory, productTransfer) => {
+      delete fromInventory['productList'];
+      productTransfer.fromInventory = fromInventory
+    });
+
+    // get toInventory
+    map = await this.crossmap({
+      source: productTransferList,
+      sourceKey: 'toInventoryId',
+      target: 'inventory'
+    });
+    map.forEach((toInventory, productTransfer) => {
+      delete toInventory['productList'];
+      productTransfer.toInventory = toInventory
+    });
+
+    // append inventory container details to inventories
+    let inventoryList = [].concat(
+      productTransferList.map(productTransfer => productTransfer.toInventory),
+      productTransferList.map(productTransfer => productTransfer.fromInventory),
+    );
+    let outletInventoryList = inventoryList.filter(inventory => inventory.inventoryContainerType === 'outlet');
+    let warehouseInventoryList = inventoryList.filter(inventory => inventory.inventoryContainerType === 'warehouse');
+
+    map = await this.crossmap({
+      source: outletInventoryList,
+      sourceKey: 'inventoryContainerId',
+      target: 'outlet'
+    });
+    map.forEach((outlet, inventory) => inventory.inventoryContainer = outlet);
+
+    map = await this.crossmap({
+      source: warehouseInventoryList,
+      sourceKey: 'inventoryContainerId',
+      target: 'warehouse'
+    });
+    map.forEach((warehouse, inventory) => inventory.inventoryContainer = warehouse);
   }
 
   async handle({ body }) {
