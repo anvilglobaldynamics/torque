@@ -86,6 +86,8 @@
 <link rel="lazy-import" href="page-report-sales.html">
 <link rel="lazy-import" href="page-report-collections.html">
 <link rel="lazy-import" href="page-report-inventories.html">
+<link rel="lazy-import" href="page-manage-product-transfers.html">
+<link rel="lazy-import" href="page-view-product-transfer.html">
 <link rel="lazy-import" href="page-report-select-inventories.html">
 <link rel="lazy-import" href="page-pos-select-products.html">
 <link rel="lazy-import" href="page-pos-assign-employee-service.html">
@@ -295,6 +297,9 @@
             <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
               <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
             </template>
+            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+              <a name="manage-product-transfers" href="#/manage-product-transfers">[[verses.sidebar.manageProductTransfer]]</a>
+            </template>
             <hr class="sidebar-divider">
 
             <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
@@ -390,6 +395,8 @@
           <page-report-sales name="report-sales"></page-report-sales>
           <page-report-collections name="report-collections"></page-report-collections>
           <page-report-inventories name="report-inventories"></page-report-inventories>
+          <page-manage-product-transfers name="manage-product-transfers"></page-manage-product-transfers>
+          <page-view-product-transfer name="view-product-transfer"></page-view-product-transfer>
           <page-report-select-inventories name="report-select-inventories"></page-report-select-inventories>
           <page-pos-select-products name="pos-select-products"></page-pos-select-products>
           <page-pos-select-services name="pos-select-services"></page-pos-select-services>
@@ -670,6 +677,12 @@
         });
         this.db.defineCollection({
           name: 'offline-data'
+        });
+        this.db.defineCollection({
+          name: 'previous-user'
+        });
+        this.db.defineCollection({
+          name: 'previous-organization'
         });
       }
 

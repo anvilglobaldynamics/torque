@@ -54,6 +54,10 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
   }
 
   async _validateNewPayment({ payment, paymentListEntry, customer }) {
+    if (paymentListEntry.paymentMethod === 'change-wallet' || paymentListEntry.shouldSaveChangeInAccount) {
+      await this.ensureModule('MOD_CUSTOMER_ACCOUNT_BALANCE');
+    }
+
     if (paymentListEntry.paymentMethod === 'change-wallet' && customer.changeWalletBalance < paymentListEntry.paidAmount) {
       // throw new CodedError("CUSTOMER_HAS_INSUFFICIENT_BALANCE_IN_CHANGE_WALLET", "The customer does not have enough balance in change wallet.");
       // NOTE: skipping the error throwing here since the error is being thrown by _deductFromChangeWalletAsPayment

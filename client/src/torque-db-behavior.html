@@ -9,7 +9,40 @@
         super(...args);
       }
 
+      // REGION: previous user and organization ===============
+
+      _backupPreviousUserData() {
+        let user = this.loadUser();
+        let organization = this.loadOrganization();
+        if (!user) return;
+        if (!organization) return;
+
+        let db = this.db || this.app.db;
+        db.upsert('previous-user', (({ which }) => which === 'only'), (doc => user), user);
+        db.upsert('previous-organization', (({ which }) => which === 'only'), (doc => organization), organization);
+      }
+
+      loadPreviousUserAndOrganization() {
+        let db = this.db || this.app.db;
+        let previousUser = db.find('previous-user', (({ which }) => which === 'only'))[0] || null;
+        let previousOrganization = db.find('previous-organization', (({ which }) => which === 'only'))[0] || null;
+        return { previousUser, previousOrganization };
+      }
+
+      removePreviousUser() {
+        let db = this.db || this.app.db;
+        db.remove('previous-user', (doc => true));
+      }
+
+      removePreviousOrganization() {
+        let db = this.db || this.app.db;
+        db.remove('previous-organization', (doc => true));
+      }
+
+      // REGION: user ===============
+
       removeUser() {
+        this._backupPreviousUserData();
         let db = this.db || this.app.db;
         db.remove('user', (doc => true));
       }
@@ -26,15 +59,11 @@
         })
         db.upsert('user', (({ which }) => which === 'only'), (doc => user), user);
       }
+      // REGION: organization ===============
 
       loadOrganization() {
         let db = this.db || this.app.db;
         return db.find('organization', (({ which }) => which === 'only'))[0] || null;
-      }
-
-      loadOfflineData() {
-        let db = this.db || this.app.db;
-        return db.find('offline-data', (({ which }) => which === 'only'))[0] || null;
       }
 
       saveOrganization(organization) {
@@ -45,9 +74,32 @@
         db.upsert('organization', (({ which }) => which === 'only'), (doc => organization), organization);
       }
 
+      // REGION: settings and offlineData ===============
+
+      removeSettings() {
+        let db = this.db || this.app.db;
+        db.remove('settings', (doc => true));
+        this._fillDatabase();
+      }
+
       loadSettings() {
         let db = this.db || this.app.db;
         return db.find('settings', (({ which }) => which === 'only'))[0] || null;
+      }
+
+      loadOfflineData() {
+        let db = this.db || this.app.db;
+        return db.find('offline-data', (({ which }) => which === 'only'))[0] || null;
+      }
+
+      removeOfflineData() {
+        try {
+          let db = this.db || this.app.db;
+          db.remove('offline-data', (doc => true));
+          this._fillDatabase();
+        } catch (ex) {
+
+        }
       }
 
     }

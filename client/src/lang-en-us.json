@@ -69,6 +69,7 @@
     "id": "ID",
     "discard": "Discard",
     "product": "Product",
+    "products": "Product(s)",
     "quantity": "Quantity",
     "unitPrice": "Unit Price",
     "price": "Price",
@@ -92,6 +93,7 @@
     "serviceModule": "Service Module",
     "sellWarehouseProductModule": "Sell Warehouse Products Module",
     "gymModule": "Gym Module",
+    "customerAccountBalanceModule": "Customer Account Balance Module",
     "retail": "Retail",
     "service": "Service",
     "both": "Both",
@@ -157,6 +159,7 @@
     "about": "About",
     "logout": "Logout",
     "manageProductCategories": "Product Categories",
+    "manageProductTransfer":"Product Transfer Records",
     "manageDiscountPresets": "Discounts"
   },
   "titleBar": {
@@ -542,7 +545,7 @@
     "noOutletSelected": "No outlet selected (Anonymous Sale Return)",
     "removeOutlet": "Remove Outlet",
     "changeOutlet": "Change Outlet",
-    "salesId": "Sales Number",
+    "associatedSalesId": "Associated Sale ID",
     "credited": "Credited",
     "salesReturnTitle": "Sales Return",
     "creditedAmount": "Credited Amount",
@@ -1014,5 +1017,13 @@
   },
   "productCategoryPicker": {
     "pickerTitle": "Select a Category"
+  },
+  "productTransfer": {
+    "manageProductTransferTitle": "Product Transfer Records",
+    "productTransferNumber":"Product Transfer Number",
+    "exclusionNote": "(Optional. Other Filters will be ignored)",
+    "noProductTransferFound":"No Product Transfer Found",
+    "recordCreatedBy":"Record Created By",
+    "productTransferTitle": "Product Transfer Details"
   }
 }

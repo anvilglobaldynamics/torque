@@ -49,7 +49,12 @@
 
       <div class="card vertical layout">
         <div><b>[[customer.fullName]]</b></div>
-        <div>[[verses.general.balance]]: [[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</div>
+        <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+          <div>
+            <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
+            [[verses.general.balance]]: [[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]
+          </div>
+        </template>
         <div>[[verses.general.number]]: [[customer.phone]]</div>
         <template is="dom-if" if="[[customer.email]]">
           <div>[[verses.general.email]]: [[customer.email]]</div>
@@ -59,31 +64,32 @@
         </template>
       </div>
 
-      <template is="dom-if" if="[[customer.changeWalletBalance]]">
-        
-        <div class="card vertical layout">
+      <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+        <template is="dom-if" if="[[customer.changeWalletBalance]]">
+          <div class="card vertical layout">
 
-          <div>[[verses.customer.changeWalletBalanceTip]]</div>
-          <paper-button raised class="secondary" on-tap="withdrawFromChangeWalletBalanceTapped">[[verses.customer.withdrawFromChangeWalletBalance]]</paper-button>
+            <div>[[verses.customer.changeWalletBalanceTip]]</div>
+            <paper-button raised class="secondary" on-tap="withdrawFromChangeWalletBalanceTapped">[[verses.customer.withdrawFromChangeWalletBalance]]</paper-button>
 
-          <template is="dom-if" if="[[customer.withdrawalHistory.length]]">
-            <div style="margin-top: 10px;" class="withdrawal-history-title">[[verses.customer.withdrawalHistory]]:</div>
+            <template is="dom-if" if="[[customer.withdrawalHistory.length]]">
+              <div style="margin-top: 10px;" class="withdrawal-history-title">[[verses.customer.withdrawalHistory]]:</div>
 
-            <template is="dom-repeat" items="[[customer.withdrawalHistory]]" as="withdrawal">
+              <template is="dom-repeat" items="[[customer.withdrawalHistory]]" as="withdrawal">
 
-              <div class="list-object">
-                <div>
-                  <b>#[[index]]</b> [[verses.general.date]]: [[$mkDate(withdrawal.creditedDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
+                <div class="list-object">
+                  <div>
+                    <b>#[[index]]</b> [[verses.general.date]]: [[$mkDate(withdrawal.creditedDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
+                  </div>
+                  <div>
+                    [[verses.general.amount]]: [[$round(withdrawal.amount)]] [[app.settings.monetaryUnit]]
+                  </div>
                 </div>
-                <div>
-                  [[verses.general.amount]]: [[$round(withdrawal.amount)]] [[app.settings.monetaryUnit]]
-                </div>
-              </div>
 
+              </template>
             </template>
-          </template>
 
-        </div>
+          </div>
+        </template>
       </template>
 
       <div class="card action-button-container">

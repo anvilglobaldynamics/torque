@@ -700,6 +700,112 @@ describe('Sales', _ => {
 
   });
 
+  it('api/add-sales (Invalid, shouldSaveChangeInAccount with no module)', testDoneFn => {
+
+    callApi('api/add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId,
+
+        productList: [
+          {
+            productId: outletInventoryProductList[0].productId,
+            count: 2,
+            salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
+            vatPercentage: 5,
+          }
+        ],
+
+        serviceList: [],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          discountPresetId: null,
+          discountType: placeholderDefaultDiscountType,
+          discountValue: placeholderDefaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBillBeforeRounding: 0,
+          roundedByAmount: 0,
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 1300,
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: true,
+          paymentMethod: 'cash'
+        },
+
+        assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
+
+        wasOfflineSale: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('UNMET_MODULE');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-login (Correct)', testDoneFn => {
+
+    callApi('api/admin-login', {
+      json: {
+        username: 'default',
+        password: 'johndoe1pass'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string');
+      expect(body).to.have.property('sessionId').that.is.a('number');
+      expect(body).to.have.property('admin').that.is.an('object');
+      adminApiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/admin-set-module-activation-status (Valid module)', testDoneFn => {
+
+    callApi('api/admin-set-module-activation-status', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: organizationId,
+        moduleCode: "MOD_CUSTOMER_ACCOUNT_BALANCE",
+        paymentReference: "joi test",
+        action: 'activate'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(response.statusCode).to.equal(200);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/user-login', testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: phone,
+        password
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
   it('api/add-sales (Valid, registered Customer)', testDoneFn => {
 
     callApi('api/add-sales', {
@@ -1132,7 +1238,6 @@ describe('Sales', _ => {
 
   });
 
-
   it('api/get-aggregated-inventory-details (Valid. Makes sure discarded products are returned)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
@@ -1200,6 +1305,133 @@ describe('Sales', _ => {
       expect(body.error.code).equal('INSUFFICIENT_BALANCE');
       testDoneFn();
     });
+
+  });
+
+  it('api/admin-login (Correct)', testDoneFn => {
+
+    callApi('api/admin-login', {
+      json: {
+        username: 'default',
+        password: 'johndoe1pass'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string');
+      expect(body).to.have.property('sessionId').that.is.a('number');
+      expect(body).to.have.property('admin').that.is.an('object');
+      adminApiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/admin-set-module-activation-status (Valid module)', testDoneFn => {
+
+    callApi('api/admin-set-module-activation-status', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: organizationId,
+        moduleCode: "MOD_CUSTOMER_ACCOUNT_BALANCE",
+        paymentReference: "joi test",
+        action: 'deactivate'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(response.statusCode).to.equal(200);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/user-login', testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: phone,
+        password
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/withdraw-from-change-wallet-balance (Invalid, no module)', testDoneFn => {
+
+    callApi('api/withdraw-from-change-wallet-balance', {
+      json: {
+        apiKey,
+        customerId,
+        amount: 50.9
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).to.equal("UNMET_MODULE");
+      testDoneFn();
+    });
+
+  });
+
+  it('api/admin-login (Correct)', testDoneFn => {
+
+    callApi('api/admin-login', {
+      json: {
+        username: 'default',
+        password: 'johndoe1pass'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string');
+      expect(body).to.have.property('sessionId').that.is.a('number');
+      expect(body).to.have.property('admin').that.is.an('object');
+      adminApiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/admin-set-module-activation-status (Valid module)', testDoneFn => {
+
+    callApi('api/admin-set-module-activation-status', {
+      json: {
+        apiKey: adminApiKey,
+        organizationId: organizationId,
+        moduleCode: "MOD_CUSTOMER_ACCOUNT_BALANCE",
+        paymentReference: "joi test",
+        action: 'activate'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(response.statusCode).to.equal(200);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/user-login', testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: phone,
+        password
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
 
   });
 
@@ -2822,26 +3054,6 @@ describe('Sales', _ => {
       expect(body.error.code).to.equal("UNMET_MODULE");
       testDoneFn();
     });
-
-  });
-
-  it('api/admin-login (Correct)', testDoneFn => {
-
-    callApi('api/admin-login', {
-      json: {
-        username: 'default',
-        password: 'johndoe1pass'
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      expect(body).to.have.property('hasError').that.equals(false);
-      expect(body).to.have.property('status').that.equals('success');
-      expect(body).to.have.property('apiKey').that.is.a('string');
-      expect(body).to.have.property('sessionId').that.is.a('number');
-      expect(body).to.have.property('admin').that.is.an('object');
-      adminApiKey = body.apiKey;
-      testDoneFn();
-    })
 
   });
 

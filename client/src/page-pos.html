@@ -185,10 +185,14 @@
                         <iron-icon icon="hardware:smartphone" class="icon secondary small m-right-8"></iron-icon>
                         <div class="type body secondary">[[customer.phone]]</div>
                       </div>
-                      <div class="horizontal layout center">
-                        <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
-                        <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
-                      </div>
+
+                      <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                        <div class="horizontal layout center">
+                          <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
+                          <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
+                        </div>
+                      </template>
+
                     </div>
                   </div>
                 </template>
@@ -457,13 +461,16 @@
                 <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
 
                 <br>
-                <template is="dom-if" if="[[customer]]">
-                  <template is="dom-if" if="[[payment.changeAmount]]">
-                    <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
-                      [[verses.pos.shouldSaveChangeInAccount]]
-                    </paper-checkbox>
+                <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                  <template is="dom-if" if="[[customer]]">
+                    <template is="dom-if" if="[[payment.changeAmount]]">
+                      <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
+                        [[verses.pos.shouldSaveChangeInAccount]]
+                      </paper-checkbox>
+                    </template>
                   </template>
                 </template>
+
               </template>
 
               <template is="dom-if" if="[[isValidCreditSale(customer, payment.totalBilled, payment.paidAmount)]]">

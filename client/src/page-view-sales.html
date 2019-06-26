@@ -284,6 +284,7 @@
       _processSales(cbfn) {
         this._fetchSales(({ sales }) => {
           this.sales = sales;
+          this.$shouldTakeAdditionalPayment(this.sales.payment.totalBilled, this.sales.payment.totalPaidAmount);
           if (this.sales.customerId) {
             this._fetchCustomer({ customerId: this.sales.customerId }, (customer) => {
               this.customer = customer;
