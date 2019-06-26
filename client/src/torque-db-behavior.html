@@ -12,6 +12,7 @@
       // REGION: previous user and organization ===============
 
       _backupPreviousUserData() {
+        console.log('_backupPreviousUserData');
         let user = this.loadUser();
         let organization = this.loadOrganization();
         if (!user) return;
@@ -23,6 +24,7 @@
       }
 
       loadPreviousUserAndOrganization() {
+        console.log('loadPreviousUserAndOrganization');
         let db = this.db || this.app.db;
         let previousUser = db.find('previous-user', (({ which }) => which === 'only'))[0] || null;
         let previousOrganization = db.find('previous-organization', (({ which }) => which === 'only'))[0] || null;
@@ -30,11 +32,13 @@
       }
 
       removePreviousUser() {
+        console.log('removePreviousUser');
         let db = this.db || this.app.db;
         db.remove('previous-user', (doc => true));
       }
 
       removePreviousOrganization() {
+        console.log('removePreviousOrganization');
         let db = this.db || this.app.db;
         db.remove('previous-organization', (doc => true));
       }
@@ -42,31 +46,37 @@
       // REGION: user ===============
 
       removeUser() {
+        console.log('removeUser');
         this._backupPreviousUserData();
         let db = this.db || this.app.db;
         db.remove('user', (doc => true));
       }
 
       loadUser() {
+        console.log('loadUser');
         let db = this.db || this.app.db;
         return db.find('user', (({ which }) => which === 'only'))[0] || null;
       }
 
       saveUser(user) {
+        console.log('saveUser');
         let db = this.db || this.app.db;
         Object.assign(user, {
           which: 'only'
         })
         db.upsert('user', (({ which }) => which === 'only'), (doc => user), user);
       }
+
       // REGION: organization ===============
 
       loadOrganization() {
+        console.log('loadOrganization');
         let db = this.db || this.app.db;
         return db.find('organization', (({ which }) => which === 'only'))[0] || null;
       }
 
       saveOrganization(organization) {
+        console.log('saveOrganization');
         let db = this.db || this.app.db;
         Object.assign(organization, {
           which: 'only'
@@ -77,28 +87,32 @@
       // REGION: settings and offlineData ===============
 
       removeSettings() {
+        console.log('removeSettings');
         let db = this.db || this.app.db;
         db.remove('settings', (doc => true));
         this._fillDatabase();
       }
 
       loadSettings() {
+        console.log('loadSettings');
         let db = this.db || this.app.db;
         return db.find('settings', (({ which }) => which === 'only'))[0] || null;
       }
 
       loadOfflineData() {
+        console.log('loadOfflineData');
         let db = this.db || this.app.db;
         return db.find('offline-data', (({ which }) => which === 'only'))[0] || null;
       }
 
       removeOfflineData() {
+        console.log('removeOfflineData');
         try {
           let db = this.db || this.app.db;
           db.remove('offline-data', (doc => true));
           this._fillDatabase();
         } catch (ex) {
-
+          console.log('ex', ex);
         }
       }
 
