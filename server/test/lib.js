@@ -364,6 +364,48 @@ exports.validateAddProductToInventoryApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+
+exports.validateGetProductTransferListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    productTransferList: Joi.array().required().items({
+
+      id: Joi.number().required(),
+      createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+      lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+      isDeleted: Joi.boolean().required(),
+      createdByUserId: Joi.number().max(999999999999999).required(),
+
+      productTransferNumber: Joi.number().max(999999999999999).required(),
+
+      transferredDatetimeStamp: Joi.number().max(999999999999999).required(),
+      fromInventoryId: Joi.number().max(999999999999999).required(),
+      toInventoryId: Joi.number().max(999999999999999).required(),
+      organizationId: Joi.number().max(999999999999999).required(),
+
+      isWithinSameInventoryContainer: Joi.boolean().required(),
+
+      productList: Joi.array().min(1).items(
+        Joi.object().keys({
+          productId: Joi.number().max(999999999999999).required(),
+          product: Joi.object().required(), // willingly not expanded
+          productBlueprint: Joi.object().required(), // willingly not expanded
+          count: Joi.number().max(999999999999999).required()
+        })
+      ),
+
+      createdByUser: Joi.object().required(), // willingly not expanded
+      fromInventory: Joi.object().required(), // willingly not expanded
+      toInventory: Joi.object().required(), // willingly not expanded    
+    
+    })
+
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateGetAggregatedInventoryDetailsApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),

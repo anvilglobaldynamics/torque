@@ -19,6 +19,7 @@ let {
   validateGenericApiFailureResponse,
   validateGenericApiSuccessResponse,
   validateGetAggregatedInventoryDetailsApiSuccessResponse,
+  validateGetProductTransferListApiSuccessResponse,
   validateReportInventoryDetailsApiSuccessResponse,
   validateAggregatedProductScema,
   validateProductBlueprintSchema,
@@ -59,6 +60,9 @@ let productBlueprintId = null;
 let productBlueprintId2 = null;
 let productBlueprintId3 = null;
 let productBlueprintId4 = null;
+
+let productTransferNumber = null;
+let InvalidProductTransferNumber = 9999999999;
 
 let warehouseDefaultInventoryId = null;
 let warehouseReturnedInventoryId = null;
@@ -470,6 +474,103 @@ describe('Inventory', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-product-transfer-list (Valid)', testDoneFn => {
+
+    callApi('api/get-product-transfer-list', {
+      json: {
+        apiKey,
+        fromDate: Date.now() - 24 * 60 * 60 * 1000,
+        toDate: Date.now(),
+        organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetProductTransferListApiSuccessResponse(body);
+      expect(body.productTransferList.length).to.equal(2);
+      expect(body.productTransferList[0].productList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
+      productTransferNumber = body.productTransferList[0].productTransferNumber;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-product-transfer-list (Valid, should return only one result)', testDoneFn => {
+
+    callApi('api/get-product-transfer-list', {
+      json: {
+        apiKey,
+        fromDate: Date.now() - 24 * 60 * 60 * 1000,
+        toDate: Date.now(),
+        organizationId,
+        searchString: String(productTransferNumber)
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetProductTransferListApiSuccessResponse(body);
+      expect(body.productTransferList.length).to.equal(1);
+      expect(body.productTransferList[0].productList[0]).to.have.property('productId').that.equals(productToBeTransferred.productId);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-product-transfer-list (Correct but Invalid, should return no results)', testDoneFn => {
+
+    callApi('api/get-product-transfer-list', {
+      json: {
+        apiKey,
+        fromDate: Date.now() - 24 * 60 * 60 * 1000,
+        toDate: Date.now(),
+        organizationId,
+        searchString: String(InvalidProductTransferNumber)
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetProductTransferListApiSuccessResponse(body);
+      expect(body.productTransferList.length).to.equal(0);
+      testDoneFn();
+    });
+
+  });
+
+
+  it('api/get-product-transfer-list (Invalid organizationId)', testDoneFn => {
+
+    callApi('api/get-product-transfer-list', {
+      json: {
+        apiKey,
+        fromDate: Date.now() - 24 * 60 * 60 * 1000,
+        toDate: Date.now(),
+        organizationId: invalidOrganizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('ORGANIZATION_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-product-transfer-list (Invalid searchString)', testDoneFn => {
+
+    callApi('api/get-product-transfer-list', {
+      json: {
+        apiKey,
+        fromDate: Date.now() - 24 * 60 * 60 * 1000,
+        toDate: Date.now(),
+        organizationId: organizationId,
+        searchString: 34343434
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VALIDATION_ERROR');
       testDoneFn();
     });
 

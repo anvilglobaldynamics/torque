@@ -548,6 +548,11 @@
         this.callCombinedJsonApi('edit-product-category', data, cbfn);
       }
 
+      callGetProductTransferListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-product-transfer-list', data, cbfn);
+      }
+
     }
 
   })();
