@@ -9,7 +9,32 @@
         super(...args);
       }
 
+      _backupPreviousUserData() {
+        let user = this.loadUser();
+        let organization = this.loadOrganization();
+        if (!user) return;
+        if (!organization) return;
+
+        let db = this.db || this.app.db;
+        db.upsert('previous-user', (({ which }) => which === 'only'), (doc => user), user);
+        db.upsert('previous-organization', (({ which }) => which === 'only'), (doc => organization), organization);
+      }
+
+      loadPreviousUserAndOrganization() {
+        let db = this.db || this.app.db;
+        let previousUser = db.find('previous-user', (({ which }) => which === 'only'))[0] || null;
+        let previousOrganization = db.find('previous-organization', (({ which }) => which === 'only'))[0] || null;
+        return { previousUser, previousOrganization };
+      }
+
+      removeSettings() {
+        let db = this.db || this.app.db;
+        db.remove('settings', (doc => true));
+        this._fillDatabase();
+      }
+
       removeUser() {
+        this._backupPreviousUserData();
         let db = this.db || this.app.db;
         db.remove('user', (doc => true));
       }
