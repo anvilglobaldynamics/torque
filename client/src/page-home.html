@@ -341,6 +341,14 @@
           }
           if (organizationList.length === 1) {
             let organization = organizationList[0];
+
+            // reset settings on organization change
+            let { previousUser, previousOrganization } = this.app.loadPreviousUserAndOrganization();
+            if (previousOrganization && previousOrganization.id !== organization.id) {
+              this.app.removeSettings();
+              this.app.removePreviousOrganization();
+            }
+
             this.app.saveOrganization(organization);
           } else {
             let index;
@@ -357,6 +365,7 @@
               return this.app.navigateTo('/manage-organizations');
             }
             let organization = organizationList[index];
+            this.app.removeSettings();
             this.app.saveOrganization(organization);
           }
           return cbfn();

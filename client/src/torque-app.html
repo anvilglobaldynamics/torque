@@ -678,6 +678,12 @@
         this.db.defineCollection({
           name: 'offline-data'
         });
+        this.db.defineCollection({
+          name: 'previous-user'
+        });
+        this.db.defineCollection({
+          name: 'previous-organization'
+        });
       }
 
       _fillDatabase() {
