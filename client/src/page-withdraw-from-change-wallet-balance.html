@@ -37,7 +37,10 @@
         <form>
           <div class="card vertical layout">
 
-            <div>[[verses.general.balance]]: [[$round(editingCustomer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</div>
+            <div>
+              <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
+              [[verses.general.balance]]: [[$round(editingCustomer.changeWalletBalance)]] [[app.settings.monetaryUnit]]
+            </div>
             <paper-input class="withdrawFromChangeWalletBalanceForm--amount" value="{{withdrawFromChangeWalletBalanceForm.amount}}" type="number" required min="1" max="[[editingCustomer.changeWalletBalance]]" on-change="genericNumericInputChanged" error-message=[[verses.withdrawFromChangeWalletBalance.amountInputError]] label=[[verses.withdrawFromChangeWalletBalance.amountInput]]></paper-input>
             <paper-button raised class="primary" on-tap="withdrawFromChangeWalletBalanceTapped">[[verses.withdrawFromChangeWalletBalance.withdraw]]</paper-button>
 
@@ -112,7 +115,8 @@
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
-          privilegeList: ['PRIV_MANAGE_CUSTOMER_WALLET_BALANCE']
+          privilegeList: ['PRIV_MANAGE_CUSTOMER_WALLET_BALANCE'],
+          moduleList: ['MOD_CUSTOMER_ACCOUNT_BALANCE']
         });
       }
 

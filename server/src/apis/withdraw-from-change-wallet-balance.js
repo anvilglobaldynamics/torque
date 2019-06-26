@@ -27,6 +27,9 @@ exports.WithdrawFromChangeWalletBalanceApi = class extends Api.mixin(CustomerMix
       },
       privilegeList: [
         "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE"
+      ],
+      moduleList: [
+        "MOD_CUSTOMER_ACCOUNT_BALANCE",
       ]
     }];
   }

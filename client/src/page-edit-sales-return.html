@@ -48,10 +48,12 @@
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
 
-            <template is="dom-if" if="sales.customerId">
-              <paper-checkbox checked="{{salesReturnForm.shouldSaveReturnableInChangeWallet}}">
-                [[verses.salesReturn.shouldSaveReturnableInChangeWallet]]
-              </paper-checkbox>
+            <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+              <template is="dom-if" if="sales.customerId">
+                <paper-checkbox checked="{{salesReturnForm.shouldSaveReturnableInChangeWallet}}">
+                  [[verses.salesReturn.shouldSaveReturnableInChangeWallet]]
+                </paper-checkbox>
+              </template>
             </template>
             
             <div class="horizontal layout button-row end">
@@ -80,13 +82,13 @@
                 return {
                   productReturnCount: 1,
                   creditedAmount: 0,
-                  shouldSaveReturnableInChangeWallet: true
+                  shouldSaveReturnableInChangeWallet: false
                 };
               } else {
                 return {
                   productReturnCount: 0,
                   creditedAmount: 0,
-                  shouldSaveReturnableInChangeWallet: true
+                  shouldSaveReturnableInChangeWallet: false
                 };
               }
             }
