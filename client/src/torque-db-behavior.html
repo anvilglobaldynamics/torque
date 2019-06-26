@@ -9,6 +9,8 @@
         super(...args);
       }
 
+      // REGION: previous user and organization ===============
+
       _backupPreviousUserData() {
         let user = this.loadUser();
         let organization = this.loadOrganization();
@@ -27,21 +29,17 @@
         return { previousUser, previousOrganization };
       }
 
-      removePreviousUser(){
+      removePreviousUser() {
         let db = this.db || this.app.db;
         db.remove('previous-user', (doc => true));
       }
 
-      removePreviousOrganization(){
+      removePreviousOrganization() {
         let db = this.db || this.app.db;
         db.remove('previous-organization', (doc => true));
       }
 
-      removeSettings() {
-        let db = this.db || this.app.db;
-        db.remove('settings', (doc => true));
-        this._fillDatabase();
-      }
+      // REGION: user ===============
 
       removeUser() {
         this._backupPreviousUserData();
@@ -61,10 +59,32 @@
         })
         db.upsert('user', (({ which }) => which === 'only'), (doc => user), user);
       }
+      // REGION: organization ===============
 
       loadOrganization() {
         let db = this.db || this.app.db;
         return db.find('organization', (({ which }) => which === 'only'))[0] || null;
+      }
+
+      saveOrganization(organization) {
+        let db = this.db || this.app.db;
+        Object.assign(organization, {
+          which: 'only'
+        })
+        db.upsert('organization', (({ which }) => which === 'only'), (doc => organization), organization);
+      }
+
+      // REGION: settings and offlineData ===============
+
+      removeSettings() {
+        let db = this.db || this.app.db;
+        db.remove('settings', (doc => true));
+        this._fillDatabase();
+      }
+
+      loadSettings() {
+        let db = this.db || this.app.db;
+        return db.find('settings', (({ which }) => which === 'only'))[0] || null;
       }
 
       loadOfflineData() {
@@ -80,19 +100,6 @@
         } catch (ex) {
 
         }
-      }
-
-      saveOrganization(organization) {
-        let db = this.db || this.app.db;
-        Object.assign(organization, {
-          which: 'only'
-        })
-        db.upsert('organization', (({ which }) => which === 'only'), (doc => organization), organization);
-      }
-
-      loadSettings() {
-        let db = this.db || this.app.db;
-        return db.find('settings', (({ which }) => which === 'only'))[0] || null;
       }
 
     }

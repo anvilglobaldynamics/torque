@@ -142,7 +142,6 @@
           // reset cache on organization change
           let { previousUser, previousOrganization } = this.app.loadPreviousUserAndOrganization();
           if (!previousUser || (previousUser && user.id !== previousUser.id)) {
-            alert("Will Remove Offline Data");
             this.app.removeOfflineData();
             this.removePreviousUser();
           }
