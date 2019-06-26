@@ -27,6 +27,16 @@
         return { previousUser, previousOrganization };
       }
 
+      removePreviousUser(){
+        let db = this.db || this.app.db;
+        db.remove('previous-user', (doc => true));
+      }
+
+      removePreviousOrganization(){
+        let db = this.db || this.app.db;
+        db.remove('previous-organization', (doc => true));
+      }
+
       removeSettings() {
         let db = this.db || this.app.db;
         db.remove('settings', (doc => true));
@@ -60,6 +70,16 @@
       loadOfflineData() {
         let db = this.db || this.app.db;
         return db.find('offline-data', (({ which }) => which === 'only'))[0] || null;
+      }
+
+      removeOfflineData() {
+        try {
+          let db = this.db || this.app.db;
+          db.remove('offline-data', (doc => true));
+          this._fillDatabase();
+        } catch (ex) {
+
+        }
       }
 
       saveOrganization(organization) {

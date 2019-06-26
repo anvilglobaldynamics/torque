@@ -21,17 +21,15 @@
 <dom-module id="page-login">
   <template>
     <style include="shared-styles">
-
       .logo-learn-more-container {
-      /* border: 1px solid red; */
-    }
+        /* border: 1px solid red; */
+      }
 
-    .lipi-learn-more-link {
-      font-size: 14px;
-      padding-top: 8px;
-      text-decoration: none;
-    }
-    
+      .lipi-learn-more-link {
+        font-size: 14px;
+        padding-top: 8px;
+        text-decoration: none;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -108,7 +106,8 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.useLanguageServices();
-        this.disableOfflineMode()
+        this.disableOfflineMode();
+        window.sessionStorage.clear();
         this.delay(300, () => {
           this.isReady = true;
         });
@@ -139,6 +138,15 @@
           let { apiKey, warning, sessionId, user } = response;
           Object.assign(user, { apiKey, warning, sessionId });
           this.app.saveUser(user);
+
+          // reset cache on organization change
+          let { previousUser, previousOrganization } = this.app.loadPreviousUserAndOrganization();
+          if (!previousUser || (previousUser && user.id !== previousUser.id)) {
+            alert("Will Remove Offline Data");
+            this.app.removeOfflineData();
+            this.removePreviousUser();
+          }
+
           this.app.wasLastNavigationBypassed = false;
           this.app.navigateTo('/home/bypassable:yes');
         });
