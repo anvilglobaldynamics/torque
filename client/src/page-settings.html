@@ -328,6 +328,10 @@
 
       settingsChanged(e) {
         let settings = this._getNormalizedSettings();
+        // console.trace();
+        if (this.outletList.length === 0) {
+          return;
+        }
 
         let outletId = null;
         try {
@@ -345,6 +349,8 @@
           this.monetaryUnit = 'BDT';
           this.moneytaryUnitError = '';
         }
+
+        console.log('settings.defaultOutletMetaMap', settings.defaultOutletMetaMap)
 
         this.app.db.update('settings', ({
           which

@@ -201,6 +201,7 @@
         let settings = this.app.db.find('settings', (({
           which
         }) => which === 'only'))[0];
+        console.log('_getNormalizedSettings', settings)
 
         if (!settings.defaultPrinterFormat) {
           settings.defaultPrinterFormat = 'a4';
