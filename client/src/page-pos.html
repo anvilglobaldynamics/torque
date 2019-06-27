@@ -228,17 +228,13 @@
                 <div class="vertical layout flex">
                   <div>
                     <span class="product-title">[[product.name]]</span>
-                    <span class="product-discount-vat-detail">
-
-                      <span>([[verses.pos.vat]]: {{product.vatValue}}%)</span>
-
-                    </span>
                   </div>
                   <div class="horizontal layout center">
                     <div class="description">[[product.selectedCount]] [[product.unit]] @&nbsp;</div>
                     <!-- <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" type="number" auto-validate min="[[product.minSalePrice]]"></paper-input> -->
                     <div>[[product.salePrice]]</div>
                     <div class="description">[[app.settings.monetaryUnit]]</div>
+                    <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
                   </div>
                 </div>
               </div>
@@ -287,7 +283,6 @@
                     <div class="horizontal layout center">
                       <div class="service-info">
                         <span class="service-title">[[service.name]]</span>
-                        <span class="service-vat-detail">([[verses.pos.vat]]: {{service.vatValue}}%)</span>
                       </div>
 
                       <template is="dom-if" if="{{service.isEmployeeAssignable}}">
@@ -316,6 +311,7 @@
                       </paper-input> -->
                       <div>[[service.salePrice]]</div>
                       <div class="description">[[app.settings.monetaryUnit]]</div>
+                      <span class="service-vat-detail">(+ [[verses.pos.vat]]: {{service.vatValue}}%)</span>
                     </div>
 
                   </div>
@@ -348,7 +344,6 @@
             <div class="individual-calculation-field-container">
               [[verses.pos.vatAmount]]:
               <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
-
             </div>
 
             <div class="individual-calculation-field-container">
