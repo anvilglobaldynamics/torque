@@ -286,21 +286,28 @@
       }
 
       addProductsTapped(e = null) {
-        let productList = [];
-        this.selectedProductBlueprintList.forEach(productBlueprint => {
-          if (parseInt(productBlueprint.count) > 0) {
-            productList.push({
-              productBlueprintId: productBlueprint.id,
-              count: parseInt(String(productBlueprint.count))
-            });
-          }
-        });
+        this.app.showModalConfirmation(
+          this.app.verses.general.modalConfirmationPleaseConfirm,
+          this.app.verses.product.addProductsConfirmMessage,
+          (answer) => {
+          if (!answer) return;
 
-        let inventoryId = parseInt(this.params.inventory);
-        this._addProductsToInventory({ productList, inventoryId }, () => {
-          let message = this.app.verses.product.productAddedToInventory;
-          this.app.showToast(message, _ => {
-            this.backButtonOnTopBarPressed();
+          let productList = [];
+          this.selectedProductBlueprintList.forEach(productBlueprint => {
+            if (parseInt(productBlueprint.count) > 0) {
+              productList.push({
+                productBlueprintId: productBlueprint.id,
+                count: parseInt(String(productBlueprint.count))
+              });
+            }
+          });
+
+          let inventoryId = parseInt(this.params.inventory);
+          this._addProductsToInventory({ productList, inventoryId }, () => {
+            let message = this.app.verses.product.productAddedToInventory;
+            this.app.showToast(message, _ => {
+              this.backButtonOnTopBarPressed();
+            });
           });
         });
       }

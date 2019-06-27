@@ -431,7 +431,8 @@
     "count": "Count",
     "sellFor": "Sell",
     "purchasedFor": "Purchase",
-    "noProductBlueprintFound": "No product blueprint found. Add as \"Product Blueprint\" first to add it as a Product to this inventory."
+    "noProductBlueprintFound": "No product blueprint found. Add as \"Product Blueprint\" first to add it as a Product to this inventory.",
+    "addProductsConfirmMessage": "Please make sure product counts are correct. Once added product count can not be deducted manually."
   },
   "addProducts": {
     "searchInputLabel": "Name or Identifier Code",
