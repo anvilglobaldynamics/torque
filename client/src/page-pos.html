@@ -311,8 +311,10 @@
                       <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
                     </template>
 
-                    <div class="horizontal layout center">
-                      <paper-input class="flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" type="number" auto-validate></paper-input>
+                    <div class="horizontal layout center mt8">
+                      <!-- <paper-input class=" flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" type="number" auto-validate>
+                      </paper-input> -->
+                      <div>[[service.salePrice]]</div>
                       <div class="description">[[app.settings.monetaryUnit]]</div>
                     </div>
 
