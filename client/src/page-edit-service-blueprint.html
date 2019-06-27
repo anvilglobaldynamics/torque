@@ -268,8 +268,15 @@
         this.elemAll('#editServiceBlueprintForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editServiceBlueprintForm').validate()) return;
 
-        let { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = this.editServiceBlueprintForm;
-        this._processUpdateServiceBlueprint({ name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable });
+        this.app.showModalConfirmation(
+          this.app.verses.general.modalConfirmationPleaseConfirm,
+          this.app.verses.serviceBlueprint.serviceBlueprintEditConfirmMessage,
+          (answer) => {
+            if (answer) {
+              let { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = this.editServiceBlueprintForm;
+              this._processUpdateServiceBlueprint({ name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable });
+            }
+          });
       }
 
       isServiceLongstandingInputChanged(e = null) {
