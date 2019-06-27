@@ -361,7 +361,8 @@
     "whatIsServiceBlueprintMessage": "Service Blueprint is the planning of a Service. Service Blueprint needs to be added only once for a Service. Information of Service Blueprint will be reused in all Service related tasks.",
     "createServiceBlueprint": "Create Service Blueprint",
     "updateServiceBlueprint": "Update Service Blueprint",
-    "serviceBlueprintCreated": "Service Blueprint Created"
+    "serviceBlueprintCreated": "Service Blueprint Created",
+    "serviceBlueprintEditConfirmMessage": "Editing Service Blueprint will update coresponding service throughout the organization and it's memberships. Editing price and duration will cause calculations to change. Do you want to prceed?"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "By name or phone.",

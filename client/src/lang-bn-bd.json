@@ -363,7 +363,8 @@
     "whatIsServiceBlueprintMessage": "সেবার পরিকল্পনা একটু সেবার নকশা। প্রতি সেবার জন্য একবারই সেবার পরিকল্পনা তৈরি করতে হবে। সেবার পরিকল্পনায় দেয়া তথ্য সেবা সংক্রান্ত কাজে ব্যবহত হবে।",
     "createServiceBlueprint": "নতুন সেবা পরিকল্পনা তৈরি করুন",
     "updateServiceBlueprint": "সেবা পরিকল্পনা আপডেট করুন",
-    "serviceBlueprintCreated": "সেবা পরিকল্পনা তৈরি হয়েছে"
+    "serviceBlueprintCreated": "সেবা পরিকল্পনা তৈরি হয়েছে",
+    "serviceBlueprintEditConfirmMessage": "সেবা পরিকল্পনায় পরিবর্তন করলে সংশ্লিষ্ট সেবা এবং সেবার সদস্যপদ পরিবর্তন হয়ে যাবে। সেবার মূল্য এবং স্থায়িত্ব পরিবর্তন করলে হিসেবে পরিবর্তন আসবে। আপনি কি নিশ্চিত করছেন?"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "নাম বা ফোন",
