@@ -827,7 +827,8 @@
     "addToInventoryHelp": "Products added to Inventory will not increase the count of existing similar products, instead will be a new Batch. Today's date will be used as 'Added-On date' for the new Batch of products.",
     "transferInventoryHelp": "Product can be transfered between inventories. You can start selecting product(s) to be transfered by clicking below.",
     "selectProductsToTransfer": "Start Selecting Products to Transfer",
-    "stopSelectingProductsToTransfer": "Stop Selecting Products to Transfer"
+    "stopSelectingProductsToTransfer": "Stop Selecting Products to Transfer",
+    "moveProductConfirmMessage": "Make sure the destination inventory and selected product count are correct. This action can not be reversed automatically."
   },
   "payment": {
     "packageHasExpired": "Your package has expired.",
