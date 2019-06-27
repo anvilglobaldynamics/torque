@@ -356,6 +356,7 @@
       }
 
       filterTapped(e = null) {
+        this.set('paginate.offset', 0);
         this.isReady = false;
         this._processSalesReturnList(() => {
           this.isReady = true;

@@ -412,6 +412,7 @@
       }
 
       filterTapped(e = null) {
+        this.set('paginate.offset', 0);
         this.isReady = false;
         this._processSalesList(() => {
           this.isReady = true;
