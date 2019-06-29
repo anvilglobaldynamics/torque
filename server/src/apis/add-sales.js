@@ -102,7 +102,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     if (payment.totalBilled > (payment.totalPaidAmount + paymentListEntry.paidAmount)) {
       throwOnFalsy(customer, "CREDIT_SALE_NOT_ALLOWED_WITHOUT_CUSTOMER", "Credit sale is not allowed without a registered cutomer.");
     }
-    return;
+
   }
 
   _reduceProductCountFromInventoryContainerDefaultInventory({ inventoryContainerDefaultInventory, productList }) {
@@ -191,6 +191,17 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     }
   }
 
+  async _appendSalePriceWithoutModification({ productList }) {
+    (await this.crossmap({
+      source: productList,
+      sourceKey: 'productId',
+      target: 'product',
+      onError: (product) => { throw new CodedError("PRODUCT_INVALID", "Invalid Product"); }
+    })).forEach((product, soldProduct) => {
+      soldProduct.salePriceBeforeModification = product.salePrice;
+    });
+  }
+
   async handle({ userId, body }) {
     let { outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId } = body;
     let organizationId = this.interimData.organization.id;
@@ -205,6 +216,8 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     await this._validateBillingAndPayment({ productList, payment, paymentListEntry, customer, organizationId });
 
     if (productList.length) {
+      await this._appendSalePriceWithoutModification({ productList });
+
       let inventoryContainerDefaultInventory;
       if (productsSelectedFromWarehouseId) {
         await this.ensureModule('MOD_SELL_WAREHOUSE_PRODUCTS');

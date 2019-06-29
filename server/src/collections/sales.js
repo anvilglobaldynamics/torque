@@ -23,6 +23,7 @@ exports.SalesCollection = class extends Collection {
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required(),
           salePrice: Joi.number().max(999999999999999).required(),
+          salePriceBeforeModification: Joi.number().max(999999999999999).required(),
           vatPercentage: Joi.number().max(999999999999999).required()
         })
       ),

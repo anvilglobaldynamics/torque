@@ -1354,6 +1354,7 @@ exports.validateSalesSchema = (doc) => {
         count: Joi.number().max(999999999999999).required(),
         returnedProductCount: Joi.number().max(999999999999999).required(),
         salePrice: Joi.number().max(999999999999999).required(),
+        salePriceBeforeModification: Joi.number().max(999999999999999).required(),
         vatPercentage: Joi.number().max(999999999999999).required(),
       })
     ),
@@ -1454,6 +1455,7 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
         productId: Joi.number().max(999999999999999).required(),
         count: Joi.number().max(999999999999999).required(),
         salePrice: Joi.number().max(999999999999999).required(),
+        salePriceBeforeModification: Joi.number().max(999999999999999).required(),
         vatPercentage: Joi.number().max(999999999999999).required(),
 
         product: Joi.object().keys({
