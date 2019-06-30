@@ -86,6 +86,7 @@ Possible Error Codes:
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required(),
           salePrice: Joi.number().max(999999999999999).required(),
+          salePriceBeforeModification: Joi.number().max(999999999999999).required(),
 
           product: Joi.object().keys({
             id: Joi.number().max(999999999999999).required(),
@@ -203,6 +204,7 @@ Possible Error Codes:
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required(),
           salePrice: Joi.number().max(999999999999999).required(),
+          salePriceBeforeModification: Joi.number().max(999999999999999).required(),
           productBlueprint: Joi.object().required()
         })
       ),
