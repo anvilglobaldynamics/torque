@@ -615,6 +615,14 @@
 
           let productList = this.app.getFromSession('pos-selected-product-list');
           if (productList) {
+            if (this.productList.length > 0) {
+              productList.forEach(newProduct => {
+                let oldProduct = this.productList.find(oldProduct => oldProduct.productId === newProduct.productId);
+                if (oldProduct){
+                  newProduct.salePrice = oldProduct.salePrice;
+                }
+              });
+            }
             this.productList = productList;
           }
 
