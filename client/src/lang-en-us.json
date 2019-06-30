@@ -361,7 +361,8 @@
     "whatIsServiceBlueprintMessage": "Service Blueprint is the planning of a Service. Service Blueprint needs to be added only once for a Service. Information of Service Blueprint will be reused in all Service related tasks.",
     "createServiceBlueprint": "Create Service Blueprint",
     "updateServiceBlueprint": "Update Service Blueprint",
-    "serviceBlueprintCreated": "Service Blueprint Created"
+    "serviceBlueprintCreated": "Service Blueprint Created",
+    "serviceBlueprintEditConfirmMessage": "Editing Service Blueprint will update coresponding service throughout the organization and it's memberships. Editing price and duration will cause calculations to change. Do you want to prceed?"
   },
   "customerSelector": {
     "customerNameOrPhoneInput": "By name or phone.",
@@ -430,7 +431,8 @@
     "count": "Count",
     "sellFor": "Sell",
     "purchasedFor": "Purchase",
-    "noProductBlueprintFound": "No product blueprint found. Add as \"Product Blueprint\" first to add it as a Product to this inventory."
+    "noProductBlueprintFound": "No product blueprint found. Add as \"Product Blueprint\" first to add it as a Product to this inventory.",
+    "addProductsConfirmMessage": "Please make sure product counts are correct. Once added product count can not be deducted manually."
   },
   "addProducts": {
     "searchInputLabel": "Name or Identifier Code",
@@ -606,6 +608,8 @@
     "lessDueToRounding": "Less",
     "editBill": "Adjust Total Payable?",
     "editBillDetails": "You can adjust Total Payable amount here. Both adjusted and original amount will be saved.",
+    "editSalePrice": "Adjust Sale Price?",
+    "editSalePriceDetails": "You can adjust the sale price here. Both adjusted and original amount will be saved.",
     "totalBillBeforeRounding": "Total Payable (without Less)",
     "roundedByAmount": "Less",
     "discountPreset": "Discount Preset"
@@ -825,7 +829,8 @@
     "addToInventoryHelp": "Products added to Inventory will not increase the count of existing similar products, instead will be a new Batch. Today's date will be used as 'Added-On date' for the new Batch of products.",
     "transferInventoryHelp": "Product can be transfered between inventories. You can start selecting product(s) to be transfered by clicking below.",
     "selectProductsToTransfer": "Start Selecting Products to Transfer",
-    "stopSelectingProductsToTransfer": "Stop Selecting Products to Transfer"
+    "stopSelectingProductsToTransfer": "Stop Selecting Products to Transfer",
+    "moveProductConfirmMessage": "Make sure the destination inventory and selected product count are correct. This action can not be reversed automatically."
   },
   "payment": {
     "packageHasExpired": "Your package has expired.",

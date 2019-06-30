@@ -54,7 +54,8 @@ Possible Error Codes:
         productBlueprintUnit: Joi.string().max(64).required(),
         productBlueprintIsReturnable: Joi.boolean().required(),
         count: Joi.number().max(999999999999999).required(),
-        salePrice: Joi.number().max(999999999999999).required()
+        salePrice: Joi.number().max(999999999999999).required(),
+        salePriceBeforeModification: Joi.number().max(999999999999999).required()
       })
     ),
 
