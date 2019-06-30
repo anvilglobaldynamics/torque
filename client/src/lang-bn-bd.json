@@ -610,6 +610,8 @@
     "lessDueToRounding": "লেস",
     "editBill": "মোট মূল্য আপডেট",
     "editBillDetails": "মোট পরিশোধনীয় মূল্য এখানে আপডেট করতে পারবেন। আসল মূল্য এবং নতুন মূল্য দুটোই সংরক্ষন করা হবে।",
+    "editSalePrice": "বিক্রয় মূল্য আপডেট",
+    "editSalePriceDetails": "বিক্রয় মূল্য এখানে আপডেট করতে পারবেন। আসল মূল্য এবং নতুন মূল্য দুটোই সংরক্ষন করা হবে।",
     "totalBillBeforeRounding": "লেস ব্যাতিত মোট পরিশোধনীয়",
     "roundedByAmount": "লেস",
     "discountPreset": "ডিসকাউন্ট প্রিসেট"

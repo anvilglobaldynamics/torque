@@ -237,6 +237,9 @@
                     <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
                   </div>
                 </div>
+                <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
+                  <paper-icon-button on-tap="editProductSalePrice" icon="create"></paper-icon-button>
+                </template>
               </div>
             </template>
 
@@ -913,6 +916,17 @@
       clearRounderByAmountTapped(e = null) {
         this.payment.roundedByAmount = 0;
         this._calculatePayment();
+      }
+
+      editProductSalePrice(e) {
+        let { product } = e.model;
+        this.app.showModalInput(this.verses.sales.editSalePrice, this.verses.sales.editSalePriceDetails, product.salePrice, (answer) => {
+          let salePrice = parseFloat(answer);
+          if (salePrice >= 0) {
+            e.model.set('product.salePrice', salePrice);
+            this._calculatePayment({ resetRounding: true });
+          }
+        });
       }
 
       editTotalBilledTapped(e = null) {
