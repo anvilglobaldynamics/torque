@@ -12,9 +12,13 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
 
   get requestSchema() {
     return Joi.object().keys({
-      inventoryIdList: Joi.array().min(1).items(
+      inventoryIdList: Joi.array().required().min(1).items(
         Joi.number().max(999999999999999).required()
-      )
+      ),
+      productCategoryIdList: Joi.array().optional().default([]).items(
+        Joi.number().max(999999999999999).required()
+      ),
+      productBlueprintId: Joi.number().max(999999999999999).optional().default(null)
     });
   }
 
@@ -58,20 +62,49 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
     };
   }
 
-  async handle({ body }) {
-    let { inventoryIdList, searchString } = body;
-
-    let aggregatedInventoryDetailsList = [];
-
-    let promiseList = inventoryIdList.map(async (inventoryId) => {
-      let aggregatedInventoryDetails = await this.__getAggregatedInventoryDetails({ inventoryId, searchString });
-      aggregatedInventoryDetailsList.push(aggregatedInventoryDetails);
-    });
-    await Promise.all(promiseList);
-
+  __sortByPositionInInventoryIdList(aggregatedInventoryDetailsList, inventoryIdList) {
     aggregatedInventoryDetailsList.sort((a, b) => {
       return inventoryIdList.indexOf(a.inventoryDetails.inventoryId) - inventoryIdList.indexOf(b.inventoryDetails.inventoryId);
     });
+  }
+
+  __filterByProductCategoryIdList(aggregatedInventoryDetailsList, productCategoryIdList) {
+    aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails => {
+      let newAggregatedProductList = aggregatedInventoryDetails.aggregatedProductList.filter(aggregatedProduct => {
+        return aggregatedProduct.product.productBlueprint.productCategoryIdList.some(productCategoryId => {
+          return (productCategoryIdList.indexOf(productCategoryId) > -1);
+        });
+      });
+      aggregatedInventoryDetails.aggregatedProductList = newAggregatedProductList;
+    });
+  }
+
+  __filterByProductBlueprintId(aggregatedInventoryDetailsList, productBlueprintId) {
+    aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails => {
+      let newAggregatedProductList = aggregatedInventoryDetails.aggregatedProductList.filter(aggregatedProduct => {
+        return (aggregatedProduct.product.productBlueprint.id === productBlueprintId);
+      });
+      aggregatedInventoryDetails.aggregatedProductList = newAggregatedProductList;
+    });
+  }
+
+  async handle({ body }) {
+    let { inventoryIdList, productCategoryIdList, productBlueprintId } = body;
+
+    let aggregatedInventoryDetailsList = [];
+
+    await Promise.all(inventoryIdList.map(async (inventoryId) => {
+      let aggregatedInventoryDetails = await this.__getAggregatedInventoryDetails({ inventoryId });
+      aggregatedInventoryDetailsList.push(aggregatedInventoryDetails);
+    }));
+
+    if (productCategoryIdList.length > 0) {
+      this.__filterByProductCategoryIdList(aggregatedInventoryDetailsList, productCategoryIdList);
+    } else if (productBlueprintId) {
+      this.__filterByProductBlueprintId(aggregatedInventoryDetailsList, productBlueprintId);
+    }
+
+    this.__sortByPositionInInventoryIdList(aggregatedInventoryDetailsList, inventoryIdList);
 
     return { aggregatedInventoryDetailsList };
   }

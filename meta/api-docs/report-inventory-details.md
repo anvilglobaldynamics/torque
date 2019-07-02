@@ -11,7 +11,11 @@ method: `POST`
   apiKey: Joi.string().length(64).required(),
   inventoryIdList: Joi.array().min(1).items(
     Joi.number().max(999999999999999).required()
-  )
+  ),
+  productCategoryIdList: Joi.array().optional().default([]).items(
+    Joi.number().max(999999999999999).required()
+  ),
+  productBlueprintId: Joi.number().max(999999999999999).optional().default(null)
 }
 ```
 
