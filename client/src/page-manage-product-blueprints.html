@@ -23,6 +23,19 @@
 <dom-module id="product-blueprint">
   <template>
     <style include="shared-styles">
+      .product-status-container {
+        padding-bottom: 2px;
+      }
+
+      .product-status-text {
+        border: 1px solid lightgreen;
+        background-color: lightgreen;
+        border-radius: 6px;
+        margin-right: 4px;
+        font-size: 13px;
+        padding: 3px;
+        color: darkgreen;
+      }
     </style>
 
     <div class="layout vertical" id="wrapper">
@@ -36,6 +49,16 @@
             </template>
 
             <div class="inventory-product-price-container">[[verses.productBlueprint.sellingPrice]]: [[productBlueprint.defaultSalePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productBlueprint.unit]]</div>
+
+            <div class="product-status-container">
+              <template is="dom-if" if="[[productBlueprint.productCategoryIdList.length]]">
+                <span class="product-status-text">categorized</span>
+              </template>
+
+              <template is="dom-if" if="[[productBlueprint.identifierCode]]">
+                <span class="product-status-text">coded</span>
+              </template>
+            </div>
           </div>
           <div class="horizontal layout wrap">
             <paper-button class="secondary" on-tap="editTapped" raised>
