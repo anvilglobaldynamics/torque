@@ -136,6 +136,36 @@
         <paper-button raised class="btn primary" on-tap="filterByProductCategoriesTapped">Filter By Product Categories</paper-button>
         <paper-button raised class="btn primary" on-tap="filterByInventoriesTapped">[[verses.inventoriesReport.filterInventoriesButton]]</paper-button>
       </div>
+
+      <template is="dom-if" if="[[$shouldShowClearFilter(_productCategoryList.length, _productBlueprintList.length)]]">
+        <div class="filter-region lone-controls">
+
+          <div class="horizontal layout center">
+            <template is="dom-if" if="[[_productCategoryList.length]]">
+              <div>
+                Showing products of category:
+                <template is="dom-repeat" items="[[_productCategoryList]]" as="productCategory">
+                  <span class="product-category-pillet" style$="display: inline-block; background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}">
+                    [[productCategory.name]]
+                  </span>
+                </template>
+              </div>
+            </template>
+            <template is="dom-if" if="[[_productBlueprintList.length]]">
+              <div>
+                Showing products of category:
+                <template is="dom-repeat" items="[[_productBlueprintList]]" as="productBlueprint">
+                  [[productBlueprint.name]],
+                </template>
+              </div>
+            </template>
+          </div>
+
+          <div class="flex"></div>
+          <paper-button raised class="btn primary" on-tap="clearFiltersTapped">Clear Filters</paper-button>
+
+        </div>
+      </template>
       <!-- filters - end -->
 
       <!-- report - start -->
@@ -303,6 +333,13 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.inventoriesReport.inventoriesReportTitle);
         if (!this._ensureAccess()) return;
+        this._preprocessFiltersAndProcessReport();
+      }
+
+      _preprocessFiltersAndProcessReport() {
+        this.isReady = false;
+        this._productCategoryList = this.app.getFromSession('report-selected-product-category-list') || [];
+        this._productBlueprintList = this.app.getFromSession('report-selected-product-blueprint-list') || [];
         this._processInventoriesReport(() => {
           this.self = this;
           this.isReady = true;
@@ -330,10 +367,13 @@
       _fetchInventoriesData(cbfn) {
 
         let productCategoryList = this.app.getFromSession('report-selected-product-category-list') || [];
-        let productCategoryIdList = productCategoryList.map(productCategory=>productCategory.id);
+        let productCategoryIdList = productCategoryList.map(productCategory => productCategory.id);
+
+        let productBlueprintList = this.app.getFromSession('report-selected-product-blueprint-list') || [];
+        let productBlueprintIdList = productBlueprintList.map(productBlueprint => productBlueprint.id);
 
         let inventoryIdList = this.inventoriesToBeFetched.map(inventory => inventory.id);
-        let data = { inventoryIdList, productCategoryIdList };
+        let data = { inventoryIdList, productCategoryIdList, productBlueprintIdList };
 
         if (inventoryIdList.length !== 0) {
           this.app.callReportInventoryDetailsApi(data, (err, response) => {
@@ -376,7 +416,14 @@
 
       // region: ui  ===========================
 
+      clearFiltersTapped(e = null) {
+        this.app.extractFromSession('report-selected-product-category-list');
+        this.app.extractFromSession('report-selected-product-blueprint-list');
+        this._preprocessFiltersAndProcessReport();
+      }
+
       filterByProductBlueprintTapped(e = null) {
+        this.app.extractFromSession('report-selected-product-category-list');
         return this.app.navigateTo(`/report-select-product-blueprints/`);
       }
 
@@ -421,6 +468,10 @@
 
       computeTotalPriceOfProduct(count, unitPrice) {
         return count * unitPrice;
+      }
+
+      $shouldShowClearFilter(_productCategoryListLength, _productBlueprintListLength) {
+        return (_productCategoryListLength > 0 || _productBlueprintListLength > 0);
       }
 
     }

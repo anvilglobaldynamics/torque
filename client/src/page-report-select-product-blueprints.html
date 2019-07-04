@@ -21,7 +21,7 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="page-report-select-product-categories">
+<dom-module id="page-report-select-product-blueprints">
   <template>
     <style include="shared-styles">
       .confirm-discard-button-group paper-button {
@@ -37,7 +37,7 @@
       <!-- search area card -->
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
-          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="[[verses.posSelectProduct.searchForProductInputError]]" label="[[verses.productCategory.searchForProductCategoryInput]]" on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="[[verses.posSelectProduct.searchForProductInputError]]" label="[[verses.productBlueprint.searchForProductBlueprintInput]]" on-keypress="searchFieldKeypressed"></paper-input>
           <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
           <paper-button raised class="primary" on-tap="searchTapped">
             [[verses.general.search]]
@@ -45,15 +45,15 @@
         </div>
       </div>
 
-      <!-- no productCategory card -->
-      <template is="dom-if" if="{{!productCategoryList.length}}">
+      <!-- no productBlueprint card -->
+      <template is="dom-if" if="{{!productBlueprintList.length}}">
         <div class="card">
-          [[verses.productCategory.noProductCategoryFound]]
+          [[verses.productBlueprint.noProductBlueprintFound]]
         </div>
       </template>
 
-      <!-- looping productCategory - start -->
-      <template is="dom-if" if="{{productCategoryList.length}}">
+      <!-- looping productBlueprint - start -->
+      <template is="dom-if" if="{{productBlueprintList.length}}">
 
         <div class="card vertical layout">
 
@@ -62,11 +62,11 @@
           </template>
 
           <div class="list">
-            <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
-              <template is="dom-if" if="[[!productCategory.isSelected]]">
+            <template is="dom-repeat" items="[[productBlueprintList]]" as="productBlueprint">
+              <template is="dom-if" if="[[!productBlueprint.isSelected]]">
                 <div class="horizontal layout item center">
-                  <div class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}">
-                    [[productCategory.name]]
+                  <div>
+                    [[productBlueprint.name]]
                   </div>
                   <div class="flex"></div>
                   <paper-button raised class="primary" on-tap="selectTapped">
@@ -90,18 +90,18 @@
 
         </div>
       </template>
-      <!-- looping productCategory - end -->
+      <!-- looping productBlueprint - end -->
 
-      <!-- selected productCategory - start -->
-      <template is="dom-if" if="{{selectedProductCategoryList.length}}">
+      <!-- selected productBlueprint - start -->
+      <template is="dom-if" if="{{selectedProductBlueprintList.length}}">
         <div class="card vertical layout">
 
           <div class="list">
-            <template is="dom-repeat" items="[[selectedProductCategoryList]]" as="productCategory">
+            <template is="dom-repeat" items="[[selectedProductBlueprintList]]" as="productBlueprint">
               <div class="horizontal layout item center">
 
-                <div class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}">
-                  [[productCategory.name]]
+                <div>
+                  [[productBlueprint.name]]
                 </div>
                 <div class="flex"></div>
                 <paper-button raised class="danger" on-tap="deselectTapped">
@@ -118,17 +118,17 @@
           </div>
         </div>
       </template>
-      <!-- selected productCategory - end -->
+      <!-- selected productBlueprint - end -->
 
     </div>
 
   </template>
 
   <script>
-    class PageReportSelectProductCategories extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+    class PageReportSelectProductBlueprints extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
-        return 'page-report-select-product-categories';
+        return 'page-report-select-product-blueprints';
       }
 
       static get properties() {
@@ -141,11 +141,11 @@
             type: String,
             value: ''
           },
-          selectedProductCategoryCount: {
+          selectedProductBlueprintCount: {
             type: Number,
             value: 0
           },
-          selectedProductCategoryList: {
+          selectedProductBlueprintList: {
             type: Array,
             value: () => []
           },
@@ -171,7 +171,7 @@
         this.onOfflineDataChange();
         this.app.pushPageTitle(this.app.verses.posSelectProduct.posSelectProductTitle);
         if (!this._ensureAccess()) return;
-        this._processProductCategoryList(() => {
+        this._processProductBlueprintList(() => {
           this.isReady = true;
         });
       }
@@ -192,107 +192,107 @@
         this.organization = organization;
       }
 
-      _fetchProductCategoryList(cbfn) {
+      _fetchProductBlueprintList(cbfn) {
         let data = { organizationId: this.app.organization.id, searchString: this.searchString, paginate: this.paginate };
-        this.app.callGetProductCategoryListApi(data, (err, response) => {
+        this.app.callGetProductBlueprintListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.pagination = response.pagination;
-          return cbfn(response.productCategoryList);
+          return cbfn(response.productBlueprintList);
         });
       }
 
-      _processProductCategoryList(cbfn) {
-        this._fetchProductCategoryList(productCategoryList => {
+      _processProductBlueprintList(cbfn) {
+        this._fetchProductBlueprintList(productBlueprintList => {
 
-          let previousSelectedList = this.app.getFromSession('report-selected-product-category-list') || [];
+          let previousSelectedList = this.app.getFromSession('report-selected-product-blueprint-list') || [];
 
-          if (this.selectedProductCategoryList.length > 0 || previousSelectedList.length > 0) {
-            if (previousSelectedList.length > 0 && this.selectedProductCategoryList.length === 0) {
-              this.selectedProductCategoryCount = previousSelectedList.length;
-              this.selectedProductCategoryList = previousSelectedList;
+          if (this.selectedProductBlueprintList.length > 0 || previousSelectedList.length > 0) {
+            if (previousSelectedList.length > 0 && this.selectedProductBlueprintList.length === 0) {
+              this.selectedProductBlueprintCount = previousSelectedList.length;
+              this.selectedProductBlueprintList = previousSelectedList;
             }
 
-            this.selectedProductCategoryList.forEach(selected => {
-              let productCategory = productCategoryList.find(productCategory => productCategory.id === selected.id);
-              if (productCategory) {
-                productCategory.isSelected = true;
+            this.selectedProductBlueprintList.forEach(selected => {
+              let productBlueprint = productBlueprintList.find(productBlueprint => productBlueprint.id === selected.id);
+              if (productBlueprint) {
+                productBlueprint.isSelected = true;
               }
             })
           }
 
-          this.productCategoryList = productCategoryList;
+          this.productBlueprintList = productBlueprintList;
           cbfn();
         });
       }
 
-      _addProductToselectedProductCategoryList({ productCategory }) {
-        this.push('selectedProductCategoryList', productCategory);
-        this.selectedProductCategoryCount = this.selectedProductCategoryList.length;
+      _addProductToselectedProductBlueprintList({ productBlueprint }) {
+        this.push('selectedProductBlueprintList', productBlueprint);
+        this.selectedProductBlueprintCount = this.selectedProductBlueprintList.length;
       }
 
-      _removeProductFromselectedProductCategoryList({ productCategory }) {
-        this.selectedProductCategoryList.forEach((selected, index) => {
-          if (selected.id === productCategory.id) {
-            this.splice('selectedProductCategoryList', index, 1);
+      _removeProductFromselectedProductBlueprintList({ productBlueprint }) {
+        this.selectedProductBlueprintList.forEach((selected, index) => {
+          if (selected.id === productBlueprint.id) {
+            this.splice('selectedProductBlueprintList', index, 1);
           }
         });
 
-        this.productCategoryList.forEach((productCategoryInList, index) => {
-          if (productCategoryInList.id === productCategory.id) {
-            this.set(`productCategoryList.${index}.isSelected`, false)
+        this.productBlueprintList.forEach((productBlueprintInList, index) => {
+          if (productBlueprintInList.id === productBlueprint.id) {
+            this.set(`productBlueprintList.${index}.isSelected`, false)
           }
         });
 
-        this.selectedProductCategoryCount = this.selectedProductCategoryList.length;
+        this.selectedProductBlueprintCount = this.selectedProductBlueprintList.length;
       }
 
       // region: ui  ===========================
 
       selectProductsTapped(e = null) {
         setTimeout(() => {
-          this.app.storeInSession('report-selected-product-category-list', this.selectedProductCategoryList);
-          this.selectedProductCategoryList = [];
-          this.selectedProductCategoryCount = 0;
+          this.app.storeInSession('report-selected-product-blueprint-list', this.selectedProductBlueprintList);
+          this.selectedProductBlueprintList = [];
+          this.selectedProductBlueprintCount = 0;
           this.backButtonOnTopBarPressed();
         }, 10);
       }
 
       selectTapped(e) {
-        e.model.set('productCategory.selectedCount', 1);
-        e.model.set('productCategory.isSelected', true);
-        let { productCategory } = e.model;
-        this._addProductToselectedProductCategoryList({ productCategory });
+        e.model.set('productBlueprint.selectedCount', 1);
+        e.model.set('productBlueprint.isSelected', true);
+        let { productBlueprint } = e.model;
+        this._addProductToselectedProductBlueprintList({ productBlueprint });
       }
 
       deselectTapped(e) {
-        let { productCategory } = e.model;
-        this._removeProductFromselectedProductCategoryList({ productCategory });
+        let { productBlueprint } = e.model;
+        this._removeProductFromselectedProductBlueprintList({ productBlueprint });
       }
 
       deselectAllTapped(e) {
-        this.productCategoryList.forEach((productCategory, index) => this.set(`productCategoryList.${index}.isSelected`, false));
-        this.selectedProductCategoryList = [];
-        this.selectedProductCategoryCount = 0;
-        this.app.storeInSession('report-selected-product-category-list', this.selectedProductCategoryList);
+        this.productBlueprintList.forEach((productBlueprint, index) => this.set(`productBlueprintList.${index}.isSelected`, false));
+        this.selectedProductBlueprintList = [];
+        this.selectedProductBlueprintCount = 0;
+        this.app.storeInSession('report-selected-product-blueprint-list', this.selectedProductBlueprintList);
       }
 
       backButtonOnTopBarPressed(e = null) {
-        this.selectedProductCategoryList = [];
-        this.selectedProductCategoryCount = 0;
+        this.selectedProductBlueprintList = [];
+        this.selectedProductBlueprintCount = 0;
         this.app.navigateToPreviousUrl(`/report-inventories`);
       }
 
       showMoreTapped(e = null) {
         this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
         this.isReady = false;
-        this._processProductCategoryList(() => this.isReady = true);
+        this._processProductBlueprintList(() => this.isReady = true);
       }
 
       showPreviousTapped(e = null) {
         this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
         this.isReady = false;
-        this._processProductCategoryList(() => this.isReady = true);
+        this._processProductBlueprintList(() => this.isReady = true);
       }
 
       searchFieldKeypressed(e) {
@@ -305,7 +305,7 @@
 
       searchTapped(e = null) {
         this.set('paginate.offset', 0);
-        this._processProductCategoryList(() => this.isReady = true);
+        this._processProductBlueprintList(() => this.isReady = true);
       }
 
       // region: misc =================================
@@ -318,6 +318,6 @@
 
     }
 
-    window.customElements.define(PageReportSelectProductCategories.is, PageReportSelectProductCategories);
+    window.customElements.define(PageReportSelectProductBlueprints.is, PageReportSelectProductBlueprints);
   </script>
 </dom-module>
