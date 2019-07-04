@@ -15,10 +15,12 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
       inventoryIdList: Joi.array().required().min(1).items(
         Joi.number().max(999999999999999).required()
       ),
-      productCategoryIdList: Joi.array().optional().default([]).items(
-        Joi.number().max(999999999999999).required()
+      productCategoryIdList: Joi.array().optional().default([]).allow([]).min(0).items(
+        Joi.number().max(999999999999999)
       ),
-      productBlueprintId: Joi.number().max(999999999999999).optional().default(null)
+      productBlueprintIdList: Joi.array().optional().default([]).allow([]).min(0).items(
+        Joi.number().max(999999999999999)
+      )
     });
   }
 
@@ -71,25 +73,28 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
   __filterByProductCategoryIdList(aggregatedInventoryDetailsList, productCategoryIdList) {
     aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails => {
       let newAggregatedProductList = aggregatedInventoryDetails.aggregatedProductList.filter(aggregatedProduct => {
-        return aggregatedProduct.product.productBlueprint.productCategoryIdList.some(productCategoryId => {
-          return (productCategoryIdList.indexOf(productCategoryId) > -1);
+        let list = aggregatedProduct.product.productBlueprint.productCategoryIdList;
+        // console.log(list, productCategoryIdList)
+        if (list.length === 0) return false;
+        return productCategoryIdList.every(productCategoryId => {
+          return (list.indexOf(productCategoryId) > -1);
         });
       });
       aggregatedInventoryDetails.aggregatedProductList = newAggregatedProductList;
     });
   }
 
-  __filterByProductBlueprintId(aggregatedInventoryDetailsList, productBlueprintId) {
+  __filterByProductBlueprintIdList(aggregatedInventoryDetailsList, productBlueprintIdList) {
     aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails => {
       let newAggregatedProductList = aggregatedInventoryDetails.aggregatedProductList.filter(aggregatedProduct => {
-        return (aggregatedProduct.product.productBlueprint.id === productBlueprintId);
+        return (productBlueprintIdList.indexOf(aggregatedProduct.product.productBlueprint.id) > -1);
       });
       aggregatedInventoryDetails.aggregatedProductList = newAggregatedProductList;
     });
   }
 
   async handle({ body }) {
-    let { inventoryIdList, productCategoryIdList, productBlueprintId } = body;
+    let { inventoryIdList, productCategoryIdList, productBlueprintIdList } = body;
 
     let aggregatedInventoryDetailsList = [];
 
@@ -100,8 +105,8 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
 
     if (productCategoryIdList.length > 0) {
       this.__filterByProductCategoryIdList(aggregatedInventoryDetailsList, productCategoryIdList);
-    } else if (productBlueprintId) {
-      this.__filterByProductBlueprintId(aggregatedInventoryDetailsList, productBlueprintId);
+    } else if (productBlueprintIdList.length > 0) {
+      this.__filterByProductBlueprintIdList(aggregatedInventoryDetailsList, productBlueprintIdList);
     }
 
     this.__sortByPositionInInventoryIdList(aggregatedInventoryDetailsList, inventoryIdList);

@@ -704,6 +704,37 @@ describe.only('Inventory', _ => {
 
   });
 
+  it('api/report-inventory-details (Valid productBlueprintIdList check)', testDoneFn => {
+
+    callApi('api/report-inventory-details', {
+      json: {
+        apiKey,
+        inventoryIdList: [
+          warehouseDefaultInventoryId, outletDefaultInventoryId
+        ],
+        productBlueprintIdList: [
+          productBlueprintId
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateReportInventoryDetailsApiSuccessResponse(body);
+
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails => {
+        aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
+          validateAggregatedProductScema(aggregatedProduct);
+        });
+      });
+
+      expect(body.aggregatedInventoryDetailsList[0].inventoryDetails.inventoryId).equals(warehouseDefaultInventoryId);
+      expect(body.aggregatedInventoryDetailsList[1].inventoryDetails.inventoryId).equals(outletDefaultInventoryId);
+
+      testDoneFn();
+    });
+
+  });
+
   it('api/report-inventory-details (Invalid invalidInventoryId in inventoryIdList)', testDoneFn => {
 
     callApi('api/report-inventory-details', {

@@ -12,12 +12,16 @@ method: `POST`
   inventoryIdList: Joi.array().min(1).items(
     Joi.number().max(999999999999999).required()
   ),
-  productCategoryIdList: Joi.array().optional().default([]).items(
-    Joi.number().max(999999999999999).required()
+  productCategoryIdList: Joi.array().optional().default([]).allow([]).min(0).items(
+    Joi.number().max(999999999999999)
   ),
-  productBlueprintId: Joi.number().max(999999999999999).optional().default(null)
+  productBlueprintIdList: Joi.array().optional().default([]).allow([]).min(0).items(
+    Joi.number().max(999999999999999)
+  )
 }
 ```
+
+NOTE: If both non-empty `productCategoryIdList` and non-empty `productBlueprintIdList` is provided, `productBlueprintIdList` will be ignored.
 
 ### response (on error):
 ```js
