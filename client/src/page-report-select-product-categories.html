@@ -1,0 +1,323 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-report-select-product-categories">
+  <template>
+    <style include="shared-styles">
+      .confirm-discard-button-group paper-button {
+        width: 100%;
+        margin: 5px;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <!-- search area card -->
+      <div class="card vertical layout">
+        <div class="p-16 horizontal layout center">
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="[[verses.posSelectProduct.searchForProductInputError]]" label="[[verses.productCategory.searchForProductCategoryInput]]" on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
+          <paper-button raised class="primary" on-tap="searchTapped">
+            [[verses.general.search]]
+          </paper-button>
+        </div>
+      </div>
+
+      <!-- no productCategory card -->
+      <template is="dom-if" if="{{!productCategoryList.length}}">
+        <div class="card">
+            [[verses.productCategory.noProductCategoryFound]]
+        </div>
+      </template>
+
+      <!-- looping productCategory - start -->
+      <template is="dom-if" if="{{productCategoryList.length}}">
+
+        <div class="card vertical layout">
+
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          </template>
+
+          <div class="list">
+            <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
+              <template is="dom-if" if="[[!productCategory.isSelected]]">
+                <div class="horizontal layout item center">
+                  <div class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}">
+                    [[productCategory.name]]
+                  </div>
+                  <div class="flex"></div>
+                  <paper-button raised class="primary" on-tap="selectTapped">
+                    <iron-icon icon="check"></iron-icon>
+                  </paper-button>
+                </div>
+              </template>
+            </template>
+          </div>
+
+          <div class="pagination">
+            [[verses.general.loaded]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          </template>
+
+        </div>
+      </template>
+      <!-- looping productCategory - end -->
+
+      <!-- selected productCategory - start -->
+      <template is="dom-if" if="{{selectedProductCategoryList.length}}">
+        <div class="card vertical layout">
+
+          <div class="list">
+            <template is="dom-repeat" items="[[selectedProductCategoryList]]" as="productCategory">
+              <div class="horizontal layout item center">
+
+                <div class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}">
+                  [[productCategory.name]]
+                </div>
+                <div class="flex"></div>
+                <paper-button raised class="danger" on-tap="deselectTapped">
+                  <iron-icon icon="clear"></iron-icon>
+                </paper-button>
+
+              </div>
+            </template>
+          </div>
+
+          <div class="vertical confirm-discard-button-group">
+            <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
+            <paper-button raised class="btn primary" on-tap="selectProductsTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
+          </div>
+        </div>
+      </template>
+      <!-- selected productCategory - end -->
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageReportSelectProductCategories extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-report-select-product-categories';
+      }
+
+      static get properties() {
+        return {
+          marginLeft: {
+            type: Number,
+            value: 0
+          },
+          searchString: {
+            type: String,
+            value: ''
+          },
+          selectedProductCategoryCount: {
+            type: Number,
+            value: 0
+          },
+          selectedProductCategoryList: {
+            type: Array,
+            value: () => []
+          },
+          isInOfflineMode: {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.onOrganizationChange(this.app.organization);
+        this.useLanguageServices();
+        this.onOfflineDataChange();
+        this.app.pushPageTitle(this.app.verses.posSelectProduct.posSelectProductTitle);
+        if (!this._ensureAccess()) return;
+        this._processProductCategoryList(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_ALL_INVENTORIES'] // FIXME
+        });
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
+
+      _fetchProductCategoryList(cbfn) {
+        let data = { organizationId: this.app.organization.id, searchString: this.searchString, paginate: this.paginate };
+        this.app.callGetProductCategoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.productCategoryList);
+        });
+      }
+
+      _processProductCategoryList(cbfn) {
+        this._fetchProductCategoryList(productCategoryList => {
+
+          let previousSelectedList = this.app.getFromSession('report-selected-product-category-list') || [];
+
+          if (this.selectedProductCategoryList.length > 0 || previousSelectedList.length > 0) {
+            if (previousSelectedList.length > 0 && this.selectedProductCategoryList.length === 0) {
+              this.selectedProductCategoryCount = previousSelectedList.length;
+              this.selectedProductCategoryList = previousSelectedList;
+            }
+
+            this.selectedProductCategoryList.forEach(selected => {
+              let productCategory = productCategoryList.find(productCategory => productCategory.id === selected.id);
+              if (productCategory) {
+                productCategory.isSelected = true;
+              }
+            })
+          }
+
+          this.productCategoryList = productCategoryList;
+          cbfn();
+        });
+      }
+
+      _addProductToselectedProductCategoryList({ productCategory }) {
+        this.push('selectedProductCategoryList', productCategory);
+        this.selectedProductCategoryCount = this.selectedProductCategoryList.length;
+      }
+
+      _removeProductFromselectedProductCategoryList({ productCategory }) {
+        this.selectedProductCategoryList.forEach((selected, index) => {
+          if (selected.id === productCategory.id) {
+            this.splice('selectedProductCategoryList', index, 1);
+          }
+        });
+
+        this.productCategoryList.forEach((productCategoryInList, index) => {
+          if (productCategoryInList.id === productCategory.id) {
+            this.set(`productCategoryList.${index}.isSelected`, false)
+          }
+        });
+
+        this.selectedProductCategoryCount = this.selectedProductCategoryList.length;
+      }
+
+      // region: ui  ===========================
+
+      selectProductsTapped(e = null) {
+        setTimeout(() => {
+          this.app.storeInSession('report-selected-product-category-list', this.selectedProductCategoryList);
+          this.selectedProductCategoryList = [];
+          this.selectedProductCategoryCount = 0;
+          this.backButtonOnTopBarPressed();
+        }, 10);
+      }
+
+      selectTapped(e) {
+        e.model.set('productCategory.selectedCount', 1);
+        e.model.set('productCategory.isSelected', true);
+        let { productCategory } = e.model;
+        this._addProductToselectedProductCategoryList({ productCategory });
+      }
+
+      deselectTapped(e) {
+        let { productCategory } = e.model;
+        this._removeProductFromselectedProductCategoryList({ productCategory });
+      }
+
+      deselectAllTapped(e) {
+        this.productCategoryList.forEach((productCategory, index) => this.set(`productCategoryList.${index}.isSelected`, false));
+        this.selectedProductCategoryList = [];
+        this.selectedProductCategoryCount = 0;
+        this.app.storeInSession('report-selected-product-category-list', this.selectedProductCategoryList);
+      }
+
+      backButtonOnTopBarPressed(e = null) {
+        this.selectedProductCategoryList = [];
+        this.selectedProductCategoryCount = 0;
+        this.app.navigateToPreviousUrl(`/report-inventories`);
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processProductCategoryList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processProductCategoryList(() => this.isReady = true);
+      }
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
+      searchCancelTapped(e = null) {
+        this.searchString = '';
+      }
+
+      searchTapped(e = null) {
+        this.set('paginate.offset', 0);
+        this._processProductCategoryList(() => this.isReady = true);
+      }
+
+      // region: misc =================================
+
+      // region: offline sales =================================
+
+      onOfflineDataChange() {
+        this.isInOfflineMode = this.app.isInOfflineMode;
+      }
+
+    }
+
+    window.customElements.define(PageReportSelectProductCategories.is, PageReportSelectProductCategories);
+  </script>
+</dom-module>

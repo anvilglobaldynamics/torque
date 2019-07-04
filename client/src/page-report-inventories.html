@@ -132,7 +132,9 @@
 
       <!-- filters - start -->
       <div class="filter-region lone-controls">
-        <paper-button raised class="btn primary" on-tap="filterTapped">[[verses.inventoriesReport.filterInventoriesButton]]</paper-button>
+        <paper-button raised class="btn primary" on-tap="filterByProductBlueprintTapped">Filter By Product Blueprint</paper-button>
+        <paper-button raised class="btn primary" on-tap="filterByProductCategoriesTapped">Filter By Product Categories</paper-button>
+        <paper-button raised class="btn primary" on-tap="filterByInventoriesTapped">[[verses.inventoriesReport.filterInventoriesButton]]</paper-button>
       </div>
       <!-- filters - end -->
 
@@ -326,8 +328,12 @@
       }
 
       _fetchInventoriesData(cbfn) {
+
+        let productCategoryList = this.app.getFromSession('report-selected-product-category-list') || [];
+        let productCategoryIdList = productCategoryList.map(productCategory=>productCategory.id);
+
         let inventoryIdList = this.inventoriesToBeFetched.map(inventory => inventory.id);
-        let data = { inventoryIdList };
+        let data = { inventoryIdList, productCategoryIdList };
 
         if (inventoryIdList.length !== 0) {
           this.app.callReportInventoryDetailsApi(data, (err, response) => {
@@ -370,7 +376,16 @@
 
       // region: ui  ===========================
 
-      filterTapped(e = null) {
+      filterByProductBlueprintTapped(e = null) {
+        return this.app.navigateTo(`/report-select-product-blueprints/`);
+      }
+
+      filterByProductCategoriesTapped(e = null) {
+        this.app.extractFromSession('report-selected-product-blueprint-list');
+        return this.app.navigateTo(`/report-select-product-categories/`);
+      }
+
+      filterByInventoriesTapped(e = null) {
         return this.app.navigateTo(`/report-select-inventories/`);
       }
 
