@@ -138,33 +138,20 @@
       </div>
 
       <template is="dom-if" if="[[$shouldShowClearFilter(_productCategoryList.length, _productBlueprintList.length)]]">
+
         <div class="filter-region lone-controls">
 
-          <div class="horizontal layout center">
-            <template is="dom-if" if="[[_productCategoryList.length]]">
-              <div>
-                Showing products of category:
-                <template is="dom-repeat" items="[[_productCategoryList]]" as="productCategory">
-                  <span class="product-category-pillet" style$="display: inline-block; background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}">
-                    [[productCategory.name]]
-                  </span>
-                </template>
-              </div>
-            </template>
-            <template is="dom-if" if="[[_productBlueprintList.length]]">
-              <div>
-                Showing products of category:
-                <template is="dom-repeat" items="[[_productBlueprintList]]" as="productBlueprint">
-                  [[productBlueprint.name]],
-                </template>
-              </div>
-            </template>
-          </div>
+          <template is="dom-if" if="[[_productCategoryList.length]]">
+            <span>Filtering by [[_productCategoryList.length]] product categories.</span>
+          </template>
+          <template is="dom-if" if="[[_productBlueprintList.length]]">
+            <span>Filtering by [[_productBlueprintList.length]] product blueprints.</span>
+          </template>
 
-          <div class="flex"></div>
           <paper-button raised class="btn primary" on-tap="clearFiltersTapped">Clear Filters</paper-button>
 
         </div>
+
       </template>
       <!-- filters - end -->
 
