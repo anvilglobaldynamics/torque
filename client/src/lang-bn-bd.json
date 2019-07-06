@@ -292,6 +292,7 @@
     "noGeolocationSupport": "আপনার ডিভাইসে অবস্থান জানার ব্যবস্থা নেই।"
   },
   "productBlueprint": {
+    "productBlueprintsTitle": "পণ্যের পরিকল্পনা",
     "manageProductBlueprintsTitle": "পণ্যের পরিকল্পনা পরিচালনা",
     "editProductBlueprintTitle": "পণ্যের পরিকল্পনা সম্পাদনা করুন",
     "addProductBlueprintTitle": "পণ্যের পরিকল্পনা যুক্ত করুন",

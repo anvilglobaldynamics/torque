@@ -290,6 +290,7 @@
     "noGeolocationSupport": "Your browser/device does not support geolocation."
   },
   "productBlueprint": {
+    "productBlueprintsTitle": "Product Blueprints",
     "manageProductBlueprintsTitle": "Manage Product Blueprints",
     "editProductBlueprintTitle": "Edit Product Blueprint",
     "addProductBlueprintTitle": "Add Product Blueprint",
