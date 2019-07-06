@@ -21,7 +21,11 @@ method: `POST`
 }
 ```
 
-NOTE: If both non-empty `productCategoryIdList` and non-empty `productBlueprintIdList` is provided, `productBlueprintIdList` will be ignored.
+NOTE: 
+
+1. If both non-empty `productCategoryIdList` and non-empty `productBlueprintIdList` is provided, `productBlueprintIdList` will be ignored.
+2. Items in `productCategoryIdList` are applied in `AND` logic. As in, products will only be shown if they are available in ALL of the provided product categories.
+3. Items in `productCategoryIdList` are applied in `OR` logic. As in, products will only be shown if they are available in ANY of the provided product categories.
 
 ### response (on error):
 ```js
