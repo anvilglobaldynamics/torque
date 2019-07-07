@@ -11,9 +11,21 @@ method: `POST`
   apiKey: Joi.string().length(64).required(),
   inventoryIdList: Joi.array().min(1).items(
     Joi.number().max(999999999999999).required()
+  ),
+  productCategoryIdList: Joi.array().optional().default([]).allow([]).min(0).items(
+    Joi.number().max(999999999999999)
+  ),
+  productBlueprintIdList: Joi.array().optional().default([]).allow([]).min(0).items(
+    Joi.number().max(999999999999999)
   )
 }
 ```
+
+NOTE: 
+
+1. If both non-empty `productCategoryIdList` and non-empty `productBlueprintIdList` is provided, `productBlueprintIdList` will be ignored.
+2. Items in `productCategoryIdList` are applied in `AND` logic. As in, products will only be shown if they are available in ALL of the provided product categories.
+3. Items in `productCategoryIdList` are applied in `OR` logic. As in, products will only be shown if they are available in ANY of the provided product categories.
 
 ### response (on error):
 ```js

@@ -25,7 +25,8 @@ let {
   validateProductBlueprintSchema,
   validateProductSchema,
   validateGetProductApiSuccessResponse,
-  validateAddProductToInventoryApiSuccessResponse
+  validateAddProductToInventoryApiSuccessResponse,
+  validateAddProductCategoryApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -78,6 +79,8 @@ let productToBeEditedId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidInventoryId = generateInvalidId();
 let invalidProductBlueprintId = generateInvalidId();
+
+let productCategoryId = null;
 
 describe('Inventory', _ => {
 
@@ -698,6 +701,110 @@ describe('Inventory', _ => {
       expect(body.aggregatedInventoryDetailsList[0].inventoryDetails.inventoryId).equals(warehouseDefaultInventoryId);
       expect(body.aggregatedInventoryDetailsList[1].inventoryDetails.inventoryId).equals(warehouseReturnedInventoryId);
       expect(body.aggregatedInventoryDetailsList[2].inventoryDetails.inventoryId).equals(outletDefaultInventoryId);
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-inventory-details (Valid productBlueprintIdList check)', testDoneFn => {
+
+    callApi('api/report-inventory-details', {
+      json: {
+        apiKey,
+        inventoryIdList: [
+          warehouseDefaultInventoryId, outletDefaultInventoryId
+        ],
+        productBlueprintIdList: [
+          productBlueprintId
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateReportInventoryDetailsApiSuccessResponse(body);
+
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails => {
+        aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
+          validateAggregatedProductScema(aggregatedProduct);
+        });
+      });
+
+      expect(body.aggregatedInventoryDetailsList[0].aggregatedProductList[0].product.productBlueprint.id).to.equal(productBlueprintId);
+
+      expect(body.aggregatedInventoryDetailsList[0].inventoryDetails.inventoryId).equals(warehouseDefaultInventoryId);
+      expect(body.aggregatedInventoryDetailsList[1].inventoryDetails.inventoryId).equals(outletDefaultInventoryId);
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-product-category (Valid; To Create productCategory)', testDoneFn => {
+
+    callApi('api/add-product-category', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "1st product category",
+        colorCode: "FFFFFF"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddProductCategoryApiSuccessResponse(body);
+      productCategoryId = body.productCategoryId;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/edit-product-blueprint (Valid; To Set productCategoryId)', testDoneFn => {
+
+    callApi('api/edit-product-blueprint', {
+      json: {
+        apiKey,
+        productBlueprintId: productBlueprintId,
+        name: "test product blueprint",
+        unit: "box",
+        identifierCode: '',
+        defaultPurchasePrice: 99,
+        defaultVat: 3,
+        defaultSalePrice: 111,
+        productCategoryIdList: [productCategoryId],
+        isReturnable: true
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    })
+
+  });
+
+  it('api/report-inventory-details (Valid productCategoryIdList check)', testDoneFn => {
+
+    callApi('api/report-inventory-details', {
+      json: {
+        apiKey,
+        inventoryIdList: [
+          warehouseDefaultInventoryId, outletDefaultInventoryId
+        ],
+        productCategoryIdList: [
+          productCategoryId
+        ]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateReportInventoryDetailsApiSuccessResponse(body);
+
+      body.aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails => {
+        aggregatedInventoryDetails.aggregatedProductList.forEach(aggregatedProduct => {
+          validateAggregatedProductScema(aggregatedProduct);
+        });
+      });
+
+      expect(body.aggregatedInventoryDetailsList[0].aggregatedProductList[0].product.productBlueprint.productCategoryIdList).to.contain(productCategoryId)
 
       testDoneFn();
     });

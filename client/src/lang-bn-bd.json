@@ -159,7 +159,7 @@
     "about": "আমাদের কথা",
     "logout": "লগ-আউট",
     "manageProductCategories": "পণ্যের ধরণ",
-    "manageProductTransfer":"পণ্য ট্রান্সফার রেকর্ড",
+    "manageProductTransfer": "পণ্য ট্রান্সফার রেকর্ড",
     "manageDiscountPresets": "ডিসকাউন্টস"
   },
   "titleBar": {
@@ -292,6 +292,7 @@
     "noGeolocationSupport": "আপনার ডিভাইসে অবস্থান জানার ব্যবস্থা নেই।"
   },
   "productBlueprint": {
+    "productBlueprintsTitle": "পণ্যের পরিকল্পনা",
     "manageProductBlueprintsTitle": "পণ্যের পরিকল্পনা পরিচালনা",
     "editProductBlueprintTitle": "পণ্যের পরিকল্পনা সম্পাদনা করুন",
     "addProductBlueprintTitle": "পণ্যের পরিকল্পনা যুক্ত করুন",
@@ -754,7 +755,13 @@
     "selectionTableTitle": "পণ্য তালিকা নির্বাচন ছক",
     "deselectAll": "সব নির্বাচন মুছে দিন",
     "resetSelection": "আগের নির্বাচন",
-    "confirmSelection": "নির্বাচন নিশ্চিত করুন"
+    "confirmSelection": "নির্বাচন নিশ্চিত করুন",
+    "filterByProductBlueprint": "পণ্যের পরিকল্পনা দ্বারা ফিল্টার",
+    "filterByProductCategories": "পণ্যের ধরণ দ্বারা ফিল্টার",
+    "filteringByPart1": "ফিল্টার করা হচ্ছে ",
+    "filteringByPart2Categories": "টি পণ্যের ধরণ দ্বারা।",
+    "filteringByPart2Blueprints": "টি পণ্যের পরিকল্পনা দ্বারা।",
+    "clearFilters": "ফিল্টার রিসেট"
   },
   "posSelectProduct": {
     "posSelectProductTitle": "পণ্য নির্বাচন",
@@ -1026,10 +1033,10 @@
   },
   "productTransfer": {
     "manageProductTransferTitle": "পণ্য ট্রান্সফার রেকর্ড",
-    "productTransferNumber":"পণ্য ট্রান্সফার নম্বর",
+    "productTransferNumber": "পণ্য ট্রান্সফার নম্বর",
     "exclusionNote": "(ঐচ্ছিক, ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
-    "noProductTransferFound":"কোনো পণ্য ট্রান্সফার রেকর্ড পাওয়া যায়নি। ",
-    "recordCreatedBy":"রেকর্ড তৈরি করেছেন",
+    "noProductTransferFound": "কোনো পণ্য ট্রান্সফার রেকর্ড পাওয়া যায়নি। ",
+    "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
     "productTransferTitle": "পণ্য ট্রান্সফার রেকর্ড"
   }
 }
