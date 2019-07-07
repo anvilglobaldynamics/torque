@@ -283,6 +283,7 @@
         this.onOrganizationChange(this.app.organization);
         this.onSettingsChange(this.app.settings);
         this.useLanguageServices();
+        this._clearSessionStorageItems();
         this._processOrganizationList(() => {
           if ('bypassable' in this.params && this.params.bypassable === 'yes' && !this.app.wasLastNavigationBypassed) {
             try {
@@ -316,6 +317,11 @@
         return this.accessControl({
           authLevel: 'authenticated'
         });
+      }
+
+      _clearSessionStorageItems(){
+        this.app.extractFromSession('report-selected-product-category-list');
+        this.app.extractFromSession('report-selected-product-blueprint-list');
       }
 
       _computeWarnings() {
