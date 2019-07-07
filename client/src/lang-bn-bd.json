@@ -750,7 +750,7 @@
     "showSalesProductDetails": "বিক্রয় এবং পণ্যের বিবরণ দেখান হোক",
     "author": "রচক",
     "noProductInInventory": "এই পণ্য তালিকায় কোনো পণ্য নেই।",
-    "filterInventoriesButton": "পণ্য তালিকা ফিল্টার",
+    "filterInventoriesButton": "পণ্য তালিকা দ্বারা ফিল্টার",
     "selectInventoriesTitle": "পণ্য তালিকা নির্বাচন",
     "selectionTableTitle": "পণ্য তালিকা নির্বাচন ছক",
     "deselectAll": "সব নির্বাচন মুছে দিন",

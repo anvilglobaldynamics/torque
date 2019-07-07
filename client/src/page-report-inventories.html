@@ -132,12 +132,14 @@
 
       <!-- filters - start -->
       <div class="filter-region lone-controls">
-        <paper-button raised class="btn primary" on-tap="filterByProductBlueprintTapped">[[verses.inventoriesReport.filterByProductBlueprint]]</paper-button>
-        <paper-button raised class="btn primary" on-tap="filterByProductCategoriesTapped">[[verses.inventoriesReport.filterByProductCategories]]</paper-button>
-        <paper-button raised class="btn primary" on-tap="filterByInventoriesTapped">[[verses.inventoriesReport.filterInventoriesButton]]</paper-button>
+        <paper-button raised class="btn secondary" on-tap="filterByProductBlueprintTapped">[[verses.inventoriesReport.filterByProductBlueprint]]</paper-button>
+        <paper-button raised class="btn secondary" on-tap="filterByProductCategoriesTapped">[[verses.inventoriesReport.filterByProductCategories]]</paper-button>
+        <paper-button raised class="btn secondary" on-tap="filterByInventoriesTapped">[[verses.inventoriesReport.filterInventoriesButton]]</paper-button>
       </div>
 
       <template is="dom-if" if="[[$shouldShowClearFilter(_productCategoryList.length, _productBlueprintList.length)]]">
+
+        <hr style="border: 1px solid lightgrey; width: 100%;">
 
         <div class="filter-region lone-controls">
 
@@ -148,12 +150,14 @@
             <span>[[verses.inventoriesReport.filteringByPart1]] [[_productBlueprintList.length]] [[verses.inventoriesReport.filteringByPart2Blueprints]]</span>
           </template>
 
-          <paper-button raised class="btn primary" on-tap="clearFiltersTapped">[[verses.inventoriesReport.clearFilters]]</paper-button>
+          <paper-button raised class="btn danger" on-tap="clearFiltersTapped">[[verses.inventoriesReport.clearFilters]]</paper-button>
 
         </div>
 
       </template>
       <!-- filters - end -->
+
+      <hr style="border: 1px solid lightgrey; width: 100%;">
 
       <!-- report - start -->
       <div class="report">

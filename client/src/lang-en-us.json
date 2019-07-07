@@ -749,7 +749,7 @@
     "showSalesProductDetails": "Show Sales and Product Details",
     "author": "Author",
     "noProductInInventory": "There's no product in this Inventory.",
-    "filterInventoriesButton": "Filter Inventories",
+    "filterInventoriesButton": "Filter By Inventories",
     "selectInventoriesTitle": "Select Inventories",
     "selectionTableTitle": "Inventories Selection Table",
     "deselectAll": "Deselect All",

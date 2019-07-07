@@ -104,6 +104,10 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
       aggregatedInventoryDetailsList.push(aggregatedInventoryDetails);
     }));
 
+    if (productCategoryIdList.length && productBlueprintIdList.length) {
+      throw new CodedError("PREDETERMINER_SETUP_INVALID", "Can not filter by both Product Category and Product Blueprint.");
+    }
+
     if (productCategoryIdList.length > 0) {
       this.__filterByProductCategoryIdList(aggregatedInventoryDetailsList, productCategoryIdList);
     } else if (productBlueprintIdList.length > 0) {
