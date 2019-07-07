@@ -75,7 +75,7 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
     aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails => {
       let newAggregatedProductList = aggregatedInventoryDetails.aggregatedProductList.filter(aggregatedProduct => {
         let list = aggregatedProduct.product.productBlueprint.productCategoryIdList;
-        // console.log(list, productCategoryIdList)
+
         if (list.length === 0) return false;
         return productCategoryIdList.every(productCategoryId => {
           return (list.indexOf(productCategoryId) > -1);
