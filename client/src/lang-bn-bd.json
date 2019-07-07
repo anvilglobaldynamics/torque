@@ -159,7 +159,7 @@
     "about": "আমাদের কথা",
     "logout": "লগ-আউট",
     "manageProductCategories": "পণ্যের ধরণ",
-    "manageProductTransfer":"পণ্য ট্রান্সফার রেকর্ড",
+    "manageProductTransfer": "পণ্য ট্রান্সফার রেকর্ড",
     "manageDiscountPresets": "ডিসকাউন্টস"
   },
   "titleBar": {
@@ -1033,10 +1033,10 @@
   },
   "productTransfer": {
     "manageProductTransferTitle": "পণ্য ট্রান্সফার রেকর্ড",
-    "productTransferNumber":"পণ্য ট্রান্সফার নম্বর",
+    "productTransferNumber": "পণ্য ট্রান্সফার নম্বর",
     "exclusionNote": "(ঐচ্ছিক, ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
-    "noProductTransferFound":"কোনো পণ্য ট্রান্সফার রেকর্ড পাওয়া যায়নি। ",
-    "recordCreatedBy":"রেকর্ড তৈরি করেছেন",
+    "noProductTransferFound": "কোনো পণ্য ট্রান্সফার রেকর্ড পাওয়া যায়নি। ",
+    "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
     "productTransferTitle": "পণ্য ট্রান্সফার রেকর্ড"
   }
 }
