@@ -657,7 +657,9 @@ describe('Inventory', _ => {
         apiKey,
         inventoryIdList: [
           warehouseDefaultInventoryId, outletDefaultInventoryId
-        ]
+        ],
+        productBlueprintIdList: [],
+        productCategoryIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -685,7 +687,9 @@ describe('Inventory', _ => {
         apiKey,
         inventoryIdList: [
           warehouseDefaultInventoryId, warehouseReturnedInventoryId, outletDefaultInventoryId
-        ]
+        ],
+        productBlueprintIdList: [],
+        productCategoryIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -717,7 +721,8 @@ describe('Inventory', _ => {
         ],
         productBlueprintIdList: [
           productBlueprintId
-        ]
+        ],
+        productCategoryIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -789,6 +794,7 @@ describe('Inventory', _ => {
         inventoryIdList: [
           warehouseDefaultInventoryId, outletDefaultInventoryId
         ],
+        productBlueprintIdList: [],
         productCategoryIdList: [
           productCategoryId
         ]
@@ -811,6 +817,32 @@ describe('Inventory', _ => {
 
   });
 
+  it('api/report-inventory-details (Invalid; Both productBlueprintIdList and productCategoryId)', testDoneFn => {
+
+    callApi('api/report-inventory-details', {
+      json: {
+        apiKey,
+        inventoryIdList: [
+          warehouseDefaultInventoryId, outletDefaultInventoryId
+        ],
+        productBlueprintIdList: [
+          productBlueprintId
+        ],
+        productCategoryIdList: [
+          productCategoryId
+        ]
+      }
+    }, (err, response, body) => {
+
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('PREDETERMINER_SETUP_INVALID');
+
+      testDoneFn();
+    });
+
+  });
+
   it('api/report-inventory-details (Invalid invalidInventoryId in inventoryIdList)', testDoneFn => {
 
     callApi('api/report-inventory-details', {
@@ -818,7 +850,9 @@ describe('Inventory', _ => {
         apiKey,
         inventoryIdList: [
           warehouseDefaultInventoryId, invalidInventoryId, outletDefaultInventoryId
-        ]
+        ],
+        productBlueprintIdList: [],
+        productCategoryIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -834,7 +868,9 @@ describe('Inventory', _ => {
     callApi('api/report-inventory-details', {
       json: {
         apiKey,
-        inventoryIdList: []
+        inventoryIdList: [],
+        productBlueprintIdList: [],
+        productCategoryIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

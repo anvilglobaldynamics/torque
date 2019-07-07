@@ -15,10 +15,10 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
       inventoryIdList: Joi.array().required().min(1).items(
         Joi.number().max(999999999999999).required()
       ),
-      productCategoryIdList: Joi.array().optional().default([]).allow([]).min(0).items(
+      productCategoryIdList: Joi.array().allow([]).min(0).items(
         Joi.number().max(999999999999999)
       ),
-      productBlueprintIdList: Joi.array().optional().default([]).allow([]).min(0).items(
+      productBlueprintIdList: Joi.array().allow([]).min(0).items(
         Joi.number().max(999999999999999)
       )
     });
