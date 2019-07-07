@@ -1,0 +1,323 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-report-select-product-blueprints">
+  <template>
+    <style include="shared-styles">
+      .confirm-discard-button-group paper-button {
+        width: 100%;
+        margin: 5px;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <!-- search area card -->
+      <div class="card vertical layout">
+        <div class="p-16 horizontal layout center">
+          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message="[[verses.posSelectProduct.searchForProductInputError]]" label="[[verses.productBlueprint.searchForProductBlueprintInput]]" on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
+          <paper-button raised class="primary" on-tap="searchTapped">
+            [[verses.general.search]]
+          </paper-button>
+        </div>
+      </div>
+
+      <!-- no productBlueprint card -->
+      <template is="dom-if" if="{{!productBlueprintList.length}}">
+        <div class="card">
+          [[verses.productBlueprint.noProductBlueprintFound]]
+        </div>
+      </template>
+
+      <!-- looping productBlueprint - start -->
+      <template is="dom-if" if="{{productBlueprintList.length}}">
+
+        <div class="card vertical layout">
+
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          </template>
+
+          <div class="list">
+            <template is="dom-repeat" items="[[productBlueprintList]]" as="productBlueprint">
+              <template is="dom-if" if="[[!productBlueprint.isSelected]]">
+                <div class="horizontal layout item center">
+                  <div>
+                    [[productBlueprint.name]]
+                  </div>
+                  <div class="flex"></div>
+                  <paper-button raised class="primary" on-tap="selectTapped">
+                    <iron-icon icon="check"></iron-icon>
+                  </paper-button>
+                </div>
+              </template>
+            </template>
+          </div>
+
+          <div class="pagination">
+            [[verses.general.loaded]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          </template>
+
+        </div>
+      </template>
+      <!-- looping productBlueprint - end -->
+
+      <!-- selected productBlueprint - start -->
+      <template is="dom-if" if="{{selectedProductBlueprintList.length}}">
+        <div class="card vertical layout">
+
+          <div class="list">
+            <template is="dom-repeat" items="[[selectedProductBlueprintList]]" as="productBlueprint">
+              <div class="horizontal layout item center">
+
+                <div>
+                  [[productBlueprint.name]]
+                </div>
+                <div class="flex"></div>
+                <paper-button raised class="danger" on-tap="deselectTapped">
+                  <iron-icon icon="clear"></iron-icon>
+                </paper-button>
+
+              </div>
+            </template>
+          </div>
+
+          <div class="vertical confirm-discard-button-group">
+            <paper-button raised class="danger btn btn-default" on-tap="deselectAllTapped">[[verses.posSelectProduct.deselectAllSelected]]</paper-button>
+            <paper-button raised class="btn primary" on-tap="selectProductsTapped">[[verses.posSelectProduct.confirmSelection]]</paper-button>
+          </div>
+        </div>
+      </template>
+      <!-- selected productBlueprint - end -->
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageReportSelectProductBlueprints extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-report-select-product-blueprints';
+      }
+
+      static get properties() {
+        return {
+          marginLeft: {
+            type: Number,
+            value: 0
+          },
+          searchString: {
+            type: String,
+            value: ''
+          },
+          selectedProductBlueprintCount: {
+            type: Number,
+            value: 0
+          },
+          selectedProductBlueprintList: {
+            type: Array,
+            value: () => []
+          },
+          isInOfflineMode: {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.onOrganizationChange(this.app.organization);
+        this.useLanguageServices();
+        this.onOfflineDataChange();
+        this.app.pushPageTitle(this.app.verses.productBlueprint.productBlueprintsTitle);
+        if (!this._ensureAccess()) return;
+        this._processProductBlueprintList(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_ALL_INVENTORIES', 'PRIV_VIEW_REPORTS', 'PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS'],
+        });
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
+
+      _fetchProductBlueprintList(cbfn) {
+        let data = { organizationId: this.app.organization.id, searchString: this.searchString, paginate: this.paginate };
+        this.app.callGetProductBlueprintListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.productBlueprintList);
+        });
+      }
+
+      _processProductBlueprintList(cbfn) {
+        this._fetchProductBlueprintList(productBlueprintList => {
+
+          let previousSelectedList = this.app.getFromSession('report-selected-product-blueprint-list') || [];
+
+          if (this.selectedProductBlueprintList.length > 0 || previousSelectedList.length > 0) {
+            if (previousSelectedList.length > 0 && this.selectedProductBlueprintList.length === 0) {
+              this.selectedProductBlueprintCount = previousSelectedList.length;
+              this.selectedProductBlueprintList = previousSelectedList;
+            }
+
+            this.selectedProductBlueprintList.forEach(selected => {
+              let productBlueprint = productBlueprintList.find(productBlueprint => productBlueprint.id === selected.id);
+              if (productBlueprint) {
+                productBlueprint.isSelected = true;
+              }
+            })
+          }
+
+          this.productBlueprintList = productBlueprintList;
+          cbfn();
+        });
+      }
+
+      _addProductToselectedProductBlueprintList({ productBlueprint }) {
+        this.push('selectedProductBlueprintList', productBlueprint);
+        this.selectedProductBlueprintCount = this.selectedProductBlueprintList.length;
+      }
+
+      _removeProductFromselectedProductBlueprintList({ productBlueprint }) {
+        this.selectedProductBlueprintList.forEach((selected, index) => {
+          if (selected.id === productBlueprint.id) {
+            this.splice('selectedProductBlueprintList', index, 1);
+          }
+        });
+
+        this.productBlueprintList.forEach((productBlueprintInList, index) => {
+          if (productBlueprintInList.id === productBlueprint.id) {
+            this.set(`productBlueprintList.${index}.isSelected`, false)
+          }
+        });
+
+        this.selectedProductBlueprintCount = this.selectedProductBlueprintList.length;
+      }
+
+      // region: ui  ===========================
+
+      selectProductsTapped(e = null) {
+        setTimeout(() => {
+          this.app.storeInSession('report-selected-product-blueprint-list', this.selectedProductBlueprintList);
+          this.selectedProductBlueprintList = [];
+          this.selectedProductBlueprintCount = 0;
+          this.backButtonOnTopBarPressed();
+        }, 10);
+      }
+
+      selectTapped(e) {
+        e.model.set('productBlueprint.selectedCount', 1);
+        e.model.set('productBlueprint.isSelected', true);
+        let { productBlueprint } = e.model;
+        this._addProductToselectedProductBlueprintList({ productBlueprint });
+      }
+
+      deselectTapped(e) {
+        let { productBlueprint } = e.model;
+        this._removeProductFromselectedProductBlueprintList({ productBlueprint });
+      }
+
+      deselectAllTapped(e) {
+        this.productBlueprintList.forEach((productBlueprint, index) => this.set(`productBlueprintList.${index}.isSelected`, false));
+        this.selectedProductBlueprintList = [];
+        this.selectedProductBlueprintCount = 0;
+        this.app.storeInSession('report-selected-product-blueprint-list', this.selectedProductBlueprintList);
+      }
+
+      backButtonOnTopBarPressed(e = null) {
+        this.selectedProductBlueprintList = [];
+        this.selectedProductBlueprintCount = 0;
+        this.app.navigateToPreviousUrl(`/report-inventories`);
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processProductBlueprintList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processProductBlueprintList(() => this.isReady = true);
+      }
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
+      searchCancelTapped(e = null) {
+        this.searchString = '';
+      }
+
+      searchTapped(e = null) {
+        this.set('paginate.offset', 0);
+        this._processProductBlueprintList(() => this.isReady = true);
+      }
+
+      // region: misc =================================
+
+      // region: offline sales =================================
+
+      onOfflineDataChange() {
+        this.isInOfflineMode = this.app.isInOfflineMode;
+      }
+
+    }
+
+    window.customElements.define(PageReportSelectProductBlueprints.is, PageReportSelectProductBlueprints);
+  </script>
+</dom-module>

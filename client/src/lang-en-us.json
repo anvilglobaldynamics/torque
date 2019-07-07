@@ -159,7 +159,7 @@
     "about": "About",
     "logout": "Logout",
     "manageProductCategories": "Product Categories",
-    "manageProductTransfer":"Product Transfer Records",
+    "manageProductTransfer": "Product Transfer Records",
     "manageDiscountPresets": "Discounts"
   },
   "titleBar": {
@@ -290,6 +290,7 @@
     "noGeolocationSupport": "Your browser/device does not support geolocation."
   },
   "productBlueprint": {
+    "productBlueprintsTitle": "Product Blueprints",
     "manageProductBlueprintsTitle": "Manage Product Blueprints",
     "editProductBlueprintTitle": "Edit Product Blueprint",
     "addProductBlueprintTitle": "Add Product Blueprint",
@@ -748,12 +749,18 @@
     "showSalesProductDetails": "Show Sales and Product Details",
     "author": "Author",
     "noProductInInventory": "There's no product in this Inventory.",
-    "filterInventoriesButton": "Filter Inventories",
+    "filterInventoriesButton": "Filter By Inventories",
     "selectInventoriesTitle": "Select Inventories",
     "selectionTableTitle": "Inventories Selection Table",
     "deselectAll": "Deselect All",
     "resetSelection": "Reset Selection",
-    "confirmSelection": "Confirm Selection"
+    "confirmSelection": "Confirm Selection",
+    "filterByProductBlueprint": "Filter By Product Blueprint",
+    "filterByProductCategories": "Filter By Product Categories",
+    "filteringByPart1": "Filtering by ",
+    "filteringByPart2Categories": " product categories.",
+    "filteringByPart2Blueprints": " product blueprints.",
+    "clearFilters": "Reset Filters"
   },
   "posSelectProduct": {
     "posSelectProductTitle": "Select Products",
@@ -1025,10 +1032,10 @@
   },
   "productTransfer": {
     "manageProductTransferTitle": "Product Transfer Records",
-    "productTransferNumber":"Product Transfer Number",
+    "productTransferNumber": "Product Transfer Number",
     "exclusionNote": "(Optional. Other Filters will be ignored)",
-    "noProductTransferFound":"No Product Transfer Found",
-    "recordCreatedBy":"Record Created By",
+    "noProductTransferFound": "No Product Transfer Found",
+    "recordCreatedBy": "Record Created By",
     "productTransferTitle": "Product Transfer Details"
   }
 }

@@ -12,8 +12,14 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
 
   get requestSchema() {
     return Joi.object().keys({
-      inventoryIdList: Joi.array().min(1).items(
+      inventoryIdList: Joi.array().required().min(1).items(
         Joi.number().max(999999999999999).required()
+      ),
+      productCategoryIdList: Joi.array().allow([]).min(0).items(
+        Joi.number().max(999999999999999)
+      ),
+      productBlueprintIdList: Joi.array().allow([]).min(0).items(
+        Joi.number().max(999999999999999)
       )
     });
   }
@@ -32,7 +38,8 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
         return organization;
       },
       privilegeList: [
-        "PRIV_VIEW_ALL_INVENTORIES"
+        "PRIV_VIEW_ALL_INVENTORIES",
+        "PRIV_VIEW_REPORTS"
       ],
       moduleList: [
         "MOD_PRODUCT",
@@ -58,20 +65,56 @@ exports.ReportInventoryDetailsApi = class extends Api.mixin(InventoryMixin) {
     };
   }
 
-  async handle({ body }) {
-    let { inventoryIdList, searchString } = body;
-
-    let aggregatedInventoryDetailsList = [];
-
-    let promiseList = inventoryIdList.map(async (inventoryId) => {
-      let aggregatedInventoryDetails = await this.__getAggregatedInventoryDetails({ inventoryId, searchString });
-      aggregatedInventoryDetailsList.push(aggregatedInventoryDetails);
-    });
-    await Promise.all(promiseList);
-
+  __sortByPositionInInventoryIdList(aggregatedInventoryDetailsList, inventoryIdList) {
     aggregatedInventoryDetailsList.sort((a, b) => {
       return inventoryIdList.indexOf(a.inventoryDetails.inventoryId) - inventoryIdList.indexOf(b.inventoryDetails.inventoryId);
     });
+  }
+
+  __filterByProductCategoryIdList(aggregatedInventoryDetailsList, productCategoryIdList) {
+    aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails => {
+      let newAggregatedProductList = aggregatedInventoryDetails.aggregatedProductList.filter(aggregatedProduct => {
+        let list = aggregatedProduct.product.productBlueprint.productCategoryIdList;
+
+        if (list.length === 0) return false;
+        return productCategoryIdList.every(productCategoryId => {
+          return (list.indexOf(productCategoryId) > -1);
+        });
+      });
+      aggregatedInventoryDetails.aggregatedProductList = newAggregatedProductList;
+    });
+  }
+
+  __filterByProductBlueprintIdList(aggregatedInventoryDetailsList, productBlueprintIdList) {
+    aggregatedInventoryDetailsList.forEach(aggregatedInventoryDetails => {
+      let newAggregatedProductList = aggregatedInventoryDetails.aggregatedProductList.filter(aggregatedProduct => {
+        return (productBlueprintIdList.indexOf(aggregatedProduct.product.productBlueprint.id) > -1);
+      });
+      aggregatedInventoryDetails.aggregatedProductList = newAggregatedProductList;
+    });
+  }
+
+  async handle({ body }) {
+    let { inventoryIdList, productCategoryIdList, productBlueprintIdList } = body;
+
+    let aggregatedInventoryDetailsList = [];
+
+    await Promise.all(inventoryIdList.map(async (inventoryId) => {
+      let aggregatedInventoryDetails = await this.__getAggregatedInventoryDetails({ inventoryId });
+      aggregatedInventoryDetailsList.push(aggregatedInventoryDetails);
+    }));
+
+    if (productCategoryIdList.length && productBlueprintIdList.length) {
+      throw new CodedError("PREDETERMINER_SETUP_INVALID", "Can not filter by both Product Category and Product Blueprint.");
+    }
+
+    if (productCategoryIdList.length > 0) {
+      this.__filterByProductCategoryIdList(aggregatedInventoryDetailsList, productCategoryIdList);
+    } else if (productBlueprintIdList.length > 0) {
+      this.__filterByProductBlueprintIdList(aggregatedInventoryDetailsList, productBlueprintIdList);
+    }
+
+    this.__sortByPositionInInventoryIdList(aggregatedInventoryDetailsList, inventoryIdList);
 
     return { aggregatedInventoryDetailsList };
   }
