@@ -156,6 +156,7 @@
       _processProductToBeReturned(cbfn) {
         this.productToBeReturned = this.sales.productList.find(product => product.productId == this.params.product);
         this.set("salesReturnForm.productReturnCount", (this.productToBeReturned.count - this.productToBeReturned.returnedProductCount));
+        this.set("salesReturnForm.creditedAmount", (this.productToBeReturned.count - this.productToBeReturned.returnedProductCount) * this.productToBeReturned.salePrice);
         cbfn();
       }
 

@@ -29,11 +29,18 @@
       }
 
       .return-button {
-        width: 97%;
-        margin: 6px;
+        /* width: 97%;
+        margin: 6px; */
       }
 
       .list-object {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 6px;
+        margin: 4px 0px;
+      }
+
+      .gray-background {
         border: 1px solid #eee;
         background-color: #f7f7f7;
         padding: 6px;
@@ -76,12 +83,13 @@
           <div>[[verses.sales.customerId]]: [[sales.customerId]]</div>
         </template> -->
 
-        <paper-button raised class="secondary" on-tap="printReceiptTapped">[[verses.sales.printReceipt]]</paper-button>
+        <div class="horizontal layout end-justified">
+          <paper-button raised class="secondary" on-tap="printReceiptTapped">[[verses.sales.printReceipt]]</paper-button>
 
-        <template is="dom-if" if="{{!sales.isDiscarded}}">
-          <paper-button raised class="danger discard-button" on-tap="discardTapped">[[verses.general.discard]]</paper-button>
-        </template>
-
+          <template is="dom-if" if="{{!sales.isDiscarded}}">
+            <paper-button raised class="danger" on-tap="discardTapped">[[verses.general.discard]]</paper-button>
+          </template>
+        </div>
       </div>
 
       <!-- product list - start -->
@@ -92,26 +100,25 @@
           </div>
           <div class="list">
             <template is="dom-repeat" items="{{sales.productList}}" as="product">
-              <div class="vertical layout flex">
-                <div class="list-object">
+              <div class="horizontal layout item center gray-background">
+                  <div class="vertical layout flex">
+                    <div>[[verses.general.product]]: [[product.productBlueprintName]]</div>
+                    <div>[[verses.sales.soldCount]]: [[product.count]]</div>
+                    <template is="dom-if" if="[[product.returnedProductCount]]">
+                      <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
+                    </template>
+                    <div>[[verses.sales.salePrice]]: [[product.salePrice]] [[app.settings.monetaryUnit]]</div>
 
-                  <div>[[verses.general.product]]: [[product.productBlueprintName]]</div>
-                  <div>[[verses.sales.soldCount]]: [[product.count]]</div>
-                  <template is="dom-if" if="[[product.returnedProductCount]]">
-                    <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
-                  </template>
-                  <div>[[verses.sales.salePrice]]: [[product.salePrice]] [[app.settings.monetaryUnit]]</div>
-
-                  <template is="dom-if" if="{{checkIfAllProductReturned(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
-                    *[[verses.sales.allReturned]]
-                  </template>
+                    <template is="dom-if" if="{{checkIfAllProductReturned(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
+                      *[[verses.sales.allReturned]]
+                    </template>
+                  </div>
 
                   <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
                     <paper-button raised class="danger return-button" on-tap="returnTapped">[[verses.sales.productReturn]]</paper-button>
                   </template>
-
-                </div>
               </div>
+
             </template>
           </div>
         </div>
