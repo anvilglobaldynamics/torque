@@ -107,5 +107,19 @@
       "maximumWarehouses": 1,
       "maximumEmployees": 5
     }
+  },
+  {
+    "code": "R-SNN-02",
+    "name": "SNN Imports Retail Package",
+    "price": 0,
+    "duration": {
+      "months": 3,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 2,
+      "maximumWarehouses": 1,
+      "maximumEmployees": 5
+    }
   }
 ]
