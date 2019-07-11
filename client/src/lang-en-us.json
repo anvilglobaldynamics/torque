@@ -535,7 +535,7 @@
     "pageTitle": "Return Sales",
     "soldCount": "Sold Count",
     "salePrice": "Sale Price",
-    "returnCount": "Return Count",
+    "returnCount": "Returned Count",
     "productReturnCountInput": "Product Return Count",
     "productReturnCountInputError": "Enter a valid number",
     "creditedAmountInput": "Customer Credited Amount",
