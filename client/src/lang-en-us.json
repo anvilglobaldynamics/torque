@@ -601,7 +601,7 @@
     "receiptTitle": "Sales Receipt ",
     "printedBy": "Printed By",
     "soldBy": "Sold By",
-    "productReturn": "Return Product",
+    "productReturn": "Return",
     "service": "Service",
     "discardQuestion": "Discard this Sale?",
     "discardMessage": "Once discarded, this sale will not be considered in any report or calculation. Service Membership(s) sold in this sale (if any) will also be discarded.",
