@@ -28,7 +28,8 @@ let {
   validateGetSalesReturnApiSuccessResponse,
   validateGetSalesReturnListApiSuccessResponse,
   validateSalesReturnSchema,
-  validateSalesReturnSchemaWhenListObj
+  validateSalesReturnSchemaWhenListObj,
+  validateGenericApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -376,6 +377,45 @@ describe('Sales Return', _ => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
       expect(body.error.code).equal('PRODUCT_BLUEPRINT_NON_RETURNABLE');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/discard-sales (Valid)', testDoneFn => {
+
+    callApi('api/discard-sales', {
+      json: {
+        apiKey,
+        salesId: sales2Id,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/add-sales-return (Invalid. already discarded)', testDoneFn => {
+
+    callApi('api/add-sales-return', {
+      json: {
+        apiKey,
+        salesId: sales2Id,
+        returnedProductList: [
+          {
+            productId: sales2Data.productList[0].productId,
+            count: sales2Data.productList[0].count
+          }
+        ],
+        creditedAmount: 300, // TODO: use data from salesData.payment
+        shouldSaveReturnableInChangeWallet: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('UNABLE_TO_RETURN_DISCARDED_SALE');
       testDoneFn();
     });
 
