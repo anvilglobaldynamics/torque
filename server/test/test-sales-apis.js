@@ -138,7 +138,7 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
-describe('Sales', _ => {
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -909,6 +909,23 @@ describe('Sales', _ => {
 
   });
 
+  it('api/get-aggregated-inventory-details (Valid; before sales return)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: outletDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
+      testDoneFn();
+    });
+
+  });
+
   it('api/add-sales-return (Valid test purpose)', testDoneFn => {
 
     callApi('api/add-sales-return', {
@@ -932,6 +949,40 @@ describe('Sales', _ => {
 
   });
 
+  it('api/get-aggregated-inventory-details (Valid sales return check)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: outletDefaultInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-aggregated-inventory-details (Valid sales return check)', testDoneFn => {
+
+    callApi('api/get-aggregated-inventory-details', {
+      json: {
+        apiKey,
+        inventoryId: outletReturnedInventoryId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(1);
+      testDoneFn();
+    });
+
+  });
+
   it('api/get-sales (Valid)', testDoneFn => {
 
     callApi('api/get-sales', {
@@ -943,6 +994,7 @@ describe('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetSalesApiSuccessResponse(body);
       validateSalesSchema(body.sales);
+
       salesNumber = body.sales.salesNumber;
       testDoneFn();
     });
@@ -1238,7 +1290,7 @@ describe('Sales', _ => {
 
   });
 
-  it('api/get-aggregated-inventory-details (Valid. Makes sure discarded products are returned)', testDoneFn => {
+  it('api/get-aggregated-inventory-details (Valid. Makes sure discarded products are returned AND Already returned products are not returned again)', testDoneFn => {
 
     callApi('api/get-aggregated-inventory-details', {
       json: {
@@ -1249,8 +1301,21 @@ describe('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
-      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(98);
-      testDoneFn();
+      expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(97);
+
+      callApi('api/get-aggregated-inventory-details', {
+        json: {
+          apiKey,
+          inventoryId: outletReturnedInventoryId
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+
+        expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(1);
+        testDoneFn();
+      });
+
     });
 
   });
