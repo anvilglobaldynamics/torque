@@ -52,4 +52,27 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     return payment;
   }
 
+  async _addReturnedProductCountToSales({ sales }) {
+    let salesReturnList = await this.database.salesReturn.listBySalesId({ salesId: sales.id });
+    if (salesReturnList.length === 0) {
+      sales.productList.forEach(product => {
+        product.returnedProductCount = 0;
+      });
+      return;
+    }
+
+    salesReturnList.forEach(salesReturn => {
+      salesReturn.returnedProductList.forEach(returnedProduct => {
+        let matchingProduct = sales.productList.find(product => {
+          return product.productId === returnedProduct.productId;
+        });
+        if (!('returnedProductCount' in matchingProduct)) {
+          matchingProduct.returnedProductCount = 0;
+        }
+        matchingProduct.returnedProductCount += returnedProduct.count;
+      });
+    });
+  }
+
+
 }
