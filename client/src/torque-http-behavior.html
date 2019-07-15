@@ -72,7 +72,19 @@
       }
 
       _createGenericCallback(path, data, _cbfn) {
+        let { shouldBlockUi } = data;
+        delete data.shouldBlockUi;
+
+        if (shouldBlockUi) {
+          this.increaseActiveServiceCount();
+        }
+
         return (err, response) => {
+
+          if (shouldBlockUi) {
+            this.decreaseActiveServiceCount();
+          }
+
           if (possibleLastWebsocketFailureTimestamp > lastWebsocketFailureTimestamp) {
             if (err) {
               possibleLastWebsocketFailureTimestamp = 0;
@@ -80,6 +92,7 @@
               lastWebsocketFailureTimestamp = possibleLastWebsocketFailureTimestamp;
             }
           }
+
           if (err) {
             if (mode === 'development') {
               console.log(`NETWORK_ERROR/api=${path}`, { data, err });
@@ -125,6 +138,11 @@
         } else {
           data.clientLanguage = 'en-us';
         }
+
+        if (!('shouldBlockUi' in data)) {
+          data.shouldBlockUi = true;
+        }
+
         let cbfn = this._createGenericCallback(path, data, _cbfn);
         let now = (new Date).getTime();
         if (!this.settings.shouldUseWebsockets || (now - lastWebsocketFailureTimestamp < WEBSOCKET_DELAY_BEFORE_RETRYING)) {
@@ -183,9 +201,8 @@
 
       callUserAssertApiKeyApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
-        window.torqueCache.ignorableApiCallCount += 1;
+        data.shouldBlockUi = false;
         this.callCombinedJsonApi('user-assert-api-key', data, (...args) => {
-          window.torqueCache.ignorableApiCallCount -= 1;
           cbfn(...args);
         });
       }
