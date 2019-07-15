@@ -749,10 +749,17 @@
         this.toggleOfflineMode();
       }
 
+      increaseActiveServiceCount() {
+        this.activeServiceCount += 1;
+      }
+
+      decreaseActiveServiceCount() {
+        this.activeServiceCount = Math.max(this.activeServiceCount - 1, 0);
+      }
+
       _intializeServiceManager() {
         this.serviceManager.on('service-change', (event) => {
-          let count = event.detail.activeCount - window.torqueCache.ignorableApiCallCount;
-          this.activeServiceCount = Math.max(count, 0);
+          // NOTE: Previously event.detail.activeCount was used to show loading indicator.
         });
         this.serviceManager.on('error', (event) => {
           let shouldPromptForOfflineMode = true;
@@ -1065,9 +1072,8 @@
             organizationId: this.organization.id,
             userId: this.user.id
           };
-          window.torqueCache.ignorableApiCallCount += 1;
+          data.shouldBlockUi = false;
           this.app.callGetUserDisplayInformationApi(data, (err, response) => {
-            window.torqueCache.ignorableApiCallCount -= 1;
             if (err) return;
             if (response.hasError) return onApiError(response.error);
             return cbfn(response);
@@ -1076,9 +1082,8 @@
 
         const _backgroundSyncGetOutlet = (outletId, cbfn) => {
           let data = { outletId };
-          window.torqueCache.ignorableApiCallCount += 1;
+          data.shouldBlockUi = false;
           this.app.callGetOutletApi(data, (err, response) => {
-            window.torqueCache.ignorableApiCallCount -= 1;
             if (err) return;
             if (response.hasError) return onApiError(response.error);
             return cbfn(response);
@@ -1088,9 +1093,8 @@
         const _backgroundSyncGetAggregatedInventoryDetailsApi = (inventoryId, cbfn) => {
           if (!this.hasModule('MOD_PRODUCT')) return cbfn(null);
           let data = { inventoryId, includeZeroCountProducts: false };
-          window.torqueCache.ignorableApiCallCount += 1;
+          data.shouldBlockUi = false;
           this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
-            window.torqueCache.ignorableApiCallCount -= 1;
             if (err) return;
             if (response.hasError) return onApiError(response.error);
             return cbfn(response);
@@ -1100,9 +1104,8 @@
         const _backgroundSyncGetActiveServiceListApi = (outletId, cbfn) => {
           if (!this.hasModule('MOD_SERVICE')) return cbfn(null);
           let data = { outletId };
-          window.torqueCache.ignorableApiCallCount += 1;
+          data.shouldBlockUi = false;
           this.app.callGetActiveServiceListApi(data, (err, response) => {
-            window.torqueCache.ignorableApiCallCount -= 1;
             if (err) return;
             if (response.hasError) return onApiError(response.error);
             return cbfn(response);
