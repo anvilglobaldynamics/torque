@@ -415,7 +415,7 @@ describe('Sales Return', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).equal('UNABLE_TO_RETURN_DISCARDED_SALE');
+      expect(body.error.code).equal('SALES_RETURN_FOR_DISCARDED_SALE_IS_INVALID');
       testDoneFn();
     });
 

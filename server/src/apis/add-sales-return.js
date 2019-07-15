@@ -67,7 +67,7 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
     let { salesId, returnedProductList, creditedAmount, shouldSaveReturnableInChangeWallet } = body;
 
     let sales = await this.database.sales.findById({ id: salesId });
-    throwOnTruthy(sales.isDiscarded, "UNABLE_TO_RETURN_DISCARDED_SALE", "Sales return is not allowed on discarded sales.");
+    throwOnTruthy(sales.isDiscarded, "SALES_RETURN_FOR_DISCARDED_SALE_IS_INVALID", "Sales return is not allowed on discarded sales.");
 
     await this._verifyProductsExist({ productList: returnedProductList });
     await this._verifyProductsAreReturnable({ productList: returnedProductList });
