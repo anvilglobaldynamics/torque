@@ -49,7 +49,7 @@ exports.AddOutletApi = class extends Api.mixin(InventoryMixin, OutletMixin) {
   async _checkOrganizationPackageOutletLimit({ organizationId, aPackage }) {
     let outletList = await this.database.outlet.listByOrganizationId({ organizationId });
     if (outletList.length == aPackage.limits.maximumOutlets) {
-      throw new CodedError("ORGANIZATION_PACKAGE_MAX_OUTLET_LIMIT_REACHED", "Organization activated package max outlet limit reached");
+      throw new CodedError("ORGANIZATION_PACKAGE_LIMIT_REACHED", this.verses.packageLimitCommon.activePackageLimitReached);
     }
   }
 

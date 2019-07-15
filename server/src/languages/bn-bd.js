@@ -44,5 +44,8 @@ exports.verses = {
   },
   userNotificationCommon: {
     yourPasswordHasChanged: "আপনার পাসওয়ার্ড পরিবর্তন হয়েছে। আপনি লগইন সংক্রান্ত কোনো সমস্যার সম্মুখীন হলে আমাদের হটলাইনে যোগাযোগ করুন।"
+  },
+  packageLimitCommon: {
+    activePackageLimitReached: "সংস্থার সক্রিয় প্যাকেজে এই কাজটি করা যাবে না।"
   }
 }
