@@ -44,5 +44,8 @@ exports.verses = {
   },
   userNotificationCommon: {
     yourPasswordHasChanged: "Your password has changed. If you did not make this change, please contact our hotline below to recover your account."
+  },
+  packageLimitCommon: {
+    activePackageLimitReached: "This action is not allowed in the organization's currently activated package."
   }
 }
