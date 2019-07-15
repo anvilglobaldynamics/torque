@@ -55,7 +55,7 @@ let warehouseDefaultInventoryId = null;
 let invalidOrganizationId = generateInvalidId();
 let invalidWarehouseId = generateInvalidId();
 
-describe.only('Warehouse', _ => {
+describe('Warehouse', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
