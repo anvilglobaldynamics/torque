@@ -327,6 +327,7 @@
       }
 
       checkIfProductReturnable(returnedProductCount, soldProductCount, isReturnable) {
+        if (this.sales.isDiscarded) return false;
         if (returnedProductCount < soldProductCount && isReturnable) return true;
         else return false;
       }
