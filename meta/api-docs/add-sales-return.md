@@ -43,6 +43,7 @@ Possible Error Codes:
 { code: OUTLET_INVENTORY_INVALID } // outler returned inventory invalid
 { code: PRODUCT_BLUEPRINT_INVALID }
 { code: PRODUCT_BLUEPRINT_NON_RETURNABLE } // product in list is non-returnable
+{ code: SALES_RETURN_FOR_DISCARDED_SALE_IS_INVALID } // sales return is not allowed for already discarded sales.
 ```
 
 ### response (on success):

@@ -4,8 +4,9 @@ const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
 const { InventoryMixin } = require('./mixins/inventory-mixin');
+const { SalesMixin } = require('./mixins/sales-mixin');
 
-exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin) {
+exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin) {
 
   get autoValidates() { return true; }
 
@@ -52,7 +53,9 @@ exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin) {
   async _returnProductsToDefaultInventory({ productList, defaultInventory }) {
     for (let i = 0; i < productList.length; i++) {
       let product = productList[i];
-      await this._pushProductOrIncrementCount({ productId: product.productId, count: product.count, inventoryId: defaultInventory.id });
+      let { productId, count, returnedProductCount } = product;
+      count = count - returnedProductCount;
+      await this._pushProductOrIncrementCount({ productId: productId, count: count, inventoryId: defaultInventory.id });
     }
     return;
   }
@@ -61,6 +64,8 @@ exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin) {
     let { salesId } = body;
 
     let sales = await this.database.sales.findById({ id: salesId });
+    await this._addReturnedProductCountToSales({ sales });
+
     let productList = sales.productList;
     let defaultInventory;
     if (sales.productsSelectedFromWarehouseId) {
