@@ -41,28 +41,6 @@ exports.GetSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin, Servic
     }];
   }
 
-  async _addReturnedProductCountToSales({ sales }) {
-    let salesReturnList = await this.database.salesReturn.listBySalesId({ salesId: sales.id });
-    if (salesReturnList.length === 0) {
-      sales.productList.forEach(product => {
-        product.returnedProductCount = 0;
-      });
-      return;
-    }
-
-    salesReturnList.forEach(salesReturn => {
-      salesReturn.returnedProductList.forEach(returnedProduct => {
-        let matchingProduct = sales.productList.find(product => {
-          return product.productId === returnedProduct.productId;
-        });
-        if (!('returnedProductCount' in matchingProduct)) {
-          matchingProduct.returnedProductCount = 0;
-        }
-        matchingProduct.returnedProductCount += returnedProduct.count;
-      });
-    });
-  }
-
   async _addProductBlueprintData({ sales }) {
     let { productList } = sales;
     await this.__getAggregatedProductListWithoutAcquisitionDetails({ productList });

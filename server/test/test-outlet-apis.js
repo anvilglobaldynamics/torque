@@ -223,7 +223,7 @@ describe('Outlet', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).equals('ORGANIZATION_PACKAGE_MAX_OUTLET_LIMIT_REACHED');
+      expect(body.error.code).equals('ORGANIZATION_PACKAGE_LIMIT_REACHED');
       testDoneFn();
     })
 
