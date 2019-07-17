@@ -1032,6 +1032,28 @@
         this.navigateTo('/manage-organizations')
       }
 
+      // ====================== cacheStorage =============================
+
+      storeInCache(key, value) {
+        key = 'torque-cache--' + key;
+        window.localStorage.setItem(key, JSON.stringify(value));
+      }
+
+      getFromCache(key) {
+        key = 'torque-cache--' + key;
+        let value = window.localStorage.getItem(key);
+        return JSON.parse(value);
+      }
+
+      extractFromCache(key) {
+        key = 'torque-cache--' + key;
+        let value = window.localStorage.getItem(key);
+        if (value) {
+          window.localStorage.removeItem(key);
+        }
+        return JSON.parse(value);
+      }
+
       // ====================== sessionStorage =============================
 
       storeInSession(key, value) {

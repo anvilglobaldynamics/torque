@@ -91,6 +91,8 @@
   </template>
 
   <script>
+    const CACHE_LAST_USED_DEFAULT_VAT_KEY_NAME = 'cache--last-used--defaultVat';
+
     class PageEditProductBlueprint extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
 
       static get is() {
@@ -126,7 +128,7 @@
                   unit: "pcs",
                   identifierCode: '',
                   defaultPurchasePrice: '',
-                  defaultVat: 5,
+                  defaultVat: this.getFromCache(CACHE_LAST_USED_DEFAULT_VAT_KEY_NAME),
                   defaultSalePrice: '',
                   isReturnable: false
                 };
@@ -253,9 +255,11 @@
       }
 
       createProductBlueprintTapped(e = null) {
+        this.storeInCache(CACHE_LAST_USED_DEFAULT_VAT_KEY_NAME, this.editProductBlueprintForm.defaultVat);
         this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editProductBlueprintForm').validate()) return;
-
+        
+        
         let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
         this._processCreateProductBlueprint({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
       }
