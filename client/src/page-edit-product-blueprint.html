@@ -42,7 +42,7 @@
             <paper-input class="editProductBlueprintForm--defaultPurchasePrice" step="0.01" value="{{editProductBlueprintForm.defaultPurchasePrice}}" type="number" required min="0" error-message=[[verses.productBlueprint.defaultPurchasePriceInputError]] label=[[verses.productBlueprint.defaultPurchasePriceInput]]>
               <div slot="suffix">[[app.settings.monetaryUnit]]</div>
             </paper-input>
-            <paper-input class="editProductBlueprintForm--defaultVat" value="{{editProductBlueprintForm.defaultVat}}" type="number" required min="0" max="100" error-message=[[verses.productBlueprint.defaultVatInputError]] label=[[verses.productBlueprint.defaultVatInput]]>
+            <paper-input class="editProductBlueprintForm--defaultVat" step="0.01" value="{{editProductBlueprintForm.defaultVat}}" type="number" required min="0" max="100" error-message=[[verses.productBlueprint.defaultVatInputError]] label=[[verses.productBlueprint.defaultVatInput]]>
               <div slot="suffix">%</div>
             </paper-input>
             <paper-input class="editProductBlueprintForm--defaultSalePrice" step="0.01" value="{{editProductBlueprintForm.defaultSalePrice}}" type="number" required min="0" error-message=[[verses.productBlueprint.productBlueprintDefaultSalePriceInputError]] label=[[verses.productBlueprint.productBlueprintDefaultSalePriceInput]]>
