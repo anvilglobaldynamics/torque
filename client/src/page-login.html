@@ -79,12 +79,12 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  emailOrPhone: '01700000011',
+                  emailOrPhone: (this.getFromCache('loginForm--emailOrPhone') || '01700000011'),
                   password: 'johndoe1pass'
                 };
               } else {
                 return {
-                  emailOrPhone: '',
+                  emailOrPhone: (this.getFromCache('loginForm--emailOrPhone') || ''),
                   password: ''
                 };
               }
@@ -124,6 +124,8 @@
       _processUserLogin({ emailOrPhone, password }) {
         emailOrPhone = emailOrPhone.trim();
         emailOrPhone = emailOrPhone.toLowerCase();
+
+        this.storeInCache('loginForm--emailOrPhone', emailOrPhone);
 
         let data = { emailOrPhone, password };
 

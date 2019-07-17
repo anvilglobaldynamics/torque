@@ -123,10 +123,10 @@
               } else {
                 return {
                   name: "",
-                  unit: "pcs",
+                  unit: (this.getFromCache('editProductBlueprintForm--unit') || ''),
                   identifierCode: '',
                   defaultPurchasePrice: '',
-                  defaultVat: 5,
+                  defaultVat: (this.getFromCache('editProductBlueprintForm--defaultVat') || ''),
                   defaultSalePrice: '',
                   isReturnable: false
                 };
@@ -255,6 +255,9 @@
       createProductBlueprintTapped(e = null) {
         this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editProductBlueprintForm').validate()) return;
+
+        this.storeInCache('editProductBlueprintForm--defaultVat', this.editProductBlueprintForm.defaultVat);
+        this.storeInCache('editProductBlueprintForm--unit', this.editProductBlueprintForm.unit);
 
         let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
         this._processCreateProductBlueprint({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
