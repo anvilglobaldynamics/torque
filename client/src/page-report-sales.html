@@ -80,6 +80,12 @@
         border-bottom: 1px dotted rgb(131, 131, 131);
         margin-bottom: 3px;
       }
+
+      .product-service-list-ol {
+        padding-left: 26px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -252,40 +258,28 @@
                   </div>
                 </template>
 
-                <template is="dom-if" if="[[!showProductDetails]]">
-                  <template is="dom-if" if="[[sales.productList.length]]">
-                    <div class="description">[[sales.productList.length]] [[verses.salesReport.products]]</div>
-                  </template>
-
-                  <template is="dom-if" if="[[sales.serviceList.length]]">
-                    <div class="description">[[sales.serviceList.length]] [[verses.salesReport.services]]</div>
-                  </template>
-                </template>
-
                 <template is="dom-if" if="[[showProductDetails]]">
                   <template is="dom-if" if="[[sales.productList.length]]">
                     <strong>[[verses.salesReport.products]]:</strong>
-                    <template is="dom-repeat" items="[[sales.productList]]" as="product">
-                      <div class="description">[[product.productBlueprint.name]]: [[product.count]] [[product.productBlueprint.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]</div>
-                    </template>
+                    <ol class="product-service-list-ol">
+                      <template is="dom-repeat" items="[[sales.productList]]" as="product">
+                          <li>
+                            <i>[[product.productBlueprint.name]]:</i> [[product.count]] [[product.productBlueprint.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]
+                          </li>
+                      </template>
+                    </ol>
                   </template>
 
                   <template is="dom-if" if="[[sales.serviceList.length]]">
                     <strong>[[verses.salesReport.services]]:</strong>
-                    <template is="dom-repeat" items="[[sales.serviceList]]" as="service">
-                      <div class="description">[[service.serviceBlueprint.name]]: [[service.salePrice]] [[app.settings.monetaryUnit]]</div>
-                    </template>
+                    <ol class="product-service-list-ol">
+                      <template is="dom-repeat" items="[[sales.serviceList]]" as="service">
+                          <li>
+                            <i>[[service.serviceBlueprint.name]]:</i> [[service.salePrice]] [[app.settings.monetaryUnit]]
+                          </li>
+                      </template>
+                    </ol>
                   </template>
-
-                  <div class="description">
-                    <strong>[[verses.salesReport.total]]:</strong>
-                    <template is="dom-if" if="[[sales.productList.length]]">
-                      [[sales.productList.length]] [[verses.salesReport.products]]
-                    </template>
-                    <template is="dom-if" if="[[sales.serviceList.length]]">
-                      [[sales.serviceList.length]] [[verses.salesReport.services]]
-                    </template>
-                  </div>
 
                   <template is="dom-if" if="[[sales.payment.discountedAmount]]">
                     <div class="description">
@@ -312,14 +306,6 @@
               <div class="description">[[$round(sales.payment.totalBilled)]]</div>
             </div>
           </template>
-          <!-- <div class="horizontal layout center item wrap">
-            <div class="flex">
-              <strong>[[verses.salesReport.total]]</strong>
-            </div>
-            <div>
-              <strong>[[salesSummary.billedAmountSum]]</strong>
-            </div>
-          </div> -->
           <!-- Detailed - End -->
         </div>
         <div class="vertical layout">
