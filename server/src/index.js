@@ -96,7 +96,7 @@ const { GetServiceMembershipListApi } = require('./apis/get-service-membership-l
 
 const { AddSalesReturnApi } = require('./apis/add-sales-return');
 let { GetSalesReturnApi } = require('./legacy-apis/get-sales-return');
-let { GetSalesReturnListApi } = require('./legacy-apis/get-sales-return-list');
+const { GetSalesReturnListApi } = require('./apis/get-sales-return-list');
 
 const { GetDashboardSummaryApi } = require('./apis/get-dashboard-summary');
 
