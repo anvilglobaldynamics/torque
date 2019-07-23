@@ -17,7 +17,9 @@ method: `POST`
   shouldFilterByCustomer: Joi.boolean().required(),
   
   fromDate: Joi.number().max(999999999999999).required(),
-  toDate: Joi.number().max(999999999999999).required()
+  toDate: Joi.number().max(999999999999999).required(),
+
+  searchString: Joi.string().min(0).max(64).allow('').optional() // Currently only used to lookup sales#salesNumber
 }
 ```
 
@@ -66,3 +68,7 @@ Possible Error Codes:
 
 ### db changes:
 updates no collection in db.
+
+### NOTE:
+
+if `searchString` is present and it is an ID, other filters are ignored.
