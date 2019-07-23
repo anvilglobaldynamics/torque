@@ -50,16 +50,6 @@ exports.GetSalesListApi = class extends Api {
     return toDate;
   }
 
-  _verifyOutletIfNeeded({ outletId, shouldFilterByOutlet }, cbfn) {
-    if (!shouldFilterByOutlet) return cbfn();
-    this._verifyOutletExist({ outletId }, cbfn);
-  }
-
-  _verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer }, cbfn) {
-    if (!shouldFilterByCustomer) return cbfn();
-    this._verifyCustomerExist({ customerId }, cbfn);
-  }
-
   async __verifyOutletIfNeeded({ outletId, shouldFilterByOutlet }) {
     if (shouldFilterByOutlet) {
       let doc = await this.database.outlet.findById({ id: outletId });
