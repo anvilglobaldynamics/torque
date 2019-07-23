@@ -29,7 +29,8 @@ let {
   validateGetSalesReturnListApiSuccessResponse,
   validateSalesReturnSchema,
   validateSalesReturnSchemaWhenListObj,
-  validateGenericApiSuccessResponse
+  validateGenericApiSuccessResponse,
+  validateGetSalesApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -61,6 +62,7 @@ let nonReturnableProductBlueprintId = null;
 let customerId = null;
 let salesId = null;
 let sales2Id = null;
+let sales2SalesNumber = null;
 let salesReturnId = null;
 
 let outletInventoryProductList = null;
@@ -91,7 +93,7 @@ fromDate = fromDate.getTime();
 let placeholderDefaultDiscountType = 'percent';
 let placeholderDefaultDiscountValue = 5;
 
-describe.only('Sales Return', _ => {
+describe('Sales Return', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -284,6 +286,23 @@ describe.only('Sales Return', _ => {
         });
       });
     });
+  });
+  
+  it('api/get-sales (Valid)', testDoneFn => {
+
+    callApi('api/get-sales', {
+      json: {
+        apiKey,
+        salesId,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetSalesApiSuccessResponse(body);
+      validateSalesSchema(body.sales);
+      sales2SalesNumber = body.sales.salesNumber;
+      testDoneFn();
+    });
+
   });
 
   it('api/add-sales-return (Invalid salesId)', testDoneFn => {
@@ -567,6 +586,36 @@ describe.only('Sales Return', _ => {
       body.salesReturnList.forEach(salesReturn => {
         validateSalesReturnSchemaWhenListObj(salesReturn);
       });
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-sales-return-list (Valid with searchString (salesNumber))', testDoneFn => {
+
+    callApi('api/get-sales-return-list', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        customerId: null,
+
+        shouldFilterByOutlet: false,
+        shouldFilterByCustomer: false,
+
+        searchString: String(sales2SalesNumber),
+
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetSalesReturnListApiSuccessResponse(body);
+      body.salesReturnList.forEach(salesReturn => {
+        validateSalesReturnSchemaWhenListObj(salesReturn);
+      });
+      expect(body.salesReturnList.length).to.equal(1);
+      expect(body.salesReturnList[0].id).to.equal(salesReturnId);
       testDoneFn();
     });
 
