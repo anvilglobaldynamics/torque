@@ -101,22 +101,22 @@
           <div class="list">
             <template is="dom-repeat" items="{{sales.productList}}" as="product">
               <div class="horizontal layout item center gray-background">
-                  <div class="vertical layout flex">
-                    <div>[[verses.general.product]]: [[product.productBlueprintName]]</div>
-                    <div>[[verses.sales.soldCount]]: [[product.count]]</div>
-                    <template is="dom-if" if="[[product.returnedProductCount]]">
-                      <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
-                    </template>
-                    <div>[[verses.sales.salePrice]]: [[product.salePrice]] [[app.settings.monetaryUnit]]</div>
-
-                    <template is="dom-if" if="{{checkIfAllProductReturned(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
-                      *[[verses.sales.allReturned]]
-                    </template>
-                  </div>
-
-                  <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
-                    <paper-button raised class="danger return-button" on-tap="returnTapped">[[verses.sales.productReturn]]</paper-button>
+                <div class="vertical layout flex">
+                  <div>[[verses.general.product]]: [[product.productBlueprintName]]</div>
+                  <div>[[verses.sales.soldCount]]: [[product.count]]</div>
+                  <template is="dom-if" if="[[product.returnedProductCount]]">
+                    <div>[[verses.sales.returnedCount]]: [[product.returnedProductCount]]</div>
                   </template>
+                  <div>[[verses.sales.salePrice]]: [[product.salePrice]] [[app.settings.monetaryUnit]]</div>
+
+                  <template is="dom-if" if="{{checkIfAllProductReturned(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
+                    *[[verses.sales.allReturned]]
+                  </template>
+                </div>
+
+                <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
+                  <paper-button raised class="danger return-button" on-tap="returnTapped">[[verses.sales.productReturn]]</paper-button>
+                </template>
               </div>
 
             </template>
@@ -328,6 +328,7 @@
 
       checkIfProductReturnable(returnedProductCount, soldProductCount, isReturnable) {
         if (this.sales.isDiscarded) return false;
+        returnedProductCount = returnedProductCount || 0;
         if (returnedProductCount < soldProductCount && isReturnable) return true;
         else return false;
       }
