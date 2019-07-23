@@ -10,7 +10,7 @@ exports.GetSalesReturnListApi = class extends Api {
 
   get requiresAuthentication() { return true; }
 
-  get autoPaginates() { return ['salesList']; }
+  get autoPaginates() { return ['salesReturnList']; }
 
   get requestSchema() {
     return Joi.object().keys({
@@ -22,7 +22,9 @@ exports.GetSalesReturnListApi = class extends Api {
       shouldFilterByCustomer: Joi.boolean().required(),
 
       fromDate: Joi.number().max(999999999999999).required(),
-      toDate: Joi.number().max(999999999999999).required()
+      toDate: Joi.number().max(999999999999999).required(),
+
+      searchString: Joi.string().min(0).max(64).allow('').optional()
     });
   }
 
@@ -64,7 +66,7 @@ exports.GetSalesReturnListApi = class extends Api {
     let outletIdList = (await this.database.outlet.listByOrganizationId({ organizationId })).map(outlet => outlet.id);
     let salesList = await this.database.sales.listByFiltersForSalesReturn(({ outletIdList, organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer }));
     let salesIdList = salesList.map(sales => sales.id);
-    let salesReturnList = await this.database.salesReturn.listByFilters({ salesIdList, fromDate, toDate});
+    let salesReturnList = await this.database.salesReturn.listByFilters({ salesIdList, fromDate, toDate });
     salesReturnList.forEach(salesReturn => {
       let sales = salesList.find(sales => sales.id === salesReturn.salesId);
       salesReturn.salesNumber = sales.salesNumber;
@@ -72,13 +74,30 @@ exports.GetSalesReturnListApi = class extends Api {
     return salesReturnList;
   }
 
+  _getFilterBySalesNumberFromSearchString(searchString) {
+    if (searchString && parseInt(searchString) >= 0) {
+      return parseInt(searchString);
+    }
+    return null;
+  }
+
   async handle({ body }) {
-    let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate } = body;
+    let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, searchString } = body;
     toDate = this.__getExtendedToDate(toDate);
 
-    await this.__verifyOutletIfNeeded({ outletId, shouldFilterByOutlet });
-    await this.__verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer });
-    let salesReturnList = await this.__getSalesReturnList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate });
+    let salesReturnList = [];
+    let filterBySalesNumber = this._getFilterBySalesNumberFromSearchString(searchString);
+    if (filterBySalesNumber) {
+      let sales = await this.database.sales.findBySalesNumber({ salesNumber: filterBySalesNumber });
+      if (sales) {
+        salesReturnList = await this.database.salesReturn.listBySalesId({ salesId: sales.id });
+        salesReturnList.forEach(salesReturn => salesReturn.salesNumber = sales.salesNumber);
+      }
+    } else {
+      await this.__verifyOutletIfNeeded({ outletId, shouldFilterByOutlet });
+      await this.__verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer });
+      salesReturnList = await this.__getSalesReturnList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate });
+    }
 
     return { salesReturnList };
   }

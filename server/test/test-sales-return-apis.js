@@ -91,7 +91,7 @@ fromDate = fromDate.getTime();
 let placeholderDefaultDiscountType = 'percent';
 let placeholderDefaultDiscountValue = 5;
 
-describe('Sales Return', _ => {
+describe.only('Sales Return', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
