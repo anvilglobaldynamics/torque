@@ -190,7 +190,15 @@
             [[verses.inventory.moveSelectedHelp]]
           </div>
 
-          <paper-dropdown-menu style="width: 100%;">
+          <paper-dropdown-menu style="width: 100%;" label="[[verses.inventory.inventoryContainerTitle]]" on-iron-select="inventoryContainerSelected">
+            <paper-listbox slot="dropdown-content" selected="{{targetInventoryContainerIndex}}">
+              <template is="dom-repeat" items="[[inventoryContainerList]]" as="inventoryContainer">
+                <paper-item>[[inventoryContainer.inventoryContainerName]]</paper-item>
+              </template>
+            </paper-listbox>
+          </paper-dropdown-menu>
+
+          <paper-dropdown-menu style="width: 100%;" label="[[verses.inventory.inventoryTitle]]">
             <paper-listbox slot="dropdown-content" selected="{{targetInventoryIndex}}">
               <template is="dom-repeat" items="[[inventoryList]]" as="inventory">
                 <paper-item data-id="[[inventory.id]]">[[inventory.inventoryContainerName]] - [[inventory.name]]</paper-item>
@@ -243,6 +251,10 @@
           targetInventoryIndex: {
             type: Number,
             value: 0
+          },
+          targetInventoryContainerIndex: {
+            type: Number,
+            value: 0
           }
         };
       }
@@ -274,7 +286,7 @@
         });
         if (this.searchString !== '') this.set('searchString', '');
         this._processInventory(() => {
-          this._fetchInventoryList(() => {
+          this._processTransferrableInventoryList(() => {
             this.isReady = true;
           });
         });
@@ -285,6 +297,7 @@
         this.selectedProductCount = 0;
         this.selectedProductList = [];
         this.targetInventoryIndex = 0;
+        this.targetInventoryContainerIndex = 0;
         this.app.popPageTitle();
       }
 
@@ -336,12 +349,32 @@
         });
       }
 
-      _fetchInventoryList(cbfn) {
+      _processTransferrableInventoryList(cbfn) {
         let data = { organizationId: this.app.organization.id };
         this.app.callGetInventoryListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this.inventoryList = response.inventoryList;
+          let inventoryList = response.inventoryList;
+
+          let inventoryContainerList = [];
+          inventoryList.forEach(inventory => {
+            let {
+              inventoryContainerId,
+              inventoryContainerName,
+              inventoryContainerType
+            } = inventory;
+            if (!inventoryContainerList.find(item =>
+              item.inventoryContainerId === inventoryContainerId && item.inventoryContainerType === inventoryContainerType
+            )) {
+              inventoryContainerList.push({
+                inventoryContainerId,
+                inventoryContainerName,
+                inventoryContainerType
+              });
+            }
+          });
+          this.inventoryContainerList = inventoryContainerList;
+          this.fullInventoryList = response.inventoryList;
           return cbfn();
         });
       }
@@ -404,7 +437,7 @@
                 this.app.showToast(message, () => {
                   this.backButtonOnTopBarPressed();
                 });
-              }); 
+              });
             }
           });
       }
@@ -470,6 +503,18 @@
       identifierCodeScanTapped(e = null) {
         this.app.storeInSession('pos-selected-product-list', this.selectedProductList);
         this.app.navigateTo(`/scan-identifier-code/from:transfer-products/inventory:${this.params.inventory}`);
+      }
+
+      inventoryContainerSelected(e) {
+        this.inventoryList = [];
+        this.delay(100, () => {
+          let inventoryContainer = this.inventoryContainerList[this.targetInventoryContainerIndex];
+          let { inventoryContainerId, inventoryContainerType } = inventoryContainer;
+          let inventoryList = this.fullInventoryList.filter(inventory =>
+            inventory.inventoryContainerId === inventoryContainerId && inventory.inventoryContainerType === inventoryContainerType
+          );
+          this.inventoryList = inventoryList;
+        });
       }
 
       // region: misc =================================

@@ -826,6 +826,7 @@
     "moveToInventory": "Move Selected Products to Inventory",
     "moveSelected": "Move Selected Products",
     "moveSelectedHelp": "The above selected products can now be moved to any other Inventory. Select an Inventory from below list and confirm Inventory Transfer;",
+    "inventoryContainerTitle": "Warehouse/Outlet",
     "addProductsBatchToInventory": "Add products to this inventory.",
     "addProducts": "Add Products to this inventory",
     "noProductsInInventory": "No products in this Inventory. Add a new product or you can transfer product from other inventories to this inventory.",

@@ -132,6 +132,13 @@ exports.SalesCollection = class extends Collection {
     });
   }
 
+  async findBySalesNumber({ salesNumber }) {
+    let query = {
+      salesNumber
+    }
+    return await this._findOne(query);
+  }
+
   async listByFilters({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, searchString }) {
 
     let filterBySalesNumber = null;
