@@ -190,7 +190,7 @@
             [[verses.inventory.moveSelectedHelp]]
           </div>
 
-          <paper-dropdown-menu style="width: 100%;" on-iron-select="inventoryContainerSelected">
+          <paper-dropdown-menu style="width: 100%;" label="[[verses.inventory.inventoryContainerTitle]]" on-iron-select="inventoryContainerSelected">
             <paper-listbox slot="dropdown-content" selected="{{targetInventoryContainerIndex}}">
               <template is="dom-repeat" items="[[inventoryContainerList]]" as="inventoryContainer">
                 <paper-item>[[inventoryContainer.inventoryContainerName]]</paper-item>
@@ -198,7 +198,7 @@
             </paper-listbox>
           </paper-dropdown-menu>
 
-          <paper-dropdown-menu style="width: 100%;">
+          <paper-dropdown-menu style="width: 100%;" label="[[verses.inventory.inventoryTitle]]">
             <paper-listbox slot="dropdown-content" selected="{{targetInventoryIndex}}">
               <template is="dom-repeat" items="[[inventoryList]]" as="inventory">
                 <paper-item data-id="[[inventory.id]]">[[inventory.inventoryContainerName]] - [[inventory.name]]</paper-item>
