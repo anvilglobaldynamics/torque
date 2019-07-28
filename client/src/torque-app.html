@@ -275,7 +275,7 @@
           display: block;
           position: fixed;
           left: 0px;
-          width: 100vh;
+          width: calc(100vh + 40px);
           overflow-x: hidden;
           background: #00000059;
         }
@@ -306,7 +306,7 @@
         <app-header slot="header" style$="[[$invisibleUnless(user)]]" fixed>
           <app-toolbar>
             <template is="dom-if" if="[[!currentPageIsModal]]">
-              <paper-icon-button id="top-nav-hamburger" icon="shared-icons:menu"></paper-icon-button>
+              <paper-icon-button id="top-nav-hamburger" icon="shared-icons:menu" on-tap="topNavHamburgerTapped"></paper-icon-button>
             </template>
             <template is="dom-if" if="[[$and(currentPageIsModal,currentPageAllowsBackButton)]]">
               <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
@@ -337,8 +337,8 @@
 
         <div class="horizontal layout">
           <!-- Drawer content - start -->
-          <div class="custom-app-drawer-wrapper" on-tap="customAppDrawerWrapperTapped">
-            <div class="custom-app-drawer">
+          <div class="custom-app-drawer-wrapper" on-tap="customAppDrawerWrapperTapped" style$="[[customAppDrawerStyle(user, isFloatingAppDrawerExpanded, innerWidth, isInOfflineMode)]]">
+            <div class="custom-app-drawer" on-tap="customAppDrawerTapped">
               <app-toolbar class="sidebar-title">
                 <img class="custom-sidebar-logo-image" src="../images/logo.png">
               </app-toolbar>
@@ -602,6 +602,10 @@
           isInOfflineMode: {
             type: Boolean,
             value: false
+          },
+          isFloatingAppDrawerExpanded: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -649,6 +653,8 @@
         this.useLanguageServices();
         this.initiateLanguageServices();
         this.pushPageTitle(this.brandName);
+        window.addEventListener('resize', () => this.updateInnerWidth());
+        this.updateInnerWidth()
         this._notifyResizeHack();
         window.setTimeout(() => this._initiateBackgroundSync(), backgroundSyncInitialDelay);
         this.delay(5000, () => this._assertApiKey());
@@ -854,12 +860,8 @@
       // ====================== navigation =============================
 
       _pageNameChanged() {
-        this.$.drawer = {
-          close() {
-
-          },
-          persistent: true
-        }
+        this.isFloatingAppDrawerExpanded = false;
+        this.initiateAppDrawerControls();
         if (this.isInOfflineMode) {
           const allowedPageNameList = [
             'login',
@@ -1214,13 +1216,52 @@
         });
       }
 
-      // ====================== utilities =============================
+      // ====================== app drawer =============================
+
+      initiateAppDrawerControls() {
+        // NOTE: below is necessary to maintain compatibility
+        // with polymer.
+        this.$.drawer = {
+          close() { },
+          persistent: true
+        }
+      }
+
+      customAppDrawerStyle(user, isFloatingAppDrawerExpanded, innerWidth, isInOfflineMode) {
+        console.log(user, isFloatingAppDrawerExpanded, innerWidth, isInOfflineMode)
+        let str = 'display: ';
+        if (!user) {
+          str += 'none';
+        } else if (isInOfflineMode) {
+          str += 'none';
+        } else if (innerWidth < 960 && !isFloatingAppDrawerExpanded) {
+          str += 'none';
+        } else {
+          str = 'block';
+        }
+        str += ';';
+        return str;
+      }
 
       customAppDrawerWrapperTapped(e) {
-        console.log("App drawer wrapper tapped")
+        this.isFloatingAppDrawerExpanded = false;
+        console.log("App drawer wrapper tapped");
+      }
+
+      customAppDrawerTapped(e) {
+        e.stopPropagation();
+      }
+
+      topNavHamburgerTapped(e) {
+        this.isFloatingAppDrawerExpanded = !this.isFloatingAppDrawerExpanded
+        console.log("Top Nav Hamburger Tapped");
       }
 
       // ====================== utilities =============================
+
+      updateInnerWidth() {
+        this.innerWidth = window.innerWidth;
+      }
 
       showAlertMessage(...args) {
         this.showModalDialog.apply(this, args);
