@@ -252,9 +252,9 @@
       }
     </style>
 
-    <app-drawer-layout responsive-width="2560px" fullbleed narrow="{{narrow}}">
+    <app-drawer-layout responsive-width="4000px" fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
-      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]" style$="[[$invisibleUnless(user)]]">
+      <!-- <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]" style$="[[$invisibleUnless(user)]]">
         <div class="app-drawer-wrapper">
           <app-toolbar class="sidebar-title">
             <img class="sidebar-logo-image" src="../images/logo.png">
@@ -311,7 +311,7 @@
 
           </iron-selector>
         </div>
-      </app-drawer>
+      </app-drawer> -->
 
       <template is="dom-if" if="[[$and(activeServiceCount, topSpinnerEnabled)]]">
         <div class="top-nav-spinner-container">
@@ -325,7 +325,7 @@
         <app-header slot="header" style$="[[$invisibleUnless(user)]]" fixed>
           <app-toolbar>
             <template is="dom-if" if="[[!currentPageIsModal]]">
-              <paper-icon-button icon="shared-icons:menu" drawer-toggle=""></paper-icon-button>
+              <paper-icon-button icon="shared-icons:menu"></paper-icon-button>
             </template>
             <template is="dom-if" if="[[$and(currentPageIsModal,currentPageAllowsBackButton)]]">
               <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
