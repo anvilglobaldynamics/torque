@@ -171,7 +171,7 @@
 
       .custom-drawer-list {
         margin: 20px 0;
-        padding-bottom: 70px;
+        padding-bottom: 20px;
         display: block;
       }
 
@@ -238,7 +238,7 @@
         display: block;
         /* height: 100vh; */
         /* overflow-y: auto; */
-        background-color: black;
+        background-color: rgb(255, 255, 255);
         min-width: 300px;
         z-index: 99;
       }
@@ -270,6 +270,11 @@
         display: none;
       }
 
+      .main-iron-pages-wrapper {
+        max-height: calc(100vh - 64px);
+        overflow-y: auto;
+      }
+
       @media (max-width: 960px) {
         .custom-app-drawer-wrapper {
           animation-duration: 0.3s;
@@ -290,6 +295,11 @@
       @media print {
         .custom-app-drawer-wrapper {
           display: none;
+        }
+
+        .main-iron-pages-wrapper {
+          max-height: none;
+          /* overflow-y: auto; */
         }
       }
 
@@ -410,7 +420,7 @@
             </div>
           </div>
           <!-- Drawer content - end -->
-          <div class="flex">
+          <div class="flex main-iron-pages-wrapper">
             <iron-pages on-iron-select="mainIronPagesIronSelected" id="main-iron-pages" selected="[[pageName]]" attr-for-selected="name" fallback-selection="error404" role="main">
               <page-home name="home"></page-home>
               <page-payment name="payment"></page-payment>
@@ -477,6 +487,27 @@
               <page-report-select-product-blueprints name="report-select-product-blueprints"></page-report-select-product-blueprints>
               <page-report-select-product-categories name="report-select-product-categories"></page-report-select-product-categories>
             </iron-pages>
+
+            <div class="footer">
+              <div>
+                <img src="../images/icons/en-us.png" data-key="en-us" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'en-us')]]" on-tap="languageIconTapped">
+                <img src="../images/icons/bn-bd.png" data-key="bn-bd" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'bn-bd')]]" on-tap="languageIconTapped">
+              </div>
+              <br>
+              <br>
+              <div>&#xA9; 2017
+                <a style="color: var(--app-primary-color-dark);" href="[[authorWebsite]]">[[authorName]]</a>
+              </div>
+              <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
+              <div>
+                <span class="extra-small" on-click="buildNumberTapped">ver [[appVersion]]</span>
+                <paper-icon-button icon="[[websocketConnectivityIndicatorIconName]]" on-tap="websocketConnectivityIndicatorIconTapped"></paper-icon-button>
+                <span class="extra-small" on-click="buildNumberTapped">build
+                  <span id="build-number">[[__deploy.build]]</span>
+                </span>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -507,26 +538,6 @@
           </div>
         </paper-dialog>
 
-        <div class="footer">
-          <div>
-            <img src="../images/icons/en-us.png" data-key="en-us" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'en-us')]]" on-tap="languageIconTapped">
-            <img src="../images/icons/bn-bd.png" data-key="bn-bd" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'bn-bd')]]" on-tap="languageIconTapped">
-          </div>
-          <br>
-          <br>
-          <div>&#xA9; 2017
-            <a style="color: var(--app-primary-color-dark);" href="[[authorWebsite]]">[[authorName]]</a>
-          </div>
-          <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
-          <div>
-            <span class="extra-small" on-click="buildNumberTapped">ver [[appVersion]]</span>
-            <paper-icon-button icon="[[websocketConnectivityIndicatorIconName]]" on-tap="websocketConnectivityIndicatorIconTapped"></paper-icon-button>
-            <span class="extra-small" on-click="buildNumberTapped">build
-              <span id="build-number">[[__deploy.build]]</span>
-            </span>
-          </div>
-
-        </div>
       </app-header-layout>
     </app-drawer-layout>
     <paper-toast id="generic-toast" text="Done"></paper-toast>
