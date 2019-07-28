@@ -358,13 +358,7 @@
                     <paper-item name="--no-discount">[[verses.pos.noDiscountApplicable]]</paper-item>
                     <template is="dom-repeat" items="[[discountPresetList]]" as="discountPreset">
                       <paper-item name="[[discountPreset.id]]">
-                        <div class="name">[[discountPreset.name]]</div>
-                        <template is="dom-if" if="[[$equals(discountPreset.discountType, 'percent')]]">
-                          <div>&nbsp;([[discountPreset.discountValue]]%)</div>
-                        </template>
-                        <template is="dom-if" if="[[$equals(discountPreset.discountType, 'fixed')]]">
-                          <div>&nbsp;([[discountPreset.discountValue]] [[app.settings.monetaryUnit]])</div>
-                        </template>
+                        [[getDiscountPresetLabel(discountPreset)]]
                       </paper-item>
                     </template>
                   </paper-listbox>
@@ -618,7 +612,7 @@
             if (this.productList.length > 0) {
               productList.forEach(newProduct => {
                 let oldProduct = this.productList.find(oldProduct => oldProduct.productId === newProduct.productId);
-                if (oldProduct){
+                if (oldProduct) {
                   newProduct.salePrice = oldProduct.salePrice;
                 }
               });
@@ -1248,6 +1242,15 @@
 
       productListOrServiceListHasElement(productListLength, serviceListLength) {
         return (productListLength || serviceListLength);
+      }
+
+      getDiscountPresetLabel(discountPreset) {
+        let { name, discountType, discountValue } = discountPreset;
+        if (discountType === 'percent') {
+          return `${name} (${discountValue}%)`;
+        } else {
+          return `${name} (${discountValue} ${this.app.settings.monetaryUnit})`;
+        }
       }
 
       // region: offline sales =================================
