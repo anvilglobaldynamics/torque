@@ -236,7 +236,7 @@
 
       .custom-app-drawer-wrapper {
         display: block;
-        height: 100vh;
+        /* height: 100vh; */
         /* overflow-y: auto; */
         background-color: black;
         min-width: 300px;
@@ -245,7 +245,7 @@
 
       .custom-app-drawer {
         display: block;
-        height: 100vh;
+        height: calc(100vh - 64px);
         overflow-y: auto;
         background-color: white;
         min-width: 300px;
@@ -272,6 +272,8 @@
 
       @media (max-width: 960px) {
         .custom-app-drawer-wrapper {
+          animation-duration: 0.3s;
+          animation-name: slidein;
           display: block;
           position: fixed;
           left: 0px;
@@ -288,6 +290,18 @@
       @media print {
         .custom-app-drawer-wrapper {
           display: none;
+        }
+      }
+
+      @keyframes slidein {
+        from {
+          margin-left: -100%;
+          width: 300%;
+        }
+
+        to {
+          margin-left: 0%;
+          width: 100%;
         }
       }
     </style>
