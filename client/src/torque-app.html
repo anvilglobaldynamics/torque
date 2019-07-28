@@ -1253,7 +1253,6 @@
       }
 
       customAppDrawerStyle(user, isFloatingAppDrawerExpanded, innerWidth, isInOfflineMode) {
-        console.log(user, isFloatingAppDrawerExpanded, innerWidth, isInOfflineMode)
         let str = 'display: ';
         if (!user) {
           str += 'none';
@@ -1270,7 +1269,6 @@
 
       customAppDrawerWrapperTapped(e) {
         this.isFloatingAppDrawerExpanded = false;
-        console.log("App drawer wrapper tapped");
       }
 
       customAppDrawerTapped(e) {
@@ -1279,7 +1277,6 @@
 
       topNavHamburgerTapped(e) {
         this.isFloatingAppDrawerExpanded = !this.isFloatingAppDrawerExpanded
-        console.log("Top Nav Hamburger Tapped");
       }
 
       // ====================== utilities =============================
