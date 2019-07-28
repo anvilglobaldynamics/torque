@@ -169,12 +169,14 @@
         --paper-icon-button-ink-color: var(--app-primary-text-color);
       }
 
-      .drawer-list {
-        margin: 0 020px;
+      .custom-drawer-list {
+        margin: 20px 0;
+        padding-bottom: 70px;
+        display: block;
       }
 
       .logout-link,
-      .drawer-list a {
+      .custom-drawer-list>a {
         display: block;
         padding: 0 16px;
         text-decoration: none;
@@ -182,7 +184,7 @@
         line-height: 40px;
       }
 
-      .drawer-list a.iron-selected {
+      .custom-drawer-list>a.iron-selected {
         color: var(--app-text);
         font-weight: bold;
       }
@@ -235,7 +237,20 @@
       .custom-app-drawer-wrapper {
         display: block;
         height: 100vh;
+        /* overflow-y: auto; */
+        background-color: black;
+        min-width: 300px;
+        z-index: 99;
+      }
+
+      .custom-app-drawer {
+        display: block;
+        height: 100vh;
         overflow-y: auto;
+        background-color: white;
+        min-width: 300px;
+        max-width: 300px;
+        z-index: 99;
       }
 
       .custom-sidebar-logo-image {
@@ -249,6 +264,31 @@
         height: 0;
         border-top: 1px solid rgba(0, 0, 0, 0.2);
         border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      #top-nav-hamburger {
+        display: none;
+      }
+
+      @media (max-width: 960px) {
+        .custom-app-drawer-wrapper {
+          display: block;
+          position: fixed;
+          left: 0px;
+          width: 100vh;
+          overflow-x: hidden;
+          background: #00000059;
+        }
+
+        #top-nav-hamburger {
+          display: inline-flex;
+        }
+      }
+
+      @media print {
+        .custom-app-drawer-wrapper {
+          display: none;
+        }
       }
     </style>
 
@@ -266,7 +306,7 @@
         <app-header slot="header" style$="[[$invisibleUnless(user)]]" fixed>
           <app-toolbar>
             <template is="dom-if" if="[[!currentPageIsModal]]">
-              <paper-icon-button icon="shared-icons:menu"></paper-icon-button>
+              <paper-icon-button id="top-nav-hamburger" icon="shared-icons:menu"></paper-icon-button>
             </template>
             <template is="dom-if" if="[[$and(currentPageIsModal,currentPageAllowsBackButton)]]">
               <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
@@ -297,61 +337,63 @@
 
         <div class="horizontal layout">
           <!-- Drawer content - start -->
-          <div class="custom-app-drawer-wrapper">
-            <app-toolbar class="sidebar-title">
-              <img class="custom-sidebar-logo-image" src="../images/logo.png">
-            </app-toolbar>
-            <iron-selector selected="[[pageName]]" attr-for-selected="name" class="drawer-list" role="navigation">
+          <div class="custom-app-drawer-wrapper" on-tap="customAppDrawerWrapperTapped">
+            <div class="custom-app-drawer">
+              <app-toolbar class="sidebar-title">
+                <img class="custom-sidebar-logo-image" src="../images/logo.png">
+              </app-toolbar>
+              <iron-selector selected="[[pageName]]" attr-for-selected="name" class="custom-drawer-list" role="navigation">
 
-              <a name="home" href="#/home">[[verses.sidebar.home]]</a>
-              <hr class="custom-sidebar-divider">
+                <a name="home" href="#/home">[[verses.sidebar.home]]</a>
+                <hr class="custom-sidebar-divider">
 
-              <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                <a name="manage-product-blueprints" href="#/manage-product-blueprints">[[verses.sidebar.productBlueprints]]</a>
-              </template>
-              <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
-                <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
-              </template>
-              <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
-              <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
-              </template>
-              <hr class="custom-sidebar-divider">
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-product-blueprints" href="#/manage-product-blueprints">[[verses.sidebar.productBlueprints]]</a>
+                </template>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
+                  <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
+                </template>
+                <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
+                </template>
+                <hr class="custom-sidebar-divider">
 
-              <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
-              <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
-              <hr class="custom-sidebar-divider">
+                <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
+                <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
+                <hr class="custom-sidebar-divider">
 
-              <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>
-              <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.manageProductCategories]]</a>
-              </template>
-              <hr class="custom-sidebar-divider">
+                <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.manageProductCategories]]</a>
+                </template>
+                <hr class="custom-sidebar-divider">
 
-              <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
-              <a name="report-collections" href="#/report-collections">[[verses.sidebar.collectionReport]]</a>
-              <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
-              </template>
-              <hr class="custom-sidebar-divider">
+                <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
+                <a name="report-collections" href="#/report-collections">[[verses.sidebar.collectionReport]]</a>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
+                </template>
+                <hr class="custom-sidebar-divider">
 
-              <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
-              <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
-              </template>
-              <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
-                <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
-              </template>
-              <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                <a name="manage-product-transfers" href="#/manage-product-transfers">[[verses.sidebar.manageProductTransfer]]</a>
-              </template>
-              <hr class="custom-sidebar-divider">
+                <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
+                </template>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
+                  <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
+                </template>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-product-transfers" href="#/manage-product-transfers">[[verses.sidebar.manageProductTransfer]]</a>
+                </template>
+                <hr class="custom-sidebar-divider">
 
-              <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
-              <a name="settings" href="#/settings">[[verses.sidebar.settings]]</a>
-              <a name="about" href="#/about">[[verses.sidebar.about]]</a>
+                <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
+                <a name="settings" href="#/settings">[[verses.sidebar.settings]]</a>
+                <a name="about" href="#/about">[[verses.sidebar.about]]</a>
 
-            </iron-selector>
+              </iron-selector>
+            </div>
           </div>
           <!-- Drawer content - end -->
           <div class="flex">
@@ -812,6 +854,12 @@
       // ====================== navigation =============================
 
       _pageNameChanged() {
+        this.$.drawer = {
+          close() {
+
+          },
+          persistent: true
+        }
         if (this.isInOfflineMode) {
           const allowedPageNameList = [
             'login',
@@ -1164,6 +1212,12 @@
         this._processBackgroundSync((wasDone) => {
           window.setTimeout(() => this._initiateBackgroundSync(), backgroundSyncInterval);
         });
+      }
+
+      // ====================== utilities =============================
+
+      customAppDrawerWrapperTapped(e) {
+        console.log("App drawer wrapper tapped")
       }
 
       // ====================== utilities =============================
