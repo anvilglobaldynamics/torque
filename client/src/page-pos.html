@@ -1017,7 +1017,7 @@
         }
       }
 
-      _resetSales() {
+      _resetSales({ refreshCurrentPage = true } = {}) {
         this.selectedDiscountPreset = '--no-discount';
         this.selectedWarehouse = '--current-outlet';
         this.productsSelectedFromWarehouseId = null;
@@ -1034,7 +1034,9 @@
 
         this.resetProperties('payment', 'productList', 'serviceList', 'customer', 'isSearchingCustomer');
 
-        this.app.refreshCurrentPage();
+        if (refreshCurrentPage) {
+          this.app.refreshCurrentPage();
+        }
       }
 
       _customerSelected(customer) {
