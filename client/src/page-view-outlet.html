@@ -238,6 +238,18 @@
       _resetDataInBrowserSession() {
         this.app.extractFromSession('selected-product-blueprint-list');
         this.app.extractFromSession('pos-selected-product-list');
+        // NOTE: The following is a hack to reset pos data
+        // while entering pos from another page.
+        // Code should be refactored at a later time and preferrably
+        // re-implemented.
+        try {
+          let el = this.app.elem('page-pos');
+          if (el && el._resetSales) {
+            el._resetSales({ refreshCurrentPage: false });
+          }
+        } catch (ex) {
+          console.warn(ex);
+        }
       }
 
       _fetchOutlet(cbfn) {
