@@ -50,14 +50,27 @@ exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin) {
     return;
   }
 
-  async _returnProductsToDefaultInventory({ productList, defaultInventory }) {
-    for (let i = 0; i < productList.length; i++) {
-      let product = productList[i];
+  _prepareReturnableProductList({ productList }) {
+    return productList.map(product => {
       let { productId, count, returnedProductCount } = product;
       count = count - returnedProductCount;
+      return { productId, count };
+    })
+  }
+
+  async _returnProductsToDefaultInventory({ productList, defaultInventory }) {
+    for (let i = 0; i < productList.length; i++) {
+      let { productId, count } = productList[i];
       await this._pushProductOrIncrementCount({ productId: productId, count: count, inventoryId: defaultInventory.id });
     }
     return;
+  }
+
+  async _addSalesDiscard({ productList, sales }) {
+    await this.database.salesDiscard.create({
+      salesId: sales.id,
+      returnedProductList: productList
+    });
   }
 
   async handle({ body }) {
@@ -66,18 +79,23 @@ exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin) {
     let sales = await this.database.sales.findById({ id: salesId });
     await this._addReturnedProductCountToSales({ sales });
 
-    let productList = sales.productList;
     let defaultInventory;
     if (sales.productsSelectedFromWarehouseId) {
       defaultInventory = await this.__getWarehouseDefaultInventory({ warehouseId: sales.productsSelectedFromWarehouseId });
     } else {
       defaultInventory = await this.__getOutletDefaultInventory({ outletId: sales.outletId });
     }
-    this._returnProductsToDefaultInventory({ productList, defaultInventory });
+
+    let returnableProductList = this._prepareReturnableProductList({ productList: sales.productList });
+
+    await this._returnProductsToDefaultInventory({ productList: returnableProductList, defaultInventory });
+
+    await this._addSalesDiscard({ productList: returnableProductList, sales });
 
     await this._listAndDiscardServiceMembership({ salesId });
 
     await this.database.sales.discard({ id: salesId });
+
     return { status: 'success' };
   }
 
