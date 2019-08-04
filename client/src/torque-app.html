@@ -169,21 +169,23 @@
         --paper-icon-button-ink-color: var(--app-primary-text-color);
       }
 
-      .drawer-list {
-        margin: 0 020px;
+      .custom-drawer-list {
+        margin: 20px 0;
+        padding-bottom: 40px;
+        display: block;
       }
 
       .logout-link,
-      .drawer-list a {
+      .custom-drawer-list>a {
         display: block;
-        padding: 0 16px;
+        padding: 2px 16px;
         text-decoration: none;
-        color: var(--app-text);
+        color: #dedede;
         line-height: 40px;
       }
 
-      .drawer-list a.iron-selected {
-        color: var(--app-text);
+      .custom-drawer-list>a.iron-selected {
+        color: var(--app-primary-color-light);
         font-weight: bold;
       }
 
@@ -232,86 +234,94 @@
         cursor: pointer;
       }
 
-      .app-drawer-wrapper {
+      .custom-app-drawer-wrapper {
         display: block;
-        height: 100vh;
-        overflow-y: auto;
+        /* height: 100vh; */
+        /* overflow-y: auto; */
+        background-color: rgb(255, 255, 255);
+        min-width: 240px;
+        z-index: 99;
       }
 
-      .sidebar-logo-image {
-        padding-top: 20px;
+      .custom-app-drawer {
+        display: block;
+        height: calc(100vh - 64px);
+        overflow-y: auto;
+        background-color: #262838;
+        min-width: 240px;
+        max-width: 240px;
+        z-index: 99;
+      }
+
+      .custom-sidebar-logo-image {
+        padding-top: 30px;
         height: 60px;
         width: 60px;
       }
 
-      .sidebar-divider {
+      .custom-sidebar-divider {
         border: 0;
         height: 0;
         border-top: 1px solid rgba(0, 0, 0, 0.2);
         border-bottom: 1px solid rgba(255, 255, 255, 0.3);
       }
+
+      #top-nav-hamburger {
+        display: none;
+      }
+
+      .main-iron-pages-wrapper {
+        max-height: calc(100vh - 64px);
+        overflow-y: auto;
+      }
+
+      @media (max-width: 960px) {
+        .custom-app-drawer-wrapper {
+          animation-duration: 0.3s;
+          animation-name: slidein;
+          display: block;
+          position: fixed;
+          left: 0px;
+          width: calc(100vh + 40px);
+          overflow-x: hidden;
+          background: #00000059;
+        }
+
+        #top-nav-hamburger {
+          display: inline-flex;
+        }
+      }
+
+      @media print {
+        .custom-app-drawer-wrapper {
+          display: none;
+        }
+
+        .main-iron-pages-wrapper {
+          padding-top: 20px;
+          max-height: none;
+          /* overflow-y: auto; */
+        }
+
+        app-header {
+          display: none;
+        }
+      }
+
+      @keyframes slidein {
+        from {
+          margin-left: -100%;
+          width: 300%;
+        }
+
+        to {
+          margin-left: 0%;
+          width: 100%;
+        }
+      }
     </style>
 
-    <app-drawer-layout responsive-width="2560px" fullbleed narrow="{{narrow}}">
-      <!-- Drawer content -->
-      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]" style$="[[$invisibleUnless(user)]]">
-        <div class="app-drawer-wrapper">
-          <app-toolbar class="sidebar-title">
-            <img class="sidebar-logo-image" src="../images/logo.png">
-          </app-toolbar>
-          <iron-selector selected="[[pageName]]" attr-for-selected="name" class="drawer-list" role="navigation">
-
-            <a name="home" href="#/home">[[verses.sidebar.home]]</a>
-            <hr class="sidebar-divider">
-
-            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-              <a name="manage-product-blueprints" href="#/manage-product-blueprints">[[verses.sidebar.productBlueprints]]</a>
-            </template>
-            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
-              <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
-            </template>
-            <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
-            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-              <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
-            </template>
-            <hr class="sidebar-divider">
-
-            <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
-            <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
-            <hr class="sidebar-divider">
-
-            <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>
-            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-              <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.manageProductCategories]]</a>
-            </template>
-            <hr class="sidebar-divider">
-
-            <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
-            <a name="report-collections" href="#/report-collections">[[verses.sidebar.collectionReport]]</a>
-            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-              <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
-            </template>
-            <hr class="sidebar-divider">
-
-            <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
-            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-              <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
-            </template>
-            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
-              <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
-            </template>
-            <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-              <a name="manage-product-transfers" href="#/manage-product-transfers">[[verses.sidebar.manageProductTransfer]]</a>
-            </template>
-            <hr class="sidebar-divider">
-
-            <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
-            <a name="settings" href="#/settings">[[verses.sidebar.settings]]</a>
-            <a name="about" href="#/about">[[verses.sidebar.about]]</a>
-
-          </iron-selector>
-        </div>
-      </app-drawer>
+    <app-drawer-layout responsive-width="4000px" fullbleed narrow="{{narrow}}">
 
       <template is="dom-if" if="[[$and(activeServiceCount, topSpinnerEnabled)]]">
         <div class="top-nav-spinner-container">
@@ -325,12 +335,12 @@
         <app-header slot="header" style$="[[$invisibleUnless(user)]]" fixed>
           <app-toolbar>
             <template is="dom-if" if="[[!currentPageIsModal]]">
-              <paper-icon-button icon="shared-icons:menu" drawer-toggle=""></paper-icon-button>
+              <paper-icon-button id="top-nav-hamburger" icon="shared-icons:menu" on-tap="topNavHamburgerTapped"></paper-icon-button>
             </template>
             <template is="dom-if" if="[[$and(currentPageIsModal,currentPageAllowsBackButton)]]">
               <paper-icon-button icon="arrow-back" on-click="backButtonOnTopBarPressed"></paper-icon-button>
             </template>
-            <div main-title="" class="flex vertical layout">
+            <div main-title="" class="flex vertical layout" style="padding-bottom: 8px;">
               <div style$="[[$computePageTitleFontSize(pageTitleList.length)]]">[[$getPageTitle(pageTitleList.length)]]</div>
               <div class="title-line-2">[[organization.name]]</div>
             </div>
@@ -354,72 +364,157 @@
           </app-toolbar>
         </app-header>
 
-        <iron-pages on-iron-select="mainIronPagesIronSelected" id="main-iron-pages" selected="[[pageName]]" attr-for-selected="name" fallback-selection="error404" role="main">
-          <page-home name="home"></page-home>
-          <page-payment name="payment"></page-payment>
-          <page-settings name="settings"></page-settings>
-          <page-error404 name="error404"></page-error404>
-          <page-error403 name="error403"></page-error403>
-          <page-about name="about"></page-about>
-          <page-login name="login"></page-login>
-          <page-verify name="verify"></page-verify>
-          <page-confirm-password-reset name="confirm-password-reset"></page-confirm-password-reset>
-          <page-register name="register"></page-register>
-          <page-toc name="toc"></page-toc>
-          <page-edit-profile name="edit-profile"></page-edit-profile>
-          <page-add-organization name="add-organization"></page-add-organization>
-          <page-manage-organizations name="manage-organizations"></page-manage-organizations>
-          <page-manage-employees name="manage-employees"></page-manage-employees>
-          <page-add-employee name="add-employee"></page-add-employee>
-          <page-view-employee name="view-employee"></page-view-employee>
-          <page-edit-employee name="edit-employee"></page-edit-employee>
-          <page-hire-employee name="hire-employee"></page-hire-employee>
-          <page-manage-outlets name="manage-outlets"></page-manage-outlets>
-          <page-edit-outlet name="edit-outlet"></page-edit-outlet>
-          <page-view-outlet name="view-outlet"></page-view-outlet>
-          <page-manage-warehouses name="manage-warehouses"></page-manage-warehouses>
-          <page-view-warehouse name="view-warehouse"></page-view-warehouse>
-          <page-edit-warehouse name="edit-warehouse"></page-edit-warehouse>
-          <page-manage-product-blueprints name="manage-product-blueprints"></page-manage-product-blueprints>
-          <page-edit-product-blueprint name="edit-product-blueprint"></page-edit-product-blueprint>
-          <page-manage-service-blueprints name="manage-service-blueprints"></page-manage-service-blueprints>
-          <page-edit-service-blueprint name="edit-service-blueprint"></page-edit-service-blueprint>
-          <page-manage-outlet-services name="manage-outlet-services"></page-manage-outlet-services>
-          <page-view-inventory name="view-inventory"></page-view-inventory>
-          <page-transfer-products name="transfer-products"></page-transfer-products>
-          <page-add-products name="add-products"></page-add-products>
-          <page-manage-customers name="manage-customers"></page-manage-customers>
-          <page-view-customer name="view-customer"></page-view-customer>
-          <page-edit-customer name="edit-customer"></page-edit-customer>
-          <page-manage-product-categories name="manage-product-categories"></page-manage-product-categories>
-          <page-edit-product-category name="edit-product-category"></page-edit-product-category>
-          <page-withdraw-from-change-wallet-balance name="withdraw-from-change-wallet-balance"></page-withdraw-from-change-wallet-balance>
-          <page-pos name="pos"></page-pos>
-          <page-report-sales name="report-sales"></page-report-sales>
-          <page-report-collections name="report-collections"></page-report-collections>
-          <page-report-inventories name="report-inventories"></page-report-inventories>
-          <page-manage-product-transfers name="manage-product-transfers"></page-manage-product-transfers>
-          <page-view-product-transfer name="view-product-transfer"></page-view-product-transfer>
-          <page-report-select-inventories name="report-select-inventories"></page-report-select-inventories>
-          <page-pos-select-products name="pos-select-products"></page-pos-select-products>
-          <page-pos-select-services name="pos-select-services"></page-pos-select-services>
-          <page-pos-assign-employee-service name="pos-assign-employee-service"></page-pos-assign-employee-service>
-          <page-pos-assign-assisted-by-employee name="pos-assign-assisted-by-employee"></page-pos-assign-assisted-by-employee>
-          <page-manage-sales name="manage-sales"></page-manage-sales>
-          <page-view-sales name="view-sales"></page-view-sales>
-          <page-manage-sales-return name="manage-sales-return"></page-manage-sales-return>
-          <page-edit-sales-return name="edit-sales-return"></page-edit-sales-return>
-          <page-manage-service-membership name="manage-service-membership"></page-manage-service-membership>
-          <page-view-sales-return name="view-sales-return"></page-view-sales-return>
-          <page-print-sales-receipt name="print-sales-receipt"></page-print-sales-receipt>
-          <page-bulk-import-product-blueprints name="bulk-import-product-blueprints"></page-bulk-import-product-blueprints>
-          <page-select-geolocation name="select-geolocation"></page-select-geolocation>
-          <page-scan-identifier-code name="scan-identifier-code"></page-scan-identifier-code>
-          <page-manage-discount-presets name="manage-discount-presets"></page-manage-discount-presets>
-          <page-edit-discount-preset name="edit-discount-preset"></page-edit-discount-preset>
-          <page-report-select-product-blueprints name="report-select-product-blueprints"></page-report-select-product-blueprints>
-          <page-report-select-product-categories name="report-select-product-categories"></page-report-select-product-categories>
-        </iron-pages>
+        <div class="horizontal layout">
+          <!-- Drawer content - start -->
+          <div class="custom-app-drawer-wrapper" on-tap="customAppDrawerWrapperTapped" style$="[[customAppDrawerStyle(user, isFloatingAppDrawerExpanded, innerWidth, isInOfflineMode)]]">
+            <div class="custom-app-drawer" on-tap="customAppDrawerTapped">
+              <app-toolbar class="sidebar-title">
+                <img class="custom-sidebar-logo-image" src="../images/logo.png">
+              </app-toolbar>
+              <iron-selector selected="[[pageName]]" attr-for-selected="name" class="custom-drawer-list" role="navigation">
+
+                <a name="home" href="#/home">[[verses.sidebar.home]]</a>
+                <hr class="custom-sidebar-divider">
+
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-product-blueprints" href="#/manage-product-blueprints">[[verses.sidebar.productBlueprints]]</a>
+                </template>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
+                  <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
+                </template>
+                <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
+                </template>
+                <hr class="custom-sidebar-divider">
+
+                <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
+                <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
+                <hr class="custom-sidebar-divider">
+
+                <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.manageProductCategories]]</a>
+                </template>
+                <hr class="custom-sidebar-divider">
+
+                <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
+                <a name="report-collections" href="#/report-collections">[[verses.sidebar.collectionReport]]</a>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
+                </template>
+                <hr class="custom-sidebar-divider">
+
+                <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
+                </template>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
+                  <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
+                </template>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-product-transfers" href="#/manage-product-transfers">[[verses.sidebar.manageProductTransfer]]</a>
+                </template>
+                <hr class="custom-sidebar-divider">
+
+                <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
+                <a name="settings" href="#/settings">[[verses.sidebar.settings]]</a>
+                <a name="about" href="#/about">[[verses.sidebar.about]]</a>
+
+              </iron-selector>
+            </div>
+          </div>
+          <!-- Drawer content - end -->
+          <div class="flex main-iron-pages-wrapper">
+            <iron-pages on-iron-select="mainIronPagesIronSelected" id="main-iron-pages" selected="[[pageName]]" attr-for-selected="name" fallback-selection="error404" role="main">
+              <page-home name="home"></page-home>
+              <page-payment name="payment"></page-payment>
+              <page-settings name="settings"></page-settings>
+              <page-error404 name="error404"></page-error404>
+              <page-error403 name="error403"></page-error403>
+              <page-about name="about"></page-about>
+              <page-login name="login"></page-login>
+              <page-verify name="verify"></page-verify>
+              <page-confirm-password-reset name="confirm-password-reset"></page-confirm-password-reset>
+              <page-register name="register"></page-register>
+              <page-toc name="toc"></page-toc>
+              <page-edit-profile name="edit-profile"></page-edit-profile>
+              <page-add-organization name="add-organization"></page-add-organization>
+              <page-manage-organizations name="manage-organizations"></page-manage-organizations>
+              <page-manage-employees name="manage-employees"></page-manage-employees>
+              <page-add-employee name="add-employee"></page-add-employee>
+              <page-view-employee name="view-employee"></page-view-employee>
+              <page-edit-employee name="edit-employee"></page-edit-employee>
+              <page-hire-employee name="hire-employee"></page-hire-employee>
+              <page-manage-outlets name="manage-outlets"></page-manage-outlets>
+              <page-edit-outlet name="edit-outlet"></page-edit-outlet>
+              <page-view-outlet name="view-outlet"></page-view-outlet>
+              <page-manage-warehouses name="manage-warehouses"></page-manage-warehouses>
+              <page-view-warehouse name="view-warehouse"></page-view-warehouse>
+              <page-edit-warehouse name="edit-warehouse"></page-edit-warehouse>
+              <page-manage-product-blueprints name="manage-product-blueprints"></page-manage-product-blueprints>
+              <page-edit-product-blueprint name="edit-product-blueprint"></page-edit-product-blueprint>
+              <page-manage-service-blueprints name="manage-service-blueprints"></page-manage-service-blueprints>
+              <page-edit-service-blueprint name="edit-service-blueprint"></page-edit-service-blueprint>
+              <page-manage-outlet-services name="manage-outlet-services"></page-manage-outlet-services>
+              <page-view-inventory name="view-inventory"></page-view-inventory>
+              <page-transfer-products name="transfer-products"></page-transfer-products>
+              <page-add-products name="add-products"></page-add-products>
+              <page-manage-customers name="manage-customers"></page-manage-customers>
+              <page-view-customer name="view-customer"></page-view-customer>
+              <page-edit-customer name="edit-customer"></page-edit-customer>
+              <page-manage-product-categories name="manage-product-categories"></page-manage-product-categories>
+              <page-edit-product-category name="edit-product-category"></page-edit-product-category>
+              <page-withdraw-from-change-wallet-balance name="withdraw-from-change-wallet-balance"></page-withdraw-from-change-wallet-balance>
+              <page-pos name="pos"></page-pos>
+              <page-report-sales name="report-sales"></page-report-sales>
+              <page-report-collections name="report-collections"></page-report-collections>
+              <page-report-inventories name="report-inventories"></page-report-inventories>
+              <page-manage-product-transfers name="manage-product-transfers"></page-manage-product-transfers>
+              <page-view-product-transfer name="view-product-transfer"></page-view-product-transfer>
+              <page-report-select-inventories name="report-select-inventories"></page-report-select-inventories>
+              <page-pos-select-products name="pos-select-products"></page-pos-select-products>
+              <page-pos-select-services name="pos-select-services"></page-pos-select-services>
+              <page-pos-assign-employee-service name="pos-assign-employee-service"></page-pos-assign-employee-service>
+              <page-pos-assign-assisted-by-employee name="pos-assign-assisted-by-employee"></page-pos-assign-assisted-by-employee>
+              <page-manage-sales name="manage-sales"></page-manage-sales>
+              <page-view-sales name="view-sales"></page-view-sales>
+              <page-manage-sales-return name="manage-sales-return"></page-manage-sales-return>
+              <page-edit-sales-return name="edit-sales-return"></page-edit-sales-return>
+              <page-manage-service-membership name="manage-service-membership"></page-manage-service-membership>
+              <page-view-sales-return name="view-sales-return"></page-view-sales-return>
+              <page-print-sales-receipt name="print-sales-receipt"></page-print-sales-receipt>
+              <page-bulk-import-product-blueprints name="bulk-import-product-blueprints"></page-bulk-import-product-blueprints>
+              <page-select-geolocation name="select-geolocation"></page-select-geolocation>
+              <page-scan-identifier-code name="scan-identifier-code"></page-scan-identifier-code>
+              <page-manage-discount-presets name="manage-discount-presets"></page-manage-discount-presets>
+              <page-edit-discount-preset name="edit-discount-preset"></page-edit-discount-preset>
+              <page-report-select-product-blueprints name="report-select-product-blueprints"></page-report-select-product-blueprints>
+              <page-report-select-product-categories name="report-select-product-categories"></page-report-select-product-categories>
+            </iron-pages>
+
+            <div class="footer">
+              <div>
+                <img src="../images/icons/en-us.png" data-key="en-us" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'en-us')]]" on-tap="languageIconTapped">
+                <img src="../images/icons/bn-bd.png" data-key="bn-bd" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'bn-bd')]]" on-tap="languageIconTapped">
+              </div>
+              <br>
+              <br>
+              <div>&#xA9; 2017
+                <a style="color: var(--app-primary-color-dark);" href="[[authorWebsite]]">[[authorName]]</a>
+              </div>
+              <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
+              <div>
+                <span class="extra-small" on-click="buildNumberTapped">ver [[appVersion]]</span>
+                <paper-icon-button icon="[[websocketConnectivityIndicatorIconName]]" on-tap="websocketConnectivityIndicatorIconTapped"></paper-icon-button>
+                <span class="extra-small" on-click="buildNumberTapped">build
+                  <span id="build-number">[[__deploy.build]]</span>
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
 
         <paper-dialog id="category-dialog" modal style="z-index: -999999">
           <h2>[[verses.productCategoryPicker.pickerTitle]]</h2>
@@ -448,26 +543,6 @@
           </div>
         </paper-dialog>
 
-        <div class="footer">
-          <div>
-            <img src="../images/icons/en-us.png" data-key="en-us" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'en-us')]]" on-tap="languageIconTapped">
-            <img src="../images/icons/bn-bd.png" data-key="bn-bd" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'bn-bd')]]" on-tap="languageIconTapped">
-          </div>
-          <br>
-          <br>
-          <div>&#xA9; 2017
-            <a style="color: var(--app-primary-color-dark);" href="[[authorWebsite]]">[[authorName]]</a>
-          </div>
-          <div style="margin-top: 12px">[[verses.root.rightsReserved]]</div>
-          <div>
-            <span class="extra-small" on-click="buildNumberTapped">ver [[appVersion]]</span>
-            <paper-icon-button icon="[[websocketConnectivityIndicatorIconName]]" on-tap="websocketConnectivityIndicatorIconTapped"></paper-icon-button>
-            <span class="extra-small" on-click="buildNumberTapped">build
-              <span id="build-number">[[__deploy.build]]</span>
-            </span>
-          </div>
-
-        </div>
       </app-header-layout>
     </app-drawer-layout>
     <paper-toast id="generic-toast" text="Done"></paper-toast>
@@ -491,7 +566,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":231,"datetimeStamp":1563941636176}');
+              return JSON.parse('{"build":233,"datetimeStamp":1564384907052}');
               '%__deploy-end'
             }
           },
@@ -557,6 +632,10 @@
           isInOfflineMode: {
             type: Boolean,
             value: false
+          },
+          isFloatingAppDrawerExpanded: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -604,6 +683,8 @@
         this.useLanguageServices();
         this.initiateLanguageServices();
         this.pushPageTitle(this.brandName);
+        window.addEventListener('resize', () => this.updateInnerWidth());
+        this.updateInnerWidth()
         this._notifyResizeHack();
         window.setTimeout(() => this._initiateBackgroundSync(), backgroundSyncInitialDelay);
         this.delay(5000, () => this._assertApiKey());
@@ -809,6 +890,8 @@
       // ====================== navigation =============================
 
       _pageNameChanged() {
+        this.isFloatingAppDrawerExpanded = false;
+        this.initiateAppDrawerControls();
         if (this.isInOfflineMode) {
           const allowedPageNameList = [
             'login',
@@ -1163,7 +1246,49 @@
         });
       }
 
+      // ====================== app drawer =============================
+
+      initiateAppDrawerControls() {
+        // NOTE: below is necessary to maintain compatibility
+        // with polymer.
+        this.$.drawer = {
+          close() { },
+          persistent: true
+        }
+      }
+
+      customAppDrawerStyle(user, isFloatingAppDrawerExpanded, innerWidth, isInOfflineMode) {
+        let str = 'display: ';
+        if (!user) {
+          str += 'none';
+        } else if (isInOfflineMode) {
+          str += 'none';
+        } else if (innerWidth < 960 && !isFloatingAppDrawerExpanded) {
+          str += 'none';
+        } else {
+          str = 'block';
+        }
+        str += ';';
+        return str;
+      }
+
+      customAppDrawerWrapperTapped(e) {
+        this.isFloatingAppDrawerExpanded = false;
+      }
+
+      customAppDrawerTapped(e) {
+        e.stopPropagation();
+      }
+
+      topNavHamburgerTapped(e) {
+        this.isFloatingAppDrawerExpanded = !this.isFloatingAppDrawerExpanded
+      }
+
       // ====================== utilities =============================
+
+      updateInnerWidth() {
+        this.innerWidth = window.innerWidth;
+      }
 
       showAlertMessage(...args) {
         this.showModalDialog.apply(this, args);
@@ -1198,10 +1323,10 @@
 
       $computePageTitleFontSize(length) {
         let title = this.$getPageTitle(length) || "Lipi";
-        let size = 20;
+        let size = 18;
         let windowWidth = window.document.body.clientWidth;
         if (windowWidth <= 496) {
-          if (title.length < 20) size = 20;
+          if (title.length < 20) size = 18;
           else if (title.length < 30) size = 14;
           else size = 12;
         }

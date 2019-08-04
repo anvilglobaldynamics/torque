@@ -18,6 +18,7 @@ const { PhoneVerificationRequestCollection } = require('./collections/phone-veri
 const { ProductBlueprintCollection } = require('./collections/product-blueprint');
 const { ProductCollection } = require('./collections/product');
 const { SalesReturnCollection } = require('./collections/sales-return');
+const { SalesDiscardCollection } = require('./collections/sales-discard');
 const { SalesCollection } = require('./collections/sales');
 const { SesssionCollection } = require('./collections/session');
 const { UserCollection } = require('./collections/user');
@@ -56,6 +57,7 @@ class DatabaseService {
     this.productBlueprint = new ProductBlueprintCollection(this.engine, this);
     this.product = new ProductCollection(this.engine, this);
     this.salesReturn = new SalesReturnCollection(this.engine, this);
+    this.salesDiscard = new SalesDiscardCollection(this.engine, this);
     this.sales = new SalesCollection(this.engine, this);
     this.sesssion = new SesssionCollection(this.engine, this);
     this.user = new UserCollection(this.engine, this);
