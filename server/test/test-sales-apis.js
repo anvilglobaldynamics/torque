@@ -43,6 +43,8 @@ let {
   getActiveServiceList,
   addSales,
 
+  getAsyncDatabase,
+
   validateGetDiscountPresetListApiSuccessResponse,
   validateDiscountPresetSchema,
   validateAddDiscountPresetApiSuccessResponse,
@@ -138,7 +140,7 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
-describe('Sales', _ => {
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -1285,7 +1287,16 @@ describe('Sales', _ => {
       validateSalesSchema(body.sales);
 
       expect(body.sales).to.have.property('isDiscarded').that.equals(true);
-      testDoneFn();
+
+      // Check and make sure data has actually changed in database
+      getAsyncDatabase().salesDiscard.findBySalesId({ salesId }).then((sales) => {
+
+        expect(body.sales.productList[0].productId).to.equal(sales.returnedProductList[0].productId);
+        expect(body.sales.productList[0].count - body.sales.productList[0].returnedProductCount).to.equal(sales.returnedProductList[0].count);
+
+        testDoneFn();
+      });
+
     });
 
   });
