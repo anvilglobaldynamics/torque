@@ -140,7 +140,7 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
-describe('Sales', _ => {
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -2164,6 +2164,40 @@ describe('Sales', _ => {
     });
 
   });
+
+    // Graph Sales - Start
+
+  it('api/graph-sales (Valid only organization Id )', testDoneFn => {
+
+    let fromDateLocal = new Date(fromDate);
+    fromDateLocal.setMonth(1);
+
+    callApi('api/graph-sales ', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        shouldFilterByOutlet: false,
+        fromDate: fromDateLocal.getTime(),
+        periodLevel: 'month'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      // FIXME: Actually write test
+
+      console.log(body);
+      // process.exit();
+      // validateGetSalesListApiSuccessResponse(body);
+      // body.salesList.forEach(sales => {
+      //   validateSalesSchemaWhenListObj(sales);
+      // });
+      testDoneFn();
+    });
+
+  });
+
+  // Graph Sales - End
 
   // Collection Report - Start
 
