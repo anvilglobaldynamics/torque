@@ -21,9 +21,14 @@ exports.GetProductCategoryListApi = class extends Api {
     });
   }
 
+  // privilege is same as product-blueprint to reflect real life use case.
+  // product blueprint and category is 1to1 relation
   get accessControl() {
     return [{
       organizationBy: "organizationId",
+      privilegeList: [
+        "PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS"
+      ],
       moduleList: [
         "MOD_PRODUCT",
       ]
