@@ -37,7 +37,7 @@ const vendorPhone = 'v1' + rnd(prefix, 11);
 const vendorPhone2 = 'v2' + rnd(prefix, 11);
 const vendorPhone3 = 'v3' + rnd(prefix, 11);
 
-describe.only('Vendor', _ => {
+describe('Vendor', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
