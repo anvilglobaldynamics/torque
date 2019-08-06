@@ -10,6 +10,7 @@ let {
   addOrganization,
 
   validateAddVendorApiSuccessResponse,
+  validateGenericApiSuccessResponse,
   validateGenericApiFailureResponse,
   validateGetVendorListApiSuccessResponse,
   validateVendorSchema
@@ -236,6 +237,56 @@ describe.only('Vendor', _ => {
   });
 
   // Get - end
+  // Edit - start
+
+  it('api/edit-vendor (Valid)', testDoneFn => {
+
+    callApi('api/edit-vendor', {
+      json: {
+        apiKey,
+        vendorId: vendor.id,
+        name: "1st new vendor",
+        contactPersonName: "a person",
+        phone: vendorPhone,
+        physicalAddress: "an address"
+      }
+    }, (err, response, body) => {
+      console.log(body);
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    })
+
+  });
+
+  it.skip('api/get-vendor-list (Valid, check)', testDoneFn => {
+
+    callApi('api/get-vendor-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: '',
+        vendorIdList: [vendor.id]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetVendorListApiSuccessResponse(body);
+
+      body.vendorList.forEach(vendor => {
+        validateVendorSchema(vendor);
+      });
+
+      expect(body.vendorList.length).to.equal(1);
+
+      // update checks here
+      expect(body.vendorList[0].name).to.equal("1st new vendor");
+      testDoneFn();
+    });
+
+  });
+
+  // Edit - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

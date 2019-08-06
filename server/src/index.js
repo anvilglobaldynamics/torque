@@ -116,6 +116,7 @@ const { GetProductCategoryListApi } = require('./apis/get-product-category-list'
 
 const { AddVendorApi } = require('./apis/add-vendor');
 const { GetVendorListApi } = require('./apis/get-vendor-list');
+const { EditVendorApi } = require('./apis/edit-vendor');
 
 const { ShopLocateNearbyOutletsApi } = require('./apis/shop-locate-nearby-outlets');
 const { ShopGetOutletDetailsApi } = require('./apis/shop-get-outlet-details');
@@ -362,6 +363,7 @@ class Program {
 
     server.registerPostApi('/api/add-vendor', AddVendorApi);
     server.registerPostApi('/api/get-vendor-list', GetVendorListApi);
+    server.registerPostApi('/api/edit-vendor', EditVendorApi);
 
     server.registerPostApi('/api/admin-login', AdminLoginApi);
     server.registerPostApi('/api/admin-get-outgoing-sms-list', AdminGetOutgoingSmsListApi);
