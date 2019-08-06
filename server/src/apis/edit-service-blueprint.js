@@ -36,7 +36,7 @@ exports.EditServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin)
         from: "service-blueprint",
         query: ({ serviceBlueprintId }) => ({ id: serviceBlueprintId }),
         select: "organizationId",
-        errorCode: "PRODUCT_BLUEPRINT_INVALID"
+        errorCode: "SERVICE_BLUEPRINT_INVALID"
       },
       privilegeList: [
         "PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS"
