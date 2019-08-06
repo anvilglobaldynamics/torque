@@ -8,7 +8,8 @@ method: `POST`
 ```js
 {
   apiKey: Joi.string().length(64).required(),
-  organizationId: Joi.number().max(999999999999999).required()
+  organizationId: Joi.number().max(999999999999999).required(),
+  discountPresetIdList: Joi.array().items(Joi.number()).default([]).optional() 
 }
 ```
 
@@ -28,6 +29,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: ORGANIZATION_INVALID } // the organization id is invalid
+{ code: DISCOUNT_PRESET_INVALID } // the discount preset is invalid
 ```
 
 ### response (on success):

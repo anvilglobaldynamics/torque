@@ -45,7 +45,7 @@
             </paper-dropdown-menu>
 
             <template is="dom-if" if="[[$equals(editDiscountPresetForm.discountType, 'percent')]]">
-              <paper-input class="editDiscountPresetForm--discountValue flex" on-change="genericDiscountValueInputChanged"  value="{{editDiscountPresetForm.discountValue}}" type="number" required min="0" max="100" label="[[verses.discountPreset.discountValueInput]]">
+              <paper-input class="editDiscountPresetForm--discountValue flex" on-change="genericDiscountValueInputChanged" value="{{editDiscountPresetForm.discountValue}}" type="number" required min="0" max="100" label="[[verses.discountPreset.discountValueInput]]">
                 <div slot="suffix">%</div>
               </paper-input>
             </template>
@@ -125,16 +125,16 @@
           this.app.pushPageTitle(this.app.verses.discountPreset.addDiscountPresetTitle);
         }
         if (!this._ensureAccess()) return;
-        this._processGetDiscountPresetList(() => {
-          if (this.editMode) {
-            this._processGetDiscountPreset();
+
+        if (this.editMode) {
+          this._processGetDiscountPreset(() => {
             this.isReady = true;
-          } else {
-            this.delay(300, () => {
-              this.isReady = true;
-            });
-          }
-        });
+          });
+        } else {
+          this.delay(300, () => {
+            this.isReady = true;
+          });
+        }
       }
 
       onNavigateOut() {
@@ -153,25 +153,29 @@
 
       // region: editDiscountPreset =================================
 
-      _processGetDiscountPresetList(cbfn) {
+      _fetchDiscountPreset({ discountPresetId }, cbfn) {
         let data = {
-          organizationId: this.app.organization.id
+          organizationId: this.app.organization.id,
+          discountPresetIdList: [discountPresetId]
         };
         this.app.callGetDiscountPresetListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this._discountPresetList = response.discountPresetList;
-          cbfn();
+          let discountPreset = response.discountPresetList[0];
+          cbfn({ discountPreset });
         });
       }
 
-      _processGetDiscountPreset() {
-        let discountPreset = this._discountPresetList.find(discountPreset => {
-          return discountPreset.id === parseInt(this.params['discount-preset']);
+      _processGetDiscountPreset(cbfn) {
+        let discountPresetId = parseInt(this.params['discount-preset']);
+        this._fetchDiscountPreset({ discountPresetId }, ({ discountPreset }) => {
+
+          this.editingDiscountPreset = discountPreset;
+          let { name, discountType, discountValue } = discountPreset;
+          this.editDiscountPresetForm = { name, discountType, discountValue };
+
+          cbfn();
         });
-        this.editingDiscountPreset = discountPreset;
-        let { name, discountType, discountValue } = discountPreset;
-        this.editDiscountPresetForm = { name, discountType, discountValue };
       }
 
       _processCreateDiscountPreset({ name, discountType, discountValue }) {
