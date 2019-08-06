@@ -16,7 +16,7 @@ exports.GraphSalesApi = class extends Api {
       shouldFilterByOutlet: Joi.boolean().required(),
       outletId: Joi.number().max(999999999999999).allow(null).required(),
       fromDate: Joi.number().max(999999999999999).required(),
-      periodLevel: Joi.string().valid('week', 'month', 'year-quarterly', 'year')
+      periodLevel: Joi.string().valid('week', 'month', 'year-quarterly', 'year-monthly')
     });
   }
 
@@ -54,123 +54,154 @@ exports.GraphSalesApi = class extends Api {
     date.setMilliseconds(0);
   }
 
-  __prepareDateRanges({ fromDate, periodLevel }) {
+  __prepareDateRangesForWeek({ refDate }) {
     const weekDayList = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-    const monthDayList = (new Array(31)).fill(null).map((_, i) => i + 1);
-    const yearMonthList = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    const yearQuarterList = ['Q1', 'Q2', 'Q3', 'Q4'];
-
-    let refDate = new Date(fromDate);
 
     let dateRangeList = [];
 
-    if (periodLevel === 'week') {
-      let dow = refDate.getDay(); // NOTE: 0 = sunday
+    let dow = refDate.getDay(); // NOTE: 0 = sunday
 
-      let rangeListStartDate = new Date(fromDate);
-      rangeListStartDate.setDate(rangeListStartDate.getDate() - dow);
+    let rangeListStartDate = new Date(refDate.getTime());
+    rangeListStartDate.setDate(rangeListStartDate.getDate() - dow);
 
-      for (let i = 0; i < weekDayList.length; i++) {
+    for (let i = 0; i < weekDayList.length; i++) {
 
-        let startDate = new Date(rangeListStartDate.getTime());
-        startDate.setDate(startDate.getDate() + i);
-        this.__setToDayStart(startDate);
-        let startDatetimeStamp = startDate.getTime();
+      let startDate = new Date(rangeListStartDate.getTime());
+      startDate.setDate(startDate.getDate() + i);
+      this.__setToDayStart(startDate);
+      let startDatetimeStamp = startDate.getTime();
 
-        let endDate = new Date(rangeListStartDate.getTime());
-        endDate.setDate(endDate.getDate() + i);
-        this.__setToDayEnd(endDate);
-        let endDatetimeStamp = endDate.getTime();
+      let endDate = new Date(rangeListStartDate.getTime());
+      endDate.setDate(endDate.getDate() + i);
+      this.__setToDayEnd(endDate);
+      let endDatetimeStamp = endDate.getTime();
 
-        dateRangeList.push({
-          startDatetimeStamp,
-          endDatetimeStamp,
-          label: weekDayList[i]
-        });
-      }
-    } else if (periodLevel === 'month') {
-      let dom = refDate.getDate() - 1; // NOTE: getDate starts from 1
-
-      let rangeListStartDate = new Date(fromDate);
-      rangeListStartDate.setDate(rangeListStartDate.getDate() - dom);
-
-      for (let i = 0; i < monthDayList.length; i++) {
-
-        let startDate = new Date(rangeListStartDate.getTime());
-        startDate.setDate(startDate.getDate() + (i));
-        this.__setToDayStart(startDate);
-        let startDatetimeStamp = startDate.getTime();
-
-        if (startDate.getMonth() !== refDate.getMonth()) continue;
-
-        let endDate = new Date(rangeListStartDate.getTime());
-        endDate.setDate(endDate.getDate() + (i));
-        this.__setToDayEnd(endDate);
-        let endDatetimeStamp = endDate.getTime();
-
-        dateRangeList.push({
-          startDatetimeStamp,
-          endDatetimeStamp,
-          label: monthDayList[i]
-        });
-      }
-    } else if (periodLevel === 'year') {
-      let moy = refDate.getMonth(); // NOTE: getMonth starts from 0
-
-      let rangeListStartDate = new Date(fromDate);
-      rangeListStartDate.setMonth(rangeListStartDate.getMonth() - moy);
-
-      for (let i = 0; i < yearMonthList.length; i++) {
-
-        let startDate = new Date(rangeListStartDate.getTime());
-        startDate.setMonth(startDate.getMonth() + (i));
-        startDate.setDate(1);
-        this.__setToDayStart(startDate);
-        let startDatetimeStamp = startDate.getTime();
-
-        let endDate = new Date(rangeListStartDate.getTime());
-        endDate.setMonth(endDate.getMonth() + (i) + 1);
-        endDate.setDate(1);
-        endDate.setDate(endDate.getDate() - 1);
-        this.__setToDayEnd(endDate);
-        let endDatetimeStamp = endDate.getTime();
-
-        dateRangeList.push({
-          startDatetimeStamp,
-          endDatetimeStamp,
-          label: yearMonthList[i]
-        });
-      }
-    } else if (periodLevel === 'year-quarterly') {
-      let moy = refDate.getMonth(); // NOTE: getMonth starts from 0
-
-      let rangeListStartDate = new Date(fromDate);
-      rangeListStartDate.setMonth(rangeListStartDate.getMonth() - moy);
-
-      for (let i = 0; i < yearQuarterList.length; i++) {
-
-        let startDate = new Date(rangeListStartDate.getTime());
-        startDate.setMonth(startDate.getMonth() + (i * 3));
-        startDate.setDate(1);
-        this.__setToDayStart(startDate);
-        let startDatetimeStamp = startDate.getTime();
-
-        let endDate = new Date(rangeListStartDate.getTime());
-        endDate.setMonth(endDate.getMonth() + (i * 3) + 2 +1);
-        endDate.setDate(1);
-        endDate.setDate(endDate.getDate() - 1);
-        this.__setToDayEnd(endDate);
-        let endDatetimeStamp = endDate.getTime();
-
-        dateRangeList.push({
-          startDatetimeStamp,
-          endDatetimeStamp,
-          label: yearQuarterList[i]
-        });
-      }
+      dateRangeList.push({
+        startDatetimeStamp,
+        endDatetimeStamp,
+        label: weekDayList[i]
+      });
     }
 
     return dateRangeList;
+  }
+
+  __prepareDateRangesForMonth({ refDate }) {
+    const monthDayList = (new Array(31)).fill(null).map((_, i) => i + 1);
+
+    let dateRangeList = [];
+
+    let dom = refDate.getDate() - 1; // NOTE: getDate starts from 1
+
+    let rangeListStartDate = new Date(refDate.getTime());
+    rangeListStartDate.setDate(rangeListStartDate.getDate() - dom);
+
+    for (let i = 0; i < monthDayList.length; i++) {
+
+      let startDate = new Date(rangeListStartDate.getTime());
+      startDate.setDate(startDate.getDate() + (i));
+      this.__setToDayStart(startDate);
+      let startDatetimeStamp = startDate.getTime();
+
+      if (startDate.getMonth() !== refDate.getMonth()) continue;
+
+      let endDate = new Date(rangeListStartDate.getTime());
+      endDate.setDate(endDate.getDate() + (i));
+      this.__setToDayEnd(endDate);
+      let endDatetimeStamp = endDate.getTime();
+
+      dateRangeList.push({
+        startDatetimeStamp,
+        endDatetimeStamp,
+        label: monthDayList[i]
+      });
+    }
+
+    return dateRangeList;
+  }
+
+  __prepareDateRangesForYearMonthly({ refDate }) {
+    const yearMonthList = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+    let dateRangeList = [];
+
+    let moy = refDate.getMonth(); // NOTE: getMonth starts from 0
+
+    let rangeListStartDate = new Date(refDate.getTime());
+    rangeListStartDate.setMonth(rangeListStartDate.getMonth() - moy);
+
+    for (let i = 0; i < yearMonthList.length; i++) {
+
+      let startDate = new Date(rangeListStartDate.getTime());
+      startDate.setMonth(startDate.getMonth() + (i));
+      startDate.setDate(1);
+      this.__setToDayStart(startDate);
+      let startDatetimeStamp = startDate.getTime();
+
+      let endDate = new Date(rangeListStartDate.getTime());
+      endDate.setMonth(endDate.getMonth() + (i) + 1);
+      endDate.setDate(1);
+      endDate.setDate(endDate.getDate() - 1);
+      this.__setToDayEnd(endDate);
+      let endDatetimeStamp = endDate.getTime();
+
+      dateRangeList.push({
+        startDatetimeStamp,
+        endDatetimeStamp,
+        label: yearMonthList[i]
+      });
+    }
+
+    return dateRangeList;
+  }
+
+  __prepareDateRangesForYearQuarterly({ refDate }) {
+    const yearQuarterList = ['Q1', 'Q2', 'Q3', 'Q4'];
+
+    let dateRangeList = [];
+
+    let moy = refDate.getMonth(); // NOTE: getMonth starts from 0
+
+    let rangeListStartDate = new Date(refDate.getTime());
+    rangeListStartDate.setMonth(rangeListStartDate.getMonth() - moy);
+
+    for (let i = 0; i < yearQuarterList.length; i++) {
+
+      let startDate = new Date(rangeListStartDate.getTime());
+      startDate.setMonth(startDate.getMonth() + (i * 3));
+      startDate.setDate(1);
+      this.__setToDayStart(startDate);
+      let startDatetimeStamp = startDate.getTime();
+
+      let endDate = new Date(rangeListStartDate.getTime());
+      endDate.setMonth(endDate.getMonth() + (i * 3) + 2 + 1);
+      endDate.setDate(1);
+      endDate.setDate(endDate.getDate() - 1);
+      this.__setToDayEnd(endDate);
+      let endDatetimeStamp = endDate.getTime();
+
+      dateRangeList.push({
+        startDatetimeStamp,
+        endDatetimeStamp,
+        label: yearQuarterList[i]
+      });
+    }
+
+    return dateRangeList;
+  }
+
+  __prepareDateRanges({ fromDate, periodLevel }) {
+    let refDate = new Date(fromDate);
+
+    if (periodLevel === 'week') {
+      return this.__prepareDateRangesForWeek({ refDate });
+    } else if (periodLevel === 'month') {
+      return this.__prepareDateRangesForMonth({ refDate });
+    } else if (periodLevel === 'year-monthly') {
+      return this.__prepareDateRangesForYearMonthly({ refDate });
+    } else if (periodLevel === 'year-quarterly') {
+      return this.__prepareDateRangesForYearQuarterly({ refDate });
+    }
   }
 
   async _getSalesGraphData({ outletIdList, outletId, shouldFilterByOutlet, dateRangeList }) {
@@ -226,7 +257,7 @@ exports.GraphSalesApi = class extends Api {
 
       let { sumTotalBilled, sumCount } = res[0];
 
-      labelList.push(label);
+      labelList.push(String(label));
       sumTotalBilledList.push(sumTotalBilled);
       sumCountList.push(sumCount);
     }
@@ -245,7 +276,7 @@ exports.GraphSalesApi = class extends Api {
 
     let graphData = await this._getSalesGraphData({ outletIdList, outletId, shouldFilterByOutlet, dateRangeList });
 
-    return graphData;
+    return { graphData };
 
   }
 
