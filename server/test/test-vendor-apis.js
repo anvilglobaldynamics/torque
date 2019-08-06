@@ -165,6 +165,7 @@ describe.only('Vendor', _ => {
 
       expect(body.vendorList.length).to.equal(2);
       vendor = body.vendorList[0];
+
       testDoneFn();
     });
 
@@ -218,7 +219,7 @@ describe.only('Vendor', _ => {
 
   });
 
-  it('api/get-vendor-list (Valid, invalid vendorIdList)', testDoneFn => {
+  it('api/get-vendor-list (Invalid vendorIdList)', testDoneFn => {
 
     callApi('api/get-vendor-list', {
       json: {
@@ -239,6 +240,45 @@ describe.only('Vendor', _ => {
   // Get - end
   // Edit - start
 
+  it('api/edit-vendor (Inalid, copy phone)', testDoneFn => {
+
+    callApi('api/edit-vendor', {
+      json: {
+        apiKey,
+        vendorId: vendor.id,
+        name: "1st new vendor",
+        contactPersonName: vendor.contactPersonName,
+        phone: vendorPhone,
+        physicalAddress: vendor.physicalAddress
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('PHONE_ALREADY_IN_USE');
+      testDoneFn();
+    })
+
+  });
+
+  it('api/edit-vendor (Inalid, copy name)', testDoneFn => {
+
+    callApi('api/edit-vendor', {
+      json: {
+        apiKey,
+        vendorId: vendor.id,
+        name: "1st vendor",
+        contactPersonName: vendor.contactPersonName,
+        phone: vendor.phone,
+        physicalAddress: vendor.physicalAddress
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      testDoneFn();
+    })
+
+  });
+
   it('api/edit-vendor (Valid)', testDoneFn => {
 
     callApi('api/edit-vendor', {
@@ -246,12 +286,11 @@ describe.only('Vendor', _ => {
         apiKey,
         vendorId: vendor.id,
         name: "1st new vendor",
-        contactPersonName: "a person",
-        phone: vendorPhone,
-        physicalAddress: "an address"
+        contactPersonName: vendor.contactPersonName + " new",
+        phone: vendorPhone3,
+        physicalAddress: vendor.physicalAddress + " new"
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateGenericApiSuccessResponse(body);
       testDoneFn();
@@ -259,7 +298,7 @@ describe.only('Vendor', _ => {
 
   });
 
-  it.skip('api/get-vendor-list (Valid, check)', testDoneFn => {
+  it('api/get-vendor-list (Valid, check)', testDoneFn => {
 
     callApi('api/get-vendor-list', {
       json: {
@@ -279,8 +318,8 @@ describe.only('Vendor', _ => {
 
       expect(body.vendorList.length).to.equal(1);
 
-      // update checks here
       expect(body.vendorList[0].name).to.equal("1st new vendor");
+      expect(body.vendorList[0].phone).to.equal(vendorPhone3);
       testDoneFn();
     });
 
