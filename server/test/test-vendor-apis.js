@@ -7,7 +7,9 @@ let {
   terminateServer,
   registerUser,
   loginUser,
-  addOrganization
+  addOrganization,
+
+  validateAddVendorApiSuccessResponse
 } = require('./lib');
 
 let apiKey = null;
@@ -52,18 +54,18 @@ describe.only('Vendor', _ => {
 
   // ADD-GET
 
-  it.skip('api/add-vendor (Valid)', testDoneFn => {
+  it('api/add-vendor (Valid)', testDoneFn => {
 
     callApi('api/add-vendor', {
       json: {
         apiKey,
         organizationId,
-        name: "1st product category",
-        colorCode: "FFFFFF"
+        name: "1st vendor",
       }
     }, (err, response, body) => {
+      console.log(body);
       expect(response.statusCode).to.equal(200);
-      validateAddProductCategoryApiSuccessResponse(body);
+      validateAddVendorApiSuccessResponse(body);
       testDoneFn();
     })
 
