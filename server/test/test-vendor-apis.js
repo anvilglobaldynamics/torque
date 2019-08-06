@@ -240,6 +240,26 @@ describe.only('Vendor', _ => {
   // Get - end
   // Edit - start
 
+  it('api/edit-vendor (Inalid vendorId)', testDoneFn => {
+
+    callApi('api/edit-vendor', {
+      json: {
+        apiKey,
+        vendorId: invalidVendorId,
+        name: vendor.name,
+        contactPersonName: vendor.contactPersonName,
+        phone: vendorPhone,
+        physicalAddress: vendor.physicalAddress
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VENDOR_INVALID');
+      testDoneFn();
+    })
+
+  });
+
   it('api/edit-vendor (Inalid, copy phone)', testDoneFn => {
 
     callApi('api/edit-vendor', {
