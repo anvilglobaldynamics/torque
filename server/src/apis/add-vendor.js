@@ -24,11 +24,9 @@ exports.AddVendorApi = class extends Api {
     return [{
       organizationBy: "organizationId",
       privilegeList: [
-        // "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
+        "PRIV_MODIFY_VENDOR"
       ],
-      moduleList: [
-        // "MOD_PRODUCT",
-      ]
+      moduleList: []
     }];
   }
 
