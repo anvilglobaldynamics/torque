@@ -12,7 +12,8 @@ exports.GetProductBlueprintListApi = class extends Api {
   get requestSchema() {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
-      searchString: Joi.string().min(0).max(64).allow('').optional()
+      searchString: Joi.string().min(0).max(64).allow('').optional(),
+      productBlueprintIdList: Joi.array().items(Joi.number()).default([]).optional()
     });
   }
 
@@ -28,13 +29,21 @@ exports.GetProductBlueprintListApi = class extends Api {
     }];
   }
 
-  async _getProductBlueprintList({ organizationId, searchString }) {
-    return await this.database.productBlueprint.listByOrganizationIdAndSearchString({ organizationId, searchString });
+  async _getProductBlueprintList({ organizationId, searchString, productBlueprintIdList }) {
+    if (productBlueprintIdList.length > 0) {
+      let productBlueprintList = await this.database.productBlueprint.listByOrganizationIdAndIdList({ organizationId, idList: productBlueprintIdList });
+      if (productBlueprintList.length !== productBlueprintIdList.length) {
+        throw new CodedError("PRODUCT_BLUEPRINT_INVALID", "The product blueprint you provided is invalid");
+      }
+      return productBlueprintList;
+    } else {
+      return await this.database.productBlueprint.listByOrganizationIdAndSearchString({ organizationId, searchString });
+    }
   }
 
   async handle({ body }) {
-    let { organizationId, searchString } = body;
-    let productBlueprintList = await this._getProductBlueprintList({ organizationId, searchString });
+    let { organizationId, searchString, productBlueprintIdList } = body;
+    let productBlueprintList = await this._getProductBlueprintList({ organizationId, searchString, productBlueprintIdList });
 
     return { productBlueprintList };
   }

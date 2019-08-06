@@ -9,7 +9,8 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
   organizationId: Joi.number().max(999999999999999).required(),
-  searchString: Joi.string().min(0).max(64).allow('').optional() // by name or identifierCode
+  searchString: Joi.string().min(0).max(64).allow('').optional(), // by name or identifierCode
+  productBlueprintIdList: Joi.array().items(Joi.number()).default([]).optional() // takes precedence over searchString
 }
 ```
 

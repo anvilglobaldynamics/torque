@@ -156,16 +156,16 @@
           this.app.pushPageTitle(this.app.verses.productBlueprint.addProductBlueprintTitle);
         }
         if (!this._ensureAccess()) return;
-        this._processGetProductBlueprintList(() => {
-          if (this.editMode) {
-            this._processGetProductBlueprint();
+
+        if (this.editMode) {
+          this._processGetProductBlueprint(() => {
             this.isReady = true;
-          } else {
-            this.delay(300, () => {
-              this.isReady = true;
-            });
-          }
-        });
+          });
+        } else {
+          this.delay(300, () => {
+            this.isReady = true;
+          });
+        }
       }
 
       onNavigateOut() {
@@ -186,34 +186,39 @@
 
       // region: editProductBlueprint =================================
 
-      _processGetProductBlueprintList(cbfn) {
+      _fetchProductBlueprint({ productBlueprintId }, cbfn) {
         let data = {
-          organizationId: this.app.organization.id
+          organizationId: this.app.organization.id,
+          searchString: '',
+          productBlueprintIdList: [productBlueprintId]
         };
         this.app.callGetProductBlueprintListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this._productBlueprintList = response.productBlueprintList;
-          cbfn();
+          let productBlueprint = response.productBlueprintList[0];
+          cbfn({ productBlueprint });
         });
       }
 
-      _processGetProductBlueprint() {
-        let productBlueprint = this._productBlueprintList.find(productBlueprint => {
-          return productBlueprint.id === parseInt(this.params['product-blueprint']);
-        });
-        this.editingProductBlueprint = productBlueprint;
-        this.productCategoryList = [];
-        let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable } = productBlueprint;
-        this.editProductBlueprintForm = { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
+      _processGetProductBlueprint(cbfn) {
+        let productBlueprintId = parseInt(this.params['product-blueprint']);
+        this._fetchProductBlueprint({ productBlueprintId }, ({ productBlueprint }) => {
 
-        if (productCategoryIdList.length === 0) {
+          this.editingProductBlueprint = productBlueprint;
           this.productCategoryList = [];
-        } else {
-          this._processGetProductCategoryList({ searchString: '', productCategoryIdList }, (productCategoryList) => {
-            this.productCategoryList = productCategoryList;
-          });
-        }
+          let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable } = productBlueprint;
+          this.editProductBlueprintForm = { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable };
+
+          if (productCategoryIdList.length === 0) {
+            this.productCategoryList = [];
+          } else {
+            this._processGetProductCategoryList({ searchString: '', productCategoryIdList }, (productCategoryList) => {
+              this.productCategoryList = productCategoryList;
+            });
+          }
+          
+          cbfn();
+        });
       }
 
       _processCreateProductBlueprint({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
