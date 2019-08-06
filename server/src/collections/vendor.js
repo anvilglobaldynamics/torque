@@ -12,8 +12,11 @@ exports.VendorCollection = class extends Collection {
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
       name: Joi.string().min(1).max(64).required(),
-      organizationId: Joi.number().max(999999999999999).required(),
+      contactPersonName: Joi.string().min(1).max(64).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      physicalAddress: Joi.string().min(1).max(128).required(),
 
+      organizationId: Joi.number().max(999999999999999).required(),
       isDeleted: Joi.boolean().required()
     });
   }
@@ -39,17 +42,17 @@ exports.VendorCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ name, organizationId }) {
+  async create({ name, contactPersonName, phone, physicalAddress, organizationId }) {
     return await this._insert({
-      name, organizationId,
+      name, contactPersonName, phone, physicalAddress, organizationId,
       isDeleted: false
     });
   }
 
-  async setDetails({ id }, { name, discountType, discountValue }) {
+  async setDetails({ id }, { name, contactPersonName, phone, physicalAddress }) {
     return await this._update({ id }, {
       $set: {
-        name, discountType, discountValue
+        name, contactPersonName, phone, physicalAddress
       }
     });
   }
