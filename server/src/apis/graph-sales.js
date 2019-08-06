@@ -16,7 +16,7 @@ exports.GraphSalesApi = class extends Api {
       shouldFilterByOutlet: Joi.boolean().required(),
       outletId: Joi.number().max(999999999999999).allow(null).required(),
       fromDate: Joi.number().max(999999999999999).required(),
-      periodLevel: Joi.string().valid('week', 'month', 'quarter', 'year')
+      periodLevel: Joi.string().valid('week', 'month', 'year-quarterly', 'year')
     });
   }
 
@@ -58,6 +58,7 @@ exports.GraphSalesApi = class extends Api {
     const weekDayList = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     const monthDayList = (new Array(31)).fill(null).map((_, i) => i + 1);
     const yearMonthList = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    const yearQuarterList = ['Q1', 'Q2', 'Q3', 'Q4'];
 
     let refDate = new Date(fromDate);
 
@@ -113,6 +114,60 @@ exports.GraphSalesApi = class extends Api {
           label: monthDayList[i]
         });
       }
+    } else if (periodLevel === 'year') {
+      let moy = refDate.getMonth(); // NOTE: getMonth starts from 0
+
+      let rangeListStartDate = new Date(fromDate);
+      rangeListStartDate.setMonth(rangeListStartDate.getMonth() - moy);
+
+      for (let i = 0; i < yearMonthList.length; i++) {
+
+        let startDate = new Date(rangeListStartDate.getTime());
+        startDate.setMonth(startDate.getMonth() + (i));
+        startDate.setDate(1);
+        this.__setToDayStart(startDate);
+        let startDatetimeStamp = startDate.getTime();
+
+        let endDate = new Date(rangeListStartDate.getTime());
+        endDate.setMonth(endDate.getMonth() + (i) + 1);
+        endDate.setDate(1);
+        endDate.setDate(endDate.getDate() - 1);
+        this.__setToDayEnd(endDate);
+        let endDatetimeStamp = endDate.getTime();
+
+        dateRangeList.push({
+          startDatetimeStamp,
+          endDatetimeStamp,
+          label: yearMonthList[i]
+        });
+      }
+    } else if (periodLevel === 'year-quarterly') {
+      let moy = refDate.getMonth(); // NOTE: getMonth starts from 0
+
+      let rangeListStartDate = new Date(fromDate);
+      rangeListStartDate.setMonth(rangeListStartDate.getMonth() - moy);
+
+      for (let i = 0; i < yearQuarterList.length; i++) {
+
+        let startDate = new Date(rangeListStartDate.getTime());
+        startDate.setMonth(startDate.getMonth() + (i * 3));
+        startDate.setDate(1);
+        this.__setToDayStart(startDate);
+        let startDatetimeStamp = startDate.getTime();
+
+        let endDate = new Date(rangeListStartDate.getTime());
+        endDate.setMonth(endDate.getMonth() + (i * 3) + 2 +1);
+        endDate.setDate(1);
+        endDate.setDate(endDate.getDate() - 1);
+        this.__setToDayEnd(endDate);
+        let endDatetimeStamp = endDate.getTime();
+
+        dateRangeList.push({
+          startDatetimeStamp,
+          endDatetimeStamp,
+          label: yearQuarterList[i]
+        });
+      }
     }
 
     return dateRangeList;
@@ -135,6 +190,9 @@ exports.GraphSalesApi = class extends Api {
 
     for (let dateRange of dateRangeList) {
       let { startDatetimeStamp, endDatetimeStamp, label } = dateRange;
+
+      console.log(label, (new Date(startDatetimeStamp)).toString())
+      console.log(label, (new Date(endDatetimeStamp)).toString())
 
       let localQuery = JSON.parse(JSON.stringify(query));
 

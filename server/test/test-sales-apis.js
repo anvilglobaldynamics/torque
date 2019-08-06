@@ -2169,8 +2169,8 @@ describe.only('Sales', _ => {
 
   it('api/graph-sales (Valid only organization Id )', testDoneFn => {
 
-    let fromDateLocal = new Date(fromDate);
-    fromDateLocal.setMonth(1);
+    // let fromDateLocal = new Date(fromDate);
+    // fromDateLocal.setMonth(1);
 
     callApi('api/graph-sales ', {
       json: {
@@ -2178,8 +2178,9 @@ describe.only('Sales', _ => {
         organizationId,
         outletId: null,
         shouldFilterByOutlet: false,
-        fromDate: fromDateLocal.getTime(),
-        periodLevel: 'month'
+        // fromDate: fromDateLocal.getTime(),
+        fromDate,
+        periodLevel: 'year'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -2187,7 +2188,7 @@ describe.only('Sales', _ => {
       // FIXME: Actually write test
 
       console.log(body);
-      // process.exit();
+      process.exit();
       // validateGetSalesListApiSuccessResponse(body);
       // body.salesList.forEach(sales => {
       //   validateSalesSchemaWhenListObj(sales);
