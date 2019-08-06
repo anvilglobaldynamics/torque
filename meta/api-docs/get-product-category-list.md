@@ -7,11 +7,9 @@ method: `POST`
 ### request: 
 ```js
 {
-  apiKey: Joi.string().length(64).required(),
   organizationId: Joi.number().max(999999999999999).required(),
   searchString: Joi.string().min(0).max(32).allow('').optional(),
-  productCategoryIdList: Joi.array().items(Joi.number()).optional(),
-  searchBySearchString: Joi.boolean().default(true).optional()
+  productCategoryIdList: Joi.array().items(Joi.number()).required() // takes precedence over searchString
 }
 ```
 
@@ -31,6 +29,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: ORGANIZATION_INVALID } // the organization id is invalid
+{ code: PRODUCT_CATEGORY_INVALID } // the product category id is invalid
 ```
 
 ### response (on success):

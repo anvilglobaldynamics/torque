@@ -118,16 +118,15 @@
           this.app.pushPageTitle(this.app.verses.productCategory.addProductCategoryTitle);
         }
         if (!this._ensureAccess()) return;
-        this._processGetProductCategoryList(() => {
-          if (this.editMode) {
-            this._processGetProductCategory();
+        if (this.editMode) {
+          this._processGetProductCategory(() => {
             this.isReady = true;
-          } else {
-            this.delay(300, () => {
-              this.isReady = true;
-            });
-          }
-        });
+          });
+        } else {
+          this.delay(300, () => {
+            this.isReady = true;
+          });
+        }
       }
 
       onNavigateOut() {
@@ -147,28 +146,33 @@
 
       // region: editProductCategory =================================
 
-      _processGetProductCategoryList(cbfn) {
+      _fetchProductCategory({ productCategoryId }, cbfn) {
         let data = {
           organizationId: this.app.organization.id,
           searchString: '',
-          productCategoryIdList: []
+          productCategoryIdList: [productCategoryId]
         };
         this.app.callGetProductCategoryListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this._productCategoryList = response.productCategoryList;
-          cbfn();
+          let productCategory = response.productCategoryList[0];
+          cbfn({ productCategory });
         });
       }
 
-      _processGetProductCategory() {
-        let productCategory = this._productCategoryList.find(productCategory => {
-          return productCategory.id === parseInt(this.params['product-category']);
+      _processGetProductCategory(cbfn) {
+        let productCategoryId = parseInt(this.params['product-category']);
+        this._fetchProductCategory({ productCategoryId }, ({ productCategory }) => {
+
+          this.editingProductCategory = productCategory;
+
+          let { name, colorCode } = productCategory;
+          colorCode = '#' + colorCode;
+
+          this.editProductCategoryForm = { name, colorCode };
+
+          cbfn();
         });
-        this.editingProductCategory = productCategory;
-        let { name, colorCode } = productCategory;
-        colorCode = '#' + colorCode;
-        this.editProductCategoryForm = { name, colorCode };
       }
 
       _processCreateProductCategory({ name, colorCode }) {
@@ -233,7 +237,7 @@
       pickAColorTapped(e = null) {
         try {
           this.elem('paper-swatch-picker').shadowRoot.querySelector('paper-menu-button').open()
-        } catch (ex){
+        } catch (ex) {
           this.app.showModalDialog("Unable to open color picker.");
         }
       }

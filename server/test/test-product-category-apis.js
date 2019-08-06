@@ -46,7 +46,7 @@ let invalidProductBlueprintId = generateInvalidId();
 
 let productCategory = null;
 
-describe.only('Product Category', _ => {
+describe('Product Category', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

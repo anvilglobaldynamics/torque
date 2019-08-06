@@ -36,7 +36,11 @@ exports.GetProductCategoryListApi = class extends Api {
 
   async __getProductCategoryList({ organizationId, searchString, productCategoryIdList }) {
     if (productCategoryIdList.length > 0) {
-      return await this.database.productCategory.listByOrganizationIdAndIdList({ organizationId, idList: productCategoryIdList });
+      let productCategoryList = await this.database.productCategory.listByOrganizationIdAndIdList({ organizationId, idList: productCategoryIdList });
+      if (productCategoryList.length !== productCategoryIdList.length) {
+        throw new CodedError("PRODUCT_CATEGORY_INVALID", "The product category you provided is invalid");
+      }
+      return productCategoryList;
     } else {
       return await this.database.productCategory.listByOrganizationIdAndSearchString({ organizationId, searchString });
     }
