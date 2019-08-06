@@ -397,7 +397,7 @@ exports.validateGetProductTransferListApiSuccessResponse = (doc) => {
       createdByUser: Joi.object().required(), // willingly not expanded
       fromInventory: Joi.object().required(), // willingly not expanded
       toInventory: Joi.object().required(), // willingly not expanded    
-    
+
     })
 
   });
@@ -1869,3 +1869,19 @@ exports.validateCollectionSchema = (doc) => {
   if (error) throw error;
 }
 
+exports.validateGraphSalesApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    graphData: Joi.object().keys({
+      labelList: Joi.array().items(Joi.string()).required(),
+      sumTotalBilledList: Joi.array().items(Joi.number()).required(),
+      sumCountList: Joi.array().items(Joi.number()).required()
+    })    
+  });
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+  let { labelList, sumTotalBilledList, sumCountList } = doc.graphData;
+  if (labelList.length !== sumTotalBilledList.length || labelList.length !== sumCountList.length) {
+    throw new Error("GraphSalesApi labelList, sumTotalBilledList & sumCountList has unequal length");
+  }
+}

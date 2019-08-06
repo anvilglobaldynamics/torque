@@ -26,6 +26,7 @@ let {
   validateGetAggregatedInventoryDetailsApiSuccessResponse,
   validateAddSalesApiSuccessResponse,
   validateGetSalesApiSuccessResponse,
+  validateGraphSalesApiSuccessResponse,
   validateGetSalesListApiSuccessResponse,
   validateAddSalesReturnApiSuccessResponse,
   validateSalesSchema,
@@ -2165,12 +2166,11 @@ describe.only('Sales', _ => {
 
   });
 
-    // Graph Sales - Start
+  // Graph Sales - Start
 
-  it('api/graph-sales (Valid only organization Id )', testDoneFn => {
+  it('api/graph-sales (Valid only organization Id, periodLevel: week )', testDoneFn => {
 
-    // let fromDateLocal = new Date(fromDate);
-    // fromDateLocal.setMonth(1);
+    localFromDate = fromDate;
 
     callApi('api/graph-sales ', {
       json: {
@@ -2178,21 +2178,88 @@ describe.only('Sales', _ => {
         organizationId,
         outletId: null,
         shouldFilterByOutlet: false,
-        // fromDate: fromDateLocal.getTime(),
-        fromDate,
-        periodLevel: 'year'
+        fromDate: localFromDate,
+        periodLevel: 'week'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
+      validateGraphSalesApiSuccessResponse(body);
+      let { labelList, sumTotalBilledList, sumCountList } = body.graphData;
+      expect(labelList.length).to.equal(7);
 
-      // FIXME: Actually write test
+      testDoneFn();
+    });
 
-      console.log(body);
-      process.exit();
-      // validateGetSalesListApiSuccessResponse(body);
-      // body.salesList.forEach(sales => {
-      //   validateSalesSchemaWhenListObj(sales);
-      // });
+  });
+
+  it('api/graph-sales (Valid only organization Id, periodLevel: month )', testDoneFn => {
+
+    localFromDate = fromDate;
+
+    callApi('api/graph-sales ', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        shouldFilterByOutlet: false,
+        fromDate: localFromDate,
+        periodLevel: 'month'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGraphSalesApiSuccessResponse(body);
+      let { labelList, sumTotalBilledList, sumCountList } = body.graphData;
+      expect(labelList.length >= 28).to.equal(true);
+      expect(labelList.length <= 31).to.equal(true);
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/graph-sales (Valid only organization Id, periodLevel: year-monthly )', testDoneFn => {
+
+    localFromDate = fromDate;
+
+    callApi('api/graph-sales ', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        shouldFilterByOutlet: false,
+        fromDate: localFromDate,
+        periodLevel: 'year-monthly'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGraphSalesApiSuccessResponse(body);
+      let { labelList, sumTotalBilledList, sumCountList } = body.graphData;
+      expect(labelList.length).to.equal(12);
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/graph-sales (Valid only organization Id, periodLevel: year-quarterly )', testDoneFn => {
+
+    localFromDate = fromDate;
+
+    callApi('api/graph-sales ', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        shouldFilterByOutlet: false,
+        fromDate: localFromDate,
+        periodLevel: 'year-quarterly'
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGraphSalesApiSuccessResponse(body);
+      let { labelList, sumTotalBilledList, sumCountList } = body.graphData;
+      expect(labelList.length).to.equal(4);
+
       testDoneFn();
     });
 
