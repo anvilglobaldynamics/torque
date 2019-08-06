@@ -9,7 +9,7 @@ method: `POST`
 {
   organizationId: Joi.number().max(999999999999999).required(),
   searchString: Joi.string().min(0).max(32).allow('').optional(),
-  productCategoryIdList: Joi.array().items(Joi.number()).required() // takes precedence over searchString
+  productCategoryIdList: Joi.array().items(Joi.number()).default([]).optional() // takes precedence over searchString
 }
 ```
 
