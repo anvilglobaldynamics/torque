@@ -734,6 +734,16 @@ exports.validateGetProductCategoryListApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateGetVendorListApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    vendorList: Joi.array().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateGetProductBlueprintListApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
@@ -1187,6 +1197,25 @@ exports.validateProductCategorySchema = (doc) => {
     colorCode: Joi.string().length(6).required(),
     organizationId: Joi.number().max(999999999999999).required(),
 
+    isDeleted: Joi.boolean().required()
+  });
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateVendorSchema = (doc) => {
+  let schema = Joi.object().keys({
+    id: Joi.number().max(999999999999999).required(),
+
+    createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+    lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
+    name: Joi.string().min(1).max(64).required(),
+    contactPersonName: Joi.string().min(1).max(64).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    physicalAddress: Joi.string().min(1).max(128).required(),
+
+    organizationId: Joi.number().max(999999999999999).required(),
     isDeleted: Joi.boolean().required()
   });
   let { error, value } = Joi.validate(doc, schema);

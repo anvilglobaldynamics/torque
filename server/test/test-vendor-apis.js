@@ -10,11 +10,16 @@ let {
   addOrganization,
 
   validateAddVendorApiSuccessResponse,
-  validateGenericApiFailureResponse
+  validateGenericApiFailureResponse,
+  validateGetVendorListApiSuccessResponse,
+  validateVendorSchema
 } = require('./lib');
 
 let apiKey = null;
 let organizationId = null;
+let vendor = null;
+
+let invalidVendorId = generateInvalidId();
 
 const prefix = 's';
 
@@ -71,7 +76,6 @@ describe.only('Vendor', _ => {
         physicalAddress: "an address"
       }
     }, (err, response, body) => {
-      // console.log(body);
       expect(response.statusCode).to.equal(200);
       validateAddVendorApiSuccessResponse(body);
       testDoneFn();
@@ -118,7 +122,120 @@ describe.only('Vendor', _ => {
 
   });
 
+  it('api/add-vendor (Valid)', testDoneFn => {
+
+    callApi('api/add-vendor', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "2nd vendor",
+        contactPersonName: "a person",
+        phone: vendorPhone2,
+        physicalAddress: "an address"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddVendorApiSuccessResponse(body);
+      testDoneFn();
+    })
+
+  });
+
   // Add - end
+  // Get - start
+
+  it('api/get-vendor-list (No parameters)', testDoneFn => {
+
+    callApi('api/get-vendor-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: '',
+        vendorIdList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetVendorListApiSuccessResponse(body);
+
+      body.vendorList.forEach(vendor => {
+        validateVendorSchema(vendor);
+      });
+
+      expect(body.vendorList.length).to.equal(2);
+      vendor = body.vendorList[0];
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-vendor-list (Valid, vendorIdList)', testDoneFn => {
+
+    callApi('api/get-vendor-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: '',
+        vendorIdList: [vendor.id]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetVendorListApiSuccessResponse(body);
+
+      body.vendorList.forEach(vendor => {
+        validateVendorSchema(vendor);
+      });
+
+      expect(body.vendorList.length).to.equal(1);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-vendor-list (Valid, searchString)', testDoneFn => {
+
+    callApi('api/get-vendor-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: '1st vendor',
+        vendorIdList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      validateGetVendorListApiSuccessResponse(body);
+
+      body.vendorList.forEach(vendor => {
+        validateVendorSchema(vendor);
+      });
+
+      expect(body.vendorList.length).to.equal(1);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-vendor-list (Valid, invalid vendorIdList)', testDoneFn => {
+
+    callApi('api/get-vendor-list', {
+      json: {
+        apiKey,
+        organizationId,
+        searchString: '',
+        vendorIdList: [invalidVendorId]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equals('VENDOR_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  // Get - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
