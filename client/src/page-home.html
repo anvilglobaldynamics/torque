@@ -27,6 +27,12 @@
 <dom-module id="page-home">
   <template>
     <style include="shared-styles">
+
+      .user-detail-container {
+        font-size: 13px;
+        color: gray;
+      }
+
       .warning-message {
         font-weight: bold;
       }
@@ -124,30 +130,20 @@
       </template>
       <!-- default outlet selection prompt - end -->
 
-      <!-- user and organization information - start -->
+      <!-- user information - start -->
       <div class="vertical layout wrap">
         <div class="card flex info-panel">
 
           <div class="title">[[verses.general.user]]: [[user.fullName]]</div>
-          <template is="dom-if" if="[[user.email]]">
-            <div class="">[[verses.general.email]]: [[user.email]]</div>
-          </template>
-          <div class="">[[verses.general.phone]]: [[user.phone]]</div>
           <div class="">[[verses.general.designation]]: [[organization.employment.designation]] ([[organization.employment.role]])</div>
-
-        </div>
-        <div class="card flex info-panel">
-
-          <div class="title">[[verses.general.organization]]: [[organization.name]]</div>
-          <template is="dom-if" if="[[organization.email]]">
-            <div class="">[[verses.general.email]]: [[organization.email]]</div>
+          <template is="dom-if" if="[[user.email]]">
+            <div class="user-detail-container">[[verses.general.email]]: [[user.email]]</div>
           </template>
-          <div class="">[[verses.general.phone]]: [[organization.phone]]</div>
-          <div class="">[[verses.general.address]]: [[organization.primaryBusinessAddress]]</div>
+          <div class="user-detail-container">[[verses.general.phone]]: [[user.phone]]</div>
 
         </div>
       </div>
-      <!-- user and organization information - end -->
+      <!-- user information - end -->
 
       <!-- organization statistics - start -->
       <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ORGANIZATION_STATISTICS', organization)]]">
@@ -181,6 +177,21 @@
           </div>
         </div>
         <!-- metrics - end -->
+
+        <!-- Organization information - start -->
+        <div class="vertical layout wrap">
+          <div class="card flex info-panel">
+  
+            <div class="title">[[verses.general.organization]]: [[organization.name]]</div>
+            <template is="dom-if" if="[[organization.email]]">
+              <div class="">[[verses.general.email]]: [[organization.email]]</div>
+            </template>
+            <div class="">[[verses.general.phone]]: [[organization.phone]]</div>
+            <div class="user-detail-container">[[verses.general.address]]: [[organization.primaryBusinessAddress]]</div>
+
+          </div>
+        </div>
+        <!-- Organization information - end -->
 
         <!-- active module - start -->
         <div class="vertical layout wrap">
