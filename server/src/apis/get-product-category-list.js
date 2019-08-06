@@ -15,9 +15,8 @@ exports.GetProductCategoryListApi = class extends Api {
   get requestSchema() {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
-      searchString: Joi.string().min(0).max(32).allow('').optional(),
-      productCategoryIdList: Joi.array().items(Joi.number()).optional(),
-      searchBySearchString: Joi.boolean().default(true).optional()
+      searchString: Joi.string().min(0).max(32).allow('').required(),
+      productCategoryIdList: Joi.array().items(Joi.number()).required()
     });
   }
 
@@ -35,9 +34,8 @@ exports.GetProductCategoryListApi = class extends Api {
     }];
   }
 
-  async __getProductCategoryList({ organizationId, searchString, productCategoryIdList, searchBySearchString }) {
-    if (!searchBySearchString) {
-      productCategoryIdList = productCategoryIdList || [];
+  async __getProductCategoryList({ organizationId, searchString, productCategoryIdList }) {
+    if (productCategoryIdList.length > 0) {
       return await this.database.productCategory.listByOrganizationIdAndIdList({ organizationId, idList: productCategoryIdList });
     } else {
       return await this.database.productCategory.listByOrganizationIdAndSearchString({ organizationId, searchString });
@@ -45,8 +43,8 @@ exports.GetProductCategoryListApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { organizationId, searchString, productCategoryIdList, searchBySearchString } = body;
-    let productCategoryList = await this.__getProductCategoryList({ organizationId, searchString, productCategoryIdList, searchBySearchString });
+    let { organizationId, searchString, productCategoryIdList } = body;
+    let productCategoryList = await this.__getProductCategoryList({ organizationId, searchString, productCategoryIdList });
     return { productCategoryList };
   }
 

@@ -149,7 +149,9 @@
 
       _processGetProductCategoryList(cbfn) {
         let data = {
-          organizationId: this.app.organization.id
+          organizationId: this.app.organization.id,
+          searchString: '',
+          productCategoryIdList: []
         };
         this.app.callGetProductCategoryListApi(data, (err, response) => {
           if (err) return;
