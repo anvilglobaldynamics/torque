@@ -222,8 +222,9 @@ exports.GraphSalesApi = class extends Api {
     for (let dateRange of dateRangeList) {
       let { startDatetimeStamp, endDatetimeStamp, label } = dateRange;
 
-      console.log(label, (new Date(startDatetimeStamp)).toString())
-      console.log(label, (new Date(endDatetimeStamp)).toString())
+      // // TODO: Remove only when completely sure about date ranges
+      // console.log(label, (new Date(startDatetimeStamp)).toString())
+      // console.log(label, (new Date(endDatetimeStamp)).toString())
 
       let localQuery = JSON.parse(JSON.stringify(query));
 
