@@ -114,6 +114,8 @@ const { AddProductCategoryApi } = require('./apis/add-product-category');
 const { EditProductCategoryApi } = require('./apis/edit-product-category');
 const { GetProductCategoryListApi } = require('./apis/get-product-category-list');
 
+const { GraphSalesApi } = require('./apis/graph-sales');
+
 const { ShopLocateNearbyOutletsApi } = require('./apis/shop-locate-nearby-outlets');
 const { ShopGetOutletDetailsApi } = require('./apis/shop-get-outlet-details');
 
@@ -356,6 +358,8 @@ class Program {
     server.registerPostApi('/api/add-product-category', AddProductCategoryApi);
     server.registerPostApi('/api/edit-product-category', EditProductCategoryApi);
     server.registerPostApi('/api/get-product-category-list', GetProductCategoryListApi);
+
+    server.registerPostApi('/api/graph-sales', GraphSalesApi);
 
     server.registerPostApi('/api/admin-login', AdminLoginApi);
     server.registerPostApi('/api/admin-get-outgoing-sms-list', AdminGetOutgoingSmsListApi);
