@@ -211,7 +211,12 @@
       }
 
       _fetchProductCategoryList(cbfn) {
-        let data = { organizationId: this.app.organization.id, searchString: this.searchString, paginate: this.paginate };
+        let data = {
+          organizationId: this.app.organization.id,
+          searchString: this.searchString,
+          productCategoryIdList: [],
+          paginate: this.paginate
+        };
         this.app.callGetProductCategoryListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);

@@ -11,7 +11,7 @@ let {
   addOrganization,
   validateProductBlueprintSchema,
   validateAddProductBlueprintApiSuccessResponse,
-  
+
   validateGenericApiFailureResponse,
   validateGenericApiSuccessResponse,
 
@@ -148,6 +148,8 @@ describe('Product Category', _ => {
       json: {
         apiKey,
         organizationId,
+        searchString: '',
+        productCategoryIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -207,6 +209,8 @@ describe('Product Category', _ => {
       json: {
         apiKey,
         organizationId,
+        searchString: '',
+        productCategoryIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -231,7 +235,7 @@ describe('Product Category', _ => {
         apiKey,
         organizationId,
         searchString: '1st',
-        searchBySearchString: true
+        productCategoryIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -250,14 +254,14 @@ describe('Product Category', _ => {
 
   });
 
-  it('api/get-product-category-list (searchString)', testDoneFn => {
+  it('api/get-product-category-list (productCategoryIdList (should return 1 element))', testDoneFn => {
 
     callApi('api/get-product-category-list', {
       json: {
         apiKey,
         organizationId,
         productCategoryIdList: [productCategory.id],
-        searchBySearchString: false
+        searchString: ''
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

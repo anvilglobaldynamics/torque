@@ -26,13 +26,11 @@
 <dom-module id="page-edit-service-blueprint">
   <template>
     <style include="shared-styles">
-
       .editServiceBlueprintForm--serviceDuration {
         margin-left: 6px;
         margin-right: 6px;
         width: 48%;
       }
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -156,16 +154,16 @@
           this.app.pushPageTitle(this.app.verses.serviceBlueprint.addServiceBlueprintTitle);
         }
         if (!this._ensureAccess()) return;
-        this._processGetServiceBlueprintList(() => {
-          if (this.editMode) {
-            this._processGetServiceBlueprint();
+
+        if (this.editMode) {
+          this._processGetServiceBlueprint(() => {
             this.isReady = true;
-          } else {
-            this.delay(300, () => {
-              this.isReady = true;
-            });
-          }
-        });
+          });
+        } else {
+          this.delay(300, () => {
+            this.isReady = true;
+          });
+        }
       }
 
       onNavigateOut() {
@@ -178,36 +176,41 @@
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
-          privilegeList: ['PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS'],
+          privilegeList: ['PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS'],
           moduleList: ['MOD_SERVICE']
         });
       }
 
       // region: editServiceBlueprint =================================
 
-      _processGetServiceBlueprintList(cbfn) {
+      _fetchServiceBlueprint({ serviceBlueprintId }, cbfn) {
         let data = {
-          organizationId: this.app.organization.id
+          organizationId: this.app.organization.id,
+          searchString: '',
+          serviceBlueprintIdList: [serviceBlueprintId]
         };
         this.app.callGetServiceBlueprintListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this._serviceBlueprintList = response.serviceBlueprintList;
-          cbfn();
+          let serviceBlueprint = response.serviceBlueprintList[0];
+          cbfn({ serviceBlueprint });
         });
       }
 
-      _processGetServiceBlueprint() {
-        let serviceBlueprint = this._serviceBlueprintList.find(serviceBlueprint => {
-          return serviceBlueprint.id === parseInt(this.params['service-blueprint']);
-        });
-        this.editingServiceBlueprint = serviceBlueprint;
-        let { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = serviceBlueprint;
+      _processGetServiceBlueprint(cbfn) {
+        let serviceBlueprintId = parseInt(this.params['service-blueprint']);
+        this._fetchServiceBlueprint({ serviceBlueprintId }, ({ serviceBlueprint }) => {
 
-        if(!isLongstanding) {
-          serviceDuration = { months: 0, days: 0 };
-        }
-        this.editServiceBlueprintForm = { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable };
+          this.editingServiceBlueprint = serviceBlueprint;
+          let { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = serviceBlueprint;
+
+          if (!isLongstanding) {
+            serviceDuration = { months: 0, days: 0 };
+          }
+          this.editServiceBlueprintForm = { name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable };
+
+          cbfn();
+        });
       }
 
       _processCreateServiceBlueprint({ name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable, avtivateInAllOutlets }) {
@@ -234,7 +237,7 @@
         if (!isLongstanding) {
           serviceDuration = null;
         }
-        
+
         let data = {
           name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable,
           serviceBlueprintId: this.editingServiceBlueprint.id
