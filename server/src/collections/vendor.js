@@ -25,7 +25,7 @@ exports.VendorCollection = class extends Collection {
     return [
       {
         filters: {},
-        keyList: ['organizationId+name']
+        keyList: ['organizationId+name', 'organizationId+phone']
       }
     ];
   }
