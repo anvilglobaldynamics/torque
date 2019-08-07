@@ -405,6 +405,21 @@
         this.callCombinedJsonApi('withdraw-from-change-wallet-balance', data, cbfn);
       }
 
+      callGetVendorListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-vendor-list', data, cbfn);
+      }
+
+      callAddVendorApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-vendor', data, cbfn);
+      }
+
+      callEditVendorApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-vendor', data, cbfn);
+      }
+
       callUserSetEmailApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('user-set-email', data, cbfn);
