@@ -1,0 +1,358 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="elem-customer-selector.html">
+<link rel="import" href="elem-outlet-selector.html">
+
+<dom-module id="page-graph-sales">
+  <template>
+    <style include="shared-styles">
+      .period-message-area {
+        text-align: center;
+      }
+
+      .period-message {
+        font-size: 14px;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card vertical layout">
+        <paper-dropdown-menu style="width: 100%;" label="Outlet">
+          <paper-listbox slot="dropdown-content" selected="{{outletSelectedIndex}}">
+            <template is="dom-repeat" items="[[outletList]]" as="outlet">
+              <paper-item>[[outlet.name]]</paper-item>
+            </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
+
+        <div class="horizontal layout center">
+          <paper-dropdown-menu class="flex" label="Period" style="margin-right: 4px;">
+            <paper-listbox slot="dropdown-content" selected="{{periodLevelSelectedIndex}}">
+              <template is="dom-repeat" items="[[periodLevelList]]" as="periodLevel">
+                <paper-item data-key="[[periodLevel.key]]">[[periodLevel.label]]</paper-item>
+              </template>
+            </paper-listbox>
+          </paper-dropdown-menu>
+
+          <paper-dropdown-menu class="flex" label="Graph Type" style="margin-left: 4px;">
+            <paper-listbox slot="dropdown-content" selected="{{graphTypeSelectedIndex}}">
+              <template is="dom-repeat" items="[[graphTypeList]]" as="graphType">
+                <paper-item data-key="[[graphType.key]]">[[graphType.label]]</paper-item>
+              </template>
+            </paper-listbox>
+          </paper-dropdown-menu>
+
+          <!-- <paper-button raised class="primary" on-tap="updateTapped">Update</paper-button> -->
+        </div>
+      </div>
+
+      <div class="card" style="padding: 0px;">
+        <div>
+          <canvas id="chart-canvas" style="max-height: 400px;"></canvas>
+        </div>
+        <div class="horizontal layout center center-justified period-message-area">
+          <paper-icon-button icon="chevron-left" on-tap="previousTapped"></paper-icon-button>
+          <div class="period-message">[[periodMessage]]</div>
+          <paper-icon-button icon="chevron-right" on-tap="nextTapped"></paper-icon-button>
+        </div>
+      </div>
+
+
+
+    </div>
+  </template>
+
+  <script>
+    class PageGraphSales extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-graph-sales';
+      }
+
+      static get properties() {
+        return {
+          periodLevelList: {
+            type: Array,
+            value: () => {
+              return [
+                { key: 'week', label: "Week" },
+                { key: 'month', label: "Month" },
+                { key: 'year-monthly', label: "Year (monthly)" },
+                { key: 'year-quarterly', label: "Year (quarterly)" }
+              ]
+            }
+          },
+          graphTypeList: {
+            type: Array,
+            value: () => {
+              return [
+                { key: 'amount', label: "Amount Sold" },
+                { key: 'count', label: "Sales Count" },
+              ]
+            }
+          },
+          outletList: {
+            type: Array,
+            value: () => []
+          },
+          graphTypeSelectedIndex: {
+            type: Number,
+            value: 0,
+            observer: 'graphVariablesChanged'
+          },
+          periodLevelSelectedIndex: {
+            type: Number,
+            value: 0,
+            observer: 'graphVariablesChanged'
+          },
+          outletSelectedIndex: {
+            type: Number,
+            value: 0,
+            observer: 'graphVariablesChanged'
+          },
+          fromDate: {
+            type: Number,
+            value: _ => {
+              return Date.now();
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.sales.graphSalesTitle);
+        if (!this._ensureAccess()) return;
+        this.onOrganizationChange(this.app.organization);
+        this._processOutletList(() => {
+          this.isReady = true;
+          this.delay(100, () => {
+            this.initGraph();
+          })
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_ALL_OUTLETS']
+        });
+      }
+
+      _fetchOutletList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetOutletListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.outletList);
+        });
+      }
+
+      _processOutletList(cbfn) {
+        this._fetchOutletList(newOutletList => {
+          newOutletList.unshift({
+            id: null,
+            name: "Entire Organization"
+          })
+          this.outletList = newOutletList;
+          cbfn();
+        });
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
+
+      // region: ui  ===========================
+
+      updateTapped(e = null) {
+        this.updateGraph();
+      }
+
+      previousTapped(e = null) {
+        let periodLevel = this.periodLevelList[this.periodLevelSelectedIndex].key;
+        let date = new Date(this.fromDate);
+        if (periodLevel === 'week') {
+          date.setDate(date.getDate() - 7);
+        } else if (periodLevel === 'month') {
+          date.setMonth(date.getMonth() - 1);
+        } else {
+          date.setFullYear(date.getFullYear() - 1);
+        }
+        this.fromDate = date.getTime();
+        this.graphVariablesChanged();
+      }
+
+      nextTapped(e = null) {
+        let periodLevel = this.periodLevelList[this.periodLevelSelectedIndex].key;
+        let date = new Date(this.fromDate);
+        if (periodLevel === 'week') {
+          date.setDate(date.getDate() + 7);
+        } else if (periodLevel === 'month') {
+          date.setMonth(date.getMonth() + 1);
+        } else {
+          date.setFullYear(date.getFullYear() + 1);
+        }
+        this.fromDate = date.getTime();
+        this.graphVariablesChanged();
+      }
+
+      // region: graph =================================
+
+      graphVariablesChanged() {
+        if (this.chart) {
+          this.updateGraph();
+        }
+      }
+
+      updateGraph() {
+        this.fetchAndPrepareGraphData(({ graphData, graphTitle }) => {
+          this.drawGraph({ graphData, graphTitle });
+        })
+      }
+
+      initGraph() {
+        Chart.defaults.global.defaultFontFamily = 'Roboto';
+        // Chart.defaults.global.defaultFontColor = 'black';
+        // Chart.defaults.global.defaultFontSize = 16;
+
+        this.updateGraph();
+
+        window.addEventListener('resize', () => {
+          if (this.chart) {
+            this.chart.resize();
+          }
+        }, true);
+      }
+
+      preparePeriodMessage() {
+        this.periodMessage = '';
+
+        let periodLevel = this.periodLevelList[this.periodLevelSelectedIndex].key;
+
+        // (new XDate(date)).toString('yyyy-MM-dd');
+        if (periodLevel === 'week') {
+          let date = new Date(this.fromDate);
+          date.setDate(date.getDate() - date.getDay());
+
+          let startDate = (new XDate(date)).toString('MMM dd, yyyy')
+
+          date.setDate(date.getDate() + 6);
+          let endDate = (new XDate(date)).toString('MMM dd, yyyy')
+
+          this.periodMessage = `${startDate} - ${endDate}`;
+        } else if (periodLevel === 'month') {
+
+          let date = new Date(this.fromDate);
+          this.periodMessage = (new XDate(date)).toString('MMMM yyyy');
+
+        } else {
+
+          let date = new Date(this.fromDate);
+          this.periodMessage = (new XDate(date)).toString('yyyy');
+
+        }
+      }
+
+      fetchAndPrepareGraphData(cbfn) {
+        let periodLevel = this.periodLevelList[this.periodLevelSelectedIndex].key;
+
+        this.preparePeriodMessage();
+
+        let outletId = this.outletList[this.outletSelectedIndex].id;
+
+        let data = {
+          organizationId: this.organization.id,
+          outletId,
+          fromDate: this.fromDate,
+          periodLevel
+        };
+        this.app.callGraphSalesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn({
+            graphData: response.graphData,
+          });
+        });
+      }
+
+      drawGraph({ graphData }) {
+        let ctx = this.elem('#chart-canvas').getContext('2d');
+
+        let valueList;
+        if (this.graphTypeList[this.graphTypeSelectedIndex].key === 'count'){
+          valueList = graphData.sumCountList;
+        } else {
+          valueList = graphData.sumTotalBilledList;
+        }
+        let data = {
+          labels: graphData.labelList,
+          datasets: [{}]
+        };
+        Object.assign(data.datasets[0], this.getCommonGraphDatasetOptions());
+        Object.assign(data.datasets[0], {
+          data: valueList
+        });
+
+        let options = this.getCommonGraphOptions({ periodLevel: 'week' });
+
+        if (this.chart) {
+          this.chart.destroy();
+        }
+
+        this.chart = new Chart(ctx, {
+          type: 'line',
+          data,
+          options
+        });
+
+      }
+
+
+    }
+
+    window.customElements.define(PageGraphSales.is, PageGraphSales);
+  </script>
+</dom-module>

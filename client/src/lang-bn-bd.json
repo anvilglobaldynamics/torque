@@ -149,6 +149,7 @@
     "serviceBlueprints": "সেবা পরিকল্পনা",
     "sales": "বিক্রয় রেকর্ড",
     "salesReturn": "বিক্রয় ফেরত রেকর্ড",
+    "salesGraph": "বিক্রয় গ্রাফ",
     "serviceMembership": "সেবার সদস্যপদ",
     "customers": "গ্রাহক",
     "salesReport": "বিক্রয় রিপোর্টস",
@@ -217,6 +218,7 @@
     "warehouses": "গুদাম",
     "promptForDefaultOutlet": "নিয়মিত ব্যবহৃত দোকান; নিয়মিত ব্যবহার এর জন্য দোকান বাছাই করলে দ্রুত বিক্রয়কেন্দ্রে যেতে পারবেন এবং লিপি অফলাইনে ব্যবহার করতে পারবেন",
     "promptForDefaultOutletGoButton": "দোকান বাছাই",
+    "salesTrendGraphTitle": "এই সপ্তাহের বিক্রয়",
     "viewActivationHistory": "সক্রিয়করণ ইতিহাস দেখুন"
   },
   "organization": {

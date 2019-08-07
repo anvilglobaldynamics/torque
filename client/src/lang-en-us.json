@@ -149,6 +149,7 @@
     "serviceBlueprints": "Service Blueprints",
     "sales": "Sales Records",
     "salesReturn": "Sales Return Records",
+    "salesGraph": "Sales Trends Graph",
     "serviceMembership": "Service Memberships",
     "customers": "Customers",
     "salesReport": "Sales Report",
@@ -215,6 +216,7 @@
     "warehouses": "Warehouses",
     "promptForDefaultOutlet": "Regularly Used Outlet; Selecting a regularly used outlet lets you quickly jump to POS after login and use lipi during network outage",
     "promptForDefaultOutletGoButton": "Select outlet",
+    "salesTrendGraphTitle": "This week's Sales Trends",
     "viewActivationHistory": "View Activation History"
   },
   "organization": {

@@ -106,6 +106,7 @@
 <link rel="lazy-import" href="page-scan-identifier-code.html">
 <link rel="lazy-import" href="page-manage-discount-presets.html">
 <link rel="lazy-import" href="page-edit-discount-preset.html">
+<link rel="lazy-import" href="page-graph-sales.html">
 
 <link rel="lazy-import" href="page-manage-product-categories.html">
 <link rel="lazy-import" href="page-edit-product-category.html">
@@ -407,6 +408,9 @@
                 </template>
                 <hr class="custom-sidebar-divider">
 
+                <a name="graph-sales" href="#/graph-sales">[[verses.sidebar.salesGraph]]</a>
+                <hr class="custom-sidebar-divider">
+
                 <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
                   <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
@@ -493,6 +497,7 @@
               <page-edit-discount-preset name="edit-discount-preset"></page-edit-discount-preset>
               <page-report-select-product-blueprints name="report-select-product-blueprints"></page-report-select-product-blueprints>
               <page-report-select-product-categories name="report-select-product-categories"></page-report-select-product-categories>
+              <page-graph-sales name="graph-sales"></page-graph-sales>
             </iron-pages>
 
             <div class="footer">

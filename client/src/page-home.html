@@ -146,6 +146,9 @@
 
       <!-- sales trend graph - start -->
       <div class="card" style="padding: 0px;">
+        <div style="text-align: center; padding: 8px;">
+          [[verses.home.salesTrendGraphTitle]]
+        </div>
         <div>
           <canvas id="chart-canvas" style="max-height: 400px;"></canvas>
         </div>
@@ -551,8 +554,7 @@
       // region: graph =================================
 
       initGraph() {
-        Chart.defaults.global.defaultFontColor = 'black';
-        Chart.defaults.global.defaultFontSize = 16;
+        Chart.defaults.global.defaultFontFamily = 'Roboto';
 
         this.fetchGraphData(({ graphData }) => {
           this.drawGraph({ graphData });
@@ -568,10 +570,9 @@
       fetchGraphData(cbfn) {
         let data = {
           organizationId: this.organization.id,
-          shouldFilterByOutlet: false,
           outletId: null,
           fromDate: Date.now(),
-          periodLevel: 'year-monthly'
+          periodLevel: 'week'
         };
         this.app.callGraphSalesApi(data, (err, response) => {
           if (err) return;
@@ -583,49 +584,19 @@
       drawGraph({ graphData }) {
         let ctx = this.elem('#chart-canvas').getContext('2d');
 
-        let labelList = graphData.labelList.map(label =>  label +  '                                    ' )
-
         let data = {
-          labels: labelList,
-          datasets: [
-            {
-              label: "",
-              borderColor: "#3e95cd",
-              data: graphData.sumTotalBilledList,
-              fill: false,
-              lineTension: 0.3,
-              pointBorderColor: "#3e95cd",
-              pointBackgroundColor: "#3e95cd",
-              pointRadius: 4,
-              pointHoverRadius: 6,
-              pointHitRadius: 10,
-            }
-          ]
-        }
+          labels: graphData.labelList,
+          datasets: [{}]
+        };
+        Object.assign(data.datasets[0], this.getCommonGraphDatasetOptions());
+        Object.assign(data.datasets[0], {
+          data: graphData.sumTotalBilledList
+        });
 
-        let options = {
-          tooltips: {
-            display: false,
-            mode: 'point', 
-            bodySpacing: 100,
-            footerSpacing: 20,
-            xPadding: 60,            
-          },
-          title: {
-            display: true,
-            text: "Sales this week"
-          },
-          legend: {
-            display: false,
-          },
-          responsive: true,
-          aspectRatio: 3,
-          layout: {
-            padding: {
-              left: 60,
-              right: 60,
-            }
-          },
+        let options = this.getCommonGraphOptions({ periodLevel: 'week' });
+
+        if (this.chart) {
+          this.chart.destroy();
         }
 
         this.chart = new Chart(ctx, {
