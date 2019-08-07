@@ -1040,5 +1040,17 @@
     "noProductTransferFound": "No Product Transfer Found",
     "recordCreatedBy": "Record Created By",
     "productTransferTitle": "Product Transfer Details"
+  },
+  "graphSales": {
+    "graphSalesTitle": "Sales Trend Graph",
+    "entireOrganization": "Entire Organization",
+    "period": "Period",
+    "graphType": "Graph Type",
+    "amountSold": "Amount Sold",
+    "salesCount": "Sales Count",
+    "periodWeek": "Week",
+    "periodMonth": "Month",
+    "periodYearMonthly": "Year (monhtly)",
+    "periodYearQUarterly": "Year (quarterly)"
   }
 }

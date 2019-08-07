@@ -327,9 +327,11 @@
             xPadding: 70,
             displayColors: false,
             callbacks: {
+              // title: function(item){
+              //   return item.value;
+              // },
               label: function(item){
-                console.log(item)
-                return ''+ item.value + '         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+                return String(Math.round(item.value));
               }
             },
             __custom: function (tooltipModel) {

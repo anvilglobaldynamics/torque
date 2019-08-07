@@ -1041,5 +1041,17 @@
     "noProductTransferFound": "কোনো পণ্য ট্রান্সফার রেকর্ড পাওয়া যায়নি। ",
     "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
     "productTransferTitle": "পণ্য ট্রান্সফার রেকর্ড"
+  },
+  "graphSales": {
+    "graphSalesTitle": "বিক্রয় গ্রাফ",
+    "entireOrganization": "সমগ্র সংস্থা",
+    "period": "পর্যায়কাল",
+    "graphType": "গ্রাফের ধরণ",
+    "amountSold": "বিক্রয় পরিমাণ",
+    "salesCount": "বিক্রয় সংখ্যা",
+    "periodWeek": "সপ্তাহ",
+    "periodMonth": "মাস",
+    "periodYearMonthly": "বছর (মাসিক)",
+    "periodYearQUarterly": "বছর (ত্রৈমাসিক)"
   }
 }
