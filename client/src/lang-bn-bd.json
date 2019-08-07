@@ -103,7 +103,8 @@
     "showFilters": "ফিল্টার",
     "verificationUnsuccessful": "যাচাই ব্যর্থ",
     "modalConfirmationPleaseConfirm": "নিশ্চিত করুন",
-    "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন"
+    "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন",
+    "contactPerson": "যোগাযোগের ব্যক্তি"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -513,10 +514,16 @@
   "vendor": {
     "editVendorTitle": "সরবরাহকারী সম্পাদনা করুন",
     "addVendorTitle": "সরবরাহকারী যুক্ত করুন",
+
     "vendorNameInput": "সরবরাহকারীর  নাম",
     "vendorNameInputError": "একটি সঠিক নাম লিখুন",
     "vendorNumberInput": "যোগাযোগের নম্বর",
     "vendorNumberInputError": "একটি সঠিক ফোন নম্বর লিখুন",
+    "vendorPhysicalAddressInput": "ঠিকানা",
+    "vendorPhysicalAddressInputError": "অন্তত ৮ টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
+    "vendorContactNameInput": "যোগাযোগ করার ব্যক্তির নাম",
+    "vendorContactNameInputError": "একটি সঠিক নাম লিখুন",
+
     "createVendor": "সরবরাহকারী যুক্ত করুন",
     "updateVendor": "সরবরাহকারী আপডেট করুন",
     "newVendorCreated": "নতুন সরবরাহকারী যুক্ত করা হয়েছে।",

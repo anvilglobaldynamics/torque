@@ -36,6 +36,9 @@
         <form>
           <div class="card vertical layout">
             <paper-input class="editVendorForm--name" value="{{editVendorForm.name}}" required minlength="3" error-message=[[verses.vendor.vendorNameInputError]] label=[[verses.vendor.vendorNameInput]]></paper-input>
+            <paper-input class="editVendorForm--contactPersonName" value="{{editVendorForm.contactPersonName}}" required minlength="3" error-message=[[verses.vendor.vendorContactNameInputError]] label=[[verses.vendor.vendorContactNameInput]]></paper-input>
+            <paper-input class="editVendorForm--phone" value="{{editVendorForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.vendor.vendorNumberInputError]] label=[[verses.vendor.vendorNumberInput]]></paper-input>
+            <paper-textarea class="editVendorForm--physicalAddress" value="{{editVendorForm.physicalAddress}}" required minlength="8" error-message=[[verses.vendor.vendorPhysicalAddressInputError]] label=[[verses.vendor.vendorPhysicalAddressInput]] rows="4"></paper-textarea>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -72,15 +75,17 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  name: "10% Off Everything",
-                  discountType: 'percent',
-                  discountValue: 10,
+                  name: "Bismillah Cosmetics",
+                  contactPersonName: 'Md. Selim Sheikh',
+                  phone: '01700000011',
+                  physicalAddress: 'Shop No-25, 244, Jamuna Future Park\nBlock-B, Kuril, Progoti Sharoni'
                 };
               } else {
                 return {
                   name: "",
-                  discountType: 'percent',
-                  discountValue: 0,
+                  contactPersonName: '',
+                  phone: '',
+                  physicalAddress: ''
                 };
               }
             }
@@ -153,16 +158,16 @@
         this._fetchVendor({ vendorId }, ({ vendor }) => {
 
           this.editingVendor = vendor;
-          let { name, discountType, discountValue } = vendor;
-          this.editVendorForm = { name, discountType, discountValue };
+          let { name, contactPersonName, phone, physicalAddress } = vendor;
+          this.editVendorForm = { name, contactPersonName, phone, physicalAddress };
 
           cbfn();
         });
       }
 
-      _processCreateVendor({ name, discountType, discountValue }) {
+      _processCreateVendor({ name, contactPersonName, phone, physicalAddress }) {
         let data = {
-          name, discountType, discountValue,
+          name, contactPersonName, phone, physicalAddress,
           organizationId: this.app.organization.id,
         };
         this.app.callAddVendorApi(data, (err, response) => {
@@ -175,9 +180,9 @@
         });
       }
 
-      _processUpdateVendor({ name, discountType, discountValue }) {
+      _processUpdateVendor({ name, contactPersonName, phone, physicalAddress }) {
         let data = {
-          name, discountType, discountValue,
+          name, contactPersonName, phone, physicalAddress,
           vendorId: this.editingVendor.id
         };
 
@@ -201,16 +206,16 @@
         this.elemAll('#editVendorForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editVendorForm').validate()) return;
 
-        let { name, discountType, discountValue } = this.editVendorForm;
-        this._processCreateVendor({ name, discountType, discountValue });
+        let { name, contactPersonName, phone, physicalAddress } = this.editVendorForm;
+        this._processCreateVendor({ name, contactPersonName, phone, physicalAddress });
       }
 
       updateVendorTapped(e = null) {
         this.elemAll('#editVendorForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editVendorForm').validate()) return;
 
-        let { name, discountType, discountValue } = this.editVendorForm;
-        this._processUpdateVendor({ name, discountType, discountValue });
+        let { name, contactPersonName, phone, physicalAddress } = this.editVendorForm;
+        this._processUpdateVendor({ name, contactPersonName, phone, physicalAddress });
       }
 
       // region: misc =================================
