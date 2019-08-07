@@ -27,7 +27,6 @@
 <dom-module id="page-home">
   <template>
     <style include="shared-styles">
-
       .user-detail-container {
         font-size: 13px;
         color: gray;
@@ -145,6 +144,14 @@
       </div>
       <!-- user information - end -->
 
+      <!-- sales trend graph - start -->
+      <div class="card" style="padding: 0px;">
+        <div>
+          <canvas id="chart-canvas" style="max-height: 400px;"></canvas>
+        </div>
+      </div>
+      <!-- sales trend graph - end -->
+
       <!-- organization statistics - start -->
       <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ORGANIZATION_STATISTICS', organization)]]">
 
@@ -181,7 +188,7 @@
         <!-- Organization information - start -->
         <div class="vertical layout wrap">
           <div class="card flex info-panel">
-  
+
             <div class="title">[[verses.general.organization]]: [[organization.name]]</div>
             <template is="dom-if" if="[[organization.email]]">
               <div class="">[[verses.general.email]]: [[organization.email]]</div>
@@ -312,9 +319,11 @@
           if (this.hasPrivilege('PRIV_VIEW_ORGANIZATION_STATISTICS')) {
             this._processDashboardSummary(() => {
               this.isReady = true;
+              this.initGraph();
             });
           } else {
             this.isReady = true;
+            this.initGraph();
           }
         });
       }
@@ -537,6 +546,94 @@
 
       hideDefaultOutletPromptTapped() {
         this.setUiParameterInSettings('pageHome', 'hideDefaultOutletPrompt', true);
+      }
+
+      // region: graph =================================
+
+      initGraph() {
+        Chart.defaults.global.defaultFontColor = 'black';
+        Chart.defaults.global.defaultFontSize = 16;
+
+        this.fetchGraphData(({ graphData }) => {
+          this.drawGraph({ graphData });
+        })
+
+        window.addEventListener('resize', () => {
+          if (this.chart) {
+            this.chart.resize();
+          }
+        }, true);
+      }
+
+      fetchGraphData(cbfn) {
+        let data = {
+          organizationId: this.organization.id,
+          shouldFilterByOutlet: false,
+          outletId: null,
+          fromDate: Date.now(),
+          periodLevel: 'year-monthly'
+        };
+        this.app.callGraphSalesApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      drawGraph({ graphData }) {
+        let ctx = this.elem('#chart-canvas').getContext('2d');
+
+        let labelList = graphData.labelList.map(label =>  label +  '                                    ' )
+
+        let data = {
+          labels: labelList,
+          datasets: [
+            {
+              label: "",
+              borderColor: "#3e95cd",
+              data: graphData.sumTotalBilledList,
+              fill: false,
+              lineTension: 0.3,
+              pointBorderColor: "#3e95cd",
+              pointBackgroundColor: "#3e95cd",
+              pointRadius: 4,
+              pointHoverRadius: 6,
+              pointHitRadius: 10,
+            }
+          ]
+        }
+
+        let options = {
+          tooltips: {
+            display: false,
+            mode: 'point', 
+            bodySpacing: 100,
+            footerSpacing: 20,
+            xPadding: 60,            
+          },
+          title: {
+            display: true,
+            text: "Sales this week"
+          },
+          legend: {
+            display: false,
+          },
+          responsive: true,
+          aspectRatio: 3,
+          layout: {
+            padding: {
+              left: 60,
+              right: 60,
+            }
+          },
+        }
+
+        this.chart = new Chart(ctx, {
+          type: 'line',
+          data,
+          options
+        });
+
       }
 
       // region: misc =================================

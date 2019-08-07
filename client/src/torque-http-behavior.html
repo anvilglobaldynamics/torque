@@ -570,6 +570,11 @@
         this.callCombinedJsonApi('get-product-transfer-list', data, cbfn);
       }
 
+      callGraphSalesApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('graph-sales', data, cbfn);
+      }
+
     }
 
   })();
