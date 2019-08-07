@@ -13,7 +13,6 @@ exports.GraphSalesApi = class extends Api {
   get requestSchema() {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
-      shouldFilterByOutlet: Joi.boolean().required(),
       outletId: Joi.number().max(999999999999999).allow(null).required(),
       fromDate: Joi.number().max(999999999999999).required(),
       periodLevel: Joi.string().valid('week', 'month', 'year-quarterly', 'year-monthly')
@@ -33,8 +32,8 @@ exports.GraphSalesApi = class extends Api {
     }];
   }
 
-  async __verifyOutletIfNeeded({ outletId, shouldFilterByOutlet }) {
-    if (shouldFilterByOutlet) {
+  async __verifyOutletIfNeeded({ outletId }) {
+    if (outletId !== null) {
       let doc = await this.database.outlet.findById({ id: outletId });
       throwOnFalsy(doc, "OUTLET_INVALID", "Outlet not found.");
     }
@@ -56,6 +55,11 @@ exports.GraphSalesApi = class extends Api {
 
   __prepareDateRangesForWeek({ refDate }) {
     const weekDayList = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    weekDayList.forEach((year, index) => {
+      let res = year.toLowerCase().split('');
+      res[0] = res[0].toUpperCase();
+      weekDayList[index] = res.join('');
+    });
 
     let dateRangeList = [];
 
@@ -122,6 +126,11 @@ exports.GraphSalesApi = class extends Api {
 
   __prepareDateRangesForYearMonthly({ refDate }) {
     const yearMonthList = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    yearMonthList.forEach((year, index) => {
+      let res = year.toLowerCase().split('');
+      res[0] = res[0].toUpperCase();
+      yearMonthList[index] = res.join('');
+    });
 
     let dateRangeList = [];
 
@@ -204,16 +213,18 @@ exports.GraphSalesApi = class extends Api {
     }
   }
 
-  async _getSalesGraphData({ outletIdList, outletId, shouldFilterByOutlet, dateRangeList }) {
+  async _getSalesGraphData({ outletIdList, outletId, dateRangeList }) {
     let query = { $and: [] };
 
-    if (shouldFilterByOutlet) {
+    if (outletId !== null) {
       query.$and.push({ outletId });
     } else {
       query.$and.push({
         outletId: { $in: outletIdList }
       });
     }
+
+    query.$and.push({ isDiscarded: false });
 
     let labelList = [];
     let sumCountList = [];
@@ -267,15 +278,15 @@ exports.GraphSalesApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { organizationId, outletId, shouldFilterByOutlet, fromDate, periodLevel } = body;
+    let { organizationId, outletId, fromDate, periodLevel } = body;
 
-    await this.__verifyOutletIfNeeded({ outletId, shouldFilterByOutlet });
+    await this.__verifyOutletIfNeeded({ outletId });
 
     let outletIdList = (await this.database.outlet.listByOrganizationId({ organizationId })).map(outlet => outlet.id);
 
     let dateRangeList = this.__prepareDateRanges({ fromDate, periodLevel });
 
-    let graphData = await this._getSalesGraphData({ outletIdList, outletId, shouldFilterByOutlet, dateRangeList });
+    let graphData = await this._getSalesGraphData({ outletIdList, outletId, dateRangeList });
 
     return { graphData };
 

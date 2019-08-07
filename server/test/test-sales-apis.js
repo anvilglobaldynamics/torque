@@ -2172,12 +2172,11 @@ describe.only('Sales', _ => {
 
     localFromDate = fromDate;
 
-    callApi('api/graph-sales ', {
+    callApi('api/graph-sales', {
       json: {
         apiKey,
         organizationId,
         outletId: null,
-        shouldFilterByOutlet: false,
         fromDate: localFromDate,
         periodLevel: 'week'
       }
@@ -2196,12 +2195,11 @@ describe.only('Sales', _ => {
 
     localFromDate = fromDate;
 
-    callApi('api/graph-sales ', {
+    callApi('api/graph-sales', {
       json: {
         apiKey,
         organizationId,
         outletId: null,
-        shouldFilterByOutlet: false,
         fromDate: localFromDate,
         periodLevel: 'month'
       }
@@ -2221,12 +2219,11 @@ describe.only('Sales', _ => {
 
     localFromDate = fromDate;
 
-    callApi('api/graph-sales ', {
+    callApi('api/graph-sales', {
       json: {
         apiKey,
         organizationId,
         outletId: null,
-        shouldFilterByOutlet: false,
         fromDate: localFromDate,
         periodLevel: 'year-monthly'
       }
@@ -2245,12 +2242,11 @@ describe.only('Sales', _ => {
 
     localFromDate = fromDate;
 
-    callApi('api/graph-sales ', {
+    callApi('api/graph-sales', {
       json: {
         apiKey,
         organizationId,
         outletId: null,
-        shouldFilterByOutlet: false,
         fromDate: localFromDate,
         periodLevel: 'year-quarterly'
       }
