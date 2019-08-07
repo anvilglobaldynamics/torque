@@ -1,0 +1,222 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-vendor">
+  <template>
+    <style include="shared-styles">
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="editVendorForm" on-keypress="genericFormSubmitionKeypress">
+        <form>
+          <div class="card vertical layout">
+            <paper-input class="editVendorForm--name" value="{{editVendorForm.name}}" required minlength="3" error-message=[[verses.vendor.vendorNameInputError]] label=[[verses.vendor.vendorNameInput]]></paper-input>
+
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editVendorForm--submit" on-tap="createVendorTapped">[[verses.vendor.createVendor]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editVendorForm--submit" on-tap="updateVendorTapped">[[verses.vendor.updateVendor]]</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageEditVendor extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-edit-vendor';
+      }
+
+      static get properties() {
+        return {
+          editMode: {
+            type: Boolean,
+            value: false
+          },
+          editingVendor: {
+            type: Object,
+            value: null
+          },
+          editVendorForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  name: "10% Off Everything",
+                  discountType: 'percent',
+                  discountValue: 10,
+                };
+              } else {
+                return {
+                  name: "",
+                  discountType: 'percent',
+                  discountValue: 0,
+                };
+              }
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        if ('vendor' in this.params) {
+          this.editMode = true;
+          this.app.pushPageTitle(this.app.verses.vendor.editVendorTitle);
+        } else {
+          this.editMode = false;
+          this.app.pushPageTitle(this.app.verses.vendor.addVendorTitle);
+        }
+        if (!this._ensureAccess()) return;
+
+        if (this.editMode) {
+          this._processGetVendor(() => {
+            this.isReady = true;
+          });
+        } else {
+          this.delay(300, () => {
+            this.isReady = true;
+          });
+        }
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editVendorForm');
+        this.removeAutoValidation('#editVendorForm paper-input');
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_VENDOR']
+        });
+      }
+
+      // region: editVendor =================================
+
+      _fetchVendor({ vendorId }, cbfn) {
+        let data = {
+          organizationId: this.app.organization.id,
+          vendorIdList: [vendorId]
+        };
+        this.app.callGetVendorListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          let vendor = response.vendorList[0];
+          cbfn({ vendor });
+        });
+      }
+
+      _processGetVendor(cbfn) {
+        let vendorId = parseInt(this.params['vendor']);
+        this._fetchVendor({ vendorId }, ({ vendor }) => {
+
+          this.editingVendor = vendor;
+          let { name, discountType, discountValue } = vendor;
+          this.editVendorForm = { name, discountType, discountValue };
+
+          cbfn();
+        });
+      }
+
+      _processCreateVendor({ name, discountType, discountValue }) {
+        let data = {
+          name, discountType, discountValue,
+          organizationId: this.app.organization.id,
+        };
+        this.app.callAddVendorApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editVendorForm');
+          let message = this.app.verses.vendor.vendorCreated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      _processUpdateVendor({ name, discountType, discountValue }) {
+        let data = {
+          name, discountType, discountValue,
+          vendorId: this.editingVendor.id
+        };
+
+        this.app.callEditVendorApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editVendorForm');
+          let message = this.app.verses.vendor.vendorUpdated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-vendors');
+      }
+
+      createVendorTapped(e = null) {
+        this.elemAll('#editVendorForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editVendorForm').validate()) return;
+
+        let { name, discountType, discountValue } = this.editVendorForm;
+        this._processCreateVendor({ name, discountType, discountValue });
+      }
+
+      updateVendorTapped(e = null) {
+        this.elemAll('#editVendorForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editVendorForm').validate()) return;
+
+        let { name, discountType, discountValue } = this.editVendorForm;
+        this._processUpdateVendor({ name, discountType, discountValue });
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageEditVendor.is, PageEditVendor);
+  </script>
+</dom-module>

@@ -60,26 +60,19 @@
               <div class="horizontal layout item center">
 
                 <div class="vertical layout flex">
-                  <div class="person-name-container">[[verses.general.name]]: [[vendor.fullName]]</div>
+                  <div class="person-name-container">[[verses.general.name]]: [[vendor.name]]</div>
                   <div class="person-phone-container">[[verses.general.phone]]: [[vendor.phone]]</div>
-                  
-                  <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
-                    <div class="person-detail-container">
-                      <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
-                      [[verses.general.balance]]: [[$round(vendor.changeWalletBalance)]] [[app.settings.monetaryUnit]]
-                    </div>
-                  </template>
                 </div>
 
                 <div class="horizontal layout wrap">
-                  <paper-button raised class="secondary" on-tap="viewTapped">
+                  <!-- <paper-button raised class="secondary" on-tap="viewTapped">
                     <iron-icon class="button-icon" icon="icons:visibility"></iron-icon>
                     [[verses.general.view]]
-                  </paper-button>
-                  <!-- <paper-button raised class="secondary" on-tap="editTapped">
+                  </paper-button> -->
+                  <paper-button raised class="secondary" on-tap="editTapped">
                     <iron-icon class="button-icon" icon="icons:create"></iron-icon>
                     [[verses.general.edit]]
-                  </paper-button> -->
+                  </paper-button>
                 </div>
 
               </div>
@@ -154,7 +147,7 @@
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
-          privilegeList: ['PRIV_VIEW_CUSTOMER']
+          privilegeList: ['PRIV_VIEW_VENDOR']
         });
       }
 

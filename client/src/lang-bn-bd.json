@@ -510,6 +510,28 @@
     "searchForCustomerInputError": "গ্রাহকের সন্ধানে ত্রুটি",
     "customerName": "গ্রাহকের নাম"
   },
+  "vendor": {
+    "editVendorTitle": "সরবরাহকারী সম্পাদনা করুন",
+    "addVendorTitle": "সরবরাহকারী যুক্ত করুন",
+    "vendorNameInput": "সরবরাহকারীর  নাম",
+    "vendorNameInputError": "একটি সঠিক নাম লিখুন",
+    "vendorNumberInput": "যোগাযোগের নম্বর",
+    "vendorNumberInputError": "একটি সঠিক ফোন নম্বর লিখুন",
+    "createVendor": "সরবরাহকারী যুক্ত করুন",
+    "updateVendor": "সরবরাহকারী আপডেট করুন",
+    "newVendorCreated": "নতুন সরবরাহকারী যুক্ত করা হয়েছে।",
+    "vendorUpdated": "সরবরাহকারী আপডেট করা হয়েছে।",
+    "viewVendorTitle": "সরবরাহকারী",
+    "clickToEditVendor": "সরবরাহকারী সম্পাদনা করতে এখানে ক্লিক করুন।",
+    "editVendor": "সরবরাহকারী সম্পাদনা",
+    "vendorName": "সরবরাহকারীর  নাম",
+
+    "manageVendorPageTitle": "সরবরাহকারী পরিচালনা",
+    "createNewVendor": "নতুন সরবরাহকারী যুক্ত করুন",
+    "searchForVendorInput": "সরবরাহকারীর নাম/নম্বর",
+    "searchForVendorInputError": "সরবরাহকারীর সন্ধানে ত্রুটি",
+    "noVendorFound": "কোনো সরবরাহকারী পাওয়া যায় নি।"
+  },
   "editProfile": {
     "editProfileTitle": "প্রোফাইল সম্পাদনা",
     "passwordChangeForm": "পাসওয়ার্ড পরিবর্তন ফর্ম",
