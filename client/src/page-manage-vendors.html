@@ -159,7 +159,8 @@
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
-          privilegeList: ['PRIV_VIEW_VENDOR']
+          privilegeList: ['PRIV_VIEW_VENDOR'],
+          moduleList: ['MOD_VENDOR']
         });
       }
 

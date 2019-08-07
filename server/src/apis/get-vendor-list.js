@@ -26,7 +26,9 @@ exports.GetVendorListApi = class extends Api {
       privilegeList: [
         "PRIV_VIEW_VENDOR"
       ],
-      moduleList: []
+      moduleList: [
+        "MOD_VENDOR"
+      ]
     }];
   }
 

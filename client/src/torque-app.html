@@ -393,7 +393,9 @@
 
                 <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
                 <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
-                <a name="manage-vendors" href="#/manage-vendors">[[verses.sidebar.vendors]]</a>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_VENDOR')]]">
+                  <a name="manage-vendors" href="#/manage-vendors">[[verses.sidebar.vendors]]</a>
+                </template>
                 <hr class="custom-sidebar-divider">
 
                 <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>

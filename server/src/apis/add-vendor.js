@@ -26,7 +26,9 @@ exports.AddVendorApi = class extends Api {
       privilegeList: [
         "PRIV_MODIFY_VENDOR"
       ],
-      moduleList: []
+      moduleList: [
+        "MOD_VENDOR"
+      ]
     }];
   }
 
