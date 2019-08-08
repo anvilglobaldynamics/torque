@@ -246,7 +246,7 @@ describe('Shop : Geolocation', _ => {
         productList: [
           { productBlueprintId: suite1Data.productBlueprint3Id, count: 100 }
         ],
-        vendor: null
+        vendorId: null
       }))
       .then((data) => 'pass')
 
