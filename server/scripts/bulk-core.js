@@ -365,7 +365,8 @@ const createOutletProduct = async ({ apiKey, organizationId, outletId, productBl
     inventoryId: outletDefaultInventoryId,
     productList: [
       { productBlueprintId, count }
-    ]
+    ],
+    vendorId: null
   });
 
   return { productId: results.insertedProductList[0].productId };
@@ -379,7 +380,8 @@ const createWarehouseProduct = async ({ apiKey, organizationId, warehouseId, pro
     inventoryId: warehouseDefaultInventoryId,
     productList: [
       { productBlueprintId, count }
-    ]
+    ],
+    vendorId: null
   });
 
   return { productId: results.insertedProductList[0].productId };

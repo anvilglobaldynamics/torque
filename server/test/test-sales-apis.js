@@ -209,14 +209,16 @@ describe('Sales', _ => {
                         inventoryId: outletDefaultInventoryId,
                         productList: [
                           { productBlueprintId, count: 100 }
-                        ]
+                        ],
+                        vendorId: null
                       }, (data) => {
                         addProductToInventory({
                           apiKey,
                           inventoryId: warehouseDefaultInventoryId,
                           productList: [
                             { productBlueprintId, count: 100 }
-                          ]
+                          ],
+                          vendorId: null
                         }, (data) => {
                           addCustomer({
                             apiKey,

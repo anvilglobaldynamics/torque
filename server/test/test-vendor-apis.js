@@ -53,7 +53,8 @@ describe('Vendor', _ => {
             name: orgName,
             primaryBusinessAddress: orgBusinessAddress,
             phone: orgPhone,
-            email: orgEmail
+            email: orgEmail,
+            activeModuleCodeList: ['MOD_PRODUCT', 'MOD_SERVICE', 'MOD_VENDOR']
           }, (data) => {
             organizationId = data.organizationId;
             testDoneFn();
@@ -77,6 +78,7 @@ describe('Vendor', _ => {
         physicalAddress: "an address"
       }
     }, (err, response, body) => {
+      console.log(body)
       expect(response.statusCode).to.equal(200);
       validateAddVendorApiSuccessResponse(body);
       testDoneFn();

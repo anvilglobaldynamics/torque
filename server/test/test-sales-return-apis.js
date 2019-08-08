@@ -160,14 +160,16 @@ describe('Sales Return', _ => {
                       inventoryId: outletDefaultInventoryId,
                       productList: [
                         { productBlueprintId: returnableProductBlueprintId, count: 100 }
-                      ]
+                      ],
+                      vendorId: null
                     }, (data) => {
                       addProductToInventory({
                         apiKey,
                         inventoryId: outletDefaultInventoryId,
                         productList: [
                           { productBlueprintId: nonReturnableProductBlueprintId, count: 200 }
-                        ]
+                        ],
+                        vendorId: null
                       }, (data) => {
                         addCustomer({
                           apiKey,

@@ -242,7 +242,8 @@ describe('Inventory', _ => {
         productList: [
           { productBlueprintId, count: 10 },
           { productBlueprintId: productBlueprintId2, count: 30 }
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -259,7 +260,8 @@ describe('Inventory', _ => {
         productList: [
           { productBlueprintId, count: 5 },
           { productBlueprintId: productBlueprintId2, count: 5 }
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -276,7 +278,8 @@ describe('Inventory', _ => {
         inventoryId: invalidInventoryId,
         productList: [
           { productBlueprintId, count: 10 }
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -298,7 +301,8 @@ describe('Inventory', _ => {
             productBlueprintId: invalidProductBlueprintId,
             count: 10
           }
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -892,7 +896,8 @@ describe('Inventory', _ => {
         inventoryId: warehouseDefaultInventoryId,
         productList: [
           { productBlueprintId, count: 10 },
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       includeZeroCountProductsProductId = body.insertedProductList[0].productId;
@@ -990,7 +995,8 @@ describe('Inventory', _ => {
         inventoryId: warehouseDefaultInventoryId,
         productList: [
           { productBlueprintId: productBlueprintId3, count: 10 },
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       identifierCodeProductId = body.insertedProductList[0].productId;
@@ -1025,7 +1031,8 @@ describe('Inventory', _ => {
         inventoryId: warehouseDefaultInventoryId,
         productList: [
           { productBlueprintId: productBlueprintId4, count: 8 },
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
