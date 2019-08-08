@@ -167,7 +167,10 @@ const createOrganization = async ({ apiKey }) => {
     name: (pickOne(adjectiveList) + ' Company ' + (uid++)),
     primaryBusinessAddress: 'ADDRESS GOES HERE',
     phone: makePhoneNumber(),
-    email: makeEmailId()
+    email: makeEmailId(),
+    activeModuleCodeList: [
+      'MOD_PRODUCT', 'MOD_SERVICE','MOD_VENDOR'
+    ]
   });
 
   let adminApiKey = (await callApi('api/admin-login', {
