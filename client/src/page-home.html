@@ -145,14 +145,16 @@
       <!-- user information - end -->
 
       <!-- sales trend graph - start -->
-      <div class="card" style="padding: 0px;">
-        <div>
-          <canvas id="chart-canvas" style="max-height: 400px;"></canvas>
+      <template is="dom-if" if="[[hasGraphPrivileges(organization)]]">
+        <div class="card" style="padding: 0px;">
+          <div>
+            <canvas id="chart-canvas" style="max-height: 400px;"></canvas>
+          </div>
+          <div style="text-align: center; padding: 8px;font-size: 12px; color: rgb(100, 100, 100)">
+            [[verses.home.salesTrendGraphTitle]]
+          </div>
         </div>
-        <div style="text-align: center; padding: 8px;font-size: 12px; color: rgb(100, 100, 100)">
-          [[verses.home.salesTrendGraphTitle]]
-        </div>
-      </div>
+      </template>
       <!-- sales trend graph - end -->
 
       <!-- organization statistics - start -->
@@ -553,7 +555,13 @@
 
       // region: graph =================================
 
+      hasGraphPrivileges(organization) {
+        return (this.hasPrivilege('PRIV_VIEW_SALES', organization)
+          && this.hasPrivilege('PRIV_VIEW_REPORTS', organization));
+      }
+
       initGraph() {
+        if (!this.hasGraphPrivileges(this.organization)) return;
         Chart.defaults.global.defaultFontFamily = 'Roboto';
 
         this.fetchGraphData(({ graphData }) => {
