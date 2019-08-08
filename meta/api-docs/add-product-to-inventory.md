@@ -18,7 +18,9 @@ method: `POST`
       salePrice: Joi.number().max(999999999999999).required(),
       count: Joi.number().max(999999999999999).required()
     });
-  )
+  ),
+
+  vendorId: Joi.number().max(999999999999999).allow(null).required(),
 }
 ```
 

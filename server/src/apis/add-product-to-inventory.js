@@ -20,7 +20,8 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin
           productBlueprintId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required()
         })
-      )
+      ),
+      vendorId: Joi.number().max(999999999999999).allow(null).required()
     });
   }
 
@@ -67,15 +68,28 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin
     return insertedProductList;
   }
 
-  async _addAcquisitionRecord({ createdByUserId, acquiredDatetimeStamp, inventoryId, productList }) {
-    await this.database.productAcquisition.create({ createdByUserId, acquiredDatetimeStamp, inventoryId, productList: productList });
+  async _addAcquisitionRecord({ createdByUserId, acquiredDatetimeStamp, inventoryId, productList, vendorId }) {
+    await this.database.productAcquisition.create({ createdByUserId, acquiredDatetimeStamp, inventoryId, productList: productList, vendorId });
+  }
+
+  async _verifyVendorIfNeeded({ vendorId, organizationId }) {
+    if (vendorId) {
+      let doc = await this.database.vendor.findByIdAndOrganizationId({ id: vendorId, organizationId });
+      throwOnFalsy(doc, "VENDOR_INVALID", "Vendor not found.");
+    }
   }
 
   async handle({ body, userId }) {
-    let { inventoryId, productList } = body;
+    let { inventoryId, productList, vendorId } = body;
+    let organizationId = this.interimData.organization.id;
+
+    await this._verifyVendorIfNeeded({ vendorId, organizationId });
+
     await this._verifyProductBlueprintsExist({ productList });
+
     let insertedProductList = await this._addProductToInventory({ inventoryId, productList });
-    await this._addAcquisitionRecord({ createdByUserId: userId, acquiredDatetimeStamp: (new Date).getTime(), inventoryId, productList: insertedProductList });
+    await this._addAcquisitionRecord({ createdByUserId: userId, acquiredDatetimeStamp: (new Date).getTime(), inventoryId, productList: insertedProductList, vendorId });
+
     return { status: "success", insertedProductList };
   }
 

@@ -20,7 +20,9 @@ exports.ProductAcquisitionCollection = class extends Collection {
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required()
         })
-      )
+      ),
+
+      vendorId: Joi.number().max(999999999999999).allow(null).required()
     });
   }
 
@@ -40,13 +42,14 @@ exports.ProductAcquisitionCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ createdByUserId, acquiredDatetimeStamp, inventoryId, productList }) {
+  async create({ createdByUserId, acquiredDatetimeStamp, inventoryId, productList, vendorId }) {
     return await this._insert({
       isDeleted: false,
       createdByUserId,
       acquiredDatetimeStamp,
       inventoryId,
       productList,
+      vendorId
     });
   }
 
