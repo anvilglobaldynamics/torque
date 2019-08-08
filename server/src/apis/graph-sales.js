@@ -23,7 +23,8 @@ exports.GraphSalesApi = class extends Api {
     return [{
       organizationBy: "organizationId",
       privilegeList: [
-        "PRIV_VIEW_SALES"
+        "PRIV_VIEW_SALES",
+        "PRIV_VIEW_REPORTS"
       ],
       moduleList: [
         "MOD_PRODUCT",
