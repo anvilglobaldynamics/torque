@@ -1,7 +1,7 @@
 This API handles;
 * returns graph data for sales trend visualization.
 
-url: `api/graph-sales`
+url: `api/graph-sales-trend`
 
 method: `POST`
 

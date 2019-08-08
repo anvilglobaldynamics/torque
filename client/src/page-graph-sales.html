@@ -314,7 +314,7 @@
           fromDate: this.fromDate,
           periodLevel
         };
-        this.app.callGraphSalesApi(data, (err, response) => {
+        this.app.callGraphSalesTrendApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           return cbfn({
