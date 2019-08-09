@@ -497,7 +497,7 @@ describe('Service', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).equal('PRODUCT_BLUEPRINT_INVALID');
+      expect(body.error.code).equal('SERVICE_BLUEPRINT_INVALID');
       testDoneFn();
     })
 

@@ -40,7 +40,8 @@
     "font-roboto": "PolymerElements/font-roboto-local#^1.1.0",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.1.0",
     "good-map": "keanulee/good-map#^0.0.1",
-    "paper-swatch-picker": "PolymerElements/paper-swatch-picker#^2.0.1"
+    "paper-swatch-picker": "PolymerElements/paper-swatch-picker#^2.0.1",
+    "chart.js": "Chart-js#^2.8.0"
   },
   "resolutions": {
     "polymer": "^2.0.0"

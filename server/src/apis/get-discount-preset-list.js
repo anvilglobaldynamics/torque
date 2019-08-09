@@ -14,7 +14,8 @@ exports.GetDiscountPresetListApi = class extends Api {
 
   get requestSchema() {
     return Joi.object().keys({
-      organizationId: Joi.number().max(999999999999999).required()
+      organizationId: Joi.number().max(999999999999999).required(),
+      discountPresetIdList: Joi.array().items(Joi.number()).default([]).optional() 
     });
   }
 
@@ -24,14 +25,21 @@ exports.GetDiscountPresetListApi = class extends Api {
     }];
   }
 
-  async __getDiscountPresetList({ organizationId }) {
-    let discountPresetList = await this.database.discountPreset.listByOrganizationId({ organizationId });
-    return discountPresetList;
+  async __getDiscountPresetList({ organizationId, discountPresetIdList }) {
+    if (discountPresetIdList.length > 0) {
+      let discountPresetList = await this.database.discountPreset.listByOrganizationIdAndIdList({ organizationId, idList: discountPresetIdList });
+      if (discountPresetList.length !== discountPresetIdList.length) {
+        throw new CodedError("DISCOUNT_PRESET_INVALID", "The discount preset you provided is invalid");
+      }
+      return discountPresetList;
+    } else {
+      return await this.database.discountPreset.listByOrganizationId({ organizationId });
+    }   
   }
 
   async handle({ body }) {
-    let { organizationId } = body;
-    let discountPresetList = await this.__getDiscountPresetList({ organizationId });
+    let { organizationId , discountPresetIdList} = body;
+    let discountPresetList = await this.__getDiscountPresetList({ organizationId, discountPresetIdList });
     return { discountPresetList };
   }
 

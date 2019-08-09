@@ -405,6 +405,21 @@
         this.callCombinedJsonApi('withdraw-from-change-wallet-balance', data, cbfn);
       }
 
+      callGetVendorListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-vendor-list', data, cbfn);
+      }
+
+      callAddVendorApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-vendor', data, cbfn);
+      }
+
+      callEditVendorApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-vendor', data, cbfn);
+      }
+
       callUserSetEmailApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('user-set-email', data, cbfn);
@@ -568,6 +583,16 @@
       callGetProductTransferListApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('get-product-transfer-list', data, cbfn);
+      }
+
+      callGraphSalesTrendApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('graph-sales-trend', data, cbfn);
+      }
+      
+      callGetProductAcquisitionListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-product-acquisition-list', data, cbfn);
       }
 
     }

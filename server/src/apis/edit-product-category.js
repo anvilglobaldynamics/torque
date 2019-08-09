@@ -18,13 +18,15 @@ exports.EditProductCategoryApi = class extends Api {
     });
   }
 
+  // privilege is same as product-blueprint to reflect real life use case.
+  // product blueprint and category is 1to1 relation
   get accessControl() {
     return [{
       organizationBy: {
         from: "product-category",
         query: ({ productCategoryId }) => ({ id: productCategoryId }),
         select: "organizationId",
-        errorCode: "DISCOUNT_PRESET_INVALID"
+        errorCode: "PRODUCT_CATEGORY_INVALID"
       },
       privilegeList: [
         "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"

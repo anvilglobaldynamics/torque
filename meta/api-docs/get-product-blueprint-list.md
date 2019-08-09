@@ -9,7 +9,8 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
   organizationId: Joi.number().max(999999999999999).required(),
-  searchString: Joi.string().min(0).max(64).allow('').optional() // by name or identifierCode
+  searchString: Joi.string().min(0).max(64).allow('').optional(), // by name or identifierCode
+  productBlueprintIdList: Joi.array().items(Joi.number()).default([]).optional() // takes precedence over searchString
 }
 ```
 
@@ -29,6 +30,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: ORGANIZATION_INVALID } // the organization id is invalid
+{ code: PRODUCT_BLUEPRINT_INVALID } // the product blueprint is invalid
 ```
 
 ### response (on success):

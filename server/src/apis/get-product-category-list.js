@@ -16,32 +16,39 @@ exports.GetProductCategoryListApi = class extends Api {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
       searchString: Joi.string().min(0).max(32).allow('').optional(),
-      productCategoryIdList: Joi.array().items(Joi.number()).optional(),
-      searchBySearchString: Joi.boolean().default(true).optional()
+      productCategoryIdList: Joi.array().items(Joi.number()).default([]).optional()
     });
   }
 
+  // privilege is same as product-blueprint to reflect real life use case.
+  // product blueprint and category is 1to1 relation
   get accessControl() {
     return [{
       organizationBy: "organizationId",
+      privilegeList: [
+        "PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS"
+      ],
       moduleList: [
         "MOD_PRODUCT",
       ]
     }];
   }
 
-  async __getProductCategoryList({ organizationId, searchString, productCategoryIdList, searchBySearchString }) {
-    if (!searchBySearchString) {
-      productCategoryIdList = productCategoryIdList || [];
-      return await this.database.productCategory.listByOrganizationIdAndIdList({ organizationId, idList: productCategoryIdList });
+  async __getProductCategoryList({ organizationId, searchString, productCategoryIdList }) {
+    if (productCategoryIdList.length > 0) {
+      let productCategoryList = await this.database.productCategory.listByOrganizationIdAndIdList({ organizationId, idList: productCategoryIdList });
+      if (productCategoryList.length !== productCategoryIdList.length) {
+        throw new CodedError("PRODUCT_CATEGORY_INVALID", "The product category you provided is invalid");
+      }
+      return productCategoryList;
     } else {
       return await this.database.productCategory.listByOrganizationIdAndSearchString({ organizationId, searchString });
     }
   }
 
   async handle({ body }) {
-    let { organizationId, searchString, productCategoryIdList, searchBySearchString } = body;
-    let productCategoryList = await this.__getProductCategoryList({ organizationId, searchString, productCategoryIdList, searchBySearchString });
+    let { organizationId, searchString, productCategoryIdList } = body;
+    let productCategoryList = await this.__getProductCategoryList({ organizationId, searchString, productCategoryIdList });
     return { productCategoryList };
   }
 

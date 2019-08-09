@@ -167,7 +167,10 @@ const createOrganization = async ({ apiKey }) => {
     name: (pickOne(adjectiveList) + ' Company ' + (uid++)),
     primaryBusinessAddress: 'ADDRESS GOES HERE',
     phone: makePhoneNumber(),
-    email: makeEmailId()
+    email: makeEmailId(),
+    activeModuleCodeList: [
+      'MOD_PRODUCT', 'MOD_SERVICE','MOD_VENDOR'
+    ]
   });
 
   let adminApiKey = (await callApi('api/admin-login', {
@@ -344,7 +347,10 @@ const createEmployee = async ({ apiKey, organizationId, i }) => {
 
       PRIV_VIEW_CUSTOMER: true,
       PRIV_MODIFY_CUSTOMER: true,
-      PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true
+      PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true,
+
+      PRIV_VIEW_VENDOR: true,
+      PRIV_MODIFY_VENDOR: true,
     }
   });
 
@@ -359,7 +365,8 @@ const createOutletProduct = async ({ apiKey, organizationId, outletId, productBl
     inventoryId: outletDefaultInventoryId,
     productList: [
       { productBlueprintId, count }
-    ]
+    ],
+    vendorId: null
   });
 
   return { productId: results.insertedProductList[0].productId };
@@ -373,7 +380,8 @@ const createWarehouseProduct = async ({ apiKey, organizationId, warehouseId, pro
     inventoryId: warehouseDefaultInventoryId,
     productList: [
       { productBlueprintId, count }
-    ]
+    ],
+    vendorId: null
   });
 
   return { productId: results.insertedProductList[0].productId };

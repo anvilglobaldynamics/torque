@@ -380,7 +380,8 @@ describe('Warehouse', _ => {
         inventoryId: warehouseDefaultInventoryId,
         productList: [
           { productBlueprintId, count: 10 }
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
