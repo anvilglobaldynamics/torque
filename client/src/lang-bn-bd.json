@@ -599,7 +599,7 @@
   "sales": {
     "manageSalesTitle": "বিক্রয় রেকর্ড",
     "salesId": "বিক্রয় নং",
-    "salesIdNote": "(ঐচ্ছিক, ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
+    "salesIdNote": "(ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
     "billed": "বিল",
     "paid": "প্রদত্ত",
     "products": "টি পণ্য",
@@ -1071,7 +1071,7 @@
   "productTransfer": {
     "manageProductTransferTitle": "পণ্য ট্রান্সফার রেকর্ড",
     "productTransferNumber": "পণ্য ট্রান্সফার নম্বর",
-    "exclusionNote": "(ঐচ্ছিক, ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
+    "exclusionNote": "(ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
     "noProductTransferFound": "কোনো পণ্য ট্রান্সফার রেকর্ড পাওয়া যায়নি। ",
     "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
     "productTransferTitle": "পণ্য ট্রান্সফার রেকর্ড"
@@ -1079,7 +1079,7 @@
   "productAcquisition": {
     "manageProductAcquisitionTitle": "পণ্য ক্রয় রেকর্ড",
     "productAcquisitionNumber": "পণ্য ক্রয় নম্বর",
-    "exclusionNote": "(ঐচ্ছিক, ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
+    "exclusionNote": "(ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
     "noProductAcquisitionFound": "কোনো পণ্য ক্রয় এর রেকর্ড পাওয়া যায়নি। ",
     "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
     "productAcquisitionTitle": "পণ্য ক্রয় এর রেকর্ড",
