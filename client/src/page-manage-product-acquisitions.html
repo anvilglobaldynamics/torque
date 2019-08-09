@@ -73,6 +73,14 @@
           </div>
 
           <paper-input class="flex min-input" value="{{productAcquisitionNumberToSearch}}" label="[[verses.productAcquisition.productAcquisitionNumber]] [[verses.productAcquisition.exclusionNote]]" type="text"></paper-input>
+          
+          <paper-dropdown-menu class="full-width-paper-dropdown" label=[[verses.general.vendor]] class="mr-4">
+            <paper-listbox slot="dropdown-content" selected="{{vendorSelectedIndex}}">
+              <template is="dom-repeat" items="[[vendorList]]" as="vendor">
+                <paper-item data-key="[[vendor.id]]">[[vendor.name]]</paper-item>
+              </template>
+            </paper-listbox>
+          </paper-dropdown-menu>
         </div>
 
         <div class="horizontal layout">
@@ -142,7 +150,11 @@
 
       static get properties() {
         return {
-          vendorId: {
+          vendorList: {
+            type: Array,
+            value: () => []
+          },
+          vendorSelectedIndex: {
             type: Number,
             value: null
           },
@@ -182,8 +194,10 @@
         this.app.pushPageTitle(this.app.verses.productAcquisition.manageProductAcquisitionTitle);
         if (!this._ensureAccess()) return;
         this._processProductAcquisitionList(() => {
-          this.self = this;
-          this.isReady = true;
+          this._processVendorList(() => {
+            this.self = this;
+            this.isReady = true;
+          })
         });
       }
 
@@ -209,12 +223,13 @@
 
         let fromDate = new Date(this.fromDate).getTime();
         let toDate = new Date(this.toDate).getTime();
+        let vendorId = this.vendorSelectedIndex;
 
         let data = {
           organizationId: this.app.organization.id,
           fromDate,
           toDate,
-          vendorId: this.vendorId,
+          vendorId,
           paginate: this.paginate
         };
 
@@ -237,16 +252,26 @@
         });
       }
 
-      showMoreTapped(e = null) {
-        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
-        this.isReady = false;
-        this._processProductAcquisitionList(() => this.isReady = true);
+      _fetchVendorList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetVendorListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.vendorList);
+        });
       }
 
-      showPreviousTapped(e = null) {
-        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
-        this.isReady = false;
-        this._processProductAcquisitionList(() => this.isReady = true);
+      _processVendorList(cbfn) {
+        this.vendorSelectedIndex = -1;
+        if (!this.hasModule('MOD_VENDOR')) {
+          this.vendorList = [];
+          cbfn();
+          return;
+        }
+        this._fetchVendorList(newVendorList => {
+          this.vendorList = newVendorList;
+          cbfn();
+        });
       }
 
       // region: ui  ===========================
@@ -262,6 +287,18 @@
         this._processProductAcquisitionList(() => {
           this.isReady = true;
         });
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processProductAcquisitionList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processProductAcquisitionList(() => this.isReady = true);
       }
 
     }
