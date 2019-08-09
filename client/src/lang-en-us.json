@@ -1082,6 +1082,7 @@
     "noProductAcquisitionFound": "No Product Acquisition Found",
     "recordCreatedBy": "Record Created By",
     "productAcquisitionTitle": "Product Acquisition Details",
-    "wholeOrganization": "Entire Organization"
+    "wholeOrganization": "Entire Organization",
+    "acquiredFrom": "Acquired From"
   }
 }

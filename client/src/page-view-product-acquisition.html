@@ -24,6 +24,10 @@
 <dom-module id="page-view-product-acquisition">
   <template>
     <style include="shared-styles">
+      .description-time {
+        font-size: 12px;
+      }
+
       .discard-button {
         margin-top: 5px;
       }
@@ -68,11 +72,12 @@
             <div class="product-acquisition-conteiner">
 
               <div style="font-size: 16px; font-weight: 500;"> [[verses.productAcquisition.productAcquisitionNumber]]: [[productAcquisition.productAcquisitionNumber]] </div>
-
               <div class="description-time">[[$mkDate(productAcquisition.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
 
-              <div class="description">[[verses.general.from]]: [[productAcquisition.fromInventory.inventoryContainer.name]] - [[productAcquisition.fromInventory.name]]</div>
-              <div class="description">[[verses.general.to]]: [[productAcquisition.toInventory.inventoryContainer.name]] - [[productAcquisition.toInventory.name]]</div>
+              <template is="dom-if" if="{{productAcquisition.vendor}}">
+                <div class="description">[[verses.general.vendor]]: : [[productAcquisition.vendor.name]]</div>
+              </template>
+              <div class="description">[[verses.general.inventory]]: [[productAcquisition.inventory.inventoryContainer.name]]</div>
 
             </div>
           </div>
@@ -80,14 +85,18 @@
         
       </div>
 
-      <!-- TODO: vendor detail - start -->
-      <div class="card vertical layout">
+      <!-- vendor detail - start -->
+      <template is="dom-if" if="{{productAcquisition.vendor}}">
+        <div class="card vertical layout">
           <div class="title">
-              <b>[[verses.productAcquisition.recordCreatedBy]]: </b>
-            </div>
-        <div>[[verses.general.name]]: [[productAcquisition.createdByUser.fullName]]</div>
-        <div>[[verses.general.phone]]: [[productAcquisition.createdByUser.phone]]</div>
-      </div>
+            <b>[[verses.productAcquisition.acquiredFrom]]: </b>
+          </div>
+          <div>[[productAcquisition.vendor.name]]</div>
+          <div>[[verses.general.contactPerson]]: [[productAcquisition.vendor.contactPersonName]]</div>
+          <div>[[verses.general.phone]]: [[productAcquisition.vendor.phone]]</div>
+          <div class="description-time">[[verses.general.address]]: [[productAcquisition.vendor.physicalAddress]]</div>
+        </div>
+      </template>
       <!-- vendor detail - end -->
 
       <!-- product list - start -->
@@ -101,8 +110,8 @@
               <div class="vertical layout flex">
                 <div class="list-object">
 
-                  <div>[[verses.general.product]]: [[product.productBlueprint.name]]</div>
-                  <div>[[verses.general.count]]: [[product.count]]</div>
+                  <div>[[product.productBlueprint.name]]</div>
+                  <div>[[verses.general.count]]: [[product.count]] [[product.productBlueprint.unit]] @ [[product.product.purchasePrice]] [[app.settings.monetaryUnit]]</div>
 
                 </div>
               </div>
@@ -114,10 +123,10 @@
 
       <!-- user detail - start -->
         <div class="card vertical layout">
-            <div class="title">
-                <b>[[verses.productAcquisition.recordCreatedBy]]: </b>
-              </div>
-          <div>[[verses.general.name]]: [[productAcquisition.createdByUser.fullName]]</div>
+          <div class="title">
+            <b>[[verses.productAcquisition.recordCreatedBy]]: </b>
+          </div>
+          <div>[[productAcquisition.createdByUser.fullName]]</div>
           <div>[[verses.general.phone]]: [[productAcquisition.createdByUser.phone]]</div>
         </div>
       <!-- user detail - end -->
@@ -134,7 +143,12 @@
       }
 
       static get properties() {
-        return {};
+        return {
+          vendorId: {
+            type: Number,
+            value: null
+          }
+        };
       }
 
       // region: core =================================
@@ -185,6 +199,7 @@
         let data = {
           fromDate: Date.now(),
           toDate: Date.now(),
+          vendorId: this.vendorId,
           organizationId: this.app.organization.id,
           searchString: productAcquisitionId
         };

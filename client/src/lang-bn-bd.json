@@ -1083,6 +1083,7 @@
     "noProductAcquisitionFound": "কোনো পণ্য ক্রয় এর রেকর্ড পাওয়া যায়নি। ",
     "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
     "productAcquisitionTitle": "পণ্য ক্রয় এর রেকর্ড",
-    "wholeOrganization": "সম্পূর্ণ সংস্থা"
+    "wholeOrganization": "সম্পূর্ণ সংস্থা",
+    "acquiredFrom": "থেকে ক্রীত"
   }
 }
