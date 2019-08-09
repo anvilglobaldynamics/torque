@@ -18,7 +18,6 @@ exports.ProductAcquisitionCollection = class extends Collection {
       organizationId: Joi.number().max(999999999999999).required(),
       productAcquisitionNumber: Joi.number().max(999999999999999).required(),
     
-
       productList: Joi.array().min(1).items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
