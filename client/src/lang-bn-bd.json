@@ -49,6 +49,7 @@
     "move": "সরান",
     "delete": "মুছে ফেলুন",
     "customer": "গ্রাহক",
+    "vendor": "সরবরাহকারী",
     "outlet": "দোকান",
     "filter": "ফিল্টার করুন",
     "date": "তারিখ",
@@ -94,6 +95,7 @@
     "sellWarehouseProductModule": "গুদাম-এর পণ্য বিক্রয় মডিউল",
     "gymModule": "জিমনেসিয়াম মডিউল",
     "customerAccountBalanceModule": "গ্রাহকের ব্যালান্স মডিউল",
+    "vendorModule": "সরবরাহকারী মডিউল",
     "retail": "পণ্য বিক্রয়",
     "service": "সেবা বিক্রয়",
     "both": "উভয়",
@@ -102,7 +104,9 @@
     "showFilters": "ফিল্টার",
     "verificationUnsuccessful": "যাচাই ব্যর্থ",
     "modalConfirmationPleaseConfirm": "নিশ্চিত করুন",
-    "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন"
+    "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন",
+    "contactPerson": "যোগাযোগের ব্যক্তি",
+    "inventory": "পণ্য তালিকা"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -152,6 +156,7 @@
     "salesGraph": "বিক্রয় গ্রাফ",
     "serviceMembership": "সেবার সদস্যপদ",
     "customers": "গ্রাহক",
+    "vendors": "সরবরাহকারী",
     "salesReport": "বিক্রয় রিপোর্টস",
     "collectionReport": "সংগ্রহ রিপোর্ট",
     "inventoryReport": "পণ্য তালিকা রিপোর্টস",
@@ -161,6 +166,7 @@
     "logout": "লগ-আউট",
     "manageProductCategories": "পণ্যের ধরণ",
     "manageProductTransfer": "পণ্য ট্রান্সফার রেকর্ড",
+    "manageProductAcquisition": "পণ্য ক্রয় রেকর্ড",
     "manageDiscountPresets": "ডিসকাউন্টস"
   },
   "titleBar": {
@@ -436,6 +442,8 @@
     "count": "গণনা",
     "sellFor": "বিক্রয় মূল্য",
     "purchasedFor": "ক্রয় মূল্য",
+    "addProductsVendorNeededTitle": "সরবরাহকারী প্রয়োজন",
+    "addProductsVendorNeededMessage": "পণ্য যোগ করার জন্য সরবরাহকারী নির্বাচন করুন। আপনি যদি সরবরাহকারী তৈরি করতে চান, তাহলে সরবরাহকারী পরিচালনা ফিচারটি ব্যবহার করুন।",
     "noProductBlueprintFound": "কোনো পণ্যের পরিকল্পনা পাওয়া যায় নি। প্রথমে পণ্যটি একটি \"পণ্যের পরিকল্পনা\" হিসেবে যোগ করুন, এর পর এই পণ্য তালিকায় পণ্য হিসেবে যোগ করুন।",
     "addProductsConfirmMessage": "নিশ্চিত করুন পণ্য সংখ্যা সঠিক আছে। একবার পণ্য যোগ হয়ে গেলে ম্যানুয়ালি কমানো যাবে না।"
   },
@@ -510,6 +518,34 @@
     "searchForCustomerInputError": "গ্রাহকের সন্ধানে ত্রুটি",
     "customerName": "গ্রাহকের নাম"
   },
+  "vendor": {
+    "editVendorTitle": "সরবরাহকারী সম্পাদনা করুন",
+    "addVendorTitle": "সরবরাহকারী যুক্ত করুন",
+
+    "vendorNameInput": "সরবরাহকারীর  নাম",
+    "vendorNameInputError": "একটি সঠিক নাম লিখুন",
+    "vendorNumberInput": "যোগাযোগের নম্বর",
+    "vendorNumberInputError": "একটি সঠিক ফোন নম্বর লিখুন",
+    "vendorPhysicalAddressInput": "ঠিকানা",
+    "vendorPhysicalAddressInputError": "অন্তত ৮ টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
+    "vendorContactNameInput": "যোগাযোগ করার ব্যক্তির নাম",
+    "vendorContactNameInputError": "একটি সঠিক নাম লিখুন",
+
+    "createVendor": "সরবরাহকারী যুক্ত করুন",
+    "updateVendor": "সরবরাহকারী আপডেট করুন",
+    "newVendorCreated": "নতুন সরবরাহকারী যুক্ত করা হয়েছে।",
+    "vendorUpdated": "সরবরাহকারী আপডেট করা হয়েছে।",
+    "viewVendorTitle": "সরবরাহকারী",
+    "clickToEditVendor": "সরবরাহকারী সম্পাদনা করতে এখানে ক্লিক করুন।",
+    "editVendor": "সরবরাহকারী সম্পাদনা",
+    "vendorName": "সরবরাহকারীর  নাম",
+
+    "manageVendorPageTitle": "সরবরাহকারী পরিচালনা",
+    "createNewVendor": "নতুন সরবরাহকারী যুক্ত করুন",
+    "searchForVendorInput": "সরবরাহকারীর নাম/নম্বর",
+    "searchForVendorInputError": "সরবরাহকারীর সন্ধানে ত্রুটি",
+    "noVendorFound": "কোনো সরবরাহকারী পাওয়া যায় নি।"
+  },
   "editProfile": {
     "editProfileTitle": "প্রোফাইল সম্পাদনা",
     "passwordChangeForm": "পাসওয়ার্ড পরিবর্তন ফর্ম",
@@ -565,7 +601,7 @@
   "sales": {
     "manageSalesTitle": "বিক্রয় রেকর্ড",
     "salesId": "বিক্রয় নং",
-    "salesIdNote": "(ঐচ্ছিক, ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
+    "salesIdNote": "(ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
     "billed": "বিল",
     "paid": "প্রদত্ত",
     "products": "টি পণ্য",
@@ -1037,7 +1073,7 @@
   "productTransfer": {
     "manageProductTransferTitle": "পণ্য ট্রান্সফার রেকর্ড",
     "productTransferNumber": "পণ্য ট্রান্সফার নম্বর",
-    "exclusionNote": "(ঐচ্ছিক, ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
+    "exclusionNote": "(ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
     "noProductTransferFound": "কোনো পণ্য ট্রান্সফার রেকর্ড পাওয়া যায়নি। ",
     "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
     "productTransferTitle": "পণ্য ট্রান্সফার রেকর্ড"
@@ -1053,5 +1089,15 @@
     "periodMonth": "মাস",
     "periodYearMonthly": "বছর (মাসিক)",
     "periodYearQUarterly": "বছর (ত্রৈমাসিক)"
+  },
+  "productAcquisition": {
+    "manageProductAcquisitionTitle": "পণ্য ক্রয় রেকর্ড",
+    "productAcquisitionNumber": "পণ্য ক্রয় নম্বর",
+    "exclusionNote": "(ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
+    "noProductAcquisitionFound": "কোনো পণ্য ক্রয় এর রেকর্ড পাওয়া যায়নি। ",
+    "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
+    "productAcquisitionTitle": "পণ্য ক্রয় এর রেকর্ড",
+    "wholeOrganization": "সম্পূর্ণ সংস্থা",
+    "acquiredFrom": "থেকে ক্রীত"
   }
 }

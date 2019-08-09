@@ -26,7 +26,7 @@ exports.EditProductCategoryApi = class extends Api {
         from: "product-category",
         query: ({ productCategoryId }) => ({ id: productCategoryId }),
         select: "organizationId",
-        errorCode: "DISCOUNT_PRESET_INVALID"
+        errorCode: "PRODUCT_CATEGORY_INVALID"
       },
       privilegeList: [
         "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
