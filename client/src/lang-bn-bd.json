@@ -1074,5 +1074,13 @@
     "noProductTransferFound": "কোনো পণ্য ট্রান্সফার রেকর্ড পাওয়া যায়নি। ",
     "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
     "productTransferTitle": "পণ্য ট্রান্সফার রেকর্ড"
+  },
+  "productAcquisition": {
+    "manageProductAcquisitionTitle": "পণ্য ক্রয় রেকর্ড",
+    "productAcquisitionNumber": "পণ্য ক্রয় নম্বর",
+    "exclusionNote": "(ঐচ্ছিক, ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
+    "noProductAcquisitionFound": "কোনো পণ্য ক্রয় এর রেকর্ড পাওয়া যায়নি। ",
+    "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
+    "productAcquisitionTitle": "পণ্য ক্রয় এর রেকর্ড"
   }
 }
