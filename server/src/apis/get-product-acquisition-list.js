@@ -20,7 +20,6 @@ exports.GetProductAcquisitionListApi = class extends Api.mixin(InventoryMixin) {
 
       fromDate: Joi.number().max(999999999999999).required(),
       toDate: Joi.number().max(999999999999999).required(),
-      
       vendorId: Joi.number().max(999999999999999).allow(null).required(),
 
       searchString: Joi.string().min(0).max(64).allow('').optional()
@@ -47,8 +46,8 @@ exports.GetProductAcquisitionListApi = class extends Api.mixin(InventoryMixin) {
     return toDate;
   }
 
-  async __getProductAcquisitionList({ organizationId, fromDate, toDate, searchString }) {
-    let productAcquisitionList = await this.database.productAcquisition.listByFilters({ organizationId, fromDate, toDate, searchString });
+  async __getProductAcquisitionList({ organizationId, fromDate, toDate, vendorId, searchString }) {
+    let productAcquisitionList = await this.database.productAcquisition.listByFilters({ organizationId, fromDate, toDate, vendorId, searchString });
     return productAcquisitionList;
   }
 
@@ -95,17 +94,18 @@ exports.GetProductAcquisitionListApi = class extends Api.mixin(InventoryMixin) {
     });
 
     // get vendor
-    productAcquisition.vendor = null;
-    if (productAcquisition.vendor){
-      map = await this.crossmap({
-        source: productAcquisitionList,
-        sourceKey: 'vendorId',
-        target: 'vendor'
-      });
-      map.forEach((vendor, productAcquisition) => {
-        productAcquisition.vendor = vendor
-      });
-    }    
+    productAcquisitionList.forEach(productAcquisition => {
+      productAcquisition.vendor = null;
+    });
+    let productAcquisitionListWithVendor = productAcquisitionList.filter(productAcquisition => productAcquisition.vendorId !== null);
+    map = await this.crossmap({
+      source: productAcquisitionListWithVendor,
+      sourceKey: 'vendorId',
+      target: 'vendor'
+    });
+    map.forEach((vendor, productAcquisition) => {
+      productAcquisition.vendor = vendor
+    });
 
     // append inventory container details to inventories
     let inventoryList = [].concat(
@@ -132,7 +132,7 @@ exports.GetProductAcquisitionListApi = class extends Api.mixin(InventoryMixin) {
   async handle({ body }) {
     let { organizationId, fromDate, toDate, vendorId, searchString } = body;
     toDate = this.__getExtendedToDate(toDate);
-    let productAcquisitionList = await this.__getProductAcquisitionList({ organizationId, fromDate, toDate, vendorId,searchString });
+    let productAcquisitionList = await this.__getProductAcquisitionList({ organizationId, fromDate, toDate, vendorId, searchString });
     await this.__includeExtendedInformation({ productAcquisitionList });
     return { productAcquisitionList };
   }

@@ -53,6 +53,7 @@ Possible Error Codes:
 
     acquiredDatetimeStamp: Joi.number().max(999999999999999).required(),
     inventoryId: Joi.number().max(999999999999999).required(),
+    vendorId: Joi.number().max(999999999999999).allow(null).required(),
     organizationId: Joi.number().max(999999999999999).required(),
 
     productList: Joi.array().min(1).items(
