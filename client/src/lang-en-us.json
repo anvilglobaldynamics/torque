@@ -164,6 +164,7 @@
     "logout": "Logout",
     "manageProductCategories": "Product Categories",
     "manageProductTransfer": "Product Transfer Records",
+    "manageProductAcquisition": "Product Acquisition Records",
     "manageDiscountPresets": "Discounts"
   },
   "titleBar": {
