@@ -20,8 +20,10 @@ let {
   validateGenericApiSuccessResponse,
   validateGetAggregatedInventoryDetailsApiSuccessResponse,
   validateGetProductTransferListApiSuccessResponse,
+  validateGetProductAcquisitionListApiSuccessResponse,
   validateReportInventoryDetailsApiSuccessResponse,
   validateAggregatedProductScema,
+  validateAddVendorApiSuccessResponse,
   validateProductBlueprintSchema,
   validateProductSchema,
   validateGetProductApiSuccessResponse,
@@ -40,6 +42,8 @@ const orgEmail = 'o1' + `${rnd(prefix)}@gmail.com`;
 const orgName = "Test Organization";
 const orgBusinessAddress = "Test Org Address";
 const orgPhone = 'o1' + rnd(prefix, 11);
+
+const vendorPhone = 'v1' + rnd(prefix, 11);
 
 const warehousePhone = 'w' + rnd(prefix, 11);
 const warehouseName = "Test Warehouse";
@@ -64,6 +68,9 @@ let productBlueprintId4 = null;
 
 let productTransferNumber = null;
 let InvalidProductTransferNumber = 9999999999;
+
+let vendorId = null;
+let productAcquisitionNumber = null;
 
 let warehouseDefaultInventoryId = null;
 let warehouseReturnedInventoryId = null;
@@ -98,7 +105,8 @@ describe('Inventory', _ => {
             name: orgName,
             primaryBusinessAddress: orgBusinessAddress,
             phone: orgPhone,
-            email: orgEmail
+            email: orgEmail,
+            activeModuleCodeList: ['MOD_PRODUCT', 'MOD_SERVICE', 'MOD_VENDOR']
           }, (data) => {
             organizationId = data.organizationId;
             addWarehouse({
@@ -185,7 +193,21 @@ describe('Inventory', _ => {
                             isReturnable: false
                           }, (data) => {
                             productBlueprintId4 = data.productBlueprintId;
-                            testDoneFn();
+                            addProductBlueprint({
+                              apiKey,
+                              organizationId,
+                              name: "Product BLueprint With Vendor",
+                              unit: "box",
+                              identifierCode: 'VVVV',
+                              defaultPurchasePrice: 199,
+                              defaultVat: 3,
+                              defaultSalePrice: 300,
+                              productCategoryIdList: [],
+                              isReturnable: false
+                            }, (data) => {
+                              productBlueprintId5ForVendor = data.productBlueprintId;
+                              testDoneFn();
+                            });
                           });
                         });
                       });
@@ -387,6 +409,131 @@ describe('Inventory', _ => {
     });
 
   });
+
+  // acquisition record - start
+
+  it('api/add-vendor (Valid)', testDoneFn => {
+
+    callApi('api/add-vendor', {
+      json: {
+        apiKey,
+        organizationId,
+        name: "1st vendor",
+        contactPersonName: "a person",
+        phone: vendorPhone,
+        physicalAddress: "an address"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddVendorApiSuccessResponse(body);
+      vendorId = body.vendorId;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-product-to-inventory (Valid warehouse; Damaged; With Vendor)', testDoneFn => {
+    callApi('api/add-product-to-inventory', {
+      json: {
+        apiKey,
+        inventoryId: warehouseDamagedInventoryId,
+        productList: [
+          { productBlueprintId: productBlueprintId5ForVendor, count: 60 },
+        ],
+        vendorId: vendorId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateAddProductToInventoryApiSuccessResponse(body);
+      testDoneFn();
+    });
+  });
+
+  it('api/get-product-acquisition-list (Valid)', testDoneFn => {
+
+    callApi('api/get-product-acquisition-list', {
+      json: {
+        apiKey,
+        fromDate: Date.now() - 24 * 60 * 60 * 1000,
+        toDate: Date.now(),
+        vendorId: null,
+        organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetProductAcquisitionListApiSuccessResponse(body);
+      expect(body.productAcquisitionList.length).to.equal(3);
+      expect(body.productAcquisitionList[0].vendor.id).to.equal(vendorId);
+      expect(body.productAcquisitionList[0].productAcquisitionNumber).to.equal(3);
+      productAcquisitionNumber = body.productAcquisitionList[0].productAcquisitionNumber;
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-product-acquisition-list (Valid; by vendorId)', testDoneFn => {
+
+    callApi('api/get-product-acquisition-list', {
+      json: {
+        apiKey,
+        fromDate: Date.now() - 24 * 60 * 60 * 1000,
+        toDate: Date.now(),
+        vendorId,
+        organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetProductAcquisitionListApiSuccessResponse(body);
+      expect(body.productAcquisitionList.length).to.equal(1);
+      expect(body.productAcquisitionList[0].vendor.id).to.equal(vendorId);
+      expect(body.productAcquisitionList[0].productAcquisitionNumber).to.equal(3);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-product-acquisition-list (Invalid; by vendorId)', testDoneFn => {
+
+    callApi('api/get-product-acquisition-list', {
+      json: {
+        apiKey,
+        fromDate: Date.now() - 24 * 60 * 60 * 1000,
+        toDate: Date.now(),
+        vendorId: 9999999999,
+        organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetProductAcquisitionListApiSuccessResponse(body);
+      expect(body.productAcquisitionList.length).to.equal(0);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-product-acquisition-list (Valid; by productAcquisitionNumber)', testDoneFn => {
+
+    callApi('api/get-product-acquisition-list', {
+      json: {
+        apiKey,
+        fromDate: Date.now() - 24 * 60 * 60 * 1000,
+        toDate: Date.now(),
+        vendorId: null,
+        searchString: String(productAcquisitionNumber),
+        organizationId
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetProductAcquisitionListApiSuccessResponse(body);
+      expect(body.productAcquisitionList.length).to.equal(1);
+      expect(body.productAcquisitionList[0].vendor.id).to.equal(vendorId);
+      expect(body.productAcquisitionList[0].productAcquisitionNumber).to.equal(3);
+      testDoneFn();
+    });
+
+  });
+
+  // acquisition record - end
 
   it('api/transfer-between-inventories (Valid)', testDoneFn => {
 
