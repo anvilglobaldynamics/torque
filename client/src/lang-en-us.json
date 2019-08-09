@@ -105,7 +105,8 @@
     "verificationUnsuccessful": "Verification Unsuccessful",
     "modalConfirmationPleaseConfirm": "Please confirm.",
     "scanButtonHelp": "Use code scanner to select multiple products quickly",
-    "contactPerson": "Contact Person"
+    "contactPerson": "Contact Person",
+    "inventory": "Inventory"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",

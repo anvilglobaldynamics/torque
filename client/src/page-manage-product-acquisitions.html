@@ -74,13 +74,15 @@
 
           <paper-input class="flex min-input" value="{{productAcquisitionNumberToSearch}}" label="[[verses.productAcquisition.productAcquisitionNumber]] [[verses.productAcquisition.exclusionNote]]" type="text"></paper-input>
           
-          <paper-dropdown-menu class="full-width-paper-dropdown" label=[[verses.general.vendor]] class="mr-4">
-            <paper-listbox slot="dropdown-content" selected="{{vendorSelectedIndex}}">
-              <template is="dom-repeat" items="[[vendorList]]" as="vendor">
-                <paper-item data-key="[[vendor.id]]">[[vendor.name]]</paper-item>
-              </template>
-            </paper-listbox>
-          </paper-dropdown-menu>
+          <template is="dom-if" if="[[hasModule('MOD_VENDOR')]]">
+            <paper-dropdown-menu class="full-width-paper-dropdown" label=[[verses.general.vendor]] class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{vendorSelectedIndex}}">
+                <template is="dom-repeat" items="[[vendorList]]" as="vendor">
+                  <paper-item data-key="[[vendor.id]]">[[vendor.name]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </template>
         </div>
 
         <div class="horizontal layout">
@@ -110,8 +112,10 @@
                   <div class="product-acquisition-conteiner">
 
                     <div style="font-size: 16px; font-weight: 500;"> [[verses.productAcquisition.productAcquisitionNumber]]: [[productAcquisition.productAcquisitionNumber]] </div>
-                    <div class="description">[[verses.general.from]]: [[productAcquisition.vendor.name]]</div>
-                    <div class="description">[[verses.general.to]]: [[productAcquisition.inventory.inventoryContainer.name]]</div>
+                    <template is="dom-if" if="{{productAcquisition.vendor}}">
+                      <div class="description">[[verses.general.vendor]]: [[productAcquisition.vendor.name]]</div>
+                    </template>
+                    <div class="description">[[verses.general.inventory]]: [[productAcquisition.inventory.inventoryContainer.name]]</div>
 
                     <div class="description-time">[[$mkDate(productAcquisition.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
 
@@ -262,7 +266,7 @@
       }
 
       _processVendorList(cbfn) {
-        this.vendorSelectedIndex = -1;
+        this.vendorSelectedIndex = null;
         if (!this.hasModule('MOD_VENDOR')) {
           this.vendorList = [];
           cbfn();

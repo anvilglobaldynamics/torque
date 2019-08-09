@@ -105,7 +105,8 @@
     "verificationUnsuccessful": "যাচাই ব্যর্থ",
     "modalConfirmationPleaseConfirm": "নিশ্চিত করুন",
     "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন",
-    "contactPerson": "যোগাযোগের ব্যক্তি"
+    "contactPerson": "যোগাযোগের ব্যক্তি",
+    "inventory": "পণ্য তালিকা"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
