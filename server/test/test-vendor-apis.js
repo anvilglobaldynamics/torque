@@ -78,7 +78,6 @@ describe('Vendor', _ => {
         physicalAddress: "an address"
       }
     }, (err, response, body) => {
-      console.log(body)
       expect(response.statusCode).to.equal(200);
       validateAddVendorApiSuccessResponse(body);
       testDoneFn();
