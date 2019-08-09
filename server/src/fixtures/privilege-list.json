@@ -116,6 +116,14 @@
     "name": "Modify all customers"
   },
   {
+    "code": "PRIV_VIEW_VENDOR",
+    "name": "View all vendors"
+  },
+  {
+    "code": "PRIV_MODIFY_VENDOR",
+    "name": "Modify all vendors"
+  },
+  {
     "code": "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE",
     "name": "Manage customer account balance"
   },

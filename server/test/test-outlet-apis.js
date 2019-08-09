@@ -419,7 +419,8 @@ describe('Outlet', _ => {
         inventoryId: outletDefaultInventoryId,
         productList: [
           { productBlueprintId, count: 10 }
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

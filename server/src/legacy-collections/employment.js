@@ -69,6 +69,9 @@ exports.EmploymentCollection = class extends LegacyCollection {
         PRIV_MODIFY_CUSTOMER: Joi.boolean().required(),
         PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: Joi.boolean().required(),
 
+        PRIV_VIEW_VENDOR: Joi.boolean().required(),
+        PRIV_MODIFY_VENDOR: Joi.boolean().required(),
+
         PRIV_VIEW_REPORTS: Joi.boolean().required()
       }),
       isActive: Joi.boolean().required(),
@@ -137,6 +140,9 @@ exports.EmploymentCollection = class extends LegacyCollection {
       "PRIV_MODIFY_CUSTOMER",
       "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE",
 
+      "PRIV_VIEW_VENDOR",
+      "PRIV_MODIFY_VENDOR",
+
       "PRIV_VIEW_REPORTS"
     ];
 
@@ -178,6 +184,9 @@ exports.EmploymentCollection = class extends LegacyCollection {
       "PRIV_VIEW_CUSTOMER",
       "PRIV_MODIFY_CUSTOMER",
       "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE",
+
+      "PRIV_VIEW_VENDOR",
+      // "PRIV_MODIFY_VENDOR",
 
       "PRIV_VIEW_REPORTS"
     ];

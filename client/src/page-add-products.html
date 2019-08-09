@@ -157,6 +157,16 @@
             </div>
           </template>
 
+          <template is="dom-if" if="[[hasModule('MOD_VENDOR')]]">
+            <paper-dropdown-menu class="full-width-paper-dropdown" label=[[verses.general.vendor]] class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{vendorSelectedIndex}}">
+                <template is="dom-repeat" items="[[vendorList]]" as="vendor">
+                  <paper-item data-key="[[vendor.id]]">[[vendor.name]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </template>
+
         </div>
 
       </template>
@@ -216,7 +226,9 @@
         this.selectedProductBlueprintList = this.app.getFromSession('selected-product-blueprint-list') || [];
 
         this._processProductBlueprintList(_ => {
-          this.isReady = true;
+          this._processVendorList(_ => {
+            this.isReady = true;
+          })
         });
       }
 
@@ -266,12 +278,34 @@
         });
       }
 
-      _addProductsToInventory({ productList, inventoryId }, cbfn) {
-        let data = { productList, inventoryId };
+      _addProductsToInventory({ productList, inventoryId, vendorId }, cbfn) {
+        let data = { productList, inventoryId, vendorId };
         this.app.callAddProductToInventoryApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           return cbfn();
+        });
+      }
+
+      _fetchVendorList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetVendorListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.vendorList);
+        });
+      }
+
+      _processVendorList(cbfn) {
+        this.vendorSelectedIndex = -1;
+        if (!this.hasModule('MOD_VENDOR')) {
+          this.vendorList = [];
+          cbfn();
+          return;
+        }
+        this._fetchVendorList(newVendorList => {
+          this.vendorList = newVendorList;
+          cbfn();
         });
       }
 
@@ -286,34 +320,44 @@
       }
 
       addProductsTapped(e = null) {
+        if (this.hasModule('MOD_VENDOR') && this.vendorSelectedIndex < 0) {
+          this.app.showModalDialog(this.app.verses.product.addProductsVendorNeededTitle, this.app.verses.product.addProductsVendorNeededMessage);
+          return;
+        }
+
         this.app.showModalConfirmation(
           this.app.verses.general.modalConfirmationPleaseConfirm,
           this.app.verses.product.addProductsConfirmMessage,
           (answer) => {
-          if (!answer) return;
+            if (!answer) return;
 
-          let productList = [];
-          this.selectedProductBlueprintList.forEach(productBlueprint => {
-            if (parseInt(productBlueprint.count) > 0) {
-              productList.push({
-                productBlueprintId: productBlueprint.id,
-                count: parseInt(String(productBlueprint.count))
-              });
+            let vendorId = null;
+            if (this.hasModule('MOD_VENDOR')) {
+              vendorId = this.vendorList[this.vendorSelectedIndex].id;
             }
-          });
 
-          let inventoryId = parseInt(this.params.inventory);
-          this._addProductsToInventory({ productList, inventoryId }, () => {
-            let message = this.app.verses.product.productAddedToInventory;
-            this.app.showToast(message, _ => {
-              this.backButtonOnTopBarPressed();
+            let productList = [];
+            this.selectedProductBlueprintList.forEach(productBlueprint => {
+              if (parseInt(productBlueprint.count) > 0) {
+                productList.push({
+                  productBlueprintId: productBlueprint.id,
+                  count: parseInt(String(productBlueprint.count))
+                });
+              }
+            });
+
+            let inventoryId = parseInt(this.params.inventory);
+            this._addProductsToInventory({ productList, inventoryId, vendorId }, () => {
+              let message = this.app.verses.product.productAddedToInventory;
+              this.app.showToast(message, _ => {
+                this.backButtonOnTopBarPressed();
+              });
             });
           });
-        });
       }
 
       backButtonOnTopBarPressed(e = null) {
-        this.app.extractFromSession('selected-product-blueprint-list') ;
+        this.app.extractFromSession('selected-product-blueprint-list');
         this.app.navigateToPreviousUrl(`/view-inventory/inventory:${this.params.inventory}`);
       }
 

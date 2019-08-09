@@ -22,5 +22,9 @@
   {
     "code": "MOD_CUSTOMER_ACCOUNT_BALANCE",
     "name": "Unlocks the ability to save change in customer account balance."
+  },
+  {
+    "code": "MOD_VENDOR",
+    "name": "Unlocks the ability to manage product and service provider vendors."
   }
 ]

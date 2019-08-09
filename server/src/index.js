@@ -85,6 +85,7 @@ const { ReportCollectionDetailsApi } = require('./apis/report-collection-details
 let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
 const { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
 const { GetProductTransferListApi } = require('./apis/get-product-transfer-list');
+const { GetProductAcquisitionListApi } = require('./apis/get-product-acquisition-list');
 const { GetProductApi } = require('./apis/get-product');
 
 const { AddSalesApi } = require('./apis/add-sales');
@@ -114,6 +115,9 @@ const { AddProductCategoryApi } = require('./apis/add-product-category');
 const { EditProductCategoryApi } = require('./apis/edit-product-category');
 const { GetProductCategoryListApi } = require('./apis/get-product-category-list');
 
+const { AddVendorApi } = require('./apis/add-vendor');
+const { GetVendorListApi } = require('./apis/get-vendor-list');
+const { EditVendorApi } = require('./apis/edit-vendor');
 const { GraphSalesApi } = require('./apis/graph-sales');
 
 const { ShopLocateNearbyOutletsApi } = require('./apis/shop-locate-nearby-outlets');
@@ -328,6 +332,7 @@ class Program {
     server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
     server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
     server.registerPostApi('/api/get-product-transfer-list', GetProductTransferListApi);
+    server.registerPostApi('/api/get-product-acquisition-list', GetProductAcquisitionListApi);
     server.registerPostApi('/api/get-product', GetProductApi);
     server.registerPostApi('/api/get-designation-list', GetDesignationListApi);
     server.registerPostApi('/api/get-role-list', GetRoleListApi);
@@ -359,6 +364,9 @@ class Program {
     server.registerPostApi('/api/edit-product-category', EditProductCategoryApi);
     server.registerPostApi('/api/get-product-category-list', GetProductCategoryListApi);
 
+    server.registerPostApi('/api/add-vendor', AddVendorApi);
+    server.registerPostApi('/api/get-vendor-list', GetVendorListApi);
+    server.registerPostApi('/api/edit-vendor', EditVendorApi);
     server.registerPostApi('/api/graph-sales', GraphSalesApi);
 
     server.registerPostApi('/api/admin-login', AdminLoginApi);

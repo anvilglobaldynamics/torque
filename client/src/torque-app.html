@@ -70,6 +70,9 @@
 <link rel="lazy-import" href="page-manage-product-blueprints.html">
 <link rel="lazy-import" href="page-edit-product-blueprint.html">
 
+<link rel="lazy-import" href="page-manage-vendors.html">
+<link rel="lazy-import" href="page-edit-vendor.html">
+
 <link rel="lazy-import" href="page-manage-service-blueprints.html">
 <link rel="lazy-import" href="page-edit-service-blueprint.html">
 <link rel="lazy-import" href="page-manage-outlet-services.html">
@@ -88,6 +91,8 @@
 <link rel="lazy-import" href="page-report-inventories.html">
 <link rel="lazy-import" href="page-manage-product-transfers.html">
 <link rel="lazy-import" href="page-view-product-transfer.html">
+<link rel="lazy-import" href="page-manage-product-acquisitions.html">
+<link rel="lazy-import" href="page-view-product-acquisition.html">
 <link rel="lazy-import" href="page-report-select-inventories.html">
 <link rel="lazy-import" href="page-pos-select-products.html">
 <link rel="lazy-import" href="page-pos-assign-employee-service.html">
@@ -239,7 +244,7 @@
         /* height: 100vh; */
         /* overflow-y: auto; */
         background-color: rgb(255, 255, 255);
-        min-width: 240px;
+        min-width: 280px;
         z-index: 99;
       }
 
@@ -248,8 +253,8 @@
         height: calc(100vh - 64px);
         overflow-y: auto;
         background-color: #262838;
-        min-width: 240px;
-        max-width: 240px;
+        min-width: 280px;
+        max-width: 280px;
         z-index: 99;
       }
 
@@ -390,6 +395,9 @@
 
                 <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
                 <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_VENDOR')]]">
+                  <a name="manage-vendors" href="#/manage-vendors">[[verses.sidebar.vendors]]</a>
+                </template>
                 <hr class="custom-sidebar-divider">
 
                 <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>
@@ -413,6 +421,7 @@
                   <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
                 </template>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-product-acquisitions" href="#/manage-product-acquisitions">[[verses.sidebar.manageProductAcquisition]]</a>
                   <a name="manage-product-transfers" href="#/manage-product-transfers">[[verses.sidebar.manageProductTransfer]]</a>
                 </template>
                 <hr class="custom-sidebar-divider">
@@ -446,6 +455,10 @@
               <page-view-employee name="view-employee"></page-view-employee>
               <page-edit-employee name="edit-employee"></page-edit-employee>
               <page-hire-employee name="hire-employee"></page-hire-employee>
+
+              <page-manage-vendors name="manage-vendors"></page-manage-vendors>
+              <page-edit-vendor name="edit-vendor"></page-edit-vendor>
+
               <page-manage-outlets name="manage-outlets"></page-manage-outlets>
               <page-edit-outlet name="edit-outlet"></page-edit-outlet>
               <page-view-outlet name="view-outlet"></page-view-outlet>
@@ -470,8 +483,12 @@
               <page-report-sales name="report-sales"></page-report-sales>
               <page-report-collections name="report-collections"></page-report-collections>
               <page-report-inventories name="report-inventories"></page-report-inventories>
+
               <page-manage-product-transfers name="manage-product-transfers"></page-manage-product-transfers>
               <page-view-product-transfer name="view-product-transfer"></page-view-product-transfer>
+              <page-manage-product-acquisitions name="manage-product-acquisitions"></page-manage-product-acquisitions>
+              <page-view-product-acquisition name="view-product-acquisition"></page-view-product-acquisition>
+
               <page-report-select-inventories name="report-select-inventories"></page-report-select-inventories>
               <page-pos-select-products name="pos-select-products"></page-pos-select-products>
               <page-pos-select-services name="pos-select-services"></page-pos-select-services>

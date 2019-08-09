@@ -21,9 +21,13 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="page-view-product-transfer">
+<dom-module id="page-view-product-acquisition">
   <template>
     <style include="shared-styles">
+      .description-time {
+        font-size: 12px;
+      }
+
       .discard-button {
         margin-top: 5px;
       }
@@ -65,14 +69,15 @@
       <div class="card vertical layout">
         <div class="horizontal layout item center">
           <div class="vertical layout flex">
-            <div class="product-transfer-conteiner">
+            <div class="product-acquisition-conteiner">
 
-              <div style="font-size: 16px; font-weight: 500;"> [[verses.productTransfer.productTransferNumber]]: [[productTransfer.productTransferNumber]] </div>
+              <div class="title"><b> [[verses.productAcquisition.productAcquisitionNumber]]: [[productAcquisition.productAcquisitionNumber]] </b></div>
+              <div class="description-time">[[$mkDate(productAcquisition.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
 
-              <div class="description-time">[[$mkDate(productTransfer.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-
-              <div class="description">[[verses.general.from]]: [[productTransfer.fromInventory.inventoryContainer.name]] - [[productTransfer.fromInventory.name]]</div>
-              <div class="description">[[verses.general.to]]: [[productTransfer.toInventory.inventoryContainer.name]] - [[productTransfer.toInventory.name]]</div>
+              <template is="dom-if" if="{{productAcquisition.vendor}}">
+                <div class="description">[[verses.general.vendor]]: : [[productAcquisition.vendor.name]]</div>
+              </template>
+              <div class="description">[[verses.general.inventory]]: [[productAcquisition.inventory.inventoryContainer.name]]</div>
 
             </div>
           </div>
@@ -80,19 +85,38 @@
         
       </div>
 
-      <!-- product list - start -->
-      <template is="dom-if" if="{{productTransfer.productList.length}}">
+      <!-- vendor detail - start -->
+      <template is="dom-if" if="{{productAcquisition.vendor}}">
         <div class="card vertical layout">
           <div class="title">
-            <b>[[verses.general.total]]: [[productTransfer.productList.length]] [[verses.general.products]]</b>
+            <b>[[verses.productAcquisition.acquiredFrom]]: </b>
+          </div>
+          <div>[[productAcquisition.vendor.name]]</div>
+          <div>[[verses.general.contactPerson]]: [[productAcquisition.vendor.contactPersonName]]</div>
+          <div>[[verses.general.phone]]: [[productAcquisition.vendor.phone]]</div>
+          <div class="description-time">[[verses.general.address]]: [[productAcquisition.vendor.physicalAddress]]</div>
+        </div>
+      </template>
+      <!-- vendor detail - end -->
+
+      <!-- product list - start -->
+      <template is="dom-if" if="{{productAcquisition.productList.length}}">
+        <div class="card vertical layout">
+          <div class="title">
+            <b>[[verses.general.total]]: [[productAcquisition.productList.length]] [[verses.general.products]]</b>
           </div>
           <div class="list">
-            <template is="dom-repeat" items="{{productTransfer.productList}}" as="product">
+            <template is="dom-repeat" items="{{productAcquisition.productList}}" as="product">
               <div class="vertical layout flex">
                 <div class="list-object">
 
                   <div>[[product.productBlueprint.name]]</div>
-                  <div>[[verses.general.count]]: [[product.count]]</div>
+                  <div>[[verses.general.count]]: [[product.count]] [[product.productBlueprint.unit]] 
+                    <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                    @ [[product.product.purchasePrice]] [[app.settings.monetaryUnit]]
+                    </template>
+                  </div>
+
 
                 </div>
               </div>
@@ -104,11 +128,11 @@
 
       <!-- user detail - start -->
         <div class="card vertical layout">
-            <div class="title">
-                <b>[[verses.productTransfer.recordCreatedBy]]: </b>
-              </div>
-          <div>[[productTransfer.createdByUser.fullName]]</div>
-          <div>[[verses.general.phone]]: [[productTransfer.createdByUser.phone]]</div>
+          <div class="title">
+            <b>[[verses.productAcquisition.recordCreatedBy]]: </b>
+          </div>
+          <div>[[productAcquisition.createdByUser.fullName]]</div>
+          <div>[[verses.general.phone]]: [[productAcquisition.createdByUser.phone]]</div>
         </div>
       <!-- user detail - end -->
 
@@ -117,14 +141,19 @@
   </template>
 
   <script>
-    class PageViewProductTransfer extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+    class PageViewProductAcquisition extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
 
       static get is() {
-        return 'page-view-product-transfer';
+        return 'page-view-product-acquisition';
       }
 
       static get properties() {
-        return {};
+        return {
+          vendorId: {
+            type: Number,
+            value: null
+          }
+        };
       }
 
       // region: core =================================
@@ -140,16 +169,16 @@
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
         this.onOrganizationChange(this.app.organization);
-        this.app.pushPageTitle(this.app.verses.productTransfer.productTransferTitle);
+        this.app.pushPageTitle(this.app.verses.productAcquisition.productAcquisitionTitle);
         if (!this._ensureAccess()) return;
-        if (!('product-transfer' in this.params)) {
+        if (!('product-acquisition' in this.params)) {
           let message = this.app.verses.general.pageCannotBeDisplayed;
           this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
             this.app.navigateTo('/home');
           });
           return;
         }
-        this._processProductTransfer(_ => {
+        this._processProductAcquisition(_ => {
           this.isReady = true;
         });
       }
@@ -170,24 +199,25 @@
         this.organization = organization;
       }
 
-      _fetchProductTransfer(cbfn) {
-        let productTransferId = String(parseInt(this.params['product-transfer']));
+      _fetchProductAcquisition(cbfn) {
+        let productAcquisitionId = String(parseInt(this.params['product-acquisition']));
         let data = {
           fromDate: Date.now(),
           toDate: Date.now(),
+          vendorId: this.vendorId,
           organizationId: this.app.organization.id,
-          searchString: productTransferId
+          searchString: productAcquisitionId
         };
-        this.app.callGetProductTransferListApi(data, (err, response) => {
+        this.app.callGetProductAcquisitionListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.productTransferList[0]);
+          return cbfn(response.productAcquisitionList[0]);
         });
       }
 
-      _processProductTransfer(cbfn) {
-        this._fetchProductTransfer((productTransfer) => {
-          this.productTransfer = productTransfer;
+      _processProductAcquisition(cbfn) {
+        this._fetchProductAcquisition((productAcquisition) => {
+          this.productAcquisition = productAcquisition;
           cbfn();
         });
       }
@@ -198,6 +228,6 @@
 
     }
 
-    window.customElements.define(PageViewProductTransfer.is, PageViewProductTransfer);
+    window.customElements.define(PageViewProductAcquisition.is, PageViewProductAcquisition);
   </script>
 </dom-module>
