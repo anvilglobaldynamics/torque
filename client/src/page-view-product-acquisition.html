@@ -1,0 +1,213 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+
+<link rel="import" href="elem-additional-payment.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-view-product-acquisition">
+  <template>
+    <style include="shared-styles">
+      .discard-button {
+        margin-top: 5px;
+      }
+
+      .return-button {
+        width: 97%;
+        margin: 6px;
+      }
+
+      .list-object {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 6px;
+        margin: 4px 0px;
+      }
+
+      .dated {
+        font-size: 12px;
+      }
+
+      .credit-text {
+        border: 1px solid red;
+        border-radius: 6px;
+        margin-left: 4px;
+        font-size: 13px;
+        padding: 3px;
+        color: red;
+      }
+
+      .duration-text {
+        font-size: 12px;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="card vertical layout">
+        <div class="horizontal layout item center">
+          <div class="vertical layout flex">
+            <div class="product-acquisition-conteiner">
+
+              <div style="font-size: 16px; font-weight: 500;"> [[verses.productAcquisition.productAcquisitionNumber]]: [[productAcquisition.productAcquisitionNumber]] </div>
+
+              <div class="description-time">[[$mkDate(productAcquisition.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+
+              <div class="description">[[verses.general.from]]: [[productAcquisition.fromInventory.inventoryContainer.name]] - [[productAcquisition.fromInventory.name]]</div>
+              <div class="description">[[verses.general.to]]: [[productAcquisition.toInventory.inventoryContainer.name]] - [[productAcquisition.toInventory.name]]</div>
+
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      <!-- TODO: vendor detail - start -->
+      <div class="card vertical layout">
+          <div class="title">
+              <b>[[verses.productAcquisition.recordCreatedBy]]: </b>
+            </div>
+        <div>[[verses.general.name]]: [[productAcquisition.createdByUser.fullName]]</div>
+        <div>[[verses.general.phone]]: [[productAcquisition.createdByUser.phone]]</div>
+      </div>
+      <!-- vendor detail - end -->
+
+      <!-- product list - start -->
+      <template is="dom-if" if="{{productAcquisition.productList.length}}">
+        <div class="card vertical layout">
+          <div class="title">
+            <b>[[verses.general.total]]: [[productAcquisition.productList.length]] [[verses.general.products]]</b>
+          </div>
+          <div class="list">
+            <template is="dom-repeat" items="{{productAcquisition.productList}}" as="product">
+              <div class="vertical layout flex">
+                <div class="list-object">
+
+                  <div>[[verses.general.product]]: [[product.productBlueprint.name]]</div>
+                  <div>[[verses.general.count]]: [[product.count]]</div>
+
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+      <!-- product list - end -->
+
+      <!-- user detail - start -->
+        <div class="card vertical layout">
+            <div class="title">
+                <b>[[verses.productAcquisition.recordCreatedBy]]: </b>
+              </div>
+          <div>[[verses.general.name]]: [[productAcquisition.createdByUser.fullName]]</div>
+          <div>[[verses.general.phone]]: [[productAcquisition.createdByUser.phone]]</div>
+        </div>
+      <!-- user detail - end -->
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageViewProductAcquisition extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-view-product-acquisition';
+      }
+
+      static get properties() {
+        return {};
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.self = this;
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        this.onOrganizationChange(this.app.organization);
+        this.app.pushPageTitle(this.app.verses.productAcquisition.productAcquisitionTitle);
+        if (!this._ensureAccess()) return;
+        if (!('product-acquisition' in this.params)) {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processProductAcquisition(_ => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_ALL_INVENTORIES']
+        });
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
+
+      _fetchProductAcquisition(cbfn) {
+        let productAcquisitionId = String(parseInt(this.params['product-acquisition']));
+        let data = {
+          fromDate: Date.now(),
+          toDate: Date.now(),
+          organizationId: this.app.organization.id,
+          searchString: productAcquisitionId
+        };
+        this.app.callGetProductAcquisitionListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.productAcquisitionList[0]);
+        });
+      }
+
+      _processProductAcquisition(cbfn) {
+        this._fetchProductAcquisition((productAcquisition) => {
+          this.productAcquisition = productAcquisition;
+          cbfn();
+        });
+      }
+
+      // region: ui  ===========================
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageViewProductAcquisition.is, PageViewProductAcquisition);
+  </script>
+</dom-module>
