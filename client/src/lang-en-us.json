@@ -1081,6 +1081,7 @@
     "exclusionNote": "(Optional. Other Filters will be ignored)",
     "noProductAcquisitionFound": "No Product Acquisition Found",
     "recordCreatedBy": "Record Created By",
-    "productAcquisitionTitle": "Product Acquisition Details"
+    "productAcquisitionTitle": "Product Acquisition Details",
+    "wholeOrganization": "Entire Organization"
   }
 }

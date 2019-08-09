@@ -227,7 +227,7 @@
 
         let fromDate = new Date(this.fromDate).getTime();
         let toDate = new Date(this.toDate).getTime();
-        let vendorId = this.vendorSelectedIndex;
+        let vendorId = this.vendorList[this.vendorSelectedIndex].id;
 
         let data = {
           organizationId: this.app.organization.id,
@@ -266,9 +266,13 @@
       }
 
       _processVendorList(cbfn) {
-        this.vendorSelectedIndex = null;
+        let allVendors = {
+          id: null,
+          name: this.app.verses.productAcquisition.wholeOrganization
+        }
+        this.vendorList = [allVendors];
+        this.vendorSelectedIndex = -1;
         if (!this.hasModule('MOD_VENDOR')) {
-          this.vendorList = [];
           cbfn();
           return;
         }
