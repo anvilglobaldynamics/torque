@@ -73,7 +73,7 @@
           </div>
 
           <paper-input class="flex min-input" value="{{productAcquisitionNumberToSearch}}" label="[[verses.productAcquisition.productAcquisitionNumber]] [[verses.productAcquisition.exclusionNote]]" type="text"></paper-input>
-          
+
           <template is="dom-if" if="[[hasModule('MOD_VENDOR')]]">
             <paper-dropdown-menu class="full-width-paper-dropdown" label=[[verses.general.vendor]] class="mr-4">
               <paper-listbox slot="dropdown-content" selected="{{vendorSelectedIndex}}">
@@ -160,7 +160,7 @@
           },
           vendorSelectedIndex: {
             type: Number,
-            value: null
+            value: 0
           },
           fromDate: {
             type: String,
@@ -197,8 +197,8 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.productAcquisition.manageProductAcquisitionTitle);
         if (!this._ensureAccess()) return;
-        this._processProductAcquisitionList(() => {
-          this._processVendorList(() => {
+        this._processVendorList(() => {
+          this._processProductAcquisitionList(() => {
             this.self = this;
             this.isReady = true;
           })
@@ -270,14 +270,14 @@
           id: null,
           name: this.app.verses.productAcquisition.wholeOrganization
         }
-        this.vendorList = [allVendors];
-        this.vendorSelectedIndex = -1;
+        this.vendorSelectedIndex = 0;
         if (!this.hasModule('MOD_VENDOR')) {
+          this.vendorList = [allVendors];
           cbfn();
           return;
         }
         this._fetchVendorList(newVendorList => {
-          this.vendorList = newVendorList;
+          this.vendorList = [].concat([allVendors], newVendorList);
           cbfn();
         });
       }
