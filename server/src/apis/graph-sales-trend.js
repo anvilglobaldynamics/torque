@@ -234,10 +234,6 @@ exports.GraphSalesTrendApi = class extends Api {
     for (let dateRange of dateRangeList) {
       let { startDatetimeStamp, endDatetimeStamp, label } = dateRange;
 
-      // // TODO: Remove only when completely sure about date ranges
-      // console.log(label, (new Date(startDatetimeStamp)).toString())
-      // console.log(label, (new Date(endDatetimeStamp)).toString())
-
       let localQuery = JSON.parse(JSON.stringify(query));
 
       localQuery.$and.push({
