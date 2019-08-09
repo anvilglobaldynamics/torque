@@ -71,7 +71,7 @@
           <div class="vertical layout flex">
             <div class="product-acquisition-conteiner">
 
-              <div style="font-size: 16px; font-weight: 500;"> [[verses.productAcquisition.productAcquisitionNumber]]: [[productAcquisition.productAcquisitionNumber]] </div>
+              <div class="title"><b> [[verses.productAcquisition.productAcquisitionNumber]]: [[productAcquisition.productAcquisitionNumber]] </b></div>
               <div class="description-time">[[$mkDate(productAcquisition.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
 
               <template is="dom-if" if="{{productAcquisition.vendor}}">
@@ -111,7 +111,12 @@
                 <div class="list-object">
 
                   <div>[[product.productBlueprint.name]]</div>
-                  <div>[[verses.general.count]]: [[product.count]] [[product.productBlueprint.unit]] @ [[product.product.purchasePrice]] [[app.settings.monetaryUnit]]</div>
+                  <div>[[verses.general.count]]: [[product.count]] [[product.productBlueprint.unit]] 
+                    <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
+                    @ [[product.product.purchasePrice]] [[app.settings.monetaryUnit]]
+                    </template>
+                  </div>
+
 
                 </div>
               </div>
