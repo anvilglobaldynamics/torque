@@ -157,13 +157,15 @@
             </div>
           </template>
 
-          <paper-dropdown-menu class="full-width-paper-dropdown" label=[[verses.general.vendor]] class="mr-4">
-            <paper-listbox slot="dropdown-content" selected="{{vendorSelectedIndex}}">
-              <template is="dom-repeat" items="[[vendorList]]" as="vendor">
-                <paper-item data-key="[[vendor.id]]">[[vendor.name]]</paper-item>
-              </template>
-            </paper-listbox>
-          </paper-dropdown-menu>
+          <template is="dom-if" if="[[hasModule('MOD_VENDOR')]]">
+            <paper-dropdown-menu class="full-width-paper-dropdown" label=[[verses.general.vendor]] class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{vendorSelectedIndex}}">
+                <template is="dom-repeat" items="[[vendorList]]" as="vendor">
+                  <paper-item data-key="[[vendor.id]]">[[vendor.name]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </template>
 
         </div>
 
