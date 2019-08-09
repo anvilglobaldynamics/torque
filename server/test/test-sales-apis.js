@@ -2170,16 +2170,15 @@ describe.only('Sales', _ => {
 
   // Graph Sales - Start
 
-  it('api/graph-sales (Valid only organization Id, periodLevel: week )', testDoneFn => {
+  it('api/graph-sales-trend (Valid only organization Id, periodLevel: week )', testDoneFn => {
 
     localFromDate = fromDate;
 
-    callApi('api/graph-sales ', {
+    callApi('api/graph-sales-trend', {
       json: {
         apiKey,
         organizationId,
         outletId: null,
-        shouldFilterByOutlet: false,
         fromDate: localFromDate,
         periodLevel: 'week'
       }
@@ -2194,16 +2193,15 @@ describe.only('Sales', _ => {
 
   });
 
-  it('api/graph-sales (Valid only organization Id, periodLevel: month )', testDoneFn => {
+  it('api/graph-sales-trend (Valid only organization Id, periodLevel: month )', testDoneFn => {
 
     localFromDate = fromDate;
 
-    callApi('api/graph-sales ', {
+    callApi('api/graph-sales-trend', {
       json: {
         apiKey,
         organizationId,
         outletId: null,
-        shouldFilterByOutlet: false,
         fromDate: localFromDate,
         periodLevel: 'month'
       }
@@ -2219,16 +2217,15 @@ describe.only('Sales', _ => {
 
   });
 
-  it('api/graph-sales (Valid only organization Id, periodLevel: year-monthly )', testDoneFn => {
+  it('api/graph-sales-trend (Valid only organization Id, periodLevel: year-monthly )', testDoneFn => {
 
     localFromDate = fromDate;
 
-    callApi('api/graph-sales ', {
+    callApi('api/graph-sales-trend', {
       json: {
         apiKey,
         organizationId,
         outletId: null,
-        shouldFilterByOutlet: false,
         fromDate: localFromDate,
         periodLevel: 'year-monthly'
       }
@@ -2243,16 +2240,15 @@ describe.only('Sales', _ => {
 
   });
 
-  it('api/graph-sales (Valid only organization Id, periodLevel: year-quarterly )', testDoneFn => {
+  it('api/graph-sales-trend (Valid only organization Id, periodLevel: year-quarterly )', testDoneFn => {
 
     localFromDate = fromDate;
 
-    callApi('api/graph-sales ', {
+    callApi('api/graph-sales-trend', {
       json: {
         apiKey,
         organizationId,
         outletId: null,
-        shouldFilterByOutlet: false,
         fromDate: localFromDate,
         periodLevel: 'year-quarterly'
       }

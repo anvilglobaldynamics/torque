@@ -153,6 +153,7 @@
     "serviceBlueprints": "সেবা পরিকল্পনা",
     "sales": "বিক্রয় রেকর্ড",
     "salesReturn": "বিক্রয় ফেরত রেকর্ড",
+    "salesGraph": "বিক্রয় গ্রাফ",
     "serviceMembership": "সেবার সদস্যপদ",
     "customers": "গ্রাহক",
     "vendors": "সরবরাহকারী",
@@ -223,6 +224,7 @@
     "warehouses": "গুদাম",
     "promptForDefaultOutlet": "নিয়মিত ব্যবহৃত দোকান; নিয়মিত ব্যবহার এর জন্য দোকান বাছাই করলে দ্রুত বিক্রয়কেন্দ্রে যেতে পারবেন এবং লিপি অফলাইনে ব্যবহার করতে পারবেন",
     "promptForDefaultOutletGoButton": "দোকান বাছাই",
+    "salesTrendGraphTitle": "এই সপ্তাহের বিক্রয়",
     "viewActivationHistory": "সক্রিয়করণ ইতিহাস দেখুন"
   },
   "organization": {
@@ -1075,6 +1077,18 @@
     "noProductTransferFound": "কোনো পণ্য ট্রান্সফার রেকর্ড পাওয়া যায়নি। ",
     "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
     "productTransferTitle": "পণ্য ট্রান্সফার রেকর্ড"
+  },
+  "graphSales": {
+    "graphSalesTitle": "বিক্রয় গ্রাফ",
+    "entireOrganization": "সমগ্র সংস্থা",
+    "period": "পর্যায়কাল",
+    "graphType": "গ্রাফের ধরণ",
+    "amountSold": "বিক্রয় পরিমাণ",
+    "salesCount": "বিক্রয় সংখ্যা",
+    "periodWeek": "সপ্তাহ",
+    "periodMonth": "মাস",
+    "periodYearMonthly": "বছর (মাসিক)",
+    "periodYearQUarterly": "বছর (ত্রৈমাসিক)"
   },
   "productAcquisition": {
     "manageProductAcquisitionTitle": "পণ্য ক্রয় রেকর্ড",

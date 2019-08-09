@@ -1,7 +1,7 @@
 This API handles;
 * returns graph data for sales trend visualization.
 
-url: `api/graph-sales`
+url: `api/graph-sales-trend`
 
 method: `POST`
 
@@ -10,7 +10,6 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
   organizationId: Joi.number().max(999999999999999).required(),
-  shouldFilterByOutlet: Joi.boolean().required(),
   outletId: Joi.number().max(999999999999999).allow(null).required(),
   fromDate: Joi.number().max(999999999999999).required(),
   periodLevel: Joi.string().valid('week', 'month', 'year-quarterly', 'year-monthly')

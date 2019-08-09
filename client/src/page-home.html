@@ -27,7 +27,6 @@
 <dom-module id="page-home">
   <template>
     <style include="shared-styles">
-
       .user-detail-container {
         font-size: 13px;
         color: gray;
@@ -145,6 +144,19 @@
       </div>
       <!-- user information - end -->
 
+      <!-- sales trend graph - start -->
+      <template is="dom-if" if="[[hasGraphPrivileges(organization)]]">
+        <div class="card" style="padding: 0px;">
+          <div>
+            <canvas id="chart-canvas" style="max-height: 400px;"></canvas>
+          </div>
+          <div style="text-align: center; padding: 8px;font-size: 12px; color: rgb(100, 100, 100)">
+            [[verses.home.salesTrendGraphTitle]]
+          </div>
+        </div>
+      </template>
+      <!-- sales trend graph - end -->
+
       <!-- organization statistics - start -->
       <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ORGANIZATION_STATISTICS', organization)]]">
 
@@ -181,7 +193,7 @@
         <!-- Organization information - start -->
         <div class="vertical layout wrap">
           <div class="card flex info-panel">
-  
+
             <div class="title">[[verses.general.organization]]: [[organization.name]]</div>
             <template is="dom-if" if="[[organization.email]]">
               <div class="">[[verses.general.email]]: [[organization.email]]</div>
@@ -312,9 +324,11 @@
           if (this.hasPrivilege('PRIV_VIEW_ORGANIZATION_STATISTICS')) {
             this._processDashboardSummary(() => {
               this.isReady = true;
+              this.initGraph();
             });
           } else {
             this.isReady = true;
+            this.initGraph();
           }
         });
       }
@@ -538,6 +552,68 @@
 
       hideDefaultOutletPromptTapped() {
         this.setUiParameterInSettings('pageHome', 'hideDefaultOutletPrompt', true);
+      }
+
+      // region: graph =================================
+
+      hasGraphPrivileges(organization) {
+        return (this.hasPrivilege('PRIV_VIEW_SALES', organization)
+          && this.hasPrivilege('PRIV_VIEW_REPORTS', organization));
+      }
+
+      initGraph() {
+        if (!this.hasGraphPrivileges(this.organization)) return;
+        Chart.defaults.global.defaultFontFamily = 'Roboto';
+
+        this.fetchGraphData(({ graphData }) => {
+          this.drawGraph({ graphData });
+        })
+
+        window.addEventListener('resize', () => {
+          if (this.chart) {
+            this.chart.resize();
+          }
+        }, true);
+      }
+
+      fetchGraphData(cbfn) {
+        let data = {
+          organizationId: this.organization.id,
+          outletId: null,
+          fromDate: Date.now(),
+          periodLevel: 'week'
+        };
+        this.app.callGraphSalesTrendApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      drawGraph({ graphData }) {
+        let ctx = this.elem('#chart-canvas').getContext('2d');
+
+        let data = {
+          labels: graphData.labelList,
+          datasets: [{}]
+        };
+        Object.assign(data.datasets[0], this.getCommonGraphDatasetOptions());
+        Object.assign(data.datasets[0], {
+          data: graphData.sumTotalBilledList
+        });
+
+        let options = this.getCommonGraphOptions({ periodLevel: 'week' });
+
+        if (this.chart) {
+          this.chart.destroy();
+        }
+
+        this.chart = new Chart(ctx, {
+          type: 'line',
+          data,
+          options
+        });
+
       }
 
       // region: misc =================================
