@@ -102,12 +102,10 @@
                   <div class="product-acquisition-conteiner">
 
                     <div style="font-size: 16px; font-weight: 500;"> [[verses.productAcquisition.productAcquisitionNumber]]: [[productAcquisition.productAcquisitionNumber]] </div>
+                    <div class="description">[[verses.general.from]]: [[productAcquisition.vendor.name]]</div>
+                    <div class="description">[[verses.general.to]]: [[productAcquisition.inventory.inventoryContainer.name]]</div>
 
                     <div class="description-time">[[$mkDate(productAcquisition.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-
-                    <div class="description">[[verses.general.from]]: [[productAcquisition.fromInventory.inventoryContainer.name]] - [[productAcquisition.fromInventory.name]]</div>
-                    <div class="description">[[verses.general.to]]: [[productAcquisition.toInventory.inventoryContainer.name]] - [[productAcquisition.toInventory.name]]</div>
-                    <span class="description">[[verses.general.total]] [[productAcquisition.productList.length]] [[verses.general.products]]</span>
 
                   </div>
                 </div>
@@ -144,6 +142,10 @@
 
       static get properties() {
         return {
+          vendorId: {
+            type: Number,
+            value: null
+          },
           fromDate: {
             type: String,
             value: _ => {
@@ -212,6 +214,7 @@
           organizationId: this.app.organization.id,
           fromDate,
           toDate,
+          vendorId: this.vendorId,
           paginate: this.paginate
         };
 
