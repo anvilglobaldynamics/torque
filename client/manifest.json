@@ -2,7 +2,7 @@
   "name": "Lipi",
   "short_name": "Lipi",
 
-  "start_url": "./?homescreen=1",
+  "start_url": "./?homescreen=1&rev=2",
   "display": "standalone",
   "orientation": "portrait",
 
