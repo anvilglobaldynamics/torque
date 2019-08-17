@@ -8,6 +8,9 @@
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
 <link rel="import" href="../bower_components/iron-icons/editor-icons.html">
@@ -33,13 +36,54 @@
 <dom-module id="page-pos2">
   <template>
     <style include="shared-styles">
+      .column {
+        min-width: 320px;
+        min-height: 70vh;
+      }
 
+      paper-tabs.view-selector {
+        --paper-tabs: {
+          background-color: var(--app-primary-color);
+          color: white;
+        }
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page-fullwidth layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <!-- header - start -->
+
+      <!-- header - Multi Column - Start -->
+      <div class="horizontal layout">
+        <template is="dom-if" if="[[isMultiColumn]]">
+          <div class="flex">Products</div>
+          <div class="flex">Customer</div>
+          <div class="flex">Payment</div>
+        </template>
+      </div>
+      <!-- header - Multi Column - End -->
+
+      <!-- header - Single Column - Start -->
+      <template is="dom-if" if="[[!isMultiColumn]]">
+        <paper-tabs id="main-view-selector" class="view-selector" selected="{{selectedTabName}}" fit-container attr-for-selected="name">
+          <paper-tab name="products">Products</paper-tab>
+          <paper-tab name="customer">Customer</paper-tab>
+          <paper-tab name="payment">Payment</paper-tab>
+        </paper-tabs>
+      </template>
+      <!-- header - Single Column - End -->
+
+      <!-- header - end -->
+
+      <!-- columns - Start -->
+      <div class="horizontal layout">
+        <div class$="column flex [[$getColumnClasses('products', isMultiColumn, selectedTabName)]]">A</div>
+        <div class$="column flex [[$getColumnClasses('customer', isMultiColumn, selectedTabName)]]">B</div>
+        <div class$="column flex [[$getColumnClasses('payment', isMultiColumn, selectedTabName)]]">C</div>
+      </div>
+      <!-- columns - End -->
 
     </div>
 
@@ -54,7 +98,7 @@
 
       static get properties() {
         return {
-          isMobile: {
+          isMultiColumn: {
             type: Boolean,
             value: false
           },
@@ -126,14 +170,29 @@
 
       // region: core =================================
 
-      _detectIfMobile() {
+      _detectMultiColumnSupport() {
         const minimumPageWidth = 960;
         const leftSidebarWidth = 280;
         if (window.innerWidth < (minimumPageWidth + leftSidebarWidth)) {
-          this.isMobile = true;
+          this.isMultiColumn = false;
         } else {
-          this.isMobile = false;
+          this.isMultiColumn = true;
         }
+      }
+
+      $getColumnClasses(tabName, isMultiColumn, selectedTabName) {
+        console.log({tabName, isMultiColumn, selectedTabName});
+        let classNames = '';
+        if (isMultiColumn) {
+
+        } else {
+          if (tabName === selectedTabName) {
+            classNames += ''
+          } else {
+            classNames += 'hidden';
+          }
+        }
+        return classNames;
       }
 
       constructor() {
@@ -161,8 +220,8 @@
 
         this.assignedAssistedByEmployee = this.app.getFromSession('pos-assigned-assisted-by-employee');
 
-        this._detectIfMobile();
-        window.addEventListener('resize', () => this._detectIfMobile());
+        this._detectMultiColumnSupport();
+        window.addEventListener('resize', () => this._detectMultiColumnSupport());
 
         this.delay(0, () => {
           this.self = this;
