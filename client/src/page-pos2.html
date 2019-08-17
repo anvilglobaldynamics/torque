@@ -39,6 +39,13 @@
       .column {
         min-width: 320px;
         min-height: 70vh;
+        border: 1px solid black;
+        background: #e1f5fe;
+        position: relative;
+      }
+
+      .placeholder {
+        background: #7b8b92;
       }
 
       paper-tabs.view-selector {
@@ -79,9 +86,51 @@
 
       <!-- columns - Start -->
       <div class="horizontal layout">
-        <div class$="column flex [[$getColumnClasses('products', isMultiColumn, selectedTabName)]]">A</div>
-        <div class$="column flex [[$getColumnClasses('customer', isMultiColumn, selectedTabName)]]">B</div>
-        <div class$="column flex [[$getColumnClasses('payment', isMultiColumn, selectedTabName)]]">C</div>
+        <div class$="column flex [[$getColumnClasses('products', 'real', isMultiColumn, selectedTabName)]]">
+
+          <div class="card horizontal layout center">
+            Page A
+          </div>
+
+          <div class="card horizontal layout center">
+
+            <paper-input class="payment--serviceChargeAmount flex" value="{{payment.serviceChargeAmount}}" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.serviceChargeInputError]]" label="[[verses.pos.serviceChargeInput]]">
+              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+            </paper-input>
+          </div>
+
+          <div class="card vertical layout">
+            <div class="p-16 horizontal layout center">
+              <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.customer.searchForCustomerInputError]] label=[[verses.customer.searchForCustomerInput]] on-keypress="searchFieldKeypressed"></paper-input>
+
+              <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
+
+              <paper-button raised class="primary" on-tap="searchTapped">
+                [[verses.general.search]]
+              </paper-button>
+            </div>
+          </div>
+        </div>
+        <div class$="column flex [[$getColumnClasses('customer', 'real', isMultiColumn, selectedTabName)]]">
+          <div class="card horizontal layout center">
+            Page B
+          </div>
+        </div>
+        <div class$="column flex placeholder  vertical layout center-center [[$getColumnClasses('customer', 'placeholder', isMultiColumn, selectedTabName)]]">
+          <div>
+            Please complete page A to access page B.
+          </div>
+        </div>
+        <div class$="column flex [[$getColumnClasses('payment', 'real', isMultiColumn, selectedTabName)]]">
+          <div class="card horizontal layout center">
+            Page C
+          </div>
+        </div>
+        <div class$="column flex placeholder vertical layout center-center  [[$getColumnClasses('payment', 'placeholder', isMultiColumn, selectedTabName)]]">
+          <div>
+            Please complete page A and B to access page C.
+          </div>
+        </div>
       </div>
       <!-- columns - End -->
 
@@ -180,16 +229,24 @@
         }
       }
 
-      $getColumnClasses(tabName, isMultiColumn, selectedTabName) {
-        console.log({tabName, isMultiColumn, selectedTabName});
+      $getColumnClasses(tabName, type, isMultiColumn, selectedTabName) {
+        console.log({ tabName, type, isMultiColumn, selectedTabName });
         let classNames = '';
         if (isMultiColumn) {
-
+          if (tabName === 'customer' && type !== 'placeholder') {
+            classNames += 'hidden ';
+          } else if (tabName === 'payment' && type !== 'placeholder') {
+            classNames += 'hidden ';
+          }
         } else {
-          if (tabName === selectedTabName) {
-            classNames += ''
+          if (type === 'placeholder') {
+            classNames += 'hidden ';
           } else {
-            classNames += 'hidden';
+            if (tabName === selectedTabName) {
+              classNames += ''
+            } else {
+              classNames += 'hidden ';
+            }
           }
         }
         return classNames;
