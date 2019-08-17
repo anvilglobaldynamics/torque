@@ -114,6 +114,18 @@
           </div>
           <!-- content-item - end -->
 
+                    <!-- content-item - start -->
+                    <div class="content-item" on-tap="pos2Tapped">
+                      <div class="icon">
+                        <iron-icon src="../../images/icons/point-of-service.png"></iron-icon>
+                        2
+                      </div>
+                      <div class="type title uppercase">[[verses.general.pos]]</div>
+                      <div class="type caption secondary">[[verses.outlet.goToPos]]</div>
+                      <paper-ripple></paper-ripple>
+                    </div>
+                    <!-- content-item - end -->
+
           <!-- content-item - start -->
           <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
             <div class="content-item" on-tap="manageOutletServicesTapped">
@@ -287,6 +299,10 @@
 
       posTapped(e) {
         return this.app.navigateTo(`/pos/outlet:${this.outlet.id}`);
+      }
+
+      pos2Tapped(e) {
+        return this.app.navigateTo(`/pos2/outlet:${this.outlet.id}`);
       }
 
       manageSalesTapped(e) {
