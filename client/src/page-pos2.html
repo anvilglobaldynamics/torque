@@ -8,9 +8,6 @@
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 
-<!-- <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../bower_components/paper-tabs/paper-tab.html"> -->
-
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
 <link rel="import" href="../bower_components/iron-icons/editor-icons.html">
@@ -98,13 +95,6 @@
 
       <!-- header - Single Column - Start -->
       <template is="dom-if" if="[[!isMultiColumn]]">
-        <!-- 
-        <paper-tabs id="main-view-selector" class="view-selector" selected="{{selectedTabName}}" fit-container attr-for-selected="name">
-          <paper-tab name="products">Products</paper-tab>
-          <paper-tab name="customer">Customer</paper-tab>
-          <paper-tab name="payment">Payment</paper-tab>
-        </paper-tabs> 
-        -->
         <div class="horizontal layout single-column-tabs-row">
           <div class$="flex single-column-tab [[$getTabSelectedClass('products', selectedTabName)]]" data-key="products" on-tap="singleColumnTabTapped">Products</div>
           <div class$="flex single-column-tab [[$getTabSelectedClass('customer', selectedTabName)]]" data-key="customer" on-tap="singleColumnTabTapped">Customer</div>
