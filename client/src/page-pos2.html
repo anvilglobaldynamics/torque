@@ -107,51 +107,97 @@
 
       <!-- columns - Start -->
       <div class="horizontal layout">
+
+        <!-- products column - start -->
         <div class$="column flex [[$getColumnClasses('products', 'real', isMultiColumn, selectedTabName)]]">
 
-          <div class="card horizontal layout center">
-            Page A
-          </div>
-
-          <div class="card horizontal layout center">
-
-            <paper-input class="payment--serviceChargeAmount flex" value="{{payment.serviceChargeAmount}}" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.serviceChargeInputError]]" label="[[verses.pos.serviceChargeInput]]">
-              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-            </paper-input>
-          </div>
-
           <div class="card vertical layout">
-            <div class="p-16 horizontal layout center">
-              <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.customer.searchForCustomerInputError]] label=[[verses.customer.searchForCustomerInput]] on-keypress="searchFieldKeypressed"></paper-input>
-
-              <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
-
-              <paper-button raised class="primary" on-tap="searchTapped">
-                [[verses.general.search]]
-              </paper-button>
+            <div class="horizontal layout center">
+              <paper-input class="flex" value="{{productSearchString}}" always-float-label label="Name of product" on-keypress="productSearchFieldKeypressed"></paper-input>
+              <paper-icon-button icon="search" on-tap="productSearchTapped"></paper-icon-button>
             </div>
           </div>
+
+          <!-- selected product list - start -->
+          <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
+            <div class="card vertical layout">
+              <div class="list">
+
+                <template is="dom-repeat" items="[[productList]]" as="product">
+                  <div class="horizontal layout item center">
+                    <div class="vertical layout flex">
+                      <div>
+                        <span class="product-title">[[product.name]]</span>
+                      </div>
+                      <div class="horizontal layout center">
+                        <div class="description">[[product.selectedCount]] [[product.unit]] @&nbsp;</div>
+                        <!-- <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" type="number" auto-validate min="[[product.minSalePrice]]"></paper-input> -->
+                        <div>[[product.salePrice]]</div>
+                        <div class="description">[[app.settings.monetaryUnit]]</div>
+                        <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
+                      </div>
+                    </div>
+                    <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
+                      <paper-icon-button on-tap="editProductSalePrice" icon="create"></paper-icon-button>
+                    </template>
+                  </div>
+                </template>
+
+                <!-- warehouse selection - start -->
+                <template is="dom-if" if="[[hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')]]">
+                  <template is="dom-if" if="[[$shouldShowWarehouseSelector(warehouseList.length, productList.length)]]">
+                    <div>
+
+                      <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.selectProductsFromInventoryContainer]]" class="mr-4">
+                        <paper-listbox slot="dropdown-content" selected="{{selectedWarehouse}}" attr-for-selected="name">
+                          <paper-item name="--current-outlet">[[verses.pos.currentOutlet]]</paper-item>
+                          <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
+                            <paper-item name="[[warehouse.id]]">
+                              <div class="name">[[warehouse.name]]</div>
+                            </paper-item>
+                          </template>
+                        </paper-listbox>
+                      </paper-dropdown-menu>
+
+                    </div>
+                  </template>
+                </template>
+                <!-- warehouse selection - end -->
+
+              </div>
+            </div>
+          </template>
+          <!-- selected product list - end -->
+
         </div>
+        <!-- products column - end -->
+
+        <!-- customer column - start -->
         <div class$="column flex [[$getColumnClasses('customer', 'real', isMultiColumn, selectedTabName)]]">
           <div class="card horizontal layout center">
-            Page B
+            Customer TBD
           </div>
         </div>
         <div class$="column flex placeholder  vertical layout center-center [[$getColumnClasses('customer', 'placeholder', isMultiColumn, selectedTabName)]]">
           <div>
-            Please complete page A to access page B.
+            Please complete product/service selection to access customer features.
           </div>
         </div>
+        <!-- customer column - end -->
+
+        <!-- payment column - start -->
         <div class$="column flex [[$getColumnClasses('payment', 'real', isMultiColumn, selectedTabName)]]">
           <div class="card horizontal layout center">
-            Page C
+            Payment TBD
           </div>
         </div>
         <div class$="column flex placeholder vertical layout center-center  [[$getColumnClasses('payment', 'placeholder', isMultiColumn, selectedTabName)]]">
           <div>
-            Please complete page A and B to access page C.
+            Please complete product/service and customer selection to access payment features.
           </div>
         </div>
+        <!-- payment column - end -->
+
       </div>
       <!-- columns - End -->
 
@@ -168,6 +214,7 @@
 
       static get properties() {
         return {
+          // Tabination =============
           isMultiColumn: {
             type: Boolean,
             value: false
@@ -176,17 +223,44 @@
             type: String,
             value: 'products'
           },
+          // Products =============
+          warehouseList: {
+            type: Array,
+            value: () => []
+          },
+          selectedWarehouse: {
+            type: String,
+            value: '--current-outlet',
+            observer: 'selectedWarehouseChanged'
+          },
+          productsSelectedFromWarehouseId: {
+            type: Number,
+            value: null,
+          },
           productList: {
             type: Array,
             value: () => []
           },
+          // Services =============
           serviceList: {
             type: Array,
             value: () => []
           },
-          warehouseList: {
-            type: Array,
-            value: () => []
+          // Customer =============
+          isSearchingCustomer: {
+            type: Boolean,
+            value: false
+          },
+          customer: {
+            type: Object,
+            value: null,
+            observer: 'customerChanged'
+          },
+          // Payment =============
+          selectedDiscountPreset: {
+            type: String,
+            value: '--no-discount',
+            observer: 'selectedDiscountPresetChanged'
           },
           payment: {
             type: Object,
@@ -208,15 +282,7 @@
               }
             }
           },
-          isSearchingCustomer: {
-            type: Boolean,
-            value: false
-          },
-          customer: {
-            type: Object,
-            value: null,
-            observer: 'customerChanged'
-          },
+          // Offline Mode =============
           isInOfflineMode: {
             type: Boolean,
             value: false
@@ -225,29 +291,104 @@
             type: Boolean,
             value: false
           },
-          selectedDiscountPreset: {
-            type: String,
-            value: '--no-discount',
-            observer: 'selectedDiscountPresetChanged'
-          },
-          selectedWarehouse: {
-            type: String,
-            value: '--current-outlet',
-            observer: 'selectedWarehouseChanged'
-          },
-          productsSelectedFromWarehouseId: {
-            type: Number,
-            value: null,
-          }
         };
       }
 
       // region: core =================================
 
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_ACCESS_POS']
+        });
+      }
+
+      onNavigateIn() {
+        this.selectedProductList = []
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        this.onOfflineDataChange();
+        this.onOrganizationChange(this.app.organization);
+        this.app.pushPageTitle(this.app.verses.pos.posPageTitle);
+        if (!'outlet' in this.params) {
+          return this.app.showModalDialog(this.app.verses.general.errorMessageTitle, this.app.verses.general.somethingWentWrong, () => {
+            return this.navigateTo('/home');
+          });
+        }
+        if (!this._ensureAccess()) return;
+
+        // tabination
+        this._detectMultiColumnSupport();
+        window.addEventListener('resize', () => this._detectMultiColumnSupport());
+
+        // products
+        if (!this.isInOfflineMode) {
+          this._fetchWarehouseList((warehouseList) => {
+            warehouseList.reverse();
+            this.warehouseList = warehouseList;
+          });
+        }
+        this.selectedWarehouse = this.app.getFromSession('pos-selected-warehouse') || '--current-outlet';
+        this.productsSelectedFromWarehouseId = this.app.getFromSession('product-selected-from-warehouse-id') || null;
+        this.productList = this.app.getFromSession('pos-selected-product-list') || [];
+
+        // services
+        this.serviceList = this.app.getFromSession('pos-selected-service-list') || [];
+
+        // customer
+        this.delay(0, () => {
+          this.self = this;
+          let customerId = this.app.extractFromSession('last-created-customer');
+          if (customerId !== null) {
+            this._processGetCustomer({ customerId }, (customer) => {
+              this.customer = customer;
+            });
+          } else {
+            let customer = this.app.getFromSession('last-selected-customer');
+            if (customer) {
+              this.customer = customer;
+            }
+          }
+        });
+
+        // payment
+        this.assignedAssistedByEmployee = this.app.getFromSession('pos-assigned-assisted-by-employee');
+        this.selectedDiscountPreset = '--no-discount';
+        this._processDiscountPresetList(() => { });
+        this.delay(0, () => {
+          this._calculatePayment();
+        });
+
+        this.isReady = true;
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.currentPageAllowsBackButton = true;
+        this.app.popPageTitle();
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
+
+      backButtonOnTopBarPressed(e = null) {
+        this._resetSales();
+        this.app.navigateToPreviousUrl('/home');
+      }
+
+      // region: tabination =================================
+
       singleColumnTabTapped(e) {
         e.stopPropagation();
         let attr = e.target.getAttribute('data-key');
-        console.log(attr);
+        console.log({ selectedTabName: attr });
         this.selectedTabName = attr;
       }
 
@@ -277,127 +418,26 @@
       $getColumnClasses(tabName, type, isMultiColumn, selectedTabName) {
         console.log({ tabName, type, isMultiColumn, selectedTabName });
         let classNames = '';
+
+        if (tabName === 'customer' && type !== 'placeholder') {
+          classNames += 'hidden ';
+        } else if (tabName === 'payment' && type !== 'placeholder') {
+          classNames += 'hidden ';
+        }
+
         if (isMultiColumn) {
-          if (tabName === 'customer' && type === 'placeholder') {
-            classNames += 'hidden ';
-          } else if (tabName === 'payment' && type !== 'placeholder') {
-            classNames += 'hidden ';
-          }
+          // todo
         } else {
-          if (type === 'placeholder') {
-            classNames += 'hidden ';
+          if (tabName === selectedTabName) {
+            classNames += ''
           } else {
-            if (tabName === selectedTabName) {
-              classNames += ''
-            } else {
-              classNames += 'hidden ';
-            }
+            classNames += 'hidden ';
           }
         }
         return classNames;
       }
 
-      constructor() {
-        super();
-        this.confirmPageReady();
-      }
-
-      onNavigateIn() {
-        this.app.shouldShowSaveButton = false;
-        this.app.currentPageIsModal = true;
-        this.useLanguageServices();
-        this.onOfflineDataChange();
-        this.onOrganizationChange(this.app.organization);
-        this.app.pushPageTitle(this.app.verses.pos.posPageTitle);
-        if (!'outlet' in this.params) {
-          return this.app.showModalDialog(this.app.verses.general.errorMessageTitle, this.app.verses.general.somethingWentWrong, () => {
-            return this.navigateTo('/home');
-          });
-        }
-        if (!this._ensureAccess()) return;
-        this.selectedDiscountPreset = '--no-discount';
-
-        this.selectedWarehouse = this.app.getFromSession('pos-selected-warehouse') || '--current-outlet';
-        this.productsSelectedFromWarehouseId = this.app.getFromSession('product-selected-from-warehouse-id') || null;
-
-        this.assignedAssistedByEmployee = this.app.getFromSession('pos-assigned-assisted-by-employee');
-
-        this._detectMultiColumnSupport();
-        window.addEventListener('resize', () => this._detectMultiColumnSupport());
-
-        this.delay(0, () => {
-          this.self = this;
-          let customerId = this.app.extractFromSession('last-created-customer');
-          if (customerId) {
-            this._processGetCustomer({ customerId }, (customer) => {
-              this.customer = customer;
-            });
-          } else {
-            let customer = this.app.getFromSession('last-selected-customer');
-            if (customer) {
-              this.customer = customer;
-            }
-          }
-
-          let productList = this.app.getFromSession('pos-selected-product-list');
-          if (productList) {
-            if (this.productList.length > 0) {
-              productList.forEach(newProduct => {
-                let oldProduct = this.productList.find(oldProduct => oldProduct.productId === newProduct.productId);
-                if (oldProduct) {
-                  newProduct.salePrice = oldProduct.salePrice;
-                }
-              });
-            }
-            this.productList = productList;
-          }
-
-          let serviceList = this.app.getFromSession('pos-selected-service-list');
-          if (serviceList) {
-            this.serviceList = serviceList;
-          }
-          this._calculatePayment();
-        });
-        this._processDiscountPresetList(() => {
-
-        });
-        if (!this.isInOfflineMode) {
-          this._fetchWarehouseList((warehouseList) => {
-            warehouseList.reverse();
-            this.warehouseList = warehouseList;
-          });
-        }
-        this.delay(10, () => {
-          if (!this._skipToProductOrServiceSelectionPage()) {
-            this.isReady = true;
-            this.jumpToPaymentIfPossible();
-          }
-        });
-      }
-
-      jumpToPaymentIfPossible() {
-        this.delay(300, () => {
-          try {
-            this.elem('#sale-and-print-button').scrollIntoView({ block: "end", inline: "nearest" });
-            this.delay(100, () => {
-              try {
-                let input = this.elem('.payment--paidAmount');
-                input.click();
-                this.delay(50, () => {
-                  try {
-                    input.focus();
-                    this.delay(50, () => {
-                      try {
-                        input.inputElement.inputElement.select();
-                      } catch (ex) { }
-                    });
-                  } catch (ex) { }
-                });
-              } catch (ex) { }
-            });
-          } catch (ex) { }
-        });
-      }
+      // region: products =================================
 
       selectedWarehouseChanged() {
         this.app.storeInSession('pos-selected-warehouse', this.selectedWarehouse);
@@ -408,71 +448,27 @@
         this.app.storeInSession('product-selected-from-warehouse-id', this.productsSelectedFromWarehouseId);
       }
 
-      onNavigateOut() {
-        super.onNavigateOut();
-        this.app.currentPageAllowsBackButton = true;
-        this.app.popPageTitle();
-      }
-
-      _ensureAccess() {
-        return this.accessControl({
-          authLevel: 'organization-selected',
-          privilegeList: ['PRIV_ACCESS_POS']
+      editProductSalePrice(e) {
+        let { product } = e.model;
+        this.app.showModalInput(this.verses.sales.editSalePrice, this.verses.sales.editSalePriceDetails, product.salePrice, (answer) => {
+          let salePrice = parseFloat(answer);
+          if (salePrice >= 0) {
+            e.model.set('product.salePrice', salePrice);
+            this._calculatePayment({ resetRounding: true });
+          }
         });
       }
 
-      onOrganizationChange(organization) {
-        this.organization = organization;
-      }
 
-      _skipToProductOrServiceSelectionPage() {
-        if (this.app.pageName !== 'pos') return;
-        if (this.hasModule('MOD_PRODUCT') && this.hasModule('MOD_SERVICE')) return;
-        if (this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')) return;
-        if (window.isComingFromProductOrServiceSelection) {
-          window.isComingFromProductOrServiceSelection = false;
-          return;
+      _fetchWarehouseList(cbfn) {
+        if (!this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')) {
+          return cbfn([]);
         }
-        if (this.productList.length > 0 || this.serviceList.length > 0) return;
-        if (this.hasModule('MOD_PRODUCT')) {
-          this.addProductTapped();
-        }
-        if (this.hasModule('MOD_SERVICE')) {
-          this.addServiceTapped();
-        }
-        return true;
-      }
-
-      // region: pos =================================
-
-      selectedDiscountPresetChanged() {
-        if (this.selectedDiscountPreset === '--no-discount') {
-          this.payment.discountPresetId = null;
-          this.payment.discountType = 'percent';
-          this.payment.discountValue = '0';
-        } else {
-          let key = parseInt(String(this.selectedDiscountPreset));
-          let discountPreset = this.discountPresetList.find(discountPreset => discountPreset.id === key);
-          this.payment.discountPresetId = discountPreset.id;
-          this.payment.discountType = discountPreset.discountType;
-          this.payment.discountValue = discountPreset.discountValue;
-        }
-        this._calculatePayment();
-      }
-
-      customerChanged() {
-        if (!this.customer) return;
-        this.app.storeInSession('last-selected-customer', this.customer);
-      }
-
-      _processGetCustomer({ customerId }, cbfn) {
-        let data = {
-          customerId
-        };
-        this.app.callGetCustomerApi(data, (err, response) => {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetWarehouseListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          cbfn(response.customer);
+          return cbfn(response.warehouseList);
         });
       }
 
@@ -518,6 +514,185 @@
             });
           }
         }
+      }
+
+      addProductTapped(e = null) {
+        this._processGetOutletDefaultInventoryId(defaultInventoryId => {
+
+          return this.app.navigateTo(`/pos-select-products/inventory:${defaultInventoryId}`);
+        })
+      }
+
+
+      _fetchProductMatchingIdentifierCodeOnline(cbfn) {
+        this._processGetOutletDefaultInventoryId(defaultInventoryId => {
+
+        let inventoryId = defaultInventoryId;
+        this.inventoryId = inventoryId;
+        let data = { inventoryId, includeZeroCountProducts: false, identifierCode: this.productSearchString };
+        this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      })
+      }
+
+      _fetchProductMatchingIdentifierCode(cbfn) {
+        if (this.isInOfflineMode) {
+          // FIXME: Remove or Implement
+          // this._fetchProductMatchingIdentifierCodeOffline(cbfn);
+        } else {
+          this._fetchProductMatchingIdentifierCodeOnline(cbfn);
+        }
+      }
+
+      _prepareProductForInsertion({ product }) {
+        let { productId, name, selectedCount, count, salePrice, vatValue, unit } = product;
+        let maxAllowedCount = count;
+        selectedCount = parseFloat(String(selectedCount));
+        let minSalePrice = salePrice;
+        return { productId, name, selectedCount, maxAllowedCount, salePrice, vatValue, minSalePrice, unit };
+      }
+
+      _fetchProduct(cbfn) {
+        this._fetchProductMatchingIdentifierCode(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
+          let productList = aggregatedProductList.map(product => {
+            let { purchasePrice, salePrice } = product.product;
+            let { name, unit, defaultVat } = product.product.productBlueprint;
+            product.isSelected = false;
+            let vatValue = defaultVat;
+            Object.assign(product, { name, unit, purchasePrice, salePrice, vatValue });
+            return product;
+          });
+          cbfn(productList);
+        });
+      }
+
+      _productIdentifierCodeEntered(e) {
+
+        this._fetchProduct((productList) => {
+          this.identifierCode = '';
+          if (productList.length === 0) {
+            this.lastErrorMessage = this.verses.scan.noMatchingProductsError;
+            return;
+          }
+
+          // NOTE: The following calculation is to ensure products are selected from adjacent batches
+          let selectedCount = 0;
+          let calculatedMaxCount = 0;
+          let product;
+          for (product of productList) {
+            calculatedMaxCount += product.count;
+            let foundProduct = this.selectedProductList.find(selectedProduct => selectedProduct.productId === product.productId);
+            if (!foundProduct) break;
+            selectedCount += parseFloat(foundProduct.selectedCount);
+            if (selectedCount < calculatedMaxCount) break;
+          }
+          if (selectedCount === calculatedMaxCount) {
+            this.lastErrorMessage = this.verses.scan.noMatchingProductsError;
+            return;
+          }
+          // NOTE: end
+
+          product = this._prepareProductForInsertion({ product });
+
+          let foundProduct = this.selectedProductList.find(selectedProduct => selectedProduct.productId === product.productId);
+          if (foundProduct) {
+            foundProduct.selectedCount = parseFloat(foundProduct.selectedCount) + 1;
+          } else {
+            product.selectedCount = 1;
+            this.selectedProductList.push(product);
+          }
+          // this.push('productList',product);
+          this.productList = [];
+          this.productList = this.selectedProductList;
+          this.selectedProductCount += 1;
+          this.lastSuccessMessage = `${this.verses.scan.lastScanned} "${product.name}"`;
+        })
+      }
+
+      productSearchTapped(e = null) {
+        this._productIdentifierCodeEntered(e);
+      }
+
+
+
+      // region: services =================================
+
+      addServiceTapped(e = null) {
+        return this.app.navigateTo(`/pos-select-services/outlet:${this.params.outlet}`);
+      }
+      // region: customer =================================
+
+      changeCustomerTapped(e = null) {
+        this.isSearchingCustomer = true;
+      }
+
+      createCustomerTapped(e = null) {
+        this.app.navigateTo('/edit-customer');
+      }
+
+      removeCustomerTapped(e = null) {
+        this.customer = null;
+        this.app.storeInSession('last-selected-customer', null);
+      }
+
+
+      customerChanged() {
+        if (!this.customer) return;
+        this.app.storeInSession('last-selected-customer', this.customer);
+      }
+
+      _processGetCustomer({ customerId }, cbfn) {
+        let data = {
+          customerId
+        };
+        this.app.callGetCustomerApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          cbfn(response.customer);
+        });
+      }
+
+
+      _customerSelected(customer) {
+        this.customer = customer;
+        this.isSearchingCustomer = false;
+      }
+
+      // region: payment =================================
+
+      paymentMethodSelected(e) {
+        // NOTE: The timeout should not be necessary. However, without it
+        // the value of this.payment.paymentMethod is not being updated in time.
+        window.setTimeout(() => {
+          this._calculatePayment();
+        }, 100);
+      }
+
+      genericPaymentInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+        if (e.target.className.indexOf('payment--paidAmount') > -1) {
+          this._calculatePayment({ resetRounding: false });
+        } else {
+          this._calculatePayment();
+        }
+      }
+
+      selectedDiscountPresetChanged() {
+        if (this.selectedDiscountPreset === '--no-discount') {
+          this.payment.discountPresetId = null;
+          this.payment.discountType = 'percent';
+          this.payment.discountValue = '0';
+        } else {
+          let key = parseInt(String(this.selectedDiscountPreset));
+          let discountPreset = this.discountPresetList.find(discountPreset => discountPreset.id === key);
+          this.payment.discountPresetId = discountPreset.id;
+          this.payment.discountType = discountPreset.discountType;
+          this.payment.discountValue = discountPreset.discountValue;
+        }
+        this._calculatePayment();
       }
 
       _fetchDiscountPresetList(cbfn) {
@@ -652,17 +827,6 @@
         this._calculatePayment();
       }
 
-      editProductSalePrice(e) {
-        let { product } = e.model;
-        this.app.showModalInput(this.verses.sales.editSalePrice, this.verses.sales.editSalePriceDetails, product.salePrice, (answer) => {
-          let salePrice = parseFloat(answer);
-          if (salePrice >= 0) {
-            e.model.set('product.salePrice', salePrice);
-            this._calculatePayment({ resetRounding: true });
-          }
-        });
-      }
-
       editTotalBilledTapped(e = null) {
         this.app.showModalInput(this.verses.sales.editBill, this.verses.sales.editBillDetails, this.payment.totalBilled, (answer) => {
           if (parseFloat(answer) > 0) {
@@ -749,6 +913,8 @@
         }
       }
 
+      // region: finalize =================================
+
       _resetSales({ refreshCurrentPage = true } = {}) {
         this.selectedDiscountPreset = '--no-discount';
         this.selectedWarehouse = '--current-outlet';
@@ -769,70 +935,6 @@
         if (refreshCurrentPage) {
           this.app.refreshCurrentPage();
         }
-      }
-
-      _customerSelected(customer) {
-        this.customer = customer;
-        this.isSearchingCustomer = false;
-      }
-
-      _fetchWarehouseList(cbfn) {
-        if (!this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')) {
-          return cbfn([]);
-        }
-        let data = { organizationId: this.app.organization.id };
-        this.app.callGetWarehouseListApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.warehouseList);
-        });
-      }
-
-      // region: ui =================================
-
-      changeCustomerTapped(e = null) {
-        this.isSearchingCustomer = true;
-      }
-
-      createCustomerTapped(e = null) {
-        this.app.navigateTo('/edit-customer');
-      }
-
-      removeCustomerTapped(e = null) {
-        this.customer = null;
-        this.app.storeInSession('last-selected-customer', null);
-      }
-
-      addProductTapped(e = null) {
-        this._processGetOutletDefaultInventoryId(defaultInventoryId => {
-          return this.app.navigateTo(`/pos-select-products/inventory:${defaultInventoryId}`);
-        })
-      }
-
-      addServiceTapped(e = null) {
-        return this.app.navigateTo(`/pos-select-services/outlet:${this.params.outlet}`);
-      }
-
-      paymentMethodSelected(e) {
-        // NOTE: The timeout should not be necessary. However, without it
-        // the value of this.payment.paymentMethod is not being updated in time.
-        window.setTimeout(() => {
-          this._calculatePayment();
-        }, 100);
-      }
-
-      genericPaymentInputChanged(e) {
-        this.enforceMinMaxOnPaperInput(e);
-        if (e.target.className.indexOf('payment--paidAmount') > -1) {
-          this._calculatePayment({ resetRounding: false });
-        } else {
-          this._calculatePayment();
-        }
-      }
-
-      backButtonOnTopBarPressed(e = null) {
-        this._resetSales();
-        this.app.navigateToPreviousUrl('/home');
       }
 
       saveSaleTapped(e = null) {
