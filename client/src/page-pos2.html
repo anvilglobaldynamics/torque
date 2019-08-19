@@ -439,6 +439,11 @@
 
       // region: products =================================
 
+      $shouldShowWarehouseSelector(warehouseListLength, productListLength) {
+        return (warehouseListLength > 0 && productListLength === 0);
+      }
+
+
       selectedWarehouseChanged() {
         this.app.storeInSession('pos-selected-warehouse', this.selectedWarehouse);
       }
@@ -712,6 +717,15 @@
         });
       }
 
+      getDiscountPresetLabel(discountPreset) {
+        let { name, discountType, discountValue } = discountPreset;
+        if (discountType === 'percent') {
+          return `${name} (${discountValue}%)`;
+        } else {
+          return `${name} (${discountValue} ${this.app.settings.monetaryUnit})`;
+        }
+      }
+
       // main payment calculation method
       _calculatePayment({ resetRounding = true } = {}) {
         let {
@@ -913,7 +927,23 @@
         }
       }
 
-      // region: finalize =================================
+      isDiscountTypePercent(discountType) {
+        return (discountType === 'percent');
+      }
+
+      isPaymentMethodCash(paymentMethod) {
+        return (paymentMethod === 'cash');
+      }
+
+      isPaymentMethodChangeWallet(paymentMethod) {
+        return (paymentMethod === 'change-wallet');
+      }
+
+      isValidCreditSale(customer, totalBilled, paidAmount) {
+        return (customer && totalBilled > paidAmount);
+      }
+
+      // region: finalize & offline mode =================================
 
       _resetSales({ refreshCurrentPage = true } = {}) {
         this.selectedDiscountPreset = '--no-discount';
@@ -1045,52 +1075,6 @@
         submitNext();
       }
 
-      isDiscountTypePercent(discountType) {
-        return (discountType === 'percent');
-      }
-
-      isPaymentMethodCash(paymentMethod) {
-        return (paymentMethod === 'cash');
-      }
-
-      isPaymentMethodChangeWallet(paymentMethod) {
-        return (paymentMethod === 'change-wallet');
-      }
-
-      isValidCreditSale(customer, totalBilled, paidAmount) {
-        return (customer && totalBilled > paidAmount);
-      }
-
-      assignEmployeeTapped(e) {
-        let { id } = e.model.service;
-        return this.app.navigateTo(`/pos-assign-employee-service/service:${id}`);
-      }
-
-      assignAssistedByEmployeeTapped() {
-        return this.app.navigateTo(`/pos-assign-assisted-by-employee`);
-      }
-
-      $shouldShowWarehouseSelector(warehouseListLength, productListLength) {
-        return (warehouseListLength > 0 && productListLength === 0);
-      }
-
-      // region: misc =================================
-
-      productListOrServiceListHasElement(productListLength, serviceListLength) {
-        return (productListLength || serviceListLength);
-      }
-
-      getDiscountPresetLabel(discountPreset) {
-        let { name, discountType, discountValue } = discountPreset;
-        if (discountType === 'percent') {
-          return `${name} (${discountValue}%)`;
-        } else {
-          return `${name} (${discountValue} ${this.app.settings.monetaryUnit})`;
-        }
-      }
-
-      // region: offline sales =================================
-
       onOfflineDataChange() {
         this.isInOfflineMode = this.app.isInOfflineMode;
         this.offlineData = this.app.offlineData;
@@ -1101,6 +1085,21 @@
         } else {
           this.app.currentPageAllowsBackButton = true;
         }
+      }
+
+      // region: misc =================================
+
+      productListOrServiceListHasElement(productListLength, serviceListLength) {
+        return (productListLength || serviceListLength);
+      }
+
+      assignEmployeeTapped(e) {
+        let { id } = e.model.service;
+        return this.app.navigateTo(`/pos-assign-employee-service/service:${id}`);
+      }
+
+      assignAssistedByEmployeeTapped() {
+        return this.app.navigateTo(`/pos-assign-assisted-by-employee`);
       }
 
     }
