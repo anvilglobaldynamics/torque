@@ -143,6 +143,45 @@
           </div>
           <!-- product searchbar - end -->
 
+          <!-- looping product - start -->
+          <template is="dom-if" if="{{matchingProductList.length}}">
+
+            <div class="card vertical layout">
+
+              <template is="dom-if" if="[[$hasPreviousPagination(productPaginate.offset)]]">
+                <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousProductsTapped">[[verses.general.showPrevious]]</paper-button>
+              </template>
+
+              <div class="list">
+                <template is="dom-repeat" items="[[matchingProductList]]" as="product">
+                  <div class="horizontal layout item center">
+                    <div class="flex" style="min-width: 128px;">
+                      <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                      <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                    </div>
+
+                    <template is="dom-if" if="[[product.count]]">
+                      <paper-icon-button class=" primary " icon="add-circle" on-tap="selectMatchingProductTapped"></paper-icon-button>
+                    </template>
+                  </div>
+                </template>
+              </div>
+
+              <div class="pagination">
+                [[verses.general.loaded]]
+                <span class="limit">[[productPagination.limit]]</span>
+                [[verses.general.itemsOutOf]]
+                <span class="total-count">[[productPagination.totalCount]]</span> [[verses.general.startingFrom]]
+                <span class="offset">#[[$inc(productPagination.offset)]]</span>.
+              </div>
+              <template is="dom-if" if="[[$hasMorePagination(productPagination.totalCount, productPaginate.offset, productPaginate.limit)]]">
+                <paper-button raised class="neutral pagination-show-more" on-tap="showMoreProductsTapped">[[verses.general.showMore]]</paper-button>
+              </template>
+
+            </div>
+          </template>
+          <!-- looping product - end -->
+
           <!-- selected product list - start -->
           <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
             <template is="dom-if" if="[[productList.length]]">
@@ -252,6 +291,21 @@
           matchingProductList: {
             type: Array,
             value: () => []
+          },
+          productPaginate: {
+            type: Object,
+            value: () => {
+              return {
+                offset: 0,
+                limit: 3
+              }
+            }
+          },
+          productPagination: {
+            type: Object,
+            value: () => {
+              return {}
+            }
           },
           // Services =============
           serviceList: {
@@ -623,23 +677,23 @@
       //   })
       // }
 
-      _fetchInventoryDetailsOnline(cbfn) {
+      _fetchAggregatedInventoryDetailsOnline(cbfn) {
         let data = {
           inventoryId: this.defaultInventoryId,
           searchString: String(this.productSearchString),
-          paginate: this.paginate,
+          paginate: this.productPaginate,
           includeZeroCountProducts: false,
           sortOrder: 'blueprint-created-date-descending'
         };
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this.pagination = response.pagination;
+          this.productPagination = response.pagination;
           return cbfn(response);
         });
       }
 
-      _fetchInventoryDetailsOffline(cbfn) {
+      _fetchAggregatedInventoryDetailsOffline(cbfn) {
         window.setTimeout(() => {
           let response = JSON.parse(JSON.stringify(this.app.offlineData.cache.getAggregatedInventoryDetails));
 
@@ -654,21 +708,21 @@
 
           ([response.aggregatedProductList, response.pagination] = this._paginateOfflineData(response.aggregatedProductList));
 
-          this.pagination = response.pagination;
+          this.productPagination = response.pagination;
           cbfn(response);
         }, 100);
       }
 
-      _fetchInventoryDetails(cbfn) {
+      _fetchAggregatedInventoryDetails(cbfn) {
         if (this.isInOfflineMode) {
-          this._fetchInventoryDetailsOffline(cbfn);
+          this._fetchAggregatedInventoryDetailsOffline(cbfn);
         } else {
-          this._fetchInventoryDetailsOnline(cbfn);
+          this._fetchAggregatedInventoryDetailsOnline(cbfn);
         }
       }
 
       _searchProducts(cbfn) {
-        this._fetchInventoryDetails(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
+        this._fetchAggregatedInventoryDetails(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
 
           // Prepare Products
           let productList = aggregatedProductList.map(product => {
@@ -709,9 +763,22 @@
       }
 
       productSearchTapped(e = null) {
+        this.isReady = false;
         this._searchProducts(() => {
-          'pass'
+          this.isReady = true;
         });
+      }
+
+      showMoreProductsTapped(e = null) {
+        this.set('productPaginate.offset', this.productPaginate.offset + this.productPaginate.limit);
+        this.isReady = false;
+        this._searchProducts(() => this.isReady = true);
+      }
+
+      showPreviousProductsTapped(e = null) {
+        this.set('productPaginate.offset', Math.max(0, this.productPaginate.offset - this.productPaginate.limit));
+        this.isReady = false;
+        this._searchProducts(() => this.isReady = true);
       }
 
       // sub-region: post selection
