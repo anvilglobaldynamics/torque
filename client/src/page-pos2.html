@@ -16,6 +16,8 @@
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 
+<link rel="import" href="../bower_components/iron-input/iron-input.html">
+
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
@@ -34,7 +36,87 @@
   <template>
     <style include="shared-styles">
       :host {
-        font-size: 12px;
+        font-size: 14px;
+      }
+
+      select-product-button-container paper-button {
+        width: 100%;
+        margin: 5px;
+      }
+
+      .individual-calculation-field-container {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 6px;
+        margin: 8px 0px;
+      }
+
+      .individual-calculation-field-container.light {
+        background-color: white;
+      }
+
+      .full-width-paper-dropdown {
+        width: 100%;
+      }
+
+      .height-adjusted {
+        margin-top: -14px;
+      }
+
+      .product-title {
+        font-weight: bold;
+      }
+
+      .product-discount-vat-detail {
+        font-size: 11px;
+      }
+
+      .service-info {
+        flex: 1;
+        /* border: 1px solid blue; */
+      }
+
+      .service-title {
+        font-weight: bold;
+      }
+
+      .service-vat-detail {
+        font-size: 11px;
+        margin-left: 6px;
+      }
+
+      .service-customer-required {
+        font-size: 11px;
+        font-weight: bold;
+      }
+
+      .employee-icon-container {
+        padding: 10px;
+      }
+
+      .employee-icon-container-active {
+        padding: 10px;
+        color: var(--app-button-primary);
+      }
+
+      .assign-icon {
+        margin-right: 4px;
+      }
+
+      .m-top-16 {
+        margin-top: 16px;
+      }
+
+      .m-bottom-18 {
+        margin-bottom: 18px;
+      }
+
+      .card.warning {
+        background: var(--app-button-alternative);
+      }
+
+      .bold-customer-card-title {
+        font-weight: bold;
       }
 
       .column {
@@ -137,20 +219,21 @@
           <!-- product searchbar - start -->
           <div class="card vertical layout">
             <div class="horizontal layout center">
-              <paper-input class="flex" value="{{productSearchString}}" always-float-label label="Name/Identifirer Code of product" on-keypress="productSearchFieldKeypressed"></paper-input>
-              <paper-icon-button icon="search" on-tap="productSearchTapped"></paper-icon-button>
+              <paper-input id="product-search-field" class="flex" value="{{productSearchString}}" always-float-label label="Name/Identifirer Code of product" on-keydown="productSearchFieldKeypressed"></paper-input>
+              <template is="dom-if" if="[[!matchingProductList.length]]">
+                <paper-icon-button icon="search" on-tap="productSearchTapped"></paper-icon-button>
+              </template>
+              <template is="dom-if" if="[[matchingProductList.length]]">
+                <paper-icon-button icon="clear" on-tap="productSearchClearTapped"></paper-icon-button>
+              </template>
             </div>
           </div>
           <!-- product searchbar - end -->
 
-          <!-- looping product - start -->
+          <!-- product search results - start -->
           <template is="dom-if" if="{{matchingProductList.length}}">
 
             <div class="card vertical layout">
-
-              <template is="dom-if" if="[[$hasPreviousPagination(productPaginate.offset)]]">
-                <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousProductsTapped">[[verses.general.showPrevious]]</paper-button>
-              </template>
 
               <div class="list">
                 <template is="dom-repeat" items="[[matchingProductList]]" as="product">
@@ -174,37 +257,54 @@
                 <span class="total-count">[[productPagination.totalCount]]</span> [[verses.general.startingFrom]]
                 <span class="offset">#[[$inc(productPagination.offset)]]</span>.
               </div>
-              <template is="dom-if" if="[[$hasMorePagination(productPagination.totalCount, productPaginate.offset, productPaginate.limit)]]">
-                <paper-button raised class="neutral pagination-show-more" on-tap="showMoreProductsTapped">[[verses.general.showMore]]</paper-button>
-              </template>
+
+              <div class="horizontal layout center">
+                <template is="dom-if" if="[[$hasPreviousPagination(productPaginate.offset)]]">
+                  <paper-button raised class="flex neutral " on-tap="showPreviousProductsTapped">[[verses.general.showPrevious]]</paper-button>
+                </template>
+
+                <template is="dom-if" if="[[$hasMorePagination(productPagination.totalCount, productPaginate.offset, productPaginate.limit)]]">
+                  <paper-button raised class="flex neutral " on-tap="showMoreProductsTapped">[[verses.general.showMore]]</paper-button>
+                </template>
+              </div>
 
             </div>
           </template>
-          <!-- looping product - end -->
+          <!-- product search results - end -->
 
           <!-- selected product list - start -->
           <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
             <template is="dom-if" if="[[productList.length]]">
 
               <div class="card vertical layout">
-                <div style="font-weight: bold;">Selected Products:</div>
+                <div class="horizontal layout center">
+
+                  <div class="flex" style="font-weight: bold; text-decoration: underline;">Selected Products:</div>
+                  <paper-icon-button on-tap="productSelectionDoneTapped" icon="done-all"></paper-icon-button>
+
+                </div>
                 <div class="list">
 
-                  <template is="dom-repeat" items="[[productList]]" as="product">
+                  <template is="dom-repeat" items="[[productList]]" as="product" index-as="productIndex">
                     <div class="horizontal layout item center">
                       <div class="vertical layout flex">
                         <div>
                           <span class="product-title">[[product.name]]</span>
                         </div>
                         <div class="horizontal layout center">
-                          <div class="description">[[product.selectedCount]] [[product.unit]] @&nbsp;</div>
-                          <div>[[product.salePrice]]</div>
+
+                          <paper-input no-label-float class="small-input m-horizontal-4" value="{{product.selectedCount}}" on-change="genericSelectedCountInputChanged" type="number" min="1" max="99999999999" label="[[verses.posSelectProduct.count]]">
+                            <div slot="suffix">&nbsp;[[product.unit]]</div>
+                          </paper-input>
+
+                          <div>&nbsp;@&nbsp;[[product.salePrice]]</div>
                           <div class="description">[[app.settings.monetaryUnit]]</div>
+                          <paper-icon-button on-tap="editProductSalePriceTapped" icon="create" style="padding: 0; height: 16px; max-width: 16px; min-width: 16px;"></paper-icon-button>
                           <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
                         </div>
                       </div>
                       <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
-                        <paper-icon-button on-tap="editProductSalePriceTapped" icon="create"></paper-icon-button>
+                        <paper-icon-button on-tap="discardProductTapped" icon="remove-circle"></paper-icon-button>
                       </template>
                     </div>
                   </template>
@@ -220,7 +320,7 @@
         <!-- products column - end -->
 
         <!-- customer column - start -->
-        <div class$="column flex [[$getColumnClasses('customer', 'real', isMultiColumn, selectedTabName)]]">
+        <div class$="customer-column column flex [[$getColumnClasses('customer', 'real', isMultiColumn, selectedTabName)]]">
           <div class="card horizontal layout center">
             Customer TBD
           </div>
@@ -589,94 +689,6 @@
 
       // sub-region: search
 
-      // _fetchProductMatchingIdentifierCodeOnline(cbfn) {
-      //   this._processGetOutletDefaultInventoryId(defaultInventoryId => {
-
-      //     let inventoryId = defaultInventoryId;
-      //     this.inventoryId = inventoryId;
-      //     let data = { inventoryId, includeZeroCountProducts: false, identifierCode: this.productSearchString };
-      //     this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
-      //       if (err) return;
-      //       if (response.hasError) return this.onApiError(response.error);
-      //       return cbfn(response);
-      //     });
-      //   })
-      // }
-
-      // _fetchProductMatchingIdentifierCode(cbfn) {
-      //   if (this.isInOfflineMode) {
-      //     // FIXME: Remove or Implement
-      //     // this._fetchProductMatchingIdentifierCodeOffline(cbfn);
-      //   } else {
-      //     this._fetchProductMatchingIdentifierCodeOnline(cbfn);
-      //   }
-      // }
-
-      // _prepareProductForInsertion({ product }) {
-      //   let { productId, name, selectedCount, count, salePrice, vatValue, unit } = product;
-      //   let maxAllowedCount = count;
-      //   selectedCount = parseFloat(String(selectedCount));
-      //   let minSalePrice = salePrice;
-      //   return { productId, name, selectedCount, maxAllowedCount, salePrice, vatValue, minSalePrice, unit };
-      // }
-
-      // _fetchProduct(cbfn) {
-      //   this._fetchProductMatchingIdentifierCode(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
-      //     let productList = aggregatedProductList.map(product => {
-      //       let { purchasePrice, salePrice } = product.product;
-      //       let { name, unit, defaultVat } = product.product.productBlueprint;
-      //       product.isSelected = false;
-      //       let vatValue = defaultVat;
-      //       Object.assign(product, { name, unit, purchasePrice, salePrice, vatValue });
-      //       return product;
-      //     });
-      //     cbfn(productList);
-      //   });
-      // }
-
-      // _productIdentifierCodeEntered(e) {
-
-      //   this._fetchProduct((productList) => {
-      //     this.identifierCode = '';
-      //     if (productList.length === 0) {
-      //       this.lastErrorMessage = this.verses.scan.noMatchingProductsError;
-      //       return;
-      //     }
-
-      //     // NOTE: The following calculation is to ensure products are selected from adjacent batches
-      //     let selectedCount = 0;
-      //     let calculatedMaxCount = 0;
-      //     let product;
-      //     for (product of productList) {
-      //       calculatedMaxCount += product.count;
-      //       let foundProduct = this.selectedProductList.find(selectedProduct => selectedProduct.productId === product.productId);
-      //       if (!foundProduct) break;
-      //       selectedCount += parseFloat(foundProduct.selectedCount);
-      //       if (selectedCount < calculatedMaxCount) break;
-      //     }
-      //     if (selectedCount === calculatedMaxCount) {
-      //       this.lastErrorMessage = this.verses.scan.noMatchingProductsError;
-      //       return;
-      //     }
-      //     // NOTE: end
-
-      //     product = this._prepareProductForInsertion({ product });
-
-      //     let foundProduct = this.selectedProductList.find(selectedProduct => selectedProduct.productId === product.productId);
-      //     if (foundProduct) {
-      //       foundProduct.selectedCount = parseFloat(foundProduct.selectedCount) + 1;
-      //     } else {
-      //       product.selectedCount = 1;
-      //       this.selectedProductList.push(product);
-      //     }
-      //     // this.push('productList',product);
-      //     this.productList = [];
-      //     this.productList = this.selectedProductList;
-      //     this.selectedProductCount += 1;
-      //     this.lastSuccessMessage = `${this.verses.scan.lastScanned} "${product.name}"`;
-      //   })
-      // }
-
       _fetchAggregatedInventoryDetailsOnline(cbfn) {
         let data = {
           inventoryId: this.defaultInventoryId,
@@ -756,13 +768,37 @@
         let existingProductIndex = this.productList.findIndex(existingProduct => existingProduct.productId === product.productId);
         if (existingProductIndex > -1) {
           let existingProduct = this.productList[existingProductIndex];
-          this.set(`productList.${existingProductIndex}.selectedCount`, (existingProduct.selectedCount + selectedCount));
+          this.set(`productList.${existingProductIndex}.selectedCount`, (parseFloat(existingProduct.selectedCount) + selectedCount));
         } else {
           this.unshift('productList', { productId, name, selectedCount, maxAllowedCount, salePrice, vatValue, minSalePrice, unit });
         }
       }
 
+      _resetProductSearch() {
+        this.productSearchString = '';
+        this.matchingProductList = [];
+      }
+
+      productSearchFieldKeypressed(e) {
+        if (e.which === 13) {
+          this.productSearchTapped(null);
+        } else if (e.which === 27) {
+          this._resetProductSearch();
+        }
+      }
+
+      productSearchClearTapped(e) {
+        this._resetProductSearch();
+        this.elem('#product-search-field').focus();
+      }
+
       productSearchTapped(e = null) {
+        if (!this.isReady) {
+          // NOTE: Keep this console log
+          console.warn("A search request is already underway.");
+          return;
+        }
+        this.productPaginate.offset = 0;
         this.isReady = false;
         this._searchProducts(() => {
           this.isReady = true;
@@ -781,6 +817,12 @@
         this._searchProducts(() => this.isReady = true);
       }
 
+      selectMatchingProductTapped(e) {
+        let { product } = e.model;
+        product.selectedCount = 1;
+        this._selectProduct({ product });
+      }
+
       // sub-region: post selection
 
       editProductSalePriceTapped(e) {
@@ -795,7 +837,14 @@
       }
 
       discardProductTapped(e) {
-        let { product } = e.model;
+        let { productIndex } = e.model;
+        this.splice('productList', productIndex, 1);
+      }
+
+      productSelectionDoneTapped(e = null) {
+        this._resetProductSearch();
+        this.selectedTabName = 'customer';
+        this.elem('.single-column-tabs-row').scrollIntoView();
       }
 
       // region: services =================================
