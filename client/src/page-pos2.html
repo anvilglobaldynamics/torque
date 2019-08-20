@@ -33,6 +33,10 @@
 <dom-module id="page-pos2">
   <template>
     <style include="shared-styles">
+      :host {
+        font-size: 12px;
+      }
+
       .column {
         min-width: 320px;
         min-height: 70vh;
@@ -111,61 +115,65 @@
         <!-- products column - start -->
         <div class$="column flex [[$getColumnClasses('products', 'real', isMultiColumn, selectedTabName)]]">
 
+          <!-- warehouse selection - start -->
+          <template is="dom-if" if="[[hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')]]">
+            <template is="dom-if" if="[[$shouldShowWarehouseSelector(warehouseList.length, productList.length)]]">
+              <div class="card">
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.selectProductsFromInventoryContainer]]" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{selectedWarehouse}}" attr-for-selected="name">
+                    <paper-item name="--current-outlet">[[verses.pos.currentOutlet]]</paper-item>
+                    <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
+                      <paper-item name="[[warehouse.id]]">
+                        <div class="name">[[warehouse.name]]</div>
+                      </paper-item>
+                    </template>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+              </div>
+            </template>
+          </template>
+          <!-- warehouse selection - end -->
+
+          <!-- product searchbar - start -->
           <div class="card vertical layout">
             <div class="horizontal layout center">
-              <paper-input class="flex" value="{{productSearchString}}" always-float-label label="Name of product" on-keypress="productSearchFieldKeypressed"></paper-input>
+              <paper-input class="flex" value="{{productSearchString}}" always-float-label label="Name/Identifirer Code of product" on-keypress="productSearchFieldKeypressed"></paper-input>
               <paper-icon-button icon="search" on-tap="productSearchTapped"></paper-icon-button>
             </div>
           </div>
+          <!-- product searchbar - end -->
 
           <!-- selected product list - start -->
           <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
-            <div class="card vertical layout">
-              <div class="list">
+            <template is="dom-if" if="[[productList.length]]">
 
-                <template is="dom-repeat" items="[[productList]]" as="product">
-                  <div class="horizontal layout item center">
-                    <div class="vertical layout flex">
-                      <div>
-                        <span class="product-title">[[product.name]]</span>
+              <div class="card vertical layout">
+                <div style="font-weight: bold;">Selected Products:</div>
+                <div class="list">
+
+                  <template is="dom-repeat" items="[[productList]]" as="product">
+                    <div class="horizontal layout item center">
+                      <div class="vertical layout flex">
+                        <div>
+                          <span class="product-title">[[product.name]]</span>
+                        </div>
+                        <div class="horizontal layout center">
+                          <div class="description">[[product.selectedCount]] [[product.unit]] @&nbsp;</div>
+                          <div>[[product.salePrice]]</div>
+                          <div class="description">[[app.settings.monetaryUnit]]</div>
+                          <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
+                        </div>
                       </div>
-                      <div class="horizontal layout center">
-                        <div class="description">[[product.selectedCount]] [[product.unit]] @&nbsp;</div>
-                        <!-- <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" type="number" auto-validate min="[[product.minSalePrice]]"></paper-input> -->
-                        <div>[[product.salePrice]]</div>
-                        <div class="description">[[app.settings.monetaryUnit]]</div>
-                        <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
-                      </div>
-                    </div>
-                    <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
-                      <paper-icon-button on-tap="editProductSalePrice" icon="create"></paper-icon-button>
-                    </template>
-                  </div>
-                </template>
-
-                <!-- warehouse selection - start -->
-                <template is="dom-if" if="[[hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')]]">
-                  <template is="dom-if" if="[[$shouldShowWarehouseSelector(warehouseList.length, productList.length)]]">
-                    <div>
-
-                      <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.selectProductsFromInventoryContainer]]" class="mr-4">
-                        <paper-listbox slot="dropdown-content" selected="{{selectedWarehouse}}" attr-for-selected="name">
-                          <paper-item name="--current-outlet">[[verses.pos.currentOutlet]]</paper-item>
-                          <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
-                            <paper-item name="[[warehouse.id]]">
-                              <div class="name">[[warehouse.name]]</div>
-                            </paper-item>
-                          </template>
-                        </paper-listbox>
-                      </paper-dropdown-menu>
-
+                      <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
+                        <paper-icon-button on-tap="editProductSalePriceTapped" icon="create"></paper-icon-button>
+                      </template>
                     </div>
                   </template>
-                </template>
-                <!-- warehouse selection - end -->
 
+                </div>
               </div>
-            </div>
+
+            </template>
           </template>
           <!-- selected product list - end -->
 
@@ -241,6 +249,10 @@
             type: Array,
             value: () => []
           },
+          matchingProductList: {
+            type: Array,
+            value: () => []
+          },
           // Services =============
           serviceList: {
             type: Array,
@@ -309,7 +321,6 @@
       }
 
       onNavigateIn() {
-        this.selectedProductList = []
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
@@ -337,6 +348,7 @@
         this.selectedWarehouse = this.app.getFromSession('pos-selected-warehouse') || '--current-outlet';
         this.productsSelectedFromWarehouseId = this.app.getFromSession('product-selected-from-warehouse-id') || null;
         this.productList = this.app.getFromSession('pos-selected-product-list') || [];
+        this.matchingProductList = [];
 
         // services
         this.serviceList = this.app.getFromSession('pos-selected-service-list') || [];
@@ -388,7 +400,7 @@
       singleColumnTabTapped(e) {
         e.stopPropagation();
         let attr = e.target.getAttribute('data-key');
-        console.log({ selectedTabName: attr });
+        // console.log({ selectedTabName: attr });
         this.selectedTabName = attr;
       }
 
@@ -416,7 +428,7 @@
       }
 
       $getColumnClasses(tabName, type, isMultiColumn, selectedTabName) {
-        console.log({ tabName, type, isMultiColumn, selectedTabName });
+        // console.log({ tabName, type, isMultiColumn, selectedTabName });
         let classNames = '';
 
         if (tabName === 'customer' && type !== 'placeholder') {
@@ -439,31 +451,21 @@
 
       // region: products =================================
 
+      // sub-region: warehouse
+
       $shouldShowWarehouseSelector(warehouseListLength, productListLength) {
         return (warehouseListLength > 0 && productListLength === 0);
       }
 
-
       selectedWarehouseChanged() {
         this.app.storeInSession('pos-selected-warehouse', this.selectedWarehouse);
+        this._updateDefaultInventoryId(() => { }); // Makes sure defaultInventoryId is set correctly
       }
 
       _setProductSelectedFromWarehouseId(id) {
         this.productsSelectedFromWarehouseId = id;
         this.app.storeInSession('product-selected-from-warehouse-id', this.productsSelectedFromWarehouseId);
       }
-
-      editProductSalePrice(e) {
-        let { product } = e.model;
-        this.app.showModalInput(this.verses.sales.editSalePrice, this.verses.sales.editSalePriceDetails, product.salePrice, (answer) => {
-          let salePrice = parseFloat(answer);
-          if (salePrice >= 0) {
-            e.model.set('product.salePrice', salePrice);
-            this._calculatePayment({ resetRounding: true });
-          }
-        });
-      }
-
 
       _fetchWarehouseList(cbfn) {
         if (!this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')) {
@@ -477,14 +479,7 @@
         });
       }
 
-      _processGetWarehouse(cbfn) {
-        let data = { warehouseId: this.selectedWarehouse };
-        this.app.callGetWarehouseApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response);
-        });
-      }
+      // sub-region: getting default inventory
 
       _processGetOutletDefaultInventoryIdOnline(cbfn) {
         let data = { outletId: this.params.outlet };
@@ -499,6 +494,15 @@
         window.setTimeout(() => {
           cbfn(this.app.offlineData.cache.getOutlet.defaultInventory.id);
         }, 10);
+      }
+
+      _processGetWarehouse(cbfn) {
+        let data = { warehouseId: this.selectedWarehouse };
+        this.app.callGetWarehouseApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
       }
 
       _processGetOutletDefaultInventoryId(cbfn) {
@@ -521,107 +525,211 @@
         }
       }
 
-      addProductTapped(e = null) {
+      _updateDefaultInventoryId(cbfn) {
+        this.defaultInventoryId = null;
         this._processGetOutletDefaultInventoryId(defaultInventoryId => {
-
-          return this.app.navigateTo(`/pos-select-products/inventory:${defaultInventoryId}`);
-        })
+          this.defaultInventoryId = defaultInventoryId;
+          cbfn();
+        });
       }
 
+      // sub-region: search
 
-      _fetchProductMatchingIdentifierCodeOnline(cbfn) {
-        this._processGetOutletDefaultInventoryId(defaultInventoryId => {
+      // _fetchProductMatchingIdentifierCodeOnline(cbfn) {
+      //   this._processGetOutletDefaultInventoryId(defaultInventoryId => {
 
-        let inventoryId = defaultInventoryId;
-        this.inventoryId = inventoryId;
-        let data = { inventoryId, includeZeroCountProducts: false, identifierCode: this.productSearchString };
+      //     let inventoryId = defaultInventoryId;
+      //     this.inventoryId = inventoryId;
+      //     let data = { inventoryId, includeZeroCountProducts: false, identifierCode: this.productSearchString };
+      //     this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
+      //       if (err) return;
+      //       if (response.hasError) return this.onApiError(response.error);
+      //       return cbfn(response);
+      //     });
+      //   })
+      // }
+
+      // _fetchProductMatchingIdentifierCode(cbfn) {
+      //   if (this.isInOfflineMode) {
+      //     // FIXME: Remove or Implement
+      //     // this._fetchProductMatchingIdentifierCodeOffline(cbfn);
+      //   } else {
+      //     this._fetchProductMatchingIdentifierCodeOnline(cbfn);
+      //   }
+      // }
+
+      // _prepareProductForInsertion({ product }) {
+      //   let { productId, name, selectedCount, count, salePrice, vatValue, unit } = product;
+      //   let maxAllowedCount = count;
+      //   selectedCount = parseFloat(String(selectedCount));
+      //   let minSalePrice = salePrice;
+      //   return { productId, name, selectedCount, maxAllowedCount, salePrice, vatValue, minSalePrice, unit };
+      // }
+
+      // _fetchProduct(cbfn) {
+      //   this._fetchProductMatchingIdentifierCode(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
+      //     let productList = aggregatedProductList.map(product => {
+      //       let { purchasePrice, salePrice } = product.product;
+      //       let { name, unit, defaultVat } = product.product.productBlueprint;
+      //       product.isSelected = false;
+      //       let vatValue = defaultVat;
+      //       Object.assign(product, { name, unit, purchasePrice, salePrice, vatValue });
+      //       return product;
+      //     });
+      //     cbfn(productList);
+      //   });
+      // }
+
+      // _productIdentifierCodeEntered(e) {
+
+      //   this._fetchProduct((productList) => {
+      //     this.identifierCode = '';
+      //     if (productList.length === 0) {
+      //       this.lastErrorMessage = this.verses.scan.noMatchingProductsError;
+      //       return;
+      //     }
+
+      //     // NOTE: The following calculation is to ensure products are selected from adjacent batches
+      //     let selectedCount = 0;
+      //     let calculatedMaxCount = 0;
+      //     let product;
+      //     for (product of productList) {
+      //       calculatedMaxCount += product.count;
+      //       let foundProduct = this.selectedProductList.find(selectedProduct => selectedProduct.productId === product.productId);
+      //       if (!foundProduct) break;
+      //       selectedCount += parseFloat(foundProduct.selectedCount);
+      //       if (selectedCount < calculatedMaxCount) break;
+      //     }
+      //     if (selectedCount === calculatedMaxCount) {
+      //       this.lastErrorMessage = this.verses.scan.noMatchingProductsError;
+      //       return;
+      //     }
+      //     // NOTE: end
+
+      //     product = this._prepareProductForInsertion({ product });
+
+      //     let foundProduct = this.selectedProductList.find(selectedProduct => selectedProduct.productId === product.productId);
+      //     if (foundProduct) {
+      //       foundProduct.selectedCount = parseFloat(foundProduct.selectedCount) + 1;
+      //     } else {
+      //       product.selectedCount = 1;
+      //       this.selectedProductList.push(product);
+      //     }
+      //     // this.push('productList',product);
+      //     this.productList = [];
+      //     this.productList = this.selectedProductList;
+      //     this.selectedProductCount += 1;
+      //     this.lastSuccessMessage = `${this.verses.scan.lastScanned} "${product.name}"`;
+      //   })
+      // }
+
+      _fetchInventoryDetailsOnline(cbfn) {
+        let data = {
+          inventoryId: this.defaultInventoryId,
+          searchString: String(this.productSearchString),
+          paginate: this.paginate,
+          includeZeroCountProducts: false,
+          sortOrder: 'blueprint-created-date-descending'
+        };
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
           return cbfn(response);
         });
-      })
       }
 
-      _fetchProductMatchingIdentifierCode(cbfn) {
+      _fetchInventoryDetailsOffline(cbfn) {
+        window.setTimeout(() => {
+          let response = JSON.parse(JSON.stringify(this.app.offlineData.cache.getAggregatedInventoryDetails));
+
+          let searchString = String(this.productSearchString);
+          if (searchString.length > 0) {
+            searchString = searchString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            let regex = new RegExp(searchString, 'g');
+            response.aggregatedProductList = response.aggregatedProductList.filter(product => {
+              return (regex.test(product.product.productBlueprint.name) || searchString === product.product.productBlueprint.identifierCode);
+            });
+          }
+
+          ([response.aggregatedProductList, response.pagination] = this._paginateOfflineData(response.aggregatedProductList));
+
+          this.pagination = response.pagination;
+          cbfn(response);
+        }, 100);
+      }
+
+      _fetchInventoryDetails(cbfn) {
         if (this.isInOfflineMode) {
-          // FIXME: Remove or Implement
-          // this._fetchProductMatchingIdentifierCodeOffline(cbfn);
+          this._fetchInventoryDetailsOffline(cbfn);
         } else {
-          this._fetchProductMatchingIdentifierCodeOnline(cbfn);
+          this._fetchInventoryDetailsOnline(cbfn);
         }
       }
 
-      _prepareProductForInsertion({ product }) {
+      _searchProducts(cbfn) {
+        this._fetchInventoryDetails(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
+
+          // Prepare Products
+          let productList = aggregatedProductList.map(product => {
+            let { purchasePrice, salePrice } = product.product;
+            let { name, unit, defaultVat, identifierCode } = product.product.productBlueprint;
+            let vatValue = defaultVat;
+            Object.assign(product, { name, unit, purchasePrice, salePrice, vatValue, identifierCode });
+            return product;
+          });
+
+          if (productList.length === 1 && this.productSearchString.length > 0 && productList[0].identifierCode === this.productSearchString) {
+            // search by identifierCode was successful.
+            productList[0].selectedCount = 1;
+            this._selectProduct({ product: productList[0] });
+            this.productSearchString = '';
+          } else {
+            this.matchingProductList = productList;
+          }
+
+          cbfn();
+        });
+      }
+
+      _selectProduct({ product }) {
+        // console.log("_selectProduct", { product });
         let { productId, name, selectedCount, count, salePrice, vatValue, unit } = product;
         let maxAllowedCount = count;
         selectedCount = parseFloat(String(selectedCount));
         let minSalePrice = salePrice;
-        return { productId, name, selectedCount, maxAllowedCount, salePrice, vatValue, minSalePrice, unit };
-      }
 
-      _fetchProduct(cbfn) {
-        this._fetchProductMatchingIdentifierCode(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
-          let productList = aggregatedProductList.map(product => {
-            let { purchasePrice, salePrice } = product.product;
-            let { name, unit, defaultVat } = product.product.productBlueprint;
-            product.isSelected = false;
-            let vatValue = defaultVat;
-            Object.assign(product, { name, unit, purchasePrice, salePrice, vatValue });
-            return product;
-          });
-          cbfn(productList);
-        });
-      }
-
-      _productIdentifierCodeEntered(e) {
-
-        this._fetchProduct((productList) => {
-          this.identifierCode = '';
-          if (productList.length === 0) {
-            this.lastErrorMessage = this.verses.scan.noMatchingProductsError;
-            return;
-          }
-
-          // NOTE: The following calculation is to ensure products are selected from adjacent batches
-          let selectedCount = 0;
-          let calculatedMaxCount = 0;
-          let product;
-          for (product of productList) {
-            calculatedMaxCount += product.count;
-            let foundProduct = this.selectedProductList.find(selectedProduct => selectedProduct.productId === product.productId);
-            if (!foundProduct) break;
-            selectedCount += parseFloat(foundProduct.selectedCount);
-            if (selectedCount < calculatedMaxCount) break;
-          }
-          if (selectedCount === calculatedMaxCount) {
-            this.lastErrorMessage = this.verses.scan.noMatchingProductsError;
-            return;
-          }
-          // NOTE: end
-
-          product = this._prepareProductForInsertion({ product });
-
-          let foundProduct = this.selectedProductList.find(selectedProduct => selectedProduct.productId === product.productId);
-          if (foundProduct) {
-            foundProduct.selectedCount = parseFloat(foundProduct.selectedCount) + 1;
-          } else {
-            product.selectedCount = 1;
-            this.selectedProductList.push(product);
-          }
-          // this.push('productList',product);
-          this.productList = [];
-          this.productList = this.selectedProductList;
-          this.selectedProductCount += 1;
-          this.lastSuccessMessage = `${this.verses.scan.lastScanned} "${product.name}"`;
-        })
+        let existingProductIndex = this.productList.findIndex(existingProduct => existingProduct.productId === product.productId);
+        if (existingProductIndex > -1) {
+          let existingProduct = this.productList[existingProductIndex];
+          this.set(`productList.${existingProductIndex}.selectedCount`, (existingProduct.selectedCount + selectedCount));
+        } else {
+          this.unshift('productList', { productId, name, selectedCount, maxAllowedCount, salePrice, vatValue, minSalePrice, unit });
+        }
       }
 
       productSearchTapped(e = null) {
-        this._productIdentifierCodeEntered(e);
+        this._searchProducts(() => {
+          'pass'
+        });
       }
 
+      // sub-region: post selection
 
+      editProductSalePriceTapped(e) {
+        let { product } = e.model;
+        this.app.showModalInput(this.verses.sales.editSalePrice, this.verses.sales.editSalePriceDetails, product.salePrice, (answer) => {
+          let salePrice = parseFloat(answer);
+          if (salePrice >= 0) {
+            e.model.set('product.salePrice', salePrice);
+            this._calculatePayment({ resetRounding: true });
+          }
+        });
+      }
+
+      discardProductTapped(e) {
+        let { product } = e.model;
+      }
 
       // region: services =================================
 
@@ -642,7 +750,6 @@
         this.customer = null;
         this.app.storeInSession('last-selected-customer', null);
       }
-
 
       customerChanged() {
         if (!this.customer) return;
