@@ -324,55 +324,85 @@
         <!-- customer column - start -->
         <div class$="customer-column column flex [[$getColumnClasses('customer', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]" on-tap="customerColumnTapped">
 
-          <elem-customer-selector page="{{self}}"></elem-customer-selector>
-
-          <!-- customer selector - start -->
           <template is="dom-if" if="[[!isInOfflineMode]]">
-            <template is="dom-if" if="[[!isSearchingCustomer]]">
-              <div class="card vertical layout">
-                <div class="horizontal layout center">
-                  <div class="flex">
-                    <div class="bold-customer-card-title">[[verses.pos.customerSelectionCardHeader]]</div>
 
-                    <template is="dom-if" if="[[customer]]">
-                      <div>
-                        <div class="type title capitalize">[[customer.fullName]]</div>
-                        <div class="horizontal layout wrap">
-                          <div class="horizontal layout center m-right-8">
-                            <iron-icon icon="hardware:smartphone" class="icon secondary small m-right-8"></iron-icon>
-                            <div class="type body secondary">[[customer.phone]]</div>
-                          </div>
+            <!-- customer selection - start -->
+            <template is="dom-if" if="[[$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
+              <elem-customer-selector page="{{self}}"></elem-customer-selector>
+            </template>
+            <!-- customer selector - end -->
 
-                          <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
-                            <div class="horizontal layout center">
-                              <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
-                              <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
-                            </div>
-                          </template>
+            <!-- customer creation - start -->
+            <template is="dom-if" if="[[$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
+              <iron-form id="editCustomerForm" on-keypress="genericFormSubmitionKeypress">
+                <form>
+                  <div class="card vertical layout">
 
-                        </div>
-                      </div>
-                    </template>
+                    <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message=[[verses.customer.customerNameInputError]] label=[[verses.customer.customerNameInput]]></paper-input>
+                    <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.customer.customerNumberInputError]] label=[[verses.customer.customerNumberInput]]></paper-input>
+
+                    <paper-input class="editCustomerForm--email" value="{{editCustomerForm.email}}" pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.customer.emailAddressInputError]] label=[[verses.customer.emailAddressInput]]></paper-input>
+                    <paper-textarea class="editCustomerForm--address" value="{{editCustomerForm.address}}" label=[[verses.customer.addressInput]] rows="3"></paper-textarea>
+
+                    <div class="horizontal layout button-row end">
+                      <paper-button raised class="danger" on-tap="skipCustomerSelectionTapped">Skip</paper-button>
+                      <div class="flex"></div>
+                      <paper-button raised class="primary editCustomerForm--submit" on-tap="createCustomerTapped">[[verses.customer.createCustomer]]</paper-button>
+                    </div>
+
                   </div>
-                </div>
+                </form>
+              </iron-form>
+            </template>
+            <!-- customer creation - end -->
+
+            <!-- customer preview - start -->
+            <template is="dom-if" if="[[!$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
+              <div class="card vertical layout">
+                <div class="bold-customer-card-title">[[verses.pos.customerSelectionCardHeader]]</div>
+
+                <template is="dom-if" if="[[customer]]">
+                  <div>
+                    <div class="type title capitalize">[[customer.fullName]]</div>
+                    <div class="horizontal layout wrap">
+
+                      <div class="horizontal layout center m-right-8">
+                        <iron-icon icon="hardware:smartphone" class="icon secondary small m-right-8"></iron-icon>
+                        <div class="type body secondary">[[customer.phone]]</div>
+                      </div>
+
+                      <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                        <div class="horizontal layout center">
+                          <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
+                          <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
+                        </div>
+                      </template>
+
+                    </div>
+                  </div>
+                </template>
+
+                <template is="dom-if" if="[[isAnonymousSale]]">
+                  <div>No customer selected</div>
+                </template>
 
                 <div class="horizontal layout end-justified m-top-16">
                   <template is="dom-if" if="[[customer]]">
                     <paper-button raised class="danger btn btn-default" on-tap="removeCustomerTapped">
-                      [[verses.pos.removeCustomer]]
+                      Select a different customer
                     </paper-button>
                   </template>
-                  <paper-button raised class="secondary btn btn-default" on-tap="changeCustomerTapped">
-                    [[verses.pos.changeCustomer]]
-                  </paper-button>
-                  <paper-button raised class="btn secondary" on-tap="createCustomerTapped">
-                    [[verses.pos.createCustomer]]
-                  </paper-button>
+                  <template is="dom-if" if="[[isAnonymousSale]]">
+                    <paper-button raised class="primary btn btn-default" on-tap="removeCustomerTapped">
+                      Select a customer
+                    </paper-button>
+                  </template>
                 </div>
               </div>
             </template>
+            <!-- customer preview - end -->
+
           </template>
-          <!-- customer selector - end -->
 
         </div>
         <!-- customer column - end -->
@@ -628,14 +658,30 @@
             type: Boolean,
             value: false
           },
-          isSearchingCustomer: {
-            type: Boolean,
-            value: false
-          },
           customer: {
             type: Object,
             value: null,
             observer: 'customerChanged'
+          },
+          editCustomerForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  fullName: 'Rahim Karim',
+                  phone: '01700000011',
+                  email: 'rahim@gmail.com',
+                  address: 'house road block code 1213 city country'
+                };
+              } else {
+                return {
+                  fullName: '',
+                  phone: '',
+                  email: null,
+                  address: ''
+                };
+              }
+            }
           },
           // Payment =============
           selectedDiscountPreset: {
@@ -1093,16 +1139,9 @@
         this._resetProductSearch();
       }
 
-      changeCustomerTapped(e = null) {
-        this.isSearchingCustomer = true;
-      }
-
-      createCustomerTapped(e = null) {
-        this.app.navigateTo('/edit-customer');
-      }
-
       removeCustomerTapped(e = null) {
         this.customer = null;
+        this.isAnonymousSale = false;
         this.app.storeInSession('last-selected-customer', null);
       }
 
@@ -1122,10 +1161,56 @@
         });
       }
 
-
       _customerSelected(customer) {
         this.customer = customer;
-        this.isSearchingCustomer = false;
+      }
+
+      _processCreateCustomer({ fullName, phone, email, address }, cbfn) {
+        let data = {
+          fullName, phone, email, address,
+          organizationId: this.app.organization.id
+        };
+        this.app.callAddCustomerApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editCustomerForm');
+          let message = this.app.verses.customer.newCustomerCreated;
+          this.app.showToast(message, _ => {
+            let customerId = response.customerId;
+            cbfn({ customerId });
+          });
+        });
+      }
+
+      createCustomerTapped(e = null) {
+        this.elemAll('#editCustomerForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editCustomerForm').validate()) return;
+
+        let { fullName, phone, email, address } = this.editCustomerForm;
+        this._processCreateCustomer({ fullName, phone, email, address }, ({ customerId }) => {
+          this.app.storeInSession('last-created-customer', customerId);
+          this.customer = {
+            id: customerId,
+            fullName, phone, email, address
+          };
+        });
+      }
+
+      skipCustomerSelectionTapped(e = null) {
+        this.app.showModalConfirmation(
+          "Are you sure?",
+          "Skipping customer selection will make it harder to identify this sale at a later time. Please\
+          Only skip customer selection if you understand the risk.",
+          (answer) => {
+            if (!answer) return;
+            this.isAnonymousSale = true;
+          }
+        );
+      }
+
+      $shouldShowCustomerSelectionOptions(customer, isAnonymousSale) {
+        console.log({ customer, isAnonymousSale });
+        if (!customer && !isAnonymousSale) return true;
+        return false;
       }
 
       // region: payment =================================
@@ -1422,7 +1507,7 @@
 
         this.app.extractFromSession('pos-assigned-assisted-by-employee');
 
-        this.resetProperties('payment', 'productList', 'serviceList', 'customer', 'isSearchingCustomer');
+        this.resetProperties('payment', 'productList', 'serviceList', 'customer', 'isAnonymousSale');
 
         if (refreshCurrentPage) {
           this.app.refreshCurrentPage();

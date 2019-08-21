@@ -483,7 +483,7 @@
     "changeWalletBalanceTip": "Unpaid Change Amount from sales are stored in Customer Account Balance. You can withdraw it by clicking below.",
     "withdrawFromChangeWalletBalance": "Withdraw",
     "addCustomerTitle": "Add Customer",
-    "customerNameInput": "Name of your customer.",
+    "customerNameInput": "Name of Customer",
     "customerNameInputError": "Enter a valid name",
     "customerNumberInput": "Contact Number",
     "customerNumberInputError": "Enter a valid phone number",
