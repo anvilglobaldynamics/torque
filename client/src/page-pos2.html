@@ -195,7 +195,7 @@
       <div class="horizontal layout">
 
         <!-- products column - start -->
-        <div class$="column flex [[$getColumnClasses('products', 'real', isMultiColumn, selectedTabName)]]">
+        <div class$="column flex [[$getColumnClasses('products', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale)]]">
 
           <!-- warehouse selection - start -->
           <template is="dom-if" if="[[hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')]]">
@@ -280,7 +280,9 @@
                 <div class="horizontal layout center">
 
                   <div class="flex" style="font-weight: bold; text-decoration: underline;">Selected Products:</div>
-                  <paper-icon-button on-tap="productSelectionDoneTapped" icon="done-all"></paper-icon-button>
+                  <template is="dom-if" if="[[!isMultiColumn]]">
+                    <paper-icon-button on-tap="productSelectionDoneTapped" icon="done-all"></paper-icon-button>
+                  </template>
 
                 </div>
                 <div class="list">
@@ -320,30 +322,237 @@
         <!-- products column - end -->
 
         <!-- customer column - start -->
-        <div class$="customer-column column flex [[$getColumnClasses('customer', 'real', isMultiColumn, selectedTabName)]]">
-          <div class="card horizontal layout center">
-            Customer TBD
-          </div>
+        <div class$="customer-column column flex [[$getColumnClasses('customer', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale)]]" on-tap="customerColumnTapped">
+
+          <!-- customer selector - start -->
+          <template is="dom-if" if="[[!isInOfflineMode]]">
+            <template is="dom-if" if="[[!isSearchingCustomer]]">
+              <div class="card vertical layout">
+                <div class="horizontal layout center">
+                  <div class="flex">
+                    <div class="bold-customer-card-title">[[verses.pos.customerSelectionCardHeader]]</div>
+
+                    <template is="dom-if" if="[[customer]]">
+                      <div>
+                        <div class="type title capitalize">[[customer.fullName]]</div>
+                        <div class="horizontal layout wrap">
+                          <div class="horizontal layout center m-right-8">
+                            <iron-icon icon="hardware:smartphone" class="icon secondary small m-right-8"></iron-icon>
+                            <div class="type body secondary">[[customer.phone]]</div>
+                          </div>
+
+                          <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                            <div class="horizontal layout center">
+                              <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
+                              <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
+                            </div>
+                          </template>
+
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+
+                <div class="horizontal layout end-justified m-top-16">
+                  <template is="dom-if" if="[[customer]]">
+                    <paper-button raised class="danger btn btn-default" on-tap="removeCustomerTapped">
+                      [[verses.pos.removeCustomer]]
+                    </paper-button>
+                  </template>
+                  <paper-button raised class="secondary btn btn-default" on-tap="changeCustomerTapped">
+                    [[verses.pos.changeCustomer]]
+                  </paper-button>
+                  <paper-button raised class="btn secondary" on-tap="createCustomerTapped">
+                    [[verses.pos.createCustomer]]
+                  </paper-button>
+                </div>
+              </div>
+            </template>
+            <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+          </template>
+          <!-- customer selector - end -->
+
         </div>
-        <div class$="column flex placeholder  vertical layout center-center [[$getColumnClasses('customer', 'placeholder', isMultiColumn, selectedTabName)]]">
+        <!-- customer column - end -->
+
+        <!-- customer column placeholder - start -->
+        <div class$="column flex placeholder  vertical layout center-center [[$getColumnClasses('customer', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale)]]">
           <div>
             Please complete product/service selection to access customer features.
           </div>
         </div>
-        <!-- customer column - end -->
+        <!-- customer column placeholder - end -->
 
         <!-- payment column - start -->
-        <div class$="column flex [[$getColumnClasses('payment', 'real', isMultiColumn, selectedTabName)]]">
-          <div class="card horizontal layout center">
-            Payment TBD
-          </div>
+        <div class$="column flex [[$getColumnClasses('payment', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale)]]" on-tap="paymentColumnTapped">
+
+          <!-- calculations - start -->
+          <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
+            <div class="card vertical layout">
+              <div class="individual-calculation-field-container">
+                <span>[[verses.pos.totalSalePrice]]: <b>{{$round(payment.totalAmount)}} [[app.settings.monetaryUnit]]</b></span>
+              </div>
+            </div>
+          </template>
+
+          <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
+            <div class="card vertical layout">
+              <div class="list">
+
+                <div class="individual-calculation-field-container">
+                  [[verses.pos.vatAmount]]:
+                  <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
+                </div>
+
+                <div class="individual-calculation-field-container">
+
+                  <div class="vertical layout m-bottom-18">
+
+                    <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discount]]" class="mr-4">
+                      <paper-listbox slot="dropdown-content" selected="{{selectedDiscountPreset}}" attr-for-selected="name">
+                        <paper-item name="--no-discount">[[verses.pos.noDiscountApplicable]]</paper-item>
+                        <template is="dom-repeat" items="[[discountPresetList]]" as="discountPreset">
+                          <paper-item name="[[discountPreset.id]]">
+                            [[getDiscountPresetLabel(discountPreset)]]
+                          </paper-item>
+                        </template>
+                      </paper-listbox>
+                    </paper-dropdown-menu>
+
+                  </div>
+
+                  [[verses.pos.discountedAmount]]:
+                  <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
+
+                </div>
+
+                <div class="individual-calculation-field-container horizontal layout center">
+
+                  <paper-input class="payment--serviceChargeAmount flex" value="{{payment.serviceChargeAmount}}" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.serviceChargeInputError]]" label="[[verses.pos.serviceChargeInput]]">
+                    <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                  </paper-input>
+
+                  <template is="dom-if" if="{{!isInOfflineMode}}">
+
+                    <template is="dom-if" if="{{assignedAssistedByEmployee}}">
+                      <div class="employee-icon-container-active" on-tap="assignAssistedByEmployeeTapped">
+                        <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
+                      </div>
+                    </template>
+
+                    <template is="dom-if" if="{{!assignedAssistedByEmployee}}">
+                      <div class="employee-icon-container" on-tap="assignAssistedByEmployeeTapped">
+                        <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
+                      </div>
+                    </template>
+
+                  </template>
+
+                </div>
+
+              </div>
+            </div>
+          </template>
+          <!-- calculations - end -->
+
+          <!-- payment area card - start -->
+          <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
+            <div class="card vertical layout" style="background: var(--app-primary-color-light);">
+              <div class="list">
+
+                <template is="dom-if" if="[[payment.roundedByAmount]]">
+                  <div class="individual-calculation-field-container light">
+                    <div class="horizontal layout center m-top-16">
+                      <div class="flex">
+                        [[verses.sales.totalBillBeforeRounding]]:
+                        <b>{{$round(payment.totalBillBeforeRounding)}} [[app.settings.monetaryUnit]]</b>
+                      </div>
+                    </div>
+                    <div class="horizontal layout center">
+                      <div class="flex">
+                        [[verses.sales.roundedByAmount]]:
+                        <b>{{$round(payment.roundedByAmount)}} [[app.settings.monetaryUnit]]</b>
+                      </div>
+                      <paper-icon-button on-tap="clearRounderByAmountTapped" icon="clear"></paper-icon-button>
+                    </div>
+                  </div>
+                </template>
+                <div class="horizontal layout center individual-calculation-field-container light">
+                  <div class="flex">
+                    [[verses.pos.totalBilled]]:
+                    <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
+                  </div>
+                  <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
+                    <paper-icon-button on-tap="editTotalBilledTapped" icon="create"></paper-icon-button>
+                  </template>
+                </div>
+
+                <div class="individual-calculation-field-container light">
+
+                  <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4" on-iron-select="paymentMethodSelected">
+                    <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
+                      <paper-item name="cash">[[verses.general.cash]]</paper-item>
+                      <paper-item name="card">[[verses.general.card]]</paper-item>
+                      <paper-item name="digital">[[verses.general.digital]]</paper-item>
+                      <template is="dom-if" if="[[customer]]">
+                        <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
+                      </template>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+
+                  <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
+                    <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+                      <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                    </paper-input>
+                  </template>
+
+                  <template is="dom-if" if="[[payment.changeAmount]]">
+                    <br> [[verses.pos.changeAmount]]:
+                    <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
+
+                    <br>
+                    <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                      <template is="dom-if" if="[[customer]]">
+                        <template is="dom-if" if="[[payment.changeAmount]]">
+                          <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
+                            [[verses.pos.shouldSaveChangeInAccount]]
+                          </paper-checkbox>
+                        </template>
+                      </template>
+                    </template>
+
+                  </template>
+
+                  <template is="dom-if" if="[[isValidCreditSale(customer, payment.totalBilled, payment.paidAmount)]]">
+                    [[verses.pos.thisWillBeACreditSale]]
+                  </template>
+
+                </div>
+
+                <div class="horizontal layout m-top-16">
+                  <paper-button raised class="primary flex" on-tap="saveSaleTapped">[[verses.pos.confirmSales]]</paper-button>
+                </div>
+
+                <div class="horizontal layout m-top-16">
+                  <paper-button id="sale-and-print-button" raised class="primary flex" on-tap="saveSaleAndPrintTapped">[[verses.pos.confirmSalesAndPrint]]</paper-button>
+                </div>
+
+              </div>
+            </div>
+          </template>
+          <!-- payment area card - end -->
+
         </div>
-        <div class$="column flex placeholder vertical layout center-center  [[$getColumnClasses('payment', 'placeholder', isMultiColumn, selectedTabName)]]">
+        <!-- payment column - end -->
+
+        <!-- payment column placeholder - start -->
+        <div class$="column flex placeholder vertical layout center-center  [[$getColumnClasses('payment', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale)]]">
           <div>
             Please complete product/service and customer selection to access payment features.
           </div>
         </div>
-        <!-- payment column - end -->
+        <!-- payment column placeholder - end -->
 
       </div>
       <!-- columns - End -->
@@ -413,6 +622,10 @@
             value: () => []
           },
           // Customer =============
+          isAnonymousSale: {
+            type: Boolean,
+            value: false
+          },
           isSearchingCustomer: {
             type: Boolean,
             value: false
@@ -581,14 +794,27 @@
         }
       }
 
-      $getColumnClasses(tabName, type, isMultiColumn, selectedTabName) {
-        // console.log({ tabName, type, isMultiColumn, selectedTabName });
+      $getColumnClasses(tabName, type, isMultiColumn, selectedTabName, productListLength, serviceListLength, customer, isAnonymousSale) {
+        // console.log({ tabName, type, isMultiColumn, selectedTabName, productListLength, serviceListLength, customer, isAnonymousSale });
         let classNames = '';
 
-        if (tabName === 'customer' && type !== 'placeholder') {
-          classNames += 'hidden ';
-        } else if (tabName === 'payment' && type !== 'placeholder') {
-          classNames += 'hidden ';
+        let isProductOrServiceSelectionDone = productListLength > 0 || serviceListLength > 0;
+        let isCustomerSelectionDone = (!!customer) || isAnonymousSale;
+
+        if (tabName === 'customer') {
+          if (isProductOrServiceSelectionDone && type === 'placeholder') {
+            classNames += 'hidden ';
+          } else if (!isProductOrServiceSelectionDone && type !== 'placeholder') {
+            classNames += 'hidden ';
+          }
+        }
+
+        if (tabName === 'payment') {
+          if (isCustomerSelectionDone && type === 'placeholder') {
+            classNames += 'hidden ';
+          } else if (!isCustomerSelectionDone && type !== 'placeholder') {
+            classNames += 'hidden ';
+          }
         }
 
         if (isMultiColumn) {
@@ -844,7 +1070,9 @@
       productSelectionDoneTapped(e = null) {
         this._resetProductSearch();
         this.selectedTabName = 'customer';
-        this.elem('.single-column-tabs-row').scrollIntoView();
+        try {
+          this.elem('.single-column-tabs-row').scrollIntoView();
+        } catch (ex) { }
       }
 
       // region: services =================================
@@ -853,6 +1081,10 @@
         return this.app.navigateTo(`/pos-select-services/outlet:${this.params.outlet}`);
       }
       // region: customer =================================
+
+      customerColumnTapped(e = null) {
+        this._resetProductSearch();
+      }
 
       changeCustomerTapped(e = null) {
         this.isSearchingCustomer = true;
