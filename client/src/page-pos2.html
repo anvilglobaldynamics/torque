@@ -195,7 +195,7 @@
       <div class="horizontal layout">
 
         <!-- products column - start -->
-        <div class$="column flex [[$getColumnClasses('products', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale)]]">
+        <div class$="column flex [[$getColumnClasses('products', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
 
           <!-- warehouse selection - start -->
           <template is="dom-if" if="[[hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')]]">
@@ -322,7 +322,9 @@
         <!-- products column - end -->
 
         <!-- customer column - start -->
-        <div class$="customer-column column flex [[$getColumnClasses('customer', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale)]]" on-tap="customerColumnTapped">
+        <div class$="customer-column column flex [[$getColumnClasses('customer', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]" on-tap="customerColumnTapped">
+
+          <elem-customer-selector page="{{self}}"></elem-customer-selector>
 
           <!-- customer selector - start -->
           <template is="dom-if" if="[[!isInOfflineMode]]">
@@ -369,7 +371,6 @@
                 </div>
               </div>
             </template>
-            <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
           </template>
           <!-- customer selector - end -->
 
@@ -377,7 +378,7 @@
         <!-- customer column - end -->
 
         <!-- customer column placeholder - start -->
-        <div class$="column flex placeholder  vertical layout center-center [[$getColumnClasses('customer', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale)]]">
+        <div class$="column flex placeholder  vertical layout center-center [[$getColumnClasses('customer', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
           <div>
             Please complete product/service selection to access customer features.
           </div>
@@ -385,7 +386,7 @@
         <!-- customer column placeholder - end -->
 
         <!-- payment column - start -->
-        <div class$="column flex [[$getColumnClasses('payment', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale)]]" on-tap="paymentColumnTapped">
+        <div class$="column flex [[$getColumnClasses('payment', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]" on-tap="paymentColumnTapped">
 
           <!-- calculations - start -->
           <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
@@ -547,7 +548,7 @@
         <!-- payment column - end -->
 
         <!-- payment column placeholder - start -->
-        <div class$="column flex placeholder vertical layout center-center  [[$getColumnClasses('payment', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale)]]">
+        <div class$="column flex placeholder vertical layout center-center  [[$getColumnClasses('payment', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
           <div>
             Please complete product/service and customer selection to access payment features.
           </div>
@@ -595,7 +596,8 @@
           },
           productList: {
             type: Array,
-            value: () => []
+            value: () => [],
+            observer: 'productListChanged'
           },
           matchingProductList: {
             type: Array,
@@ -794,8 +796,8 @@
         }
       }
 
-      $getColumnClasses(tabName, type, isMultiColumn, selectedTabName, productListLength, serviceListLength, customer, isAnonymousSale) {
-        // console.log({ tabName, type, isMultiColumn, selectedTabName, productListLength, serviceListLength, customer, isAnonymousSale });
+      $getColumnClasses(tabName, type, isMultiColumn, selectedTabName, productListLength, serviceListLength, customer, isAnonymousSale, isInOfflineMode) {
+        // console.log({ tabName, type, isMultiColumn, selectedTabName, productListLength, serviceListLength, customer, isAnonymousSale, isInOfflineMode });
         let classNames = '';
 
         let isProductOrServiceSelectionDone = productListLength > 0 || serviceListLength > 0;
@@ -998,6 +1000,7 @@
         } else {
           this.unshift('productList', { productId, name, selectedCount, maxAllowedCount, salePrice, vatValue, minSalePrice, unit });
         }
+        this.productListChanged();
       }
 
       _resetProductSearch() {
@@ -1047,6 +1050,10 @@
         let { product } = e.model;
         product.selectedCount = 1;
         this._selectProduct({ product });
+      }
+
+      productListChanged() {
+        this.app.storeInSession('pos-selected-product-list', this.productList);
       }
 
       // sub-region: post selection
