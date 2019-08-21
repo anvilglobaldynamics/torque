@@ -129,7 +129,7 @@
       }
 
       .placeholder {
-        background: #b6bdc0;
+        background: #afafaf;
         padding: 12px;
         text-align: center;
       }
@@ -281,7 +281,10 @@
 
                   <div class="flex" style="font-weight: bold; text-decoration: underline;">Selected Products:</div>
                   <template is="dom-if" if="[[!isMultiColumn]]">
-                    <paper-icon-button on-tap="productSelectionDoneTapped" icon="done-all"></paper-icon-button>
+                    <!-- <paper-icon-button on-tap="productSelectionDoneTapped" icon="done-all"></paper-icon-button> Continue -->
+                    <paper-button raised class="primary" on-tap="productSelectionDoneTapped" style="margin-bottom: 8px;">
+                      <iron-icon icon="done-all"></iron-icon>&nbsp;Continue
+                    </paper-button>
                   </template>
 
                 </div>
@@ -295,7 +298,7 @@
                         </div>
                         <div class="horizontal layout center">
 
-                          <paper-input no-label-float class="small-input m-horizontal-4" value="{{product.selectedCount}}" on-change="genericSelectedCountInputChanged" type="number" min="1" max="99999999999" label="[[verses.posSelectProduct.count]]">
+                          <paper-input no-label-float class="small-input m-horizontal-4" value="{{product.selectedCount}}" on-change="productSelectedCountInputChanged" type="number" min="1" max="99999999999" label="[[verses.posSelectProduct.count]]">
                             <div slot="suffix">&nbsp;[[product.unit]]</div>
                           </paper-input>
 
@@ -399,6 +402,13 @@
                   </template>
                 </div>
               </div>
+
+              <template is="dom-if" if="[[!isMultiColumn]]">
+                <paper-button raised class="primary" on-tap="customerSelectionDoneTapped" style="width: calc(100% - 16px); margin: 8px;">
+                  <iron-icon icon="done-all"></iron-icon>&nbsp;Continue
+                </paper-button>
+              </template>
+
             </template>
             <!-- customer preview - end -->
 
@@ -409,7 +419,7 @@
 
         <!-- customer column placeholder - start -->
         <div class$="column flex placeholder  vertical layout center-center [[$getColumnClasses('customer', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
-          <div>
+          <div style="max-width: 300px;">
             Please complete product/service selection to access customer features.
           </div>
         </div>
@@ -579,7 +589,7 @@
 
         <!-- payment column placeholder - start -->
         <div class$="column flex placeholder vertical layout center-center  [[$getColumnClasses('payment', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
-          <div>
+          <div style="max-width: 300px;">
             Please complete product/service and customer selection to access payment features.
           </div>
         </div>
@@ -771,17 +781,12 @@
         // customer
         this.delay(0, () => {
           this.self = this;
-          let customerId = this.app.extractFromSession('last-created-customer');
-          if (customerId !== null) {
-            this._processGetCustomer({ customerId }, (customer) => {
-              this.customer = customer;
-            });
-          } else {
-            let customer = this.app.getFromSession('last-selected-customer');
-            if (customer) {
-              this.customer = customer;
-            }
+          let customer = this.app.getFromSession('last-selected-customer');
+          if (customer) {
+            this.customer = customer;
           }
+          this.isAnonymousSale = this.app.getFromSession('last-selected-customer-is-anonymous') || false;
+          console.log(this.isAnonymousSale);
         });
 
         // payment
@@ -858,9 +863,9 @@
         }
 
         if (tabName === 'payment') {
-          if (isCustomerSelectionDone && type === 'placeholder') {
+          if ((isProductOrServiceSelectionDone && isCustomerSelectionDone) && type === 'placeholder') {
             classNames += 'hidden ';
-          } else if (!isCustomerSelectionDone && type !== 'placeholder') {
+          } else if (!(isProductOrServiceSelectionDone && isCustomerSelectionDone) && type !== 'placeholder') {
             classNames += 'hidden ';
           }
         }
@@ -1100,9 +1105,15 @@
 
       productListChanged() {
         this.app.storeInSession('pos-selected-product-list', this.productList);
+        this._calculatePayment({ resetRounding: true });
       }
 
       // sub-region: post selection
+
+      productSelectedCountInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+        this._calculatePayment({ resetRounding: true });
+      }
 
       editProductSalePriceTapped(e) {
         let { product } = e.model;
@@ -1118,6 +1129,7 @@
       discardProductTapped(e) {
         let { productIndex } = e.model;
         this.splice('productList', productIndex, 1);
+        this._calculatePayment({ resetRounding: true });
       }
 
       productSelectionDoneTapped(e = null) {
@@ -1126,6 +1138,7 @@
         try {
           this.elem('.single-column-tabs-row').scrollIntoView();
         } catch (ex) { }
+        this._calculatePayment({ resetRounding: true });
       }
 
       // region: services =================================
@@ -1135,6 +1148,11 @@
       }
       // region: customer =================================
 
+      _customerVariablesChanged() {
+        this.app.storeInSession('last-selected-customer', this.customer);
+        this.app.storeInSession('last-selected-customer-is-anonymous', this.isAnonymousSale);
+      }
+
       customerColumnTapped(e = null) {
         this._resetProductSearch();
       }
@@ -1142,12 +1160,12 @@
       removeCustomerTapped(e = null) {
         this.customer = null;
         this.isAnonymousSale = false;
-        this.app.storeInSession('last-selected-customer', null);
+        this._customerVariablesChanged();
       }
 
       customerChanged() {
         if (!this.customer) return;
-        this.app.storeInSession('last-selected-customer', this.customer);
+        this._customerVariablesChanged();
       }
 
       _processGetCustomer({ customerId }, cbfn) {
@@ -1187,11 +1205,11 @@
 
         let { fullName, phone, email, address } = this.editCustomerForm;
         this._processCreateCustomer({ fullName, phone, email, address }, ({ customerId }) => {
-          this.app.storeInSession('last-created-customer', customerId);
-          this.customer = {
-            id: customerId,
-            fullName, phone, email, address
-          };
+          this._processGetCustomer({ customerId }, (customer) => {
+            this.customer = customer;
+            this.isAnonymousSale = false;
+            this._customerVariablesChanged();
+          });
         });
       }
 
@@ -1203,17 +1221,27 @@
           (answer) => {
             if (!answer) return;
             this.isAnonymousSale = true;
+            this._customerVariablesChanged();
           }
         );
       }
 
       $shouldShowCustomerSelectionOptions(customer, isAnonymousSale) {
-        console.log({ customer, isAnonymousSale });
+        // console.log({ customer, isAnonymousSale });
         if (!customer && !isAnonymousSale) return true;
         return false;
       }
 
+      customerSelectionDoneTapped(e) {
+        this.selectedTabName = 'payment';
+        this._customerVariablesChanged();
+      }
+
       // region: payment =================================
+
+      paymentColumnTapped(e = null) {
+        this._resetProductSearch();
+      }
 
       paymentMethodSelected(e) {
         // NOTE: The timeout should not be necessary. However, without it
@@ -1391,7 +1419,12 @@
       editTotalBilledTapped(e = null) {
         this.app.showModalInput(this.verses.sales.editBill, this.verses.sales.editBillDetails, this.payment.totalBilled, (answer) => {
           if (parseFloat(answer) > 0) {
-            this.payment.roundedByAmount = Math.max(0, (this.payment.totalBillBeforeRounding - parseFloat(answer)));
+            let roundedByAmount = (this.payment.totalBillBeforeRounding - parseFloat(answer));
+            if (roundedByAmount < 0) {
+              this.app.showModalDialog("Invalid amount", "You can not increase total billed amount. Please update individual prices or add service charge.");
+              return;
+            }
+            this.payment.roundedByAmount = roundedByAmount;
             this._calculatePayment({ resetRounding: false });
           }
         });
@@ -1499,11 +1532,13 @@
 
         this.app.extractFromSession('pos-selected-warehouse');
         this.app.extractFromSession('product-selected-from-warehouse-id');
+        this.app.extractFromSession('last-selected-customer');
 
         this.app.extractFromSession('pos-selected-product-list');
         this.app.extractFromSession('pos-selected-service-list');
 
         this.app.extractFromSession('last-selected-customer');
+        this.app.extractFromSession('last-selected-customer-is-anonymous');
 
         this.app.extractFromSession('pos-assigned-assisted-by-employee');
 
