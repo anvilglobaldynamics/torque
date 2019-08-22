@@ -252,11 +252,8 @@
 
           <!-- service search results - start -->
           <template is="dom-if" if="{{matchingServiceList.length}}">
-            <div class="card vertical layout">
 
-              <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
-                <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
-              </template>
+            <div class="card vertical layout">
 
               <div class="list">
                 <template is="dom-repeat" items="[[matchingServiceList]]" as="service">
@@ -267,9 +264,7 @@
                       <div class="inventory-product-price-container">[[verses.posSelectService.sale]]: [[service.salePrice]][[app.settings.monetaryUnit]]</div>
                     </div>
 
-                    <div class="horizontal layout wrap center">
-                      <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
-                    </div>
+                    <paper-icon-button class=" primary " icon="add-circle" on-tap="selectMatchingServiceTapped"></paper-icon-button>
                   </div>
 
                 </template>
@@ -277,67 +272,86 @@
 
               <div class="pagination">
                 [[verses.general.loaded]]
-                <span class="limit">[[pagination.limit]]</span>
+                <span class="limit">[[servicePagination.limit]]</span>
                 [[verses.general.itemsOutOf]]
-                <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
-                <span class="offset">#[[$inc(pagination.offset)]]</span>.
+                <span class="total-count">[[servicePagination.totalCount]]</span> [[verses.general.startingFrom]]
+                <span class="offset">#[[$inc(servicePagination.offset)]]</span>.
               </div>
-              <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
-                <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
-              </template>
+
+              <div class="horizontal layout center">
+                <template is="dom-if" if="[[$hasPreviousPagination(servicePaginate.offset)]]">
+                  <paper-button raised class="flex neutral" on-tap="showPreviousServicesTapped">[[verses.general.showPrevious]]</paper-button>
+                </template>
+
+                <template is="dom-if" if="[[$hasMorePagination(servicePagination.totalCount, servicePaginate.offset, servicePaginate.limit)]]">
+                  <paper-button raised class="flex neutral" on-tap="showMoreServicesTapped">[[verses.general.showMore]]</paper-button>
+                </template>
+              </div>
 
             </div>
           </template>
           <!-- service search results - end -->
 
           <!-- selected service list - start -->
-          <div class="card vertical layout">
-            <div class="list">
+          <template is="dom-if" if="[[serviceList.length]]">
 
-              <template is="dom-repeat" items="[[serviceList]]" as="service">
-                <div class="horizontal layout item center">
-                  <div class="vertical layout flex">
+            <div class="card vertical layout">
 
-                    <div class="horizontal layout center">
-                      <div class="service-info">
-                        <span class="service-title">[[service.name]]</span>
+              <div class="horizontal layout center">
+                <div class="flex" style="font-weight: bold; text-decoration: underline;">Selected Services:</div>
+                <template is="dom-if" if="[[!isMultiColumn]]">
+                  <paper-button raised class="primary" on-tap="serviceSelectionDoneTapped" style="margin-bottom: 8px;">
+                    <iron-icon icon="done-all"></iron-icon>&nbsp;Continue
+                  </paper-button>
+                </template>
+              </div>
+
+              <div class="list">
+                <template is="dom-repeat" items="[[serviceList]]" as="service" index-as="serviceIndex">
+                  <div class="horizontal layout item center">
+                    <div class="vertical layout flex">
+
+                      <div class="horizontal layout center">
+                        <div class="service-info">
+                          <span class="service-title">[[service.name]]</span>
+                        </div>
+
+                        <template is="dom-if" if="{{service.isEmployeeAssignable}}">
+
+                          <template is="dom-if" if="{{service.assignedEmploymentId}}">
+                            <div class="employee-icon-container-active" on-tap="assignEmployeeTapped">
+                              <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignedEmployee]]
+                            </div>
+                          </template>
+
+                          <template is="dom-if" if="{{!service.assignedEmploymentId}}">
+                            <div class="employee-icon-container" on-tap="assignEmployeeTapped">
+                              <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignEmployee]]
+                            </div>
+                          </template>
+
+                        </template>
                       </div>
 
-                      <template is="dom-if" if="{{service.isEmployeeAssignable}}">
-
-                        <template is="dom-if" if="{{service.assignedEmploymentId}}">
-                          <div class="employee-icon-container-active" on-tap="assignEmployeeTapped">
-                            <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignedEmployee]]
-                          </div>
-                        </template>
-
-                        <template is="dom-if" if="{{!service.assignedEmploymentId}}">
-                          <div class="employee-icon-container" on-tap="assignEmployeeTapped">
-                            <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignEmployee]]
-                          </div>
-                        </template>
-
+                      <template is="dom-if" if="{{service.isCustomerRequired}}">
+                        <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
                       </template>
+
+                      <div class="horizontal layout center">
+                        <div>[[service.salePrice]]</div>
+                        <div class="description">[[app.settings.monetaryUnit]]</div>
+                        <span class="service-vat-detail">(+ [[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                        <paper-icon-button on-tap="discardServiceTapped" icon="remove-circle"></paper-icon-button>
+                      </div>
+
                     </div>
-
-                    <template is="dom-if" if="{{service.isCustomerRequired}}">
-                      <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
-                    </template>
-
-                    <div class="horizontal layout center mt8">
-                      <!-- <paper-input class=" flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" type="number" auto-validate>
-                        </paper-input> -->
-                      <div>[[service.salePrice]]</div>
-                      <div class="description">[[app.settings.monetaryUnit]]</div>
-                      <span class="service-vat-detail">(+ [[verses.pos.vat]]: {{service.vatValue}}%)</span>
-                    </div>
-
                   </div>
-                </div>
-              </template>
+                </template>
+              </div>
 
             </div>
-          </div>
+
+          </template>
           <!-- selected service list - end -->
 
         </div>
@@ -409,11 +423,11 @@
 
               <div class="horizontal layout center">
                 <template is="dom-if" if="[[$hasPreviousPagination(productPaginate.offset)]]">
-                  <paper-button raised class="flex neutral " on-tap="showPreviousProductsTapped">[[verses.general.showPrevious]]</paper-button>
+                  <paper-button raised class="flex neutral" on-tap="showPreviousProductsTapped">[[verses.general.showPrevious]]</paper-button>
                 </template>
 
                 <template is="dom-if" if="[[$hasMorePagination(productPagination.totalCount, productPaginate.offset, productPaginate.limit)]]">
-                  <paper-button raised class="flex neutral " on-tap="showMoreProductsTapped">[[verses.general.showMore]]</paper-button>
+                  <paper-button raised class="flex neutral" on-tap="showMoreProductsTapped">[[verses.general.showMore]]</paper-button>
                 </template>
               </div>
 
@@ -425,19 +439,17 @@
           <template is="dom-if" if="[[productList.length]]">
 
             <div class="card vertical layout">
-              <div class="horizontal layout center">
 
+              <div class="horizontal layout center">
                 <div class="flex" style="font-weight: bold; text-decoration: underline;">Selected Products:</div>
                 <template is="dom-if" if="[[!isMultiColumn]]">
-                  <!-- <paper-icon-button on-tap="productSelectionDoneTapped" icon="done-all"></paper-icon-button> Continue -->
                   <paper-button raised class="primary" on-tap="productSelectionDoneTapped" style="margin-bottom: 8px;">
                     <iron-icon icon="done-all"></iron-icon>&nbsp;Continue
                   </paper-button>
                 </template>
-
               </div>
-              <div class="list">
 
+              <div class="list">
                 <template is="dom-repeat" items="[[productList]]" as="product" index-as="productIndex">
                   <div class="horizontal layout item center">
                     <div class="vertical layout flex">
@@ -445,23 +457,21 @@
                         <span class="product-title">[[product.name]]</span>
                       </div>
                       <div class="horizontal layout center">
-
                         <paper-input no-label-float class="small-input m-horizontal-4 product-count-input" value="{{product.selectedCount}}" on-change="productSelectedCountInputChanged" type="number" min="1" max="99999999999" label="[[verses.posSelectProduct.count]]">
                           <div slot="suffix">&nbsp;[[product.unit]]</div>
                         </paper-input>
 
                         <div>&nbsp;@&nbsp;[[product.salePrice]]</div>
                         <div class="description">[[app.settings.monetaryUnit]]</div>
-                        <paper-icon-button on-tap="editProductSalePriceTapped" icon="create" style="padding: 0; height: 16px; max-width: 16px; min-width: 16px;"></paper-icon-button>
+                        <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
+                          <paper-icon-button on-tap="editProductSalePriceTapped" icon="create" style="padding: 0; height: 16px; max-width: 16px; min-width: 16px;"></paper-icon-button>
+                        </template>
                         <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
                       </div>
                     </div>
-                    <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
-                      <paper-icon-button on-tap="discardProductTapped" icon="remove-circle"></paper-icon-button>
-                    </template>
+                    <paper-icon-button on-tap="discardProductTapped" icon="remove-circle"></paper-icon-button>
                   </div>
                 </template>
-
               </div>
             </div>
 
@@ -812,7 +822,8 @@
           // Services =============
           serviceList: {
             type: Array,
-            value: () => []
+            value: () => [],
+            observer: 'serviceListChanged'
           },
           matchingServiceList: {
             type: Array,
@@ -950,7 +961,7 @@
         } else {
           this.selectedTabName = salesType;
         }
-        console.log('selectedTabName', this.selectedTabName);
+        // console.log('selectedTabName', this.selectedTabName);
 
         // products
         if (!this.isInOfflineMode) {
@@ -1347,14 +1358,19 @@
 
       // region: services =================================
 
+      // subregion: search
 
       _fetchOutletServiceListOnline(cbfn) {
-        let data = { outletId: parseInt(this.params.outlet), searchString: this.searchString, paginate: this.paginate };
+        let data = {
+          outletId: parseInt(this.params.outlet),
+          searchString: this.serviceSearchString,
+          paginate: this.servicePaginate
+        };
 
         this.app.callGetActiveServiceListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this.pagination = response.pagination;
+          this.servicePagination = response.pagination;
           return cbfn(response);
         });
       }
@@ -1363,7 +1379,7 @@
         window.setTimeout(() => {
           let response = JSON.parse(JSON.stringify(this.app.offlineData.cache.getActiveServiceList));
 
-          let searchString = String(this.searchString);
+          let searchString = String(this.serviceSearchString);
           if (searchString.length > 0) {
             searchString = searchString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             let regex = new RegExp(searchString, 'g');
@@ -1374,23 +1390,24 @@
 
           ([response.serviceList, response.pagination] = this._paginateOfflineData(response.serviceList));
 
-          this.pagination = response.pagination;
+          this.servicePagination = response.pagination;
           cbfn(response);
         }, 100);
       }
 
       _fetchOutletServiceList(cbfn) {
         if (this.isInOfflineMode) {
+          // FIXME: Probably not going to work
           this._fetchOutletServiceListOffline(cbfn);
         } else {
           this._fetchOutletServiceListOnline(cbfn);
         }
       }
 
-      _processOutletServices(cbfn) {
+      _searchServices(cbfn) {
         this._fetchOutletServiceList(({ serviceList }) => {
 
-          this.serviceList = serviceList.map(service => {
+          this.matchingServiceList = serviceList.map(service => {
             let { salePrice } = service;
             let { name, defaultVat, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration } = service.serviceBlueprint;
             service.isSelected = false;
@@ -1400,101 +1417,99 @@
             return service;
           });
 
-          let previousSavedSelectedServiceList = this.app.getFromSession('pos-selected-service-list') || [];
-
-          if (this.selectedServiceList.length > 0 || previousSavedSelectedServiceList.length > 0) {
-            if (previousSavedSelectedServiceList.length > 0 && this.selectedServiceList.length === 0) {
-              this.selectedServiceCount = previousSavedSelectedServiceList.length;
-              this.selectedServiceList = previousSavedSelectedServiceList;
-            }
-
-            this.selectedServiceList.forEach(previousService => {
-              let service = this.serviceList.find(service => service.id === previousService.id);
-              if (service) {
-                service.isSelected = true;
-              }
-            })
-          }
-
           cbfn();
         });
       }
 
-      _addServiceToSelectedServiceList({ service }) {
+      _selectService({ service }) {
         let { id, name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration } = service;
         let minSalePrice = salePrice;
-        this.push('selectedServiceList', { id, name, minSalePrice, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration });
-        this.selectedServiceCount = this.selectedServiceList.length;
+        this.push('serviceList', { id, name, minSalePrice, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration });
+        this.serviceListChanged();
       }
 
-      _removeServiceFromSelectedServiceList({ service }) {
-        this.selectedServiceList.forEach((selectedProduct, index) => {
-          if (selectedProduct.id === service.id) {
-            this.splice('selectedServiceList', index, 1);
+      _resetServiceSearch() {
+        this.serviceSearchString = '';
+        this.matchingServiceList = [];
+      }
+
+      serviceSearchFieldKeypressed(e) {
+        if (e.which === 13) {
+          this.serviceSearchTapped(null);
+        } else if (e.which === 27) {
+          this._resetServiceSearch();
+        }
+      }
+
+      serviceSearchClearTapped(e) {
+        this._resetServiceSearch();
+        this.elem('#service-search-field').focus();
+      }
+
+      serviceSearchTapped(e = null) {
+        if (!this.isReady) {
+          // NOTE: Keep this console log
+          console.warn("A search request is already underway.");
+          return;
+        }
+        this.servicePaginate.offset = 0;
+        this.isReady = false;
+        this._searchServices(() => {
+          this.isReady = true;
+        });
+      }
+
+      showMoreServicesTapped(e = null) {
+        this.set('servicePaginate.offset', this.servicePaginate.offset + this.servicePaginate.limit);
+        this.isReady = false;
+        this._searchServices(() => this.isReady = true);
+      }
+
+      showPreviousServicesTapped(e = null) {
+        this.set('servicePaginate.offset', Math.max(0, this.servicePaginate.offset - this.servicePaginate.limit));
+        this.isReady = false;
+        this._searchServices(() => this.isReady = true);
+      }
+
+      selectMatchingServiceTapped(e) {
+        let { service } = e.model;
+        service.selectedCount = 1;
+        this._selectService({ service });
+      }
+
+      serviceListChanged() {
+        this.app.storeInSession('pos-selected-service-list', this.serviceList);
+        this._calculatePayment({ resetRounding: true });
+      }
+
+      // sub-region: post selection
+
+      editServiceSalePriceTapped(e) {
+        let { service } = e.model;
+        this.app.showModalInput(this.verses.sales.editSalePrice, this.verses.sales.editSalePriceDetails, service.salePrice, (answer) => {
+          let salePrice = parseFloat(answer);
+          if (salePrice >= 0) {
+            e.model.set('service.salePrice', salePrice);
+            this._calculatePayment({ resetRounding: true });
           }
         });
-
-        this.serviceList.forEach((serviceInList, index) => {
-          if (serviceInList.id === service.id) {
-            this.set(`serviceList.${index}.isSelected`, false);
-          }
-        });
-
-        this.selectedServiceCount = this.selectedServiceList.length;
       }
 
-
-      showMoreTapped(e = null) {
-        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
-        this.isReady = false;
-        this._processOutletServices(() => this.isReady = true);
+      discardServiceTapped(e) {
+        let { serviceIndex } = e.model;
+        this.splice('serviceList', serviceIndex, 1);
+        this.serviceListChanged();
+        this._calculatePayment({ resetRounding: true });
       }
 
-      showPreviousTapped(e = null) {
-        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
-        this.isReady = false;
-        this._processOutletServices(() => this.isReady = true);
+      serviceSelectionDoneTapped(e = null) {
+        this._resetServiceSearch();
+        this.selectedTabName = 'customer';
+        try {
+          this.elem('.single-column-tabs-row').scrollIntoView();
+        } catch (ex) { }
+        this._calculatePayment({ resetRounding: true });
       }
-
-      searchFieldKeypressed(e) {
-        if (e.which === 13) this.searchTapped(null);
-      }
-
-      searchCancelTapped(e = null) {
-        this.searchString = '';
-      }
-
-      searchTapped(e = null) {
-        this.set('paginate.offset', 0);
-        this._processOutletServices(() => this.isReady = true);
-      }
-
-      selectTapped(e) {
-        e.model.set('service.isSelected', true);
-        let { service } = e.model;
-        this._addServiceToSelectedServiceList({ service });
-      }
-
-      deselectTapped(e) {
-        let { service } = e.model;
-        this._removeServiceFromSelectedServiceList({ service });
-      }
-
-      selectServicesTapped(e = null) {
-        this.app.storeInSession('pos-selected-service-list', this.selectedServiceList);
-        this.selectedServiceList = [];
-        this.selectedServiceCount = 0;
-        this.backButtonOnTopBarPressed();
-      }
-
-      deselectAllTapped(e) {
-        this.serviceList.forEach((service, index) => this.set(`serviceList.${index}.isSelected`, false));
-        this.selectedServiceList = [];
-        this.selectedServiceCount = 0;
-        this.app.storeInSession('pos-selected-service-list', this.selectedServiceList);
-      }
-
-
 
       // region: customer =================================
 
@@ -1505,6 +1520,7 @@
 
       customerColumnTapped(e = null) {
         this._resetProductSearch();
+        this._resetServiceSearch();
       }
 
       removeCustomerTapped(e = null) {
@@ -1591,6 +1607,7 @@
 
       paymentColumnTapped(e = null) {
         this._resetProductSearch();
+        this._resetServiceSearch();
       }
 
       paymentMethodSelected(e) {
