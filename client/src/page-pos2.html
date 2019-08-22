@@ -161,6 +161,10 @@
       .single-column-tab.selected {
         text-decoration: underline;
       }
+
+      .product-count-input {
+        --paper-input-container-color: var(--app-primary-color);
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -298,7 +302,7 @@
                         </div>
                         <div class="horizontal layout center">
 
-                          <paper-input no-label-float class="small-input m-horizontal-4" value="{{product.selectedCount}}" on-change="productSelectedCountInputChanged" type="number" min="1" max="99999999999" label="[[verses.posSelectProduct.count]]">
+                          <paper-input no-label-float class="small-input m-horizontal-4 product-count-input" value="{{product.selectedCount}}" on-change="productSelectedCountInputChanged" type="number" min="1" max="99999999999" label="[[verses.posSelectProduct.count]]">
                             <div slot="suffix">&nbsp;[[product.unit]]</div>
                           </paper-input>
 
@@ -786,7 +790,7 @@
             this.customer = customer;
           }
           this.isAnonymousSale = this.app.getFromSession('last-selected-customer-is-anonymous') || false;
-          console.log(this.isAnonymousSale);
+          // console.log(this.isAnonymousSale);
         });
 
         // payment
@@ -892,6 +896,7 @@
 
       selectedWarehouseChanged() {
         this.app.storeInSession('pos-selected-warehouse', this.selectedWarehouse);
+        this._resetProductSearch();
         this._updateDefaultInventoryId(() => { }); // Makes sure defaultInventoryId is set correctly
       }
 
@@ -1129,6 +1134,7 @@
       discardProductTapped(e) {
         let { productIndex } = e.model;
         this.splice('productList', productIndex, 1);
+        this.productListChanged();
         this._calculatePayment({ resetRounding: true });
       }
 
