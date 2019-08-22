@@ -194,7 +194,19 @@
       <!-- header - Single Column - Start -->
       <template is="dom-if" if="[[!isMultiColumn]]">
         <div class="horizontal layout single-column-tabs-row">
-          <div class$="flex single-column-tab [[$getTabSelectedClass('products', selectedTabName)]]" data-key="products" on-tap="singleColumnTabTapped">Products</div>
+
+          <template is="dom-if" if="[[$equals('undecided', salesType)]]">
+            <div class$="flex single-column-tab [[$getTabSelectedClass('selection', selectedTabName)]]" data-key="selection" on-tap="singleColumnTabTapped">Selection</div>
+          </template>
+
+          <template is="dom-if" if="[[$equals('products', salesType)]]">
+            <div class$="flex single-column-tab [[$getTabSelectedClass('products', selectedTabName)]]" data-key="products" on-tap="singleColumnTabTapped">Products</div>
+          </template>
+
+          <template is="dom-if" if="[[$equals('services', salesType)]]">
+            <div class$="flex single-column-tab [[$getTabSelectedClass('services', selectedTabName)]]" data-key="services" on-tap="singleColumnTabTapped">Services</div>
+          </template>
+
           <div class$="flex single-column-tab [[$getTabSelectedClass('customer', selectedTabName)]]" data-key="customer" on-tap="singleColumnTabTapped">Customer</div>
           <div class$="flex single-column-tab [[$getTabSelectedClass('payment', selectedTabName)]]" data-key="payment" on-tap="singleColumnTabTapped">Payment</div>
         </div>
@@ -224,7 +236,107 @@
         <!-- services column - start -->
         <div class$="column flex [[$getColumnClasses('services', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
 
-          services
+          <!-- service search area - start -->
+          <div class="card vertical layout">
+            <div class="p-16 horizontal layout center">
+              <paper-input class="flex" value="{{serviceSearchString}}" required minlength="0" error-message="[[verses.posSelectService.searchForServiceInputError]]" label="[[verses.posSelectService.searchForServiceInput]]" on-keypress="searchFieldKeypressed"></paper-input>
+              <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
+              <paper-button raised class="primary" on-tap="searchTapped">
+                [[verses.general.search]]
+              </paper-button>
+            </div>
+          </div>
+          <!-- service search area - end -->
+
+          <!-- service search results - start -->
+          <template is="dom-if" if="{{matchingServiceList.length}}">
+            <div class="card vertical layout">
+
+              <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+                <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+              </template>
+
+              <div class="list">
+                <template is="dom-repeat" items="[[matchingServiceList]]" as="service">
+
+                  <div class="horizontal layout item center">
+                    <div class="flex" style="min-width: 128px;">
+                      <div class="inventory-product-important-detail-container">[[service.name]]</div>
+                      <div class="inventory-product-price-container">[[verses.posSelectService.sale]]: [[service.salePrice]][[app.settings.monetaryUnit]]</div>
+                    </div>
+
+                    <div class="horizontal layout wrap center">
+                      <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
+                    </div>
+                  </div>
+
+                </template>
+              </div>
+
+              <div class="pagination">
+                [[verses.general.loaded]]
+                <span class="limit">[[pagination.limit]]</span>
+                [[verses.general.itemsOutOf]]
+                <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+                <span class="offset">#[[$inc(pagination.offset)]]</span>.
+              </div>
+              <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+                <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+              </template>
+
+            </div>
+          </template>
+          <!-- service search results - end -->
+
+          <!-- selected service list - start -->
+          <div class="card vertical layout">
+            <div class="list">
+
+              <template is="dom-repeat" items="[[serviceList]]" as="service">
+                <div class="horizontal layout item center">
+                  <div class="vertical layout flex">
+
+                    <div class="horizontal layout center">
+                      <div class="service-info">
+                        <span class="service-title">[[service.name]]</span>
+                      </div>
+
+                      <template is="dom-if" if="{{service.isEmployeeAssignable}}">
+
+                        <template is="dom-if" if="{{service.assignedEmploymentId}}">
+                          <div class="employee-icon-container-active" on-tap="assignEmployeeTapped">
+                            <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignedEmployee]]
+                          </div>
+                        </template>
+
+                        <template is="dom-if" if="{{!service.assignedEmploymentId}}">
+                          <div class="employee-icon-container" on-tap="assignEmployeeTapped">
+                            <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignEmployee]]
+                          </div>
+                        </template>
+
+                      </template>
+                    </div>
+
+                    <template is="dom-if" if="{{service.isCustomerRequired}}">
+                      <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
+                    </template>
+
+                    <div class="horizontal layout center mt8">
+                      <!-- <paper-input class=" flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" type="number" auto-validate>
+                        </paper-input> -->
+                      <div>[[service.salePrice]]</div>
+                      <div class="description">[[app.settings.monetaryUnit]]</div>
+                      <span class="service-vat-detail">(+ [[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                    </div>
+
+                  </div>
+                </div>
+              </template>
+
+            </div>
+          </div>
+          <!-- selected service list - end -->
 
         </div>
         <!-- services column - end -->
@@ -1214,9 +1326,155 @@
 
       // region: services =================================
 
-      addServiceTapped(e = null) {
-        return this.app.navigateTo(`/pos-select-services/outlet:${this.params.outlet}`);
+
+      _fetchOutletServiceListOnline(cbfn) {
+        let data = { outletId: parseInt(this.params.outlet), searchString: this.searchString, paginate: this.paginate };
+
+        this.app.callGetActiveServiceListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response);
+        });
       }
+
+      _fetchOutletServiceListOffline(cbfn) {
+        window.setTimeout(() => {
+          let response = JSON.parse(JSON.stringify(this.app.offlineData.cache.getActiveServiceList));
+
+          let searchString = String(this.searchString);
+          if (searchString.length > 0) {
+            searchString = searchString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            let regex = new RegExp(searchString, 'g');
+            response.serviceList = response.serviceList.filter(product => {
+              return regex.test(product.product.productBlueprint.name);
+            });
+          }
+
+          ([response.serviceList, response.pagination] = this._paginateOfflineData(response.serviceList));
+
+          this.pagination = response.pagination;
+          cbfn(response);
+        }, 100);
+      }
+
+      _fetchOutletServiceList(cbfn) {
+        if (this.isInOfflineMode) {
+          this._fetchOutletServiceListOffline(cbfn);
+        } else {
+          this._fetchOutletServiceListOnline(cbfn);
+        }
+      }
+
+      _processOutletServices(cbfn) {
+        this._fetchOutletServiceList(({ serviceList }) => {
+
+          this.serviceList = serviceList.map(service => {
+            let { salePrice } = service;
+            let { name, defaultVat, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration } = service.serviceBlueprint;
+            service.isSelected = false;
+            let vatValue = defaultVat;
+            let assignedEmploymentId = null;
+            Object.assign(service, { name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration });
+            return service;
+          });
+
+          let previousSavedSelectedServiceList = this.app.getFromSession('pos-selected-service-list') || [];
+
+          if (this.selectedServiceList.length > 0 || previousSavedSelectedServiceList.length > 0) {
+            if (previousSavedSelectedServiceList.length > 0 && this.selectedServiceList.length === 0) {
+              this.selectedServiceCount = previousSavedSelectedServiceList.length;
+              this.selectedServiceList = previousSavedSelectedServiceList;
+            }
+
+            this.selectedServiceList.forEach(previousService => {
+              let service = this.serviceList.find(service => service.id === previousService.id);
+              if (service) {
+                service.isSelected = true;
+              }
+            })
+          }
+
+          cbfn();
+        });
+      }
+
+      _addServiceToSelectedServiceList({ service }) {
+        let { id, name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration } = service;
+        let minSalePrice = salePrice;
+        this.push('selectedServiceList', { id, name, minSalePrice, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration });
+        this.selectedServiceCount = this.selectedServiceList.length;
+      }
+
+      _removeServiceFromSelectedServiceList({ service }) {
+        this.selectedServiceList.forEach((selectedProduct, index) => {
+          if (selectedProduct.id === service.id) {
+            this.splice('selectedServiceList', index, 1);
+          }
+        });
+
+        this.serviceList.forEach((serviceInList, index) => {
+          if (serviceInList.id === service.id) {
+            this.set(`serviceList.${index}.isSelected`, false);
+          }
+        });
+
+        this.selectedServiceCount = this.selectedServiceList.length;
+      }
+
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processOutletServices(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processOutletServices(() => this.isReady = true);
+      }
+
+      searchFieldKeypressed(e) {
+        if (e.which === 13) this.searchTapped(null);
+      }
+
+      searchCancelTapped(e = null) {
+        this.searchString = '';
+      }
+
+      searchTapped(e = null) {
+        this.set('paginate.offset', 0);
+        this._processOutletServices(() => this.isReady = true);
+      }
+
+      selectTapped(e) {
+        e.model.set('service.isSelected', true);
+        let { service } = e.model;
+        this._addServiceToSelectedServiceList({ service });
+      }
+
+      deselectTapped(e) {
+        let { service } = e.model;
+        this._removeServiceFromSelectedServiceList({ service });
+      }
+
+      selectServicesTapped(e = null) {
+        this.app.storeInSession('pos-selected-service-list', this.selectedServiceList);
+        this.selectedServiceList = [];
+        this.selectedServiceCount = 0;
+        this.backButtonOnTopBarPressed();
+      }
+
+      deselectAllTapped(e) {
+        this.serviceList.forEach((service, index) => this.set(`serviceList.${index}.isSelected`, false));
+        this.selectedServiceList = [];
+        this.selectedServiceCount = 0;
+        this.app.storeInSession('pos-selected-service-list', this.selectedServiceList);
+      }
+
+
+
       // region: customer =================================
 
       _customerVariablesChanged() {
@@ -1615,6 +1873,7 @@
 
         this.app.extractFromSession('pos-assigned-assisted-by-employee');
 
+        this.productSearchString = '';
         this.resetProperties('payment', 'productList', 'serviceList', 'customer', 'isAnonymousSale', 'salesType', 'editCustomerForm');
 
         if (refreshCurrentPage) {
