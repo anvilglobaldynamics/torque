@@ -751,7 +751,7 @@
     "assignEmployee": "Assign",
     "noDiscountApplicable": "Not Applicable",
     "assistedEmployee": "Assisted by",
-    "selectProductsFromInventoryContainer": "Which Outlet/Warehouse you want to sell from?",
+    "selectProductsFromInventoryContainer": "Which Outlet/Warehouse do you want to sell from?",
     "currentOutlet": "Current Outlet",
     "saleNotValid": "Sale not valid",
     "offlineWarehouseSellNotAllowed": "Can not sell products from warehouse when in offline mode."
