@@ -233,130 +233,6 @@
         </div>
         <!-- selection column - end -->
 
-        <!-- services column - start -->
-        <div class$="column flex [[$getColumnClasses('services', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
-
-          <!-- service searchbar - start -->
-          <div class="card vertical layout">
-            <div class="horizontal layout center">
-              <paper-input id="service-search-field" class="flex" value="{{serviceSearchString}}" always-float-label label="[[verses.posSelectService.searchForServiceInput]]" on-keydown="productSearchFieldKeypressed"></paper-input>
-              <template is="dom-if" if="[[!matchingServiceList.length]]">
-                <paper-icon-button icon="search" on-tap="serviceSearchTapped"></paper-icon-button>
-              </template>
-              <template is="dom-if" if="[[matchingServiceList.length]]">
-                <paper-icon-button icon="clear" on-tap="serviceSearchClearTapped"></paper-icon-button>
-              </template>
-            </div>
-          </div>
-          <!-- service searchbar - end -->
-
-          <!-- service search results - start -->
-          <template is="dom-if" if="{{matchingServiceList.length}}">
-
-            <div class="card vertical layout">
-
-              <div class="list">
-                <template is="dom-repeat" items="[[matchingServiceList]]" as="service">
-
-                  <div class="horizontal layout item center">
-                    <div class="flex" style="min-width: 128px;">
-                      <div class="inventory-product-important-detail-container">[[service.name]]</div>
-                      <div class="inventory-product-price-container">[[verses.posSelectService.sale]]: [[service.salePrice]][[app.settings.monetaryUnit]]</div>
-                    </div>
-
-                    <paper-icon-button class=" primary " icon="add-circle" on-tap="selectMatchingServiceTapped"></paper-icon-button>
-                  </div>
-
-                </template>
-              </div>
-
-              <div class="pagination">
-                [[verses.general.loaded]]
-                <span class="limit">[[servicePagination.limit]]</span>
-                [[verses.general.itemsOutOf]]
-                <span class="total-count">[[servicePagination.totalCount]]</span> [[verses.general.startingFrom]]
-                <span class="offset">#[[$inc(servicePagination.offset)]]</span>.
-              </div>
-
-              <div class="horizontal layout center">
-                <template is="dom-if" if="[[$hasPreviousPagination(servicePaginate.offset)]]">
-                  <paper-button raised class="flex neutral" on-tap="showPreviousServicesTapped">[[verses.general.showPrevious]]</paper-button>
-                </template>
-
-                <template is="dom-if" if="[[$hasMorePagination(servicePagination.totalCount, servicePaginate.offset, servicePaginate.limit)]]">
-                  <paper-button raised class="flex neutral" on-tap="showMoreServicesTapped">[[verses.general.showMore]]</paper-button>
-                </template>
-              </div>
-
-            </div>
-          </template>
-          <!-- service search results - end -->
-
-          <!-- selected service list - start -->
-          <template is="dom-if" if="[[serviceList.length]]">
-
-            <div class="card vertical layout">
-
-              <div class="horizontal layout center">
-                <div class="flex" style="font-weight: bold; text-decoration: underline;">Selected Services:</div>
-                <template is="dom-if" if="[[!isMultiColumn]]">
-                  <paper-button raised class="primary" on-tap="serviceSelectionDoneTapped" style="margin-bottom: 8px;">
-                    <iron-icon icon="done-all"></iron-icon>&nbsp;Continue
-                  </paper-button>
-                </template>
-              </div>
-
-              <div class="list">
-                <template is="dom-repeat" items="[[serviceList]]" as="service" index-as="serviceIndex">
-                  <div class="horizontal layout item center">
-                    <div class="vertical layout flex">
-
-                      <div class="horizontal layout center">
-                        <div class="service-info">
-                          <span class="service-title">[[service.name]]</span>
-                        </div>
-
-                        <template is="dom-if" if="{{service.isEmployeeAssignable}}">
-
-                          <template is="dom-if" if="{{service.assignedEmploymentId}}">
-                            <div class="employee-icon-container-active" on-tap="assignEmployeeTapped">
-                              <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignedEmployee]]
-                            </div>
-                          </template>
-
-                          <template is="dom-if" if="{{!service.assignedEmploymentId}}">
-                            <div class="employee-icon-container" on-tap="assignEmployeeTapped">
-                              <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignEmployee]]
-                            </div>
-                          </template>
-
-                        </template>
-                      </div>
-
-                      <template is="dom-if" if="{{service.isCustomerRequired}}">
-                        <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
-                      </template>
-
-                      <div class="horizontal layout center">
-                        <div>[[service.salePrice]]</div>
-                        <div class="description">[[app.settings.monetaryUnit]]</div>
-                        <span class="service-vat-detail">(+ [[verses.pos.vat]]: {{service.vatValue}}%)</span>
-                        <paper-icon-button on-tap="discardServiceTapped" icon="remove-circle"></paper-icon-button>
-                      </div>
-
-                    </div>
-                  </div>
-                </template>
-              </div>
-
-            </div>
-
-          </template>
-          <!-- selected service list - end -->
-
-        </div>
-        <!-- services column - end -->
-
         <!-- products column - start -->
         <div class$="column flex [[$getColumnClasses('products', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
 
@@ -480,6 +356,130 @@
 
         </div>
         <!-- products column - end -->
+
+        <!-- services column - start -->
+        <div class$="column flex [[$getColumnClasses('services', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
+
+          <!-- service searchbar - start -->
+          <div class="card vertical layout">
+            <div class="horizontal layout center">
+              <paper-input id="service-search-field" class="flex" value="{{serviceSearchString}}" always-float-label label="[[verses.posSelectService.searchForServiceInput]]" on-keydown="productSearchFieldKeypressed"></paper-input>
+              <template is="dom-if" if="[[!matchingServiceList.length]]">
+                <paper-icon-button icon="search" on-tap="serviceSearchTapped"></paper-icon-button>
+              </template>
+              <template is="dom-if" if="[[matchingServiceList.length]]">
+                <paper-icon-button icon="clear" on-tap="serviceSearchClearTapped"></paper-icon-button>
+              </template>
+            </div>
+          </div>
+          <!-- service searchbar - end -->
+
+          <!-- service search results - start -->
+          <template is="dom-if" if="{{matchingServiceList.length}}">
+
+            <div class="card vertical layout">
+
+              <div class="list">
+                <template is="dom-repeat" items="[[matchingServiceList]]" as="service">
+
+                  <div class="horizontal layout item center">
+                    <div class="flex" style="min-width: 128px;">
+                      <div class="inventory-product-important-detail-container">[[service.name]]</div>
+                      <div class="inventory-product-price-container">[[verses.posSelectService.sale]]: [[service.salePrice]][[app.settings.monetaryUnit]]</div>
+                    </div>
+
+                    <paper-icon-button class=" primary " icon="add-circle" on-tap="selectMatchingServiceTapped"></paper-icon-button>
+                  </div>
+
+                </template>
+              </div>
+
+              <div class="pagination">
+                [[verses.general.loaded]]
+                <span class="limit">[[servicePagination.limit]]</span>
+                [[verses.general.itemsOutOf]]
+                <span class="total-count">[[servicePagination.totalCount]]</span> [[verses.general.startingFrom]]
+                <span class="offset">#[[$inc(servicePagination.offset)]]</span>.
+              </div>
+
+              <div class="horizontal layout center">
+                <template is="dom-if" if="[[$hasPreviousPagination(servicePaginate.offset)]]">
+                  <paper-button raised class="flex neutral" on-tap="showPreviousServicesTapped">[[verses.general.showPrevious]]</paper-button>
+                </template>
+
+                <template is="dom-if" if="[[$hasMorePagination(servicePagination.totalCount, servicePaginate.offset, servicePaginate.limit)]]">
+                  <paper-button raised class="flex neutral" on-tap="showMoreServicesTapped">[[verses.general.showMore]]</paper-button>
+                </template>
+              </div>
+
+            </div>
+          </template>
+          <!-- service search results - end -->
+
+          <!-- selected service list - start -->
+          <template is="dom-if" if="[[serviceList.length]]">
+
+            <div class="card vertical layout">
+
+              <div class="horizontal layout center">
+                <div class="flex" style="font-weight: bold; text-decoration: underline;">Selected Services:</div>
+                <template is="dom-if" if="[[!isMultiColumn]]">
+                  <paper-button raised class="primary" on-tap="serviceSelectionDoneTapped" style="margin-bottom: 8px;">
+                    <iron-icon icon="done-all"></iron-icon>&nbsp;Continue
+                  </paper-button>
+                </template>
+              </div>
+
+              <div class="list">
+                <template is="dom-repeat" items="[[serviceList]]" as="service" index-as="serviceIndex">
+                  <div class="horizontal layout item center">
+                    <div class="vertical layout flex">
+
+                      <div class="horizontal layout center">
+                        <div class="service-info">
+                          <span class="service-title">[[service.name]]</span>
+                        </div>
+
+                        <template is="dom-if" if="{{service.isEmployeeAssignable}}">
+
+                          <template is="dom-if" if="{{service.assignedEmploymentId}}">
+                            <div class="employee-icon-container-active" on-tap="assignEmployeeTapped">
+                              <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignedEmployee]]
+                            </div>
+                          </template>
+
+                          <template is="dom-if" if="{{!service.assignedEmploymentId}}">
+                            <div class="employee-icon-container" on-tap="assignEmployeeTapped">
+                              <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignEmployee]]
+                            </div>
+                          </template>
+
+                        </template>
+                      </div>
+
+                      <template is="dom-if" if="{{service.isCustomerRequired}}">
+                        <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
+                      </template>
+
+                      <div class="horizontal layout center">
+                        <div>[[service.salePrice]]</div>
+                        <div class="description">[[app.settings.monetaryUnit]]</div>
+                        <span class="service-vat-detail">(+ [[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                        <paper-icon-button on-tap="discardServiceTapped" icon="remove-circle"></paper-icon-button>
+                      </div>
+
+                    </div>
+                  </div>
+                </template>
+              </div>
+
+            </div>
+
+          </template>
+          <!-- selected service list - end -->
+
+        </div>
+        <!-- services column - end -->
 
         <!-- customer column - start -->
         <div class$="customer-column column flex [[$getColumnClasses('customer', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]" on-tap="customerColumnTapped">
@@ -1095,6 +1095,13 @@
         this.app.storeInSession('pos-sales-type', this.salesType);
       }
 
+      _scrollToNavBar() {
+        try {
+          this.elem('.single-column-tabs-row').scrollIntoView();
+          this.elem('.multi-column-header-row').scrollIntoView();
+        } catch (ex) { }
+      }
+
       // region: products =================================
 
       // sub-region: warehouse
@@ -1350,9 +1357,7 @@
       productSelectionDoneTapped(e = null) {
         this._resetProductSearch();
         this.selectedTabName = 'customer';
-        try {
-          this.elem('.single-column-tabs-row').scrollIntoView();
-        } catch (ex) { }
+        this._scrollToNavBar();
         this._calculatePayment({ resetRounding: true });
       }
 
@@ -1505,9 +1510,7 @@
       serviceSelectionDoneTapped(e = null) {
         this._resetServiceSearch();
         this.selectedTabName = 'customer';
-        try {
-          this.elem('.single-column-tabs-row').scrollIntoView();
-        } catch (ex) { }
+        this._scrollToNavBar();
         this._calculatePayment({ resetRounding: true });
       }
 
@@ -1575,21 +1578,15 @@
             this.customer = customer;
             this.isAnonymousSale = false;
             this._customerVariablesChanged();
+            this.elem('elem-customer-selector').cancelTapped();
           });
         });
       }
 
       skipCustomerSelectionTapped(e = null) {
-        this.app.showModalConfirmation(
-          "Are you sure?",
-          "Skipping customer selection will make it harder to identify this sale at a later time. Please\
-          Only skip customer selection if you understand the risk.",
-          (answer) => {
-            if (!answer) return;
-            this.isAnonymousSale = true;
-            this._customerVariablesChanged();
-          }
-        );
+        this.isAnonymousSale = true;
+        this._customerVariablesChanged();
+        this.elem('elem-customer-selector').cancelTapped();
       }
 
       $shouldShowCustomerSelectionOptions(customer, isAnonymousSale) {
@@ -1601,6 +1598,7 @@
       customerSelectionDoneTapped(e) {
         this.selectedTabName = 'payment';
         this._customerVariablesChanged();
+        this._scrollToNavBar();
       }
 
       // region: payment =================================
