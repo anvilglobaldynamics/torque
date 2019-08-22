@@ -176,7 +176,15 @@
       <!-- header - Multi Column - Start -->
       <template is="dom-if" if="[[isMultiColumn]]">
         <div class="horizontal layout multi-column-header-row">
-          <div class="flex multi-column-header">Products</div>
+          <template is="dom-if" if="[[$equals('undecided', salesType)]]">
+            <div class="flex multi-column-header">Selection</div>
+          </template>
+          <template is="dom-if" if="[[$equals('services', salesType)]]">
+            <div class="flex multi-column-header">Services</div>
+          </template>
+          <template is="dom-if" if="[[$equals('products', salesType)]]">
+            <div class="flex multi-column-header">Products</div>
+          </template>
           <div class="flex multi-column-header">Customer</div>
           <div class="flex multi-column-header">Payment</div>
         </div>
@@ -197,6 +205,29 @@
 
       <!-- columns - Start -->
       <div class="horizontal layout">
+
+        <!-- selection column - start -->
+        <div class$="column flex [[$getColumnClasses('selection', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
+
+          <div class="card vertical layout">
+            <paper-button raised class="primary" on-tap="salesTypeIsProductsTapped" style="margin-bottom: 8px;">
+              Product Sales
+            </paper-button>
+            <paper-button raised class="primary" on-tap="salesTypeIsServicesTapped" style="margin-bottom: 8px;">
+              Service Sales
+            </paper-button>
+
+          </div>
+        </div>
+        <!-- selection column - end -->
+
+        <!-- services column - start -->
+        <div class$="column flex [[$getColumnClasses('services', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
+
+          services
+
+        </div>
+        <!-- services column - end -->
 
         <!-- products column - start -->
         <div class$="column flex [[$getColumnClasses('products', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
@@ -277,51 +308,49 @@
           <!-- product search results - end -->
 
           <!-- selected product list - start -->
-          <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
-            <template is="dom-if" if="[[productList.length]]">
+          <template is="dom-if" if="[[productList.length]]">
 
-              <div class="card vertical layout">
-                <div class="horizontal layout center">
+            <div class="card vertical layout">
+              <div class="horizontal layout center">
 
-                  <div class="flex" style="font-weight: bold; text-decoration: underline;">Selected Products:</div>
-                  <template is="dom-if" if="[[!isMultiColumn]]">
-                    <!-- <paper-icon-button on-tap="productSelectionDoneTapped" icon="done-all"></paper-icon-button> Continue -->
-                    <paper-button raised class="primary" on-tap="productSelectionDoneTapped" style="margin-bottom: 8px;">
-                      <iron-icon icon="done-all"></iron-icon>&nbsp;Continue
-                    </paper-button>
-                  </template>
+                <div class="flex" style="font-weight: bold; text-decoration: underline;">Selected Products:</div>
+                <template is="dom-if" if="[[!isMultiColumn]]">
+                  <!-- <paper-icon-button on-tap="productSelectionDoneTapped" icon="done-all"></paper-icon-button> Continue -->
+                  <paper-button raised class="primary" on-tap="productSelectionDoneTapped" style="margin-bottom: 8px;">
+                    <iron-icon icon="done-all"></iron-icon>&nbsp;Continue
+                  </paper-button>
+                </template>
 
-                </div>
-                <div class="list">
-
-                  <template is="dom-repeat" items="[[productList]]" as="product" index-as="productIndex">
-                    <div class="horizontal layout item center">
-                      <div class="vertical layout flex">
-                        <div>
-                          <span class="product-title">[[product.name]]</span>
-                        </div>
-                        <div class="horizontal layout center">
-
-                          <paper-input no-label-float class="small-input m-horizontal-4 product-count-input" value="{{product.selectedCount}}" on-change="productSelectedCountInputChanged" type="number" min="1" max="99999999999" label="[[verses.posSelectProduct.count]]">
-                            <div slot="suffix">&nbsp;[[product.unit]]</div>
-                          </paper-input>
-
-                          <div>&nbsp;@&nbsp;[[product.salePrice]]</div>
-                          <div class="description">[[app.settings.monetaryUnit]]</div>
-                          <paper-icon-button on-tap="editProductSalePriceTapped" icon="create" style="padding: 0; height: 16px; max-width: 16px; min-width: 16px;"></paper-icon-button>
-                          <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
-                        </div>
-                      </div>
-                      <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
-                        <paper-icon-button on-tap="discardProductTapped" icon="remove-circle"></paper-icon-button>
-                      </template>
-                    </div>
-                  </template>
-
-                </div>
               </div>
+              <div class="list">
 
-            </template>
+                <template is="dom-repeat" items="[[productList]]" as="product" index-as="productIndex">
+                  <div class="horizontal layout item center">
+                    <div class="vertical layout flex">
+                      <div>
+                        <span class="product-title">[[product.name]]</span>
+                      </div>
+                      <div class="horizontal layout center">
+
+                        <paper-input no-label-float class="small-input m-horizontal-4 product-count-input" value="{{product.selectedCount}}" on-change="productSelectedCountInputChanged" type="number" min="1" max="99999999999" label="[[verses.posSelectProduct.count]]">
+                          <div slot="suffix">&nbsp;[[product.unit]]</div>
+                        </paper-input>
+
+                        <div>&nbsp;@&nbsp;[[product.salePrice]]</div>
+                        <div class="description">[[app.settings.monetaryUnit]]</div>
+                        <paper-icon-button on-tap="editProductSalePriceTapped" icon="create" style="padding: 0; height: 16px; max-width: 16px; min-width: 16px;"></paper-icon-button>
+                        <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
+                      </div>
+                    </div>
+                    <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
+                      <paper-icon-button on-tap="discardProductTapped" icon="remove-circle"></paper-icon-button>
+                    </template>
+                  </div>
+                </template>
+
+              </div>
+            </div>
+
           </template>
           <!-- selected product list - end -->
 
@@ -622,7 +651,11 @@
           },
           selectedTabName: {
             type: String,
-            value: 'products'
+            value: 'selection'
+          },
+          salesType: {
+            type: String,
+            value: 'undecided' // can be - 'undecided', 'products', 'services'
           },
           // Products =============
           warehouseList: {
@@ -767,6 +800,25 @@
         this._detectMultiColumnSupport();
         window.addEventListener('resize', () => this._detectMultiColumnSupport());
 
+        let salesType = this.app.getFromSession('pos-sales-type') || 'undecided';
+        if (salesType === 'undecided') {
+          if (this.hasModule('MOD_PRODUCT') && this.hasModule('MOD_SERVICE')) {
+            'pass'
+          } else if (this.hasModule('MOD_PRODUCT')) {
+            salesType = 'products';
+          } else if (this.hasModule('MOD_SERVICE')) {
+            salesType = 'services';
+          }
+        }
+        this.salesType = salesType;
+
+        if (salesType === 'undecided') {
+          this.selectedTabName = 'selection';
+        } else {
+          this.selectedTabName = salesType;
+        }
+        console.log('selectedTabName', this.selectedTabName);
+
         // products
         if (!this.isInOfflineMode) {
           this._fetchWarehouseList((warehouseList) => {
@@ -785,10 +837,7 @@
         // customer
         this.delay(0, () => {
           this.self = this;
-          let customer = this.app.getFromSession('last-selected-customer');
-          if (customer) {
-            this.customer = customer;
-          }
+          this.customer = this.app.getFromSession('last-selected-customer') || null;
           this.isAnonymousSale = this.app.getFromSession('last-selected-customer-is-anonymous') || false;
           // console.log(this.isAnonymousSale);
         });
@@ -829,12 +878,10 @@
       }
 
       $getTabSelectedClass(tabName, selectedTabName) {
+        console.log('getTabSelectedClass', { tabName, selectedTabName })
         let classNames = '';
         if (tabName === selectedTabName) {
           classNames += 'selected ';
-        }
-        if (tabName === 'payment') {
-          classNames += 'disabled';
         }
         return classNames;
       }
@@ -875,7 +922,13 @@
         }
 
         if (isMultiColumn) {
-          // todo
+          if (tabName !== 'payment' && tabName !== 'customer') {
+            if (tabName === selectedTabName) {
+              classNames += ''
+            } else {
+              classNames += 'hidden ';
+            }
+          }
         } else {
           if (tabName === selectedTabName) {
             classNames += ''
@@ -884,6 +937,18 @@
           }
         }
         return classNames;
+      }
+
+      salesTypeIsProductsTapped(e = null) {
+        this.salesType = 'products';
+        this.selectedTabName = 'products';
+        this.app.storeInSession('pos-sales-type', this.salesType);
+      }
+
+      salesTypeIsServicesTapped(e = null) {
+        this.salesType = 'services';
+        this.selectedTabName = 'services';
+        this.app.storeInSession('pos-sales-type', this.salesType);
       }
 
       // region: products =================================
@@ -1536,6 +1601,8 @@
         this.selectedWarehouse = '--current-outlet';
         this.productsSelectedFromWarehouseId = null;
 
+        this.app.extractFromSession('pos-sales-type');
+
         this.app.extractFromSession('pos-selected-warehouse');
         this.app.extractFromSession('product-selected-from-warehouse-id');
         this.app.extractFromSession('last-selected-customer');
@@ -1548,7 +1615,7 @@
 
         this.app.extractFromSession('pos-assigned-assisted-by-employee');
 
-        this.resetProperties('payment', 'productList', 'serviceList', 'customer', 'isAnonymousSale');
+        this.resetProperties('payment', 'productList', 'serviceList', 'customer', 'isAnonymousSale', 'salesType', 'editCustomerForm');
 
         if (refreshCurrentPage) {
           this.app.refreshCurrentPage();
