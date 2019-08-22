@@ -236,17 +236,19 @@
         <!-- services column - start -->
         <div class$="column flex [[$getColumnClasses('services', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
 
-          <!-- service search area - start -->
+          <!-- service searchbar - start -->
           <div class="card vertical layout">
-            <div class="p-16 horizontal layout center">
-              <paper-input class="flex" value="{{serviceSearchString}}" required minlength="0" error-message="[[verses.posSelectService.searchForServiceInputError]]" label="[[verses.posSelectService.searchForServiceInput]]" on-keypress="searchFieldKeypressed"></paper-input>
-              <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
-              <paper-button raised class="primary" on-tap="searchTapped">
-                [[verses.general.search]]
-              </paper-button>
+            <div class="horizontal layout center">
+              <paper-input id="service-search-field" class="flex" value="{{serviceSearchString}}" always-float-label label="[[verses.posSelectService.searchForServiceInput]]" on-keydown="productSearchFieldKeypressed"></paper-input>
+              <template is="dom-if" if="[[!matchingServiceList.length]]">
+                <paper-icon-button icon="search" on-tap="serviceSearchTapped"></paper-icon-button>
+              </template>
+              <template is="dom-if" if="[[matchingServiceList.length]]">
+                <paper-icon-button icon="clear" on-tap="serviceSearchClearTapped"></paper-icon-button>
+              </template>
             </div>
           </div>
-          <!-- service search area - end -->
+          <!-- service searchbar - end -->
 
           <!-- service search results - start -->
           <template is="dom-if" if="{{matchingServiceList.length}}">
@@ -811,6 +813,25 @@
           serviceList: {
             type: Array,
             value: () => []
+          },
+          matchingServiceList: {
+            type: Array,
+            value: () => []
+          },
+          servicePaginate: {
+            type: Object,
+            value: () => {
+              return {
+                offset: 0,
+                limit: 3
+              }
+            }
+          },
+          servicePagination: {
+            type: Object,
+            value: () => {
+              return {}
+            }
           },
           // Customer =============
           isAnonymousSale: {
@@ -1874,6 +1895,7 @@
         this.app.extractFromSession('pos-assigned-assisted-by-employee');
 
         this.productSearchString = '';
+        this.serviceSearchString = '';
         this.resetProperties('payment', 'productList', 'serviceList', 'customer', 'isAnonymousSale', 'salesType', 'editCustomerForm');
 
         if (refreshCurrentPage) {
