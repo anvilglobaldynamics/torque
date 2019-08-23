@@ -238,35 +238,46 @@
 
           <!-- warehouse selection - start -->
           <template is="dom-if" if="[[hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')]]">
-            <template is="dom-if" if="[[$shouldShowWarehouseSelector(warehouseList.length, productList.length)]]">
-              <div class="card">
-                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.selectProductsFromInventoryContainer]]" class="mr-4">
-                  <paper-listbox slot="dropdown-content" selected="{{selectedWarehouse}}" attr-for-selected="name">
-                    <paper-item name="--current-outlet">[[verses.pos.currentOutlet]]</paper-item>
-                    <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
-                      <paper-item name="[[warehouse.id]]">
-                        <div class="name">[[warehouse.name]]</div>
-                      </paper-item>
-                    </template>
-                  </paper-listbox>
-                </paper-dropdown-menu>
+            <template is="dom-if" if="[[!productSourceSelectionComplete]]">
+              <template is="dom-if" if="[[$shouldShowWarehouseSelector(warehouseList.length, productList.length)]]">
+                <div class="card horizontal layout center">
+                  <paper-dropdown-menu class="full-width-paper-dropdown flex" label="[[verses.pos.selectProductsFromInventoryContainer]]" class="mr-4">
+                    <paper-listbox slot="dropdown-content" selected="{{selectedWarehouse}}" attr-for-selected="name">
+                      <paper-item name="--current-outlet">[[verses.pos.currentOutlet]]</paper-item>
+                      <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
+                        <paper-item name="[[warehouse.id]]">
+                          <div class="name">[[warehouse.name]]</div>
+                        </paper-item>
+                      </template>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+                  <paper-button class="primary" raised on-tap="selectedWarehouseChanged">Select</paper-button>
+                </div>
+              </template>
+            </template>
+            <template is="dom-if" if="[[productSourceSelectionComplete]]">
+              <div class="card horizontal layout center">
+                <div class="flex">Selling products from [[productSourceToDisplay]]</div>
+                <paper-button class="neutral" raised on-tap="changeProductSourceTapped">Change</paper-button>
               </div>
             </template>
           </template>
           <!-- warehouse selection - end -->
 
           <!-- product searchbar - start -->
-          <div class="card vertical layout">
-            <div class="horizontal layout center">
-              <paper-input id="product-search-field" class="flex" value="{{productSearchString}}" always-float-label label="Name/Identifirer Code of product" on-keydown="productSearchFieldKeypressed"></paper-input>
-              <template is="dom-if" if="[[!matchingProductList.length]]">
-                <paper-icon-button icon="search" on-tap="productSearchTapped"></paper-icon-button>
-              </template>
-              <template is="dom-if" if="[[matchingProductList.length]]">
-                <paper-icon-button icon="clear" on-tap="productSearchClearTapped"></paper-icon-button>
-              </template>
+          <template is="dom-if" if="[[productSourceSelectionComplete]]">
+            <div class="card vertical layout">
+              <div class="horizontal layout center">
+                <paper-input id="product-search-field" class="flex" value="{{productSearchString}}" always-float-label label="Name/Identifirer Code of product" on-keydown="productSearchFieldKeypressed"></paper-input>
+                <template is="dom-if" if="[[!matchingProductList.length]]">
+                  <paper-icon-button icon="search" on-tap="productSearchTapped"></paper-icon-button>
+                </template>
+                <template is="dom-if" if="[[matchingProductList.length]]">
+                  <paper-icon-button icon="clear" on-tap="productSearchClearTapped"></paper-icon-button>
+                </template>
+              </div>
             </div>
-          </div>
+          </template>
           <!-- product searchbar - end -->
 
           <!-- product search results - start -->
@@ -789,7 +800,7 @@
           selectedWarehouse: {
             type: String,
             value: '--current-outlet',
-            observer: 'selectedWarehouseChanged'
+            // observer: 'selectedWarehouseChanged'
           },
           productsSelectedFromWarehouseId: {
             type: Number,
@@ -964,14 +975,21 @@
         // console.log('selectedTabName', this.selectedTabName);
 
         // products
-        if (!this.isInOfflineMode) {
-          this._fetchWarehouseList((warehouseList) => {
-            warehouseList.reverse();
-            this.warehouseList = warehouseList;
-          });
+        if (this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')) {
+          if (!this.isInOfflineMode) {
+            this.productSourceSelectionComplete = false;
+            this._fetchWarehouseList((warehouseList) => {
+              warehouseList.reverse();
+              this.warehouseList = warehouseList;
+              this.selectedWarehouseChanged();
+            });
+          }
+        } else {
+          this.productSourceSelectionComplete = true;
         }
-        this.selectedWarehouse = this.app.getFromSession('pos-selected-warehouse') || '--current-outlet';
-        this.productsSelectedFromWarehouseId = this.app.getFromSession('product-selected-from-warehouse-id') || null;
+        this.productSourceToDisplay = this.app.verses.pos.currentOutlet;
+        this.selectedWarehouse = this.app.getFromSession('pos-selected-warehouse') || '--current-outlet'; // for dropdown
+        this.productsSelectedFromWarehouseId = this.app.getFromSession('product-selected-from-warehouse-id') || null; // for calculation
         this.productList = this.app.getFromSession('pos-selected-product-list') || [];
         this.matchingProductList = [];
 
@@ -1022,7 +1040,7 @@
       }
 
       $getTabSelectedClass(tabName, selectedTabName) {
-        console.log('getTabSelectedClass', { tabName, selectedTabName })
+        // console.log('getTabSelectedClass', { tabName, selectedTabName })
         let classNames = '';
         if (tabName === selectedTabName) {
           classNames += 'selected ';
@@ -1133,6 +1151,12 @@
         });
       }
 
+      changeProductSourceTapped(e = null) {
+        this.productList = [];
+        this.productListChanged();
+        this.productSourceSelectionComplete = false;
+      }
+
       // sub-region: getting default inventory
 
       _processGetOutletDefaultInventoryIdOnline(cbfn) {
@@ -1155,6 +1179,7 @@
         this.app.callGetWarehouseApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
+          this.productSourceToDisplay = response.warehouse.name;
           return cbfn(response);
         });
       }
@@ -1162,6 +1187,7 @@
       _processGetOutletDefaultInventoryId(cbfn) {
         if (this.selectedWarehouse === '--current-outlet') {
           this._setProductSelectedFromWarehouseId(null);
+          this.productSourceToDisplay = this.app.verses.pos.currentOutlet;
           if (this.isInOfflineMode) {
             this._processGetOutletDefaultInventoryIdOffline(cbfn);
           } else {
@@ -1183,6 +1209,7 @@
         this.defaultInventoryId = null;
         this._processGetOutletDefaultInventoryId(defaultInventoryId => {
           this.defaultInventoryId = defaultInventoryId;
+          this.productSourceSelectionComplete = true;
           cbfn();
         });
       }
