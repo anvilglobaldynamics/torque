@@ -122,7 +122,7 @@
       .column {
         min-width: 320px;
         min-height: 70vh;
-        background: #e1f5fe;
+        /* background: #e1f5fe; */
         position: relative;
         margin-left: 2px;
         margin-right: 2px;
@@ -164,6 +164,49 @@
 
       .product-count-input {
         --paper-input-container-color: var(--app-primary-color);
+      }
+
+      .product-search-bar {
+        background: var(--app-button-alternative);
+      }
+
+      .service-search-bar {
+        background: var(--app-button-alternative);
+      }
+
+      .scanning-active-message {
+        font-size: 20px;
+        text-align: center;
+        color: blue;
+      }
+
+      .positive {
+        color: var(--app-button-primary);
+      }
+
+      .negative {
+        color: var(--app-button-label-danger);
+      }
+
+      .selected-products-or-services-card {
+        background: var(--app-primary-color-light);
+      }
+
+      .selected-products-or-services-list {
+        background: white;
+        padding: 0px 6px 0 6px;
+      }
+
+      .selected-products-or-services-list .item {
+        padding-top: 8px;
+      }
+
+      .pos-card-heading {
+        margin-bottom: 8px;
+      }
+
+      .pos-card-heading-label {
+        font-size: 20px;
       }
     </style>
 
@@ -315,9 +358,9 @@
             </template>
             <template is="dom-if" if="[[productSourceSelectionComplete]]">
               <div class="card horizontal layout center">
-                <div class="flex">Selling products from [[productSourceToDisplay]]</div>
+                <div class="flex">Selling products from <b>[[productSourceToDisplay]]</b></div>
                 <template is="dom-if" if="[[!isInOfflineMode]]">
-                  <paper-button class="neutral" raised on-tap="changeProductSourceTapped">Change</paper-button>
+                  <paper-button class="secondary" raised on-tap="changeProductSourceTapped">Change</paper-button>
                 </template>
               </div>
             </template>
@@ -326,9 +369,12 @@
 
           <!-- product searchbar - start -->
           <template is="dom-if" if="[[productSourceSelectionComplete]]">
-            <div class="card vertical layout">
+            <div class="card vertical layout product-search-bar">
+              <template is="dom-if" if="[[isScanningActive]]">
+                <div class="scanning-active-message">SCANNING ACTIVE</div>
+              </template>
               <div class="horizontal layout center">
-                <paper-input id="product-search-field" class="flex" value="{{productSearchString}}" always-float-label label="Name/Identifirer Code of product" on-keydown="productSearchFieldKeypressed"></paper-input>
+                <paper-input id="product-search-field" class="flex" value="{{productSearchString}}" always-float-label label="Name/Identifirer Code of product" on-keydown="productSearchFieldKeypressed" on-focus="productSearchFieldFocused" on-blur="productSearchFieldBlurred"></paper-input>
                 <template is="dom-if" if="[[!matchingProductList.length]]">
                   <paper-icon-button icon="search" on-tap="productSearchTapped"></paper-icon-button>
                 </template>
@@ -354,7 +400,7 @@
                     </div>
 
                     <template is="dom-if" if="[[product.count]]">
-                      <paper-icon-button class=" primary " icon="add-circle" on-tap="selectMatchingProductTapped"></paper-icon-button>
+                      <paper-icon-button class="positive" icon="add-circle" on-tap="selectMatchingProductTapped"></paper-icon-button>
                     </template>
                   </div>
                 </template>
@@ -385,18 +431,18 @@
           <!-- selected product list - start -->
           <template is="dom-if" if="[[productList.length]]">
 
-            <div class="card vertical layout">
+            <div class="card vertical layout selected-products-or-services-card">
 
-              <div class="horizontal layout center">
-                <div class="flex" style="font-weight: bold; text-decoration: underline;">Selected Products:</div>
+              <div class="horizontal layout center pos-card-heading">
+                <div class="flex pos-card-heading-label">Selected Products</div>
                 <template is="dom-if" if="[[!isMultiColumn]]">
                   <paper-button raised class="primary" on-tap="productSelectionDoneTapped" style="margin-bottom: 8px;">
-                    <iron-icon icon="done-all"></iron-icon>&nbsp;Continue
+                    Next
                   </paper-button>
                 </template>
               </div>
 
-              <div class="list">
+              <div class="list selected-products-or-services-list">
                 <template is="dom-repeat" items="[[productList]]" as="product" index-as="productIndex">
                   <div class="horizontal layout item center">
                     <div class="vertical layout flex">
@@ -416,7 +462,7 @@
                         <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
                       </div>
                     </div>
-                    <paper-icon-button on-tap="discardProductTapped" icon="remove-circle"></paper-icon-button>
+                    <paper-icon-button class="negative" on-tap="discardProductTapped" icon="remove-circle"></paper-icon-button>
                   </div>
                 </template>
               </div>
@@ -432,7 +478,7 @@
         <div class$="column flex [[$getColumnClasses('services', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
 
           <!-- service searchbar - start -->
-          <div class="card vertical layout">
+          <div class="card vertical layout service-search-bar">
             <div class="horizontal layout center">
               <paper-input id="service-search-field" class="flex" value="{{serviceSearchString}}" always-float-label label="[[verses.posSelectService.searchForServiceInput]]" on-keydown="serviceSearchFieldKeypressed"></paper-input>
               <template is="dom-if" if="[[!matchingServiceList.length]]">
@@ -490,18 +536,18 @@
           <!-- selected service list - start -->
           <template is="dom-if" if="[[serviceList.length]]">
 
-            <div class="card vertical layout">
+            <div class="card vertical layout selected-products-or-services-card">
 
-              <div class="horizontal layout center">
-                <div class="flex" style="font-weight: bold; text-decoration: underline;">Selected Services:</div>
+              <div class="horizontal layout center pos-card-heading">
+                <div class="flex pos-card-heading-label">Selected Services</div>
                 <template is="dom-if" if="[[!isMultiColumn]]">
-                  <paper-button raised class="primary" on-tap="serviceSelectionDoneTapped" style="margin-bottom: 8px;">
-                    <iron-icon icon="done-all"></iron-icon>&nbsp;Continue
+                  <paper-button raised class="primary" on-tap="serviceSelectionDoneTapped">
+                    Next
                   </paper-button>
                 </template>
               </div>
 
-              <div class="list">
+              <div class="list selected-products-or-services-list">
                 <template is="dom-repeat" items="[[serviceList]]" as="service" index-as="serviceIndex">
                   <div class="horizontal layout item center">
                     <div class="vertical layout flex">
@@ -567,16 +613,21 @@
               <form>
                 <div class="card vertical layout">
 
+                  <div class="horizontal layout center pos-card-heading">
+                    <div class="flex pos-card-heading-label">Create New Customer</div>
+                  </div>
+
                   <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message=[[verses.customer.customerNameInputError]] label=[[verses.customer.customerNameInput]]></paper-input>
                   <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.customer.customerNumberInputError]] label=[[verses.customer.customerNumberInput]]></paper-input>
 
                   <paper-input class="editCustomerForm--email" value="{{editCustomerForm.email}}" pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.customer.emailAddressInputError]] label=[[verses.customer.emailAddressInput]]></paper-input>
                   <paper-textarea class="editCustomerForm--address" value="{{editCustomerForm.address}}" label=[[verses.customer.addressInput]] rows="3"></paper-textarea>
+                  <div class="horizontal layout m-top-16">
+                    <paper-button raised class="flex danger" on-tap="skipCustomerSelectionTapped">Continue Without Customer</paper-button>
+                  </div>
 
-                  <div class="horizontal layout button-row end">
-                    <paper-button raised class="danger" on-tap="skipCustomerSelectionTapped">Skip</paper-button>
-                    <div class="flex"></div>
-                    <paper-button raised class="primary editCustomerForm--submit" on-tap="createCustomerTapped">[[verses.customer.createCustomer]]</paper-button>
+                  <div class="horizontal layout m-top-16">
+                    <paper-button raised class="flex primary editCustomerForm--submit" on-tap="createCustomerTapped">[[verses.customer.createCustomer]]</paper-button>
                   </div>
 
                 </div>
@@ -623,7 +674,7 @@
                 </template>
                 <template is="dom-if" if="[[!isInOfflineMode]]">
                   <template is="dom-if" if="[[isAnonymousSale]]">
-                    <paper-button raised class="primary btn btn-default" on-tap="removeCustomerTapped">
+                    <paper-button raised class="secondary btn btn-default" on-tap="removeCustomerTapped">
                       Select a customer
                     </paper-button>
                   </template>
@@ -633,7 +684,7 @@
 
             <template is="dom-if" if="[[!isMultiColumn]]">
               <paper-button raised class="primary" on-tap="customerSelectionDoneTapped" style="width: calc(100% - 16px); margin: 8px;">
-                <iron-icon icon="done-all"></iron-icon>&nbsp;Continue
+                Next
               </paper-button>
             </template>
 
@@ -1294,6 +1345,14 @@
       }
 
       // sub-region: search
+
+      productSearchFieldFocused(e) {
+        this.isScanningActive = true;
+      }
+
+      productSearchFieldBlurred(e) {
+        this.isScanningActive = false;
+      }
 
       _fetchAggregatedInventoryDetailsOnline(cbfn) {
         let data = {
