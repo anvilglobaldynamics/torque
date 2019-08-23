@@ -434,7 +434,7 @@
           <!-- service searchbar - start -->
           <div class="card vertical layout">
             <div class="horizontal layout center">
-              <paper-input id="service-search-field" class="flex" value="{{serviceSearchString}}" always-float-label label="[[verses.posSelectService.searchForServiceInput]]" on-keydown="productSearchFieldKeypressed"></paper-input>
+              <paper-input id="service-search-field" class="flex" value="{{serviceSearchString}}" always-float-label label="[[verses.posSelectService.searchForServiceInput]]" on-keydown="serviceSearchFieldKeypressed"></paper-input>
               <template is="dom-if" if="[[!matchingServiceList.length]]">
                 <paper-icon-button icon="search" on-tap="serviceSearchTapped"></paper-icon-button>
               </template>
@@ -851,6 +851,10 @@
             value: 'undecided' // can be - 'undecided', 'products', 'services'
           },
           // Products =============
+          productSourceSelectionComplete: {
+            type: Boolean,
+            value: false
+          },
           warehouseList: {
             type: Array,
             value: () => []
@@ -1033,25 +1037,15 @@
         // console.log('selectedTabName', this.selectedTabName);
 
         // products
-        if (this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS') && !this.isInOfflineMode) {
-          this.productSourceSelectionComplete = false;
-          this._fetchWarehouseList((warehouseList) => {
-            warehouseList.reverse();
-            this.warehouseList = warehouseList;
-            this.selectedWarehouseChanged();
-          });
-        } else {
-          this.productSourceSelectionComplete = true;
-          this.selectedWarehouseChanged();
+        if (this.salesType === 'products') {
+          this._initProductColumn();
         }
-        this.productSourceToDisplay = this.app.verses.pos.currentOutlet;
-        this.selectedWarehouse = this.app.getFromSession('pos-selected-warehouse') || '--current-outlet'; // for dropdown
-        this.productsSelectedFromWarehouseId = this.app.getFromSession('product-selected-from-warehouse-id') || null; // for calculation
-        this.productList = this.app.getFromSession('pos-selected-product-list') || [];
-        this.matchingProductList = [];
 
         // services
-        this.serviceList = this.app.getFromSession('pos-selected-service-list') || [];
+        if (this.salesType === 'services') {
+          this.serviceList = this.app.getFromSession('pos-selected-service-list') || [];
+          this._focusServiceSearchField();
+        }
 
         // customer
         this.delay(0, () => {
@@ -1074,6 +1068,26 @@
         });
 
         this.isReady = true;
+      }
+
+      _initProductColumn() {
+        this.matchingProductList = [];
+        this.productList = this.app.getFromSession('pos-selected-product-list') || [];
+
+        if (this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS') && !this.isInOfflineMode) {
+          this.productSourceSelectionComplete = false;
+          this._fetchWarehouseList((warehouseList) => {
+            warehouseList.reverse();
+            this.warehouseList = warehouseList;
+            this.selectedWarehouseChanged();
+          });
+        } else {
+          this.productSourceSelectionComplete = true;
+          this.selectedWarehouseChanged();
+        }
+        this.productSourceToDisplay = this.app.verses.pos.currentOutlet;
+        this.selectedWarehouse = this.app.getFromSession('pos-selected-warehouse') || '--current-outlet'; // for dropdown
+        this.productsSelectedFromWarehouseId = this.app.getFromSession('product-selected-from-warehouse-id') || null; // for calculation
       }
 
       onNavigateOut() {
@@ -1166,12 +1180,14 @@
         this.salesType = 'products';
         this.selectedTabName = 'products';
         this.app.storeInSession('pos-sales-type', this.salesType);
+        this._initProductColumn();
       }
 
       salesTypeIsServicesTapped(e = null) {
         this.salesType = 'services';
         this.selectedTabName = 'services';
         this.app.storeInSession('pos-sales-type', this.salesType);
+        this._focusServiceSearchField({ repeat: false });
       }
 
       _scrollToNavBar() {
@@ -1192,6 +1208,7 @@
       selectedWarehouseChanged() {
         this.app.storeInSession('pos-selected-warehouse', this.selectedWarehouse);
         this._resetProductSearch();
+        this._focusProductSearchField();
         this._updateDefaultInventoryId(() => { }); // Makes sure defaultInventoryId is set correctly
       }
 
@@ -1379,7 +1396,17 @@
 
       productSearchClearTapped(e) {
         this._resetProductSearch();
-        this.elem('#product-search-field').focus();
+        this._focusProductSearchField();
+      }
+
+      _focusProductSearchField() {
+        const fn = () => {
+          try {
+            this.elem('#product-search-field').focus();
+          } catch (ex) { }
+        }
+        this.delay(100, fn);
+        fn();
       }
 
       productSearchTapped(e = null) {
@@ -1537,7 +1564,19 @@
 
       serviceSearchClearTapped(e) {
         this._resetServiceSearch();
-        this.elem('#service-search-field').focus();
+        this._focusServiceSearchField();
+      }
+
+      _focusServiceSearchField({ repeat = true } = {}) {
+        const fn = () => {
+          try {
+            this.elem('#service-search-field').focus();
+          } catch (ex) { }
+        }
+        if (repeat) {
+          this.delay(100, fn);
+        }
+        fn();
       }
 
       serviceSearchTapped(e = null) {
@@ -1998,6 +2037,8 @@
 
         this.app.extractFromSession('pos-assigned-assisted-by-employee');
 
+        this.productSourceSelectionComplete = false;
+        this.productSourceToDisplay = '';
         this.productSearchString = '';
         this.serviceSearchString = '';
         this.resetProperties('payment', 'productList', 'serviceList', 'customer', 'isAnonymousSale', 'salesType', 'editCustomerForm');
@@ -2135,6 +2176,7 @@
 
       assignEmployeeTapped(e) {
         let { id } = e.model.service;
+        this._resetServiceSearch();
         return this.app.navigateTo(`/pos-assign-employee-service/service:${id}`);
       }
 
