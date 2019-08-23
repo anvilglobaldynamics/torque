@@ -1042,6 +1042,7 @@
           });
         } else {
           this.productSourceSelectionComplete = true;
+          this.selectedWarehouseChanged();
         }
         this.productSourceToDisplay = this.app.verses.pos.currentOutlet;
         this.selectedWarehouse = this.app.getFromSession('pos-selected-warehouse') || '--current-outlet'; // for dropdown
@@ -1244,7 +1245,8 @@
         });
       }
 
-      _processGetOutletDefaultInventoryId(cbfn) {
+      _processGetDefaultInventoryId(cbfn) {
+        // console.log('_processGetDefaultInventoryId')
         if (this.selectedWarehouse === '--current-outlet') {
           this._setProductSelectedFromWarehouseId(null);
           this.productSourceToDisplay = this.app.verses.pos.currentOutlet;
@@ -1267,7 +1269,7 @@
 
       _updateDefaultInventoryId(cbfn) {
         this.defaultInventoryId = null;
-        this._processGetOutletDefaultInventoryId(defaultInventoryId => {
+        this._processGetDefaultInventoryId(defaultInventoryId => {
           this.defaultInventoryId = defaultInventoryId;
           this.productSourceSelectionComplete = true;
           cbfn();
