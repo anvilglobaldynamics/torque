@@ -378,7 +378,7 @@
                 <paper-item on-tap="switchOrganizationTapped" hidden="[[isInOfflineMode]]">[[verses.topMenu.switchOrganization]]</paper-item>
                 <paper-item on-tap="reloadTapped">[[verses.topMenu.reload]]</paper-item>
                 <!-- FIXME: Remove offline toggle switch after testing -->
-                <!-- <paper-item on-tap="toggleOfflineMode">Toggle Offline Mode (Debug Only)</paper-item> -->
+                <paper-item on-tap="toggleOfflineMode">Toggle Offline Mode (Debug Only)</paper-item>
                 <paper-item on-tap="logoutTapped">[[verses.topMenu.logout]]</paper-item>
               </paper-listbox>
             </paper-menu-button>
@@ -937,6 +937,7 @@
           const allowedPageNameList = [
             'login',
             'pos',
+            'pos2',
             'error404',
             'pos-select-products',
             'pos-select-services',
@@ -949,7 +950,7 @@
               let defaultOutletMeta = settings.defaultOutletMetaMap[this.app.organization.id];
               let defaultOutletId = defaultOutletMeta.outletId;
               if (defaultOutletId) {
-                this.navigateTo(`/pos/outlet:${defaultOutletId}`);
+                this.navigateTo(`/pos2/outlet:${defaultOutletId}`);
                 return
               }
             } catch (ex) {
@@ -1009,13 +1010,18 @@
           return data;
         });
 
+        // Try to reset any pending sales
+        try {
+          this.elem('page-pos2')._resetSales();
+        } catch (ex) { }
+
         // TODO: Refactor
         this.app = this;
         let settings = this._getNormalizedSettings();
         let defaultOutletMeta = settings.defaultOutletMetaMap[this.app.organization.id];
         let defaultOutletId = defaultOutletMeta.outletId;
         if (defaultOutletId) {
-          this.navigateTo(`/pos/outlet:${defaultOutletId}`);
+          this.navigateTo(`/pos2/outlet:${defaultOutletId}`);
           return
         }
         this.navigateTo(`/home`);

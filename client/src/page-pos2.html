@@ -171,6 +171,59 @@
 
     <div class$="page-fullwidth layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <!-- offline mode - start -->
+      <template is="dom-if" if="[[isInOfflineMode]]">
+        <div class="card warning vertical layout">
+          <div class="flex">[[verses.pos.offlineModeWarning]]</div>
+          <paper-button raised class="primary btn" on-tap="goOnlineTapped">
+            [[verses.pos.goOnline]]
+          </paper-button>
+        </div>
+      </template>
+
+      <template is="dom-if" if="[[offlineData.data.unsyncedSalesList.length]]">
+        <div class="card vertical layout">
+
+          <div class="vertical layout">
+            <div class="flex">[[offlineData.data.unsyncedSalesList.length]] [[verses.pos.offlineSaleCountMessage]]</div>
+            <div class="horizontal layout">
+              <paper-button raised class="secondary btn" style="width: 100%;" on-tap="toggleAllOfflineSalesTapped">
+                [[verses.pos.showHideButton]]
+              </paper-button>
+
+              <paper-button raised class="primary btn" style="width: 100%;" on-tap="submitAllOfflineSalesTapped">
+                [[verses.pos.submitOfflineSales]]
+              </paper-button>
+            </div>
+          </div>
+
+          <template is="dom-if" if="[[shouldExpandOfflineSalesList]]">
+            <div class="list m-top-16">
+              <template is="dom-repeat" items="[[offlineData.data.unsyncedSalesList]]" as="unsyncedSales">
+                <div class="horizontal layout item center">
+                  <div class="flex">
+                    <b>[[unsyncedSales.id]]</b> <br>
+                    [[verses.pos.createdOfflineSaleDatetime]]: [[$mkDate(unsyncedSales.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
+                  </div>
+
+                  <div class="vertical layout">
+                    <paper-button raised class="secondary btn btn-default slim" on-tap="printOfflineSalesTapped">
+                      [[verses.general.print]]
+                    </paper-button>
+                    <paper-button raised class="danger btn btn-default slim" style="margin-top: 6px;" on-tap="discardOfflineSalesTapped">
+                      [[verses.general.discard]]
+                    </paper-button>
+                  </div>
+
+                </div>
+              </template>
+            </div>
+          </template>
+
+        </div>
+      </template>
+      <!-- offline mode - end -->
+
       <!-- header - start -->
 
       <!-- header - Multi Column - Start -->
@@ -222,14 +275,19 @@
         <div class$="column flex [[$getColumnClasses('selection', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
 
           <div class="card vertical layout">
+
             <paper-button raised class="primary" on-tap="salesTypeIsProductsTapped" style="margin-bottom: 8px;">
               Product Sales
             </paper-button>
-            <paper-button raised class="primary" on-tap="salesTypeIsServicesTapped" style="margin-bottom: 8px;">
-              Service Sales
-            </paper-button>
+
+            <template is="dom-if" if="[[!isInOfflineMode]]">
+              <paper-button raised class="primary" on-tap="salesTypeIsServicesTapped" style="margin-bottom: 8px;">
+                Service Sales
+              </paper-button>
+            </template>
 
           </div>
+
         </div>
         <!-- selection column - end -->
 
@@ -258,7 +316,9 @@
             <template is="dom-if" if="[[productSourceSelectionComplete]]">
               <div class="card horizontal layout center">
                 <div class="flex">Selling products from [[productSourceToDisplay]]</div>
-                <paper-button class="neutral" raised on-tap="changeProductSourceTapped">Change</paper-button>
+                <template is="dom-if" if="[[!isInOfflineMode]]">
+                  <paper-button class="neutral" raised on-tap="changeProductSourceTapped">Change</paper-button>
+                </template>
               </div>
             </template>
           </template>
@@ -495,92 +555,90 @@
         <!-- customer column - start -->
         <div class$="customer-column column flex [[$getColumnClasses('customer', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]" on-tap="customerColumnTapped">
 
-          <template is="dom-if" if="[[!isInOfflineMode]]">
+          <!-- customer selection - start -->
+          <template is="dom-if" if="[[$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
+            <elem-customer-selector page="{{self}}"></elem-customer-selector>
+          </template>
+          <!-- customer selector - end -->
 
-            <!-- customer selection - start -->
-            <template is="dom-if" if="[[$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
-              <elem-customer-selector page="{{self}}"></elem-customer-selector>
-            </template>
-            <!-- customer selector - end -->
+          <!-- customer creation - start -->
+          <template is="dom-if" if="[[$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
+            <iron-form id="editCustomerForm" on-keypress="genericFormSubmitionKeypress">
+              <form>
+                <div class="card vertical layout">
 
-            <!-- customer creation - start -->
-            <template is="dom-if" if="[[$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
-              <iron-form id="editCustomerForm" on-keypress="genericFormSubmitionKeypress">
-                <form>
-                  <div class="card vertical layout">
+                  <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message=[[verses.customer.customerNameInputError]] label=[[verses.customer.customerNameInput]]></paper-input>
+                  <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.customer.customerNumberInputError]] label=[[verses.customer.customerNumberInput]]></paper-input>
 
-                    <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message=[[verses.customer.customerNameInputError]] label=[[verses.customer.customerNameInput]]></paper-input>
-                    <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.customer.customerNumberInputError]] label=[[verses.customer.customerNumberInput]]></paper-input>
+                  <paper-input class="editCustomerForm--email" value="{{editCustomerForm.email}}" pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.customer.emailAddressInputError]] label=[[verses.customer.emailAddressInput]]></paper-input>
+                  <paper-textarea class="editCustomerForm--address" value="{{editCustomerForm.address}}" label=[[verses.customer.addressInput]] rows="3"></paper-textarea>
 
-                    <paper-input class="editCustomerForm--email" value="{{editCustomerForm.email}}" pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.customer.emailAddressInputError]] label=[[verses.customer.emailAddressInput]]></paper-input>
-                    <paper-textarea class="editCustomerForm--address" value="{{editCustomerForm.address}}" label=[[verses.customer.addressInput]] rows="3"></paper-textarea>
+                  <div class="horizontal layout button-row end">
+                    <paper-button raised class="danger" on-tap="skipCustomerSelectionTapped">Skip</paper-button>
+                    <div class="flex"></div>
+                    <paper-button raised class="primary editCustomerForm--submit" on-tap="createCustomerTapped">[[verses.customer.createCustomer]]</paper-button>
+                  </div>
 
-                    <div class="horizontal layout button-row end">
-                      <paper-button raised class="danger" on-tap="skipCustomerSelectionTapped">Skip</paper-button>
-                      <div class="flex"></div>
-                      <paper-button raised class="primary editCustomerForm--submit" on-tap="createCustomerTapped">[[verses.customer.createCustomer]]</paper-button>
+                </div>
+              </form>
+            </iron-form>
+          </template>
+          <!-- customer creation - end -->
+
+          <!-- customer preview - start -->
+          <template is="dom-if" if="[[!$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
+            <div class="card vertical layout">
+              <div class="bold-customer-card-title">[[verses.pos.customerSelectionCardHeader]]</div>
+
+              <template is="dom-if" if="[[customer]]">
+                <div>
+                  <div class="type title capitalize">[[customer.fullName]]</div>
+                  <div class="horizontal layout wrap">
+
+                    <div class="horizontal layout center m-right-8">
+                      <iron-icon icon="hardware:smartphone" class="icon secondary small m-right-8"></iron-icon>
+                      <div class="type body secondary">[[customer.phone]]</div>
                     </div>
 
-                  </div>
-                </form>
-              </iron-form>
-            </template>
-            <!-- customer creation - end -->
-
-            <!-- customer preview - start -->
-            <template is="dom-if" if="[[!$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
-              <div class="card vertical layout">
-                <div class="bold-customer-card-title">[[verses.pos.customerSelectionCardHeader]]</div>
-
-                <template is="dom-if" if="[[customer]]">
-                  <div>
-                    <div class="type title capitalize">[[customer.fullName]]</div>
-                    <div class="horizontal layout wrap">
-
-                      <div class="horizontal layout center m-right-8">
-                        <iron-icon icon="hardware:smartphone" class="icon secondary small m-right-8"></iron-icon>
-                        <div class="type body secondary">[[customer.phone]]</div>
+                    <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                      <div class="horizontal layout center">
+                        <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
+                        <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
                       </div>
+                    </template>
 
-                      <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
-                        <div class="horizontal layout center">
-                          <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
-                          <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
-                        </div>
-                      </template>
-
-                    </div>
                   </div>
-                </template>
+                </div>
+              </template>
 
-                <template is="dom-if" if="[[isAnonymousSale]]">
-                  <div>No customer selected</div>
-                </template>
+              <template is="dom-if" if="[[isAnonymousSale]]">
+                <div>No customer selected</div>
+              </template>
 
-                <div class="horizontal layout end-justified m-top-16">
-                  <template is="dom-if" if="[[customer]]">
-                    <paper-button raised class="danger btn btn-default" on-tap="removeCustomerTapped">
-                      Select a different customer
-                    </paper-button>
-                  </template>
+              <div class="horizontal layout end-justified m-top-16">
+                <template is="dom-if" if="[[customer]]">
+                  <paper-button raised class="danger btn btn-default" on-tap="removeCustomerTapped">
+                    Select a different customer
+                  </paper-button>
+                </template>
+                <template is="dom-if" if="[[!isInOfflineMode]]">
                   <template is="dom-if" if="[[isAnonymousSale]]">
                     <paper-button raised class="primary btn btn-default" on-tap="removeCustomerTapped">
                       Select a customer
                     </paper-button>
                   </template>
-                </div>
+                </template>
               </div>
+            </div>
 
-              <template is="dom-if" if="[[!isMultiColumn]]">
-                <paper-button raised class="primary" on-tap="customerSelectionDoneTapped" style="width: calc(100% - 16px); margin: 8px;">
-                  <iron-icon icon="done-all"></iron-icon>&nbsp;Continue
-                </paper-button>
-              </template>
-
+            <template is="dom-if" if="[[!isMultiColumn]]">
+              <paper-button raised class="primary" on-tap="customerSelectionDoneTapped" style="width: calc(100% - 16px); margin: 8px;">
+                <iron-icon icon="done-all"></iron-icon>&nbsp;Continue
+              </paper-button>
             </template>
-            <!-- customer preview - end -->
 
           </template>
+          <!-- customer preview - end -->
 
         </div>
         <!-- customer column - end -->
@@ -975,15 +1033,13 @@
         // console.log('selectedTabName', this.selectedTabName);
 
         // products
-        if (this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')) {
-          if (!this.isInOfflineMode) {
-            this.productSourceSelectionComplete = false;
-            this._fetchWarehouseList((warehouseList) => {
-              warehouseList.reverse();
-              this.warehouseList = warehouseList;
-              this.selectedWarehouseChanged();
-            });
-          }
+        if (this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS') && !this.isInOfflineMode) {
+          this.productSourceSelectionComplete = false;
+          this._fetchWarehouseList((warehouseList) => {
+            warehouseList.reverse();
+            this.warehouseList = warehouseList;
+            this.selectedWarehouseChanged();
+          });
         } else {
           this.productSourceSelectionComplete = true;
         }
@@ -999,9 +1055,13 @@
         // customer
         this.delay(0, () => {
           this.self = this;
-          this.customer = this.app.getFromSession('last-selected-customer') || null;
-          this.isAnonymousSale = this.app.getFromSession('last-selected-customer-is-anonymous') || false;
-          // console.log(this.isAnonymousSale);
+          if (this.isInOfflineMode) {
+            this.customer = null;
+            this.isAnonymousSale = true;
+          } else {
+            this.customer = this.app.getFromSession('last-selected-customer') || null;
+            this.isAnonymousSale = this.app.getFromSession('last-selected-customer-is-anonymous') || false;
+          }
         });
 
         // payment
