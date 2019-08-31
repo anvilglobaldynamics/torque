@@ -1668,6 +1668,12 @@
       _searchServices(cbfn) {
         this._fetchOutletServiceList(({ serviceList }) => {
 
+          if (serviceList.length === 0 && this.servicePagination.offset === 0) {
+            this.app.showModalDialog("Not found", "Service not found");
+            cbfn();
+            return;
+          }
+
           this.matchingServiceList = serviceList.map(service => {
             let { salePrice } = service;
             let { name, defaultVat, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration } = service.serviceBlueprint;
