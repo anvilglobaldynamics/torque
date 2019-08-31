@@ -8,6 +8,7 @@
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
 <link rel="import" href="../bower_components/iron-icons/editor-icons.html">
@@ -141,25 +142,58 @@
         }
       }
 
-      .multi-column-header-row {}
+      .edit-product-price-icon {
+        padding: 0;
+        height: 16px;
+        max-width: 16px;
+        min-width: 16px;
+      }
+
+      .multi-column-header-row {
+        margin-top: 8px;
+      }
 
       .multi-column-header {
         cursor: pointer;
         text-align: center;
-        margin: 16px 0;
-        text-decoration: underline;
+        padding: 16px 0;
+        background-color: var(--app-tab-unselected);
+        border-bottom: 2px solid var(--app-tab-selected);
+        /* margin: 2px; */
       }
 
-      .single-column-tabs-row {}
+      .multi-column-header .title {
+        font-size: 14px;
+      }
+
+      .multi-column-header .subtitle {
+        font-size: 12px;
+      }
+
+      .multi-column-header .icon {
+        padding: 0;
+        height: 16px;
+        max-width: 16px;
+        min-width: 16px;
+        margin-left: 4px;
+      }
+
+      .single-column-tabs-row {
+        margin: 8px;
+        margin-bottom: 0;
+      }
 
       .single-column-tab {
         cursor: pointer;
         text-align: center;
-        margin: 16px 0;
+        padding: 16px 0;
+        background-color: var(--app-tab-unselected);
+        border-bottom: 2px solid var(--app-tab-selected);
       }
 
       .single-column-tab.selected {
-        text-decoration: underline;
+        background-color: var(--app-tab-selected);
+        color: var(--app-tab-label-selected);
       }
 
       .product-count-input {
@@ -273,16 +307,41 @@
       <template is="dom-if" if="[[isMultiColumn]]">
         <div class="horizontal layout multi-column-header-row">
           <template is="dom-if" if="[[$equals('undecided', salesType)]]">
-            <div class="flex multi-column-header">Selection</div>
+            <div class="flex multi-column-header">
+              <div class="title">Selection</div>
+              <div class="subtitle">Step 1</div>
+
+            </div>
           </template>
           <template is="dom-if" if="[[$equals('services', salesType)]]">
-            <div class="flex multi-column-header">Services</div>
+            <div class="flex multi-column-header">
+              <div class="title">Services</div>
+              <div class="horizontal layout center-center">
+                <div class="subtitle">Step 1</div>
+                <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
+              </div>
+            </div>
           </template>
           <template is="dom-if" if="[[$equals('products', salesType)]]">
-            <div class="flex multi-column-header">Products</div>
+            <div class="flex multi-column-header">
+              <div class="title">Products</div>
+              <div class="horizontal layout center-center">
+                <div class="subtitle">Step 1</div>
+                <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
+              </div>
+            </div>
           </template>
-          <div class="flex multi-column-header">Customer</div>
-          <div class="flex multi-column-header">Payment</div>
+          <div class="flex multi-column-header">
+            <div class="title">Customer</div>
+            <div class="horizontal layout center-center">
+              <div class="subtitle">Step 2</div>
+              <iron-icon icon="check-circle" class$="icon positive [[$getCustomerCompleteIconClass(customer, isAnonymousSale)]]"></iron-icon>
+            </div>
+          </div>
+          <div class="flex multi-column-header">
+            <div class="title">Payment</div>
+            <div class="subtitle">Step 3</div>
+          </div>
         </div>
       </template>
       <!-- header - Multi Column - End -->
@@ -457,7 +516,7 @@
                         <div>&nbsp;@&nbsp;[[product.salePrice]]</div>
                         <div class="description">[[app.settings.monetaryUnit]]</div>
                         <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
-                          <paper-icon-button on-tap="editProductSalePriceTapped" icon="create" style="padding: 0; height: 16px; max-width: 16px; min-width: 16px;"></paper-icon-button>
+                          <paper-icon-button on-tap="editProductSalePriceTapped" icon="create" class="edit-product-price-icon"></paper-icon-button>
                         </template>
                         <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
                       </div>
@@ -505,7 +564,7 @@
                       <div class="inventory-product-price-container">[[verses.posSelectService.sale]]: [[service.salePrice]][[app.settings.monetaryUnit]]</div>
                     </div>
 
-                    <paper-icon-button class=" primary " icon="add-circle" on-tap="selectMatchingServiceTapped"></paper-icon-button>
+                    <paper-icon-button class="primary positive" icon="add-circle" on-tap="selectMatchingServiceTapped"></paper-icon-button>
                   </div>
 
                 </template>
@@ -582,7 +641,7 @@
                         <div>[[service.salePrice]]</div>
                         <div class="description">[[app.settings.monetaryUnit]]</div>
                         <span class="service-vat-detail">(+ [[verses.pos.vat]]: {{service.vatValue}}%)</span>
-                        <paper-icon-button on-tap="discardServiceTapped" icon="remove-circle"></paper-icon-button>
+                        <paper-icon-button class="negative" on-tap="discardServiceTapped" icon="remove-circle"></paper-icon-button>
                       </div>
 
                     </div>
@@ -1186,6 +1245,22 @@
         }
       }
 
+      $getSelectionCompleteIconClass(productListLength, serviceListLength) {
+        let isProductOrServiceSelectionDone = productListLength > 0 || serviceListLength > 0;
+        if (isProductOrServiceSelectionDone) {
+          return '';
+        }
+        return 'hidden ';
+      }
+
+      $getCustomerCompleteIconClass(customer, isAnonymousSale) {
+        let isCustomerSelectionDone = (!!customer) || isAnonymousSale;
+        if (isCustomerSelectionDone) {
+          return '';
+        }
+        return 'hidden ';
+      }
+
       $getColumnClasses(tabName, type, isMultiColumn, selectedTabName, productListLength, serviceListLength, customer, isAnonymousSale, isInOfflineMode) {
         // console.log({ tabName, type, isMultiColumn, selectedTabName, productListLength, serviceListLength, customer, isAnonymousSale, isInOfflineMode });
         let classNames = '';
@@ -1400,6 +1475,12 @@
 
       _searchProducts(cbfn) {
         this._fetchAggregatedInventoryDetails(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
+
+          if (aggregatedProductList.length === 0 && this.productPagination.offset === 0) {
+            this.app.showModalDialog("Not found", "Product not found");
+            cbfn();
+            return;
+          }
 
           // Prepare Products
           let productList = aggregatedProductList.map(product => {
