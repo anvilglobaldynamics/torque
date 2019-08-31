@@ -181,6 +181,8 @@
 
             </template>
           </div>
+
+
         </div>
 
         <!-- section handles inventory transfer -->
@@ -205,6 +207,16 @@
               </template>
             </paper-listbox>
           </paper-dropdown-menu>
+
+          <template is="dom-if" if="[[hasModule('MOD_VENDOR')]]">
+            <paper-dropdown-menu style="width: 100%;" label=[[verses.general.vendor]] class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{vendorSelectedIndex}}">
+                <template is="dom-repeat" items="[[vendorList]]" as="vendor">
+                  <paper-item data-key="[[vendor.id]]">[[vendor.name]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </template>
 
           <paper-button raised class="primary m-0 manage-inventory-button" on-tap="moveSelectedTapped">[[verses.inventory.moveSelected]]</paper-button>
         </div>
@@ -287,7 +299,9 @@
         if (this.searchString !== '') this.set('searchString', '');
         this._processInventory(() => {
           this._processTransferrableInventoryList(() => {
-            this.isReady = true;
+            this._processVendorList(_ => {
+              this.isReady = true;
+            });
           });
         });
       }
@@ -310,6 +324,28 @@
 
       onOrganizationChange(organization) {
         this.organization = organization;
+      }
+
+      _fetchVendorList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetVendorListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.vendorList);
+        });
+      }
+
+      _processVendorList(cbfn) {
+        this.vendorSelectedIndex = -1;
+        if (!this.hasModule('MOD_VENDOR')) {
+          this.vendorList = [];
+          cbfn();
+          return;
+        }
+        this._fetchVendorList(newVendorList => {
+          this.vendorList = newVendorList;
+          cbfn();
+        });
       }
 
       _fetchInventoryDetails(cbfn) {
@@ -379,8 +415,8 @@
         });
       }
 
-      _processMoveProducts({ fromInventoryId, toInventoryId, productList }, cbfn) {
-        let data = { fromInventoryId, toInventoryId, productList };
+      _processMoveProducts({ fromInventoryId, toInventoryId, productList, vendorId }, cbfn) {
+        let data = { fromInventoryId, toInventoryId, productList, vendorId };
         this.app.callTransferBetweenInventoriesApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -418,11 +454,24 @@
       // region: ui  ===========================
 
       moveSelectedTapped(e) {
+        if (this.hasModule('MOD_VENDOR') && this.vendorSelectedIndex < 0) {
+          this.app.showModalDialog(this.app.verses.product.vendorNeededMessageTitle, this.app.verses.product.vendorNeededMessageBody);
+          return;
+        }
+
         this.app.showModalConfirmation(
           this.app.verses.general.modalConfirmationPleaseConfirm,
           this.app.verses.inventory.moveProductConfirmMessage,
           (answer) => {
             if (answer) {
+
+              let vendorId = null;
+              if (this.hasModule('MOD_VENDOR')) {
+                try {
+                  vendorId = this.vendorList[this.vendorSelectedIndex].id;
+                } catch (ex) { }
+              }
+
               let fromInventoryId = parseInt(this.params.inventory, 10);
               let toInventoryId = this.inventoryList[this.targetInventoryIndex].id;
               let productList = this.productList.filter(product => product.isSelected).map(product => {
@@ -431,7 +480,7 @@
                 let count = parseInt(selectedCount, 10);
                 return { count, productId };
               });
-              this._processMoveProducts({ fromInventoryId, toInventoryId, productList }, () => {
+              this._processMoveProducts({ fromInventoryId, toInventoryId, productList, vendorId }, () => {
                 this._deselectAllFromSelectedProductList();
                 let message = this.app.verses.inventory.selectedProductsMoved;
                 this.app.showToast(message, () => {
