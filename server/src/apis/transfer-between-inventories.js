@@ -20,7 +20,8 @@ exports.TransferBetweenInventoriesApi = class extends Api {
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required()
         })
-      )
+      ),
+      vendorId: Joi.number().max(999999999999999).allow(null).required()
     });
   }
 
@@ -92,13 +93,23 @@ exports.TransferBetweenInventoriesApi = class extends Api {
     this.ensureUpdate('inventory', result);
   }
 
-  async _addTransferRecord({ organizationId, createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList, isWithinSameInventoryContainer }) {
-    await this.database.productTransfer.create({ organizationId, createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList, isWithinSameInventoryContainer });
+  async _addTransferRecord({ organizationId, createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList, vendorId, isWithinSameInventoryContainer }) {
+    await this.database.productTransfer.create({ organizationId, createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList, vendorId, isWithinSameInventoryContainer });
+  }
+
+  async _verifyVendorIfNeeded({ vendorId, organizationId }) {
+    if (vendorId) {
+      let doc = await this.database.vendor.findByIdAndOrganizationId({ id: vendorId, organizationId });
+      throwOnFalsy(doc, "VENDOR_INVALID", "Vendor not found.");
+    }
   }
 
   async handle({ body, userId }) {
-    let { fromInventoryId, toInventoryId, productList } = body;
+    let { fromInventoryId, toInventoryId, productList, vendorId } = body;
     let { organizationId } = this.interimData;
+
+    await this._verifyVendorIfNeeded({ vendorId, organizationId });
+
     let { fromInventory, toInventory } = await this._getInventoriesWithId({ fromInventoryId, toInventoryId });
 
     let isWithinSameInventoryContainer = false;
@@ -110,7 +121,7 @@ exports.TransferBetweenInventoriesApi = class extends Api {
     this._transfer({ fromInventory, toInventory, productList });
     await this._updateInventories({ fromInventory, toInventory });
 
-    await this._addTransferRecord({ organizationId, createdByUserId: userId, transferredDatetimeStamp: (new Date).getTime(), fromInventoryId, toInventoryId, productList, isWithinSameInventoryContainer })
+    await this._addTransferRecord({ organizationId, createdByUserId: userId, transferredDatetimeStamp: (new Date).getTime(), fromInventoryId, toInventoryId, productList, vendorId, isWithinSameInventoryContainer })
 
     return { status: "success" };
   }
