@@ -130,8 +130,7 @@
       }
 
       .placeholder {
-        background: #afafaf;
-        padding: 12px;
+        background: var(--app-tab-unselected);
         text-align: center;
       }
 
@@ -159,15 +158,15 @@
         padding: 16px 0;
         background-color: var(--app-tab-unselected);
         border-bottom: 2px solid var(--app-tab-selected);
-        /* margin: 2px; */
+        margin: 2px;
       }
 
       .multi-column-header .title {
-        font-size: 14px;
+        font-size: 20px;
       }
 
       .multi-column-header .subtitle {
-        font-size: 12px;
+        font-size: 14px;
       }
 
       .multi-column-header .icon {
@@ -194,6 +193,22 @@
       .single-column-tab.selected {
         background-color: var(--app-tab-selected);
         color: var(--app-tab-label-selected);
+      }
+
+      .single-column-tab .icon {
+        padding: 0;
+        height: 16px;
+        max-width: 16px;
+        min-width: 16px;
+        margin-left: 4px;
+      }
+
+      .single-column-tab .title {
+        font-size: 16px;
+      }
+
+      .single-column-tab .subtitle {
+        font-size: 12px;
       }
 
       .product-count-input {
@@ -351,19 +366,46 @@
         <div class="horizontal layout single-column-tabs-row">
 
           <template is="dom-if" if="[[$equals('undecided', salesType)]]">
-            <div class$="flex single-column-tab [[$getTabSelectedClass('selection', selectedTabName)]]" data-key="selection" on-tap="singleColumnTabTapped">Selection</div>
+            <div class$="flex single-column-tab [[$getTabSelectedClass('selection', selectedTabName)]]" data-key="selection" on-tap="singleColumnTabTapped">
+              <div class="title">Selection</div>
+              <div class="subtitle">Step 1</div>
+            </div>
           </template>
 
           <template is="dom-if" if="[[$equals('products', salesType)]]">
-            <div class$="flex single-column-tab [[$getTabSelectedClass('products', selectedTabName)]]" data-key="products" on-tap="singleColumnTabTapped">Products</div>
+            <div class$="flex single-column-tab [[$getTabSelectedClass('products', selectedTabName)]]" data-key="products" on-tap="singleColumnTabTapped">
+              <div class="title">Products</div>
+              <div class="horizontal layout center-center">
+                <div class="subtitle">Step 1</div>
+                <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
+              </div>
+            </div>
           </template>
 
           <template is="dom-if" if="[[$equals('services', salesType)]]">
-            <div class$="flex single-column-tab [[$getTabSelectedClass('services', selectedTabName)]]" data-key="services" on-tap="singleColumnTabTapped">Services</div>
+            <div class$="flex single-column-tab [[$getTabSelectedClass('services', selectedTabName)]]" data-key="services" on-tap="singleColumnTabTapped">
+              <div class="title">Services</div>
+              <div class="horizontal layout center-center">
+                <div class="subtitle">Step 1</div>
+                <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
+              </div>
+            </div>
           </template>
 
-          <div class$="flex single-column-tab [[$getTabSelectedClass('customer', selectedTabName)]]" data-key="customer" on-tap="singleColumnTabTapped">Customer</div>
-          <div class$="flex single-column-tab [[$getTabSelectedClass('payment', selectedTabName)]]" data-key="payment" on-tap="singleColumnTabTapped">Payment</div>
+          <div class$="flex single-column-tab [[$getTabSelectedClass('customer', selectedTabName)]]" data-key="customer" on-tap="singleColumnTabTapped">
+            <div class="title">Customer</div>
+            <div class="horizontal layout center-center">
+              <div class="subtitle">Step 2</div>
+              <iron-icon icon="check-circle" class$="icon positive [[$getCustomerCompleteIconClass(customer, isAnonymousSale)]]"></iron-icon>
+            </div>
+          </div>
+
+          <div class$="flex single-column-tab [[$getTabSelectedClass('payment', selectedTabName)]]" data-key="payment" on-tap="singleColumnTabTapped">
+            <div class="title">Payment</div>
+            <div class="horizontal layout center-center">
+              <div class="subtitle">Step 3</div>
+            </div>
+          </div>
         </div>
       </template>
       <!-- header - Single Column - End -->
@@ -755,7 +797,7 @@
 
         <!-- customer column placeholder - start -->
         <div class$="column flex placeholder  vertical layout center-center [[$getColumnClasses('customer', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
-          <div style="max-width: 300px;">
+          <div style="max-width: 220px;">
             Please complete product/service selection to access customer features.
           </div>
         </div>
@@ -1219,8 +1261,7 @@
 
       singleColumnTabTapped(e) {
         e.stopPropagation();
-        let attr = e.target.getAttribute('data-key');
-        // console.log({ selectedTabName: attr });
+        let attr = e.currentTarget.getAttribute('data-key');
         this.selectedTabName = attr;
       }
 
