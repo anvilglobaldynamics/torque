@@ -195,6 +195,10 @@
         color: var(--app-tab-label-selected);
       }
 
+      .single-column-tab.selected .icon {
+        color: var(--app-tab-label-selected);
+      }
+
       .single-column-tab .icon {
         padding: 0;
         height: 16px;
@@ -1181,12 +1185,12 @@
         }
         this.salesType = salesType;
 
+        let selectedTabName = null;
         if (salesType === 'undecided') {
-          this.selectedTabName = 'selection';
+          selectedTabName = 'selection';
         } else {
-          this.selectedTabName = salesType;
+          selectedTabName = salesType;
         }
-        // console.log('selectedTabName', this.selectedTabName);
 
         // products
         if (this.salesType === 'products') {
@@ -1219,7 +1223,19 @@
           this._calculatePayment();
         });
 
+        // set currently selected tab
+        if (window.isComingFromAssistedByAssignment) {
+          window.isComingFromAssistedByAssignment = false;
+          let isProductOrServiceSelectionDone = this.productList.length > 0 || this.serviceList.length > 0;
+          let isCustomerSelectionDone = (!!this.customer) || this.isAnonymousSale;
+          if (isProductOrServiceSelectionDone && isCustomerSelectionDone) {
+            selectedTabName = 'payment';
+          }
+        } this.selectedTabName = selectedTabName;
+        // console.log('selectedTabName', this.selectedTabName);
+
         this.isReady = true;
+        this._scrollToNavBar();
       }
 
       _initProductColumn() {
@@ -1359,8 +1375,9 @@
 
       _scrollToNavBar() {
         try {
-          this.elem('.single-column-tabs-row').scrollIntoView();
-          this.elem('.multi-column-header-row').scrollIntoView();
+          this.elem('.page-fullwidth').scrollIntoView();
+          // this.elem('.single-column-tabs-row').scrollIntoView();
+          // this.elem('.multi-column-header-row').scrollIntoView();
         } catch (ex) { }
       }
 
