@@ -23,6 +23,7 @@
     "select": "Select",
     "remove": "Remove",
     "selected": "Selected",
+    "selection": "Selection",
     "deselect": "Deselect",
     "address": "Address",
     "comingSoon": "Coming Soon",
@@ -98,6 +99,7 @@
     "vendorModule": "Vendor Module",
     "retail": "Retail",
     "service": "Service",
+    "services": "Services",
     "both": "Both",
     "optional": "(Optional)",
     "print": "Print",
@@ -106,7 +108,11 @@
     "modalConfirmationPleaseConfirm": "Please confirm.",
     "scanButtonHelp": "Use code scanner to select multiple products quickly",
     "contactPerson": "Contact Person",
-    "inventory": "Inventory"
+    "inventory": "Inventory",
+    "payment": "Payment",
+    "change": "Change",
+    "nextOrContinue": "Next",
+    "notFound": "Not found"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -519,7 +525,6 @@
   "vendor": {
     "editVendorTitle": "Edit Vendor",
     "addVendorTitle": "Add Vendor",
-    
     "vendorNameInput": "Name of your vendor",
     "vendorNameInputError": "Enter a valid name",
     "vendorNumberInput": "Contact Number",
@@ -528,7 +533,6 @@
     "vendorPhysicalAddressInputError": "Enter an address at least 8 characters long",
     "vendorContactNameInput": "Name of Contact Person",
     "vendorContactNameInputError": "Enter a valid name",
-
     "createVendor": "Create Vendor",
     "updateVendor": "Update Vendor",
     "newVendorCreated": "New vendor has been created.",
@@ -537,7 +541,6 @@
     "clickToEditVendor": "Click here to edit the vendor.",
     "editVendor": "Edit Vendor",
     "vendorName": "Vendor Name",
-
     "manageVendorPageTitle": "Manage Vendor",
     "createNewVendor": "Create New Vendor",
     "searchForVendorInput": "Vendor Name/Number",
@@ -704,7 +707,7 @@
     "posPageTitle": "POS",
     "newSalesAdded": "New Sales has been added.",
     "customerSelectionCardHeader": "Customer Selection",
-    "noCustomerSelected": "No customer selected (Anonymous Sale)",
+    "noCustomerSelected": "No customer selected",
     "removeCustomer": "Remove",
     "changeCustomer": "Old",
     "createCustomer": "New",
@@ -754,7 +757,27 @@
     "selectProductsFromInventoryContainer": "Which Outlet/Warehouse do you want to sell from?",
     "currentOutlet": "Current Outlet",
     "saleNotValid": "Sale not valid",
-    "offlineWarehouseSellNotAllowed": "Can not sell products from warehouse when in offline mode."
+    "offlineWarehouseSellNotAllowed": "Can not sell products from warehouse when in offline mode.",
+    "//NEW": "",
+    "step1": "Step 1",
+    "step2": "Step 2",
+    "step3": "Step 3",
+    "productSales": "Product Sales",
+    "serviceSales": "Service Sales",
+    "sellingProductsFrom": "Source of Product: ",
+    "scanningActive":"SCANNING ACTIVE",
+    "productSearchLabel":"Name/Identifirer Code of product",
+    "selectedProducts":"Selected Products",
+    "selectedServices": "Selected Services",
+    "continueWithoutCustomer": "Continue without customer",
+    "selectACustomer":"Select a customer",
+    "selectADifferentCustomer": "Select a different customer",
+    "customerSectionBlocked": "Please complete product/service selection to access customer section.",
+    "paymentSectionBlocked": "Please complete product/service and customer selection to access payment section.",
+    "productNotFound": "Product not found",
+    "serviceNotFound": "Service not found",
+    "invalidAmount": "Invalid amount",
+    "invalidTotalBillAmountMessage": "You can not increase total billed amount. Please update individual prices or add service charge."
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",

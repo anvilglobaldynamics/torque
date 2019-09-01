@@ -327,39 +327,39 @@
         <div class="horizontal layout multi-column-header-row">
           <template is="dom-if" if="[[$equals('undecided', salesType)]]">
             <div class="flex multi-column-header">
-              <div class="title">Selection</div>
-              <div class="subtitle">Step 1</div>
+              <div class="title">[[verses.general.selection]]</div>
+              <div class="subtitle">[[verses.pos.step1]]</div>
 
             </div>
           </template>
           <template is="dom-if" if="[[$equals('services', salesType)]]">
             <div class="flex multi-column-header">
-              <div class="title">Services</div>
+              <div class="title">[[verses.general.services]]</div>
               <div class="horizontal layout center-center">
-                <div class="subtitle">Step 1</div>
+                <div class="subtitle">[[verses.pos.step1]]</div>
                 <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
               </div>
             </div>
           </template>
           <template is="dom-if" if="[[$equals('products', salesType)]]">
             <div class="flex multi-column-header">
-              <div class="title">Products</div>
+              <div class="title">[[verses.general.products]]</div>
               <div class="horizontal layout center-center">
-                <div class="subtitle">Step 1</div>
+                <div class="subtitle">[[verses.pos.step1]]</div>
                 <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
               </div>
             </div>
           </template>
           <div class="flex multi-column-header">
-            <div class="title">Customer</div>
+            <div class="title">[[verses.general.customer]]</div>
             <div class="horizontal layout center-center">
-              <div class="subtitle">Step 2</div>
+              <div class="subtitle">[[verses.pos.step2]]</div>
               <iron-icon icon="check-circle" class$="icon positive [[$getCustomerCompleteIconClass(customer, isAnonymousSale)]]"></iron-icon>
             </div>
           </div>
           <div class="flex multi-column-header">
-            <div class="title">Payment</div>
-            <div class="subtitle">Step 3</div>
+            <div class="title">[[verses.general.payment]]</div>
+            <div class="subtitle">[[verses.pos.step3]]</div>
           </div>
         </div>
       </template>
@@ -371,16 +371,16 @@
 
           <template is="dom-if" if="[[$equals('undecided', salesType)]]">
             <div class$="flex single-column-tab [[$getTabSelectedClass('selection', selectedTabName)]]" data-key="selection" on-tap="singleColumnTabTapped">
-              <div class="title">Selection</div>
-              <div class="subtitle">Step 1</div>
+              <div class="title">[[verses.general.selection]]</div>
+              <div class="subtitle">[[verses.pos.step1]]</div>
             </div>
           </template>
 
           <template is="dom-if" if="[[$equals('products', salesType)]]">
             <div class$="flex single-column-tab [[$getTabSelectedClass('products', selectedTabName)]]" data-key="products" on-tap="singleColumnTabTapped">
-              <div class="title">Products</div>
+              <div class="title">[[verses.general.products]]</div>
               <div class="horizontal layout center-center">
-                <div class="subtitle">Step 1</div>
+                <div class="subtitle">[[verses.pos.step1]]</div>
                 <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
               </div>
             </div>
@@ -388,26 +388,26 @@
 
           <template is="dom-if" if="[[$equals('services', salesType)]]">
             <div class$="flex single-column-tab [[$getTabSelectedClass('services', selectedTabName)]]" data-key="services" on-tap="singleColumnTabTapped">
-              <div class="title">Services</div>
+              <div class="title">[[verses.general.services]]</div>
               <div class="horizontal layout center-center">
-                <div class="subtitle">Step 1</div>
+                <div class="subtitle">[[verses.pos.step1]]</div>
                 <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
               </div>
             </div>
           </template>
 
           <div class$="flex single-column-tab [[$getTabSelectedClass('customer', selectedTabName)]]" data-key="customer" on-tap="singleColumnTabTapped">
-            <div class="title">Customer</div>
+            <div class="title">[[verses.general.customer]]</div>
             <div class="horizontal layout center-center">
-              <div class="subtitle">Step 2</div>
+              <div class="subtitle">[[verses.pos.step2]]</div>
               <iron-icon icon="check-circle" class$="icon positive [[$getCustomerCompleteIconClass(customer, isAnonymousSale)]]"></iron-icon>
             </div>
           </div>
 
           <div class$="flex single-column-tab [[$getTabSelectedClass('payment', selectedTabName)]]" data-key="payment" on-tap="singleColumnTabTapped">
-            <div class="title">Payment</div>
+            <div class="title">[[verses.general.payment]]</div>
             <div class="horizontal layout center-center">
-              <div class="subtitle">Step 3</div>
+              <div class="subtitle">[[verses.pos.step3]]</div>
             </div>
           </div>
         </div>
@@ -425,12 +425,12 @@
           <div class="card vertical layout">
 
             <paper-button raised class="primary" on-tap="salesTypeIsProductsTapped" style="margin-bottom: 8px;">
-              Product Sales
+              [[verses.pos.productSales]]
             </paper-button>
 
             <template is="dom-if" if="[[!isInOfflineMode]]">
               <paper-button raised class="primary" on-tap="salesTypeIsServicesTapped" style="margin-bottom: 8px;">
-                Service Sales
+                [[verses.pos.serviceSales]]
               </paper-button>
             </template>
 
@@ -457,15 +457,15 @@
                       </template>
                     </paper-listbox>
                   </paper-dropdown-menu>
-                  <paper-button class="primary" raised on-tap="selectedWarehouseChanged">Select</paper-button>
+                  <paper-button class="primary" raised on-tap="selectedWarehouseChanged">[[verses.general.select]]</paper-button>
                 </div>
               </template>
             </template>
             <template is="dom-if" if="[[productSourceSelectionComplete]]">
               <div class="card horizontal layout center">
-                <div class="flex">Selling products from <b>[[productSourceToDisplay]]</b></div>
+                <div class="flex">[[verses.pos.sellingProductsFrom]] <b>[[productSourceToDisplay]]</b></div>
                 <template is="dom-if" if="[[!isInOfflineMode]]">
-                  <paper-button class="secondary" raised on-tap="changeProductSourceTapped">Change</paper-button>
+                  <paper-button class="secondary" raised on-tap="changeProductSourceTapped">[[verses.general.change]]</paper-button>
                 </template>
               </div>
             </template>
@@ -476,10 +476,10 @@
           <template is="dom-if" if="[[productSourceSelectionComplete]]">
             <div class="card vertical layout product-search-bar">
               <template is="dom-if" if="[[isScanningActive]]">
-                <div class="scanning-active-message">SCANNING ACTIVE</div>
+                <div class="scanning-active-message">[[verses.pos.scanningActive]]</div>
               </template>
               <div class="horizontal layout center">
-                <paper-input id="product-search-field" class="flex" value="{{productSearchString}}" always-float-label label="Name/Identifirer Code of product" on-keydown="productSearchFieldKeypressed" on-focus="productSearchFieldFocused" on-blur="productSearchFieldBlurred"></paper-input>
+                <paper-input id="product-search-field" class="flex" value="{{productSearchString}}" always-float-label label="[[verses.pos.productSearchLabel]]" on-keydown="productSearchFieldKeypressed" on-focus="productSearchFieldFocused" on-blur="productSearchFieldBlurred"></paper-input>
                 <template is="dom-if" if="[[!matchingProductList.length]]">
                   <paper-icon-button icon="search" on-tap="productSearchTapped"></paper-icon-button>
                 </template>
@@ -539,10 +539,10 @@
             <div class="card vertical layout selected-products-or-services-card">
 
               <div class="horizontal layout center pos-card-heading">
-                <div class="flex pos-card-heading-label">Selected Products</div>
+                <div class="flex pos-card-heading-label">[[verses.pos.selectedProducts]]</div>
                 <template is="dom-if" if="[[!isMultiColumn]]">
                   <paper-button raised class="primary" on-tap="productSelectionDoneTapped" style="margin-bottom: 8px;">
-                    Next
+                    [[verses.general.nextOrContinue]]
                   </paper-button>
                 </template>
               </div>
@@ -644,10 +644,10 @@
             <div class="card vertical layout selected-products-or-services-card">
 
               <div class="horizontal layout center pos-card-heading">
-                <div class="flex pos-card-heading-label">Selected Services</div>
+                <div class="flex pos-card-heading-label">[[verses.pos.selectedServices]]</div>
                 <template is="dom-if" if="[[!isMultiColumn]]">
                   <paper-button raised class="primary" on-tap="serviceSelectionDoneTapped">
-                    Next
+                    [[verses.general.nextOrContinue]]
                   </paper-button>
                 </template>
               </div>
@@ -719,7 +719,7 @@
                 <div class="card vertical layout">
 
                   <div class="horizontal layout center pos-card-heading">
-                    <div class="flex pos-card-heading-label">Create New Customer</div>
+                    <div class="flex pos-card-heading-label">[[verses.customer.createNewCustomer]]</div>
                   </div>
 
                   <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message=[[verses.customer.customerNameInputError]] label=[[verses.customer.customerNameInput]]></paper-input>
@@ -728,7 +728,7 @@
                   <paper-input class="editCustomerForm--email" value="{{editCustomerForm.email}}" pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.customer.emailAddressInputError]] label=[[verses.customer.emailAddressInput]]></paper-input>
                   <paper-textarea class="editCustomerForm--address" value="{{editCustomerForm.address}}" label=[[verses.customer.addressInput]] rows="3"></paper-textarea>
                   <div class="horizontal layout m-top-16">
-                    <paper-button raised class="flex danger" on-tap="skipCustomerSelectionTapped">Continue Without Customer</paper-button>
+                    <paper-button raised class="flex danger" on-tap="skipCustomerSelectionTapped">[[verses.pos.continueWithoutCustomer]]</paper-button>
                   </div>
 
                   <div class="horizontal layout m-top-16">
@@ -768,19 +768,19 @@
               </template>
 
               <template is="dom-if" if="[[isAnonymousSale]]">
-                <div>No customer selected</div>
+                <div>[[verses.pos.noCustomerSelected]]</div>
               </template>
 
               <div class="horizontal layout end-justified m-top-16">
                 <template is="dom-if" if="[[customer]]">
                   <paper-button raised class="danger btn btn-default" on-tap="removeCustomerTapped">
-                    Select a different customer
+                    [[verses.pos.selectADifferentCustomer]]
                   </paper-button>
                 </template>
                 <template is="dom-if" if="[[!isInOfflineMode]]">
                   <template is="dom-if" if="[[isAnonymousSale]]">
                     <paper-button raised class="secondary btn btn-default" on-tap="removeCustomerTapped">
-                      Select a customer
+                      [[verses.pos.selectACustomer]]
                     </paper-button>
                   </template>
                 </template>
@@ -789,7 +789,7 @@
 
             <template is="dom-if" if="[[!isMultiColumn]]">
               <paper-button raised class="primary" on-tap="customerSelectionDoneTapped" style="width: calc(100% - 16px); margin: 8px;">
-                Next
+                [[verses.general.nextOrContinue]]
               </paper-button>
             </template>
 
@@ -802,7 +802,7 @@
         <!-- customer column placeholder - start -->
         <div class$="column flex placeholder  vertical layout center-center [[$getColumnClasses('customer', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
           <div style="max-width: 220px;">
-            Please complete product/service selection to access customer features.
+            [[verses.pos.customerSectionBlocked]]
           </div>
         </div>
         <!-- customer column placeholder - end -->
@@ -972,7 +972,7 @@
         <!-- payment column placeholder - start -->
         <div class$="column flex placeholder vertical layout center-center  [[$getColumnClasses('payment', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
           <div style="max-width: 300px;">
-            Please complete product/service and customer selection to access payment features.
+            [[verses.pos.paymentSectionBlocked]]
           </div>
         </div>
         <!-- payment column placeholder - end -->
@@ -1542,7 +1542,7 @@
         this._fetchAggregatedInventoryDetails(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
 
           if (aggregatedProductList.length === 0 && this.productPagination.offset === 0) {
-            this.app.showModalDialog("Not found", "Product not found");
+            this.app.showModalDialog(this.app.verses.general.notFound, this.app.verses.pos.productNotFound);
             cbfn();
             return;
           }
@@ -1617,7 +1617,6 @@
       productSearchTapped(e = null) {
         if (!this.isReady) {
           // NOTE: Keep this console log
-          console.warn("A search request is already underway.");
           return;
         }
         this.productPaginate.offset = 0;
@@ -1734,7 +1733,7 @@
         this._fetchOutletServiceList(({ serviceList }) => {
 
           if (serviceList.length === 0 && this.servicePagination.offset === 0) {
-            this.app.showModalDialog("Not found", "Service not found");
+            this.app.showModalDialog(this.app.verses.general.notFound, this.app.verses.pos.serviceNotFound);
             cbfn();
             return;
           }
@@ -1793,7 +1792,6 @@
       serviceSearchTapped(e = null) {
         if (!this.isReady) {
           // NOTE: Keep this console log
-          console.warn("A search request is already underway.");
           return;
         }
         this.servicePaginate.offset = 0;
@@ -2125,7 +2123,7 @@
           if (parseFloat(answer) > 0) {
             let roundedByAmount = (this.payment.totalBillBeforeRounding - parseFloat(answer));
             if (roundedByAmount < 0) {
-              this.app.showModalDialog("Invalid amount", "You can not increase total billed amount. Please update individual prices or add service charge.");
+              this.app.showModalDialog(this.verses.pos.invalidAmount, this.verses.pos.invalidTotalBillAmountMessage);
               return;
             }
             this.payment.roundedByAmount = roundedByAmount;
