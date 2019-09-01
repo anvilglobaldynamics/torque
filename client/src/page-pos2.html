@@ -1232,7 +1232,6 @@
             selectedTabName = 'payment';
           }
         } this.selectedTabName = selectedTabName;
-        // console.log('selectedTabName', this.selectedTabName);
 
         this.isReady = true;
         this._scrollToNavBar();
@@ -1287,7 +1286,6 @@
       }
 
       $getTabSelectedClass(tabName, selectedTabName) {
-        // console.log('getTabSelectedClass', { tabName, selectedTabName })
         let classNames = '';
         if (tabName === selectedTabName) {
           classNames += 'selected ';
@@ -1324,7 +1322,6 @@
       }
 
       $getColumnClasses(tabName, type, isMultiColumn, selectedTabName, productListLength, serviceListLength, customer, isAnonymousSale, isInOfflineMode) {
-        // console.log({ tabName, type, isMultiColumn, selectedTabName, productListLength, serviceListLength, customer, isAnonymousSale, isInOfflineMode });
         let classNames = '';
 
         let isProductOrServiceSelectionDone = productListLength > 0 || serviceListLength > 0;
@@ -1452,7 +1449,6 @@
       }
 
       _processGetDefaultInventoryId(cbfn) {
-        // console.log('_processGetDefaultInventoryId')
         if (this.selectedWarehouse === '--current-outlet') {
           this._setProductSelectedFromWarehouseId(null);
           this.productSourceToDisplay = this.app.verses.pos.currentOutlet;
@@ -1570,7 +1566,6 @@
       }
 
       _selectProduct({ product }) {
-        // console.log("_selectProduct", { product });
         let { productId, name, selectedCount, count, salePrice, vatValue, unit } = product;
         let maxAllowedCount = count;
         selectedCount = parseFloat(String(selectedCount));
@@ -1615,10 +1610,7 @@
       }
 
       productSearchTapped(e = null) {
-        if (!this.isReady) {
-          // NOTE: Keep this console log
-          return;
-        }
+        if (!this.isReady) return;
         this.productPaginate.offset = 0;
         this.isReady = false;
         this._searchProducts(() => {
@@ -1790,10 +1782,7 @@
       }
 
       serviceSearchTapped(e = null) {
-        if (!this.isReady) {
-          // NOTE: Keep this console log
-          return;
-        }
+        if (!this.isReady) return;
         this.servicePaginate.offset = 0;
         this.isReady = false;
         this._searchServices(() => {
@@ -1927,7 +1916,6 @@
       }
 
       $shouldShowCustomerSelectionOptions(customer, isAnonymousSale) {
-        // console.log({ customer, isAnonymousSale });
         if (!customer && !isAnonymousSale) return true;
         return false;
       }
