@@ -54,7 +54,7 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
 
   async _getSalesSummaryForMonth(organizationId) {
     let fromDate = new Date();
-    fromDate.setDate(0);
+    fromDate.setDate(1);
     fromDate.setHours(0);
     fromDate.setMinutes(0);
     fromDate.setSeconds(0);
