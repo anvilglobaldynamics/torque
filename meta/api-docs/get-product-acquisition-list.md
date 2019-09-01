@@ -67,7 +67,7 @@ Possible Error Codes:
 
     createdByUser: Joi.object().required(), // willingly not expanded
     inventory: Joi.object().required(), // willingly not expanded
-    vendor: Joi.object().required(), // willingly not expanded
+    vendor: Joi.object().required() // willingly not expanded
   
   })
 }

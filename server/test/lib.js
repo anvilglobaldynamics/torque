@@ -393,7 +393,7 @@ exports.validateGetProductAcquisitionListApiSuccessResponse = (doc) => {
 
       createdByUser: Joi.object().required(), // willingly not expanded
       inventory: Joi.object().required(), // willingly not expanded
-      vendor: Joi.object().allow(null).required(), // willingly not expanded    
+      vendor: Joi.object().allow(null).required() // willingly not expanded    
     
     })
 
@@ -435,7 +435,8 @@ exports.validateGetProductTransferListApiSuccessResponse = (doc) => {
 
       createdByUser: Joi.object().required(), // willingly not expanded
       fromInventory: Joi.object().required(), // willingly not expanded
-      toInventory: Joi.object().required(), // willingly not expanded    
+      toInventory: Joi.object().required(), // willingly not expanded
+      vendor: Joi.object().allow(null).required() // willingly not expanded
 
     })
 

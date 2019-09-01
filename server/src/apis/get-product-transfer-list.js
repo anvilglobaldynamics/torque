@@ -103,6 +103,20 @@ exports.GetProductTransferListApi = class extends Api.mixin(InventoryMixin) {
       productTransfer.toInventory = toInventory
     });
 
+    // TODO: get vendor
+    productTransferList.forEach(productTransfer => {
+      productTransfer.vendor = null;
+    });
+    let productTransferListWithVendor = productTransferList.filter(productTransfer => productTransfer.vendorId !== null);
+    map = await this.crossmap({
+      source: productTransferListWithVendor,
+      sourceKey: 'vendorId',
+      target: 'vendor'
+    });
+    map.forEach((vendor, productTransfer) => {
+      productTransfer.vendor = vendor
+    });
+
     // append inventory container details to inventories
     let inventoryList = [].concat(
       productTransferList.map(productTransfer => productTransfer.toInventory),

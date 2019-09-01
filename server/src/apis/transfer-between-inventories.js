@@ -121,7 +121,7 @@ exports.TransferBetweenInventoriesApi = class extends Api {
     this._transfer({ fromInventory, toInventory, productList });
     await this._updateInventories({ fromInventory, toInventory });
 
-    await this._addTransferRecord({ organizationId, createdByUserId: userId, transferredDatetimeStamp: (new Date).getTime(), fromInventoryId, toInventoryId, productList, vendorId, isWithinSameInventoryContainer })
+    await this._addTransferRecord({ organizationId, createdByUserId: userId, transferredDatetimeStamp: (new Date).getTime(), fromInventoryId, toInventoryId, productList, vendorId, isWithinSameInventoryContainer });
 
     return { status: "success" };
   }
