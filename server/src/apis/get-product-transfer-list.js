@@ -103,7 +103,7 @@ exports.GetProductTransferListApi = class extends Api.mixin(InventoryMixin) {
       productTransfer.toInventory = toInventory
     });
 
-    // TODO: get vendor
+    // get vendor
     productTransferList.forEach(productTransfer => {
       productTransfer.vendor = null;
     });
