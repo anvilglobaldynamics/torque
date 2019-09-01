@@ -1247,7 +1247,12 @@
           this._fetchWarehouseList((warehouseList) => {
             warehouseList.reverse();
             this.warehouseList = warehouseList;
-            this.selectedWarehouseChanged();
+
+            let shouldSkipWarehouseSelection = true;
+            if (this.app.getFromSession('pos-selected-warehouse')) {
+              shouldSkipWarehouseSelection = false;
+            }
+            this.selectedWarehouseChanged({ shouldSkipWarehouseSelection });
           });
         } else {
           this.productSourceSelectionComplete = true;
@@ -1389,11 +1394,11 @@
         return (warehouseListLength > 0 && productListLength === 0);
       }
 
-      selectedWarehouseChanged() {
+      selectedWarehouseChanged({ shouldSkipWarehouseSelection = false } = {}) {
         this.app.storeInSession('pos-selected-warehouse', this.selectedWarehouse);
         this._resetProductSearch();
         this._focusProductSearchField();
-        this._updateDefaultInventoryId(() => { }); // Makes sure defaultInventoryId is set correctly
+        this._updateDefaultInventoryId({ shouldSkipWarehouseSelection }, () => { }); // Makes sure defaultInventoryId is set correctly
       }
 
       _setProductSelectedFromWarehouseId(id) {
@@ -1468,11 +1473,13 @@
         }
       }
 
-      _updateDefaultInventoryId(cbfn) {
+      _updateDefaultInventoryId({ shouldSkipWarehouseSelection }, cbfn) {
         this.defaultInventoryId = null;
         this._processGetDefaultInventoryId(defaultInventoryId => {
           this.defaultInventoryId = defaultInventoryId;
-          this.productSourceSelectionComplete = true;
+          if (!shouldSkipWarehouseSelection) {
+            this.productSourceSelectionComplete = true;
+          }
           cbfn();
         });
       }
