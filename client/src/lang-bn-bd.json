@@ -1076,7 +1076,8 @@
     "exclusionNote": "(ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
     "noProductTransferFound": "কোনো পণ্য ট্রান্সফার রেকর্ড পাওয়া যায়নি। ",
     "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
-    "productTransferTitle": "পণ্য ট্রান্সফার রেকর্ড"
+    "productTransferTitle": "পণ্য ট্রান্সফার রেকর্ড",
+    "acquiredFrom": "থেকে ক্রীত"
   },
   "graphSales": {
     "graphSalesTitle": "বিক্রয় গ্রাফ",

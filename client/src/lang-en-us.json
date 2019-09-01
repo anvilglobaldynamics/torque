@@ -1075,7 +1075,8 @@
     "exclusionNote": "(Other Filters will be ignored)",
     "noProductTransferFound": "No Product Transfer Found",
     "recordCreatedBy": "Record Created By",
-    "productTransferTitle": "Product Transfer Details"
+    "productTransferTitle": "Product Transfer Details",
+    "acquiredFrom": "Acquired From"
   },
   "graphSales": {
     "graphSalesTitle": "Sales Trend Graph",
