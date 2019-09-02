@@ -380,7 +380,7 @@
     "serviceBlueprintEditConfirmMessage": "Editing Service Blueprint will update coresponding service throughout the organization and it's memberships. Editing price and duration will cause calculations to change. Do you want to prceed?"
   },
   "customerSelector": {
-    "customerNameOrPhoneInput": "By name or phone.",
+    "customerNameOrPhoneInput": "Customer name or phone.",
     "customerNameOrPhoneInputError": "Enter a name or phone"
   },
   "outletSelector": {
@@ -758,10 +758,12 @@
     "currentOutlet": "Current Outlet",
     "saleNotValid": "Sale not valid",
     "offlineWarehouseSellNotAllowed": "Can not sell products from warehouse when in offline mode.",
-    "//NEW": "",
+
     "step1": "Step 1",
     "step2": "Step 2",
     "step3": "Step 3",
+    "products": "Products",
+    "services": "Services",
     "productSales": "Product Sales",
     "serviceSales": "Service Sales",
     "sellingProductsFrom": "Source of Product: ",
@@ -772,8 +774,8 @@
     "continueWithoutCustomer": "Continue without customer",
     "selectACustomer":"Select a customer",
     "selectADifferentCustomer": "Select a different customer",
-    "customerSectionBlocked": "Please complete product/service selection to access customer section.",
-    "paymentSectionBlocked": "Please complete product/service and customer selection to access payment section.",
+    "customerSectionBlocked": "Select Product/Service to view Customer section.",
+    "paymentSectionBlocked": "Select Product/Service and Customer to view Payment section.",
     "productNotFound": "Product not found",
     "serviceNotFound": "Service not found",
     "invalidAmount": "Invalid amount",

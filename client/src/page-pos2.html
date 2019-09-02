@@ -130,7 +130,7 @@
       }
 
       .placeholder {
-        background: var(--app-tab-unselected);
+        background: #dde4e7;
         text-align: center;
       }
 
@@ -163,6 +163,7 @@
 
       .multi-column-header .title {
         font-size: 20px;
+        font-weight: bold;
       }
 
       .multi-column-header .subtitle {
@@ -209,6 +210,7 @@
 
       .single-column-tab .title {
         font-size: 16px;
+        font-weight: bold;
       }
 
       .single-column-tab .subtitle {
@@ -334,7 +336,7 @@
           </template>
           <template is="dom-if" if="[[$equals('services', salesType)]]">
             <div class="flex multi-column-header">
-              <div class="title">[[verses.general.services]]</div>
+              <div class="title">[[verses.pos.services]]</div>
               <div class="horizontal layout center-center">
                 <div class="subtitle">[[verses.pos.step1]]</div>
                 <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
@@ -343,7 +345,7 @@
           </template>
           <template is="dom-if" if="[[$equals('products', salesType)]]">
             <div class="flex multi-column-header">
-              <div class="title">[[verses.general.products]]</div>
+              <div class="title">[[verses.pos.products]]</div>
               <div class="horizontal layout center-center">
                 <div class="subtitle">[[verses.pos.step1]]</div>
                 <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
@@ -378,7 +380,7 @@
 
           <template is="dom-if" if="[[$equals('products', salesType)]]">
             <div class$="flex single-column-tab [[$getTabSelectedClass('products', selectedTabName)]]" data-key="products" on-tap="singleColumnTabTapped">
-              <div class="title">[[verses.general.products]]</div>
+              <div class="title">[[verses.pos.products]]</div>
               <div class="horizontal layout center-center">
                 <div class="subtitle">[[verses.pos.step1]]</div>
                 <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
@@ -388,7 +390,7 @@
 
           <template is="dom-if" if="[[$equals('services', salesType)]]">
             <div class$="flex single-column-tab [[$getTabSelectedClass('services', selectedTabName)]]" data-key="services" on-tap="singleColumnTabTapped">
-              <div class="title">[[verses.general.services]]</div>
+              <div class="title">[[verses.pos.services]]</div>
               <div class="horizontal layout center-center">
                 <div class="subtitle">[[verses.pos.step1]]</div>
                 <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
@@ -801,7 +803,7 @@
 
         <!-- customer column placeholder - start -->
         <div class$="column flex placeholder  vertical layout center-center [[$getColumnClasses('customer', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
-          <div style="max-width: 220px;">
+          <div style="max-width: 250px;">
             [[verses.pos.customerSectionBlocked]]
           </div>
         </div>

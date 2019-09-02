@@ -382,7 +382,7 @@
     "serviceBlueprintEditConfirmMessage": "সেবা পরিকল্পনায় পরিবর্তন করলে সংশ্লিষ্ট সেবা এবং সেবার সদস্যপদ পরিবর্তন হয়ে যাবে। সেবার মূল্য এবং স্থায়িত্ব পরিবর্তন করলে হিসেবে পরিবর্তন আসবে। আপনি কি নিশ্চিত করছেন?"
   },
   "customerSelector": {
-    "customerNameOrPhoneInput": "নাম বা ফোন",
+    "customerNameOrPhoneInput": "গ্রাহকের নাম বা ফোন",
     "customerNameOrPhoneInputError": "গ্রাহকের নাম বা ফোন লিখুন"
   },
   "outletSelector": {
@@ -760,10 +760,12 @@
     "currentOutlet": "বর্তমান দোকান",
     "saleNotValid": "বিক্রয় সঠিক নয়",
     "offlineWarehouseSellNotAllowed": "অফলাইন মোডে গুদাম থেকে পণ্য বিক্রি করতে পারবেন না।",
-    "//NEW": "",
+
     "step1": "প্রথম ধাপ",
     "step2": "দ্বিতীয় ধাপ",
     "step3": "তৃতীয় ধাপ",
+    "products": "পণ্য",
+    "services": "সেবা",
     "productSales": "পণ্য বিক্রয়",
     "serviceSales": "সেবা বিক্রয়",
     "sellingProductsFrom": "পণ্যের উৎস:",
@@ -774,8 +776,8 @@
     "continueWithoutCustomer": "ক্রেতা নির্বাচন না করেই এগিয়ে যান",
     "selectACustomer":"গ্রাহক নির্বাচন করুন",
     "selectADifferentCustomer": "ভিন্ন গ্রাহক নির্বাচন করুন",
-    "customerSectionBlocked": "গ্রাহক নির্বাচন করতে পণ্য/সেবা নির্বাচন সম্পূর্ণ করুন।",
-    "paymentSectionBlocked": "অর্থ পরিশোধ অ্যাক্সেস করতে দয়া করে পণ্য/সেবা এবং গ্রাহক নির্বাচন সম্পূর্ণ করুন।",
+    "customerSectionBlocked": "গ্রাহক নির্বাচন করতে পণ্য/সেবা নির্বাচন করুন।",
+    "paymentSectionBlocked": "অর্থ পরিশোধ করতে পণ্য/সেবা এবং গ্রাহক নির্বাচন করুন।",
     "productNotFound": "পণ্য পাওয়া যায় নি",
     "serviceNotFound": "সেবা পাওয়া যায় নি",
     "invalidAmount": "ভুল পরিমাণ",
