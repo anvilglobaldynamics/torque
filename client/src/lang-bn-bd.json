@@ -1049,6 +1049,7 @@
     "searchFieldTips": "নাম অথবা ফোন"
   },
   "productCategory": {
+    "productCategories": "পণ্যের ধরণ",
     "productCategoriesTitle": "পণ্যের ধরণ",
     "manageProductCategoriesTitle": "পণ্যের ধরণ পরিচালনা",
     "editProductCategoryTitle": "পণ্যের ধরণ সম্পাদনা করুন",

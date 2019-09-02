@@ -79,9 +79,9 @@
     "cancel": "Cancel",
     "organization": "Organization",
     "user": "User",
-    "cash": "cash",
-    "card": "card",
-    "digital": "digital",
+    "cash": "Cash",
+    "card": "Card",
+    "digital": "Digital",
     "email": "Email",
     "designation": "Designation",
     "errorMessageBody": "Error Occurred, Please contact Lipi representative.",
@@ -1048,6 +1048,7 @@
     "searchFieldTips": "Name or phone"
   },
   "productCategory": {
+    "productCategories": "Product Categories",
     "productCategoriesTitle": "Product Categories",
     "manageProductCategoriesTitle": "Manage Product Categories",
     "editProductCategoryTitle": "Edit Product Category",
