@@ -263,6 +263,11 @@
       .pos-card-heading-label {
         font-size: 20px;
       }
+
+      .not-found-message {
+        text-align: center;
+        color: red;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -489,6 +494,9 @@
                   <paper-icon-button icon="clear" on-tap="productSearchClearTapped"></paper-icon-button>
                 </template>
               </div>
+              <template is="dom-if" if="[[notFoundMessage]]">
+                <div class="not-found-message">[[notFoundMessage]]</div>
+              </template>
             </div>
           </template>
           <!-- product searchbar - end -->
@@ -595,6 +603,9 @@
                 <paper-icon-button icon="clear" on-tap="serviceSearchClearTapped"></paper-icon-button>
               </template>
             </div>
+            <template is="dom-if" if="[[notFoundMessage]]">
+              <div class="not-found-message">[[notFoundMessage]]</div>
+            </template>
           </div>
           <!-- service searchbar - end -->
 
@@ -1171,6 +1182,8 @@
         }
         if (!this._ensureAccess()) return;
 
+        this.notFoundMessage = '';
+
         // tabination
         this._detectMultiColumnSupport();
         window.addEventListener('resize', () => this._detectMultiColumnSupport());
@@ -1490,6 +1503,7 @@
 
       productSearchFieldBlurred(e) {
         this.isScanningActive = false;
+        this.notFoundMessage = '';
       }
 
       _fetchAggregatedInventoryDetailsOnline(cbfn) {
@@ -1540,7 +1554,8 @@
         this._fetchAggregatedInventoryDetails(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
 
           if (aggregatedProductList.length === 0 && this.productPagination.offset === 0) {
-            this.app.showModalDialog(this.app.verses.general.notFound, this.app.verses.pos.productNotFound);
+            this.notFoundMessage = this.app.verses.pos.productNotFound;
+            this._focusProductSearchField();
             cbfn();
             return;
           }
@@ -1584,15 +1599,19 @@
       }
 
       _resetProductSearch() {
+        this.notFoundMessage = '';
         this.productSearchString = '';
         this.matchingProductList = [];
       }
 
       productSearchFieldKeypressed(e) {
+        this.notFoundMessage = '';
         if (e.which === 13) {
           this.productSearchTapped(null);
         } else if (e.which === 27) {
           this._resetProductSearch();
+        } else {
+          this.matchingProductList = [];
         }
       }
 
@@ -1727,7 +1746,8 @@
         this._fetchOutletServiceList(({ serviceList }) => {
 
           if (serviceList.length === 0 && this.servicePagination.offset === 0) {
-            this.app.showModalDialog(this.app.verses.general.notFound, this.app.verses.pos.serviceNotFound);
+            this.notFoundMessage = this.app.verses.pos.serviceNotFound;
+            this._focusServiceSearchField();
             cbfn();
             return;
           }
@@ -1754,15 +1774,19 @@
       }
 
       _resetServiceSearch() {
+        this.notFoundMessage = '';
         this.serviceSearchString = '';
         this.matchingServiceList = [];
       }
 
       serviceSearchFieldKeypressed(e) {
+        this.notFoundMessage = '';
         if (e.which === 13) {
           this.serviceSearchTapped(null);
         } else if (e.which === 27) {
           this._resetServiceSearch();
+        } else {
+          this.matchingServiceList = [];
         }
       }
 
