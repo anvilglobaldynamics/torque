@@ -56,6 +56,10 @@
       .duration-text {
         font-size: 12px;
       }
+
+      .description-time {
+        font-size: 12px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -79,6 +83,20 @@
         </div>
         
       </div>
+
+      <!-- vendor detail - start -->
+      <template is="dom-if" if="{{productTransfer.vendor}}">
+        <div class="card vertical layout">
+          <div class="title">
+            <b>[[verses.productTransfer.acquiredFrom]]: </b>
+          </div>
+          <div>[[productTransfer.vendor.name]]</div>
+          <div>[[verses.general.contactPerson]]: [[productTransfer.vendor.contactPersonName]]</div>
+          <div>[[verses.general.phone]]: [[productTransfer.vendor.phone]]</div>
+          <div class="description-time">[[verses.general.address]]: [[productTransfer.vendor.physicalAddress]]</div>
+        </div>
+      </template>
+      <!-- vendor detail - end -->
 
       <!-- product list - start -->
       <template is="dom-if" if="{{productTransfer.productList.length}}">

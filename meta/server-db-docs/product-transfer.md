@@ -13,6 +13,7 @@ Joi.object().keys({
   transferredDatetimeStamp: Joi.number().max(999999999999999).required(),
   fromInventoryId: Joi.number().max(999999999999999).required(),
   toInventoryId: Joi.number().max(999999999999999).required(),
+  vendorId: Joi.number().max(999999999999999).allow(null).required(),
   organizationId: Joi.number().max(999999999999999).required(),
 
   isWithinSameInventoryContainer: Joi.boolean().required(),

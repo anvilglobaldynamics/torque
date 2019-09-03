@@ -105,9 +105,12 @@
 
                     <div class="description-time">[[$mkDate(productTransfer.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
 
+                    <template is="dom-if" if="{{productTransfer.vendor}}">
+                      <div class="description">[[verses.general.vendor]]: [[productTransfer.vendor.name]]</div>
+                    </template>
+
                     <div class="description">[[verses.general.from]]: [[productTransfer.fromInventory.inventoryContainer.name]] - [[productTransfer.fromInventory.name]]</div>
                     <div class="description">[[verses.general.to]]: [[productTransfer.toInventory.inventoryContainer.name]] - [[productTransfer.toInventory.name]]</div>
-                    <span class="description">[[verses.general.total]] [[productTransfer.productList.length]] [[verses.general.products]]</span>
 
                   </div>
                 </div>
