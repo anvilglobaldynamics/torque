@@ -196,38 +196,42 @@
               <strong>[[collectionSummary.collectedAmountSum]]</strong>
             </div>
           </div>
-          <div class="horizontal layout center item wrap">
-            <div class="flex">
-              [[verses.general.cash]]
+          <template is="dom-if" if="[[$equals(paymentMethod, 'all')]]">
+            <div class="horizontal layout center item wrap">
+              <div class="flex">
+                [[verses.general.cash]]
+              </div>
+              <div>
+                <strong>[[collectionSummary.collectedCashSum]]</strong>
+              </div>
             </div>
-            <div>
-              <strong>[[collectionSummary.collectedCashSum]]</strong>
+            <div class="horizontal layout center item wrap">
+              <div class="flex">
+                [[verses.general.card]]
+              </div>
+              <div>
+                <strong>[[collectionSummary.collectedCardSum]]</strong>
+              </div>
             </div>
-          </div>
-          <div class="horizontal layout center item wrap">
-            <div class="flex">
-              [[verses.general.card]]
+            <div class="horizontal layout center item wrap">
+              <div class="flex">
+                [[verses.general.digital]]
+              </div>
+              <div>
+                <strong>[[collectionSummary.collectedDigitalSum]]</strong>
+              </div>
             </div>
-            <div>
-              <strong>[[collectionSummary.collectedCardSum]]</strong>
-            </div>
-          </div>
-          <div class="horizontal layout center item wrap">
-            <div class="flex">
-              [[verses.general.digital]]
-            </div>
-            <div>
-              <strong>[[collectionSummary.collectedDigitalSum]]</strong>
-            </div>
-          </div>
-          <div class="horizontal layout center item wrap">
-            <div class="flex">
-              [[verses.general.balance]]
-            </div>
-            <div>
-              <strong>[[collectionSummary.collectedAccountBalanceSum]]</strong>
-            </div>
-          </div>
+            <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+              <div class="horizontal layout center item wrap">
+                <div class="flex">
+                  [[verses.general.balance]]
+                </div>
+                <div>
+                  <strong>[[collectionSummary.collectedAccountBalanceSum]]</strong>
+                </div>
+              </div>
+            </template>
+          </template>
           <!-- Summary - End -->
           <!-- Detailed - Start -->
           <div class="hr hr-mt"></div>
@@ -520,6 +524,10 @@
 
       printButtonOnTopBarPressed(e = null) {
         window.print();
+      }
+
+      $equals(a, b) {
+        return a === b;
       }
 
     }
