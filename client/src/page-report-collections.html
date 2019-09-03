@@ -220,14 +220,16 @@
               <strong>[[collectionSummary.collectedDigitalSum]]</strong>
             </div>
           </div>
-          <div class="horizontal layout center item wrap">
-            <div class="flex">
-              [[verses.general.balance]]
+          <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+            <div class="horizontal layout center item wrap">
+              <div class="flex">
+                [[verses.general.balance]]
+              </div>
+              <div>
+                <strong>[[collectionSummary.collectedAccountBalanceSum]]</strong>
+              </div>
             </div>
-            <div>
-              <strong>[[collectionSummary.collectedAccountBalanceSum]]</strong>
-            </div>
-          </div>
+          </template>
           <!-- Summary - End -->
           <!-- Detailed - Start -->
           <div class="hr hr-mt"></div>
