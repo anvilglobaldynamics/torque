@@ -393,7 +393,7 @@ exports.validateGetProductAcquisitionListApiSuccessResponse = (doc) => {
 
       createdByUser: Joi.object().required(), // willingly not expanded
       inventory: Joi.object().required(), // willingly not expanded
-      vendor: Joi.object().allow(null).required(), // willingly not expanded    
+      vendor: Joi.object().allow(null).required() // willingly not expanded    
     
     })
 
@@ -419,6 +419,7 @@ exports.validateGetProductTransferListApiSuccessResponse = (doc) => {
       transferredDatetimeStamp: Joi.number().max(999999999999999).required(),
       fromInventoryId: Joi.number().max(999999999999999).required(),
       toInventoryId: Joi.number().max(999999999999999).required(),
+      vendorId: Joi.number().max(999999999999999).allow(null).required(),
       organizationId: Joi.number().max(999999999999999).required(),
 
       isWithinSameInventoryContainer: Joi.boolean().required(),
@@ -434,7 +435,8 @@ exports.validateGetProductTransferListApiSuccessResponse = (doc) => {
 
       createdByUser: Joi.object().required(), // willingly not expanded
       fromInventory: Joi.object().required(), // willingly not expanded
-      toInventory: Joi.object().required(), // willingly not expanded    
+      toInventory: Joi.object().required(), // willingly not expanded
+      vendor: Joi.object().allow(null).required() // willingly not expanded
 
     })
 

@@ -81,7 +81,7 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin
 
   async handle({ body, userId }) {
     let { inventoryId, productList, vendorId } = body;
-    let organizationId = this.interimData.organization.id;
+    let { organizationId } = this.interimData;
 
     await this._verifyVendorIfNeeded({ vendorId, organizationId });
 

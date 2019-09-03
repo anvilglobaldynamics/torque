@@ -440,8 +440,8 @@
     "count": "Count",
     "sellFor": "Sell",
     "purchasedFor": "Purchase",
-    "addProductsVendorNeededTitle": "Vendor needed",
-    "addProductsVendorNeededMessage": "Select a vendor to continue. If you need to create a vendor, please use the Vendor Manager feature.",
+    "vendorNeededMessageTitle": "Vendor needed",
+    "vendorNeededMessageBody": "Select a vendor to continue. If you need to create a vendor, please use the Vendor Manager feature.",
     "noProductBlueprintFound": "No product blueprint found. Add as \"Product Blueprint\" first to add it as a Product to this inventory.",
     "addProductsConfirmMessage": "Please make sure product counts are correct. Once added product count can not be deducted manually."
   },
@@ -1075,7 +1075,8 @@
     "exclusionNote": "(Other Filters will be ignored)",
     "noProductTransferFound": "No Product Transfer Found",
     "recordCreatedBy": "Record Created By",
-    "productTransferTitle": "Product Transfer Details"
+    "productTransferTitle": "Product Transfer Details",
+    "acquiredFrom": "Acquired From"
   },
   "graphSales": {
     "graphSalesTitle": "Sales Trend Graph",
