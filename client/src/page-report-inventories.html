@@ -124,6 +124,10 @@
       .no-visibility {
         visibility: hidden;
       }
+
+      .product-category-filter{
+        margin-bottom: 2px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -179,6 +183,12 @@
               <div>[[app.organization.employment.companyProvidedId]]</div>
             </div>
           </div>
+          <template is="dom-if" if="[[_productCategoryList.length]]">
+            <div class="product-category-filter">
+              <b>[[verses.productCategory.productCategories]]:</b>
+              [[$joinProductCategoryNames(_productCategoryList, _productCategoryList.length)]]
+            </div>
+          </template>
         </div>
         <!-- report header - start -->
 
@@ -463,6 +473,11 @@
 
       $shouldShowClearFilter(_productCategoryListLength, _productBlueprintListLength) {
         return (_productCategoryListLength > 0 || _productBlueprintListLength > 0);
+      }
+
+      $joinProductCategoryNames(list, length) {
+        list = list.map(productCategory => productCategory.name);
+        return list.join(', ');
       }
 
     }
