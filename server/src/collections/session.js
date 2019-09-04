@@ -88,6 +88,16 @@ exports.SesssionCollection = class extends Collection {
     });
   }
 
+  async expireByUserIdWhenLoggedInFromAnotherDevice({ userId }) {
+    return await this._updateMany({ userId, hasExpired: false }, {
+      $set: {
+        hasExpired: true,
+        terminatedBy: 'system (duplicate)',
+        terminatedDatetimeStamp: (new Date()).getTime()
+      }
+    });
+  }
+
   async expireByUserIdWhenFired({ userId }) {
     return await this._updateMany({ userId, hasExpired: false }, {
       $set: {

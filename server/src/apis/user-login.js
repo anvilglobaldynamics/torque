@@ -63,9 +63,14 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
     return { apiKey, sessionId };
   }
 
+  async __destroyExistingSessions({ userId }) {
+    await this.database.sesssion.expireByUserIdWhenLoggedInFromAnotherDevice({ userId });
+  }
+
   async handle({ body }) {
     let { emailOrPhone, password } = body;
     let { user, warning } = await this.__getUser({ emailOrPhone, password });
+    await this.__destroyExistingSessions({ userId: user.id });
     let { apiKey, sessionId } = await this.__createSession({ userId: user.id });
     return {
       status: "success",
