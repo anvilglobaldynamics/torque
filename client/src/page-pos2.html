@@ -33,7 +33,7 @@
 
 <link rel="import" href="elem-customer-selector.html">
 
-<dom-module id="page-pos2">
+<dom-module id="page-pos">
   <template>
     <style include="shared-styles">
       :host {
@@ -998,10 +998,10 @@
   </template>
 
   <script>
-    class PagePos2 extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+    class PagePos extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
 
       static get is() {
-        return 'page-pos2';
+        return 'page-pos';
       }
 
       static get properties() {
@@ -2409,6 +2409,6 @@
 
     }
 
-    window.customElements.define(PagePos2.is, PagePos2);
+    window.customElements.define(PagePos.is, PagePos);
   </script>
 </dom-module>

@@ -314,7 +314,7 @@
               let { outletId, bypassHomepage } = settings.defaultOutletMetaMap[this.app.organization.id];
               if (bypassHomepage) {
                 this.app.wasLastNavigationBypassed = true;
-                this.app.navigateTo(`/pos2/outlet:${outletId}`);
+                this.app.navigateTo(`/pos/outlet:${outletId}`);
                 return;
               }
             } catch (ex) {
