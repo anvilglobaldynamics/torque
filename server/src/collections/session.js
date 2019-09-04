@@ -2,7 +2,7 @@
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
-exports.SesssionCollection = class extends Collection {
+exports.SessionCollection = class extends Collection {
 
   get name() { return 'session'; }
 

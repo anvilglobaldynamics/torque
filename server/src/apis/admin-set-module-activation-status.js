@@ -29,7 +29,7 @@ exports.AdminSetModuleActivationStatusApi = class extends Api {
   async _remotelyTerminateSessionOfUsersInOrganization({ organizationId }) {
     let employmentList = await this.database.employment.listByOrganizationId({ organizationId });
     for (let employment of employmentList) {
-      await this.database.sesssion.expireByUserId({ userId: employment.userId });
+      await this.database.session.expireByUserId({ userId: employment.userId });
     }
   }
 

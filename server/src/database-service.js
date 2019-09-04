@@ -20,7 +20,7 @@ const { ProductCollection } = require('./collections/product');
 const { SalesReturnCollection } = require('./collections/sales-return');
 const { SalesDiscardCollection } = require('./collections/sales-discard');
 const { SalesCollection } = require('./collections/sales');
-const { SesssionCollection } = require('./collections/session');
+const { SessionCollection } = require('./collections/session');
 const { UserCollection } = require('./collections/user');
 const { WarehouseCollection } = require('./collections/warehouse');
 const { ProductAcquisitionCollection } = require('./collections/product-acquisition');
@@ -60,7 +60,7 @@ class DatabaseService {
     this.salesReturn = new SalesReturnCollection(this.engine, this);
     this.salesDiscard = new SalesDiscardCollection(this.engine, this);
     this.sales = new SalesCollection(this.engine, this);
-    this.sesssion = new SesssionCollection(this.engine, this);
+    this.session = new SessionCollection(this.engine, this);
     this.user = new UserCollection(this.engine, this);
     this.warehouse = new WarehouseCollection(this.engine, this);
     this.productAcquisition = new ProductAcquisitionCollection(this.engine, this);
