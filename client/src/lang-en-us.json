@@ -384,7 +384,7 @@
   },
   "commonEmploymentDetails": {
     "privileges": "Privileges",
-    "privilegesTip": "By selecting or deselcting below privileges you can select which features an Employee can use",
+    "privilegesTip": "By selecting or deselecting below privileges you can select which features an Employee can use",
     "roleOfEmployeeInput": "Role of Employee.",
     "roleOfEmployeeInputError": "Enter a valid role",
     "designationOfEmployeeInput": "Designation of Employee.",
