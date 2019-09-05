@@ -137,25 +137,26 @@
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 1)]]">
 
-        <div class="card vertical layout" style="text-align: center;">
-          [[verses.settings.noOrganizationSettingsPrivilege]]
-        </div>
-
-        <div class="card horizontal layout center">
-          <div>[[verses.settings.entireOrganizationWarning]]</div>
-          <div class="flex"></div>
-          <paper-button class="primary" raised on-tap="updateOrganizationSettingsTapped">[[verses.general.update]]</paper-button>
-        </div>
-
-        <div class="card vertical layout">
-          <div class="note">
-            [[verses.settings.receiptText]]:
+        <template is="dom-if" if="[[!hasPrivilege('PRIV_MODIFY_ORGANIZATION_SETTINGS')]]">
+          <div class="card vertical layout" style="text-align: center;">
+            [[verses.settings.noOrganizationSettingsPrivilege]]
           </div>
+        </template>
 
-          <paper-input value="{{organizationSettings.receiptText1}}" maxlength="64" label="[[verses.settings.receiptText1]]"></paper-input>
+        <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ORGANIZATION_SETTINGS')]]">
+          <div class="card vertical layout">
+            <div class="note">
+              [[verses.settings.receiptText]]:
+            </div>
 
-          <paper-input value="{{organizationSettings.receiptText2}}" maxlength="64" label="[[verses.settings.receiptText2]]"></paper-input>
-        </div>
+            <paper-input value="{{organizationSettings.receiptText1}}" maxlength="64" label="[[verses.settings.receiptText1]]"></paper-input>
+
+            <paper-input value="{{organizationSettings.receiptText2}}" maxlength="64" label="[[verses.settings.receiptText2]]"></paper-input>
+
+            <paper-button class="primary" raised on-tap="updateOrganizationSettingsTapped" style="margin-top: 8px;">[[verses.general.update]]</paper-button>
+
+          </div>
+        </template>
 
       </template>
 
@@ -400,7 +401,7 @@
         this.app.callEditOrganizationSettingsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this.app.showModalDialog("", this.verses.settings.changesSaved, ()=>{
+          this.app.showModalDialog("", this.verses.settings.changesSaved, () => {
             this.app.logoutTapped();
           });
         });

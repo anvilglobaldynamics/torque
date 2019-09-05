@@ -173,7 +173,7 @@
         text-align: center;
       }
 
-      .slim-report .header .outlet-block{
+      .slim-report .header .outlet-block {
         margin-top: 8px;
       }
 
@@ -239,6 +239,14 @@
 
       /* slim - end */
 
+      .receipt-text-slim {
+        font-size: 8px;
+      }
+
+      .receipt-text-a4 {
+        font-size: 12px;
+      }
+
       .tr-border-top-bottom {
         border-top: 1px solid black;
         border-bottom: 1px solid black;
@@ -294,6 +302,10 @@
                 <div><b>[[verses.salesReceipt.customerName]]:</b> [[customer.fullName]]</div>
                 <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
               </template>
+            </div>
+
+            <div class="receipt-text-slim receipt-text-1-slim">
+              [[app.organization.settings.receiptText1]]
             </div>
 
             <table class="product-table">
@@ -402,6 +414,9 @@
             <div class="footer-sold-by-slim">
               <div class="author-title">[[verses.salesReceipt.soldBy]]: [[soldByUser.fullName]], [[soldByUser.designation]] [[soldByUser.companyProvidedId]]</div>
             </div>
+            <div class="receipt-text-slim receipt-text-2-slim">
+              [[app.organization.settings.receiptText2]]
+            </div>
           </div>
 
           <div class="powered-by-footer">Powered by <span style="font-weight: bold;">Lipi</span>, anvil.live/lipi</div>
@@ -424,7 +439,7 @@
 
                 <div class="author-title">[[verses.salesReceipt.receiptTitle]] #[[sales.salesNumber]]</div>
                 <div><b>[[verses.general.date]]:</b> [[$mkDate(sales.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</div>
-                
+
                 <template is="dom-if" if="{{sales.customerId}}">
                   <div><b>[[verses.salesReceipt.customerName]]:</b> [[customer.fullName]]</div>
                   <div><b>[[verses.salesReceipt.customerPhone]]:</b> [[customer.phone]]</div>
@@ -453,6 +468,10 @@
                 <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
               </template>
             </div> -->
+
+            <div class="receipt-text-a4 receipt-text-1-a4">
+                [[app.organization.settings.receiptText1]]
+              </div>
 
             <table class="product-table">
               <tr class="tr-border-top-bottom">
@@ -566,6 +585,9 @@
               <!-- <div>[[soldByUser.phone]]</div> -->
             </div>
           </div>
+          <div class="receipt-text-a4 receipt-text-2-a4">
+              [[app.organization.settings.receiptText2]]
+            </div>
 
           <div class="powered-by-footer">Powered by <span style="font-weight: bold;">Lipi</span>, anvil.live/lipi</div>
 

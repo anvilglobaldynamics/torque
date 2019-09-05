@@ -23,7 +23,7 @@ exports.EditOrganizationSettingsApi = class extends Api.mixin(OrganizationMixin)
     return [{
       organizationBy: "organizationId",
       privilegeList: [
-        // "PRIV_MODIFY_ALL_OUTLETS"
+        "PRIV_MODIFY_ORGANIZATION_SETTINGS"
       ]
     }];
   }
