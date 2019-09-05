@@ -579,6 +579,11 @@ exports.validateGetOrganizationListApiSuccessResponse = (doc) => {
         companyProvidedId: Joi.string().allow('').required(),
         isActive: Joi.boolean().required(),
         privileges: Joi.object().required()
+      }),
+      settings: Joi.object().keys({
+        receiptText1: Joi.string().min(0).max(128).allow('').required(),
+        receiptText2: Joi.string().min(0).max(128).allow('').required(),
+        logoImageId: Joi.number().max(999999999999999).allow(null).required(),
       })
     })
   });
@@ -1175,6 +1180,11 @@ exports.validateResponseOrganizationSchema = (doc) => {
       companyProvidedId: Joi.string().allow('').required(),
       isActive: Joi.boolean().required(),
       privileges: Joi.object()
+    }),
+    settings: Joi.object().keys({
+      receiptText1: Joi.string().min(0).max(128).allow('').required(),
+      receiptText2: Joi.string().min(0).max(128).allow('').required(),
+      logoImageId: Joi.number().max(999999999999999).allow(null).required(),
     })
   });
   let { error, value } = Joi.validate(doc, schema);

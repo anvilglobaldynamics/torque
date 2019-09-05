@@ -17,12 +17,14 @@ exports.GetOrganizationListApi = class extends Api {
     });
   }
 
-  __getAggregatedOrganization({ employment, organization }) {
+  __getAggregatedOrganization({ employment, organization, settings }) {
     let { id, name, primaryBusinessAddress, phone, email, activeModuleCodeList } = organization;
     let { designation, role, companyProvidedId, isActive, privileges } = employment;
+    let { receiptText1, receiptText2, logoImageId } = settings;
     return {
       id, name, primaryBusinessAddress, phone, email, activeModuleCodeList,
-      employment: { designation, role, companyProvidedId, isActive, privileges }
+      employment: { designation, role, companyProvidedId, isActive, privileges },
+      settings: { receiptText1, receiptText2, logoImageId }
     };
   }
 
@@ -31,8 +33,9 @@ exports.GetOrganizationListApi = class extends Api {
     let employmentList = await this.database.employment.listActiveEmploymentsOfUser({ userId });
     for (let employment of employmentList) {
       let organization = await this.database.organization.findById({ id: employment.organizationId });
-      let org = this.__getAggregatedOrganization({employment, organization});
-      organizationList.push(org);
+      let settings = await this.database.organizationSettings.findByOrganizationId({ organizationId: employment.organizationId });
+      let aggregated = this.__getAggregatedOrganization({ employment, organization, settings });
+      organizationList.push(aggregated);
     }
     return organizationList;
   }
