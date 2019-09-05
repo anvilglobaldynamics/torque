@@ -70,7 +70,7 @@ exports.AddNewEmployeeApi = class extends phoneVerificationRequestMixin(userComm
 
         PRIV_VIEW_REPORTS: Joi.boolean().required(),
         
-        MODIFY_ORGANIZATION_SETTINGS: Joi.boolean().required()
+        PRIV_MODIFY_ORGANIZATION_SETTINGS: Joi.boolean().required()
       })
     });
   }

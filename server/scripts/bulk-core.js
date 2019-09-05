@@ -352,7 +352,7 @@ const createEmployee = async ({ apiKey, organizationId, i }) => {
       PRIV_VIEW_VENDOR: true,
       PRIV_MODIFY_VENDOR: true,
 
-      MODIFY_ORGANIZATION_SETTINGS: true
+      PRIV_MODIFY_ORGANIZATION_SETTINGS: true
     }
   });
 

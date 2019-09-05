@@ -132,7 +132,7 @@
     "name": "View all reports"
   },
   {
-    "code": "MODIFY_ORGANIZATION_SETTINGS",
+    "code": "PRIV_MODIFY_ORGANIZATION_SETTINGS",
     "name": "Modify Organization-wide Settings"
   }
 ]

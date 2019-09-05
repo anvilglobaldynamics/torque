@@ -94,7 +94,7 @@ const privilegeObject = {
 
   PRIV_VIEW_REPORTS: true,
 
-  MODIFY_ORGANIZATION_SETTINGS: true
+  PRIV_MODIFY_ORGANIZATION_SETTINGS: true
 };
 
 let apiKey = null;

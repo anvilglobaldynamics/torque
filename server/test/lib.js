@@ -1889,7 +1889,7 @@ exports.validateEmploymentSchema = (doc) => {
 
       PRIV_VIEW_REPORTS: Joi.boolean().required(),
 
-      MODIFY_ORGANIZATION_SETTINGS: Joi.boolean().required()
+      PRIV_MODIFY_ORGANIZATION_SETTINGS: Joi.boolean().required()
     }),
 
     isActive: Joi.boolean().required()
