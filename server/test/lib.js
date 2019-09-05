@@ -581,8 +581,8 @@ exports.validateGetOrganizationListApiSuccessResponse = (doc) => {
         privileges: Joi.object().required()
       }),
       settings: Joi.object().keys({
-        receiptText1: Joi.string().min(0).max(128).allow('').required(),
-        receiptText2: Joi.string().min(0).max(128).allow('').required(),
+        receiptText1: Joi.string().min(0).max(64).allow('').required(),
+        receiptText2: Joi.string().min(0).max(64).allow('').required(),
         logoImageId: Joi.number().max(999999999999999).allow(null).required(),
       })
     })
@@ -1182,8 +1182,8 @@ exports.validateResponseOrganizationSchema = (doc) => {
       privileges: Joi.object()
     }),
     settings: Joi.object().keys({
-      receiptText1: Joi.string().min(0).max(128).allow('').required(),
-      receiptText2: Joi.string().min(0).max(128).allow('').required(),
+      receiptText1: Joi.string().min(0).max(64).allow('').required(),
+      receiptText2: Joi.string().min(0).max(64).allow('').required(),
       logoImageId: Joi.number().max(999999999999999).allow(null).required(),
     })
   });
