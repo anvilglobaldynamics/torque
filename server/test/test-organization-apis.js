@@ -45,7 +45,7 @@ let adminApiKey = null;
 const adminUsername = "default";
 const adminPassword = "johndoe1pass";
 
-describe('Organization', _ => {
+describe.only('Organization', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -159,6 +159,64 @@ describe('Organization', _ => {
     });
 
   });
+
+  // --- Organization Settings Section - start
+
+  it('api/get-organization-list (Valid)', testDoneFn => {
+
+    callApi('api/get-organization-list', {
+      json: {
+        apiKey,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetOrganizationListApiSuccessResponse(body);
+
+      expect(body.organizationList[0].settings.receiptText1).to.equal('');
+      expect(body.organizationList[0].settings.receiptText2).to.equal('');
+
+      testDoneFn();
+    });
+
+  });
+
+  it('api/edit-organization-settings (Valid)', testDoneFn => {
+
+    callApi('api/edit-organization-settings', {
+      json: {
+        apiKey,
+        organizationId: organizationToBeEdited.id,
+        receiptText1: 'Test Change',
+        receiptText2: '',
+        logoImageId: null
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/get-organization-list (Valid modification check)', testDoneFn => {
+
+    callApi('api/get-organization-list', {
+      json: {
+        apiKey,
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGetOrganizationListApiSuccessResponse(body);
+
+      expect(body.organizationList[0].settings.receiptText1).to.equal('Test Change');
+      expect(body.organizationList[0].settings.receiptText2).to.equal('');
+
+      testDoneFn();
+    });
+
+  });
+
+  // --- Organization Settings Section - end
 
   // --- Package Section - start
 
