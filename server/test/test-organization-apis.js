@@ -45,7 +45,7 @@ let adminApiKey = null;
 const adminUsername = "default";
 const adminPassword = "johndoe1pass";
 
-describe.only('Organization', _ => {
+describe('Organization', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -198,7 +198,7 @@ describe.only('Organization', _ => {
 
   });
 
-  it('api/get-organization-list (Valid modification check)', testDoneFn => {
+  it('api/get-organization-list (Valid modification check; not logged in check)', testDoneFn => {
 
     callApi('api/get-organization-list', {
       json: {
@@ -206,12 +206,34 @@ describe.only('Organization', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-      validateGetOrganizationListApiSuccessResponse(body);
-
-      expect(body.organizationList[0].settings.receiptText1).to.equal('Test Change');
-      expect(body.organizationList[0].settings.receiptText2).to.equal('');
-
+      expect(body.hasError).to.equal(true);
+      expect(body.error).to.have.property('code').that.equals('APIKEY_EXPIRED');
       testDoneFn();
+    });
+
+  });
+
+  it('api/get-organization-list (Login again and Valid modification check)', testDoneFn => {
+
+    loginUser({
+      emailOrPhone: phone, password
+    }, (data) => {
+      apiKey = data.apiKey;
+
+      callApi('api/get-organization-list', {
+        json: {
+          apiKey,
+        }
+      }, (err, response, body) => {
+        expect(response.statusCode).to.equal(200);
+        validateGetOrganizationListApiSuccessResponse(body);
+
+        expect(body.organizationList[0].settings.receiptText1).to.equal('Test Change');
+        expect(body.organizationList[0].settings.receiptText2).to.equal('');
+
+        testDoneFn();
+      });
+
     });
 
   });

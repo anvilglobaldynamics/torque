@@ -2,8 +2,9 @@
 const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
+const { OrganizationMixin } = require('./mixins/organization-mixin');
 
-exports.AdminSetModuleActivationStatusApi = class extends Api {
+exports.AdminSetModuleActivationStatusApi = class extends Api.mixin(OrganizationMixin) {
 
   get autoValidates() { return true; }
 
@@ -24,13 +25,6 @@ exports.AdminSetModuleActivationStatusApi = class extends Api {
   async _updateOrganizationactiveModuleCodeList({ organizationId, activeModuleCodeList }) {
     let result = await this.database.organization.setActiveModuleCodeList({ id: organizationId }, { activeModuleCodeList });
     this.ensureUpdate('organization', result);
-  }
-
-  async _remotelyTerminateSessionOfUsersInOrganization({ organizationId }) {
-    let employmentList = await this.database.employment.listByOrganizationId({ organizationId });
-    for (let employment of employmentList) {
-      await this.database.session.expireByUserId({ userId: employment.userId });
-    }
   }
 
   async _checkIfModuleExists({ moduleCode }) {
