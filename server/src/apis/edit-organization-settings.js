@@ -12,8 +12,8 @@ exports.EditOrganizationSettingsApi = class extends Api {
   get requestSchema() {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
-      receiptText1: Joi.string().min(0).max(128).allow('').required(),
-      receiptText2: Joi.string().min(0).max(128).allow('').required(),
+      receiptText1: Joi.string().min(0).max(64).allow('').required(),
+      receiptText2: Joi.string().min(0).max(64).allow('').required(),
       logoImageId: Joi.number().max(999999999999999).allow(null).required(),
     });
   }
