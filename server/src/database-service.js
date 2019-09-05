@@ -34,6 +34,7 @@ const { DiscountPresetCollection } = require('./collections/discount-preset');
 const { CacheOutletGeolocationCollection } = require('./collections/cache-outlet-geolocation');
 const { ProductCategoryCollection } = require('./collections/product-category');
 const { VendorCollection } = require('./collections/vendor');
+const { OrganizationSettingsCollection } = require('./collections/organization-settings');
 
 class DatabaseService {
 
@@ -74,6 +75,8 @@ class DatabaseService {
     this.productCategory = new ProductCategoryCollection(this.engine, this);
     this.vendor = new VendorCollection(this.engine, this);
     this.cacheOutletGeolocation = new CacheOutletGeolocationCollection(this.engine, this);
+    this.organizationSettings = new OrganizationSettingsCollection(this.engine, this);
+
     /** @type {[Collection]} */
     this.collectionList = Object.keys(this).filter(key => this[key] instanceof Collection).map(key => this[key]);
   }
