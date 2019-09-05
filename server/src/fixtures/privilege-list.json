@@ -130,5 +130,9 @@
   {
     "code": "PRIV_VIEW_REPORTS",
     "name": "View all reports"
+  },
+  {
+    "code": "MODIFY_ORGANIZATION_SETTINGS",
+    "name": "Modify Organization-wide Settings"
   }
 ]
