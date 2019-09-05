@@ -61,7 +61,7 @@
 
       <paper-tabs id="main-view-selector" class="view-selector" selected="{{paperTabSelectedViewIndex}}" fit-container>
         <paper-tab>[[verses.settings.app]]</paper-tab>
-        <paper-tab>[[verses.settings.general]]</paper-tab>
+        <paper-tab>[[verses.general.organization]]</paper-tab>
         <paper-tab>[[verses.settings.others]]</paper-tab>
       </paper-tabs>
 
@@ -113,12 +113,6 @@
           </div>
         </div>
 
-      </template>
-
-      <!-- View Index 0 End -->
-      <!-- View Index 1 Start -->
-
-      <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 1)]]">
         <div class="card vertical layout">
           <div class="option">
             <paper-input on-change="monetaryUnitChanged" on-input="monetaryUnitChanged" value="{{monetaryUnit}}" label="[[verses.settings.monetaryUnit]]"></paper-input>
@@ -135,6 +129,34 @@
             </div>
           </div>
         </div>
+
+      </template>
+
+      <!-- View Index 0 End -->
+      <!-- View Index 1 Start -->
+
+      <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 1)]]">
+
+        <div class="card vertical layout" style="text-align: center;">
+          [[verses.settings.noOrganizationSettingsPrivilege]]
+        </div>
+
+        <div class="card horizontal layout center">
+          <div>[[verses.settings.entireOrganizationWarning]]</div>
+          <div class="flex"></div>
+          <paper-button class="primary" raised on-tap="updateOrganizationSettingsTapped">[[verses.general.update]]</paper-button>
+        </div>
+
+        <div class="card vertical layout">
+          <div class="note">
+            [[verses.settings.receiptText]]:
+          </div>
+
+          <paper-input value="{{organizationSettings.receiptText1}}" maxlength="64" label="[[verses.settings.receiptText1]]"></paper-input>
+
+          <paper-input value="{{organizationSettings.receiptText2}}" maxlength="64" label="[[verses.settings.receiptText2]]"></paper-input>
+        </div>
+
       </template>
 
       <!-- View Index 1 End -->
@@ -258,6 +280,7 @@
         if (!this._ensureAccess()) return;
         this._processOutletList(() => {
           this.isReady = true;
+          this._loadOrganizationSettings();
         });
       }
 
@@ -357,6 +380,29 @@
           doc.defaultOutletMetaMap = settings.defaultOutletMetaMap;
           doc.defaultPrinterFormat = this.printerFormatOptionList[this.indexOfDefaultPrinterFormat];
           return doc
+        });
+      }
+
+      // region: organization-settings =================================
+
+      _loadOrganizationSettings() {
+        let { receiptText1, receiptText2, logoImageId } = this.app.organization.settings;
+        this.organizationSettings = {
+          receiptText1, receiptText2, logoImageId
+        };
+      }
+
+      updateOrganizationSettingsTapped(e = null) {
+        let data = {
+          organizationId: this.app.organization.id
+        };
+        Object.assign(data, this.organizationSettings);
+        this.app.callEditOrganizationSettingsApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.app.showModalDialog("", this.verses.settings.changesSaved, ()=>{
+            this.app.logoutTapped();
+          });
         });
       }
 

@@ -106,7 +106,8 @@
     "modalConfirmationPleaseConfirm": "নিশ্চিত করুন",
     "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন",
     "contactPerson": "যোগাযোগের ব্যক্তি",
-    "inventory": "পণ্য তালিকা"
+    "inventory": "পণ্য তালিকা",
+    "update": "আপডেট"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -843,7 +844,13 @@
     "defaultPrinterFormat": "রসিদের জন্য ডিফল্ট প্রিন্টার",
     "defaultPrinterFormatA4": "A4",
     "defaultPrinterFormatSlim": "Slim (POS)",
-    "defaultPrinterFormatDetail": "রসিদের জন্য ডিফল্ট প্রিন্টার নির্বাচন করুন"
+    "defaultPrinterFormatDetail": "রসিদের জন্য ডিফল্ট প্রিন্টার নির্বাচন করুন",
+    "receiptText": "রসিদে দেয়ার জন্য অতিরিক্ত তথ্য",
+    "receiptText1": "প্রথম লাইন",
+    "receiptText2": "দ্বিতীয় লাইন",
+    "noOrganizationSettingsPrivilege": "সংগঠন-ব্যাপী সেটিংস পরিবর্তন করার জন্য আপনার প্রয়োজনীয় বিশেষাধিকার নেই।",
+    "entireOrganizationWarning": "নীচের সেটিংস পুরো সংস্থাটিকে প্রভাবিত করে.",
+    "changesSaved": "সংগঠন-ব্যাপী সেটিংসগুলি সংরক্ষণ করা হয়েছে। পুনরায় লগ ইন করুন। "
   },
   "verify": {
     "verificationModalTitle": "যাচাইকরণ এসএমএস পাঠানো হয়েছে",
