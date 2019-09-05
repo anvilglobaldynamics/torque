@@ -29,7 +29,9 @@
       }
 
       .privilege-code {
-        font-size: 12px;
+        /* padding-left: 6px; */
+        color: #707070;
+        font-size: 10px;
       }
     </style>
 
@@ -42,7 +44,8 @@
 
       <template is="dom-repeat" items="[[privilegeList]]" as="privilege">
         <paper-checkbox checked="[[$isChecked(privilege)]]" on-change="privilegeChanged">
-          <span class="privilege-name">[[privilege.name]]</span> <span class="privilege-code">([[privilege.code]])</span>
+          <span class="privilege-name">[[privilege.name]]</span> <br>
+          <span class="privilege-code">[[privilege.code]]</span>
         </paper-checkbox>
       </template>
     </div>
