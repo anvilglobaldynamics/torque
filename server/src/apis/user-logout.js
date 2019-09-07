@@ -18,13 +18,13 @@ exports.UserLogoutApi = class extends Api.mixin(SecurityMixin, UserMixin) {
   }
 
   async __getSession({ apiKey }) {
-    let session = await this.database.sesssion.findByApiKey({ apiKey });
+    let session = await this.database.session.findByApiKey({ apiKey });
     throwOnFalsy(session, "APIKEY_INVALID", "Session could not be found using the ApiKey");
     return { sessionId: session.id };
   }
 
   async __closeSession({ sessionId }) {
-    let result = await this.database.sesssion.close({ id: sessionId });
+    let result = await this.database.session.close({ id: sessionId });
     this.ensureUpdate('session', result);
   }
 

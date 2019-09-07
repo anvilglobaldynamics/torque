@@ -2,7 +2,7 @@
 const { Collection } = require('./../collection-base');
 const Joi = require('joi');
 
-exports.SesssionCollection = class extends Collection {
+exports.SessionCollection = class extends Collection {
 
   get name() { return 'session'; }
 
@@ -83,6 +83,16 @@ exports.SesssionCollection = class extends Collection {
       $set: {
         hasExpired: true,
         terminatedBy: 'system (generic)',
+        terminatedDatetimeStamp: (new Date()).getTime()
+      }
+    });
+  }
+
+  async expireByUserIdWhenLoggedInFromAnotherDevice({ userId }) {
+    return await this._updateMany({ userId, hasExpired: false }, {
+      $set: {
+        hasExpired: true,
+        terminatedBy: 'system (duplicate)',
         terminatedDatetimeStamp: (new Date()).getTime()
       }
     });

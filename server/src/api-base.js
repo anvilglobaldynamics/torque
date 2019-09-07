@@ -361,7 +361,7 @@ class Api {
       }
       return adminSession.username;
     } else {
-      let session = await this.database.sesssion.findByApiKey({ apiKey });
+      let session = await this.database.session.findByApiKey({ apiKey });
       if (!session) {
         throw new CodedError("APIKEY_INVALID", this.verses.apiCommon.apikeyInvalid);
       }
