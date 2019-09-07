@@ -401,7 +401,7 @@
         this.app.callEditOrganizationSettingsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this.app.showModalDialog("", this.verses.settings.changesSaved, () => {
+          this.app.showModalDialog(this.verses.general.saved, this.verses.settings.changesSaved, () => {
             this.app.logoutTapped();
           });
         });

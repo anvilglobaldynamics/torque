@@ -107,7 +107,8 @@
     "scanButtonHelp": "Use code scanner to select multiple products quickly",
     "contactPerson": "Contact Person",
     "inventory": "Inventory",
-    "update": "Update"
+    "update": "Update",
+    "saved": "Saved"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",

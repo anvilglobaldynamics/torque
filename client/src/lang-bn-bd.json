@@ -107,7 +107,8 @@
     "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন",
     "contactPerson": "যোগাযোগের ব্যক্তি",
     "inventory": "পণ্য তালিকা",
-    "update": "আপডেট"
+    "update": "আপডেট",
+    "saved": "সংরক্ষিত"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
