@@ -65,7 +65,9 @@ exports.EditEmploymentApi = class extends userCommonMixin(collectionCommonMixin(
         PRIV_VIEW_VENDOR: Joi.boolean().required(),
         PRIV_MODIFY_VENDOR: Joi.boolean().required(),
 
-        PRIV_VIEW_REPORTS: Joi.boolean().required()
+        PRIV_VIEW_REPORTS: Joi.boolean().required(),
+        
+        PRIV_MODIFY_ORGANIZATION_SETTINGS: Joi.boolean().required()
       })
     });
   }

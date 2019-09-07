@@ -59,7 +59,9 @@ exports.EmploymentCollection = class extends Collection {
         PRIV_VIEW_VENDOR: Joi.boolean().required(),
         PRIV_MODIFY_VENDOR: Joi.boolean().required(),
 
-        PRIV_VIEW_REPORTS: Joi.boolean().required()
+        PRIV_VIEW_REPORTS: Joi.boolean().required(),
+
+        PRIV_MODIFY_ORGANIZATION_SETTINGS:Joi.boolean().required()
       }),
       isActive: Joi.boolean().required()
     });
@@ -129,7 +131,9 @@ exports.EmploymentCollection = class extends Collection {
       "PRIV_VIEW_VENDOR",
       "PRIV_MODIFY_VENDOR",
 
-      "PRIV_VIEW_REPORTS"
+      "PRIV_VIEW_REPORTS",
+
+      "PRIV_MODIFY_ORGANIZATION_SETTINGS"
     ];
   }
 

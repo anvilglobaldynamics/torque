@@ -92,7 +92,9 @@ const privilegeObject = {
   PRIV_VIEW_VENDOR: true,
   PRIV_MODIFY_VENDOR: true,
 
-  PRIV_VIEW_REPORTS: true
+  PRIV_VIEW_REPORTS: true,
+
+  PRIV_MODIFY_ORGANIZATION_SETTINGS: true
 };
 
 let apiKey = null;
@@ -105,7 +107,7 @@ let invalidUserId = generateInvalidId();
 let invalidEmploymentId = generateInvalidId();
 let invalidOrganizationId = generateInvalidId();
 
-describe('Employee', _ => {
+describe.only('Employee', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
