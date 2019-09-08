@@ -19,7 +19,7 @@ exports.UserMixin = (SuperApiClass) => class extends SuperApiClass {
     } while (!isUnique);
     await this.database.phoneVerificationRequest.create({ userId, phone, origin: 'user-register', verificationToken });
     let verificationLink = this._generatePhoneVerificationLink({ verificationToken });
-    return { verificationLink };
+    return verificationLink;
   }
 
   // TODO: try/catch mechanism since this method will not be awaited
