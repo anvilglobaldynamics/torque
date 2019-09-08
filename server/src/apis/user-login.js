@@ -57,15 +57,20 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
   async __createSession({ userId }) {
     do {
       var apiKey = generateRandomString(64);
-      var isUnique = await this.database.sesssion.isApiKeyUnique({ apiKey });
+      var isUnique = await this.database.session.isApiKeyUnique({ apiKey });
     } while (!isUnique);
-    let sessionId = await this.database.sesssion.create({ userId, apiKey });
+    let sessionId = await this.database.session.create({ userId, apiKey });
     return { apiKey, sessionId };
+  }
+
+  async __destroyExistingSessions({ userId }) {
+    await this.database.session.expireByUserIdWhenLoggedInFromAnotherDevice({ userId });
   }
 
   async handle({ body }) {
     let { emailOrPhone, password } = body;
     let { user, warning } = await this.__getUser({ emailOrPhone, password });
+    await this.__destroyExistingSessions({ userId: user.id });
     let { apiKey, sessionId } = await this.__createSession({ userId: user.id });
     return {
       status: "success",

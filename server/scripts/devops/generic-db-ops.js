@@ -33,57 +33,82 @@ const updateOne = async (collectionName, query, modifications) => {
   return (results.matchedCount === 1);
 }
 
+const insert = async (collectionName, doc) => {
+  let results = await db.collection(collectionName).insert(doc);
+  return results;
+}
+
 // ====================================== code
 
 const runCode = async () => {
   await connect(dbConfig);
 
-  // Part 1. Set organizationId
-  let productAcquisitionList = await find('product-acquisition', {});
+  // REGION: ================================= Use case: Product Acquisition
 
-  for (let productAcquisition of productAcquisitionList) {
-    if ('organizationId' in productAcquisition) continue;
-    let inventory = await find('inventory', { id: productAcquisition.inventoryId });
-    await updateOne('product-acquisition', { id: productAcquisition.id }, {
-      $set: {
-        organizationId: inventory[0].organizationId
-      }
-    });
-    console.log('set organizationId')
-  }
+  // // Part 1. Set organizationId
+  // let productAcquisitionList = await find('product-acquisition', {});
 
-  // Part 2. Set vendorId
-  for (let productAcquisition of productAcquisitionList) {
-    if ('vendorId' in productAcquisition) continue;
-    await updateOne('product-acquisition', { id: productAcquisition.id }, {
-      $set: {
-        vendorId: null
-      }
-    });
-    console.log('set vendorId')
-  }
+  // for (let productAcquisition of productAcquisitionList) {
+  //   if ('organizationId' in productAcquisition) continue;
+  //   let inventory = await find('inventory', { id: productAcquisition.inventoryId });
+  //   await updateOne('product-acquisition', { id: productAcquisition.id }, {
+  //     $set: {
+  //       organizationId: inventory[0].organizationId
+  //     }
+  //   });
+  //   console.log('set organizationId')
+  // }
 
-  // Part 3. set productAcquisitionNumber
+  // // Part 2. Set vendorId
+  // for (let productAcquisition of productAcquisitionList) {
+  //   if ('vendorId' in productAcquisition) continue;
+  //   await updateOne('product-acquisition', { id: productAcquisition.id }, {
+  //     $set: {
+  //       vendorId: null
+  //     }
+  //   });
+  //   console.log('set vendorId')
+  // }
+
+  // // Part 3. set productAcquisitionNumber
+  // let organizationList = await find('organization', {});
+  // for (let organization of organizationList) {
+  //   let productAcquisitionNumber = 1;
+  //   let productAcquisitionList = await find('product-acquisition', { organizationId: organization.id });
+  //   for (let productAcquisition of productAcquisitionList) {
+  //     await updateOne('product-acquisition', { id: productAcquisition.id }, {
+  //       $set: {
+  //         productAcquisitionNumber
+  //       }
+  //     });
+  //     productAcquisitionNumber += 1;
+  //     console.log({ productAcquisitionNumber });
+  //   }
+
+  //   await updateOne('auto-generated-organization-specific-number', { organizationId: organization.id }, {
+  //     $set: {
+  //       productAcquisitionNumberSeed: productAcquisitionNumber
+  //     }
+  //   });
+  // }
+
+  // REGION: ================================= Use case: Add organization-settings
+
   let organizationList = await find('organization', {});
-  for (let organization of organizationList) {
-    let productAcquisitionNumber = 1;
-    let productAcquisitionList = await find('product-acquisition', { organizationId: organization.id });
-    for (let productAcquisition of productAcquisitionList) {
-      await updateOne('product-acquisition', { id: productAcquisition.id }, {
-        $set: {
-          productAcquisitionNumber
-        }
-      });
-      productAcquisitionNumber += 1;
-      console.log({ productAcquisitionNumber });
-    }
 
-    await updateOne('auto-generated-organization-specific-number', { organizationId: organization.id }, {
-      $set: {
-        productAcquisitionNumberSeed: productAcquisitionNumber
-      }
-    });
+  for (let organization of organizationList) {
+    await insert('organization-settings', {
+      createdDatetimeStamp: Date.now(),
+      lastModifiedDatetimeStamp: Date.now(),
+      isDeleted: false,
+      organizationId: organization.id,
+      receiptText1: '',
+      receiptText2: '',
+      logoImageId: null
+    })
+    console.log('add organization-settings')
   }
+
 }
 
 // ====================================== start

@@ -579,6 +579,11 @@ exports.validateGetOrganizationListApiSuccessResponse = (doc) => {
         companyProvidedId: Joi.string().allow('').required(),
         isActive: Joi.boolean().required(),
         privileges: Joi.object().required()
+      }),
+      settings: Joi.object().keys({
+        receiptText1: Joi.string().min(0).max(64).allow('').required(),
+        receiptText2: Joi.string().min(0).max(64).allow('').required(),
+        logoImageId: Joi.number().max(999999999999999).allow(null).required(),
       })
     })
   });
@@ -1175,6 +1180,11 @@ exports.validateResponseOrganizationSchema = (doc) => {
       companyProvidedId: Joi.string().allow('').required(),
       isActive: Joi.boolean().required(),
       privileges: Joi.object()
+    }),
+    settings: Joi.object().keys({
+      receiptText1: Joi.string().min(0).max(64).allow('').required(),
+      receiptText2: Joi.string().min(0).max(64).allow('').required(),
+      logoImageId: Joi.number().max(999999999999999).allow(null).required(),
     })
   });
   let { error, value } = Joi.validate(doc, schema);
@@ -1811,6 +1821,8 @@ exports.validateAggregatedProductScema = (doc) => {
 }
 
 exports.validateEmploymentSchema = (doc) => {
+  const { getPrivilegesSchemaFromJson } = require('../src/utils/privilege-loader');
+
   let schema = Joi.object().keys({
     id: Joi.number().max(999999999999999).required(),
 
@@ -1833,52 +1845,7 @@ exports.validateEmploymentSchema = (doc) => {
     role: Joi.string().max(64).required(),
     companyProvidedId: Joi.string().allow('').max(64).required(),
 
-    privileges: Joi.object().required().keys({
-      PRIV_VIEW_USERS: Joi.boolean().required(),
-      PRIV_MODIFY_USERS: Joi.boolean().required(),
-
-      PRIV_ACCESS_POS: Joi.boolean().required(),
-      PRIV_VIEW_SALES: Joi.boolean().required(),
-      PRIV_MODIFY_SALES: Joi.boolean().required(),
-      PRIV_ALLOW_FLEXIBLE_PRICE: Joi.boolean().required(),
-      PRIV_VIEW_PURCHASE_PRICE: Joi.boolean().required(),
-
-      PRIV_MODIFY_DISCOUNT_PRESETS: Joi.boolean().required(),
-
-      PRIV_VIEW_SALES_RETURN: Joi.boolean().required(),
-      PRIV_MODIFY_SALES_RETURN: Joi.boolean().required(),
-
-      PRIV_VIEW_ALL_INVENTORIES: Joi.boolean().required(),
-      PRIV_VIEW_ALL_SERVICES: Joi.boolean().required(),
-      PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: Joi.boolean().required(),
-      PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: Joi.boolean().required(),
-      PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS: Joi.boolean().required(),
-      PRIV_VIEW_ALL_SERVICE_BLUEPRINTS: Joi.boolean().required(),
-      PRIV_TRANSFER_ALL_INVENTORIES: Joi.boolean().required(),
-      PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: Joi.boolean().required(),
-      PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS: Joi.boolean().required(),
-
-      PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: Joi.boolean().required(),
-      PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: Joi.boolean().required(),
-
-      PRIV_VIEW_ALL_OUTLETS: Joi.boolean().required(),
-      PRIV_MODIFY_ALL_OUTLETS: Joi.boolean().required(),
-
-      PRIV_VIEW_ALL_WAREHOUSES: Joi.boolean().required(),
-      PRIV_MODIFY_ALL_WAREHOUSES: Joi.boolean().required(),
-
-      PRIV_VIEW_ORGANIZATION_STATISTICS: Joi.boolean().required(),
-      PRIV_MODIFY_ORGANIZATION: Joi.boolean().required(),
-
-      PRIV_VIEW_CUSTOMER: Joi.boolean().required(),
-      PRIV_MODIFY_CUSTOMER: Joi.boolean().required(),
-      PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: Joi.boolean().required(),
-
-      PRIV_VIEW_VENDOR: Joi.boolean().required(),
-      PRIV_MODIFY_VENDOR: Joi.boolean().required(),
-
-      PRIV_VIEW_REPORTS: Joi.boolean().required()
-    }),
+    privileges: getPrivilegesSchemaFromJson(),
 
     isActive: Joi.boolean().required()
   });

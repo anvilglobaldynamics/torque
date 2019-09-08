@@ -22,7 +22,7 @@ exports.AdminSetUserBanningStatusApi = class extends Api {
   async _updateUserBanningStatus({ isBanned, userId }) {
     let result = await this.database.user.setBanningStatus({ id: userId }, { isBanned });
     this.ensureUpdate('user', result);
-    await this.database.sesssion.expireByUserId({ userId });
+    await this.database.session.expireByUserId({ userId });
   }
 
   async handle({ body }) {

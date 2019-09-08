@@ -17,7 +17,7 @@ method: `POST`
   companyProvidedId: Joi.string().allow('').max(64).required(),
   
   privileges: Joi.object().required().keys({
-    [Look up privileges here](../server-db-docs/employment.md)
+    [Look up privileges here](../server-db-docs/employment.js)
   });
 }
 ```

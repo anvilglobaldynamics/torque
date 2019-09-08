@@ -49,51 +49,8 @@ const orgName = "Test Organization";
 const orgBusinessAddress = "My Address";
 const orgPhone = 'o1' + rnd(prefix, 11);
 
-const privilegeObject = {
-  PRIV_VIEW_USERS: true,
-  PRIV_MODIFY_USERS: true,
-
-  PRIV_ACCESS_POS: true,
-  PRIV_VIEW_SALES: true,
-  PRIV_MODIFY_SALES: true,
-  PRIV_ALLOW_FLEXIBLE_PRICE: true,
-  PRIV_VIEW_PURCHASE_PRICE: true,
-  PRIV_MODIFY_DISCOUNT_PRESETS: true,
-
-  PRIV_VIEW_SALES_RETURN: true,
-  PRIV_MODIFY_SALES_RETURN: true,
-
-  PRIV_VIEW_ALL_INVENTORIES: true,
-  PRIV_VIEW_ALL_SERVICES: true,
-  PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS: true,
-  PRIV_MODIFY_ALL_SERVICE_BLUEPRINTS: true,
-  PRIV_VIEW_ALL_SERVICE_BLUEPRINTS: true,
-  PRIV_VIEW_ALL_PRODUCT_BLUEPRINTS: true,
-  PRIV_TRANSFER_ALL_INVENTORIES: true,
-  PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES: true,
-  PRIV_MODIFY_ALL_SERVICES_AVAILABILITY_IN_ALL_OUTLETS: true,
-
-  PRIV_VIEW_ALL_SERVICE_MEMBERSHIPS: true,
-  PRIV_MODIFY_ALL_SERVICE_MEMBERSHIPS: true,
-
-  PRIV_VIEW_ALL_OUTLETS: true,
-  PRIV_MODIFY_ALL_OUTLETS: true,
-
-  PRIV_VIEW_ALL_WAREHOUSES: true,
-  PRIV_MODIFY_ALL_WAREHOUSES: true,
-
-  PRIV_VIEW_ORGANIZATION_STATISTICS: true,
-  PRIV_MODIFY_ORGANIZATION: true,
-
-  PRIV_VIEW_CUSTOMER: true,
-  PRIV_MODIFY_CUSTOMER: true,
-  PRIV_MANAGE_CUSTOMER_WALLET_BALANCE: true,
-
-  PRIV_VIEW_VENDOR: true,
-  PRIV_MODIFY_VENDOR: true,
-
-  PRIV_VIEW_REPORTS: true
-};
+const { getPrivilegesFromJson } = require('../src/utils/privilege-loader');
+const privilegeObject = getPrivilegesFromJson();
 
 let apiKey = null;
 let organizationId = null;

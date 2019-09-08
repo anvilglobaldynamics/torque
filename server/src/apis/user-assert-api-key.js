@@ -18,7 +18,7 @@ exports.UserAssertApiKeyApi = class extends Api.mixin(SecurityMixin, UserMixin) 
   }
 
   async __getSession({ apiKey }) {
-    let session = await this.database.sesssion.findByApiKey({ apiKey });
+    let session = await this.database.session.findByApiKey({ apiKey });
     throwOnFalsy(session, "APIKEY_INVALID", "Session could not be found using the ApiKey");
     return { sessionId: session.id };
   }
