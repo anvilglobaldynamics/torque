@@ -846,8 +846,8 @@
     "defaultPrinterFormatSlim": "Slim (POS)",
     "defaultPrinterFormatDetail": "Select Default Printer Format for POS Receipts",
     "receiptText": "Additional information to print on receipt",
-    "receiptText1": "Line 1",
-    "receiptText2": "Line 2",
+    "receiptText1": "Line 1 (Top)",
+    "receiptText2": "Line 2 (Bottom)",
     "noOrganizationSettingsPrivilege": "You do not have the required privilege to modify organization-wide settings.",
     "entireOrganizationWarning": "The settings below affect the entire organization.",
     "changesSaved": "Changes have been saved for the entire organization. Log in again."
