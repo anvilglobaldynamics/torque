@@ -133,6 +133,14 @@ exports.UserCollection = class extends Collection {
     });
   }
 
+  async setOriginType({ id }, { originType }) {
+    return await this._update({ id }, {
+      $set: {
+        originType
+      }
+    });
+  }
+
   async setAgreedToTocDatetimeStamp({ id }, { agreedToTocDatetimeStamp }) {
     return await this._update({ id }, {
       $set: {
