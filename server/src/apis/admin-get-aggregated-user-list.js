@@ -12,6 +12,8 @@ exports.AdminGetAggregatedUserListApi = class extends Api {
 
   get authenticationLevel() { return 'admin'; }
 
+  get autoPaginates() { return ['userList']; }
+
   get requestSchema() {
     return Joi.object().keys({
       apiKey: Joi.string().length(64).required(),
@@ -51,6 +53,7 @@ exports.AdminGetAggregatedUserListApi = class extends Api {
 
     await Promise.all(userList.map(async user => {
       user.organizationList = await this._getOrganizationsThatEmployedUser({ user });
+      user.passwordHash = 'REDACTED';
     }));
     return userList;
   }

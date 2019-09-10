@@ -8,6 +8,10 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
 
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
@@ -45,6 +49,47 @@
       .organization {
         padding: 5px;
       }
+
+      .badge {
+        margin-right: 4px;
+        font-size: 14px;
+        border-radius: 4px;
+        padding: 4px 8px;
+      }
+
+      .badge.banned {
+        background: red;
+        color: white;
+      }
+
+      .badge.unsure {
+        background: grey;
+        color: white;
+        text-transform: capitalize;
+      }
+
+      .badge.test {
+        background: yellow;
+        color: blue;
+        text-transform: capitalize;
+      }
+
+      .badge.real {
+        background: green;
+        color: white;
+        text-transform: capitalize;
+      }
+
+      .badge.phone-unverified {
+        background: orange;
+        text-transform: capitalize;
+      }
+
+      .badge.phone-verified {
+        background: green;
+        color: white;
+        text-transform: capitalize;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -57,10 +102,25 @@
       </div>
 
       <div class="card vertical layout">
+
+        <!-- user-list - start -->
         <div class="std-list">
           <template is="dom-repeat" items="[[userList]]" as="user">
-            <div class="horizontal layout std-list-item center" style="padding: 10px;">
+            <div class="horizontal layout wrap std-list-item center" style="padding: 10px;">
               <div class="vertical layout flex">
+
+                <div class="horizontal layout center">
+                  <div class$="badge [[user.originType]]">Origin: [[user.originType]]</div>
+                  <template is="dom-if" if="[[user.isBanned]]">
+                    <div class="badge banned">Banned</div>
+                  </template>
+                  <template is="dom-if" if="[[user.isPhoneVerified]]">
+                    <div class="badge phone-verified">Phone Verified</div>
+                  </template>
+                  <template is="dom-if" if="[[!user.isPhoneVerified]]">
+                    <div class="badge phone-unverified">Phone not verified</div>
+                  </template>
+                </div>
 
                 <div class="title">Name: [[user.fullName]]</div>
                 <div class="description">Phone: [[user.phone]] Email: [[user.email]]</div>
@@ -73,7 +133,19 @@
                 <template is="dom-if" if="[[user.isBanned]]">
                   <paper-button raised class="ban-unban primary" on-tap="unbanUserTapped">Unban</paper-button>
                 </template>
-                
+
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="Set Origin Type" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{originType}}" attr-for-selected="code">
+                    <!-- <template is="dom-repeat" items="[[packageList]]" as="package">
+                      <paper-item code="[[package.code]]">[[package.name]] ([[package.code]])</paper-item>
+                    </template> -->
+                  </paper-listbox>
+                </paper-dropdown-menu>
+
+
+              </div>
+              <div class="flex">
+
                 <template is="dom-if" if="[[user.organizationList.length]]">
                   <div class="organization-list-container">
                     <p class="organization-list-title">Organizations:</p>
@@ -91,6 +163,25 @@
             </div>
           </template>
         </div>
+        <!-- user-list - end -->
+
+        <div class="horizontal layout center-center" style="margin-top: 8px;">
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">Show Previous</paper-button>
+          </template>
+          <div class="pagination">
+            Showing
+            <span class="limit">[[pagination.limit]]</span>
+            item(s) out of
+            <span class="total-count">[[pagination.totalCount]]</span> item(s) starting from
+            <span class="offset">#[[pagination.offset]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">Show More</paper-button>
+          </template>
+        </div>
+
+
       </div>
 
     </div>
@@ -109,6 +200,21 @@
           userSearchString: {
             type: String,
             value: ''
+          },
+          paginate: {
+            type: Object,
+            value: () => {
+              return {
+                offset: 0,
+                limit: 6
+              }
+            }
+          },
+          pagination: {
+            type: Object,
+            value: () => {
+              return {}
+            }
           }
         };
       }
@@ -144,10 +250,14 @@
       }
 
       _fetchUserList(cbfn) {
-        let data = { userSearchString: this.userSearchString };
+        let data = {
+          userSearchString: this.userSearchString,
+          paginate: this.paginate
+        };
         this.app.callAdminGetAggregatedUserListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
           return cbfn(response.userList);
         });
       }
@@ -172,6 +282,7 @@
 
       searchTapped(e = null) {
         this.isReady = false;
+        this.paginate.offset = 0;
         this._processUserList(() => {
           this.isReady = true;
         });
@@ -198,7 +309,27 @@
         return this.app.navigateTo(`/manage-organization/organization:${organization.id}`);
       }
 
-      // region: misc =================================
+      // region: pagination =================================
+
+      $hasMorePagination(totalCount, offset, limit) {
+        return (totalCount > (offset + limit));
+      }
+
+      $hasPreviousPagination(offset) {
+        return (offset > 0);
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processUserList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processUserList(() => this.isReady = true);
+      }
 
     }
 
