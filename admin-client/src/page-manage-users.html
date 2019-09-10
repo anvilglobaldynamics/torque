@@ -33,7 +33,8 @@
       }
 
       .ban-unban {
-        width: 10%;
+        /* width: 10%; */
+        /* width: 100px; */
       }
 
       .organization-list-container {
@@ -136,14 +137,6 @@
                 <div class="description">Phone: [[user.phone]] Email: [[user.email]]</div>
                 <div class="description">NID: [[user.nid]]</div>
 
-                <!-- TODO: align below buttons -->
-                <template is="dom-if" if="[[!user.isBanned]]">
-                  <paper-button raised class="ban-unban primary" on-tap="banUserTapped">Ban</paper-button>
-                </template>
-                <template is="dom-if" if="[[user.isBanned]]">
-                  <paper-button raised class="ban-unban primary" on-tap="unbanUserTapped">Unban</paper-button>
-                </template>
-
                 <div class="horizontal layout center">
                   <paper-dropdown-menu class="full-width-paper-dropdown" label="Set Origin Type" class="mr-4" style="min-width: 300px;">
                     <paper-listbox slot="dropdown-content" selected="{{user.originTypeSelected}}">
@@ -153,6 +146,15 @@
                     </paper-listbox>
                   </paper-dropdown-menu>
                   <paper-button raised class="ban-unban primary" on-tap="setOriginTypeTapped">Set</paper-button>
+                </div>
+
+                <div class="horizontal layout">
+                  <template is="dom-if" if="[[!user.isBanned]]">
+                    <paper-button raised class="ban-unban primary" on-tap="banUserTapped">Ban User</paper-button>
+                  </template>
+                  <template is="dom-if" if="[[user.isBanned]]">
+                    <paper-button raised class="ban-unban primary" on-tap="unbanUserTapped">Unban User</paper-button>
+                  </template>
                 </div>
 
               </div>
