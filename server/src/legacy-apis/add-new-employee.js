@@ -57,15 +57,24 @@ exports.AddNewEmployeeApi = class extends phoneVerificationRequestMixin(userComm
     });
   }
 
-  handle({ body }) {
+  _findUserById({ userId }, cbfn) {
+    this.legacyDatabase.user.findById({ userId }, (err, user) => {
+      return cbfn(user);
+    })
+  }
+
+  handle({ body, userId: creatorUserId }) {
     let { fullName, phone, password, organizationId, role, designation, companyProvidedId, privileges } = body;
     let { aPackage } = this.interimData;
-    this._checkOrganizationPackageEmployeeLimit({ organizationId, aPackage }, () => {
-      this._createUser({ fullName, phone, password, agreedToTocDatetimeStamp: null }, (userId) => {
-        this._hireUser({ userId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {
-          this._createPhoneVerificationRequest({ phone, userId }, (verificationLink) => {
-            this._sendPhoneVerificationSms({ phone, verificationLink });
-            this.success({ status: "success", userId, employmentId });
+
+    this._findUserById({ userId: creatorUserId }, (creatorUser) => {
+      this._checkOrganizationPackageEmployeeLimit({ organizationId, aPackage }, () => {
+        this._createUser({ fullName, phone, password, agreedToTocDatetimeStamp: null, originType: creatorUser.originType }, (createdUserId) => {
+          this._hireUser({ userId: createdUserId, organizationId, role, designation, companyProvidedId, privileges }, (employmentId) => {
+            this._createPhoneVerificationRequest({ phone, userId: createdUserId }, (verificationLink) => {
+              this._sendPhoneVerificationSms({ phone, verificationLink });
+              this.success({ status: "success", userId: createdUserId, employmentId });
+            });
           });
         });
       });

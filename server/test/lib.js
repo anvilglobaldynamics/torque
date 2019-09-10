@@ -1773,6 +1773,7 @@ exports.validateUserSchema = (doc) => {
     physicalAddress: Joi.string().min(1).max(128).allow('').required(),
     emergencyContact: Joi.string().min(1).max(128).allow('').required(),
     bloodGroup: Joi.string().alphanum().min(2).max(3).allow('').required(),
+    originType: Joi.string().valid('real', 'test', 'unsure').required(),
 
     isDeleted: Joi.boolean().required(),
     isPhoneVerified: Joi.boolean().required(),

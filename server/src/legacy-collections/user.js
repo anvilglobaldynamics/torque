@@ -31,6 +31,7 @@ exports.UserCollection = class extends LegacyCollection {
       physicalAddress: Joi.string().min(1).max(128).allow('').required(),
       emergencyContact: Joi.string().min(1).max(128).allow('').required(),
       bloodGroup: Joi.string().min(2).max(3).allow('').required(),
+      originType: Joi.string().valid('real', 'test', 'unsure').required(),
       isDeleted: Joi.boolean().required(),
       isPhoneVerified: Joi.boolean().required(),
       isEmailVerified: Joi.boolean().required(),
@@ -46,7 +47,7 @@ exports.UserCollection = class extends LegacyCollection {
     ]
   }
 
-  create({ phone, fullName, passwordHash, agreedToTocDatetimeStamp  }, cbfn) {
+  create({ phone, fullName, passwordHash, agreedToTocDatetimeStamp }, cbfn) {
     let user = {
       passwordHash,
       email: null,
@@ -56,6 +57,7 @@ exports.UserCollection = class extends LegacyCollection {
       physicalAddress: '',
       emergencyContact: '',
       bloodGroup: '',
+      originType: 'unsure',
       isDeleted: false,
       isPhoneVerified: false,
       isEmailVerified: false,
@@ -178,7 +180,7 @@ exports.UserCollection = class extends LegacyCollection {
     });
   }
 
-  updateBanningStatus({ userId }, {isBanned}, cbfn) {
+  updateBanningStatus({ userId }, { isBanned }, cbfn) {
     let mod = {
       $set: {
         isBanned
