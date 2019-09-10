@@ -118,7 +118,7 @@
         <div class="std-list">
           <template is="dom-repeat" items="[[userList]]" as="user">
             <div class="horizontal layout wrap std-list-item center" style="padding: 10px;">
-              <div class="vertical layout flex">
+              <div class="vertical layout flex" style="min-width: 300px;">
 
                 <div class="horizontal layout center">
                   <div class$="badge [[user.originType]]">Origin: [[user.originType]]</div>
@@ -134,11 +134,12 @@
                 </div>
 
                 <div class="title">Name: [[user.fullName]]</div>
-                <div class="description">Phone: [[user.phone]] Email: [[user.email]]</div>
+                <div class="description">Phone: [[user.phone]]</div>
+                <div class="description">Email: [[user.email]]</div>
                 <div class="description">NID: [[user.nid]]</div>
 
                 <div class="horizontal layout center">
-                  <paper-dropdown-menu class="full-width-paper-dropdown" label="Set Origin Type" class="mr-4" style="min-width: 300px;">
+                  <paper-dropdown-menu class="full-width-paper-dropdown" label="Set Origin Type" class="mr-4">
                     <paper-listbox slot="dropdown-content" selected="{{user.originTypeSelected}}">
                       <template is="dom-repeat" items="[[originTypeList]]" as="originType">
                         <paper-item name="[[package.originType]]">[[originType.label]]</paper-item>
@@ -150,7 +151,7 @@
 
                 <div class="horizontal layout">
                   <template is="dom-if" if="[[!user.isBanned]]">
-                    <paper-button raised class="ban-unban primary" on-tap="banUserTapped">Ban User</paper-button>
+                    <paper-button raised class="ban-unban danger" on-tap="banUserTapped">Ban User</paper-button>
                   </template>
                   <template is="dom-if" if="[[user.isBanned]]">
                     <paper-button raised class="ban-unban primary" on-tap="unbanUserTapped">Unban User</paper-button>
