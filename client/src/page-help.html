@@ -1,0 +1,91 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-help">
+  <template>
+
+    <style include="shared-styles">
+      p {}
+
+      ul,
+      ol {}
+
+      li {}
+
+      h1 {}
+
+      h2 {}
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      Work in Progress
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageHelp extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-help';
+      }
+
+      static get properties() {
+        return {
+
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        if (!this._ensureAccess()) return;
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.help.helpUsTitle);
+        this.delay(300, () => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'authenticated'
+        });
+      }
+
+      // region: misc =================================      
+
+
+    }
+
+    window.customElements.define(PageHelp.is, PageHelp);
+  </script>
+</dom-module>
