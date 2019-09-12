@@ -148,6 +148,11 @@
         --app-button-alternative: #FFF59D;
         --app-button-label-alternative: #067e24;
 
+        --app-tab-selected: #0091ea;
+        --app-tab-label-selected: #e1f5fe;
+        --app-tab-unselected: #e1f5fe;
+        --app-tab-label-unselected: #000000;
+
         display: block;
       }
 
@@ -161,6 +166,21 @@
           display: none;
         }
       }
+
+      /* 
+      NOTE: Uncomment to apply custom scrollbars
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #ddd;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #757575;
+      } 
+      */
 
       /* ============= styles ============= */
 
@@ -362,7 +382,7 @@
                 <paper-item on-tap="switchOrganizationTapped" hidden="[[isInOfflineMode]]">[[verses.topMenu.switchOrganization]]</paper-item>
                 <paper-item on-tap="reloadTapped">[[verses.topMenu.reload]]</paper-item>
                 <!-- FIXME: Remove offline toggle switch after testing -->
-                <!-- <paper-item on-tap="toggleOfflineMode">Toggle Offline Mode (Debug Only)</paper-item> -->
+                <paper-item on-tap="toggleOfflineMode">Toggle Offline Mode (Debug Only)</paper-item>
                 <paper-item on-tap="logoutTapped">[[verses.topMenu.logout]]</paper-item>
               </paper-listbox>
             </paper-menu-button>
@@ -991,6 +1011,11 @@
           data.offlineModeInitiatedDatetimeStamp = date;
           return data;
         });
+
+        // Try to reset any pending sales
+        try {
+          this.elem('page-pos')._resetSales();
+        } catch (ex) { }
 
         // TODO: Refactor
         this.app = this;

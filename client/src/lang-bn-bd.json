@@ -23,6 +23,7 @@
     "select": "বাছাই",
     "remove": "সরান",
     "selected": "বাছাইকৃত",
+    "selection": "নির্বাচন",
     "deselect": "বাতিল",
     "address": "ঠিকানা",
     "comingSoon": "শীঘ্রই আসছে",
@@ -98,6 +99,7 @@
     "vendorModule": "সরবরাহকারী মডিউল",
     "retail": "পণ্য বিক্রয়",
     "service": "সেবা বিক্রয়",
+    "services": "সেবা",
     "both": "উভয়",
     "optional": "(ঐচ্ছিক)",
     "print": "প্রিন্ট",
@@ -107,6 +109,10 @@
     "scanButtonHelp": "একটি স্ক্যানার ব্যবহার করে দ্রুত অনেক পণ্য বাছাই করুন",
     "contactPerson": "যোগাযোগের ব্যক্তি",
     "inventory": "পণ্য তালিকা",
+    "payment": "পরিশোধ",
+    "change": "বদলান",
+    "nextOrContinue": "পরবর্তী",
+    "notFound": "পাওয়া যায় নি"
     "update": "আপডেট",
     "saved": "সংরক্ষিত"
   },
@@ -378,7 +384,7 @@
     "serviceBlueprintEditConfirmMessage": "সেবা পরিকল্পনায় পরিবর্তন করলে সংশ্লিষ্ট সেবা এবং সেবার সদস্যপদ পরিবর্তন হয়ে যাবে। সেবার মূল্য এবং স্থায়িত্ব পরিবর্তন করলে হিসেবে পরিবর্তন আসবে। আপনি কি নিশ্চিত করছেন?"
   },
   "customerSelector": {
-    "customerNameOrPhoneInput": "নাম বা ফোন",
+    "customerNameOrPhoneInput": "গ্রাহকের নাম বা ফোন",
     "customerNameOrPhoneInputError": "গ্রাহকের নাম বা ফোন লিখুন"
   },
   "outletSelector": {
@@ -523,7 +529,6 @@
   "vendor": {
     "editVendorTitle": "সরবরাহকারী সম্পাদনা করুন",
     "addVendorTitle": "সরবরাহকারী যুক্ত করুন",
-
     "vendorNameInput": "সরবরাহকারীর  নাম",
     "vendorNameInputError": "একটি সঠিক নাম লিখুন",
     "vendorNumberInput": "যোগাযোগের নম্বর",
@@ -532,7 +537,6 @@
     "vendorPhysicalAddressInputError": "অন্তত ৮ টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
     "vendorContactNameInput": "যোগাযোগ করার ব্যক্তির নাম",
     "vendorContactNameInputError": "একটি সঠিক নাম লিখুন",
-
     "createVendor": "সরবরাহকারী যুক্ত করুন",
     "updateVendor": "সরবরাহকারী আপডেট করুন",
     "newVendorCreated": "নতুন সরবরাহকারী যুক্ত করা হয়েছে।",
@@ -541,7 +545,6 @@
     "clickToEditVendor": "সরবরাহকারী সম্পাদনা করতে এখানে ক্লিক করুন।",
     "editVendor": "সরবরাহকারী সম্পাদনা",
     "vendorName": "সরবরাহকারীর  নাম",
-
     "manageVendorPageTitle": "সরবরাহকারী পরিচালনা",
     "createNewVendor": "নতুন সরবরাহকারী যুক্ত করুন",
     "searchForVendorInput": "সরবরাহকারীর নাম/নম্বর",
@@ -758,7 +761,29 @@
     "selectProductsFromInventoryContainer": "কোন দোকান/গুদাম থেকে বিক্রি হবে?",
     "currentOutlet": "বর্তমান দোকান",
     "saleNotValid": "বিক্রয় সঠিক নয়",
-    "offlineWarehouseSellNotAllowed": "অফলাইন মোডে গুদাম থেকে পণ্য বিক্রি করতে পারবেন না।"
+    "offlineWarehouseSellNotAllowed": "অফলাইন মোডে গুদাম থেকে পণ্য বিক্রি করতে পারবেন না।",
+
+    "step1": "প্রথম ধাপ",
+    "step2": "দ্বিতীয় ধাপ",
+    "step3": "তৃতীয় ধাপ",
+    "products": "পণ্য",
+    "services": "সেবা",
+    "productSales": "পণ্য বিক্রয়",
+    "serviceSales": "সেবা বিক্রয়",
+    "sellingProductsFrom": "পণ্যের উৎস:",
+    "scanningActive":"স্ক্যানিং সক্রিয়",
+    "productSearchLabel":"পণ্যের নাম/সনাক্তকারী কোড",
+    "selectedProducts":"নির্বাচিত পণ্য",
+    "selectedServices": "নির্বাচিত সেবা",
+    "continueWithoutCustomer": "ক্রেতা নির্বাচন না করেই এগিয়ে যান",
+    "selectACustomer":"গ্রাহক নির্বাচন করুন",
+    "selectADifferentCustomer": "ভিন্ন গ্রাহক নির্বাচন করুন",
+    "customerSectionBlocked": "গ্রাহক নির্বাচন করতে পণ্য/সেবা নির্বাচন করুন।",
+    "paymentSectionBlocked": "অর্থ পরিশোধ করতে পণ্য/সেবা এবং গ্রাহক নির্বাচন করুন।",
+    "productNotFound": "পণ্য পাওয়া যায় নি",
+    "serviceNotFound": "সেবা পাওয়া যায় নি",
+    "invalidAmount": "ভুল পরিমাণ",
+    "invalidTotalBillAmountMessage": "মোট বিলের পরিমাণ বাড়ানো সম্ভম না। চাইলে পণ্য বা সেবার মূল্য বাড়ান অথবা সার্ভিস চার্জ যোগ করুন।"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",

@@ -8,6 +8,7 @@
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
 <link rel="import" href="../bower_components/iron-icons/editor-icons.html">
@@ -15,6 +16,8 @@
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/iron-input/iron-input.html">
 
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
@@ -33,7 +36,11 @@
 <dom-module id="page-pos">
   <template>
     <style include="shared-styles">
-      .select-product-button-container paper-button {
+      :host {
+        font-size: 14px;
+      }
+
+      select-product-button-container paper-button {
         width: 100%;
         margin: 5px;
       }
@@ -112,12 +119,162 @@
       .bold-customer-card-title {
         font-weight: bold;
       }
+
+      .column {
+        min-width: 320px;
+        min-height: 70vh;
+        /* background: #e1f5fe; */
+        position: relative;
+        margin-left: 2px;
+        margin-right: 2px;
+      }
+
+      .placeholder {
+        background: #dde4e7;
+        text-align: center;
+      }
+
+      paper-tabs.view-selector {
+        --paper-tabs: {
+          background-color: var(--app-primary-color);
+          color: white;
+        }
+      }
+
+      .edit-product-price-icon {
+        padding: 0;
+        height: 16px;
+        max-width: 16px;
+        min-width: 16px;
+      }
+
+      .multi-column-header-row {
+        margin-top: 8px;
+      }
+
+      .multi-column-header {
+        cursor: pointer;
+        text-align: center;
+        padding: 16px 0;
+        background-color: var(--app-tab-unselected);
+        border-bottom: 2px solid var(--app-tab-selected);
+        margin: 2px;
+      }
+
+      .multi-column-header .title {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .multi-column-header .subtitle {
+        font-size: 14px;
+      }
+
+      .multi-column-header .icon {
+        padding: 0;
+        height: 16px;
+        max-width: 16px;
+        min-width: 16px;
+        margin-left: 4px;
+      }
+
+      .single-column-tabs-row {
+        margin: 8px;
+        margin-bottom: 0;
+      }
+
+      .single-column-tab {
+        cursor: pointer;
+        text-align: center;
+        padding: 16px 0;
+        background-color: var(--app-tab-unselected);
+        border-bottom: 2px solid var(--app-tab-selected);
+      }
+
+      .single-column-tab.selected {
+        background-color: var(--app-tab-selected);
+        color: var(--app-tab-label-selected);
+      }
+
+      .single-column-tab.selected .icon {
+        color: var(--app-tab-label-selected);
+      }
+
+      .single-column-tab .icon {
+        padding: 0;
+        height: 16px;
+        max-width: 16px;
+        min-width: 16px;
+        margin-left: 4px;
+      }
+
+      .single-column-tab .title {
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .single-column-tab .subtitle {
+        font-size: 12px;
+      }
+
+      .product-count-input {
+        --paper-input-container-color: var(--app-primary-color);
+      }
+
+      .product-search-bar {
+        background: var(--app-button-alternative);
+      }
+
+      .service-search-bar {
+        background: var(--app-button-alternative);
+      }
+
+      .scanning-active-message {
+        font-size: 20px;
+        text-align: center;
+        color: blue;
+      }
+
+      .positive {
+        color: var(--app-button-primary);
+      }
+
+      .negative {
+        color: var(--app-button-label-danger);
+      }
+
+      .selected-products-or-services-card {
+        background: var(--app-primary-color-light);
+      }
+
+      .selected-products-or-services-list {
+        background: white;
+        padding: 0px 6px 0 6px;
+      }
+
+      .selected-products-or-services-list .item {
+        padding-top: 8px;
+      }
+
+      .pos-card-heading {
+        margin-bottom: 8px;
+      }
+
+      .pos-card-heading-label {
+        font-size: 20px;
+      }
+
+      .not-found-message {
+        text-align: center;
+        color: red;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
-    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+    <div class$="page-fullwidth layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <!-- offline mode - start -->
       <template is="dom-if" if="[[isInOfflineMode]]">
         <div class="card warning vertical layout">
           <div class="flex">[[verses.pos.offlineModeWarning]]</div>
@@ -168,87 +325,136 @@
 
         </div>
       </template>
+      <!-- offline mode - end -->
 
-      <!-- customer selector - start -->
-      <template is="dom-if" if="[[!isInOfflineMode]]">
-        <template is="dom-if" if="[[!isSearchingCustomer]]">
-          <div class="card vertical layout">
-            <div class="horizontal layout center">
-              <div class="flex">
-                <div class="bold-customer-card-title">[[verses.pos.customerSelectionCardHeader]]</div>
+      <!-- header - start -->
 
-                <template is="dom-if" if="[[customer]]">
-                  <div>
-                    <div class="type title capitalize">[[customer.fullName]]</div>
-                    <div class="horizontal layout wrap">
-                      <div class="horizontal layout center m-right-8">
-                        <iron-icon icon="hardware:smartphone" class="icon secondary small m-right-8"></iron-icon>
-                        <div class="type body secondary">[[customer.phone]]</div>
-                      </div>
+      <!-- header - Multi Column - Start -->
+      <template is="dom-if" if="[[isMultiColumn]]">
+        <div class="horizontal layout multi-column-header-row">
+          <template is="dom-if" if="[[$equals('undecided', salesType)]]">
+            <div class="flex multi-column-header">
+              <div class="title">[[verses.general.selection]]</div>
+              <div class="subtitle">[[verses.pos.step1]]</div>
 
-                      <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
-                        <div class="horizontal layout center">
-                          <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
-                          <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
-                        </div>
-                      </template>
-
-                    </div>
-                  </div>
-                </template>
+            </div>
+          </template>
+          <template is="dom-if" if="[[$equals('services', salesType)]]">
+            <div class="flex multi-column-header">
+              <div class="title">[[verses.pos.services]]</div>
+              <div class="horizontal layout center-center">
+                <div class="subtitle">[[verses.pos.step1]]</div>
+                <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
               </div>
             </div>
-
-            <div class="horizontal layout end-justified m-top-16">
-              <template is="dom-if" if="[[customer]]">
-                <paper-button raised class="danger btn btn-default" on-tap="removeCustomerTapped">
-                  [[verses.pos.removeCustomer]]
-                </paper-button>
-              </template>
-              <paper-button raised class="secondary btn btn-default" on-tap="changeCustomerTapped">
-                [[verses.pos.changeCustomer]]
-              </paper-button>
-              <paper-button raised class="btn secondary" on-tap="createCustomerTapped">
-                [[verses.pos.createCustomer]]
-              </paper-button>
+          </template>
+          <template is="dom-if" if="[[$equals('products', salesType)]]">
+            <div class="flex multi-column-header">
+              <div class="title">[[verses.pos.products]]</div>
+              <div class="horizontal layout center-center">
+                <div class="subtitle">[[verses.pos.step1]]</div>
+                <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
+              </div>
+            </div>
+          </template>
+          <div class="flex multi-column-header">
+            <div class="title">[[verses.general.customer]]</div>
+            <div class="horizontal layout center-center">
+              <div class="subtitle">[[verses.pos.step2]]</div>
+              <iron-icon icon="check-circle" class$="icon positive [[$getCustomerCompleteIconClass(customer, isAnonymousSale)]]"></iron-icon>
             </div>
           </div>
-        </template>
-        <elem-customer-selector page="{{self}}" class$="[[$if(isSearchingCustomer, '', 'hidden')]]"></elem-customer-selector>
+          <div class="flex multi-column-header">
+            <div class="title">[[verses.general.payment]]</div>
+            <div class="subtitle">[[verses.pos.step3]]</div>
+          </div>
+        </div>
       </template>
-      <!-- customer selector - end -->
+      <!-- header - Multi Column - End -->
 
-      <!-- selected product list - start -->
-      <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
-        <div class="card vertical layout">
-          <div class="list">
+      <!-- header - Single Column - Start -->
+      <template is="dom-if" if="[[!isMultiColumn]]">
+        <div class="horizontal layout single-column-tabs-row">
 
-            <template is="dom-repeat" items="[[productList]]" as="product">
-              <div class="horizontal layout item center">
-                <div class="vertical layout flex">
-                  <div>
-                    <span class="product-title">[[product.name]]</span>
-                  </div>
-                  <div class="horizontal layout center">
-                    <div class="description">[[product.selectedCount]] [[product.unit]] @&nbsp;</div>
-                    <!-- <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" type="number" auto-validate min="[[product.minSalePrice]]"></paper-input> -->
-                    <div>[[product.salePrice]]</div>
-                    <div class="description">[[app.settings.monetaryUnit]]</div>
-                    <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
-                  </div>
-                </div>
-                <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
-                  <paper-icon-button on-tap="editProductSalePrice" icon="create"></paper-icon-button>
-                </template>
+          <template is="dom-if" if="[[$equals('undecided', salesType)]]">
+            <div class$="flex single-column-tab [[$getTabSelectedClass('selection', selectedTabName)]]" data-key="selection" on-tap="singleColumnTabTapped">
+              <div class="title">[[verses.general.selection]]</div>
+              <div class="subtitle">[[verses.pos.step1]]</div>
+            </div>
+          </template>
+
+          <template is="dom-if" if="[[$equals('products', salesType)]]">
+            <div class$="flex single-column-tab [[$getTabSelectedClass('products', selectedTabName)]]" data-key="products" on-tap="singleColumnTabTapped">
+              <div class="title">[[verses.pos.products]]</div>
+              <div class="horizontal layout center-center">
+                <div class="subtitle">[[verses.pos.step1]]</div>
+                <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
               </div>
+            </div>
+          </template>
+
+          <template is="dom-if" if="[[$equals('services', salesType)]]">
+            <div class$="flex single-column-tab [[$getTabSelectedClass('services', selectedTabName)]]" data-key="services" on-tap="singleColumnTabTapped">
+              <div class="title">[[verses.pos.services]]</div>
+              <div class="horizontal layout center-center">
+                <div class="subtitle">[[verses.pos.step1]]</div>
+                <iron-icon icon="check-circle" class$="icon positive [[$getSelectionCompleteIconClass(productList.length, serviceList.length)]]"></iron-icon>
+              </div>
+            </div>
+          </template>
+
+          <div class$="flex single-column-tab [[$getTabSelectedClass('customer', selectedTabName)]]" data-key="customer" on-tap="singleColumnTabTapped">
+            <div class="title">[[verses.general.customer]]</div>
+            <div class="horizontal layout center-center">
+              <div class="subtitle">[[verses.pos.step2]]</div>
+              <iron-icon icon="check-circle" class$="icon positive [[$getCustomerCompleteIconClass(customer, isAnonymousSale)]]"></iron-icon>
+            </div>
+          </div>
+
+          <div class$="flex single-column-tab [[$getTabSelectedClass('payment', selectedTabName)]]" data-key="payment" on-tap="singleColumnTabTapped">
+            <div class="title">[[verses.general.payment]]</div>
+            <div class="horizontal layout center-center">
+              <div class="subtitle">[[verses.pos.step3]]</div>
+            </div>
+          </div>
+        </div>
+      </template>
+      <!-- header - Single Column - End -->
+
+      <!-- header - end -->
+
+      <!-- columns - Start -->
+      <div class="horizontal layout">
+
+        <!-- selection column - start -->
+        <div class$="column flex [[$getColumnClasses('selection', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
+
+          <div class="card vertical layout">
+
+            <paper-button raised class="primary" on-tap="salesTypeIsProductsTapped" style="margin-bottom: 8px;">
+              [[verses.pos.productSales]]
+            </paper-button>
+
+            <template is="dom-if" if="[[!isInOfflineMode]]">
+              <paper-button raised class="primary" on-tap="salesTypeIsServicesTapped" style="margin-bottom: 8px;">
+                [[verses.pos.serviceSales]]
+              </paper-button>
             </template>
 
-            <!-- warehouse selection - start -->
-            <template is="dom-if" if="[[hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')]]">
-              <template is="dom-if" if="[[$shouldShowWarehouseSelector(warehouseList.length, productList.length)]]">
-                <div>
+          </div>
 
-                  <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.selectProductsFromInventoryContainer]]" class="mr-4">
+        </div>
+        <!-- selection column - end -->
+
+        <!-- products column - start -->
+        <div class$="column flex [[$getColumnClasses('products', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
+
+          <!-- warehouse selection - start -->
+          <template is="dom-if" if="[[hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')]]">
+            <template is="dom-if" if="[[!productSourceSelectionComplete]]">
+              <template is="dom-if" if="[[$shouldShowWarehouseSelector(warehouseList.length, productList.length)]]">
+                <div class="card horizontal layout center">
+                  <paper-dropdown-menu class="full-width-paper-dropdown flex" label="[[verses.pos.selectProductsFromInventoryContainer]]" class="mr-4">
                     <paper-listbox slot="dropdown-content" selected="{{selectedWarehouse}}" attr-for-selected="name">
                       <paper-item name="--current-outlet">[[verses.pos.currentOutlet]]</paper-item>
                       <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
@@ -258,234 +464,534 @@
                       </template>
                     </paper-listbox>
                   </paper-dropdown-menu>
-
+                  <paper-button class="primary" raised on-tap="selectedWarehouseChanged">[[verses.general.select]]</paper-button>
                 </div>
               </template>
             </template>
-            <!-- warehouse selection - end -->
+            <template is="dom-if" if="[[productSourceSelectionComplete]]">
+              <div class="card horizontal layout center">
+                <div class="flex">[[verses.pos.sellingProductsFrom]] <b>[[productSourceToDisplay]]</b></div>
+                <template is="dom-if" if="[[!isInOfflineMode]]">
+                  <paper-button class="secondary" raised on-tap="changeProductSourceTapped">[[verses.general.change]]</paper-button>
+                </template>
+              </div>
+            </template>
+          </template>
+          <!-- warehouse selection - end -->
 
-            <div class="select-product-button-container">
-              <paper-button raised class="btn primary" on-tap="addProductTapped">[[verses.pos.selectProduct]]</paper-button>
+          <!-- product searchbar - start -->
+          <template is="dom-if" if="[[productSourceSelectionComplete]]">
+            <div class="card vertical layout product-search-bar">
+              <template is="dom-if" if="[[isScanningActive]]">
+                <div class="scanning-active-message">[[verses.pos.scanningActive]]</div>
+              </template>
+              <div class="horizontal layout center">
+                <paper-input id="product-search-field" class="flex" value="{{productSearchString}}" always-float-label label="[[verses.pos.productSearchLabel]]" on-keydown="productSearchFieldKeypressed" on-focus="productSearchFieldFocused" on-blur="productSearchFieldBlurred"></paper-input>
+                <template is="dom-if" if="[[!matchingProductList.length]]">
+                  <paper-icon-button icon="search" on-tap="productSearchTapped"></paper-icon-button>
+                </template>
+                <template is="dom-if" if="[[matchingProductList.length]]">
+                  <paper-icon-button icon="clear" on-tap="productSearchClearTapped"></paper-icon-button>
+                </template>
+              </div>
+              <template is="dom-if" if="[[notFoundMessage]]">
+                <div class="not-found-message">[[notFoundMessage]]</div>
+              </template>
+            </div>
+          </template>
+          <!-- product searchbar - end -->
+
+          <!-- product search results - start -->
+          <template is="dom-if" if="{{matchingProductList.length}}">
+
+            <div class="card vertical layout">
+
+              <div class="list">
+                <template is="dom-repeat" items="[[matchingProductList]]" as="product">
+                  <div class="horizontal layout item center">
+                    <div class="flex" style="min-width: 128px;">
+                      <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                      <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                    </div>
+
+                    <template is="dom-if" if="[[product.count]]">
+                      <paper-icon-button class="positive" icon="add-circle" on-tap="selectMatchingProductTapped"></paper-icon-button>
+                    </template>
+                  </div>
+                </template>
+              </div>
+
+              <div class="pagination">
+                [[verses.general.loaded]]
+                <span class="limit">[[productPagination.limit]]</span>
+                [[verses.general.itemsOutOf]]
+                <span class="total-count">[[productPagination.totalCount]]</span> [[verses.general.startingFrom]]
+                <span class="offset">#[[$inc(productPagination.offset)]]</span>.
+              </div>
+
+              <div class="horizontal layout center">
+                <template is="dom-if" if="[[$hasPreviousPagination(productPaginate.offset)]]">
+                  <paper-button raised class="flex neutral" on-tap="showPreviousProductsTapped">[[verses.general.showPrevious]]</paper-button>
+                </template>
+
+                <template is="dom-if" if="[[$hasMorePagination(productPagination.totalCount, productPaginate.offset, productPaginate.limit)]]">
+                  <paper-button raised class="flex neutral" on-tap="showMoreProductsTapped">[[verses.general.showMore]]</paper-button>
+                </template>
+              </div>
+
+            </div>
+          </template>
+          <!-- product search results - end -->
+
+          <!-- selected product list - start -->
+          <template is="dom-if" if="[[productList.length]]">
+
+            <div class="card vertical layout selected-products-or-services-card">
+
+              <div class="horizontal layout center pos-card-heading">
+                <div class="flex pos-card-heading-label">[[verses.pos.selectedProducts]]</div>
+                <template is="dom-if" if="[[!isMultiColumn]]">
+                  <paper-button raised class="primary" on-tap="productSelectionDoneTapped" style="margin-bottom: 8px;">
+                    [[verses.general.nextOrContinue]]
+                  </paper-button>
+                </template>
+              </div>
+
+              <div class="list selected-products-or-services-list">
+                <template is="dom-repeat" items="[[productList]]" as="product" index-as="productIndex">
+                  <div class="horizontal layout item center">
+                    <div class="vertical layout flex">
+                      <div>
+                        <span class="product-title">[[product.name]]</span>
+                      </div>
+                      <div class="horizontal layout center">
+                        <paper-input no-label-float class="small-input m-horizontal-4 product-count-input" value="{{product.selectedCount}}" on-change="productSelectedCountInputChanged" type="number" min="1" max="99999999999" label="[[verses.posSelectProduct.count]]">
+                          <div slot="suffix">&nbsp;[[product.unit]]</div>
+                        </paper-input>
+
+                        <div>&nbsp;@&nbsp;[[product.salePrice]]</div>
+                        <div class="description">[[app.settings.monetaryUnit]]</div>
+                        <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
+                          <paper-icon-button on-tap="editProductSalePriceTapped" icon="create" class="edit-product-price-icon"></paper-icon-button>
+                        </template>
+                        <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
+                      </div>
+                    </div>
+                    <paper-icon-button class="negative" on-tap="discardProductTapped" icon="remove-circle"></paper-icon-button>
+                  </div>
+                </template>
+              </div>
             </div>
 
-          </div>
+          </template>
+          <!-- selected product list - end -->
+
         </div>
-      </template>
-      <!-- selected product list - end -->
+        <!-- products column - end -->
 
-      <!-- selected service list - start -->
-      <template is="dom-if" if="[[!isInOfflineMode]]">
-        <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
-          <div class="card vertical layout">
-            <div class="list">
+        <!-- services column - start -->
+        <div class$="column flex [[$getColumnClasses('services', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
 
-              <template is="dom-repeat" items="[[serviceList]]" as="service">
-                <div class="horizontal layout item center">
-                  <div class="vertical layout flex">
+          <!-- service searchbar - start -->
+          <div class="card vertical layout service-search-bar">
+            <div class="horizontal layout center">
+              <paper-input id="service-search-field" class="flex" value="{{serviceSearchString}}" always-float-label label="[[verses.posSelectService.searchForServiceInput]]" on-keydown="serviceSearchFieldKeypressed"></paper-input>
+              <template is="dom-if" if="[[!matchingServiceList.length]]">
+                <paper-icon-button icon="search" on-tap="serviceSearchTapped"></paper-icon-button>
+              </template>
+              <template is="dom-if" if="[[matchingServiceList.length]]">
+                <paper-icon-button icon="clear" on-tap="serviceSearchClearTapped"></paper-icon-button>
+              </template>
+            </div>
+            <template is="dom-if" if="[[notFoundMessage]]">
+              <div class="not-found-message">[[notFoundMessage]]</div>
+            </template>
+          </div>
+          <!-- service searchbar - end -->
 
-                    <div class="horizontal layout center">
-                      <div class="service-info">
-                        <span class="service-title">[[service.name]]</span>
+          <!-- service search results - start -->
+          <template is="dom-if" if="{{matchingServiceList.length}}">
+
+            <div class="card vertical layout">
+
+              <div class="list">
+                <template is="dom-repeat" items="[[matchingServiceList]]" as="service">
+
+                  <div class="horizontal layout item center">
+                    <div class="flex" style="min-width: 128px;">
+                      <div class="inventory-product-important-detail-container">[[service.name]]</div>
+                      <div class="inventory-product-price-container">[[verses.posSelectService.sale]]: [[service.salePrice]][[app.settings.monetaryUnit]]</div>
+                    </div>
+
+                    <paper-icon-button class="primary positive" icon="add-circle" on-tap="selectMatchingServiceTapped"></paper-icon-button>
+                  </div>
+
+                </template>
+              </div>
+
+              <div class="pagination">
+                [[verses.general.loaded]]
+                <span class="limit">[[servicePagination.limit]]</span>
+                [[verses.general.itemsOutOf]]
+                <span class="total-count">[[servicePagination.totalCount]]</span> [[verses.general.startingFrom]]
+                <span class="offset">#[[$inc(servicePagination.offset)]]</span>.
+              </div>
+
+              <div class="horizontal layout center">
+                <template is="dom-if" if="[[$hasPreviousPagination(servicePaginate.offset)]]">
+                  <paper-button raised class="flex neutral" on-tap="showPreviousServicesTapped">[[verses.general.showPrevious]]</paper-button>
+                </template>
+
+                <template is="dom-if" if="[[$hasMorePagination(servicePagination.totalCount, servicePaginate.offset, servicePaginate.limit)]]">
+                  <paper-button raised class="flex neutral" on-tap="showMoreServicesTapped">[[verses.general.showMore]]</paper-button>
+                </template>
+              </div>
+
+            </div>
+          </template>
+          <!-- service search results - end -->
+
+          <!-- selected service list - start -->
+          <template is="dom-if" if="[[serviceList.length]]">
+
+            <div class="card vertical layout selected-products-or-services-card">
+
+              <div class="horizontal layout center pos-card-heading">
+                <div class="flex pos-card-heading-label">[[verses.pos.selectedServices]]</div>
+                <template is="dom-if" if="[[!isMultiColumn]]">
+                  <paper-button raised class="primary" on-tap="serviceSelectionDoneTapped">
+                    [[verses.general.nextOrContinue]]
+                  </paper-button>
+                </template>
+              </div>
+
+              <div class="list selected-products-or-services-list">
+                <template is="dom-repeat" items="[[serviceList]]" as="service" index-as="serviceIndex">
+                  <div class="horizontal layout item center">
+                    <div class="vertical layout flex">
+
+                      <div class="horizontal layout center">
+                        <div class="service-info">
+                          <span class="service-title">[[service.name]]</span>
+                        </div>
+
+                        <template is="dom-if" if="{{service.isEmployeeAssignable}}">
+
+                          <template is="dom-if" if="{{service.assignedEmploymentId}}">
+                            <div class="employee-icon-container-active" on-tap="assignEmployeeTapped">
+                              <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignedEmployee]]
+                            </div>
+                          </template>
+
+                          <template is="dom-if" if="{{!service.assignedEmploymentId}}">
+                            <div class="employee-icon-container" on-tap="assignEmployeeTapped">
+                              <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignEmployee]]
+                            </div>
+                          </template>
+
+                        </template>
                       </div>
 
-                      <template is="dom-if" if="{{service.isEmployeeAssignable}}">
-
-                        <template is="dom-if" if="{{service.assignedEmploymentId}}">
-                          <div class="employee-icon-container-active" on-tap="assignEmployeeTapped">
-                            <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignedEmployee]]
-                          </div>
-                        </template>
-
-                        <template is="dom-if" if="{{!service.assignedEmploymentId}}">
-                          <div class="employee-icon-container" on-tap="assignEmployeeTapped">
-                            <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assignEmployee]]
-                          </div>
-                        </template>
-
+                      <template is="dom-if" if="{{service.isCustomerRequired}}">
+                        <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
                       </template>
+
+                      <div class="horizontal layout center">
+                        <div>[[service.salePrice]]</div>
+                        <div class="description">[[app.settings.monetaryUnit]]</div>
+                        <span class="service-vat-detail">(+ [[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                        <paper-icon-button class="negative" on-tap="discardServiceTapped" icon="remove-circle"></paper-icon-button>
+                      </div>
+
+                    </div>
+                  </div>
+                </template>
+              </div>
+
+            </div>
+
+          </template>
+          <!-- selected service list - end -->
+
+        </div>
+        <!-- services column - end -->
+
+        <!-- customer column - start -->
+        <div class$="customer-column column flex [[$getColumnClasses('customer', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]" on-tap="customerColumnTapped">
+
+          <!-- customer selection - start -->
+          <template is="dom-if" if="[[$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
+            <elem-customer-selector page="{{self}}"></elem-customer-selector>
+          </template>
+          <!-- customer selector - end -->
+
+          <!-- customer creation - start -->
+          <template is="dom-if" if="[[$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
+            <iron-form id="editCustomerForm" on-keypress="genericFormSubmitionKeypress">
+              <form>
+                <div class="card vertical layout">
+
+                  <div class="horizontal layout center pos-card-heading">
+                    <div class="flex pos-card-heading-label">[[verses.customer.createNewCustomer]]</div>
+                  </div>
+
+                  <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message=[[verses.customer.customerNameInputError]] label=[[verses.customer.customerNameInput]]></paper-input>
+                  <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.customer.customerNumberInputError]] label=[[verses.customer.customerNumberInput]]></paper-input>
+
+                  <paper-input class="editCustomerForm--email" value="{{editCustomerForm.email}}" pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.customer.emailAddressInputError]] label=[[verses.customer.emailAddressInput]]></paper-input>
+                  <paper-textarea class="editCustomerForm--address" value="{{editCustomerForm.address}}" label=[[verses.customer.addressInput]] rows="3"></paper-textarea>
+                  <div class="horizontal layout m-top-16">
+                    <paper-button raised class="flex danger" on-tap="skipCustomerSelectionTapped">[[verses.pos.continueWithoutCustomer]]</paper-button>
+                  </div>
+
+                  <div class="horizontal layout m-top-16">
+                    <paper-button raised class="flex primary editCustomerForm--submit" on-tap="createCustomerTapped">[[verses.customer.createCustomer]]</paper-button>
+                  </div>
+
+                </div>
+              </form>
+            </iron-form>
+          </template>
+          <!-- customer creation - end -->
+
+          <!-- customer preview - start -->
+          <template is="dom-if" if="[[!$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
+            <div class="card vertical layout">
+              <div class="bold-customer-card-title">[[verses.pos.customerSelectionCardHeader]]</div>
+
+              <template is="dom-if" if="[[customer]]">
+                <div>
+                  <div class="type title capitalize">[[customer.fullName]]</div>
+                  <div class="horizontal layout wrap">
+
+                    <div class="horizontal layout center m-right-8">
+                      <iron-icon icon="hardware:smartphone" class="icon secondary small m-right-8"></iron-icon>
+                      <div class="type body secondary">[[customer.phone]]</div>
                     </div>
 
-                    <template is="dom-if" if="{{service.isCustomerRequired}}">
-                      <span class="service-customer-required">*[[verses.pos.serviceRequiresCustomerSelection]]</span>
+                    <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                      <div class="horizontal layout center">
+                        <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
+                        <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
+                      </div>
                     </template>
-
-                    <div class="horizontal layout center mt8">
-                      <!-- <paper-input class=" flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" type="number" auto-validate>
-                      </paper-input> -->
-                      <div>[[service.salePrice]]</div>
-                      <div class="description">[[app.settings.monetaryUnit]]</div>
-                      <span class="service-vat-detail">(+ [[verses.pos.vat]]: {{service.vatValue}}%)</span>
-                    </div>
 
                   </div>
                 </div>
               </template>
 
-              <div class="select-product-button-container">
-                <paper-button raised class="btn primary" on-tap="addServiceTapped">[[verses.pos.selectService]]</paper-button>
-              </div>
-
-            </div>
-          </div>
-        </template>
-      </template>
-      <!-- selected service list - end -->
-
-      <!-- calculations - start -->
-      <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
-        <div class="card vertical layout">
-          <div class="individual-calculation-field-container">
-            <span>[[verses.pos.totalSalePrice]]: <b>{{$round(payment.totalAmount)}} [[app.settings.monetaryUnit]]</b></span>
-          </div>
-        </div>
-      </template>
-
-      <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
-        <div class="card vertical layout">
-          <div class="list">
-
-            <div class="individual-calculation-field-container">
-              [[verses.pos.vatAmount]]:
-              <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
-            </div>
-
-            <div class="individual-calculation-field-container">
-
-              <div class="vertical layout m-bottom-18">
-
-                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discount]]" class="mr-4">
-                  <paper-listbox slot="dropdown-content" selected="{{selectedDiscountPreset}}" attr-for-selected="name">
-                    <paper-item name="--no-discount">[[verses.pos.noDiscountApplicable]]</paper-item>
-                    <template is="dom-repeat" items="[[discountPresetList]]" as="discountPreset">
-                      <paper-item name="[[discountPreset.id]]">
-                        [[getDiscountPresetLabel(discountPreset)]]
-                      </paper-item>
-                    </template>
-                  </paper-listbox>
-                </paper-dropdown-menu>
-
-              </div>
-
-              [[verses.pos.discountedAmount]]:
-              <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
-
-            </div>
-
-            <div class="individual-calculation-field-container horizontal layout center">
-
-              <paper-input class="payment--serviceChargeAmount flex" value="{{payment.serviceChargeAmount}}" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.serviceChargeInputError]]" label="[[verses.pos.serviceChargeInput]]">
-                <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-              </paper-input>
-
-              <template is="dom-if" if="{{!isInOfflineMode}}">
-
-                <template is="dom-if" if="{{assignedAssistedByEmployee}}">
-                  <div class="employee-icon-container-active" on-tap="assignAssistedByEmployeeTapped">
-                    <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
-                  </div>
-                </template>
-
-                <template is="dom-if" if="{{!assignedAssistedByEmployee}}">
-                  <div class="employee-icon-container" on-tap="assignAssistedByEmployeeTapped">
-                    <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
-                  </div>
-                </template>
-
+              <template is="dom-if" if="[[isAnonymousSale]]">
+                <div>[[verses.pos.noCustomerSelected]]</div>
               </template>
 
+              <div class="horizontal layout end-justified m-top-16">
+                <template is="dom-if" if="[[customer]]">
+                  <paper-button raised class="danger btn btn-default" on-tap="removeCustomerTapped">
+                    [[verses.pos.selectADifferentCustomer]]
+                  </paper-button>
+                </template>
+                <template is="dom-if" if="[[!isInOfflineMode]]">
+                  <template is="dom-if" if="[[isAnonymousSale]]">
+                    <paper-button raised class="secondary btn btn-default" on-tap="removeCustomerTapped">
+                      [[verses.pos.selectACustomer]]
+                    </paper-button>
+                  </template>
+                </template>
+              </div>
             </div>
 
-          </div>
-        </div>
-      </template>
-
-      <!-- payment area card - start -->
-      <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
-        <div class="card vertical layout" style="background: var(--app-primary-color-light);">
-          <div class="list">
-
-            <template is="dom-if" if="[[payment.roundedByAmount]]">
-              <div class="individual-calculation-field-container light">
-                <div class="horizontal layout center m-top-16">
-                  <div class="flex">
-                    [[verses.sales.totalBillBeforeRounding]]:
-                    <b>{{$round(payment.totalBillBeforeRounding)}} [[app.settings.monetaryUnit]]</b>
-                  </div>
-                </div>
-                <div class="horizontal layout center">
-                  <div class="flex">
-                    [[verses.sales.roundedByAmount]]:
-                    <b>{{$round(payment.roundedByAmount)}} [[app.settings.monetaryUnit]]</b>
-                  </div>
-                  <paper-icon-button on-tap="clearRounderByAmountTapped" icon="clear"></paper-icon-button>
-                </div>
-              </div>
+            <template is="dom-if" if="[[!isMultiColumn]]">
+              <paper-button raised class="primary" on-tap="customerSelectionDoneTapped" style="width: calc(100% - 16px); margin: 8px;">
+                [[verses.general.nextOrContinue]]
+              </paper-button>
             </template>
-            <div class="horizontal layout center individual-calculation-field-container light">
-              <div class="flex">
-                [[verses.pos.totalBilled]]:
-                <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
-              </div>
-              <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
-                <paper-icon-button on-tap="editTotalBilledTapped" icon="create"></paper-icon-button>
-              </template>
-            </div>
 
-            <div class="individual-calculation-field-container light">
+          </template>
+          <!-- customer preview - end -->
 
-              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4" on-iron-select="paymentMethodSelected">
-                <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
-                  <paper-item name="cash">[[verses.general.cash]]</paper-item>
-                  <paper-item name="card">[[verses.general.card]]</paper-item>
-                  <paper-item name="digital">[[verses.general.digital]]</paper-item>
-                  <template is="dom-if" if="[[customer]]">
-                    <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
-                  </template>
-                </paper-listbox>
-              </paper-dropdown-menu>
+        </div>
+        <!-- customer column - end -->
 
-              <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
-                <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
-                  <div slot="suffix">[[app.settings.monetaryUnit]]</div>
-                </paper-input>
-              </template>
-
-              <template is="dom-if" if="[[payment.changeAmount]]">
-                <br> [[verses.pos.changeAmount]]:
-                <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
-
-                <br>
-                <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
-                  <template is="dom-if" if="[[customer]]">
-                    <template is="dom-if" if="[[payment.changeAmount]]">
-                      <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
-                        [[verses.pos.shouldSaveChangeInAccount]]
-                      </paper-checkbox>
-                    </template>
-                  </template>
-                </template>
-
-              </template>
-
-              <template is="dom-if" if="[[isValidCreditSale(customer, payment.totalBilled, payment.paidAmount)]]">
-                [[verses.pos.thisWillBeACreditSale]]
-              </template>
-
-            </div>
-
-            <div class="horizontal layout m-top-16">
-              <paper-button raised class="primary flex" on-tap="saveSaleTapped">[[verses.pos.confirmSales]]</paper-button>
-            </div>
-
-            <div class="horizontal layout m-top-16">
-              <paper-button id="sale-and-print-button" raised class="primary flex" on-tap="saveSaleAndPrintTapped">[[verses.pos.confirmSalesAndPrint]]</paper-button>
-            </div>
-
+        <!-- customer column placeholder - start -->
+        <div class$="column flex placeholder  vertical layout center-center [[$getColumnClasses('customer', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
+          <div style="max-width: 250px;">
+            [[verses.pos.customerSectionBlocked]]
           </div>
         </div>
-      </template>
-      <!-- payment area card - end -->
-      <!-- calculations - end -->
+        <!-- customer column placeholder - end -->
+
+        <!-- payment column - start -->
+        <div class$="column flex [[$getColumnClasses('payment', 'real', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]" on-tap="paymentColumnTapped">
+
+          <!-- calculations - start -->
+          <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
+            <div class="card vertical layout">
+              <div class="individual-calculation-field-container">
+                <span>[[verses.pos.totalSalePrice]]: <b>{{$round(payment.totalAmount)}} [[app.settings.monetaryUnit]]</b></span>
+              </div>
+            </div>
+          </template>
+
+          <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
+            <div class="card vertical layout">
+              <div class="list">
+
+                <div class="individual-calculation-field-container">
+                  [[verses.pos.vatAmount]]:
+                  <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
+                </div>
+
+                <div class="individual-calculation-field-container">
+
+                  <div class="vertical layout m-bottom-18">
+
+                    <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discount]]" class="mr-4">
+                      <paper-listbox slot="dropdown-content" selected="{{selectedDiscountPreset}}" attr-for-selected="name">
+                        <paper-item name="--no-discount">[[verses.pos.noDiscountApplicable]]</paper-item>
+                        <template is="dom-repeat" items="[[discountPresetList]]" as="discountPreset">
+                          <paper-item name="[[discountPreset.id]]">
+                            [[getDiscountPresetLabel(discountPreset)]]
+                          </paper-item>
+                        </template>
+                      </paper-listbox>
+                    </paper-dropdown-menu>
+
+                  </div>
+
+                  [[verses.pos.discountedAmount]]:
+                  <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
+
+                </div>
+
+                <div class="individual-calculation-field-container horizontal layout center">
+
+                  <paper-input class="payment--serviceChargeAmount flex" value="{{payment.serviceChargeAmount}}" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.serviceChargeInputError]]" label="[[verses.pos.serviceChargeInput]]">
+                    <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                  </paper-input>
+
+                  <template is="dom-if" if="{{!isInOfflineMode}}">
+
+                    <template is="dom-if" if="{{assignedAssistedByEmployee}}">
+                      <div class="employee-icon-container-active" on-tap="assignAssistedByEmployeeTapped">
+                        <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
+                      </div>
+                    </template>
+
+                    <template is="dom-if" if="{{!assignedAssistedByEmployee}}">
+                      <div class="employee-icon-container" on-tap="assignAssistedByEmployeeTapped">
+                        <iron-icon icon="icons:account-circle" class="assign-icon"></iron-icon>[[verses.pos.assistedEmployee]]
+                      </div>
+                    </template>
+
+                  </template>
+
+                </div>
+
+              </div>
+            </div>
+          </template>
+          <!-- calculations - end -->
+
+          <!-- payment area card - start -->
+          <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
+            <div class="card vertical layout" style="background: var(--app-primary-color-light);">
+              <div class="list">
+
+                <template is="dom-if" if="[[payment.roundedByAmount]]">
+                  <div class="individual-calculation-field-container light">
+                    <div class="horizontal layout center m-top-16">
+                      <div class="flex">
+                        [[verses.sales.totalBillBeforeRounding]]:
+                        <b>{{$round(payment.totalBillBeforeRounding)}} [[app.settings.monetaryUnit]]</b>
+                      </div>
+                    </div>
+                    <div class="horizontal layout center">
+                      <div class="flex">
+                        [[verses.sales.roundedByAmount]]:
+                        <b>{{$round(payment.roundedByAmount)}} [[app.settings.monetaryUnit]]</b>
+                      </div>
+                      <paper-icon-button on-tap="clearRounderByAmountTapped" icon="clear"></paper-icon-button>
+                    </div>
+                  </div>
+                </template>
+                <div class="horizontal layout center individual-calculation-field-container light">
+                  <div class="flex">
+                    [[verses.pos.totalBilled]]:
+                    <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
+                  </div>
+                  <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
+                    <paper-icon-button on-tap="editTotalBilledTapped" icon="create"></paper-icon-button>
+                  </template>
+                </div>
+
+                <div class="individual-calculation-field-container light">
+
+                  <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4" on-iron-select="paymentMethodSelected">
+                    <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
+                      <paper-item name="cash">[[verses.general.cash]]</paper-item>
+                      <paper-item name="card">[[verses.general.card]]</paper-item>
+                      <paper-item name="digital">[[verses.general.digital]]</paper-item>
+                      <template is="dom-if" if="[[customer]]">
+                        <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
+                      </template>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+
+                  <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
+                    <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+                      <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                    </paper-input>
+                  </template>
+
+                  <template is="dom-if" if="[[payment.changeAmount]]">
+                    <br> [[verses.pos.changeAmount]]:
+                    <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
+
+                    <br>
+                    <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                      <template is="dom-if" if="[[customer]]">
+                        <template is="dom-if" if="[[payment.changeAmount]]">
+                          <paper-checkbox checked="{{payment.shouldSaveChangeInAccount}}">
+                            [[verses.pos.shouldSaveChangeInAccount]]
+                          </paper-checkbox>
+                        </template>
+                      </template>
+                    </template>
+
+                  </template>
+
+                  <template is="dom-if" if="[[isValidCreditSale(customer, payment.totalBilled, payment.paidAmount)]]">
+                    [[verses.pos.thisWillBeACreditSale]]
+                  </template>
+
+                </div>
+
+                <div class="horizontal layout m-top-16">
+                  <paper-button raised class="primary flex" on-tap="saveSaleTapped">[[verses.pos.confirmSales]]</paper-button>
+                </div>
+
+                <div class="horizontal layout m-top-16">
+                  <paper-button id="sale-and-print-button" raised class="primary flex" on-tap="saveSaleAndPrintTapped">[[verses.pos.confirmSalesAndPrint]]</paper-button>
+                </div>
+
+              </div>
+            </div>
+          </template>
+          <!-- payment area card - end -->
+
+        </div>
+        <!-- payment column - end -->
+
+        <!-- payment column placeholder - start -->
+        <div class$="column flex placeholder vertical layout center-center  [[$getColumnClasses('payment', 'placeholder', isMultiColumn, selectedTabName, productList.length, serviceList.length, customer, isAnonymousSale, isInOfflineMode)]]">
+          <div style="max-width: 300px;">
+            [[verses.pos.paymentSectionBlocked]]
+          </div>
+        </div>
+        <!-- payment column placeholder - end -->
+
+      </div>
+      <!-- columns - End -->
 
     </div>
 
@@ -500,17 +1006,121 @@
 
       static get properties() {
         return {
-          productList: {
-            type: Array,
-            value: () => []
+          // Tabination =============
+          isMultiColumn: {
+            type: Boolean,
+            value: false
           },
-          serviceList: {
-            type: Array,
-            value: () => []
+          selectedTabName: {
+            type: String,
+            value: 'selection'
+          },
+          salesType: {
+            type: String,
+            value: 'undecided' // can be - 'undecided', 'products', 'services'
+          },
+          // Products =============
+          productSourceSelectionComplete: {
+            type: Boolean,
+            value: false
           },
           warehouseList: {
             type: Array,
             value: () => []
+          },
+          selectedWarehouse: {
+            type: String,
+            value: '--current-outlet',
+            // observer: 'selectedWarehouseChanged'
+          },
+          productsSelectedFromWarehouseId: {
+            type: Number,
+            value: null,
+          },
+          productList: {
+            type: Array,
+            value: () => [],
+            observer: 'productListChanged'
+          },
+          matchingProductList: {
+            type: Array,
+            value: () => []
+          },
+          productPaginate: {
+            type: Object,
+            value: () => {
+              return {
+                offset: 0,
+                limit: 3
+              }
+            }
+          },
+          productPagination: {
+            type: Object,
+            value: () => {
+              return {}
+            }
+          },
+          // Services =============
+          serviceList: {
+            type: Array,
+            value: () => [],
+            observer: 'serviceListChanged'
+          },
+          matchingServiceList: {
+            type: Array,
+            value: () => []
+          },
+          servicePaginate: {
+            type: Object,
+            value: () => {
+              return {
+                offset: 0,
+                limit: 3
+              }
+            }
+          },
+          servicePagination: {
+            type: Object,
+            value: () => {
+              return {}
+            }
+          },
+          // Customer =============
+          isAnonymousSale: {
+            type: Boolean,
+            value: false
+          },
+          customer: {
+            type: Object,
+            value: null,
+            observer: 'customerChanged'
+          },
+          editCustomerForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  fullName: 'Rahim Karim',
+                  phone: '01700000011',
+                  email: 'rahim@gmail.com',
+                  address: 'house road block code 1213 city country'
+                };
+              } else {
+                return {
+                  fullName: '',
+                  phone: '',
+                  email: null,
+                  address: ''
+                };
+              }
+            }
+          },
+          // Payment =============
+          selectedDiscountPreset: {
+            type: String,
+            value: '--no-discount',
+            observer: 'selectedDiscountPresetChanged'
           },
           payment: {
             type: Object,
@@ -532,15 +1142,7 @@
               }
             }
           },
-          isSearchingCustomer: {
-            type: Boolean,
-            value: false
-          },
-          customer: {
-            type: Object,
-            value: null,
-            observer: 'customerChanged'
-          },
+          // Offline Mode =============
           isInOfflineMode: {
             type: Boolean,
             value: false
@@ -549,20 +1151,6 @@
             type: Boolean,
             value: false
           },
-          selectedDiscountPreset: {
-            type: String,
-            value: '--no-discount',
-            observer: 'selectedDiscountPresetChanged'
-          },
-          selectedWarehouse: {
-            type: String,
-            value: '--current-outlet',
-            observer: 'selectedWarehouseChanged'
-          },
-          productsSelectedFromWarehouseId: {
-            type: Number,
-            value: null,
-          }
         };
       }
 
@@ -571,6 +1159,13 @@
       constructor() {
         super();
         this.confirmPageReady();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_ACCESS_POS']
+        });
       }
 
       onNavigateIn() {
@@ -586,94 +1181,100 @@
           });
         }
         if (!this._ensureAccess()) return;
-        this.selectedDiscountPreset = '--no-discount';
 
-        this.selectedWarehouse = this.app.getFromSession('pos-selected-warehouse') || '--current-outlet';
-        this.productsSelectedFromWarehouseId = this.app.getFromSession('product-selected-from-warehouse-id') || null;
+        this.notFoundMessage = '';
 
-        this.assignedAssistedByEmployee = this.app.getFromSession('pos-assigned-assisted-by-employee');
+        // tabination
+        this._detectMultiColumnSupport();
+        window.addEventListener('resize', () => this._detectMultiColumnSupport());
 
+        let salesType = this.app.getFromSession('pos-sales-type') || 'undecided';
+        if (salesType === 'undecided') {
+          if (this.hasModule('MOD_PRODUCT') && this.hasModule('MOD_SERVICE')) {
+            'pass'
+          } else if (this.hasModule('MOD_PRODUCT')) {
+            salesType = 'products';
+          } else if (this.hasModule('MOD_SERVICE')) {
+            salesType = 'services';
+          }
+        }
+        this.salesType = salesType;
+
+        let selectedTabName = null;
+        if (salesType === 'undecided') {
+          selectedTabName = 'selection';
+        } else {
+          selectedTabName = salesType;
+        }
+
+        // products
+        if (this.salesType === 'products') {
+          this._initProductColumn();
+        }
+
+        // services
+        if (this.salesType === 'services') {
+          this.serviceList = this.app.getFromSession('pos-selected-service-list') || [];
+          this._focusServiceSearchField();
+        }
+
+        // customer
         this.delay(0, () => {
           this.self = this;
-          let customerId = this.app.extractFromSession('last-created-customer');
-          if (customerId) {
-            this._processGetCustomer({ customerId }, (customer) => {
-              this.customer = customer;
-            });
+          if (this.isInOfflineMode) {
+            this.customer = null;
+            this.isAnonymousSale = true;
           } else {
-            let customer = this.app.getFromSession('last-selected-customer');
-            if (customer) {
-              this.customer = customer;
-            }
+            this.customer = this.app.getFromSession('last-selected-customer') || null;
+            this.isAnonymousSale = this.app.getFromSession('last-selected-customer-is-anonymous') || false;
           }
+        });
 
-          let productList = this.app.getFromSession('pos-selected-product-list');
-          if (productList) {
-            if (this.productList.length > 0) {
-              productList.forEach(newProduct => {
-                let oldProduct = this.productList.find(oldProduct => oldProduct.productId === newProduct.productId);
-                if (oldProduct) {
-                  newProduct.salePrice = oldProduct.salePrice;
-                }
-              });
-            }
-            this.productList = productList;
-          }
-
-          let serviceList = this.app.getFromSession('pos-selected-service-list');
-          if (serviceList) {
-            this.serviceList = serviceList;
-          }
+        // payment
+        this.assignedAssistedByEmployee = this.app.getFromSession('pos-assigned-assisted-by-employee');
+        this.selectedDiscountPreset = '--no-discount';
+        this._processDiscountPresetList(() => { });
+        this.delay(0, () => {
           this._calculatePayment();
         });
-        this._processDiscountPresetList(() => {
 
-        });
-        if (!this.isInOfflineMode) {
+        // set currently selected tab
+        if (window.isComingFromAssistedByAssignment) {
+          window.isComingFromAssistedByAssignment = false;
+          let isProductOrServiceSelectionDone = this.productList.length > 0 || this.serviceList.length > 0;
+          let isCustomerSelectionDone = (!!this.customer) || this.isAnonymousSale;
+          if (isProductOrServiceSelectionDone && isCustomerSelectionDone) {
+            selectedTabName = 'payment';
+          }
+        } this.selectedTabName = selectedTabName;
+
+        this.isReady = true;
+        this._scrollToNavBar();
+      }
+
+      _initProductColumn() {
+        this.matchingProductList = [];
+        this.productList = this.app.getFromSession('pos-selected-product-list') || [];
+
+        if (this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS') && !this.isInOfflineMode) {
+          this.productSourceSelectionComplete = false;
           this._fetchWarehouseList((warehouseList) => {
             warehouseList.reverse();
             this.warehouseList = warehouseList;
+
+            let shouldSkipWarehouseSelection = true;
+            if (this.app.getFromSession('pos-selected-warehouse')) {
+              shouldSkipWarehouseSelection = false;
+            }
+            this.selectedWarehouseChanged({ shouldSkipWarehouseSelection });
           });
+        } else {
+          this.productSourceSelectionComplete = true;
+          this.selectedWarehouseChanged();
         }
-        this.delay(10, () => {
-          if (!this._skipToProductOrServiceSelectionPage()) {
-            this.isReady = true;
-            this.jumpToPaymentIfPossible();
-          }
-        });
-      }
-
-      jumpToPaymentIfPossible() {
-        this.delay(300, () => {
-          try {
-            this.elem('#sale-and-print-button').scrollIntoView({ block: "end", inline: "nearest" });
-            this.delay(100, () => {
-              try {
-                let input = this.elem('.payment--paidAmount');
-                input.click();
-                this.delay(50, () => {
-                  try {
-                    input.focus();
-                    this.delay(50, () => {
-                      try {
-                        input.inputElement.inputElement.select();
-                      } catch (ex) { }
-                    });
-                  } catch (ex) { }
-                });
-              } catch (ex) { }
-            });
-          } catch (ex) { }
-        });
-      }
-
-      selectedWarehouseChanged() {
-        this.app.storeInSession('pos-selected-warehouse', this.selectedWarehouse);
-      }
-
-      _setProductSelectedFromWarehouseId(id) {
-        this.productsSelectedFromWarehouseId = id;
-        this.app.storeInSession('product-selected-from-warehouse-id', this.productsSelectedFromWarehouseId);
+        this.productSourceToDisplay = this.app.verses.pos.currentOutlet;
+        this.selectedWarehouse = this.app.getFromSession('pos-selected-warehouse') || '--current-outlet'; // for dropdown
+        this.productsSelectedFromWarehouseId = this.app.getFromSession('product-selected-from-warehouse-id') || null; // for calculation
       }
 
       onNavigateOut() {
@@ -682,76 +1283,160 @@
         this.app.popPageTitle();
       }
 
-      _ensureAccess() {
-        return this.accessControl({
-          authLevel: 'organization-selected',
-          privilegeList: ['PRIV_ACCESS_POS']
-        });
-      }
-
       onOrganizationChange(organization) {
         this.organization = organization;
       }
 
-      _skipToProductOrServiceSelectionPage() {
-        if (this.app.pageName !== 'pos') return;
-        if (this.hasModule('MOD_PRODUCT') && this.hasModule('MOD_SERVICE')) return;
-        if (this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')) return;
-        if (window.isComingFromProductOrServiceSelection) {
-          window.isComingFromProductOrServiceSelection = false;
-          return;
-        }
-        if (this.productList.length > 0 || this.serviceList.length > 0) return;
-        if (this.hasModule('MOD_PRODUCT')) {
-          this.addProductTapped();
-        }
-        if (this.hasModule('MOD_SERVICE')) {
-          this.addServiceTapped();
-        }
-        return true;
+      backButtonOnTopBarPressed(e = null) {
+        this._resetSales();
+        this.app.navigateToPreviousUrl('/home');
       }
 
-      // region: pos =================================
+      // region: tabination =================================
 
-      selectedDiscountPresetChanged() {
-        if (this.selectedDiscountPreset === '--no-discount') {
-          this.payment.discountPresetId = null;
-          this.payment.discountType = 'percent';
-          this.payment.discountValue = '0';
+      singleColumnTabTapped(e) {
+        e.stopPropagation();
+        let attr = e.currentTarget.getAttribute('data-key');
+        this.selectedTabName = attr;
+      }
+
+      $getTabSelectedClass(tabName, selectedTabName) {
+        let classNames = '';
+        if (tabName === selectedTabName) {
+          classNames += 'selected ';
+        }
+        return classNames;
+      }
+
+      _detectMultiColumnSupport() {
+        const minimumPageWidth = 960;
+        const leftSidebarWidth = 280;
+        const margins = 2 + 2 + 2 + 2;
+        const scrollbars = 25;
+        if (window.innerWidth < (minimumPageWidth + leftSidebarWidth + margins + scrollbars)) {
+          this.isMultiColumn = false;
         } else {
-          let key = parseInt(String(this.selectedDiscountPreset));
-          let discountPreset = this.discountPresetList.find(discountPreset => discountPreset.id === key);
-          this.payment.discountPresetId = discountPreset.id;
-          this.payment.discountType = discountPreset.discountType;
-          this.payment.discountValue = discountPreset.discountValue;
+          this.isMultiColumn = true;
         }
-        this._calculatePayment();
       }
 
-      customerChanged() {
-        if (!this.customer) return;
-        this.app.storeInSession('last-selected-customer', this.customer);
+      $getSelectionCompleteIconClass(productListLength, serviceListLength) {
+        let isProductOrServiceSelectionDone = productListLength > 0 || serviceListLength > 0;
+        if (isProductOrServiceSelectionDone) {
+          return '';
+        }
+        return 'hidden ';
       }
 
-      _processGetCustomer({ customerId }, cbfn) {
-        let data = {
-          customerId
-        };
-        this.app.callGetCustomerApi(data, (err, response) => {
+      $getCustomerCompleteIconClass(customer, isAnonymousSale) {
+        let isCustomerSelectionDone = (!!customer) || isAnonymousSale;
+        if (isCustomerSelectionDone) {
+          return '';
+        }
+        return 'hidden ';
+      }
+
+      $getColumnClasses(tabName, type, isMultiColumn, selectedTabName, productListLength, serviceListLength, customer, isAnonymousSale, isInOfflineMode) {
+        let classNames = '';
+
+        let isProductOrServiceSelectionDone = productListLength > 0 || serviceListLength > 0;
+        let isCustomerSelectionDone = (!!customer) || isAnonymousSale;
+
+        if (tabName === 'customer') {
+          if (isProductOrServiceSelectionDone && type === 'placeholder') {
+            classNames += 'hidden ';
+          } else if (!isProductOrServiceSelectionDone && type !== 'placeholder') {
+            classNames += 'hidden ';
+          }
+        }
+
+        if (tabName === 'payment') {
+          if ((isProductOrServiceSelectionDone && isCustomerSelectionDone) && type === 'placeholder') {
+            classNames += 'hidden ';
+          } else if (!(isProductOrServiceSelectionDone && isCustomerSelectionDone) && type !== 'placeholder') {
+            classNames += 'hidden ';
+          }
+        }
+
+        if (isMultiColumn) {
+          if (tabName !== 'payment' && tabName !== 'customer') {
+            if (tabName === selectedTabName) {
+              classNames += ''
+            } else {
+              classNames += 'hidden ';
+            }
+          }
+        } else {
+          if (tabName === selectedTabName) {
+            classNames += ''
+          } else {
+            classNames += 'hidden ';
+          }
+        }
+        return classNames;
+      }
+
+      salesTypeIsProductsTapped(e = null) {
+        this.salesType = 'products';
+        this.selectedTabName = 'products';
+        this.app.storeInSession('pos-sales-type', this.salesType);
+        this._initProductColumn();
+      }
+
+      salesTypeIsServicesTapped(e = null) {
+        this.salesType = 'services';
+        this.selectedTabName = 'services';
+        this.app.storeInSession('pos-sales-type', this.salesType);
+        this._focusServiceSearchField({ repeat: false });
+      }
+
+      _scrollToNavBar() {
+        try {
+          this.elem('.page-fullwidth').scrollIntoView();
+          // this.elem('.single-column-tabs-row').scrollIntoView();
+          // this.elem('.multi-column-header-row').scrollIntoView();
+        } catch (ex) { }
+      }
+
+      // region: products =================================
+
+      // sub-region: warehouse
+
+      $shouldShowWarehouseSelector(warehouseListLength, productListLength) {
+        return (warehouseListLength > 0 && productListLength === 0);
+      }
+
+      selectedWarehouseChanged({ shouldSkipWarehouseSelection = false } = {}) {
+        this.app.storeInSession('pos-selected-warehouse', this.selectedWarehouse);
+        this._resetProductSearch();
+        this._focusProductSearchField();
+        this._updateDefaultInventoryId({ shouldSkipWarehouseSelection }, () => { }); // Makes sure defaultInventoryId is set correctly
+      }
+
+      _setProductSelectedFromWarehouseId(id) {
+        this.productsSelectedFromWarehouseId = id;
+        this.app.storeInSession('product-selected-from-warehouse-id', this.productsSelectedFromWarehouseId);
+      }
+
+      _fetchWarehouseList(cbfn) {
+        if (!this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')) {
+          return cbfn([]);
+        }
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetWarehouseListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          cbfn(response.customer);
+          return cbfn(response.warehouseList);
         });
       }
 
-      _processGetWarehouse(cbfn) {
-        let data = { warehouseId: this.selectedWarehouse };
-        this.app.callGetWarehouseApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response);
-        });
+      changeProductSourceTapped(e = null) {
+        this.productList = [];
+        this.productListChanged();
+        this.productSourceSelectionComplete = false;
       }
+
+      // sub-region: getting default inventory
 
       _processGetOutletDefaultInventoryIdOnline(cbfn) {
         let data = { outletId: this.params.outlet };
@@ -768,9 +1453,20 @@
         }, 10);
       }
 
-      _processGetOutletDefaultInventoryId(cbfn) {
+      _processGetWarehouse(cbfn) {
+        let data = { warehouseId: this.selectedWarehouse };
+        this.app.callGetWarehouseApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.productSourceToDisplay = response.warehouse.name;
+          return cbfn(response);
+        });
+      }
+
+      _processGetDefaultInventoryId(cbfn) {
         if (this.selectedWarehouse === '--current-outlet') {
           this._setProductSelectedFromWarehouseId(null);
+          this.productSourceToDisplay = this.app.verses.pos.currentOutlet;
           if (this.isInOfflineMode) {
             this._processGetOutletDefaultInventoryIdOffline(cbfn);
           } else {
@@ -788,6 +1484,513 @@
         }
       }
 
+      _updateDefaultInventoryId({ shouldSkipWarehouseSelection }, cbfn) {
+        this.defaultInventoryId = null;
+        this._processGetDefaultInventoryId(defaultInventoryId => {
+          this.defaultInventoryId = defaultInventoryId;
+          if (!shouldSkipWarehouseSelection) {
+            this.productSourceSelectionComplete = true;
+          }
+          cbfn();
+        });
+      }
+
+      // sub-region: search
+
+      productSearchFieldFocused(e) {
+        this.isScanningActive = true;
+      }
+
+      productSearchFieldBlurred(e) {
+        this.isScanningActive = false;
+        this.notFoundMessage = '';
+      }
+
+      _fetchAggregatedInventoryDetailsOnline(cbfn) {
+        let data = {
+          inventoryId: this.defaultInventoryId,
+          searchString: String(this.productSearchString),
+          paginate: this.productPaginate,
+          includeZeroCountProducts: false,
+          sortOrder: 'blueprint-created-date-descending'
+        };
+        this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.productPagination = response.pagination;
+          return cbfn(response);
+        });
+      }
+
+      _fetchAggregatedInventoryDetailsOffline(cbfn) {
+        window.setTimeout(() => {
+          let response = JSON.parse(JSON.stringify(this.app.offlineData.cache.getAggregatedInventoryDetails));
+
+          let searchString = String(this.productSearchString);
+          if (searchString.length > 0) {
+            searchString = searchString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            let regex = new RegExp(searchString, 'g');
+            response.aggregatedProductList = response.aggregatedProductList.filter(product => {
+              return (regex.test(product.product.productBlueprint.name) || searchString === product.product.productBlueprint.identifierCode);
+            });
+          }
+
+          ([response.aggregatedProductList, response.pagination] = this._paginateOfflineData(response.aggregatedProductList));
+
+          this.productPagination = response.pagination;
+          cbfn(response);
+        }, 100);
+      }
+
+      _fetchAggregatedInventoryDetails(cbfn) {
+        if (this.isInOfflineMode) {
+          this._fetchAggregatedInventoryDetailsOffline(cbfn);
+        } else {
+          this._fetchAggregatedInventoryDetailsOnline(cbfn);
+        }
+      }
+
+      _searchProducts(cbfn) {
+        this._fetchAggregatedInventoryDetails(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
+
+          if (aggregatedProductList.length === 0 && this.productPagination.offset === 0) {
+            this.notFoundMessage = this.app.verses.pos.productNotFound;
+            this._focusProductSearchField();
+            cbfn();
+            return;
+          }
+
+          // Prepare Products
+          let productList = aggregatedProductList.map(product => {
+            let { purchasePrice, salePrice } = product.product;
+            let { name, unit, defaultVat, identifierCode } = product.product.productBlueprint;
+            let vatValue = defaultVat;
+            Object.assign(product, { name, unit, purchasePrice, salePrice, vatValue, identifierCode });
+            return product;
+          });
+
+          if (productList.length === 1 && this.productSearchString.length > 0 && productList[0].identifierCode === this.productSearchString) {
+            // search by identifierCode was successful.
+            productList[0].selectedCount = 1;
+            this._selectProduct({ product: productList[0] });
+            this.productSearchString = '';
+          } else {
+            this.matchingProductList = productList;
+          }
+
+          cbfn();
+        });
+      }
+
+      _selectProduct({ product }) {
+        let { productId, name, selectedCount, count, salePrice, vatValue, unit } = product;
+        let maxAllowedCount = count;
+        selectedCount = parseFloat(String(selectedCount));
+        let minSalePrice = salePrice;
+
+        let existingProductIndex = this.productList.findIndex(existingProduct => existingProduct.productId === product.productId);
+        if (existingProductIndex > -1) {
+          let existingProduct = this.productList[existingProductIndex];
+          this.set(`productList.${existingProductIndex}.selectedCount`, (parseFloat(existingProduct.selectedCount) + selectedCount));
+        } else {
+          this.unshift('productList', { productId, name, selectedCount, maxAllowedCount, salePrice, vatValue, minSalePrice, unit });
+        }
+        this.productListChanged();
+      }
+
+      _resetProductSearch() {
+        this.notFoundMessage = '';
+        this.productSearchString = '';
+        this.matchingProductList = [];
+      }
+
+      productSearchFieldKeypressed(e) {
+        this.notFoundMessage = '';
+        if (e.which === 13) {
+          this.productSearchTapped(null);
+        } else if (e.which === 27) {
+          this._resetProductSearch();
+        } else {
+          this.matchingProductList = [];
+        }
+      }
+
+      productSearchClearTapped(e) {
+        this._resetProductSearch();
+        this._focusProductSearchField();
+      }
+
+      _focusProductSearchField() {
+        const fn = () => {
+          try {
+            this.elem('#product-search-field').focus();
+          } catch (ex) { }
+        }
+        this.delay(100, fn);
+        fn();
+      }
+
+      productSearchTapped(e = null) {
+        if (!this.isReady) return;
+        this.productPaginate.offset = 0;
+        this.isReady = false;
+        this._searchProducts(() => {
+          this.isReady = true;
+        });
+      }
+
+      showMoreProductsTapped(e = null) {
+        this.set('productPaginate.offset', this.productPaginate.offset + this.productPaginate.limit);
+        this.isReady = false;
+        this._searchProducts(() => this.isReady = true);
+      }
+
+      showPreviousProductsTapped(e = null) {
+        this.set('productPaginate.offset', Math.max(0, this.productPaginate.offset - this.productPaginate.limit));
+        this.isReady = false;
+        this._searchProducts(() => this.isReady = true);
+      }
+
+      selectMatchingProductTapped(e) {
+        let { product } = e.model;
+        product.selectedCount = 1;
+        this._selectProduct({ product });
+      }
+
+      productListChanged() {
+        this.app.storeInSession('pos-selected-product-list', this.productList);
+        this._calculatePayment({ resetRounding: true });
+      }
+
+      // sub-region: post selection
+
+      productSelectedCountInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+        this._calculatePayment({ resetRounding: true });
+      }
+
+      editProductSalePriceTapped(e) {
+        let { product } = e.model;
+        this.app.showModalInput(this.verses.sales.editSalePrice, this.verses.sales.editSalePriceDetails, product.salePrice, (answer) => {
+          let salePrice = parseFloat(answer);
+          if (salePrice >= 0) {
+            e.model.set('product.salePrice', salePrice);
+            this._calculatePayment({ resetRounding: true });
+          }
+        });
+      }
+
+      discardProductTapped(e) {
+        let { productIndex } = e.model;
+        this.splice('productList', productIndex, 1);
+        this.productListChanged();
+        this._calculatePayment({ resetRounding: true });
+      }
+
+      productSelectionDoneTapped(e = null) {
+        this._resetProductSearch();
+        this.selectedTabName = 'customer';
+        this._scrollToNavBar();
+        this._calculatePayment({ resetRounding: true });
+      }
+
+      // region: services =================================
+
+      // subregion: search
+
+      _fetchOutletServiceListOnline(cbfn) {
+        let data = {
+          outletId: parseInt(this.params.outlet),
+          searchString: this.serviceSearchString,
+          paginate: this.servicePaginate
+        };
+
+        this.app.callGetActiveServiceListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.servicePagination = response.pagination;
+          return cbfn(response);
+        });
+      }
+
+      _fetchOutletServiceListOffline(cbfn) {
+        window.setTimeout(() => {
+          let response = JSON.parse(JSON.stringify(this.app.offlineData.cache.getActiveServiceList));
+
+          let searchString = String(this.serviceSearchString);
+          if (searchString.length > 0) {
+            searchString = searchString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            let regex = new RegExp(searchString, 'g');
+            response.serviceList = response.serviceList.filter(product => {
+              return regex.test(product.product.productBlueprint.name);
+            });
+          }
+
+          ([response.serviceList, response.pagination] = this._paginateOfflineData(response.serviceList));
+
+          this.servicePagination = response.pagination;
+          cbfn(response);
+        }, 100);
+      }
+
+      _fetchOutletServiceList(cbfn) {
+        if (this.isInOfflineMode) {
+          // FIXME: Probably not going to work
+          this._fetchOutletServiceListOffline(cbfn);
+        } else {
+          this._fetchOutletServiceListOnline(cbfn);
+        }
+      }
+
+      _searchServices(cbfn) {
+        this._fetchOutletServiceList(({ serviceList }) => {
+
+          if (serviceList.length === 0 && this.servicePagination.offset === 0) {
+            this.notFoundMessage = this.app.verses.pos.serviceNotFound;
+            this._focusServiceSearchField();
+            cbfn();
+            return;
+          }
+
+          this.matchingServiceList = serviceList.map(service => {
+            let { salePrice } = service;
+            let { name, defaultVat, isCustomerRequired, isEmployeeAssignable, isLongstanding, serviceDuration } = service.serviceBlueprint;
+            service.isSelected = false;
+            let vatValue = defaultVat;
+            let assignedEmploymentId = null;
+            Object.assign(service, { name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration });
+            return service;
+          });
+
+          cbfn();
+        });
+      }
+
+      _selectService({ service }) {
+        let { id, name, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration } = service;
+        let minSalePrice = salePrice;
+        this.push('serviceList', { id, name, minSalePrice, salePrice, vatValue, isCustomerRequired, isEmployeeAssignable, assignedEmploymentId, isLongstanding, serviceDuration });
+        this.serviceListChanged();
+      }
+
+      _resetServiceSearch() {
+        this.notFoundMessage = '';
+        this.serviceSearchString = '';
+        this.matchingServiceList = [];
+      }
+
+      serviceSearchFieldKeypressed(e) {
+        this.notFoundMessage = '';
+        if (e.which === 13) {
+          this.serviceSearchTapped(null);
+        } else if (e.which === 27) {
+          this._resetServiceSearch();
+        } else {
+          this.matchingServiceList = [];
+        }
+      }
+
+      serviceSearchClearTapped(e) {
+        this._resetServiceSearch();
+        this._focusServiceSearchField();
+      }
+
+      _focusServiceSearchField({ repeat = true } = {}) {
+        const fn = () => {
+          try {
+            this.elem('#service-search-field').focus();
+          } catch (ex) { }
+        }
+        if (repeat) {
+          this.delay(100, fn);
+        }
+        fn();
+      }
+
+      serviceSearchTapped(e = null) {
+        if (!this.isReady) return;
+        this.servicePaginate.offset = 0;
+        this.isReady = false;
+        this._searchServices(() => {
+          this.isReady = true;
+        });
+      }
+
+      showMoreServicesTapped(e = null) {
+        this.set('servicePaginate.offset', this.servicePaginate.offset + this.servicePaginate.limit);
+        this.isReady = false;
+        this._searchServices(() => this.isReady = true);
+      }
+
+      showPreviousServicesTapped(e = null) {
+        this.set('servicePaginate.offset', Math.max(0, this.servicePaginate.offset - this.servicePaginate.limit));
+        this.isReady = false;
+        this._searchServices(() => this.isReady = true);
+      }
+
+      selectMatchingServiceTapped(e) {
+        let { service } = e.model;
+        service.selectedCount = 1;
+        this._selectService({ service });
+      }
+
+      serviceListChanged() {
+        this.app.storeInSession('pos-selected-service-list', this.serviceList);
+        this._calculatePayment({ resetRounding: true });
+      }
+
+      // sub-region: post selection
+
+      editServiceSalePriceTapped(e) {
+        let { service } = e.model;
+        this.app.showModalInput(this.verses.sales.editSalePrice, this.verses.sales.editSalePriceDetails, service.salePrice, (answer) => {
+          let salePrice = parseFloat(answer);
+          if (salePrice >= 0) {
+            e.model.set('service.salePrice', salePrice);
+            this._calculatePayment({ resetRounding: true });
+          }
+        });
+      }
+
+      discardServiceTapped(e) {
+        let { serviceIndex } = e.model;
+        this.splice('serviceList', serviceIndex, 1);
+        this.serviceListChanged();
+        this._calculatePayment({ resetRounding: true });
+      }
+
+      serviceSelectionDoneTapped(e = null) {
+        this._resetServiceSearch();
+        this.selectedTabName = 'customer';
+        this._scrollToNavBar();
+        this._calculatePayment({ resetRounding: true });
+      }
+
+      // region: customer =================================
+
+      _customerVariablesChanged() {
+        this.app.storeInSession('last-selected-customer', this.customer);
+        this.app.storeInSession('last-selected-customer-is-anonymous', this.isAnonymousSale);
+      }
+
+      customerColumnTapped(e = null) {
+        this._resetProductSearch();
+        this._resetServiceSearch();
+      }
+
+      removeCustomerTapped(e = null) {
+        this.customer = null;
+        this.isAnonymousSale = false;
+        this._customerVariablesChanged();
+      }
+
+      customerChanged() {
+        if (!this.customer) return;
+        this._customerVariablesChanged();
+      }
+
+      _processGetCustomer({ customerId }, cbfn) {
+        let data = {
+          customerId
+        };
+        this.app.callGetCustomerApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          cbfn(response.customer);
+        });
+      }
+
+      _customerSelected(customer) {
+        this.customer = customer;
+      }
+
+      _processCreateCustomer({ fullName, phone, email, address }, cbfn) {
+        let data = {
+          fullName, phone, email, address,
+          organizationId: this.app.organization.id
+        };
+        this.app.callAddCustomerApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editCustomerForm');
+          let message = this.app.verses.customer.newCustomerCreated;
+          this.app.showToast(message, _ => {
+            let customerId = response.customerId;
+            cbfn({ customerId });
+          });
+        });
+      }
+
+      createCustomerTapped(e = null) {
+        this.elemAll('#editCustomerForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editCustomerForm').validate()) return;
+
+        let { fullName, phone, email, address } = this.editCustomerForm;
+        this._processCreateCustomer({ fullName, phone, email, address }, ({ customerId }) => {
+          this._processGetCustomer({ customerId }, (customer) => {
+            this.customer = customer;
+            this.isAnonymousSale = false;
+            this._customerVariablesChanged();
+            this.elem('elem-customer-selector').cancelTapped();
+          });
+        });
+      }
+
+      skipCustomerSelectionTapped(e = null) {
+        this.isAnonymousSale = true;
+        this._customerVariablesChanged();
+        this.elem('elem-customer-selector').cancelTapped();
+      }
+
+      $shouldShowCustomerSelectionOptions(customer, isAnonymousSale) {
+        if (!customer && !isAnonymousSale) return true;
+        return false;
+      }
+
+      customerSelectionDoneTapped(e) {
+        this.selectedTabName = 'payment';
+        this._customerVariablesChanged();
+        this._scrollToNavBar();
+      }
+
+      // region: payment =================================
+
+      paymentColumnTapped(e = null) {
+        this._resetProductSearch();
+        this._resetServiceSearch();
+      }
+
+      paymentMethodSelected(e) {
+        // NOTE: The timeout should not be necessary. However, without it
+        // the value of this.payment.paymentMethod is not being updated in time.
+        window.setTimeout(() => {
+          this._calculatePayment();
+        }, 100);
+      }
+
+      genericPaymentInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+        if (e.target.className.indexOf('payment--paidAmount') > -1) {
+          this._calculatePayment({ resetRounding: false });
+        } else {
+          this._calculatePayment();
+        }
+      }
+
+      selectedDiscountPresetChanged() {
+        if (this.selectedDiscountPreset === '--no-discount') {
+          this.payment.discountPresetId = null;
+          this.payment.discountType = 'percent';
+          this.payment.discountValue = '0';
+        } else {
+          let key = parseInt(String(this.selectedDiscountPreset));
+          let discountPreset = this.discountPresetList.find(discountPreset => discountPreset.id === key);
+          this.payment.discountPresetId = discountPreset.id;
+          this.payment.discountType = discountPreset.discountType;
+          this.payment.discountValue = discountPreset.discountValue;
+        }
+        this._calculatePayment();
+      }
+
       _fetchDiscountPresetList(cbfn) {
         let data = { organizationId: this.app.organization.id };
         this.app.callGetDiscountPresetListApi(data, (err, response) => {
@@ -803,6 +2006,15 @@
           this.discountPresetList = discountPresetList;
           return cbfn();
         });
+      }
+
+      getDiscountPresetLabel(discountPreset) {
+        let { name, discountType, discountValue } = discountPreset;
+        if (discountType === 'percent') {
+          return `${name} (${discountValue}%)`;
+        } else {
+          return `${name} (${discountValue} ${this.app.settings.monetaryUnit})`;
+        }
       }
 
       // main payment calculation method
@@ -921,21 +2133,15 @@
         this._calculatePayment();
       }
 
-      editProductSalePrice(e) {
-        let { product } = e.model;
-        this.app.showModalInput(this.verses.sales.editSalePrice, this.verses.sales.editSalePriceDetails, product.salePrice, (answer) => {
-          let salePrice = parseFloat(answer);
-          if (salePrice >= 0) {
-            e.model.set('product.salePrice', salePrice);
-            this._calculatePayment({ resetRounding: true });
-          }
-        });
-      }
-
       editTotalBilledTapped(e = null) {
         this.app.showModalInput(this.verses.sales.editBill, this.verses.sales.editBillDetails, this.payment.totalBilled, (answer) => {
           if (parseFloat(answer) > 0) {
-            this.payment.roundedByAmount = Math.max(0, (this.payment.totalBillBeforeRounding - parseFloat(answer)));
+            let roundedByAmount = (this.payment.totalBillBeforeRounding - parseFloat(answer));
+            if (roundedByAmount < 0) {
+              this.app.showModalDialog(this.verses.pos.invalidAmount, this.verses.pos.invalidTotalBillAmountMessage);
+              return;
+            }
+            this.payment.roundedByAmount = roundedByAmount;
             this._calculatePayment({ resetRounding: false });
           }
         });
@@ -1018,90 +2224,52 @@
         }
       }
 
+      isDiscountTypePercent(discountType) {
+        return (discountType === 'percent');
+      }
+
+      isPaymentMethodCash(paymentMethod) {
+        return (paymentMethod === 'cash');
+      }
+
+      isPaymentMethodChangeWallet(paymentMethod) {
+        return (paymentMethod === 'change-wallet');
+      }
+
+      isValidCreditSale(customer, totalBilled, paidAmount) {
+        return (customer && totalBilled > paidAmount);
+      }
+
+      // region: finalize & offline mode =================================
+
       _resetSales({ refreshCurrentPage = true } = {}) {
         this.selectedDiscountPreset = '--no-discount';
         this.selectedWarehouse = '--current-outlet';
         this.productsSelectedFromWarehouseId = null;
 
+        this.app.extractFromSession('pos-sales-type');
+
         this.app.extractFromSession('pos-selected-warehouse');
         this.app.extractFromSession('product-selected-from-warehouse-id');
+        this.app.extractFromSession('last-selected-customer');
 
         this.app.extractFromSession('pos-selected-product-list');
         this.app.extractFromSession('pos-selected-service-list');
 
         this.app.extractFromSession('last-selected-customer');
+        this.app.extractFromSession('last-selected-customer-is-anonymous');
 
         this.app.extractFromSession('pos-assigned-assisted-by-employee');
 
-        this.resetProperties('payment', 'productList', 'serviceList', 'customer', 'isSearchingCustomer');
+        this.productSourceSelectionComplete = false;
+        this.productSourceToDisplay = '';
+        this.productSearchString = '';
+        this.serviceSearchString = '';
+        this.resetProperties('payment', 'productList', 'serviceList', 'customer', 'isAnonymousSale', 'salesType', 'editCustomerForm');
 
         if (refreshCurrentPage) {
           this.app.refreshCurrentPage();
         }
-      }
-
-      _customerSelected(customer) {
-        this.customer = customer;
-        this.isSearchingCustomer = false;
-      }
-
-      _fetchWarehouseList(cbfn) {
-        if (!this.hasModule('MOD_SELL_WAREHOUSE_PRODUCTS')) {
-          return cbfn([]);
-        }
-        let data = { organizationId: this.app.organization.id };
-        this.app.callGetWarehouseListApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.warehouseList);
-        });
-      }
-
-      // region: ui =================================
-
-      changeCustomerTapped(e = null) {
-        this.isSearchingCustomer = true;
-      }
-
-      createCustomerTapped(e = null) {
-        this.app.navigateTo('/edit-customer');
-      }
-
-      removeCustomerTapped(e = null) {
-        this.customer = null;
-        this.app.storeInSession('last-selected-customer', null);
-      }
-
-      addProductTapped(e = null) {
-        this._processGetOutletDefaultInventoryId(defaultInventoryId => {
-          return this.app.navigateTo(`/pos-select-products/inventory:${defaultInventoryId}`);
-        })
-      }
-
-      addServiceTapped(e = null) {
-        return this.app.navigateTo(`/pos-select-services/outlet:${this.params.outlet}`);
-      }
-
-      paymentMethodSelected(e) {
-        // NOTE: The timeout should not be necessary. However, without it
-        // the value of this.payment.paymentMethod is not being updated in time.
-        window.setTimeout(() => {
-          this._calculatePayment();
-        }, 100);
-      }
-
-      genericPaymentInputChanged(e) {
-        this.enforceMinMaxOnPaperInput(e);
-        if (e.target.className.indexOf('payment--paidAmount') > -1) {
-          this._calculatePayment({ resetRounding: false });
-        } else {
-          this._calculatePayment();
-        }
-      }
-
-      backButtonOnTopBarPressed(e = null) {
-        this._resetSales();
-        this.app.navigateToPreviousUrl('/home');
       }
 
       saveSaleTapped(e = null) {
@@ -1212,52 +2380,6 @@
         submitNext();
       }
 
-      isDiscountTypePercent(discountType) {
-        return (discountType === 'percent');
-      }
-
-      isPaymentMethodCash(paymentMethod) {
-        return (paymentMethod === 'cash');
-      }
-
-      isPaymentMethodChangeWallet(paymentMethod) {
-        return (paymentMethod === 'change-wallet');
-      }
-
-      isValidCreditSale(customer, totalBilled, paidAmount) {
-        return (customer && totalBilled > paidAmount);
-      }
-
-      assignEmployeeTapped(e) {
-        let { id } = e.model.service;
-        return this.app.navigateTo(`/pos-assign-employee-service/service:${id}`);
-      }
-
-      assignAssistedByEmployeeTapped() {
-        return this.app.navigateTo(`/pos-assign-assisted-by-employee`);
-      }
-
-      $shouldShowWarehouseSelector(warehouseListLength, productListLength) {
-        return (warehouseListLength > 0 && productListLength === 0);
-      }
-
-      // region: misc =================================
-
-      productListOrServiceListHasElement(productListLength, serviceListLength) {
-        return (productListLength || serviceListLength);
-      }
-
-      getDiscountPresetLabel(discountPreset) {
-        let { name, discountType, discountValue } = discountPreset;
-        if (discountType === 'percent') {
-          return `${name} (${discountValue}%)`;
-        } else {
-          return `${name} (${discountValue} ${this.app.settings.monetaryUnit})`;
-        }
-      }
-
-      // region: offline sales =================================
-
       onOfflineDataChange() {
         this.isInOfflineMode = this.app.isInOfflineMode;
         this.offlineData = this.app.offlineData;
@@ -1268,6 +2390,22 @@
         } else {
           this.app.currentPageAllowsBackButton = true;
         }
+      }
+
+      // region: misc =================================
+
+      productListOrServiceListHasElement(productListLength, serviceListLength) {
+        return (productListLength || serviceListLength);
+      }
+
+      assignEmployeeTapped(e) {
+        let { id } = e.model.service;
+        this._resetServiceSearch();
+        return this.app.navigateTo(`/pos-assign-employee-service/service:${id}`);
+      }
+
+      assignAssistedByEmployeeTapped() {
+        return this.app.navigateTo(`/pos-assign-assisted-by-employee`);
       }
 
     }

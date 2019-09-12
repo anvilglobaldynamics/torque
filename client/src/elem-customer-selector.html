@@ -103,32 +103,54 @@
       </div>
 
       <div class="vertical layout">
-        <template is="dom-repeat" items="[[customerList]]" as="customer" index-as="customerIndex">
-          <div class="horizontal layout item center">
+        <template is="dom-if" if="[[customerList.length]]">
 
-            <div class="flex">
-              <div class="type body capitalize">[[customer.fullName]]</div>
-              <div class="horizontal layout wrap type secondary">
-                <div class="horizontal layout center m-right-8">
-                  <iron-icon icon="hardware:smartphone" class="icon small"></iron-icon>
-                  <div class="type caption-2">[[customer.phone]]</div>
+          <template is="dom-repeat" items="[[customerList]]" as="customer" index-as="customerIndex">
+            <div class="horizontal layout item center">
+
+              <div class="flex">
+                <div class="type body capitalize">[[customer.fullName]]</div>
+                <div class="horizontal layout wrap type secondary">
+                  <div class="horizontal layout center m-right-8">
+                    <iron-icon icon="hardware:smartphone" class="icon small"></iron-icon>
+                    <div class="type caption-2">[[customer.phone]]</div>
+                  </div>
                 </div>
               </div>
+
+              <!-- selection button -->
+              <paper-button raised class="secondary btn btn-default" on-tap="selectTapped">
+                <iron-icon icon="check" class="m-right-8"></iron-icon>
+              </paper-button>
+
             </div>
+          </template>
 
-            <!-- selection button -->
-            <paper-button raised class="secondary btn btn-default" on-tap="selectTapped">
-              <iron-icon icon="check" class="m-right-8"></iron-icon>
-            </paper-button>
-
+          <div class="pagination">
+            [[verses.general.loaded]]
+            <span class="limit">[[customerPagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[customerPagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(customerPagination.offset)]]</span>.
           </div>
+
+          <div class="horizontal layout center">
+            <template is="dom-if" if="[[$hasPreviousPagination(customerPaginate.offset)]]">
+              <paper-button raised class="flex neutral " on-tap="showPreviousProductsTapped">[[verses.general.showPrevious]]</paper-button>
+            </template>
+
+            <template is="dom-if" if="[[$hasMorePagination(customerPagination.totalCount, customerPaginate.offset, customerPaginate.limit)]]">
+              <paper-button raised class="flex neutral " on-tap="showMoreProductsTapped">[[verses.general.showMore]]</paper-button>
+            </template>
+          </div>
+          
         </template>
       </div>
 
     </div>
   </template>
   <script>
-    class ElemCustomerSelector extends FxElement.mixin(TorqueLanguageBehavior) {
+    class ElemCustomerSelector extends FxElement.mixin(TorqueLanguageBehavior, TorqueCommonBehavior) {
 
       static get is() { return 'elem-customer-selector'; }
 
@@ -142,7 +164,22 @@
             type: Object,
             value: null,
             observer: 'pageChanged'
-          }
+          },
+          customerPaginate: {
+            type: Object,
+            value: () => {
+              return {
+                offset: 0,
+                limit: 3
+              }
+            }
+          },
+          customerPagination: {
+            type: Object,
+            value: () => {
+              return {}
+            }
+          },
         };
       }
 
@@ -156,19 +193,23 @@
       }
 
       cancelTapped(e = null) {
-        this.page._customerSelected(null);
+        this.searchString = '';
+        this.customerList = [];
+        // this.page._customerSelected(null);
       }
 
       searchTapped(e = null) {
         let organizationId = parseInt(this.page.app.organization.id);
         let data = {
           organizationId,
-          searchString: this.searchString
+          searchString: this.searchString,
+          paginate: this.customerPaginate
         };
         this.page.app.callGetCustomerListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.page.onApiError(response.error);
           this.customerList = response.customerList;
+          this.customerPagination = response.pagination;
           if (this.customerList.length === 1) {
             this._selectCustomer(0);
           }
@@ -185,6 +226,19 @@
         let { customerIndex } = e.model;
         this._selectCustomer(customerIndex);
       }
+
+      showMoreProductsTapped(e = null) {
+        this.set('customerPaginate.offset', this.customerPaginate.offset + this.customerPaginate.limit);
+        this.searchTapped();
+        // this.isReady = false;
+        // this._searchProducts(() => this.isReady = true);
+      }
+
+      showPreviousProductsTapped(e = null) {
+        this.set('customerPaginate.offset', Math.max(0, this.customerPaginate.offset - this.customerPaginate.limit));
+        this.searchTapped();
+      }
+
 
     }
     window.customElements.define(ElemCustomerSelector.is, ElemCustomerSelector);
