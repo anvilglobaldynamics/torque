@@ -31,8 +31,9 @@
 
       li {}
 
-      h1, h2 {
-        padding:0px;
+      h1,
+      h2 {
+        padding: 0px;
         margin: 0px;
         line-height: normal;
       }
@@ -44,7 +45,9 @@
 
       h2 {}
 
-      a {}
+      a {
+        color: var(--app-primary-color);
+      }
 
       .block {}
 
@@ -101,13 +104,13 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="block card" data-key="transfer">
+      <div class="block card" data-topic="transfer">
         <div class="question" draggable="false" on-tap="questionTapped">
-          <iron-icon icon="icons:chevron-right" class="collapsed-icon hidden"></iron-icon>
-          <iron-icon icon="icons:expand-more" class="expanded-icon"></iron-icon>
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
           How to transfer products from one inventory to another inventory?
         </div>
-        <div class="answer">
+        <div class="answer hidden">
           <h1>Between warehouses and outlets</h1>
           <p> Follow the steps below to transfer products from warehouse to an outlet:
             <ol>
@@ -116,6 +119,7 @@
               <li>Press the "View" button beside the inventory you want to move products <b>from</b>.</li>
               <li>Scroll to bottom and tap on "Start selecting products to transfer".</li>
               <li>Select the desired products and write in how many units do you want to move</li>
+              <li>Click <a href="#">Here to learn more</a></li>
             </ol>
             <img src="../images/help/transfer-1.png">
           </p>
@@ -136,7 +140,7 @@
         </div>
       </div>
 
-      <div class="block card" data-key="add">
+      <div class="block card" data-topic="add">
         <div class="question" draggable="false" on-tap="questionTapped">
           <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
           <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
@@ -147,7 +151,7 @@
         </div>
       </div>
 
-      <div class="block card" data-key="add">
+      <div class="block card" data-topic="add">
         <div class="question" draggable="false" on-tap="questionTapped">
           <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
           <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
@@ -158,7 +162,7 @@
         </div>
       </div>
 
-      <div class="block card" data-key="add">
+      <div class="block card" data-topic="add">
         <div class="question" draggable="false" on-tap="questionTapped">
           <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
           <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
@@ -200,6 +204,13 @@
         this.app.pushPageTitle(this.app.verses.help.pageTitle);
         this.delay(300, () => {
           this.isReady = true;
+          if ('topic' in this.params) {
+            let parent = this.elem(`[data-topic=${this.params.topic}]`);
+            if (parent) {
+              this._showAnswerOfBlock(parent);
+              parent.scrollIntoView();
+            }
+          }
         });
       }
 
