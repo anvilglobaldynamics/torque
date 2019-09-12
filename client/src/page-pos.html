@@ -2266,6 +2266,7 @@
         this.productSearchString = '';
         this.serviceSearchString = '';
         this.resetProperties('payment', 'productList', 'serviceList', 'customer', 'isAnonymousSale', 'salesType', 'editCustomerForm');
+        this.removeAutoValidation('#editCustomerForm paper-input');
 
         if (refreshCurrentPage) {
           this.app.refreshCurrentPage();
