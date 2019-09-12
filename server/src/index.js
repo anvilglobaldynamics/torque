@@ -32,7 +32,7 @@ let { UserResetPasswordGetTokenInfoApi } = require('./legacy-apis/user-reset-pas
 let { UserResetPasswordConfirmApi } = require('./legacy-apis/user-reset-password--confirm');
 
 const { AddOrganizationApi } = require('./apis/add-organization');
-let { GetOrganizationListApi } = require('./legacy-apis/get-organization-list');
+const { GetOrganizationListApi } = require('./apis/get-organization-list');
 let { EditOrganizationApi } = require('./legacy-apis/edit-organization');
 const { GetActivatedPackageListApi } = require('./apis/get-activated-package-list');
 
@@ -119,6 +119,8 @@ const { GraphSalesTrendApi } = require('./apis/graph-sales-trend');
 const { AddVendorApi } = require('./apis/add-vendor');
 const { GetVendorListApi } = require('./apis/get-vendor-list');
 const { EditVendorApi } = require('./apis/edit-vendor');
+
+const { EditOrganizationSettingsApi } = require('./apis/edit-organization-settings');
 
 const { ShopLocateNearbyOutletsApi } = require('./apis/shop-locate-nearby-outlets');
 const { ShopGetOutletDetailsApi } = require('./apis/shop-get-outlet-details');
@@ -368,6 +370,8 @@ class Program {
     server.registerPostApi('/api/add-vendor', AddVendorApi);
     server.registerPostApi('/api/get-vendor-list', GetVendorListApi);
     server.registerPostApi('/api/edit-vendor', EditVendorApi);
+
+    server.registerPostApi('/api/edit-organization-settings', EditOrganizationSettingsApi);
 
     server.registerPostApi('/api/admin-login', AdminLoginApi);
     server.registerPostApi('/api/admin-get-outgoing-sms-list', AdminGetOutgoingSmsListApi);

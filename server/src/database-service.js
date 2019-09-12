@@ -20,7 +20,7 @@ const { ProductCollection } = require('./collections/product');
 const { SalesReturnCollection } = require('./collections/sales-return');
 const { SalesDiscardCollection } = require('./collections/sales-discard');
 const { SalesCollection } = require('./collections/sales');
-const { SesssionCollection } = require('./collections/session');
+const { SessionCollection } = require('./collections/session');
 const { UserCollection } = require('./collections/user');
 const { WarehouseCollection } = require('./collections/warehouse');
 const { ProductAcquisitionCollection } = require('./collections/product-acquisition');
@@ -34,6 +34,7 @@ const { DiscountPresetCollection } = require('./collections/discount-preset');
 const { CacheOutletGeolocationCollection } = require('./collections/cache-outlet-geolocation');
 const { ProductCategoryCollection } = require('./collections/product-category');
 const { VendorCollection } = require('./collections/vendor');
+const { OrganizationSettingsCollection } = require('./collections/organization-settings');
 
 class DatabaseService {
 
@@ -60,7 +61,7 @@ class DatabaseService {
     this.salesReturn = new SalesReturnCollection(this.engine, this);
     this.salesDiscard = new SalesDiscardCollection(this.engine, this);
     this.sales = new SalesCollection(this.engine, this);
-    this.sesssion = new SesssionCollection(this.engine, this);
+    this.session = new SessionCollection(this.engine, this);
     this.user = new UserCollection(this.engine, this);
     this.warehouse = new WarehouseCollection(this.engine, this);
     this.productAcquisition = new ProductAcquisitionCollection(this.engine, this);
@@ -74,6 +75,8 @@ class DatabaseService {
     this.productCategory = new ProductCategoryCollection(this.engine, this);
     this.vendor = new VendorCollection(this.engine, this);
     this.cacheOutletGeolocation = new CacheOutletGeolocationCollection(this.engine, this);
+    this.organizationSettings = new OrganizationSettingsCollection(this.engine, this);
+
     /** @type {[Collection]} */
     this.collectionList = Object.keys(this).filter(key => this[key] instanceof Collection).map(key => this[key]);
   }

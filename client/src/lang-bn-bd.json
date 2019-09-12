@@ -113,6 +113,8 @@
     "change": "বদলান",
     "nextOrContinue": "পরবর্তী",
     "notFound": "পাওয়া যায় নি"
+    "update": "আপডেট",
+    "saved": "সংরক্ষিত"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -448,8 +450,8 @@
     "count": "গণনা",
     "sellFor": "বিক্রয় মূল্য",
     "purchasedFor": "ক্রয় মূল্য",
-    "addProductsVendorNeededTitle": "সরবরাহকারী প্রয়োজন",
-    "addProductsVendorNeededMessage": "পণ্য যোগ করার জন্য সরবরাহকারী নির্বাচন করুন। আপনি যদি সরবরাহকারী তৈরি করতে চান, তাহলে সরবরাহকারী পরিচালনা ফিচারটি ব্যবহার করুন।",
+    "vendorNeededMessageTitle": "সরবরাহকারী প্রয়োজন",
+    "vendorNeededMessageBody": "পণ্য যোগ করার জন্য সরবরাহকারী নির্বাচন করুন। আপনি যদি সরবরাহকারী তৈরি করতে চান, তাহলে সরবরাহকারী পরিচালনা ফিচারটি ব্যবহার করুন।",
     "noProductBlueprintFound": "কোনো পণ্যের পরিকল্পনা পাওয়া যায় নি। প্রথমে পণ্যটি একটি \"পণ্যের পরিকল্পনা\" হিসেবে যোগ করুন, এর পর এই পণ্য তালিকায় পণ্য হিসেবে যোগ করুন।",
     "addProductsConfirmMessage": "নিশ্চিত করুন পণ্য সংখ্যা সঠিক আছে। একবার পণ্য যোগ হয়ে গেলে ম্যানুয়ালি কমানো যাবে না।"
   },
@@ -868,7 +870,13 @@
     "defaultPrinterFormat": "রসিদের জন্য ডিফল্ট প্রিন্টার",
     "defaultPrinterFormatA4": "A4",
     "defaultPrinterFormatSlim": "Slim (POS)",
-    "defaultPrinterFormatDetail": "রসিদের জন্য ডিফল্ট প্রিন্টার নির্বাচন করুন"
+    "defaultPrinterFormatDetail": "রসিদের জন্য ডিফল্ট প্রিন্টার নির্বাচন করুন",
+    "receiptText": "রসিদে দেয়ার জন্য অতিরিক্ত তথ্য",
+    "receiptText1": "প্রথম লাইন (উপর)",
+    "receiptText2": "দ্বিতীয় লাইন (নীচ)",
+    "noOrganizationSettingsPrivilege": "সংগঠন-ব্যাপী সেটিংস পরিবর্তন করার জন্য আপনার প্রয়োজনীয় বিশেষাধিকার নেই।",
+    "entireOrganizationWarning": "নীচের সেটিংস পুরো সংস্থাটিকে প্রভাবিত করে.",
+    "changesSaved": "সংগঠন-ব্যাপী সেটিংসগুলি সংরক্ষণ করা হয়েছে। পুনরায় লগ ইন করুন। "
   },
   "verify": {
     "verificationModalTitle": "যাচাইকরণ এসএমএস পাঠানো হয়েছে",
@@ -1074,6 +1082,7 @@
     "searchFieldTips": "নাম অথবা ফোন"
   },
   "productCategory": {
+    "productCategories": "পণ্যের ধরণ",
     "productCategoriesTitle": "পণ্যের ধরণ",
     "manageProductCategoriesTitle": "পণ্যের ধরণ পরিচালনা",
     "editProductCategoryTitle": "পণ্যের ধরণ সম্পাদনা করুন",
@@ -1101,7 +1110,8 @@
     "exclusionNote": "(ব্যবহার করলে অন্যান্য ফিল্টার কাজ করবেনা)",
     "noProductTransferFound": "কোনো পণ্য ট্রান্সফার রেকর্ড পাওয়া যায়নি। ",
     "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
-    "productTransferTitle": "পণ্য ট্রান্সফার রেকর্ড"
+    "productTransferTitle": "পণ্য ট্রান্সফার রেকর্ড",
+    "acquiredFrom": "থেকে ক্রীত"
   },
   "graphSales": {
     "graphSalesTitle": "বিক্রয় গ্রাফ",

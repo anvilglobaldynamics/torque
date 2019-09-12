@@ -9,4 +9,11 @@ exports.OrganizationMixin = (SuperApiClass) => class extends SuperApiClass {
     return organization;
   }
 
+  async _remotelyTerminateSessionOfUsersInOrganization({ organizationId }) {
+    let employmentList = await this.database.employment.listByOrganizationId({ organizationId });
+    for (let employment of employmentList) {
+      await this.database.session.expireByUserId({ userId: employment.userId });
+    }
+  }
+
 }

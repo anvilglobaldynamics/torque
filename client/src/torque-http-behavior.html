@@ -595,6 +595,11 @@
         this.callCombinedJsonApi('get-product-acquisition-list', data, cbfn);
       }
 
+      callEditOrganizationSettingsApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-organization-settings', data, cbfn);
+      }
+
     }
 
   })();

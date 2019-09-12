@@ -17,6 +17,7 @@ exports.ProductTransferCollection = class extends Collection {
       transferredDatetimeStamp: Joi.number().max(999999999999999).required(),
       fromInventoryId: Joi.number().max(999999999999999).required(),
       toInventoryId: Joi.number().max(999999999999999).required(),
+      vendorId: Joi.number().max(999999999999999).allow(null).required(),
       organizationId: Joi.number().max(999999999999999).required(),
 
       isWithinSameInventoryContainer: Joi.boolean().required(),
@@ -56,7 +57,7 @@ exports.ProductTransferCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ organizationId, createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList, isWithinSameInventoryContainer }) {
+  async create({ organizationId, createdByUserId, transferredDatetimeStamp, fromInventoryId, toInventoryId, productList, vendorId, isWithinSameInventoryContainer }) {
     let productTransferNumber = await this.autoGenerateOrganizationSpecificNumber({ organizationId, fieldName: 'productTransferNumberSeed' });
 
     return await this._insert({
@@ -68,6 +69,7 @@ exports.ProductTransferCollection = class extends Collection {
       productList,
       organizationId,
       productTransferNumber,
+      vendorId,
       isWithinSameInventoryContainer
     });
   }

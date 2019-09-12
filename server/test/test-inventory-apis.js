@@ -544,7 +544,8 @@ describe('Inventory', _ => {
         toInventoryId: warehouseReturnedInventoryId,
         productList: [
           { productId: productToBeTransferred.productId, count: 1 }
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -563,7 +564,8 @@ describe('Inventory', _ => {
         toInventoryId: warehouseReturnedInventoryId,
         productList: [
           { productId: productToBeTransferred.productId, count: 99999999 }
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -583,7 +585,8 @@ describe('Inventory', _ => {
         toInventoryId: warehouseReturnedInventoryId,
         productList: [
           { productId: productToBeTransferred.productId, count: 1 }
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -603,7 +606,8 @@ describe('Inventory', _ => {
         toInventoryId: invalidInventoryId,
         productList: [
           { productId: productToBeTransferred.productId, count: 1 }
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -623,7 +627,8 @@ describe('Inventory', _ => {
         toInventoryId: warehouseReturnedInventoryId,
         productList: [
           { productId: productToBeTransferred.productId, count: 1 }
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -756,7 +761,8 @@ describe('Inventory', _ => {
         toInventoryId: outletDefaultInventoryId,
         productList: [
           { productId: productToBeTransferred.productId, count: 3 }
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -1081,7 +1087,8 @@ describe('Inventory', _ => {
         toInventoryId: outletDefaultInventoryId,
         productList: [
           { productId: includeZeroCountProductsProductId, count: 20 }
-        ]
+        ],
+        vendorId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

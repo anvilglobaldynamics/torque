@@ -344,7 +344,6 @@ describe('user apis (1)', _ => {
 
   });
 
-
   it('api/user-set-email', testDoneFn => {
 
     callApi('api/user-set-email', {
@@ -727,6 +726,85 @@ describe('user apis (1)', _ => {
   });
 
   // ================================================== Logout
+
+  it('api/user-logout (Correct)', testDoneFn => {
+
+    callApi('api/user-logout', {
+      json: {
+        apiKey
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      testDoneFn();
+    });
+
+  });
+
+
+  // ================================================== Login
+
+  let oldApiKey = null;
+
+  it('api/user-login (Testing Duplicate Login. Login 1)', testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: phone,
+        password: changedPassword3
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string')
+      expect(body).to.have.property('sessionId').that.is.a('number')
+      expect(body).to.have.property('warning').that.is.an('array').that.deep.equals([]);
+      expect(body).to.have.property('user').that.is.an('object')
+      oldApiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  it('api/user-login (Testing Duplicate Login. Login 2)', testDoneFn => {
+
+    callApi('api/user-login', {
+      json: {
+        emailOrPhone: phone,
+        password: changedPassword3
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body).to.have.property('status').that.equals('success');
+      expect(body).to.have.property('apiKey').that.is.a('string')
+      expect(body).to.have.property('sessionId').that.is.a('number')
+      expect(body).to.have.property('warning').that.is.an('array').that.deep.equals([]);
+      expect(body).to.have.property('user').that.is.an('object')
+      apiKey = body.apiKey;
+      testDoneFn();
+    })
+
+  });
+
+  // ================================================== Logout
+
+  it('api/user-logout (Correct)', testDoneFn => {
+
+    callApi('api/user-logout', {
+      json: {
+        apiKey: oldApiKey
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(true);
+      expect(body.error).to.have.property('code').that.equals('APIKEY_EXPIRED');
+      testDoneFn();
+    });
+
+  });
 
   it('api/user-logout (Correct)', testDoneFn => {
 

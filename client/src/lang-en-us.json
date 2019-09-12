@@ -80,9 +80,9 @@
     "cancel": "Cancel",
     "organization": "Organization",
     "user": "User",
-    "cash": "cash",
-    "card": "card",
-    "digital": "digital",
+    "cash": "Cash",
+    "card": "Card",
+    "digital": "Digital",
     "email": "Email",
     "designation": "Designation",
     "errorMessageBody": "Error Occurred, Please contact Lipi representative.",
@@ -113,6 +113,8 @@
     "change": "Change",
     "nextOrContinue": "Next",
     "notFound": "Not found"
+    "update": "Update",
+    "saved": "Saved"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -390,7 +392,7 @@
   },
   "commonEmploymentDetails": {
     "privileges": "Privileges",
-    "privilegesTip": "By selecting or deselcting below privileges you can select which features an Employee can use",
+    "privilegesTip": "By selecting or deselecting below privileges you can select which features an Employee can use",
     "roleOfEmployeeInput": "Role of Employee.",
     "roleOfEmployeeInputError": "Enter a valid role",
     "designationOfEmployeeInput": "Designation of Employee.",
@@ -446,8 +448,8 @@
     "count": "Count",
     "sellFor": "Sell",
     "purchasedFor": "Purchase",
-    "addProductsVendorNeededTitle": "Vendor needed",
-    "addProductsVendorNeededMessage": "Select a vendor to continue. If you need to create a vendor, please use the Vendor Manager feature.",
+    "vendorNeededMessageTitle": "Vendor needed",
+    "vendorNeededMessageBody": "Select a vendor to continue. If you need to create a vendor, please use the Vendor Manager feature.",
     "noProductBlueprintFound": "No product blueprint found. Add as \"Product Blueprint\" first to add it as a Product to this inventory.",
     "addProductsConfirmMessage": "Please make sure product counts are correct. Once added product count can not be deducted manually."
   },
@@ -867,7 +869,13 @@
     "defaultPrinterFormat": "Default Printer Format for POS Receipts",
     "defaultPrinterFormatA4": "A4",
     "defaultPrinterFormatSlim": "Slim (POS)",
-    "defaultPrinterFormatDetail": "Select Default Printer Format for POS Receipts"
+    "defaultPrinterFormatDetail": "Select Default Printer Format for POS Receipts",
+    "receiptText": "Additional information to print on receipt",
+    "receiptText1": "Line 1 (Top)",
+    "receiptText2": "Line 2 (Bottom)",
+    "noOrganizationSettingsPrivilege": "You do not have the required privilege to modify organization-wide settings.",
+    "entireOrganizationWarning": "The settings below affect the entire organization.",
+    "changesSaved": "Changes have been saved for the entire organization. Log in again."
   },
   "verify": {
     "verificationModalTitle": "Verification SMS Sent",
@@ -1073,6 +1081,7 @@
     "searchFieldTips": "Name or phone"
   },
   "productCategory": {
+    "productCategories": "Product Categories",
     "productCategoriesTitle": "Product Categories",
     "manageProductCategoriesTitle": "Manage Product Categories",
     "editProductCategoryTitle": "Edit Product Category",
@@ -1100,7 +1109,8 @@
     "exclusionNote": "(Other Filters will be ignored)",
     "noProductTransferFound": "No Product Transfer Found",
     "recordCreatedBy": "Record Created By",
-    "productTransferTitle": "Product Transfer Details"
+    "productTransferTitle": "Product Transfer Details",
+    "acquiredFrom": "Acquired From"
   },
   "graphSales": {
     "graphSalesTitle": "Sales Trend Graph",

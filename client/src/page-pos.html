@@ -2099,7 +2099,8 @@
         // calculating change amount, paid amount depending on payment method
         if (paymentMethod === 'change-wallet') {
           changeAmount = 0;
-          paidAmount = 0;
+          // NOTE: commented out the following to avoid incorrect charging
+          // paidAmount = 0;
         } else {
           if (paidAmount > totalBilled) {
             changeAmount = paidAmount - totalBilled;

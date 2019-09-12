@@ -228,7 +228,7 @@
         this._processProductBlueprintList(_ => {
           this._processVendorList(_ => {
             this.isReady = true;
-          })
+          });
         });
       }
 
@@ -321,7 +321,7 @@
 
       addProductsTapped(e = null) {
         if (this.hasModule('MOD_VENDOR') && this.vendorSelectedIndex < 0) {
-          this.app.showModalDialog(this.app.verses.product.addProductsVendorNeededTitle, this.app.verses.product.addProductsVendorNeededMessage);
+          this.app.showModalDialog(this.app.verses.product.vendorNeededMessageTitle, this.app.verses.product.vendorNeededMessageBody);
           return;
         }
 
@@ -333,8 +333,10 @@
 
             let vendorId = null;
             if (this.hasModule('MOD_VENDOR')) {
-              vendorId = this.vendorList[this.vendorSelectedIndex].id;
-            }
+                try {
+                  vendorId = this.vendorList[this.vendorSelectedIndex].id;
+                } catch (ex) { }
+              }
 
             let productList = [];
             this.selectedProductBlueprintList.forEach(productBlueprint => {
