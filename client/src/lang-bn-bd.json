@@ -148,6 +148,7 @@
   "sidebar": {
     "lipiName": "লিপি",
     "home": "হোম",
+    "help": "সহায়তা নিন",
     "employees": "কর্মচারী",
     "outlets": "দোকান",
     "warehouses": "গুদাম",
@@ -1109,5 +1110,8 @@
     "productAcquisitionTitle": "পণ্য ক্রয় এর রেকর্ড",
     "wholeOrganization": "সম্পূর্ণ সংস্থা",
     "acquiredFrom": "থেকে ক্রীত"
+  }, 
+  "help": {
+    "pageTitle": "সহায়তা নিন"
   }
 }

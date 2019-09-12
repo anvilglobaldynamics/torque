@@ -28,13 +28,62 @@
       h1 {}
 
       h2 {}
+
+      a {}
+
+      .block {}
+
+      .question {
+        cursor: pointer;
+        font-size: 20px;
+      }
+
+      .answer {
+        border-top: 1px solid rgb(165, 165, 165);
+        margin-left: 28px;
+        padding-left: 4px;
+        padding-top: 2px;
+
+        animation-name: example;
+        animation-duration: 1s;
+      }
+
+      @keyframes example {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      Work in Progress
+      <div class="block card" data-key="transfer">
+        <div class="question" draggable="false" on-tap="questionTapped">
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon hidden"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon"></iron-icon>
+          How to transfer products from one inventory to another inventory?
+        </div>
+        <div class="answer">
+          Yes
+        </div>
+      </div>
+
+      <div class="block card" data-key="add">
+        <div class="question" draggable="false" on-tap="questionTapped">
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
+          How to add products to outlet/warehouse?
+        </div>
+        <div class="answer hidden">
+          Yes
+        </div>
+      </div>
 
     </div>
 
@@ -65,7 +114,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.useLanguageServices();
-        this.app.pushPageTitle(this.app.verses.help.helpUsTitle);
+        this.app.pushPageTitle(this.app.verses.help.pageTitle);
         this.delay(300, () => {
           this.isReady = true;
         });
@@ -79,6 +128,29 @@
         return this.accessControl({
           authLevel: 'authenticated'
         });
+      }
+
+      _hideAllAnswers({ exclude = null } = {}) {
+        this.elemAll('.block').forEach(parent => {
+          if (parent === exclude) return;
+          let answer = parent.querySelector('.answer');
+          answer.classList.add('hidden');
+          parent.querySelector('.collapsed-icon').classList.remove('hidden');
+          parent.querySelector('.expanded-icon').classList.add('hidden');
+        })
+      }
+
+      _showAnswerOfBlock(parent) {
+        let answer = parent.querySelector('.answer');
+        answer.classList.toggle('hidden');
+        parent.querySelector('.collapsed-icon').classList.add('hidden');
+        parent.querySelector('.expanded-icon').classList.remove('hidden');
+      }
+
+      questionTapped(e) {
+        let parent = e.currentTarget.parentNode;
+        this._hideAllAnswers({ exclude: parent });
+        this._showAnswerOfBlock(parent);
       }
 
       // region: misc =================================      
