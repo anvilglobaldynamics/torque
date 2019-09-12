@@ -325,6 +325,9 @@
       backgroundSyncDropdownSelected() {
         window.setTimeout(() => {
           this.settingsChanged();
+          window.setTimeout(() => {
+            this.app._processBackgroundSync(() => { });
+          })
         }, 100);
       }
 

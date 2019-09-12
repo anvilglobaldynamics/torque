@@ -131,6 +131,7 @@
         if (!this._ensureAccess()) return;
         this._processCurrentlySelected(() => {
           this._processEmployeeList(() => {
+            window.isComingFromAssistedByAssignment = true;
             this.isReady = true;
           });
         });

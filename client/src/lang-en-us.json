@@ -23,6 +23,7 @@
     "select": "Select",
     "remove": "Remove",
     "selected": "Selected",
+    "selection": "Selection",
     "deselect": "Deselect",
     "address": "Address",
     "comingSoon": "Coming Soon",
@@ -98,6 +99,7 @@
     "vendorModule": "Vendor Module",
     "retail": "Retail",
     "service": "Service",
+    "services": "Services",
     "both": "Both",
     "optional": "(Optional)",
     "print": "Print",
@@ -107,6 +109,10 @@
     "scanButtonHelp": "Use code scanner to select multiple products quickly",
     "contactPerson": "Contact Person",
     "inventory": "Inventory",
+    "payment": "Payment",
+    "change": "Change",
+    "nextOrContinue": "Next",
+    "notFound": "Not found"
     "update": "Update",
     "saved": "Saved"
   },
@@ -376,7 +382,7 @@
     "serviceBlueprintEditConfirmMessage": "Editing Service Blueprint will update coresponding service throughout the organization and it's memberships. Editing price and duration will cause calculations to change. Do you want to prceed?"
   },
   "customerSelector": {
-    "customerNameOrPhoneInput": "By name or phone.",
+    "customerNameOrPhoneInput": "Customer name or phone.",
     "customerNameOrPhoneInputError": "Enter a name or phone"
   },
   "outletSelector": {
@@ -485,7 +491,7 @@
     "changeWalletBalanceTip": "Unpaid Change Amount from sales are stored in Customer Account Balance. You can withdraw it by clicking below.",
     "withdrawFromChangeWalletBalance": "Withdraw",
     "addCustomerTitle": "Add Customer",
-    "customerNameInput": "Name of your customer.",
+    "customerNameInput": "Name of Customer",
     "customerNameInputError": "Enter a valid name",
     "customerNumberInput": "Contact Number",
     "customerNumberInputError": "Enter a valid phone number",
@@ -521,7 +527,6 @@
   "vendor": {
     "editVendorTitle": "Edit Vendor",
     "addVendorTitle": "Add Vendor",
-    
     "vendorNameInput": "Name of your vendor",
     "vendorNameInputError": "Enter a valid name",
     "vendorNumberInput": "Contact Number",
@@ -530,7 +535,6 @@
     "vendorPhysicalAddressInputError": "Enter an address at least 8 characters long",
     "vendorContactNameInput": "Name of Contact Person",
     "vendorContactNameInputError": "Enter a valid name",
-
     "createVendor": "Create Vendor",
     "updateVendor": "Update Vendor",
     "newVendorCreated": "New vendor has been created.",
@@ -539,7 +543,6 @@
     "clickToEditVendor": "Click here to edit the vendor.",
     "editVendor": "Edit Vendor",
     "vendorName": "Vendor Name",
-
     "manageVendorPageTitle": "Manage Vendor",
     "createNewVendor": "Create New Vendor",
     "searchForVendorInput": "Vendor Name/Number",
@@ -706,7 +709,7 @@
     "posPageTitle": "POS",
     "newSalesAdded": "New Sales has been added.",
     "customerSelectionCardHeader": "Customer Selection",
-    "noCustomerSelected": "No customer selected (Anonymous Sale)",
+    "noCustomerSelected": "No customer selected",
     "removeCustomer": "Remove",
     "changeCustomer": "Old",
     "createCustomer": "New",
@@ -753,10 +756,32 @@
     "assignEmployee": "Assign",
     "noDiscountApplicable": "Not Applicable",
     "assistedEmployee": "Assisted by",
-    "selectProductsFromInventoryContainer": "Which Outlet/Warehouse you want to sell from?",
+    "selectProductsFromInventoryContainer": "Which Outlet/Warehouse do you want to sell from?",
     "currentOutlet": "Current Outlet",
     "saleNotValid": "Sale not valid",
-    "offlineWarehouseSellNotAllowed": "Can not sell products from warehouse when in offline mode."
+    "offlineWarehouseSellNotAllowed": "Can not sell products from warehouse when in offline mode.",
+
+    "step1": "Step 1",
+    "step2": "Step 2",
+    "step3": "Step 3",
+    "products": "Products",
+    "services": "Services",
+    "productSales": "Product Sales",
+    "serviceSales": "Service Sales",
+    "sellingProductsFrom": "Source of Product: ",
+    "scanningActive":"SCANNING ACTIVE",
+    "productSearchLabel":"Name/Identifirer Code of product",
+    "selectedProducts":"Selected Products",
+    "selectedServices": "Selected Services",
+    "continueWithoutCustomer": "Continue without customer",
+    "selectACustomer":"Select a customer",
+    "selectADifferentCustomer": "Select a different customer",
+    "customerSectionBlocked": "Select Product/Service to view Customer section.",
+    "paymentSectionBlocked": "Select Product/Service and Customer to view Payment section.",
+    "productNotFound": "Product not found",
+    "serviceNotFound": "Service not found",
+    "invalidAmount": "Invalid amount",
+    "invalidTotalBillAmountMessage": "You can not increase total billed amount. Please update individual prices or add service charge."
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",

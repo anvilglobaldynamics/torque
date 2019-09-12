@@ -152,7 +152,7 @@
             if (err) {
               if (mode === 'development') {
                 if (path !== 'user-assert-api-key') {
-                  console.log(`WS_ERROR/api=${path}`, err);
+                  // console.log(`WS_ERROR/api=${path}`, err);
                 }
               }
               possibleLastWebsocketFailureTimestamp = (new Date).getTime();

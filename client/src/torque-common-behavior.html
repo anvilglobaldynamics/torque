@@ -256,6 +256,13 @@
         }
       }
 
+      $hasMorePagination(totalCount, offset, limit) {
+        return (totalCount > (offset + limit));
+      }
+
+      $hasPreviousPagination(offset) {
+        return (offset > 0);
+      }
 
       // ====================== static cacheStorage =============================
 

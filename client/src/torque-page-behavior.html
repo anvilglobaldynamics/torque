@@ -147,10 +147,12 @@
         return true;
       }
 
+      // FIXME: Remove from here and make sure every page works from torque-common-behavior
       $hasMorePagination(totalCount, offset, limit) {
         return (totalCount > (offset + limit));
       }
 
+      // FIXME: Remove from here and make sure every page works from torque-common-behavior
       $hasPreviousPagination(offset) {
         return (offset > 0);
       }
