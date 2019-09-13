@@ -77,42 +77,112 @@
         </div>
       </template>
 
-      <template is="dom-if" if="[[user.phone]]">
-        <template is="dom-if" if="[[!user.isPhoneVerified]]">
-          <div class="card">
-            [[verses.home.notYetVerifiedPhonePart1]]
-            <b>[[user.phone]]</b> [[verses.home.notYetVerifiedPhonePart2]]
-            <br>
-            <div class="button-row">
-              <paper-button raised class="primary" on-tap="verifyPhoneTapped">[[verses.home.verifyPhoneNumberManually]]</paper-button>
-              <paper-button raised class="neutral" on-tap="resendSmsTapped">[[verses.home.resendSms]]</paper-button>
-            </div>
-          </div>
-        </template>
-      </template>
-
-      <template is="dom-if" if="[[!user.email]]">
+      <!-- verifications - start -->
+      <template is="dom-if" if="[[!user.isPhoneVerified]]">
         <div class="card">
-          [[verses.home.whyProvideEmailAddress]]
+          [[verses.home.notYetVerifiedPhonePart1]]
+          <b>[[user.phone]]</b> [[verses.home.notYetVerifiedPhonePart2]]
+          <br>
           <div class="button-row">
-            <paper-button raised class="secondary m-0" on-tap="setEmailTapped">[[verses.home.setYourEmail]]</paper-button>
+            <paper-button raised class="primary" on-tap="verifyPhoneTapped">[[verses.home.verifyPhoneNumberManually]]</paper-button>
+            <paper-button raised class="neutral" on-tap="resendSmsTapped">[[verses.home.resendSms]]</paper-button>
           </div>
         </div>
       </template>
 
-      <template is="dom-if" if="[[user.email]]">
-        <template is="dom-if" if="[[!user.isEmailVerified]]">
+      <template is="dom-if" if="[[user.isPhoneVerified]]">
+
+        <template is="dom-if" if="[[!user.email]]">
           <div class="card">
-            [[verses.home.notYetVarifiedEmail]]
-            <b>[[user.email]]</b> [[verses.general.or]] [[verses.general.pressBelowButton]]
-            <br>
+            [[verses.home.whyProvideEmailAddress]]
             <div class="button-row">
-              <paper-button raised class="primary" on-tap="verifyEmailTapped">[[verses.home.verifyEmailManually]]</paper-button>
-              <paper-button raised class="neutral" on-tap="resendEmailTapped">[[verses.home.resendEmail]]</paper-button>
+              <paper-button raised class="secondary m-0" on-tap="setEmailTapped">[[verses.home.setYourEmail]]</paper-button>
             </div>
           </div>
         </template>
+
+        <template is="dom-if" if="[[user.email]]">
+          <template is="dom-if" if="[[!user.isEmailVerified]]">
+            <div class="card">
+              [[verses.home.notYetVarifiedEmail]]
+              <b>[[user.email]]</b> [[verses.general.or]] [[verses.general.pressBelowButton]]
+              <br>
+              <div class="button-row">
+                <paper-button raised class="primary" on-tap="verifyEmailTapped">[[verses.home.verifyEmailManually]]</paper-button>
+                <paper-button raised class="neutral" on-tap="resendEmailTapped">[[verses.home.resendEmail]]</paper-button>
+              </div>
+            </div>
+          </template>
+        </template>
+
       </template>
+      <!-- verifications - end -->
+
+      <!-- various prompts - start -->
+      <template is="dom-if" if="[[$and(user.isPhoneVerified, user.isEmailVerified)]]">
+
+        <!-- outlet prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'outlet-creation')]]">
+          <div class="card">
+            [[verses.home.promptCreateOutlet]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="secondary" on-tap="buttonCreateOutletTapped">[[verses.home.buttonCreateOutlet]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- outlet prompt - end -->
+
+        <!-- product-blueprint prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'product-blueprint-creation')]]">
+          <div class="card">
+            [[verses.home.promptCreateProductBlueprint]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="secondary" on-tap="buttonCreateProductBlueprintTapped">[[verses.home.buttonCreateProductBlueprint]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- product-blueprint prompt - end -->
+
+        <!-- vendor prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'vendor-creation')]]">
+          <div class="card">
+            [[verses.home.promptCreateVendor]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="secondary" on-tap="buttonCreateVendorTapped">[[verses.home.buttonCreateVendor]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- vendor prompt - end -->
+
+        <!-- product-acquisition prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'product-acquisition-creation')]]">
+          <div class="card">
+            [[verses.home.promptCreateProductAcquisition]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="secondary" on-tap="buttonCreateProductAcquisitionTapped">[[verses.home.buttonCreateProductAcquisition]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- product-acquisition prompt - end -->
+
+        <!-- service-blueprint prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'service-blueprint-creation')]]">
+          <div class="card">
+            [[verses.home.promptCreateServiceBlueprint]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="secondary" on-tap="buttonCreateServiceBlueprintTapped">[[verses.home.buttonCreateServiceBlueprint]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- service-blueprint prompt - end -->
+
+      </template>
+      <!-- various prompts - end -->
 
       <!-- default outlet selection prompt - start -->
       <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
@@ -412,9 +482,39 @@
         });
       }
 
+      _decideWhichPromptToShow() {
+        this.promptName = (() => {
+          if (!this.usageFlags) return 'none';
+
+          let {
+            hasAnyOutlet,
+            hasAnyProductBlueprint,
+            hasAnyVendor,
+            hasAnyProductAcquisition,
+            hasAnyServiceBlueprint
+          } = this.usageFlags;
+
+          if (!hasAnyOutlet) return 'outlet-creation';
+
+          if (this.hasModule('MOD_PRODUCT')) {
+            if (!hasAnyProductBlueprint) return 'product-blueprint-creation';
+            if (!hasAnyVendor) return 'vendor-creation';
+            if (!hasAnyProductAcquisition) return 'product-acquisition-creation';
+          }
+
+          if (this.hasModule('MOD_SERVICE')) {
+            if (!hasAnyServiceBlueprint) return 'service-blueprint-creation';
+          }
+
+          return 'none';
+        })();
+        console.log(this.promptName);
+      }
+
       _processDashboardSummary(cbfn) {
-        this._fetchDashboardSummary(({ metrics, organizationPackageDetails }) => {
+        this._fetchDashboardSummary(({ metrics, organizationPackageDetails, usageFlags }) => {
           this.metrics = metrics;
+          this.usageFlags = usageFlags;
           let { code, name, limits, duration } = organizationPackageDetails.packageDetail;
           let { createdDatetimeStamp } = organizationPackageDetails.packageActivation;
           let date = new Date(createdDatetimeStamp);
@@ -426,6 +526,7 @@
             createdDatetimeStamp,
             expirationDatetimeStamp
           }
+          this._decideWhichPromptToShow();
           cbfn();
         });
       }

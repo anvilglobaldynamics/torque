@@ -233,7 +233,17 @@
     "promptForDefaultOutlet": "নিয়মিত ব্যবহৃত দোকান; নিয়মিত ব্যবহার এর জন্য দোকান বাছাই করলে দ্রুত বিক্রয়কেন্দ্রে যেতে পারবেন এবং লিপি অফলাইনে ব্যবহার করতে পারবেন",
     "promptForDefaultOutletGoButton": "দোকান বাছাই",
     "salesTrendGraphTitle": "এই সপ্তাহের বিক্রয়",
-    "viewActivationHistory": "সক্রিয়করণ ইতিহাস দেখুন"
+    "viewActivationHistory": "সক্রিয়করণ ইতিহাস দেখুন",
+    "promptCreateOutlet": "you need to Add Outlet",
+    "buttonCreateOutlet": "Add Outlet",
+    "promptCreateProductBlueprint": "you need to Add Product Blueprint",
+    "buttonCreateProductBlueprint": "Add Product Blueprint",
+    "promptCreateVendor": "you need to Add Vendor",
+    "buttonCreateVendor": "Add Vendor",
+    "promptCreateProductAcquisition": "you need to Add Product Acquisition",
+    "buttonCreateProductAcquisition": "Add Product Acquisition",
+    "promptCreateServiceBlueprint": "you need to Add Service Blueprint",
+    "buttonCreateServiceBlueprint": "Add Service Blueprint"
   },
   "organization": {
     "addOrganizationTitle": "সংস্থা তৈরি করুন",
