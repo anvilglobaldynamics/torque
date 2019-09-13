@@ -22,7 +22,13 @@
 
 <dom-module id="page-manage-outlets">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+    
+    .small-pos-button {
+      background-color: #e1f5fe;
+    }
+
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -50,6 +56,7 @@
                   <div class="place-detail-container">[[outlet.physicalAddress]]</div>
                 </div>
                 <div class="horizontal layout wrap">
+                  <paper-button raised class="btn small-pos-button" on-tap="posTapped">[[verses.general.pos]]</paper-button>
                   <paper-button raised class="btn secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
                   <!-- <paper-button raised class="btn primary" on-tap="editTapped">Edit</paper-button> -->
                   <!-- <paper-button raised class="btn primary" on-tap="posTapped">POS</paper-button> -->
@@ -165,6 +172,11 @@
       viewTapped(e) {
         let { outlet } = e.model;
         return this.app.navigateTo(`/view-outlet/outlet:${outlet.id}`);
+      }
+
+      posTapped(e) {
+        let { outlet } = e.model;
+        return this.app.navigateTo(`/pos/outlet:${outlet.id}`);
       }
 
       // editTapped(e) {
