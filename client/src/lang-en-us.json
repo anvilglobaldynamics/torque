@@ -112,7 +112,7 @@
     "payment": "Payment",
     "change": "Change",
     "nextOrContinue": "Next",
-    "notFound": "Not found"
+    "notFound": "Not found",
     "update": "Update",
     "saved": "Saved"
   },
@@ -1131,7 +1131,7 @@
     "noProductAcquisitionFound": "No Product Acquisition Found",
     "recordCreatedBy": "Record Created By",
     "productAcquisitionTitle": "Product Acquisition Details",
-    "wholeOrganization": "Entire Organization",
+    "wholeOrganization": "All",
     "acquiredFrom": "Acquired From"
   }
 }

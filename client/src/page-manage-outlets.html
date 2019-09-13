@@ -74,7 +74,10 @@
 
       <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_OUTLETS', organization)]]">
         <div class="lone-controls">
-          <paper-button raised class="btn primary" on-tap="createTapped">[[verses.outlet.createNewOutlet]]</paper-button>
+          <paper-button raised class="btn primary" on-tap="createTapped">
+            <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
+            [[verses.outlet.createNewOutlet]]
+          </paper-button>
         </div>
       </template>
 

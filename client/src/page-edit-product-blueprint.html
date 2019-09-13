@@ -75,12 +75,10 @@
             </div>
           </div>
 
-          <div class="card vertical layout">
-            <div class="horizontal layout button-row end">
-              <div class="flex"></div>
-              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editProductBlueprintForm--submit" on-tap="createProductBlueprintTapped">[[verses.productBlueprint.createProductBlueprint]]</paper-button>
-              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editProductBlueprintForm--submit" on-tap="updateProductBlueprintTapped">[[verses.productBlueprint.updateProductBlueprint]]</paper-button>
-            </div>
+          <div class="horizontal layout button-row end">
+            <div class="flex"></div>
+            <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editProductBlueprintForm--submit" on-tap="createProductBlueprintTapped">[[verses.productBlueprint.createProductBlueprint]]</paper-button>
+            <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editProductBlueprintForm--submit" on-tap="updateProductBlueprintTapped">[[verses.productBlueprint.updateProductBlueprint]]</paper-button>
           </div>
 
         </form>

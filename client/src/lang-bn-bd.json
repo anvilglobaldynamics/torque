@@ -41,7 +41,7 @@
     "phone": "ফোন",
     "balance": "অ্যাকাউন্ট ব্যালান্স",
     "view": "দেখুন",
-    "edit": "পরিবর্তন করুন",
+    "edit": "পরিবর্তন",
     "showing": "দেখাচ্ছে",
     "loaded": "লোড করা হয়েছে",
     "itemsOutOf": "আইটেম গুলোর মধ্যে",
@@ -112,7 +112,7 @@
     "payment": "পরিশোধ",
     "change": "বদলান",
     "nextOrContinue": "পরবর্তী",
-    "notFound": "পাওয়া যায় নি"
+    "notFound": "পাওয়া যায় নি",
     "update": "আপডেট",
     "saved": "সংরক্ষিত"
   },
@@ -1132,7 +1132,7 @@
     "noProductAcquisitionFound": "কোনো পণ্য ক্রয় এর রেকর্ড পাওয়া যায়নি। ",
     "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
     "productAcquisitionTitle": "পণ্য ক্রয় এর রেকর্ড",
-    "wholeOrganization": "সম্পূর্ণ সংস্থা",
+    "wholeOrganization": "সকল",
     "acquiredFrom": "থেকে ক্রীত"
   }
 }
