@@ -57,6 +57,10 @@
         --app-text-light: #424242;
         --app-text-lighter: #757575;
         --app-text-invert: #ffffff;
+        --app-button-neutral: #CFD8DC;
+        --app-button-label-neutral: #263238;
+        --app-button-danger: #ffcdd2;
+        --app-button-label-danger: #c62828;
         display: block;
       }
 
@@ -290,7 +294,7 @@
         this.serviceManager.on('error', (event) => {
           this.showModalDialog("Network error", "Make sure you are connected to the internet and try again");
         });
-        
+
       }
 
       showToast(message, cbfn) {

@@ -8,6 +8,10 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
 
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
 <link rel="import" href="../bower_components/polymer-fx/fx-page.html">
@@ -29,7 +33,8 @@
       }
 
       .ban-unban {
-        width: 10%;
+        /* width: 10%; */
+        /* width: 100px; */
       }
 
       .organization-list-container {
@@ -45,6 +50,47 @@
       .organization {
         padding: 5px;
       }
+
+      .badge {
+        margin-right: 4px;
+        font-size: 14px;
+        border-radius: 4px;
+        padding: 4px 8px;
+      }
+
+      .badge.banned {
+        background: red;
+        color: white;
+      }
+
+      .badge.unsure {
+        background: grey;
+        color: white;
+        text-transform: capitalize;
+      }
+
+      .badge.test {
+        background: yellow;
+        color: blue;
+        text-transform: capitalize;
+      }
+
+      .badge.real {
+        background: green;
+        color: white;
+        text-transform: capitalize;
+      }
+
+      .badge.phone-unverified {
+        background: orange;
+        text-transform: capitalize;
+      }
+
+      .badge.phone-verified {
+        background: green;
+        color: white;
+        text-transform: capitalize;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -52,28 +98,69 @@
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card horizontal layout center">
-        <paper-input class="flex" value="{{userSearchString}}" label="search by name, nid, phone or email"></paper-input>
+        <paper-input class="flex" value="{{userSearchString}}" label="Search by name, nid, phone or email"></paper-input>
+
+        <paper-dropdown-menu label="Origin Type" class="mr-4" style="max-width: 150px; margin-left: 4px;">
+          <paper-listbox slot="dropdown-content" selected="{{pageWideOriginTypeSelected}}" attr-for-selected="name">
+            <paper-item name="any">Any</paper-item>
+            <template is="dom-repeat" items="[[originTypeList]]" as="originType">
+              <paper-item name="[[originType.code]]">[[originType.label]]</paper-item>
+            </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
+
         <paper-button raised class="primary" on-tap="searchTapped">Search</paper-button>
       </div>
 
       <div class="card vertical layout">
+
+        <!-- user-list - start -->
         <div class="std-list">
           <template is="dom-repeat" items="[[userList]]" as="user">
-            <div class="horizontal layout std-list-item center" style="padding: 10px;">
-              <div class="vertical layout flex">
+            <div class="horizontal layout wrap std-list-item center" style="padding: 10px;">
+              <div class="vertical layout flex" style="min-width: 300px;">
+
+                <div class="horizontal layout center">
+                  <div class$="badge [[user.originType]]">Origin: [[user.originType]]</div>
+                  <template is="dom-if" if="[[user.isBanned]]">
+                    <div class="badge banned">Banned</div>
+                  </template>
+                  <template is="dom-if" if="[[user.isPhoneVerified]]">
+                    <div class="badge phone-verified">Phone Verified</div>
+                  </template>
+                  <template is="dom-if" if="[[!user.isPhoneVerified]]">
+                    <div class="badge phone-unverified">Phone not verified</div>
+                  </template>
+                </div>
 
                 <div class="title">Name: [[user.fullName]]</div>
-                <div class="description">Phone: [[user.phone]] Email: [[user.email]]</div>
+                <div class="description">Phone: [[user.phone]]</div>
+                <div class="description">Email: [[user.email]]</div>
                 <div class="description">NID: [[user.nid]]</div>
 
-                <!-- TODO: align below buttons -->
-                <template is="dom-if" if="[[!user.isBanned]]">
-                  <paper-button raised class="ban-unban primary" on-tap="banUserTapped">Ban</paper-button>
-                </template>
-                <template is="dom-if" if="[[user.isBanned]]">
-                  <paper-button raised class="ban-unban primary" on-tap="unbanUserTapped">Unban</paper-button>
-                </template>
-                
+                <div class="horizontal layout center">
+                  <paper-dropdown-menu class="full-width-paper-dropdown" label="Set Origin Type" class="mr-4">
+                    <paper-listbox slot="dropdown-content" selected="{{user.originTypeSelected}}">
+                      <template is="dom-repeat" items="[[originTypeList]]" as="originType">
+                        <paper-item name="[[package.originType]]">[[originType.label]]</paper-item>
+                      </template>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+                  <paper-button raised class="ban-unban primary" on-tap="setOriginTypeTapped">Set</paper-button>
+                </div>
+
+                <div class="horizontal layout">
+                  <template is="dom-if" if="[[!user.isBanned]]">
+                    <paper-button raised class="ban-unban danger" on-tap="banUserTapped">Ban User</paper-button>
+                  </template>
+                  <template is="dom-if" if="[[user.isBanned]]">
+                    <paper-button raised class="ban-unban primary" on-tap="unbanUserTapped">Unban User</paper-button>
+                  </template>
+                </div>
+
+              </div>
+              <div class="flex">
+
                 <template is="dom-if" if="[[user.organizationList.length]]">
                   <div class="organization-list-container">
                     <p class="organization-list-title">Organizations:</p>
@@ -91,6 +178,27 @@
             </div>
           </template>
         </div>
+        <!-- user-list - end -->
+
+        <div class="pagination" style="margin-top: 8px;">
+          Showing
+          <span class="limit">[[pagination.limit]]</span>
+          item(s) out of
+          <span class="total-count">[[pagination.totalCount]]</span> item(s) starting from
+          <span class="offset">#[[pagination.offset]]</span>.
+        </div>
+
+        <div class="horizontal layout center-center" style="margin-top: 8px;">
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous flex" on-tap="showPreviousTapped">Show Previous</paper-button>
+          </template>
+
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more flex" on-tap="showMoreTapped">Show More</paper-button>
+          </template>
+        </div>
+
+
       </div>
 
     </div>
@@ -106,9 +214,38 @@
 
       static get properties() {
         return {
+          pageWideOriginTypeSelected: {
+            type: String,
+            value: 'any'
+          },
           userSearchString: {
             type: String,
             value: ''
+          },
+          paginate: {
+            type: Object,
+            value: () => {
+              return {
+                offset: 0,
+                limit: 6
+              }
+            }
+          },
+          pagination: {
+            type: Object,
+            value: () => {
+              return {}
+            }
+          },
+          originTypeList: {
+            type: Array,
+            value: () => {
+              return [
+                { code: 'real', label: 'Real' },
+                { code: 'test', label: 'Test' },
+                { code: 'unsure', label: 'Unsure' },
+              ]
+            }
           }
         };
       }
@@ -144,10 +281,15 @@
       }
 
       _fetchUserList(cbfn) {
-        let data = { userSearchString: this.userSearchString };
+        let data = {
+          userSearchString: this.userSearchString,
+          originType: this.pageWideOriginTypeSelected,
+          paginate: this.paginate
+        };
         this.app.callAdminGetAggregatedUserListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
           return cbfn(response.userList);
         });
       }
@@ -168,10 +310,31 @@
         });
       }
 
+      _processSeOriginType({ originType, userId }, cbfn) {
+        let data = { originType, userId };
+        this.app.callAdminSetUserOriginTypeApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn();
+        });
+      }
+
       // region: ui  ===========================
+
+      setOriginTypeTapped(e = null) {
+        let { user } = e.model;
+        if (typeof (user.originTypeSelected) === 'number') {
+          let originType = this.originTypeList[user.originTypeSelected].code;
+          let userId = user.id;
+          this._processSeOriginType({ originType, userId }, () => {
+            this.searchTapped();
+          });
+        }
+      }
 
       searchTapped(e = null) {
         this.isReady = false;
+        this.paginate.offset = 0;
         this._processUserList(() => {
           this.isReady = true;
         });
@@ -198,7 +361,27 @@
         return this.app.navigateTo(`/manage-organization/organization:${organization.id}`);
       }
 
-      // region: misc =================================
+      // region: pagination =================================
+
+      $hasMorePagination(totalCount, offset, limit) {
+        return (totalCount > (offset + limit));
+      }
+
+      $hasPreviousPagination(offset) {
+        return (offset > 0);
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processUserList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processUserList(() => this.isReady = true);
+      }
 
     }
 

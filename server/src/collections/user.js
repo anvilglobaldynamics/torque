@@ -18,6 +18,7 @@ exports.UserCollection = class extends Collection {
       physicalAddress: Joi.string().min(1).max(128).allow('').required(),
       emergencyContact: Joi.string().min(1).max(128).allow('').required(),
       bloodGroup: Joi.string().min(2).max(3).allow('').required(),
+      originType: Joi.string().valid('real', 'test', 'unsure').required(),
       isDeleted: Joi.boolean().required(),
       isPhoneVerified: Joi.boolean().required(),
       isEmailVerified: Joi.boolean().required(),
@@ -45,6 +46,7 @@ exports.UserCollection = class extends Collection {
       physicalAddress: '',
       emergencyContact: '',
       bloodGroup: '',
+      originType: 'unsure',
       isDeleted: false,
       isPhoneVerified: false,
       isEmailVerified: false,
@@ -127,6 +129,14 @@ exports.UserCollection = class extends Collection {
     return await this._update({ id }, {
       $set: {
         isBanned
+      }
+    });
+  }
+
+  async setOriginType({ id }, { originType }) {
+    return await this._update({ id }, {
+      $set: {
+        originType
       }
     });
   }

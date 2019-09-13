@@ -365,8 +365,8 @@ describe('Admin', _ => {
     callApi('api/admin-get-aggregated-user-list', {
       json: {
         apiKey: apiKey,
-        userSearchString: phone
-
+        userSearchString: phone,
+        originType:'any'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -384,7 +384,8 @@ describe('Admin', _ => {
     callApi('api/admin-get-aggregated-user-list', {
       json: {
         apiKey: apiKey,
-        userSearchString: fullName
+        userSearchString: fullName,
+        originType:'any'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -404,7 +405,8 @@ describe('Admin', _ => {
     callApi('api/admin-get-aggregated-user-list', {
       json: {
         apiKey: apiKey,
-        userSearchString: ''
+        userSearchString: '',
+        originType:'any'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
