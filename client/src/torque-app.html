@@ -382,7 +382,7 @@
                 <paper-item on-tap="switchOrganizationTapped" hidden="[[isInOfflineMode]]">[[verses.topMenu.switchOrganization]]</paper-item>
                 <paper-item on-tap="reloadTapped">[[verses.topMenu.reload]]</paper-item>
                 <!-- FIXME: Remove offline toggle switch after testing -->
-                <paper-item on-tap="toggleOfflineMode">Toggle Offline Mode (Debug Only)</paper-item>
+                <!-- <paper-item on-tap="toggleOfflineMode">Toggle Offline Mode (Debug Only)</paper-item> -->
                 <paper-item on-tap="logoutTapped">[[verses.topMenu.logout]]</paper-item>
               </paper-listbox>
             </paper-menu-button>
@@ -560,6 +560,32 @@
           </div>
         </div>
 
+        <paper-dialog id="inventory-container-dialog" modal style="z-index: -999999">
+          <template is="dom-if" if="[[_outletList]]">
+            <h2>Outlets</h2>
+            <div class="list" style="max-height: 240px; overflow: auto; margin-bottom: 8px;">
+              <template is="dom-repeat" items="[[_outletList]]" as="outlet">
+                <div class="item" on-click="inventoryContainerDialogSelectOutletTapped" style="min-width: 200px;">
+                  [[outlet.name]]
+                </div>
+              </template>
+            </div>
+          </template>
+          <template is="dom-if" if="[[_warehouseList]]">
+            <h2>Warehouses</h2>
+            <div class="list" style="max-height: 240px; overflow: auto; margin-bottom: 8px;">
+              <template is="dom-repeat" items="[[_warehouseList]]" as="warehouse" style="min-width: 200px;">
+                <div on-click="inventoryContainerDialogSelectWarehouseTapped">
+                  [[warehouse.name]]
+                </div>
+              </template>
+            </div>
+          </template>
+          <div class="buttons">
+            <paper-button raised class="secondary" on-click="inventoryContainerDialogCancelTapped">[[verses.general.cancel]]</paper-button>
+          </div>
+        </paper-dialog>
+
         <paper-dialog id="category-dialog" modal style="z-index: -999999">
           <h2>[[verses.productCategoryPicker.pickerTitle]]</h2>
           <paper-dialog-scrollable>
@@ -570,7 +596,7 @@
             </template>
           </paper-dialog-scrollable>
           <div class="buttons">
-            <paper-button class="secondary" on-click="categoryDialogCancelTapped" autofocus>[[verses.general.cancel]]</paper-button>
+            <paper-button raised class="secondary" on-click="categoryDialogCancelTapped">[[verses.general.cancel]]</paper-button>
           </div>
         </paper-dialog>
 
@@ -820,31 +846,31 @@
         this.db.upsert('settings', (({
           which
         }) => which === 'only'), (doc => doc), {
-            which: 'only',
-            shouldUseWebsockets: true,
-            monetaryUnit: 'BDT',
-            defaultOutletMetaMap: {},
-            defaultPrinterFormat: 'a4',
-            ui: {}
-          });
+          which: 'only',
+          shouldUseWebsockets: true,
+          monetaryUnit: 'BDT',
+          defaultOutletMetaMap: {},
+          defaultPrinterFormat: 'a4',
+          ui: {}
+        });
 
         this.db.upsert('offline-data', (({
           which
         }) => which === 'only'), (doc => doc), {
-            which: 'only',
-            offlineModeInitiatedDatetimeStamp: null,
-            lastFetchedDatetimeStamp: null,
-            cache: {
-              getOutlet: null,
-              getAggregatedInventoryDetails: null,
-              getActiveServiceList: null,
-              getUserDisplayInformation: null
-            },
-            data: {
-              unsyncedSalesIdSeed: 0,
-              unsyncedSalesList: []
-            }
-          });
+          which: 'only',
+          offlineModeInitiatedDatetimeStamp: null,
+          lastFetchedDatetimeStamp: null,
+          cache: {
+            getOutlet: null,
+            getAggregatedInventoryDetails: null,
+            getActiveServiceList: null,
+            getUserDisplayInformation: null
+          },
+          data: {
+            unsyncedSalesIdSeed: 0,
+            unsyncedSalesList: []
+          }
+        });
       }
 
       _setUpDatabaseObservers() {
@@ -1126,6 +1152,47 @@
         //     unsyncedSalesList: []
         //   }
         // }
+      }
+
+      // ====================== inventory container dialog =============================
+
+      displayInventoryContainerDialog({ outletList, warehouseList }, cbfn) {
+        if (outletList.length === 0 && warehouseList.length === 0) {
+          return cbfn(null);
+        } else if (outletList.length === 1 && warehouseList.length === 0) {
+          return cbfn({ inventoryContainer: outletList[0], type: 'outlet' });
+        } else if (outletList.length === 0 && warehouseList.length === 1) {
+          return cbfn({ inventoryContainer: warehouseList[0], type: 'warehouse' });
+        }
+
+        this._inventoryContainerDialogCbfn = cbfn;
+        this._outletList = outletList;
+        this._warehouseList = warehouseList;
+
+        this._patchForPolymerModalDialogIssue();
+        this.elem('#inventory-container-dialog').open();
+      }
+
+      __callInventoryContainerCbfn(data) {
+        this._inventoryContainerDialogCbfn(data);
+        this._inventoryContainerDialogCbfn = null;
+      }
+
+      inventoryContainerDialogCancelTapped(e = null) {
+        this.elem('#inventory-container-dialog').close();
+        this.__callInventoryContainerCbfn(null);
+      }
+
+      inventoryContainerDialogSelectOutletTapped(e) {
+        this.elem('#inventory-container-dialog').close();
+        let { outlet } = e.model;
+        this.__callInventoryContainerCbfn({ inventoryContainer: outlet, type: 'outlet' });
+      }
+
+      inventoryContainerDialogSelectWarehouseTapped(e) {
+        this.elem('#inventory-container-dialog').close();
+        let { warehouse } = e.model;
+        this.__callInventoryContainerCbfn({ inventoryContainer: warehouse, type: 'warehouse' });
       }
 
       // ====================== product category dialog =============================
