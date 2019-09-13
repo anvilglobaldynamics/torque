@@ -45,6 +45,7 @@
 <script src="torque-utils.js"></script>
 
 <link rel="lazy-import" href="page-home.html">
+<link rel="lazy-import" href="page-help.html">
 <link rel="lazy-import" href="page-payment.html">
 <link rel="lazy-import" href="page-settings.html">
 <link rel="lazy-import" href="page-error404.html">
@@ -402,6 +403,7 @@
               <iron-selector selected="[[pageName]]" attr-for-selected="name" class="custom-drawer-list" role="navigation">
 
                 <a name="home" href="#/home">[[verses.sidebar.home]]</a>
+                <a name="help" href="#/help">[[verses.sidebar.help]]</a>
                 <hr class="custom-sidebar-divider">
 
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
@@ -463,6 +465,7 @@
           <div class="flex main-iron-pages-wrapper">
             <iron-pages on-iron-select="mainIronPagesIronSelected" id="main-iron-pages" selected="[[pageName]]" attr-for-selected="name" fallback-selection="error404" role="main">
               <page-home name="home"></page-home>
+              <page-help name="help"></page-help>
               <page-payment name="payment"></page-payment>
               <page-settings name="settings"></page-settings>
               <page-error404 name="error404"></page-error404>

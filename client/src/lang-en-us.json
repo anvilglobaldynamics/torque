@@ -154,6 +154,7 @@
   "sidebar": {
     "lipiName": "Lipi",
     "home": "Home",
+    "help": "Help / How To",
     "employees": "Employees",
     "outlets": "Outlets",
     "warehouses": "Warehouses",
@@ -1133,5 +1134,8 @@
     "productAcquisitionTitle": "Product Acquisition Details",
     "wholeOrganization": "All",
     "acquiredFrom": "Acquired From"
+  }, 
+  "help": {
+    "pageTitle": "Help / How To"
   }
 }
