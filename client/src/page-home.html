@@ -498,7 +498,7 @@
 
           if (this.hasModule('MOD_PRODUCT')) {
             if (!hasAnyProductBlueprint) return 'product-blueprint-creation';
-            if (!hasAnyVendor) return 'vendor-creation';
+            if (this.hasModule('MOD_VENDOR') && !hasAnyVendor) return 'vendor-creation';
             if (!hasAnyProductAcquisition) return 'product-acquisition-creation';
           }
 
@@ -715,6 +715,29 @@
           options
         });
 
+      }
+
+      // region: misc =================================
+
+
+      buttonCreateOutletTapped(e = null) {
+        this.app.navigateTo(`/edit-outlet`);
+      }
+
+      buttonCreateProductBlueprintTapped(e = null) {
+        this.app.navigateTo(`/edit-product-blueprint`);
+      }
+
+      buttonCreateVendorTapped(e = null) {
+        this.app.navigateTo(`/edit-vendor`);
+      }
+
+      buttonCreateProductAcquisitionTapped(e = null) {
+        this.app.navigateTo(`/edit-outlet`);
+      }
+
+      buttonCreateServiceBlueprintTapped(e = null) {
+        this.app.navigateTo(`/edit-service-blueprint`);
       }
 
       // region: misc =================================
