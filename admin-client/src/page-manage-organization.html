@@ -117,7 +117,7 @@
             <paper-dropdown-menu class="full-width-paper-dropdown" label="select package" class="mr-4">
               <paper-listbox slot="dropdown-content" selected="{{packageCode}}" attr-for-selected="code">
                 <template is="dom-repeat" items="[[packageList]]" as="package">
-                  <paper-item code="[[package.code]]">[[package.name]]</paper-item>
+                  <paper-item code="[[package.code]]">[[package.name]] ([[package.code]])</paper-item>
                 </template>
               </paper-listbox>
             </paper-dropdown-menu>

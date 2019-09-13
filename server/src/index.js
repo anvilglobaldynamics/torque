@@ -134,6 +134,7 @@ const { AdminGetOutgoingEmailListApi } = require('./apis/admin-get-outgoing-emai
 const { AdminSetOutgoingEmailStatusApi } = require('./apis/admin-set-outgoing-email-status');
 const { AdminGetAggregatedUserListApi } = require('./apis/admin-get-aggregated-user-list');
 const { AdminSetUserBanningStatusApi } = require('./apis/admin-set-user-banning-status');
+const { AdminSetUserOriginTypeApi } = require('./apis/admin-set-user-origin-type');
 const { AdminGetOrganizationApi } = require('./apis/admin-get-organization');
 const { AdminAssignPackageToOrganizationApi } = require('./apis/admin-assign-package-to-organization');
 const { AdminListOrganizationPackagesApi } = require('./apis/admin-list-organization-packages');
@@ -380,6 +381,7 @@ class Program {
     server.registerPostApi('/api/admin-set-outgoing-email-status', AdminSetOutgoingEmailStatusApi);
     server.registerPostApi('/api/admin-get-aggregated-user-list', AdminGetAggregatedUserListApi);
     server.registerPostApi('/api/admin-set-user-banning-status', AdminSetUserBanningStatusApi);
+    server.registerPostApi('/api/admin-set-user-origin-type', AdminSetUserOriginTypeApi);
     server.registerPostApi('/api/admin-get-organization', AdminGetOrganizationApi);
     server.registerPostApi('/api/admin-get-package-list', AdminGetPackageListApi);
     server.registerPostApi('/api/admin-assign-package-to-organization', AdminAssignPackageToOrganizationApi);

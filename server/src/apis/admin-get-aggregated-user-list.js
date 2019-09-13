@@ -12,9 +12,12 @@ exports.AdminGetAggregatedUserListApi = class extends Api {
 
   get authenticationLevel() { return 'admin'; }
 
+  get autoPaginates() { return ['userList']; }
+
   get requestSchema() {
     return Joi.object().keys({
       apiKey: Joi.string().length(64).required(),
+      originType: Joi.string().valid('any', 'real', 'test', 'unsure').required(),
       userSearchString: Joi.string().min(0).max(64).allow('').required()
     });
   }
@@ -44,20 +47,26 @@ exports.AdminGetAggregatedUserListApi = class extends Api {
     return organizationList;
   }
 
-  async _getAggregatedUserList({ userSearchString }) {
+  async _getAggregatedUserList({ userSearchString, originType }) {
     let escapedSearchString = this.escapeRegExp(userSearchString.toLowerCase());
     let userSearchRegex = new RegExp(escapedSearchString, 'i');
     let userList = await this.database.user.listByCommonFields({ userSearchRegex });
 
+    if (originType !== 'any') {
+      userList = userList.filter(user => user.originType === originType);
+    }
+
     await Promise.all(userList.map(async user => {
       user.organizationList = await this._getOrganizationsThatEmployedUser({ user });
+      user.passwordHash = 'REDACTED';
     }));
+
     return userList;
   }
 
   async handle({ body }) {
-    let { userSearchString } = body;
-    let userList = await this._getAggregatedUserList({ userSearchString });
+    let { userSearchString, originType } = body;
+    let userList = await this._getAggregatedUserList({ userSearchString, originType });
     return { status: 'success', userList };
   }
 

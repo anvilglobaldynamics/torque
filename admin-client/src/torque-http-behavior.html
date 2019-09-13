@@ -182,6 +182,11 @@
           this.callCombinedJsonApi('admin-set-module-activation-status', data, cbfn);
         }
 
+        callAdminSetUserOriginTypeApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-set-user-origin-type', data, cbfn);
+        }
+
       }
     }
 
