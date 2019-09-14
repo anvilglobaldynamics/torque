@@ -278,7 +278,14 @@ exports.validateGetDashboardSummaryApiSuccessResponse = (doc) => {
     organizationPackageDetails: Joi.object().allow(null).keys({
       packageActivation: Joi.object().required(),
       packageDetail: Joi.object().required()
-    })
+    }),
+    usageFlags: Joi.object().keys({
+      hasAnyOutlet: Joi.boolean().required(),
+      hasAnyProductBlueprint: Joi.boolean().required(),
+      hasAnyVendor: Joi.boolean().required(),
+      hasAnyProductAcquisition: Joi.boolean().required(),
+      hasAnyServiceBlueprint: Joi.boolean().required()
+    }),
   });
 
   let { error, value } = Joi.validate(doc, schema);
@@ -394,7 +401,7 @@ exports.validateGetProductAcquisitionListApiSuccessResponse = (doc) => {
       createdByUser: Joi.object().required(), // willingly not expanded
       inventory: Joi.object().required(), // willingly not expanded
       vendor: Joi.object().allow(null).required() // willingly not expanded    
-    
+
     })
 
   });
@@ -1927,7 +1934,7 @@ exports.validateGraphSalesApiSuccessResponse = (doc) => {
       labelList: Joi.array().items(Joi.string()).required(),
       sumTotalBilledList: Joi.array().items(Joi.number()).required(),
       sumCountList: Joi.array().items(Joi.number()).required()
-    })    
+    })
   });
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;

@@ -52,7 +52,15 @@ Possible Error Codes:
     packageDetail: Joi.object().required().keys({
       // TODO: to be finalized
     })
-  })
+  }),
+
+  usageFlags: Joi.object().keys({
+    hasAnyOutlet: Joi.boolean().required(),
+    hasAnyProductBlueprint: Joi.boolean().required(),
+    hasAnyVendor: Joi.boolean().required(),
+    hasAnyProductAcquisition: Joi.boolean().required(),
+    hasAnyServiceBlueprint: Joi.boolean().required()
+  }),
 }
 ```
 

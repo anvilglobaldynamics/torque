@@ -77,57 +77,129 @@
         </div>
       </template>
 
-      <template is="dom-if" if="[[user.phone]]">
-        <template is="dom-if" if="[[!user.isPhoneVerified]]">
-          <div class="card">
-            [[verses.home.notYetVerifiedPhonePart1]]
-            <b>[[user.phone]]</b> [[verses.home.notYetVerifiedPhonePart2]]
-            <br>
-            <div class="button-row">
-              <paper-button raised class="primary" on-tap="verifyPhoneTapped">[[verses.home.verifyPhoneNumberManually]]</paper-button>
-              <paper-button raised class="neutral" on-tap="resendSmsTapped">[[verses.home.resendSms]]</paper-button>
-            </div>
-          </div>
-        </template>
-      </template>
-
-      <template is="dom-if" if="[[!user.email]]">
+      <!-- verifications - start -->
+      <template is="dom-if" if="[[!user.isPhoneVerified]]">
         <div class="card">
-          [[verses.home.whyProvideEmailAddress]]
+          [[verses.home.notYetVerifiedPhonePart1]]
+          <b>[[user.phone]]</b> [[verses.home.notYetVerifiedPhonePart2]]
+          <br>
           <div class="button-row">
-            <paper-button raised class="secondary m-0" on-tap="setEmailTapped">[[verses.home.setYourEmail]]</paper-button>
+            <paper-button raised class="primary" on-tap="verifyPhoneTapped">[[verses.home.verifyPhoneNumberManually]]</paper-button>
+            <paper-button raised class="neutral" on-tap="resendSmsTapped">[[verses.home.resendSms]]</paper-button>
           </div>
         </div>
       </template>
 
-      <template is="dom-if" if="[[user.email]]">
-        <template is="dom-if" if="[[!user.isEmailVerified]]">
-          <div class="card">
-            [[verses.home.notYetVarifiedEmail]]
-            <b>[[user.email]]</b> [[verses.general.or]] [[verses.general.pressBelowButton]]
-            <br>
-            <div class="button-row">
-              <paper-button raised class="primary" on-tap="verifyEmailTapped">[[verses.home.verifyEmailManually]]</paper-button>
-              <paper-button raised class="neutral" on-tap="resendEmailTapped">[[verses.home.resendEmail]]</paper-button>
-            </div>
-          </div>
-        </template>
-      </template>
+      <template is="dom-if" if="[[user.isPhoneVerified]]">
 
-      <!-- default outlet selection prompt - start -->
-      <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
-        <template is="dom-if" if="[[!settings.ui.pageHome.hideDefaultOutletPrompt]]">
+        <template is="dom-if" if="[[!user.email]]">
           <div class="card">
-            [[verses.home.promptForDefaultOutlet]]
-            <br>
+            [[verses.home.whyProvideEmailAddress]]
             <div class="button-row">
-              <paper-button raised class="secondary" on-tap="selectDefaultOutletTapped">[[verses.home.promptForDefaultOutletGoButton]]</paper-button>
-              <paper-button raised class="neutral" on-tap="hideDefaultOutletPromptTapped">[[verses.general.hideCard]]</paper-button>
+              <paper-button raised class="secondary m-0" on-tap="setEmailTapped">[[verses.home.setYourEmail]]</paper-button>
             </div>
           </div>
         </template>
+
+        <template is="dom-if" if="[[user.email]]">
+          <template is="dom-if" if="[[!user.isEmailVerified]]">
+            <div class="card">
+              [[verses.home.notYetVarifiedEmail]]
+              <b>[[user.email]]</b> [[verses.general.or]] [[verses.general.pressBelowButton]]
+              <br>
+              <div class="button-row">
+                <paper-button raised class="primary" on-tap="verifyEmailTapped">[[verses.home.verifyEmailManually]]</paper-button>
+                <paper-button raised class="neutral" on-tap="resendEmailTapped">[[verses.home.resendEmail]]</paper-button>
+              </div>
+            </div>
+          </template>
+        </template>
+
       </template>
-      <!-- default outlet selection prompt - end -->
+      <!-- verifications - end -->
+
+      <!-- various prompts - start -->
+      <template is="dom-if" if="[[$and(user.isPhoneVerified, user.isEmailVerified)]]">
+
+        <!-- outlet prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'outlet-creation')]]">
+          <div class="card">
+            [[verses.home.promptCreateOutlet]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="secondary" on-tap="buttonCreateOutletTapped">[[verses.home.buttonCreateOutlet]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- outlet prompt - end -->
+
+        <!-- product-blueprint prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'product-blueprint-creation')]]">
+          <div class="card">
+            [[verses.home.promptCreateProductBlueprint]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="secondary" on-tap="buttonCreateProductBlueprintTapped">[[verses.home.buttonCreateProductBlueprint]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- product-blueprint prompt - end -->
+
+        <!-- vendor prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'vendor-creation')]]">
+          <div class="card">
+            [[verses.home.promptCreateVendor]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="secondary" on-tap="buttonCreateVendorTapped">[[verses.home.buttonCreateVendor]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- vendor prompt - end -->
+
+        <!-- product-acquisition prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'product-acquisition-creation')]]">
+          <div class="card">
+            [[verses.home.promptCreateProductAcquisition]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="secondary" on-tap="buttonCreateProductAcquisitionTapped">[[verses.home.buttonCreateProductAcquisition]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- product-acquisition prompt - end -->
+
+        <!-- service-blueprint prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'service-blueprint-creation')]]">
+          <div class="card">
+            [[verses.home.promptCreateServiceBlueprint]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="secondary" on-tap="buttonCreateServiceBlueprintTapped">[[verses.home.buttonCreateServiceBlueprint]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- service-blueprint prompt - end -->
+
+      </template>
+      <!-- various prompts - end -->
+
+      <template is="dom-if" if="[[$equals(promptName, 'none')]]">
+        <!-- default outlet selection prompt - start -->
+        <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
+          <template is="dom-if" if="[[!settings.ui.pageHome.hideDefaultOutletPrompt]]">
+            <div class="card">
+              [[verses.home.promptForDefaultOutlet]]
+              <br>
+              <div class="button-row">
+                <paper-button raised class="secondary" on-tap="selectDefaultOutletTapped">[[verses.home.promptForDefaultOutletGoButton]]</paper-button>
+                <paper-button raised class="neutral" on-tap="hideDefaultOutletPromptTapped">[[verses.general.hideCard]]</paper-button>
+              </div>
+            </div>
+          </template>
+        </template>
+        <!-- default outlet selection prompt - end -->
+      </template>
 
       <!-- user information - start -->
       <div class="vertical layout wrap">
@@ -396,7 +468,13 @@
               return this.app.navigateTo('/manage-organizations');
             }
             let organization = organizationList[index];
-            this.app.removeSettings();
+
+            // reset settings on organization change
+            let { previousUser, previousOrganization } = this.app.loadPreviousUserAndOrganization();
+            if (previousOrganization && previousOrganization.id !== organization.id) {
+              this.app.removeSettings();
+              this.app.removePreviousOrganization();
+            }
             this.app.saveOrganization(organization);
           }
           return cbfn();
@@ -412,9 +490,38 @@
         });
       }
 
+      _decideWhichPromptToShow() {
+        this.promptName = (() => {
+          if (!this.usageFlags) return 'none';
+
+          let {
+            hasAnyOutlet,
+            hasAnyProductBlueprint,
+            hasAnyVendor,
+            hasAnyProductAcquisition,
+            hasAnyServiceBlueprint
+          } = this.usageFlags;
+
+          if (!hasAnyOutlet) return 'outlet-creation';
+
+          if (this.hasModule('MOD_PRODUCT')) {
+            if (!hasAnyProductBlueprint) return 'product-blueprint-creation';
+            if (this.hasModule('MOD_VENDOR') && !hasAnyVendor) return 'vendor-creation';
+            if (!hasAnyProductAcquisition) return 'product-acquisition-creation';
+          }
+
+          if (this.hasModule('MOD_SERVICE')) {
+            if (!hasAnyServiceBlueprint) return 'service-blueprint-creation';
+          }
+
+          return 'none';
+        })();
+      }
+
       _processDashboardSummary(cbfn) {
-        this._fetchDashboardSummary(({ metrics, organizationPackageDetails }) => {
+        this._fetchDashboardSummary(({ metrics, organizationPackageDetails, usageFlags }) => {
           this.metrics = metrics;
+          this.usageFlags = usageFlags;
           let { code, name, limits, duration } = organizationPackageDetails.packageDetail;
           let { createdDatetimeStamp } = organizationPackageDetails.packageActivation;
           let date = new Date(createdDatetimeStamp);
@@ -426,6 +533,7 @@
             createdDatetimeStamp,
             expirationDatetimeStamp
           }
+          this._decideWhichPromptToShow();
           cbfn();
         });
       }
@@ -614,6 +722,60 @@
           options
         });
 
+      }
+
+      // region: prompt events and logic =================================
+
+      buttonCreateOutletTapped(e = null) {
+        this.app.navigateTo(`/edit-outlet`);
+      }
+
+      buttonCreateProductBlueprintTapped(e = null) {
+        this.app.navigateTo(`/edit-product-blueprint`);
+      }
+
+      buttonCreateVendorTapped(e = null) {
+        this.app.navigateTo(`/edit-vendor`);
+      }
+
+      _getOutletAndWarehouseWitDefaultInventoryList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetInventoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          let inventoryList = response.inventoryList;
+
+          let inventoryContainerList = inventoryList
+            .filter(inventory => inventory.name === 'Default')
+            .map(inventory => ({
+              name: inventory.inventoryContainerName,
+              type: inventory.inventoryContainerType,
+              id: inventory.inventoryContainerId,
+              defaultInventoryId: inventory.id
+            }));
+
+          let outletList = inventoryContainerList.filter(i => i.type === 'outlet');
+          let warehouseList = inventoryContainerList.filter(i => i.type === 'warehouse');
+
+          return cbfn({ outletList, warehouseList });
+        });
+      }
+
+      buttonCreateProductAcquisitionTapped(e = null) {
+        this._getOutletAndWarehouseWitDefaultInventoryList(({ outletList, warehouseList }) => {
+
+          this.app.displayInventoryContainerDialog({ outletList, warehouseList }, (selected) => {
+            if (!selected) return;
+            let { inventoryContainer, type } = selected;
+
+            this.app.navigateTo(`/add-products/inventory:${inventoryContainer.defaultInventoryId}`);
+          });
+
+        });
+      }
+
+      buttonCreateServiceBlueprintTapped(e = null) {
+        this.app.navigateTo(`/edit-service-blueprint`);
       }
 
       // region: misc =================================
