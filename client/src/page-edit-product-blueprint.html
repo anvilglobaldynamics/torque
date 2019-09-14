@@ -54,26 +54,39 @@
             <paper-checkbox checked="{{editProductBlueprintForm.isReturnable}}">[[verses.productBlueprint.isProductReturnable]]</paper-checkbox>
           </div>
 
-          <div class="card vertical layout">
+          <!-- select/deselect product category - start -->
+          <template is="dom-if" if="[[!shouldShowProductCategoryCreationPrompt]]">
+            <div class="card vertical layout">
 
-            <div class="mb-4" style="font-weight: bold;">[[verses.productCategory.productCategoriesTitle]]:</div>
+              <div class="mb-4" style="font-weight: bold;">[[verses.productCategory.productCategoriesTitle]]:</div>
 
-            <div class="horizontal layout wrap">
-              <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory" index-as="productCategoryIndex">
-                <div class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; margin: 4px; border: none; display: inline-block;">
-                  [[productCategory.name]]
-                  <iron-icon icon="clear" style$="color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; height: 18px; style: margin-top: -12px;" on-tap="deleteProductCategoryTapped"></iron-icon>
-                </div>
-              </template>
+              <div class="horizontal layout wrap">
+                <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory" index-as="productCategoryIndex">
+                  <div class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; margin: 4px; border: none; display: inline-block;">
+                    [[productCategory.name]]
+                    <iron-icon icon="clear" style$="color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; height: 18px; style: margin-top: -12px;" on-tap="deleteProductCategoryTapped"></iron-icon>
+                  </div>
+                </template>
+              </div>
+
+              <div class="horizontal layout center">
+                <paper-input class="new-category-input flex" value="{{newCategoryInput}}" minlength="3" on-keypress="newCategoryInputChanged" label="[[verses.productCategory.searchForProductCategoryInput]]"></paper-input>
+                <paper-button class="secondary" raised icon="search" on-tap="newCategoryAddTapped">
+                  <iron-icon icon="search"></iron-icon>
+                </paper-button>
+              </div>
             </div>
+          </template>
+          <!-- select/deselect product category - end -->
 
-            <div class="horizontal layout center">
-              <paper-input class="new-category-input flex" value="{{newCategoryInput}}" minlength="3" on-keypress="newCategoryInputChanged" label="[[verses.productCategory.searchForProductCategoryInput]]"></paper-input>
-              <paper-button class="secondary" raised icon="search" on-tap="newCategoryAddTapped">
-                <iron-icon icon="search"></iron-icon>
-              </paper-button>
+          <template is="dom-if" if="[[shouldShowProductCategoryCreationPrompt]]">
+            <div class="card helpful-tips">
+              [[verses.productBlueprint.productCategoryCreationPromptmessage]]<br>
+              <div class="button-row">
+                <paper-button raised class="secondary" on-tap="buttonCreateProductCategoryTapped">[[verses.productBlueprint.createProductCategory]]</paper-button>
+              </div>
             </div>
-          </div>
+          </template>
 
           <div class="horizontal layout button-row end">
             <div class="flex"></div>
@@ -155,15 +168,21 @@
         }
         if (!this._ensureAccess()) return;
 
-        if (this.editMode) {
-          this._processGetProductBlueprint(() => {
-            this.isReady = true;
-          });
-        } else {
-          this.delay(300, () => {
-            this.isReady = true;
-          });
-        }
+        this.shouldShowProductCategoryCreationPrompt = false;
+        this._processGetProductCategoryList({ searchString: '', productCategoryIdList: [] }, (productCategoryList) => {
+          if (productCategoryList.length === 0) {
+            this.shouldShowProductCategoryCreationPrompt = true;
+          }
+          if (this.editMode) {
+            this._processGetProductBlueprint(() => {
+              this.isReady = true;
+            });
+          } else {
+            this.delay(300, () => {
+              this.isReady = true;
+            });
+          }
+        });
       }
 
       onNavigateOut() {
@@ -214,7 +233,7 @@
               this.productCategoryList = productCategoryList;
             });
           }
-          
+
           cbfn();
         });
       }
@@ -255,6 +274,10 @@
       }
 
       // region: ui =================================
+
+      buttonCreateProductCategoryTapped(e = null) {
+        this.app.navigateTo(`/edit-product-category`);
+      }
 
       backButtonOnTopBarPressed(e = null) {
         this.app.navigateToPreviousUrl('/manage-product-blueprints');
