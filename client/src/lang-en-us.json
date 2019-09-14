@@ -235,7 +235,7 @@
     "promptForDefaultOutletGoButton": "Select outlet",
     "salesTrendGraphTitle": "This week's Sales Trend",
     "viewActivationHistory": "View Activation History",
-    "promptCreateOutlet": "you need to Add Outlet",
+    "promptCreateOutlet": "There are no outlets in your organization. An Outlet is necessary for selling products/services.",
     "buttonCreateOutlet": "Add Outlet",
     "promptCreateProductBlueprint": "you need to Add Product Blueprint",
     "buttonCreateProductBlueprint": "Add Product Blueprint",
