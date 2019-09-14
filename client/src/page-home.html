@@ -471,7 +471,8 @@
 
             // reset settings on organization change
             let { previousUser, previousOrganization } = this.app.loadPreviousUserAndOrganization();
-            if (previousOrganization && previousOrganization.id !== organization.id) {
+
+            if (previousOrganization && (previousOrganization.id !== organization.id)) {
               this.app.removeSettings();
               this.app.removePreviousOrganization();
             }

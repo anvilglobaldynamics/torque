@@ -23,8 +23,6 @@
 <dom-module id="page-manage-organizations">
   <template>
     <style include="shared-styles">
-
-
       pre {
         font-family: Arial, Helvetica, sans-serif !important;
       }
@@ -139,9 +137,12 @@
 
       selectTapped(e) {
         let { organization } = e.model;
+        this.app.removeSettings();
+        this.app.removePreviousOrganization();
         this.app.saveOrganization(organization);
-        this.app.wasLastNavigationBypassed = false;
-        return this.app.navigateTo('/home/bypassable:yes');
+        return this.app.navigateTo(`/home/org:${organization.id}`);
+        // this.app.wasLastNavigationBypassed = false;
+        // return this.app.navigateTo('/home/bypassable:yes');
       }
 
       // region: misc =================================
