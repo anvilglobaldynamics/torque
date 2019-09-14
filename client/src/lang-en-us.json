@@ -242,7 +242,10 @@
     "promptCreateProductAcquisition": "you need to Add Product Acquisition",
     "buttonCreateProductAcquisition": "Add Product Acquisition",
     "promptCreateServiceBlueprint": "you need to Add Service Blueprint",
-    "buttonCreateServiceBlueprint": "Add Service Blueprint"
+    "buttonCreateServiceBlueprint": "Add Service Blueprint",
+    "shortcutToPosAndAddProductMessage": "You can jump to POS and also to Add Product",
+    "shortcutToPos": "POS",
+    "shortcutToAddProduct": "Add Products"
   },
   "organization": {
     "addOrganizationTitle": "Add Organization",

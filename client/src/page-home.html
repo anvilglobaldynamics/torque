@@ -127,7 +127,7 @@
             [[verses.home.promptCreateOutlet]]
             <br>
             <div class="button-row">
-              <paper-button raised class="secondary" on-tap="buttonCreateOutletTapped">[[verses.home.buttonCreateOutlet]]</paper-button>
+              <paper-button raised class="primary" on-tap="buttonCreateOutletTapped">[[verses.home.buttonCreateOutlet]]</paper-button>
             </div>
           </div>
         </template>
@@ -139,7 +139,7 @@
             [[verses.home.promptCreateProductBlueprint]]
             <br>
             <div class="button-row">
-              <paper-button raised class="secondary" on-tap="buttonCreateProductBlueprintTapped">[[verses.home.buttonCreateProductBlueprint]]</paper-button>
+              <paper-button raised class="primary" on-tap="buttonCreateProductBlueprintTapped">[[verses.home.buttonCreateProductBlueprint]]</paper-button>
             </div>
           </div>
         </template>
@@ -151,7 +151,7 @@
             [[verses.home.promptCreateVendor]]
             <br>
             <div class="button-row">
-              <paper-button raised class="secondary" on-tap="buttonCreateVendorTapped">[[verses.home.buttonCreateVendor]]</paper-button>
+              <paper-button raised class="primary" on-tap="buttonCreateVendorTapped">[[verses.home.buttonCreateVendor]]</paper-button>
             </div>
           </div>
         </template>
@@ -163,7 +163,7 @@
             [[verses.home.promptCreateProductAcquisition]]
             <br>
             <div class="button-row">
-              <paper-button raised class="secondary" on-tap="buttonCreateProductAcquisitionTapped">[[verses.home.buttonCreateProductAcquisition]]</paper-button>
+              <paper-button raised class="primary" on-tap="buttonCreateProductAcquisitionTapped">[[verses.home.buttonCreateProductAcquisition]]</paper-button>
             </div>
           </div>
         </template>
@@ -175,7 +175,7 @@
             [[verses.home.promptCreateServiceBlueprint]]
             <br>
             <div class="button-row">
-              <paper-button raised class="secondary" on-tap="buttonCreateServiceBlueprintTapped">[[verses.home.buttonCreateServiceBlueprint]]</paper-button>
+              <paper-button raised class="primary" on-tap="buttonCreateServiceBlueprintTapped">[[verses.home.buttonCreateServiceBlueprint]]</paper-button>
             </div>
           </div>
         </template>
@@ -185,6 +185,18 @@
       <!-- various prompts - end -->
 
       <template is="dom-if" if="[[$equals(promptName, 'none')]]">
+
+        <!-- product-acquisition prompt - start -->
+        <div class="card">
+          [[verses.home.shortcutToPosAndAddProductMessage]]
+          <br>
+          <div class="button-row">
+            <paper-button raised class="secondary" on-tap="buttonGoToPosTapped">[[verses.home.shortcutToPos]]</paper-button>
+            <paper-button raised class="secondary" on-tap="buttonCreateProductAcquisitionTapped">[[verses.home.shortcutToAddProduct]]</paper-button>
+          </div>
+        </div>
+        <!-- product-acquisition prompt - end -->
+
         <!-- default outlet selection prompt - start -->
         <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
           <template is="dom-if" if="[[!settings.ui.pageHome.hideDefaultOutletPrompt]]">
@@ -471,7 +483,8 @@
 
             // reset settings on organization change
             let { previousUser, previousOrganization } = this.app.loadPreviousUserAndOrganization();
-            if (previousOrganization && previousOrganization.id !== organization.id) {
+
+            if (previousOrganization && (previousOrganization.id !== organization.id)) {
               this.app.removeSettings();
               this.app.removePreviousOrganization();
             }
@@ -726,18 +739,6 @@
 
       // region: prompt events and logic =================================
 
-      buttonCreateOutletTapped(e = null) {
-        this.app.navigateTo(`/edit-outlet`);
-      }
-
-      buttonCreateProductBlueprintTapped(e = null) {
-        this.app.navigateTo(`/edit-product-blueprint`);
-      }
-
-      buttonCreateVendorTapped(e = null) {
-        this.app.navigateTo(`/edit-vendor`);
-      }
-
       _getOutletAndWarehouseWitDefaultInventoryList(cbfn) {
         let data = { organizationId: this.app.organization.id };
         this.app.callGetInventoryListApi(data, (err, response) => {
@@ -761,6 +762,18 @@
         });
       }
 
+      buttonCreateOutletTapped(e = null) {
+        this.app.navigateTo(`/edit-outlet`);
+      }
+
+      buttonCreateProductBlueprintTapped(e = null) {
+        this.app.navigateTo(`/edit-product-blueprint`);
+      }
+
+      buttonCreateVendorTapped(e = null) {
+        this.app.navigateTo(`/edit-vendor`);
+      }
+
       buttonCreateProductAcquisitionTapped(e = null) {
         this._getOutletAndWarehouseWitDefaultInventoryList(({ outletList, warehouseList }) => {
 
@@ -769,6 +782,20 @@
             let { inventoryContainer, type } = selected;
 
             this.app.navigateTo(`/add-products/inventory:${inventoryContainer.defaultInventoryId}`);
+          });
+
+        });
+      }
+
+      buttonGoToPosTapped(e = null) {
+        this._getOutletAndWarehouseWitDefaultInventoryList(({ outletList }) => {
+          let warehouseList = [];
+
+          this.app.displayInventoryContainerDialog({ outletList, warehouseList }, (selected) => {
+            if (!selected) return;
+            let { inventoryContainer, type } = selected;
+
+            this.app.navigateTo(`/pos/outlet:${inventoryContainer.id}`);
           });
 
         });
