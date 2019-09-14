@@ -114,7 +114,9 @@
     "nextOrContinue": "Next",
     "notFound": "Not found",
     "update": "Update",
-    "saved": "Saved"
+    "saved": "Saved",
+    "outlets": "Outlets",
+    "warehouses": "Warehouses"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",

@@ -186,16 +186,38 @@
 
       <template is="dom-if" if="[[$equals(promptName, 'none')]]">
 
-        <!-- product-acquisition prompt - start -->
+        <!-- POS and product-acquisition prompt - start -->
+        <!-- <div class="card">
+          <div class="horizontal layout center">
+            <paper-button raised class="pos flex" on-tap="buttonGoToPosTapped">[[verses.home.shortcutToPos]]</paper-button>
+            <paper-button raised class="secondary flex" on-tap="buttonCreateProductAcquisitionTapped">[[verses.home.shortcutToAddProduct]]</paper-button>
+          </div>
+        </div> -->
+        <!-- POS and product-acquisition prompt - end -->
+
         <div class="card">
-          [[verses.home.shortcutToPosAndAddProductMessage]]
-          <br>
-          <div class="button-row">
-            <paper-button raised class="secondary" on-tap="buttonGoToPosTapped">[[verses.home.shortcutToPos]]</paper-button>
-            <paper-button raised class="secondary" on-tap="buttonCreateProductAcquisitionTapped">[[verses.home.shortcutToAddProduct]]</paper-button>
+          <div class="layout horizontal wrap">
+            
+            <div class="touch-button" on-tap="buttonGoToPosTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
+              <div class="icon">
+                <iron-icon src="../../images/icons/point-of-service.png"></iron-icon>
+              </div>
+              <div class="type title uppercase">[[verses.home.shortcutToPos]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+
+            <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
+              <div class="touch-button" on-tap="buttonCreateProductAcquisitionTapped">
+                <div class="icon">
+                  <iron-icon src="../../images/icons/package-right.png"></iron-icon>
+                </div>
+                <div class="type title uppercase">[[verses.home.shortcutToAddProduct]]</div>
+                <paper-ripple></paper-ripple>
+              </div>
+            </template>
+
           </div>
         </div>
-        <!-- product-acquisition prompt - end -->
 
         <!-- default outlet selection prompt - start -->
         <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">

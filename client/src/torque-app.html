@@ -355,6 +355,23 @@
         margin-bottom: 8px;
         margin-top: 8px;
       }
+
+      .popup-list {
+        /* border: 1px red solid; */
+      }
+
+      .popup-list .item {
+        /* border: 1px blue solid; */
+        font-size: 16px;
+        cursor: pointer;
+        color: var(--app-button-label-secondary);
+        background-color: var(--app-button-secondary);
+        padding-top: 12px;
+        padding-bottom: 12px;
+        padding-left: 16px;
+        padding-right: 16px;
+        margin-bottom: 10px;
+      }
     </style>
 
     <app-drawer-layout responsive-width="4000px" fullbleed narrow="{{narrow}}">
@@ -572,8 +589,8 @@
 
         <paper-dialog id="inventory-container-dialog" modal style="z-index: -999999">
           <template is="dom-if" if="[[_outletList.length]]">
-            <h2>Outlets</h2>
-            <div class="list">
+            <h2>[[verses.general.outlets]]</h2>
+            <div class="popup-list">
               <template is="dom-repeat" items="[[_outletList]]" as="outlet">
                 <div class="item" on-click="inventoryContainerDialogSelectOutletTapped" style="min-width: 200px;">
                   [[outlet.name]]
@@ -582,17 +599,17 @@
             </div>
           </template>
           <template is="dom-if" if="[[_warehouseList.length]]">
-            <h2>Warehouses</h2>
-            <div class="list">
+            <h2 style="margin-top: 20px;">[[verses.general.warehouses]]</h2>
+            <div class="popup-list">
               <template is="dom-repeat" items="[[_warehouseList]]" as="warehouse" style="min-width: 200px;">
-                <div on-click="inventoryContainerDialogSelectWarehouseTapped">
+                <div class="item" on-click="inventoryContainerDialogSelectWarehouseTapped">
                   [[warehouse.name]]
                 </div>
               </template>
             </div>
           </template>
-          <div class="buttons">
-            <paper-button raised class="secondary" on-click="inventoryContainerDialogCancelTapped">[[verses.general.cancel]]</paper-button>
+          <div class="buttons" style="margin: 14px;">
+            <paper-button raised class="danger" on-click="inventoryContainerDialogCancelTapped">[[verses.general.cancel]]</paper-button>
           </div>
         </paper-dialog>
 

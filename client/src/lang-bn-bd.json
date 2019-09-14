@@ -114,7 +114,9 @@
     "nextOrContinue": "পরবর্তী",
     "notFound": "পাওয়া যায় নি",
     "update": "আপডেট",
-    "saved": "সংরক্ষিত"
+    "saved": "সংরক্ষিত",
+    "outlets": "দোকান",
+    "warehouses": "গুদাম"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -246,8 +248,8 @@
     "promptCreateServiceBlueprint": "you need to Add Service Blueprint",
     "buttonCreateServiceBlueprint": "Add Service Blueprint",
     "shortcutToPosAndAddProductMessage": "You can jump to POS and also to Add Product",
-    "shortcutToPos": "POS",
-    "shortcutToAddProduct": "Add Products"
+    "shortcutToPos": "বিক্রয়কেন্দ্র",
+    "shortcutToAddProduct": "পণ্য যোগ করুন"
   },
   "organization": {
     "addOrganizationTitle": "সংস্থা তৈরি করুন",
