@@ -347,6 +347,13 @@
           width: 100%;
         }
       }
+
+      #inventory-container-dialog .list {
+        max-height: 240px;
+        overflow: auto;
+        margin-bottom: 8px;
+        margin-top: 8px;
+      }
     </style>
 
     <app-drawer-layout responsive-width="4000px" fullbleed narrow="{{narrow}}">
@@ -561,9 +568,9 @@
         </div>
 
         <paper-dialog id="inventory-container-dialog" modal style="z-index: -999999">
-          <template is="dom-if" if="[[_outletList]]">
+          <template is="dom-if" if="[[_outletList.length]]">
             <h2>Outlets</h2>
-            <div class="list" style="max-height: 240px; overflow: auto; margin-bottom: 8px;">
+            <div class="list">
               <template is="dom-repeat" items="[[_outletList]]" as="outlet">
                 <div class="item" on-click="inventoryContainerDialogSelectOutletTapped" style="min-width: 200px;">
                   [[outlet.name]]
@@ -571,9 +578,9 @@
               </template>
             </div>
           </template>
-          <template is="dom-if" if="[[_warehouseList]]">
+          <template is="dom-if" if="[[_warehouseList.length]]">
             <h2>Warehouses</h2>
-            <div class="list" style="max-height: 240px; overflow: auto; margin-bottom: 8px;">
+            <div class="list">
               <template is="dom-repeat" items="[[_warehouseList]]" as="warehouse" style="min-width: 200px;">
                 <div on-click="inventoryContainerDialogSelectWarehouseTapped">
                   [[warehouse.name]]
