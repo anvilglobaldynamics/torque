@@ -361,7 +361,9 @@
     "productCategoryNotFound": "ধরণ পাওয়া যায়নি",
     "productCategoryNotFoundDetails": "এই নামের পণ্যের ধরণ খুঁজে পাওয়া যায়নি",
     "whatIsProductBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত সকল কাজে ব্যবহত হবে। বর্তমান পণ্যের পরিকল্পনা পুনঃব্যবহার বা সম্পাদনা করার পরিবর্তে, পণ্য পরিকল্পনায় সামান্যতম ভিন্নতা থাকলেও নতুন পণ্য পরিকল্পনা তৈরি করুন।",
-    "productBlueprintEditConfirmMessage": "পণ্যের পরিকল্পনায় পরিবর্তন করলে সংশ্লিষ্ট পণ্য-ও পরিবর্তন হয়ে যাবে। পণ্যের মূল্য পরিবর্তন করলে হিসেবে পরিবর্তন আসবে। আপনি কি নিশ্চিত করছেন?"
+    "productBlueprintEditConfirmMessage": "পণ্যের পরিকল্পনায় পরিবর্তন করলে সংশ্লিষ্ট পণ্য-ও পরিবর্তন হয়ে যাবে। পণ্যের মূল্য পরিবর্তন করলে হিসেবে পরিবর্তন আসবে। আপনি কি নিশ্চিত করছেন?",
+    "productCategoryCreationPromptmessage": "পণ্যের ধরণ আপনাকে পণ্য অনুসন্ধান এবং গোছাতে সাহায্য করে। ব্র্যান্ড, মডেল, বৈশিষ্ট্য এবং পণ্যের প্রকারের উপর ভিত্তি করে বিভিন্ন পণ্যের ধরণ তৈরি করার চেষ্টা করুন।",
+    "createProductCategory": "পণ্যের ধরণ যুক্ত করুন"
   },
   "serviceBlueprint": {
     "manageServiceBlueprintsTitle": "সেবা পরিকল্পনা পরিচালনা",
@@ -775,7 +777,6 @@
     "currentOutlet": "বর্তমান দোকান",
     "saleNotValid": "বিক্রয় সঠিক নয়",
     "offlineWarehouseSellNotAllowed": "অফলাইন মোডে গুদাম থেকে পণ্য বিক্রি করতে পারবেন না।",
-
     "step1": "প্রথম ধাপ",
     "step2": "দ্বিতীয় ধাপ",
     "step3": "তৃতীয় ধাপ",
@@ -784,12 +785,12 @@
     "productSales": "পণ্য বিক্রয়",
     "serviceSales": "সেবা বিক্রয়",
     "sellingProductsFrom": "পণ্যের উৎস:",
-    "scanningActive":"স্ক্যানিং সক্রিয়",
-    "productSearchLabel":"পণ্যের নাম/সনাক্তকারী কোড",
-    "selectedProducts":"নির্বাচিত পণ্য",
+    "scanningActive": "স্ক্যানিং সক্রিয়",
+    "productSearchLabel": "পণ্যের নাম/সনাক্তকারী কোড",
+    "selectedProducts": "নির্বাচিত পণ্য",
     "selectedServices": "নির্বাচিত সেবা",
     "continueWithoutCustomer": "ক্রেতা নির্বাচন না করেই এগিয়ে যান",
-    "selectACustomer":"গ্রাহক নির্বাচন করুন",
+    "selectACustomer": "গ্রাহক নির্বাচন করুন",
     "selectADifferentCustomer": "ভিন্ন গ্রাহক নির্বাচন করুন",
     "customerSectionBlocked": "গ্রাহক নির্বাচন করতে পণ্য/সেবা নির্বাচন করুন।",
     "paymentSectionBlocked": "অর্থ পরিশোধ করতে পণ্য/সেবা এবং গ্রাহক নির্বাচন করুন।",
