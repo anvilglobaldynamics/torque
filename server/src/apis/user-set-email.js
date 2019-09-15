@@ -23,14 +23,18 @@ exports.UserSetEmailApi = class extends Api.mixin(SecurityMixin, UserMixin) {
     let user = await this.database.user.findById({ id: userId });
     throwOnFalsy(user, "USER_INAVLID", "User not found.");
 
+    if (user.email === email) return;
+
+    let existingUser = (await this.database.user.findByEmailOrPhone({ emailOrPhone: email }));
+    if (existingUser) {
+      throw new CodedError("EMAIL_INVALID", "The email you provided is already in use");
+    }
+
     let result = await this.database.user.setEmail({ id: userId }, { email });
     this.ensureUpdate('user', result);
 
-    if (user.email === email) return;
-
     result = await this.database.user.setEmailVerificationStatus({ id: userId }, { isEmailVerified: false });
     this.ensureUpdate('user', result);
-
 
     let verificationLink = await this._createEmailVerificationRequest({ email, userId });
     this._sendEmailVerificationMail({ email, verificationLink });
