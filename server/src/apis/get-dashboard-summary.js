@@ -29,6 +29,7 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
 
   async _getSalesSummaryForDateRange({ organizationId, fromDate, toDate }) {
     let salesList = await this._getSalesList({ organizationId, fromDate, toDate, outletId: null, customerId: null, shouldFilterByOutlet: false, shouldFilterByCustomer: false });
+    salesList = salesList.filter(sales => !sales.isDiscarded);
     let totalCount = salesList.length;
     let totalAmount = 0;
     salesList.forEach((sales) => {
