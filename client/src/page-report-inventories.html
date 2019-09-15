@@ -227,15 +227,17 @@
                       </template>
                     </th>
                     <th class="cell" on-tap="columnHeaderCountTapped" style="cursor: pointer;">
-                      <span>[[verses.general.count]]</span>
-                      <template is="dom-if" if="[[$equals(sortBy, 'count')]]">
-                        <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
-                          <iron-icon class="sort-direction-icon" icon="arrow-drop-down"></iron-icon>
+                      <div class="horizontal layout center">
+                        <span>[[verses.general.count]]</span>
+                        <template is="dom-if" if="[[$equals(sortBy, 'count')]]">
+                          <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
+                            <iron-icon class="sort-direction-icon" icon="arrow-drop-down"></iron-icon>
+                          </template>
+                          <template is="dom-if" if="[[$equals(sortDirection, 'descending')]]">
+                            <iron-icon class="sort-direction-icon" icon="arrow-drop-up"></iron-icon>
+                          </template>
                         </template>
-                        <template is="dom-if" if="[[$equals(sortDirection, 'descending')]]">
-                          <iron-icon class="sort-direction-icon" icon="arrow-drop-up"></iron-icon>
-                        </template>
-                      </template>
+                      </div>
                     </th>
 
                     <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
