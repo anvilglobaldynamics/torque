@@ -60,6 +60,10 @@
           margin: 4px;
         }
       }
+
+      .prompt-card {
+        background: var(--app-button-alternative);
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -79,7 +83,7 @@
 
       <!-- verifications - start -->
       <template is="dom-if" if="[[!user.isPhoneVerified]]">
-        <div class="card">
+        <div class="card prompt-card">
           [[verses.home.notYetVerifiedPhonePart1]]
           <b>[[user.phone]]</b> [[verses.home.notYetVerifiedPhonePart2]]
           <br>
@@ -93,7 +97,7 @@
       <template is="dom-if" if="[[user.isPhoneVerified]]">
 
         <template is="dom-if" if="[[!user.email]]">
-          <div class="card">
+          <div class="card prompt-card">
             [[verses.home.whyProvideEmailAddress]]
             <div class="button-row">
               <paper-button raised class="secondary m-0" on-tap="setEmailTapped">[[verses.home.setYourEmail]]</paper-button>
@@ -103,7 +107,7 @@
 
         <template is="dom-if" if="[[user.email]]">
           <template is="dom-if" if="[[!user.isEmailVerified]]">
-            <div class="card">
+            <div class="card prompt-card">
               [[verses.home.notYetVarifiedEmail]]
               <b>[[user.email]]</b> [[verses.general.or]] [[verses.general.pressBelowButton]]
               <br>
@@ -123,7 +127,7 @@
 
         <!-- outlet prompt - start -->
         <template is="dom-if" if="[[$equals(promptName, 'outlet-creation')]]">
-          <div class="card">
+          <div class="card prompt-card">
             [[verses.home.promptCreateOutlet]]
             <br>
             <div class="button-row">
@@ -135,7 +139,7 @@
 
         <!-- product-blueprint prompt - start -->
         <template is="dom-if" if="[[$equals(promptName, 'product-blueprint-creation')]]">
-          <div class="card">
+          <div class="card prompt-card">
             [[verses.home.promptCreateProductBlueprint]]
             <br>
             <div class="button-row">
@@ -147,7 +151,7 @@
 
         <!-- vendor prompt - start -->
         <template is="dom-if" if="[[$equals(promptName, 'vendor-creation')]]">
-          <div class="card">
+          <div class="card prompt-card">
             [[verses.home.promptCreateVendor]]
             <br>
             <div class="button-row">
@@ -159,7 +163,7 @@
 
         <!-- product-acquisition prompt - start -->
         <template is="dom-if" if="[[$equals(promptName, 'product-acquisition-creation')]]">
-          <div class="card">
+          <div class="card prompt-card">
             [[verses.home.promptCreateProductAcquisition]]
             <br>
             <div class="button-row">
@@ -171,7 +175,7 @@
 
         <!-- service-blueprint prompt - start -->
         <template is="dom-if" if="[[$equals(promptName, 'service-blueprint-creation')]]">
-          <div class="card">
+          <div class="card prompt-card">
             [[verses.home.promptCreateServiceBlueprint]]
             <br>
             <div class="button-row">
@@ -186,18 +190,9 @@
 
       <template is="dom-if" if="[[$equals(promptName, 'none')]]">
 
-        <!-- POS and product-acquisition prompt - start -->
-        <!-- <div class="card">
-          <div class="horizontal layout center">
-            <paper-button raised class="pos flex" on-tap="buttonGoToPosTapped">[[verses.home.shortcutToPos]]</paper-button>
-            <paper-button raised class="secondary flex" on-tap="buttonCreateProductAcquisitionTapped">[[verses.home.shortcutToAddProduct]]</paper-button>
-          </div>
-        </div> -->
-        <!-- POS and product-acquisition prompt - end -->
-
         <div class="card">
           <div class="layout horizontal wrap">
-            
+
             <div class="touch-button" on-tap="buttonGoToPosTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
               <div class="icon">
                 <iron-icon src="../../images/icons/point-of-service.png"></iron-icon>
@@ -222,7 +217,7 @@
         <!-- default outlet selection prompt - start -->
         <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
           <template is="dom-if" if="[[!settings.ui.pageHome.hideDefaultOutletPrompt]]">
-            <div class="card">
+            <div class="card prompt-card">
               [[verses.home.promptForDefaultOutlet]]
               <br>
               <div class="button-row">
