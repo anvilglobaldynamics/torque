@@ -45,6 +45,7 @@
 <script src="torque-utils.js"></script>
 
 <link rel="lazy-import" href="page-home.html">
+<link rel="lazy-import" href="page-help.html">
 <link rel="lazy-import" href="page-payment.html">
 <link rel="lazy-import" href="page-settings.html">
 <link rel="lazy-import" href="page-error404.html">
@@ -347,6 +348,30 @@
           width: 100%;
         }
       }
+
+      #inventory-container-dialog .list {
+        max-height: 240px;
+        overflow: auto;
+        margin-bottom: 8px;
+        margin-top: 8px;
+      }
+
+      .popup-list {
+        /* border: 1px red solid; */
+      }
+
+      .popup-list .item {
+        /* border: 1px blue solid; */
+        font-size: 16px;
+        cursor: pointer;
+        color: var(--app-button-label-secondary);
+        background-color: var(--app-button-secondary);
+        padding-top: 12px;
+        padding-bottom: 12px;
+        padding-left: 16px;
+        padding-right: 16px;
+        margin-bottom: 10px;
+      }
     </style>
 
     <app-drawer-layout responsive-width="4000px" fullbleed narrow="{{narrow}}">
@@ -402,6 +427,7 @@
               <iron-selector selected="[[pageName]]" attr-for-selected="name" class="custom-drawer-list" role="navigation">
 
                 <a name="home" href="#/home">[[verses.sidebar.home]]</a>
+                <a name="help" href="#/help">[[verses.sidebar.help]]</a>
                 <hr class="custom-sidebar-divider">
 
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
@@ -463,6 +489,7 @@
           <div class="flex main-iron-pages-wrapper">
             <iron-pages on-iron-select="mainIronPagesIronSelected" id="main-iron-pages" selected="[[pageName]]" attr-for-selected="name" fallback-selection="error404" role="main">
               <page-home name="home"></page-home>
+              <page-help name="help"></page-help>
               <page-payment name="payment"></page-payment>
               <page-settings name="settings"></page-settings>
               <page-error404 name="error404"></page-error404>
@@ -560,6 +587,32 @@
           </div>
         </div>
 
+        <paper-dialog id="inventory-container-dialog" modal style="z-index: -999999">
+          <template is="dom-if" if="[[_outletList.length]]">
+            <h2>[[verses.general.outlets]]</h2>
+            <div class="popup-list">
+              <template is="dom-repeat" items="[[_outletList]]" as="outlet">
+                <div class="item" on-click="inventoryContainerDialogSelectOutletTapped" style="min-width: 200px;">
+                  [[outlet.name]]
+                </div>
+              </template>
+            </div>
+          </template>
+          <template is="dom-if" if="[[_warehouseList.length]]">
+            <h2 style="margin-top: 20px;">[[verses.general.warehouses]]</h2>
+            <div class="popup-list">
+              <template is="dom-repeat" items="[[_warehouseList]]" as="warehouse" style="min-width: 200px;">
+                <div class="item" on-click="inventoryContainerDialogSelectWarehouseTapped">
+                  [[warehouse.name]]
+                </div>
+              </template>
+            </div>
+          </template>
+          <div class="buttons" style="margin: 14px;">
+            <paper-button raised class="danger" on-click="inventoryContainerDialogCancelTapped">[[verses.general.cancel]]</paper-button>
+          </div>
+        </paper-dialog>
+
         <paper-dialog id="category-dialog" modal style="z-index: -999999">
           <h2>[[verses.productCategoryPicker.pickerTitle]]</h2>
           <paper-dialog-scrollable>
@@ -570,7 +623,7 @@
             </template>
           </paper-dialog-scrollable>
           <div class="buttons">
-            <paper-button class="secondary" on-click="categoryDialogCancelTapped" autofocus>[[verses.general.cancel]]</paper-button>
+            <paper-button raised class="secondary" on-click="categoryDialogCancelTapped">[[verses.general.cancel]]</paper-button>
           </div>
         </paper-dialog>
 
@@ -820,31 +873,31 @@
         this.db.upsert('settings', (({
           which
         }) => which === 'only'), (doc => doc), {
-            which: 'only',
-            shouldUseWebsockets: true,
-            monetaryUnit: 'BDT',
-            defaultOutletMetaMap: {},
-            defaultPrinterFormat: 'a4',
-            ui: {}
-          });
+          which: 'only',
+          shouldUseWebsockets: true,
+          monetaryUnit: 'BDT',
+          defaultOutletMetaMap: {},
+          defaultPrinterFormat: 'a4',
+          ui: {}
+        });
 
         this.db.upsert('offline-data', (({
           which
         }) => which === 'only'), (doc => doc), {
-            which: 'only',
-            offlineModeInitiatedDatetimeStamp: null,
-            lastFetchedDatetimeStamp: null,
-            cache: {
-              getOutlet: null,
-              getAggregatedInventoryDetails: null,
-              getActiveServiceList: null,
-              getUserDisplayInformation: null
-            },
-            data: {
-              unsyncedSalesIdSeed: 0,
-              unsyncedSalesList: []
-            }
-          });
+          which: 'only',
+          offlineModeInitiatedDatetimeStamp: null,
+          lastFetchedDatetimeStamp: null,
+          cache: {
+            getOutlet: null,
+            getAggregatedInventoryDetails: null,
+            getActiveServiceList: null,
+            getUserDisplayInformation: null
+          },
+          data: {
+            unsyncedSalesIdSeed: 0,
+            unsyncedSalesList: []
+          }
+        });
       }
 
       _setUpDatabaseObservers() {
@@ -1126,6 +1179,47 @@
         //     unsyncedSalesList: []
         //   }
         // }
+      }
+
+      // ====================== inventory container dialog =============================
+
+      displayInventoryContainerDialog({ outletList, warehouseList }, cbfn) {
+        if (outletList.length === 0 && warehouseList.length === 0) {
+          return cbfn(null);
+        } else if (outletList.length === 1 && warehouseList.length === 0) {
+          return cbfn({ inventoryContainer: outletList[0], type: 'outlet' });
+        } else if (outletList.length === 0 && warehouseList.length === 1) {
+          return cbfn({ inventoryContainer: warehouseList[0], type: 'warehouse' });
+        }
+
+        this._inventoryContainerDialogCbfn = cbfn;
+        this._outletList = outletList;
+        this._warehouseList = warehouseList;
+
+        this._patchForPolymerModalDialogIssue();
+        this.elem('#inventory-container-dialog').open();
+      }
+
+      __callInventoryContainerCbfn(data) {
+        this._inventoryContainerDialogCbfn(data);
+        this._inventoryContainerDialogCbfn = null;
+      }
+
+      inventoryContainerDialogCancelTapped(e = null) {
+        this.elem('#inventory-container-dialog').close();
+        this.__callInventoryContainerCbfn(null);
+      }
+
+      inventoryContainerDialogSelectOutletTapped(e) {
+        this.elem('#inventory-container-dialog').close();
+        let { outlet } = e.model;
+        this.__callInventoryContainerCbfn({ inventoryContainer: outlet, type: 'outlet' });
+      }
+
+      inventoryContainerDialogSelectWarehouseTapped(e) {
+        this.elem('#inventory-container-dialog').close();
+        let { warehouse } = e.model;
+        this.__callInventoryContainerCbfn({ inventoryContainer: warehouse, type: 'warehouse' });
       }
 
       // ====================== product category dialog =============================

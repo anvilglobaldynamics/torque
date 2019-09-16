@@ -26,11 +26,9 @@
 <dom-module id="page-add-organization">
   <template>
     <style include="shared-styles">
-
-    .full-width-paper-dropdown {
-      width: 100%;
-    }
-
+      .full-width-paper-dropdown {
+        width: 100%;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -53,7 +51,10 @@
               </paper-listbox>
             </paper-dropdown-menu>
 
-            <paper-checkbox class="addOrganizationForm--isNotOneOutletOrg" checked="{{addOrganizationForm.isNotOneOutletOrg}}">[[verses.organization.isNotOneOutletOrg]]</paper-checkbox>
+            <!-- 
+              FIXME: Remove when completely certain we do not need this feature
+              <paper-checkbox class="addOrganizationForm--isNotOneOutletOrg" checked="{{addOrganizationForm.isNotOneOutletOrg}}">[[verses.organization.isNotOneOutletOrg]]</paper-checkbox>
+            -->
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary addOrganizationForm--submit" on-tap="addOrganizationTapped">[[verses.organization.createOrganization]]</paper-button>
@@ -170,8 +171,6 @@
       addOrganizationTapped() {
         this.elemAll('#addOrganizationForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#addOrganizationForm').validate()) return;
-
-
 
         let { name, phone, email, primaryBusinessAddress, isNotOneOutletOrg, industryCategory } = this.addOrganizationForm;
         this._processUserAddOrganization({ name, phone, email, primaryBusinessAddress, isNotOneOutletOrg, industryCategory });

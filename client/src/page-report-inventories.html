@@ -125,8 +125,13 @@
         visibility: hidden;
       }
 
-      .product-category-filter{
+      .product-category-filter {
         margin-bottom: 2px;
+      }
+
+      .sort-direction-icon {
+        width: 24px;
+        height: 24px;
       }
     </style>
 
@@ -200,7 +205,7 @@
 
           <template is="dom-repeat" items="[[aggregatedInventoryDetailsList]]" as="aggregatedInventoryDetail">
 
-            <div class="inventory-table-container">
+            <div class="inventory-table-container" style="animation: 1s fadein;">
               <table class="inventory-table">
                 <tr>
                   <span class="table-title">
@@ -210,8 +215,30 @@
 
                 <template is="dom-if" if="[[aggregatedInventoryDetail.aggregatedProductList.length]]">
                   <tr>
-                    <th class="cell product-column" align="left">[[verses.general.product]]</th>
-                    <th class="cell">[[verses.general.count]]</th>
+                    <th class="cell product-column" align="left" on-tap="columnHeaderProductTapped" style="cursor: pointer;">
+                      <span>[[verses.general.product]]</span>
+                      <template is="dom-if" if="[[$equals(sortBy, 'product')]]">
+                        <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
+                          <iron-icon class="sort-direction-icon" icon="arrow-drop-down"></iron-icon>
+                        </template>
+                        <template is="dom-if" if="[[$equals(sortDirection, 'descending')]]">
+                          <iron-icon class="sort-direction-icon" icon="arrow-drop-up"></iron-icon>
+                        </template>
+                      </template>
+                    </th>
+                    <th class="cell" on-tap="columnHeaderCountTapped" style="cursor: pointer;">
+                      <div class="horizontal layout center-center">
+                        <span>[[verses.general.count]]</span>
+                        <template is="dom-if" if="[[$equals(sortBy, 'count')]]">
+                          <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
+                            <iron-icon class="sort-direction-icon" icon="arrow-drop-down"></iron-icon>
+                          </template>
+                          <template is="dom-if" if="[[$equals(sortDirection, 'descending')]]">
+                            <iron-icon class="sort-direction-icon" icon="arrow-drop-up"></iron-icon>
+                          </template>
+                        </template>
+                      </div>
+                    </th>
 
                     <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
                       <th class="cell">[[verses.general.purchase]]</th>
@@ -315,6 +342,14 @@
           aggregatedInventoryDetailsList: {
             type: Array,
             value: () => []
+          },
+          sortBy: {
+            type: String,
+            value: 'default'
+          },
+          sortDirection: {
+            type: String,
+            value: 'ascending'
           }
         };
       }
@@ -334,6 +369,8 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.inventoriesReport.inventoriesReportTitle);
         if (!this._ensureAccess()) return;
+        this.sortBy = 'default';
+        this.sortDirection = 'descending';
         this._preprocessFiltersAndProcessReport();
       }
 
@@ -441,6 +478,56 @@
         window.print();
       }
 
+      // region: sort
+
+      _applySortParameters() {
+        this.aggregatedInventoryDetailsList.forEach((aggregatedInventoryDetail, index) => {
+          let list = aggregatedInventoryDetail.aggregatedProductList;
+          list.sort((a, b) => {
+            if (this.sortBy === 'product') {
+              let strA = a.product.productBlueprint.name;
+              let strB = b.product.productBlueprint.name;
+              if (this.sortDirection === 'ascending') {
+                return strA.localeCompare(strB);
+              } else {
+                return strB.localeCompare(strA);
+              }
+            } else if (this.sortBy === 'count') {
+              if (this.sortDirection === 'ascending') {
+                return a.count - b.count;
+              } else {
+                return b.count - a.count;
+              }
+            }
+          });
+        });
+        let list = this.aggregatedInventoryDetailsList;
+        this.aggregatedInventoryDetailsList = [];
+        window.setTimeout(() => {
+          this.aggregatedInventoryDetailsList = list;
+        }, 0);
+      }
+
+      columnHeaderProductTapped(e = null) {
+        if (this.sortBy === 'product') {
+          this.sortDirection = (this.sortDirection === 'ascending' ? 'descending' : 'ascending');
+        } else {
+          this.sortBy = 'product';
+          this.sortDirection = 'ascending';
+        }
+        this._applySortParameters();
+      }
+
+      columnHeaderCountTapped(e = null) {
+        if (this.sortBy === 'count') {
+          this.sortDirection = (this.sortDirection === 'ascending' ? 'descending' : 'ascending');
+        } else {
+          this.sortBy = 'count';
+          this.sortDirection = 'ascending';
+        }
+        this._applySortParameters();
+      }
+
       // region: util
 
       computeTotalProductCount(productList) {
@@ -479,6 +566,8 @@
         list = list.map(productCategory => productCategory.name);
         return list.join(', ');
       }
+
+      $equals(a, b) { return a === b; }
 
     }
 

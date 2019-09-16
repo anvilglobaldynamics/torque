@@ -50,6 +50,7 @@
                   <div class="place-detail-container">[[outlet.physicalAddress]]</div>
                 </div>
                 <div class="horizontal layout wrap">
+                  <paper-button raised class="btn pos" on-tap="posTapped">[[verses.general.pos]]</paper-button>
                   <paper-button raised class="btn secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
                   <!-- <paper-button raised class="btn primary" on-tap="editTapped">Edit</paper-button> -->
                   <!-- <paper-button raised class="btn primary" on-tap="posTapped">POS</paper-button> -->
@@ -74,7 +75,10 @@
 
       <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_OUTLETS', organization)]]">
         <div class="lone-controls">
-          <paper-button raised class="btn primary" on-tap="createTapped">[[verses.outlet.createNewOutlet]]</paper-button>
+          <paper-button raised class="btn primary" on-tap="createTapped">
+            <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
+            [[verses.outlet.createNewOutlet]]
+          </paper-button>
         </div>
       </template>
 
@@ -162,6 +166,11 @@
       viewTapped(e) {
         let { outlet } = e.model;
         return this.app.navigateTo(`/view-outlet/outlet:${outlet.id}`);
+      }
+
+      posTapped(e) {
+        let { outlet } = e.model;
+        return this.app.navigateTo(`/pos/outlet:${outlet.id}`);
       }
 
       // editTapped(e) {

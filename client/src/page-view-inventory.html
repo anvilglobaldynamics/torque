@@ -31,6 +31,14 @@
         width: 300px;
       }
 
+      .inventory-page-title {
+        /* border: 1px solid red; */
+        padding-left: 14px;
+        padding-top: 6px;
+        font-size: 20px;
+        font-weight: 500;
+      }
+
       .manage-inventory-button {
         width: 100%;
         margin: 5px;
@@ -47,7 +55,7 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <!-- section shows inventory container and inventory name -->
-      <p class="page-subtitle">
+      <p class="inventory-page-title">
         [[inventoryContainerName]] - [[inventoryName]]
       </p>
 

@@ -41,7 +41,7 @@
     "phone": "ফোন",
     "balance": "অ্যাকাউন্ট ব্যালান্স",
     "view": "দেখুন",
-    "edit": "পরিবর্তন করুন",
+    "edit": "পরিবর্তন",
     "showing": "দেখাচ্ছে",
     "loaded": "লোড করা হয়েছে",
     "itemsOutOf": "আইটেম গুলোর মধ্যে",
@@ -114,7 +114,9 @@
     "nextOrContinue": "পরবর্তী",
     "notFound": "পাওয়া যায় নি",
     "update": "আপডেট",
-    "saved": "সংরক্ষিত"
+    "saved": "সংরক্ষিত",
+    "outlets": "দোকান",
+    "warehouses": "গুদাম"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -154,6 +156,7 @@
   "sidebar": {
     "lipiName": "লিপি",
     "home": "হোম",
+    "help": "সাহায্য নিন",
     "employees": "কর্মচারী",
     "outlets": "দোকান",
     "warehouses": "গুদাম",
@@ -233,7 +236,19 @@
     "promptForDefaultOutlet": "নিয়মিত ব্যবহৃত দোকান; নিয়মিত ব্যবহার এর জন্য দোকান বাছাই করলে দ্রুত বিক্রয়কেন্দ্রে যেতে পারবেন এবং লিপি অফলাইনে ব্যবহার করতে পারবেন",
     "promptForDefaultOutletGoButton": "দোকান বাছাই",
     "salesTrendGraphTitle": "এই সপ্তাহের বিক্রয়",
-    "viewActivationHistory": "সক্রিয়করণ ইতিহাস দেখুন"
+    "viewActivationHistory": "সক্রিয়করণ ইতিহাস দেখুন",
+    "promptCreateOutlet": "আপনার সংস্থায় কোনো দোকান নেই। দোকান ছাড়া বিক্রি করা সম্ভব নয়।",
+    "buttonCreateOutlet": "দোকান যোগ করুন",
+    "promptCreateProductBlueprint": "আপনার সংস্থার কোনো পণ্য পরিকল্পনা নেই। পণ্য পরিকল্পনা ছাড়া পণ্য বিক্রি এবং পণ্য তালিকা করা যাবে না।",
+    "buttonCreateProductBlueprint": "পণ্যের পরিকল্পনা যুক্ত করুন",
+    "promptCreateVendor": "আপনার সংস্থার জন্য কোনো সরবরাহকারী নেই। সরবরাহকারী ছাড়া পণ্য ক্রয় এবং ট্রান্সফার করা যাবে না।",
+    "buttonCreateVendor": "সরবরাহকারী যুক্ত করুন",
+    "promptCreateProductAcquisition": "আপনার সংস্থার পণ্য তালিকার কোনো পণ্য নেই। পণ্য তালিকার যোগ না করে পণ্য বিক্রি করা যাবে না।",
+    "buttonCreateProductAcquisition": "পণ্য তালিকায় পণ্য যোগ করুন",
+    "promptCreateServiceBlueprint": "আপনার সংস্থার কোনো সেবা পরিকল্পনা নেই। সেবা পরিকল্পনা ছাড়া সেবা বিক্রি করা যাবে না।",
+    "buttonCreateServiceBlueprint": "সেবা পরিকল্পনা যুক্ত করুন",
+    "shortcutToPos": "বিক্রয়কেন্দ্র",
+    "shortcutToAddProduct": "পণ্য যোগ করুন"
   },
   "organization": {
     "addOrganizationTitle": "সংস্থা তৈরি করুন",
@@ -348,7 +363,9 @@
     "productCategoryNotFound": "ধরণ পাওয়া যায়নি",
     "productCategoryNotFoundDetails": "এই নামের পণ্যের ধরণ খুঁজে পাওয়া যায়নি",
     "whatIsProductBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত সকল কাজে ব্যবহত হবে। বর্তমান পণ্যের পরিকল্পনা পুনঃব্যবহার বা সম্পাদনা করার পরিবর্তে, পণ্য পরিকল্পনায় সামান্যতম ভিন্নতা থাকলেও নতুন পণ্য পরিকল্পনা তৈরি করুন।",
-    "productBlueprintEditConfirmMessage": "পণ্যের পরিকল্পনায় পরিবর্তন করলে সংশ্লিষ্ট পণ্য-ও পরিবর্তন হয়ে যাবে। পণ্যের মূল্য পরিবর্তন করলে হিসেবে পরিবর্তন আসবে। আপনি কি নিশ্চিত করছেন?"
+    "productBlueprintEditConfirmMessage": "পণ্যের পরিকল্পনায় পরিবর্তন করলে সংশ্লিষ্ট পণ্য-ও পরিবর্তন হয়ে যাবে। পণ্যের মূল্য পরিবর্তন করলে হিসেবে পরিবর্তন আসবে। আপনি কি নিশ্চিত করছেন?",
+    "productCategoryCreationPromptmessage": "পণ্যের ধরণ আপনাকে পণ্য অনুসন্ধান এবং গোছাতে সাহায্য করে। ব্র্যান্ড, মডেল, বৈশিষ্ট্য এবং পণ্যের প্রকারের উপর ভিত্তি করে বিভিন্ন পণ্যের ধরণ তৈরি করার চেষ্টা করুন।",
+    "createProductCategory": "পণ্যের ধরণ যুক্ত করুন"
   },
   "serviceBlueprint": {
     "manageServiceBlueprintsTitle": "সেবা পরিকল্পনা পরিচালনা",
@@ -762,7 +779,6 @@
     "currentOutlet": "বর্তমান দোকান",
     "saleNotValid": "বিক্রয় সঠিক নয়",
     "offlineWarehouseSellNotAllowed": "অফলাইন মোডে গুদাম থেকে পণ্য বিক্রি করতে পারবেন না।",
-
     "step1": "প্রথম ধাপ",
     "step2": "দ্বিতীয় ধাপ",
     "step3": "তৃতীয় ধাপ",
@@ -771,12 +787,12 @@
     "productSales": "পণ্য বিক্রয়",
     "serviceSales": "সেবা বিক্রয়",
     "sellingProductsFrom": "পণ্যের উৎস:",
-    "scanningActive":"স্ক্যানিং সক্রিয়",
-    "productSearchLabel":"পণ্যের নাম/সনাক্তকারী কোড",
-    "selectedProducts":"নির্বাচিত পণ্য",
+    "scanningActive": "স্ক্যানিং সক্রিয়",
+    "productSearchLabel": "পণ্যের নাম/সনাক্তকারী কোড",
+    "selectedProducts": "নির্বাচিত পণ্য",
     "selectedServices": "নির্বাচিত সেবা",
     "continueWithoutCustomer": "ক্রেতা নির্বাচন না করেই এগিয়ে যান",
-    "selectACustomer":"গ্রাহক নির্বাচন করুন",
+    "selectACustomer": "গ্রাহক নির্বাচন করুন",
     "selectADifferentCustomer": "ভিন্ন গ্রাহক নির্বাচন করুন",
     "customerSectionBlocked": "গ্রাহক নির্বাচন করতে পণ্য/সেবা নির্বাচন করুন।",
     "paymentSectionBlocked": "অর্থ পরিশোধ করতে পণ্য/সেবা এবং গ্রাহক নির্বাচন করুন।",
@@ -1132,7 +1148,10 @@
     "noProductAcquisitionFound": "কোনো পণ্য ক্রয় এর রেকর্ড পাওয়া যায়নি। ",
     "recordCreatedBy": "রেকর্ড তৈরি করেছেন",
     "productAcquisitionTitle": "পণ্য ক্রয় এর রেকর্ড",
-    "wholeOrganization": "সম্পূর্ণ সংস্থা",
+    "wholeOrganization": "সকল",
     "acquiredFrom": "থেকে ক্রীত"
+  }, 
+  "help": {
+    "pageTitle": "সহায়তা নিন"
   }
 }

@@ -37,42 +37,6 @@
         top: 8px;
         right: 8px;
       }
-
-      .content-item {
-        position: relative;
-        margin: 5px;
-        padding: 5px;
-        border: 1px solid #eee;
-        background-color: #f7f7f7;
-        width: 40%;
-        text-align: center;
-      }
-
-      .content-item:hover,
-      .content-item-2:hover {
-        cursor: pointer;
-      }
-
-      .content-item .title {
-        text-align: center;
-        margin: 0;
-        font-size: 18px;
-      }
-
-      .content-item .caption {
-        text-align: center;
-        font-size: 14px;
-      }
-
-      .content-item .icon {
-        text-align: center;
-        padding: 16px;
-      }
-
-      iron-icon {
-        --iron-icon-height: 40px;
-        --iron-icon-width: 40px;
-      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -103,8 +67,8 @@
         <div class="sp"></div>
         <div class="p-16 layout horizontal wrap">
 
-          <!-- content-item - start -->
-          <div class="content-item" on-tap="posTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
+          <!-- touch-button - start -->
+          <div class="touch-button" on-tap="posTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
             <div class="icon">
               <iron-icon src="../../images/icons/point-of-service.png"></iron-icon>
             </div>
@@ -112,11 +76,11 @@
             <div class="type caption secondary">[[verses.outlet.goToPos]]</div>
             <paper-ripple></paper-ripple>
           </div>
-          <!-- content-item - end -->
+          <!-- touch-button - end -->
 
-          <!-- content-item - start -->
+          <!-- touch-button - start -->
           <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
-            <div class="content-item" on-tap="manageOutletServicesTapped">
+            <div class="touch-button" on-tap="manageOutletServicesTapped">
               <div class="icon">
                 <iron-icon src="../../images/icons/support.png"></iron-icon>
               </div>
@@ -125,11 +89,11 @@
               <paper-ripple></paper-ripple>
             </div>
           </template>
-          <!-- content-item - end -->
+          <!-- touch-button - end -->
 
-          <!-- content-item - start -->
+          <!-- touch-button - start -->
           <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
-            <div class="content-item" on-tap="viewInventoryTapped" data-key="defaultInventory">
+            <div class="touch-button" on-tap="viewInventoryTapped" data-key="defaultInventory">
               <div class="icon">
                 <iron-icon src="../../images/icons/package-right.png"></iron-icon>
               </div>
@@ -138,11 +102,11 @@
               <paper-ripple></paper-ripple>
             </div>
           </template>
-          <!-- content-item - end -->
+          <!-- touch-button - end -->
 
-          <!-- content-item - start -->
+          <!-- touch-button - start -->
           <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
-            <div class="content-item" on-tap="viewInventoryTapped" data-key="returnedInventory">
+            <div class="touch-button" on-tap="viewInventoryTapped" data-key="returnedInventory">
               <div class="icon">
                 <iron-icon src="../../images/icons/package-down.png"></iron-icon>
               </div>
@@ -151,11 +115,11 @@
               <paper-ripple></paper-ripple>
             </div>
           </template>
-          <!-- content-item - end -->
+          <!-- touch-button - end -->
 
-          <!-- content-item - start -->
+          <!-- touch-button - start -->
           <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
-            <div class="content-item" on-tap="viewInventoryTapped" data-key="damagedInventory">
+            <div class="touch-button" on-tap="viewInventoryTapped" data-key="damagedInventory">
               <div class="icon">
                 <iron-icon src="../../images/icons/package-wrapped.png"></iron-icon>
               </div>
@@ -164,10 +128,10 @@
               <paper-ripple></paper-ripple>
             </div>
           </template>
-          <!-- content-item - end -->
+          <!-- touch-button - end -->
 
-          <!-- content-item - start -->
-          <div class="content-item" on-tap="manageSalesTapped">
+          <!-- touch-button - start -->
+          <div class="touch-button" on-tap="manageSalesTapped">
             <div class="icon">
               <iron-icon src="../../images/icons/package-wrapped.png"></iron-icon>
             </div>
@@ -175,7 +139,7 @@
             <div class="type caption secondary">[[verses.outlet.goToPreviousSales]]</div>
             <paper-ripple></paper-ripple>
           </div>
-          <!-- content-item - end -->
+          <!-- touch-button - end -->
 
         </div>
 

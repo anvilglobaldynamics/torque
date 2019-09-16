@@ -30,7 +30,23 @@ exports.UserEditProfileApi = class extends Api.mixin(UserMixin) {
     let user = await this.database.user.findById({ id: userId });
     throwOnFalsy(user, "USER_INAVLID", "User not found.");
 
-    let result = await this.database.user.setProfile({ id: userId }, {
+    let result;
+
+    if (user.email !== email) {
+      let existingUser = (await this.database.user.findByEmailOrPhone({ emailOrPhone: email }));
+      if (existingUser) {
+        throw new CodedError("EMAIL_INVALID", "The email you provided is already in use");
+      }
+    }
+
+    if (user.phone !== phone) {
+      let existingUser = (await this.database.user.findByEmailOrPhone({ emailOrPhone: phone }));
+      if (existingUser) {
+        throw new CodedError("PHONE_INVALID", "The phone you provided is already in use");
+      }
+    }
+
+    result = await this.database.user.setProfile({ id: userId }, {
       userId, email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup
     });
     this.ensureUpdate('user', result);
@@ -54,7 +70,6 @@ exports.UserEditProfileApi = class extends Api.mixin(UserMixin) {
     }
 
     return true;
-
   }
 
   async handle({ userId, body }) {

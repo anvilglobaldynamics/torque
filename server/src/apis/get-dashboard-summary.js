@@ -29,6 +29,7 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
 
   async _getSalesSummaryForDateRange({ organizationId, fromDate, toDate }) {
     let salesList = await this._getSalesList({ organizationId, fromDate, toDate, outletId: null, customerId: null, shouldFilterByOutlet: false, shouldFilterByCustomer: false });
+    salesList = salesList.filter(sales => !sales.isDiscarded);
     let totalCount = salesList.length;
     let totalAmount = 0;
     salesList.forEach((sales) => {
@@ -102,11 +103,27 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
     }
   }
 
+  async _getUsageFlags({ organizationId }) {
+    let hasAnyOutlet = (await this.database.outlet._find({ organizationId })).length > 0;
+    let hasAnyProductBlueprint = (await this.database.productBlueprint._find({ organizationId })).length > 0;
+    let hasAnyVendor = (await this.database.vendor._find({ organizationId })).length > 0;
+    let hasAnyProductAcquisition = (await this.database.productAcquisition._find({ organizationId })).length > 0;
+    let hasAnyServiceBlueprint = (await this.database.serviceBlueprint._find({ organizationId })).length > 0;
+    return {
+      hasAnyOutlet,
+      hasAnyProductBlueprint,
+      hasAnyVendor,
+      hasAnyProductAcquisition,
+      hasAnyServiceBlueprint
+    }
+  }
+
   async handle({ body }) {
     let { organizationId } = body;
     let metrics = await this._getSalesSummary({ organizationId });
     let organizationPackageDetails = await this._getActivatedPackageDetails({ organizationId });
-    return { metrics, organizationPackageDetails };
+    let usageFlags = await this._getUsageFlags({ organizationId });
+    return { metrics, organizationPackageDetails, usageFlags };
   }
 
 }

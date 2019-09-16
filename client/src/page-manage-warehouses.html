@@ -74,7 +74,10 @@
 
       <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_WAREHOUSES', organization)]]">
         <div class="lone-controls">
-          <paper-button raised class="btn primary" on-tap="createTapped">[[verses.warehouse.createNewWarehouse]]</paper-button>
+          <paper-button raised class="btn primary" on-tap="createTapped">
+            <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
+            [[verses.warehouse.createNewWarehouse]]
+          </paper-button>
         </div>
       </template>
 

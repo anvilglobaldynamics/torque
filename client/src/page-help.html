@@ -1,0 +1,405 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-help">
+  <template>
+
+    <style include="shared-styles">
+      :host {
+        font-size: 16px;
+      }
+
+      p {}
+
+      ul,
+      ol {
+        padding-left: 18px;
+      }
+
+      li {}
+
+      h1,
+      h2 {
+        padding: 0px;
+        margin: 0px;
+        line-height: normal;
+      }
+
+      h1 {
+        font-size: 18px;
+        margin-top: 12px;
+      }
+
+      h2 {}
+
+      a {
+        color: var(--app-primary-color);
+      }
+
+      .block {}
+
+      .question {
+        cursor: pointer;
+        font-size: 20px;
+      }
+
+      .answer {
+        border-top: 1px solid rgb(165, 165, 165);
+        /* margin-left: 28px; */
+        /* padding-left: 4px; */
+        padding-top: 2px;
+        animation: 1s fadein;
+      }
+
+
+
+      img {
+        width: 100%;
+      }
+
+      /* This element defines the size the iframe will take.
+   In this example we want to have a ratio of 25:14 */
+      .aspect-ratio {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 56%;
+        /* The height of the item will now be 56% of the width. */
+      }
+
+      /* Adjust the iframe so it's rendered in the outer-width and outer-height of it's parent */
+      .aspect-ratio iframe {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="block card" data-topic="new-product">
+        <div class="question" draggable="false" on-tap="questionTapped">
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
+          How to create a new product? 
+        </div>
+        <div class="answer hidden">
+          <ol>
+            <li>From the sidebar click <b>Product Blueprints</b></li>
+            <li>Click <b>Create New Product Blueprint</b></li>
+            <li>Fill the form and click <b>Create Product Blueprint</b></li>
+          </ol>
+
+          <img src="../images/help/new-product-1.png">
+        </div>
+      </div>
+
+      <div class="block card" data-topic="new-product-category">
+        <div class="question" draggable="false" on-tap="questionTapped">
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
+          How to categorise product? 
+        </div>
+        <div class="answer hidden">
+          <p><b>Product Category</b> helps you search and organise products. Products of different brand, model, feature and type should be different categories.</p>
+
+          <ol>
+            <li>From the sidebar click <b>Product Categories</b></li>
+            <li>Click <b>Create New Product Category</b></li>
+            <li>Type a name, pick a color and click <b>Create Product Category</b></li>
+          </ol>
+
+          <p>Now you can select this category when creating a new <b>Product Blueprint</b> or update existing.</p>
+
+          <img src="../images/help/new-product-category-1.png">
+        </div>
+      </div>
+
+      <div class="block card" data-topic="product-acquisition">
+        <div class="question" draggable="false" on-tap="questionTapped">
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
+          How to add product to inventory? (Product acquisition / purchase) 
+        </div>
+        <div class="answer hidden">
+          <p>Adding product to an inventory is called <b>Product Acquisition</b>. This is also how you enter a new product purchase.</p>
+          <p>First, you need to navigate to the warehouse or outlet where you want to add these new products;</p>
+
+          <ol>
+            <li>From the sidebar click <b>Outlets / Warehouses</b></li>
+            <li>Click <b>View</b> beside the desired Outlets / Warehouses</li>
+          </ol>
+
+          <img src="../images/help/product-acquisition-1.png">
+
+          <p>Now, you are in the inventory page. To add products to this inventory;</p>
+
+          <ol>
+            <li>Click <b>Default Inventory</b></li>
+            <li>Click <b>Add Products To This Inventory</b></li>
+          </ol>
+
+          <img src="../images/help/product-acquisition-2.png">
+        </div>
+      </div>
+
+      <div class="block card" data-topic="product-transfer">
+        <div class="question" draggable="false" on-tap="questionTapped">
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
+          How to transfer product from warehouse to outlet? (Product transfer) 
+        </div>
+        <div class="answer hidden">
+          <p>First, you need to go to the warehouse or outlet where you want to transfer these new products <b>from;</b></p>
+
+          <ol>
+            <li>From the sidebar click <b>Outlets / Warehouses</b></li>
+            <li>Click <b>View</b> beside the desired Outlets / Warehouses</li>
+          </ol>
+
+          <img src="../images/help/product-acquisition-1.png">
+
+          <p>Now, you are in the inventory page. To start selecting products from this inventory;</p>
+
+          <ol>
+            <li>Click to view the inventory. (Default / returned / damaged)</li>
+            <li>Click <b>Start Selecting Products To Transfer</b></li>
+          </ol>
+
+          <img src="../images/help/product-transfer-1.png">
+        </div>
+      </div>
+
+      <div class="block card" data-topic="sell-pos">
+        <div class="question" draggable="false" on-tap="questionTapped">
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
+          How to sell? (POS)  
+        </div>
+        <div class="answer hidden">
+          <p>All sales are done from an <b>Outlet’s POS</b> (Point of sale). To go to an outlet’s POS;</p>
+
+          <ol>
+            <li>From the sidebar click <b>Outlets</b></li>
+            <li>Click <b>POS</b> to sell from the outlet</li>
+          </ol>
+
+          <img src="../images/help/sell-pos-1.png">
+        </div>
+      </div>
+
+      <div class="block card" data-topic="discount">
+        <div class="question" draggable="false" on-tap="questionTapped">
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
+          How to discount?  
+        </div>
+        <div class="answer hidden">
+          <p>There are 2 types of discounts; Percentage and Fixed value.</p>
+
+          <ol>
+            <li>From the sidebar click <b>Discounts</b></li>
+            <li>Click <b>Create New Discount Preset</b></li>
+            <li>Enter a Name, select discount type and enter value</li>
+            <li>Click <b>Create Discount Preset</b></li>
+          </ol>
+
+          <p>This discount can now be applied during a sell in POS.</p>
+
+          <img src="../images/help/discount-1.png">
+        </div>
+      </div>
+
+      <div class="block card" data-topic="sales-record-report">
+        <div class="question" draggable="false" on-tap="questionTapped">
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
+          How to view sale? (Sales record / report) 
+        </div>
+        <div class="answer hidden">
+          <ol>
+            <li>From the sidebar click <b>Sales Records</b></li>
+            <li>You can use filters to find specific sale</li>
+            <li>Also, you can click <b>Sales Report</b> from the sidebar</li>
+            <li>Here you can view an aggregated sales report and can also filter</li>
+          </ol>
+
+          <img src="../images/help/sales-record-report-1.png">
+        </div>
+      </div>
+
+      <div class="block card" data-topic="inventory-report">
+        <div class="question" draggable="false" on-tap="questionTapped">
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
+          How to view product count? (Inventory report) 
+        </div>
+        <div class="answer hidden">
+          <ol>
+            <li>From the sidebar click <b>Inventories Report</b></li>
+            <li>You can use filters to find specific counts</li>
+          </ol>
+
+          <img src="../images/help/inventory-report-1.png">
+        </div>
+      </div>
+
+      <div class="block card" data-topic="employee-privilege">
+        <div class="question" draggable="false" on-tap="questionTapped">
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
+          How to create employee account? (Employee privilege) 
+        </div>
+        <div class="answer hidden">
+          <ol>
+            <li>From the sidebar click <b>Employees</b></li>
+            <li>Click <b>Add New User As Employee</b></li>
+            <li>Fill the form with accurate information</li>
+            <li>Scroll down and you will see a list of <b>Privileges</b></li>
+          </ol>
+
+          <p>Employee privileges let you control what your employee can view and modify in Lipi. Select privileges carefully, you can also change employee privileges later.</p>
+
+          <img src="../images/help/employee-privilege-1.png">
+        </div>
+      </div>
+
+      <div class="block card" data-topic="account-information">
+        <div class="question" draggable="false" on-tap="questionTapped">
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
+          How to change account information? (Name, password, phone)
+        </div>
+        <div class="answer hidden">
+          <ol>
+            <li>From the sidebar click <b>Profile</b></li>
+            <li>Here you can change your password on top section</li>
+            <li>In bottom section you can change your information</li>
+            <li>Click <b>Save Changes</b> after you change any information</li>
+          </ol>
+
+          <img src="../images/help/account-information-1.png">
+        </div>
+      </div>
+
+      <div class="block card" data-topic="manage-vendor">
+        <div class="question" draggable="false" on-tap="questionTapped">
+          <iron-icon icon="icons:chevron-right" class="collapsed-icon"></iron-icon>
+          <iron-icon icon="icons:expand-more" class="expanded-icon hidden"></iron-icon>
+          How to manage supplier / vendor?
+        </div>
+        <div class="answer hidden">
+          <p>First, add a new <b>Vendor;</b></p>
+
+          <ol>
+            <li>From the sidebar click <b>Vendors</b></li>
+            <li>Click <b>Create New Vendor</b></li>
+            <li>Fill the form and click <b>Create Vendor</b></li>
+          </ol>
+
+          <img src="../images/help/manage-vendor-1.png">
+
+          <p>Now, you can select this vendor during;</p>
+
+          <ol>
+            <li>Adding new product to inventory</li>
+            <li>Transferring product between inventories</li>
+          </ol>
+
+          <p>Detailed vendor records will then be available in <b>Product Acquisition Records</b> and <b>Product Transfer Records</b>.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageHelp extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-help';
+      }
+
+      static get properties() {
+        return {
+
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.help.pageTitle);
+        this.delay(300, () => {
+          this.isReady = true;
+          if ('topic' in this.params) {
+            let parent = this.elem(`[data-topic=${this.params.topic}]`);
+            if (parent) {
+              this._showAnswerOfBlock(parent);
+              parent.scrollIntoView();
+            }
+          }
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+      }
+
+      _hideAllAnswers({ exclude = null } = {}) {
+        this.elemAll('.block').forEach(parent => {
+          if (parent === exclude) return;
+          let answer = parent.querySelector('.answer');
+          answer.classList.add('hidden');
+          parent.querySelector('.collapsed-icon').classList.remove('hidden');
+          parent.querySelector('.expanded-icon').classList.add('hidden');
+        })
+      }
+
+      _showAnswerOfBlock(parent) {
+        let answer = parent.querySelector('.answer');
+        answer.classList.toggle('hidden');
+        parent.querySelector('.collapsed-icon').classList.toggle('hidden');
+        parent.querySelector('.expanded-icon').classList.toggle('hidden');
+      }
+
+      questionTapped(e) {
+        let parent = e.currentTarget.parentNode;
+        this._hideAllAnswers({ exclude: parent });
+        this._showAnswerOfBlock(parent);
+      }
+
+      // region: misc =================================      
+
+
+    }
+
+    window.customElements.define(PageHelp.is, PageHelp);
+  </script>
+</dom-module>
