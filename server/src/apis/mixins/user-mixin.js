@@ -53,7 +53,7 @@ exports.UserMixin = (SuperApiClass) => class extends SuperApiClass {
     } while (!isUnique);
     await this.database.emailVerificationRequest.create({ userId, email, origin: 'user-register', verificationToken });
     let verificationLink = this._generateEmailVerificationLink({ verificationToken });
-    return { verificationLink };
+    return verificationLink;
   }
 
   // TODO: try/catch mechanism since this method will not be awaited
