@@ -92,6 +92,7 @@
 <link rel="lazy-import" href="page-report-sales.html">
 <link rel="lazy-import" href="page-report-collections.html">
 <link rel="lazy-import" href="page-report-inventories.html">
+<link rel="lazy-import" href="page-report-product-sales.html">
 <link rel="lazy-import" href="page-manage-product-transfers.html">
 <link rel="lazy-import" href="page-view-product-transfer.html">
 <link rel="lazy-import" href="page-manage-product-acquisitions.html">
@@ -459,6 +460,7 @@
                 <a name="report-collections" href="#/report-collections">[[verses.sidebar.collectionReport]]</a>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
                   <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
+                  <a name="report-product-sales" href="#/report-product-sales">[[verses.sidebar.productSalesReport]]PS</a>
                 </template>
                 <hr class="custom-sidebar-divider">
 
@@ -536,6 +538,7 @@
               <page-report-sales name="report-sales"></page-report-sales>
               <page-report-collections name="report-collections"></page-report-collections>
               <page-report-inventories name="report-inventories"></page-report-inventories>
+              <page-report-product-sales name="report-product-sales"></page-report-product-sales>
 
               <page-manage-product-transfers name="manage-product-transfers"></page-manage-product-transfers>
               <page-view-product-transfer name="view-product-transfer"></page-view-product-transfer>

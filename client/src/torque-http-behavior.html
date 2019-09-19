@@ -600,6 +600,11 @@
         this.callCombinedJsonApi('edit-organization-settings', data, cbfn);
       }
 
+      callReportProductSalesDetailsApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('report-product-sales-details', data, cbfn);
+      }
+
     }
 
   })();

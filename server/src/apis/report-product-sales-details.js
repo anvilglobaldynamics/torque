@@ -103,7 +103,7 @@ exports.ReportProductSalesDetailsApi = class extends Api.mixin(InventoryMixin) {
     }
   }
 
-  __getProductSalesSummary({ productList }) {
+  __getProductSalesSummaryList({ productList }) {
     let map = {};
     productList.forEach(soldProduct => {
       let key = String(soldProduct.productId);
@@ -124,8 +124,8 @@ exports.ReportProductSalesDetailsApi = class extends Api.mixin(InventoryMixin) {
       sumProduct.sumCount += soldProduct.count;
       sumProduct.sumSalePrice += (soldProduct.count * soldProduct.salePrice);
     });
-    let productSalesSummary = Object.keys(map).map(key => map[key]);
-    return productSalesSummary;
+    let productSalesSummaryList = Object.keys(map).map(key => map[key]);
+    return productSalesSummaryList;
   }
 
   async handle({ body }) {
@@ -135,9 +135,9 @@ exports.ReportProductSalesDetailsApi = class extends Api.mixin(InventoryMixin) {
     let salesList = await this.__getSalesList({ organizationId, outletId, fromDate, toDate });
     let productList = await this.__prepareProductList({ salesList });
     productList = await this.__filterProductList({ productList, productCategoryIdList, productBlueprintIdList });
-    let productSalesSummary = this.__getProductSalesSummary({ productList });
+    let productSalesSummaryList = this.__getProductSalesSummaryList({ productList });
 
-    return { productSalesSummary };
+    return { productSalesSummaryList };
   }
 
 }
