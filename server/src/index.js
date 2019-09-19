@@ -82,6 +82,7 @@ const { GetInventoryListApi } = require('./apis/get-inventory-list');
 const { GetAggregatedInventoryDetailsApi } = require('./apis/get-aggregated-inventory-details');
 const { ReportInventoryDetailsApi } = require('./apis/report-inventory-details');
 const { ReportCollectionDetailsApi } = require('./apis/report-collection-details');
+const { ReportProductSalesDetailsApi } = require('./apis/report-product-sales-details');
 let { AddProductToInventoryApi } = require('./apis/add-product-to-inventory');
 const { TransferBetweenInventoriesApi } = require('./apis/transfer-between-inventories');
 const { GetProductTransferListApi } = require('./apis/get-product-transfer-list');
@@ -332,6 +333,7 @@ class Program {
     server.registerPostApi('/api/get-aggregated-inventory-details', GetAggregatedInventoryDetailsApi);
     server.registerPostApi('/api/report-inventory-details', ReportInventoryDetailsApi);
     server.registerPostApi('/api/report-collection-details', ReportCollectionDetailsApi);
+    server.registerPostApi('/api/report-product-sales-details', ReportProductSalesDetailsApi);
     server.registerPostApi('/api/add-product-to-inventory', AddProductToInventoryApi);
     server.registerPostApi('/api/transfer-between-inventories', TransferBetweenInventoriesApi);
     server.registerPostApi('/api/get-product-transfer-list', GetProductTransferListApi);
