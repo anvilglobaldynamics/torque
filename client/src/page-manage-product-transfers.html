@@ -211,10 +211,15 @@
         let fromDate = new Date(this.fromDate).getTime();
         let toDate = new Date(this.toDate).getTime();
 
+        let vendorId = null;
+        // TODO:
+        // let vendorId = this.vendorList[this.vendorSelectedIndex].id;
+
         let data = {
           organizationId: this.app.organization.id,
           fromDate,
           toDate,
+          vendorId,
           paginate: this.paginate
         };
 
