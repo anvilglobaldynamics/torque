@@ -33,6 +33,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: ORGANIZATION_INVALID } // organization could not be found
+{ code: VENDOR_INVALID } // vendor could not be found
 ```
 
 ### response (on success, without includeExtendedInformation):

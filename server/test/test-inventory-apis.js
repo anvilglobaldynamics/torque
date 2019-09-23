@@ -645,6 +645,7 @@ describe.only('Inventory', _ => {
         apiKey,
         fromDate: Date.now() - 24 * 60 * 60 * 1000,
         toDate: Date.now(),
+        vendorId: null,
         organizationId
       }
     }, (err, response, body) => {
@@ -665,6 +666,7 @@ describe.only('Inventory', _ => {
         apiKey,
         fromDate: Date.now() - 24 * 60 * 60 * 1000,
         toDate: Date.now(),
+        vendorId: null,
         organizationId,
         searchString: String(productTransferNumber)
       }
@@ -685,6 +687,7 @@ describe.only('Inventory', _ => {
         apiKey,
         fromDate: Date.now() - 24 * 60 * 60 * 1000,
         toDate: Date.now(),
+        vendorId: null,
         organizationId,
         searchString: String(InvalidProductTransferNumber)
       }
@@ -705,6 +708,7 @@ describe.only('Inventory', _ => {
         apiKey,
         fromDate: Date.now() - 24 * 60 * 60 * 1000,
         toDate: Date.now(),
+        vendorId: null,
         organizationId: invalidOrganizationId
       }
     }, (err, response, body) => {
@@ -723,6 +727,7 @@ describe.only('Inventory', _ => {
         apiKey,
         fromDate: Date.now() - 24 * 60 * 60 * 1000,
         toDate: Date.now(),
+        vendorId: null,
         organizationId: organizationId,
         searchString: 34343434
       }
