@@ -79,7 +79,7 @@ exports.ProductTransferCollection = class extends Collection {
   }
 
 
-  async listByFilters({ organizationId, fromDate, toDate, searchString }) {
+  async listByFilters({ organizationId, fromDate, toDate, vendorId, searchString }) {
 
     let filterByProductTransferNumber = null;
     if (searchString) {
@@ -103,6 +103,12 @@ exports.ProductTransferCollection = class extends Collection {
       query.$and.push({
         organizationId
       });
+
+      if (vendorId) {
+        query.$and.push({
+          vendorId
+        });
+      }
 
       query.$and.push({
         createdDatetimeStamp: {

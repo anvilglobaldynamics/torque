@@ -142,7 +142,12 @@
       }
 
       static get properties() {
-        return {};
+        return {
+          vendorId: {
+            type: Number,
+            value: null
+          }
+        };
       }
 
       // region: core =================================
@@ -193,6 +198,7 @@
         let data = {
           fromDate: Date.now(),
           toDate: Date.now(),
+          vendorId: this.vendorId,
           organizationId: this.app.organization.id,
           searchString: productTransferId
         };

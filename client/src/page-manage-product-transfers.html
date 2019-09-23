@@ -73,6 +73,16 @@
           </div>
 
           <paper-input class="flex min-input" value="{{productTransferNumberToSearch}}" label="[[verses.productTransfer.productTransferNumber]] [[verses.productTransfer.exclusionNote]]" type="text"></paper-input>
+
+          <template is="dom-if" if="[[hasModule('MOD_VENDOR')]]">
+            <paper-dropdown-menu class="full-width-paper-dropdown" label=[[verses.general.vendor]] class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{vendorSelectedIndex}}">
+                <template is="dom-repeat" items="[[vendorList]]" as="vendor">
+                  <paper-item data-key="[[vendor.id]]">[[vendor.name]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </template>
         </div>
 
         <div class="horizontal layout">
@@ -147,6 +157,14 @@
 
       static get properties() {
         return {
+          vendorList: {
+            type: Array,
+            value: () => []
+          },
+          vendorSelectedIndex: {
+            type: Number,
+            value: 0
+          },
           fromDate: {
             type: String,
             value: _ => {
@@ -182,9 +200,11 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.productTransfer.manageProductTransferTitle);
         if (!this._ensureAccess()) return;
-        this._processProductTransferList(() => {
-          this.self = this;
-          this.isReady = true;
+        this._processVendorList(() => {
+          this._processProductTransferList(() => {
+            this.self = this;
+            this.isReady = true;
+          })
         });
       }
 
@@ -210,11 +230,13 @@
 
         let fromDate = new Date(this.fromDate).getTime();
         let toDate = new Date(this.toDate).getTime();
+        let vendorId = this.vendorList[this.vendorSelectedIndex].id;
 
         let data = {
           organizationId: this.app.organization.id,
           fromDate,
           toDate,
+          vendorId,
           paginate: this.paginate
         };
 
@@ -247,6 +269,32 @@
         this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
         this.isReady = false;
         this._processProductTransferList(() => this.isReady = true);
+      }
+
+      _fetchVendorList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetVendorListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.vendorList);
+        });
+      }
+
+      _processVendorList(cbfn) {
+        let allVendors = {
+          id: null,
+          name: this.app.verses.productAcquisition.wholeOrganization
+        }
+        this.vendorSelectedIndex = 0;
+        if (!this.hasModule('MOD_VENDOR')) {
+          this.vendorList = [allVendors];
+          cbfn();
+          return;
+        }
+        this._fetchVendorList(newVendorList => {
+          this.vendorList = [].concat([allVendors], newVendorList);
+          cbfn();
+        });
       }
 
       // region: ui  ===========================

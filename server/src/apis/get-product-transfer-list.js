@@ -20,6 +20,7 @@ exports.GetProductTransferListApi = class extends Api.mixin(InventoryMixin) {
 
       fromDate: Joi.number().max(999999999999999).required(),
       toDate: Joi.number().max(999999999999999).required(),
+      vendorId: Joi.number().max(999999999999999).allow(null).required(),
 
       searchString: Joi.string().min(0).max(64).allow('').optional()
     });
@@ -45,8 +46,8 @@ exports.GetProductTransferListApi = class extends Api.mixin(InventoryMixin) {
     return toDate;
   }
 
-  async __getProductTransferList({ organizationId, fromDate, toDate, searchString }) {
-    let productTransferList = await this.database.productTransfer.listByFilters({ organizationId, fromDate, toDate, searchString });
+  async __getProductTransferList({ organizationId, fromDate, toDate, vendorId, searchString }) {
+    let productTransferList = await this.database.productTransfer.listByFilters({ organizationId, fromDate, toDate, vendorId, searchString });
     return productTransferList;
   }
 
@@ -141,9 +142,9 @@ exports.GetProductTransferListApi = class extends Api.mixin(InventoryMixin) {
   }
 
   async handle({ body }) {
-    let { organizationId, fromDate, toDate, searchString } = body;
+    let { organizationId, fromDate, toDate, vendorId, searchString } = body;
     toDate = this.__getExtendedToDate(toDate);
-    let productTransferList = await this.__getProductTransferList({ organizationId, fromDate, toDate, searchString });
+    let productTransferList = await this.__getProductTransferList({ organizationId, fromDate, toDate, vendorId, searchString });
     await this.__includeExtendedInformation({ productTransferList });
     return { productTransferList };
   }
