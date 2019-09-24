@@ -306,7 +306,7 @@
                       [[productSalesSummary.name]]
                     </td>
                     <td class="cell" align="center">
-                      <div>[[productSalesSummary.sumCount]] [[productSalesSummary.unit]]</div>
+                      <div>[[productSalesSummary.sumCount]]</div>
                     </td>
                     <td class="cell cell-right" align="center">
                       <div>[[productSalesSummary.sumSalePrice]]</div>
@@ -598,9 +598,6 @@
         productList.forEach(product => {
           totalCount += product.sumCount;
         });
-        if (productList.length > 0) {
-          totalCount += ' ' + productList[0].unit;
-        }
         return totalCount;
       }
 
