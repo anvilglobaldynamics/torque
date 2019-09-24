@@ -144,42 +144,59 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <!-- filters - start -->
-      <div class="filter-region lone-controls">
-        <paper-button raised class="btn secondary" on-tap="filterByProductBlueprintTapped">[[verses.productSalesReport.filterByProductBlueprint]]</paper-button>
-        <paper-button raised class="btn secondary" on-tap="filterByProductCategoriesTapped">[[verses.productSalesReport.filterByProductCategories]]</paper-button>
+      <div class="filter-toggle-region horizontal layout center">
+        <div class="flex"></div>
+        <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.general.showFilters]]</paper-toggle-button>
       </div>
 
-      <div class="card horizontal layout center wrap">
-        <paper-input class="flex mr-4" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]" on-change="fromDateChanged"></paper-input>
-        <paper-input class="flex mr-4" value="{{toDate}}" type="date" label="[[verses.general.toDate]]" on-change="toDateChanged"></paper-input>
-        <paper-dropdown-menu label="[[verses.general.outlet]]" class="flex mr-4" on-iron-select="outletSelected">
-          <paper-listbox slot="dropdown-content" selected="{{selectedOutletId}}" attr-for-selected="name">
-            <paper-item name="all">All Outlets</paper-item>
-            <template is="dom-repeat" items="[[outletList]]" as="outlet">
-              <paper-item name="[[outlet.id]]">[[outlet.name]]</paper-item>
-            </template>
-          </paper-listbox>
-        </paper-dropdown-menu>
-      </div>
+      <div class="filter-region" hidden="[[!shouldShowFilters]]">
 
-      <template is="dom-if" if="[[$shouldShowClearFilter(_productCategoryList.length, _productBlueprintList.length)]]">
+        <div class="lone-controls">
+          <paper-button raised class="btn secondary" on-tap="filterByProductBlueprintTapped">[[verses.productSalesReport.filterByProductBlueprint]]</paper-button>
+          <paper-button raised class="btn secondary" on-tap="filterByProductCategoriesTapped">[[verses.productSalesReport.filterByProductCategories]]</paper-button>
+        </div>
+
+        <div class="card vertical layout">
+          <div class="horizontal layout center wrap">
+            <paper-input class="flex mr-4" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+            <paper-input class="flex mr-4" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+          </div>
+          <div class="horizontal layout center wrap">
+            <paper-dropdown-menu label="[[verses.general.outlet]]" class="flex mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{selectedOutletId}}" attr-for-selected="name">
+                <paper-item name="all">All Outlets</paper-item>
+                <template is="dom-repeat" items="[[outletList]]" as="outlet">
+                  <paper-item name="[[outlet.id]]">[[outlet.name]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </div>
+        </div>
 
         <hr style="border: 1px solid lightgrey; width: 100%;">
 
-        <div class="filter-region lone-controls">
+        <div class="lone-controls">
 
-          <template is="dom-if" if="[[_productCategoryList.length]]">
-            <span>[[verses.productSalesReport.filteringByPart1]] [[_productCategoryList.length]] [[verses.productSalesReport.filteringByPart2Categories]]</span>
-          </template>
-          <template is="dom-if" if="[[_productBlueprintList.length]]">
-            <span>[[verses.productSalesReport.filteringByPart1]] [[_productBlueprintList.length]] [[verses.productSalesReport.filteringByPart2Blueprints]]</span>
+          <template is="dom-if" if="[[$shouldShowClearFilter(_productCategoryList.length, _productBlueprintList.length)]]">
+            <template is="dom-if" if="[[_productCategoryList.length]]">
+              <span>[[verses.productSalesReport.filteringByPart1]] [[_productCategoryList.length]] [[verses.productSalesReport.filteringByPart2Categories]]</span>
+            </template>
+            <template is="dom-if" if="[[_productBlueprintList.length]]">
+              <span>[[verses.productSalesReport.filteringByPart1]] [[_productBlueprintList.length]] [[verses.productSalesReport.filteringByPart2Blueprints]]</span>
+            </template>
+
+            <paper-button raised class="btn danger" on-tap="clearFiltersTapped">[[verses.productSalesReport.clearFilters]]</paper-button>
           </template>
 
-          <paper-button raised class="btn danger" on-tap="clearFiltersTapped">[[verses.productSalesReport.clearFilters]]</paper-button>
+          <paper-button raised class="btn primary" on-tap="filterTapped">
+            <!-- <iron-icon class="button-icon" icon="icons:find-in-page"></iron-icon> -->
+            [[verses.general.filter]]
+          </paper-button>
 
         </div>
 
-      </template>
+      </div>
+
       <!-- filters - end -->
 
       <hr style="border: 1px solid lightgrey; width: 100%;">
@@ -326,6 +343,10 @@
 
       static get properties() {
         return {
+          shouldShowFilters: {
+            type: Boolean,
+            value: true
+          },
           productSalesSummaryList: {
             type: Array,
             value: () => []
@@ -346,7 +367,7 @@
             type: String,
             value: _ => {
               let date = new Date();
-              date.setMonth(date.getMonth() - 1);
+              date.setDate(date.getDate() - 7);
               date = date.getTime();
               date = (new XDate(date)).toString('yyyy-MM-dd');
               return date;
@@ -382,18 +403,22 @@
         this.sortBy = 'default';
         this.sortDirection = 'descending';
         this.selectedOutletId = 'all';
-        this._preprocessFiltersAndProcessReport();
+        this._preprocessFilters();
+        this._processOutletList(() => {
+          this._processReport();
+        });
       }
 
-      _preprocessFiltersAndProcessReport() {
-        this.isReady = false;
+      _preprocessFilters() {
         this._productCategoryList = this.app.getFromSession('report-selected-product-category-list') || [];
         this._productBlueprintList = this.app.getFromSession('report-selected-product-blueprint-list') || [];
-        this._processOutletList(() => {
-          this._processProductSalesReport(() => {
-            this.self = this;
-            this.isReady = true;
-          });
+      }
+
+      _processReport() {
+        this.isReady = false;
+        this._processProductSalesReport(() => {
+          this.self = this;
+          this.isReady = true;
         });
       }
 
@@ -474,34 +499,14 @@
 
       // region: ui  ===========================
 
-      toDateChanged(e = null) {
-        window.setTimeout(() => {
-          if (this.isReady) {
-            this._preprocessFiltersAndProcessReport();
-          }
-        }, 10);
-      }
-
-      fromDateChanged(e = null) {
-        window.setTimeout(() => {
-          if (this.isReady) {
-            this._preprocessFiltersAndProcessReport();
-          }
-        }, 10);
-      }
-
-      outletSelected(e = null) {
-        window.setTimeout(() => {
-          if (this.isReady) {
-            this._preprocessFiltersAndProcessReport();
-          }
-        }, 10);
+      filterTapped(e = null) {
+        this._processReport();
       }
 
       clearFiltersTapped(e = null) {
         this.app.extractFromSession('report-selected-product-category-list');
         this.app.extractFromSession('report-selected-product-blueprint-list');
-        this._preprocessFiltersAndProcessReport();
+        this._preprocessFilters();
       }
 
       filterByProductBlueprintTapped(e = null) {
