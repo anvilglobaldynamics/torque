@@ -163,7 +163,6 @@ exports.ReportProductSalesDetailsApi = class extends Api.mixin(InventoryMixin) {
     }
   }
 
-
   async handle({ body }) {
     let { organizationId, outletId, productCategoryIdList, productBlueprintIdList, fromDate, toDate } = body;
     toDate = this.__getExtendedToDate(toDate);
