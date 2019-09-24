@@ -11,6 +11,7 @@ method: `POST`
 
   fromDate: Joi.number().max(999999999999999).required(),
   toDate: Joi.number().max(999999999999999).required(),
+  vendorId: Joi.number().max(999999999999999).required(),
 
   searchString: Joi.string().min(0).max(64).allow('').optional() // NOTE: searchString is currently used for productTransferNumber. We can extend it for other purposes later
 }
@@ -32,6 +33,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: ORGANIZATION_INVALID } // organization could not be found
+{ code: VENDOR_INVALID } // vendor could not be found
 ```
 
 ### response (on success, without includeExtendedInformation):
@@ -51,6 +53,7 @@ Possible Error Codes:
     transferredDatetimeStamp: Joi.number().max(999999999999999).required(),
     fromInventoryId: Joi.number().max(999999999999999).required(),
     toInventoryId: Joi.number().max(999999999999999).required(),
+    vendorId: Joi.number().max(999999999999999).allow(null).required(),
     organizationId: Joi.number().max(999999999999999).required(),
 
     isWithinSameInventoryContainer: Joi.boolean().required(),
