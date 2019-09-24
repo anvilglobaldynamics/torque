@@ -51,7 +51,10 @@ let {
   validateAddDiscountPresetApiSuccessResponse,
 
   validateReportCollectionDetailsApiSuccessResponse,
-  validateCollectionSchema
+  validateCollectionSchema,
+
+  addProductCategory,
+  validateReportProductSalesDetailsApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -89,6 +92,7 @@ let customerId = null;
 let salesId = null;
 let salesNumber = null;
 let salesData = null;
+let productCategoryId = null;
 
 let outletInventoryProductList = null;
 let outletInventoryMatchingProductList = null;
@@ -111,6 +115,8 @@ let invalidProductId = generateInvalidId();
 let invalidCustomerId = generateInvalidId();
 let invalidSalesId = generateInvalidId();
 let invalidEmployeeId = generateInvalidId();
+let invalidProductBlueprintId = generateInvalidId();
+let invalidProductCategoryId = generateInvalidId();
 
 let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
@@ -192,94 +198,102 @@ describe('Sales', _ => {
                     apiKey, warehouseId
                   }, (data) => {
                     warehouseDefaultInventoryId = data.defaultInventory.id;
-                    addProductBlueprint({
+                    addProductCategory({
                       apiKey,
                       organizationId,
-                      name: productBlueprintName,
-                      unit: "box",
-                      identifierCode: '',
-                      defaultPurchasePrice: 99,
-                      defaultVat: 3,
-                      defaultSalePrice: 112,
-                      productCategoryIdList: [],
-                      isReturnable: true
+                      name: "1st product category",
+                      colorCode: "FFFFFF"
                     }, (data) => {
-                      productBlueprintId = data.productBlueprintId;
-                      addProductToInventory({
+                      productCategoryId = data.productCategoryId;
+                      addProductBlueprint({
                         apiKey,
-                        inventoryId: outletDefaultInventoryId,
-                        productList: [
-                          { productBlueprintId, count: 100 }
-                        ],
-                        vendorId: null
+                        organizationId,
+                        name: productBlueprintName,
+                        unit: "box",
+                        identifierCode: '',
+                        defaultPurchasePrice: 99,
+                        defaultVat: 3,
+                        defaultSalePrice: 112,
+                        productCategoryIdList: [],
+                        isReturnable: true
                       }, (data) => {
+                        productBlueprintId = data.productBlueprintId;
                         addProductToInventory({
                           apiKey,
-                          inventoryId: warehouseDefaultInventoryId,
+                          inventoryId: outletDefaultInventoryId,
                           productList: [
                             { productBlueprintId, count: 100 }
                           ],
                           vendorId: null
                         }, (data) => {
-                          addCustomer({
+                          addProductToInventory({
                             apiKey,
-                            organizationId,
-                            fullName: customerFullName,
-                            phone: customerPhone,
-                            email: null,
-                            address: ''
+                            inventoryId: warehouseDefaultInventoryId,
+                            productList: [
+                              { productBlueprintId, count: 100 }
+                            ],
+                            vendorId: null
                           }, (data) => {
-                            customerId = data.customerId;
-                            getCustomer({
-                              apiKey, customerId
+                            addCustomer({
+                              apiKey,
+                              organizationId,
+                              fullName: customerFullName,
+                              phone: customerPhone,
+                              email: null,
+                              address: ''
                             }, (data) => {
-                              customerData = data.customer;
-                              addServiceBlueprint({
-                                apiKey,
-                                organizationId,
-                                name: "1st service blueprint",
-                                defaultVat: 2,
-                                defaultSalePrice: 250,
-                                isLongstanding: false,
-                                serviceDuration: null,
-                                isEmployeeAssignable: false,
-                                isCustomerRequired: false,
-                                isRefundable: false,
-                                avtivateInAllOutlets: true
+                              customerId = data.customerId;
+                              getCustomer({
+                                apiKey, customerId
                               }, (data) => {
-                                basicServiceBlueprintId = data.serviceBlueprintId;
+                                customerData = data.customer;
                                 addServiceBlueprint({
                                   apiKey,
                                   organizationId,
-                                  name: "2nd service blueprint",
+                                  name: "1st service blueprint",
                                   defaultVat: 2,
                                   defaultSalePrice: 250,
                                   isLongstanding: false,
                                   serviceDuration: null,
-                                  isEmployeeAssignable: true,
-                                  isCustomerRequired: true,
+                                  isEmployeeAssignable: false,
+                                  isCustomerRequired: false,
                                   isRefundable: false,
                                   avtivateInAllOutlets: true
                                 }, (data) => {
-                                  customerAndEmployeeServiceBlueprintId = data.serviceBlueprintId;
+                                  basicServiceBlueprintId = data.serviceBlueprintId;
                                   addServiceBlueprint({
                                     apiKey,
                                     organizationId,
-                                    name: "3rd long service blueprint",
+                                    name: "2nd service blueprint",
                                     defaultVat: 2,
                                     defaultSalePrice: 250,
-                                    isLongstanding: true,
-                                    serviceDuration: {
-                                      months: 1,
-                                      days: 7
-                                    },
+                                    isLongstanding: false,
+                                    serviceDuration: null,
                                     isEmployeeAssignable: true,
                                     isCustomerRequired: true,
                                     isRefundable: false,
                                     avtivateInAllOutlets: true
                                   }, (data) => {
-                                    longstandingServiceBlueprintId = data.serviceBlueprintId;
-                                    testDoneFn();
+                                    customerAndEmployeeServiceBlueprintId = data.serviceBlueprintId;
+                                    addServiceBlueprint({
+                                      apiKey,
+                                      organizationId,
+                                      name: "3rd long service blueprint",
+                                      defaultVat: 2,
+                                      defaultSalePrice: 250,
+                                      isLongstanding: true,
+                                      serviceDuration: {
+                                        months: 1,
+                                        days: 7
+                                      },
+                                      isEmployeeAssignable: true,
+                                      isCustomerRequired: true,
+                                      isRefundable: false,
+                                      avtivateInAllOutlets: true
+                                    }, (data) => {
+                                      longstandingServiceBlueprintId = data.serviceBlueprintId;
+                                      testDoneFn();
+                                    });
                                   });
                                 });
                               });
@@ -1261,6 +1275,134 @@ describe('Sales', _ => {
     });
 
   });
+
+  // Report product sales - start 
+
+  it('api/report-product-sales-details (Valid, No param)', testDoneFn => {
+
+    callApi('api/report-product-sales-details', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        productCategoryIdList: [],
+        productBlueprintIdList: [],
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateReportProductSalesDetailsApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-product-sales-details (Invalid outletId)', testDoneFn => {
+
+    callApi('api/report-product-sales-details', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: invalidOutletId,
+        productCategoryIdList: [],
+        productBlueprintIdList: [],
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('OUTLET_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-product-sales-details (Invalid invalidProductCategoryId)', testDoneFn => {
+
+    callApi('api/report-product-sales-details', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        productCategoryIdList: [invalidProductCategoryId],
+        productBlueprintIdList: [],
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PRODUCT_CATEGORY_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-product-sales-details (Invalid invalidProductBlueprintId)', testDoneFn => {
+
+    callApi('api/report-product-sales-details', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        productCategoryIdList: [],
+        productBlueprintIdList: [invalidProductBlueprintId],
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PRODUCT_BLUEPRINT_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-product-sales-details (Valid)', testDoneFn => {
+
+    callApi('api/report-product-sales-details', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: outletId,
+        productCategoryIdList: [],
+        productBlueprintIdList: [],
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateReportProductSalesDetailsApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-product-sales-details (Invalid, both productCategoryIdList and productBlueprintIdList)', testDoneFn => {
+
+    callApi('api/report-product-sales-details', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        productCategoryIdList: [productCategoryId],
+        productBlueprintIdList: [productBlueprintId],
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PREDETERMINER_SETUP_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  // Report product sales - end
 
   it('api/discard-sales (Valid)', testDoneFn => {
 

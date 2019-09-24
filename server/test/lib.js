@@ -147,6 +147,16 @@ exports.getOutlet = (data, callback) => {
   })
 }
 
+// ===================================== Product Category
+
+exports.addProductCategory = (data, callback) => {
+  callApi('api/add-product-category', {
+    json: data
+  }, (err, response, body) => {
+    callback(body);
+  })
+}
+
 // ===================================== Product Blueprint
 
 exports.addProductBlueprint = (data, callback) => {
@@ -447,6 +457,23 @@ exports.validateGetProductTransferListApiSuccessResponse = (doc) => {
 
     })
 
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
+exports.validateReportProductSalesDetailsApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    productSalesSummaryList: Joi.array().required().items({
+      productId: Joi.number().required(),
+      productBlueprintId: Joi.number().required(),
+      sumCount: Joi.number().required(),
+      sumSalePrice: Joi.number().required(),
+      name: Joi.string().required(),
+      unit: Joi.string().required()
+    })
   });
 
   let { error, value } = Joi.validate(doc, schema);
