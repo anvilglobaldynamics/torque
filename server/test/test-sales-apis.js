@@ -115,6 +115,8 @@ let invalidProductId = generateInvalidId();
 let invalidCustomerId = generateInvalidId();
 let invalidSalesId = generateInvalidId();
 let invalidEmployeeId = generateInvalidId();
+let invalidProductBlueprintId = generateInvalidId();
+let invalidProductCategoryId = generateInvalidId();
 
 let fromDate = new Date();
 fromDate.setDate(fromDate.getDate() - 1);
@@ -1274,6 +1276,91 @@ describe.only('Sales', _ => {
 
   });
 
+  // Report product sales - start 
+
+  it('api/report-product-sales-details (Valid, No param)', testDoneFn => {
+
+    callApi('api/report-product-sales-details', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        productCategoryIdList: [],
+        productBlueprintIdList: [],
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateReportProductSalesDetailsApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-product-sales-details (Invalid outletId)', testDoneFn => {
+
+    callApi('api/report-product-sales-details', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: invalidOutletId,
+        productCategoryIdList: [],
+        productBlueprintIdList: [],
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('OUTLET_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-product-sales-details (Invalid invalidProductCategoryId)', testDoneFn => {
+
+    callApi('api/report-product-sales-details', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        productCategoryIdList: [invalidProductCategoryId],
+        productBlueprintIdList: [],
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PRODUCT_CATEGORY_ID_LIST_INVALID');
+      testDoneFn();
+    });
+
+  });
+
+  it('api/report-product-sales-details (Invalid invalidProductBlueprintId)', testDoneFn => {
+
+    callApi('api/report-product-sales-details', {
+      json: {
+        apiKey,
+        organizationId,
+        outletId: null,
+        productCategoryIdList: [],
+        productBlueprintIdList: [invalidProductBlueprintId],
+        fromDate,
+        toDate: (new Date()).getTime(),
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiFailureResponse(body);
+      expect(body.error.code).equal('PRODUCT_BLUEPRINT_ID_LIST_INVALID');
+      testDoneFn();
+    });
+
+  });
+
   it('api/report-product-sales-details (Valid)', testDoneFn => {
 
     callApi('api/report-product-sales-details', {
@@ -1314,6 +1401,8 @@ describe.only('Sales', _ => {
     });
 
   });
+
+  // Report product sales - end
 
   it('api/discard-sales (Valid)', testDoneFn => {
 
