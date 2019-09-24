@@ -135,9 +135,42 @@ exports.ReportProductSalesDetailsApi = class extends Api.mixin(InventoryMixin) {
     return productSalesSummaryList;
   }
 
+  async __verifyOutletIfNeeded({ outletId }) {
+    if (outletId) {
+      let doc = await this.database.outlet.findById({ id: outletId });
+      throwOnFalsy(doc, "OUTLET_INVALID", "Outlet not found.");
+    }
+  }
+
+  async __verifyOutletIfNeeded({ outletId }) {
+    if (outletId) {
+      let doc = await this.database.outlet.findById({ id: outletId });
+      throwOnFalsy(doc, "OUTLET_INVALID", "Outlet not found.");
+    }
+  }
+
+  async __verifyProductCategoryIdList({ organizationId, productCategoryIdList }) {
+    let productCategoryList = await this.database.productCategory.listByOrganizationIdAndIdList({ organizationId, idList: productCategoryIdList });
+    if (productCategoryList.length !== productCategoryIdList.length) {
+      throw new CodedError("PRODUCT_CATEGORY_INVALID", "The product category you provided is invalid");
+    }
+  }
+
+  async __verifyProductBlueprintIdList({ organizationId, productBlueprintIdList }) {
+    let productBlueprintList = await this.database.productBlueprint.listByOrganizationIdAndIdList({ organizationId, idList: productBlueprintIdList });
+    if (productBlueprintList.length !== productBlueprintIdList.length) {
+      throw new CodedError("PRODUCT_BLUEPRINT_INVALID", "The product Blueprint you provided is invalid");
+    }
+  }
+
+
   async handle({ body }) {
     let { organizationId, outletId, productCategoryIdList, productBlueprintIdList, fromDate, toDate } = body;
     toDate = this.__getExtendedToDate(toDate);
+
+    await this.__verifyOutletIfNeeded({ outletId });
+    await this.__verifyProductCategoryIdList({ organizationId, productCategoryIdList });
+    await this.__verifyProductBlueprintIdList({ organizationId, productBlueprintIdList });
 
     let salesList = await this.__getSalesList({ organizationId, outletId, fromDate, toDate });
     let productList = await this.__prepareProductList({ salesList });

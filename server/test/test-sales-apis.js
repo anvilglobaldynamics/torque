@@ -147,7 +147,7 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
-describe.only('Sales', _ => {
+describe('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -1334,7 +1334,7 @@ describe.only('Sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).equal('PRODUCT_CATEGORY_ID_LIST_INVALID');
+      expect(body.error.code).equal('PRODUCT_CATEGORY_INVALID');
       testDoneFn();
     });
 
@@ -1355,7 +1355,7 @@ describe.only('Sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).equal('PRODUCT_BLUEPRINT_ID_LIST_INVALID');
+      expect(body.error.code).equal('PRODUCT_BLUEPRINT_INVALID');
       testDoneFn();
     });
 
