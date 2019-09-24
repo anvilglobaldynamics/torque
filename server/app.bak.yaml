@@ -1,3 +1,4 @@
+WARNING! Service is no longer in use.
 
 runtime: nodejs8
 service: 'lipi-server'

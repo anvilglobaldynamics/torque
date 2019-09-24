@@ -1,3 +1,5 @@
+WARNING! Service is no longer in use.
+
 runtime: nodejs8
 service: lipi-client-fallback
 default_expiration: "1m"
