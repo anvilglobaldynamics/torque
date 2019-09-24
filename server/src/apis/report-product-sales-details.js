@@ -42,17 +42,6 @@ exports.ReportProductSalesDetailsApi = class extends Api.mixin(InventoryMixin) {
 
     let shouldFilterByOutlet = (outletId === null ? false : true);
 
-    console.log({
-      outletIdList,
-      organizationId,
-      outletId,
-      shouldFilterByOutlet,
-      shouldFilterByCustomer: false,
-      customer: null,
-      fromDate,
-      toDate
-    })
-
     let salesList = await this.database.sales.listByFiltersForCollectionReport({
       outletIdList,
       organizationId,
@@ -94,8 +83,22 @@ exports.ReportProductSalesDetailsApi = class extends Api.mixin(InventoryMixin) {
   }
 
   async __filterProductList({ productList, productCategoryIdList, productBlueprintIdList }) {
-    return productList;
+    if (productCategoryIdList.length === 0 && productBlueprintIdList.length === 0) {
+      return productList;
+    }
+
     if (productCategoryIdList.length > 0) {
+      return productList.filter(product => {
+
+        let list = product.productBlueprint.productCategoryIdList;
+
+        if (list.length === 0) return false;
+        return productCategoryIdList.every(productCategoryId => {
+          return (list.indexOf(productCategoryId) > -1);
+        });
+
+      });
+      
     } else {
       return productList.filter(product => {
         return productBlueprintIdList.indexOf(product.productBlueprint.id) > -1;

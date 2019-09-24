@@ -116,7 +116,8 @@
     "update": "Update",
     "saved": "Saved",
     "outlets": "Outlets",
-    "warehouses": "Warehouses"
+    "warehouses": "Warehouses",
+    "author": "Author"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -178,7 +179,8 @@
     "manageProductCategories": "Product Categories",
     "manageProductTransfer": "Product Transfer Records",
     "manageProductAcquisition": "Product Acquisition Records",
-    "manageDiscountPresets": "Discounts"
+    "manageDiscountPresets": "Discounts",
+    "productSalesReport": "Product Sales Report"
   },
   "titleBar": {
     "home": "Home",
@@ -1149,8 +1151,20 @@
     "productAcquisitionTitle": "Product Acquisition Details",
     "wholeOrganization": "All",
     "acquiredFrom": "Acquired From"
-  }, 
+  },
   "help": {
     "pageTitle": "Help / How To"
+  },
+  "productSalesReport": {
+    "productSalesReportTitle": "Product Sales Report",
+    "deselectAll": "Deselect All",
+    "resetSelection": "Reset Selection",
+    "confirmSelection": "Confirm Selection",
+    "filterByProductBlueprint": "Filter By Product Blueprint",
+    "filterByProductCategories": "Filter By Product Categories",
+    "filteringByPart1": "Filtering by ",
+    "filteringByPart2Categories": " product categories.",
+    "filteringByPart2Blueprints": " product blueprints.",
+    "clearFilters": "Reset Filters"
   }
 }

@@ -70,7 +70,7 @@
 
       .report .body {}
 
-      .inventory-table {
+      .product-sales-table {
         width: 100%;
         font-size: 14px;
       }
@@ -83,7 +83,7 @@
         font-size: 11px;
       }
 
-      .inventory-table-container {
+      .product-sales-table-container {
         margin-bottom: 20px;
       }
 
@@ -91,16 +91,16 @@
         min-width: 130px;
       }
 
-      .inventory-table .cell {
+      .product-sales-table .cell {
         border-bottom: 1px solid var(--table-border-color);
         border-right: 1px solid var(--table-border-color);
       }
 
-      .inventory-table .cell-right {
+      .product-sales-table .cell-right {
         border-right: 0px solid var(--table-border-color);
       }
 
-      .inventory-table .cell-bottom {
+      .product-sales-table .cell-bottom {
         border-bottom: 0px solid var(--table-border-color);
       }
 
@@ -133,6 +133,10 @@
         width: 24px;
         height: 24px;
       }
+
+      .mr-4 {
+        margin-right: 4px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -141,13 +145,21 @@
 
       <!-- filters - start -->
       <div class="filter-region lone-controls">
-        <paper-button raised class="btn secondary" on-tap="filterByProductBlueprintTapped">[[verses.inventoriesReport.filterByProductBlueprint]]</paper-button>
-        <paper-button raised class="btn secondary" on-tap="filterByProductCategoriesTapped">[[verses.inventoriesReport.filterByProductCategories]]</paper-button>
+        <paper-button raised class="btn secondary" on-tap="filterByProductBlueprintTapped">[[verses.productSalesReport.filterByProductBlueprint]]</paper-button>
+        <paper-button raised class="btn secondary" on-tap="filterByProductCategoriesTapped">[[verses.productSalesReport.filterByProductCategories]]</paper-button>
       </div>
 
-      <div class="card horizontal layout center">
-        <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
-        <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+      <div class="card horizontal layout center wrap">
+        <paper-input class="flex mr-4" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]" on-change="fromDateChanged"></paper-input>
+        <paper-input class="flex mr-4" value="{{toDate}}" type="date" label="[[verses.general.toDate]]" on-change="toDateChanged"></paper-input>
+        <paper-dropdown-menu label="[[verses.general.outlet]]" class="flex mr-4" on-iron-select="outletSelected">
+          <paper-listbox slot="dropdown-content" selected="{{selectedOutletId}}" attr-for-selected="name">
+            <paper-item name="all">All Outlets</paper-item>
+            <template is="dom-repeat" items="[[outletList]]" as="outlet">
+              <paper-item name="[[outlet.id]]">[[outlet.name]]</paper-item>
+            </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
       </div>
 
       <template is="dom-if" if="[[$shouldShowClearFilter(_productCategoryList.length, _productBlueprintList.length)]]">
@@ -157,13 +169,13 @@
         <div class="filter-region lone-controls">
 
           <template is="dom-if" if="[[_productCategoryList.length]]">
-            <span>[[verses.inventoriesReport.filteringByPart1]] [[_productCategoryList.length]] [[verses.inventoriesReport.filteringByPart2Categories]]</span>
+            <span>[[verses.productSalesReport.filteringByPart1]] [[_productCategoryList.length]] [[verses.productSalesReport.filteringByPart2Categories]]</span>
           </template>
           <template is="dom-if" if="[[_productBlueprintList.length]]">
-            <span>[[verses.inventoriesReport.filteringByPart1]] [[_productBlueprintList.length]] [[verses.inventoriesReport.filteringByPart2Blueprints]]</span>
+            <span>[[verses.productSalesReport.filteringByPart1]] [[_productBlueprintList.length]] [[verses.productSalesReport.filteringByPart2Blueprints]]</span>
           </template>
 
-          <paper-button raised class="btn danger" on-tap="clearFiltersTapped">[[verses.inventoriesReport.clearFilters]]</paper-button>
+          <paper-button raised class="btn danger" on-tap="clearFiltersTapped">[[verses.productSalesReport.clearFilters]]</paper-button>
 
         </div>
 
@@ -177,7 +189,7 @@
 
         <!-- report header - start -->
         <div class="header vertical layout">
-          <div class="name">[[verses.inventoriesReport.inventoriesReportTitle]]</div>
+          <div class="name">[[verses.productSalesReport.productSalesReportTitle]]</div>
           <div class="horizontal layout wrap">
             <div>
               <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
@@ -187,7 +199,7 @@
             </div>
             <div class="flex"></div>
             <div>
-              <div class="author-title">[[verses.inventoriesReport.author]]: [[app.user.fullName]]</div>
+              <div class="author-title">[[verses.general.author]]: [[app.user.fullName]]</div>
               <div>[[app.organization.employment.designation]]</div>
               <div>[[app.organization.employment.companyProvidedId]]</div>
             </div>
@@ -209,8 +221,8 @@
 
           <template is="dom-if" if="{{productSalesSummaryList.length}}">
 
-            <div class="inventory-table-container" style="animation: 1s fadein;">
-              <table class="inventory-table">
+            <div class="product-sales-table-container" style="animation: 1s fadein;">
+              <table class="product-sales-table">
 
                 <tr>
                   <th class="cell product-column" align="left" on-tap="columnHeaderProductTapped" style="cursor: pointer;">
@@ -238,18 +250,30 @@
                     </div>
                   </th>
 
-                  <th class="cell cell-right">[[verses.general.sale]]</th>
+                  <th class="cell  cell-right" on-tap="columnHeaderSalePriceTapped" style="cursor: pointer;">
+                    <div class="horizontal layout center-center">
+                      <span>[[verses.sales.salePrice]]</span>
+                      <template is="dom-if" if="[[$equals(sortBy, 'salePrice')]]">
+                        <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
+                          <iron-icon class="sort-direction-icon" icon="arrow-drop-down"></iron-icon>
+                        </template>
+                        <template is="dom-if" if="[[$equals(sortDirection, 'descending')]]">
+                          <iron-icon class="sort-direction-icon" icon="arrow-drop-up"></iron-icon>
+                        </template>
+                      </template>
+                    </div>
+                  </th>
                 </tr>
 
                 <!-- total - start -->
                 <tr>
                   <td class="cell" style="font-weight: bold;">[[verses.general.total]]</td>
                   <td class="cell" align="center">
-                    {{computeTotalProductCount(aggregatedInventoryDetail.aggregatedProductList)}}
+                    {{computeTotalProductCount(productSalesSummaryList)}}
                   </td>
 
                   <td class="cell cell-right" align="center">
-                    {{computeTotalSalePrice(aggregatedInventoryDetail.aggregatedProductList)}}
+                    {{computeTotalSalePrice(productSalesSummaryList)}}
                   </td>
                 </tr>
                 <!-- total - end -->
@@ -272,11 +296,11 @@
                 <tr>
                   <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
                   <td class="cell cell-bottom" align="center">
-                    {{computeTotalProductCount(aggregatedInventoryDetail.aggregatedProductList)}}
+                    {{computeTotalProductCount(productSalesSummaryList)}}
                   </td>
 
                   <td class="cell cell-bottom cell-right" align="center">
-                    {{computeTotalSalePrice(aggregatedInventoryDetail.aggregatedProductList)}}
+                    {{computeTotalSalePrice(productSalesSummaryList)}}
                   </td>
                 </tr>
                 <!-- total - end -->
@@ -314,6 +338,10 @@
             type: String,
             value: 'ascending'
           },
+          selectedOutletId: {
+            type: String,
+            value: 'all'
+          },
           fromDate: {
             type: String,
             value: _ => {
@@ -349,10 +377,11 @@
         this.app.shouldShowPrintButton = true;
         this.onOrganizationChange(this.app.organization);
         this.useLanguageServices();
-        this.app.pushPageTitle(this.app.verses.inventoriesReport.inventoriesReportTitle);
+        this.app.pushPageTitle(this.app.verses.productSalesReport.productSalesReportTitle);
         if (!this._ensureAccess()) return;
         this.sortBy = 'default';
         this.sortDirection = 'descending';
+        this.selectedOutletId = 'all';
         this._preprocessFiltersAndProcessReport();
       }
 
@@ -361,7 +390,7 @@
         this._productCategoryList = this.app.getFromSession('report-selected-product-category-list') || [];
         this._productBlueprintList = this.app.getFromSession('report-selected-product-blueprint-list') || [];
         this._processOutletList(() => {
-          this._processInventoriesReport(() => {
+          this._processProductSalesReport(() => {
             this.self = this;
             this.isReady = true;
           });
@@ -396,9 +425,16 @@
         let fromDate = new Date(this.fromDate).getTime();
         let toDate = new Date(this.toDate).getTime();
 
+        let outletId;
+        if (this.selectedOutletId === 'all') {
+          outletId = null;
+        } else {
+          outletId = parseInt(String(this.selectedOutletId));
+        }
+
         let data = {
           organizationId: this.app.organization.id,
-          outletId: null,
+          outletId,
           productCategoryIdList,
           productBlueprintIdList,
           fromDate,
@@ -430,13 +466,37 @@
         });
       }
 
-      _processInventoriesReport(cbfn) {
+      _processProductSalesReport(cbfn) {
         this._fetchProductSalesSummaryList(() => {
           cbfn();
         });
       }
 
       // region: ui  ===========================
+
+      toDateChanged(e = null) {
+        window.setTimeout(() => {
+          if (this.isReady) {
+            this._preprocessFiltersAndProcessReport();
+          }
+        }, 10);
+      }
+
+      fromDateChanged(e = null) {
+        window.setTimeout(() => {
+          if (this.isReady) {
+            this._preprocessFiltersAndProcessReport();
+          }
+        }, 10);
+      }
+
+      outletSelected(e = null) {
+        window.setTimeout(() => {
+          if (this.isReady) {
+            this._preprocessFiltersAndProcessReport();
+          }
+        }, 10);
+      }
 
       clearFiltersTapped(e = null) {
         this.app.extractFromSession('report-selected-product-category-list');
@@ -454,10 +514,6 @@
         return this.app.navigateTo(`/report-select-product-categories/`);
       }
 
-      filterByInventoriesTapped(e = null) {
-        return this.app.navigateTo(`/report-select-inventories/`);
-      }
-
       printButtonOnTopBarPressed(e = null) {
         window.print();
       }
@@ -465,30 +521,27 @@
       // region: sort
 
       _applySortParameters() {
-        this.aggregatedInventoryDetailsList.forEach((aggregatedInventoryDetail, index) => {
-          let list = aggregatedInventoryDetail.aggregatedProductList;
-          list.sort((a, b) => {
-            if (this.sortBy === 'product') {
-              let strA = a.product.productBlueprint.name;
-              let strB = b.product.productBlueprint.name;
-              if (this.sortDirection === 'ascending') {
-                return strA.localeCompare(strB);
-              } else {
-                return strB.localeCompare(strA);
-              }
-            } else if (this.sortBy === 'count') {
-              if (this.sortDirection === 'ascending') {
-                return a.count - b.count;
-              } else {
-                return b.count - a.count;
-              }
+        let list = this.productSalesSummaryList;
+        list.sort((a, b) => {
+          if (this.sortBy === 'product') {
+            let strA = a.name;
+            let strB = b.name;
+            if (this.sortDirection === 'ascending') {
+              return strA.localeCompare(strB);
+            } else {
+              return strB.localeCompare(strA);
             }
-          });
+          } else if (this.sortBy === 'count') {
+            if (this.sortDirection === 'ascending') {
+              return a.sumCount - b.sumCount;
+            } else {
+              return b.sumCount - a.sumCount;
+            }
+          }
         });
-        let list = this.aggregatedInventoryDetailsList;
-        this.aggregatedInventoryDetailsList = [];
+        this.productSalesSummaryList = [];
         window.setTimeout(() => {
-          this.aggregatedInventoryDetailsList = list;
+          this.productSalesSummaryList = list.map(i => i);
         }, 0);
       }
 
@@ -512,28 +565,33 @@
         this._applySortParameters();
       }
 
+      columnHeaderSalePriceTapped(e = null) {
+        if (this.sortBy === 'salePrice') {
+          this.sortDirection = (this.sortDirection === 'ascending' ? 'descending' : 'ascending');
+        } else {
+          this.sortBy = 'salePrice';
+          this.sortDirection = 'ascending';
+        }
+        this._applySortParameters();
+      }
+
       // region: util
 
       computeTotalProductCount(productList) {
         let totalCount = 0;
         productList.forEach(product => {
-          totalCount += product.count;
+          totalCount += product.sumCount;
         });
+        if (productList.length > 0) {
+          totalCount += ' ' + productList[0].unit;
+        }
         return totalCount;
-      }
-
-      computeTotalPurchasePrice(productList) {
-        let totalPurchasePrice = 0;
-        productList.forEach(product => {
-          totalPurchasePrice += product.product.purchasePrice * product.count;
-        });
-        return totalPurchasePrice;
       }
 
       computeTotalSalePrice(productList) {
         let totalSalePrice = 0;
         productList.forEach(product => {
-          totalSalePrice += product.product.salePrice * product.count;
+          totalSalePrice += product.sumSalePrice;
         });
         return totalSalePrice;
       }

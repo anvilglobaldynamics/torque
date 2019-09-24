@@ -116,7 +116,8 @@
     "update": "আপডেট",
     "saved": "সংরক্ষিত",
     "outlets": "দোকান",
-    "warehouses": "গুদাম"
+    "warehouses": "গুদাম",
+    "author": "রচক"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -178,7 +179,8 @@
     "manageProductCategories": "পণ্যের ধরণ",
     "manageProductTransfer": "পণ্য ট্রান্সফার রেকর্ড",
     "manageProductAcquisition": "পণ্য ক্রয় রেকর্ড",
-    "manageDiscountPresets": "ডিসকাউন্টস"
+    "manageDiscountPresets": "ডিসকাউন্টস",
+    "productSalesReport":"পণ্য বিক্রয় রিপোর্ট"
   },
   "titleBar": {
     "home": "হোম",
@@ -1153,5 +1155,17 @@
   }, 
   "help": {
     "pageTitle": "সহায়তা নিন"
+  },
+  "productSalesReport": {
+    "productSalesReportTitle": "পণ্য বিক্রয় রিপোর্ট",
+    "deselectAll": "সব নির্বাচন মুছে দিন",
+    "resetSelection": "আগের নির্বাচন",
+    "confirmSelection": "নির্বাচন নিশ্চিত করুন",
+    "filterByProductBlueprint": "পণ্যের পরিকল্পনা দ্বারা ফিল্টার",
+    "filterByProductCategories": "পণ্যের ধরণ দ্বারা ফিল্টার",
+    "filteringByPart1": "ফিল্টার করা হচ্ছে ",
+    "filteringByPart2Categories": "টি পণ্যের ধরণ দ্বারা।",
+    "filteringByPart2Blueprints": "টি পণ্যের পরিকল্পনা দ্বারা।",
+    "clearFilters": "ফিল্টার রিসেট"
   }
 }
