@@ -1165,6 +1165,7 @@
     "filteringByPart1": "Filtering by ",
     "filteringByPart2Categories": " product categories.",
     "filteringByPart2Blueprints": " product blueprints.",
-    "clearFilters": "Reset Filters"
+    "clearFilters": "Reset Filters",
+    "allOutlets": "All Outlets"
   }
 }

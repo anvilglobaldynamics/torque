@@ -1166,6 +1166,7 @@
     "filteringByPart1": "ফিল্টার করা হচ্ছে ",
     "filteringByPart2Categories": "টি পণ্যের ধরণ দ্বারা।",
     "filteringByPart2Blueprints": "টি পণ্যের পরিকল্পনা দ্বারা।",
-    "clearFilters": "ফিল্টার রিসেট"
+    "clearFilters": "ফিল্টার রিসেট",
+    "allOutlets": "সব আউটলেট"
   }
 }

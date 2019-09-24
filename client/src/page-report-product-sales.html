@@ -164,7 +164,7 @@
           <div class="horizontal layout center wrap">
             <paper-dropdown-menu label="[[verses.general.outlet]]" class="flex mr-4">
               <paper-listbox slot="dropdown-content" selected="{{selectedOutletId}}" attr-for-selected="name">
-                <paper-item name="all">All Outlets</paper-item>
+                <paper-item name="all">[[verses.productSalesReport.allOutlets]]</paper-item>
                 <template is="dom-repeat" items="[[outletList]]" as="outlet">
                   <paper-item name="[[outlet.id]]">[[outlet.name]]</paper-item>
                 </template>
@@ -541,6 +541,12 @@
               return a.sumCount - b.sumCount;
             } else {
               return b.sumCount - a.sumCount;
+            }
+          } else if (this.sortBy === 'salePrice') {
+            if (this.sortDirection === 'ascending') {
+              return a.sumSalePrice - b.sumSalePrice;
+            } else {
+              return b.sumSalePrice - a.sumSalePrice;
             }
           }
         });
