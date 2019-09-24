@@ -83,6 +83,10 @@ exports.ReportProductSalesDetailsApi = class extends Api.mixin(InventoryMixin) {
   }
 
   async __filterProductList({ productList, productCategoryIdList, productBlueprintIdList }) {
+    if (productCategoryIdList.length && productBlueprintIdList.length) {
+      throw new CodedError("PREDETERMINER_SETUP_INVALID", "Can not filter by both Product Category and Product Blueprint.");
+    }
+
     if (productCategoryIdList.length === 0 && productBlueprintIdList.length === 0) {
       return productList;
     }
@@ -98,7 +102,7 @@ exports.ReportProductSalesDetailsApi = class extends Api.mixin(InventoryMixin) {
         });
 
       });
-      
+
     } else {
       return productList.filter(product => {
         return productBlueprintIdList.indexOf(product.productBlueprint.id) > -1;
