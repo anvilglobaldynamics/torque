@@ -17,8 +17,8 @@
     "test": "polymer test",
     "test:integration": "polymer build # test that psk builds without error with the CLI",
     "compile": "node ./scripts/compile-deploy.js",
-    "compile-android": "node ./scripts/compile-deploy.js --android",
-    "deploy-fallback": "node ./scripts/compile-deploy.js --deploy --fallback",
+    "//compile-android": "node ./scripts/compile-deploy.js --android",
+    "//deploy-fallback": "node ./scripts/compile-deploy.js --deploy --fallback",
     "deploy": "node ./scripts/compile-deploy.js --deploy",
     "start": "polymer serve --port 8545"
   },
