@@ -1,11 +1,10 @@
 {
   "name": "Lipi",
   "short_name": "Lipi",
-
   "start_url": "./?homescreen=1&rev=2",
   "display": "standalone",
   "orientation": "portrait",
-
+  "gcm_sender_id": "530180125042",
   "theme_color": "#009688",
   "background_color": "#B2DFDB",
   "icons": [
