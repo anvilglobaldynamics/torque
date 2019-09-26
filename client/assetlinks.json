@@ -1,0 +1,5 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "live.lipi.lipitest1",
+               "sha256_cert_fingerprints": ["AC:03:43:8B:91:13:9F:F4:9C:94:27:18:12:7F:CC:0B:0B:77:CA:5C:0E:2F:D5:46:8C:54:D5:58:B3:17:12:58"] }
+}]

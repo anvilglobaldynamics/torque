@@ -9,6 +9,7 @@
   ],
   "extraDependencies": [
     "manifest.json",
+    "assetlinks.json",
     "bower_components/webcomponentsjs/*.js",
     "bower_components/font-roboto/fonts/roboto/*"
   ],

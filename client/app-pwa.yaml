@@ -48,6 +48,14 @@ handlers:
     Cache-Control: private
     Content-Type: text/javascript
 
+- url: /.well-known/assetlinks.json
+  static_files: build/custom-es6-service-worker/assetlinks.json
+  upload: build/custom-es6-service-worker/assetlinks.json
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
+
 - url: /.*
   static_files: build/custom-es6-service-worker/index.html
   upload: build/custom-es6-service-worker/index.html
