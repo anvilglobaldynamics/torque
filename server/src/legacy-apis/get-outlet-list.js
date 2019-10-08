@@ -9,6 +9,8 @@ exports.GetOutletListApi = class extends LegacyApi {
 
   get autoPaginates() { return ['outletList']; }
 
+  get skipSubscriptionCheckOnTorqueLite() { return true; }
+
   get requestSchema() {
     return Joi.object().keys({
       // apiKey: Joi.string().length(64).required(),

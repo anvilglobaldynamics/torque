@@ -60,6 +60,10 @@ class LegacyApi {
     return false;
   }
 
+  get skipSubscriptionCheckOnTorqueLite() {
+    return true;
+  }
+
   get autoPaginates() {
     return false;
   }

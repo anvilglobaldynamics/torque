@@ -85,6 +85,10 @@ class Api {
     return 'user';
   }
 
+  get skipSubscriptionCheckOnTorqueLite() {
+    return true;
+  }
+
   /*
     enforces Access Control Rules. Rules are specified using the accessControl property. Format - 
     [
@@ -272,6 +276,10 @@ class Api {
       // is essentially unable to use this.requiresSubscription = true and so, just returning should suffice.
       // Still, it is here in case it is needed.
       // throw new CodedError("DEV_ERROR", "api requires subscription but organizationId could not be looked up.");
+      return;
+    }
+    if (this.clientApplication === 'torque-lite' && this.skipSubscriptionCheckOnTorqueLite) {
+      console.log("SKIPPING SUBSCRIPTION VERIFICATION", this._request.url);
       return;
     }
     let organization = await this.database.organization.findById({ id: body.organizationId });
