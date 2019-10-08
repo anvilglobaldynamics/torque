@@ -12,7 +12,7 @@ exports.LiteSendVerificationSmsApi = class extends Api.mixin(SecurityMixin, User
 
   get requiresAuthentication() { return false; }
 
-  get isEnabled() { return true; }
+  get isEnabled() { return false; }
 
   get requestSchema() {
     return Joi.object().keys({
