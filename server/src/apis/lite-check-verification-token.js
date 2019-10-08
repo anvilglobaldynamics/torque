@@ -7,7 +7,7 @@ const { SecurityMixin } = require('./mixins/security-mixin');
 const { UserMixin } = require('./mixins/user-mixin');
 const { LiteMixin } = require('./mixins/lite-mixin');
 
-exports.LiteCheckVerificationToken = class extends Api.mixin(SecurityMixin, UserMixin, LiteMixin) {
+exports.LiteCheckVerificationTokenApi = class extends Api.mixin(SecurityMixin, UserMixin, LiteMixin) {
 
   get autoValidates() { return true; }
 

@@ -143,8 +143,9 @@ const { AdminGetModuleListApi } = require('./apis/admin-get-module-list');
 const { AdminListOrganizationModulesApi } = require('./apis/admin-list-organization-modules');
 const { AdminSetModuleActivationStatusApi } = require('./apis/admin-set-module-activation-status');
 
-const { LiteSendVerificationSms } = require('./apis/lite-send-verification-sms');
-const { LiteCheckVerificationToken } = require('./apis/lite-check-verification-token');
+const { LiteSendVerificationSmsApi } = require('./apis/lite-send-verification-sms');
+const { LiteCheckVerificationTokenApi } = require('./apis/lite-check-verification-token');
+const { LiteUserRegisterApi } = require('./apis/lite-user-register');
 
 let { FixtureCollection } = require('./legacy-collections/fixture');
 let { UserCollection } = require('./legacy-collections/user');
@@ -403,8 +404,9 @@ class Program {
     server.registerPostApi('/api/shop-locate-nearby-outlets', ShopLocateNearbyOutletsApi);
     server.registerPostApi('/api/shop-get-outlet-details', ShopGetOutletDetailsApi);
 
-    server.registerPostApi('/api/lite-send-verification-sms', LiteSendVerificationSms);
-    server.registerPostApi('/api/lite-check-verification-token', LiteCheckVerificationToken);
+    server.registerPostApi('/api/lite-send-verification-sms', LiteSendVerificationSmsApi);
+    server.registerPostApi('/api/lite-check-verification-token', LiteCheckVerificationTokenApi);
+    server.registerPostApi('/api/lite-user-register', LiteUserRegisterApi);
   }
 
 }

@@ -6,7 +6,7 @@ const { extract } = require('./../utils/extract');
 const { SecurityMixin } = require('./mixins/security-mixin');
 const { UserMixin } = require('./mixins/user-mixin');
 
-exports.LiteSendVerificationSms = class extends Api.mixin(SecurityMixin, UserMixin) {
+exports.LiteSendVerificationSmsApi = class extends Api.mixin(SecurityMixin, UserMixin) {
 
   get autoValidates() { return true; }
 
