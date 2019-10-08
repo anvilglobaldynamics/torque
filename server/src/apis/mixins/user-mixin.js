@@ -14,7 +14,7 @@ exports.UserMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async _createPhoneVerificationRequest({ phone, userId }) {
     do {
-      var verificationToken = generateRandomString(16);
+      var verificationToken = generateRandomString(5);
       var isUnique = await this.database.phoneVerificationRequest.isVerificationTokenUnique({ verificationToken });
     } while (!isUnique);
     await this.database.phoneVerificationRequest.create({ userId, phone, origin: 'user-register', verificationToken });

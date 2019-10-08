@@ -143,6 +143,8 @@ const { AdminGetModuleListApi } = require('./apis/admin-get-module-list');
 const { AdminListOrganizationModulesApi } = require('./apis/admin-list-organization-modules');
 const { AdminSetModuleActivationStatusApi } = require('./apis/admin-set-module-activation-status');
 
+const { LiteSendVerificationSms } = require('./apis/lite-send-verification-sms');
+
 let { FixtureCollection } = require('./legacy-collections/fixture');
 let { UserCollection } = require('./legacy-collections/user');
 let { EmailVerificationRequestCollection } = require('./legacy-collections/email-verification-request');
@@ -399,6 +401,8 @@ class Program {
     server.registerPostApi('/api/admin-set-module-activation-status', AdminSetModuleActivationStatusApi);
     server.registerPostApi('/api/shop-locate-nearby-outlets', ShopLocateNearbyOutletsApi);
     server.registerPostApi('/api/shop-get-outlet-details', ShopGetOutletDetailsApi);
+
+    server.registerPostApi('/api/lite-send-verification-sms', LiteSendVerificationSms);
   }
 
 }
