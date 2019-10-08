@@ -212,7 +212,8 @@ class Api {
       });
     }
     schema = schema.keys({
-      clientLanguage: Joi.string().valid('en-us', 'bn-bd').optional()
+      clientLanguage: Joi.string().valid('en-us', 'bn-bd').optional(),
+      clientApplication: Joi.string().valid('torque', 'torque-lite').optional()
     });
     let { error, value } = this.validate(body, schema);
     if (error) throw error;
@@ -220,7 +221,17 @@ class Api {
   }
 
   /** @private */
-  __detectLanguage(body) {
+  __detectClientApplication(body) {
+    if ('clientApplication' in body) {
+      this.clientApplication = body.clientApplication;
+      delete body['clientApplication'];
+    } else {
+      this.clientApplication = 'torque';
+    }
+  }
+
+  /** @private */
+  __detectClientLanguage(body) {
     if ('clientLanguage' in body) {
       this.clientLanguage = body.clientLanguage;
       delete body['clientLanguage'];
@@ -294,7 +305,8 @@ class Api {
       if (this.autoValidates) {
         let body = this.__composeAndValidateSchema(originalBody);
         body = this.sanitize(body);
-        this.__detectLanguage(body);
+        this.__detectClientApplication(body);
+        this.__detectClientLanguage(body);
         this.__detectPagination(body);
         if (this.requiresAuthentication) {
           let authData = await this.__handleAuthentication(body);

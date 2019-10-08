@@ -33,8 +33,10 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
     throwOnFalsy(user, "USER_NOT_FOUND", this.verses.userLoginApi.userNotFound);
     throwOnTruthy(user.isBanned, "USER_BANNED", this.verses.userLoginApi.userBanned);
 
+    // NOTE: Not currently validating phone when clientApplication === 'torque-lite'
+
     let warning = [];
-    if (emailOrPhone === user.phone && !user.isPhoneVerified) {
+    if (emailOrPhone === user.phone && !user.isPhoneVerified && this.clientApplication === 'torque') {
       let phoneVerificationRequest = await this.database.phoneVerificationRequest.findByForPhone({ forPhone: user.phone });
       throwOnFalsy(phoneVerificationRequest, "PHONE_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.phoneVerificationRequestNotFound);
       let { createdDatetimeStamp, isVerificationComplete } = phoneVerificationRequest;
@@ -44,7 +46,7 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
         diff = Math.round(diff / (1000 * 60))
         warning.push(`You have less than 1 hour to verify your phone number "${user.phone}".`);
       }
-    } else if (emailOrPhone === user.email && !user.isEmailVerified) {
+    } else if (emailOrPhone === user.email && !user.isEmailVerified && this.clientApplication === 'torque') {
       let emailVerificationRequest = await this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email });
       throwOnFalsy(emailVerificationRequest, "EMAIL_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.emailVerificationRequestNotFound)
       throwOnFalsy(emailVerificationRequest.isVerificationComplete, "USER_REQUIRES_EMAIL_VERIFICATION", this.verses.userLoginApi.userRequiresEmailVerification)
