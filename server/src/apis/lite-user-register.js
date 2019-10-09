@@ -33,7 +33,7 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
   // FIXME: User mixin
   async __createUser({ fullName, phone, password, agreedToTocDatetimeStamp }) {
     let passwordHash = this._makeHash(password);
-    let userId = await this.database.user.create({ fullName, phone, passwordHash, agreedToTocDatetimeStamp });
+    let userId = await this.database.user.create({ fullName, phone, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList: ['torque-lite'] });
     return userId;
   }
 
@@ -68,7 +68,7 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
 
     // === outlet creation
     let location = { lat: 23.7945153, lng: 90.4139857 };
-    
+
     let outletId = await this._createOutlet({
       name: organizationName + ' - Primary Outlet',
       organizationId,

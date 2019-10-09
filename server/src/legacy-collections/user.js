@@ -36,6 +36,9 @@ exports.UserCollection = class extends LegacyCollection {
       isPhoneVerified: Joi.boolean().required(),
       isEmailVerified: Joi.boolean().required(),
       isBanned: Joi.boolean().required(),
+      accessibleApplicationList: Joi.array().items(
+        Joi.string().valid('torque', 'torque-lite').required(),
+      ).required(),
       agreedToTocDatetimeStamp: Joi.number().max(999999999999999).allow(null).required()
     });
 
@@ -47,7 +50,7 @@ exports.UserCollection = class extends LegacyCollection {
     ]
   }
 
-  create({ phone, fullName, passwordHash, agreedToTocDatetimeStamp }, cbfn) {
+  create({ phone, fullName, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList }, cbfn) {
     let user = {
       passwordHash,
       email: null,
@@ -62,6 +65,7 @@ exports.UserCollection = class extends LegacyCollection {
       isPhoneVerified: false,
       isEmailVerified: false,
       isBanned: false,
+      accessibleApplicationList,
       agreedToTocDatetimeStamp
     }
     this._insert(user, (err, id) => {

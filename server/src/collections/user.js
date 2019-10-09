@@ -23,6 +23,9 @@ exports.UserCollection = class extends Collection {
       isPhoneVerified: Joi.boolean().required(),
       isEmailVerified: Joi.boolean().required(),
       isBanned: Joi.boolean().required(),
+      accessibleApplicationList: Joi.array().items(
+        Joi.string().valid('torque', 'torque-lite').required(),
+      ).required(),
       agreedToTocDatetimeStamp: Joi.number().max(999999999999999).allow(null).required()
     });
   }
@@ -36,7 +39,7 @@ exports.UserCollection = class extends Collection {
     ];
   }
 
-  async create({ phone, fullName, passwordHash, agreedToTocDatetimeStamp }) {
+  async create({ phone, fullName, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList }) {
     return await this._insert({
       passwordHash,
       email: null,
@@ -51,6 +54,7 @@ exports.UserCollection = class extends Collection {
       isPhoneVerified: false,
       isEmailVerified: false,
       isBanned: false,
+      accessibleApplicationList,
       agreedToTocDatetimeStamp
     });
   }
