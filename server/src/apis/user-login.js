@@ -33,7 +33,6 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
     throwOnFalsy(user, "USER_NOT_FOUND", this.verses.userLoginApi.userNotFound);
     throwOnTruthy(user.isBanned, "USER_BANNED", this.verses.userLoginApi.userBanned);
 
-    console.log(user.accessibleApplicationList, this.clientApplication)
     if (user.accessibleApplicationList.indexOf(this.clientApplication) === -1) {
       if (this.clientApplication === 'torque-lite') {
         throw new CodedError("APP_ACCESS_DENIED", "You already have access to Lipi for Business. Please use that instead of Lipi Lite.");
