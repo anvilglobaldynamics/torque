@@ -54,15 +54,19 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
     let userId = await this.__createUser({ fullName, phone, password, agreedToTocDatetimeStamp });
 
     // === organization creation
+    let activeModuleCodeList = ['MOD_PRODUCT', 'MOD_SERVICE'];
+
     let organizationId = await this._createOrganization({
       name: organizationName,
       primaryBusinessAddress: 'Not Provided',
       phone,
       email: '',
       userId,
-      activeModuleCodeList: []
+      activeModuleCodeList
     });
     this._createOrganizationSettings({ organizationId });
+
+    await this._addModuleActivation({ organizationId, activeModuleCodeList });
 
     let employmentId = await this._setUserAsOwner({ userId, organizationId });
 
