@@ -4,6 +4,10 @@
     "name": "General Shop"
   },
   {
+    "code": "CAT_ELECTRONICS",
+    "name": "Computer, Mobile, Electronics"
+  },
+  {
     "code": "CAT_GROCERY",
     "name": "Grocery"
   },
@@ -11,6 +15,23 @@
     "code": "CAT_PHARMACY",
     "name": "Pharmacy"
   },
+  {
+    "code": "CAT_COSMETICS",
+    "name": "Cosmetics"
+  },
+  {
+    "code": "CAT_BOOK",
+    "name": "Book Shop"
+  },
+  {
+    "code": "CAT_STATIONERY",
+    "name": "Stationery Shop"
+  },
+  {
+    "code": "CAT_CERAMIC",
+    "name": "Ceramic Shop"
+  },
+  
   {
     "code": "CAT_SALON",
     "name": "Men's Salon"
@@ -23,6 +44,7 @@
     "code": "CAT_GYM",
     "name": "Gym"
   },
+
   {
     "code": "CAT_CLOTHES",
     "name": "Clothes Shop"
@@ -39,11 +61,6 @@
     "code": "CAT_OPTICS",
     "name": "Optics Shop"
   },
-  {
-    "code": "CAT_CERAMIC",
-    "name": "Ceramic Shop"
-  },
-
   {
     "code": "CAT_JEWELLERY",
     "name": "Jewellery Shop"
@@ -64,14 +81,7 @@
     "code": "CAT_PET",
     "name": "Pet Shop"
   },
-  {
-    "code": "CAT_BOOK",
-    "name": "Book Shop"
-  },
-  {
-    "code": "CAT_STATIONERY",
-    "name": "Stationery Shop"
-  },
+
   {
     "code": "CAT_BEAUTY",
     "name": "Beauty Salon"
