@@ -525,6 +525,9 @@ class Api {
     if (err.code === "DUPLICATE_email") {
       err = new Error(this.verses.duplicationCommon.emailAlreadyInUse);
       err.code = 'EMAIL_ALREADY_IN_USE';
+    } else if (err.code === "DUPLICATE_organizationId+email") {
+      err = new Error(this.verses.duplicationCommon.emailAlreadyInUse);
+      err.code = 'EMAIL_ALREADY_IN_USE';
     } else if (err.code === "DUPLICATE_phone") {
       err = new Error(this.verses.duplicationCommon.phoneAlreadyInUse);
       err.code = 'PHONE_ALREADY_IN_USE';

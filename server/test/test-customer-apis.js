@@ -167,7 +167,7 @@ describe('Customer', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).equals('PHONE_OR_EMAIL_ALREADY_IN_USE');
+      expect(body.error.code).equals('PHONE_ALREADY_IN_USE');
       testDoneFn();
     })
 
@@ -312,7 +312,7 @@ describe('Customer', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiFailureResponse(body);
-      expect(body.error.code).equals('PHONE_OR_EMAIL_ALREADY_IN_USE');
+      expect(body.error.code).equals('PHONE_ALREADY_IN_USE');
       testDoneFn();
     })
 

@@ -36,7 +36,11 @@ exports.CustomerCollection = class extends Collection {
     return [
       {
         filters: {},
-        keyList: ['organizationId+phone+email']
+        keyList: ['organizationId+phone']
+      },
+      {
+        filters: {},
+        keyList: ['organizationId+email']
       }
     ];
   }
