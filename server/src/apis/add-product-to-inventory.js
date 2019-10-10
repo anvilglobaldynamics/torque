@@ -42,36 +42,6 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin
     }];
   }
 
-  async _findOrCreateProduct({ productBlueprintId }) {
-    let product = await this.database.product.findByProductBlueprintId({ productBlueprintId });
-    if (!product) {
-      let productBlueprint = await this.database.productBlueprint.findById({ id: productBlueprintId });
-      let purchasePrice = productBlueprint.defaultPurchasePrice;
-      let salePrice = productBlueprint.defaultSalePrice;
-      await this.database.product.create({ productBlueprintId, purchasePrice, salePrice });
-      product = await this.database.product.findByProductBlueprintId({ productBlueprintId });
-    }
-    throwOnFalsy(product, "PRODUCT_NOT_FOUND", "Product could not be found");
-    return product;
-  }
-
-  async _addProductToInventory({ inventoryId, productList }) {
-    let insertedProductList = [];
-
-    await Promise.all(productList.map(async product => {
-      let { productBlueprintId, count } = product;
-
-      let { id: productId } = await this._findOrCreateProduct({ productBlueprintId });
-      await this._pushProductOrIncrementCount({ productId, count, inventoryId });
-      await insertedProductList.push({ productId, count });
-    }));
-    return insertedProductList;
-  }
-
-  async _addAcquisitionRecord({ createdByUserId, acquiredDatetimeStamp, inventoryId, productList, vendorId, organizationId }) {
-    await this.database.productAcquisition.create({ createdByUserId, acquiredDatetimeStamp, inventoryId, productList: productList, vendorId, organizationId });
-  }
-
   async _verifyVendorIfNeeded({ vendorId, organizationId }) {
     if (vendorId) {
       let doc = await this.database.vendor.findByIdAndOrganizationId({ id: vendorId, organizationId });

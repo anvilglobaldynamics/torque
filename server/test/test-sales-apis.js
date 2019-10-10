@@ -581,6 +581,122 @@ describe('Sales', _ => {
 
   });
 
+  // Lipi Lite - Start
+
+  let liteProductBlueprintIdList = null;
+
+  it('api/lite-add-sales (Valid, No Customer)', testDoneFn => {
+
+    callApi('api/lite-add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productBlueprintId: null,
+            name: "New Product",
+            count: 5,
+            salePrice: 500,
+          }
+        ],
+
+        serviceList: [],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          vatPercentage: 5,
+          discountPresetId: null,
+          discountType: placeholderDefaultDiscountType,
+          discountValue: placeholderDefaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBillBeforeRounding: 0,
+          roundedByAmount: 0,
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        },
+
+        assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
+
+        wasOfflineSale: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+
+      liteProductBlueprintIdList = body.productBlueprintIdList;
+      delete body.productBlueprintIdList;
+      expect(liteProductBlueprintIdList.length).to.equal(1);
+
+      validateAddSalesApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/lite-add-sales (Valid, No Customer, Existing Blueprint)', testDoneFn => {
+
+    callApi('api/lite-add-sales', {
+      json: {
+        apiKey,
+
+        outletId,
+        customerId: null,
+
+        productList: [
+          {
+            productBlueprintId: liteProductBlueprintIdList[0].productBlueprintId,
+            name: "New Product",
+            count: 5,
+            salePrice: 500,
+          }
+        ],
+
+        serviceList: [],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          vatPercentage: 5,
+          discountPresetId: null,
+          discountType: placeholderDefaultDiscountType,
+          discountValue: placeholderDefaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBillBeforeRounding: 0,
+          roundedByAmount: 0,
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          shouldSaveChangeInAccount: false,
+          paymentMethod: 'cash'
+        },
+
+        assistedByEmployeeId: null,
+        productsSelectedFromWarehouseId: null,
+
+        wasOfflineSale: false
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      liteProductBlueprintIdList = body.productBlueprintIdList;
+      delete body.productBlueprintIdList;
+      validateAddSalesApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+
+  // Lipi Lite - End
+
   it('api/add-sales (Invalid payment)', testDoneFn => {
 
     callApi('api/add-sales', {

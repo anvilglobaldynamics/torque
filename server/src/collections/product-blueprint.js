@@ -44,7 +44,8 @@ exports.ProductBlueprintCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ organizationId,
+  async create({
+    organizationId,
     name,
     unit,
     identifierCode,
@@ -52,7 +53,8 @@ exports.ProductBlueprintCollection = class extends Collection {
     defaultVat,
     defaultSalePrice,
     productCategoryIdList,
-    isReturnable }) {
+    isReturnable
+  }) {
     return await this._insert({
       organizationId,
       name,
