@@ -33,7 +33,7 @@ Possible Error Codes:
 { code: VALIDATION_ERROR } // validation error on one of the fields
 { code: APIKEY_INVALID } // the api key is invalid
 { code: ORGANIZATION_INVALID } // the organization id is invalid
-{ code: PHONE_ALREADY_IN_USE } // the phone number is already associated with another customer
+{ code: PHONE_OR_EMAIL_ALREADY_IN_USE } // the phone number/email is already associated with another customer
 { code: PHONE_REQUIRED } // Phone is required ('torque' only)
 { code: CUSTOMER_EMAIL_OR_PHONE_REQUIRED } // At least phone or email is required
 ```

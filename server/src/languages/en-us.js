@@ -10,7 +10,8 @@ exports.verses = {
   },
   duplicationCommon: {
     emailAlreadyInUse: "Provided email address is already in use",
-    phoneAlreadyInUse: "Provided phone number is already in use"
+    phoneAlreadyInUse: "Provided phone number is already in use",
+    emailOrPhoneAlreadyInUse: "Provided email adress or phone number is already in use"
   },
   collectionCommon: {
     genericUpdateFailureFn: (collectionName => `Unable to find ${collectionName} to update.`),
