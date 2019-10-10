@@ -34,6 +34,8 @@ Possible Error Codes:
 { code: APIKEY_INVALID } // the api key is invalid
 { code: ORGANIZATION_INVALID } // the organization id is invalid
 { code: PHONE_ALREADY_IN_USE } // the phone number is already associated with another customer
+{ code: PHONE_REQUIRED } // Phone is required ('torque' only)
+{ code: CUSTOMER_EMAIL_OR_PHONE_REQUIRED } // At least phone or email is required
 ```
 
 ### response (on success):
