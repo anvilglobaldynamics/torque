@@ -83,6 +83,15 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
       salePrice,
       vatPercentage,
     } = originalProduct;
+
+    // Avoid name collision
+    if (productBlueprintId === null) {
+      let productBlueprint = await this.database.productBlueprint._findOne({ name });
+      if (productBlueprint) {
+        productBlueprintId = productBlueprint.id;
+      }
+    }
+
     if (productBlueprintId !== null) {
       // Update existing ProductBlueprint
       let result = await this.database.productBlueprint._update({
