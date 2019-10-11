@@ -17,7 +17,12 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
     return Joi.object().keys({
 
       outletId: Joi.number().max(999999999999999).required(),
-      customerId: Joi.number().max(999999999999999).allow(null).required(),
+
+      customer: Joi.object().keys({
+        fullName: Joi.string().min(1).max(64).required(),
+        phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).allow(null).required(),
+        email: Joi.string().email().min(3).max(30).allow(null).required(),
+      }).allow(null),
 
       productList: Joi.array().required().items(
         Joi.object().keys({
@@ -151,8 +156,41 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
     }
   }
 
+  async getCustomerId({ customer }) {
+    if (!customer) return null;
+    if (customer.email) {
+      let existingCustomer = await this.database.customer._findOne({ email: customer.email });
+      if (existingCustomer) {
+        await this.database.customer._update({ email: customer.email }, { $set: { fullName: customer.fullName } })
+        return existingCustomer.id;
+      } else {
+        return await this.database.customer.create({
+          organizationId: this.interimData.organization.id,
+          fullName: customer.fullName,
+          phone: customer.phone,
+          email: customer.email,
+          address: ''
+        });
+      }
+    } else {
+      let existingCustomer = await this.database.customer._findOne({ phone: customer.phone });
+      if (existingCustomer) {
+        await this.database.customer._update({ phone: customer.phone }, { $set: { fullName: customer.fullName } })
+        return existingCustomer.id;
+      } else {
+        return await this.database.customer.create({
+          organizationId: this.interimData.organization.id,
+          fullName: customer.fullName,
+          phone: customer.phone,
+          email: customer.email,
+          address: ''
+        });
+      }
+    }
+  }
+
   async handle({ userId, body }) {
-    let { outletId, customerId, productList: originalProductList, payment: originalPayment } = body;
+    let { outletId, customer, productList: originalProductList, payment: originalPayment } = body;
     let organizationId = this.interimData.organization.id;
 
     let { vatPercentage } = originalPayment;
@@ -176,6 +214,8 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
     originalPayment.shouldSaveChangeInAccount = false;
     let assistedByEmployeeId = null;
     let wasOfflineSale = false;
+
+    let customerId = await this.getCustomerId({ customer });
 
     let results = await this.__addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale });
     results.productBlueprintIdList = productBlueprintIdList;

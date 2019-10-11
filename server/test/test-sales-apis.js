@@ -592,7 +592,7 @@ describe('Sales', _ => {
         apiKey,
 
         outletId,
-        customerId: null,
+        customer: null,
 
         productList: [
           {
@@ -639,7 +639,7 @@ describe('Sales', _ => {
         apiKey,
 
         outletId,
-        customerId: null,
+        customer: null,
 
         productList: [
           {
