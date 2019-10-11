@@ -603,8 +603,6 @@ describe('Sales', _ => {
           }
         ],
 
-        serviceList: [],
-
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
@@ -658,8 +656,6 @@ describe('Sales', _ => {
             salePrice: 500,
           }
         ],
-
-        serviceList: [],
 
         payment: {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
