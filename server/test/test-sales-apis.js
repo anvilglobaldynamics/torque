@@ -147,7 +147,7 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
-describe.only('Sales', _ => {
+describe('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -620,7 +620,6 @@ describe.only('Sales', _ => {
         }
       }
     }, (err, response, body) => {
-      console.log(body)
       expect(response.statusCode).to.equal(200);
 
       liteProductBlueprintIdList = body.productBlueprintIdList;
@@ -986,6 +985,7 @@ describe.only('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
+      body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
       testDoneFn();
     });
@@ -1037,6 +1037,8 @@ describe.only('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
+      body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
+
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
       testDoneFn();
     });
@@ -1076,6 +1078,8 @@ describe.only('Sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+
+      body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
 
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
       testDoneFn();
@@ -1554,6 +1558,8 @@ describe.only('Sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+
+      body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
 
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(97);
 
