@@ -19,8 +19,6 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
       outletId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).allow(null).required(),
 
-      productsSelectedFromWarehouseId: Joi.number().max(999999999999999).allow(null).required(),
-
       productList: Joi.array().required().items(
         Joi.object().keys({
           productBlueprintId: Joi.number().max(999999999999999).allow(null).required(),
@@ -34,7 +32,6 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
         totalAmount: Joi.number().max(999999999999999).required(), // means total sale price of all products
         vatAmount: Joi.number().max(999999999999999).required(),
         vatPercentage: Joi.number().max(999999999999999).required(), // Note: Is moved to productList when processing.
-        discountPresetId: Joi.number().max(999999999999999).allow(null).required(),
         discountType: Joi.string().valid('percent', 'fixed').required(),
         discountValue: Joi.number().max(999999999999999).required(),
         discountedAmount: Joi.number().max(999999999999999).required(),
@@ -47,12 +44,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
         paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
         paidAmount: Joi.number().max(999999999999999).required(),
         changeAmount: Joi.number().max(999999999999999).required(),
-        shouldSaveChangeInAccount: Joi.boolean().required()
       }),
-
-      assistedByEmployeeId: Joi.number().min(0).max(999999999999999).allow(null).required(),
-
-      wasOfflineSale: Joi.boolean().required()
 
     });
   }
@@ -160,7 +152,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
   }
 
   async handle({ userId, body }) {
-    let { outletId, customerId, productList: originalProductList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId } = body;
+    let { outletId, customerId, productList: originalProductList, payment: originalPayment } = body;
     let organizationId = this.interimData.organization.id;
 
     let { vatPercentage } = originalPayment;
@@ -177,8 +169,15 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
       productBlueprintIdList.push(productBlueprintId);
     };
 
+    // Following fields are required by __addSales api
     let serviceList = [];
-    let results = await this.__addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId });
+    let productsSelectedFromWarehouseId = null;
+    originalPayment.discountPresetId = null;
+    originalPayment.shouldSaveChangeInAccount = false;
+    let assistedByEmployeeId = null;
+    let wasOfflineSale = false;
+
+    let results = await this.__addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale });
     results.productBlueprintIdList = productBlueprintIdList;
     return results;
   }

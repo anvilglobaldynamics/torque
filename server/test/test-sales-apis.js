@@ -147,7 +147,7 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
-describe('Sales', _ => {
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -607,7 +607,6 @@ describe('Sales', _ => {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
           vatPercentage: 5,
-          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -617,16 +616,11 @@ describe('Sales', _ => {
           totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        },
-
-        assistedByEmployeeId: null,
-        productsSelectedFromWarehouseId: null,
-
-        wasOfflineSale: false
+        }
       }
     }, (err, response, body) => {
+      console.log(body)
       expect(response.statusCode).to.equal(200);
 
       liteProductBlueprintIdList = body.productBlueprintIdList;
@@ -661,7 +655,6 @@ describe('Sales', _ => {
           totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
           vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
           vatPercentage: 5,
-          discountPresetId: null,
           discountType: placeholderDefaultDiscountType,
           discountValue: placeholderDefaultDiscountValue,
           discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
@@ -671,14 +664,8 @@ describe('Sales', _ => {
           totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
-          shouldSaveChangeInAccount: false,
           paymentMethod: 'cash'
-        },
-
-        assistedByEmployeeId: null,
-        productsSelectedFromWarehouseId: null,
-
-        wasOfflineSale: false
+        }
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -689,7 +676,6 @@ describe('Sales', _ => {
     });
 
   });
-
 
   // Lipi Lite - End
 

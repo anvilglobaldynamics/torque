@@ -197,7 +197,7 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     });
   }
 
-  async __addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId }) {
+  async __addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale }) {
 
     if (!productList.length && !serviceList.length) {
       throw new CodedError("NO_PRODUCT_OR_SERVICE_SELECTED", "Both productList and serviceList can not be empty.");
@@ -230,7 +230,7 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
 
     payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
 
-    let salesId = await this.database.sales.create({ organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment, productsSelectedFromWarehouseId });
+    let salesId = await this.database.sales.create({ organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment, productsSelectedFromWarehouseId, wasOfflineSale });
 
     if (serviceList.length) {
       for (let i = 0; i < serviceList.length; i++) {
