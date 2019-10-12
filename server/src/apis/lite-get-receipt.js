@@ -31,6 +31,11 @@ exports.LiteGetReceiptApi = class extends Api.mixin(InventoryMixin, SalesMixin, 
 
     let organization = await this.database.organization.findById({ id: outlet.organizationId });
 
+    let customer = null;
+    if (sales.customerId !== null) {
+      customer = await this.database.customer.findById({ id: sales.customerId });
+    }
+
     let userId = sales.payment.paymentList[0].acceptedByUserId;
     let user = await this.database.user.findById({ id: userId });
     let soldByUser = {
@@ -48,7 +53,8 @@ exports.LiteGetReceiptApi = class extends Api.mixin(InventoryMixin, SalesMixin, 
       sales,
       outlet,
       organization,
-      soldByUser
+      soldByUser,
+      customer
     };
   }
 
