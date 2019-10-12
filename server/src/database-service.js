@@ -35,6 +35,7 @@ const { CacheOutletGeolocationCollection } = require('./collections/cache-outlet
 const { ProductCategoryCollection } = require('./collections/product-category');
 const { VendorCollection } = require('./collections/vendor');
 const { OrganizationSettingsCollection } = require('./collections/organization-settings');
+const { ReceiptCollection } = require('./collections/receipt');
 
 class DatabaseService {
 
@@ -76,6 +77,7 @@ class DatabaseService {
     this.vendor = new VendorCollection(this.engine, this);
     this.cacheOutletGeolocation = new CacheOutletGeolocationCollection(this.engine, this);
     this.organizationSettings = new OrganizationSettingsCollection(this.engine, this);
+    this.receipt = new ReceiptCollection(this.engine, this);
 
     /** @type {[Collection]} */
     this.collectionList = Object.keys(this).filter(key => this[key] instanceof Collection).map(key => this[key]);
