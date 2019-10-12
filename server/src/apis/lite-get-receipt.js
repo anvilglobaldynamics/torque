@@ -19,41 +19,23 @@ exports.LiteGetReceiptApi = class extends Api.mixin(InventoryMixin, SalesMixin, 
     });
   }
 
-  get accessControl() {
-    return [{
-      organizationBy: [
-        {
-          from: "receipt",
-          query: ({ receiptToken }) => ({ receiptToken }),
-          select: "salesId",
-          errorCode: "RECEIPT_INVALID"
-        },
-        {
-          from: "sales",
-          query: ({ salesId }) => ({ id: salesId }),
-          select: "outletId",
-          errorCode: "SALES_INVALID"
-        },
-        {
-          from: "outlet",
-          query: ({ outletId }) => ({ id: outletId }),
-          select: "organizationId",
-          errorCode: "OUTLET_INVALID"
-        }
-      ],
-      privilegeList: [
-        "PRIV_VIEW_SALES"
-      ]
-    }];
-  }
-
   async handle({ body }) {
     let { receiptToken } = body;
 
     let receipt = await this.database.receipt.findByReceiptToken({ receiptToken });
-    console.log({ receipt })
+    throwOnFalsy(receipt, "RECEIPT_INVALID", "The receipt you have asked for is not valid");
 
     let sales = await this._getSales({ salesId: receipt.salesId });
+
+    let outlet = await this.database.outlet.findById({ id: sales.outletId });
+
+    let organization = await this.database.organization.findById({ id: outlet.organizationId });
+
+    let userId = sales.payment.paymentList[0].acceptedByUserId;
+    let user = await this.database.user.findById({ id: userId });
+    let soldByUser = {
+      fullName: user.fullName
+    }
 
     await this._addReturnedProductCountToSales({ sales });
     await this._addProductBlueprintData({ sales });
@@ -63,7 +45,10 @@ exports.LiteGetReceiptApi = class extends Api.mixin(InventoryMixin, SalesMixin, 
     await this.__addDiscountPresetName({ sales });
 
     return {
-      sales
+      sales,
+      outlet,
+      organization,
+      soldByUser
     };
   }
 
