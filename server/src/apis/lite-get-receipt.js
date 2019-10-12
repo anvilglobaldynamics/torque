@@ -7,21 +7,27 @@ const { InventoryMixin } = require('./mixins/inventory-mixin');
 const { SalesMixin } = require('./mixins/sales-mixin');
 const { ServiceMixin } = require('./mixins/service-mixin');
 
-exports.GetSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin, ServiceMixin) {
+exports.LiteGetReceiptApi = class extends Api.mixin(InventoryMixin, SalesMixin, ServiceMixin) {
 
   get autoValidates() { return true; }
 
-  get requiresAuthentication() { return true; }
+  get requiresAuthentication() { return false; }
 
   get requestSchema() {
     return Joi.object().keys({
-      salesId: Joi.number().max(999999999999999).required()
+      receiptToken: Joi.string().length(5).required(),
     });
   }
 
   get accessControl() {
     return [{
       organizationBy: [
+        {
+          from: "receipt",
+          query: ({ receiptToken }) => ({ receiptToken }),
+          select: "salesId",
+          errorCode: "RECEIPT_INVALID"
+        },
         {
           from: "sales",
           query: ({ salesId }) => ({ id: salesId }),
@@ -42,9 +48,12 @@ exports.GetSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin, Servic
   }
 
   async handle({ body }) {
-    let { salesId } = body;
+    let { receiptToken } = body;
 
-    let sales = await this._getSales({ salesId });
+    let receipt = await this.database.receipt.findByReceiptToken({ receiptToken });
+    console.log({ receipt })
+
+    let sales = await this._getSales({ salesId: receipt.salesId });
 
     await this._addReturnedProductCountToSales({ sales });
     await this._addProductBlueprintData({ sales });

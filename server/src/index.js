@@ -148,6 +148,7 @@ const { LiteCheckVerificationTokenApi } = require('./apis/lite-check-verificatio
 const { LiteUserRegisterApi } = require('./apis/lite-user-register');
 const { LiteAddSalesApi } = require('./apis/lite-add-sales');
 const { LiteGetCustomerApi } = require('./apis/lite-get-customer');
+const { LiteGetReceiptApi } = require('./apis/lite-get-receipt');
 
 let { FixtureCollection } = require('./legacy-collections/fixture');
 let { UserCollection } = require('./legacy-collections/user');
@@ -411,6 +412,8 @@ class Program {
     server.registerPostApi('/api/lite-user-register', LiteUserRegisterApi);
     server.registerPostApi('/api/lite-add-sales', LiteAddSalesApi);
     server.registerPostApi('/api/lite-get-customer', LiteGetCustomerApi);
+    server.registerPostApi('/api/lite-get-receipt', LiteGetReceiptApi);
+
   }
 
 }

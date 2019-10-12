@@ -6,6 +6,7 @@ const { InventoryMixin } = require('./mixins/inventory-mixin');
 const { CustomerMixin } = require('./mixins/customer-mixin');
 const { SalesMixin } = require('./mixins/sales-mixin');
 const { ServiceMixin } = require('./mixins/service-mixin');
+const { generateRandomString } = require('./../utils/random-string');
 
 exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin, ServiceMixin) {
 
@@ -189,6 +190,16 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
     }
   }
 
+  async _createReceipt({ salesId, sendVia }) {
+    do {
+      var receiptToken = generateRandomString(5).toUpperCase();
+      var isUnique = await this.database.receipt.findByReceiptToken({ receiptToken });
+    } while (!isUnique);
+    let sentHistory = [];
+    let receiptId = await this.database.receipt.create({ receiptToken, salesId, sentHistory });
+    console.log({receiptId, receiptToken})
+  }
+
   async handle({ userId, body }) {
     let { outletId, customer, productList: originalProductList, payment: originalPayment } = body;
     let organizationId = this.interimData.organization.id;
@@ -219,6 +230,9 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
 
     let results = await this.__addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale });
     results.productBlueprintIdList = productBlueprintIdList;
+
+    await this._createReceipt({ salesId: results.salesId, sendVia: 'none' });
+
     return results;
   }
 
