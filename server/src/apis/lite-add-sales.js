@@ -6,7 +6,7 @@ const { InventoryMixin } = require('./mixins/inventory-mixin');
 const { CustomerMixin } = require('./mixins/customer-mixin');
 const { SalesMixin } = require('./mixins/sales-mixin');
 const { ServiceMixin } = require('./mixins/service-mixin');
-const { generateRandomString } = require('./../utils/random-string');
+const { generateRandomStringCaseInsensitive } = require('./../utils/random-string');
 
 exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin, ServiceMixin) {
 
