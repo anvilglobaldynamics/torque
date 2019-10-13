@@ -27,7 +27,8 @@ exports.CustomerCollection = class extends Collection {
           byUserId: Joi.number().max(999999999999999).required(),
           amount: Joi.number().max(999999999999999).required()
         })
-      )
+      ),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
 
     });
   }
@@ -57,8 +58,9 @@ exports.CustomerCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ organizationId, fullName, phone, email, address }) {
+  async create({ originApp, organizationId, fullName, phone, email, address }) {
     return await this._insert({
+      originApp,
       fullName,
       organizationId,
       phone,

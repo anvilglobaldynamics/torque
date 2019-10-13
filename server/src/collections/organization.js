@@ -19,7 +19,8 @@ exports.OrganizationCollection = class extends Collection {
       isDeleted: Joi.boolean().required(),
       activeModuleCodeList: Joi.array().items(
         Joi.string()
-      ).required()
+      ).required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
   }
 
@@ -31,8 +32,9 @@ exports.OrganizationCollection = class extends Collection {
     return [];
   }
 
-  async create({ name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList }) {
+  async create({ originApp, name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList }) {
     return await this._insert({
+      originApp,
       createdByUserId: userId,
       name,
       primaryBusinessAddress,

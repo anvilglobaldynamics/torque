@@ -19,7 +19,8 @@ exports.ProductBlueprintCollection = class extends Collection {
       defaultSalePrice: Joi.number().max(999999999999999).required(),
       productCategoryIdList: Joi.array().items(Joi.number()).required(),
       isDeleted: Joi.boolean().required(),
-      isReturnable: Joi.boolean().required()
+      isReturnable: Joi.boolean().required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
   }
 
@@ -45,6 +46,7 @@ exports.ProductBlueprintCollection = class extends Collection {
   get deletionIndicatorKey() { return 'isDeleted'; }
 
   async create({
+    originApp,
     organizationId,
     name,
     unit,
@@ -56,6 +58,7 @@ exports.ProductBlueprintCollection = class extends Collection {
     isReturnable
   }) {
     return await this._insert({
+      originApp,
       organizationId,
       name,
       unit,

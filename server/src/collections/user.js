@@ -26,7 +26,8 @@ exports.UserCollection = class extends Collection {
       accessibleApplicationList: Joi.array().items(
         Joi.string().valid('torque', 'torque-lite').required(),
       ).required(),
-      agreedToTocDatetimeStamp: Joi.number().max(999999999999999).allow(null).required()
+      agreedToTocDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
   }
 
@@ -39,8 +40,9 @@ exports.UserCollection = class extends Collection {
     ];
   }
 
-  async create({ phone, fullName, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList }) {
+  async create({ originApp, phone, fullName, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList }) {
     return await this._insert({
+      originApp,
       passwordHash,
       email: null,
       phone,

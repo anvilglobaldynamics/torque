@@ -17,13 +17,14 @@ exports.ProductAcquisitionCollection = class extends Collection {
       vendorId: Joi.number().max(999999999999999).allow(null).required(),
       organizationId: Joi.number().max(999999999999999).required(),
       productAcquisitionNumber: Joi.number().max(999999999999999).required(),
-    
+
       productList: Joi.array().min(1).items(
         Joi.object().keys({
           productId: Joi.number().max(999999999999999).required(),
           count: Joi.number().max(999999999999999).required()
         })
-      )
+      ),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
   }
 
@@ -43,10 +44,11 @@ exports.ProductAcquisitionCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ createdByUserId, acquiredDatetimeStamp, inventoryId, productList, vendorId, organizationId }) {
+  async create({ originApp, createdByUserId, acquiredDatetimeStamp, inventoryId, productList, vendorId, organizationId }) {
     let productAcquisitionNumber = await this.autoGenerateOrganizationSpecificNumber({ organizationId, fieldName: 'productAcquisitionNumberSeed' });
 
     return await this._insert({
+      originApp,
       isDeleted: false,
       createdByUserId,
       acquiredDatetimeStamp,

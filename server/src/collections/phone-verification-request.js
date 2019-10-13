@@ -15,7 +15,8 @@ exports.PhoneVerificationRequestCollection = class extends Collection {
       verifiedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       origin: Joi.string().max(1024).required(),
       verificationToken: Joi.string().length(5).required(),
-      isVerificationComplete: Joi.boolean().required()
+      isVerificationComplete: Joi.boolean().required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
   }
 
@@ -51,8 +52,9 @@ exports.PhoneVerificationRequestCollection = class extends Collection {
     return true;
   }
 
-  async create({ userId, phone, origin, verificationToken }) {
+  async create({ originApp, userId, phone, origin, verificationToken }) {
     return await this._insert({
+      originApp,
       forPhone: phone,
       forUserId: userId,
       origin,
