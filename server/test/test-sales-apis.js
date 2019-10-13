@@ -625,6 +625,12 @@ describe('Sales', _ => {
       liteProductBlueprintIdList = body.productBlueprintIdList;
       delete body.productBlueprintIdList;
       expect(liteProductBlueprintIdList.length).to.equal(1);
+      
+      expect(body.receiptToken.length).to.equal(5);
+      expect(body.sentVia).to.equal('none');
+
+      delete body.receiptToken;
+      delete body.sentVia;
 
       validateAddSalesApiSuccessResponse(body);
       testDoneFn();
@@ -670,6 +676,13 @@ describe('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       liteProductBlueprintIdList = body.productBlueprintIdList;
       delete body.productBlueprintIdList;
+
+      expect(body.receiptToken.length).to.equal(5);
+      expect(body.sentVia).to.equal('none');
+
+      delete body.receiptToken;
+      delete body.sentVia;
+
       validateAddSalesApiSuccessResponse(body);
       testDoneFn();
     });
