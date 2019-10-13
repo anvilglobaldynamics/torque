@@ -190,14 +190,74 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
     }
   }
 
-  async _createReceipt({ salesId, sendVia }) {
+  async _createReceipt({ salesId, sentVia }) {
     do {
       var receiptToken = generateRandomStringCaseInsensitive(5).toLowerCase();
       var isUnique = !(await this.database.receipt.findByReceiptToken({ receiptToken }));
     } while (!isUnique);
     let sentHistory = [];
+    if (sentVia !== 'none') {
+      sentHistory.push({
+        sentVia,
+        sentDatetimeStamp: Date.now(),
+      })
+    }
     let receiptId = await this.database.receipt.create({ receiptToken, salesId, sentHistory });
-    console.log({ receiptId, receiptToken })
+    return receiptToken;
+  }
+
+  async _sendReceiptMail(model) {
+    function unescapeHtmlEntities(str) {
+      var map = {
+        "&amp;": "&",
+        "&lt;": "<",
+        "&gt;": ">",
+        "&quot;": "\"",
+        "&#39;": "'",
+        "&apos;": "'"
+      };
+      return str.replace(/(&amp;|&lt;|&gt;|&quot;|&#39;|&apos;)/g, function (m) { return map[m]; });
+    }
+
+    model.organizationName = unescapeHtmlEntities(model.organizationName);
+
+    let clientLanguage = (this.clientLanguage || 'en-us');
+    let [err, isDeveloperError, response, finalBody] = await this.server.emailService.sendStoredMail(clientLanguage, 'receipt', model, model.email);
+
+    if ((err) || response.message !== 'Queued. Thank you.') {
+      if (err) {
+        if (!isDeveloperError) this.logger.error(err);
+      } else {
+        this.logger.log("Unexpected emailService response:", response);
+      }
+      let message = 'Failed to send receipt email. Please handle the case manually.';
+      this.logger.important(message, {
+        type: 'email-receipt',
+        model
+      });
+    }
+  }
+
+  async _sendReceiptByEmail({ payment, organization, customer, receiptToken }) {
+    let organizationName = organization.name;
+    let organizationPhone = organization.phone;
+    let date = (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString();
+
+    let { totalBilled, changeAmount, totalPaidAmount } = payment;
+    totalBilled = Math.round(totalBilled * 100) / 100;
+    changeAmount = Math.round(changeAmount * 100) / 100;
+
+    let email = customer.email;
+
+    await this._sendReceiptMail({
+      email,
+      totalBilled,
+      changeAmount,
+      organizationName,
+      organizationPhone,
+      receiptToken,
+      date
+    });
   }
 
   async handle({ userId, body }) {
@@ -231,7 +291,24 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
     let results = await this.__addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale });
     results.productBlueprintIdList = productBlueprintIdList;
 
-    await this._createReceipt({ salesId: results.salesId, sendVia: 'none' });
+    let sentVia = 'none';
+    if (customerId && customer) {
+      if (customer.email) sentVia = 'email';
+      if (customer.phone) sentVia = 'own-sms';
+    }
+
+    let receiptToken = await this._createReceipt({ salesId: results.salesId, sentVia });
+    results.receiptToken = receiptToken;
+    results.sentVia = sentVia;
+
+    if (sentVia === 'email') {
+      await this._sendReceiptByEmail({
+        payment: originalPayment,
+        organization: this.interimData.organization,
+        customer,
+        receiptToken
+      });
+    }
 
     return results;
   }
