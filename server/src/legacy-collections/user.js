@@ -39,7 +39,8 @@ exports.UserCollection = class extends LegacyCollection {
       accessibleApplicationList: Joi.array().items(
         Joi.string().valid('torque', 'torque-lite').required(),
       ).required(),
-      agreedToTocDatetimeStamp: Joi.number().max(999999999999999).allow(null).required()
+      agreedToTocDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
 
     this.uniqueKeyDefList = [
@@ -50,8 +51,9 @@ exports.UserCollection = class extends LegacyCollection {
     ]
   }
 
-  create({ phone, fullName, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList }, cbfn) {
+  create({ originApp, phone, fullName, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList }, cbfn) {
     let user = {
+      originApp,
       passwordHash,
       email: null,
       phone,

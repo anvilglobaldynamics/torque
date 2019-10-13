@@ -27,7 +27,8 @@ exports.SessionCollection = class extends LegacyCollection {
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       terminatedDatetimeStamp: Joi.number().max(999999999999999).required().allow(null),
       terminatedBy: Joi.string().allow('').max(64).required(),
-      hasExpired: Joi.boolean().required()
+      hasExpired: Joi.boolean().required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
 
     this.uniqueKeyDefList = [
@@ -58,8 +59,9 @@ exports.SessionCollection = class extends LegacyCollection {
     });
   }
 
-  create({ userId, apiKey }, cbfn) {
+  create({ originApp, userId, apiKey }, cbfn) {
     let user = {
+      originApp,
       userId,
       apiKey,
       terminatedDatetimeStamp: null,

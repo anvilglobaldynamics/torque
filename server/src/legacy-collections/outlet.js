@@ -31,7 +31,8 @@ exports.OutletCollection = class extends LegacyCollection {
         lat: Joi.number().required(),
         lng: Joi.number().required()
       }).required(),
-      isDeleted: Joi.boolean().required()
+      isDeleted: Joi.boolean().required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
 
     this.uniqueKeyDefList = [
@@ -50,8 +51,9 @@ exports.OutletCollection = class extends LegacyCollection {
     ];
   }
 
-  create({ name, organizationId, physicalAddress, phone, contactPersonName, location }, cbfn) {
+  create({ originApp, name, organizationId, physicalAddress, phone, contactPersonName, location }, cbfn) {
     let doc = {
+      originApp,
       name,
       organizationId,
       physicalAddress,
