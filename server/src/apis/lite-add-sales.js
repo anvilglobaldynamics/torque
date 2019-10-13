@@ -248,6 +248,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
     changeAmount = Math.round(changeAmount * 100) / 100;
 
     let email = customer.email;
+    let customerName = customer.name;
 
     await this._sendReceiptMail({
       email,
@@ -256,6 +257,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
       organizationName,
       organizationPhone,
       receiptToken,
+      customerName,
       date
     });
   }
