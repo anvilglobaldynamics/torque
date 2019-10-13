@@ -21,25 +21,26 @@
 						<tr>
 							<td>
 								<h3>{{{organizationName}}}</h3>
-								<p class="lead">Contact: {{organizationPhone}}</p>
+								<p class="lead">Phone: {{organizationPhone}}</p>
 								<p>{{date}}</p>
-								<p>Thank you for your purchase.</p>
+
+								<p style="padding-top: 10px;">Dear {{customerName}}, thank you for your purchase.</p>
 
 								<!-- Callout Panel -->
-								<p class="callout">
-									<span style="font-size: 20px;">Total: {{totalBilled}}</span>
+								<p class="callout" style="margin-top: 20px;">
+									<span style="font-size: 30px;">Total: {{totalBilled}}</span>
 									<br>
-									<span>Change: {{changeAmount}}</span>
+									<span style="font-size: 16px; color: darkslategray;">Change: {{changeAmount}}</span>
 									<br>
-									<span>See breakdown: <a href="https://lipi.shop/r/{{receiptToken}}">https://lipi.shop/r/{{receiptToken}}</a></span>
+									<span style="font-size: 18px;">Full receipt: <a href="https://lipi.shop/r/{{receiptToken}}">https://lipi.shop/r/{{receiptToken}}</a></span>
 								</p>
 								<!-- /Callout Panel -->
 
-								<div style="width: 100%; text-align:center; margin-top: 24px;">
-									<a href="https://lipi.shop/r/{{receiptToken}}" class="soc-btn tw" style="color: white; padding: 12px; margin: 12px;;">View full receipt</a>
+								<div style="width: 100%; text-align:center; margin-top: 30px; padding-bottom: 6px;">
+									<a href="https://lipi.shop/r/{{receiptToken}}" class="soc-btn tw" style="color: white; padding: 12px; margin: 12px; text-decoration: none;">View Full Receipt</a>
 								</div>
 
-								<p style="margin-top: 24px;">You are receiving this email because your email address {{email}} was used to make a purchase on {{{organizationName}}} through Lipi for Business.</p>
+								<p style="margin-top: 24px;">You are receiving this email because your email address {{email}} was used to make a purchase on {{{organizationName}}} through <b>Lipi for Business.</b></p>
 							</td>
 						</tr>
 					</table>
@@ -64,7 +65,7 @@
 						<tr>
 							<td align="center">
 								<p>
-									<a href="https://anvil.live/lipi">Lipi for Business</a>
+									<a style="font-size: 14px; font-weight: bold;" href="https://anvil.live/lipi">Lipi for Business</a>
 								</p>
 							</td>
 						</tr>
