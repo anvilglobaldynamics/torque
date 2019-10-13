@@ -62,7 +62,7 @@ exports.CustomerCollection = class extends Collection {
       fullName,
       organizationId,
       phone,
-      email, 
+      email,
       address,
       changeWalletBalance: 0,
       withdrawalHistory: [],
@@ -105,7 +105,8 @@ exports.CustomerCollection = class extends Collection {
       let searchRegex = new RegExp(searchString, 'i');
       query.$or = [
         { fullName: searchRegex },
-        { phone: searchRegex }
+        { phone: searchRegex },
+        { id: parseInt(searchString) }
       ];
     }
     return await this._find(query);
