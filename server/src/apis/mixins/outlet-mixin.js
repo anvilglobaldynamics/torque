@@ -6,7 +6,8 @@ exports.OutletMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async _createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode }) {
     let outlet = {
-      name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode
+      name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode,
+      originApp: this.clientApplication
     }
     return await this.database.outlet.create(outlet);
   }

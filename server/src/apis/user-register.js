@@ -25,7 +25,7 @@ exports.UserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin) {
 
   async _createUser({ fullName, phone, password, agreedToTocDatetimeStamp }) {
     let passwordHash = this._makeHash(password);
-    let userId = await this.database.user.create({ fullName, phone, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList: ['torque'] });
+    let userId = await this.database.user.create({ originApp: this.clientApplication, fullName, phone, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList: ['torque'] });
     return userId;
   }
 

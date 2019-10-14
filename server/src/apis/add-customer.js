@@ -33,7 +33,7 @@ exports.AddCustomerApi = class extends Api.mixin(CustomerMixin) {
   async handle({ body }) {
     let { organizationId, fullName, phone, email, address } = body;
     await this.ensureEmailOrPhoneIsProvided({ phone, email });
-    let customerId = await this.database.customer.create({ organizationId, fullName, phone, email, address });
+    let customerId = await this.database.customer.create({ originApp: this.clientApplication,  organizationId, fullName, phone, email, address });
     return { status: "success", customerId };
   }
 
