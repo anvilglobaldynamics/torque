@@ -80,7 +80,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
 
     // Avoid name collision
     if (productBlueprintId === null) {
-      let productBlueprint = await this.database.productBlueprint._findOne({ name });
+      let productBlueprint = await this.database.productBlueprint._findOne({ name, organizationId });
       if (productBlueprint) {
         productBlueprintId = productBlueprint.id;
       }
@@ -88,6 +88,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
 
     if (productBlueprintId !== null) {
       // Update existing ProductBlueprint
+
       let result = await this.database.productBlueprint._update({
         id: productBlueprintId
       }, {
