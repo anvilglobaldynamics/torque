@@ -91,6 +91,7 @@ class LegacyApi {
 
   _sendResponse(data) {
     data = ModernApi.prototype.__removeMongodbObjectIdReferrences.call(this, data);
+    ModernApi.prototype._stripInsecureFields.call(this, data);
     if (this._channel === 'ws') {
       let reponse = {
         operation: 'response-proxy',

@@ -365,6 +365,7 @@ describe('Customer', _ => {
         customerId: firstCustomer.id
       }
     }, (err, response, body) => {
+      console.log(body)
       expect(response.statusCode).to.equal(200);
       validateGetCustomerApiSuccessResponse(body);
       expect(body.customer.phone).to.equal(updatedCustomerPhone);
