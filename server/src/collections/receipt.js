@@ -21,7 +21,8 @@ exports.ReceiptCollection = class extends Collection {
       numberOfTimesViewed: Joi.number().max(999999999999999).required(),
       receiptToken: Joi.string().length(5).required(),
 
-      isDeleted: Joi.boolean().required()
+      isDeleted: Joi.boolean().required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
   }
 
@@ -41,9 +42,10 @@ exports.ReceiptCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ salesId, sentHistory, receiptToken }) {
+  async create({ originApp, salesId, sentHistory, receiptToken }) {
     let numberOfTimesViewed = 0;
     return await this._insert({
+      originApp, 
       salesId, sentHistory, numberOfTimesViewed, receiptToken,
       isDeleted: false
     });

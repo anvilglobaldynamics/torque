@@ -203,7 +203,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
         sentDatetimeStamp: Date.now(),
       })
     }
-    let receiptId = await this.database.receipt.create({ receiptToken, salesId, sentHistory });
+    let receiptId = await this.database.receipt.create({ originApp: this.clientApplication, receiptToken, salesId, sentHistory });
     return receiptToken;
   }
 
