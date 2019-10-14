@@ -591,6 +591,8 @@ describe('Sales', _ => {
       json: {
         apiKey,
 
+        clientApplication: 'torque-lite',
+
         outletId,
         customer: null,
 
@@ -621,11 +623,10 @@ describe('Sales', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
-
       liteProductBlueprintIdList = body.productBlueprintIdList;
       delete body.productBlueprintIdList;
       expect(liteProductBlueprintIdList.length).to.equal(1);
-      
+
       expect(body.receiptToken.length).to.equal(5);
       expect(body.sentVia).to.equal('none');
 
@@ -643,6 +644,8 @@ describe('Sales', _ => {
     callApi('api/lite-add-sales', {
       json: {
         apiKey,
+
+        clientApplication: 'torque-lite',
 
         outletId,
         customer: null,
@@ -998,7 +1001,7 @@ describe('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
-      body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
+      // body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
       testDoneFn();
     });
@@ -1050,7 +1053,7 @@ describe('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
-      body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
+      // body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
 
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
       testDoneFn();
@@ -1092,7 +1095,7 @@ describe('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
-      body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
+      // body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
 
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
       testDoneFn();
@@ -1572,7 +1575,7 @@ describe('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
-      body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
+      // body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
 
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(97);
 

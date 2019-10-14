@@ -67,7 +67,8 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
       passwordHash,
       agreedToTocDatetimeStamp,
       originType,
-      accessibleApplicationList: ['torque']
+      accessibleApplicationList: ['torque'], 
+      originApp: this.clientApplication,
     }
     this.legacyDatabase.user.create(user, (err, userId) => {
       if (err) return this.fail(err);

@@ -80,7 +80,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
 
     // Avoid name collision
     if (productBlueprintId === null) {
-      let productBlueprint = await this.database.productBlueprint._findOne({ name });
+      let productBlueprint = await this.database.productBlueprint._findOne({ name, organizationId });
       if (productBlueprint) {
         productBlueprintId = productBlueprint.id;
       }
@@ -88,6 +88,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
 
     if (productBlueprintId !== null) {
       // Update existing ProductBlueprint
+
       let result = await this.database.productBlueprint._update({
         id: productBlueprintId
       }, {
@@ -127,7 +128,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
 
     } else {
       // Create ProductBlueprint
-      let productBlueprintId = await this.database.productBlueprint.create({
+      let productBlueprintId = await this.database.productBlueprint.create({ originApp: this.clientApplication, 
         organizationId,
         name,
         unit: "Unit",
@@ -165,7 +166,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
         await this.database.customer._update({ email: customer.email }, { $set: { fullName: customer.fullName } })
         return existingCustomer.id;
       } else {
-        return await this.database.customer.create({
+        return await this.database.customer.create({ originApp: this.clientApplication, 
           organizationId: this.interimData.organization.id,
           fullName: customer.fullName,
           phone: customer.phone,
@@ -179,7 +180,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
         await this.database.customer._update({ phone: customer.phone }, { $set: { fullName: customer.fullName } })
         return existingCustomer.id;
       } else {
-        return await this.database.customer.create({
+        return await this.database.customer.create({ originApp: this.clientApplication, 
           organizationId: this.interimData.organization.id,
           fullName: customer.fullName,
           phone: customer.phone,
@@ -202,7 +203,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
         sentDatetimeStamp: Date.now(),
       })
     }
-    let receiptId = await this.database.receipt.create({ receiptToken, salesId, sentHistory });
+    let receiptId = await this.database.receipt.create({ originApp: this.clientApplication, receiptToken, salesId, sentHistory });
     return receiptToken;
   }
 

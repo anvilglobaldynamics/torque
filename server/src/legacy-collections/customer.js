@@ -37,7 +37,8 @@ exports.CustomerCollection = class extends LegacyCollection {
           byUserId: Joi.number().max(999999999999999).required(),
           amount: Joi.number().max(999999999999999).required()
         })
-      )
+      ),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
 
     });
 
@@ -57,8 +58,9 @@ exports.CustomerCollection = class extends LegacyCollection {
     ];
   }
 
-  create({ organizationId, fullName, phone }, cbfn) {
+  create({ originApp, organizationId, fullName, phone }, cbfn) {
     let customer = {
+      originApp,
       fullName,
       organizationId,
       phone,

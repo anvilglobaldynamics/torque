@@ -29,6 +29,7 @@ exports.PhoneVerificationRequestCollection = class extends LegacyCollection {
       origin: Joi.string().max(1024).required(),
       verificationToken: Joi.string().length(5).required(),
       isVerificationComplete: Joi.boolean().required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
 
     this.uniqueKeyDefList = [
@@ -52,8 +53,9 @@ exports.PhoneVerificationRequestCollection = class extends LegacyCollection {
     ];
   }
 
-  create({ userId, phone, origin, verificationToken }, cbfn) {
+  create({ originApp, userId, phone, origin, verificationToken }, cbfn) {
     let user = {
+      originApp,
       forPhone: phone,
       forUserId: userId,
       origin,

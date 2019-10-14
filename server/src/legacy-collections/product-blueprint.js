@@ -31,7 +31,8 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
       defaultSalePrice: Joi.number().max(999999999999999).required(),
       productCategoryIdList: Joi.array().items(Joi.number()).required(),
       isDeleted: Joi.boolean().required(),
-      isReturnable: Joi.boolean().required()
+      isReturnable: Joi.boolean().required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
 
     this.uniqueDefList = [
@@ -58,6 +59,7 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
    */
   create(data, cbfn) {
     let {
+      originApp,
       organizationId,
       name,
       unit,
@@ -69,6 +71,7 @@ exports.ProductBlueprintCollection = class extends LegacyCollection {
       isReturnable
     } = data;
     let doc = {
+      originApp,
       organizationId,
       name,
       unit,

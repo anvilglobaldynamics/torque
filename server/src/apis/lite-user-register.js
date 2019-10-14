@@ -33,7 +33,7 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
   // FIXME: User mixin
   async __createUser({ fullName, phone, password, agreedToTocDatetimeStamp }) {
     let passwordHash = this._makeHash(password);
-    let userId = await this.database.user.create({ fullName, phone, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList: ['torque-lite'] });
+    let userId = await this.database.user.create({ originApp: this.clientApplication, fullName, phone, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList: ['torque-lite'] });
     return userId;
   }
 

@@ -328,6 +328,7 @@ class Api {
       }
       response.hasError = false;
       this.__applyPaginationToResponse(response);
+      this._stripInsecureFields(response);
       this._sendResponse(response);
     } catch (originalErrorObject) {
       this.logger.error(originalErrorObject);
@@ -339,6 +340,35 @@ class Api {
   }
 
   // region: security ==========================
+
+  _stripInsecureFields(response) {
+    const fieldNameList = [
+      'originApp'
+    ];
+
+    const _cleanup = function (object) {
+      if (typeof (object) === "object" && object !== null) {
+        if (Array.isArray(object)) {
+          for (let i = 0; i < object.length; i++) {
+            _cleanup(object[i]);
+          }
+        } else {
+          let keys = Object.keys(object);
+          for (let i = 0; i < keys.length; i++) {
+            if (fieldNameList.indexOf(keys[i]) > -1) {
+              delete object[keys[i]];
+            } else {
+              if (keys[i] !== '_id') {
+                _cleanup(object[keys[i]]);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    _cleanup(response);
+  }
 
   validate(object, schema) {
     return Joi.validate(object, schema, {

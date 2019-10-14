@@ -230,7 +230,7 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
 
     payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
 
-    let salesId = await this.database.sales.create({ organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment, productsSelectedFromWarehouseId, wasOfflineSale });
+    let salesId = await this.database.sales.create({ originApp: this.clientApplication,  organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment, productsSelectedFromWarehouseId, wasOfflineSale });
 
     if (serviceList.length) {
       for (let i = 0; i < serviceList.length; i++) {

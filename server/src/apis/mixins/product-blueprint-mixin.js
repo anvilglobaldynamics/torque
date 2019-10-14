@@ -5,7 +5,7 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-e
 exports.ProductBlueprintMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async _createProductBlueprint({ organizationId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable }) {
-    return await this.database.productBlueprint.create({ organizationId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable });
+    return await this.database.productBlueprint.create({ originApp: this.clientApplication,  organizationId, name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, productCategoryIdList, isReturnable });
   }
 
   async _verifyProductBlueprintsExist({ productList }) {

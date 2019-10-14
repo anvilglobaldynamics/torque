@@ -14,7 +14,8 @@ exports.SessionCollection = class extends Collection {
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       terminatedDatetimeStamp: Joi.number().max(999999999999999).required().allow(null),
       terminatedBy: Joi.string().allow('').max(64).required(),
-      hasExpired: Joi.boolean().required()
+      hasExpired: Joi.boolean().required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
   }
 
@@ -44,8 +45,9 @@ exports.SessionCollection = class extends Collection {
     return true;
   }
 
-  async create({ userId, apiKey }) {
+  async create({ originApp, userId, apiKey }) {
     return await this._insert({
+      originApp,
       userId,
       apiKey,
       terminatedDatetimeStamp: null,

@@ -68,7 +68,8 @@ exports.SalesCollection = class extends Collection {
       wasOfflineSale: Joi.boolean().required(),
       isModified: Joi.boolean().required(),
       isDeleted: Joi.boolean().required(),
-      isDiscarded: Joi.boolean().required()
+      isDiscarded: Joi.boolean().required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
   }
 
@@ -95,9 +96,10 @@ exports.SalesCollection = class extends Collection {
   // NOTE: commented out, because currently we don't support deleting sales.
   // get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ organizationId, outletId, customerId, productList, serviceList, payment, assistedByEmployeeId, wasOfflineSale = false, productsSelectedFromWarehouseId }) {
+  async create({ originApp, organizationId, outletId, customerId, productList, serviceList, payment, assistedByEmployeeId, wasOfflineSale = false, productsSelectedFromWarehouseId }) {
     let salesNumber = await this.autoGenerateOrganizationSpecificNumber({ organizationId, fieldName: 'salesNumberSeed' });
     return await this._insert({
+      originApp,
       outletId,
       customerId,
       productList,
