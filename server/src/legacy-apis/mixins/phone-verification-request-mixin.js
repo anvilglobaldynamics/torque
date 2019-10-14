@@ -23,11 +23,11 @@ exports.phoneVerificationRequestMixin = (SuperApiClass) => class extends SuperAp
   }
 
   _createPhoneVerificationRequest({ phone, userId }, cbfn) {
-    let verificationToken = generateRandomString(16);
+    let verificationToken = generateRandomString(5).toUpperCase();
     this.legacyDatabase.phoneVerificationRequest.isVerificationTokenUnique(verificationToken, (err, isUnique) => {
       if (err) return this.fail(err);
       if (!isUnique) return this._createPhoneVerificationRequest({ phone, userId }, cbfn);
-      this.legacyDatabase.phoneVerificationRequest.create({ userId, phone, origin: 'user-register', verificationToken }, (err) => {
+      this.legacyDatabase.phoneVerificationRequest.create({ originApp: this.clientApplication, userId, phone, origin: 'user-register', verificationToken }, (err) => {
         let verificationLink = this._generatePhoneVerificationLink(verificationToken);
         return cbfn(verificationLink);
       });

@@ -46,4 +46,16 @@ exports.CustomerMixin = (SuperApiClass) => class extends SuperApiClass {
     throwOnFalsy(doc, "UNABLE_TO_UPDATE_CUSTOMER_CHANGE_WALLET_BALANCE", "Unable to update customer change wallet balance");
   }
 
+  async ensureEmailOrPhoneIsProvided({ phone, email }) {
+    if (!phone && !email) {
+      throw new CodedError("CUSTOMER_EMAIL_OR_PHONE_REQUIRED", "Customer's email or phone is required.");
+    }
+    // For Lipi for Business, Customer phone number is required.
+    if (this.clientApplication === 'torque') {
+      if (!phone) {
+        throw new CodedError("PHONE_INVALID", "Customer's phone is required");
+      }
+    }
+  }
+
 }

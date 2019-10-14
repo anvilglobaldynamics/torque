@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>{{shortName}}</title>
+	<link rel="stylesheet" type="text/css" href="common.css" />
+</head>
+
+<body bgcolor="#FFFFFF">
+
+	<!-- BODY -->
+	<table class="body-wrap">
+		<tr>
+			<td></td>
+			<td class="container" bgcolor="#FFFFFF">
+
+				<div class="content">
+					<table>
+						<tr>
+							<td>
+								<h3>{{{organizationName}}}</h3>
+								<p class="lead">Phone: {{organizationPhone}}</p>
+								<p>{{date}}</p>
+
+								<p style="padding-top: 10px;">Dear {{customerName}}, thank you for your purchase.</p>
+
+								<!-- Callout Panel -->
+								<p class="callout" style="margin-top: 20px;">
+									<span style="font-size: 30px;">Total: {{totalBilled}}</span>
+									<br>
+									<span style="font-size: 16px; color: darkslategray;">Change: {{changeAmount}}</span>
+									<br>
+									<span style="font-size: 18px;">Full receipt: <a href="https://lipi.shop/r/{{receiptToken}}">https://lipi.shop/r/{{receiptToken}}</a></span>
+								</p>
+								<!-- /Callout Panel -->
+
+								<div style="width: 100%; text-align:center; margin-top: 30px; padding-bottom: 6px;">
+									<a href="https://lipi.shop/r/{{receiptToken}}" class="soc-btn tw" style="color: white; padding: 12px; margin: 12px; text-decoration: none;">View Full Receipt</a>
+								</div>
+
+								<p style="margin-top: 24px;">You are receiving this email because your email address {{email}} was used to make a purchase on {{{organizationName}}} through <b>Lipi for Business.</b></p>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!-- /content -->
+
+			</td>
+			<td></td>
+		</tr>
+	</table>
+	<!-- /BODY -->
+
+	<!-- FOOTER -->
+	<table class="footer-wrap">
+		<tr>
+			<td></td>
+			<td class="container">
+
+				<!-- content -->
+				<div class="content">
+					<table>
+						<tr>
+							<td align="center">
+								<p>
+									<a style="font-size: 14px; font-weight: bold;" href="https://anvil.live/lipi">Lipi for Business</a>
+								</p>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!-- /content -->
+
+			</td>
+			<td></td>
+		</tr>
+	</table>
+	<!-- /FOOTER -->
+
+</body>
+
+</html>

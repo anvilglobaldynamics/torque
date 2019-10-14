@@ -14,7 +14,7 @@ exports.CustomerCollection = class extends Collection {
       isDeleted: Joi.boolean().required(),
 
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).allow(null).required(),
       email: Joi.string().email().min(3).max(30).allow(null).required(),
       address: Joi.string().min(1).max(128).allow('').required(),
 
@@ -27,7 +27,8 @@ exports.CustomerCollection = class extends Collection {
           byUserId: Joi.number().max(999999999999999).required(),
           amount: Joi.number().max(999999999999999).required()
         })
-      )
+      ),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
 
     });
   }
@@ -37,6 +38,10 @@ exports.CustomerCollection = class extends Collection {
       {
         filters: {},
         keyList: ['organizationId+phone']
+      },
+      {
+        filters: {},
+        keyList: ['organizationId+email']
       }
     ];
   }
@@ -53,12 +58,13 @@ exports.CustomerCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ organizationId, fullName, phone, email, address }) {
+  async create({ originApp, organizationId, fullName, phone, email, address }) {
     return await this._insert({
+      originApp,
       fullName,
       organizationId,
       phone,
-      email, 
+      email,
       address,
       changeWalletBalance: 0,
       withdrawalHistory: [],
@@ -101,7 +107,8 @@ exports.CustomerCollection = class extends Collection {
       let searchRegex = new RegExp(searchString, 'i');
       query.$or = [
         { fullName: searchRegex },
-        { phone: searchRegex }
+        { phone: searchRegex },
+        { id: parseInt(searchString) }
       ];
     }
     return await this._find(query);

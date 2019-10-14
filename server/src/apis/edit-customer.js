@@ -2,8 +2,9 @@ const { Api } = require('../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
 const { extract } = require('../utils/extract');
+const { CustomerMixin } = require('./mixins/customer-mixin');
 
-exports.EditCustomerApi = class extends Api {
+exports.EditCustomerApi = class extends Api.mixin(CustomerMixin) {
 
   get autoValidates() { return true; }
 
@@ -14,7 +15,7 @@ exports.EditCustomerApi = class extends Api {
       customerId: Joi.number().max(999999999999999).required(),
 
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).allow(null).required(),
       email: Joi.string().email().min(3).max(30).allow(null).required(),
       address: Joi.string().min(1).max(128).allow('').required()
     });
@@ -36,7 +37,8 @@ exports.EditCustomerApi = class extends Api {
 
   async handle({ body }) {
     let { customerId, fullName, phone, email, address } = body;
-    let result = await this.database.customer.setProfile({ id: customerId }, {  fullName, phone, email, address });
+    await this.ensureEmailOrPhoneIsProvided({ phone, email });
+    let result = await this.database.customer.setProfile({ id: customerId }, { fullName, phone, email, address });
     this.ensureUpdate(result, 'customer');
     return { status: "success" };
   }

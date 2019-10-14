@@ -9,13 +9,14 @@ exports.PhoneVerificationRequestCollection = class extends Collection {
   get joiSchema() {
     return Joi.object().keys({
       forPhone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
-      forUserId: Joi.number().max(999999999999999).required(),
+      forUserId: Joi.number().max(999999999999999).allow(null).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       verifiedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       origin: Joi.string().max(1024).required(),
-      verificationToken: Joi.string().length(16).required(),
-      isVerificationComplete: Joi.boolean().required()
+      verificationToken: Joi.string().length(5).required(),
+      isVerificationComplete: Joi.boolean().required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
   }
 
@@ -23,23 +24,24 @@ exports.PhoneVerificationRequestCollection = class extends Collection {
     return [
       {
         filters: {},
-        keyList: ['verificationToken']
+        keyList: ['forPhone+verificationToken']
       }
     ];
   }
 
   get foreignKeyDefList() {
     return [
-      {
-        targetCollection: 'user',
-        foreignKey: 'id',
-        referringKey: 'forUserId'
-      },
-      {
-        targetCollection: 'user',
-        foreignKey: 'phone',
-        referringKey: 'forPhone'
-      }
+      // // NOTE: Disabled for Lipi Compatibility
+      // {
+      //   targetCollection: 'user',
+      //   foreignKey: 'id',
+      //   referringKey: 'forUserId'
+      // },
+      // {
+      //   targetCollection: 'user',
+      //   foreignKey: 'phone',
+      //   referringKey: 'forPhone'
+      // }
     ];
   }
 
@@ -50,8 +52,9 @@ exports.PhoneVerificationRequestCollection = class extends Collection {
     return true;
   }
 
-  async create({ userId, phone, origin, verificationToken }) {
+  async create({ originApp, userId, phone, origin, verificationToken }) {
     return await this._insert({
+      originApp,
       forPhone: phone,
       forUserId: userId,
       origin,

@@ -25,7 +25,7 @@ body {
 /* ------------------------------------- 
 		ELEMENTS 
 ------------------------------------- */
-a { color: #2BA6CB;}
+a { color: #009688;}
 
 .btn {
 	text-decoration:none;
@@ -46,7 +46,7 @@ p.callout {
 }
 .callout a {
 	font-weight:bold;
-	color: #2BA6CB;
+	color: #009688;
 }
 
 table.social {
@@ -64,7 +64,7 @@ table.social {
 	text-align:center;
 }
 a.fb { background-color: #3B5998!important; }
-a.tw { background-color: #1daced!important; }
+a.tw { background-color: #009688!important; }
 a.gp { background-color: #DB4A39!important; }
 a.ms { background-color: #000!important; }
 

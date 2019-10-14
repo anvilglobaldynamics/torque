@@ -12,7 +12,8 @@ exports.ProductCollection = class extends Collection {
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       productBlueprintId: Joi.number().max(999999999999999).required(),
       purchasePrice: Joi.number().max(999999999999999).required(),
-      salePrice: Joi.number().max(999999999999999).required()
+      salePrice: Joi.number().max(999999999999999).required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
   }
 
@@ -35,8 +36,9 @@ exports.ProductCollection = class extends Collection {
     ];
   }
 
-  async create({ productBlueprintId, purchasePrice, salePrice }) {
+  async create({ originApp, productBlueprintId, purchasePrice, salePrice }) {
     return await this._insert({
+      originApp,
       productBlueprintId, purchasePrice, salePrice
     });
   }

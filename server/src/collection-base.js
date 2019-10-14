@@ -70,28 +70,26 @@ class Collection {
         ]
       };
 
-      if (key.indexOf('+') > -1) {
-        let innerKeyList = key.split('+');
-        innerKeyList.forEach(key => {
-          if (!(key in doc)) {
-            throw new Error(`unique key ${key} is missing from document.`);
-          }
-          query[key] = doc[key];
-        });
-      } else {
+      let innerKeyList = key.split('+');
+      innerKeyList.forEach(key => {
         if (!(key in doc)) {
           throw new Error(`unique key ${key} is missing from document.`);
         }
         query[key] = doc[key];
-      }
+      });
 
       for (let fragment in filters) {
         query[fragment] = filters[fragment];
       }
       let docList = await this._db.find(this.name, query);
+
+      docList = docList.filter(doc => {
+        return innerKeyList.every(key => doc[key] !== null);
+      });
       if ((docList.length === 0 && !isAlreadyInDb) || (docList.length < 2 && isAlreadyInDb)) {
         return true;
       }
+
       throw new CodedError(`DUPLICATE_${key}`, `Duplicate value found for key ${key}`);
     }));
   }

@@ -10,7 +10,8 @@ exports.verses = {
   },
   duplicationCommon: {
     emailAlreadyInUse: "প্রদত্ত ইমেল ব্যবহৃত।",
-    phoneAlreadyInUse: "প্রদত্ত ফোন নম্বরটি ব্যবহৃত।"
+    phoneAlreadyInUse: "প্রদত্ত ফোন নম্বরটি ব্যবহৃত।",
+    emailOrPhoneAlreadyInUse: "প্রদত্ত ইমেল/ফোন নম্বরটি ব্যবহৃত।"
   },
   collectionCommon: {
     genericUpdateFailureFn: (collectionName => `পরিবর্তন এর জন্য পাওয়া যায়নি ${collectionName}.`),

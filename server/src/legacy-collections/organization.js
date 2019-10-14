@@ -31,7 +31,8 @@ exports.OrganizationCollection = class extends LegacyCollection {
       isDeleted: Joi.boolean().required(),
       activeModuleCodeList: Joi.array().items(
         Joi.string()
-      ).required()
+      ).required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
 
     this.uniqueKeyDefList = [

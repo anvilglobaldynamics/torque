@@ -85,6 +85,10 @@ class Api {
     return 'user';
   }
 
+  get skipSubscriptionCheckOnTorqueLite() {
+    return true;
+  }
+
   /*
     enforces Access Control Rules. Rules are specified using the accessControl property. Format - 
     [
@@ -212,7 +216,8 @@ class Api {
       });
     }
     schema = schema.keys({
-      clientLanguage: Joi.string().valid('en-us', 'bn-bd').optional()
+      clientLanguage: Joi.string().valid('en-us', 'bn-bd').optional(),
+      clientApplication: Joi.string().valid('torque', 'torque-lite').optional()
     });
     let { error, value } = this.validate(body, schema);
     if (error) throw error;
@@ -220,7 +225,17 @@ class Api {
   }
 
   /** @private */
-  __detectLanguage(body) {
+  __detectClientApplication(body) {
+    if ('clientApplication' in body) {
+      this.clientApplication = body.clientApplication;
+      delete body['clientApplication'];
+    } else {
+      this.clientApplication = 'torque';
+    }
+  }
+
+  /** @private */
+  __detectClientLanguage(body) {
     if ('clientLanguage' in body) {
       this.clientLanguage = body.clientLanguage;
       delete body['clientLanguage'];
@@ -263,6 +278,10 @@ class Api {
       // throw new CodedError("DEV_ERROR", "api requires subscription but organizationId could not be looked up.");
       return;
     }
+    if (this.clientApplication === 'torque-lite' && this.skipSubscriptionCheckOnTorqueLite) {
+      console.log("SKIPPING SUBSCRIPTION VERIFICATION", this._request.url);
+      return;
+    }
     let organization = await this.database.organization.findById({ id: body.organizationId });
     if (!organization.packageActivationId) {
       throw new CodedError("SUBSCRIPTION_EXPIRED", "Your subscription has expired. (Never Assigned)");
@@ -294,7 +313,8 @@ class Api {
       if (this.autoValidates) {
         let body = this.__composeAndValidateSchema(originalBody);
         body = this.sanitize(body);
-        this.__detectLanguage(body);
+        this.__detectClientApplication(body);
+        this.__detectClientLanguage(body);
         this.__detectPagination(body);
         if (this.requiresAuthentication) {
           let authData = await this.__handleAuthentication(body);
@@ -308,6 +328,7 @@ class Api {
       }
       response.hasError = false;
       this.__applyPaginationToResponse(response);
+      this._stripInsecureFields(response);
       this._sendResponse(response);
     } catch (originalErrorObject) {
       this.logger.error(originalErrorObject);
@@ -319,6 +340,35 @@ class Api {
   }
 
   // region: security ==========================
+
+  _stripInsecureFields(response) {
+    const fieldNameList = [
+      'originApp'
+    ];
+
+    const _cleanup = function (object) {
+      if (typeof (object) === "object" && object !== null) {
+        if (Array.isArray(object)) {
+          for (let i = 0; i < object.length; i++) {
+            _cleanup(object[i]);
+          }
+        } else {
+          let keys = Object.keys(object);
+          for (let i = 0; i < keys.length; i++) {
+            if (fieldNameList.indexOf(keys[i]) > -1) {
+              delete object[keys[i]];
+            } else {
+              if (keys[i] !== '_id') {
+                _cleanup(object[keys[i]]);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    _cleanup(response);
+  }
 
   validate(object, schema) {
     return Joi.validate(object, schema, {
@@ -505,12 +555,18 @@ class Api {
     if (err.code === "DUPLICATE_email") {
       err = new Error(this.verses.duplicationCommon.emailAlreadyInUse);
       err.code = 'EMAIL_ALREADY_IN_USE';
+    } else if (err.code === "DUPLICATE_organizationId+email") {
+      err = new Error(this.verses.duplicationCommon.emailAlreadyInUse);
+      err.code = 'EMAIL_ALREADY_IN_USE';
     } else if (err.code === "DUPLICATE_phone") {
       err = new Error(this.verses.duplicationCommon.phoneAlreadyInUse);
       err.code = 'PHONE_ALREADY_IN_USE';
     } else if (err.code === "DUPLICATE_organizationId+phone") {
       err = new Error(this.verses.duplicationCommon.phoneAlreadyInUse);
       err.code = 'PHONE_ALREADY_IN_USE';
+    } else if (err.code === "DUPLICATE_organizationId+phone+email") {
+      err = new Error(this.verses.duplicationCommon.emailOrPhoneAlreadyInUse);
+      err.code = 'PHONE_OR_EMAIL_ALREADY_IN_USE';
     }
     return err;
   }

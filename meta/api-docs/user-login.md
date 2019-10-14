@@ -36,6 +36,7 @@ Possible Error Codes:
 { code: USER_REQUIRES_PHONE_VERIFICATION } // the user requires phone verification
 { code: PHONE_VERIFICATION_REQUEST_NOT_FOUND }
 { code: EMAIL_VERIFICATION_REQUEST_NOT_FOUND }
+{ code: APP_ACCESS_DENIED } // User is not permitted to use the app. (Lipi user trying to use Lipi Lite and so on)
 ```
 
 ### response (on success):

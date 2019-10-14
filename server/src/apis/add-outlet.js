@@ -35,17 +35,6 @@ exports.AddOutletApi = class extends Api.mixin(InventoryMixin, OutletMixin) {
     }];
   }
 
-  async _createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode }) {
-    let outlet = {
-      name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode
-    }
-    return await this.database.outlet.create(outlet);
-  }
-
-  async _createGeolocationCache({ outletId, location }) {
-    return await this.database.cacheOutletGeolocation.create({ outletId, location });
-  }
-
   async _checkOrganizationPackageOutletLimit({ organizationId, aPackage }) {
     let outletList = await this.database.outlet.listByOrganizationId({ organizationId });
     if (outletList.length == aPackage.limits.maximumOutlets) {

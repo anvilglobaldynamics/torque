@@ -41,40 +41,6 @@ exports.GetSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin, Servic
     }];
   }
 
-  async _addProductBlueprintData({ sales }) {
-    let { productList } = sales;
-    await this.__getAggregatedProductListWithoutAcquisitionDetails({ productList });
-    productList.forEach(product => {
-      let { productBlueprint } = product.product;
-      product.productBlueprintId = productBlueprint.id;
-      product.productBlueprintName = productBlueprint.name;
-      product.productBlueprintUnit = productBlueprint.unit;
-      product.productBlueprintIsReturnable = productBlueprint.isReturnable;
-      delete product.product;
-    });
-  }
-
-  async _addServiceBlueprintData({ sales }) {
-    let { serviceList } = sales;
-    await this.__getAggregatedServiceList({ serviceList });
-    serviceList.forEach(service => {
-      let { serviceBlueprint } = service.service;
-      service.serviceBlueprintId = serviceBlueprint.id;
-      service.serviceBlueprintName = serviceBlueprint.name;
-      service.serviceBlueprintIsLongstanding = serviceBlueprint.isLongstanding;
-      service.serviceBlueprintServiceDuration = serviceBlueprint.serviceDuration;
-      service.serviceBlueprintIsRefundable = serviceBlueprint.isRefundable;
-      delete service.service;
-    });
-  }
-
-  async __addDiscountPresetName({ sales }) {
-    sales.payment.discountPresetName = '';
-    if (sales.payment.discountPresetId === null) return;
-    let discountPreset = await this.database.discountPreset.findById({ id: sales.payment.discountPresetId });
-    sales.payment.discountPresetName = discountPreset.name;
-  }
-
   async handle({ body }) {
     let { salesId } = body;
 

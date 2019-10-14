@@ -33,8 +33,18 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
     throwOnFalsy(user, "USER_NOT_FOUND", this.verses.userLoginApi.userNotFound);
     throwOnTruthy(user.isBanned, "USER_BANNED", this.verses.userLoginApi.userBanned);
 
+    if (user.accessibleApplicationList.indexOf(this.clientApplication) === -1) {
+      if (this.clientApplication === 'torque-lite') {
+        throw new CodedError("APP_ACCESS_DENIED", "You already have access to Lipi for Business. Please use that instead of Lipi Lite.");
+      } else {
+        throw new CodedError("APP_ACCESS_DENIED", "You do not have access to Lipi for Business. Please use Lipi Lite.");
+      }
+    }
+
+    // NOTE: Not currently validating phone when clientApplication === 'torque-lite'
+
     let warning = [];
-    if (emailOrPhone === user.phone && !user.isPhoneVerified) {
+    if (emailOrPhone === user.phone && !user.isPhoneVerified && this.clientApplication === 'torque') {
       let phoneVerificationRequest = await this.database.phoneVerificationRequest.findByForPhone({ forPhone: user.phone });
       throwOnFalsy(phoneVerificationRequest, "PHONE_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.phoneVerificationRequestNotFound);
       let { createdDatetimeStamp, isVerificationComplete } = phoneVerificationRequest;
@@ -44,7 +54,7 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
         diff = Math.round(diff / (1000 * 60))
         warning.push(`You have less than 1 hour to verify your phone number "${user.phone}".`);
       }
-    } else if (emailOrPhone === user.email && !user.isEmailVerified) {
+    } else if (emailOrPhone === user.email && !user.isEmailVerified && this.clientApplication === 'torque') {
       let emailVerificationRequest = await this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email });
       throwOnFalsy(emailVerificationRequest, "EMAIL_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.emailVerificationRequestNotFound)
       throwOnFalsy(emailVerificationRequest.isVerificationComplete, "USER_REQUIRES_EMAIL_VERIFICATION", this.verses.userLoginApi.userRequiresEmailVerification)
@@ -59,7 +69,7 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
       var apiKey = generateRandomString(64);
       var isUnique = await this.database.session.isApiKeyUnique({ apiKey });
     } while (!isUnique);
-    let sessionId = await this.database.session.create({ userId, apiKey });
+    let sessionId = await this.database.session.create({ originApp: this.clientApplication, userId, apiKey });
     return { apiKey, sessionId };
   }
 

@@ -43,7 +43,7 @@ class FixtureManager {
       {
         name: "outlet-category-list",
         path: "./src/fixtures/outlet-category-list.json",
-        version: 4
+        version: 5
       }
     ];
 

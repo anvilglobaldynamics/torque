@@ -24,7 +24,8 @@ exports.ProductCollection = class extends LegacyCollection {
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       productBlueprintId: Joi.number().max(999999999999999).required(),
       purchasePrice: Joi.number().max(999999999999999).required(),
-      salePrice: Joi.number().max(999999999999999).required()
+      salePrice: Joi.number().max(999999999999999).required(),
+      originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
 
     this.uniqueKeyDefList = [
@@ -43,8 +44,9 @@ exports.ProductCollection = class extends LegacyCollection {
     ];
   }
 
-  create({ productBlueprintId, purchasePrice, salePrice }, cbfn) {
+  create({ originApp, productBlueprintId, purchasePrice, salePrice }, cbfn) {
     let doc = {
+      originApp,
       productBlueprintId, purchasePrice, salePrice
     }
     this._insert(doc, (err, id) => {

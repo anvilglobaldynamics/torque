@@ -1813,6 +1813,9 @@ exports.validateUserSchema = (doc) => {
     isPhoneVerified: Joi.boolean().required(),
     isEmailVerified: Joi.boolean().required(),
     isBanned: Joi.boolean().required(),
+    accessibleApplicationList: Joi.array().items(
+      Joi.string().valid('torque', 'torque-lite').required(),
+    ).required(),
     agreedToTocDatetimeStamp: Joi.number().max(999999999999999).allow(null).required()
   });
   let { error, value } = Joi.validate(doc, schema);

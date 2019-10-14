@@ -60,6 +60,10 @@ class LegacyApi {
     return false;
   }
 
+  get skipSubscriptionCheckOnTorqueLite() {
+    return true;
+  }
+
   get autoPaginates() {
     return false;
   }
@@ -87,6 +91,7 @@ class LegacyApi {
 
   _sendResponse(data) {
     data = ModernApi.prototype.__removeMongodbObjectIdReferrences.call(this, data);
+    ModernApi.prototype._stripInsecureFields.call(this, data);
     if (this._channel === 'ws') {
       let reponse = {
         operation: 'response-proxy',
@@ -134,7 +139,8 @@ class LegacyApi {
         });
       }
       schema = schema.keys({
-        clientLanguage: Joi.string().valid('en-us', 'bn-bd').optional()
+        clientLanguage: Joi.string().valid('en-us', 'bn-bd').optional(),
+        clientApplication: Joi.string().valid('torque', 'torque-lite').optional()
       });
       let { error, value } = this.validate(body, schema);
       if (error) {
@@ -148,6 +154,12 @@ class LegacyApi {
           this.clientLanguage = 'en-us';
         }
         this.verses = languageCache[this.clientLanguage];
+        if ('clientApplication' in body) {
+          this.clientApplication = body.clientApplication;
+          delete body['clientApplication'];
+        } else {
+          this.clientApplication = 'torque';
+        }
         if ('paginate' in body) {
           this.__paginationCache = body.paginate;
           delete body['paginate'];

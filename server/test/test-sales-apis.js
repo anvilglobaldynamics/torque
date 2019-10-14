@@ -581,6 +581,119 @@ describe('Sales', _ => {
 
   });
 
+  // Lipi Lite - Start
+
+  let liteProductBlueprintIdList = null;
+
+  it('api/lite-add-sales (Valid, No Customer)', testDoneFn => {
+
+    callApi('api/lite-add-sales', {
+      json: {
+        apiKey,
+
+        clientApplication: 'torque-lite',
+
+        outletId,
+        customer: null,
+
+        productList: [
+          {
+            productBlueprintId: null,
+            name: "New Product",
+            count: 5,
+            salePrice: 500,
+          }
+        ],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          vatPercentage: 5,
+          discountType: placeholderDefaultDiscountType,
+          discountValue: placeholderDefaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBillBeforeRounding: 0,
+          roundedByAmount: 0,
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      liteProductBlueprintIdList = body.productBlueprintIdList;
+      delete body.productBlueprintIdList;
+      expect(liteProductBlueprintIdList.length).to.equal(1);
+
+      expect(body.receiptToken.length).to.equal(5);
+      expect(body.sentVia).to.equal('none');
+
+      delete body.receiptToken;
+      delete body.sentVia;
+
+      validateAddSalesApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  it('api/lite-add-sales (Valid, No Customer, Existing Blueprint)', testDoneFn => {
+
+    callApi('api/lite-add-sales', {
+      json: {
+        apiKey,
+
+        clientApplication: 'torque-lite',
+
+        outletId,
+        customer: null,
+
+        productList: [
+          {
+            productBlueprintId: liteProductBlueprintIdList[0].productBlueprintId,
+            name: "New Product",
+            count: 5,
+            salePrice: 500,
+          }
+        ],
+
+        payment: {
+          totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+          vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
+          vatPercentage: 5,
+          discountType: placeholderDefaultDiscountType,
+          discountValue: placeholderDefaultDiscountValue,
+          discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
+          serviceChargeAmount: 0,
+          totalBillBeforeRounding: 0,
+          roundedByAmount: 0,
+          totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
+          paidAmount: 300,
+          changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
+          paymentMethod: 'cash'
+        }
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      liteProductBlueprintIdList = body.productBlueprintIdList;
+      delete body.productBlueprintIdList;
+
+      expect(body.receiptToken.length).to.equal(5);
+      expect(body.sentVia).to.equal('none');
+
+      delete body.receiptToken;
+      delete body.sentVia;
+
+      validateAddSalesApiSuccessResponse(body);
+      testDoneFn();
+    });
+
+  });
+
+  // Lipi Lite - End
+
   it('api/add-sales (Invalid payment)', testDoneFn => {
 
     callApi('api/add-sales', {
@@ -888,6 +1001,7 @@ describe('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
+      // body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
       testDoneFn();
     });
@@ -939,6 +1053,8 @@ describe('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
 
+      // body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
+
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
       testDoneFn();
     });
@@ -978,6 +1094,8 @@ describe('Sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+
+      // body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
 
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(96);
       testDoneFn();
@@ -1456,6 +1574,8 @@ describe('Sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGetAggregatedInventoryDetailsApiSuccessResponse(body);
+
+      // body.aggregatedProductList.reverse(); // Because checks below rely on the item first entered in the list
 
       expect(body.aggregatedProductList[0]).to.have.property('count').that.equals(97);
 

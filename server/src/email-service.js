@@ -52,6 +52,17 @@ class EmailService {
         name: 'bn-bd--generic-message',
         path: './src/templates/email/bn-bd--generic-message.html',
         subject: `Message from ${branding.shortName}`
+      },
+      // Receipt
+      {
+        name: 'en-us--receipt',
+        path: './src/templates/email/receipt.html',
+        subject: `Receipt - Lipi for Business`
+      },
+      {
+        name: 'bn-bd--receipt',
+        path: './src/templates/email/receipt.html',
+        subject: `Receipt - Lipi for Business`
       }
     ];
 
