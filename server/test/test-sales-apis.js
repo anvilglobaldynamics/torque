@@ -591,6 +591,8 @@ describe('Sales', _ => {
       json: {
         apiKey,
 
+        clientApplication: 'torque-lite',
+
         outletId,
         customer: null,
 
@@ -642,6 +644,8 @@ describe('Sales', _ => {
     callApi('api/lite-add-sales', {
       json: {
         apiKey,
+
+        clientApplication: 'torque-lite',
 
         outletId,
         customer: null,
