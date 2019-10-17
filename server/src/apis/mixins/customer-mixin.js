@@ -58,4 +58,9 @@ exports.CustomerMixin = (SuperApiClass) => class extends SuperApiClass {
     }
   }
 
+  async _createCustomer({ originApp, organizationId, fullName, phone, email, address }) {
+    await this.applyGlobalUsageLimit({ useCase: 'add-customer' });
+    return await this.database.customer.create({ originApp, organizationId, fullName, phone, email, address });
+  }
+
 }

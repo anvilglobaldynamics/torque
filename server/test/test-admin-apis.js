@@ -366,7 +366,7 @@ describe('Admin', _ => {
       json: {
         apiKey: apiKey,
         userSearchString: phone,
-        originType:'any'
+        originType: 'any'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -385,7 +385,7 @@ describe('Admin', _ => {
       json: {
         apiKey: apiKey,
         userSearchString: fullName,
-        originType:'any'
+        originType: 'any'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -406,7 +406,7 @@ describe('Admin', _ => {
       json: {
         apiKey: apiKey,
         userSearchString: '',
-        originType:'any'
+        originType: 'any'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

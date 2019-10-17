@@ -128,7 +128,8 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
 
     } else {
       // Create ProductBlueprint
-      let productBlueprintId = await this.database.productBlueprint.create({ originApp: this.clientApplication, 
+      let productBlueprintId = await this.database.productBlueprint.create({
+        originApp: this.clientApplication,
         organizationId,
         name,
         unit: "Unit",
@@ -166,7 +167,8 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
         await this.database.customer._update({ email: customer.email }, { $set: { fullName: customer.fullName } })
         return existingCustomer.id;
       } else {
-        return await this.database.customer.create({ originApp: this.clientApplication, 
+        return await this._createCustomer({
+          originApp: this.clientApplication,
           organizationId: this.interimData.organization.id,
           fullName: customer.fullName,
           phone: customer.phone,
@@ -180,7 +182,8 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
         await this.database.customer._update({ phone: customer.phone }, { $set: { fullName: customer.fullName } })
         return existingCustomer.id;
       } else {
-        return await this.database.customer.create({ originApp: this.clientApplication, 
+        return await this._createCustomer({
+          originApp: this.clientApplication,
           organizationId: this.interimData.organization.id,
           fullName: customer.fullName,
           phone: customer.phone,
@@ -266,7 +269,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
   async handle({ userId, body }) {
     // NOTE: Checking here instead of in _addSales because there is no point
     // in creating product blueprints and customers if the sale does not go through.
-    await this.applyGlobalUsageLimit({ useCase: 'add-sales' }); 
+    await this.applyGlobalUsageLimit({ useCase: 'add-sales' });
 
     let { outletId, customer, productList: originalProductList, payment: originalPayment } = body;
     let organizationId = this.interimData.organization.id;

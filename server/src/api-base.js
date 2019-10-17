@@ -414,11 +414,17 @@ class Api {
     const usageLimitMap = {
       "register": {
         dailyLimit: {
-          'torque': 116,
-          'torque-lite': 2
+          'torque': 1000,
+          'torque-lite': 10000
         }
       },
       "add-sales": {
+        dailyLimit: {
+          'torque': 1000,
+          'torque-lite': 10000
+        }
+      },
+      "add-customer": {
         dailyLimit: {
           'torque': 1000,
           'torque-lite': 10000
