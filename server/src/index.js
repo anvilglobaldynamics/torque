@@ -36,7 +36,7 @@ const { GetOrganizationListApi } = require('./apis/get-organization-list');
 let { EditOrganizationApi } = require('./legacy-apis/edit-organization');
 const { GetActivatedPackageListApi } = require('./apis/get-activated-package-list');
 
-let { AddNewEmployeeApi } = require('./legacy-apis/add-new-employee');
+const { AddNewEmployeeApi } = require('./apis/add-new-employee');
 let { FindUserApi } = require('./legacy-apis/find-user');
 let { HireUserAsEmployeeApi } = require('./legacy-apis/hire-user-as-employee');
 const { GetEmployeeListApi } = require('./apis/get-employee-list');
