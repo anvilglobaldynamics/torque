@@ -361,7 +361,7 @@ class Api {
     if (!doc) {
       throw new CodedError("INTERNAL_DATABASE_ERROR", `Unable to increase global daily usage of ${dateString}/${fieldName}`);
     }
-    console.log(`${dateString}/${fieldName}`, doc[fieldName]);
+    // console.log(`${dateString}/${fieldName}`, doc[fieldName]);
     return [doc[fieldName], doc.hasAdminBeenAlerted];
   }
 
