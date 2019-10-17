@@ -133,4 +133,11 @@ exports.UserMixin = (SuperApiClass) => class extends SuperApiClass {
     return { user };
   }
 
+  async _createUser({ fullName, phone, password, agreedToTocDatetimeStamp, accessibleApplicationList }) {
+    await this.applyGlobalUsageLimit({ useCase: 'register' });
+    let passwordHash = this._makeHash(password);
+    let userId = await this.database.user.create({ originApp: this.clientApplication, fullName, phone, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList });
+    return userId;
+  }
+
 }

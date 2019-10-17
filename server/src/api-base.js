@@ -3,6 +3,7 @@ const Joi = require('joi');
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 const baselib = require('baselib');
+const moment = require('moment');
 const { CodedError, throwOnFalsy } = require('./utils/coded-error');
 const { Server } = require('./server');
 const { DatabaseService } = require('./database-service');
@@ -340,6 +341,61 @@ class Api {
   }
 
   // region: security ==========================
+
+  /** @private */
+  async _increaseGlobalDailyUsageCount({ appName, useCase }) {
+    const globalUsageCollectionName = 'auto-generated-global-daily-usage';
+
+    const dateString = moment((new Date())).format('YYYY-MM-DD');
+    const fieldName = appName + '--' + useCase;
+    let query = {
+      dateString,
+      // fieldName
+    };
+    let modifications = {
+      $inc: {
+        [fieldName]: 1
+      }
+    };
+
+    let doc = await this.database.engine.upsertAndReturnNew(globalUsageCollectionName, query, modifications);
+    if (!doc) {
+      throw new CodedError("INTERNAL_DATABASE_ERROR", `Unable to increase global daily usage of ${dateString}/${fieldName}`);
+    }
+    // console.log(`${dateString}/${fieldName}`, doc[fieldName]);
+    return doc[fieldName];
+  }
+
+  // * Call this method from any API to enforce usage limit.
+  // * useCase must be a string specified in the usageLimitMap below.
+  // * This Api will throw an error "GLOBAL_USAGE_LIMIT_REACHED" if usage crosses
+  //   the limit.
+  async applyGlobalUsageLimit({ useCase }) {
+    const usageLimitMap = {
+      "register": {
+        dailyLimit: {
+          'torque': 1000,
+          'torque-lite': 10000
+        }
+      },
+      "add-sales": {
+        dailyLimit: {
+          'torque': 1000,
+          'torque-lite': 10000
+        }
+      }
+    };
+
+    if (!(useCase in usageLimitMap)) throw new CodedError("DEV_ERROR", "Invalid Usecase for applying global usage limit");
+
+    let count = await this._increaseGlobalDailyUsageCount({ appName: this.clientApplication, useCase });
+
+    if (count > usageLimitMap[useCase].dailyLimit[this.clientApplication]) {
+      // TODO: Send Email to Devs
+      throw new CodedError("GLOBAL_USAGE_LIMIT_REACHED", "Global usage limit has been reached");
+    }
+
+  }
 
   _stripInsecureFields(response) {
     const fieldNameList = [

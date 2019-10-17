@@ -30,13 +30,6 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
     });
   }
 
-  // FIXME: User mixin
-  async __createUser({ fullName, phone, password, agreedToTocDatetimeStamp }) {
-    let passwordHash = this._makeHash(password);
-    let userId = await this.database.user.create({ originApp: this.clientApplication, fullName, phone, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList: ['torque-lite'] });
-    return userId;
-  }
-
   async handle({ body }) {
     let { organizationName, categoryCode, fullName, phone, password, hasAgreedToToc } = body;
 
@@ -51,7 +44,7 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
     // await this.database.phoneVerificationRequest.applyVerificationToken({ verificationToken });
 
     // === user creation
-    let userId = await this.__createUser({ fullName, phone, password, agreedToTocDatetimeStamp });
+    let userId = await this.__createUser({ fullName, phone, password, agreedToTocDatetimeStamp, accessibleApplicationList: ['torque-lite'] });
 
     // === organization creation
     let activeModuleCodeList = ['MOD_PRODUCT', 'MOD_SERVICE'];

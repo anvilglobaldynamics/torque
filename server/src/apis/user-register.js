@@ -23,18 +23,12 @@ exports.UserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin) {
     });
   }
 
-  async _createUser({ fullName, phone, password, agreedToTocDatetimeStamp }) {
-    let passwordHash = this._makeHash(password);
-    let userId = await this.database.user.create({ originApp: this.clientApplication, fullName, phone, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList: ['torque'] });
-    return userId;
-  }
-
   async handle({ body }) {
     let { fullName, phone, password, hasAgreedToToc } = body;
 
     let agreedToTocDatetimeStamp = (hasAgreedToToc ? Date.now() : null);
 
-    let userId = await this._createUser({ fullName, phone, password, agreedToTocDatetimeStamp });
+    let userId = await this._createUser({ fullName, phone, password, agreedToTocDatetimeStamp, accessibleApplicationList: ['torque'] });
 
     let verificationLink = await this._createPhoneVerificationRequest({ phone, userId });
     this._sendPhoneVerificationSms({ phone, verificationLink });
