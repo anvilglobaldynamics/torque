@@ -44,7 +44,7 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
     // await this.database.phoneVerificationRequest.applyVerificationToken({ verificationToken });
 
     // === user creation
-    let userId = await this.__createUser({ fullName, phone, password, agreedToTocDatetimeStamp, accessibleApplicationList: ['torque-lite'] });
+    let userId = await this._createUser({ fullName, phone, password, agreedToTocDatetimeStamp, accessibleApplicationList: ['torque-lite'] });
 
     // === organization creation
     let activeModuleCodeList = ['MOD_PRODUCT', 'MOD_SERVICE'];

@@ -264,6 +264,10 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
   }
 
   async handle({ userId, body }) {
+    // NOTE: Checking here instead of in _addSales because there is no point
+    // in creating product blueprints and customers if the sale does not go through.
+    await this.applyGlobalUsageLimit({ useCase: 'add-sales' }); 
+
     let { outletId, customer, productList: originalProductList, payment: originalPayment } = body;
     let organizationId = this.interimData.organization.id;
 

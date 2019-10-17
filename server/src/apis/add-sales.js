@@ -82,6 +82,9 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
   }
 
   async handle({ userId, body }) {
+    // NOTE: See lite-add-sales.js handle method for explanation
+    await this.applyGlobalUsageLimit({ useCase: 'add-sales' });
+
     let { outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale } = body;
     let organizationId = this.interimData.organization.id;
 

@@ -343,14 +343,13 @@ class Api {
   // region: security ==========================
 
   /** @private */
-  async _increaseGlobalDailyUsageCount({ appName, useCase }) {
+  async _increaseGlobalDailyUsageCount({ useCase }) {
     const globalUsageCollectionName = 'auto-generated-global-daily-usage';
 
     const dateString = moment((new Date())).format('YYYY-MM-DD');
-    const fieldName = appName + '--' + useCase;
+    const fieldName = this.clientApplication + '--' + useCase;
     let query = {
       dateString,
-      // fieldName
     };
     let modifications = {
       $inc: {
@@ -362,8 +361,49 @@ class Api {
     if (!doc) {
       throw new CodedError("INTERNAL_DATABASE_ERROR", `Unable to increase global daily usage of ${dateString}/${fieldName}`);
     }
-    // console.log(`${dateString}/${fieldName}`, doc[fieldName]);
-    return doc[fieldName];
+    console.log(`${dateString}/${fieldName}`, doc[fieldName]);
+    return [doc[fieldName], doc.hasAdminBeenAlerted];
+  }
+
+  async _alertAdminsByEmail({ usageLimitMap, useCase, count }) {
+    let to = "server.alert@anvil.live"
+    const dateString = moment((new Date())).format('YYYY-MM-DD')
+    let subject = `Server Alert: ${dateString} - Global Daily Usage Limit has been Exceeded`;
+    let html = JSON.stringify({
+      dateString,
+      useCase,
+      clientApplication: this.clientApplication,
+      attemptNumber: count,
+      limit: usageLimitMap[useCase].dailyLimit[this.clientApplication]
+    }, null, 2);
+    html = '<code>' + html.replace(/\n/g, '<br>') + '</code>';
+    let [err, isDeveloperError, response, finalBody] = await this.server.emailService.sendMail({ to, subject, html });
+
+    // TODO: Unify email service error handling
+    if ((err) || response.message !== 'Queued. Thank you.') {
+      if (err) {
+        if (!isDeveloperError) this.logger.error(err);
+      } else {
+        this.logger.log("Unexpected emailService response:", response);
+      }
+      let message = 'Failed to send warning email. Please handle the case manually.';
+      this.logger.important(message, {
+        type: 'warning-email',
+        subject,
+        html
+      });
+    }
+
+    const globalUsageCollectionName = 'auto-generated-global-daily-usage';
+    let query = {
+      dateString,
+    };
+    let modifications = {
+      $set: {
+        hasAdminBeenAlerted: true
+      }
+    };
+    await this.database.engine.upsertAndReturnNew(globalUsageCollectionName, query, modifications);
   }
 
   // * Call this method from any API to enforce usage limit.
@@ -374,8 +414,8 @@ class Api {
     const usageLimitMap = {
       "register": {
         dailyLimit: {
-          'torque': 1000,
-          'torque-lite': 10000
+          'torque': 116,
+          'torque-lite': 2
         }
       },
       "add-sales": {
@@ -388,10 +428,14 @@ class Api {
 
     if (!(useCase in usageLimitMap)) throw new CodedError("DEV_ERROR", "Invalid Usecase for applying global usage limit");
 
-    let count = await this._increaseGlobalDailyUsageCount({ appName: this.clientApplication, useCase });
+    let [count, hasAdminBeenAlerted] = await this._increaseGlobalDailyUsageCount({ useCase });
 
     if (count > usageLimitMap[useCase].dailyLimit[this.clientApplication]) {
-      // TODO: Send Email to Devs
+
+      if (!hasAdminBeenAlerted) {
+        await this._alertAdminsByEmail({ useCase, count, usageLimitMap });
+      }
+
       throw new CodedError("GLOBAL_USAGE_LIMIT_REACHED", "Global usage limit has been reached");
     }
 
