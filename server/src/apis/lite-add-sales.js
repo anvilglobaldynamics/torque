@@ -7,6 +7,7 @@ const { CustomerMixin } = require('./mixins/customer-mixin');
 const { SalesMixin } = require('./mixins/sales-mixin');
 const { ServiceMixin } = require('./mixins/service-mixin');
 const { generateRandomStringCaseInsensitive } = require('./../utils/random-string');
+const moment = require('moment');
 
 exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin, ServiceMixin) {
 
@@ -245,7 +246,10 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
   async _sendReceiptByEmail({ payment, organization, customer, receiptToken }) {
     let organizationName = organization.name;
     let organizationPhone = organization.phone;
-    let date = (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString();
+
+    let dateObject = (new Date())
+    dateObject.setHours(dateObject.getHours() + 6); // GMT + 6
+    let date = moment((new Date())).format('dddd, MMMM Do YYYY, h:mm a');
 
     let { totalBilled, changeAmount, totalPaidAmount } = payment;
     totalBilled = Math.round(totalBilled * 100) / 100;
