@@ -249,7 +249,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
 
     let dateObject = (new Date())
     dateObject.setHours(dateObject.getHours() + 6); // GMT + 6
-    let date = moment((new Date())).format('dddd, MMMM Do YYYY, h:mm a');
+    let date = moment(dateObject).format('dddd, MMMM Do YYYY, h:mm a');
 
     let { totalBilled, changeAmount, totalPaidAmount } = payment;
     totalBilled = Math.round(totalBilled * 100) / 100;
