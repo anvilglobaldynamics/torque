@@ -256,12 +256,28 @@
         --paper-spinner-color: #009688;
       }
 
+      .footer-login {
+        margin-top: 8px;
+      }
+
+      .language-area {
+        width: 100%;
+      }
+
+      .language-block {
+        cursor: pointer;
+        margin-left: 4px;
+        margin-right: 4px;
+      }
+
       .language-active {
         border-bottom: 2px solid #009688;
       }
 
-      .language-icon {
-        cursor: pointer;
+      .language-icon {}
+
+      .language-name {
+        font-size: 14px;
       }
 
       .custom-app-drawer-wrapper {
@@ -567,10 +583,17 @@
               <page-graph-sales name="graph-sales"></page-graph-sales>
             </iron-pages>
 
-            <div class="footer">
-              <div>
-                <img src="../images/icons/en-us.png" data-key="en-us" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'en-us')]]" on-tap="languageIconTapped">
-                <img src="../images/icons/bn-bd.png" data-key="bn-bd" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'bn-bd')]]" on-tap="languageIconTapped">
+            <div class$="footer footer-[[pageName]]">
+              <!-- [[pageName]] -->
+              <div class="language-area horizontal layout center-center">
+                <div class="language-block" data-key="en-us" on-tap="languageIconTapped">
+                  <img src="../images/icons/en-us.png" data-key="en-us" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'en-us')]]">
+                  <div class="language-name" data-key="en-us" style="font-size: 13px !important;">EN</div>
+                </div>
+                <div class="language-block" data-key="bn-bd" on-tap="languageIconTapped">
+                  <img src="../images/icons/bn-bd.png" data-key="bn-bd" class$="language-icon [[$getLanguageClass(selectedLanguageIdentifier, 'bn-bd')]]">
+                  <div class="language-name" data-key="bn-bd">বাং</div>
+                </div>
               </div>
               <br>
               <br>
