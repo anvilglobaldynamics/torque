@@ -54,7 +54,9 @@ let {
   validateCollectionSchema,
 
   addProductCategory,
-  validateReportProductSalesDetailsApiSuccessResponse
+  validateReportProductSalesDetailsApiSuccessResponse,
+
+  validateLiteAddSalesApiSuccessResponse
 } = require('./lib');
 
 const prefix = 's';
@@ -624,16 +626,8 @@ describe('Sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       liteProductBlueprintIdList = body.productBlueprintIdList;
-      delete body.productBlueprintIdList;
-      expect(liteProductBlueprintIdList.length).to.equal(1);
 
-      expect(body.receiptToken.length).to.equal(6);
-      expect(body.sentVia).to.equal('none');
-
-      delete body.receiptToken;
-      delete body.sentVia;
-
-      validateAddSalesApiSuccessResponse(body);
+      validateLiteAddSalesApiSuccessResponse(body);
       testDoneFn();
     });
 
@@ -678,15 +672,7 @@ describe('Sales', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       liteProductBlueprintIdList = body.productBlueprintIdList;
-      delete body.productBlueprintIdList;
-
-      expect(body.receiptToken.length).to.equal(6);
-      expect(body.sentVia).to.equal('none');
-
-      delete body.receiptToken;
-      delete body.sentVia;
-
-      validateAddSalesApiSuccessResponse(body);
+      validateLiteAddSalesApiSuccessResponse(body);
       testDoneFn();
     });
 

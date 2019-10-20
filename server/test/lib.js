@@ -853,6 +853,24 @@ exports.validateGetActiveServiceListApiSuccessResponse = (doc) => {
   if (error) throw error;
 }
 
+exports.validateLiteAddSalesApiSuccessResponse = (doc) => {
+  let schema = Joi.object().keys({
+    hasError: Joi.boolean().required().equal(false),
+    status: Joi.string().required().equal('success'),
+    receiptToken: Joi.string().length(6).required(),
+    sentVia: Joi.string().valid('none', 'email', 'sms', 'own-sms').required(),
+    productBlueprintIdList: Joi.array().allow([]).min(0).items(
+      Joi.object().keys({
+        productBlueprintId: Joi.number().max(999999999999999)
+      })
+    ),
+    salesId: Joi.number().required()
+  });
+
+  let { error, value } = Joi.validate(doc, schema);
+  if (error) throw error;
+}
+
 exports.validateAddSalesApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
