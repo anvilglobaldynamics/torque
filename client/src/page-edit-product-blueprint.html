@@ -346,7 +346,7 @@
               .filter(productCategory =>
                 !this.productCategoryList.find(_productCategory => productCategory.id === _productCategory.id)
               )
-              .slice(0, 8);
+              // .slice(0, 8);
           } catch (ex) {
             productCategoryList = [];
           }

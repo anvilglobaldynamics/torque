@@ -619,11 +619,13 @@
         <paper-dialog id="category-dialog" modal style="z-index: -999999">
           <h2>[[verses.productCategoryPicker.pickerTitle]]</h2>
           <paper-dialog-scrollable>
-            <template is="dom-repeat" items="[[_productCategoryList]]" as="productCategory">
-              <div on-click="categoryDialogSelectTapped" class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; margin: 4px; border: none;">
-                [[productCategory.name]]
-              </div>
-            </template>
+            <div style="overflow: auto; max-height: 300px !important; min-width: 200px; padding-left: 20px; padding-right: 20px;">
+              <template is="dom-repeat" items="[[_productCategoryList]]" as="productCategory">
+                <div on-click="categoryDialogSelectTapped" class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; margin: 4px; border: none;">
+                  [[productCategory.name]]
+                </div>
+              </template>
+            </div>
           </paper-dialog-scrollable>
           <div class="buttons">
             <paper-button raised class="secondary" on-click="categoryDialogCancelTapped">[[verses.general.cancel]]</paper-button>
