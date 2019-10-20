@@ -4,7 +4,7 @@ const shell = require('shelljs');
 const readlineSync = require('readline-sync');
 
 const importRemote = (password) => {
-  let command = `mongodump --db torque --host db.lipi.live:27017 -u torque-admin -p ${password} --authenticationDatabase torque --out ./mongo-temp-import`
+  let command = `mongodump --db torque --host 35.200.184.65:27017 -u torque-admin -p ${password} --authenticationDatabase torque --out ./mongo-temp-import`
   let res = shell.exec(command);
   if (res.code !== 0) {
     shell.echo(`Error: mongodump failed`);
@@ -13,7 +13,7 @@ const importRemote = (password) => {
 }
 
 const exportToLocal = () => {
-  let command = `mongorestore --db torque-imported --drop ./mongo-temp-import/torque`
+  let command = `mongorestore --db torque --drop ./mongo-temp-import/torque`
   let res = shell.exec(command);
   if (res.code !== 0) {
     shell.echo(`Error: mongorestore failed`);
