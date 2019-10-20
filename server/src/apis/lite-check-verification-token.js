@@ -18,7 +18,7 @@ exports.LiteCheckVerificationTokenApi = class extends Api.mixin(SecurityMixin, U
   get requestSchema() {
     return Joi.object().keys({
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
-      verificationToken: Joi.string().length(5).required()
+      verificationToken: Joi.string().length(6).required()
     });
   }
 

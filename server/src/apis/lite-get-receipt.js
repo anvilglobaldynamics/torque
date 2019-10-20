@@ -15,7 +15,7 @@ exports.LiteGetReceiptApi = class extends Api.mixin(InventoryMixin, SalesMixin, 
 
   get requestSchema() {
     return Joi.object().keys({
-      receiptToken: Joi.string().length(5).required(),
+      receiptToken: Joi.string().length(6).required(),
     });
   }
 

@@ -197,7 +197,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
 
   async _createReceipt({ salesId, sentVia }) {
     do {
-      var receiptToken = generateRandomStringCaseInsensitive(5).toLowerCase();
+      var receiptToken = generateRandomStringCaseInsensitive(6).toLowerCase();
       var isUnique = !(await this.database.receipt.findByReceiptToken({ receiptToken }));
     } while (!isUnique);
     let sentHistory = [];
