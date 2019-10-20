@@ -25,7 +25,9 @@ method: `POST`
 Possible Error Codes:
 ```js
 { code: RECEIPT_INVALID }
-// TODO: 
+{ code: VALIDATION_ERROR } // validation error on one of the fields
+{ code: APIKEY_INVALID } // the api key is invalid
+{ code: SALES_INVALID } // sales could not be found
 ```
 
 ### response (on success):
@@ -33,7 +35,13 @@ Signup is successful
 ```js
 {
   "hasError": false,
-  // sales, outlet, organization, soldByUser, customer
+  sales, // See get-sales api response
+  outlet, // see outlet.js
+  organization, // see organization.js
+  soldByUser: {
+    fullName: Joi.string().min(1).max(64).required(),
+  },
+  customer: // see customer.js
 }
 ```
 

@@ -25,7 +25,6 @@ method: `POST`
 Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
-// TODO:
 { code: APIKEY_INVALID } // the api key is invalid
 ```
 
@@ -38,4 +37,4 @@ Possible Error Codes:
 ```
 
 ### db changes:
-<!-- TODO: updates no collection in db. -->
+Updated `phoneVerificationRequst` collection

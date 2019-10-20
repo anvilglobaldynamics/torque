@@ -41,7 +41,8 @@ Signup is successful
   "hasError": false,
   "status": "success",
   "userId": Joi.number().max(999999999999999).required(),
-  // TODO: organizationId, employmentId
+  "organizationId": Joi.number().max(999999999999999).required(),
+  "employmentId": Joi.number().max(999999999999999).required(),
 }
 ```
 

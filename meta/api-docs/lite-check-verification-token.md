@@ -1,4 +1,4 @@
-<!-- TODO: This API handles sending verification sms -->
+This API checks a verification token but does not mark it as used.
 
 url: `api/lite-check-verification-token`
 
@@ -26,8 +26,8 @@ method: `POST`
 Possible Error Codes:
 ```js
 { code: VALIDATION_ERROR } // validation error on one of the fields
-// TODO:
 { code: APIKEY_INVALID } // the api key is invalid
+{ code: PHONE_VERIFICATION_TOKEN_INVALID } // Invalid phone verification request provided
 ```
 
 ### response (on success):
@@ -39,4 +39,4 @@ Possible Error Codes:
 ```
 
 ### db changes:
-<!-- TODO: updates no collection in db. -->
+updates no collection in db.

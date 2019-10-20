@@ -65,16 +65,21 @@ Possible Error Codes:
 { code: CUSTOMER_INVALID } // customer could not be found
 { code: PRODUCT_INVALID } // product could not be found
 { code: NO_PRODUCT_OR_SERVICE_SELECTED } // Both productList and serviceList can not be empty.
-// TODO:
 ```
 
 ### response (on success, without includeExtendedInformation):
 ```js
 {
-  "hasError": false,
-  "status": "success",
-  "salesId": Joi.number().max(999999999999999).allow(null).required()
-  // TODO:
+  hasError: Joi.boolean().required().equal(false),
+  status: Joi.string().required().equal('success'),
+  receiptToken: Joi.string().length(6).required(),
+  sentVia: Joi.string().valid('none', 'email', 'sms', 'own-sms').required(),
+  productBlueprintIdList: Joi.array().allow([]).min(0).items(
+    Joi.object().keys({
+      productBlueprintId: Joi.number().max(999999999999999)
+    })
+  ),
+  salesId: Joi.number().required()
 }
 ```
 
