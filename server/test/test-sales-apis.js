@@ -627,7 +627,7 @@ describe('Sales', _ => {
       delete body.productBlueprintIdList;
       expect(liteProductBlueprintIdList.length).to.equal(1);
 
-      expect(body.receiptToken.length).to.equal(5);
+      expect(body.receiptToken.length).to.equal(6);
       expect(body.sentVia).to.equal('none');
 
       delete body.receiptToken;
@@ -680,7 +680,7 @@ describe('Sales', _ => {
       liteProductBlueprintIdList = body.productBlueprintIdList;
       delete body.productBlueprintIdList;
 
-      expect(body.receiptToken.length).to.equal(5);
+      expect(body.receiptToken.length).to.equal(6);
       expect(body.sentVia).to.equal('none');
 
       delete body.receiptToken;

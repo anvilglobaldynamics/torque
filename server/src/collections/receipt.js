@@ -19,7 +19,7 @@ exports.ReceiptCollection = class extends Collection {
         })
       ),
       numberOfTimesViewed: Joi.number().max(999999999999999).required(),
-      receiptToken: Joi.string().length(5).required(),
+      receiptToken: Joi.string().length(6).required(),
 
       isDeleted: Joi.boolean().required(),
       originApp: Joi.string().valid('torque', 'torque-lite').required(),

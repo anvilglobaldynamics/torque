@@ -27,7 +27,7 @@ exports.PhoneVerificationRequestCollection = class extends LegacyCollection {
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       verifiedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       origin: Joi.string().max(1024).required(),
-      verificationToken: Joi.string().length(5).required(),
+      verificationToken: Joi.string().length(6).required(),
       isVerificationComplete: Joi.boolean().required(),
       originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
