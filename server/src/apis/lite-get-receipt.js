@@ -25,6 +25,8 @@ exports.LiteGetReceiptApi = class extends Api.mixin(InventoryMixin, SalesMixin, 
     let receipt = await this.database.receipt.findByReceiptToken({ receiptToken });
     throwOnFalsy(receipt, "RECEIPT_INVALID", "The receipt you have asked for is not valid");
 
+    await this.database.receipt._update({ receiptToken }, { $inc: { numberOfTimesViewed: 1 } });
+
     let sales = await this._getSales({ salesId: receipt.salesId });
 
     let outlet = await this.database.outlet.findById({ id: sales.outletId });
