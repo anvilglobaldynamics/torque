@@ -222,7 +222,7 @@ class Server {
     this._expressApp.get(path, jsonParser, (req, res) => {
       this.logger.info('GET', req.url);
       if (ApiClass.prototype instanceof LegacyApi) {
-        let api = new ApiClass(this, this.database, this.legacyDatabase, this.logger, req, res, null, 'get');
+        let api = new ApiClass(path, this, this.database, this.legacyDatabase, this.logger, req, res, null, 'get');
         api._prehandleGetApi();
       } else {
         throw new Error("Async APIs are not yet supported.");
