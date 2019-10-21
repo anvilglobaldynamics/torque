@@ -36,7 +36,8 @@ class Api {
   * @param {DatabaseService} database
   * @param {Logger} logger
   */
-  constructor(server, database, logger, request, response, socket, channel, requestUid = null, consumerId = null) {
+  constructor(apiPath, server, database, logger, request, response, socket, channel, requestUid = null, consumerId = null) {
+    this.apiPath = apiPath;
     this.server = server;
     this.database = database;
     this.logger = logger;
@@ -280,7 +281,8 @@ class Api {
       return;
     }
     if (this.clientApplication === 'torque-lite' && this.skipSubscriptionCheckOnTorqueLite) {
-      console.log("SKIPPING SUBSCRIPTION VERIFICATION", this._request.url);
+      // console.log("SKIPPING SUBSCRIPTION VERIFICATION", this.apiPath);
+      // NOTE: Skipping subscription verification since user is using Lipi Lite
       return;
     }
     let organization = await this.database.organization.findById({ id: body.organizationId });

@@ -24,7 +24,8 @@ const _restrictedErrorCodeList = [
 
 class LegacyApi {
 
-  constructor(server, database, legacyDatabase, logger, request, response, socket, channel, requestUid = null, consumerId = null) {
+  constructor(apiPath, server, database, legacyDatabase, logger, request, response, socket, channel, requestUid = null, consumerId = null) {
+    this.apiPath = apiPath;
     this.server = server;
     this.legacyDatabase = legacyDatabase;
     this.database = database; // Do not use during coding without .then and .catch

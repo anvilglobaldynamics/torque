@@ -152,10 +152,10 @@ class Server {
         let { ApiClass } = route;
         this.logger.info('WS', `${message.path} ${message.requestUid}`);
         if (ApiClass.prototype instanceof LegacyApi) {
-          let api = new ApiClass(this, this.database, this.legacyDatabase, this.logger, null, null, ws, 'ws', message.requestUid, message.consumerId);
+          let api = new ApiClass(message.path, this, this.database, this.legacyDatabase, this.logger, null, null, ws, 'ws', message.requestUid, message.consumerId);
           api._prehandlePostOrWsApi(message.body);
         } else {
-          let api = new ApiClass(this, this.database, this.logger, null, null, ws, 'ws', message.requestUid, message.consumerId);
+          let api = new ApiClass(message.path, this, this.database, this.logger, null, null, ws, 'ws', message.requestUid, message.consumerId);
           api._prehandle(message.body);
         }
       });
@@ -236,10 +236,10 @@ class Server {
       setTimeout(() => {
         this.logger.info('POST', req.url);
         if (ApiClass.prototype instanceof LegacyApi) {
-          let api = new ApiClass(this, this.database, this.legacyDatabase, this.logger, req, res, null, 'post');
+          let api = new ApiClass(path, this, this.database, this.legacyDatabase, this.logger, req, res, null, 'post');
           api._prehandlePostOrWsApi(req.body);
         } else {
-          let api = new ApiClass(this, this.database, this.logger, req, res, null, 'post');
+          let api = new ApiClass(path, this, this.database, this.logger, req, res, null, 'post');
           api._prehandle(req.body);
         }
       }, 1)
