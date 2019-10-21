@@ -180,7 +180,7 @@
     "manageProductTransfer": "পণ্য ট্রান্সফার রেকর্ড",
     "manageProductAcquisition": "পণ্য ক্রয় রেকর্ড",
     "manageDiscountPresets": "ডিসকাউন্টস",
-    "productSalesReport":"পণ্য বিক্রয় রিপোর্ট"
+    "productSalesReport": "পণ্য বিক্রয় রিপোর্ট"
   },
   "titleBar": {
     "home": "হোম",
@@ -801,7 +801,9 @@
     "productNotFound": "পণ্য পাওয়া যায় নি",
     "serviceNotFound": "সেবা পাওয়া যায় নি",
     "invalidAmount": "ভুল পরিমাণ",
-    "invalidTotalBillAmountMessage": "মোট বিলের পরিমাণ বাড়ানো সম্ভম না। চাইলে পণ্য বা সেবার মূল্য বাড়ান অথবা সার্ভিস চার্জ যোগ করুন।"
+    "invalidTotalBillAmountMessage": "মোট বিলের পরিমাণ বাড়ানো সম্ভম না। চাইলে পণ্য বা সেবার মূল্য বাড়ান অথবা সার্ভিস চার্জ যোগ করুন।",
+    "discardSalesTitle": "বিক্রয় বাতিল করুন",
+    "discardSalesText": "আপনি কি বিক্রয়টি বাতিল করতে চান?"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",
@@ -1152,7 +1154,7 @@
     "productAcquisitionTitle": "পণ্য ক্রয় এর রেকর্ড",
     "wholeOrganization": "সকল",
     "acquiredFrom": "থেকে ক্রীত"
-  }, 
+  },
   "help": {
     "pageTitle": "সহায়তা নিন"
   },
