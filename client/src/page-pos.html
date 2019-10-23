@@ -967,6 +967,11 @@
                 </div>
 
                 <div class="horizontal layout m-top-16">
+
+                  <paper-button raised class="danger" on-tap="discardSalesTapped">
+                    <iron-icon icon="delete"></iron-icon>
+                  </paper-button>
+
                   <paper-button raised class="primary flex" on-tap="saveSaleTapped">[[verses.pos.confirmSales]]</paper-button>
                 </div>
 
@@ -2287,6 +2292,16 @@
           this._resetSales();
           return this.app.navigateTo(`/print-sales-receipt/sales:${salesId}/from:pos`);
         });
+      }
+
+      discardSalesTapped(e = null) {
+        this.app.showModalConfirmation(
+          this.app.verses.pos.discardSalesTitle,
+          this.app.verses.pos.discardSalesText,
+          (answer) => {
+            if (!answer) return;
+            this._resetSales();
+          });
       }
 
       toggleAllOfflineSalesTapped(e = null) {

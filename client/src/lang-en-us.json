@@ -799,7 +799,9 @@
     "productNotFound": "Product not found",
     "serviceNotFound": "Service not found",
     "invalidAmount": "Invalid amount",
-    "invalidTotalBillAmountMessage": "You can not increase total billed amount. Please update individual prices or add service charge."
+    "invalidTotalBillAmountMessage": "You can not increase total billed amount. Please update individual prices or add service charge.",
+    "discardSalesTitle": "Discard Sale",
+    "discardSalesText": "Are you sure you want to discard this sale?"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
