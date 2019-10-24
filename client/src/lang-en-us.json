@@ -7,7 +7,14 @@
     "networkErrorTitle": "Network error",
     "networkErrorContent": "Make sure you are connected to the internet and try again",
     "unableToGoOffline": "Unable to enable offline mode. Next time you are online, make sure to select an outlet for offline mode.",
-    "apiErrorHeader": ""
+    "apiErrorHeader": "",
+    "usageLimitTitle": "Usage Limit Reached",
+    "usageLimitDetails": "Usage limit has been reached. Please contact us at +880 1770 947908.",
+    "sessionExpriredTitle": "Session Expired",
+    "sessionExpriredDetails": "Your session has expired. You will be automatically logged out. Please log in again.",
+    "subscriptionExpiredTitle": "Subscription Expired",
+    "subscriptionExpiredDetails": "Your subscription for \"",
+    "subscriptionExpiredDetails2": "\" has expired. Taking you to the payment page."
   },
   "general": {
     "or": "or",

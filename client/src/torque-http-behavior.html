@@ -103,23 +103,32 @@
           if (mode === 'development' && response.hasError) {
             console.log(`API_ERROR/api=${path}`, { data, response });
           }
+          let verses = this.verses || this.app.verses;
+          if (response.hasError && (response.error.code === "GLOBAL_USAGE_LIMIT_REACHED")) {
+            if (path === 'user-logout') {
+              return _cbfn(null, { hasError: false });
+            }
+            let message = verses.root.usageLimitDetails;
+            this.showModalDialog(verses.root.usageLimitTitle, message, _ => {
+              this.logoutTapped();
+            });
+            return;
+          }
           if (response.hasError && (response.error.code === "APIKEY_EXPIRED" || response.error.code === "APIKEY_INVALID")) {
             if (path === 'user-logout') {
               return _cbfn(null, { hasError: false });
             }
-            // TODO: Translate
-            let message = "Your session has expired. You will be automatically logged out. Please log in again.";
-            this.showModalDialog("Session Expired", message, _ => {
+            let message = verses.root.sessionExpriredDetails;
+            this.showModalDialog(verses.root.sessionExpriredTitle, message, _ => {
               this.logoutTapped();
             });
             return;
           }
           if (response.hasError && (response.error.code === "SUBSCRIPTION_EXPIRED")) {
             if (this.pageName !== 'payment') {
-              // TODO: Translate
               this.navigateTo('/payment');
-              let message = `Your subscription for "${this.organization.name}" has expired. Taking you to the payment page.`;
-              this.showModalDialog("Subscription Expired", message, _ => {
+              let message = `${verses.root.subscriptionExpiredDetails}${this.organization.name}${verses.root.subscriptionExpiredDetails2}`;
+              this.showModalDialog(verses.root.subscriptionExpiredTitle, message, _ => {
                 return;
               });
               return;
@@ -589,7 +598,7 @@
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('graph-sales-trend', data, cbfn);
       }
-      
+
       callGetProductAcquisitionListApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('get-product-acquisition-list', data, cbfn);
