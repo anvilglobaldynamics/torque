@@ -534,6 +534,8 @@
     "acceptedBy": "Accepted By",
     "clickToEditCustomer": "Click here to edit the customer.",
     "editCustomer": "Edit Customer",
+    "viewCustomerSalesText": "View all sale history of this customer from your organization.",
+    "viewCustomerSales": "View Sales",
     "clickAdjustCustomersBalance": "Click here to adjust the customer's balance.",
     "adjustCustomerBalance": "Adjust Customer Balance",
     "clickToDeleteCustomer": "Click here to delete the customer. Be warned that once deleted, an customer can not be restored.",

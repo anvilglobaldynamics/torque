@@ -23,24 +23,22 @@
 <dom-module id="page-view-customer">
   <template>
     <style include="shared-styles">
-    
-    .action-button-container paper-button {
-      width: 100%;
-      margin: 5px;
-    }
+      .action-button-container paper-button {
+        width: 100%;
+        margin: 5px;
+      }
 
-    .withdrawal-history-title {
-      font-weight: bold;
-      margin-top: 6px;
-    }
+      .withdrawal-history-title {
+        font-weight: bold;
+        margin-top: 6px;
+      }
 
-    .list-object {
-      border: 1px solid #eee;
-      background-color: #f7f7f7;
-      padding: 6px;
-      margin: 4px 0px;
-    }
-
+      .list-object {
+        border: 1px solid #eee;
+        background-color: #f7f7f7;
+        padding: 6px;
+        margin: 4px 0px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -95,6 +93,12 @@
       <div class="card action-button-container">
         <div class="mb-4">[[verses.customer.clickToEditCustomer]]</div>
         <paper-button raised class="secondary m-0" on-tap="editTapped">[[verses.customer.editCustomer]]</paper-button>
+      </div>
+
+      <!-- View customer sales -->
+      <div class="card action-button-container">
+        <div class="mb-4">[[verses.customer.viewCustomerSalesText]]</div>
+        <paper-button raised class="secondary m-0" on-tap="viewSalesTapped">[[verses.customer.viewCustomerSales]]</paper-button>
       </div>
 
       <!-- <div class="card action-button-container">
@@ -181,6 +185,10 @@
       }
 
       // region: ui  ===========================
+
+      viewSalesTapped(e) {
+        return this.app.navigateTo(`/manage-sales/customer:${this.customer.id}`);
+      }
 
       editTapped(e = null) {
         return this.app.navigateTo(`/edit-customer/customer:${this.customer.id}`);

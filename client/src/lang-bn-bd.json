@@ -536,6 +536,8 @@
     "acceptedBy": "দ্বারা গৃহীত",
     "clickToEditCustomer": "গ্রাহক সম্পাদনা করতে এখানে ক্লিক করুন।",
     "editCustomer": "গ্রাহক সম্পাদনা",
+    "viewCustomerSalesText": "এই ক্রেতা কে করা সকল বিক্রয় দেখুন।",
+    "viewCustomerSales": "সকল বিক্রয়",
     "clickAdjustCustomersBalance": "গ্রাহকের ব্যালেন্স ডেবিট-ক্রেডিট করতে এখানে ক্লিক করুন।",
     "adjustCustomerBalance": "গ্রাহক ব্যালেন্স ডেবিট-ক্রেডিট",
     "clickToDeleteCustomer": "গ্রাহক মুছে ফেলার জন্য এখানে ক্লিক করুন একবার মুছে ফেলা সতর্ক করা হবে, একটি গ্রাহক পুনরুদ্ধার করা যাবে না।",

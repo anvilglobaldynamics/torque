@@ -277,18 +277,30 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.sales.manageSalesTitle);
         if (!this._ensureAccess()) return;
+
         this._processSalesList(() => {
-          if ('outlet' in this.params) {
-            this.isSearchingOutlet = true;
-            this.elem('elem-outlet-selector').forceSelect(this.params.outlet);
-          }
           this.self = this;
           this.isReady = true;
+
+          try {
+            if ('outlet' in this.params) {
+              this.isSearchingOutlet = true;
+              this.elem('elem-outlet-selector').forceSelect(this.params.outlet);
+            } else if ('customer' in this.params) {
+              this.isSearchingCustomer = true;
+              this.elem('elem-customer-selector').forceSelect(this.params.customer);
+            } else {
+              this.isSearchingCustomer = false;
+              this.elem('elem-customer-selector').cancelTapped();
+            }
+          } catch (ex) { }
+
         });
       }
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.resetProperties('customer')
         this.app.popPageTitle();
       }
 
@@ -368,11 +380,13 @@
       _customerSelected(customer) {
         this.customer = customer;
         this.isSearchingCustomer = false;
+        this._processSalesList(() => this.isReady = true);
       }
 
       _outletSelected(outlet) {
         this.outlet = outlet;
         this.isSearchingOutlet = false;
+        this._processSalesList(() => this.isReady = true);
       }
 
       showMoreTapped(e = null) {
