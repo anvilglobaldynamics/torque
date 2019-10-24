@@ -938,7 +938,7 @@
                   </paper-dropdown-menu>
 
                   <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
-                    <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+                    <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]" on-focus="paidAmountInputFocuesd">
                       <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                     </paper-input>
                   </template>
@@ -1876,6 +1876,11 @@
       _customerVariablesChanged() {
         this.app.storeInSession('last-selected-customer', this.customer);
         this.app.storeInSession('last-selected-customer-is-anonymous', this.isAnonymousSale);
+        if ((this.customer || this.isAnonymousSale) && this.isMultiColumn) {
+          window.setTimeout(() => {
+            this.elem('.payment--paidAmount').focus();
+          }, 100);
+        }
       }
 
       customerColumnTapped(e = null) {
@@ -1958,6 +1963,14 @@
       }
 
       // region: payment =================================
+
+      paidAmountInputFocuesd(e) {
+        try {
+          e.target.inputElement.inputElement.select();
+        } catch (ex) {
+          'pass'
+        }
+      }
 
       paymentColumnTapped(e = null) {
         this._resetProductSearch();
