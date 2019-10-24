@@ -1172,5 +1172,10 @@
     "filteringByPart2Blueprints": "টি পণ্যের পরিকল্পনা দ্বারা।",
     "clearFilters": "ফিল্টার রিসেট",
     "allOutlets": "সব আউটলেট"
+  },
+  "receipt": {
+    "dialogTitle":"রসিদ",
+    "noReceipt":"রসিদ নেই",
+    "printReceipt": "রসিদ প্রিন্ট করুন"
   }
 }

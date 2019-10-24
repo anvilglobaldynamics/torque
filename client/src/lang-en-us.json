@@ -1171,5 +1171,10 @@
     "filteringByPart2Blueprints": " product blueprints.",
     "clearFilters": "Reset Filters",
     "allOutlets": "All Outlets"
+  },
+  "receipt": {
+    "dialogTitle":"Receipt",
+    "noReceipt":"No Receipt",
+    "printReceipt": "Print Receipt"
   }
 }

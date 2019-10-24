@@ -975,10 +975,6 @@
                   <paper-button raised class="primary flex" on-tap="saveSaleTapped">[[verses.pos.confirmSales]]</paper-button>
                 </div>
 
-                <div class="horizontal layout m-top-16">
-                  <paper-button id="sale-and-print-button" raised class="primary flex" on-tap="saveSaleAndPrintTapped">[[verses.pos.confirmSalesAndPrint]]</paper-button>
-                </div>
-
               </div>
             </div>
           </template>
@@ -2292,20 +2288,38 @@
       }
 
       saveSaleTapped(e = null) {
-        this._processAddSales(({ salesId }) => {
-          let message = this.app.verses.pos.newSalesAdded;
-          this.app.showToast(message, _ => {
-            this._resetSales();
-          });
+        this.app.displayReceiptDialog(({ receiptType }) => {
+          if (receiptType === 'print-receipt') {
+            this._processAddSales(({ salesId }) => {
+              this._resetSales();
+              return this.app.navigateTo(`/print-sales-receipt/sales:${salesId}/from:pos`);
+            });
+          } else if (receiptType === 'no-receipt') {
+            this._processAddSales(({ salesId }) => {
+              let message = this.app.verses.pos.newSalesAdded;
+              this.app.showToast(message, _ => {
+                this._resetSales();
+              });
+            });
+          }
         });
       }
 
-      saveSaleAndPrintTapped(e = null) {
-        this._processAddSales(({ salesId }) => {
-          this._resetSales();
-          return this.app.navigateTo(`/print-sales-receipt/sales:${salesId}/from:pos`);
-        });
-      }
+      // saveSaleTapped(e = null) {
+      //   this._processAddSales(({ salesId }) => {
+      //     let message = this.app.verses.pos.newSalesAdded;
+      //     this.app.showToast(message, _ => {
+      //       this._resetSales();
+      //     });
+      //   });
+      // }
+
+      // saveSaleAndPrintTapped(e = null) {
+      //   this._processAddSales(({ salesId }) => {
+      //     this._resetSales();
+      //     return this.app.navigateTo(`/print-sales-receipt/sales:${salesId}/from:pos`);
+      //   });
+      // }
 
       discardSalesTapped(e = null) {
         this.app.showModalConfirmation(
