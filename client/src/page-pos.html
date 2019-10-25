@@ -938,7 +938,7 @@
                   </paper-dropdown-menu>
 
                   <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
-                    <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
+                    <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]" on-focus="paidAmountInputFocuesd">
                       <div slot="suffix">[[app.settings.monetaryUnit]]</div>
                     </paper-input>
                   </template>
@@ -973,10 +973,6 @@
                   </paper-button>
 
                   <paper-button raised class="primary flex" on-tap="saveSaleTapped">[[verses.pos.confirmSales]]</paper-button>
-                </div>
-
-                <div class="horizontal layout m-top-16">
-                  <paper-button id="sale-and-print-button" raised class="primary flex" on-tap="saveSaleAndPrintTapped">[[verses.pos.confirmSalesAndPrint]]</paper-button>
                 </div>
 
               </div>
@@ -1876,6 +1872,11 @@
       _customerVariablesChanged() {
         this.app.storeInSession('last-selected-customer', this.customer);
         this.app.storeInSession('last-selected-customer-is-anonymous', this.isAnonymousSale);
+        if ((this.customer || this.isAnonymousSale) && this.isMultiColumn) {
+          window.setTimeout(() => {
+            this.elem('.payment--paidAmount').focus();
+          }, 100);
+        }
       }
 
       customerColumnTapped(e = null) {
@@ -1958,6 +1959,14 @@
       }
 
       // region: payment =================================
+
+      paidAmountInputFocuesd(e) {
+        try {
+          e.target.inputElement.inputElement.select();
+        } catch (ex) {
+          'pass'
+        }
+      }
 
       paymentColumnTapped(e = null) {
         this._resetProductSearch();
@@ -2279,20 +2288,38 @@
       }
 
       saveSaleTapped(e = null) {
-        this._processAddSales(({ salesId }) => {
-          let message = this.app.verses.pos.newSalesAdded;
-          this.app.showToast(message, _ => {
-            this._resetSales();
-          });
+        this.app.displayReceiptDialog(({ receiptType }) => {
+          if (receiptType === 'print-receipt') {
+            this._processAddSales(({ salesId }) => {
+              this._resetSales();
+              return this.app.navigateTo(`/print-sales-receipt/sales:${salesId}/from:pos`);
+            });
+          } else if (receiptType === 'no-receipt') {
+            this._processAddSales(({ salesId }) => {
+              let message = this.app.verses.pos.newSalesAdded;
+              this.app.showToast(message, _ => {
+                this._resetSales();
+              });
+            });
+          }
         });
       }
 
-      saveSaleAndPrintTapped(e = null) {
-        this._processAddSales(({ salesId }) => {
-          this._resetSales();
-          return this.app.navigateTo(`/print-sales-receipt/sales:${salesId}/from:pos`);
-        });
-      }
+      // saveSaleTapped(e = null) {
+      //   this._processAddSales(({ salesId }) => {
+      //     let message = this.app.verses.pos.newSalesAdded;
+      //     this.app.showToast(message, _ => {
+      //       this._resetSales();
+      //     });
+      //   });
+      // }
+
+      // saveSaleAndPrintTapped(e = null) {
+      //   this._processAddSales(({ salesId }) => {
+      //     this._resetSales();
+      //     return this.app.navigateTo(`/print-sales-receipt/sales:${salesId}/from:pos`);
+      //   });
+      // }
 
       discardSalesTapped(e = null) {
         this.app.showModalConfirmation(

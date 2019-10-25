@@ -7,7 +7,14 @@
     "networkErrorTitle": "ইন্টারনেট সংযোগ",
     "networkErrorContent": "আপনার ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়ে আছে। ইন্টারনেটে সংযুক্ত হয়ে আবার চেষ্টা করুন। ",
     "unableToGoOffline": "অফলাইন মোড সক্ষম করতে অক্ষম। পরের বার আপনি অনলাইনে থাকবেন, অফলাইন মোডের জন্য একটি আউটলেট নির্বাচন করতে ভুলবেন না।",
-    "apiErrorHeader": ""
+    "apiErrorHeader": "",
+    "usageLimitTitle": "ব্যবহারের সীমা অতিক্রম",
+    "usageLimitDetails": "ব্যবহারের সীমা অতিক্রম হয়ে গেছে। আমাদের সাথে যোগাযোগ করুন এই নম্বরে +880 1770 947908.",
+    "sessionExpriredTitle": "লগআউট",
+    "sessionExpriredDetails": "আপনার সেশনটির মেয়াদ শেষ হয়ে গেছে। আপনি স্বয়ংক্রিয়ভাবে লগ আউট হয়ে যাবেন। আবার লগ ইন করুন।",
+    "subscriptionExpiredTitle": "সাবস্ক্রিপশনের মেয়াদ শেষ হয়েছে",
+    "subscriptionExpiredDetails": "\"",
+    "subscriptionExpiredDetails2": "\" সংস্থার সাবস্ক্রিপশনের মেয়াদ শেষ হয়েছে. আপনাকে পেমেন্টে নিয়ে যাওয়া হচ্ছে।"
   },
   "general": {
     "or": "বা",
@@ -536,6 +543,8 @@
     "acceptedBy": "দ্বারা গৃহীত",
     "clickToEditCustomer": "গ্রাহক সম্পাদনা করতে এখানে ক্লিক করুন।",
     "editCustomer": "গ্রাহক সম্পাদনা",
+    "viewCustomerSalesText": "এই ক্রেতা কে করা সকল বিক্রয় দেখুন।",
+    "viewCustomerSales": "সকল বিক্রয়",
     "clickAdjustCustomersBalance": "গ্রাহকের ব্যালেন্স ডেবিট-ক্রেডিট করতে এখানে ক্লিক করুন।",
     "adjustCustomerBalance": "গ্রাহক ব্যালেন্স ডেবিট-ক্রেডিট",
     "clickToDeleteCustomer": "গ্রাহক মুছে ফেলার জন্য এখানে ক্লিক করুন একবার মুছে ফেলা সতর্ক করা হবে, একটি গ্রাহক পুনরুদ্ধার করা যাবে না।",
@@ -1170,5 +1179,10 @@
     "filteringByPart2Blueprints": "টি পণ্যের পরিকল্পনা দ্বারা।",
     "clearFilters": "ফিল্টার রিসেট",
     "allOutlets": "সব আউটলেট"
+  },
+  "receipt": {
+    "dialogTitle":"রসিদ",
+    "noReceipt":"রসিদ নেই",
+    "printReceipt": "রসিদ প্রিন্ট করুন"
   }
 }

@@ -389,6 +389,18 @@
         padding-right: 16px;
         margin-bottom: 10px;
       }
+
+      #receipt-dialog h2{
+        min-width: 200px;
+      }
+
+      .receipt-dialog-button {
+        margin: 8px;
+        margin-left: 24px;
+        margin-right: 24px;
+
+        /* max-width: 400px; */
+      }
     </style>
 
     <app-drawer-layout responsive-width="4000px" fullbleed narrow="{{narrow}}">
@@ -665,6 +677,17 @@
             </template>
             <paper-button class="secondary" on-click="networkErrorRetryTapped" autofocus>[[verses.root.networkErrorRetry]]</paper-button>
           </div>
+        </paper-dialog>
+
+        <paper-dialog id="receipt-dialog" modal style="z-index: -999999">
+          <h2>[[verses.receipt.dialogTitle]]</h2>
+          <paper-dialog-scrollable>
+            <div class="vertical layout">
+              <paper-button raised class="primary receipt-dialog-button" on-click="receiptDialogPrintReceiptTapped">[[verses.receipt.printReceipt]]</paper-button>
+              <paper-button raised class="danger receipt-dialog-button" on-click="receiptDialogNoReceiptTapped">[[verses.receipt.noReceipt]]</paper-button>
+            </div>
+          </paper-dialog-scrollable>
+
         </paper-dialog>
 
       </app-header-layout>
@@ -1274,6 +1297,26 @@
         let { productCategory } = e.model;
         this._categoryDialogCbfn(productCategory);
         this._categoryDialogCbfn = null;
+      }
+
+      // ====================== receipt dialog =============================
+
+      displayReceiptDialog(cbfn) {
+        this._receiptDialogCbfn = cbfn;
+        this._patchForPolymerModalDialogIssue();
+        this.elem('#receipt-dialog').open();
+      }
+
+      receiptDialogPrintReceiptTapped(e = null) {
+        this.elem('#receipt-dialog').close();
+        this._receiptDialogCbfn({ receiptType: 'print-receipt' });
+        this._receiptDialogCbfn = null;
+      }
+
+      receiptDialogNoReceiptTapped(e) {
+        this.elem('#receipt-dialog').close();
+        this._receiptDialogCbfn({ receiptType: 'no-receipt' });
+        this._receiptDialogCbfn = null;
       }
 
       // ====================== shortcuts =============================
