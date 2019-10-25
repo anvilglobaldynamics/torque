@@ -7,7 +7,11 @@ exports.VerifyPhoneApi = class extends LegacyApi {
   _applyVerificationToken(verificationToken, cbfn) {
     this.legacyDatabase.phoneVerificationRequest.applyVerificationToken({ verificationToken }, (err, forUserId) => {
       if (err) return cbfn(err);
-      this.legacyDatabase.user.setPhoneAsVerified({ userId: forUserId }, cbfn);
+      this.legacyDatabase.user.setPhoneAsVerified({ userId: forUserId }, () => {
+        this.database.session.expireByUserId({ userId: forUserId }).then(()=>{
+          cbfn();
+        });
+      });
     })
   }
 

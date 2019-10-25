@@ -7,7 +7,11 @@ exports.VerifyEmailApi = class extends LegacyApi {
   _applyVerificationToken(verificationToken, cbfn) {
     this.legacyDatabase.emailVerificationRequest.applyVerificationToken({ verificationToken }, (err, forUserId) => {
       if (err) return cbfn(err);
-      this.legacyDatabase.user.setEmailAsVerified({ userId: forUserId }, cbfn);
+      this.legacyDatabase.user.setEmailAsVerified({ userId: forUserId }, () => {
+        this.database.session.expireByUserId({ userId: forUserId }).then(() => {
+          cbfn();
+        });
+      });
     })
   }
 
