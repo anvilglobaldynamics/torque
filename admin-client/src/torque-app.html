@@ -174,11 +174,23 @@
           <a href="[[authorWebsite]]">[[authorName]]</a> All Rights Reserved.
           <br>
           <span class="extra-small">admin build
-            <span id="build-number">20</span>
+            <span id="build-number">21</span>
           </span>
         </div>
+
+        <paper-dialog id="email-preview-dialog" modal style="z-index: -999999">
+          <h2>Email Preview</h2>
+          <paper-dialog-scrollable>
+            <div class="email-preview-content">Loading...</div>
+          </paper-dialog-scrollable>
+          <div class="buttons">
+            <paper-button raised class="primary" on-click="emailPreviewDialogCancelTapped">Close</paper-button>
+          </div>
+        </paper-dialog>
+
       </app-header-layout>
     </app-drawer-layout>
+    
 
     <paper-toast id="generic-toast" text="Done"></paper-toast>
     <div class="super-class-insertion-point"></div>
@@ -326,6 +338,21 @@
       refreshCurrentPage() {
         this.activePageElement.onNavigateOut();
         this.activePageElement.onNavigateIn();
+      }
+
+
+      // ====================== email preview dialog =============================
+
+      displayEmailPreviewDialog(cbfn) {
+        this._emailPreviewDialogCbfn = cbfn;
+        this._patchForPolymerModalDialogIssue();
+        this.elem('#email-preview-dialog').open();
+      }
+
+      emailPreviewDialogCancelTapped(e = null) {
+        this.elem('#email-preview-dialog').close();
+        this._emailPreviewDialogCbfn(null);
+        this._emailPreviewDialogCbfn = null;
       }
 
       // ======================  events =============================
