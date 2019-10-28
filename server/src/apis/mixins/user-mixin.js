@@ -48,7 +48,7 @@ exports.UserMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async _createEmailVerificationRequest({ email, userId }) {
     do {
-      var verificationToken = generateRandomString(16);
+      var verificationToken = generateRandomString(6);
       var isUnique = await this.database.emailVerificationRequest.isVerificationTokenUnique({ verificationToken });
     } while (!isUnique);
     await this.database.emailVerificationRequest.create({ userId, email, origin: 'user-register', verificationToken });

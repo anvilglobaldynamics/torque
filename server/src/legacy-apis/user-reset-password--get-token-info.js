@@ -12,7 +12,7 @@ exports.UserResetPasswordGetTokenInfoApi = class extends collectionCommonMixin(L
 
   get requestSchema() {
     return Joi.object().keys({
-      uniqueToken: Joi.string().length(16).required(),
+      uniqueToken: Joi.string().length(6).required(),
     });
   }
 

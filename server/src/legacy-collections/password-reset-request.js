@@ -28,7 +28,7 @@ exports.PasswordResetRequestCollection = class extends LegacyCollection {
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       confirmedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
       origin: Joi.string().max(1024).required(),
-      confirmationToken: Joi.string().length(16).required(),
+      confirmationToken: Joi.string().length(6).required(),
       isPasswordResetComplete: Joi.boolean().required(),
     });
 
