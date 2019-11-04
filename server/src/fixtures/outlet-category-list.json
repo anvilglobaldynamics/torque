@@ -20,6 +20,18 @@
     "name": "Home Decor"
   },
   {
+    "code": "CAT_SOCIAL_MEDIA_SHOP",
+    "name": "Social Media Shop"
+  },
+  {
+    "code": "CAT_ECOMMERCE",
+    "name": "E-commerce"
+  },
+  {
+    "code": "CAT_HOME_DECOR",
+    "name": "Home Decor"
+  },
+  {
     "code": "CAT_HARDWARE",
     "name": "Hardware Shop"
   },
