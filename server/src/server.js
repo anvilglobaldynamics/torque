@@ -13,7 +13,7 @@ const { Logger } = require('./logger');
 const { LegacyApi } = require('./legacy-api-base');
 const moment = require('moment');
 
-const WEBSOCKET_CLIENT_POOL_MAX_COUNT = 24;
+const WEBSOCKET_CLIENT_POOL_MAX_COUNT = 128;
 const WEBSOCKET_RECONNECTION_DELAY = 10000;
 const WEBSOCKET_STARTUP_DELAY = 5000;
 
