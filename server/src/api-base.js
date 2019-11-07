@@ -517,6 +517,10 @@ class Api {
       if (!adminSession) {
         throw new CodedError("APIKEY_INVALID", this.verses.apiCommon.apikeyInvalid);
       }
+      let hasExpired = adminSession.hasExpired || (((new Date).getTime() - adminSession.createdDatetimeStamp) > SESSION_DURATION_LIMIT);
+      if (hasExpired) {
+        throw new CodedError("APIKEY_EXPIRED", this.verses.apiCommon.apikeyExpired);
+      }
       return adminSession.username;
     } else {
       let session = await this.database.session.findByApiKey({ apiKey });

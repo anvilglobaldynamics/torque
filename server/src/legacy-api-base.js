@@ -287,6 +287,12 @@ class LegacyApi {
           err.code = "APIKEY_INVALID";
           return this.fail(err);
         }
+        let hasExpired = adminSession.hasExpired || (((new Date).getTime() - adminSession.createdDatetimeStamp) > SESSION_DURATION_LIMIT);
+        if (hasExpired) {
+          err = new Error(this.verses.apiCommon.apikeyExpired);
+          err.code = "APIKEY_EXPIRED";
+          return this.fail(err);
+        }
         cbfn(null, adminSession.username);
       });
     } else {
