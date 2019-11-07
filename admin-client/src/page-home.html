@@ -50,6 +50,29 @@
       <div class="horizontal layout">
         <div class="card flex">
           <div>
+            <b>Statistics</b>
+          </div>
+          <pre style="font-family: 'Courier New', Courier, monospace !important; font-size: 12px !important;">{{statistics}}</pre>
+        </div>
+      </div>
+
+      <div class="horizontal layout">
+        <div class="card horizontal layout flex center">
+          <paper-button class="primary flex" on-tap="usersTapped">Users</paper-button>
+        </div>
+        <div class="card horizontal layout flex center">
+          <paper-button class="primary flex" on-tap="outgoingSmsesTapped">Outgoing SMSes</paper-button>
+        </div>
+        <div class="card vertical layout flex center">
+          <paper-button class="primary flex" on-tap="outgoingEmailsTapped">Outgoing Emails</paper-button>
+        </div>
+        <div class="card vertical layout flex center">
+        </div>
+      </div>
+
+      <div class="horizontal layout">
+        <div class="card flex">
+          <div>
             <b>User</b>
           </div>
           You are logged in as
@@ -62,20 +85,7 @@
           <pre>[[$json(user.rights)]]</pre>
         </div>
       </div>
-      <div class="horizontal layout">
-        <div class="card horizontal layout flex center">
-          <paper-button class="primary flex" on-tap="usersTapped">Users</paper-button>
-        </div>
-        <div class="card horizontal layout flex center">
-          <paper-button class="primary flex" on-tap="outgoingSmsesTapped">Outgoing SMSes</paper-button>
-        </div>
-        <div class="card vertical layout flex center">
-            <paper-button class="primary flex" on-tap="outgoingEmailsTapped">Outgoing Emails</paper-button>
-        </div>
-        <div class="card vertical layout flex center">
 
-        </div>
-      </div>
     </div>
   </template>
 
@@ -104,7 +114,7 @@
         if (!this._ensureAccess()) return;
         this.onUserChange(this.app.user);
         this.onSettingsChange(this.app.settings);
-        this.delay(300, () => {
+        this._processStatistics(() => {
           this.isReady = true;
         });
       }
@@ -130,6 +140,17 @@
         return true;
       }
 
+      _processStatistics(cbfn) {
+        let data = {};
+        this.app.callAdminGetStatisticsApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.statistics = JSON.stringify(response.statistics, null, 2);
+          return cbfn();
+          // return cbfn(response.statistics);
+        });
+      }
+
       // region: ui  ===========================
 
       usersTapped(e = null) {
@@ -143,7 +164,7 @@
       outgoingEmailsTapped(e = null) {
         this.app.navigateTo('/outgoing-emails');
       }
-      
+
       // region: misc =================================
 
     }

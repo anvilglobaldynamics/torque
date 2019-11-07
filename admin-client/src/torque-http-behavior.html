@@ -113,6 +113,11 @@
 
         // api calls ===================================
 
+        callAdminGetStatisticsApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-get-statistics', data, cbfn);
+        }
+
         callAdminLoginApi(data, cbfn) {
           this.callCombinedJsonApi('admin-login', data, cbfn);
         }
