@@ -28,7 +28,10 @@ exports.AdminGetStatisticsApi = class extends Api {
         hasAtLeast1Sale: 0,
         hasAtLeast5Sales: 0
       },
-      receipts: {
+      liteCustomers: {
+        total: 0
+      },
+      liteReceipts: {
         total: 0,
         noReceipt: 0,
         byEmail: 0,
@@ -62,19 +65,23 @@ exports.AdminGetStatisticsApi = class extends Api {
     }
 
     // receipts
-    let receiptList = await this.database.receipt._find({});
-    statistics.receipts.total = receiptList.length;
+    let receiptList = await this.database.receipt._find({ originApp: 'torque-lite' });
+    statistics.liteReceipts.total = receiptList.length;
     receiptList.forEach(receipt => {
       if (receipt.sentHistory.length === 0) {
-        statistics.receipts.noReceipt += 1;
+        statistics.liteReceipts.noReceipt += 1;
         return;
       }
       if (receipt.sentHistory[0].sentVia === 'email') {
-        statistics.receipts.byEmail += 1;
+        statistics.liteReceipts.byEmail += 1;
       } else {
-        statistics.receipts.byPhone += 1;
+        statistics.liteReceipts.byPhone += 1;
       }
     })
+
+    // customers
+    let customerList = await this.database.customer._find({ originApp: 'torque-lite' });
+    statistics.liteCustomers.total = customerList.length;
 
     return { statistics };
   }
