@@ -44,6 +44,10 @@ exports.LiteGetReceiptApi = class extends Api.mixin(InventoryMixin, SalesMixin, 
       fullName: user.fullName
     }
 
+    let organizationSettings = await this.database.organizationSettings.findByOrganizationId({
+      organizationId: organization.id
+    });
+
     await this._addReturnedProductCountToSales({ sales });
     await this._addProductBlueprintData({ sales });
 
@@ -56,7 +60,8 @@ exports.LiteGetReceiptApi = class extends Api.mixin(InventoryMixin, SalesMixin, 
       outlet,
       organization,
       soldByUser,
-      customer
+      customer,
+      organizationSettings
     };
   }
 

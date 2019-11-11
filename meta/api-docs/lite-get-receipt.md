@@ -41,7 +41,8 @@ Signup is successful
   soldByUser: {
     fullName: Joi.string().min(1).max(64).required(),
   },
-  customer: // see customer.js
+  customer: // see customer.js,
+  organizationSettings // see organization-settings.js
 }
 ```
 
