@@ -527,9 +527,12 @@ class Api {
       if (!session) {
         throw new CodedError("APIKEY_INVALID", this.verses.apiCommon.apikeyInvalid);
       }
-      let hasExpired = session.hasExpired || (((new Date).getTime() - session.createdDatetimeStamp) > SESSION_DURATION_LIMIT);
-      if (hasExpired) {
-        throw new CodedError("APIKEY_EXPIRED", this.verses.apiCommon.apikeyExpired);
+      // only expire for torque users. Issue #932
+      if (this.clientApplication === 'torque') {
+        let hasExpired = session.hasExpired || (((new Date).getTime() - session.createdDatetimeStamp) > SESSION_DURATION_LIMIT);
+        if (hasExpired) {
+          throw new CodedError("APIKEY_EXPIRED", this.verses.apiCommon.apikeyExpired);
+        }
       }
       return session.userId;
     }
