@@ -13,7 +13,9 @@ const { Logger } = require('./logger');
 const { LegacyApi } = require('./legacy-api-base');
 const moment = require('moment');
 
-const PERIODIC_SOCKET_REPORT_DELAY = 60 * 000;
+const PERIODIC_SOCKET_REPORT_DELAY = 60 * 1000;
+const PERIODIC_IDLE_SOCKET_PURGE_INTERVAL = 30 * 60 * 1000;
+const SOCKET_IDLE_TIME_THRESHOLD = 5 * 60 * 1000;
 
 class Server {
 
@@ -90,6 +92,25 @@ class Server {
     }
     periodicSocketReport();
 
+    const periodicSocketPurge = () => {
+      console.log("(wss)> Periodic Socket Purge.", getTotalMessage());
+
+      let now = Date.now();
+
+      wss.clients.forEach(ws => {
+        try {
+          if (now - ws.lastActivityDatetimeStamp > SOCKET_IDLE_TIME_THRESHOLD) {
+            ws.terminate();
+          }
+        } catch (ex) {
+          console.error(ex);
+        }
+      });
+
+      setTimeout(periodicSocketPurge, PERIODIC_IDLE_SOCKET_PURGE_INTERVAL);
+    }
+    periodicSocketPurge();
+
     wss.on('connection', (ws) => {
       console.log("(wss)> New Socket Client Connected.", getTotalMessage());
 
@@ -104,6 +125,7 @@ class Server {
 
       ws.on('message', (message) => {
         // console.log("(ws)> message received:", message);
+        ws.lastActivityDatetimeStamp = Date.now();
 
         // Validate JSON
         try {
