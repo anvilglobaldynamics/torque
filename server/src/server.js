@@ -13,6 +13,8 @@ const { Logger } = require('./logger');
 const { LegacyApi } = require('./legacy-api-base');
 const moment = require('moment');
 
+const PERIODIC_SOCKET_REPORT_DELAY = 10000;
+
 class Server {
 
   constructor(config, mode) {
@@ -78,8 +80,28 @@ class Server {
       server: this._webServer
     });
 
+    const getTotalMessage = () => {
+      return `Total Connections: ${wss.clients.size}`;
+    }
+
+    const periodicSocketReport = () => {
+      console.log("(wss)> Periodic Socket Status.", getTotalMessage());
+      setTimeout(periodicSocketReport, PERIODIC_SOCKET_REPORT_DELAY);
+    }
+    periodicSocketReport();
+
     wss.on('connection', (ws) => {
-      console.log("(wss)> New Socket Client Connected");
+      console.log("(wss)> New Socket Client Connected.", getTotalMessage());
+
+      ws.on('close', () => {
+        console.log("(wss)> Socket Closed.", getTotalMessage());
+      });
+
+      ws.on('error', (err) => {
+        console.error("(ws)> Error", err);
+        console.log("(wss)> Socket Error.", getTotalMessage());
+      });
+
       ws.on('message', (message) => {
         // console.log("(ws)> message received:", message);
 
