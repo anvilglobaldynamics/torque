@@ -26,8 +26,6 @@ exports.AnalyticsReportUrlHitApi = class extends Api {
       throw new CodedError("PSSK_ERROR", "Preshared Secret Key is Inavlid");
     }
 
-    console.log({ name });
-
     this.database.urlAnalytics.reportUrlHit({ name });
 
     return {};
