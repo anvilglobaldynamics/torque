@@ -883,11 +883,11 @@
         if (mode === 'production') {
           this.serverHost = 'https://single-server.lipi.live'
           this.jsonPostApiPathPrefix = 'https://single-server.lipi.live/api/';
-          this.websocketHost = 'wss://socket.lipi.live';
+          this.websocketHost = 'wss://single-server.lipi.live';
         } else {
           this.serverHost = 'http://localhost:8540'
           this.jsonPostApiPathPrefix = 'http://localhost:8540/api/';
-          this.websocketHost = 'ws://localhost:8410';
+          this.websocketHost = 'ws://localhost:8540';
         }
       }
 

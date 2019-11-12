@@ -13,10 +13,6 @@ const { Logger } = require('./logger');
 const { LegacyApi } = require('./legacy-api-base');
 const moment = require('moment');
 
-const WEBSOCKET_CLIENT_POOL_MAX_COUNT = 128;
-const WEBSOCKET_RECONNECTION_DELAY = 10000;
-const WEBSOCKET_STARTUP_DELAY = 5000;
-
 class Server {
 
   constructor(config, mode) {
@@ -75,122 +71,74 @@ class Server {
     });
   }
 
-  __createWebsocketClient() {
-    let ws = new WebSocket(this.config.socketProxy.url);
-    let listener = (err) => {
-      this.__socketClientCount -= 1;
-      if (!this.__hasReportedAnySocketFailure) {
-        this.__hasReportedAnySocketFailure = true;
-        this.logger.error(err);
-      }
-    }
-    let serial = this.__socketClientSerialSeed;
-    this.__socketClientSerialSeed += 1;
+  _initializeWebsocket() {
+    this._wsApiList = [];
 
-    ws.once('error', listener);
+    const wss = new WebSocket.Server({
+      server: this._webServer
+    });
 
-    this.__socketClientCount += 1;
-    ws.on('open', () => {
-      // this.logger.debug(`Websocket added to socket-pool: #${serial}`);
-
-      ws.on('close', (code) => {
-        this.__socketClientCount -= 1;
-        // this.logger.debug('Websocket closed:', `#${serial}`);
-      });
-
-      ws.on('error', (err) => {
-        this.__socketClientCount -= 1;
-        this.logger.error(err);
-      });
-      ws.removeListener('error', listener);
-
-      let authMessage = this.config.socketProxy.pssk + '/' + (process.env.GAE_VERSION || this.__socketMockGaeVersion);
-      ws.send(authMessage);
-
+    wss.on('connection', (ws) => {
+      console.log("(wss)> New Socket Client Connected");
       ws.on('message', (message) => {
-        // this.logger.debug('Websocket message on', `#${serial}`);
-        if (message === 'COMMAND:DISCONNECT:OLDVERSION') {
-          this.logger.important("(ws:socket)> Received request to stop opening websocket connections.");
-          this.__socketIsOldVersion = true;
-          return
-        }
+        // console.log("(ws)> message received:", message);
 
+        // Validate JSON
         try {
           message = JSON.parse(message);
         } catch (err) {
-          this.logger.log("(ws:socket)> Expected message to be a valid JSON", message);
+          this.logger.log("(ws)> Expected message to be a valid JSON", message);
           return;
         }
 
+        // Make sure it is an object
         if ((typeof message !== 'object') || (message === null)) {
-          this.logger.log("(ws:socket)> Expected message to be a stringified object.", message);
+          this.logger.log("(ws)> Expected message to be a stringified object.", message);
           return;
         }
 
+        // Validate Schema
         let schema = Joi.object().keys({
           requestUid: Joi.string().length(20).required(),
-          operation: Joi.string().min(1).max(128).required(),
-          consumerId: Joi.number().required(),
           path: Joi.string().min(1).max(128).required(),
           body: Joi.object().required()
         });
         let { error, value } = Joi.validate(message, schema);
         if (error) {
-          this.logger.log("(ws:socket)> Socket request validation error." + JSON.stringify(error), message);
+          this.logger.log("(ws)> Socket request validation error." + JSON.stringify(error), message);
           return;
         }
         message = value;
 
+        // match route
         let route = this._wsApiList.find(({ path }) => {
           return path === message.path;
         });
         if (!route) {
+          this.logger.log("(ws)> Unkown route requested", message.path);
           ws.send("Unkown route requested");
           return;
         }
 
+        // process api
         let { ApiClass } = route;
         this.logger.info('WS', `${message.path} ${message.requestUid}`);
         if (ApiClass.prototype instanceof LegacyApi) {
-          let api = new ApiClass(message.path, this, this.database, this.legacyDatabase, this.logger, null, null, ws, 'ws', message.requestUid, message.consumerId);
+          let api = new ApiClass(message.path, this, this.database, this.legacyDatabase, this.logger, null, null, ws, 'ws', message.requestUid, null);
           api._prehandlePostOrWsApi(message.body);
         } else {
-          let api = new ApiClass(message.path, this, this.database, this.logger, null, null, ws, 'ws', message.requestUid, message.consumerId);
+          let api = new ApiClass(message.path, this, this.database, this.logger, null, null, ws, 'ws', message.requestUid, null);
           api._prehandle(message.body);
         }
+
       });
     });
-  }
 
-  __spawnWebsocketIfNecessary() {
-    if (this.config.socketProxy.url.indexOf('wss') > -1) {
-      this.logger.info("(server)> attempting websocket connection. Connected", this.__socketClientCount, 'out of', WEBSOCKET_CLIENT_POOL_MAX_COUNT);
-    }
-    let lim = Math.max(WEBSOCKET_CLIENT_POOL_MAX_COUNT - this.__socketClientCount, 0);
-    for (let i = 0; i < lim; i++) {
-      this.__createWebsocketClient();
-    }
-    if (!this.__socketIsOldVersion) {
-      setTimeout(() => {
-        this.__spawnWebsocketIfNecessary();
-      }, WEBSOCKET_RECONNECTION_DELAY);
-    }
-  }
+    wss.on('error', (err) => {
+      console.log("(wss)> Error:", err);
+    });
 
-  _initializeWebsocket() {
-    this.__socketIsOldVersion = false;
-    this.__socketMockGaeVersion = moment((new Date)).format('YYYYMMDDtHHmmss');
-    this.__socketClientSerialSeed = 0;
-    this.__socketClientCount = 0;
-    this._wsApiList = [];
-    if (!this.config.socketProxy.enabled) {
-      this.logger.info("(server)> websocket server is not enabled.");
-      return;
-    }
-    this.logger.info("(server)> websocket socket-proxy is", this.config.socketProxy.url);
-    setTimeout(() => {
-      this.__spawnWebsocketIfNecessary();
-    }, WEBSOCKET_STARTUP_DELAY);
+    console.log(`(wss)> Listening on port ${this._port}`);
   }
 
   setLogger(logger) {
