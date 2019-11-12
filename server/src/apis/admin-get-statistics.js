@@ -91,7 +91,9 @@ exports.AdminGetStatisticsApi = class extends Api {
       for (let key in statistics.urlHits) {
         let stamp = statistics.urlHits[key].lastHitDatetimeStamp;
         delete statistics.urlHits[key].lastHitDatetimeStamp;
-        statistics.urlHits[key].lastHit = (new Date(stamp)).toISOString();
+        let date = (new Date(stamp));
+        date.setHours(date.getHours() + 6); // timezone
+        statistics.urlHits[key].lastHit = date.toISOString();
       }
     }
 
