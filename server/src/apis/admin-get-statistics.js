@@ -88,6 +88,11 @@ exports.AdminGetStatisticsApi = class extends Api {
     let urlAnalytics = await this.database.urlAnalytics._find({ which: 'only' });
     if (urlAnalytics.length > 0) {
       statistics.urlHits = urlAnalytics[0].urlHits;
+      for (let key in statistics.urlHits) {
+        let stamp = statistics.urlHits[key].lastHitDatetimeStamp;
+        delete statistics.urlHits[key].lastHitDatetimeStamp;
+        statistics.urlHits[key].lastHit = (new Date(stamp)).toISOString();
+      }
     }
 
     return { statistics };
