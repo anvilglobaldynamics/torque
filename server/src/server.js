@@ -13,7 +13,7 @@ const { Logger } = require('./logger');
 const { LegacyApi } = require('./legacy-api-base');
 const moment = require('moment');
 
-const PERIODIC_SOCKET_REPORT_DELAY = 10000;
+const PERIODIC_SOCKET_REPORT_DELAY = 60 * 000;
 
 class Server {
 
