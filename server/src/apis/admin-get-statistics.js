@@ -36,7 +36,8 @@ exports.AdminGetStatisticsApi = class extends Api {
         noReceipt: 0,
         byEmail: 0,
         byPhone: 0
-      }
+      },
+      urlHits: {}
     };
 
     // products
@@ -82,6 +83,12 @@ exports.AdminGetStatisticsApi = class extends Api {
     // customers
     let customerList = await this.database.customer._find({ originApp: 'torque-lite' });
     statistics.liteCustomers.total = customerList.length;
+
+    // urlHists
+    let urlAnalytics = await this.database.urlAnalytics._find({ which: 'only' });
+    if (urlAnalytics.length > 0) {
+      statistics.urlHits = urlAnalytics[0].urlHits;
+    }
 
     return { statistics };
   }

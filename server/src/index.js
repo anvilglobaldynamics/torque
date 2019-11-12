@@ -151,6 +151,8 @@ const { LiteAddSalesApi } = require('./apis/lite-add-sales');
 const { LiteGetCustomerApi } = require('./apis/lite-get-customer');
 const { LiteGetReceiptApi } = require('./apis/lite-get-receipt');
 
+const { AnalyticsReportUrlHitApi } = require('./apis/analytics-report-url-hit');
+
 let { FixtureCollection } = require('./legacy-collections/fixture');
 let { UserCollection } = require('./legacy-collections/user');
 let { EmailVerificationRequestCollection } = require('./legacy-collections/email-verification-request');
@@ -417,6 +419,7 @@ class Program {
     server.registerPostApi('/api/lite-get-customer', LiteGetCustomerApi);
     server.registerPostApi('/api/lite-get-receipt', LiteGetReceiptApi);
 
+    server.registerPostApi('/api/analytics-report-url-hit', AnalyticsReportUrlHitApi);
   }
 
 }
