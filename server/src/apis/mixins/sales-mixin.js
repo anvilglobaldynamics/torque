@@ -230,7 +230,7 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
 
     payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
 
-    let salesId = await this.database.sales.create({ originApp: this.clientApplication,  organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment, productsSelectedFromWarehouseId, wasOfflineSale });
+    let salesId = await this.database.sales.create({ originApp: this.clientApplication, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment, productsSelectedFromWarehouseId, wasOfflineSale });
 
     if (serviceList.length) {
       for (let i = 0; i < serviceList.length; i++) {
@@ -281,5 +281,52 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
   // Get Sales - End
+
+  // Sales Receipt - Start
+
+  async  _getReceiptData({ receiptId }) {
+
+    let receipt = await this.database.receipt.findById({ id: receiptId });
+
+    let sales = await this._getSales({ salesId: receipt.salesId });
+
+    let outlet = await this.database.outlet.findById({ id: sales.outletId });
+
+    let organization = await this.database.organization.findById({ id: outlet.organizationId });
+
+    let customer = null;
+    if (sales.customerId !== null) {
+      customer = await this.database.customer.findById({ id: sales.customerId });
+    }
+
+    let userId = sales.payment.paymentList[0].acceptedByUserId;
+    let user = await this.database.user.findById({ id: userId });
+    let soldByUser = {
+      fullName: user.fullName
+    }
+
+    let organizationSettings = await this.database.organizationSettings.findByOrganizationId({
+      organizationId: organization.id
+    });
+
+    await this._addReturnedProductCountToSales({ sales });
+    await this._addProductBlueprintData({ sales });
+
+    await this._addServiceBlueprintData({ sales });
+
+    await this.__addDiscountPresetName({ sales });
+
+    return {
+      sales,
+      outlet,
+      organization,
+      soldByUser,
+      customer,
+      organizationSettings
+    };
+
+  }
+
+  // Sales Receipt - End
 
 }
