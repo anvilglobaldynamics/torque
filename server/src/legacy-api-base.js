@@ -303,11 +303,14 @@ class LegacyApi {
           err.code = "APIKEY_INVALID";
           return this.fail(err);
         }
-        let hasExpired = session.hasExpired || (((new Date).getTime() - session.createdDatetimeStamp) > SESSION_DURATION_LIMIT);
-        if (hasExpired) {
-          err = new Error(this.verses.apiCommon.apikeyExpired);
-          err.code = "APIKEY_EXPIRED";
-          return this.fail(err);
+        // only expire for torque users. Issue #932
+        if (this.clientApplication === 'torque') {
+          let hasExpired = session.hasExpired || (((new Date).getTime() - session.createdDatetimeStamp) > SESSION_DURATION_LIMIT);
+          if (hasExpired) {
+            err = new Error(this.verses.apiCommon.apikeyExpired);
+            err.code = "APIKEY_EXPIRED";
+            return this.fail(err);
+          }
         }
         cbfn(null, session.userId);
       });
