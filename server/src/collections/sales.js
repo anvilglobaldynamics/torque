@@ -8,6 +8,8 @@ exports.SalesCollection = class extends Collection {
   get name() { return 'sales'; }
 
   get joiSchema() {
+    // NOTE: Make sure to check with receipt.js's receiptData property before making any
+    // changes to this schema
     return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),

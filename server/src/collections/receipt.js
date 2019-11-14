@@ -21,6 +21,8 @@ exports.ReceiptCollection = class extends Collection {
       numberOfTimesViewed: Joi.number().max(999999999999999).required(),
       receiptToken: Joi.string().length(6).required(),
 
+      receiptData: Joi.object().allow(null).required(), // see "_getReceiptData" in sales-mixin.js
+
       isDeleted: Joi.boolean().required(),
       originApp: Joi.string().valid('torque', 'torque-lite').required(),
     });
@@ -45,9 +47,10 @@ exports.ReceiptCollection = class extends Collection {
   async create({ originApp, salesId, sentHistory, receiptToken }) {
     let numberOfTimesViewed = 0;
     return await this._insert({
-      originApp, 
+      originApp,
       salesId, sentHistory, numberOfTimesViewed, receiptToken,
-      isDeleted: false
+      isDeleted: false,
+      receiptData: null
     });
   }
 
@@ -60,6 +63,14 @@ exports.ReceiptCollection = class extends Collection {
   async findBySalesId({ salesId }) {
     return await this._findOne({
       salesId
+    });
+  }
+
+  async setReceiptData({ id }, { receiptData }) {
+    return await this._update({ id }, {
+      $set: {
+        receiptData
+      }
     });
   }
 

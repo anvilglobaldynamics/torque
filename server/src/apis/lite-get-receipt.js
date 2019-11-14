@@ -27,42 +27,14 @@ exports.LiteGetReceiptApi = class extends Api.mixin(InventoryMixin, SalesMixin, 
 
     await this.database.receipt._update({ receiptToken }, { $inc: { numberOfTimesViewed: 1 } });
 
-    let sales = await this._getSales({ salesId: receipt.salesId });
-
-    let outlet = await this.database.outlet.findById({ id: sales.outletId });
-
-    let organization = await this.database.organization.findById({ id: outlet.organizationId });
-
-    let customer = null;
-    if (sales.customerId !== null) {
-      customer = await this.database.customer.findById({ id: sales.customerId });
+    if (receipt.receiptData) {
+      console.log("AA")
+      return receipt.receiptData;
+    } else {
+      let receiptData = await this._getReceiptData({ receiptId: receipt.id });
+      await this.database.receipt.setReceiptData({ id: receipt.id }, { receiptData });
+      return receiptData;
     }
-
-    let userId = sales.payment.paymentList[0].acceptedByUserId;
-    let user = await this.database.user.findById({ id: userId });
-    let soldByUser = {
-      fullName: user.fullName
-    }
-
-    let organizationSettings = await this.database.organizationSettings.findByOrganizationId({
-      organizationId: organization.id
-    });
-
-    await this._addReturnedProductCountToSales({ sales });
-    await this._addProductBlueprintData({ sales });
-
-    await this._addServiceBlueprintData({ sales });
-
-    await this.__addDiscountPresetName({ sales });
-
-    return {
-      sales,
-      outlet,
-      organization,
-      soldByUser,
-      customer,
-      organizationSettings
-    };
   }
 
 }
