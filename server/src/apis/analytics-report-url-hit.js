@@ -16,6 +16,7 @@ exports.AnalyticsReportUrlHitApi = class extends Api {
     });
   }
 
+  // NOTE: This key is added as extra security since this api is only meant to be called internally
   get pssk() {
     return 'D1doF#sENM5w';
   }
@@ -23,7 +24,7 @@ exports.AnalyticsReportUrlHitApi = class extends Api {
   async handle({ body }) {
     let { pssk, name } = body;
     if (pssk !== this.pssk) {
-      throw new CodedError("PSSK_ERROR", "Preshared Secret Key is Inavlid");
+      throw new CodedError("PSSK_INVALID", "Preshared Secret Key is Inavlid");
     }
 
     await this.database.urlAnalytics.reportUrlHit({ name });
