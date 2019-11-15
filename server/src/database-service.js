@@ -37,6 +37,7 @@ const { VendorCollection } = require('./collections/vendor');
 const { OrganizationSettingsCollection } = require('./collections/organization-settings');
 const { ReceiptCollection } = require('./collections/receipt');
 const { UrlAnalyticsCollection } = require('./collections/url-analytics');
+const { UserLocationCollection } = require('./collections/user-location');
 
 class DatabaseService {
 
@@ -80,6 +81,7 @@ class DatabaseService {
     this.organizationSettings = new OrganizationSettingsCollection(this.engine, this);
     this.receipt = new ReceiptCollection(this.engine, this);
     this.urlAnalytics = new UrlAnalyticsCollection(this.engine, this);
+    this.userLocation = new UserLocationCollection(this.engine, this);
 
     /** @type {[Collection]} */
     this.collectionList = Object.keys(this).filter(key => this[key] instanceof Collection).map(key => this[key]);

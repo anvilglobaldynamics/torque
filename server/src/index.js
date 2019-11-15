@@ -152,6 +152,7 @@ const { LiteGetCustomerApi } = require('./apis/lite-get-customer');
 const { LiteGetReceiptApi } = require('./apis/lite-get-receipt');
 
 const { AnalyticsReportUrlHitApi } = require('./apis/analytics-report-url-hit');
+const { AnalyticsReportUserLocationApi } = require('./apis/analytics-report-user-location');
 
 let { FixtureCollection } = require('./legacy-collections/fixture');
 let { UserCollection } = require('./legacy-collections/user');
@@ -420,6 +421,7 @@ class Program {
     server.registerPostApi('/api/lite-get-receipt', LiteGetReceiptApi);
 
     server.registerPostApi('/api/analytics-report-url-hit', AnalyticsReportUrlHitApi);
+    server.registerPostApi('/api/analytics-report-user-location', AnalyticsReportUserLocationApi);
   }
 
 }
