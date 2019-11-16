@@ -375,9 +375,9 @@
             xPadding: 70,
             displayColors: false,
             callbacks: {
-              // title: function(item){
-              //   return item.value;
-              // },
+              title: function(item){
+                return "Period: " + item[0].label;
+              },
               label: function (item, data) {
                 return "Sales: " + String(Math.round(item.value));
               }
