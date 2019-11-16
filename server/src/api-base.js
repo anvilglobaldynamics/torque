@@ -779,7 +779,7 @@ class Api {
 
   ensureUpdate(wasUpdated, collectionName) {
     if (!wasUpdated) {
-      err = new CodedError("GENERIC_UPDATE_FAILURE", this.verses.collectionCommon.genericUpdateFailureFn(collectionName));
+      let err = new CodedError("GENERIC_UPDATE_FAILURE", this.verses.collectionCommon.genericUpdateFailureFn(collectionName));
       err.collectionName = collectionName;
       throw err;
     }

@@ -64,7 +64,7 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
     let employmentId = await this._setUserAsOwner({ userId, organizationId });
 
     // === outlet creation
-    let location = { lat: 23.7945153, lng: 90.4139857 };
+    let location = { lat: 24, lng: 89 };
 
     let outletId = await this._createOutlet({
       name: organizationName + ' - Primary Outlet',
