@@ -160,12 +160,12 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
     }
   }
 
-  async getCustomerId({ customer }) {
+  async getCustomerId({ customer, organizationId }) {
     if (!customer) return null;
     if (customer.email) {
-      let existingCustomer = await this.database.customer._findOne({ email: customer.email });
+      let existingCustomer = await this.database.customer._findOne({ email: customer.email, organizationId });
       if (existingCustomer) {
-        await this.database.customer._update({ email: customer.email }, { $set: { fullName: customer.fullName } })
+        await this.database.customer._update({ email: customer.email, organizationId }, { $set: { fullName: customer.fullName } })
         return existingCustomer.id;
       } else {
         return await this._createCustomer({
@@ -178,9 +178,9 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
         });
       }
     } else {
-      let existingCustomer = await this.database.customer._findOne({ phone: customer.phone });
+      let existingCustomer = await this.database.customer._findOne({ phone: customer.phone, organizationId });
       if (existingCustomer) {
-        await this.database.customer._update({ phone: customer.phone }, { $set: { fullName: customer.fullName } })
+        await this.database.customer._update({ phone: customer.phone, organizationId }, { $set: { fullName: customer.fullName } })
         return existingCustomer.id;
       } else {
         return await this._createCustomer({
@@ -305,7 +305,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
     let assistedByEmployeeId = null;
     let wasOfflineSale = false;
 
-    let customerId = await this.getCustomerId({ customer });
+    let customerId = await this.getCustomerId({ customer, organizationId });
 
     let results = await this.__addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale });
     results.productBlueprintIdList = productBlueprintIdList;
