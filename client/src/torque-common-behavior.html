@@ -369,6 +369,7 @@
         return {
           scaleShowLabels: false,
           tooltips: {
+            textDirection: 'rtl',
             enabled: true,
             mode: 'nearest',
             xPadding: 70,
@@ -377,8 +378,8 @@
               // title: function(item){
               //   return item.value;
               // },
-              label: function (item) {
-                return String(Math.round(item.value));
+              label: function (item, data) {
+                return "Sales: " + String(Math.round(item.value));
               }
             },
             __custom: function (tooltipModel) {
