@@ -73,6 +73,9 @@ exports.ShopLocateNearbyOutletsApi = class extends Api {
     }
     await this._appendOrganizationNameToOutletList({ outletList });
     let finalOutletList = outletList.map(outlet => extract(outlet, ['id', 'organizationName', 'name', 'categoryCode', 'location']));
+    finalOutletList.forEach(outlet => {
+      outlet.name = outlet.name.replace(' - Primary Outlet', '');
+    })
     return {
       outletList: finalOutletList
     }
