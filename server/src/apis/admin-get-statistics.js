@@ -35,7 +35,13 @@ exports.AdminGetStatisticsApi = class extends Api {
         total: 0,
         noReceipt: 0,
         byEmail: 0,
-        byPhone: 0
+        byOwnSms: 0
+      },
+      premiumReceipts: {
+        total: 0,
+        noReceipt: 0,
+        printed: 0,
+        byEmail: 0
       },
       urlHits: {}
     };
@@ -76,9 +82,9 @@ exports.AdminGetStatisticsApi = class extends Api {
       if (receipt.sentHistory[0].sentVia === 'email') {
         statistics.liteReceipts.byEmail += 1;
       } else {
-        statistics.liteReceipts.byPhone += 1;
+        statistics.liteReceipts.byOwnSms += 1;
       }
-    })
+    });
 
     // customers
     let customerList = await this.database.customer._find({ originApp: 'torque-lite' });
@@ -96,6 +102,21 @@ exports.AdminGetStatisticsApi = class extends Api {
         statistics.urlHits[key].lastHit = date.toISOString();
       }
     }
+
+    // receipts
+    let receiptList2 = await this.database.receipt._find({ originApp: 'torque' });
+    statistics.premiumReceipts.total = receiptList2.length;
+    receiptList2.forEach(receipt => {
+      if (receipt.sentHistory.length === 0) {
+        statistics.premiumReceipts.noReceipt += 1;
+        return;
+      }
+      if (receipt.sentHistory[0].sentVia === 'email') {
+        statistics.premiumReceipts.byEmail += 1;
+      } else if (receipt.sentHistory[0].sentVia === 'print') {
+        statistics.premiumReceipts.printed += 1;
+      }
+    });
 
     return { statistics };
   }
