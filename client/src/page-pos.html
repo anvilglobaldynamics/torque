@@ -1911,6 +1911,8 @@
       }
 
       _processCreateCustomer({ fullName, phone, email, address }, cbfn) {
+        if (!email) email = null;
+        if (!phone) phone = null;
         let data = {
           fullName, phone, email, address,
           organizationId: this.app.organization.id
@@ -2186,7 +2188,7 @@
         cbfn({ salesId: salesData.id });
       }
 
-      _processAddSales(cbfn) {
+      _processAddSales({ sentVia }, cbfn) {
         let outletId = this.params.outlet;
         let payment = this.payment;
 
@@ -2228,7 +2230,8 @@
 
         let data = {
           customerId, outletId, productList, serviceList, assistedByEmployeeId, payment,
-          productsSelectedFromWarehouseId
+          productsSelectedFromWarehouseId,
+          sentVia
         };
 
         if (this.isInOfflineMode) {
@@ -2288,14 +2291,25 @@
       }
 
       saveSaleTapped(e = null) {
-        this.app.displayReceiptDialog(({ receiptType }) => {
+        let canHaveEmailReceipt = false;
+        if (this.customer) {
+          if (this.customer.email) canHaveEmailReceipt = true;
+        }
+        this.app.displayReceiptDialog({ canHaveEmailReceipt }, ({ receiptType }) => {
           if (receiptType === 'print-receipt') {
-            this._processAddSales(({ salesId }) => {
+            this._processAddSales({ sentVia: 'none' }, ({ salesId }) => {
               this._resetSales();
               return this.app.navigateTo(`/print-sales-receipt/sales:${salesId}/from:pos`);
             });
+          } else if (receiptType === 'email-receipt') {
+            this._processAddSales({ sentVia: 'email' }, ({ salesId }) => {
+              let message = this.app.verses.pos.newSalesAdded;
+              this.app.showToast(message, _ => {
+                this._resetSales();
+              });
+            });
           } else if (receiptType === 'no-receipt') {
-            this._processAddSales(({ salesId }) => {
+            this._processAddSales({ sentVia: 'none' }, ({ salesId }) => {
               let message = this.app.verses.pos.newSalesAdded;
               this.app.showToast(message, _ => {
                 this._resetSales();

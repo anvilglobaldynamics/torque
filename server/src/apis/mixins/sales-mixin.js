@@ -1,6 +1,10 @@
 const { Api } = require('./../../api-base');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-error');
 
+const moment = require('moment');
+
+const { generateRandomStringCaseInsensitive } = require('./../../utils/random-string');
+
 /** @param {typeof Api} SuperApiClass */
 exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
 
@@ -325,6 +329,86 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
       organizationSettings
     };
 
+  }
+
+  async _createReceipt({ salesId, sentVia }) {
+    do {
+      var receiptToken = generateRandomStringCaseInsensitive(6).toLowerCase();
+      var isUnique = !(await this.database.receipt.findByReceiptToken({ receiptToken }));
+    } while (!isUnique);
+    let sentHistory = [];
+    if (sentVia !== 'none') {
+      sentHistory.push({
+        sentVia,
+        sentDatetimeStamp: Date.now(),
+      })
+    }
+    let receiptId = await this.database.receipt.create({ originApp: this.clientApplication, receiptToken, salesId, sentHistory });
+
+    let receiptData = await this._getReceiptData({ receiptId });
+
+    await this.database.receipt.setReceiptData({ id: receiptId }, { receiptData });
+
+    return receiptToken;
+  }
+
+  async _sendReceiptMail(model) {
+    function unescapeHtmlEntities(str) {
+      var map = {
+        "&amp;": "&",
+        "&lt;": "<",
+        "&gt;": ">",
+        "&quot;": "\"",
+        "&#39;": "'",
+        "&apos;": "'"
+      };
+      return str.replace(/(&amp;|&lt;|&gt;|&quot;|&#39;|&apos;)/g, function (m) { return map[m]; });
+    }
+
+    model.organizationName = unescapeHtmlEntities(model.organizationName);
+
+    let clientLanguage = (this.clientLanguage || 'en-us');
+    let [err, isDeveloperError, response, finalBody] = await this.server.emailService.sendStoredMail(clientLanguage, 'receipt', model, model.email);
+
+    if ((err) || response.message !== 'Queued. Thank you.') {
+      if (err) {
+        if (!isDeveloperError) this.logger.error(err);
+      } else {
+        this.logger.log("Unexpected emailService response:", response);
+      }
+      let message = 'Failed to send receipt email. Please handle the case manually.';
+      this.logger.important(message, {
+        type: 'email-receipt',
+        model
+      });
+    }
+  }
+
+  async _sendReceiptByEmail({ payment, organization, customer, receiptToken }) {
+    let organizationName = organization.name;
+    let organizationPhone = organization.phone;
+
+    let dateObject = (new Date())
+    dateObject.setHours(dateObject.getHours() + 6); // GMT + 6
+    let date = moment(dateObject).format('dddd, MMMM Do YYYY, h:mm a');
+
+    let { totalBilled, changeAmount, totalPaidAmount } = payment;
+    totalBilled = Math.round(totalBilled * 100) / 100;
+    changeAmount = Math.round(changeAmount * 100) / 100;
+
+    let email = customer.email;
+    let customerName = customer.fullName;
+
+    await this._sendReceiptMail({
+      email,
+      totalBilled,
+      changeAmount,
+      organizationName,
+      organizationPhone,
+      receiptToken,
+      customerName,
+      date
+    });
   }
 
   // Sales Receipt - End

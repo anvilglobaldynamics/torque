@@ -390,7 +390,7 @@
         margin-bottom: 10px;
       }
 
-      #receipt-dialog h2{
+      #receipt-dialog h2 {
         min-width: 200px;
       }
 
@@ -683,6 +683,9 @@
           <h2>[[verses.receipt.dialogTitle]]</h2>
           <paper-dialog-scrollable>
             <div class="vertical layout">
+              <template is="dom-if" if="[[_receiptDialogCanHaveEmailReceipt]]">
+                <paper-button raised class="primary receipt-dialog-button" on-click="receiptDialogEmailReceiptTapped">[[verses.receipt.emailReceipt]]</paper-button>
+              </template>
               <paper-button raised class="primary receipt-dialog-button" on-click="receiptDialogPrintReceiptTapped">[[verses.receipt.printReceipt]]</paper-button>
               <paper-button raised class="danger receipt-dialog-button" on-click="receiptDialogNoReceiptTapped">[[verses.receipt.noReceipt]]</paper-button>
             </div>
@@ -1301,10 +1304,18 @@
 
       // ====================== receipt dialog =============================
 
-      displayReceiptDialog(cbfn) {
+      displayReceiptDialog({ canHaveEmailReceipt, canHaveSmsReceipt }, cbfn) {
+        this._receiptDialogCanHaveEmailReceipt = canHaveEmailReceipt;
+        this._receiptDialogCanHaveSmsReceipt = canHaveSmsReceipt;
         this._receiptDialogCbfn = cbfn;
         this._patchForPolymerModalDialogIssue();
         this.elem('#receipt-dialog').open();
+      }
+
+      receiptDialogEmailReceiptTapped(e = null) {
+        this.elem('#receipt-dialog').close();
+        this._receiptDialogCbfn({ receiptType: 'email-receipt' });
+        this._receiptDialogCbfn = null;
       }
 
       receiptDialogPrintReceiptTapped(e = null) {

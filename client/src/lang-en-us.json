@@ -1182,6 +1182,7 @@
   "receipt": {
     "dialogTitle":"Receipt",
     "noReceipt":"No Receipt",
-    "printReceipt": "Print Receipt"
+    "printReceipt": "Print Receipt",
+    "emailReceipt": "Send Receipt by Email"
   }
 }

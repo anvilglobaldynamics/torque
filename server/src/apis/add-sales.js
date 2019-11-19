@@ -60,7 +60,9 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
 
       assistedByEmployeeId: Joi.number().min(0).max(999999999999999).allow(null).required(),
 
-      wasOfflineSale: Joi.boolean().required()
+      wasOfflineSale: Joi.boolean().required(),
+
+      sentVia: Joi.string().valid('none', 'email', 'sms', 'own-sms').required(),
 
     });
   }
@@ -85,10 +87,26 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     // NOTE: See lite-add-sales.js handle method for explanation
     await this.applyGlobalUsageLimit({ useCase: 'add-sales' });
 
-    let { outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale } = body;
+    let { outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale, sentVia } = body;
     let organizationId = this.interimData.organization.id;
 
-    return await this.__addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale });
+    let results = await this.__addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale });
+
+    let receiptToken = await this._createReceipt({ salesId: results.salesId, sentVia });
+    results.receiptToken = receiptToken;
+    results.sentVia = sentVia;
+
+    if (sentVia === 'email') {
+      let customer = await this.database.customer._findOne({ organizationId, id: customerId });
+      await this._sendReceiptByEmail({
+        payment: originalPayment,
+        organization: this.interimData.organization,
+        customer,
+        receiptToken
+      });
+    }
+
+    return results
   }
 
 }

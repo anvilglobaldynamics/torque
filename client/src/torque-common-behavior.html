@@ -375,7 +375,7 @@
             xPadding: 70,
             displayColors: false,
             callbacks: {
-              title: function(item){
+              title: function (item) {
                 return "Period: " + item[0].label;
               },
               label: function (item, data) {
@@ -494,6 +494,16 @@
         }
       }
 
+      // ====================== utils =============================
+
+      // Check browser depending on user agent
+      isBrowserAndroid() {
+        let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        if (/android/i.test(userAgent)) {
+          return true;
+        }
+        return false;
+      }
 
     }
 
