@@ -28,7 +28,6 @@ exports.LiteGetReceiptApi = class extends Api.mixin(InventoryMixin, SalesMixin, 
     await this.database.receipt._update({ receiptToken }, { $inc: { numberOfTimesViewed: 1 } });
 
     if (receipt.receiptData) {
-      console.log("AA")
       return receipt.receiptData;
     } else {
       let receiptData = await this._getReceiptData({ receiptId: receipt.id });
