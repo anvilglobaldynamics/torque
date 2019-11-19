@@ -2296,7 +2296,9 @@
           if (this.customer.email) canHaveEmailReceipt = true;
         }
         this.app.displayReceiptDialog({ canHaveEmailReceipt }, ({ receiptType }) => {
-          if (receiptType === 'print-receipt') {
+          if (receiptType === 'close') {
+            'pass'
+          } else if (receiptType === 'print-receipt') {
             this._processAddSales({ sentVia: 'none' }, ({ salesId }) => {
               this._resetSales();
               return this.app.navigateTo(`/print-sales-receipt/sales:${salesId}/from:pos`);
