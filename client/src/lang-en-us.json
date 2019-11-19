@@ -1183,6 +1183,8 @@
     "dialogTitle":"Receipt",
     "noReceipt":"No Receipt",
     "printReceipt": "Print Receipt",
-    "emailReceipt": "Send Receipt by Email"
+    "emailReceipt": "Send Receipt by Email",
+    "resendReceipt": "Receipt",
+    "resentSuccessfully": "Receipt has been sent successfully."
   }
 }

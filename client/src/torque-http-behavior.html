@@ -614,6 +614,11 @@
         this.callCombinedJsonApi('report-product-sales-details', data, cbfn);
       }
 
+      callResendSalesReceiptApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('resend-sales-receipt', data, cbfn);
+      }
+
     }
 
   })();

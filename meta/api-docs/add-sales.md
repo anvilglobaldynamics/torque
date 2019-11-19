@@ -96,7 +96,9 @@ From "customer-mixin":
 {
   "hasError": false,
   "status": "success",
-  "salesId": Joi.number().max(999999999999999).allow(null).required()
+  "salesId": Joi.number().max(999999999999999).allow(null).required(),
+  "receiptToken": Joi.string().length(6).required(),
+  "sentVia": Joi.string().valid('none', 'email', 'sms', 'own-sms').required(),
 }
 ```
 

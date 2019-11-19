@@ -32,15 +32,16 @@ exports.ReceiptCollection = class extends Collection {
     return [];
   }
 
-  get foreignKeyDefList() {
-    return [
-      {
-        targetCollection: 'sales',
-        foreignKey: 'id',
-        referringKey: 'salesId'
-      }
-    ];
-  }
+  // NOTE: Now a sale can have multiple salesId
+  // get foreignKeyDefList() {
+  //   return [
+  //     {
+  //       targetCollection: 'sales',
+  //       foreignKey: 'id',
+  //       referringKey: 'salesId'
+  //     }
+  //   ];
+  // }
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 

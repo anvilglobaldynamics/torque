@@ -95,6 +95,7 @@ const { GetSalesApi } = require('./apis/get-sales');
 const { GetSalesListApi } = require('./apis/get-sales-list');
 const { DiscardSalesApi } = require('./apis/discard-sales');
 const { GetServiceMembershipListApi } = require('./apis/get-service-membership-list');
+const { ResendSalesReceiptApi } = require('./apis/resend-sales-receipt');
 
 const { AddSalesReturnApi } = require('./apis/add-sales-return');
 let { GetSalesReturnApi } = require('./legacy-apis/get-sales-return');
@@ -358,6 +359,8 @@ class Program {
     server.registerPostApi('/api/get-sales', GetSalesApi);
     server.registerPostApi('/api/get-sales-list', GetSalesListApi);
     server.registerPostApi('/api/get-service-membership-list', GetServiceMembershipListApi);
+    server.registerPostApi('/api/resend-sales-receipt', ResendSalesReceiptApi);
+
     server.registerPostApi('/api/discard-sales', DiscardSalesApi);
     server.registerPostApi('/api/add-sales-return', AddSalesReturnApi);
     server.registerPostApi('/api/get-sales-return', GetSalesReturnApi);

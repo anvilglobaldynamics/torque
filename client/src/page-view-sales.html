@@ -84,7 +84,7 @@
         </template> -->
 
         <div class="horizontal layout end-justified">
-          <paper-button raised class="secondary" on-tap="printReceiptTapped">[[verses.sales.printReceipt]]</paper-button>
+          <paper-button raised class="secondary" on-tap="resendReceiptTapped">[[verses.receipt.resendReceipt]]</paper-button>
 
           <template is="dom-if" if="{{!sales.isDiscarded}}">
             <paper-button raised class="danger" on-tap="discardTapped">[[verses.general.discard]]</paper-button>
@@ -343,8 +343,23 @@
         return this.app.navigateTo(`/edit-sales-return/sales:${this.sales.id}/product:${product.productId}`);
       }
 
-      printReceiptTapped(e) {
-        return this.app.navigateTo(`/print-sales-receipt/sales:${this.sales.id}/from:sales-record`);
+      resendReceiptTapped(e) {
+        let canHaveEmailReceipt = false;
+        if (this.customer) {
+          if (this.customer.email) canHaveEmailReceipt = true;
+        }
+        this.app.displayReceiptDialog({ canHaveEmailReceipt }, ({ receiptType }) => {
+          if (receiptType === 'print-receipt') {
+            return this.app.navigateTo(`/print-sales-receipt/sales:${this.sales.id}/from:sales-record`);
+          } else if (receiptType === 'email-receipt') {
+            let data = { salesId: this.sales.id, sentVia: 'email' };
+            this.app.callResendSalesReceiptApi(data, (err, response) => {
+              if (err) return;
+              if (response.hasError) return this.onApiError(response.error);
+              this.app.showToast(this.verses.receipt.resentSuccessfully, _ => { });
+            });
+          }
+        });
       }
 
       // region: misc =================================
