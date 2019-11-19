@@ -681,7 +681,9 @@
 
         <paper-dialog id="receipt-dialog" modal style="z-index: -999999">
           <h2>[[verses.receipt.dialogTitle]]</h2>
-          <div style="position: absolute; right: -10px; top: -10px;" on-click="receiptDialogCloseTapped">X</div>
+
+          <iron-icon style="position: absolute; right: -12px; top: -10px;" icon="clear" on-click="receiptDialogCloseTapped"></iron-icon>
+
           <paper-dialog-scrollable>
             <div class="vertical layout">
               <template is="dom-if" if="[[_receiptDialogCanHaveEmailReceipt]]">
@@ -1331,7 +1333,7 @@
         this._receiptDialogCbfn = null;
       }
 
-      receiptDialogCloseTapped(e){
+      receiptDialogCloseTapped(e) {
         this.elem('#receipt-dialog').close();
         this._receiptDialogCbfn({ receiptType: 'close' });
         this._receiptDialogCbfn = null;
