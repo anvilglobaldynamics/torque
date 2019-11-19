@@ -383,7 +383,9 @@ const createSales = async ({ apiKey, outletId, productList, i }) => {
 
     assistedByEmployeeId: null,
 
-    wasOfflineSale: false
+    wasOfflineSale: false,
+
+sentVia: 'none'
   });
 
   return { salesId };

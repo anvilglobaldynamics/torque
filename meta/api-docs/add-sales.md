@@ -51,7 +51,9 @@ method: `POST`
 
   assistedByEmployeeId: Joi.number().min(0).max(999999999999999).allow(null).required(),
   
-  wasOfflineSale: Joi.boolean().required()
+  wasOfflineSale: Joi.boolean().required(),
+
+  sentVia: Joi.string().valid('none', 'email', 'sms', 'own-sms').required(),
 }
 ```
 

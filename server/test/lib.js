@@ -875,6 +875,8 @@ exports.validateAddSalesApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
     status: Joi.string().required().equal('success'),
+    receiptToken: Joi.string().length(6).required(),
+    sentVia: Joi.string().valid('none', 'email', 'sms', 'own-sms').required(),
     salesId: Joi.number().required()
   });
 
@@ -1548,6 +1550,7 @@ exports.validateSalesSchema = (doc) => {
     assistedByEmployeeId: Joi.number().min(0).max(999999999999999).allow(null).required(),
 
     wasOfflineSale: Joi.boolean().required(),
+
     isModified: Joi.boolean().required(),
     isDeleted: Joi.boolean().required(),
     isDiscarded: Joi.boolean().required()

@@ -223,7 +223,9 @@ describe('Sales Return', _ => {
                                 assistedByEmployeeId: null,
                                 productsSelectedFromWarehouseId: null,
 
-                                wasOfflineSale: false
+                                wasOfflineSale: false,
+
+                                sentVia: 'none'
                               }, (data) => {
                                 salesId = data.salesId;
                                 addSales({
@@ -259,7 +261,9 @@ describe('Sales Return', _ => {
                                   assistedByEmployeeId: null,
                                   productsSelectedFromWarehouseId: null,
 
-                                  wasOfflineSale: false
+                                  wasOfflineSale: false,
+
+                                  sentVia: 'none'
                                 }, (data) => {
                                   sales2Id = data.salesId;
                                   getSales({
@@ -289,7 +293,7 @@ describe('Sales Return', _ => {
       });
     });
   });
-  
+
   it('api/get-sales (Valid)', testDoneFn => {
 
     callApi('api/get-sales', {

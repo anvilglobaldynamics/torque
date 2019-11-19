@@ -376,7 +376,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -420,7 +422,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -471,7 +475,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -522,7 +528,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -573,7 +581,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -705,7 +715,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -756,7 +768,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -807,7 +821,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -858,7 +874,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -964,7 +982,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -1841,7 +1861,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -2072,7 +2094,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -2123,7 +2147,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -2190,7 +2216,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -2241,7 +2269,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -2292,7 +2322,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -2343,7 +2375,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -2766,7 +2800,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }))
       .then((body) => { })
 
@@ -2805,7 +2841,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }))
       .then((body) => { })
 
@@ -2844,7 +2882,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }))
       .then((body) => { })
 
@@ -2883,7 +2923,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }))
       .then((body) => { })
 
@@ -2922,7 +2964,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }))
       .then((body) => { })
 
@@ -3345,7 +3389,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -3396,7 +3442,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: null,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -3470,7 +3518,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: warehouseId,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -3569,7 +3619,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: invalidWarehouseId,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -3620,7 +3672,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: warehouseId,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -3686,7 +3740,9 @@ describe('Sales', _ => {
         assistedByEmployeeId: null,
         productsSelectedFromWarehouseId: warehouseId,
 
-        wasOfflineSale: false
+        wasOfflineSale: false,
+
+        sentVia: 'none'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
