@@ -521,7 +521,7 @@
     "customerNameInputError": "Enter a valid name",
     "customerNumberInput": "Contact Number",
     "customerNumberInputError": "Enter a valid phone number",
-    "emailAddressInput": "Email Address (Optional)",
+    "emailAddressInput": "Email Address (for Digital Receipt, Optional)",
     "emailAddressInputError": "Enter valid email address",
     "addressInput": "Physical Address (Optional)",
     "openingBalance": "Opening Balance",
@@ -810,7 +810,8 @@
     "invalidAmount": "Invalid amount",
     "invalidTotalBillAmountMessage": "You can not increase total billed amount. Please update individual prices or add service charge.",
     "discardSalesTitle": "Discard Sale",
-    "discardSalesText": "Are you sure you want to discard this sale?"
+    "discardSalesText": "Are you sure you want to discard this sale?",
+    "whyCustomerInfo": "To send Digital Receipts and make Credit Sale, customer information is needed."
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
