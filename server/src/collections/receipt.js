@@ -14,7 +14,7 @@ exports.ReceiptCollection = class extends Collection {
       salesId: Joi.number().max(999999999999999).required(),
       sentHistory: Joi.array().min(0).items(
         Joi.object().keys({
-          sentVia: Joi.string().valid('none', 'email', 'sms', 'own-sms').required(),
+          sentVia: Joi.string().valid('none', 'print', 'email', 'sms', 'own-sms').required(),
           sentDatetimeStamp: Joi.number().max(999999999999999).required()
         })
       ),

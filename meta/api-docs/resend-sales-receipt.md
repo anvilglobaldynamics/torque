@@ -10,7 +10,7 @@ method: `POST`
   apiKey: Joi.string().length(64).required(),
 
   salesId: Joi.number().max(999999999999999).required(),
-  sentVia: Joi.string().valid('none', 'email', 'sms', 'own-sms').required(),
+  sentVia: Joi.string().valid('none', 'print', 'email', 'sms', 'own-sms').required(),
 }
 ```
 
@@ -40,7 +40,7 @@ Possible Error Codes:
   "hasError": false,
   status: "success",
   receiptToken: Joi.string().length(6).required(),
-  sentVia: Joi.string().valid('none', 'email', 'sms', 'own-sms').required(),
+  sentVia: Joi.string().valid('none', 'print', 'email', 'sms', 'own-sms').required(),
 }
 ```
 

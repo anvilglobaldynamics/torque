@@ -16,7 +16,7 @@ exports.ResendSalesReceiptApi = class extends Api.mixin(InventoryMixin, Customer
   get requestSchema() {
     return Joi.object().keys({
       salesId: Joi.number().max(999999999999999).required(),
-      sentVia: Joi.string().valid('none', 'email', 'sms', 'own-sms').required(),
+      sentVia: Joi.string().valid('none', 'print', 'email', 'sms', 'own-sms').required(),
     });
   }
 

@@ -53,7 +53,7 @@ method: `POST`
   
   wasOfflineSale: Joi.boolean().required(),
 
-  sentVia: Joi.string().valid('none', 'email', 'sms', 'own-sms').required(),
+  sentVia: Joi.string().valid('none', 'print', 'email', 'sms', 'own-sms').required(),
 }
 ```
 

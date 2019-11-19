@@ -73,7 +73,7 @@ Possible Error Codes:
   hasError: Joi.boolean().required().equal(false),
   status: Joi.string().required().equal('success'),
   receiptToken: Joi.string().length(6).required(),
-  sentVia: Joi.string().valid('none', 'email', 'sms', 'own-sms').required(),
+  sentVia: Joi.string().valid('none', 'print', 'email', 'sms', 'own-sms').required(),
   productBlueprintIdList: Joi.array().allow([]).min(0).items(
     Joi.object().keys({
       productBlueprintId: Joi.number().max(999999999999999)
