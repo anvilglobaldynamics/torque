@@ -30,6 +30,7 @@ class Server {
   async initialize() {
     this._expressApp.settings['x-powered-by'] = false;
     this._expressApp.set('etag', false);
+    this._expressApp.set('trust proxy', true)
     this._expressApp.use(function (req, res, next) {
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -168,10 +169,12 @@ class Server {
         let { ApiClass } = route;
         this.logger.info('WS', `${message.path} ${message.requestUid}`);
         if (ApiClass.prototype instanceof LegacyApi) {
-          let api = new ApiClass(message.path, this, this.database, this.legacyDatabase, this.logger, null, null, ws, 'ws', message.requestUid, null);
+          let ip = ws._socket.remoteAddress;
+          let api = new ApiClass(message.path, ip, this, this.database, this.legacyDatabase, this.logger, null, null, ws, 'ws', message.requestUid, null);
           api._prehandlePostOrWsApi(message.body);
         } else {
-          let api = new ApiClass(message.path, this, this.database, this.logger, null, null, ws, 'ws', message.requestUid, null);
+          let ip = ws._socket.remoteAddress;
+          let api = new ApiClass(message.path, ip, this, this.database, this.logger, null, null, ws, 'ws', message.requestUid, null);
           api._prehandle(message.body);
         }
 
@@ -214,7 +217,8 @@ class Server {
     this._expressApp.get(path, jsonParser, (req, res) => {
       this.logger.info('GET', req.url);
       if (ApiClass.prototype instanceof LegacyApi) {
-        let api = new ApiClass(path, this, this.database, this.legacyDatabase, this.logger, req, res, null, 'get');
+        let ip = req.ip;
+        let api = new ApiClass(path, ip, this, this.database, this.legacyDatabase, this.logger, req, res, null, 'get');
         api._prehandleGetApi();
       } else {
         throw new Error("Async APIs are not yet supported.");
@@ -228,10 +232,12 @@ class Server {
       setTimeout(() => {
         this.logger.info('POST', req.url);
         if (ApiClass.prototype instanceof LegacyApi) {
-          let api = new ApiClass(path, this, this.database, this.legacyDatabase, this.logger, req, res, null, 'post');
+          let ip = req.ip;
+          let api = new ApiClass(path, ip, this, this.database, this.legacyDatabase, this.logger, req, res, null, 'post');
           api._prehandlePostOrWsApi(req.body);
         } else {
-          let api = new ApiClass(path, this, this.database, this.logger, req, res, null, 'post');
+          let ip = req.ip;
+          let api = new ApiClass(path, ip, this, this.database, this.logger, req, res, null, 'post');
           api._prehandle(req.body);
         }
       }, 1)

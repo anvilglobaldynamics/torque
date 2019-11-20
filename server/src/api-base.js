@@ -36,9 +36,10 @@ class Api {
   * @param {DatabaseService} database
   * @param {Logger} logger
   */
-  constructor(apiPath, server, database, logger, request, response, socket, channel, requestUid = null, consumerId = null) {
+  constructor(apiPath, ip, server, database, logger, request, response, socket, channel, requestUid = null, consumerId = null) {
     this.apiPath = apiPath;
     this.server = server;
+    this.ip = ip;
     this.database = database;
     this.logger = logger;
     this._request = request;
@@ -307,6 +308,18 @@ class Api {
   }
 
   /** @private */
+  async __applySpamFilter() {
+    let log = {
+      ip: this.ip,
+      originApp: this.clientApplication,
+      apiPath: this.apiPath,
+      datetimeStamp: Date.now()
+    }
+    const collectionName = "api-call-log";
+    await this.database.engine.insertOne(collectionName, log);
+  }
+
+  /** @private */
   async _prehandle(originalBody) {
     try {
       if (!this.isEnabled) {
@@ -317,6 +330,7 @@ class Api {
         let body = this.__composeAndValidateSchema(originalBody);
         body = this.sanitize(body);
         this.__detectClientApplication(body);
+        await this.__applySpamFilter();
         this.__detectClientLanguage(body);
         this.__detectPagination(body);
         if (this.requiresAuthentication) {
@@ -324,6 +338,8 @@ class Api {
           Object.assign(apiArgs, authData);
         }
         apiArgs.body = body;
+      } else {
+        await this.__applySpamFilter();
       }
       let response = await this.handle(apiArgs);
       if (typeof (response) !== 'object' || response === null) {

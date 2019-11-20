@@ -24,9 +24,10 @@ const _restrictedErrorCodeList = [
 
 class LegacyApi {
 
-  constructor(apiPath, server, database, legacyDatabase, logger, request, response, socket, channel, requestUid = null, consumerId = null) {
+  constructor(apiPath, ip, server, database, legacyDatabase, logger, request, response, socket, channel, requestUid = null, consumerId = null) {
     this.apiPath = apiPath;
     this.server = server;
+    this.ip = ip;
     this.legacyDatabase = legacyDatabase;
     this.database = database; // Do not use during coding without .then and .catch
     this.logger = logger;
@@ -112,11 +113,15 @@ class LegacyApi {
   }
 
   _prehandleGetApi() {
-    this.handle();
     if (!this.isEnabled) {
       let err = new CodedError("API_DISABLED", "This action has been disabled by the developers. Please contact our call center for more information.");
       return this.fail(err);
     }
+    ModernApi.prototype.__applySpamFilter.call(this).then(() => {
+      this.handle();
+    }).catch(err => {
+      return this.fail(err);
+    });
   }
 
   _prehandlePostOrWsApi(body) {
@@ -165,33 +170,37 @@ class LegacyApi {
           this.__paginationCache = body.paginate;
           delete body['paginate'];
         }
-        if (this.requiresAuthentication) {
-          let { apiKey } = body;
-          if (this.authenticationLevel === 'admin') {
-            this.authenticate(body, (err, username) => {
-              if (err) this.fail(err);
-              return this.handle({ username, body, apiKey });
-            });
-          } else {
-            this.authenticate(body, (err, userId) => {
-              if (err) this.fail(err);
-              this._enforceAccessControl(userId, body, (err) => {
-                if (err) {
-                  return this.fail(err);
-                } else {
-                  this.database = this.server.database;
-                  ModernApi.prototype.__handleSubscriptionVerification.call(this, body).then(() => {
-                    return this.handle({ userId, body, apiKey });
-                  }).catch(err => {
-                    return this.fail(err);
-                  });
-                }
+        ModernApi.prototype.__applySpamFilter.apply(this).then(() => {
+          if (this.requiresAuthentication) {
+            let { apiKey } = body;
+            if (this.authenticationLevel === 'admin') {
+              this.authenticate(body, (err, username) => {
+                if (err) this.fail(err);
+                return this.handle({ username, body, apiKey });
               });
-            });
+            } else {
+              this.authenticate(body, (err, userId) => {
+                if (err) this.fail(err);
+                this._enforceAccessControl(userId, body, (err) => {
+                  if (err) {
+                    return this.fail(err);
+                  } else {
+                    this.database = this.server.database;
+                    ModernApi.prototype.__handleSubscriptionVerification.call(this, body).then(() => {
+                      return this.handle({ userId, body, apiKey });
+                    }).catch(err => {
+                      return this.fail(err);
+                    });
+                  }
+                });
+              });
+            }
+          } else {
+            return this.handle({ body });
           }
-        } else {
-          return this.handle({ body });
-        }
+        }).catch(err => {
+          return this.fail(err);
+        });
       }
     }
   }
