@@ -48,5 +48,8 @@ exports.verses = {
   },
   packageLimitCommon: {
     activePackageLimitReached: "সংস্থার সক্রিয় প্যাকেজে এই কাজটি করা যাবে না।"
+  },
+  receipt: {
+    limitReached: "আপনি প্রতিটি বিক্রির সর্বোচ ৫টি ডিজিটাল রিসিট তৈরি করতে পারবেন। সাহায্যের জন্য ফোন দিন 01770947908"
   }
 }

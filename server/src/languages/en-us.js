@@ -48,5 +48,8 @@ exports.verses = {
   },
   packageLimitCommon: {
     activePackageLimitReached: "This action is not allowed in the organization's currently activated package."
+  },
+  receipt: {
+    limitReached: "You can create maximum 5 Digital receipts per sales, limit has been reached. Call 01770947908 for support."
   }
 }

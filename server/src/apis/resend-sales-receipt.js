@@ -7,6 +7,8 @@ const { CustomerMixin } = require('./mixins/customer-mixin');
 const { SalesMixin } = require('./mixins/sales-mixin');
 const { ServiceMixin } = require('./mixins/service-mixin');
 
+const MAX_RECEIPT_SENDING_LIMIT = 5;
+
 exports.ResendSalesReceiptApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin, ServiceMixin) {
 
   get autoValidates() { return true; }
@@ -49,6 +51,11 @@ exports.ResendSalesReceiptApi = class extends Api.mixin(InventoryMixin, Customer
 
     let { salesId, sentVia } = body;
     let organizationId = this.interimData.organization.id;
+
+    let receiptList = await this.database.receipt._find({ salesId });
+    if (receiptList.length >= MAX_RECEIPT_SENDING_LIMIT) {
+      throw new CodedError("RECEIPT_LIMIT_REACHED", this.verses.receipt.limitReached);
+    }
 
     let sales = await this.database.sales.findById({ id: salesId });
 
