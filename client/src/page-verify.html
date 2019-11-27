@@ -35,7 +35,7 @@
             <template is="dom-if" if="[[$equals(what, 'phone')]]">
               <div class="page-small--header">[[verses.verify.verifyPhoneNumberHeader]]</div>
               <div class="help-text">[[verses.verify.verificationToken]]</div>
-              <paper-textarea class="verifyForm--verificationToken" value="{{verifyForm.verificationToken}}" required minlength="16" error-message="[[verses.verify.verificationTokenInputError]]" label="[[verses.verify.verificationTokenInput]]" rows="2"></paper-textarea>
+              <paper-textarea class="verifyForm--verificationToken" value="{{verifyForm.verificationToken}}" required minlength="6" error-message="[[verses.verify.verificationTokenInputError]]" label="[[verses.verify.verificationTokenInput]]" rows="2"></paper-textarea>
             </template>
 
             <div class="vertical layout button-row">
