@@ -543,6 +543,11 @@ class Api {
       if (!session) {
         throw new CodedError("APIKEY_INVALID", this.verses.apiCommon.apikeyInvalid);
       }
+
+      if (session.hasExpired) {
+        throw new CodedError("APIKEY_EXPIRED", this.verses.apiCommon.apikeyExpired);
+      }
+
       // only expire for torque users. Issue #932
       if (this.clientApplication === 'torque') {
         let hasExpired = session.hasExpired || (((new Date).getTime() - session.createdDatetimeStamp) > SESSION_DURATION_LIMIT);
