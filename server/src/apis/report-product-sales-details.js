@@ -42,7 +42,7 @@ exports.ReportProductSalesDetailsApi = class extends Api.mixin(InventoryMixin) {
 
     let shouldFilterByOutlet = (outletId === null ? false : true);
 
-    let salesList = await this.database.sales.listByFiltersForCollectionReport({
+    let salesList = await this.database.sales.listByFiltersForProductSalesReport({
       outletIdList,
       organizationId,
       outletId,

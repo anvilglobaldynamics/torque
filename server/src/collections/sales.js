@@ -235,5 +235,31 @@ exports.SalesCollection = class extends Collection {
     return await this._find(query);
   }
 
+  async listByFiltersForProductSalesReport({ outletIdList, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate }) {
+
+    let query = { $and: [] };
+
+    query.$and.push({
+      outletId: { $in: outletIdList }
+    });
+
+    query.$and.push({
+      'createdDatetimeStamp': {
+        $gte: fromDate,
+        $lte: toDate
+      }
+    });
+
+    if (shouldFilterByOutlet) {
+      query.$and.push({ outletId });
+    }
+
+    if (shouldFilterByCustomer) {
+      query.$and.push({ customerId });
+    }
+
+    return await this._find(query);
+  }
+
 
 }
