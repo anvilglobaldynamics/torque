@@ -306,10 +306,10 @@
                       [[productSalesSummary.name]]
                     </td>
                     <td class="cell" align="center">
-                      <div>[[productSalesSummary.sumCount]]</div>
+                      <div>[[$round(productSalesSummary.sumCount)]]</div>
                     </td>
                     <td class="cell cell-right" align="center">
-                      <div>[[productSalesSummary.sumSalePrice]]</div>
+                      <div>[[$round(productSalesSummary.sumSalePrice)]]</div>
                     </td>
                   </tr>
                 </template>
@@ -598,7 +598,7 @@
         productList.forEach(product => {
           totalCount += product.sumCount;
         });
-        return totalCount;
+        return this.$round(totalCount);
       }
 
       computeTotalSalePrice(productList) {
@@ -606,7 +606,7 @@
         productList.forEach(product => {
           totalSalePrice += product.sumSalePrice;
         });
-        return totalSalePrice;
+        return this.$round(totalSalePrice);
       }
 
       computeTotalPriceOfProduct(count, unitPrice) {

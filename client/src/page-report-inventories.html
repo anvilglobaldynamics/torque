@@ -272,7 +272,7 @@
                         [[aggregatedProduct.product.productBlueprint.name]]
                       </td>
                       <td class="cell" align="center">
-                        <div>[[aggregatedProduct.count]]</div>
+                        <div>[[$round(aggregatedProduct.count)]]</div>
                         <div class="price-rate no-visibility">-</div>
                       </td>
 
@@ -535,7 +535,7 @@
         productList.forEach(product => {
           totalCount += product.count;
         });
-        return totalCount;
+        return this.$round(totalCount);
       }
 
       computeTotalPurchasePrice(productList) {
@@ -543,7 +543,7 @@
         productList.forEach(product => {
           totalPurchasePrice += product.product.purchasePrice * product.count;
         });
-        return totalPurchasePrice;
+        return this.$round(totalPurchasePrice);
       }
 
       computeTotalSalePrice(productList) {
@@ -551,11 +551,11 @@
         productList.forEach(product => {
           totalSalePrice += product.product.salePrice * product.count;
         });
-        return totalSalePrice;
+        return this.$round(totalSalePrice);
       }
 
       computeTotalPriceOfProduct(count, unitPrice) {
-        return count * unitPrice;
+        return this.$round(count * unitPrice);
       }
 
       $shouldShowClearFilter(_productCategoryListLength, _productBlueprintListLength) {

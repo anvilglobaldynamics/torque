@@ -183,7 +183,7 @@
               [[verses.salesReport.billedAmount]]
             </div>
             <div>
-              <strong>[[salesSummary.billedAmountSum]]</strong>
+              <strong>[[$round(salesSummary.billedAmountSum)]]</strong>
             </div>
           </div>
           <div class="ul"></div>
@@ -192,7 +192,7 @@
               [[verses.salesReport.discountedAmount]]
             </div>
             <div>
-              <strong>[[salesSummary.discountedAmountSum]]</strong>
+              <strong>[[$round(salesSummary.discountedAmountSum)]]</strong>
             </div>
           </div>
           <div class="ul"></div>
@@ -201,7 +201,7 @@
               [[verses.salesReport.vat]]
             </div>
             <div>
-              <strong>[[salesSummary.vatAmountSum]]</strong>
+              <strong>[[$round(salesSummary.vatAmountSum)]]</strong>
             </div>
           </div>
           <div class="ul"></div>
@@ -210,7 +210,7 @@
               [[verses.salesReport.serviceCharge]]
             </div>
             <div>
-              <strong>[[salesSummary.serviceChargeAmountSum]]</strong>
+              <strong>[[$round(salesSummary.serviceChargeAmountSum)]]</strong>
             </div>
           </div>
           <div class="ul"></div>
@@ -220,7 +220,7 @@
                 [[verses.salesReport.lessDueToRounding]]
               </div>
               <div>
-                <strong>[[salesSummary.roundedByAmountSum]]</strong>
+                <strong>[[$round(salesSummary.roundedByAmountSum)]]</strong>
               </div>
             </div>
             <div class="ul"></div>
@@ -230,7 +230,7 @@
               [[verses.salesReport.dueAmount]]
             </div>
             <div>
-              <strong>[[salesSummary.dueAmountSum]]</strong>
+              <strong>[[$round(salesSummary.dueAmountSum)]]</strong>
             </div>
           </div>
           <!-- Summary - End -->
@@ -263,7 +263,7 @@
                     <ol class="product-service-list-ol">
                       <template is="dom-repeat" items="[[sales.productList]]" as="product">
                           <li>
-                            <i>[[product.productBlueprint.name]]:</i> [[product.count]] [[product.productBlueprint.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]
+                            <i>[[product.productBlueprint.name]]:</i> [[$round(product.count)]] [[product.productBlueprint.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]
                           </li>
                       </template>
                     </ol>
@@ -274,7 +274,7 @@
                     <ol class="product-service-list-ol">
                       <template is="dom-repeat" items="[[sales.serviceList]]" as="service">
                           <li>
-                            <i>[[service.serviceBlueprint.name]]:</i> [[service.salePrice]] [[app.settings.monetaryUnit]]
+                            <i>[[service.serviceBlueprint.name]]:</i> [[$round(service.salePrice)]] [[app.settings.monetaryUnit]]
                           </li>
                       </template>
                     </ol>
@@ -293,7 +293,7 @@
                       <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</div>
                   </template>
                   <template is="dom-if" if="[[sales.payment.roundedByAmount]]">
-                    <div>[[verses.salesReceipt.lessDueToRounding]]: [[sales.payment.roundedByAmount]]</div>
+                    <div>[[verses.salesReceipt.lessDueToRounding]]: [[$round(sales.payment.roundedByAmount)]]</div>
                   </template>
                   <template is="dom-if" if="[[sales.payment.dueAmount]]">
                     <div class="description">
