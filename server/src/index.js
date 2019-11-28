@@ -151,6 +151,7 @@ const { LiteUserRegisterApi } = require('./apis/lite-user-register');
 const { LiteAddSalesApi } = require('./apis/lite-add-sales');
 const { LiteGetCustomerApi } = require('./apis/lite-get-customer');
 const { LiteGetReceiptApi } = require('./apis/lite-get-receipt');
+const { LiteUserEditProfileApi } = require('./apis/lite-user-edit-profile');
 
 const { AnalyticsReportUrlHitApi } = require('./apis/analytics-report-url-hit');
 const { AnalyticsReportUserLocationApi } = require('./apis/analytics-report-user-location');
@@ -422,6 +423,7 @@ class Program {
     server.registerPostApi('/api/lite-add-sales', LiteAddSalesApi);
     server.registerPostApi('/api/lite-get-customer', LiteGetCustomerApi);
     server.registerPostApi('/api/lite-get-receipt', LiteGetReceiptApi);
+    server.registerPostApi('/api/lite-user-edit-profile', LiteUserEditProfileApi);
 
     server.registerPostApi('/api/analytics-report-url-hit', AnalyticsReportUrlHitApi);
     server.registerPostApi('/api/analytics-report-user-location', AnalyticsReportUserLocationApi);

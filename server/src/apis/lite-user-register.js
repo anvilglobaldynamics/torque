@@ -66,8 +66,10 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
     // === outlet creation
     let location = { lat: 24, lng: 89 };
 
+    let outletName = (organizationName + ' - Primary Outlet').substring(0, 63);
+
     let outletId = await this._createOutlet({
-      name: organizationName + ' - Primary Outlet',
+      name: outletName,
       organizationId,
       physicalAddress: 'Not Provided',
       phone,
