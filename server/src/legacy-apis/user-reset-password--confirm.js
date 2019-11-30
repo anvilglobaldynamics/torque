@@ -52,8 +52,10 @@ exports.UserResetPasswordConfirmApi = class extends userCommonMixin(collectionCo
       let { forUserId: userId } = passwordResetRequest;
       this._setPasswordIfValid({ newPassword, userId }, () => {
         this._markPasswordResetRequestAsComplete({ uniqueToken }, () => {
-          this.success({ status: "success" });
-          this._notifyPasswordChange({ userId });
+          this.legacyDatabase.session.expireByUserIdWhenLoggedInFromAnotherDevice({userId}, ()=>{
+            this.success({ status: "success" });
+            this._notifyPasswordChange({ userId });
+          });
         });
       });
     });

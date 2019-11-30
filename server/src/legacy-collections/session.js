@@ -105,6 +105,22 @@ exports.SessionCollection = class extends LegacyCollection {
     });
   }
 
+  expireByUserIdWhenLoggedInFromAnotherDevice({ userId }, cbfn) {
+    let mod = {
+      $set: {
+        hasExpired: true,
+        terminatedBy: 'system (duplicate)',
+        terminatedDatetimeStamp: (new Date).getTime()
+      }
+    };
+    this._updateMany({ userId, hasExpired: false }, mod, (err, wasUpdated) => {
+      if (err) return cbfn(err);
+      // NOTE: Willingly not checking if the sessions were actually updated or not.
+      // if (!wasUpdated) return cbfn(new Error("Unable to find session to expire"));
+      return cbfn();
+    });
+  }
+
   expireByUserIdWhenFired({ userId }, cbfn) {
     let mod = {
       $set: {
