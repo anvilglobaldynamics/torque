@@ -1,0 +1,380 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="elem-customer-selector.html">
+<link rel="import" href="elem-outlet-selector.html">
+
+<dom-module id="page-print-product-transfer">
+  <template>
+    <style include="shared-styles">
+      :root {
+        --table-border-color: #9E9E9E;
+      }
+
+      @media print {
+
+        .filter-toggle-region,
+        .filter-toggle-region paper-toggle-button,
+        .filter-region {
+          display: none;
+        }
+
+        .report {
+          margin-top: -48px;
+        }
+
+        hr {
+          display: none;
+        }
+      }
+
+
+      .report {
+        background-color: white;
+        padding: 12px;
+        width: calc(100% - 24px);
+      }
+
+      .report .author-title {
+        font-weight: bold;
+      }
+
+      .report .header {
+        border-bottom: 1px solid var(--table-border-color);
+      }
+
+      .report .header .name {
+        font-size: 30px;
+        text-align: center;
+      }
+
+      .report .header .date {
+        font-size: 15px;
+        text-align: center;
+      }
+
+      .report .body {}
+
+      .product-sales-table {
+        width: 100%;
+        font-size: 14px;
+      }
+
+      .table-title {
+        font-weight: bold;
+      }
+
+      .product-detail {
+        font-size: 11px;
+      }
+
+      .product-sales-table-container {
+        margin-bottom: 20px;
+      }
+
+      .product-column {
+        min-width: 130px;
+      }
+
+      .product-sales-table .cell {
+        border-bottom: 1px solid var(--table-border-color);
+        border-right: 1px solid var(--table-border-color);
+      }
+
+      .product-sales-table .cell-right {
+        border-right: 0px solid var(--table-border-color);
+      }
+
+      .product-sales-table .cell-bottom {
+        border-bottom: 0px solid var(--table-border-color);
+      }
+
+      .report .body .item {
+        margin-bottom: 8px;
+        margin-top: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px dotted rgb(131, 131, 131);
+      }
+
+      .filter-toggle-region {
+        text-align: right;
+        margin-right: 8px;
+        margin-bottom: 8px;
+      }
+
+      .price-rate {
+        font-size: 11px;
+      }
+
+      .no-visibility {
+        visibility: hidden;
+      }
+
+      .product-category-filter {
+        margin-bottom: 2px;
+      }
+
+      .sort-direction-icon {
+        width: 24px;
+        height: 24px;
+      }
+
+      .mr-4 {
+        margin-right: 4px;
+      }
+
+      .item-title {
+        font-weight: bold;
+        text-transform: capitalize;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <hr style="border: 1px solid lightgrey; width: 100%;">
+
+      <!-- report - start -->
+      <div class="report">
+
+        <!-- report header - start -->
+        <div class="header vertical layout">
+          <div class="name">[[verses.productTransfer.productTransferNumber]]: [[productTransfer.productTransferNumber]]</div>
+          <div class="horizontal layout wrap">
+            <div>
+              <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
+              <div>[[app.organization.primaryBusinessAddress]]</div>
+              <div>[[app.organization.email]]</div>
+              <div>[[app.organization.phone]]</div>
+            </div>
+            <div class="flex"></div>
+
+            <div>
+              <div class="author-title">[[verses.productTransfer.recordCreatedBy]]: [[productTransfer.createdByUser.fullName]]</div>
+              <div>[[productTransfer.createdByUser.phone]]</div>
+            </div>
+          </div>
+
+        </div>
+        <!-- report header - start -->
+
+        <!-- report body - start -->
+        <div class="body">
+
+          <div class="horizontal layout center wrap">
+            <div class="description-time flex"><span class="item-title">[[verses.general.date]]:</span> [[$mkDate(productTransfer.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+            <div class="description flex"><span class="item-title">[[verses.general.from]]:</span> [[productTransfer.fromInventory.inventoryContainer.name]] - [[productTransfer.fromInventory.name]]</div>
+            <div class="description flex"><span class="item-title">[[verses.general.to]]:</span> [[productTransfer.toInventory.inventoryContainer.name]] - [[productTransfer.toInventory.name]]</div>
+          </div>
+
+          <template is="dom-if" if="{{!productTransfer.productList.length}}">
+            [[verses.general.noDataFound]]
+          </template>
+
+          <template is="dom-if" if="{{productTransfer.productList.length}}">
+
+            <div class="product-sales-table-container" style="animation: 1s fadein;">
+              <table class="product-sales-table" style="margin-top: 8px;">
+
+                <tr>
+                  <th class="cell product-column" align="left" on-tap="columnHeaderProductTapped" style="cursor: pointer;">
+                    <span>[[verses.general.product]]</span>
+                    <template is="dom-if" if="[[$equals(sortBy, 'product')]]">
+                      <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
+                        <iron-icon class="sort-direction-icon" icon="arrow-drop-down"></iron-icon>
+                      </template>
+                      <template is="dom-if" if="[[$equals(sortDirection, 'descending')]]">
+                        <iron-icon class="sort-direction-icon" icon="arrow-drop-up"></iron-icon>
+                      </template>
+                    </template>
+                  </th>
+                  <th class="cell" on-tap="columnHeaderCountTapped" style="cursor: pointer;">
+                    <div class="horizontal layout center-center">
+                      <span>[[verses.general.count]]</span>
+                      <template is="dom-if" if="[[$equals(sortBy, 'count')]]">
+                        <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
+                          <iron-icon class="sort-direction-icon" icon="arrow-drop-down"></iron-icon>
+                        </template>
+                        <template is="dom-if" if="[[$equals(sortDirection, 'descending')]]">
+                          <iron-icon class="sort-direction-icon" icon="arrow-drop-up"></iron-icon>
+                        </template>
+                      </template>
+                    </div>
+                  </th>
+
+                </tr>
+
+                <!-- total - start -->
+                <tr>
+                  <td class="cell" style="font-weight: bold;">[[verses.general.total]]</td>
+                  <td class="cell" align="center">
+                    {{computeTotalProductCount(productTransfer.productList)}}
+                  </td>
+                </tr>
+                <!-- total - end -->
+
+                <template is="dom-repeat" items="[[productTransfer.productList]]" as="product">
+                  <tr>
+                    <td class="cell">
+                      [[product.productBlueprint.name]]
+                    </td>
+                    <td class="cell" align="center">
+                      <div>[[$round(product.count)]]</div>
+                    </td>
+                  </tr>
+                </template>
+
+                <!-- total - start -->
+                <tr>
+                  <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
+                  <td class="cell cell-bottom" align="center">
+                    {{computeTotalProductCount(productTransfer.productList)}}
+                  </td>
+                </tr>
+                <!-- total - end -->
+
+              </table>
+            </div>
+
+            <!-- vendor detail - start -->
+            <template is="dom-if" if="{{productTransfer.vendor}}">
+              <div class="title">
+                <b>[[verses.productTransfer.acquiredFrom]]: </b>
+              </div>
+              <div>[[productTransfer.vendor.name]]</div>
+              <div>[[verses.general.contactPerson]]: [[productTransfer.vendor.contactPersonName]]</div>
+              <div>[[verses.general.phone]]: [[productTransfer.vendor.phone]]</div>
+              <div class="description-time">[[verses.general.address]]: [[productTransfer.vendor.physicalAddress]]</div>
+            </template>
+            <!-- vendor detail - end -->
+
+          </template>
+        </div>
+        <!-- report body - start -->
+
+      </div>
+      <!-- report - end -->
+
+    </div>
+  </template>
+
+  <script>
+    class PagePrintProductTransfer extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-print-product-transfer';
+      }
+
+      static get properties() {
+        return {
+          vendorId: {
+            type: Number,
+            value: null
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.self = this;
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        this.onOrganizationChange(this.app.organization);
+        this.app.pushPageTitle(this.app.verses.productTransfer.productTransferTitle);
+        if (!this._ensureAccess()) return;
+        if (!('product-transfer' in this.params)) {
+          let message = this.app.verses.general.pageCannotBeDisplayed;
+          this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
+            this.app.navigateTo('/home');
+          });
+          return;
+        }
+        this._processProductTransfer(_ => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_ALL_INVENTORIES']
+        });
+      }
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
+
+      _fetchProductTransfer(cbfn) {
+        let productTransferId = String(parseInt(this.params['product-transfer']));
+        let data = {
+          fromDate: Date.now(),
+          toDate: Date.now(),
+          vendorId: this.vendorId,
+          organizationId: this.app.organization.id,
+          searchString: productTransferId
+        };
+        this.app.callGetProductTransferListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.productTransferList[0]);
+        });
+      }
+
+      _processProductTransfer(cbfn) {
+        this._fetchProductTransfer((productTransfer) => {
+          this.productTransfer = productTransfer;
+          cbfn();
+        });
+      }
+
+      computeTotalProductCount(productList) {
+        let totalCount = 0;
+        productList.forEach(product => {
+          totalCount += product.count;
+        });
+        return this.$round(totalCount);
+      }
+
+      // region: ui  ===========================
+
+      printButtonOnTopBarPressed(e = null) {
+        window.print();
+      }
+    }
+
+    window.customElements.define(PagePrintProductTransfer.is, PagePrintProductTransfer);
+  </script>
+</dom-module>

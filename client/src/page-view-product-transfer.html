@@ -80,8 +80,11 @@
 
             </div>
           </div>
+          <div>
+            <paper-button raised class="secondary" on-tap="printInvoiceTapped">[[verses.general.print]]</paper-button>
+          </div>
         </div>
-        
+
       </div>
 
       <!-- vendor detail - start -->
@@ -121,13 +124,13 @@
       <!-- product list - end -->
 
       <!-- user detail - start -->
-        <div class="card vertical layout">
-            <div class="title">
-                <b>[[verses.productTransfer.recordCreatedBy]]: </b>
-              </div>
-          <div>[[productTransfer.createdByUser.fullName]]</div>
-          <div>[[verses.general.phone]]: [[productTransfer.createdByUser.phone]]</div>
+      <div class="card vertical layout">
+        <div class="title">
+          <b>[[verses.productTransfer.recordCreatedBy]]: </b>
         </div>
+        <div>[[productTransfer.createdByUser.fullName]]</div>
+        <div>[[verses.general.phone]]: [[productTransfer.createdByUser.phone]]</div>
+      </div>
       <!-- user detail - end -->
 
     </div>
@@ -217,6 +220,11 @@
       }
 
       // region: ui  ===========================
+
+      printInvoiceTapped(){
+        let productTransferId = String(parseInt(this.params['product-transfer']));
+        return this.app.navigateTo(`/print-product-transfer/product-transfer:${productTransferId}`);
+      }
 
       // region: misc =================================
 
