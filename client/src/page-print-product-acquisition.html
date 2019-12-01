@@ -40,7 +40,7 @@
         }
 
         .report {
-          margin-top: -48px;
+          /* margin-top: -48px; */
         }
 
         hr {
@@ -60,11 +60,11 @@
       }
 
       .report .header {
-        border-bottom: 1px solid var(--table-border-color);
+        /* border-bottom: 1px solid var(--table-border-color); */
       }
 
       .report .header .name {
-        font-size: 30px;
+        font-size: 20px;
         text-align: center;
       }
 
@@ -163,17 +163,22 @@
           <div class="name">[[verses.productAcquisition.productAcquisitionNumber]]: [[productAcquisition.productAcquisitionNumber]]</div>
           <div class="horizontal layout wrap">
             <div>
-              <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
-              <div>[[app.organization.primaryBusinessAddress]]</div>
-              <div>[[app.organization.email]]</div>
-              <div>[[app.organization.phone]]</div>
+              <div class="description-time"><span class="item-title">[[verses.general.date]]:</span> [[$mkDate(productAcquisition.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+              <div class="description"><span class="item-title">[[verses.general.inventory]]:</span> [[productAcquisition.inventory.inventoryContainer.name]] - [[productAcquisition.inventory.name]]</div>
             </div>
             <div class="flex"></div>
-
-            <div>
-              <div class="author-title">[[verses.productAcquisition.recordCreatedBy]]: [[productAcquisition.createdByUser.fullName]]</div>
-              <div>[[productAcquisition.createdByUser.phone]]</div>
-            </div>
+            <!-- vendor detail - start -->
+            <template is="dom-if" if="{{productAcquisition.vendor}}">
+              <div>
+                <div class="title">
+                  <b>[[verses.general.vendor]]: </b>[[productAcquisition.vendor.name]]
+                </div>
+                <div>[[verses.general.contactPerson]]: [[productAcquisition.vendor.contactPersonName]]</div>
+                <div>[[verses.general.phone]]: [[productAcquisition.vendor.phone]]</div>
+                <!-- <div class="description-time">[[verses.general.address]]: [[productAcquisition.vendor.physicalAddress]]</div> -->
+              </div>
+            </template>
+            <!-- vendor detail - end -->
           </div>
 
         </div>
@@ -181,12 +186,6 @@
 
         <!-- report body - start -->
         <div class="body">
-
-          <div class="horizontal layout center wrap">
-            <div class="description-time"><span class="item-title">[[verses.general.date]]:</span> [[$mkDate(productAcquisition.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-            <div class="flex"></div>
-            <div class="description"><span class="item-title">[[verses.general.inventory]]:</span> [[productAcquisition.inventory.inventoryContainer.name]] - [[productAcquisition.inventory.name]]</div>
-          </div>
 
           <template is="dom-if" if="{{!productAcquisition.productList.length}}">
             [[verses.general.noDataFound]]
@@ -257,17 +256,20 @@
               </table>
             </div>
 
-            <!-- vendor detail - start -->
-            <template is="dom-if" if="{{productAcquisition.vendor}}">
-              <div class="title">
-                <b>[[verses.productAcquisition.acquiredFrom]]: </b>
+            <div class="horizontal layout wrap">
+              <div>
+                <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
+                <!-- <div>[[app.organization.primaryBusinessAddress]]</div> -->
+                <div>[[app.organization.email]]</div>
+                <div>[[app.organization.phone]]</div>
               </div>
-              <div>[[productAcquisition.vendor.name]]</div>
-              <div>[[verses.general.contactPerson]]: [[productAcquisition.vendor.contactPersonName]]</div>
-              <div>[[verses.general.phone]]: [[productAcquisition.vendor.phone]]</div>
-              <div class="description-time">[[verses.general.address]]: [[productAcquisition.vendor.physicalAddress]]</div>
-            </template>
-            <!-- vendor detail - end -->
+              <div class="flex"></div>
+
+              <div>
+                <div class="author-title">[[verses.productAcquisition.recordCreatedBy]]: [[productAcquisition.createdByUser.fullName]]</div>
+                <div>[[productAcquisition.createdByUser.phone]]</div>
+              </div>
+            </div>
 
           </template>
         </div>
@@ -318,6 +320,7 @@
         }
         this._processProductAcquisition(_ => {
           this.isReady = true;
+          this._printAndGoBack();
         });
       }
 
@@ -335,6 +338,20 @@
 
       onOrganizationChange(organization) {
         this.organization = organization;
+      }
+
+      _printAndGoBack() {
+        window.setTimeout(() => {
+
+          const threshold = 2000;
+          let then = Date.now();
+          window.print();
+          let now = Date.now();
+          if (now - then > threshold) {
+            window.history.back();
+          }
+
+        }, 500);
       }
 
       _fetchProductAcquisition(cbfn) {
@@ -394,7 +411,7 @@
             } else {
               return b.count - a.count;
             }
-          } 
+          }
         });
         this.set('productAcquisition.productList', []);
         window.setTimeout(() => {

@@ -40,7 +40,7 @@
         }
 
         .report {
-          margin-top: -48px;
+          /* margin-top: -48px; */
         }
 
         hr {
@@ -60,11 +60,11 @@
       }
 
       .report .header {
-        border-bottom: 1px solid var(--table-border-color);
+        /* border-bottom: 1px solid var(--table-border-color); */
       }
 
       .report .header .name {
-        font-size: 30px;
+        font-size: 20px;
         text-align: center;
       }
 
@@ -163,17 +163,17 @@
           <div class="name">[[verses.productTransfer.productTransferNumber]]: [[productTransfer.productTransferNumber]]</div>
           <div class="horizontal layout wrap">
             <div>
-              <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
-              <div>[[app.organization.primaryBusinessAddress]]</div>
-              <div>[[app.organization.email]]</div>
-              <div>[[app.organization.phone]]</div>
+                <div class="description-time"><span class="item-title">[[verses.general.date]]:</span> [[$mkDate(productTransfer.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+                <div class="description"><span class="item-title">[[verses.general.from]]:</span> [[productTransfer.fromInventory.inventoryContainer.name]] - [[productTransfer.fromInventory.name]]</div>
+                <div class="description"><span class="item-title">[[verses.general.to]]:</span> [[productTransfer.toInventory.inventoryContainer.name]] - [[productTransfer.toInventory.name]]</div>
             </div>
             <div class="flex"></div>
-
             <div>
-              <div class="author-title">[[verses.productTransfer.recordCreatedBy]]: [[productTransfer.createdByUser.fullName]]</div>
-              <div>[[productTransfer.createdByUser.phone]]</div>
-            </div>
+                <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
+                <!-- <div>[[app.organization.primaryBusinessAddress]]</div> -->
+                <div>[[app.organization.email]]</div>
+                <div>[[app.organization.phone]]</div>
+              </div>
           </div>
 
         </div>
@@ -182,13 +182,13 @@
         <!-- report body - start -->
         <div class="body">
 
-          <div class="horizontal layout center wrap">
+          <!-- <div class="horizontal layout center wrap">
             <div class="description-time"><span class="item-title">[[verses.general.date]]:</span> [[$mkDate(productTransfer.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
             <div class="flex"></div>
             <div class="description"><span class="item-title">[[verses.general.from]]:</span> [[productTransfer.fromInventory.inventoryContainer.name]] - [[productTransfer.fromInventory.name]]</div>
             <div class="flex"></div>
             <div class="description"><span class="item-title">[[verses.general.to]]:</span> [[productTransfer.toInventory.inventoryContainer.name]] - [[productTransfer.toInventory.name]]</div>
-          </div>
+          </div> -->
 
           <template is="dom-if" if="{{!productTransfer.productList.length}}">
             [[verses.general.noDataFound]]
@@ -259,26 +259,38 @@
               </table>
             </div>
 
-            <!-- vendor detail - start -->
-            <template is="dom-if" if="{{productTransfer.vendor}}">
-              <div class="title">
-                <b>[[verses.productTransfer.acquiredFrom]]: </b>
-              </div>
-              <div>[[productTransfer.vendor.name]]</div>
-              <div>[[verses.general.contactPerson]]: [[productTransfer.vendor.contactPersonName]]</div>
-              <div>[[verses.general.phone]]: [[productTransfer.vendor.phone]]</div>
-              <div class="description-time">[[verses.general.address]]: [[productTransfer.vendor.physicalAddress]]</div>
-            </template>
+
+            <div class="horizontal layout wrap">
+              <!-- vendor detail - start -->
+              <template is="dom-if" if="{{productTransfer.vendor}}">
+                <div>
+                  <div class="title">
+                    <b>[[verses.general.vendor]]: </b>
+                  </div>
+                  <div>[[productTransfer.vendor.name]]</div>
+                  <div>[[verses.general.contactPerson]]: [[productTransfer.vendor.contactPersonName]]</div>
+                  <div>[[verses.general.phone]]: [[productTransfer.vendor.phone]]</div>
+                  <!-- <div class="description-time">[[verses.general.address]]: [[productTransfer.vendor.physicalAddress]]</div> -->
+                </div>
+              </template>
             <!-- vendor detail - end -->
 
-          </template>
+            <div class="flex"></div>
+
+            <div>
+              <div class="author-title">[[verses.productTransfer.recordCreatedBy]]: [[productTransfer.createdByUser.fullName]]</div>
+              <div>[[productTransfer.createdByUser.phone]]</div>
+            </div>
         </div>
-        <!-- report body - start -->
 
-      </div>
-      <!-- report - end -->
+  </template>
+  </div>
+  <!-- report body - start -->
 
-    </div>
+  </div>
+  <!-- report - end -->
+
+  </div>
   </template>
 
   <script>
@@ -307,6 +319,7 @@
         this.self = this;
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
+        this.app.shouldShowPrintButton = true;
         this.useLanguageServices();
         this.onOrganizationChange(this.app.organization);
         this.app.pushPageTitle(this.app.verses.productTransfer.productTransferTitle);
@@ -320,11 +333,13 @@
         }
         this._processProductTransfer(_ => {
           this.isReady = true;
+          this._printAndGoBack();
         });
       }
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.app.shouldShowPrintButton = false;
         this.app.popPageTitle();
       }
 
@@ -337,6 +352,20 @@
 
       onOrganizationChange(organization) {
         this.organization = organization;
+      }
+
+      _printAndGoBack() {
+        window.setTimeout(() => {
+
+          const threshold = 2000;
+          let then = Date.now();
+          window.print();
+          let now = Date.now();
+          if (now - then > threshold) {
+            window.history.back();
+          }
+
+        }, 500);
       }
 
       _fetchProductTransfer(cbfn) {
@@ -396,7 +425,7 @@
             } else {
               return b.count - a.count;
             }
-          } 
+          }
         });
         this.set('productTransfer.productList', []);
         window.setTimeout(() => {
