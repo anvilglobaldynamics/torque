@@ -24,7 +24,7 @@
 <link rel="import" href="elem-customer-selector.html">
 <link rel="import" href="elem-outlet-selector.html">
 
-<dom-module id="page-print-product-transfer">
+<dom-module id="page-print-product-acquisition">
   <template>
     <style include="shared-styles">
       :root {
@@ -160,7 +160,7 @@
 
         <!-- report header - start -->
         <div class="header vertical layout">
-          <div class="name">[[verses.productTransfer.productTransferNumber]]: [[productTransfer.productTransferNumber]]</div>
+          <div class="name">[[verses.productAcquisition.productAcquisitionNumber]]: [[productAcquisition.productAcquisitionNumber]]</div>
           <div class="horizontal layout wrap">
             <div>
               <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
@@ -171,8 +171,8 @@
             <div class="flex"></div>
 
             <div>
-              <div class="author-title">[[verses.productTransfer.recordCreatedBy]]: [[productTransfer.createdByUser.fullName]]</div>
-              <div>[[productTransfer.createdByUser.phone]]</div>
+              <div class="author-title">[[verses.productAcquisition.recordCreatedBy]]: [[productAcquisition.createdByUser.fullName]]</div>
+              <div>[[productAcquisition.createdByUser.phone]]</div>
             </div>
           </div>
 
@@ -183,18 +183,16 @@
         <div class="body">
 
           <div class="horizontal layout center wrap">
-            <div class="description-time"><span class="item-title">[[verses.general.date]]:</span> [[$mkDate(productTransfer.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+            <div class="description-time"><span class="item-title">[[verses.general.date]]:</span> [[$mkDate(productAcquisition.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
             <div class="flex"></div>
-            <div class="description"><span class="item-title">[[verses.general.from]]:</span> [[productTransfer.fromInventory.inventoryContainer.name]] - [[productTransfer.fromInventory.name]]</div>
-            <div class="flex"></div>
-            <div class="description"><span class="item-title">[[verses.general.to]]:</span> [[productTransfer.toInventory.inventoryContainer.name]] - [[productTransfer.toInventory.name]]</div>
+            <div class="description"><span class="item-title">[[verses.general.inventory]]:</span> [[productAcquisition.inventory.inventoryContainer.name]] - [[productAcquisition.inventory.name]]</div>
           </div>
 
-          <template is="dom-if" if="{{!productTransfer.productList.length}}">
+          <template is="dom-if" if="{{!productAcquisition.productList.length}}">
             [[verses.general.noDataFound]]
           </template>
 
-          <template is="dom-if" if="{{productTransfer.productList.length}}">
+          <template is="dom-if" if="{{productAcquisition.productList.length}}">
 
             <div class="product-sales-table-container" style="animation: 1s fadein;">
               <table class="product-sales-table" style="margin-top: 8px;">
@@ -231,12 +229,12 @@
                 <tr>
                   <td class="cell" style="font-weight: bold;">[[verses.general.total]]</td>
                   <td class="cell" align="center">
-                    {{computeTotalProductCount(productTransfer.productList)}}
+                    {{computeTotalProductCount(productAcquisition.productList)}}
                   </td>
                 </tr>
                 <!-- total - end -->
 
-                <template is="dom-repeat" items="[[productTransfer.productList]]" as="product">
+                <template is="dom-repeat" items="[[productAcquisition.productList]]" as="product">
                   <tr>
                     <td class="cell">
                       [[product.productBlueprint.name]]
@@ -251,7 +249,7 @@
                 <tr>
                   <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
                   <td class="cell cell-bottom" align="center">
-                    {{computeTotalProductCount(productTransfer.productList)}}
+                    {{computeTotalProductCount(productAcquisition.productList)}}
                   </td>
                 </tr>
                 <!-- total - end -->
@@ -260,14 +258,14 @@
             </div>
 
             <!-- vendor detail - start -->
-            <template is="dom-if" if="{{productTransfer.vendor}}">
+            <template is="dom-if" if="{{productAcquisition.vendor}}">
               <div class="title">
-                <b>[[verses.productTransfer.acquiredFrom]]: </b>
+                <b>[[verses.productAcquisition.acquiredFrom]]: </b>
               </div>
-              <div>[[productTransfer.vendor.name]]</div>
-              <div>[[verses.general.contactPerson]]: [[productTransfer.vendor.contactPersonName]]</div>
-              <div>[[verses.general.phone]]: [[productTransfer.vendor.phone]]</div>
-              <div class="description-time">[[verses.general.address]]: [[productTransfer.vendor.physicalAddress]]</div>
+              <div>[[productAcquisition.vendor.name]]</div>
+              <div>[[verses.general.contactPerson]]: [[productAcquisition.vendor.contactPersonName]]</div>
+              <div>[[verses.general.phone]]: [[productAcquisition.vendor.phone]]</div>
+              <div class="description-time">[[verses.general.address]]: [[productAcquisition.vendor.physicalAddress]]</div>
             </template>
             <!-- vendor detail - end -->
 
@@ -282,9 +280,9 @@
   </template>
 
   <script>
-    class PagePrintProductTransfer extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+    class PagePrintProductAcquisition extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
       static get is() {
-        return 'page-print-product-transfer';
+        return 'page-print-product-acquisition';
       }
 
       static get properties() {
@@ -309,16 +307,16 @@
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
         this.onOrganizationChange(this.app.organization);
-        this.app.pushPageTitle(this.app.verses.productTransfer.productTransferTitle);
+        this.app.pushPageTitle(this.app.verses.productAcquisition.productAcquisitionTitle);
         if (!this._ensureAccess()) return;
-        if (!('product-transfer' in this.params)) {
+        if (!('product-acquisition' in this.params)) {
           let message = this.app.verses.general.pageCannotBeDisplayed;
           this.app.showModalDialog(this.app.verses.general.somethingWentWrong, message, _ => {
             this.app.navigateTo('/home');
           });
           return;
         }
-        this._processProductTransfer(_ => {
+        this._processProductAcquisition(_ => {
           this.isReady = true;
         });
       }
@@ -339,25 +337,25 @@
         this.organization = organization;
       }
 
-      _fetchProductTransfer(cbfn) {
-        let productTransferId = String(parseInt(this.params['product-transfer']));
+      _fetchProductAcquisition(cbfn) {
+        let productAcquisitionId = String(parseInt(this.params['product-acquisition']));
         let data = {
           fromDate: Date.now(),
           toDate: Date.now(),
           vendorId: this.vendorId,
           organizationId: this.app.organization.id,
-          searchString: productTransferId
+          searchString: productAcquisitionId
         };
-        this.app.callGetProductTransferListApi(data, (err, response) => {
+        this.app.callGetProductAcquisitionListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.productTransferList[0]);
+          return cbfn(response.productAcquisitionList[0]);
         });
       }
 
-      _processProductTransfer(cbfn) {
-        this._fetchProductTransfer((productTransfer) => {
-          this.productTransfer = productTransfer;
+      _processProductAcquisition(cbfn) {
+        this._fetchProductAcquisition((productAcquisition) => {
+          this.productAcquisition = productAcquisition;
           cbfn();
         });
       }
@@ -380,7 +378,7 @@
       // region: sort
 
       _applySortParameters() {
-        let list = this.productTransfer.productList;
+        let list = this.productAcquisition.productList;
         list.sort((a, b) => {
           if (this.sortBy === 'product') {
             let strA = a.productBlueprint.name;
@@ -398,9 +396,9 @@
             }
           } 
         });
-        this.set('productTransfer.productList', []);
+        this.set('productAcquisition.productList', []);
         window.setTimeout(() => {
-          this.set('productTransfer.productList', list.map(i => i));
+          this.set('productAcquisition.productList', list.map(i => i));
         }, 0);
       }
 
@@ -425,6 +423,6 @@
       }
     }
 
-    window.customElements.define(PagePrintProductTransfer.is, PagePrintProductTransfer);
+    window.customElements.define(PagePrintProductAcquisition.is, PagePrintProductAcquisition);
   </script>
 </dom-module>

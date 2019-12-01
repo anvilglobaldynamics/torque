@@ -81,6 +81,9 @@
 
             </div>
           </div>
+          <div>
+            <paper-button raised class="secondary" on-tap="printInvoiceTapped">[[verses.general.print]]</paper-button>
+          </div>
         </div>
         
       </div>
@@ -223,6 +226,11 @@
       }
 
       // region: ui  ===========================
+
+      printInvoiceTapped(){
+        let productTransferId = String(parseInt(this.params['product-acquisition']));
+        return this.app.navigateTo(`/print-product-acquisition/product-acquisition:${productTransferId}`);
+      }
 
       // region: misc =================================
 
