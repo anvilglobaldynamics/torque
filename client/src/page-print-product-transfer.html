@@ -163,17 +163,17 @@
           <div class="name">[[verses.productTransfer.productTransferNumber]]: [[productTransfer.productTransferNumber]]</div>
           <div class="horizontal layout wrap">
             <div>
-                <div class="description-time"><span class="item-title">[[verses.general.date]]:</span> [[$mkDate(productTransfer.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                <div class="description"><span class="item-title">[[verses.general.from]]:</span> [[productTransfer.fromInventory.inventoryContainer.name]] - [[productTransfer.fromInventory.name]]</div>
-                <div class="description"><span class="item-title">[[verses.general.to]]:</span> [[productTransfer.toInventory.inventoryContainer.name]] - [[productTransfer.toInventory.name]]</div>
+              <div class="description-time"><span class="item-title">[[verses.general.date]]:</span> [[$mkDate(productTransfer.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
+              <div class="description"><span class="item-title">[[verses.general.from]]:</span> [[productTransfer.fromInventory.inventoryContainer.name]] - [[productTransfer.fromInventory.name]]</div>
+              <div class="description"><span class="item-title">[[verses.general.to]]:</span> [[productTransfer.toInventory.inventoryContainer.name]] - [[productTransfer.toInventory.name]]</div>
             </div>
             <div class="flex"></div>
             <div>
-                <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
-                <!-- <div>[[app.organization.primaryBusinessAddress]]</div> -->
-                <div>[[app.organization.email]]</div>
-                <div>[[app.organization.phone]]</div>
-              </div>
+              <div class="author-title">[[verses.general.organization]]: [[app.organization.name]]</div>
+              <!-- <div>[[app.organization.primaryBusinessAddress]]</div> -->
+              <div>[[app.organization.email]]</div>
+              <div>[[app.organization.phone]]</div>
+            </div>
           </div>
 
         </div>
@@ -181,14 +181,6 @@
 
         <!-- report body - start -->
         <div class="body">
-
-          <!-- <div class="horizontal layout center wrap">
-            <div class="description-time"><span class="item-title">[[verses.general.date]]:</span> [[$mkDate(productTransfer.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-            <div class="flex"></div>
-            <div class="description"><span class="item-title">[[verses.general.from]]:</span> [[productTransfer.fromInventory.inventoryContainer.name]] - [[productTransfer.fromInventory.name]]</div>
-            <div class="flex"></div>
-            <div class="description"><span class="item-title">[[verses.general.to]]:</span> [[productTransfer.toInventory.inventoryContainer.name]] - [[productTransfer.toInventory.name]]</div>
-          </div> -->
 
           <template is="dom-if" if="{{!productTransfer.productList.length}}">
             [[verses.general.noDataFound]]
@@ -224,7 +216,19 @@
                       </template>
                     </div>
                   </th>
-
+                  <th class="cell cell-right" on-tap="columnHeaderCountTapped" style="cursor: pointer;">
+                    <div class="horizontal layout center-center">
+                      <span>[[verses.general.salePrice]]</span>
+                      <template is="dom-if" if="[[$equals(sortBy, 'defaultSalePrice')]]">
+                        <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
+                          <iron-icon class="sort-direction-icon" icon="arrow-drop-down"></iron-icon>
+                        </template>
+                        <template is="dom-if" if="[[$equals(sortDirection, 'descending')]]">
+                          <iron-icon class="sort-direction-icon" icon="arrow-drop-up"></iron-icon>
+                        </template>
+                      </template>
+                    </div>
+                  </th>
                 </tr>
 
                 <!-- total - start -->
@@ -232,6 +236,9 @@
                   <td class="cell" style="font-weight: bold;">[[verses.general.total]]</td>
                   <td class="cell" align="center">
                     {{computeTotalProductCount(productTransfer.productList)}}
+                  </td>
+                  <td class="cell cell-right" align="center">
+                    {{computeTotalSalePrice(productTransfer.productList)}}
                   </td>
                 </tr>
                 <!-- total - end -->
@@ -244,6 +251,9 @@
                     <td class="cell" align="center">
                       <div>[[$round(product.count)]]</div>
                     </td>
+                    <td class="cell cell-right" align="center">
+                      <div>[[$round(product.productBlueprint.defaultSalePrice)]]</div>
+                    </td>
                   </tr>
                 </template>
 
@@ -252,6 +262,9 @@
                   <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
                   <td class="cell cell-bottom" align="center">
                     {{computeTotalProductCount(productTransfer.productList)}}
+                  </td>
+                  <td class="cell-right cell-bottom" align="center">
+                    {{computeTotalSalePrice(productTransfer.productList)}}
                   </td>
                 </tr>
                 <!-- total - end -->
@@ -273,24 +286,24 @@
                   <!-- <div class="description-time">[[verses.general.address]]: [[productTransfer.vendor.physicalAddress]]</div> -->
                 </div>
               </template>
-            <!-- vendor detail - end -->
+              <!-- vendor detail - end -->
 
-            <div class="flex"></div>
+              <div class="flex"></div>
 
-            <div>
-              <div class="author-title">[[verses.productTransfer.recordCreatedBy]]: [[productTransfer.createdByUser.fullName]]</div>
-              <div>[[productTransfer.createdByUser.phone]]</div>
+              <div>
+                <div class="author-title">[[verses.productTransfer.recordCreatedBy]]: [[productTransfer.createdByUser.fullName]]</div>
+                <div>[[productTransfer.createdByUser.phone]]</div>
+              </div>
             </div>
+
+          </template>
         </div>
+        <!-- report body - start -->
 
-  </template>
-  </div>
-  <!-- report body - start -->
+      </div>
+      <!-- report - end -->
 
-  </div>
-  <!-- report - end -->
-
-  </div>
+    </div>
   </template>
 
   <script>
@@ -395,6 +408,15 @@
         let totalCount = 0;
         productList.forEach(product => {
           totalCount += product.count;
+        });
+        return this.$round(totalCount);
+      }
+
+      computeTotalSalePrice(productList) {
+        console.log("AA")
+        let totalCount = 0;
+        productList.forEach(product => {
+          totalCount += product.productBlueprint.defaultSalePrice;
         });
         return this.$round(totalCount);
       }

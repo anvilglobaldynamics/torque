@@ -124,7 +124,8 @@
     "saved": "সংরক্ষিত",
     "outlets": "দোকান",
     "warehouses": "গুদাম",
-    "author": "রচক"
+    "author": "রচক",
+    "salePrice": "বিক্রয় মূল্য"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",

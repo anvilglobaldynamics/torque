@@ -221,6 +221,19 @@
                       </template>
                     </div>
                   </th>
+                  <th class="cell cell-right" on-tap="columnHeaderCountTapped" style="cursor: pointer;">
+                    <div class="horizontal layout center-center">
+                      <span>[[verses.general.salePrice]]</span>
+                      <template is="dom-if" if="[[$equals(sortBy, 'defaultSalePrice')]]">
+                        <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
+                          <iron-icon class="sort-direction-icon" icon="arrow-drop-down"></iron-icon>
+                        </template>
+                        <template is="dom-if" if="[[$equals(sortDirection, 'descending')]]">
+                          <iron-icon class="sort-direction-icon" icon="arrow-drop-up"></iron-icon>
+                        </template>
+                      </template>
+                    </div>
+                  </th>
 
                 </tr>
 
@@ -229,6 +242,9 @@
                   <td class="cell" style="font-weight: bold;">[[verses.general.total]]</td>
                   <td class="cell" align="center">
                     {{computeTotalProductCount(productAcquisition.productList)}}
+                  </td>
+                  <td class="cell cell-right" align="center">
+                    {{computeTotalSalePrice(productAcquisition.productList)}}
                   </td>
                 </tr>
                 <!-- total - end -->
@@ -241,6 +257,9 @@
                     <td class="cell" align="center">
                       <div>[[$round(product.count)]]</div>
                     </td>
+                    <td class="cell cell-right" align="center">
+                      <div>[[$round(product.productBlueprint.defaultSalePrice)]]</div>
+                    </td>
                   </tr>
                 </template>
 
@@ -249,6 +268,9 @@
                   <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
                   <td class="cell cell-bottom" align="center">
                     {{computeTotalProductCount(productAcquisition.productList)}}
+                  </td>
+                  <td class="cell-right cell-bottom" align="center">
+                    {{computeTotalSalePrice(productAcquisition.productList)}}
                   </td>
                 </tr>
                 <!-- total - end -->
@@ -385,6 +407,13 @@
         return this.$round(totalCount);
       }
 
+      computeTotalSalePrice(productList) {
+        let totalCount = 0;
+        productList.forEach(product => {
+          totalCount += product.productBlueprint.defaultSalePrice;
+        });
+        return this.$round(totalCount);
+      }
       // region: ui  ===========================
 
       printButtonOnTopBarPressed(e = null) {

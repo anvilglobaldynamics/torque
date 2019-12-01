@@ -124,7 +124,8 @@
     "saved": "Saved",
     "outlets": "Outlets",
     "warehouses": "Warehouses",
-    "author": "Author"
+    "author": "Author",
+    "salePrice": "Sale Price"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
