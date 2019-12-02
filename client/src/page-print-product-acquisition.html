@@ -258,7 +258,8 @@
                       <div>[[$round(product.count)]]</div>
                     </td>
                     <td class="cell cell-right" align="center">
-                      <div>[[$round(product.productBlueprint.defaultSalePrice)]]</div>
+                      <div>[[computeTotalPriceOfProduct(product.productBlueprint.defaultSalePrice, product.count)]]</div>
+                      <div class="price-rate">@ [[product.productBlueprint.defaultSalePrice]]</div>
                     </td>
                   </tr>
                 </template>
@@ -410,9 +411,13 @@
       computeTotalSalePrice(productList) {
         let totalCount = 0;
         productList.forEach(product => {
-          totalCount += product.productBlueprint.defaultSalePrice;
+          totalCount += product.productBlueprint.defaultSalePrice * product.count;
         });
         return this.$round(totalCount);
+      }
+
+      computeTotalPriceOfProduct(count, unitPrice) {
+        return this.$round(count * unitPrice);
       }
       // region: ui  ===========================
 
