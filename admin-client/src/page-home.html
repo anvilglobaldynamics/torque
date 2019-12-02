@@ -54,6 +54,12 @@
           </div>
           <pre style="font-family: 'Courier New', Courier, monospace !important; font-size: 12px !important;">{{statistics}}</pre>
         </div>
+        <div class="card flex">
+            <div>
+              <b>DAU / Sales</b>
+            </div>
+            <pre style="font-family: 'Courier New', Courier, monospace !important; font-size: 12px !important;">{{dailyStatistics.table}}</pre>
+          </div>
       </div>
 
       <div class="horizontal layout">
@@ -145,7 +151,9 @@
         this.app.callAdminGetStatisticsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
+          console.log(response)
           this.statistics = JSON.stringify(response.statistics, null, 2);
+          this.dailyStatistics = response.dailyStatistics;
           return cbfn();
           // return cbfn(response.statistics);
         });

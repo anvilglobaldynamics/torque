@@ -118,7 +118,61 @@ exports.AdminGetStatisticsApi = class extends Api {
       }
     });
 
-    return { statistics };
+    // Daily Statistics
+    let dailyStatistics = {
+      table: 'Date\t\tDAU\tSales\n'
+    };
+
+    // let startDate = new Date('2019-11-01');
+    // let endDate = new Date('2019-11-30');
+
+    let endDate = new Date(new Date().toISOString().split('T')[0]); // Get today without time.
+    endDate.setDate(endDate.getDate()-1); // exclude today
+
+    let startDate = new Date(endDate.getTime());
+    startDate.setDate(endDate.getDate() - 29); // show stats for 30 days
+
+    let dateCount = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
+
+    for (let i = 0; i <= dateCount; i++) {
+      let date = new Date(startDate.getTime());
+      date.setDate(date.getDate() + i);
+
+      let dateString = date.toISOString().replace('T00:00:00.000Z', '');
+      let dateWithEndTime = new Date(date.toISOString().replace('T00:00:00.000Z', 'T23:59:59.000Z'));
+
+      let collectionName = 'sales';
+      let dauCount = (await this.database.engine._db.collection(collectionName).aggregate([
+        {
+          $match: {
+            originApp: 'torque-lite',
+            createdDatetimeStamp: {
+              $gte: date.getTime(),
+              $lte: dateWithEndTime.getTime()
+            }
+          }
+        },
+        { "$group": { _id: "$outletId", count: { $sum: 1 } } }
+      ]).sort({ count: -1 }).toArray()).length;
+
+      collectionName = 'sales';
+      let salesCount = (await this.database.engine._db.collection(collectionName).aggregate([
+        {
+          $match: {
+            originApp: 'torque-lite',
+            createdDatetimeStamp: {
+              $gte: date.getTime(),
+              $lte: dateWithEndTime.getTime()
+            }
+          }
+        },
+      ]).sort({ count: -1 }).toArray()).length;
+
+      let str = `"${dateString}"\t${dauCount}\t${salesCount}`;
+      dailyStatistics.table += str + '\n';
+    }
+
+    return { statistics, dailyStatistics };
   }
 
 }
