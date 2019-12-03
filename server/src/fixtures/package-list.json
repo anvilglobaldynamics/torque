@@ -33,7 +33,7 @@
     "price": 0,
     "duration": {
       "months": 0,
-      "days": 14
+      "days": 7
     },
     "limits": {
       "maximumOutlets": 2,
@@ -73,7 +73,7 @@
     "price": 0,
     "duration": {
       "months": 0,
-      "days": 14
+      "days": 7
     },
     "limits": {
       "maximumOutlets": 1,
