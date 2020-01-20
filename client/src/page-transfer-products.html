@@ -296,6 +296,7 @@
         this.selectedProductList.forEach(selectedProduct => {
           selectedProduct.isSelected = true;
         });
+        this.selectedProductCount = this.selectedProductList.length;
         if (this.searchString !== '') this.set('searchString', '');
         this._processInventory(() => {
           this._processTransferrableInventoryList(() => {
