@@ -120,7 +120,7 @@ exports.AdminGetStatisticsApi = class extends Api {
 
     // Daily Statistics
     let dailyStatistics = {
-      table: 'Date\t\tDAU\tSales\n'
+      table: 'Date\t\tDAU\tSales\tRegister\n'
     };
 
     // let startDate = new Date('2019-11-01');
@@ -168,7 +168,20 @@ exports.AdminGetStatisticsApi = class extends Api {
         },
       ]).sort({ count: -1 }).toArray()).length;
 
-      let str = `"${dateString}"\t${dauCount}\t${salesCount}`;
+      collectionName = 'user';
+      let userCount = (await this.database.engine._db.collection(collectionName).aggregate([
+        {
+          $match: {
+            originApp: 'torque-lite',
+            createdDatetimeStamp: {
+              $gte: date.getTime(),
+              $lte: dateWithEndTime.getTime()
+            }
+          }
+        },
+      ]).sort({ count: -1 }).toArray()).length;
+
+      let str = `"${dateString}"\t${dauCount}\t${salesCount}\t${userCount}`;
       dailyStatistics.table += str + '\n';
     }
 
