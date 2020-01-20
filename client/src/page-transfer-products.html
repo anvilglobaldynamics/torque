@@ -474,7 +474,7 @@
 
               let fromInventoryId = parseInt(this.params.inventory, 10);
               let toInventoryId = this.inventoryList[this.targetInventoryIndex].id;
-              let productList = this.productList.filter(product => product.isSelected).map(product => {
+              let productList = this.selectedProductList.filter(product => product.isSelected).map(product => {
                 if (!('selectedCount' in product)) product.selectedCount = '' + product.count;
                 let { productId, selectedCount } = product;
                 let count = parseInt(selectedCount, 10);
