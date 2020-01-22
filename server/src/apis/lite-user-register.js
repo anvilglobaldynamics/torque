@@ -24,6 +24,7 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
       categoryCode: Joi.string().required(),
       fullName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
       password: Joi.string().min(8).max(30).required(),
       // verificationToken: Joi.string().length(6).required(), // NOTE: Not currently validating user
       hasAgreedToToc: Joi.boolean().required().valid(true)
@@ -31,7 +32,7 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
   }
 
   async handle({ body }) {
-    let { organizationName, categoryCode, fullName, phone, password, hasAgreedToToc } = body;
+    let { organizationName, categoryCode, fullName, phone, password, hasAgreedToToc, countryCode } = body;
 
     let agreedToTocDatetimeStamp = (hasAgreedToToc ? Date.now() : null);
 
@@ -44,7 +45,7 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
     // await this.database.phoneVerificationRequest.applyVerificationToken({ verificationToken });
 
     // === user creation
-    let userId = await this._createUser({ fullName, phone, password, agreedToTocDatetimeStamp, accessibleApplicationList: ['torque-lite'] });
+    let userId = await this._createUser({ fullName, phone, password, agreedToTocDatetimeStamp, countryCode, accessibleApplicationList: ['torque-lite'] });
 
     // === organization creation
     let activeModuleCodeList = ['MOD_PRODUCT', 'MOD_SERVICE'];
@@ -55,6 +56,7 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
       phone,
       email: '',
       userId,
+      countryCode,
       activeModuleCodeList
     });
     this._createOrganizationSettings({ organizationId });
