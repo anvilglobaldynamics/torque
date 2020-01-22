@@ -10,7 +10,7 @@ method: `POST`
   apiKey: Joi.string().length(64).required(),
 
   fullName: Joi.string().min(1).max(64).required(),
-  phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+  phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
   password: Joi.string().min(8).max(30).required(),
 
   organizationId: Joi.number().max(999999999999999).required(),

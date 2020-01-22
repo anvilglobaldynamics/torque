@@ -23,18 +23,18 @@ const prefix = 'adm';
 const adminUsername = "default";
 const adminPassword = "johndoe1pass";
 
-const phone = rnd(prefix, 11);
+const phone = rnd(prefix, 9);
 const email = `${rnd(prefix)}@rmail.com`;
 const password = "123545678";
 const fullName = "Test " + rnd(prefix, 11);
 const fullName2 = "Test " + rnd(prefix, 11).split('').reverse().join('');
 const phone2 = rnd(prefix, 11).split('').reverse().join('');
-const newOrgOwnerPhone = 'o' + rnd(prefix, 11);
-const newOrg1Phone = '1' + rnd(prefix, 11);
-const newOrg2Phone = '2' + rnd(prefix, 11);
+const newOrgOwnerPhone = 'o' + rnd(prefix, 9);
+const newOrg1Phone = '1' + rnd(prefix, 9);
+const newOrg2Phone = '2' + rnd(prefix, 9);
 const newOrg1Email = '1' + `${rnd(prefix)}@gmail.com`;
 const newOrg2Email = '2' + `${rnd(prefix)}@gmail.com`;
-const unusedPhone = 'x' + rnd(prefix, 11);
+const unusedPhone = 'x' + rnd(prefix, 9);
 const unusedEmail = 'x' + `${rnd(prefix)}@gmail.com`;
 
 let invalidOrganizationId = generateInvalidId();

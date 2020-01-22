@@ -10,7 +10,7 @@ method: `POST`
   organizationName: Joi.string().min(1).max(64).required(),
   categoryCode: Joi.string().required(),
   fullName: Joi.string().min(1).max(64).required(),
-  phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+  phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
   password: Joi.string().min(8).max(30).required(),
   // verificationToken: Joi.string().length(5).required(), // NOTE: Not currently validating user
   hasAgreedToToc: Joi.boolean().required().valid(true)

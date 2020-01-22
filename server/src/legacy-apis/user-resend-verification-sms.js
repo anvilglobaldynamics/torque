@@ -14,7 +14,7 @@ exports.UserResendVerificationSmsApi = class extends collectionCommonMixin(userC
 
   get requestSchema() {
     return Joi.object().keys({
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required()
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required()
     });
   }
 

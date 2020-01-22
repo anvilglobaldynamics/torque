@@ -68,7 +68,7 @@ Possible Error Codes:
         isDeleted: Joi.boolean().required(),
       
         fullName: Joi.string().min(1).max(64).required(),
-        phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+        phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
         organizationId: Joi.number().max(999999999999999).required(),
         changeWalletBalance: Joi.number().max(999999999999999).required(),
         

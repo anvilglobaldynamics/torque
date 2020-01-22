@@ -16,7 +16,7 @@ exports.AddNewEmployeeApi = class extends Api.mixin(UserMixin, SecurityMixin) {
   get requestSchema() {
     return Joi.object().keys({
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
       password: Joi.string().min(8).max(30).required(),
 
       organizationId: Joi.number().max(999999999999999).required(),

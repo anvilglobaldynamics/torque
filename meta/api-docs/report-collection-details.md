@@ -56,7 +56,7 @@ Possible Error Codes:
     collectedDatetimeStamp: Joi.number().max(999999999999999).required(),
     collectedByUser: Joi.object().keys({
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
     }),    
     paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required()
   )

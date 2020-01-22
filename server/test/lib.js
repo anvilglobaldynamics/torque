@@ -1059,13 +1059,13 @@ exports.validateShopGetOutletDetailsApiSuccessResponse = (doc) => {
       name: Joi.string().min(1).max(64).required(),
       physicalAddress: Joi.string().min(1).max(128).required(),
       contactPersonName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
       categoryCode: Joi.string().required()
     }).required(),
     organizationDetails: Joi.object().keys({
       name: Joi.string().min(1).max(64).required(),
       primaryBusinessAddress: Joi.string().min(1).max(128).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
       email: Joi.string().email().min(3).max(30).required()
     }).required(),
     otherOutletList: Joi.array().items(
@@ -1156,7 +1156,7 @@ exports.validateCustomerSchema = (doc) => {
     isDeleted: Joi.boolean().required(),
 
     fullName: Joi.string().min(1).max(64).required(),
-    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
     email: Joi.string().email().min(3).max(30).allow(null).required(),
     address: Joi.string().min(1).max(128).allow('').required(),
 
@@ -1186,7 +1186,7 @@ exports.validateOutletSchema = (doc) => {
     organizationId: Joi.number().max(999999999999999).required(),
     physicalAddress: Joi.string().min(1).max(128).required(),
     contactPersonName: Joi.string().min(1).max(64).required(),
-    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
 
     location: Joi.object().keys({
       lat: Joi.number().required(),
@@ -1225,7 +1225,7 @@ exports.validateResponseOrganizationSchema = (doc) => {
     id: Joi.number().max(999999999999999).required(),
     name: Joi.string().min(1).max(64).required(),
     primaryBusinessAddress: Joi.string().min(1).max(128).required(),
-    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
     email: Joi.string().email().min(3).max(30).required(),
     activeModuleCodeList: Joi.array().items(
       Joi.string().required()
@@ -1260,7 +1260,7 @@ exports.validateOrganizationSchema = (doc) => {
     activeModuleCodeList: Joi.array().items(
       Joi.string().required()
     ).required(),
-    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
     countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
     email: Joi.string().email().min(3).max(30).required(),
     packageActivationId: Joi.number().max(999999999999999).allow(null).required(),
@@ -1285,7 +1285,7 @@ exports.validateWarehouseSchema = (doc) => {
     organizationId: Joi.number().max(999999999999999).required(),
     physicalAddress: Joi.string().min(1).max(128).required(),
     contactPersonName: Joi.string().min(1).max(64).required(),
-    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
 
     isDeleted: Joi.boolean().required()
   });
@@ -1319,7 +1319,7 @@ exports.validateVendorSchema = (doc) => {
 
     name: Joi.string().min(1).max(64).required(),
     contactPersonName: Joi.string().min(1).max(64).required(),
-    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
     physicalAddress: Joi.string().min(1).max(128).required(),
 
     organizationId: Joi.number().max(999999999999999).required(),
@@ -1580,7 +1580,7 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
       isDeleted: Joi.boolean().required(),
 
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
       organizationId: Joi.number().max(999999999999999).required(),
       changeWalletBalance: Joi.number().max(999999999999999).required(),
       email: Joi.string().email().min(3).max(30).allow(null).required(),
@@ -1738,7 +1738,7 @@ exports.validateServiceMembershipSchemaWhenListObj = (doc) => {
     customerId: Joi.number().max(999999999999999).required(),
     customerDetails: Joi.object().required().keys({
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
     }),
 
     serviceId: Joi.number().max(999999999999999).required(),
@@ -1749,7 +1749,7 @@ exports.validateServiceMembershipSchemaWhenListObj = (doc) => {
     assignedEmploymentId: Joi.number().max(999999999999999).allow(null).required(),
     assignedEmployeeDetails: Joi.object().allow(null).required().keys({
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
     }),
 
     expiringDatetimeStamp: Joi.number().max(999999999999999).required(),
@@ -1824,7 +1824,7 @@ exports.validateUserSchema = (doc) => {
     lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
     fullName: Joi.string().min(1).max(64).required(),
-    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
     countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
     passwordHash: Joi.string().min(64).max(64).required(),
     email: Joi.string().email().min(3).max(30).allow(null).required(),
@@ -1895,7 +1895,7 @@ exports.validateEmploymentSchema = (doc) => {
     userId: Joi.number().max(999999999999999).required(),
     userDetails: Joi.object().required().keys({
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
       email: Joi.string().email().min(3).max(30).allow(null).required(),
       nid: Joi.string().min(16).max(16).allow('').required(),
       physicalAddress: Joi.string().min(1).max(128).allow('').required(),
@@ -1974,7 +1974,7 @@ exports.validateCollectionSchema = (doc) => {
     collectedDatetimeStamp: Joi.number().max(999999999999999).required(),
     collectedByUser: Joi.object().keys({
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
     }),
     paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required()
   });

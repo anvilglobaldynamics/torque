@@ -17,7 +17,7 @@ exports.UserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin) {
   get requestSchema() {
     return Joi.object().keys({
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
       password: Joi.string().min(8).max(30).required(),
       countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
       hasAgreedToToc: Joi.boolean().required().valid(true)

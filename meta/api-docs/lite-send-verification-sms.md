@@ -7,7 +7,7 @@ method: `POST`
 ### request: 
 ```js
 {
-  phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required()
+  phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required()
 }
 ```
 

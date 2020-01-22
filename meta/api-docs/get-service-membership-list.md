@@ -59,7 +59,7 @@ Possible Error Codes:
       customerId: Joi.number().max(999999999999999).required(),
       customerDetails: Joi.object().keys({
         fullName: Joi.string().min(1).max(64).required(),
-        phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+        phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
       }),
 
       serviceId: Joi.number().max(999999999999999).required(),
@@ -70,7 +70,7 @@ Possible Error Codes:
       assignedEmploymentId: Joi.number().max(999999999999999).allow(null).required(),
       assignedEmployeeDetails: Joi.object().allow(null).required().keys({
         fullName: Joi.string().min(1).max(64).required(),
-        phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+        phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
       }),
 
       expiringDatetimeStamp: Joi.number().max(999999999999999).required(),
