@@ -38,7 +38,7 @@ exports.UserCollection = class extends Collection {
     return [
       {
         filters: {},
-        keyList: ['phone']
+        keyList: ['countryCode+phone']
       }
     ];
   }
