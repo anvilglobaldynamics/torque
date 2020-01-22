@@ -22,7 +22,7 @@ const changedPhone = '9' + rnd(prefix, 11);
 
 let apiKey = null;
 
-describe('user apis (1)', _ => {
+describe.only('user apis (1)', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -39,7 +39,8 @@ describe('user apis (1)', _ => {
         password,
         phone,
         fullName,
-        hasAgreedToToc: true
+        hasAgreedToToc: true,
+        countryCode: '+880'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200)
@@ -58,7 +59,8 @@ describe('user apis (1)', _ => {
         password,
         phone,
         fullName,
-        hasAgreedToToc: false
+        hasAgreedToToc: false,
+        countryCode: '+880'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -78,7 +80,8 @@ describe('user apis (1)', _ => {
         password,
         phone,
         fullName,
-        hasAgreedToToc: true
+        hasAgreedToToc: true,
+        countryCode: '+880'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -98,7 +101,8 @@ describe('user apis (1)', _ => {
         password: 'short',
         phone,
         fullName,
-        hasAgreedToToc: true
+        hasAgreedToToc: true,
+        countryCode: '+880'
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -118,6 +122,7 @@ describe('user apis (1)', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: phone,
+        countryCode: '+880',
         password
       }
     }, (err, response, body) => {
@@ -181,6 +186,7 @@ describe('user apis (1)', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: phone,
+        countryCode: '+880',
         password: changedPassword
       }
     }, (err, response, body) => {
@@ -270,6 +276,7 @@ describe('user apis (1)', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: changedEmail,
+        countryCode: '+880',
         password: changedPassword
       }
     }, (err, response, body) => {
@@ -326,6 +333,7 @@ describe('user apis (1)', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: changedEmail + 'x',
+        countryCode: '+880',
         password: changedPassword
       }
     }, (err, response, body) => {
@@ -384,6 +392,7 @@ describe('user apis (1)', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: changedEmail,
+        countryCode: '+880',
         password: changedPassword
       }
     }, (err, response, body) => {
@@ -488,6 +497,7 @@ describe('user apis (1)', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: changedEmail,
+        countryCode: '+880',
         password: changedPassword2
       }
     }, (err, response, body) => {
@@ -549,6 +559,7 @@ describe('user apis (1)', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: changedEmail,
+        countryCode: '+880',
         password: changedPassword2
       }
     }, (err, response, body) => {
@@ -651,6 +662,7 @@ describe('user apis (1)', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: phone,
+        countryCode: '+880',
         password: changedPassword3
       }
     }, (err, response, body) => {
@@ -709,6 +721,7 @@ describe('user apis (1)', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: phone,
+        countryCode: '+880',
         password: changedPassword3
       }
     }, (err, response, body) => {
@@ -752,6 +765,7 @@ describe('user apis (1)', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: phone,
+        countryCode: '+880',
         password: changedPassword3
       }
     }, (err, response, body) => {
@@ -773,6 +787,7 @@ describe('user apis (1)', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: phone,
+        countryCode: '+880',
         password: changedPassword3
       }
     }, (err, response, body) => {

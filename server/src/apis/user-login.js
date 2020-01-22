@@ -23,6 +23,7 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
         Joi.string().email().min(3).max(30), // if email
         Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15) // if phone
       ]).required(),
+      countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
       password: Joi.string().min(8).max(30).required()
     });
   }
@@ -56,8 +57,10 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
       }
     } else if (emailOrPhone === user.email && !user.isEmailVerified && this.clientApplication === 'torque') {
       let emailVerificationRequest = await this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email });
-      throwOnFalsy(emailVerificationRequest, "EMAIL_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.emailVerificationRequestNotFound)
-      throwOnFalsy(emailVerificationRequest.isVerificationComplete, "USER_REQUIRES_EMAIL_VERIFICATION", this.verses.userLoginApi.userRequiresEmailVerification)
+      // throwOnFalsy(emailVerificationRequest, "EMAIL_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.emailVerificationRequestNotFound)
+      if (emailVerificationRequest) {
+        throwOnFalsy(emailVerificationRequest.isVerificationComplete, "USER_REQUIRES_EMAIL_VERIFICATION", this.verses.userLoginApi.userRequiresEmailVerification)
+      }
     } else {
       'pass'
     }
