@@ -68,6 +68,7 @@ exports.terminateServer = (callback) => {
 
 exports.registerUser = (data, callback) => {
   data.hasAgreedToToc = true;
+  if (!('countryCode' in data)) data.countryCode = '+880'
   callApi('api/user-register', {
     json: data
   }, (err, response, body) => {
@@ -78,6 +79,7 @@ exports.registerUser = (data, callback) => {
 }
 
 exports.loginUser = (data, callback) => {
+  if (!('countryCode' in data)) data.countryCode = '+880'
   callApi('api/user-login', {
     json: data
   }, (err, response, body) => {
@@ -1259,6 +1261,7 @@ exports.validateOrganizationSchema = (doc) => {
       Joi.string().required()
     ).required(),
     phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
     email: Joi.string().email().min(3).max(30).required(),
     packageActivationId: Joi.number().max(999999999999999).allow(null).required(),
     isDeleted: Joi.boolean().required(),
@@ -1822,6 +1825,7 @@ exports.validateUserSchema = (doc) => {
 
     fullName: Joi.string().min(1).max(64).required(),
     phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+    countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
     passwordHash: Joi.string().min(64).max(64).required(),
     email: Joi.string().email().min(3).max(30).allow(null).required(),
     nid: Joi.string().min(16).max(16).allow('').required(),
