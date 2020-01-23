@@ -737,7 +737,7 @@
                   <div style="font-size: 11px;">[[verses.pos.whyCustomerInfo]]</div>
 
                   <paper-input class="editCustomerForm--fullName" value="{{editCustomerForm.fullName}}" required minlength="3" error-message=[[verses.customer.customerNameInputError]] label=[[verses.customer.customerNameInput]]></paper-input>
-                  <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.customer.customerNumberInputError]] label=[[verses.customer.customerNumberInput]]></paper-input>
+                  <paper-input class="editCustomerForm--phone" value="{{editCustomerForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.customer.customerNumberInputError]] label=[[verses.customer.customerNumberInput]]></paper-input>
 
                   <paper-input class="editCustomerForm--email" value="{{editCustomerForm.email}}" pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.customer.emailAddressInputError]] label=[[verses.customer.emailAddressInput]]></paper-input>
                   <paper-textarea class="editCustomerForm--address" value="{{editCustomerForm.address}}" label=[[verses.customer.addressInput]] rows="3"></paper-textarea>
@@ -1104,7 +1104,7 @@
               if (mode === 'development') {
                 return {
                   fullName: 'Rahim Karim',
-                  phone: '01700000011',
+                  phone: '1700000011',
                   email: 'rahim@gmail.com',
                   address: 'house road block code 1213 city country'
                 };

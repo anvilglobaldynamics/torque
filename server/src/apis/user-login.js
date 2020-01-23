@@ -21,7 +21,7 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
     return Joi.object().keys({
       emailOrPhone: Joi.alternatives([
         Joi.string().email().min(3).max(30), // if email
-        Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15) // if phone
+        Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14) // if phone
       ]).required(),
       countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
       password: Joi.string().min(8).max(30).required()

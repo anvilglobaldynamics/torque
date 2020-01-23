@@ -9,7 +9,7 @@ method: `POST`
 {
   apiKey: Joi.string().length(64).required(),
   organizationId: Joi.number().max(999999999999999).required(),
-  phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).allow(null).required(),
+  phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).allow(null).required(),
   email: Joi.string().email().min(3).max(30).allow(null).required()
 }
 ```
