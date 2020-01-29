@@ -15,7 +15,8 @@ exports.OrganizationCollection = class extends Collection {
       createdByUserId: Joi.number().max(999999999999999).required(),
       name: Joi.string().min(1).max(64).required(),
       primaryBusinessAddress: Joi.string().min(1).max(128).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
+      countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
       email: Joi.string().email().min(3).max(30).allow('').required(),
       packageActivationId: Joi.number().max(999999999999999).allow(null).required(),
       isDeleted: Joi.boolean().required(),
@@ -34,7 +35,7 @@ exports.OrganizationCollection = class extends Collection {
     return [];
   }
 
-  async create({ originApp, name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList }) {
+  async create({ originApp, name, primaryBusinessAddress, phone, email, userId, countryCode = '+880', activeModuleCodeList }) {
     return await this._insert({
       originApp,
       createdByUserId: userId,
@@ -43,6 +44,7 @@ exports.OrganizationCollection = class extends Collection {
       phone,
       email,
       packageActivationId: null,
+      countryCode,
       isDeleted: false,
       activeModuleCodeList
     });

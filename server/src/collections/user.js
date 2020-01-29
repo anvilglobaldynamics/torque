@@ -13,7 +13,8 @@ exports.UserCollection = class extends Collection {
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
+      countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
       passwordHash: Joi.string().min(64).max(64).required(),
       email: Joi.string().email().min(3).max(30).allow(null).required(),
       nid: Joi.string().min(16).max(16).allow('').required(),
@@ -37,12 +38,12 @@ exports.UserCollection = class extends Collection {
     return [
       {
         filters: {},
-        keyList: ['phone']
+        keyList: ['countryCode+phone']
       }
     ];
   }
 
-  async create({ originApp, phone, fullName, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList }) {
+  async create({ originApp, phone, fullName, passwordHash, agreedToTocDatetimeStamp, countryCode = '+880', accessibleApplicationList }) {
     return await this._insert({
       originApp,
       passwordHash,
@@ -58,6 +59,7 @@ exports.UserCollection = class extends Collection {
       isPhoneVerified: false,
       isEmailVerified: false,
       isBanned: false,
+      countryCode,
       accessibleApplicationList,
       agreedToTocDatetimeStamp
     });
@@ -83,12 +85,13 @@ exports.UserCollection = class extends Collection {
     });
   }
 
-  async findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }) {
+  async findByEmailOrPhoneAndPasswordHash({ countryCode, emailOrPhone, passwordHash }) {
     return await this._findOne({
       $or: [
         { email: emailOrPhone },
         { phone: emailOrPhone }
       ],
+      countryCode,
       passwordHash
     });
   }

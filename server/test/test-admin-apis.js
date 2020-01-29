@@ -23,18 +23,18 @@ const prefix = 'adm';
 const adminUsername = "default";
 const adminPassword = "johndoe1pass";
 
-const phone = rnd(prefix, 11);
+const phone = rnd(prefix, 9);
 const email = `${rnd(prefix)}@rmail.com`;
 const password = "123545678";
 const fullName = "Test " + rnd(prefix, 11);
 const fullName2 = "Test " + rnd(prefix, 11).split('').reverse().join('');
 const phone2 = rnd(prefix, 11).split('').reverse().join('');
-const newOrgOwnerPhone = 'o' + rnd(prefix, 11);
-const newOrg1Phone = '1' + rnd(prefix, 11);
-const newOrg2Phone = '2' + rnd(prefix, 11);
+const newOrgOwnerPhone = 'o' + rnd(prefix, 9);
+const newOrg1Phone = '1' + rnd(prefix, 9);
+const newOrg2Phone = '2' + rnd(prefix, 9);
 const newOrg1Email = '1' + `${rnd(prefix)}@gmail.com`;
 const newOrg2Email = '2' + `${rnd(prefix)}@gmail.com`;
-const unusedPhone = 'x' + rnd(prefix, 11);
+const unusedPhone = 'x' + rnd(prefix, 9);
 const unusedEmail = 'x' + `${rnd(prefix)}@gmail.com`;
 
 let invalidOrganizationId = generateInvalidId();
@@ -393,6 +393,7 @@ describe('Admin', _ => {
       expect(body).to.have.property('userList').that.is.an('array');
       expect(body.userList.length).to.equal(1);
       expect(body.userList[0].phone).to.equal(phone);
+      userId = body.userList.find(user => user.phone === phone).id;
       testDoneFn();
     });
 
@@ -400,7 +401,8 @@ describe('Admin', _ => {
 
   let userId = null;
 
-  it('api/admin-get-aggregated-user-list (No Query)', testDoneFn => {
+  // NOTE: Skipping because it's taking a very long time with remote data
+  it.skip('api/admin-get-aggregated-user-list (No Query)', testDoneFn => {
 
     callApi('api/admin-get-aggregated-user-list', {
       json: {

@@ -79,7 +79,7 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  emailOrPhone: (this.getFromCache('loginForm--emailOrPhone') || '01700000011'),
+                  emailOrPhone: (this.getFromCache('loginForm--emailOrPhone') || '1700000011'),
                   password: 'johndoe1pass'
                 };
               } else {
@@ -127,7 +127,10 @@
 
         this.storeInCache('loginForm--emailOrPhone', emailOrPhone);
 
-        let data = { emailOrPhone, password };
+        // NOTE: Update when Lipi is internationalized
+        let countryCode = '+880';
+
+        let data = { emailOrPhone, password, countryCode };
 
         this.app.callUserLoginApi(data, (err, response) => {
           if (err) return;

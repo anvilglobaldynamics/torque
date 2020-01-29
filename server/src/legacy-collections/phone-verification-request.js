@@ -21,7 +21,7 @@ exports.PhoneVerificationRequestCollection = class extends LegacyCollection {
     this.collectionName = 'phone-verification-request';
 
     this.joiSchema = Joi.object().keys({
-      forPhone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      forPhone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
       forUserId: Joi.number().max(999999999999999).allow(null).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),

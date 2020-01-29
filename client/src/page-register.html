@@ -21,9 +21,9 @@
 <dom-module id="page-register">
   <template>
     <style include="shared-styles">
-      .toc{
-      margin-top: 8px;
-    }
+      .toc {
+        margin-top: 8px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -35,7 +35,7 @@
           <div class="card vertical layout">
             <div class="page-small--header">[[verses.register.register]]</div>
             <paper-input class="registerForm--fullName" value="{{registerForm.fullName}}" required minlength="3" error-message="[[verses.register.fullnameInputError]]" label="[[verses.register.fullnameInput]]"></paper-input>
-            <paper-input class="registerForm--phone" value="{{registerForm.phone}}" required minlength="11" maxlength="15" error-message="[[verses.register.phoneInputError]]" label="[[verses.register.phoneInput]]"></paper-input>
+            <paper-input class="registerForm--phone" value="{{registerForm.phone}}" required minlength="4" minlength="14" error-message="[[verses.register.phoneInputError]]" label="[[verses.register.phoneInput]]"></paper-input>
             <paper-input class="registerForm--password" value="{{registerForm.password}}" required minlength="8" error-message="[[verses.register.passwordInputError]]" label="[[verses.register.passwordInput]]" type="password"></paper-input>
 
             <div class="toc">[[verses.register.tocLinkPart1]]<a class="link primary" on-tap="viewTocTapped">[[verses.register.tocLinkPart2]]</a>[[verses.register.tocLinkPart3]]</div>
@@ -79,7 +79,7 @@
               if (mode === 'development') {
                 return {
                   fullName: 'John Doe1',
-                  phone: '01700000011',
+                  phone: '1700000011',
                   password: 'johndoe1pass'
                 };
               } else {
@@ -120,7 +120,10 @@
       // region: register =================================
 
       _processUserRegister({ fullName, phone, password, hasAgreedToToc }) {
-        let data = { fullName, phone, password, hasAgreedToToc };
+        // NOTE: Update when Lipi is internationalized
+        let countryCode = '+880';
+
+        let data = { fullName, phone, password, hasAgreedToToc, countryCode };
         this.app.callUserRegisterApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'registerForm');

@@ -21,15 +21,16 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
     return Joi.object().keys({
       emailOrPhone: Joi.alternatives([
         Joi.string().email().min(3).max(30), // if email
-        Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15) // if phone
+        Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14) // if phone
       ]).required(),
+      countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
       password: Joi.string().min(8).max(30).required()
     });
   }
 
-  async __getUser({ emailOrPhone, password }) {
+  async __getUser({ countryCode, emailOrPhone, password }) {
     let passwordHash = this._makeHash(password);
-    let user = await this.database.user.findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash });
+    let user = await this.database.user.findByEmailOrPhoneAndPasswordHash({ countryCode, emailOrPhone, passwordHash });
     throwOnFalsy(user, "USER_NOT_FOUND", this.verses.userLoginApi.userNotFound);
     throwOnTruthy(user.isBanned, "USER_BANNED", this.verses.userLoginApi.userBanned);
 
@@ -56,8 +57,10 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
       }
     } else if (emailOrPhone === user.email && !user.isEmailVerified && this.clientApplication === 'torque') {
       let emailVerificationRequest = await this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email });
-      throwOnFalsy(emailVerificationRequest, "EMAIL_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.emailVerificationRequestNotFound)
-      throwOnFalsy(emailVerificationRequest.isVerificationComplete, "USER_REQUIRES_EMAIL_VERIFICATION", this.verses.userLoginApi.userRequiresEmailVerification)
+      // throwOnFalsy(emailVerificationRequest, "EMAIL_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.emailVerificationRequestNotFound)
+      if (emailVerificationRequest) {
+        throwOnFalsy(emailVerificationRequest.isVerificationComplete, "USER_REQUIRES_EMAIL_VERIFICATION", this.verses.userLoginApi.userRequiresEmailVerification)
+      }
     } else {
       'pass'
     }
@@ -78,8 +81,8 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
   }
 
   async handle({ body }) {
-    let { emailOrPhone, password } = body;
-    let { user, warning } = await this.__getUser({ emailOrPhone, password });
+    let { countryCode, emailOrPhone, password } = body;
+    let { user, warning } = await this.__getUser({ countryCode, emailOrPhone, password });
     await this.__destroyExistingSessions({ userId: user.id });
     let { apiKey, sessionId } = await this.__createSession({ userId: user.id });
     return {

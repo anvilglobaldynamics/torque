@@ -20,7 +20,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
 
       customer: Joi.object().keys({
         fullName: Joi.string().min(1).max(64).required(),
-        phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).allow(null).required(),
+        phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).allow(null).required(),
         email: Joi.string().email().min(3).max(30).allow(null).required(),
       }).allow(null),
 

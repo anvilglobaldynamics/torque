@@ -31,7 +31,7 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card vertical layout">
-        <paper-input class="findUserField" value="{{findUserField.emailOrPhone}}" required minlength="11" maxlength="15" error-message=[[verses.employee.emailOrPhoneInputError]] label=[[verses.employee.emailOrPhoneInputTitle]]></paper-input>
+        <paper-input class="findUserField" value="{{findUserField.emailOrPhone}}" required minlength="4" minlength="14" error-message=[[verses.employee.emailOrPhoneInputError]] label=[[verses.employee.emailOrPhoneInputTitle]]></paper-input>
 
         <div class="horizontal layout button-row end">
           <div class="flex"></div>
@@ -69,7 +69,7 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  emailOrPhone: '01700000011',
+                  emailOrPhone: '1700000011',
                 };
               } else {
                 return {

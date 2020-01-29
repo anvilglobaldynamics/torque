@@ -16,7 +16,7 @@ exports.EditOutletApi = class extends collectionCommonMixin(LegacyApi) {
 
       name: Joi.string().min(1).max(64).required(),
       physicalAddress: Joi.string().min(1).max(128).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(11).max(15).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
       contactPersonName: Joi.string().min(1).max(64).required(),
       location: Joi.object().keys({
         lat: Joi.number().required(),

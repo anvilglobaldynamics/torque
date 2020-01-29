@@ -36,7 +36,7 @@
           <div class="card vertical layout">
             <paper-input class="addEmployeeForm--fullName" value="{{addEmployeeForm.fullName}}" required minlength="3" error-message=[[verses.employee.nameOfEmployeeInputError]] label=[[verses.employee.nameOfEmployeeInput]]></paper-input>
             <paper-input class="addEmployeeForm--password" value="{{addEmployeeForm.password}}" required minlength="8" error-message=[[verses.employee.passwordInputError]] label=[[verses.employee.passwordInput]] type="password"></paper-input>
-            <paper-input class="addEmployeeForm--phone" value="{{addEmployeeForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.employee.phoneInputError]] label=[[verses.employee.contactPhoneOfContactPerson]]></paper-input>
+            <paper-input class="addEmployeeForm--phone" value="{{addEmployeeForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.employee.phoneInputError]] label=[[verses.employee.contactPhoneOfContactPerson]]></paper-input>
 
             <elem-common-employment-details-input name="employeeForm" employee-form="{{addEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input>
 
@@ -64,7 +64,7 @@
               if (mode === 'development') {
                 return {
                   fullName: 'Added Employee Full Name',
-                  phone: '01700000011',
+                  phone: '1700000011',
                   password: 'johndoe1pass',
                   role: 'pichi role',
                   designation: 'pichi desig',

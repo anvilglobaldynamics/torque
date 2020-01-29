@@ -35,7 +35,7 @@
             <paper-input class="editWarehouseForm--name" value="{{editWarehouseForm.name}}" required minlength="3" error-message=[[verses.warehouse.warehouseNameInputError]] label=[[verses.warehouse.warehouseNameInput]]></paper-input>
             <paper-textarea class="editWarehouseForm--physicalAddress" value="{{editWarehouseForm.physicalAddress}}" required minlength="8" error-message=[[verses.warehouse.warehousePhysicalAddressInputError]] label=[[verses.warehouse.warehousePhysicalAddressInput]] rows="4"></paper-textarea>
             <paper-input class="editWarehouseForm--contactPersonName" value="{{editWarehouseForm.contactPersonName}}" required minlength="3" error-message=[[verses.warehouse.warehouseManagerNameInputError]] label=[[verses.warehouse.warehouseManagerNameInput]]></paper-input>
-            <paper-input class="editWarehouseForm--phone" value="{{editWarehouseForm.phone}}" required minlength="11" maxlength="15" error-message=[[verses.warehouse.warehouseManagerNumberInputError]] label=[[verses.warehouse.warehouseManagerNumberInput]]></paper-input>
+            <paper-input class="editWarehouseForm--phone" value="{{editWarehouseForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.warehouse.warehouseManagerNumberInputError]] label=[[verses.warehouse.warehouseManagerNumberInput]]></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editWarehouseForm--submit" on-tap="createWarehouseTapped">[[verses.warehouse.createWarehouse]]</paper-button>
@@ -70,7 +70,7 @@
               if (mode === 'development') {
                 return {
                   name: 'Badda Warehouse',
-                  phone: '01700000011',
+                  phone: '1700000011',
                   contactPersonName: 'Johns Apparel',
                   physicalAddress: 'Road 50\nThis Town'
                 };

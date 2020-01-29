@@ -20,8 +20,8 @@ exports.OrganizationMixin = (SuperApiClass) => class extends SuperApiClass {
 
   // Organization Creation - Start
 
-  async _createOrganization({ name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList }) {
-    return await this.database.organization.create({ originApp: this.clientApplication, name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList });
+  async _createOrganization({ name, primaryBusinessAddress, phone, email, userId, countryCode, activeModuleCodeList }) {
+    return await this.database.organization.create({ originApp: this.clientApplication, name, primaryBusinessAddress, phone, email, userId, countryCode, activeModuleCodeList });
   }
 
   async _createOrganizationSettings({ organizationId }) {

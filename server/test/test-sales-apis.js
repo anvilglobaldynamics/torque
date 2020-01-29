@@ -931,6 +931,7 @@ describe('Sales', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: phone,
+        countryCode: '+880',
         password
       }
     }, (err, response, body) => {
@@ -1699,6 +1700,7 @@ describe('Sales', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: phone,
+        countryCode: '+880',
         password
       }
     }, (err, response, body) => {
@@ -1771,6 +1773,7 @@ describe('Sales', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: phone,
+        countryCode: '+880',
         password
       }
     }, (err, response, body) => {
@@ -3568,6 +3571,7 @@ describe('Sales', _ => {
     callApi('api/user-login', {
       json: {
         emailOrPhone: phone,
+        countryCode: '+880',
         password
       }
     }, (err, response, body) => {

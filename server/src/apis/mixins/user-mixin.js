@@ -133,10 +133,10 @@ exports.UserMixin = (SuperApiClass) => class extends SuperApiClass {
     return { user };
   }
 
-  async _createUser({ fullName, phone, password, agreedToTocDatetimeStamp, accessibleApplicationList }) {
+  async _createUser({ fullName, phone, password, agreedToTocDatetimeStamp, countryCode, accessibleApplicationList }) {
     await this.applyGlobalUsageLimit({ useCase: 'register' });
     let passwordHash = this._makeHash(password);
-    let userId = await this.database.user.create({ originApp: this.clientApplication, fullName, phone, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList });
+    let userId = await this.database.user.create({ originApp: this.clientApplication, fullName, phone, passwordHash, agreedToTocDatetimeStamp, countryCode, accessibleApplicationList });
     return userId;
   }
 
