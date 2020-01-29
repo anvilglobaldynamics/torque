@@ -85,12 +85,13 @@ exports.UserCollection = class extends Collection {
     });
   }
 
-  async findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }) {
+  async findByEmailOrPhoneAndPasswordHash({ countryCode, emailOrPhone, passwordHash }) {
     return await this._findOne({
       $or: [
         { email: emailOrPhone },
         { phone: emailOrPhone }
       ],
+      countryCode,
       passwordHash
     });
   }

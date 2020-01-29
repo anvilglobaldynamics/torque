@@ -28,9 +28,9 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
     });
   }
 
-  async __getUser({ emailOrPhone, password }) {
+  async __getUser({ countryCode, emailOrPhone, password }) {
     let passwordHash = this._makeHash(password);
-    let user = await this.database.user.findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash });
+    let user = await this.database.user.findByEmailOrPhoneAndPasswordHash({ countryCode, emailOrPhone, passwordHash });
     throwOnFalsy(user, "USER_NOT_FOUND", this.verses.userLoginApi.userNotFound);
     throwOnTruthy(user.isBanned, "USER_BANNED", this.verses.userLoginApi.userBanned);
 
@@ -81,8 +81,8 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
   }
 
   async handle({ body }) {
-    let { emailOrPhone, password } = body;
-    let { user, warning } = await this.__getUser({ emailOrPhone, password });
+    let { countryCode, emailOrPhone, password } = body;
+    let { user, warning } = await this.__getUser({ countryCode, emailOrPhone, password });
     await this.__destroyExistingSessions({ userId: user.id });
     let { apiKey, sessionId } = await this.__createSession({ userId: user.id });
     return {

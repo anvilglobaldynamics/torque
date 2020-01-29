@@ -107,12 +107,13 @@ exports.UserCollection = class extends LegacyCollection {
     }, cbfn);
   }
 
-  findByEmailOrPhoneAndPasswordHash({ emailOrPhone, passwordHash }, cbfn) {
+  findByEmailOrPhoneAndPasswordHash({ countryCode, emailOrPhone, passwordHash }, cbfn) {
     this._findOne({
       $or: [
         { email: emailOrPhone },
         { phone: emailOrPhone }
       ],
+      countryCode,
       passwordHash
     }, cbfn);
   }
