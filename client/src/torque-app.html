@@ -723,7 +723,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":277,"datetimeStamp":1579526679852}');
+              return JSON.parse('{"build":279,"datetimeStamp":1581232083705}');
               '%__deploy-end'
             }
           },
@@ -1078,9 +1078,9 @@
         let matchingEl = Array.from(localDocument.querySelectorAll('link[rel="lazy-import"]')).find(el => {
           return el.href.indexOf(qualifiedName) > -1;
         });
-        if (matchingEl) {
-          qualifiedName = matchingEl.href;
-        }
+        // if (matchingEl) {
+        //   qualifiedName = matchingEl.href;
+        // }
         var resolvedPageUrl = this.resolveUrl(qualifiedName);
         const successFn = (...args) => {
           'pass'

@@ -174,7 +174,7 @@
           <a href="[[authorWebsite]]">[[authorName]]</a> All Rights Reserved.
           <br>
           <span class="extra-small">admin build
-            <span id="build-number">25</span>
+            <span id="build-number">26</span>
           </span>
         </div>
 
@@ -322,9 +322,9 @@
         let matchingEl = Array.from(localDocument.querySelectorAll('link[rel="lazy-import"]')).find(el => {
           return el.href.indexOf(qualifiedName) > -1;
         });
-        if (matchingEl) {
-          qualifiedName = matchingEl.href;
-        }
+        // if (matchingEl) {
+        //   qualifiedName = matchingEl.href;
+        // }
         var resolvedPageUrl = this.resolveUrl(qualifiedName);
         Polymer.importHref(resolvedPageUrl, null, (_ => this.pageName = 'error404'), true);
       }

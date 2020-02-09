@@ -64,6 +64,7 @@
       0% {
         -webkit-transform: scale(0)
       }
+
       100% {
         -webkit-transform: scale(1.0);
         opacity: 0;
@@ -75,6 +76,7 @@
         -webkit-transform: scale(0);
         transform: scale(0);
       }
+
       100% {
         -webkit-transform: scale(1.0);
         transform: scale(1.0);
@@ -107,6 +109,13 @@
         return value;
       }
     }
+  </script>
+
+  <script>
+    // Force all polyfills on
+    if (window.customElements) window.customElements.forcePolyfill = true;
+    ShadyDOM = { force: true };
+    ShadyCSS = { shimcssproperties: true };
   </script>
 
   <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
