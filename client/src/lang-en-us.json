@@ -442,6 +442,7 @@
     "passwordInput": "Employee password",
     "phoneInputError": "Enter your valid phone number.",
     "contactPhoneOfContactPerson": "Contact Number of Contact Person",
+    "contactNumber": "Contact Number",
     "employeeUpdated": "Employee has been updated.",
     "updateEmployee": "Update Employee",
     "hireEmployeePageTitle": "Hire Employee",

@@ -444,6 +444,7 @@
     "passwordInput": "কর্মচারী পাসওয়ার্ড",
     "phoneInputError": "আপনার সঠিক ফোন নম্বর লিখুন।",
     "contactPhoneOfContactPerson": "যোগাযোগ করার ব্যক্তির ফোন",
+    "contactNumber": "ফোন নম্বর",
     "employeeUpdated": "কর্মচারী আপডেট করা হয়েছে।",
     "updateEmployee": "কর্মচারী আপডেট",
     "hireEmployeePageTitle": "কর্মচারী নিয়োগ",
