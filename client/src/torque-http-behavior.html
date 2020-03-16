@@ -66,7 +66,11 @@
           // suppress the event so that it does not bubble to service manager
           event.bubbles = false;
         });
-        baselib.setImmediate(_ => service.request('json', data));
+
+        window.setTimeout(() => {
+          service.request('json', data)
+        }, 0);
+
         this.serviceManager.manage(service);
         return service;
       }
