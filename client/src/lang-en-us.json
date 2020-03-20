@@ -169,6 +169,9 @@
     "employees": "Employees",
     "outlets": "Outlets",
     "warehouses": "Warehouses",
+    "manageMonetaryAccounts": "Monetary Accounts",
+    "manageAccounts": "Accounts",
+    "manageTransactions": "Manage Transactions",
     "productBlueprints": "Product Blueprints",
     "serviceBlueprints": "Service Blueprints",
     "sales": "Sales Records",
@@ -1189,5 +1192,10 @@
     "emailReceipt": "Send Receipt by Email",
     "resendReceipt": "Receipt",
     "resentSuccessfully": "Receipt has been sent successfully."
+  },
+  "accounting": {
+    "manageAccountPageTitle": "Manage Accounts",
+    "noAccountFound": "No account found",
+    "createNewAccount": "Create new account"
   }
 }
