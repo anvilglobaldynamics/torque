@@ -45,7 +45,7 @@ let adminApiKey = null;
 const adminUsername = "default";
 const adminPassword = "johndoe1pass";
 
-describe.only('Organization', _ => {
+describe('Organization', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -62,7 +62,7 @@ describe.only('Organization', _ => {
     });
   });
 
-  it.only('api/add-organization (Valid)', testDoneFn => {
+  it('api/add-organization (Valid)', testDoneFn => {
 
     callApi('api/add-organization', {
       json: {

@@ -25,16 +25,15 @@ exports.AddAccountApi = class extends Api {
         // "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
       ],
       moduleList: [
-        // TODO: update privilegeList with relevant privilege
+        // TODO: update moduleList with MOD_ACCOUNTING
         // "MOD_ACCOUNTING",
       ]
     }];
   }
 
   async handle({ body }) {
-    console.log("IN AddAccountApi");
     let { organizationId, name } = body;
-    let account = 0;
+    let accountId = 0;
     return { status: "success", accountId };
   }
 

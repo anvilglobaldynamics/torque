@@ -30,7 +30,7 @@ const orgPhone = 'o' + rnd(prefix, 11);
 let apiKey = null;
 let organizationId = null;
 
-describe('Accounting', _ => {
+describe.only('Accounting', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -49,7 +49,6 @@ describe('Accounting', _ => {
             email: orgEmail
           }, (data) => {
             organizationId = data.organizationId;
-            console.log("addOrganization data: ", data);
             testDoneFn();
           })
         });
@@ -66,7 +65,7 @@ describe('Accounting', _ => {
         name: "DBDL Bank Account" 
       }
     }, (err, response, body) => {
-      // console.log(body);
+      console.log(body);
       expect(response.statusCode).to.equal(200);
       testDoneFn();
     })
