@@ -29,6 +29,7 @@ const orgPhone = 'o' + rnd(prefix, 11);
 
 let apiKey = null;
 let organizationId = null;
+let accountToBeEdited = null;
 
 describe.only('Accounting', _ => {
 
@@ -62,7 +63,7 @@ describe.only('Accounting', _ => {
       json: {
         apiKey,
         organizationId,
-        name: "DBDL Bank Account" 
+        displayName: "DBDL Bank Account" 
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -82,8 +83,27 @@ describe.only('Accounting', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
+
+      accountToBeEdited = body.accountList[0];
       testDoneFn();
     });
+
+  });
+
+  it.skip('api/edit-account (Valid)', testDoneFn => {
+
+    callApi('api/edit-account', {
+      json: {
+        apiKey,
+        accountId: 1,
+        displayName: "DBDL Bank Account UPDATED",
+        note: "A note holding some detail."
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    })
 
   });
 

@@ -12,7 +12,7 @@ exports.AddAccountApi = class extends Api {
   get requestSchema() {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
-      name: Joi.string().min(1).max(32).required()
+      displayName: Joi.string().min(1).max(32).required()
     });
   }
 
@@ -31,7 +31,7 @@ exports.AddAccountApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { organizationId, name } = body;
+    let { organizationId, displayName } = body;
     let accountId = 0;
     return { status: "success", accountId };
   }
