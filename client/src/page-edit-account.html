@@ -79,15 +79,17 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  displayName: 'Badda Account',
+                  displayName: 'Rent Expense Account',
                   note: 'A random note',
-                  nature: 'revenue'
+                  nature: 'expense',
+                  isMonetaryAccount: false
                 };
               } else {
                 return {
                   displayName: '',
                   note: '',
-                  nature: ''
+                  nature: '',
+                  isMonetaryAccount: false
                 };
               }
             }
@@ -142,14 +144,17 @@
       _processGetAccount(cbfn) {
         let accountId = parseInt(this.params.account);
         let data = {
-          accountId
+          organizationId: this.app.organization.id,
+          filterByNature: 'all',
+          filterByIsMonetary: 'all',
+          accountIdList: [accountId]
         };
-        this.app.callGetAccountApi(data, (err, response) => {
+        this.app.callGetAccountListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.editingAccount = response.account;
-          let { displayName, note, nature } = this.editingAccount;
-          this.editAccountForm = { displayName, note, nature };
+          let { displayName, note } = this.editingAccount;
+          this.editAccountForm = { displayName, note };
           cbfn();
         });
       }
@@ -157,6 +162,7 @@
       _processCreateAccount({ displayName, note, nature }) {
         let data = {
           displayName, note, nature,
+          isMonetaryAccount: false,
           organizationId: this.app.organization.id
         };
         this.app.callAddAccountApi(data, (err, response) => {
@@ -169,9 +175,9 @@
         });
       }
 
-      _processUpdateAccount({ displayName, phone, note }) {
+      _processUpdateAccount({ displayName, note }) {
         let data = {
-          displayName, phone, note,
+          displayName, note,
           accountId: this.editingAccount.id
         };
         this.app.callEditAccountApi(data, (err, response) => {

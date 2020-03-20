@@ -628,6 +628,11 @@
         this.callCombinedJsonApi('add-account', data, cbfn);
       }
 
+      callEditAccountApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-account', data, cbfn);
+      }
+
       callGetAccountListApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('get-account-list', data, cbfn);

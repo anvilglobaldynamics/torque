@@ -47,6 +47,7 @@
                 <div class="vertical layout flex">
 
                   <div class="place-name-container">[[account.displayName]]</div>
+                  <div>[[account.nature]]</div>
 
                 </div>
                 <div class="horizontal layout wrap">
@@ -126,7 +127,9 @@
       _fetchAccountList(cbfn) {
         let data = { 
           organizationId: this.app.organization.id, 
-          onlyMonetaryAccounts: false,
+          filterByIsMonetary: 'exclude-monetary',
+          filterByNature: 'all',
+          accountIdList: [],
           paginate: this.paginate 
         };
         this.app.callGetAccountListApi(data, (err, response) => {
