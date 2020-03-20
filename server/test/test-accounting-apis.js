@@ -104,7 +104,7 @@ describe.only('Accounting', _ => {
     callApi('api/edit-account', {
       json: {
         apiKey,
-        accountId: 1,
+        accountId: accountToBeEdited.id,
         displayName: "DBDL Bank Account UPDATED",
         note: "A note holding some detail."
       }
@@ -138,7 +138,7 @@ describe.only('Accounting', _ => {
 
   });
 
-  it('api/get-transaction-list (Valid onlyMonetaryAccounts)', testDoneFn => {
+  it('api/get-transaction-list (Valid)', testDoneFn => {
 
     callApi('api/get-transaction-list', {
       json: {
@@ -156,6 +156,25 @@ describe.only('Accounting', _ => {
       transactionToBeEdited = body.transactionList[0];
       testDoneFn();
     });
+
+  });
+
+  it.skip('api/edit-transaction (Valid)', testDoneFn => {
+
+    callApi('api/edit-transaction', {
+      json: {
+        apiKey,
+        transactionId: 1, 
+        // transactionToBeEdited.id
+        note: "UPDATE A transaction added from test." ,
+        amount: 1000
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      validateGenericApiSuccessResponse(body);
+      testDoneFn();
+    })
 
   });
 

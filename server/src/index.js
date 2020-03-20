@@ -132,6 +132,7 @@ const { EditAccountApi } = require('./apis/edit-account');
 const { GetAccountListApi } = require('./apis/get-account-list');
 const { AddTransactionApi } = require('./apis/add-transaction');
 const { GetTransactionListApi } = require('./apis/get-transaction-list');
+const { EditTransactionApi } = require('./apis/edit-transaction');
 
 let { InternalStatusApi } = require('./legacy-apis/internal--status');
 
@@ -396,6 +397,7 @@ class Program {
     server.registerPostApi('/api/get-account-list', GetAccountListApi);
     server.registerPostApi('/api/add-transaction', AddTransactionApi);
     server.registerPostApi('/api/get-transaction-list', GetTransactionListApi);
+    server.registerPostApi('/api/edit-transaction', EditTransactionApi);
 
     server.registerPostApi('/api/graph-sales-trend', GraphSalesTrendApi);
     server.registerPostApi('/api/add-vendor', AddVendorApi);
