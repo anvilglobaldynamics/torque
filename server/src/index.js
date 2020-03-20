@@ -128,6 +128,7 @@ const { ShopLocateNearbyOutletsApi } = require('./apis/shop-locate-nearby-outlet
 const { ShopGetOutletDetailsApi } = require('./apis/shop-get-outlet-details');
 
 const { AddAccountApi } = require('./apis/add-account');
+const { GetAccountListApi } = require('./apis/get-account-list');
 
 let { InternalStatusApi } = require('./legacy-apis/internal--status');
 
@@ -388,6 +389,7 @@ class Program {
     server.registerPostApi('/api/get-product-category-list', GetProductCategoryListApi);
 
     server.registerPostApi('/api/add-account', AddAccountApi);
+    server.registerPostApi('/api/get-account-list', GetAccountListApi);
 
     server.registerPostApi('/api/graph-sales-trend', GraphSalesTrendApi);
     server.registerPostApi('/api/add-vendor', AddVendorApi);

@@ -65,10 +65,25 @@ describe.only('Accounting', _ => {
         name: "DBDL Bank Account" 
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       testDoneFn();
     })
+
+  });
+
+  it('api/get-account-list (Valid onlyMonetaryAccounts)', testDoneFn => {
+
+    callApi('api/get-account-list', {
+      json: {
+        apiKey,
+        organizationId,
+        onlyMonetaryAccounts: true,
+        accountIdList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      testDoneFn();
+    });
 
   });
 
