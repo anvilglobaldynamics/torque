@@ -15,8 +15,10 @@ exports.GetAccountListApi = class extends Api {
   get requestSchema() {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
-      onlyMonetaryAccounts: Joi.boolean().required(),
-      accountIdList: Joi.array().items(Joi.number()).default([]).optional()
+      
+      filterByNature: Joi.string().valid('all', 'asset', 'liability', 'equity', 'revenue', 'expense').required(),
+      filterByIsMonetary: Joi.string().valid('all', 'only-monetary', 'exclude-monetary').required(),
+      accountIdList: Joi.array().items(Joi.number()).default([]).required()
     });
   }
 
@@ -34,8 +36,10 @@ exports.GetAccountListApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { organizationId, onlyMonetaryAccounts, accountIdList } = body;
-    let accountList = [];
+    let { organizationId, filterByNature, filterByIsMonetary, accountIdList } = body;
+
+    let accountList = await this.database.account.listByFilters({ organizationId, filterByNature, filterByIsMonetary, accountIdList });
+
     return { accountList };
   }
 

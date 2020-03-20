@@ -46,7 +46,7 @@ exports.AccountCollection = class extends Collection {
 
   async create({ codeName, displayName, nature, isMonetaryAccount, note, isDefaultAccount, organizationId }) {
     return await this._insert({
-      codeName,  displayName, nature, isMonetaryAccount, note, isDefaultAccount, organizationId,
+      codeName, displayName, nature, isMonetaryAccount, note, isDefaultAccount, organizationId,
       isDeleted: false
     });
   }
@@ -81,6 +81,36 @@ exports.AccountCollection = class extends Collection {
 
   async listByOrganizationIdAndIdList({ organizationId, idList }) {
     let query = { organizationId, id: { $in: idList } };
+    return await this._find(query);
+  }
+
+  async listByFilters({ organizationId, filterByNature, filterByIsMonetary, accountIdList }) {
+
+    let query = { $and: [] };
+
+    query.$and.push({
+      organizationId
+    });
+
+    if (accountIdList.length > 0) {
+      query.$and.push({
+        id: { $in: accountIdList }
+      });
+    }
+
+    if (filterByNature !== 'all') {
+      query.$and.push({
+        nature: filterByNature
+      });
+    }
+
+    if (filterByIsMonetary !== 'all') {
+      let isMonetaryAccount = (filterByIsMonetary === 'only-monetary') ? true : false;
+      query.$and.push({
+        isMonetaryAccount
+      });
+    }
+
     return await this._find(query);
   }
 
