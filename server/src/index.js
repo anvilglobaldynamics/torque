@@ -144,6 +144,7 @@ const { AdminGetModuleListApi } = require('./apis/admin-get-module-list');
 const { AdminListOrganizationModulesApi } = require('./apis/admin-list-organization-modules');
 const { AdminSetModuleActivationStatusApi } = require('./apis/admin-set-module-activation-status');
 const { AdminGetStatisticsApi } = require('./apis/admin-get-statistics');
+const { AdminSetupAccountingModuleApi } = require('./apis/admin-setup-accounting-module');
 
 const { LiteSendVerificationSmsApi } = require('./apis/lite-send-verification-sms');
 const { LiteCheckVerificationTokenApi } = require('./apis/lite-check-verification-token');
@@ -404,6 +405,7 @@ class Program {
     server.registerPostApi('/api/admin-assign-package-to-organization', AdminAssignPackageToOrganizationApi);
     server.registerPostApi('/api/admin-list-organization-packages', AdminListOrganizationPackagesApi);
     server.registerPostApi('/api/admin-get-statistics', AdminGetStatisticsApi);
+    server.registerPostApi('/api/admin-setup-accounting-module', AdminSetupAccountingModuleApi);
 
     server.registerPostApi('/api/add-service-blueprint', AddServiceBlueprintApi);
     server.registerPostApi('/api/get-service-blueprint-list', GetServiceBlueprintListApi);
