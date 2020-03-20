@@ -57,6 +57,8 @@ describe.only('Accounting', _ => {
     });
   });
 
+  // Account tests - start
+
   it('api/add-account (Valid)', testDoneFn => {
 
     callApi('api/add-account', {
@@ -67,6 +69,7 @@ describe.only('Accounting', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
       testDoneFn();
     })
 
@@ -83,6 +86,7 @@ describe.only('Accounting', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
 
       accountToBeEdited = body.accountList[0];
       testDoneFn();
@@ -101,11 +105,35 @@ describe.only('Accounting', _ => {
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
       validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
 
   });
+
+  // Account tests - end
+  // Transaction tests - start
+
+  it('api/add-transaction (Valid)', testDoneFn => {
+
+    callApi('api/add-transaction', {
+      json: {
+        apiKey,
+        organizationId,
+        note: "A transaction added from test." ,
+        amount: 1000,
+        transactionType: "system"
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      testDoneFn();
+    })
+
+  });
+
+  // Transaction tests - start
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
