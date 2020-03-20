@@ -27,9 +27,14 @@ const orgName = "Test Organization";
 const orgBusinessAddress = "My Address";
 const orgPhone = 'o' + rnd(prefix, 11);
 
+let fromDate = new Date();
+fromDate.setDate(fromDate.getDate() - 1);
+fromDate = fromDate.getTime();
+
 let apiKey = null;
 let organizationId = null;
 let accountToBeEdited = null;
+let transactionToBeEdited = null;
 
 describe.only('Accounting', _ => {
 
@@ -130,6 +135,27 @@ describe.only('Accounting', _ => {
       expect(body).to.have.property('hasError').that.equals(false);
       testDoneFn();
     })
+
+  });
+
+  it('api/get-transaction-list (Valid onlyMonetaryAccounts)', testDoneFn => {
+
+    callApi('api/get-transaction-list', {
+      json: {
+        apiKey,
+        organizationId,
+        fromDate,
+        toDate: (new Date()).getTime(),
+        transactionTypeList: [],
+        accountIdList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+
+      transactionToBeEdited = body.transactionList[0];
+      testDoneFn();
+    });
 
   });
 
