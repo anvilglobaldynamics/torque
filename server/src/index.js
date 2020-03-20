@@ -127,6 +127,8 @@ const { EditOrganizationSettingsApi } = require('./apis/edit-organization-settin
 const { ShopLocateNearbyOutletsApi } = require('./apis/shop-locate-nearby-outlets');
 const { ShopGetOutletDetailsApi } = require('./apis/shop-get-outlet-details');
 
+const { AddAccountApi } = require('./apis/add-account');
+
 let { InternalStatusApi } = require('./legacy-apis/internal--status');
 
 const { AdminLoginApi } = require('./apis/admin-login');
@@ -384,6 +386,8 @@ class Program {
     server.registerPostApi('/api/add-product-category', AddProductCategoryApi);
     server.registerPostApi('/api/edit-product-category', EditProductCategoryApi);
     server.registerPostApi('/api/get-product-category-list', GetProductCategoryListApi);
+
+    server.registerPostApi('/api/add-account', AddAccountApi);
 
     server.registerPostApi('/api/graph-sales-trend', GraphSalesTrendApi);
     server.registerPostApi('/api/add-vendor', AddVendorApi);

@@ -20,7 +20,8 @@ exports.AddOrganizationApi = class extends Api.mixin(OrganizationMixin, Accounti
       email: Joi.string().email().min(3).max(30).allow('').required(),
       activeModuleCodeList: Joi.array().items(
         Joi.string().required()
-      ).optional().default(['MOD_PRODUCT', 'MOD_SERVICE', 'MOD_ACCOUNTING'])
+      ).optional().default(['MOD_PRODUCT', 'MOD_SERVICE'])
+      // TODO: add MOD_ACCOUNTING to above list
     });
   }
 
@@ -37,7 +38,7 @@ exports.AddOrganizationApi = class extends Api.mixin(OrganizationMixin, Accounti
     await this._setTrialPackage({ organizationId });
     await this._addModuleActivation({ organizationId, activeModuleCodeList });
 
-    await this.createDefaultAccounts({ organizationId })
+    // await this.createDefaultAccounts({ organizationId })
 
     return { status: "success", organizationId, employmentId };
   }

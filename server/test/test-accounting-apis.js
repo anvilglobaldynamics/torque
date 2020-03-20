@@ -11,10 +11,7 @@ let {
   loginUser,
   addOrganization,
 
-  validateProductBlueprintSchema,
-  validateAddProductBlueprintApiSuccessResponse,
   validateGenericApiFailureResponse,
-  validateGetProductBlueprintListApiSuccessResponse,
   validateGenericApiSuccessResponse
 } = require('./lib');
 
@@ -33,7 +30,7 @@ const orgPhone = 'o' + rnd(prefix, 11);
 let apiKey = null;
 let organizationId = null;
 
-describe.only('Accounting', _ => {
+describe('Accounting', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -52,6 +49,7 @@ describe.only('Accounting', _ => {
             email: orgEmail
           }, (data) => {
             organizationId = data.organizationId;
+            console.log("addOrganization data: ", data);
             testDoneFn();
           })
         });
@@ -59,18 +57,17 @@ describe.only('Accounting', _ => {
     });
   });
 
-  it('api/add-monetary-account (Valid)', testDoneFn => {
+  it('api/add-account (Valid)', testDoneFn => {
 
-    callApi('api/add-monetary-account', {
+    callApi('api/add-account', {
       json: {
         apiKey,
         organizationId,
-        name: "DBDL Bank Account",
-        note: "This is the main account."
+        name: "DBDL Bank Account" 
       }
     }, (err, response, body) => {
+      // console.log(body);
       expect(response.statusCode).to.equal(200);
-      // validateAddProductBlueprintApiSuccessResponse(body);
       testDoneFn();
     })
 
