@@ -1,0 +1,204 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-account">
+  <template>
+    <style include="shared-styles">
+
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="editAccountForm" on-keypress="genericFormSubmitionKeypress">
+        <form>
+          <div class="card vertical layout">
+            <paper-input class="editAccountForm--name" value="{{editAccountForm.name}}" required minlength="3" error-message=[[verses.accounting.accountNameInputError]] label=[[verses.accounting.accountNameInput]]></paper-input>
+            <paper-textarea class="editAccountForm--physicalAddress" value="{{editAccountForm.physicalAddress}}" required minlength="8" error-message=[[verses.accounting.accountPhysicalAddressInputError]] label=[[verses.accounting.accountPhysicalAddressInput]] rows="4"></paper-textarea>
+            <paper-input class="editAccountForm--phone" value="{{editAccountForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.accounting.accountManagerNumberInputError]] label=[[verses.accounting.accountManagerNumberInput]]></paper-input>
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editAccountForm--submit" on-tap="createAccountTapped">[[verses.accounting.createNewAccount]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editAccountForm--submit" on-tap="updateAccountTapped">[[verses.accounting.updateOldAccount]]</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+    </div>
+  </template>
+
+  <script>
+    class PageEditAccount extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-edit-account';
+      }
+
+      static get properties() {
+        return {
+          editMode: {
+            type: Boolean,
+            value: false
+          },
+          editingAccount: {
+            type: Object,
+            value: null
+          },
+          editAccountForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  name: 'Badda Account',
+                  phone: '1700000011',
+                  contactPersonName: 'Johns Apparel',
+                  physicalAddress: 'Road 50\nThis Town'
+                };
+              } else {
+                return {
+                  name: '',
+                  phone: '',
+                  contactPersonName: '',
+                  physicalAddress: ''
+                };
+              }
+            }
+          }
+        };
+      }
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        if ('account' in this.params) {
+          this.editMode = true;
+          this.app.pushPageTitle(this.app.verses.accounting.editAccountPageTitle);
+        } else {
+          this.editMode = false;
+          this.app.pushPageTitle(this.app.verses.accounting.addAccountPageTitle);
+        }
+        if (!this._ensureAccess()) return;
+        if (this.editMode) {
+          this._processGetAccount(() => {
+            this.isReady = true;
+          });
+        } else {
+          this.delay(300, () => {
+            this.isReady = true;
+          });
+        }
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editAccountForm');
+        this.removeAutoValidation('#editAccountForm paper-input');
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_ALL_WAREHOUSES']
+        });
+      }
+
+      // region: editAccount =================================
+
+      _processGetAccount(cbfn) {
+        let accountId = parseInt(this.params.account);
+        let data = {
+          accountId
+        };
+        this.app.callGetAccountApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.editingAccount = response.account;
+          let { name, phone, contactPersonName, physicalAddress } = this.editingAccount;
+          this.editAccountForm = { name, phone, contactPersonName, physicalAddress };
+          cbfn();
+        });
+      }
+
+      _processCreateAccount({ name, phone, contactPersonName, physicalAddress }) {
+        let data = {
+          name, phone, contactPersonName, physicalAddress,
+          organizationId: this.app.organization.id
+        };
+        this.app.callAddAccountApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editAccountForm');
+          let message = this.app.verses.accounting.accountCreated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      _processUpdateAccount({ name, phone, contactPersonName, physicalAddress }) {
+        let data = {
+          name, phone, contactPersonName, physicalAddress,
+          accountId: this.editingAccount.id
+        };
+        this.app.callEditAccountApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editAccountForm');
+          let message = this.app.verses.accounting.accountUpdated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-accounts');
+      }
+
+      createAccountTapped(e = null) {
+        this.elemAll('#editAccountForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editAccountForm').validate()) return;
+
+        let { name, phone, contactPersonName, physicalAddress } = this.editAccountForm;
+        this._processCreateAccount({ name, phone, contactPersonName, physicalAddress });
+      }
+
+      updateAccountTapped(e = null) {
+        this.elemAll('#editAccountForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editAccountForm').validate()) return;
+
+        let { name, phone, contactPersonName, physicalAddress } = this.editAccountForm;
+        this._processUpdateAccount({ name, phone, contactPersonName, physicalAddress });
+      }
+    }
+
+    window.customElements.define(PageEditAccount.is, PageEditAccount);
+  </script>
+
+</dom-module>

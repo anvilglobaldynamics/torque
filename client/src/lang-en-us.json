@@ -1195,7 +1195,12 @@
   },
   "accounting": {
     "manageAccountPageTitle": "Manage Accounts",
+    "editAccountPageTitle": "Edit Account",
+    "addAccountPageTitle": "Add Account",
     "noAccountFound": "No account found",
-    "createNewAccount": "Create new account"
+    "createNewAccount": "Create new account",
+    "updateOldAccount": "Update old account",
+    "accountCreated": "Account created successfully.",
+    "accountUpdated": "Account update successfully."
   }
 }
