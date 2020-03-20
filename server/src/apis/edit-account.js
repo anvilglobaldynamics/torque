@@ -44,7 +44,7 @@ exports.EditAccountApi = class extends Api {
 
   async handle({ body }) {
     let { accountId, displayName, note } = body;
-    // await this._updateAccount({ accountId, displayName, note });
+    await this._updateAccount({ accountId, displayName, note });
     return { status: "success" };
   }
 

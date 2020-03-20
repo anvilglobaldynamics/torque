@@ -64,15 +64,39 @@ describe.only('Accounting', _ => {
 
   // Account tests - start
 
-  it('api/add-account (Valid)', testDoneFn => {
+  it('api/add-account (Valid, Bank)', testDoneFn => {
 
     callApi('api/add-account', {
       json: {
         apiKey,
         organizationId,
-        displayName: "DBDL Bank Account" 
+        displayName: "DBDL Bank Account",
+        nature: 'asset',
+        isMonetaryAccount: true,
+        note: "My Primary Account",
       }
     }, (err, response, body) => {
+      console.log(body);
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      testDoneFn();
+    })
+
+  });
+
+  it('api/add-account (Valid, Rent)', testDoneFn => {
+
+    callApi('api/add-account', {
+      json: {
+        apiKey,
+        organizationId,
+        displayName: "Rent Expenses",
+        nature: 'expense',
+        isMonetaryAccount: false,
+        note: "",
+      }
+    }, (err, response, body) => {
+      console.log(body);
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       testDoneFn();
@@ -86,12 +110,15 @@ describe.only('Accounting', _ => {
       json: {
         apiKey,
         organizationId,
-        onlyMonetaryAccounts: true,
+        filterByNature: 'all',
+        filterByIsMonetary: 'only-monetary',
         accountIdList: []
       }
     }, (err, response, body) => {
+      console.log(body)
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      expect(body.accountList.length).to.equal(1);
 
       accountToBeEdited = body.accountList[0];
       testDoneFn();
@@ -99,7 +126,7 @@ describe.only('Accounting', _ => {
 
   });
 
-  it.skip('api/edit-account (Valid)', testDoneFn => {
+  it('api/edit-account (Valid)', testDoneFn => {
 
     callApi('api/edit-account', {
       json: {
@@ -117,6 +144,26 @@ describe.only('Accounting', _ => {
 
   });
 
+  it('api/get-account-list (Valid, modification check)', testDoneFn => {
+
+    callApi('api/get-account-list', {
+      json: {
+        apiKey,
+        organizationId,
+        filterByNature: 'all',
+        filterByIsMonetary: 'all',
+        accountIdList: [accountToBeEdited.id]
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body.accountList.length).to.equal(1);
+      expect(body.accountList[0].displayName).to.equal('DBDL Bank Account UPDATED');
+      testDoneFn();
+    });
+
+  });
+
   // Account tests - end
   // Transaction tests - start
 
@@ -126,7 +173,7 @@ describe.only('Accounting', _ => {
       json: {
         apiKey,
         organizationId,
-        note: "A transaction added from test." ,
+        note: "A transaction added from test.",
         amount: 1000,
         transactionType: "system"
       }
@@ -164,9 +211,9 @@ describe.only('Accounting', _ => {
     callApi('api/edit-transaction', {
       json: {
         apiKey,
-        transactionId: 1, 
+        transactionId: 1,
         // transactionToBeEdited.id
-        note: "UPDATE A transaction added from test." ,
+        note: "UPDATE A transaction added from test.",
         amount: 1000
       }
     }, (err, response, body) => {
