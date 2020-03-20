@@ -1196,7 +1196,24 @@
   },
   "accounting": {
     "manageAccountPageTitle": "Manage Accounts",
+    "editAccountPageTitle": "Edit Account",
+    "addAccountPageTitle": "Add Account",
     "noAccountFound": "No account found",
-    "createNewAccount": "Create new account"
+    "createNewAccount": "Create new account",
+    "updateOldAccount": "Update old account",
+    "accountCreated": "Account created successfully.",
+    "accountUpdated": "Account update successfully.",
+
+    "accountNameInput": "Account Name",
+    "accountNameInputError": "Enter valid account name.", 
+    "accountNoteInput": "Note",
+    "accountNoteInputError": "Note is too long.",
+
+    "nature": "Nature of account",
+    "asset": "Asset",
+    "liability": "Liability",
+    "equity": "Equity",
+    "revenue": "Revenue",
+    "expense": "Expense"
   }
 }

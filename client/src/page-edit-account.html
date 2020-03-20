@@ -32,9 +32,20 @@
       <iron-form id="editAccountForm" on-keypress="genericFormSubmitionKeypress">
         <form>
           <div class="card vertical layout">
-            <paper-input class="editAccountForm--name" value="{{editAccountForm.name}}" required minlength="3" error-message=[[verses.accounting.accountNameInputError]] label=[[verses.accounting.accountNameInput]]></paper-input>
-            <paper-textarea class="editAccountForm--physicalAddress" value="{{editAccountForm.physicalAddress}}" required minlength="8" error-message=[[verses.accounting.accountPhysicalAddressInputError]] label=[[verses.accounting.accountPhysicalAddressInput]] rows="4"></paper-textarea>
-            <paper-input class="editAccountForm--phone" value="{{editAccountForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.accounting.accountManagerNumberInputError]] label=[[verses.accounting.accountManagerNumberInput]]></paper-input>
+
+            <paper-input class="editAccountForm--displayName" value="{{editAccountForm.displayName}}" required minlength="3" error-message=[[verses.accounting.accountNameInputError]] label=[[verses.accounting.accountNameInput]]></paper-input>
+            <paper-textarea class="editAccountForm--note" value="{{editAccountForm.note}}" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
+
+            <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.nature]]" class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{editAccountForm.nature}}" attr-for-selected="name">
+                <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
+                <paper-item name="liability">[[verses.accounting.liability]]</paper-item>
+                <paper-item name="equity">[[verses.accounting.equity]]</paper-item>
+                <paper-item name="revenue">[[verses.accounting.revenue]]</paper-item>
+                <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+            
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editAccountForm--submit" on-tap="createAccountTapped">[[verses.accounting.createNewAccount]]</paper-button>
@@ -68,17 +79,15 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  name: 'Badda Account',
-                  phone: '1700000011',
-                  contactPersonName: 'Johns Apparel',
-                  physicalAddress: 'Road 50\nThis Town'
+                  displayName: 'Badda Account',
+                  note: 'A random note',
+                  nature: 'revenue'
                 };
               } else {
                 return {
-                  name: '',
-                  phone: '',
-                  contactPersonName: '',
-                  physicalAddress: ''
+                  displayName: '',
+                  note: '',
+                  nature: ''
                 };
               }
             }
@@ -139,15 +148,15 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.editingAccount = response.account;
-          let { name, phone, contactPersonName, physicalAddress } = this.editingAccount;
-          this.editAccountForm = { name, phone, contactPersonName, physicalAddress };
+          let { displayName, note, nature } = this.editingAccount;
+          this.editAccountForm = { displayName, note, nature };
           cbfn();
         });
       }
 
-      _processCreateAccount({ name, phone, contactPersonName, physicalAddress }) {
+      _processCreateAccount({ displayName, note, nature }) {
         let data = {
-          name, phone, contactPersonName, physicalAddress,
+          displayName, note, nature,
           organizationId: this.app.organization.id
         };
         this.app.callAddAccountApi(data, (err, response) => {
@@ -160,9 +169,9 @@
         });
       }
 
-      _processUpdateAccount({ name, phone, contactPersonName, physicalAddress }) {
+      _processUpdateAccount({ displayName, phone, note }) {
         let data = {
-          name, phone, contactPersonName, physicalAddress,
+          displayName, phone, note,
           accountId: this.editingAccount.id
         };
         this.app.callEditAccountApi(data, (err, response) => {
@@ -185,16 +194,16 @@
         this.elemAll('#editAccountForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editAccountForm').validate()) return;
 
-        let { name, phone, contactPersonName, physicalAddress } = this.editAccountForm;
-        this._processCreateAccount({ name, phone, contactPersonName, physicalAddress });
+        let { displayName, note, nature } = this.editAccountForm;
+        this._processCreateAccount({ displayName, note, nature });
       }
 
       updateAccountTapped(e = null) {
         this.elemAll('#editAccountForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editAccountForm').validate()) return;
 
-        let { name, phone, contactPersonName, physicalAddress } = this.editAccountForm;
-        this._processUpdateAccount({ name, phone, contactPersonName, physicalAddress });
+        let { displayName, note, nature } = this.editAccountForm;
+        this._processUpdateAccount({ displayName, note, nature });
       }
     }
 
