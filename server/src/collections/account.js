@@ -11,7 +11,8 @@ exports.AccountCollection = class extends Collection {
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
 
-      name: Joi.string().min(1).max(32).required(),
+      codeName: Joi.string().min(1).max(32).required(),
+      displayName: Joi.string().min(1).max(32).required(),
       nature: Joi.string().valid('asset', 'liability', 'equity', 'revenue', 'expense').required(),
       isMonetaryAccount: Joi.boolean().required(),
       note: Joi.string().allow('').max(64).required(),
@@ -26,7 +27,7 @@ exports.AccountCollection = class extends Collection {
     return [
       {
         filters: {},
-        keyList: ['organizationId+name']
+        keyList: ['organizationId+codeName']
       }
     ];
   }
@@ -43,17 +44,17 @@ exports.AccountCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ name, nature, isMonetaryAccount, note, isDefaultAccount, organizationId }) {
+  async create({ codeName, displayName, nature, isMonetaryAccount, note, isDefaultAccount, organizationId }) {
     return await this._insert({
-      name, nature, isMonetaryAccount, note, isDefaultAccount, organizationId,
+      codeName,  displayName, nature, isMonetaryAccount, note, isDefaultAccount, organizationId,
       isDeleted: false
     });
   }
 
-  async setDetails({ id }, { name, note }) {
+  async setDetails({ id }, { displayName, note }) {
     return await this._update({ id }, {
       $set: {
-        name, note
+        displayName, note
       }
     });
   }
@@ -72,7 +73,7 @@ exports.AccountCollection = class extends Collection {
       let escapedSearchString = this.escapeRegExp(searchString.toLowerCase());
       let searchRegex = new RegExp(escapedSearchString, 'i');
       query.$or = [
-        { name: searchRegex }
+        { displayName: searchRegex }
       ];
     }
     return await this._find(query);
