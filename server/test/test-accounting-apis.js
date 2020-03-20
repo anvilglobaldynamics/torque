@@ -178,7 +178,7 @@ describe.only('Accounting', _ => {
 
   });
 
-  // Transaction tests - start
+  // Transaction tests - end
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);

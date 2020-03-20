@@ -27,8 +27,7 @@ exports.EditAccountApi = class extends Api {
         errorCode: "ACCOUNT_INVALID"
       },
       privilegeList: [
-        // TODO: update privilegeList with relevant privilege
-        // "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
+        "PRIV_MANAGE_ACCOUNTING"
       ],
       moduleList: [
         // TODO: update moduleList with MOD_ACCOUNTING

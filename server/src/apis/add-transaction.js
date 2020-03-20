@@ -24,8 +24,7 @@ exports.AddTransactionApi = class extends Api {
       // TODO: how to validate debitedAccountId and creditedAccountId?
       organizationBy: "organizationId",
       privilegeList: [
-        // TODO: update privilegeList with relevant privilege
-        // "PRIV_MODIFY_ALL_PRODUCT_BLUEPRINTS"
+        "PRIV_MANAGE_ACCOUNTING"
       ],
       moduleList: [
         // TODO: update moduleList with MOD_ACCOUNTING

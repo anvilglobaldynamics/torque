@@ -124,6 +124,14 @@
     "name": "Modify all vendors"
   },
   {
+    "code": "PRIV_MANAGE_ACCOUNTING",
+    "name": "Manage organization's accounting"
+  },
+  {
+    "code": "PRIV_VIEW_ACCOUNTING_REPORTS",
+    "name": "View all accounting reports"
+  },
+  {
     "code": "PRIV_MANAGE_CUSTOMER_WALLET_BALANCE",
     "name": "Manage customer account balance"
   },
