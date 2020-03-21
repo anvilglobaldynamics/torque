@@ -29,14 +29,36 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="card">
-        <div class="layout horizontal">
-          <paper-button raised class="btn primary" on-tap="createTapped">
-            one
-          </paper-button>
+        <div class="layout vertical">
 
-          <paper-button raised class="btn primary" on-tap="createTapped">
-            two
-          </paper-button>
+          <div class="layout horizontal">
+
+            <div class="touch-button" on-tap="buttonAddManualTransactionTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
+              <div class="type title uppercase">[[verses.accounting.addManualTransaction]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+  
+            <div class="touch-button" on-tap="buttonAddManualTransactionTapped">
+              <div class="type title uppercase">[[verses.accounting.addManualTransaction]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+  
+          </div>
+
+          <div class="layout horizontal">
+
+            <div class="touch-button" on-tap="buttonAddManualTransactionTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
+              <div class="type title uppercase">[[verses.accounting.addManualTransaction]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+  
+            <div class="touch-button" on-tap="buttonAddManualTransactionTapped">
+              <div class="type title uppercase">[[verses.accounting.addManualTransaction]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+  
+          </div>
+
         </div>
       </div>
 
@@ -86,8 +108,8 @@
 
       // region: ui  ===========================
 
-      createTapped(e = null) {
-        return this.app.navigateTo('/edit-account');
+      buttonAddManualTransactionTapped(e = null) {
+        return this.app.navigateTo('/add-transaction');
       }
 
       editTapped(e) {

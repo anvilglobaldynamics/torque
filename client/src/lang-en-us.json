@@ -1199,6 +1199,7 @@
     "addAccountPageTitle": "Add Account",
 
     "manageTransactionPageTitle": "Manage Transactions",
+    "addManualTransaction": "Add Manual Transaction",
 
     "noAccountFound": "No account found",
     "createNewAccount": "Create new account",
