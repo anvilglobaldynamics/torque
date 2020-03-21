@@ -405,7 +405,7 @@ describe('Organization', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateAdminListOrganizationModulesApiSuccessResponse(body);
-      expect(body.moduleActivationList.length).to.equal(2); // from default activation
+      expect(body.moduleActivationList.length).to.equal(3); // from default activation
       testDoneFn();
     });
 
@@ -439,7 +439,7 @@ describe('Organization', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateAdminListOrganizationModulesApiSuccessResponse(body);
-      expect(body.moduleActivationList.length).to.equal(2); // from default activation
+      expect(body.moduleActivationList.length).to.equal(3); // from default activation
       expect(body.moduleActivationList.filter(i => i.isDeactivated).length).to.equal(1);
       testDoneFn();
     });
@@ -474,7 +474,7 @@ describe('Organization', _ => {
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateAdminListOrganizationModulesApiSuccessResponse(body);
-      expect(body.moduleActivationList.length).to.equal(3); // 2 from default activation + 1 created above
+      expect(body.moduleActivationList.length).to.equal(4); // 3 from default activation + 1 created above
       expect(body.moduleActivationList.filter(i => i.isDeactivated).length).to.equal(1);
       testDoneFn();
     });
@@ -549,7 +549,7 @@ describe('Organization', _ => {
         });
 
         let organization = body.organizationList.find(organization => organization.id === org1id);
-        expect(organization.activeModuleCodeList.sort()).to.deep.equal(['MOD_PRODUCT', 'MOD_SERVICE', 'MOD_GYM'].sort());
+        expect(organization.activeModuleCodeList.sort()).to.deep.equal(['MOD_PRODUCT', 'MOD_SERVICE', 'MOD_GYM', "MOD_ACCOUNTING"].sort());
 
         testDoneFn();
       });

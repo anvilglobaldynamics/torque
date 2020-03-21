@@ -40,7 +40,7 @@ let cashAccount = null;
 let rentExpenseAccount = null;
 let interestIncomeAccount = null;
 
-describe.only('Accounting', _ => {
+describe('Accounting', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -263,7 +263,7 @@ describe.only('Accounting', _ => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body.transactionList.length).to.equal(1);
-      expect(body.transactionList[0].note).to.equal('UPDATE A transaction added from test.')
+      expect(body.transactionList[0].note).to.equal('UPDATE A transaction added from test.');
       testDoneFn();
     });
 
