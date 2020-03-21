@@ -159,7 +159,6 @@
         this.app.callGetTransactionListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          // TODO: Improve below line
           this.editingTransaction = response.transactionList[0];
           let { displayName, note, nature } = this.editingTransaction;
           this.editTransactionForm = { displayName, note, nature };

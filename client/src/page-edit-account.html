@@ -153,7 +153,6 @@
         this.app.callGetAccountListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          // TODO: Improve below line
           this.editingAccount = response.accountList[0];
           let { displayName, note, nature } = this.editingAccount;
           this.editAccountForm = { displayName, note, nature };

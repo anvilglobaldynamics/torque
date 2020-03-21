@@ -1216,7 +1216,6 @@
     "transactionAmountInput": "Amount",
     "transactionAmountInputError": "Enter valid amount",
 
-
     "natureOfAccount": "Nature of account",
     "natureOfTransaction": "Nature of transaction",
     "asset": "Asset",

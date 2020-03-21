@@ -38,7 +38,7 @@
               <paper-ripple></paper-ripple>
             </div>
   
-            <div class="touch-button" on-tap="buttonAddManualTransactionTapped">
+            <div class="touch-button" on-tap="buttonViewTransactionsTapped">
               <div class="type title uppercase">[[verses.accounting.addManualTransaction]]</div>
               <paper-ripple></paper-ripple>
             </div>
@@ -110,6 +110,10 @@
 
       buttonAddManualTransactionTapped(e = null) {
         return this.app.navigateTo('/edit-transaction/transaction-type:manual');
+      }
+
+      buttonViewTransactionsTapped(e = null) {
+        return this.app.navigateTo('/view-transactions/transaction-type:manual');
       }
 
       editTapped(e) {
