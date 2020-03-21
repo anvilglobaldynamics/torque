@@ -1213,13 +1213,19 @@
     "accountNameInputError": "Enter valid account name.", 
     "accountNoteInput": "Note",
     "accountNoteInputError": "Note is too long.",
+    "transactionAmountInput": "Amount",
+    "transactionAmountInputError": "Enter valid amount",
 
-    "nature": "Nature of account",
+
+    "natureOfAccount": "Nature of account",
+    "natureOfTransaction": "Nature of transaction",
     "asset": "Asset",
     "liability": "Liability",
     "equity": "Equity",
     "revenue": "Revenue",
     "expense": "Expense",
-    "ledger": "Ledger"
+    "ledger": "Ledger",
+    "income": "Income",
+    "manual": "Manual"
   }
 }

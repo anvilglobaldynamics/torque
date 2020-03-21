@@ -21,9 +21,7 @@
 
 <dom-module id="page-edit-account">
   <template>
-    <style include="shared-styles">
-
-    </style>
+    <style include="shared-styles"></style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -37,7 +35,7 @@
             <paper-textarea class="editAccountForm--note" value="{{editAccountForm.note}}" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
 
             <template is="dom-if" if="[[!editMode]]">
-              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.nature]]" class="mr-4">
+              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.natureOfAccount]]" class="mr-4">
                 <paper-listbox slot="dropdown-content" selected="{{editAccountForm.nature}}" attr-for-selected="name">
                   <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
                   <paper-item name="liability">[[verses.accounting.liability]]</paper-item>
@@ -53,6 +51,7 @@
               <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editAccountForm--submit" on-tap="createAccountTapped">[[verses.accounting.createNewAccount]]</paper-button>
               <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editAccountForm--submit" on-tap="updateAccountTapped">[[verses.accounting.updateOldAccount]]</paper-button>
             </div>
+
           </div>
         </form>
       </iron-form>

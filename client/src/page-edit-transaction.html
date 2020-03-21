@@ -31,20 +31,22 @@
         <form>
           <div class="card vertical layout">
 
-            <paper-input class="editTransactionForm--displayName" value="{{editTransactionForm.displayName}}" required minlength="3" error-message=[[verses.accounting.transactionNameInputError]] label=[[verses.accounting.transactionNameInput]]></paper-input>
-            <paper-textarea class="editTransactionForm--note" value="{{editTransactionForm.note}}" maxlength="64" error-message=[[verses.accounting.transactionNoteInputError]] label=[[verses.accounting.transactionNoteInput]] rows="4"></paper-textarea>
+            <paper-textarea class="editTransactionForm--note" value="{{editTransactionForm.note}}" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
+            <paper-input class="editTransactionForm--amount" step="0.01" value="{{editTransactionForm.amount}}" type="number" required min="0" error-message=[[verses.accounting.transactionAmountInputError]] label=[[verses.accounting.transactionAmountInput]]></paper-input>
 
             <template is="dom-if" if="[[!editMode]]">
-              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.nature]]" class="mr-4">
+              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.natureOfTransaction]]" class="mr-4">
                 <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.nature}}" attr-for-selected="name">
-                  <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
-                  <paper-item name="liability">[[verses.accounting.liability]]</paper-item>
-                  <paper-item name="equity">[[verses.accounting.equity]]</paper-item>
-                  <paper-item name="revenue">[[verses.accounting.revenue]]</paper-item>
+                  <paper-item name="income">[[verses.accounting.income]]</paper-item>
                   <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
+                  <!-- TODO: should below be here? -->
+                  <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
                 </paper-listbox>
               </paper-dropdown-menu>
             </template>
+
+            <!-- TODO: debit account select -->
+            <!-- TODO: credit account select -->
             
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -79,17 +81,15 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  displayName: 'Rent Expense Transaction',
-                  note: 'A random note',
-                  nature: 'expense',
-                  isMonetaryTransaction: false
+                  note: 'Electricity Bill',
+                  amount: 2000,
+                  nature: 'expense'
                 };
               } else {
                 return {
-                  displayName: '',
                   note: '',
-                  nature: '',
-                  isMonetaryTransaction: false
+                  amount: 0,
+                  nature: ''
                 };
               }
             }
@@ -170,7 +170,6 @@
       _processCreateTransaction({ displayName, note, nature }) {
         let data = {
           displayName, note, nature,
-          isMonetaryTransaction: false,
           organizationId: this.app.organization.id
         };
         this.app.callAddTransactionApi(data, (err, response) => {
