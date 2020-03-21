@@ -623,6 +623,31 @@
         this.callCombinedJsonApi('resend-sales-receipt', data, cbfn);
       }
 
+      callAddAccountApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-account', data, cbfn);
+      }
+
+      callEditAccountApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-account', data, cbfn);
+      }
+
+      callGetAccountListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-account-list', data, cbfn);
+      }
+
+      callAddTransactionApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-transaction', data, cbfn);
+      }
+
+      callGetTransactionListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-transaction-list', data, cbfn);
+      }
+
     }
 
   })();

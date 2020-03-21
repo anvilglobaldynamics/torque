@@ -1,0 +1,225 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-transaction">
+  <template>
+    <style include="shared-styles"></style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="editTransactionForm" on-keypress="genericFormSubmitionKeypress">
+        <form>
+          <div class="card vertical layout">
+
+            <paper-textarea class="editTransactionForm--note" value="{{editTransactionForm.note}}" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
+            <paper-input class="editTransactionForm--amount" step="0.01" value="{{editTransactionForm.amount}}" type="number" required min="0" error-message=[[verses.accounting.transactionAmountInputError]] label=[[verses.accounting.transactionAmountInput]]></paper-input>
+
+            <template is="dom-if" if="[[!editMode]]">
+              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.natureOfTransaction]]" class="mr-4">
+                <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.nature}}" attr-for-selected="name">
+                  <paper-item name="income">[[verses.accounting.income]]</paper-item>
+                  <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
+                  <!-- TODO: should below be here? -->
+                  <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
+                </paper-listbox>
+              </paper-dropdown-menu>
+            </template>
+
+            <!-- TODO: debit account select -->
+            <!-- TODO: credit account select -->
+            
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editTransactionForm--submit" on-tap="createTransactionTapped">[[verses.accounting.createNewTransaction]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editTransactionForm--submit" on-tap="updateTransactionTapped">[[verses.accounting.updateOldTransaction]]</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+    </div>
+  </template>
+
+  <script>
+    class PageEditTransaction extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-edit-transaction';
+      }
+
+      static get properties() {
+        return {
+          editMode: {
+            type: Boolean,
+            value: false
+          },
+          editingTransaction: {
+            type: Object,
+            value: null
+          },
+          editTransactionForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  note: 'Electricity Bill',
+                  amount: 2000,
+                  nature: 'expense'
+                };
+              } else {
+                return {
+                  note: '',
+                  amount: 0,
+                  nature: ''
+                };
+              }
+            }
+          }
+        };
+      }
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+
+        // TODO: how to handle both transaction-type and editMode?
+        if('transaction-type' in this.params) {
+          console.log("params:", this.params);
+        }
+
+        if ('transaction' in this.params) {
+          this.editMode = true;
+          this.app.pushPageTitle(this.app.verses.accounting.editTransactionPageTitle);
+        } else {
+          this.editMode = false;
+          this.app.pushPageTitle(this.app.verses.accounting.addTransactionPageTitle);
+        }
+
+        if (!this._ensureAccess()) return;
+        if (this.editMode) {
+          this._processGetTransaction(() => {
+            this.isReady = true;
+          });
+        } else {
+          this.delay(300, () => {
+            this.isReady = true;
+          });
+        }
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editTransactionForm');
+        this.removeAutoValidation('#editTransactionForm paper-input');
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MANAGE_ACCOUNTING']
+        });
+      }
+
+      // region: editTransaction =================================
+
+      _processGetTransaction(cbfn) {
+        let transactionId = parseInt(this.params.transaction);
+        let data = {
+          organizationId: this.app.organization.id,
+          filterByNature: 'all',
+          filterByIsMonetary: 'all',
+          transactionIdList: [transactionId]
+        };
+        this.app.callGetTransactionListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.editingTransaction = response.transactionList[0];
+          let { displayName, note, nature } = this.editingTransaction;
+          this.editTransactionForm = { displayName, note, nature };
+          cbfn();
+        });
+      }
+
+      _processCreateTransaction({ displayName, note, nature }) {
+        let data = {
+          displayName, note, nature,
+          organizationId: this.app.organization.id
+        };
+        this.app.callAddTransactionApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editTransactionForm');
+          let message = this.app.verses.accounting.transactionCreated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      _processUpdateTransaction({ displayName, note }) {
+        let data = {
+          displayName, note,
+          transactionId: this.editingTransaction.id
+        };
+        this.app.callEditTransactionApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editTransactionForm');
+          let message = this.app.verses.accounting.transactionUpdated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-transactions');
+      }
+
+      createTransactionTapped(e = null) {
+        this.elemAll('#editTransactionForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editTransactionForm').validate()) return;
+
+        let { displayName, note, nature } = this.editTransactionForm;
+        this._processCreateTransaction({ displayName, note, nature });
+      }
+
+      updateTransactionTapped(e = null) {
+        this.elemAll('#editTransactionForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editTransactionForm').validate()) return;
+
+        let { displayName, note } = this.editTransactionForm;
+        this._processUpdateTransaction({ displayName, note });
+      }
+    }
+
+    window.customElements.define(PageEditTransaction.is, PageEditTransaction);
+  </script>
+
+</dom-module>

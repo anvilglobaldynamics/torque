@@ -169,6 +169,9 @@
     "employees": "কর্মচারী",
     "outlets": "দোকান",
     "warehouses": "গুদাম",
+    "manageMonetaryAccounts": "আর্থিক হিসাব",
+    "manageAccounts": "হিসাব",
+    "manageTransactions": "লেনদেন পরিচালনা",
     "productBlueprints": "পণ্যের পরিকল্পনা",
     "serviceBlueprints": "সেবা পরিকল্পনা",
     "sales": "বিক্রয় রেকর্ড",
@@ -1190,5 +1193,27 @@
     "emailReceipt": "ই-মেইলে রিসিট পাঠান",
     "resendReceipt": "রিসিট",
     "resentSuccessfully": "রিসিট পাঠানো হয়েছে।"
+  },
+  "accounting": {
+    "manageAccountPageTitle": "Manage Accounts",
+    "editAccountPageTitle": "Edit Account",
+    "addAccountPageTitle": "Add Account",
+    "noAccountFound": "No account found",
+    "createNewAccount": "Create new account",
+    "updateOldAccount": "Update old account",
+    "accountCreated": "Account created successfully.",
+    "accountUpdated": "Account update successfully.",
+
+    "accountNameInput": "Account Name",
+    "accountNameInputError": "Enter valid account name.", 
+    "accountNoteInput": "Note",
+    "accountNoteInputError": "Note is too long.",
+
+    "nature": "Nature of account",
+    "asset": "Asset",
+    "liability": "Liability",
+    "equity": "Equity",
+    "revenue": "Revenue",
+    "expense": "Expense"
   }
 }
