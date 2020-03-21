@@ -40,7 +40,7 @@ let cashAccount = null;
 let rentExpenseAccount = null;
 let interestIncomeAccount = null;
 
-describe('Accounting', _ => {
+describe.only('Accounting', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -183,7 +183,7 @@ describe('Accounting', _ => {
         apiKey,
         organizationId,
 
-        transactionType: 'expense',
+        transactionOrigin: 'add-expense',
         transactionDatetimeStamp: Date.now(),
 
         debitedAccountId: rentExpenseAccount,

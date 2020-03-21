@@ -13,7 +13,7 @@ exports.AddTransactionApi = class extends Api {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
 
-      transactionType: Joi.string().valid('system', 'manual', 'income', 'expense').required(),
+      transactionOrigin: Joi.string().valid('system', 'manual', 'add-income', 'add-expense', 'add-asset-purchase').required(),
       transactionDatetimeStamp: Joi.number().max(999999999999999).required(),
 
       debitedAccountId: Joi.number().max(999999999999999).required(),
@@ -57,12 +57,12 @@ exports.AddTransactionApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { organizationId, note, amount, transactionDatetimeStamp, transactionType, debitedAccountId, creditedAccountId, action } = body;
+    let { organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitedAccountId, creditedAccountId, action } = body;
 
-    throwOnTruthy(transactionType === 'system', "TRANSACTION_TYPE_INVALID", "Transaction type 'system' can not be set from APIs");
+    throwOnTruthy(transactionOrigin === 'system', "TRANSACTION_ORIGIN_INVALID", "Transaction type 'system' can not be set from APIs");
 
     let transactionId = await this.database.transaction.create({
-      organizationId, note, amount, transactionDatetimeStamp, transactionType, debitedAccountId, creditedAccountId, action
+      organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitedAccountId, creditedAccountId, action
     })
 
     return { status: "success", transactionId };

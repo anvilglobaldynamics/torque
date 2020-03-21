@@ -59,7 +59,7 @@ exports.EditTransactionApi = class extends Api {
     // Make sure only manual entries can be edited
     let transaction = await this.database.transaction.findByIdAndOrganizationId({ organizationId, id:transactionId });
     throwOnFalsy(transaction, "TRANSACTION_INVALID", "The transaction could not be found");
-    throwOnTruthy(transaction.transactionType === 'system', 'TRANSACTION_NOT_EDITABLE', "System transactions can not be edited manually.");
+    throwOnTruthy(transaction.transactionOrigin === 'system', 'TRANSACTION_NOT_EDITABLE', "System transactions can not be edited manually.");
 
     await this._updateTransaction({ transactionId, transactionDatetimeStamp, amount, note, debitedAccountId, creditedAccountId });
     return { status: "success" };
