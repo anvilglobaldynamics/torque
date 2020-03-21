@@ -1197,6 +1197,9 @@
     "manageAccountPageTitle": "Manage Accounts",
     "editAccountPageTitle": "Edit Account",
     "addAccountPageTitle": "Add Account",
+
+    "manageTransactionPageTitle": "Manage Transactions",
+
     "noAccountFound": "No account found",
     "createNewAccount": "Create new account",
     "updateOldAccount": "Update old account",
