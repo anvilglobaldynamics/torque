@@ -1213,6 +1213,7 @@
     "liability": "Liability",
     "equity": "Equity",
     "revenue": "Revenue",
-    "expense": "Expense"
+    "expense": "Expense",
+    "ledger": "Ledger"
   }
 }

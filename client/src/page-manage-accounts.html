@@ -50,8 +50,10 @@
                   <div>[[account.nature]]</div>
 
                 </div>
+
                 <div class="horizontal layout wrap">
-                  <paper-button raised class="btn secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
+                  <paper-button raised class="btn pos" on-tap="posTapped">[[verses.accounting.ledger]]</paper-button>
+                  <paper-button raised class="btn secondary" on-tap="editTapped">[[verses.general.edit]]</paper-button>
                 </div>
               </div>
             </template>
@@ -165,9 +167,9 @@
         return this.app.navigateTo('/edit-account');
       }
 
-      viewTapped(e) {
+      editTapped(e) {
         let { account } = e.model;
-        return this.app.navigateTo(`/view-account/account:${account.id}`);
+        return this.app.navigateTo(`/edit-account/account:${account.id}`);
       }
 
       // region: misc =================================

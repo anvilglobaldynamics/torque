@@ -36,15 +36,17 @@
             <paper-input class="editAccountForm--displayName" value="{{editAccountForm.displayName}}" required minlength="3" error-message=[[verses.accounting.accountNameInputError]] label=[[verses.accounting.accountNameInput]]></paper-input>
             <paper-textarea class="editAccountForm--note" value="{{editAccountForm.note}}" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
 
-            <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.nature]]" class="mr-4">
-              <paper-listbox slot="dropdown-content" selected="{{editAccountForm.nature}}" attr-for-selected="name">
-                <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
-                <paper-item name="liability">[[verses.accounting.liability]]</paper-item>
-                <paper-item name="equity">[[verses.accounting.equity]]</paper-item>
-                <paper-item name="revenue">[[verses.accounting.revenue]]</paper-item>
-                <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
-              </paper-listbox>
-            </paper-dropdown-menu>
+            <template is="dom-if" if="[[!editMode]]">
+              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.nature]]" class="mr-4">
+                <paper-listbox slot="dropdown-content" selected="{{editAccountForm.nature}}" attr-for-selected="name">
+                  <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
+                  <paper-item name="liability">[[verses.accounting.liability]]</paper-item>
+                  <paper-item name="equity">[[verses.accounting.equity]]</paper-item>
+                  <paper-item name="revenue">[[verses.accounting.revenue]]</paper-item>
+                  <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
+                </paper-listbox>
+              </paper-dropdown-menu>
+            </template>
             
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -152,9 +154,10 @@
         this.app.callGetAccountListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          this.editingAccount = response.account;
-          let { displayName, note } = this.editingAccount;
-          this.editAccountForm = { displayName, note };
+          // TODO: Improve below line
+          this.editingAccount = response.accountList[0];
+          let { displayName, note, nature } = this.editingAccount;
+          this.editAccountForm = { displayName, note, nature };
           cbfn();
         });
       }
@@ -208,8 +211,8 @@
         this.elemAll('#editAccountForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editAccountForm').validate()) return;
 
-        let { displayName, note, nature } = this.editAccountForm;
-        this._processUpdateAccount({ displayName, note, nature });
+        let { displayName, note } = this.editAccountForm;
+        this._processUpdateAccount({ displayName, note });
       }
     }
 
