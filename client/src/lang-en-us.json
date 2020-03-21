@@ -1200,8 +1200,16 @@
     "addAccountPageTitle": "Add Account",
 
     "manageTransactionPageTitle": "Manage Transactions",
+    
     "viewManualTransaction": "View Manual Transactions",
     "addManualTransaction": "Add Manual Transaction",
+    "viewIncome": "View Income",
+    "addIncome": "Add Income",
+    "viewExpense": "View Expense",
+    "addExpense": "Add Expense",
+    "viewAssetPurchase": "View Asset Purchase",
+    "addAssetPurchase": "Add Asset Purchase",
+
     "addTransactionPageTitle": "Add Transaction",
     "editTransactionPageTitle": "Edit Transaction",
 
@@ -1232,6 +1240,8 @@
     "expense": "Expense",
     "ledger": "Ledger",
     "income": "Income",
-    "manual": "Manual"
+    "manual": "Manual",
+    "transaction": "Transaction",
+    "purchase": "Purchase"
   }
 }
