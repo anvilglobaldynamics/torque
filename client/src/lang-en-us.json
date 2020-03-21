@@ -1223,6 +1223,8 @@
     "updateOldTransaction": "Update Transaction",
 
     "natureOfAccount": "Nature of account",
+    "debitAccountNatureText": "Nature of Debit Account",
+    "creditAccountNatureText": "Nature of Credit Account",
     "asset": "Asset",
     "liability": "Liability",
     "equity": "Equity",

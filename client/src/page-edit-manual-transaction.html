@@ -37,15 +37,15 @@
             <template is="dom-if" if="[[!editMode]]">
               <div class="horizontal layout center">
                 <!-- nature of account dropdown - start -->
-                <!-- <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.natureOfAccount]]" class="mr-4">
-                  <paper-listbox slot="dropdown-content" selected="{{editAccountForm.nature}}" attr-for-selected="name">
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.debitAccountNatureText]]" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.debitAccountNature}}" attr-for-selected="name" on-iron-select="debitAccountNatureSelected">
                     <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
                     <paper-item name="liability">[[verses.accounting.liability]]</paper-item>
                     <paper-item name="equity">[[verses.accounting.equity]]</paper-item>
                     <paper-item name="revenue">[[verses.accounting.revenue]]</paper-item>
                     <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
                   </paper-listbox>
-                </paper-dropdown-menu> -->
+                </paper-dropdown-menu>
                 <!-- nature of account dropdown - end -->
 
                 <paper-dropdown-menu class="full-width-paper-dropdown" label="Debit Account" class="mr-4">
@@ -60,15 +60,15 @@
 
               <div class="horizontal layout center">
                 <!-- nature of account dropdown - start -->
-                <!-- <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.natureOfAccount]]" class="mr-4">
-                  <paper-listbox slot="dropdown-content" selected="{{editAccountForm.nature}}" attr-for-selected="name">
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.creditAccountNatureText]]" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.creditAccountNature}}" attr-for-selected="name" on-iron-select="creditAccountNatureSelected">
                     <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
                     <paper-item name="liability">[[verses.accounting.liability]]</paper-item>
                     <paper-item name="equity">[[verses.accounting.equity]]</paper-item>
                     <paper-item name="revenue">[[verses.accounting.revenue]]</paper-item>
                     <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
                   </paper-listbox>
-                </paper-dropdown-menu> -->
+                </paper-dropdown-menu>
                 <!-- nature of account dropdown - end -->
 
                 <paper-dropdown-menu class="full-width-paper-dropdown" label="Credit Account" class="mr-4">
@@ -203,6 +203,24 @@
           this.creditAccountList = newAccountList;
           cbfn();
         });
+      }
+
+      debitAccountNatureSelected() {
+        window.setTimeout(() => {
+          console.log(this.editTransactionForm.debitAccountNature)
+          let debitAccountList = this.accountList.filter(account => account.nature === this.editTransactionForm.debitAccountNature);
+          this.set('debitAccountList', debitAccountList);
+          this.set('editTransactionForm.debitedAccountId', -1);
+        }, 100);
+      }
+
+      creditAccountNatureSelected() {
+        window.setTimeout(() => {
+          console.log(this.editTransactionForm.creditAccountNature)
+          let creditAccountList = this.accountList.filter(account => account.nature === this.editTransactionForm.creditAccountNature);
+          this.set('creditAccountList', creditAccountList);
+          this.set('editTransactionForm.creditedAccountId', -1);
+        }, 100);
       }
 
       _processGetTransaction(cbfn) {
