@@ -56,13 +56,13 @@ exports.AddTransactionApi = class extends Api {
     }];
   }
 
-  async handle({ body }) {
+  async handle({ body, userId }) {
     let { organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitedAccountId, creditedAccountId, action } = body;
 
     throwOnTruthy(transactionOrigin === 'system', "TRANSACTION_ORIGIN_INVALID", "Transaction type 'system' can not be set from APIs");
 
     let transactionId = await this.database.transaction.create({
-      organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitedAccountId, creditedAccountId, action
+      createdByUserId: userId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitedAccountId, creditedAccountId, action
     })
 
     return { status: "success", transactionId };

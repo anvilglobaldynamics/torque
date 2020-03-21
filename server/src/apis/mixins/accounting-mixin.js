@@ -6,7 +6,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
 
   // nature: Joi.string().valid('asset', 'liability', 'equity', 'revenue', 'expense').required(),
 
-  async createDefaultAccounts({ organizationId }) {
+  async createDefaultAccounts({ organizationId, userId }) {
 
     const defaultAccountList = [
       // Assets (Monetary)
@@ -88,7 +88,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     ];
 
     for (let i = 0; i < defaultAccountList.length; i++) {
-      let account = { isDefaultAccount: true, organizationId };
+      let account = { isDefaultAccount: true, organizationId, createdByUserId: userId };
       Object.assign(account, defaultAccountList[i]);
       let accountId = await this.database.account.create(account);
     }

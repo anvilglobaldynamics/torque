@@ -33,7 +33,7 @@ exports.AddAccountApi = class extends Api {
     }];
   }
 
-  async handle({ body }) {
+  async handle({ body, userId }) {
     let { organizationId, displayName, nature, isMonetaryAccount, note } = body;
 
     // Create a custom codeName, like CUSTOM_41
@@ -42,6 +42,7 @@ exports.AddAccountApi = class extends Api {
 
     // Add to database
     let accountId = await this.database.account.create({
+      createdByUserId: userId,
       displayName, nature, isMonetaryAccount, note, organizationId,
       codeName,
       isDefaultAccount: false,

@@ -10,6 +10,7 @@ exports.TransactionCollection = class extends Collection {
     return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+      createdByUserId: Joi.number().max(999999999999999).required(),
 
       transactionDatetimeStamp: Joi.number().max(999999999999999).required(),
       note: Joi.string().allow('').max(64).required(),
@@ -43,9 +44,9 @@ exports.TransactionCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ transactionDatetimeStamp, note, organizationId, amount, transactionOrigin, debitedAccountId, creditedAccountId, action }) {
+  async create({ createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitedAccountId, creditedAccountId, action }) {
     return await this._insert({
-      transactionDatetimeStamp, note, organizationId, amount, transactionOrigin, debitedAccountId, creditedAccountId, action,
+      createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitedAccountId, creditedAccountId, action,
       isDeleted: false
     });
   }
