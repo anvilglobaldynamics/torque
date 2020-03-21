@@ -42,12 +42,12 @@
 
           <div class="layout horizontal">
 
-            <div class="touch-button" on-tap="buttonAddManualTransactionTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
+            <div class="touch-button" on-tap="buttonAddIncomeTransactionTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
               <div class="type title uppercase">[[verses.accounting.addIncome]]</div>
               <paper-ripple></paper-ripple>
             </div>
 
-            <div class="touch-button" on-tap="buttonViewManualTransactionsTapped">
+            <div class="touch-button" on-tap="buttonViewIncomeTransactionsTapped">
               <div class="type title uppercase">[[verses.accounting.viewIncome]]</div>
               <paper-ripple></paper-ripple>
             </div>
@@ -65,12 +65,12 @@
 
           <div class="layout horizontal">
 
-            <div class="touch-button" on-tap="buttonAddManualTransactionTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
+            <div class="touch-button" on-tap="buttonAddExpenseTransactionTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
               <div class="type title uppercase">[[verses.accounting.addExpense]]</div>
               <paper-ripple></paper-ripple>
             </div>
 
-            <div class="touch-button" on-tap="buttonViewManualTransactionsTapped">
+            <div class="touch-button" on-tap="buttonViewExpenseTransactionsTapped">
               <div class="type title uppercase">[[verses.accounting.viewExpense]]</div>
               <paper-ripple></paper-ripple>
             </div>
@@ -88,12 +88,12 @@
 
           <div class="layout horizontal">
 
-            <div class="touch-button" on-tap="buttonAddManualTransactionTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
+            <div class="touch-button" on-tap="buttonAddAssetTransactionTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
               <div class="type title uppercase">[[verses.accounting.addAssetPurchase]]</div>
               <paper-ripple></paper-ripple>
             </div>
 
-            <div class="touch-button" on-tap="buttonViewManualTransactionsTapped">
+            <div class="touch-button" on-tap="buttonViewAssetTransactionsTapped">
               <div class="type title uppercase">[[verses.accounting.viewAssetPurchase]]</div>
               <paper-ripple></paper-ripple>
             </div>
@@ -172,17 +172,36 @@
 
       // region: ui  ===========================
 
+      buttonAddIncomeTransactionTapped(e = null) {
+        return this.app.navigateTo('/edit-usual-transaction/transaction-type:income');
+      }
+
+      buttonViewIncomeTransactionsTapped(e = null) {
+        return this.app.navigateTo('/view-transactions/transaction-origin:income');
+      }
+
+      buttonAddExpenseTransactionTapped(e = null) {
+        return this.app.navigateTo('/edit-usual-transaction/transaction-type:expense');
+      }
+
+      buttonViewExpenseTransactionsTapped(e = null) {
+        return this.app.navigateTo('/view-transactions/transaction-origin:expense');
+      }
+
+      buttonAddAssetTransactionTapped(e = null) {
+        return this.app.navigateTo('/edit-usual-transaction/transaction-type:asset');
+      }
+
+      buttonViewAssetTransactionsTapped(e = null) {
+        return this.app.navigateTo('/view-transactions/transaction-origin:asset');
+      }
+
       buttonAddManualTransactionTapped(e = null) {
         return this.app.navigateTo('/edit-manual-transaction/transaction-type:manual');
       }
 
       buttonViewManualTransactionsTapped(e = null) {
         return this.app.navigateTo('/view-transactions/transaction-origin:manual');
-      }
-
-      editTapped(e) {
-        let { account } = e.model;
-        return this.app.navigateTo(`/edit-account/account:${account.id}`);
       }
 
       // region: misc =================================
