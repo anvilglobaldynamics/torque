@@ -13,16 +13,39 @@ exports.AddTransactionApi = class extends Api {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
 
-      note: Joi.string().allow('').max(64).required(),
+      transactionType: Joi.string().valid('system', 'manual', 'income', 'expense').required(),
+      transactionDatetimeStamp: Joi.number().max(999999999999999).required(),
+
+      debitedAccountId: Joi.number().max(999999999999999).required(),
+      creditedAccountId: Joi.number().max(999999999999999).required(),
       amount: Joi.number().max(999999999999999).required(),
-      transactionType: Joi.string().valid('system', 'manual', 'income', 'expense').required()
+
+      note: Joi.string().allow('').max(64).required(),
+
+      action: Joi.object().keys({
+        name: Joi.string().min(1).max(32).required(),
+        collectionName: Joi.string().min(1).max(32).required(),
+        documentId: Joi.number().max(999999999999999).required()
+      }).allow(null).required()
     });
   }
 
   get accessControl() {
     return [{
-      // TODO: how to validate debitedAccountId and creditedAccountId?
-      organizationBy: "organizationId",
+      organizationBy: [
+        {
+          from: "account",
+          query: ({ debitedAccountId }) => ({ id: debitedAccountId }),
+          select: "organizationId",
+          errorCode: "DEBITED_BY_ACCOUNT_INVALID"
+        },
+        {
+          from: "account",
+          query: ({ creditedAccountId }) => ({ id: creditedAccountId }),
+          select: "organizationId",
+          errorCode: "CREDITED_BY_ACCOUNT_INVALID"
+        }
+      ],
       privilegeList: [
         "PRIV_MANAGE_ACCOUNTING"
       ],
@@ -34,8 +57,14 @@ exports.AddTransactionApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { organizationId, note, amount, transactionType } = body;
-    let transactionId = 0;
+    let { organizationId, note, amount, transactionDatetimeStamp, transactionType, debitedAccountId, creditedAccountId, action } = body;
+
+    throwOnTruthy(transactionType === 'system', "TRANSACTION_TYPE_INVALID", "Transaction type 'system' can not be set from APIs");
+
+    let transactionId = await this.database.transaction.create({
+      organizationId, note, amount, transactionDatetimeStamp, transactionType, debitedAccountId, creditedAccountId, action
+    })
+
     return { status: "success", transactionId };
   }
 

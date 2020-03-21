@@ -3,8 +3,9 @@ const { Api } = require('./../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
+const { AccountingMixin } = require('./mixins/accounting-mixin');
 
-exports.GetTransactionListApi = class extends Api {
+exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
 
   get autoValidates() { return true; }
 
@@ -15,16 +16,17 @@ exports.GetTransactionListApi = class extends Api {
   get requestSchema() {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
+
       fromDate: Joi.number().max(999999999999999).required(),
       toDate: Joi.number().max(999999999999999).required(),
-      transactionTypeList: Joi.array().items(Joi.string()).default([]).optional(),
-      accountIdList: Joi.array().items(Joi.number()).default([]).optional()
+
+      preset: Joi.string().valid('all-exepnses', 'all-revenues', 'all-payables', 'all-receivables', 'query').required(),
+      accountIdList: Joi.array().items(Joi.number()).default([]).required() // it is overriden by 'preset` unless 'preset' === 'query'
     });
   }
 
   get accessControl() {
     return [{
-      // TODO: how to validate accountIdList?
       organizationBy: "organizationId",
       privilegeList: [
         "PRIV_MANAGE_ACCOUNTING"
@@ -37,8 +39,31 @@ exports.GetTransactionListApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { organizationId, fromDate, toDate, transactionTypeList, accountIdList } = body;
-    let transactionList = [];
+    let { organizationId, fromDate, toDate, preset, accountIdList } = body;
+
+    // validate accountIdList
+    if (preset === 'query' && accountIdList.length > 0) {
+      await this.validateAccountIdList({ organizationId, accountIdList });
+    }
+
+    // apply presets (override accountIdList if provided)
+    if (preset === 'all-receivables') {
+      let account = await this.getAccountByCodeName({ organizationId, codeName: "ACCOUNTS_RECEIVABLE" });
+      accountIdList = [account.id];
+    } else if (preset === 'all-payables') {
+      let account = await this.getAccountByCodeName({ organizationId, codeName: "ACCOUNTS_PAYABLE" });
+      accountIdList = [account.id];
+    } else if (preset === 'all-exepnses') {
+      let accountList = await this.database.account._find({ nature: 'expense' });
+      accountIdList = accountList.map(account => account.id);
+    } else if (preset === 'all-revenues') {
+      let accountList = await this.database.account._find({ nature: 'revenue' });
+      accountIdList = accountList.map(account => account.id);
+    }
+
+    // list all transactions
+    let transactionList = await this.database.transaction.listByFilters({ organizationId, accountIdList, fromDate, toDate });
+
     return { transactionList };
   }
 

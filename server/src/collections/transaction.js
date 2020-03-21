@@ -71,4 +71,31 @@ exports.TransactionCollection = class extends Collection {
     return await this._find(query);
   }
 
+  async listByFilters({ organizationId, accountIdList, fromDate, toDate }) {
+
+    let query = { $and: [] };
+
+    query.$and.push({
+      organizationId
+    });
+
+    if (accountIdList.length > 0) {
+      query.$and.push({
+        debitedAccountId: { $in: accountIdList }
+      });
+      query.$and.push({
+        creditedAccountId: { $in: accountIdList }
+      });
+    }
+
+    query.$and.push({
+      createdDatetimeStamp: {
+        $gte: fromDate,
+        $lte: toDate
+      }
+    });
+
+    return await this._find(query);
+  }
+
 }

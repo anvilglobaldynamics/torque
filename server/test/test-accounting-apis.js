@@ -36,6 +36,10 @@ let organizationId = null;
 let accountToBeEdited = null;
 let transactionToBeEdited = null;
 
+let cashAccount = null;
+let rentExpenseAccount = null;
+let interestIncomeAccount = null;
+
 describe.only('Accounting', _ => {
 
   it('START', testDoneFn => {
@@ -64,21 +68,21 @@ describe.only('Accounting', _ => {
 
   // Account tests - start
 
-  it('api/add-account (Valid, Bank)', testDoneFn => {
+  it('api/add-account (Valid, Interest Income)', testDoneFn => {
 
     callApi('api/add-account', {
       json: {
         apiKey,
         organizationId,
-        displayName: "DBDL Bank Account",
-        nature: 'asset',
-        isMonetaryAccount: true,
+        displayName: "Interest Income",
+        nature: 'revenue',
+        isMonetaryAccount: false,
         note: "My Primary Account",
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      interestIncomeAccount = body.accountId;
       testDoneFn();
     })
 
@@ -96,31 +100,36 @@ describe.only('Accounting', _ => {
         note: "",
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      rentExpenseAccount = body.accountId;
       testDoneFn();
     })
 
   });
 
-  it('api/get-account-list (Valid onlyMonetaryAccounts)', testDoneFn => {
+  it('api/get-account-list (Valid)', testDoneFn => {
 
     callApi('api/get-account-list', {
       json: {
         apiKey,
         organizationId,
         filterByNature: 'all',
-        filterByIsMonetary: 'only-monetary',
+        filterByIsMonetary: 'all',
         accountIdList: []
       }
     }, (err, response, body) => {
-      console.log(body)
+
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
-      expect(body.accountList.length).to.equal(1);
 
-      accountToBeEdited = body.accountList[0];
+      body.accountList.forEach(account => {
+        if (account.codeName === 'CASH') {
+          cashAccount = account.id;
+        }
+      });
+
+      expect(cashAccount).to.not.equal(null);
       testDoneFn();
     });
 
@@ -131,9 +140,9 @@ describe.only('Accounting', _ => {
     callApi('api/edit-account', {
       json: {
         apiKey,
-        accountId: accountToBeEdited.id,
-        displayName: "DBDL Bank Account UPDATED",
-        note: "A note holding some detail."
+        accountId: rentExpenseAccount,
+        displayName: "Rent Account UPDATED",
+        note: "Paid Rents"
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -152,13 +161,13 @@ describe.only('Accounting', _ => {
         organizationId,
         filterByNature: 'all',
         filterByIsMonetary: 'all',
-        accountIdList: [accountToBeEdited.id]
+        accountIdList: [rentExpenseAccount]
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
       expect(body.accountList.length).to.equal(1);
-      expect(body.accountList[0].displayName).to.equal('DBDL Bank Account UPDATED');
+      expect(body.accountList[0].displayName).to.equal('Rent Account UPDATED');
       testDoneFn();
     });
 
@@ -173,13 +182,22 @@ describe.only('Accounting', _ => {
       json: {
         apiKey,
         organizationId,
-        note: "A transaction added from test.",
-        amount: 1000,
-        transactionType: "system"
+
+        transactionType: 'expense',
+        transactionDatetimeStamp: Date.now(),
+
+        debitedAccountId: rentExpenseAccount,
+        creditedAccountId: cashAccount,
+        amount: 5000,
+
+        note: "Paid Rent with Cash",
+
+        action: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
+      transactionToBeEdited = body.transactionId;
       testDoneFn();
     })
 
@@ -191,29 +209,32 @@ describe.only('Accounting', _ => {
       json: {
         apiKey,
         organizationId,
-        fromDate,
+
+        fromDate: (new Date()).getTime() - 24 * 60 * 60 * 1000,
         toDate: (new Date()).getTime(),
-        transactionTypeList: [],
+
+        preset: 'query',
         accountIdList: []
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       expect(body).to.have.property('hasError').that.equals(false);
-
-      transactionToBeEdited = body.transactionList[0];
+      expect(body.transactionList.length).to.equal(1);
       testDoneFn();
     });
 
   });
 
-  it.skip('api/edit-transaction (Valid)', testDoneFn => {
+  it('api/edit-transaction (Valid)', testDoneFn => {
 
     callApi('api/edit-transaction', {
       json: {
         apiKey,
-        transactionId: 1,
-        // transactionToBeEdited.id
+        transactionId: transactionToBeEdited,
         note: "UPDATE A transaction added from test.",
+        transactionDatetimeStamp: Date.now(),
+        debitedAccountId: rentExpenseAccount,
+        creditedAccountId: cashAccount,
         amount: 1000
       }
     }, (err, response, body) => {
@@ -222,6 +243,29 @@ describe.only('Accounting', _ => {
       validateGenericApiSuccessResponse(body);
       testDoneFn();
     })
+
+  });
+
+  it('api/get-transaction-list (Valid, modification check)', testDoneFn => {
+
+    callApi('api/get-transaction-list', {
+      json: {
+        apiKey,
+        organizationId,
+
+        fromDate: (new Date()).getTime() - 24 * 60 * 60 * 1000,
+        toDate: (new Date()).getTime(),
+
+        preset: 'query',
+        accountIdList: []
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      expect(body.transactionList.length).to.equal(1);
+      expect(body.transactionList[0].note).to.equal('UPDATE A transaction added from test.')
+      testDoneFn();
+    });
 
   });
 
