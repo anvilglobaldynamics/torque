@@ -35,19 +35,12 @@
             <paper-input class="editTransactionForm--amount" step="0.01" value="{{editTransactionForm.amount}}" type="number" required min="0" error-message=[[verses.accounting.transactionAmountInputError]] label=[[verses.accounting.transactionAmountInput]]></paper-input>
 
             <template is="dom-if" if="[[!editMode]]">
-              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.natureOfTransaction]]" class="mr-4">
-                <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.nature}}" attr-for-selected="name">
-                  <paper-item name="income">[[verses.accounting.income]]</paper-item>
-                  <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
-                  <!-- TODO: should below be here? -->
-                  <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
-                </paper-listbox>
-              </paper-dropdown-menu>
+              <!-- TODO: Hide non-editables in edit mode -->
             </template>
 
             <!-- TODO: debit account select -->
             <!-- TODO: credit account select -->
-            
+
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editTransactionForm--submit" on-tap="createTransactionTapped">[[verses.accounting.createNewTransaction]]</paper-button>
@@ -81,15 +74,13 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  note: 'Electricity Bill',
+                  note: 'Electricity Bill for March',
                   amount: 2000,
-                  nature: 'expense'
                 };
               } else {
                 return {
                   note: '',
                   amount: 0,
-                  nature: ''
                 };
               }
             }
@@ -108,7 +99,7 @@
         this.useLanguageServices();
 
         // TODO: how to handle both transaction-type and editMode?
-        if('transaction-type' in this.params) {
+        if ('transaction-type' in this.params) {
           console.log("params:", this.params);
         }
 
@@ -160,15 +151,15 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.editingTransaction = response.transactionList[0];
-          let { displayName, note, nature } = this.editingTransaction;
-          this.editTransactionForm = { displayName, note, nature };
+          let { note } = this.editingTransaction;
+          this.editTransactionForm = { note };
           cbfn();
         });
       }
 
-      _processCreateTransaction({ displayName, note, nature }) {
+      _processCreateTransaction({ note }) {
         let data = {
-          displayName, note, nature,
+          note,
           organizationId: this.app.organization.id
         };
         this.app.callAddTransactionApi(data, (err, response) => {
@@ -181,9 +172,9 @@
         });
       }
 
-      _processUpdateTransaction({ displayName, note }) {
+      _processUpdateTransaction({ note }) {
         let data = {
-          displayName, note,
+          note,
           transactionId: this.editingTransaction.id
         };
         this.app.callEditTransactionApi(data, (err, response) => {
@@ -206,16 +197,16 @@
         this.elemAll('#editTransactionForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editTransactionForm').validate()) return;
 
-        let { displayName, note, nature } = this.editTransactionForm;
-        this._processCreateTransaction({ displayName, note, nature });
+        let { note } = this.editTransactionForm;
+        this._processCreateTransaction({ note });
       }
 
       updateTransactionTapped(e = null) {
         this.elemAll('#editTransactionForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editTransactionForm').validate()) return;
 
-        let { displayName, note } = this.editTransactionForm;
-        this._processUpdateTransaction({ displayName, note });
+        let { note } = this.editTransactionForm;
+        this._processUpdateTransaction({ note });
       }
     }
 
