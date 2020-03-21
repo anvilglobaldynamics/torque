@@ -9,7 +9,22 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
   async createDefaultAccounts({ organizationId }) {
 
     const defaultAccountList = [
-      // Assets
+      // Assets (Monetary)
+      {
+        nature: 'asset',
+        codeName: "CASH",
+        displayName: "Cash",
+        isMonetaryAccount: true,
+        note: "Default Cash Account for all purposes"
+      },      
+      {
+        nature: 'asset',
+        codeName: "BANK",
+        displayName: "Bank",
+        isMonetaryAccount: true,
+        note: "Default Bank Account"
+      },      
+      // Assets (Non-Monetary)
       {
         nature: 'asset',
         codeName: "INVENTORY",
