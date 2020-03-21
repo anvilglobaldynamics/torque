@@ -35,6 +35,7 @@
             <paper-textarea class="editAccountForm--note" value="{{editAccountForm.note}}" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
 
             <template is="dom-if" if="[[!editMode]]">
+              <!-- nature of account dropdown - start -->
               <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.natureOfAccount]]" class="mr-4">
                 <paper-listbox slot="dropdown-content" selected="{{editAccountForm.nature}}" attr-for-selected="name">
                   <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
@@ -44,6 +45,7 @@
                   <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
                 </paper-listbox>
               </paper-dropdown-menu>
+              <!-- nature of account dropdown - end -->
             </template>
             
             <div class="horizontal layout button-row end">

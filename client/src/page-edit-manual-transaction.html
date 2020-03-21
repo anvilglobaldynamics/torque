@@ -31,15 +31,57 @@
         <form>
           <div class="card vertical layout">
 
-            <paper-textarea class="editTransactionForm--note" value="{{editTransactionForm.note}}" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
+            <paper-input type="date" class="editTransactionForm--date" value="{{editTransactionForm.transactionDate}}" label="{{verses.accounting.transactionDate}}"></paper-input>
             <paper-input class="editTransactionForm--amount" step="0.01" value="{{editTransactionForm.amount}}" type="number" required min="0" error-message=[[verses.accounting.transactionAmountInputError]] label=[[verses.accounting.transactionAmountInput]]></paper-input>
 
             <template is="dom-if" if="[[!editMode]]">
-              <!-- TODO: Hide non-editables in edit mode -->
+              <div class="horizontal layout center">
+                <!-- nature of account dropdown - start -->
+                <!-- <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.natureOfAccount]]" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{editAccountForm.nature}}" attr-for-selected="name">
+                    <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
+                    <paper-item name="liability">[[verses.accounting.liability]]</paper-item>
+                    <paper-item name="equity">[[verses.accounting.equity]]</paper-item>
+                    <paper-item name="revenue">[[verses.accounting.revenue]]</paper-item>
+                    <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
+                  </paper-listbox>
+                </paper-dropdown-menu> -->
+                <!-- nature of account dropdown - end -->
+
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="Debit Account" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.debitedAccountId}}" attr-for-selected="key">
+                    <template is="dom-repeat" items="[[debitAccountList]]" as="account">
+                      <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
+                    </template>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+              </div>
+
+
+              <div class="horizontal layout center">
+                <!-- nature of account dropdown - start -->
+                <!-- <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.natureOfAccount]]" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{editAccountForm.nature}}" attr-for-selected="name">
+                    <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
+                    <paper-item name="liability">[[verses.accounting.liability]]</paper-item>
+                    <paper-item name="equity">[[verses.accounting.equity]]</paper-item>
+                    <paper-item name="revenue">[[verses.accounting.revenue]]</paper-item>
+                    <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
+                  </paper-listbox>
+                </paper-dropdown-menu> -->
+                <!-- nature of account dropdown - end -->
+
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="Credit Account" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.creditedAccountId}}" attr-for-selected="key">
+                    <template is="dom-repeat" items="[[creditAccountList]]" as="account">
+                      <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
+                    </template>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+              </div>
             </template>
 
-            <!-- TODO: debit account select -->
-            <!-- TODO: credit account select -->
+            <paper-textarea class="editTransactionForm--note" value="{{editTransactionForm.note}}" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -98,29 +140,30 @@
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
 
-        // TODO: how to handle both transaction-type and editMode?
-        if ('transaction-type' in this.params) {
-          console.log("params:", this.params);
-        }
+        this._processAccountList(() => {
 
-        if ('transaction' in this.params) {
-          this.editMode = true;
-          this.app.pushPageTitle(this.app.verses.accounting.editTransactionPageTitle);
-        } else {
-          this.editMode = false;
-          this.app.pushPageTitle(this.app.verses.accounting.addTransactionPageTitle);
-        }
+          if ('transaction' in this.params) {
+            this.editMode = true;
+            this.app.pushPageTitle(this.app.verses.accounting.editTransactionPageTitle);
+          } else {
+            this.editMode = false;
+            this.app.pushPageTitle(this.app.verses.accounting.addTransactionPageTitle);
 
-        if (!this._ensureAccess()) return;
-        if (this.editMode) {
-          this._processGetTransaction(() => {
-            this.isReady = true;
-          });
-        } else {
-          this.delay(300, () => {
-            this.isReady = true;
-          });
-        }
+            this.set('editTransactionForm.transactionDate', this.$mkDate(Date.now(), 'yyyy-MM-dd'));
+          }
+
+          if (!this._ensureAccess()) return;
+          if (this.editMode) {
+            this._processGetTransaction(() => {
+              this.isReady = true;
+            });
+          } else {
+            this.delay(300, () => {
+              this.isReady = true;
+            });
+          }
+
+        });
       }
 
       onNavigateOut() {
@@ -138,6 +181,29 @@
       }
 
       // region: editTransaction =================================
+
+      _fetchAccountList(cbfn) {
+        let data = {
+          organizationId: this.app.organization.id,
+          filterByIsMonetary: 'all',
+          filterByNature: 'all',
+          accountIdList: [],
+        };
+        this.app.callGetAccountListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.accountList);
+        });
+      }
+
+      _processAccountList(cbfn) {
+        this._fetchAccountList(newAccountList => {
+          this.accountList = newAccountList;
+          this.debitAccountList = newAccountList;
+          this.creditAccountList = newAccountList;
+          cbfn();
+        });
+      }
 
       _processGetTransaction(cbfn) {
         let transactionId = parseInt(this.params.transaction);
@@ -157,9 +223,11 @@
         });
       }
 
-      _processCreateTransaction({ note }) {
+      _processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp, }) {
         let data = {
-          note,
+          note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp,
+          transactionOrigin: 'manual',
+          action: null,
           organizationId: this.app.organization.id
         };
         this.app.callAddTransactionApi(data, (err, response) => {
@@ -197,8 +265,9 @@
         this.elemAll('#editTransactionForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editTransactionForm').validate()) return;
 
-        let { note } = this.editTransactionForm;
-        this._processCreateTransaction({ note });
+        let { note, creditedAccountId, debitedAccountId, amount, transactionDate } = this.editTransactionForm;
+        let transactionDatetimeStamp = (new Date(transactionDate)).getTime();
+        this._processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp });
       }
 
       updateTransactionTapped(e = null) {

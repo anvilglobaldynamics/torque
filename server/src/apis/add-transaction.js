@@ -59,6 +59,8 @@ exports.AddTransactionApi = class extends Api {
   async handle({ body, userId }) {
     let { organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitedAccountId, creditedAccountId, action } = body;
 
+    throwOnTruthy(debitedAccountId === creditedAccountId, "TRANSACTION_INVALID", "Cannot do a transaction between same account");
+
     throwOnTruthy(transactionOrigin === 'system', "TRANSACTION_ORIGIN_INVALID", "Transaction type 'system' can not be set from APIs");
 
     let transactionId = await this.database.transaction.create({

@@ -1217,6 +1217,10 @@
     "accountNoteInputError": "Note is too long.",
     "transactionAmountInput": "Amount",
     "transactionAmountInputError": "Enter valid amount",
+    "transactionDate": "Transaction Date",
+
+    "createNewTransaction": "Create Transaction",
+    "updateOldTransaction": "Update Transaction",
 
     "natureOfAccount": "Nature of account",
     "asset": "Asset",
