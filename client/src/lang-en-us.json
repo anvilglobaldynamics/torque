@@ -1200,6 +1200,7 @@
     "addAccountPageTitle": "Add Account",
 
     "manageTransactionPageTitle": "Manage Transactions",
+    "viewManualTransaction": "View Manual Transactions",
     "addManualTransaction": "Add Manual Transaction",
     "addTransactionPageTitle": "Add Transaction",
     "editTransactionPageTitle": "Edit Transaction",

@@ -19,7 +19,7 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="page-edit-transaction">
+<dom-module id="page-edit-manual-transaction">
   <template>
     <style include="shared-styles"></style>
 
@@ -54,9 +54,9 @@
   </template>
 
   <script>
-    class PageEditTransaction extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+    class PageEditManualTransaction extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
-        return 'page-edit-transaction';
+        return 'page-edit-manual-transaction';
       }
 
       static get properties() {
@@ -210,7 +210,7 @@
       }
     }
 
-    window.customElements.define(PageEditTransaction.is, PageEditTransaction);
+    window.customElements.define(PageEditManualTransaction.is, PageEditManualTransaction);
   </script>
 
 </dom-module>
