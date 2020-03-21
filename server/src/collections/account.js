@@ -10,6 +10,7 @@ exports.AccountCollection = class extends Collection {
     return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+      createdByUserId: Joi.number().max(999999999999999).required(),
 
       codeName: Joi.string().min(1).max(32).required(),
       displayName: Joi.string().min(1).max(32).required(),
@@ -44,9 +45,9 @@ exports.AccountCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ codeName, displayName, nature, isMonetaryAccount, note, isDefaultAccount, organizationId }) {
+  async create({ createdByUserId, codeName, displayName, nature, isMonetaryAccount, note, isDefaultAccount, organizationId }) {
     return await this._insert({
-      codeName, displayName, nature, isMonetaryAccount, note, isDefaultAccount, organizationId,
+      createdByUserId, codeName, displayName, nature, isMonetaryAccount, note, isDefaultAccount, organizationId,
       isDeleted: false
     });
   }

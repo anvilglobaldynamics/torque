@@ -38,6 +38,7 @@ exports.AdminSetupAccountingModuleApi = class extends Api.mixin(OrganizationMixi
     this.ensureUpdate('organization', result);
     // - end
 
+    // TODO: org owner id should be passed as userId
     await this.createDefaultAccounts({ organizationId });
 
     await this._remotelyTerminateSessionOfUsersInOrganization({ organizationId });

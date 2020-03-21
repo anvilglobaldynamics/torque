@@ -37,7 +37,7 @@ exports.AddOrganizationApi = class extends Api.mixin(OrganizationMixin, Accounti
     await this._setTrialPackage({ organizationId });
     await this._addModuleActivation({ organizationId, activeModuleCodeList });
 
-    await this.createDefaultAccounts({ organizationId });
+    await this.createDefaultAccounts({ organizationId, userId });
 
     return { status: "success", organizationId, employmentId };
   }
