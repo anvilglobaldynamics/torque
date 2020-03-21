@@ -1200,6 +1200,8 @@
 
     "manageTransactionPageTitle": "Manage Transactions",
     "addManualTransaction": "Add Manual Transaction",
+    "addTransactionPageTitle": "Add Transaction",
+    "editTransactionPageTitle": "Edit Transaction",
 
     "noAccountFound": "No account found",
     "createNewAccount": "Create new account",
