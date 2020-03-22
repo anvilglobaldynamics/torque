@@ -34,18 +34,20 @@
             <paper-input class="editAccountForm--displayName" value="{{editAccountForm.displayName}}" required minlength="3" error-message=[[verses.accounting.accountNameInputError]] label=[[verses.accounting.accountNameInput]]></paper-input>
             <paper-textarea class="editAccountForm--note" value="{{editAccountForm.note}}" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
 
-            <template is="dom-if" if="[[!editMode]]">
-              <!-- nature of account dropdown - start -->
-              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.natureOfAccount]]" class="mr-4">
-                <paper-listbox slot="dropdown-content" selected="{{editAccountForm.nature}}" attr-for-selected="name">
-                  <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
-                  <paper-item name="liability">[[verses.accounting.liability]]</paper-item>
-                  <paper-item name="equity">[[verses.accounting.equity]]</paper-item>
-                  <paper-item name="revenue">[[verses.accounting.revenue]]</paper-item>
-                  <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
-                </paper-listbox>
-              </paper-dropdown-menu>
-              <!-- nature of account dropdown - end -->
+            <template is="dom-if" if="[[!isMonetaryAccount]]">
+              <template is="dom-if" if="[[!editMode]]">
+                <!-- nature of account dropdown - start -->
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.natureOfAccount]]" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{editAccountForm.nature}}" attr-for-selected="name">
+                    <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
+                    <paper-item name="liability">[[verses.accounting.liability]]</paper-item>
+                    <paper-item name="equity">[[verses.accounting.equity]]</paper-item>
+                    <paper-item name="revenue">[[verses.accounting.revenue]]</paper-item>
+                    <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+                <!-- nature of account dropdown - end -->
+              </template>
             </template>
             
             <div class="horizontal layout button-row end">
@@ -84,15 +86,13 @@
                 return {
                   displayName: 'Rent Expense Account',
                   note: 'A random note',
-                  nature: 'expense',
-                  isMonetaryAccount: false
+                  nature: 'expense'
                 };
               } else {
                 return {
                   displayName: '',
                   note: '',
-                  nature: '',
-                  isMonetaryAccount: false
+                  nature: ''
                 };
               }
             }
@@ -109,6 +109,11 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
+
+        if ('is-monetary-account' in this.params) {
+          this.isMonetaryAccount = this.params['is-monetary-account'];
+        }
+
         if ('account' in this.params) {
           this.editMode = true;
           this.app.pushPageTitle(this.app.verses.accounting.editAccountPageTitle);
@@ -116,6 +121,7 @@
           this.editMode = false;
           this.app.pushPageTitle(this.app.verses.accounting.addAccountPageTitle);
         }
+
         if (!this._ensureAccess()) return;
         if (this.editMode) {
           this._processGetAccount(() => {
@@ -163,9 +169,13 @@
       }
 
       _processCreateAccount({ displayName, note, nature }) {
+        if (this.isMonetaryAccount) {
+          nature = 'asset';
+        }
+
         let data = {
           displayName, note, nature,
-          isMonetaryAccount: false,
+          isMonetaryAccount: this.isMonetaryAccount,
           organizationId: this.app.organization.id
         };
         this.app.callAddAccountApi(data, (err, response) => {

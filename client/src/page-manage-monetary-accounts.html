@@ -165,13 +165,13 @@
 
       // TODO: check below method
       createTapped(e = null) {
-        return this.app.navigateTo('/edit-account');
+        return this.app.navigateTo(`/edit-account/is-monetary-account:${true}`);
       }
 
       // TODO: check below method
       editTapped(e) {
         let { account } = e.model;
-        return this.app.navigateTo(`/edit-account/account:${account.id}`);
+        return this.app.navigateTo(`/edit-account/account:${account.id}/is-monetary-account:${true}`);
       }
 
       viewLedgerTapped(e) {

@@ -164,12 +164,12 @@
       // region: ui  ===========================
 
       createTapped(e = null) {
-        return this.app.navigateTo('/edit-account');
+        return this.app.navigateTo(`/edit-account/is-monetary-account:${false}`);
       }
 
       editTapped(e) {
         let { account } = e.model;
-        return this.app.navigateTo(`/edit-account/account:${account.id}`);
+        return this.app.navigateTo(`/edit-account/account:${account.id}/is-monetary-account:${false}`);
       }
 
       viewLedgerTapped(e) {
