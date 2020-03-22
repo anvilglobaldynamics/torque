@@ -509,6 +509,14 @@
         return false;
       }
 
+      // ====================== Accounting Module =============================
+
+      $getAccount(accountId) {
+        console.log('this.fullA', this.fullAccountList, accountId)
+        let account = this.fullAccountList.find((account) => account.id === accountId)
+        return account ? account.displayName : '';
+      }
+
     }
 
   })();

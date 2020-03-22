@@ -303,13 +303,9 @@
 
       _processAccountList(cbfn) {
         this._fetchAccountList(newAccountList => {
-          this.accountList = newAccountList;
+          this.fullAccountList = newAccountList;
           cbfn();
         });
-      }
-
-      $getAccount(accountId) {
-        return this.accountList.find((account) => account.id === accountId).displayName;
       }
 
       _fetchTransactionList(cbfn) {
@@ -337,7 +333,7 @@
       _processTransactionList(cbfn) {
         this._fetchTransactionList(newTransactionList => {
 
-          newTransactionList.sort((a,b)=>a.transactionDatetimeStamp - b.transactionDatetimeStamp)
+          newTransactionList.sort((a, b) => a.transactionDatetimeStamp - b.transactionDatetimeStamp);
 
           this.transactionList = newTransactionList;
           cbfn();
@@ -348,7 +344,11 @@
 
       editTransactionTapped(e) {
         let { transaction } = e.model;
-        return this.app.navigateTo(`/edit-manual-transaction/transaction:${transaction.id}`);
+        if (transaction.transactionOrigin === 'manual') {
+          return this.app.navigateTo(`/edit-manual-transaction/transaction:${transaction.id}`);
+        } else {
+          return this.app.navigateTo(`/edit-usual-transaction/transaction:${transaction.id}/transaction-origin:${transaction.transactionOrigin}`);
+        }
       }
 
       filterTapped(e = null) {
