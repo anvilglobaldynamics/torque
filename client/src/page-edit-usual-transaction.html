@@ -51,9 +51,7 @@
                 </paper-listbox>
               </paper-dropdown-menu>
 
-              <paper-checkbox 
-                class="editTransactionForm--monetaryTransactionOccurred" 
-                checked="{{editTransactionForm.monetaryTransactionOccurred}}">
+              <paper-checkbox class="editTransactionForm--hasMonetaryTransactionOccurred" checked="{{editTransactionForm.hasMonetaryTransactionOccurred}}">
                 <template is="dom-if" if="[[$equals(transactionOrigin, 'add-income')]]">
                   [[verses.accounting.moneyCollected]]
                 </template>
@@ -64,8 +62,8 @@
                   [[verses.accounting.moneyPaid]]
                 </template>
               </paper-checkbox>
-              
-              <template is="dom-if" if="[[editTransactionForm.monetaryTransactionOccurred]]">
+
+              <template is="dom-if" if="[[editTransactionForm.hasMonetaryTransactionOccurred]]">
                 <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.monetaryAccount]]" class="mr-4">
                   <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.monetaryAccountId}}" attr-for-selected="key">
                     <template is="dom-repeat" items="[[monetaryAccountList]]" as="account">
@@ -74,7 +72,7 @@
                   </paper-listbox>
                 </paper-dropdown-menu>
               </template>
-            
+
             </template>
 
             <paper-textarea class="editTransactionForm--note" value="{{editTransactionForm.note}}" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
@@ -117,7 +115,7 @@
                   transactionDate: '',
                   usualAccountId: null,
                   monetaryAccountId: null,
-                  monetaryTransactionOccurred: false
+                  hasMonetaryTransactionOccurred: false
                 };
               } else {
                 return {
@@ -126,7 +124,7 @@
                   transactionDate: '',
                   usualAccountId: null,
                   monetaryAccountId: null,
-                  monetaryTransactionOccurred: false
+                  hasMonetaryTransactionOccurred: false
                 };
               }
             }
@@ -218,8 +216,13 @@
             nature = 'asset';
           }
 
-          this.accountList = newAccountList.filter(account => account.nature === nature);
+          this.accountList = newAccountList.filter(account => !account.isMonetaryAccount && account.nature === nature);
           this.monetaryAccountList = newAccountList.filter(account => account.isMonetaryAccount);
+
+          // select payable and receivable account 
+          this.accountsPayableId = newAccountList.find(account => account.codeName === 'ACCOUNTS_PAYABLE').id;
+          this.accountsReceivableId = newAccountList.find(account => account.codeName === 'ACCOUNTS_RECEIVABLE').id;
+
           cbfn();
         });
       }
@@ -243,18 +246,17 @@
         });
       }
 
-      // TODO: _processCreateTransaction
-      _processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp, }) {
+      _processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp }) {
         let data = {
           note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp,
-          transactionOrigin: 'manual',
+          transactionOrigin: this.transactionOrigin,
           action: null,
           organizationId: this.app.organization.id
         };
         this.app.callAddTransactionApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editTransactionForm');
-          let message = this.app.verses.accounting.transactionCreated;
+          let message = this.app.verses.accounting.transactionSaved;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
@@ -270,7 +272,7 @@
         this.app.callEditTransactionApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editTransactionForm');
-          let message = this.app.verses.accounting.transactionUpdated;
+          let message = this.app.verses.accounting.transactionSaved;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
@@ -287,9 +289,30 @@
         this.elemAll('#editTransactionForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editTransactionForm').validate()) return;
 
-        // TODO: update below
-        let { note, creditedAccountId, debitedAccountId, amount, transactionDate } = this.editTransactionForm;
+        let { note, amount, transactionDate, hasMonetaryTransactionOccurred, usualAccountId, monetaryAccountId } = this.editTransactionForm;
         let transactionDatetimeStamp = (new Date(transactionDate)).getTime();
+
+        let creditedAccountId = null;
+        let debitedAccountId = null;
+
+        if (this.transactionOrigin === 'add-income') {
+          // because income is always credited when increased
+          creditedAccountId = usualAccountId;
+          if (hasMonetaryTransactionOccurred) {
+            debitedAccountId = monetaryAccountId;
+          } else {
+            debitedAccountId = this.accountsReceivableId;
+          }
+        } else {
+          // because expense and assets are always debited when increased
+          debitedAccountId = usualAccountId;
+          if (hasMonetaryTransactionOccurred) {
+            creditedAccountId = monetaryAccountId;
+          } else {
+            creditedAccountId = this.accountsPayableId;
+          }
+        }
+
         this._processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp });
       }
 
@@ -306,5 +329,3 @@
     window.customElements.define(PageEditUsualTransaction.is, PageEditUsualTransaction);
   </script>
 </dom-module>
-
-

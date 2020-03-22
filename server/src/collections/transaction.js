@@ -90,7 +90,7 @@ exports.TransactionCollection = class extends Collection {
     }
 
     query.$and.push({
-      createdDatetimeStamp: {
+      transactionDatetimeStamp: {
         $gte: fromDate,
         $lte: toDate
       }

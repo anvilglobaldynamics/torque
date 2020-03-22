@@ -1257,6 +1257,8 @@
     "moneyPaid": "Money Paid",
     "transactions": "Transactions",
     
-    "transactionListTitle": "Transactions"
+    "transactionListTitle": "Transactions",
+
+    "transactionSaved": "Transaction Saved!"
   }
 }
