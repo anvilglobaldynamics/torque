@@ -71,7 +71,6 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
       let accountList = await this.database.account._find({ organizationId, nature: 'asset', isMonetaryAccount: false });
       accountIdList = accountList.map(account => account.id);
     }
-    console.log({ accountIdList })
 
     // list all transactions
     let transactionList = await this.database.transaction.listByFilters({ organizationId, accountIdList, fromDate, toDate, preset });
