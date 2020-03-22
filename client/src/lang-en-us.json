@@ -1227,12 +1227,16 @@
     "transactionAmountInputError": "Enter valid amount",
     "transactionDate": "Transaction Date",
 
+    "debitAccount": "Debit Account",
+    "creditAccount": "Credit Account",
+    "monetaryAccount": "Monetary Account",
     "createNewTransaction": "Create Transaction",
     "updateOldTransaction": "Update Transaction",
 
     "natureOfAccount": "Nature of account",
     "debitAccountNatureText": "Nature of Debit Account",
     "creditAccountNatureText": "Nature of Credit Account",
+    "account": "Account",
     "asset": "Asset",
     "liability": "Liability",
     "equity": "Equity",

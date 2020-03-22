@@ -48,7 +48,7 @@
                 </paper-dropdown-menu>
                 <!-- nature of account dropdown - end -->
 
-                <paper-dropdown-menu class="full-width-paper-dropdown" label="Debit Account" class="mr-4">
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.debitAccount]]" class="mr-4">
                   <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.debitedAccountId}}" attr-for-selected="key">
                     <template is="dom-repeat" items="[[debitAccountList]]" as="account">
                       <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
@@ -71,7 +71,7 @@
                 </paper-dropdown-menu>
                 <!-- nature of account dropdown - end -->
 
-                <paper-dropdown-menu class="full-width-paper-dropdown" label="Credit Account" class="mr-4">
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.creditAccount]]" class="mr-4">
                   <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.creditedAccountId}}" attr-for-selected="key">
                     <template is="dom-repeat" items="[[creditAccountList]]" as="account">
                       <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>

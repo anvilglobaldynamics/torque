@@ -26,8 +26,45 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
-      page-edit-usual-transaction
-      <!-- Content here -->
+
+      <iron-form id="editTransactionForm" on-keypress="genericFormSubmitionKeypress">
+        <form>
+          <div class="card vertical layout">
+
+            <paper-input type="date" class="editTransactionForm--date" value="{{editTransactionForm.transactionDate}}" label="{{verses.accounting.transactionDate}}"></paper-input>
+            <paper-input class="editTransactionForm--amount" step="0.01" value="{{editTransactionForm.amount}}" type="number" required min="0" error-message=[[verses.accounting.transactionAmountInputError]] label=[[verses.accounting.transactionAmountInput]]></paper-input>
+
+            <template is="dom-if" if="[[!editMode]]">
+
+              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.account]]" class="mr-4">
+                <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.usualAccountId}}" attr-for-selected="key">
+                  <template is="dom-repeat" items="[[accountList]]" as="account">
+                    <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
+                  </template>
+                </paper-listbox>
+              </paper-dropdown-menu>
+              
+              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.monetaryAccount]]" class="mr-4">
+                <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.monetaryAccountId}}" attr-for-selected="key">
+                  <template is="dom-repeat" items="[[monetaryAccountList]]" as="account">
+                    <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
+                  </template>
+                </paper-listbox>
+              </paper-dropdown-menu>
+            
+            </template>
+
+            <paper-textarea class="editTransactionForm--note" value="{{editTransactionForm.note}}" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
+
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editTransactionForm--submit" on-tap="createTransactionTapped">[[verses.accounting.createNewTransaction]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editTransactionForm--submit" on-tap="updateTransactionTapped">[[verses.accounting.updateOldTransaction]]</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
     </div>
   </template>
 
@@ -54,13 +91,17 @@
                 return {
                   note: 'Electricity Bill for March',
                   amount: 2000,
-                  transactionDate: ''
+                  transactionDate: '',
+                  usualAccountId: 1,
+                  monetaryAccountId: 1
                 };
               } else {
                 return {
                   note: '',
                   amount: 0,
-                  transactionDate: ''
+                  transactionDate: '',
+                  usualAccountId: null,
+                  monetaryAccountId: null
                 };
               }
             }
