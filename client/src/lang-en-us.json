@@ -1246,7 +1246,9 @@
     "income": "Income",
     "manual": "Manual",
     "transaction": "Transaction",
+    "transactions": "Transactions",
     "purchase": "Purchase",
+
 
     "transactionListTitle": "Transactions"
   }

@@ -75,18 +75,6 @@
         margin-bottom: 4px;
       }
 
-      .ul {
-        height: 1px;
-        border-bottom: 1px dotted rgb(131, 131, 131);
-        margin-bottom: 3px;
-      }
-
-      .product-service-list-ol {
-        padding-left: 26px;
-        margin-top: 2px;
-        margin-bottom: 2px;
-      }
-
       /*  */
 
       .transaction-list-table-container {
@@ -192,6 +180,7 @@
                     <div>[[transaction.amount]]</div>
                   </td>
                   <td class="cell cell-right" align="center">
+                    <paper-icon-button icon="create" on-tap="editTransactionTapped"></paper-icon-button>
                   </td>
                 </tr>
               </template>
@@ -199,8 +188,8 @@
               <!-- total - start -->
               <tr>
                 <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
-                <td class="cell cell-bottom" align="center">
-                  {{computeTotalProductCount(productSalesSummaryList)}} Transactions
+                <td class="cell cell-bottom " colspan="3" align="center">
+                  {{transactionList.length}} [[verses.accounting.transactions]]
                 </td>
               </tr>
               <!-- total - end -->
@@ -294,7 +283,7 @@
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
-          privilegeList: ['PRIV_VIEW_SALES', 'PRIV_VIEW_REPORTS']
+          privilegeList: ['PRIV_MANAGE_ACCOUNTING']
         });
       }
 
@@ -333,6 +322,8 @@
           preset: 'query',
           accountIdList: [],
 
+          transactionId: null,
+
           fromDate,
           toDate
         };
@@ -352,10 +343,10 @@
 
       // region: ui  ===========================
 
-      // viewTapped(e) {
-      //   let { sale } = e.model;
-      //   return this.app.navigateTo(`/view-sales/sales:${sale.id}`);
-      // }
+      editTransactionTapped(e) {
+        let { transaction } = e.model;
+        return this.app.navigateTo(`/edit-manual-transaction/transaction:${transaction.id}`);
+      }
 
       filterTapped(e = null) {
         this.isReady = false;
