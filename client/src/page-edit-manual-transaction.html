@@ -149,7 +149,6 @@
           } else {
             this.editMode = false;
             this.app.pushPageTitle(this.app.verses.accounting.addManualTransactionPageTitle);
-
             this.set('editTransactionForm.transactionDate', this.$mkDate(Date.now(), 'yyyy-MM-dd'));
           }
 
@@ -226,21 +225,26 @@
         let transactionId = parseInt(this.params.transaction);
         let data = {
           organizationId: this.app.organization.id,
-          filterByNature: 'all',
-          filterByIsMonetary: 'all',
-          transactionIdList: [transactionId]
+
+          fromDate: null,
+          toDate: null,
+          preset: 'single',
+          accountIdList: [],
+
+          transactionId,
         };
         this.app.callGetTransactionListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.editingTransaction = response.transactionList[0];
-          let { note } = this.editingTransaction;
-          this.editTransactionForm = { note };
+          let { note, amount, transactionDatetimeStamp , creditedAccountId, debitedAccountId} = this.editingTransaction;
+          let transactionDate = this.$mkDate(new Date(transactionDatetimeStamp), 'yyyy-MM-dd');
+          this.editTransactionForm = { note, amount, transactionDate, creditedAccountId, debitedAccountId };
           cbfn();
         });
       }
 
-      _processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp, }) {
+      _processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp }) {
         let data = {
           note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp,
           transactionOrigin: 'manual',
@@ -257,9 +261,9 @@
         });
       }
 
-      _processUpdateTransaction({ note }) {
+      _processUpdateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp }) {
         let data = {
-          note,
+          note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp,
           transactionId: this.editingTransaction.id
         };
         this.app.callEditTransactionApi(data, (err, response) => {
@@ -291,8 +295,9 @@
         this.elemAll('#editTransactionForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editTransactionForm').validate()) return;
 
-        let { note } = this.editTransactionForm;
-        this._processUpdateTransaction({ note });
+        let { note, creditedAccountId, debitedAccountId, amount, transactionDate } = this.editTransactionForm;
+        let transactionDatetimeStamp = (new Date(transactionDate)).getTime();
+        this._processUpdateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp });
       }
     }
 

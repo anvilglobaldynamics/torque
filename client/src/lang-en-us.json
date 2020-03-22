@@ -1239,7 +1239,12 @@
     "natureOfAccount": "Nature of account",
     "debitAccountNatureText": "Nature of Debit Account",
     "creditAccountNatureText": "Nature of Credit Account",
+
     "account": "Account",
+
+    "debitAccount": "Debited Account",
+    "creditAccount": "Credited Account",
+
     "asset": "Asset",
     "liability": "Liability",
     "equity": "Equity",
@@ -1252,5 +1257,10 @@
     "purchase": "Purchase",
     "moneyCollected": "Money Collected",
     "moneyPaid": "Money Paid"
+    "transactions": "Transactions",
+    
+    "purchase": "Purchase",
+
+    "transactionListTitle": "Transactions"
   }
 }

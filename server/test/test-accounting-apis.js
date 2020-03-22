@@ -214,7 +214,9 @@ describe.only('Accounting', _ => {
         toDate: (new Date()).getTime(),
 
         preset: 'query',
-        accountIdList: []
+        accountIdList: [],
+
+        transactionId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
@@ -257,7 +259,9 @@ describe.only('Accounting', _ => {
         toDate: (new Date()).getTime(),
 
         preset: 'query',
-        accountIdList: []
+        accountIdList: [],
+
+        transactionId: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
