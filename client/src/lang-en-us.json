@@ -1230,8 +1230,6 @@
     "addEditExpenseTransactionPageTitle": "Expense Transaction",
     "addEditAssetPurchasePageTitle": "Asset Purchase",
 
-    "debitAccount": "Debit Account",
-    "creditAccount": "Credit Account",
     "monetaryAccount": "Monetary Account",
     "createNewTransaction": "Create Transaction",
     "updateOldTransaction": "Update Transaction",
@@ -1256,11 +1254,9 @@
     "transaction": "Transaction",
     "purchase": "Purchase",
     "moneyCollected": "Money Collected",
-    "moneyPaid": "Money Paid"
+    "moneyPaid": "Money Paid",
     "transactions": "Transactions",
     
-    "purchase": "Purchase",
-
     "transactionListTitle": "Transactions"
   }
 }
