@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="horizontal layout wrap">
-                  <paper-button raised class="btn pos" on-tap="posTapped">[[verses.accounting.ledger]]</paper-button>
+                  <paper-button raised class="btn pos" on-tap="viewLedgerTapped">[[verses.accounting.ledger]]</paper-button>
                   <paper-button raised class="btn secondary" on-tap="editTapped">[[verses.general.edit]]</paper-button>
                 </div>
               </div>
@@ -172,6 +172,11 @@
       editTapped(e) {
         let { account } = e.model;
         return this.app.navigateTo(`/edit-account/account:${account.id}`);
+      }
+
+      viewLedgerTapped(e) {
+        let { account } = e.model;
+        return this.app.navigateTo(`/view-account-ledger/account:${account.id}`);
       }
 
       // region: misc =================================
