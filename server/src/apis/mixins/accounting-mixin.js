@@ -41,7 +41,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       },    
       // Liabilities
       {
-        nature: 'asset',
+        nature: 'liability',
         codeName: "ACCOUNTS_PAYABLE",
         displayName: "Accounts Payable",
         isMonetaryAccount: false,
