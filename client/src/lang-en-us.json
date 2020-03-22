@@ -1233,6 +1233,10 @@
     "natureOfAccount": "Nature of account",
     "debitAccountNatureText": "Nature of Debit Account",
     "creditAccountNatureText": "Nature of Credit Account",
+
+    "debitAccount": "Debited Account",
+    "creditAccount": "Credited Account",
+
     "asset": "Asset",
     "liability": "Liability",
     "equity": "Equity",
@@ -1242,6 +1246,8 @@
     "income": "Income",
     "manual": "Manual",
     "transaction": "Transaction",
-    "purchase": "Purchase"
+    "purchase": "Purchase",
+
+    "transactionListTitle": "Transactions"
   }
 }
