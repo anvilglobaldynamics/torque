@@ -17,11 +17,13 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
 
-      fromDate: Joi.number().max(999999999999999).required(),
-      toDate: Joi.number().max(999999999999999).required(),
+      fromDate: Joi.number().max(999999999999999).allow(null).required(),
+      toDate: Joi.number().max(999999999999999).allow(null).required(),
 
-      preset: Joi.string().valid('all-exepnses', 'all-revenues', 'all-payables', 'all-receivables', 'query').required(),
-      accountIdList: Joi.array().items(Joi.number()).default([]).required() // it is overriden by 'preset` unless 'preset' === 'query'
+      preset: Joi.string().valid('all-exepnses', 'all-revenues', 'all-payables', 'all-receivables', 'query', 'single').required(),
+      accountIdList: Joi.array().items(Joi.number()).default([]).required(), // it is overriden by 'preset` unless 'preset' === 'query'
+
+      transactionId: Joi.number().allow(null).required()
     });
   }
 
@@ -39,7 +41,13 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
   }
 
   async handle({ body }) {
-    let { organizationId, fromDate, toDate, preset, accountIdList } = body;
+    let { organizationId, fromDate, toDate, preset, accountIdList, transactionId } = body;
+
+    // if preset is single, return only the transaction
+    if (preset === 'single') {
+      let transaction = await this.database.transaction.findByIdAndOrganizationId({ id: transactionId, organizationId });
+      return { transactionList: [transaction] };
+    }
 
     // validate accountIdList
     if (preset === 'query' && accountIdList.length > 0) {
