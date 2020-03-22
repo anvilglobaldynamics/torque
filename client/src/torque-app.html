@@ -121,6 +121,7 @@
 <link rel="lazy-import" href="page-edit-product-category.html">
 
 <link rel="lazy-import" href="page-manage-transactions.html">
+<link rel="lazy-import" href="page-manage-monetary-accounts.html">
 <link rel="lazy-import" href="page-manage-accounts.html">
 <link rel="lazy-import" href="page-edit-account.html">
 <link rel="lazy-import" href="page-edit-manual-transaction.html">
@@ -480,7 +481,7 @@
 
                 <!-- Accounting section - start -->
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_ACCOUNTING')]]">
-                  <a name="manage-monetary-accounts" href="#/manage-accounts/type:monetary">[[verses.sidebar.manageMonetaryAccounts]]</a>
+                  <a name="manage-monetary-accounts" href="#/manage-monetary-accounts">[[verses.sidebar.manageMonetaryAccounts]]</a>
                   <a name="manage-accounts" href="#/manage-accounts">[[verses.sidebar.manageAccounts]]</a>
                   <a name="manage-transactions" href="#/manage-transactions">[[verses.sidebar.manageTransactions]]</a>
                   <hr class="custom-sidebar-divider">
@@ -613,6 +614,7 @@
               <page-graph-sales name="graph-sales"></page-graph-sales>
 
               <page-manage-transactions name="manage-transactions"></page-manage-transactions>
+              <page-manage-monetary-accounts name="manage-monetary-accounts"></page-manage-monetary-accounts>
               <page-manage-accounts name="manage-accounts"></page-manage-accounts>
               <page-edit-account name="edit-account"></page-edit-account>
               <page-edit-manual-transaction name="edit-manual-transaction"></page-edit-manual-transaction>
