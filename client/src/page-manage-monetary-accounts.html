@@ -1,0 +1,186 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-manage-monetary-accounts">
+  <template>
+    <style include="shared-styles"></style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <template is="dom-if" if="{{!accountList.length}}">
+        <div class="card">
+          [[verses.accounting.noAccountFound]]
+        </div>
+      </template>
+
+      <template is="dom-if" if="{{accountList.length}}">
+        <div class="card vertical layout">
+
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          </template>
+
+          <div class="list">
+            <template is="dom-repeat" items="[[accountList]]" as="account">
+              <div class="horizontal layout item center">
+                <div class="vertical layout flex">
+
+                  <div class="place-name-container">[[account.displayName]]</div>
+                  <div>[[account.nature]]</div>
+
+                </div>
+
+                <div class="horizontal layout wrap">
+                  <paper-button raised class="btn pos" on-tap="posTapped">[[verses.accounting.ledger]]</paper-button>
+                  <paper-button raised class="btn secondary" on-tap="editTapped">[[verses.general.edit]]</paper-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div class="pagination">
+            [[verses.general.showing]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          </template>
+
+        </div>
+      </template>
+
+      <div class="lone-controls">
+        <paper-button raised class="btn primary" on-tap="createTapped">
+          <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
+          [[verses.accounting.createNewAccount]]
+        </paper-button>
+      </div>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageManageMonetaryAccounts extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-manage-monetary-accounts';
+      }
+
+      static get properties() {
+        return {};
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.accounting.manageMonetaryAccountPageTitle);
+        if (!this._ensureAccess()) return;
+        this.onOrganizationChange(this.app.organization);
+        this._processAccountList(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MANAGE_ACCOUNTING']
+        });
+      }
+
+      _fetchAccountList(cbfn) {
+        let data = { 
+          organizationId: this.app.organization.id, 
+          filterByIsMonetary: 'only-monetary',
+          filterByNature: 'all',
+          accountIdList: [],
+          paginate: this.paginate 
+        };
+        this.app.callGetAccountListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.accountList);
+        });
+      }
+
+      _processAccountList(cbfn) {
+        this._fetchAccountList(newAccountList => {
+          this.accountList = newAccountList;
+          cbfn();
+        });
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processAccountList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processAccountList(() => this.isReady = true);
+      }
+
+      // region: ui  ===========================
+
+      // TODO: check below method
+      createTapped(e = null) {
+        return this.app.navigateTo('/edit-account');
+      }
+
+      // TODO: check below method
+      editTapped(e) {
+        let { account } = e.model;
+        return this.app.navigateTo(`/edit-account/account:${account.id}`);
+      }
+
+      // region: misc =================================
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
+    }
+
+    window.customElements.define(PageManageMonetaryAccounts.is, PageManageMonetaryAccounts);
+  </script>
+</dom-module>

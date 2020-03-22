@@ -1196,6 +1196,7 @@
   },
   "accounting": {
     "manageAccountPageTitle": "Manage Accounts",
+    "manageMonetaryAccountPageTitle": "Monetary Accounts",
     "editAccountPageTitle": "Edit Account",
     "addAccountPageTitle": "Add Account",
 
