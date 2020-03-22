@@ -20,7 +20,7 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
       fromDate: Joi.number().max(999999999999999).allow(null).required(),
       toDate: Joi.number().max(999999999999999).allow(null).required(),
 
-      preset: Joi.string().valid('all-exepnses', 'all-revenues', 'all-payables', 'all-receivables', 'query', 'single').required(),
+      preset: Joi.string().valid('all-expenses', 'all-revenues', 'all-assets', 'all-payables', 'all-receivables', 'query', 'single', 'only-manual').required(),
       accountIdList: Joi.array().items(Joi.number()).default([]).required(), // it is overriden by 'preset` unless 'preset' === 'query'
 
       transactionId: Joi.number().allow(null).required()
@@ -61,16 +61,20 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
     } else if (preset === 'all-payables') {
       let account = await this.getAccountByCodeName({ organizationId, codeName: "ACCOUNTS_PAYABLE" });
       accountIdList = [account.id];
-    } else if (preset === 'all-exepnses') {
-      let accountList = await this.database.account._find({ nature: 'expense' });
+    } else if (preset === 'all-expenses') {
+      let accountList = await this.database.account._find({ organizationId, nature: 'expense' });
       accountIdList = accountList.map(account => account.id);
     } else if (preset === 'all-revenues') {
-      let accountList = await this.database.account._find({ nature: 'revenue' });
+      let accountList = await this.database.account._find({ organizationId, nature: 'revenue' });
+      accountIdList = accountList.map(account => account.id);
+    } else if (preset === 'all-assets') {
+      let accountList = await this.database.account._find({ organizationId, nature: 'asset', isMonetaryAccount: false });
       accountIdList = accountList.map(account => account.id);
     }
+    console.log({ accountIdList })
 
     // list all transactions
-    let transactionList = await this.database.transaction.listByFilters({ organizationId, accountIdList, fromDate, toDate });
+    let transactionList = await this.database.transaction.listByFilters({ organizationId, accountIdList, fromDate, toDate, preset });
 
     return { transactionList };
   }

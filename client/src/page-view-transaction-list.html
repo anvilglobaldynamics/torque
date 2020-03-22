@@ -139,7 +139,13 @@
 
       <div class="report">
         <div class="header vertical layout">
-          <div class="name">[[verses.accounting.transactionListTitle]]</div>
+          <div class="name">
+            <template is="dom-if" if="[[$equals(preset, 'all-expenses')]]">[[verses.accounting.expense]]</template>
+            <template is="dom-if" if="[[$equals(preset, 'all-revenues')]]">[[verses.accounting.income]]</template>
+            <template is="dom-if" if="[[$equals(preset, 'all-assets')]]">[[verses.accounting.asset]]</template>
+            <template is="dom-if" if="[[$equals(preset, 'only-manual')]]">[[verses.accounting.manual]]</template>
+            [[verses.accounting.transactionListTitle]]
+          </div>
           <div class="date"> [[$mkDate(fromDate, 'dd MMM yyyy')]] [[verses.general.from]] [[$mkDate(toDate, 'dd MMM yyyy')]]</div>
         </div>
         <div class="body">
@@ -256,16 +262,16 @@
 
       onNavigateIn() {
         this.app.shouldShowSaveButton = false;
-        this.app.currentPageIsModal = false;
+        this.app.currentPageIsModal = true;
         this.app.shouldShowPrintButton = true;
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.accounting.transactionListTitle);
         if (!this._ensureAccess()) return;
 
         this._processAccountList(() => {
-          this.transactionOrigin = 'all';
-          if ('transaction-origin' in this.params) {
-            this.transactionOrigin = this.params['transaction-origin'];
+          this.preset = 'all';
+          if ('preset' in this.params) {
+            this.preset = this.params['preset'];
           }
           this._processTransactionList(() => {
             this.self = this;
@@ -312,10 +318,16 @@
         let fromDate = new Date(this.fromDate).getTime();
         let toDate = new Date(this.toDate).getTime();
 
+        let preset = 'query';
+        if ('preset' in this.params) {
+          preset = this.params['preset'];
+        }
+        console.log(preset)
+
         let data = {
           organizationId: this.app.organization.id,
 
-          preset: 'query',
+          preset,
           accountIdList: [],
 
           transactionId: null,

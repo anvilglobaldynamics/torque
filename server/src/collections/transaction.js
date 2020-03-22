@@ -72,7 +72,7 @@ exports.TransactionCollection = class extends Collection {
     return await this._find(query);
   }
 
-  async listByFilters({ organizationId, accountIdList, fromDate, toDate }) {
+  async listByFilters({ organizationId, accountIdList, fromDate, toDate, preset }) {
 
     let query = { $and: [] };
 
@@ -82,10 +82,16 @@ exports.TransactionCollection = class extends Collection {
 
     if (accountIdList.length > 0) {
       query.$and.push({
-        debitedAccountId: { $in: accountIdList }
+        $or: [
+          {debitedAccountId: { $in: accountIdList }},
+          {creditedAccountId: { $in: accountIdList }}
+        ]
       });
+    }
+
+    if (preset === 'only-manual'){
       query.$and.push({
-        creditedAccountId: { $in: accountIdList }
+        transactionOrigin: 'manual'
       });
     }
 
