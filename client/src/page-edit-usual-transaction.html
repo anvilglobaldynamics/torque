@@ -19,9 +19,16 @@
 
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="page-edit-manual-transaction">
+<dom-module id="page-edit-usual-transaction">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+      .edit-usual-transaction-subtitle {
+        font-size: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+      }
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -35,49 +42,39 @@
             <paper-input class="editTransactionForm--amount" step="0.01" value="{{editTransactionForm.amount}}" type="number" required min="0" error-message=[[verses.accounting.transactionAmountInputError]] label=[[verses.accounting.transactionAmountInput]]></paper-input>
 
             <template is="dom-if" if="[[!editMode]]">
-              <div class="horizontal layout center">
-                <!-- nature of account dropdown - start -->
-                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.debitAccountNatureText]]" class="mr-4">
-                  <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.debitAccountNature}}" attr-for-selected="name" on-iron-select="debitAccountNatureSelected">
-                    <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
-                    <paper-item name="liability">[[verses.accounting.liability]]</paper-item>
-                    <paper-item name="equity">[[verses.accounting.equity]]</paper-item>
-                    <paper-item name="revenue">[[verses.accounting.revenue]]</paper-item>
-                    <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
-                  </paper-listbox>
-                </paper-dropdown-menu>
-                <!-- nature of account dropdown - end -->
 
-                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.debitAccount]]" class="mr-4">
-                  <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.debitedAccountId}}" attr-for-selected="key">
-                    <template is="dom-repeat" items="[[debitAccountList]]" as="account">
+              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.account]]" class="mr-4">
+                <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.usualAccountId}}" attr-for-selected="key">
+                  <template is="dom-repeat" items="[[accountList]]" as="account">
+                    <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
+                  </template>
+                </paper-listbox>
+              </paper-dropdown-menu>
+
+              <paper-checkbox 
+                class="editTransactionForm--monetaryTransactionOccurred" 
+                checked="{{editTransactionForm.monetaryTransactionOccurred}}">
+                <template is="dom-if" if="[[$equals(transactionOrigin, 'add-income')]]">
+                  [[verses.accounting.moneyCollected]]
+                </template>
+                <template is="dom-if" if="[[$equals(transactionOrigin, 'add-expense')]]">
+                  [[verses.accounting.moneyPaid]]
+                </template>
+                <template is="dom-if" if="[[$equals(transactionOrigin, 'add-asset-purchase')]]">
+                  [[verses.accounting.moneyPaid]]
+                </template>
+              </paper-checkbox>
+              
+              <template is="dom-if" if="[[editTransactionForm.monetaryTransactionOccurred]]">
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.monetaryAccount]]" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.monetaryAccountId}}" attr-for-selected="key">
+                    <template is="dom-repeat" items="[[monetaryAccountList]]" as="account">
                       <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
                     </template>
                   </paper-listbox>
                 </paper-dropdown-menu>
-              </div>
-
-              <div class="horizontal layout center">
-                <!-- nature of account dropdown - start -->
-                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.creditAccountNatureText]]" class="mr-4">
-                  <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.creditAccountNature}}" attr-for-selected="name" on-iron-select="creditAccountNatureSelected">
-                    <paper-item name="asset">[[verses.accounting.asset]]</paper-item>
-                    <paper-item name="liability">[[verses.accounting.liability]]</paper-item>
-                    <paper-item name="equity">[[verses.accounting.equity]]</paper-item>
-                    <paper-item name="revenue">[[verses.accounting.revenue]]</paper-item>
-                    <paper-item name="expense">[[verses.accounting.expense]]</paper-item>
-                  </paper-listbox>
-                </paper-dropdown-menu>
-                <!-- nature of account dropdown - end -->
-
-                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.creditAccount]]" class="mr-4">
-                  <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.creditedAccountId}}" attr-for-selected="key">
-                    <template is="dom-repeat" items="[[creditAccountList]]" as="account">
-                      <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
-                    </template>
-                  </paper-listbox>
-                </paper-dropdown-menu>
-              </div>
+              </template>
+            
             </template>
 
             <paper-textarea class="editTransactionForm--note" value="{{editTransactionForm.note}}" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
@@ -95,9 +92,9 @@
   </template>
 
   <script>
-    class PageEditManualTransaction extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+    class PageEditUsualTransaction extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
       static get is() {
-        return 'page-edit-manual-transaction';
+        return 'page-edit-usual-transaction';
       }
 
       static get properties() {
@@ -117,13 +114,19 @@
                 return {
                   note: 'Electricity Bill for March',
                   amount: 2000,
-                  transactionDate: ''
+                  transactionDate: '',
+                  usualAccountId: null,
+                  monetaryAccountId: null,
+                  monetaryTransactionOccurred: false
                 };
               } else {
                 return {
                   note: '',
                   amount: 0,
-                  transactionDate: ''
+                  transactionDate: '',
+                  usualAccountId: null,
+                  monetaryAccountId: null,
+                  monetaryTransactionOccurred: false
                 };
               }
             }
@@ -141,17 +144,26 @@
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
 
+        if ('transaction-origin' in this.params) {
+          this.transactionOrigin = this.params['transaction-origin'];
+        }
+
+        if (this.transactionOrigin == 'add-income') {
+          this.app.pushPageTitle(this.app.verses.accounting.addEditIncomeTransactionPageTitle);
+        } else if (this.transactionOrigin == 'add-expense') {
+          this.app.pushPageTitle(this.app.verses.accounting.addEditExpenseTransactionPageTitle);
+        } else if (this.transactionOrigin == 'add-asset-purchase') {
+          this.app.pushPageTitle(this.app.verses.accounting.addEditAssetPurchasePageTitle);
+        }
+
+        if ('transaction' in this.params) {
+          this.editMode = true;
+        } else {
+          this.editMode = false;
+          this.set('editTransactionForm.transactionDate', this.$mkDate(Date.now(), 'yyyy-MM-dd'));
+        }
+
         this._processAccountList(() => {
-
-          if ('transaction' in this.params) {
-            this.editMode = true;
-            this.app.pushPageTitle(this.app.verses.accounting.editManualTransactionPageTitle);
-          } else {
-            this.editMode = false;
-            this.app.pushPageTitle(this.app.verses.accounting.addManualTransactionPageTitle);
-            this.set('editTransactionForm.transactionDate', this.$mkDate(Date.now(), 'yyyy-MM-dd'));
-          }
-
           if (!this._ensureAccess()) return;
           if (this.editMode) {
             this._processGetTransaction(() => {
@@ -162,7 +174,6 @@
               this.isReady = true;
             });
           }
-
         });
       }
 
@@ -198,53 +209,42 @@
 
       _processAccountList(cbfn) {
         this._fetchAccountList(newAccountList => {
-          this.accountList = newAccountList;
-          this.debitAccountList = newAccountList;
-          this.creditAccountList = newAccountList;
+          let nature = null;
+          if (this.transactionOrigin == 'add-income') {
+            nature = 'revenue';
+          } else if (this.transactionOrigin == 'add-expense') {
+            nature = 'expense';
+          } else if (this.transactionOrigin == 'add-asset-purchase') {
+            nature = 'asset';
+          }
+
+          this.accountList = newAccountList.filter(account => account.nature === nature);
+          this.monetaryAccountList = newAccountList.filter(account => account.isMonetaryAccount);
           cbfn();
         });
       }
 
-      debitAccountNatureSelected() {
-        window.setTimeout(() => {
-          let debitAccountList = this.accountList.filter(account => account.nature === this.editTransactionForm.debitAccountNature);
-          this.set('debitAccountList', debitAccountList);
-          this.set('editTransactionForm.debitedAccountId', -1);
-        }, 100);
-      }
-
-      creditAccountNatureSelected() {
-        window.setTimeout(() => {
-          let creditAccountList = this.accountList.filter(account => account.nature === this.editTransactionForm.creditAccountNature);
-          this.set('creditAccountList', creditAccountList);
-          this.set('editTransactionForm.creditedAccountId', -1);
-        }, 100);
-      }
-
+      // TODO: _processGetTransaction while edit page wip
       _processGetTransaction(cbfn) {
         let transactionId = parseInt(this.params.transaction);
         let data = {
           organizationId: this.app.organization.id,
-
-          fromDate: null,
-          toDate: null,
-          preset: 'single',
-          accountIdList: [],
-
-          transactionId,
+          filterByNature: 'all',
+          filterByIsMonetary: 'all',
+          transactionIdList: [transactionId]
         };
         this.app.callGetTransactionListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.editingTransaction = response.transactionList[0];
-          let { note, amount, transactionDatetimeStamp , creditedAccountId, debitedAccountId} = this.editingTransaction;
-          let transactionDate = this.$mkDate(new Date(transactionDatetimeStamp), 'yyyy-MM-dd');
-          this.editTransactionForm = { note, amount, transactionDate, creditedAccountId, debitedAccountId };
+          let { note } = this.editingTransaction;
+          this.editTransactionForm = { note };
           cbfn();
         });
       }
 
-      _processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp }) {
+      // TODO: _processCreateTransaction
+      _processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp, }) {
         let data = {
           note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp,
           transactionOrigin: 'manual',
@@ -261,9 +261,10 @@
         });
       }
 
-      _processUpdateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp }) {
+      // TODO: _processUpdateTransaction
+      _processUpdateTransaction({ note }) {
         let data = {
-          note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp,
+          note,
           transactionId: this.editingTransaction.id
         };
         this.app.callEditTransactionApi(data, (err, response) => {
@@ -286,6 +287,7 @@
         this.elemAll('#editTransactionForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editTransactionForm').validate()) return;
 
+        // TODO: update below
         let { note, creditedAccountId, debitedAccountId, amount, transactionDate } = this.editTransactionForm;
         let transactionDatetimeStamp = (new Date(transactionDate)).getTime();
         this._processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp });
@@ -295,13 +297,14 @@
         this.elemAll('#editTransactionForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editTransactionForm').validate()) return;
 
-        let { note, creditedAccountId, debitedAccountId, amount, transactionDate } = this.editTransactionForm;
-        let transactionDatetimeStamp = (new Date(transactionDate)).getTime();
-        this._processUpdateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp });
+        // TODO: update below
+        let { note } = this.editTransactionForm;
+        this._processUpdateTransaction({ note });
       }
     }
 
-    window.customElements.define(PageEditManualTransaction.is, PageEditManualTransaction);
+    window.customElements.define(PageEditUsualTransaction.is, PageEditUsualTransaction);
   </script>
-
 </dom-module>
+
+
