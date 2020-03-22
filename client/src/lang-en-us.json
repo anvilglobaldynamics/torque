@@ -1210,8 +1210,8 @@
     "viewAssetPurchase": "View Asset Purchase",
     "addAssetPurchase": "Add Asset Purchase",
 
-    "addTransactionPageTitle": "Add Transaction",
-    "editTransactionPageTitle": "Edit Transaction",
+    "addManualTransactionPageTitle": "Add Manual Transaction",
+    "editManualTransactionPageTitle": "Edit Manual Transaction",
 
     "noAccountFound": "No account found",
     "createNewAccount": "Create new account",
@@ -1226,6 +1226,9 @@
     "transactionAmountInput": "Amount",
     "transactionAmountInputError": "Enter valid amount",
     "transactionDate": "Transaction Date",
+    "addEditIncomeTransactionPageTitle": "Income Transaction",
+    "addEditExpenseTransactionPageTitle": "Expense Transaction",
+    "addEditAssetPurchasePageTitle": "Asset Purchase",
 
     "debitAccount": "Debit Account",
     "creditAccount": "Credit Account",
@@ -1246,6 +1249,8 @@
     "income": "Income",
     "manual": "Manual",
     "transaction": "Transaction",
-    "purchase": "Purchase"
+    "purchase": "Purchase",
+    "moneyCollected": "Money Collected",
+    "moneyPaid": "Money Paid"
   }
 }

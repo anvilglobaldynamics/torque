@@ -21,7 +21,14 @@
 
 <dom-module id="page-edit-usual-transaction">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+      .edit-usual-transaction-subtitle {
+        font-size: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+      }
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -43,14 +50,30 @@
                   </template>
                 </paper-listbox>
               </paper-dropdown-menu>
+
+              <paper-checkbox 
+                class="editTransactionForm--monetaryTransactionOccurred" 
+                checked="{{editTransactionForm.monetaryTransactionOccurred}}">
+                <template is="dom-if" if="[[$equals(transactionOrigin, 'add-income')]]">
+                  [[verses.accounting.moneyCollected]]
+                </template>
+                <template is="dom-if" if="[[$equals(transactionOrigin, 'add-expense')]]">
+                  [[verses.accounting.moneyPaid]]
+                </template>
+                <template is="dom-if" if="[[$equals(transactionOrigin, 'add-asset-purchase')]]">
+                  [[verses.accounting.moneyPaid]]
+                </template>
+              </paper-checkbox>
               
-              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.monetaryAccount]]" class="mr-4">
-                <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.monetaryAccountId}}" attr-for-selected="key">
-                  <template is="dom-repeat" items="[[monetaryAccountList]]" as="account">
-                    <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
-                  </template>
-                </paper-listbox>
-              </paper-dropdown-menu>
+              <template is="dom-if" if="[[editTransactionForm.monetaryTransactionOccurred]]">
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.monetaryAccount]]" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.monetaryAccountId}}" attr-for-selected="key">
+                    <template is="dom-repeat" items="[[monetaryAccountList]]" as="account">
+                      <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
+                    </template>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+              </template>
             
             </template>
 
@@ -92,8 +115,9 @@
                   note: 'Electricity Bill for March',
                   amount: 2000,
                   transactionDate: '',
-                  usualAccountId: 1,
-                  monetaryAccountId: 1
+                  usualAccountId: null,
+                  monetaryAccountId: null,
+                  monetaryTransactionOccurred: false
                 };
               } else {
                 return {
@@ -101,7 +125,8 @@
                   amount: 0,
                   transactionDate: '',
                   usualAccountId: null,
-                  monetaryAccountId: null
+                  monetaryAccountId: null,
+                  monetaryTransactionOccurred: false
                 };
               }
             }
@@ -120,20 +145,25 @@
         this.useLanguageServices();
 
         if ('transaction-origin' in this.params) {
-            this.transactionOrigin = this.params['transaction-origin'];
-          }
+          this.transactionOrigin = this.params['transaction-origin'];
+        }
+
+        if (this.transactionOrigin == 'add-income') {
+          this.app.pushPageTitle(this.app.verses.accounting.addEditIncomeTransactionPageTitle);
+        } else if (this.transactionOrigin == 'add-expense') {
+          this.app.pushPageTitle(this.app.verses.accounting.addEditExpenseTransactionPageTitle);
+        } else if (this.transactionOrigin == 'add-asset-purchase') {
+          this.app.pushPageTitle(this.app.verses.accounting.addEditAssetPurchasePageTitle);
+        }
+
+        if ('transaction' in this.params) {
+          this.editMode = true;
+        } else {
+          this.editMode = false;
+          this.set('editTransactionForm.transactionDate', this.$mkDate(Date.now(), 'yyyy-MM-dd'));
+        }
 
         this._processAccountList(() => {
-          if ('transaction' in this.params) {
-            this.editMode = true;
-            this.app.pushPageTitle(this.app.verses.accounting.editTransactionPageTitle);
-          } else {
-            this.editMode = false;
-            this.app.pushPageTitle(this.app.verses.accounting.addTransactionPageTitle);
-
-            this.set('editTransactionForm.transactionDate', this.$mkDate(Date.now(), 'yyyy-MM-dd'));
-          }
-
           if (!this._ensureAccess()) return;
           if (this.editMode) {
             this._processGetTransaction(() => {
@@ -144,7 +174,6 @@
               this.isReady = true;
             });
           }
-
         });
       }
 
@@ -195,7 +224,7 @@
         });
       }
 
-      // TODO: _processGetTransaction
+      // TODO: _processGetTransaction while edit page wip
       _processGetTransaction(cbfn) {
         let transactionId = parseInt(this.params.transaction);
         let data = {

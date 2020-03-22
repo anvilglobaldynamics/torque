@@ -57,7 +57,6 @@
                 </paper-dropdown-menu>
               </div>
 
-
               <div class="horizontal layout center">
                 <!-- nature of account dropdown - start -->
                 <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.creditAccountNatureText]]" class="mr-4">
@@ -146,10 +145,10 @@
 
           if ('transaction' in this.params) {
             this.editMode = true;
-            this.app.pushPageTitle(this.app.verses.accounting.editTransactionPageTitle);
+            this.app.pushPageTitle(this.app.verses.accounting.editManualTransactionPageTitle);
           } else {
             this.editMode = false;
-            this.app.pushPageTitle(this.app.verses.accounting.addTransactionPageTitle);
+            this.app.pushPageTitle(this.app.verses.accounting.addManualTransactionPageTitle);
 
             this.set('editTransactionForm.transactionDate', this.$mkDate(Date.now(), 'yyyy-MM-dd'));
           }
