@@ -54,11 +54,13 @@
                 return {
                   note: 'Electricity Bill for March',
                   amount: 2000,
+                  transactionDate: ''
                 };
               } else {
                 return {
                   note: '',
                   amount: 0,
+                  transactionDate: ''
                 };
               }
             }
@@ -76,10 +78,11 @@
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
 
+        if ('transaction-origin' in this.params) {
+            this.transactionOrigin = this.params['transaction-origin'];
+          }
+
         this._processAccountList(() => {
-
-          // TODO: add transaction-type in param
-
           if ('transaction' in this.params) {
             this.editMode = true;
             this.app.pushPageTitle(this.app.verses.accounting.editTransactionPageTitle);
@@ -136,31 +139,22 @@
 
       _processAccountList(cbfn) {
         this._fetchAccountList(newAccountList => {
-          this.accountList = newAccountList;
-          this.debitAccountList = newAccountList;
-          this.creditAccountList = newAccountList;
+          let nature = null;
+          if (this.transactionOrigin == 'add-income') {
+            nature = 'revenue';
+          } else if (this.transactionOrigin == 'add-expense') {
+            nature = 'expense';
+          } else if (this.transactionOrigin == 'add-asset-purchase') {
+            nature = 'asset';
+          }
+
+          this.accountList = newAccountList.filter(account => account.nature === nature);
+          this.monetaryAccountList = newAccountList.filter(account => account.isMonetaryAccount);
           cbfn();
         });
       }
 
-      debitAccountNatureSelected() {
-        window.setTimeout(() => {
-          console.log(this.editTransactionForm.debitAccountNature)
-          let debitAccountList = this.accountList.filter(account => account.nature === this.editTransactionForm.debitAccountNature);
-          this.set('debitAccountList', debitAccountList);
-          this.set('editTransactionForm.debitedAccountId', -1);
-        }, 100);
-      }
-
-      creditAccountNatureSelected() {
-        window.setTimeout(() => {
-          console.log(this.editTransactionForm.creditAccountNature)
-          let creditAccountList = this.accountList.filter(account => account.nature === this.editTransactionForm.creditAccountNature);
-          this.set('creditAccountList', creditAccountList);
-          this.set('editTransactionForm.creditedAccountId', -1);
-        }, 100);
-      }
-
+      // TODO: _processGetTransaction
       _processGetTransaction(cbfn) {
         let transactionId = parseInt(this.params.transaction);
         let data = {
@@ -179,6 +173,7 @@
         });
       }
 
+      // TODO: _processCreateTransaction
       _processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp, }) {
         let data = {
           note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp,
@@ -196,6 +191,7 @@
         });
       }
 
+      // TODO: _processUpdateTransaction
       _processUpdateTransaction({ note }) {
         let data = {
           note,
@@ -221,6 +217,7 @@
         this.elemAll('#editTransactionForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editTransactionForm').validate()) return;
 
+        // TODO: update below
         let { note, creditedAccountId, debitedAccountId, amount, transactionDate } = this.editTransactionForm;
         let transactionDatetimeStamp = (new Date(transactionDate)).getTime();
         this._processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp });
@@ -230,6 +227,7 @@
         this.elemAll('#editTransactionForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editTransactionForm').validate()) return;
 
+        // TODO: update below
         let { note } = this.editTransactionForm;
         this._processUpdateTransaction({ note });
       }
