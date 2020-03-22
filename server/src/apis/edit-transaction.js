@@ -61,6 +61,8 @@ exports.EditTransactionApi = class extends Api {
     throwOnFalsy(transaction, "TRANSACTION_INVALID", "The transaction could not be found");
     throwOnTruthy(transaction.transactionOrigin === 'system', 'TRANSACTION_NOT_EDITABLE', "System transactions can not be edited manually.");
 
+    throwOnTruthy(debitedAccountId === creditedAccountId, "TRANSACTION_INVALID", "Cannot do a transaction between same account");
+
     await this._updateTransaction({ transactionId, transactionDatetimeStamp, amount, note, debitedAccountId, creditedAccountId });
     return { status: "success" };
   }
