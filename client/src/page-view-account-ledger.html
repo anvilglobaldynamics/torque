@@ -68,6 +68,12 @@
         text-align: center;
       }
 
+      .account-name {
+        font-size: 20px;
+        text-align: center;
+        margin-top: -6px;
+      }
+
       .report .body {}
 
       .report .body .item {
@@ -140,11 +146,10 @@
       <div class="report">
         <div class="header vertical layout">
           <div class="name">
-            <template is="dom-if" if="[[$equals(preset, 'all-expenses')]]">[[verses.accounting.expense]]</template>
-            <template is="dom-if" if="[[$equals(preset, 'all-revenues')]]">[[verses.accounting.income]]</template>
-            <template is="dom-if" if="[[$equals(preset, 'all-assets')]]">[[verses.accounting.asset]]</template>
-            <template is="dom-if" if="[[$equals(preset, 'only-manual')]]">[[verses.accounting.manual]]</template>
-            [[verses.accounting.transactionListTitle]]
+            [[$getAccount(accountId)]]
+          </div>
+          <div class="account-name">
+            [[verses.accounting.accountLedger]]
           </div>
           <div class="date"> [[$mkDate(fromDate, 'dd MMM yyyy')]] [[verses.general.from]] [[$mkDate(toDate, 'dd MMM yyyy')]]</div>
         </div>
@@ -157,14 +162,17 @@
                 <th class="cell" align="left" style="cursor: pointer;">
                   <span>[[verses.general.date]]</span>
                 </th>
-                <th class="cell  transaction-list-column" style="cursor: pointer;">
-                  <span>[[verses.accounting.debitAccount]]</span>
-                </th>
-                <th class="cell  transaction-list-column" style="cursor: pointer;">
-                  <span>[[verses.accounting.creditAccount]]</span>
+                <th class="cell transaction-list-column" style="cursor: pointer;">
+                  <span>[[verses.accounting.againstAccount]]</span>
                 </th>
                 <th class="cell" style="cursor: pointer;">
-                  <span>[[verses.general.amount]]</span>
+                  <span>[[verses.accounting.debit]]</span>
+                </th>
+                <th class="cell" style="cursor: pointer;">
+                  <span>[[verses.accounting.credit]]</span>
+                </th>
+                <th class="cell" style="cursor: pointer;">
+                  <span>[[verses.accounting.balance]]</span>
                 </th>
                 <th class="cell  cell-right" style="cursor: pointer;">
                   <span>[[verses.general.action]]</span>
@@ -177,13 +185,16 @@
                     [[$mkDate(transaction.transactionDatetimeStamp, 'yyyy-MM-dd')]]
                   </td>
                   <td class="cell" align="center">
-                    <div>[[$getAccount(transaction.debitedAccountId)]]</div>
+                    <div>[[$getAccount(transaction.againstAccountId)]]</div>
                   </td>
                   <td class="cell" align="center">
-                    <div>[[$getAccount(transaction.creditedAccountId)]]</div>
+                    <div>[[transaction.debit]]</div>
                   </td>
                   <td class="cell" align="center">
-                    <div>[[transaction.amount]]</div>
+                    <div>[[transaction.credit]]</div>
+                  </td>
+                  <td class="cell" align="center">
+                    <div>[[transaction.balance]]</div>
                   </td>
                   <td class="cell cell-right" align="center">
                     <paper-icon-button icon="create" on-tap="editTransactionTapped"></paper-icon-button>
@@ -196,6 +207,9 @@
                 <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
                 <td class="cell cell-bottom " colspan="3" align="center">
                   {{transactionList.length}} [[verses.accounting.transactions]]
+                </td>
+                <td class="cell cell-bottom " align="center">
+                  [[finalBalance]]
                 </td>
               </tr>
               <!-- total - end -->
@@ -269,10 +283,20 @@
         if (!this._ensureAccess()) return;
 
         this._processAccountList(() => {
-          this.preset = 'all';
-          if ('preset' in this.params) {
-            this.preset = this.params['preset'];
+          this.finalBalance = 0;
+          this.accountId = null;
+          if ('account' in this.params) {
+            this.accountId = parseInt(this.params['account']);
           }
+
+          if (!this.$getAccount(this.accountId)) {
+            let title = this.verses.accounting.errorMessageTitle;
+            let message = this.verses.accounting.accountInvalidMessage;
+            this.app.showModalDialog(title, message, _ => {
+              this.app.navigateTo('/home');
+            });
+          }
+
           this._processTransactionList(() => {
             this.self = this;
             this.isReady = true;
@@ -319,16 +343,12 @@
         let toDate = new Date(this.toDate).getTime();
 
         let preset = 'query';
-        if ('preset' in this.params) {
-          preset = this.params['preset'];
-        }
-        console.log(preset)
 
         let data = {
           organizationId: this.app.organization.id,
 
           preset,
-          accountIdList: [],
+          accountIdList: [this.accountId],
 
           transactionId: null,
 
@@ -345,7 +365,39 @@
       _processTransactionList(cbfn) {
         this._fetchTransactionList(newTransactionList => {
 
+          // determine whether the main account balance is debit or credit
+          let isBalanceDebit = false;
+          let nature = this.fullAccountList.find((account) => account.id === this.accountId).nature;
+          if (nature === 'asset' || nature === 'expense') isBalanceDebit = true;
+
+          // sort
           newTransactionList.sort((a, b) => a.transactionDatetimeStamp - b.transactionDatetimeStamp);
+
+          // prepare data for preview and compute balance
+          let balance = 0;
+          newTransactionList.forEach((transaction) => {
+            if (transaction.debitedAccountId === this.accountId) {
+              transaction.debit = transaction.amount;
+              transaction.againstAccountId = transaction.creditedAccountId;
+              if (isBalanceDebit) {
+                balance += transaction.amount;
+              } else {
+                balance -= transaction.amount;
+              }
+              transaction.balance = balance;
+            } else if (transaction.creditedAccountId === this.accountId) {
+              transaction.credit = transaction.amount;
+              transaction.againstAccountId = transaction.debitedAccountId;
+              if (isBalanceDebit) {
+                balance -= transaction.amount;
+              } else {
+                balance += transaction.amount;
+              }
+              transaction.balance = balance;
+            }
+          });
+
+          this.finalBalance = balance;
 
           this.transactionList = newTransactionList;
           cbfn();

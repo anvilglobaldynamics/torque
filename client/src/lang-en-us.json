@@ -1244,6 +1244,9 @@
     "debitAccount": "Debited Account",
     "creditAccount": "Credited Account",
 
+    "accountLedger": "Account Ledger",
+    "accountInvalidMessage": "The account is not valid.",
+
     "asset": "Asset",
     "liability": "Liability",
     "equity": "Equity",
@@ -1257,7 +1260,12 @@
     "moneyCollected": "Money Collected",
     "moneyPaid": "Money Paid",
     "transactions": "Transactions",
-    
+
+    "debit": "Debit",
+    "credit": "Credit",
+    "balance": "Balance",
+    "againstAccount": "Against Account",
+
     "transactionListTitle": "Transactions",
 
     "transactionSaved": "Transaction Saved!"

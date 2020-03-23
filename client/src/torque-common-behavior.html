@@ -512,6 +512,7 @@
       // ====================== Accounting Module =============================
 
       $getAccount(accountId) {
+        accountId = parseInt(String(accountId));
         let account = this.fullAccountList.find((account) => account.id === accountId)
         return account ? account.displayName : '';
       }
