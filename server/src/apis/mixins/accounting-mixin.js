@@ -9,6 +9,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
   async createDefaultAccounts({ organizationId, userId }) {
 
     const defaultAccountList = [
+      
       // Assets (Monetary)
       {
         nature: 'asset',
@@ -23,7 +24,8 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         displayName: "Bank",
         isMonetaryAccount: true,
         note: "Default Bank Account"
-      },      
+      },  
+
       // Assets (Non-Monetary)
       {
         nature: 'asset',
@@ -38,7 +40,8 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         displayName: "Accounts Receivable",
         isMonetaryAccount: false,
         note: "Money someone owes the business"
-      },    
+      },  
+
       // Liabilities
       {
         nature: 'liability',
@@ -46,7 +49,8 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         displayName: "Accounts Payable",
         isMonetaryAccount: false,
         note: "Money the business owes"
-      },  
+      },
+
       // Revenues
       {
         nature: 'revenue',
@@ -62,7 +66,8 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         isMonetaryAccount: false,
         note: "All revenue generated from Product Sales"
       },
-      // expenses  
+
+      // Expenses
       {
         nature: 'expense',
         codeName: "COST_OF_GOODS_SOLD",
@@ -70,7 +75,8 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         isMonetaryAccount: false,
         note: "Cost of all the goods sold from Inventory"
       },
-      // unsure
+
+      // Unsure because of contra revenue
       {
         nature: 'expense',
         codeName: "PRODUCT_SALES_RETURN",
@@ -84,7 +90,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         displayName: "Service Sales Return",
         isMonetaryAccount: false,
         note: "Revenue Lost due to Service Sales Return"
-      },
+      }
     ];
 
     for (let i = 0; i < defaultAccountList.length; i++) {
