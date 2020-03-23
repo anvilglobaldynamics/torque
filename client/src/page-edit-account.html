@@ -111,7 +111,11 @@
         this.useLanguageServices();
 
         if ('is-monetary-account' in this.params) {
-          this.isMonetaryAccount = this.params['is-monetary-account'];
+          if (this.params['is-monetary-account'] == 'yes') {
+            this.isMonetaryAccount = true;
+          } else {
+            this.isMonetaryAccount = false;
+          }
         }
 
         if ('account' in this.params) {
