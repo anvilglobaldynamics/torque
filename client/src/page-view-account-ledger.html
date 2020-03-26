@@ -376,18 +376,20 @@
           // prepare data for preview and compute balance
           let balance = 0;
           newTransactionList.forEach((transaction) => {
-            if (transaction.debitedAccountId === this.accountId) {
+            let isAccountDebited = transaction.debitList.find(({ accountId }) => accountId === this.accountId);
+
+            if (isAccountDebited) {
               transaction.debit = transaction.amount;
-              transaction.againstAccountId = transaction.creditedAccountId;
+              transaction.againstAccountId = transaction.creditList[0].accountId;
               if (isBalanceDebit) {
                 balance += transaction.amount;
               } else {
                 balance -= transaction.amount;
               }
               transaction.balance = balance;
-            } else if (transaction.creditedAccountId === this.accountId) {
+            } else {
               transaction.credit = transaction.amount;
-              transaction.againstAccountId = transaction.debitedAccountId;
+              transaction.againstAccountId = transaction.debitList[0].accountId;
               if (isBalanceDebit) {
                 balance -= transaction.amount;
               } else {

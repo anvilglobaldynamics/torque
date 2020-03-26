@@ -177,10 +177,10 @@
                     [[$mkDate(transaction.transactionDatetimeStamp, 'yyyy-MM-dd')]]
                   </td>
                   <td class="cell" align="center">
-                    <div>[[$getAccount(transaction.debitedAccountId)]]</div>
+                    <div>[[$getAccount(transaction.debitList.0.accountId)]]</div>
                   </td>
                   <td class="cell" align="center">
-                    <div>[[$getAccount(transaction.creditedAccountId)]]</div>
+                    <div>[[$getAccount(transaction.creditList.0.accountId)]]</div>
                   </td>
                   <td class="cell" align="center">
                     <div>[[transaction.amount]]</div>
