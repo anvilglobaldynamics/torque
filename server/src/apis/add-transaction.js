@@ -2,8 +2,9 @@ const { Api } = require('../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
 const { extract } = require('../utils/extract');
+const { AccountingMixin } = require('./mixins/accounting-mixin');
 
-exports.AddTransactionApi = class extends Api {
+exports.AddTransactionApi = class extends Api.mixin(AccountingMixin) {
 
   get autoValidates() { return true; }
 
@@ -68,20 +69,8 @@ exports.AddTransactionApi = class extends Api {
   async handle({ body, userId }) {
     let { organizationId, note, transactionDatetimeStamp, transactionOrigin, debitList, creditList, action } = body;
 
-    if (debitList.length === 1 && creditList.length === 1) {
-      throwOnTruthy(debitList[0].accountId === creditList[0].accountId, "TRANSACTION_INVALID", "Cannot do a transaction between same account");
-    }
-
     // make sure amounts are in balance
-    let amount = 0;
-    {
-      let creditSum = 0;
-      let debitSum = 0;
-      debitList.forEach(({ amount }) => debitSum += amount);
-      creditList.forEach(({ amount }) => creditSum += amount);
-      throwOnTruthy(debitList[0].accountId === creditList[0].accountId, "TRANSACTION_NOT_BALANCED", "Debit and credit does not match.");
-      amount = debitSum;
-    }
+    let amount = await this.balanceTransactionAndGetAmount({ debitList, creditList });
 
     throwOnTruthy(transactionOrigin === 'system', "TRANSACTION_ORIGIN_INVALID", "Transaction type 'system' can not be set from APIs");
 

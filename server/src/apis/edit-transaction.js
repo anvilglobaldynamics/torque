@@ -2,8 +2,9 @@ const { Api } = require('../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
 const { extract } = require('../utils/extract');
+const { AccountingMixin } = require('./mixins/accounting-mixin');
 
-exports.EditTransactionApi = class extends Api {
+exports.EditTransactionApi = class extends Api.mixin(AccountingMixin) {
 
   get autoValidates() { return true; }
 
@@ -66,20 +67,8 @@ exports.EditTransactionApi = class extends Api {
     throwOnFalsy(transaction, "TRANSACTION_INVALID", "The transaction could not be found");
     throwOnTruthy(transaction.transactionOrigin === 'system', 'TRANSACTION_NOT_EDITABLE', "System transactions can not be edited manually.");
 
-    if (debitList.length === 1 && creditList.length === 1) {
-      throwOnTruthy(debitList[0].accountId === creditList[0].accountId, "TRANSACTION_INVALID", "Cannot do a transaction between same account");
-    }
-
     // make sure amounts are in balance
-    let amount = 0;
-    {
-      let creditSum = 0;
-      let debitSum = 0;
-      debitList.forEach(({ amount }) => debitSum += amount);
-      creditList.forEach(({ amount }) => creditSum += amount);
-      throwOnTruthy(debitList[0].accountId === creditList[0].accountId, "TRANSACTION_NOT_BALANCED", "Debit and credit does not match.");
-      amount = debitSum;
-    }
+    let amount = await this.balanceTransactionAndGetAmount({ debitList, creditList });
 
     await this._updateTransaction({ transactionId, transactionDatetimeStamp, amount, note, debitList, creditList });
     return { status: "success" };
