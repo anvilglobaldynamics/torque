@@ -235,7 +235,10 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.editingTransaction = response.transactionList[0];
-          let { note, amount, transactionDatetimeStamp, creditedAccountId, debitedAccountId } = this.editingTransaction;
+          let { note, amount, transactionDatetimeStamp, creditList, debitList } = this.editingTransaction;
+          let creditedAccountId = creditList[0].accountId;
+          let debitedAccountId = debitList[0].accountId;
+
           let transactionDate = this.$mkDate(new Date(transactionDatetimeStamp), 'yyyy-MM-dd');
 
           let creditAccountNature = this.accountList.find((account) => account.id === creditedAccountId).nature;
@@ -251,9 +254,9 @@
         });
       }
 
-      _processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp }) {
+      _processCreateTransaction({ note, creditList, debitList, transactionDatetimeStamp }) {
         let data = {
-          note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp,
+          note, creditList, debitList, transactionDatetimeStamp,
           transactionOrigin: 'manual',
           action: null,
           organizationId: this.app.organization.id
@@ -268,9 +271,9 @@
         });
       }
 
-      _processUpdateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp }) {
+      _processUpdateTransaction({ note, creditList, debitList, transactionDatetimeStamp }) {
         let data = {
-          note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp,
+          note, creditList, debitList, transactionDatetimeStamp,
           transactionId: this.editingTransaction.id
         };
         this.app.callEditTransactionApi(data, (err, response) => {
@@ -295,7 +298,22 @@
 
         let { note, creditedAccountId, debitedAccountId, amount, transactionDate } = this.editTransactionForm;
         let transactionDatetimeStamp = (new Date(transactionDate)).getTime();
-        this._processCreateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp });
+
+        let creditList = [
+          {
+            accountId: creditedAccountId,
+            amount
+          }
+        ]
+
+        let debitList = [
+          {
+            accountId: debitedAccountId,
+            amount
+          }
+        ]
+
+        this._processCreateTransaction({ note, creditList, debitList, transactionDatetimeStamp });
       }
 
       updateTransactionTapped(e = null) {
@@ -304,7 +322,22 @@
 
         let { note, creditedAccountId, debitedAccountId, amount, transactionDate } = this.editTransactionForm;
         let transactionDatetimeStamp = (new Date(transactionDate)).getTime();
-        this._processUpdateTransaction({ note, creditedAccountId, debitedAccountId, amount, transactionDatetimeStamp });
+
+        let creditList = [
+          {
+            accountId: creditedAccountId,
+            amount
+          }
+        ]
+
+        let debitList = [
+          {
+            accountId: debitedAccountId,
+            amount
+          }
+        ]
+
+        this._processUpdateTransaction({ note, creditList, debitList, transactionDatetimeStamp });
       }
     }
 
