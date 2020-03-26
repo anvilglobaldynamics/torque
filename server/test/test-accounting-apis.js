@@ -186,9 +186,8 @@ describe.only('Accounting', _ => {
         transactionOrigin: 'add-expense',
         transactionDatetimeStamp: Date.now(),
 
-        debitedAccountId: rentExpenseAccount,
-        creditedAccountId: cashAccount,
-        amount: 5000,
+        debitList: [{ accountId: rentExpenseAccount, amount: 5000 }],
+        creditList: [{ accountId: cashAccount, amount: 5000 }],
 
         note: "Paid Rent with Cash",
 
@@ -235,9 +234,10 @@ describe.only('Accounting', _ => {
         transactionId: transactionToBeEdited,
         note: "UPDATE A transaction added from test.",
         transactionDatetimeStamp: Date.now(),
-        debitedAccountId: rentExpenseAccount,
-        creditedAccountId: cashAccount,
-        amount: 1000
+
+        debitList: [{ accountId: rentExpenseAccount, amount: 5000 }],
+        creditList: [{ accountId: cashAccount, amount: 5000 }],
+
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);

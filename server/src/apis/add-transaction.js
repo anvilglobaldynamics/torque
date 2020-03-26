@@ -16,9 +16,15 @@ exports.AddTransactionApi = class extends Api {
       transactionOrigin: Joi.string().valid('system', 'manual', 'add-income', 'add-expense', 'add-asset-purchase').required(),
       transactionDatetimeStamp: Joi.number().max(999999999999999).required(),
 
-      debitedAccountId: Joi.number().max(999999999999999).required(),
-      creditedAccountId: Joi.number().max(999999999999999).required(),
-      amount: Joi.number().max(999999999999999).required(),
+      debitList: Joi.array().items(Joi.object().keys({
+        accountId: Joi.number().max(999999999999999).required(),
+        amount: Joi.number().max(999999999999999).required(),
+      })).min(1).required(),
+
+      creditList: Joi.array().items(Joi.object().keys({
+        accountId: Joi.number().max(999999999999999).required(),
+        amount: Joi.number().max(999999999999999).required(),
+      })).min(1).required(),
 
       note: Joi.string().allow('').max(64).required(),
 
@@ -33,15 +39,18 @@ exports.AddTransactionApi = class extends Api {
   get accessControl() {
     return [{
       organizationBy: [
+        // NOTE: We are just validating user input. These lists can only contain 1 item each.
+        // TODO: Add validation as done in report-inventory-details.js
+        //       Or, Add a common validateAccounts() method in account-mixin.js
         {
           from: "account",
-          query: ({ debitedAccountId }) => ({ id: debitedAccountId }),
+          query: ({ debitList }) => ({ id: debitList[0].accountId }),
           select: "organizationId",
           errorCode: "DEBITED_BY_ACCOUNT_INVALID"
         },
         {
           from: "account",
-          query: ({ creditedAccountId }) => ({ id: creditedAccountId }),
+          query: ({ creditList }) => ({ id: creditList[0].accountId }),
           select: "organizationId",
           errorCode: "CREDITED_BY_ACCOUNT_INVALID"
         }
@@ -57,14 +66,27 @@ exports.AddTransactionApi = class extends Api {
   }
 
   async handle({ body, userId }) {
-    let { organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitedAccountId, creditedAccountId, action } = body;
+    let { organizationId, note, transactionDatetimeStamp, transactionOrigin, debitList, creditList, action } = body;
 
-    throwOnTruthy(debitedAccountId === creditedAccountId, "TRANSACTION_INVALID", "Cannot do a transaction between same account");
+    if (debitList.length === 1 && creditList.length === 1) {
+      throwOnTruthy(debitList[0].accountId === creditList[0].accountId, "TRANSACTION_INVALID", "Cannot do a transaction between same account");
+    }
+
+    // make sure amounts are in balance
+    let amount = 0;
+    {
+      let creditSum = 0;
+      let debitSum = 0;
+      debitList.forEach(({ amount }) => debitSum += amount);
+      creditList.forEach(({ amount }) => creditSum += amount);
+      throwOnTruthy(debitList[0].accountId === creditList[0].accountId, "TRANSACTION_NOT_BALANCED", "Debit and credit does not match.");
+      amount = debitSum;
+    }
 
     throwOnTruthy(transactionOrigin === 'system', "TRANSACTION_ORIGIN_INVALID", "Transaction type 'system' can not be set from APIs");
 
     let transactionId = await this.database.transaction.create({
-      createdByUserId: userId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitedAccountId, creditedAccountId, action
+      createdByUserId: userId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, action
     })
 
     return { status: "success", transactionId };

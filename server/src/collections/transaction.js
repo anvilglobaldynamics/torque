@@ -18,8 +18,17 @@ exports.TransactionCollection = class extends Collection {
 
       amount: Joi.number().max(999999999999999).required(),
       transactionOrigin: Joi.string().valid('system', 'manual', 'add-income', 'add-expense', 'add-asset-purchase').required(),
-      debitedAccountId: Joi.number().max(999999999999999).required(),
-      creditedAccountId: Joi.number().max(999999999999999).required(),
+
+      debitList: Joi.array().items(Joi.object().keys({
+        accountId: Joi.number().max(999999999999999).required(),
+        amount: Joi.number().max(999999999999999).required(),
+      })).min(1).required(),
+
+      creditList: Joi.array().items(Joi.object().keys({
+        accountId: Joi.number().max(999999999999999).required(),
+        amount: Joi.number().max(999999999999999).required(),
+      })).min(1).required(),
+
       action: Joi.object().keys({
         name: Joi.string().min(1).max(32).required(),
         collectionName: Joi.string().min(1).max(32).required(),
@@ -44,17 +53,17 @@ exports.TransactionCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitedAccountId, creditedAccountId, action }) {
+  async create({ createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, action }) {
     return await this._insert({
-      createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitedAccountId, creditedAccountId, action,
+      createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, action,
       isDeleted: false
     });
   }
 
-  async setDetailsForManualEntry({ id }, { transactionDatetimeStamp, note, amount, debitedAccountId, creditedAccountId }) {
+  async setDetailsForManualEntry({ id }, { transactionDatetimeStamp, note, amount, debitList, creditList }) {
     return await this._update({ id }, {
       $set: {
-        transactionDatetimeStamp, note, amount, debitedAccountId, creditedAccountId
+        transactionDatetimeStamp, note, amount, debitList, creditList
       }
     });
   }
@@ -83,13 +92,13 @@ exports.TransactionCollection = class extends Collection {
     if (accountIdList.length > 0) {
       query.$and.push({
         $or: [
-          {debitedAccountId: { $in: accountIdList }},
-          {creditedAccountId: { $in: accountIdList }}
+          { "debitList.accountId": { $in: accountIdList } },
+          { "creditList.accountId": { $in: accountIdList } }
         ]
       });
     }
 
-    if (preset === 'only-manual'){
+    if (preset === 'only-manual') {
       query.$and.push({
         transactionOrigin: 'manual'
       });
