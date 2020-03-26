@@ -345,7 +345,7 @@
       _processTransactionList(cbfn) {
         this._fetchTransactionList(newTransactionList => {
 
-          newTransactionList.sort((a, b) => a.transactionDatetimeStamp - b.transactionDatetimeStamp);
+          newTransactionList.sort((a, b) => b.transactionDatetimeStamp - a.transactionDatetimeStamp);
 
           this.transactionList = newTransactionList;
           cbfn();

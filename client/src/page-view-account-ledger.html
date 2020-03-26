@@ -371,7 +371,7 @@
           if (nature === 'asset' || nature === 'expense') isBalanceDebit = true;
 
           // sort
-          newTransactionList.sort((a, b) => a.transactionDatetimeStamp - b.transactionDatetimeStamp);
+          newTransactionList.sort((a, b) => b.transactionDatetimeStamp - a.transactionDatetimeStamp);
 
           // prepare data for preview and compute balance
           let balance = 0;
