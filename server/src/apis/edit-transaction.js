@@ -2,8 +2,9 @@ const { Api } = require('../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
 const { extract } = require('../utils/extract');
+const { AccountingMixin } = require('./mixins/accounting-mixin');
 
-exports.EditTransactionApi = class extends Api {
+exports.EditTransactionApi = class extends Api.mixin(AccountingMixin) {
 
   get autoValidates() { return true; }
 
@@ -15,13 +16,18 @@ exports.EditTransactionApi = class extends Api {
 
       transactionDatetimeStamp: Joi.number().max(999999999999999).required(),
 
-      debitedAccountId: Joi.number().max(999999999999999).required(),
-      creditedAccountId: Joi.number().max(999999999999999).required(),
-      amount: Joi.number().max(999999999999999).required(),
+      debitList: Joi.array().items(Joi.object().keys({
+        accountId: Joi.number().max(999999999999999).required(),
+        amount: Joi.number().max(999999999999999).required(),
+      })).min(1).required(),
+
+      creditList: Joi.array().items(Joi.object().keys({
+        accountId: Joi.number().max(999999999999999).required(),
+        amount: Joi.number().max(999999999999999).required(),
+      })).min(1).required(),
 
       note: Joi.string().allow('').max(64).required(),
 
-      amount: Joi.number().max(999999999999999).required(),
       note: Joi.string().allow('').max(64).required()
     });
   }
@@ -44,26 +50,27 @@ exports.EditTransactionApi = class extends Api {
     }];
   }
 
-  async _updateTransaction({ transactionId, transactionDatetimeStamp, amount, note, debitedAccountId, creditedAccountId }) {
+  async _updateTransaction({ transactionId, transactionDatetimeStamp, amount, note, debitList, creditList }) {
     let result = await this.database.transaction.setDetailsForManualEntry({ id: transactionId }, {
-      transactionDatetimeStamp, amount, note, debitedAccountId, creditedAccountId
+      transactionDatetimeStamp, amount, note, debitList, creditList
     });
     this.ensureUpdate(result, 'transaction');
     return;
   }
 
   async handle({ body }) {
-    let { transactionId, transactionDatetimeStamp, amount, note, debitedAccountId, creditedAccountId } = body;
+    let { transactionId, transactionDatetimeStamp, note, debitList, creditList } = body;
     let { organizationId } = this.interimData;
 
     // Make sure only manual entries can be edited
-    let transaction = await this.database.transaction.findByIdAndOrganizationId({ organizationId, id:transactionId });
+    let transaction = await this.database.transaction.findByIdAndOrganizationId({ organizationId, id: transactionId });
     throwOnFalsy(transaction, "TRANSACTION_INVALID", "The transaction could not be found");
     throwOnTruthy(transaction.transactionOrigin === 'system', 'TRANSACTION_NOT_EDITABLE', "System transactions can not be edited manually.");
 
-    throwOnTruthy(debitedAccountId === creditedAccountId, "TRANSACTION_INVALID", "Cannot do a transaction between same account");
+    // make sure amounts are in balance
+    let amount = await this.balanceTransactionAndGetAmount({ debitList, creditList });
 
-    await this._updateTransaction({ transactionId, transactionDatetimeStamp, amount, note, debitedAccountId, creditedAccountId });
+    await this._updateTransaction({ transactionId, transactionDatetimeStamp, amount, note, debitList, creditList });
     return { status: "success" };
   }
 

@@ -9,7 +9,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
   async createDefaultAccounts({ organizationId, userId }) {
 
     const defaultAccountList = [
-      
+
       // Assets (Monetary)
       {
         nature: 'asset',
@@ -17,14 +17,14 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         displayName: "Cash",
         isMonetaryAccount: true,
         note: "Default Cash Account for all purposes"
-      },      
+      },
       {
         nature: 'asset',
         codeName: "BANK",
         displayName: "Bank",
         isMonetaryAccount: true,
         note: "Default Bank Account"
-      },  
+      },
 
       // Assets (Non-Monetary)
       {
@@ -33,14 +33,14 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         displayName: "Inventory",
         isMonetaryAccount: false,
         note: "Sum of purchase price of all products in inventory"
-      },      
+      },
       {
         nature: 'asset',
         codeName: "ACCOUNTS_RECEIVABLE",
         displayName: "Accounts Receivable",
         isMonetaryAccount: false,
         note: "Money someone owes the business"
-      },  
+      },
 
       // Liabilities
       {
@@ -102,11 +102,11 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
   async validateAccountIdList({ organizationId, accountIdList }) {
-    let accountList = await this.database.account._find({ 
-      organizationId ,
-      id: {$in: accountIdList}
+    let accountList = await this.database.account._find({
+      organizationId,
+      id: { $in: accountIdList }
     });
-    if (accountList.length !== accountIdList.length){
+    if (accountList.length !== accountIdList.length) {
       throw new CodedError("ACCOUNT_ID_LIST_INVALID", "The accountIdList is invalid")
     }
   }
@@ -114,6 +114,19 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
   async getAccountByCodeName({ organizationId, codeName }) {
     let account = await this.database.account._findOne({ codeName, organizationId });
     throwOnFalsy(account, "ACCOUNT_INVALID", "The account is invalid");
+  }
+
+  async balanceTransactionAndGetAmount({ debitList, creditList }) {
+    if (debitList.length === 1 && creditList.length === 1) {
+      throwOnTruthy(debitList[0].accountId === creditList[0].accountId, "TRANSACTION_INVALID", "Cannot do a transaction between same account");
+    }
+    
+    let creditSum = 0;
+    let debitSum = 0;
+    debitList.forEach(({ amount }) => debitSum += amount);
+    creditList.forEach(({ amount }) => creditSum += amount);
+    throwOnTruthy(debitList[0].accountId === creditList[0].accountId, "TRANSACTION_NOT_BALANCED", "Debit and credit does not match.");
+    return debitSum;
   }
 
 }
