@@ -172,6 +172,8 @@
     "warehouses": "Warehouses",
     "manageMonetaryAccounts": "Monetary Accounts",
     "manageAccounts": "Accounts",
+    "accountsPayable": "Accounts Payable",
+    "accountsReceivable": "Accounts Receivable",
     "manageTransactions": "Manage Transactions",
     "productBlueprints": "Product Blueprints",
     "serviceBlueprints": "Service Blueprints",
