@@ -158,10 +158,10 @@
                   <span>[[verses.general.date]]</span>
                 </th>
                 <th class="cell  transaction-list-column" style="cursor: pointer;">
-                  <span>[[verses.accounting.debitAccount]]</span>
+                  <span>[[verses.accounting.debit]]</span>
                 </th>
                 <th class="cell  transaction-list-column" style="cursor: pointer;">
-                  <span>[[verses.accounting.creditAccount]]</span>
+                  <span>[[verses.accounting.credit]]</span>
                 </th>
                 <th class="cell" style="cursor: pointer;">
                   <span>[[verses.general.amount]]</span>
@@ -173,21 +173,27 @@
 
               <template is="dom-repeat" items="[[transactionList]]" as="transaction">
                 <tr>
-                  <td class="cell">
+                  <td class="cell" rowspan="2">
                     [[$mkDate(transaction.transactionDatetimeStamp, 'yyyy-MM-dd')]]
                   </td>
                   <td class="cell" align="center">
-                    <div>[[$getAccount(transaction.debitList.0.accountId)]]</div>
+                    <template is="dom-repeat" items="[[transaction.debitList]]" as="debit">
+                      <div><i>[[$getAccount(debit.accountId)]]:</i> [[debit.amount]]</div>
+                    </template>
                   </td>
                   <td class="cell" align="center">
-                    <div>[[$getAccount(transaction.creditList.0.accountId)]]</div>
-                  </td>
-                  <td class="cell" align="center">
+                    <template is="dom-repeat" items="[[transaction.creditList]]" as="credit">
+                      <div><i>[[$getAccount(credit.accountId)]]:</i> [[credit.amount]]</div>
+                    </template> </td>
+                  <td class="cell" align="center" rowspan="2">
                     <div>[[transaction.amount]]</div>
                   </td>
-                  <td class="cell cell-right" align="center">
+                  <td class="cell cell-right" align="center" rowspan="2">
                     <paper-icon-button icon="create" on-tap="editTransactionTapped"></paper-icon-button>
                   </td>
+                </tr>
+                <tr>
+                  <td class="cell" colspan="2" align="center">[[transaction.note]]</td>
                 </tr>
               </template>
 
