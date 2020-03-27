@@ -285,10 +285,17 @@
         this._processAccountList(() => {
           this.finalBalance = 0;
           this.accountId = null;
+
+          // get accountId (directly or from codeName)
           if ('account' in this.params) {
             this.accountId = parseInt(this.params['account']);
+          } else if ('codeName' in this.params) {
+            let codeName = this.params['codeName'];
+            let account = this.fullAccountList.find((account) => account.codeName === codeName);
+            this.accountId = account ? account.id : null;
           }
 
+          // get account
           if (!this.$getAccount(this.accountId)) {
             let title = this.verses.accounting.errorMessageTitle;
             let message = this.verses.accounting.accountInvalidMessage;
