@@ -40,8 +40,18 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
     }];
   }
 
+  __getExtendedToDate(toDate) {
+    toDate = new Date(toDate);
+    toDate.setHours(23);
+    toDate.setMinutes(59);
+    toDate = toDate.getTime();
+    return toDate;
+  }
+
   async handle({ body }) {
     let { organizationId, fromDate, toDate, preset, accountIdList, transactionId } = body;
+
+    toDate = this.__getExtendedToDate(toDate);
 
     // if preset is single, return only the transaction
     if (preset === 'single') {

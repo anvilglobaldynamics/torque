@@ -66,6 +66,13 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         isMonetaryAccount: false,
         note: "All revenue generated from Product Sales"
       },
+      {
+        nature: 'revenue',
+        codeName: "SERVICE_CHARGE_REVENUE",
+        displayName: "Service Charge Revenue",
+        isMonetaryAccount: false,
+        note: "All revenue generated from service charges"
+      },
 
       // Expenses
       {
@@ -75,7 +82,13 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         isMonetaryAccount: false,
         note: "Cost of all the goods sold from Inventory"
       },
-
+      {
+        nature: 'expense',
+        codeName: "SALES_DISCOUNT_EXPENSE",
+        displayName: "Sales Discount Expense",
+        isMonetaryAccount: false,
+        note: "Discount given during sales"
+      },
       // Unsure because of contra revenue
       {
         nature: 'expense',
@@ -113,14 +126,15 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async getAccountByCodeName({ organizationId, codeName }) {
     let account = await this.database.account._findOne({ codeName, organizationId });
-    throwOnFalsy(account, "ACCOUNT_INVALID", "The account is invalid");
+    throwOnFalsy(account, "ACCOUNT_INVALID", `The account ${codeName} is invalid`);
+    return account;
   }
 
   async balanceTransactionAndGetAmount({ debitList, creditList }) {
     if (debitList.length === 1 && creditList.length === 1) {
       throwOnTruthy(debitList[0].accountId === creditList[0].accountId, "TRANSACTION_INVALID", "Cannot do a transaction between same account");
     }
-    
+
     let creditSum = 0;
     let debitSum = 0;
     debitList.forEach(({ amount }) => debitSum += amount);
@@ -128,5 +142,15 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     throwOnTruthy(debitList[0].accountId === creditList[0].accountId, "TRANSACTION_NOT_BALANCED", "Debit and credit does not match.");
     return debitSum;
   }
+
+  async addSystemTransaction({ createdByUserId, organizationId, transactionDatetimeStamp, debitList, creditList, note, action }) {
+    let amount = await this.balanceTransactionAndGetAmount({ debitList, creditList });
+    let transactionOrigin = 'system';
+    let transactionId = await this.database.transaction.create({
+      createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, action
+    });
+    return transactionId;
+  }
+
 
 }

@@ -6,8 +6,9 @@ const { InventoryMixin } = require('./mixins/inventory-mixin');
 const { CustomerMixin } = require('./mixins/customer-mixin');
 const { SalesMixin } = require('./mixins/sales-mixin');
 const { ServiceMixin } = require('./mixins/service-mixin');
+const { AccountingMixin } = require('./mixins/accounting-mixin');
 
-exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin, ServiceMixin) {
+exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin, ServiceMixin, AccountingMixin) {
 
   get autoValidates() { return true; }
 
