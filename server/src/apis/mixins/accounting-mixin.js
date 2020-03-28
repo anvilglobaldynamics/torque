@@ -152,5 +152,95 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     return transactionId;
   }
 
+  async addSalesTransaction({
+    transactionData = { createdByUserId, organizationId },
+    salesData = { productList, serviceList, payment, salesId, salesNumber }
+  }) {
+
+    let { createdByUserId, organizationId } = transactionData;
+    let { productList, serviceList, payment, salesId, salesNumber } = salesData;
+
+    let accounting = {
+      // debit
+      debitAccountsReceivable: payment.totalBilled - payment.totalPaidAmount,
+      debitMonetary: payment.totalPaidAmount,
+      debitSalesDiscountExpense: payment.discountedAmount + payment.roundedByAmount,
+      // credit
+      creditSalesRevenue: payment.totalAmount + payment.vatAmount,
+      creditServiceChargeRevenue: payment.serviceChargeAmount
+    }
+
+    // debit
+    let debitList = [];
+
+    if (accounting.debitMonetary) {
+      if (payment.paymentList[0].paymentMethod === 'cash') {
+        debitList.push({
+          accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'CASH' })).id,
+          amount: accounting.debitMonetary
+        });
+      } else {
+        debitList.push({
+          accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'BANK' })).id,
+          amount: accounting.debitMonetary
+        });
+      }
+    }
+
+    if (accounting.debitAccountsReceivable) {
+      debitList.push({
+        accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'ACCOUNTS_RECEIVABLE' })).id,
+        amount: accounting.debitAccountsReceivable
+      });
+    }
+
+    if (accounting.debitSalesDiscountExpense) {
+      debitList.push({
+        accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'SALES_DISCOUNT_EXPENSE' })).id,
+        amount: accounting.debitSalesDiscountExpense
+      });
+    }
+
+    // credit
+    let creditList = [];
+
+    if (accounting.creditServiceChargeRevenue) {
+      creditList.push({
+        accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'SERVICE_CHARGE_REVENUE' })).id,
+        amount: accounting.creditServiceChargeRevenue
+      });
+    }
+
+    if (accounting.creditSalesRevenue) {
+      if (productList.length > 0) {
+        creditList.push({
+          accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'PRODUCT_SALES_REVENUE' })).id,
+          amount: accounting.creditSalesRevenue
+        });
+      } else if (serviceList.length > 0) {
+        creditList.push({
+          accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'SERVICE_SALES_REVENUE' })).id,
+          amount: accounting.creditSalesRevenue
+        });
+      }
+    }
+
+    let transaction = {
+      createdByUserId,
+      organizationId,
+      transactionDatetimeStamp: Date.now(),
+      debitList,
+      creditList,
+      note: `Transaction recorded from Sales #${salesNumber}`,
+      action: {
+        name: 'add-sales',
+        collectionName: 'sales',
+        documentId: salesId
+      }
+    };
+
+    return await this.addSystemTransaction(transaction);
+  }
+
 
 }
