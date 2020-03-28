@@ -347,7 +347,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       transactionDatetimeStamp: Date.now(),
       debitList,
       creditList,
-      note: `Adding additional payments for Sales #${salesNumber}`,
+      note: `Additional payments for Sales #${salesNumber}`,
       action: {
         name: 'add-additional-payment',
         collectionName: 'sales',
