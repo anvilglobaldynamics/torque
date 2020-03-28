@@ -151,7 +151,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     return transactionId;
   }
 
-  async reverseTransaction({ transaction, action }) {
+  async reverseTransaction({ transaction, action, note }) {
     transaction = JSON.parse(JSON.stringify(transaction)); // create referenceless clone
 
     // swap debit and credit
@@ -159,12 +159,10 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     transaction.creditList = transaction.debitList;
     transaction.debitList = t;
 
-    // update note
-    transaction.note = "Reversed: " + transaction.note;
-
     // override 
     transaction.action = action;
     transaction.transactionDatetimeStamp = Date.now();
+    transaction.note = note;
 
     await this.addSystemTransaction(transaction);
   }

@@ -111,9 +111,11 @@ exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin, Ac
       documentId: salesDiscardId
     }
 
+    let note = `Discarded Sales #${sales.salesNumber}`;
+
     for (let i = 0; i < transactionList.length; i++) {
       let transaction = transactionList[i];
-      await this.reverseTransaction({ transaction, action });
+      await this.reverseTransaction({ transaction, action, note });
     }
 
     return { status: 'success' };
