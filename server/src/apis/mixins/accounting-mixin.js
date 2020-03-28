@@ -242,7 +242,6 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     return await this.addSystemTransaction(transaction);
   }
 
-
   async addSalesInventoryTransaction({
     transactionData = { createdByUserId, organizationId },
     salesData = { productList, salesId, salesNumber }
@@ -292,6 +291,65 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       note: `Transaction recorded from Sales #${salesNumber}`,
       action: {
         name: 'add-sales',
+        collectionName: 'sales',
+        documentId: salesId
+      }
+    };
+
+    return await this.addSystemTransaction(transaction);
+  }
+
+  async addAddtionalPaymentTransaction({
+    transactionData = { createdByUserId, organizationId },
+    salesData = { payment, salesId, salesNumber }
+  }) {
+
+    let { createdByUserId, organizationId } = transactionData;
+    let { payment, salesId, salesNumber } = salesData;
+
+    let accounting = {
+      // debit
+      debitMonetary: payment.paidAmount - payment.changeAmount,
+      // credit
+      creditAccountsReceivable: payment.paidAmount - payment.changeAmount,
+    }
+
+    // debit
+    let debitList = [];
+
+    if (accounting.debitMonetary) {
+      if (payment.paymentMethod === 'cash') {
+        debitList.push({
+          accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'CASH' })).id,
+          amount: accounting.debitMonetary
+        });
+      } else {
+        debitList.push({
+          accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'BANK' })).id,
+          amount: accounting.debitMonetary
+        });
+      }
+    }
+
+    // credit
+    let creditList = [];
+
+    if (accounting.creditAccountsReceivable) {
+      creditList.push({
+        accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'ACCOUNTS_RECEIVABLE' })).id,
+        amount: accounting.creditAccountsReceivable
+      });
+    }
+
+    let transaction = {
+      createdByUserId,
+      organizationId,
+      transactionDatetimeStamp: Date.now(),
+      debitList,
+      creditList,
+      note: `Adding additional payments for Sales #${salesNumber}`,
+      action: {
+        name: 'add-additional-payment',
         collectionName: 'sales',
         documentId: salesId
       }
