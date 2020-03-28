@@ -201,7 +201,7 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     });
   }
 
-  async __addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale }) {
+  async __addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale, isLiteSales }) {
 
     if (!productList.length && !serviceList.length) {
       throw new CodedError("NO_PRODUCT_OR_SERVICE_SELECTED", "Both productList and serviceList can not be empty.");
@@ -237,26 +237,28 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     let salesId = await this.database.sales.create({ originApp: this.clientApplication, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment, productsSelectedFromWarehouseId, wasOfflineSale });
     let sales = await this.database.sales.findById({ id: salesId });
 
-    await this.addSalesRevenueTransaction({
-      transactionData: {
-        createdByUserId: userId,
-        organizationId
-      },
-      salesData: { productList, serviceList, payment, salesId, salesNumber: sales.salesNumber }
-    });
-
-    // get purchase price of products
-    productList = await this.__getAggregatedProductList({ productList });
-    productList.forEach(product => product.purchasePrice = product.product.purchasePrice);
-
-    if (productList.length > 0) {
-      await this.addSalesInventoryTransaction({
+    if (!isLiteSales) {
+      await this.addSalesRevenueTransaction({
         transactionData: {
           createdByUserId: userId,
           organizationId
         },
-        salesData: { productList, salesId, salesNumber: sales.salesNumber }
+        salesData: { productList, serviceList, payment, salesId, salesNumber: sales.salesNumber }
       });
+
+      // get purchase price of products
+      productList = await this.__getAggregatedProductList({ productList });
+      productList.forEach(product => product.purchasePrice = product.product.purchasePrice);
+
+      if (productList.length > 0) {
+        await this.addSalesInventoryTransaction({
+          transactionData: {
+            createdByUserId: userId,
+            organizationId
+          },
+          salesData: { productList, salesId, salesNumber: sales.salesNumber }
+        });
+      }
     }
 
     if (serviceList.length) {

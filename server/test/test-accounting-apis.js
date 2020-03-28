@@ -40,7 +40,7 @@ let cashAccount = null;
 let rentExpenseAccount = null;
 let interestIncomeAccount = null;
 
-describe.only('Accounting', _ => {
+describe('Accounting', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
