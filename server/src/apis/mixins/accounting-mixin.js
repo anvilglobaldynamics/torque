@@ -89,7 +89,6 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         isMonetaryAccount: false,
         note: "Discount given during sales"
       },
-      // Unsure because of contra revenue
       {
         nature: 'expense',
         codeName: "PRODUCT_SALES_RETURN",
@@ -352,6 +351,107 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         name: 'add-additional-payment',
         collectionName: 'sales',
         documentId: salesId
+      }
+    };
+
+    return await this.addSystemTransaction(transaction);
+  }
+
+  async addSalesReturnExpenseTransaction({
+    transactionData = { createdByUserId, organizationId },
+    salesData = { refundedAmount, salesReturnId, salesNumber }
+  }) {
+
+    let { createdByUserId, organizationId } = transactionData;
+    let { refundedAmount, salesReturnId, salesNumber } = salesData;
+
+    let accounting = {
+      // debit
+      debitSalesReturnExpense: refundedAmount,
+      // credit
+      creditMonetary: refundedAmount
+    }
+
+    // debit
+    let debitList = [];
+
+    debitList.push({
+      accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'PRODUCT_SALES_RETURN' })).id,
+      amount: accounting.debitSalesReturnExpense
+    });
+
+    // credit
+    let creditList = [];
+
+    creditList.push({
+      accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'CASH' })).id,
+      amount: accounting.creditMonetary
+    });
+
+    let transaction = {
+      createdByUserId,
+      organizationId,
+      transactionDatetimeStamp: Date.now(),
+      debitList,
+      creditList,
+      note: `Product return for Sales #${salesNumber}`,
+      action: {
+        name: 'add-sales-return',
+        collectionName: 'sales-return',
+        documentId: salesReturnId
+      }
+    };
+
+    return await this.addSystemTransaction(transaction);
+  }
+
+  async addSalesReturnInventoryTransaction({
+    transactionData = { createdByUserId, organizationId },
+    salesData = { returnedProductList, salesReturnId, salesNumber }
+  }) {
+
+    let { createdByUserId, organizationId } = transactionData;
+    let { returnedProductList, salesReturnId, salesNumber } = salesData;
+
+    let purchasePriceSum = 0;
+    returnedProductList.forEach(product => {
+      purchasePriceSum += product.purchasePrice * product.count;
+    });
+
+    let accounting = {
+      // debit
+      debitInventory: purchasePriceSum,
+      // credit
+      creditCostOfGoodsSold: purchasePriceSum
+    }
+
+    // debit
+    let debitList = [];
+
+    debitList.push({
+      accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'INVENTORY' })).id,
+      amount: accounting.debitInventory
+    });
+
+    // credit
+    let creditList = [];
+
+    creditList.push({
+      accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'COST_OF_GOODS_SOLD' })).id,
+      amount: accounting.creditCostOfGoodsSold
+    });
+
+    let transaction = {
+      createdByUserId,
+      organizationId,
+      transactionDatetimeStamp: Date.now(),
+      debitList,
+      creditList,
+      note: `Product return for Sales #${salesNumber}`,
+      action: {
+        name: 'add-sales-return',
+        collectionName: 'sales-return',
+        documentId: salesReturnId
       }
     };
 
