@@ -152,7 +152,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     return transactionId;
   }
 
-  async addSalesTransaction({
+  async addSalesRevenueTransaction({
     transactionData = { createdByUserId, organizationId },
     salesData = { productList, serviceList, payment, salesId, salesNumber }
   }) {
@@ -242,5 +242,62 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     return await this.addSystemTransaction(transaction);
   }
 
+
+  async addSalesInventoryTransaction({
+    transactionData = { createdByUserId, organizationId },
+    salesData = { productList, salesId, salesNumber }
+  }) {
+
+    let { createdByUserId, organizationId } = transactionData;
+    let { productList, salesId, salesNumber } = salesData;
+
+    let purchasePriceSum = 0;
+    productList.forEach(product => {
+      purchasePriceSum += product.purchasePrice * product.count;
+    });
+
+    let accounting = {
+      // debit
+      debitCostOfGoodsSold: purchasePriceSum,
+      // credit
+      creditInventory: purchasePriceSum
+    }
+
+    // debit
+    let debitList = [];
+
+    if (accounting.debitCostOfGoodsSold) {
+      debitList.push({
+        accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'COST_OF_GOODS_SOLD' })).id,
+        amount: accounting.debitCostOfGoodsSold
+      });
+    }
+
+    // credit
+    let creditList = [];
+
+    if (accounting.creditInventory) {
+      creditList.push({
+        accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'INVENTORY' })).id,
+        amount: accounting.creditInventory
+      });
+    }
+
+    let transaction = {
+      createdByUserId,
+      organizationId,
+      transactionDatetimeStamp: Date.now(),
+      debitList,
+      creditList,
+      note: `Transaction recorded from Sales #${salesNumber}`,
+      action: {
+        name: 'add-sales',
+        collectionName: 'sales',
+        documentId: salesId
+      }
+    };
+
+    return await this.addSystemTransaction(transaction);
+  }
 
 }

@@ -237,13 +237,27 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     let salesId = await this.database.sales.create({ originApp: this.clientApplication, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment, productsSelectedFromWarehouseId, wasOfflineSale });
     let sales = await this.database.sales.findById({ id: salesId });
 
-    await this.addSalesTransaction({
+    await this.addSalesRevenueTransaction({
       transactionData: {
         createdByUserId: userId,
         organizationId
       },
       salesData: { productList, serviceList, payment, salesId, salesNumber: sales.salesNumber }
     });
+
+    // get purchase price of products
+    productList = await this.__getAggregatedProductList({ productList });
+    productList.forEach(product => product.purchasePrice = product.product.purchasePrice);
+
+    if (productList.length > 0) {
+      await this.addSalesInventoryTransaction({
+        transactionData: {
+          createdByUserId: userId,
+          organizationId
+        },
+        salesData: { productList, salesId, salesNumber: sales.salesNumber }
+      });
+    }
 
     if (serviceList.length) {
       for (let i = 0; i < serviceList.length; i++) {
