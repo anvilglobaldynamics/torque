@@ -162,8 +162,9 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     // update note
     transaction.note = "Reversed: " + transaction.note;
 
-    // override action
+    // override 
     transaction.action = action;
+    transaction.transactionDatetimeStamp = Date.now();
 
     await this.addSystemTransaction(transaction);
   }
