@@ -64,7 +64,7 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin
     let productAcquisition = await this.database.productAcquisition.findById({ id: productAcquisitionId });
 
     // get purchase price of products
-    productList = await this.__getAggregatedProductList({ productList: insertedProductList });
+    productList = await this.__getAggregatedProductList({ productList: JSON.parse(JSON.stringify(insertedProductList)) });
     productList.forEach(product => {
       product.purchasePrice = product.product.purchasePrice
       delete product.product;
