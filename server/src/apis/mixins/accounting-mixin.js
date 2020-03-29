@@ -169,11 +169,11 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async addSalesRevenueTransaction({
     transactionData = { createdByUserId, organizationId },
-    salesData = { productList, serviceList, payment, salesId, salesNumber }
+    operationData = { productList, serviceList, payment, salesId, salesNumber }
   }) {
 
     let { createdByUserId, organizationId } = transactionData;
-    let { productList, serviceList, payment, salesId, salesNumber } = salesData;
+    let { productList, serviceList, payment, salesId, salesNumber } = operationData;
 
     let accounting = {
       // debit
@@ -259,11 +259,11 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async addSalesInventoryTransaction({
     transactionData = { createdByUserId, organizationId },
-    salesData = { productList, salesId, salesNumber }
+    operationData = { productList, salesId, salesNumber }
   }) {
 
     let { createdByUserId, organizationId } = transactionData;
-    let { productList, salesId, salesNumber } = salesData;
+    let { productList, salesId, salesNumber } = operationData;
 
     let purchasePriceSum = 0;
     productList.forEach(product => {
@@ -316,11 +316,11 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async addAddtionalPaymentTransaction({
     transactionData = { createdByUserId, organizationId },
-    salesData = { payment, salesId, salesNumber }
+    operationData = { payment, salesId, salesNumber }
   }) {
 
     let { createdByUserId, organizationId } = transactionData;
-    let { payment, salesId, salesNumber } = salesData;
+    let { payment, salesId, salesNumber } = operationData;
 
     let accounting = {
       // debit
@@ -375,11 +375,11 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async addSalesReturnExpenseTransaction({
     transactionData = { createdByUserId, organizationId },
-    salesData = { refundedAmount, salesReturnId, salesNumber }
+    operationData = { refundedAmount, salesReturnId, salesNumber }
   }) {
 
     let { createdByUserId, organizationId } = transactionData;
-    let { refundedAmount, salesReturnId, salesNumber } = salesData;
+    let { refundedAmount, salesReturnId, salesNumber } = operationData;
 
     let accounting = {
       // debit
@@ -423,11 +423,11 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async addSalesReturnInventoryTransaction({
     transactionData = { createdByUserId, organizationId },
-    salesData = { returnedProductList, salesReturnId, salesNumber }
+    operationData = { returnedProductList, salesReturnId, salesNumber }
   }) {
 
     let { createdByUserId, organizationId } = transactionData;
-    let { returnedProductList, salesReturnId, salesNumber } = salesData;
+    let { returnedProductList, salesReturnId, salesNumber } = operationData;
 
     let purchasePriceSum = 0;
     returnedProductList.forEach(product => {

@@ -100,7 +100,7 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
         createdByUserId: userId,
         organizationId
       },
-      salesData: { returnedProductList, salesReturnId, salesNumber: sales.salesNumber }
+      operationData: { returnedProductList, salesReturnId, salesNumber: sales.salesNumber }
     });
 
     await this.addSalesReturnExpenseTransaction({
@@ -109,7 +109,7 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
         organizationId
       },
       // since 'creditedAmount' will be confusing
-      salesData: { refundedAmount: creditedAmount, salesReturnId, salesNumber: sales.salesNumber }
+      operationData: { refundedAmount: creditedAmount, salesReturnId, salesNumber: sales.salesNumber }
     });
 
     return { status: "success", salesReturnId };

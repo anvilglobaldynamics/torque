@@ -250,7 +250,7 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
           createdByUserId: userId,
           organizationId
         },
-        salesData: { productList, serviceList, payment, salesId, salesNumber: sales.salesNumber }
+        operationData: { productList, serviceList, payment, salesId, salesNumber: sales.salesNumber }
       });
 
       if (productList.length > 0) {
@@ -259,7 +259,7 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
             createdByUserId: userId,
             organizationId
           },
-          salesData: { productList, salesId, salesNumber: sales.salesNumber }
+          operationData: { productList, salesId, salesNumber: sales.salesNumber }
         });
       }
     }
