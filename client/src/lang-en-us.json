@@ -1271,6 +1271,8 @@
 
     "transactionListTitle": "Transactions",
 
+    "productAcquisitionMessage": " will be added as Accounts Payable.",
+
     "transactionSaved": "Transaction Saved!"
   }
 }
