@@ -370,6 +370,8 @@
         });
       }
 
+
+
       _processTransactionList(cbfn) {
         this._fetchTransactionList(newTransactionList => {
 
@@ -379,7 +381,7 @@
           if (nature === 'asset' || nature === 'expense') isBalanceDebit = true;
 
           // sort
-          newTransactionList.sort((a, b) => b.transactionDatetimeStamp - a.transactionDatetimeStamp);
+          this.__sortTransaction(newTransactionList);
 
           // prepare data for preview and compute balance
           let balance = 0;

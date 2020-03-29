@@ -517,6 +517,18 @@
         return account ? account.displayName : '';
       }
 
+      __sortTransaction(newTransactionList) {
+        newTransactionList.sort((a, b) => {
+          let bTime = Math.floor(b.transactionDatetimeStamp / (24 * 60 * 60 * 1000));
+          let aTime = Math.floor(b.transactionDatetimeStamp / (24 * 60 * 60 * 1000));
+          if (bTime === aTime) {
+            return b.id - a.id;
+          } else {
+            return bTime - aTime;
+          }
+        });
+      }
+
     }
 
   })();
