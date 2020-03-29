@@ -474,4 +474,57 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     return await this.addSystemTransaction(transaction);
   }
 
+  async addProductAcquisitionInventoryTransaction({
+    transactionData = { createdByUserId, organizationId },
+    operationData = { productList, productAcquisitionId, productAcquisitionNumber }
+  }) {
+
+    let { createdByUserId, organizationId } = transactionData;
+    let { productList, productAcquisitionId, productAcquisitionNumber } = operationData;
+
+    let purchasePriceSum = 0;
+    productList.forEach(product => {
+      purchasePriceSum += product.purchasePrice * product.count;
+    });
+
+    let accounting = {
+      // debit
+      debitInventory: purchasePriceSum,
+      // credit
+      creditAccountsPayable: purchasePriceSum
+    }
+
+    // debit
+    let debitList = [];
+
+    debitList.push({
+      accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'INVENTORY' })).id,
+      amount: accounting.debitInventory
+    });
+
+    // credit
+    let creditList = [];
+
+    creditList.push({
+      accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'ACCOUNTS_PAYABLE' })).id,
+      amount: accounting.creditAccountsPayable
+    });
+
+    let transaction = {
+      createdByUserId,
+      organizationId,
+      transactionDatetimeStamp: Date.now(),
+      debitList,
+      creditList,
+      note: `Product Acquisition #${productAcquisitionNumber}`,
+      action: {
+        name: 'add-product-to-inventory',
+        collectionName: 'product-acquisition',
+        documentId: productAcquisitionId
+      }
+    };
+
+    return await this.addSystemTransaction(transaction);
+  }
+
 }

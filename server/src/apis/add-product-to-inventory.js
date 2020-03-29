@@ -5,8 +5,9 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-er
 const { extract } = require('./../utils/extract');
 const { ProductBlueprintMixin } = require('./mixins/product-blueprint-mixin');
 const { InventoryMixin } = require('./mixins/inventory-mixin');
+const { AccountingMixin } = require('./mixins/accounting-mixin');
 
-exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin, InventoryMixin) {
+exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin, InventoryMixin, AccountingMixin) {
 
   get autoValidates() { return true; }
 
@@ -58,7 +59,24 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin
     await this._verifyProductBlueprintsExist({ productList });
 
     let insertedProductList = await this._addProductToInventory({ inventoryId, productList });
-    await this._addAcquisitionRecord({ createdByUserId: userId, acquiredDatetimeStamp: (new Date).getTime(), inventoryId, productList: insertedProductList, vendorId, organizationId });
+    let productAcquisitionId = await this._addAcquisitionRecord({ createdByUserId: userId, acquiredDatetimeStamp: (new Date).getTime(), inventoryId, productList: insertedProductList, vendorId, organizationId });
+
+    let productAcquisition = await this.database.productAcquisition.findById({ id: productAcquisitionId });
+
+    // get purchase price of products
+    productList = await this.__getAggregatedProductList({ productList: insertedProductList });
+    productList.forEach(product => {
+      product.purchasePrice = product.product.purchasePrice
+      delete product.product;
+    });
+
+    await this.addProductAcquisitionInventoryTransaction({
+      transactionData: {
+        createdByUserId: userId,
+        organizationId
+      },
+      operationData: { productList, productAcquisitionId, productAcquisitionNumber: productAcquisition.productAcquisitionNumber }
+    });
 
     return { status: "success", insertedProductList };
   }
