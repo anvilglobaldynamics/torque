@@ -54,6 +54,12 @@
         /* text-align: center;
         text-decoration: underline; */
       }
+
+      .acc-payable {
+        margin-top: 12px;
+        /* color: rgb(255, 145, 0); */
+        color: var(--app-button-label-alternative);
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -166,6 +172,13 @@
               </paper-listbox>
             </paper-dropdown-menu>
           </template>
+
+          <template is="dom-if" if="[[selectedProductBlueprintList.length]]">
+            <template is="dom-if" if="[[hasModule('MOD_ACCOUNTING')]]">
+              <div class="acc-payable"> Total [[totalAccountsPayable]] [[app.settings.monetaryUnit]] will be added as Accounts Payable.</div>
+            </template>
+          </template>
+
 
         </div>
 
@@ -311,11 +324,20 @@
 
       // region: ui  ===========================
 
+      calculateAccountsPayable() {
+        let sum = 0;
+        this.selectedProductBlueprintList.forEach(blueprint => {
+          sum += parseInt(blueprint.count) * blueprint.defaultPurchasePrice;
+        });
+        this.totalAccountsPayable = sum;
+      }
+
       $isDisabled(count) {
         return count <= 0;
       }
 
       genericNumericInputChanged(e) {
+        this.calculateAccountsPayable();
         this.enforceMinMaxOnPaperInput(e);
       }
 
@@ -333,10 +355,10 @@
 
             let vendorId = null;
             if (this.hasModule('MOD_VENDOR')) {
-                try {
-                  vendorId = this.vendorList[this.vendorSelectedIndex].id;
-                } catch (ex) { }
-              }
+              try {
+                vendorId = this.vendorList[this.vendorSelectedIndex].id;
+              } catch (ex) { }
+            }
 
             let productList = [];
             this.selectedProductBlueprintList.forEach(productBlueprint => {
@@ -396,6 +418,7 @@
         }
         this.unshift('selectedProductBlueprintList', productBlueprint);
         this.splice('productBlueprintList', index, 1);
+        this.calculateAccountsPayable();
         window.setTimeout(() => {
           let el = this.elem(`.id-${productBlueprint.id}`);
           el.focus();
@@ -411,6 +434,7 @@
         }
         productBlueprint.count = 0;
         this.push('productBlueprintList', productBlueprint);
+        this.calculateAccountsPayable();
       }
 
       identifierCodeScanTapped(e = null) {
