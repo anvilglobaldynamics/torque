@@ -40,7 +40,7 @@ let cashAccount = null;
 let rentExpenseAccount = null;
 let interestIncomeAccount = null;
 
-describe('Accounting', _ => {
+describe.only('Accounting', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -274,6 +274,59 @@ describe('Accounting', _ => {
   });
 
   // Transaction tests - end
+
+  // report-income-statement
+
+  it('api/report-income-statement (Valid)', testDoneFn => {
+
+    callApi('api/report-income-statement', {
+      json: {
+        apiKey,
+        organizationId,
+        fromDate: (new Date()).getTime() - 24 * 60 * 60 * 1000,
+        toDate: (new Date()).getTime()
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      testDoneFn();
+    })
+
+  });
+
+  it('api/report-balance-sheet (Valid)', testDoneFn => {
+
+    callApi('api/report-balance-sheet', {
+      json: {
+        apiKey,
+        organizationId,
+        fromDate: (new Date()).getTime() - 24 * 60 * 60 * 1000,
+        toDate: (new Date()).getTime()
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      testDoneFn();
+    })
+
+  });
+
+  it('api/report-trial-balance (Valid)', testDoneFn => {
+
+    callApi('api/report-trial-balance', {
+      json: {
+        apiKey,
+        organizationId,
+        fromDate: (new Date()).getTime() - 24 * 60 * 60 * 1000,
+        toDate: (new Date()).getTime()
+      }
+    }, (err, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.have.property('hasError').that.equals(false);
+      testDoneFn();
+    })
+
+  });
 
   it('END', testDoneFn => {
     terminateServer(testDoneFn);
