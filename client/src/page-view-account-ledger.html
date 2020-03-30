@@ -162,6 +162,9 @@
                 <th class="cell" align="left" style="cursor: pointer;">
                   <span>[[verses.general.date]]</span>
                 </th>
+                <th class="cell" style="cursor: pointer;">
+                  <span>[[verses.general.id]]</span>
+                </th>
                 <th class="cell transaction-list-column" style="cursor: pointer;">
                   <span>[[verses.accounting.note]]</span>
                 </th>
@@ -185,6 +188,9 @@
                     [[$mkDate(transaction.transactionDatetimeStamp, 'yyyy-MM-dd')]]
                   </td>
                   <td class="cell" align="center">
+                    <div>[[transaction.transactionNumber]]</div>
+                  </td>
+                  <td class="cell" align="center">
                     <!-- <div>[[$getAccount(transaction.againstAccountId)]]</div> -->
                     <div>[[transaction.note]]</div>
                   </td>
@@ -206,7 +212,7 @@
               <!-- total - start -->
               <tr>
                 <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
-                <td class="cell cell-bottom " colspan="3" align="center">
+                <td class="cell cell-bottom " colspan="4" align="center">
                   {{transactionList.length}} [[verses.accounting.transactions]]
                 </td>
                 <td class="cell cell-bottom " align="center">
