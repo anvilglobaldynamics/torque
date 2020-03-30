@@ -175,6 +175,7 @@
     "accountsPayable": "Accounts Payable",
     "accountsReceivable": "Accounts Receivable",
     "manageTransactions": "Manage Transactions",
+    "accountingReports": "Accounting Reports",
     "productBlueprints": "Product Blueprints",
     "serviceBlueprints": "Service Blueprints",
     "sales": "Sales Records",
@@ -1203,6 +1204,7 @@
     "addAccountPageTitle": "Add Account",
 
     "manageTransactionPageTitle": "Manage Transactions",
+    "accountingReportPageTitle": "Accounting Reports",
     
     "viewManualTransaction": "View Manual Transactions",
     "addManualTransaction": "Add Manual Transaction",
@@ -1268,6 +1270,10 @@
     "balance": "Balance",
     "againstAccount": "Against Account",
     "note": "Note",
+
+    "incomeStatement": "Income Statement",
+    "trialBalance": "Trial Balance",
+    "balanceSheet": "Balance Sheet",
 
     "transactionListTitle": "Transactions",
 
