@@ -131,7 +131,6 @@
       pageChanged() {
         if (!this.page) return;
         this.useLanguageServices();
-        console.log("Page Change")
         this._processVendorList(() => { });
         this._processEmployeeList(() => { });
 
@@ -139,7 +138,6 @@
 
       selectedCollectionNameChanged(newValue, oldValue) {
         if (!this.selectedCollectionName) return;
-        console.log("CHANGE selectedCollectionName", this.selectedCollectionName);
         if (oldValue) {
           this.selectedDocumentId = -1;
         }
@@ -147,7 +145,6 @@
 
       selectedDocumentIdChanged(newValue, oldValue) {
         if (!this.selectedDocumentId) return;
-        console.log("CHANGE selectedDocumentId", this.selectedDocumentId);
       }
 
       collectionNameSelected(e, item) {
