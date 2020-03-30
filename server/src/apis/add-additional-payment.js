@@ -85,7 +85,7 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
         createdByUserId: userId,
         organizationId
       },
-      operationData: { payment: paymentListEntry, salesId, salesNumber: sales.salesNumber }
+      operationData: { payment: paymentListEntry, salesId, salesNumber: sales.salesNumber, customer }
     });
 
     return { status: "success" };

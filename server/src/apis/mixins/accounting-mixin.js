@@ -142,11 +142,11 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     return debitSum;
   }
 
-  async addSystemTransaction({ createdByUserId, organizationId, transactionDatetimeStamp, debitList, creditList, note, action }) {
+  async addSystemTransaction({ createdByUserId, organizationId, transactionDatetimeStamp, debitList, creditList, note, party, action }) {
     let amount = await this.balanceTransactionAndGetAmount({ debitList, creditList });
     let transactionOrigin = 'system';
     let transactionId = await this.database.transaction.create({
-      createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, action
+      createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, party, action
     });
     return transactionId;
   }
@@ -169,11 +169,11 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async addSalesRevenueTransaction({
     transactionData = { createdByUserId, organizationId },
-    operationData = { productList, serviceList, payment, salesId, salesNumber }
+    operationData = { productList, serviceList, payment, salesId, salesNumber, customer }
   }) {
 
     let { createdByUserId, organizationId } = transactionData;
-    let { productList, serviceList, payment, salesId, salesNumber } = operationData;
+    let { productList, serviceList, payment, salesId, salesNumber, customer } = operationData;
 
     let accounting = {
       // debit
@@ -240,6 +240,14 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       }
     }
 
+    let party = null;
+    if (customer) {
+      party = {
+        collectionName: 'customer',
+        documentId: customer.id
+      }
+    }
+
     let transaction = {
       createdByUserId,
       organizationId,
@@ -247,6 +255,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       debitList,
       creditList,
       note: `Transaction recorded from Sales #${salesNumber}`,
+      party,
       action: {
         name: 'add-sales',
         collectionName: 'sales',
@@ -259,11 +268,11 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async addSalesInventoryTransaction({
     transactionData = { createdByUserId, organizationId },
-    operationData = { productList, salesId, salesNumber }
+    operationData = { productList, salesId, salesNumber, customer }
   }) {
 
     let { createdByUserId, organizationId } = transactionData;
-    let { productList, salesId, salesNumber } = operationData;
+    let { productList, salesId, salesNumber, customer } = operationData;
 
     let purchasePriceSum = 0;
     productList.forEach(product => {
@@ -297,6 +306,14 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       });
     }
 
+    let party = null;
+    if (customer) {
+      party = {
+        collectionName: 'customer',
+        documentId: customer.id
+      }
+    }
+
     let transaction = {
       createdByUserId,
       organizationId,
@@ -304,6 +321,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       debitList,
       creditList,
       note: `Transaction recorded from Sales #${salesNumber}`,
+      party,
       action: {
         name: 'add-sales',
         collectionName: 'sales',
@@ -316,11 +334,11 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async addAddtionalPaymentTransaction({
     transactionData = { createdByUserId, organizationId },
-    operationData = { payment, salesId, salesNumber }
+    operationData = { payment, salesId, salesNumber, customer }
   }) {
 
     let { createdByUserId, organizationId } = transactionData;
-    let { payment, salesId, salesNumber } = operationData;
+    let { payment, salesId, salesNumber, customer } = operationData;
 
     let accounting = {
       // debit
@@ -356,6 +374,14 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       });
     }
 
+    let party = null;
+    if (customer) {
+      party = {
+        collectionName: 'customer',
+        documentId: customer.id
+      }
+    }
+
     let transaction = {
       createdByUserId,
       organizationId,
@@ -363,6 +389,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       debitList,
       creditList,
       note: `Additional payments for Sales #${salesNumber}`,
+      party,
       action: {
         name: 'add-additional-payment',
         collectionName: 'sales',
@@ -375,11 +402,11 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async addSalesReturnExpenseTransaction({
     transactionData = { createdByUserId, organizationId },
-    operationData = { refundedAmount, salesReturnId, salesNumber }
+    operationData = { refundedAmount, salesReturnId, salesNumber, customer }
   }) {
 
     let { createdByUserId, organizationId } = transactionData;
-    let { refundedAmount, salesReturnId, salesNumber } = operationData;
+    let { refundedAmount, salesReturnId, salesNumber, customer } = operationData;
 
     let accounting = {
       // debit
@@ -404,6 +431,14 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       amount: accounting.creditMonetary
     });
 
+    let party = null;
+    if (customer) {
+      party = {
+        collectionName: 'customer',
+        documentId: customer.id
+      }
+    }
+
     let transaction = {
       createdByUserId,
       organizationId,
@@ -411,6 +446,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       debitList,
       creditList,
       note: `Product return for Sales #${salesNumber}`,
+      party,
       action: {
         name: 'add-sales-return',
         collectionName: 'sales-return',
@@ -423,11 +459,11 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async addSalesReturnInventoryTransaction({
     transactionData = { createdByUserId, organizationId },
-    operationData = { returnedProductList, salesReturnId, salesNumber }
+    operationData = { returnedProductList, salesReturnId, salesNumber, customer }
   }) {
 
     let { createdByUserId, organizationId } = transactionData;
-    let { returnedProductList, salesReturnId, salesNumber } = operationData;
+    let { returnedProductList, salesReturnId, salesNumber, customer } = operationData;
 
     let purchasePriceSum = 0;
     returnedProductList.forEach(product => {
@@ -457,6 +493,14 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       amount: accounting.creditCostOfGoodsSold
     });
 
+    let party = null;
+    if (customer) {
+      party = {
+        collectionName: 'customer',
+        documentId: customer.id
+      }
+    }
+
     let transaction = {
       createdByUserId,
       organizationId,
@@ -464,6 +508,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       debitList,
       creditList,
       note: `Product return for Sales #${salesNumber}`,
+      party,
       action: {
         name: 'add-sales-return',
         collectionName: 'sales-return',
@@ -476,11 +521,11 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
 
   async addProductAcquisitionInventoryTransaction({
     transactionData = { createdByUserId, organizationId },
-    operationData = { productList, productAcquisitionId, productAcquisitionNumber }
+    operationData = { productList, productAcquisitionId, productAcquisitionNumber, vendorId }
   }) {
 
     let { createdByUserId, organizationId } = transactionData;
-    let { productList, productAcquisitionId, productAcquisitionNumber } = operationData;
+    let { productList, productAcquisitionId, productAcquisitionNumber, vendorId } = operationData;
 
     let purchasePriceSum = 0;
     productList.forEach(product => {
@@ -510,6 +555,14 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       amount: accounting.creditAccountsPayable
     });
 
+    let party = null;
+    if (vendorId) {
+      party = {
+        collectionName: 'vendor',
+        documentId: vendorId
+      }
+    }
+
     let transaction = {
       createdByUserId,
       organizationId,
@@ -517,6 +570,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
       debitList,
       creditList,
       note: `Product Acquisition #${productAcquisitionNumber}`,
+      party,
       action: {
         name: 'add-product-to-inventory',
         collectionName: 'product-acquisition',
