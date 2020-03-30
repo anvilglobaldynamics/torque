@@ -70,7 +70,10 @@
           for (let error of errorList) {
             let { path, message } = error;
             let key = `.${form}--${path}`;
-            let el = this.elem(key);
+            let el;
+            try {
+              el = this.elem(key);
+            } catch (ex) { }
             if (!el && this.subForm) {
               let subFormName = this.subForm.getAttribute('name');
               if (subFormName) {

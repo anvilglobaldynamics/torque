@@ -1,0 +1,198 @@
+<!-- 
+  ========================================
+  =====    elem-party-selector    =====
+  ========================================
+
+  Parameters :=
+
+    selectedCollectionName
+    selectedDocumentId
+
+  Host Configuratio Details:=
+
+    required assign in construction/navigatedIn:= 
+
+      this.page = this;
+
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../bower_components/iron-icons/editor-icons.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="elem-party-selector">
+  <template>
+    <style include="shared-styles">
+      .item {
+        margin-bottom: 4px;
+        padding-bottom: 6px;
+        border-bottom: 1px dashed rgb(192, 198, 214);
+      }
+
+      .item:first-of-type {
+        margin-top: 4px;
+      }
+
+      .item:last-of-type {
+        border: none;
+      }
+    </style>
+    <div class="horizontal layout center">
+
+      <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.party]] [[verses.general.optional]]" class="mr-4" on-iron-select="collectionNameSelected">
+        <paper-listbox slot="dropdown-content" selected="{{selectedCollectionName}}" attr-for-selected="key">
+          <paper-item key="no-party">[[verses.accounting.noParty]]</paper-item>
+          <paper-item key="vendor">[[verses.general.vendor]] </paper-item>
+          <paper-item key="employee">[[verses.accounting.employee]] </paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu>
+
+      <template is="dom-if" if="[[$equals(selectedCollectionName, 'vendor')]]">
+        <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.general.vendor]]" class="mr-4" on-iron-select="documentIdSelected">
+          <paper-listbox slot="dropdown-content" selected="{{selectedDocumentId}}" attr-for-selected="key">
+            <template is="dom-repeat" items="[[vendorList]]" as="vendor">
+              <paper-item key="[[vendor.id]]">[[vendor.name]]</paper-item>
+            </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
+      </template>
+
+      <template is="dom-if" if="[[$equals(selectedCollectionName, 'employee')]]">
+        <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.employee]]" class="mr-4" on-iron-select="documentIdSelected">
+          <paper-listbox slot="dropdown-content" selected="{{selectedDocumentId}}" attr-for-selected="key">
+            <template is="dom-repeat" items="[[employeeList]]" as="employee">
+              <paper-item key="[[employee.id]]">[[employee.userDetails.fullName]]</paper-item>
+            </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
+      </template>
+
+    </div>
+  </template>
+  <script>
+    class ElemPartySelector extends FxElement.mixin(TorqueLanguageBehavior, TorqueCommonBehavior) {
+
+      static get is() { return 'elem-party-selector'; }
+
+      static get properties() {
+        return {
+          selectedCollectionName: {
+            type: String,
+            value: '',
+            observer: 'selectedCollectionNameChanged',
+            notify: true
+          },
+          selectedDocumentId: {
+            type: Number,
+            value: -1,
+            observer: 'selectedDocumentIdChanged',
+            notify: true
+          },
+          page: {
+            type: Object,
+            value: null,
+            observer: 'pageChanged',
+            notify: true
+          },
+          vendorList: {
+            type: Array,
+            value: (() => [])
+          },
+          employeeList: {
+            type: Array,
+            value: (() => [])
+          }
+        };
+      }
+
+      pageChanged() {
+        if (!this.page) return;
+        this.useLanguageServices();
+        console.log("Page Change")
+        this._processVendorList(() => { });
+        this._processEmployeeList(() => { });
+
+      }
+
+      selectedCollectionNameChanged(newValue, oldValue) {
+        if (!this.selectedCollectionName) return;
+        console.log("CHANGE selectedCollectionName", this.selectedCollectionName);
+        if (oldValue) {
+          this.selectedDocumentId = -1;
+        }
+      }
+
+      selectedDocumentIdChanged(newValue, oldValue) {
+        if (!this.selectedDocumentId) return;
+        console.log("CHANGE selectedDocumentId", this.selectedDocumentId);
+      }
+
+      collectionNameSelected(e, item) {
+        // pass. change handled in observer
+      }
+
+      documentIdSelected(e, item) {
+        // pass. change handled in observer
+      }
+
+      // fetch
+
+      _fetchVendorList(cbfn) {
+        let data = { organizationId: this.page.app.organization.id };
+        this.page.app.callGetVendorListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.vendorList);
+        });
+      }
+
+      _processVendorList(cbfn) {
+        this._fetchVendorList(newVendorList => {
+          this.vendorList = newVendorList;
+          cbfn();
+        });
+      }
+
+      _fetchEmployeeList(cbfn) {
+        let data = { organizationId: this.page.app.organization.id };
+        this.page.app.callGetEmployeeListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.employeeList);
+        });
+      }
+
+      _processEmployeeList(cbfn) {
+        this._fetchEmployeeList(newEmployeeList => {
+          this.employeeList = newEmployeeList;
+          cbfn();
+        });
+      }
+
+    }
+    window.customElements.define(ElemPartySelector.is, ElemPartySelector);
+  </script>
+</dom-module>

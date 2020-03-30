@@ -1269,6 +1269,10 @@
     "againstAccount": "Against Account",
     "note": "Note",
 
+    "employee": "Employee",
+    "noParty": "No Party",
+    "party": "Party",
+
     "transactionListTitle": "Transactions",
 
     "productAcquisitionMessage": " will be added as Accounts Payable.",
