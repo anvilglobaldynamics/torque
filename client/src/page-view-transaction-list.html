@@ -157,6 +157,9 @@
                 <th class="cell" align="left" style="cursor: pointer;">
                   <span>[[verses.general.date]]</span>
                 </th>
+                <th class="cell" style="cursor: pointer;">
+                  <span>[[verses.general.id]]</span>
+                </th>
                 <th class="cell  transaction-list-column" style="cursor: pointer;">
                   <span>[[verses.accounting.debit]]</span>
                 </th>
@@ -176,6 +179,9 @@
                   <td class="cell" rowspan="2">
                     [[$mkDate(transaction.transactionDatetimeStamp, 'yyyy-MM-dd')]]
                   </td>
+                  <td class="cell" align="center" rowspan="2">
+                    <div>[[transaction.transactionNumber]]</div>
+                  </td>
                   <td class="cell" align="center">
                     <template is="dom-repeat" items="[[transaction.debitList]]" as="debit">
                       <div><i>[[$getAccount(debit.accountId)]]:</i> [[debit.amount]]</div>
@@ -189,7 +195,7 @@
                     <div>[[transaction.amount]]</div>
                   </td>
                   <td class="cell cell-right" align="center" rowspan="2">
-                    <paper-icon-button icon="create" on-tap="editTransactionTapped"></paper-icon-button>
+                    <paper-icon-button icon="create" on-tap="editTransactionTapped" disabled="[[$equals(transaction.transactionOrigin, 'system')]]"></paper-icon-button>
                   </td>
                 </tr>
                 <tr>
@@ -200,7 +206,7 @@
               <!-- total - start -->
               <tr>
                 <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
-                <td class="cell cell-bottom " colspan="3" align="center">
+                <td class="cell cell-bottom " colspan="4" align="center">
                   {{transactionList.length}} [[verses.accounting.transactions]]
                 </td>
               </tr>

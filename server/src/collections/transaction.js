@@ -12,6 +12,8 @@ exports.TransactionCollection = class extends Collection {
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       createdByUserId: Joi.number().max(999999999999999).required(),
 
+      transactionNumber: Joi.number().max(999999999999999).required(),
+
       transactionDatetimeStamp: Joi.number().max(999999999999999).required(),
       note: Joi.string().allow('').max(64).required(),
       organizationId: Joi.number().max(999999999999999).required(),
@@ -54,8 +56,11 @@ exports.TransactionCollection = class extends Collection {
   get deletionIndicatorKey() { return 'isDeleted'; }
 
   async create({ createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, action }) {
+    let transactionNumber = await this.autoGenerateOrganizationSpecificNumber({ organizationId, fieldName: 'transactionNumberSeed' });
+
     return await this._insert({
       createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, action,
+      transactionNumber,
       isDeleted: false
     });
   }

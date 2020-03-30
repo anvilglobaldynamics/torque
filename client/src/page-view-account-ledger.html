@@ -162,6 +162,9 @@
                 <th class="cell" align="left" style="cursor: pointer;">
                   <span>[[verses.general.date]]</span>
                 </th>
+                <th class="cell" style="cursor: pointer;">
+                  <span>[[verses.general.id]]</span>
+                </th>
                 <th class="cell transaction-list-column" style="cursor: pointer;">
                   <span>[[verses.accounting.note]]</span>
                 </th>
@@ -185,6 +188,9 @@
                     [[$mkDate(transaction.transactionDatetimeStamp, 'yyyy-MM-dd')]]
                   </td>
                   <td class="cell" align="center">
+                    <div>[[transaction.transactionNumber]]</div>
+                  </td>
+                  <td class="cell" align="center">
                     <!-- <div>[[$getAccount(transaction.againstAccountId)]]</div> -->
                     <div>[[transaction.note]]</div>
                   </td>
@@ -198,7 +204,7 @@
                     <div>[[transaction.balance]]</div>
                   </td>
                   <td class="cell cell-right" align="center">
-                    <paper-icon-button icon="create" on-tap="editTransactionTapped"></paper-icon-button>
+                    <paper-icon-button icon="create" on-tap="editTransactionTapped" disabled="[[$equals(transaction.transactionOrigin, 'system')]]"></paper-icon-button>
                   </td>
                 </tr>
               </template>
@@ -206,7 +212,7 @@
               <!-- total - start -->
               <tr>
                 <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
-                <td class="cell cell-bottom " colspan="3" align="center">
+                <td class="cell cell-bottom " colspan="4" align="center">
                   {{transactionList.length}} [[verses.accounting.transactions]]
                 </td>
                 <td class="cell cell-bottom " align="center">
@@ -385,6 +391,7 @@
 
           // prepare data for preview and compute balance
           let balance = 0;
+          newTransactionList.reverse(); // reverse so that the balances are correct
           newTransactionList.forEach((transaction) => {
             let isAccountDebited = transaction.debitList.find(({ accountId }) => accountId === this.accountId);
 
@@ -408,6 +415,7 @@
               transaction.balance = balance;
             }
           });
+          newTransactionList.reverse(); // reverse back so that the order is correct
 
           this.finalBalance = balance;
 
