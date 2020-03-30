@@ -1,0 +1,388 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="elem-customer-selector.html">
+<link rel="import" href="elem-outlet-selector.html">
+
+<dom-module id="page-report-balance-sheet">
+  <template>
+    <style include="shared-styles">
+      @media print {
+
+        .filter-toggle-region,
+        .filter-toggle-region paper-toggle-button,
+        .filter-region {
+          display: none;
+        }
+
+        .report {
+          margin-top: -48px;
+        }
+      }
+
+      .report {
+        background-color: white;
+        padding: 12px;
+        width: calc(100% - 24px);
+      }
+
+      .report .author-title {
+        font-weight: bold;
+      }
+
+      .hr {
+        border-bottom: 1px solid black;
+      }
+
+      .hr-mt {
+        margin-top: 18px;
+      }
+
+      .report .header .name {
+        font-size: 30px;
+        text-align: center;
+      }
+
+      .report .header .date {
+        font-size: 15px;
+        text-align: center;
+      }
+
+      .report .body {}
+
+      .report .body .item {
+        margin-top: 4px;
+        margin-bottom: 4px;
+      }
+
+      /*  */
+
+      .transaction-list-table-container {
+        margin-bottom: 20px;
+        margin-top: 16px;
+      }
+
+      .transaction-list-table {
+        width: 100%;
+      }
+
+      .transaction-list-column {
+        min-width: 180px;
+      }
+
+      .transaction-list-table .cell {
+        border-bottom: 1px solid var(--table-border-color);
+        border-right: 1px solid var(--table-border-color);
+      }
+
+      .transaction-list-table .cell-right {
+        border-right: 0px solid var(--table-border-color);
+      }
+
+      .transaction-list-table .cell-bottom {
+        border-bottom: 0px solid var(--table-border-color);
+      }
+
+      .report .body .item {
+        margin-bottom: 8px;
+        margin-top: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px dotted rgb(131, 131, 131);
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="filter-toggle-region horizontal layout center">
+        <div class="flex"></div>
+        <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.general.showFilters]]</paper-toggle-button>
+      </div>
+
+      <!-- filters - start -->
+      <div class="filter-region" hidden="[[!shouldShowFilters]]">
+
+        <div class="card horizontal layout center">
+          <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+          <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+        </div>
+
+        <div class="lone-controls">
+          <paper-button raised class="primary" on-tap="filterTapped">
+            [[verses.general.filter]]
+          </paper-button>
+        </div>
+
+      </div>
+      <!-- filters - end -->
+
+      <div class="report">
+        <div class="header vertical layout">
+          <div class="name">
+            <template is="dom-if" if="[[$equals(preset, 'all-expenses')]]">[[verses.accounting.expense]]</template>
+            <template is="dom-if" if="[[$equals(preset, 'all-revenues')]]">[[verses.accounting.income]]</template>
+            <template is="dom-if" if="[[$equals(preset, 'all-assets')]]">[[verses.accounting.asset]]</template>
+            <template is="dom-if" if="[[$equals(preset, 'only-manual')]]">[[verses.accounting.manual]]</template>
+            [[verses.accounting.transactionListTitle]]
+          </div>
+          <div class="date"> [[$mkDate(fromDate, 'dd MMM yyyy')]] [[verses.general.from]] [[$mkDate(toDate, 'dd MMM yyyy')]]</div>
+        </div>
+        <div class="body">
+          <!-- transaction-list - Start -->
+          <div class="transaction-list-table-container">
+            <table class="transaction-list-table">
+
+              <tr>
+                <th class="cell" align="left" style="cursor: pointer;">
+                  <span>[[verses.general.date]]</span>
+                </th>
+                <th class="cell  transaction-list-column" style="cursor: pointer;">
+                  <span>[[verses.accounting.debit]]</span>
+                </th>
+                <th class="cell  transaction-list-column" style="cursor: pointer;">
+                  <span>[[verses.accounting.credit]]</span>
+                </th>
+                <th class="cell" style="cursor: pointer;">
+                  <span>[[verses.general.amount]]</span>
+                </th>
+                <th class="cell  cell-right" style="cursor: pointer;">
+                  <span>[[verses.general.action]]</span>
+                </th>
+              </tr>
+
+              <template is="dom-repeat" items="[[transactionList]]" as="transaction">
+                <tr>
+                  <td class="cell" rowspan="2">
+                    [[$mkDate(transaction.transactionDatetimeStamp, 'yyyy-MM-dd')]]
+                  </td>
+                  <td class="cell" align="center">
+                    <template is="dom-repeat" items="[[transaction.debitList]]" as="debit">
+                      <div><i>[[$getAccount(debit.accountId)]]:</i> [[debit.amount]]</div>
+                    </template>
+                  </td>
+                  <td class="cell" align="center">
+                    <template is="dom-repeat" items="[[transaction.creditList]]" as="credit">
+                      <div><i>[[$getAccount(credit.accountId)]]:</i> [[credit.amount]]</div>
+                    </template> </td>
+                  <td class="cell" align="center" rowspan="2">
+                    <div>[[transaction.amount]]</div>
+                  </td>
+                  <td class="cell cell-right" align="center" rowspan="2">
+                    <paper-icon-button icon="create" on-tap="editTransactionTapped"></paper-icon-button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="cell" colspan="2" align="center">[[transaction.note]]</td>
+                </tr>
+              </template>
+
+              <!-- total - start -->
+              <tr>
+                <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
+                <td class="cell cell-bottom " colspan="3" align="center">
+                  {{transactionList.length}} [[verses.accounting.transactions]]
+                </td>
+              </tr>
+              <!-- total - end -->
+
+            </table>
+          </div>
+          <!-- transaction-list - End -->
+        </div>
+        <div class="vertical layout">
+          <div class="horizontal layout wrap">
+            <div class="flex"></div>
+            <div>
+              <div class="author-title">[[verses.general.author]]: [[app.user.fullName]]</div>
+              <div>[[app.organization.employment.designation]]</div>
+              <div>[[app.organization.employment.companyProvidedId]]</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+    class PageReportBalanceSheet extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-report-balance-sheet';
+      }
+
+      static get properties() {
+        return {
+          shouldShowFilters: {
+            type: Boolean,
+            value: false
+          },
+          fromDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date.setMonth(date.getMonth() - 1);
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          toDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.app.shouldShowPrintButton = true;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.accounting.transactionListTitle);
+        if (!this._ensureAccess()) return;
+
+        this._processAccountList(() => {
+          this.preset = 'all';
+          if ('preset' in this.params) {
+            this.preset = this.params['preset'];
+          }
+          this._processTransactionList(() => {
+            this.self = this;
+            this.isReady = true;
+          });
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.shouldShowPrintButton = false;
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_VIEW_ACCOUNTING_REPORTS']
+        });
+      }
+
+      _fetchAccountList(cbfn) {
+        let data = {
+          organizationId: this.app.organization.id,
+          filterByIsMonetary: 'all',
+          filterByNature: 'all',
+          accountIdList: [],
+        };
+        this.app.callGetAccountListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.accountList);
+        });
+      }
+
+      _processAccountList(cbfn) {
+        this._fetchAccountList(newAccountList => {
+          this.fullAccountList = newAccountList;
+          cbfn();
+        });
+      }
+
+      _fetchTransactionList(cbfn) {
+        let fromDate = new Date(this.fromDate).getTime();
+        let toDate = new Date(this.toDate).getTime();
+
+        let preset = 'query';
+        if ('preset' in this.params) {
+          preset = this.params['preset'];
+        }
+        console.log(preset)
+
+        let data = {
+          organizationId: this.app.organization.id,
+
+          preset,
+          accountIdList: [],
+
+          transactionId: null,
+
+          fromDate,
+          toDate
+        };
+        this.app.callGetTransactionListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.transactionList);
+        });
+      }
+
+      _processTransactionList(cbfn) {
+        this._fetchTransactionList(newTransactionList => {
+
+          // sort
+          this.__sortTransaction(newTransactionList);
+
+          this.transactionList = newTransactionList;
+          cbfn();
+        });
+      }
+
+      // region: ui  ===========================
+
+      editTransactionTapped(e) {
+        let { transaction } = e.model;
+        if (transaction.transactionOrigin === 'manual') {
+          return this.app.navigateTo(`/edit-manual-transaction/transaction:${transaction.id}`);
+        } else {
+          return this.app.navigateTo(`/edit-usual-transaction/transaction:${transaction.id}/transaction-origin:${transaction.transactionOrigin}`);
+        }
+      }
+
+      filterTapped(e = null) {
+        this.isReady = false;
+        this._processTransactionList(() => {
+          this.isReady = true;
+        });
+      }
+
+      printButtonOnTopBarPressed(e = null) {
+        window.print();
+      }
+
+    }
+
+    window.customElements.define(PageReportBalanceSheet.is, PageReportBalanceSheet);
+  </script>
+</dom-module>
