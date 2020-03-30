@@ -385,6 +385,7 @@
 
           // prepare data for preview and compute balance
           let balance = 0;
+          newTransactionList.reverse(); // reverse so that the balances are correct
           newTransactionList.forEach((transaction) => {
             let isAccountDebited = transaction.debitList.find(({ accountId }) => accountId === this.accountId);
 
@@ -408,6 +409,7 @@
               transaction.balance = balance;
             }
           });
+          newTransactionList.reverse(); // reverse back so that the order is correct
 
           this.finalBalance = balance;
 
