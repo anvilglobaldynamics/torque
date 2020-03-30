@@ -1271,6 +1271,9 @@
     "againstAccount": "Against Account",
     "note": "Note",
 
+    "employee": "Employee",
+    "noParty": "No Party",
+    "party": "Party",
     "incomeStatement": "Income Statement",
     "trialBalance": "Trial Balance",
     "balanceSheet": "Balance Sheet",

@@ -19,6 +19,8 @@
 
 <link rel="import" href="shared-styles.html">
 
+<link rel="import" href="elem-party-selector.html">
+
 <dom-module id="page-edit-manual-transaction">
   <template>
     <style include="shared-styles"></style>
@@ -78,6 +80,10 @@
               </paper-dropdown-menu>
             </div>
 
+            <template is="dom-if" if="[[!editMode]]">
+              <elem-party-selector selected-collection-name="{{partyCollectionName}}" selected-document-id="{{partyDocumentId}}" page="{{self}}"></elem-party-selector>
+            </template>
+
             <paper-textarea class="editTransactionForm--note" value="{{editTransactionForm.note}}" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
 
             <div class="horizontal layout button-row end">
@@ -135,6 +141,8 @@
       }
 
       onNavigateIn() {
+        this.self = this;
+
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
@@ -149,6 +157,9 @@
             this.app.pushPageTitle(this.app.verses.accounting.addManualTransactionPageTitle);
             this.set('editTransactionForm.transactionDate', this.$mkDate(Date.now(), 'yyyy-MM-dd'));
           }
+
+          this.partyCollectionName = 'no-party';
+          this.partyDocumentId = -1;
 
           if (!this._ensureAccess()) return;
           if (this.editMode) {
@@ -254,9 +265,9 @@
         });
       }
 
-      _processCreateTransaction({ note, creditList, debitList, transactionDatetimeStamp }) {
+      _processCreateTransaction({ note, party, creditList, debitList, transactionDatetimeStamp }) {
         let data = {
-          note, creditList, debitList, transactionDatetimeStamp,
+          note, party, creditList, debitList, transactionDatetimeStamp,
           transactionOrigin: 'manual',
           action: null,
           organizationId: this.app.organization.id
@@ -313,7 +324,15 @@
           }
         ]
 
-        this._processCreateTransaction({ note, creditList, debitList, transactionDatetimeStamp });
+        let party = null;
+        if (!(this.partyCollectionName === 'no-party' || this.partyDocumentId === null || this.partyDocumentId === -1)) {
+          party = {
+            collectionName: this.partyCollectionName,
+            documentId: this.partyDocumentId
+          }
+        }
+
+        this._processCreateTransaction({ note, party, creditList, debitList, transactionDatetimeStamp });
       }
 
       updateTransactionTapped(e = null) {

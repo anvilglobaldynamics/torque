@@ -19,6 +19,8 @@
 
 <link rel="import" href="shared-styles.html">
 
+<link rel="import" href="elem-party-selector.html">
+
 <dom-module id="page-edit-usual-transaction">
   <template>
     <style include="shared-styles">
@@ -55,6 +57,8 @@
                   </template>
                 </paper-listbox>
               </paper-dropdown-menu>
+
+              <elem-party-selector selected-collection-name="{{partyCollectionName}}" selected-document-id="{{partyDocumentId}}" page="{{self}}"></elem-party-selector>
 
               <paper-checkbox class="editTransactionForm--hasMonetaryTransactionOccurred" checked="{{editTransactionForm.hasMonetaryTransactionOccurred}}">
                 <template is="dom-if" if="[[$equals(transactionOrigin, 'add-income')]]">
@@ -147,6 +151,8 @@
       }
 
       onNavigateIn() {
+        this.self = this;
+
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
@@ -169,6 +175,9 @@
           this.editMode = false;
           this.set('editTransactionForm.transactionDate', this.$mkDate(Date.now(), 'yyyy-MM-dd'));
         }
+
+        this.partyCollectionName = 'no-party';
+        this.partyDocumentId = -1;
 
         this._processAccountList(() => {
           if (!this._ensureAccess()) return;
@@ -254,19 +263,19 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.editingTransaction = response.transactionList[0];
-          let { note, amount, transactionDatetimeStamp , creditList, debitList} = this.editingTransaction;
+          let { note, amount, transactionDatetimeStamp, creditList, debitList } = this.editingTransaction;
           let creditedAccountId = creditList[0].accountId;
           let debitedAccountId = debitList[0].accountId;
-          
+
           let transactionDate = this.$mkDate(new Date(transactionDatetimeStamp), 'yyyy-MM-dd');
           this.editTransactionForm = { note, amount, transactionDate, creditedAccountId, debitedAccountId };
           cbfn();
         });
       }
 
-      _processCreateTransaction({ note, creditList, debitList, transactionDatetimeStamp }) {
+      _processCreateTransaction({ note, party, creditList, debitList, transactionDatetimeStamp }) {
         let data = {
-          note, creditList, debitList, transactionDatetimeStamp,
+          note, party, creditList, debitList, transactionDatetimeStamp,
           transactionOrigin: this.transactionOrigin,
           action: null,
           organizationId: this.app.organization.id
@@ -344,7 +353,15 @@
           }
         ]
 
-        this._processCreateTransaction({ note, creditList, debitList, transactionDatetimeStamp });
+        let party = null;
+        if (!(this.partyCollectionName === 'no-party' || this.partyDocumentId === null || this.partyDocumentId === -1)) {
+          party = {
+            collectionName: this.partyCollectionName,
+            documentId: this.partyDocumentId
+          }
+        }
+
+        this._processCreateTransaction({ note, party, creditList, debitList, transactionDatetimeStamp });
       }
 
       updateTransactionTapped(e = null) {

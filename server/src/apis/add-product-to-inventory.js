@@ -75,7 +75,7 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin
         createdByUserId: userId,
         organizationId
       },
-      operationData: { productList, productAcquisitionId, productAcquisitionNumber: productAcquisition.productAcquisitionNumber }
+      operationData: { productList, productAcquisitionId, productAcquisitionNumber: productAcquisition.productAcquisitionNumber, vendorId }
     });
 
     return { status: "success", insertedProductList };
