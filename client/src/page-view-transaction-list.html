@@ -195,7 +195,7 @@
                     <div>[[transaction.amount]]</div>
                   </td>
                   <td class="cell cell-right" align="center" rowspan="2">
-                    <paper-icon-button icon="create" on-tap="editTransactionTapped"></paper-icon-button>
+                    <paper-icon-button icon="create" on-tap="editTransactionTapped" disabled="[[$equals(transaction.transactionOrigin, 'system')]]"></paper-icon-button>
                   </td>
                 </tr>
                 <tr>
