@@ -31,6 +31,11 @@ exports.TransactionCollection = class extends Collection {
         amount: Joi.number().max(999999999999999).required(),
       })).min(1).required(),
 
+      party: Joi.object().keys({
+        collectionName: Joi.string().min(1).max(32).required(),
+        documentId: Joi.number().max(999999999999999).required()
+      }).allow(null).required(),
+
       action: Joi.object().keys({
         name: Joi.string().min(1).max(32).required(),
         collectionName: Joi.string().min(1).max(32).required(),
@@ -55,11 +60,11 @@ exports.TransactionCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, action }) {
+  async create({ createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, party, action }) {
     let transactionNumber = await this.autoGenerateOrganizationSpecificNumber({ organizationId, fieldName: 'transactionNumberSeed' });
 
     return await this._insert({
-      createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, action,
+      createdByUserId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, party, action,
       transactionNumber,
       isDeleted: false
     });

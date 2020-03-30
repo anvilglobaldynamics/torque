@@ -29,6 +29,11 @@ exports.AddTransactionApi = class extends Api.mixin(AccountingMixin) {
 
       note: Joi.string().allow('').max(64).required(),
 
+      party: Joi.object().keys({
+        collectionName: Joi.string().min(1).max(32).required(),
+        documentId: Joi.number().max(999999999999999).required()
+      }).allow(null).required(),
+
       action: Joi.object().keys({
         name: Joi.string().min(1).max(32).required(),
         collectionName: Joi.string().min(1).max(32).required(),
@@ -67,7 +72,7 @@ exports.AddTransactionApi = class extends Api.mixin(AccountingMixin) {
   }
 
   async handle({ body, userId }) {
-    let { organizationId, note, transactionDatetimeStamp, transactionOrigin, debitList, creditList, action } = body;
+    let { organizationId, note, transactionDatetimeStamp, transactionOrigin, debitList, creditList, party, action } = body;
 
     // make sure amounts are in balance
     let amount = await this.balanceTransactionAndGetAmount({ debitList, creditList });
@@ -75,7 +80,7 @@ exports.AddTransactionApi = class extends Api.mixin(AccountingMixin) {
     throwOnTruthy(transactionOrigin === 'system', "TRANSACTION_ORIGIN_INVALID", "Transaction type 'system' can not be set from APIs");
 
     let transactionId = await this.database.transaction.create({
-      createdByUserId: userId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, action
+      createdByUserId: userId, organizationId, note, amount, transactionDatetimeStamp, transactionOrigin, debitList, creditList, party, action
     })
 
     return { status: "success", transactionId };

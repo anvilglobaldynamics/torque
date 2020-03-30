@@ -191,6 +191,7 @@ describe.only('Accounting', _ => {
 
         note: "Paid Rent with Cash",
 
+        party: null,
         action: null
       }
     }, (err, response, body) => {
