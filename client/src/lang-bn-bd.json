@@ -1189,6 +1189,7 @@
     "noReceipt":"রসিদ নেই",
     "printReceipt": "রসিদ প্রিন্ট করুন",
     "emailReceipt": "ই-মেইলে রিসিট পাঠান",
+    "smsReceipt": "SMS রিসিট পাঠান",
     "resendReceipt": "রিসিট",
     "resentSuccessfully": "রিসিট পাঠানো হয়েছে।"
   }

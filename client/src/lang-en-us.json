@@ -1188,6 +1188,7 @@
     "noReceipt":"No Receipt",
     "printReceipt": "Print Receipt",
     "emailReceipt": "Send Receipt by Email",
+    "smsReceipt": "Send Receipt by Sms",
     "resendReceipt": "Receipt",
     "resentSuccessfully": "Receipt has been sent successfully."
   }

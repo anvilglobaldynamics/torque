@@ -2291,12 +2291,50 @@
         }
       }
 
+      _sendReceiptBySms({ data, receiptToken }) {
+        let organizationName = this.organization.name;
+
+        if (organizationName.length > 48) {
+          organizationName = organizationName.slice(0, 45) + ' ..';
+        }
+        let { totalBilled, changeAmount } = data.payment;
+        totalBilled = Math.round(totalBilled * 100) / 100;
+        changeAmount = Math.round(changeAmount * 100) / 100;
+
+        let body = `${organizationName}
+Total ${totalBilled}
+Change ${changeAmount}
+
+Full receipt: https://lipi.shop/r/${receiptToken}
+
+Powered by Lipi for Business.`;
+
+        let phone = data.customer.phone;
+
+        console.log({ phone, body });
+
+        phone = encodeURIComponent(phone);
+        body = encodeURIComponent(body);
+        let url = `sms:${phone};?&body=${body}`;
+
+        console.log(url);
+
+        try {
+          window.open(url);
+        } catch (ex) {
+          const message = "Unable to send SMS. Please contact developers with the following messag: " + ex.message;
+          alert(message);
+        }
+      }
+
       saveSaleTapped(e = null) {
         let canHaveEmailReceipt = false;
+        let canHaveSmsReceipt = false;
         if (this.customer) {
           if (this.customer.email) canHaveEmailReceipt = true;
+          if (this.customer.phone) canHaveSmsReceipt = true;
         }
-        this.app.displayReceiptDialog({ canHaveEmailReceipt }, ({ receiptType }) => {
+        this.app.displayReceiptDialog({ canHaveEmailReceipt, canHaveSmsReceipt }, ({ receiptType }) => {
           if (receiptType === 'close') {
             'pass'
           } else if (receiptType === 'print-receipt') {
@@ -2309,6 +2347,25 @@
               let message = this.app.verses.pos.newSalesAdded;
               this.app.showToast(message, _ => {
                 this._resetSales();
+              });
+            });
+          } else if (receiptType === 'sms-receipt') {
+            this._processAddSales({ sentVia: 'sms' }, ({ receiptToken }) => {
+              let message = this.app.verses.pos.newSalesAdded;
+              this.app.showToast(message, _ => {
+
+                let data = {
+                  payment: this.payment,
+                  customer: this.customer,
+                }
+
+                this._sendReceiptBySms({
+                  data: JSON.parse(JSON.stringify(data)),
+                  receiptToken
+                });
+
+                this._resetSales();
+
               });
             });
           } else if (receiptType === 'no-receipt') {
