@@ -1643,8 +1643,6 @@
       }
 
       _fetchEntireInventoryDetails(cbfn) {
-        // let inventoryId = parseInt(this.params.inventory);
-        // this.inventoryId = inventoryId;
         let inventoryId = this.defaultInventoryId;
         let data = { inventoryId, includeZeroCountProducts: false, sortOrder: 'blueprint-created-date-descending' };
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
@@ -1656,8 +1654,6 @@
 
       _processEntireInventory(cbfn) {
         this._fetchEntireInventoryDetails(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
-          // this.inventoryContainerName = inventoryContainerDetails.inventoryContainerName;
-          // this.inventoryName = inventoryDetails.inventoryName;
 
           let productList = aggregatedProductList.map(product => {
             let { purchasePrice, salePrice } = product.product;
@@ -1665,9 +1661,7 @@
             product.isSelected = false;
             Object.assign(product, { name, unit, purchasePrice, salePrice });
             return product;
-
           });
-
 
           productList = productList.map(product => {
             let { purchasePrice, salePrice } = product.product;
@@ -1684,12 +1678,10 @@
 
       productCategoryTapped(e) {
         let { productCategory } = e.model;
-        console.log({ productCategory })
         this.selectedProductCategory = productCategory;
         this.productCategoryProductList = this.entireProductList.filter(product => {
           return product.product.productBlueprint.productCategoryIdList.indexOf(productCategory.id) > -1
         });
-        console.log(this.productCategoryProductList, this.entireProductList)
       }
 
       backFromProductCategoryTapped() {
