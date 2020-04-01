@@ -40,6 +40,7 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       Joi.string().valid('Yes', 'No').required(), // is converted into isReturnable
       Joi.string().max(64).allow('').required(), // identifierCode
       Joi.string().max(64).allow('').required(), // productCategory
+      Joi.string().max(64).allow('').required(), // productCategory2
       Joi.number().max(999999999999999).required() // defaultInventoryId
     );
   }
@@ -61,10 +62,10 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
   _convertRowToProductBlueprint(row) {
     let [
       name, unit, defaultPurchasePrice, defaultSalePrice,
-      defaultVat, isReturnable, identifierCode, productCategoryName, defaultInventoryId
+      defaultVat, isReturnable, identifierCode, productCategoryName, productCategory2Name, defaultInventoryId
     ] = row;
     return {
-      name, unit, identifierCode, defaultPurchasePrice, defaultSalePrice, productCategoryName, defaultInventoryId,
+      name, unit, identifierCode, defaultPurchasePrice, defaultSalePrice, productCategoryName, productCategory2Name, defaultInventoryId,
       defaultVat, isReturnable
     }
   }
@@ -100,8 +101,9 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       try {
         productBlueprint.organizationId = organizationId;
 
-        let { productCategoryName, defaultInventoryId } = productBlueprint;
+        let { productCategoryName, defaultInventoryId, productCategory2Name } = productBlueprint;
         delete productBlueprint.productCategoryName;
+        delete productBlueprint.productCategory2Name;
         delete productBlueprint.defaultInventoryId;
 
         // validate inventory
@@ -119,7 +121,21 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
           productCategory = await this.database.productCategory._findOne({ name: productCategoryName, organizationId });
         }
         let productCategoryId = productCategory.id;
-        productBlueprint.productCategoryIdList = [productCategoryId];
+
+        // add or get product category 2
+        let productCategory2 = await this.database.productCategory._findOne({ name: productCategory2Name, organizationId });
+        if (!productCategory2) {
+          await this.database.productCategory.create({
+            name: productCategory2Name,
+            organizationId,
+            colorCode: '000000'
+          });
+          productCategory2 = await this.database.productCategory._findOne({ name: productCategory2Name, organizationId });
+        }
+        let productCategory2Id = productCategory.id;
+
+        // set product category id list
+        productBlueprint.productCategoryIdList = [productCategoryId, productCategory2Id];
 
         // add product blueprint
         await this.__ensureIdentifierCodeIsUnique({ identifierCode: productBlueprint.identifierCode, organizationId });
