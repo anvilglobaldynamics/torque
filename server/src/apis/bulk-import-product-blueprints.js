@@ -130,7 +130,6 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
           inventoryId: defaultInventoryId,
           productList: [{ count: 1, productBlueprintId }]
         });
-        console.log(insertedProductList)
 
         successfulCount += 1;
       } catch (err) {
