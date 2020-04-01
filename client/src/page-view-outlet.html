@@ -79,54 +79,62 @@
           <!-- touch-button - end -->
 
           <!-- touch-button - start -->
-          <template is="dom-if" if="[[hasModule('MOD_SERVICE')]]">
-            <div class="touch-button" on-tap="manageOutletServicesTapped">
-              <div class="icon">
-                <iron-icon src="../../images/icons/support.png"></iron-icon>
+          <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
+            <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+              <div class="touch-button" on-tap="manageOutletServicesTapped">
+                <div class="icon">
+                  <iron-icon src="../../images/icons/support.png"></iron-icon>
+                </div>
+                <div class="type title uppercase">[[verses.outlet.manageOutletServicesTitle]]</div>
+                <div class="type caption secondary">[[verses.outlet.manageOutletServices]]</div>
+                <paper-ripple></paper-ripple>
               </div>
-              <div class="type title uppercase">[[verses.outlet.manageOutletServicesTitle]]</div>
-              <div class="type caption secondary">[[verses.outlet.manageOutletServices]]</div>
-              <paper-ripple></paper-ripple>
-            </div>
+            </template>
           </template>
           <!-- touch-button - end -->
 
           <!-- touch-button - start -->
-          <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
-            <div class="touch-button" on-tap="viewInventoryTapped" data-key="defaultInventory">
-              <div class="icon">
-                <iron-icon src="../../images/icons/package-right.png"></iron-icon>
+          <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+            <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+              <div class="touch-button" on-tap="viewInventoryTapped" data-key="defaultInventory">
+                <div class="icon">
+                  <iron-icon src="../../images/icons/package-right.png"></iron-icon>
+                </div>
+                <div class="type title uppercase">[[verses.outlet.defaultInventoryName]] [[verses.outlet.inventory]]</div>
+                <div class="type caption secondary">[[verses.outlet.goToDefaultInventory]]</div>
+                <paper-ripple></paper-ripple>
               </div>
-              <div class="type title uppercase">[[verses.outlet.defaultInventoryName]] [[verses.outlet.inventory]]</div>
-              <div class="type caption secondary">[[verses.outlet.goToDefaultInventory]]</div>
-              <paper-ripple></paper-ripple>
-            </div>
+            </template>
           </template>
           <!-- touch-button - end -->
 
           <!-- touch-button - start -->
-          <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
-            <div class="touch-button" on-tap="viewInventoryTapped" data-key="returnedInventory">
-              <div class="icon">
-                <iron-icon src="../../images/icons/package-down.png"></iron-icon>
+          <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+            <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+              <div class="touch-button" on-tap="viewInventoryTapped" data-key="returnedInventory">
+                <div class="icon">
+                  <iron-icon src="../../images/icons/package-down.png"></iron-icon>
+                </div>
+                <div class="type title uppercase">[[verses.outlet.returnedInventoryName]] [[verses.outlet.inventory]]</div>
+                <div class="type caption secondary">[[verses.outlet.goToReturnedInventory]]</div>
+                <paper-ripple></paper-ripple>
               </div>
-              <div class="type title uppercase">[[verses.outlet.returnedInventoryName]] [[verses.outlet.inventory]]</div>
-              <div class="type caption secondary">[[verses.outlet.goToReturnedInventory]]</div>
-              <paper-ripple></paper-ripple>
-            </div>
+            </template>
           </template>
           <!-- touch-button - end -->
 
           <!-- touch-button - start -->
-          <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
-            <div class="touch-button" on-tap="viewInventoryTapped" data-key="damagedInventory">
-              <div class="icon">
-                <iron-icon src="../../images/icons/package-wrapped.png"></iron-icon>
+          <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+            <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+              <div class="touch-button" on-tap="viewInventoryTapped" data-key="damagedInventory">
+                <div class="icon">
+                  <iron-icon src="../../images/icons/package-wrapped.png"></iron-icon>
+                </div>
+                <div class="type title uppercase">[[verses.outlet.damagedInventoryName]] [[verses.outlet.inventory]]</div>
+                <div class="type caption secondary">[[verses.outlet.goToDamagedInventory]]</div>
+                <paper-ripple></paper-ripple>
               </div>
-              <div class="type title uppercase">[[verses.outlet.damagedInventoryName]] [[verses.outlet.inventory]]</div>
-              <div class="type caption secondary">[[verses.outlet.goToDamagedInventory]]</div>
-              <paper-ripple></paper-ripple>
-            </div>
+            </template>
           </template>
           <!-- touch-button - end -->
 
