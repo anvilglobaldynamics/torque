@@ -1681,7 +1681,6 @@
         this.productCategoryProductList = this.entireProductList.filter(product => {
           return product.product.productBlueprint.productCategoryIdList.indexOf(productCategory.id) > -1
         });
-        console.log(this.productCategoryProductList)
       }
 
       backFromProductCategoryTapped() {
@@ -1690,7 +1689,6 @@
 
       productFromProductCategorySelected(e) {
         let { product } = e.model;
-        console.log("PRODUCT", product)
         product.selectedCount = 1;
         this._selectProduct({ product });
       }
@@ -1783,7 +1781,6 @@
       }
 
       _selectProduct({ product }) {
-        console.log({ product });
         let { productId, name, selectedCount, count, salePrice, vatValue, unit } = product;
         let maxAllowedCount = count;
         selectedCount = parseFloat(String(selectedCount));
@@ -2510,13 +2507,9 @@ Powered by Lipi for Business.`;
 
         let phone = data.customer.phone;
 
-        console.log({ phone, body });
-
         phone = encodeURIComponent(phone);
         body = encodeURIComponent(body);
         let url = `sms:${phone};?&body=${body}`;
-
-        console.log(url);
 
         try {
           window.open(url);
