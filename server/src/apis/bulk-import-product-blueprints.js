@@ -132,7 +132,7 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
           });
           productCategory2 = await this.database.productCategory._findOne({ name: productCategory2Name, organizationId });
         }
-        let productCategory2Id = productCategory.id;
+        let productCategory2Id = productCategory2.id;
 
         // set product category id list
         productBlueprint.productCategoryIdList = [productCategoryId, productCategory2Id];
