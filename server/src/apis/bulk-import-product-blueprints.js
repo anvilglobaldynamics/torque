@@ -3,8 +3,9 @@ const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
 const { extract } = require('../utils/extract');
 const { ProductBlueprintMixin } = require('./mixins/product-blueprint-mixin');
+const { InventoryMixin } = require('./mixins/inventory-mixin');
 
-exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprintMixin) {
+exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprintMixin, InventoryMixin) {
 
   get autoValidates() { return true; }
 
@@ -37,7 +38,9 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       Joi.number().max(999999999999999).required(), //defaultSalePrice
       Joi.number().max(999999999999999).required(), // defaultVat
       Joi.string().valid('Yes', 'No').required(), // is converted into isReturnable
-      Joi.string().max(64).allow('').required() // identifierCode
+      Joi.string().max(64).allow('').required(), // identifierCode
+      Joi.string().max(64).allow('').required(), // productCategory
+      Joi.number().max(999999999999999).required() // defaultInventoryId
     );
   }
 
@@ -58,10 +61,10 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
   _convertRowToProductBlueprint(row) {
     let [
       name, unit, defaultPurchasePrice, defaultSalePrice,
-      defaultVat, isReturnable, identifierCode
+      defaultVat, isReturnable, identifierCode, productCategoryName, defaultInventoryId
     ] = row;
     return {
-      name, unit, identifierCode, defaultPurchasePrice, defaultSalePrice,
+      name, unit, identifierCode, defaultPurchasePrice, defaultSalePrice, productCategoryName, defaultInventoryId,
       defaultVat, isReturnable
     }
   }
@@ -96,10 +99,39 @@ exports.BulkImportProductBlueprintsApi = class extends Api.mixin(ProductBlueprin
       let productBlueprint = productBlueprintList[i];
       try {
         productBlueprint.organizationId = organizationId;
-        // FIXME: Update when there is support for category during bulk import
-        productBlueprint.productCategoryIdList = []; 
+
+        let { productCategoryName, defaultInventoryId } = productBlueprint;
+        delete productBlueprint.productCategoryName;
+        delete productBlueprint.defaultInventoryId;
+
+        // validate inventory
+        let inventory = await this.database.inventory._findOne({ organizationId, id: defaultInventoryId });
+        throwOnFalsy(inventory, "INVENTORY_INVALID", "Inventory is Invalid");
+
+        // add or get product category
+        let productCategory = await this.database.productCategory._findOne({ name: productCategoryName, organizationId });
+        if (!productCategory) {
+          await this.database.productCategory.create({
+            name: productCategoryName,
+            organizationId,
+            colorCode: '000000'
+          });
+          productCategory = await this.database.productCategory._findOne({ name: productCategoryName, organizationId });
+        }
+        let productCategoryId = productCategory.id;
+        productBlueprint.productCategoryIdList = [productCategoryId];
+
+        // add product blueprint
         await this.__ensureIdentifierCodeIsUnique({ identifierCode: productBlueprint.identifierCode, organizationId });
-        await this._createProductBlueprint(productBlueprint);
+        let productBlueprintId = await this._createProductBlueprint(productBlueprint);
+
+        // add product to inventory
+        let insertedProductList = await this._addProductToInventory({
+          inventoryId: defaultInventoryId,
+          productList: [{ count: 1, productBlueprintId }]
+        });
+        console.log(insertedProductList)
+
         successfulCount += 1;
       } catch (err) {
         if (err.code && err.code.indexOf('DUPLICATE_') === 0) {
