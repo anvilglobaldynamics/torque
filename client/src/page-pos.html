@@ -1275,11 +1275,7 @@
         }
         if (!this._ensureAccess()) return;
 
-        // FIXME: Organize
-        this.selectedProductCategory = null;
-        this.selectedProductSubtab = 'categories';
-        this._processProductCategoryList(() => { });
-        // FIXME: Update _processEntireInventory Usage
+        this._initProductCategorySubtab();
 
         this.notFoundMessage = '';
 
@@ -1374,6 +1370,17 @@
         this.productSourceToDisplay = this.app.verses.pos.currentOutlet;
         this.selectedWarehouse = this.app.getFromSession('pos-selected-warehouse') || '--current-outlet'; // for dropdown
         this.productsSelectedFromWarehouseId = this.app.getFromSession('product-selected-from-warehouse-id') || null; // for calculation
+      }
+
+      _initProductCategorySubtab(){
+        this.selectedProductCategory = null;
+        if (this.hasModule('MOD_RESTAURANT')) {
+          this.selectedProductSubtab = 'categories';
+        } else {
+          this.selectedProductSubtab = 'search';
+        }
+        this._processProductCategoryList(() => { });
+        // NOTE: _processEntireInventory Is called seperately
       }
 
       onNavigateOut() {
@@ -1591,7 +1598,7 @@
             this.productSourceSelectionComplete = true;
           }
 
-          // FIXME organize, should not be done from here
+          // Fetch full inventory to allow category-wise selection
           this._processEntireInventory(() => { });
 
           cbfn();
@@ -1651,18 +1658,18 @@
         this._fetchEntireInventoryDetails(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
           // this.inventoryContainerName = inventoryContainerDetails.inventoryContainerName;
           // this.inventoryName = inventoryDetails.inventoryName;
-          
+
           let productList = aggregatedProductList.map(product => {
             let { purchasePrice, salePrice } = product.product;
             let { name, unit } = product.product.productBlueprint;
             product.isSelected = false;
             Object.assign(product, { name, unit, purchasePrice, salePrice });
             return product;
-            
+
           });
 
 
-           productList = productList.map(product => {
+          productList = productList.map(product => {
             let { purchasePrice, salePrice } = product.product;
             let { name, unit, defaultVat, identifierCode } = product.product.productBlueprint;
             let vatValue = defaultVat;
