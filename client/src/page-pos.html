@@ -1372,7 +1372,7 @@
         this.productsSelectedFromWarehouseId = this.app.getFromSession('product-selected-from-warehouse-id') || null; // for calculation
       }
 
-      _initProductCategorySubtab(){
+      _initProductCategorySubtab() {
         this.selectedProductCategory = null;
         if (this.hasModule('MOD_RESTAURANT')) {
           this.selectedProductSubtab = 'categories';
@@ -1646,7 +1646,7 @@
         // let inventoryId = parseInt(this.params.inventory);
         // this.inventoryId = inventoryId;
         let inventoryId = this.defaultInventoryId;
-        let data = { inventoryId, searchString: this.searchString, paginate: this.paginate, includeZeroCountProducts: false, sortOrder: 'blueprint-created-date-descending' };
+        let data = { inventoryId, includeZeroCountProducts: false, sortOrder: 'blueprint-created-date-descending' };
         this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
@@ -1684,10 +1684,12 @@
 
       productCategoryTapped(e) {
         let { productCategory } = e.model;
+        console.log({ productCategory })
         this.selectedProductCategory = productCategory;
         this.productCategoryProductList = this.entireProductList.filter(product => {
           return product.product.productBlueprint.productCategoryIdList.indexOf(productCategory.id) > -1
         });
+        console.log(this.productCategoryProductList, this.entireProductList)
       }
 
       backFromProductCategoryTapped() {
