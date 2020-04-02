@@ -306,6 +306,12 @@
         cursor: pointer;
       }
 
+      .psb-container {
+        max-height: 300px;
+        /* scroll-behavior: auto; */
+        overflow-y: auto;
+      }
+
       .psb-product .price {}
     </style>
 
@@ -1643,7 +1649,7 @@
           });
 
           this.productCategoryList = productCategoryList.filter(productCategory => productCategory.productCategoryProductList.length);
-          
+
           return cbfn();
         });
       }
