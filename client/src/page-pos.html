@@ -1379,7 +1379,6 @@
         } else {
           this.selectedProductSubtab = 'search';
         }
-        this._processProductCategoryList(() => { });
         // NOTE: _processEntireInventory Is called seperately
       }
 
@@ -1599,7 +1598,9 @@
           }
 
           // Fetch full inventory to allow category-wise selection
-          this._processEntireInventory(() => { });
+          this._processEntireInventory(() => {
+            this._processProductCategoryList(() => { });
+          });
 
           cbfn();
         });
@@ -1637,7 +1638,15 @@
 
       _processProductCategoryList(cbfn) {
         this._fetchProductCategoryList(productCategoryList => {
-          this.productCategoryList = productCategoryList;
+
+          productCategoryList.forEach(productCategory => {
+            productCategory.productCategoryProductList = this.entireProductList.filter(product => {
+              return product.product.productBlueprint.productCategoryIdList.indexOf(productCategory.id) > -1
+            });
+          });
+
+          this.productCategoryList = productCategoryList.filter(productCategory => productCategory.productCategoryProductList.length);
+          
           return cbfn();
         });
       }
