@@ -121,5 +121,19 @@
       "maximumWarehouses": 1,
       "maximumEmployees": 5
     }
+  },
+  {
+    "code": "R-DFETCH-01",
+    "name": "Direct Fetch Restaurant Demo Package",
+    "price": 0,
+    "duration": {
+      "months": 0,
+      "days": 7
+    },
+    "limits": {
+      "maximumOutlets": 3,
+      "maximumWarehouses": 0,
+      "maximumEmployees": 5
+    }
   }
 ]
