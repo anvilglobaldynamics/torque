@@ -268,6 +268,45 @@
         text-align: center;
         color: red;
       }
+
+      .category-box {
+        font-size: 16px;
+        padding: 8px;
+        margin: 4px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .product-subtab {
+        text-align: center;
+        padding: 12px;
+        font-size: 14px;
+        background: #B2DFDB;
+        border-bottom: 4px solid #80CBC4;
+        cursor: pointer;
+      }
+
+      .product-subtab.selected {
+        border-bottom: 4px solid #004D40;
+      }
+
+      .psb-category-container {
+        font-size: 16px;
+        padding: 8px;
+        margin: 4px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .psb-product {
+        background: rgb(191, 221, 219);
+        font-size: 14px;
+        padding: 8px;
+        margin: 4px;
+        cursor: pointer;
+      }
+
+      .psb-product .price {}
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -479,67 +518,119 @@
           </template>
           <!-- warehouse selection - end -->
 
-          <!-- product searchbar - start -->
-          <template is="dom-if" if="[[productSourceSelectionComplete]]">
-            <div class="card vertical layout product-search-bar">
-              <template is="dom-if" if="[[isScanningActive]]">
-                <div class="scanning-active-message">[[verses.pos.scanningActive]]</div>
-              </template>
-              <div class="horizontal layout center">
-                <paper-input id="product-search-field" class="flex" value="{{productSearchString}}" always-float-label label="[[verses.pos.productSearchLabel]]" on-keydown="productSearchFieldKeypressed" on-focus="productSearchFieldFocused" on-blur="productSearchFieldBlurred"></paper-input>
-                <template is="dom-if" if="[[!matchingProductList.length]]">
-                  <paper-icon-button icon="search" on-tap="productSearchTapped"></paper-icon-button>
-                </template>
-                <template is="dom-if" if="[[matchingProductList.length]]">
-                  <paper-icon-button icon="clear" on-tap="productSearchClearTapped"></paper-icon-button>
+          <div class="horizontal layout">
+            <div class$="product-subtab flex [[$getProductSubtabClass('categories', selectedProductSubtab)]]" on-tap="productSubtabCategoryTapped" style="margin-right: 1px;;">
+              Categories
+            </div>
+            <div class$="product-subtab flex [[$getProductSubtabClass('search', selectedProductSubtab)]]" on-tap="productSubtabSearchTapped">
+              Search
+            </div>
+          </div>
+
+          <!-- categories - subtab - start -->
+          <template is="dom-if" if="[[$equals(selectedProductSubtab, 'categories')]]">
+
+            <template is="dom-if" if="[[!selectedProductCategory]]">
+              <div class="card horizontal layout wrap">
+                <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
+                  <div class="category-box" on-tap="productCategoryTapped" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}">[[productCategory.name]]</div>
                 </template>
               </div>
-              <template is="dom-if" if="[[notFoundMessage]]">
-                <div class="not-found-message">[[notFoundMessage]]</div>
-              </template>
-            </div>
+            </template>
+
+            <!-- product selection box - start -->
+            <template is="dom-if" if="[[selectedProductCategory]]">
+              <div class="">
+                <div class="product-selection-box">
+                  <div class="psb-category-container horizontal layout center" style$="background-color: #{{selectedProductCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(selectedProductCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(selectedProductCategory.colorCode)}}">
+                    <paper-icon-button icon="arrow-back" on-tap="backFromProductCategoryTapped"></paper-icon-button>
+                    [[selectedProductCategory.name]]
+                  </div>
+                </div>
+                <div class="psb-container  card">
+                  <template is="dom-if" if="[[!productCategoryProductList.length]]">
+                    <div style="text-align: center;">No products selected</div>
+                  </template>
+                  <template is="dom-repeat" items="[[productCategoryProductList]]" as="product">
+                    <div class="psb-product horizontal layout center" on-tap="productFromProductCategorySelected">
+                      <div class="name">[[product.name]]</div>
+                      <div class="flex"></div>
+                      <div class="price">[[product.salePrice]]</div>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </template>
+            <!-- product selection box - end -->
+
+          </template>
+          <!-- categories - subtab - end -->
+
+          <!-- product searchbar - start -->
+          <template is="dom-if" if="[[$equals(selectedProductSubtab, 'search')]]">
+            <template is="dom-if" if="[[productSourceSelectionComplete]]">
+              <div class="card vertical layout product-search-bar">
+                <template is="dom-if" if="[[isScanningActive]]">
+                  <div class="scanning-active-message">[[verses.pos.scanningActive]]</div>
+                </template>
+                <div class="horizontal layout center">
+                  <paper-input id="product-search-field" class="flex" value="{{productSearchString}}" always-float-label label="[[verses.pos.productSearchLabel]]" on-keydown="productSearchFieldKeypressed" on-focus="productSearchFieldFocused" on-blur="productSearchFieldBlurred"></paper-input>
+                  <template is="dom-if" if="[[!matchingProductList.length]]">
+                    <paper-icon-button icon="search" on-tap="productSearchTapped"></paper-icon-button>
+                  </template>
+                  <template is="dom-if" if="[[matchingProductList.length]]">
+                    <paper-icon-button icon="clear" on-tap="productSearchClearTapped"></paper-icon-button>
+                  </template>
+                </div>
+                <template is="dom-if" if="[[notFoundMessage]]">
+                  <div class="not-found-message">[[notFoundMessage]]</div>
+                </template>
+              </div>
+            </template>
           </template>
           <!-- product searchbar - end -->
 
           <!-- product search results - start -->
-          <template is="dom-if" if="{{matchingProductList.length}}">
+          <template is="dom-if" if="[[$equals(selectedProductSubtab, 'search')]]">
+            <template is="dom-if" if="{{matchingProductList.length}}">
 
-            <div class="card vertical layout">
+              <div class="card vertical layout">
 
-              <div class="list">
-                <template is="dom-repeat" items="[[matchingProductList]]" as="product">
-                  <div class="horizontal layout item center">
-                    <div class="flex" style="min-width: 128px;">
-                      <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                      <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                <div class="list">
+                  <template is="dom-repeat" items="[[matchingProductList]]" as="product">
+                    <div class="horizontal layout item center">
+                      <div class="flex" style="min-width: 128px;">
+                        <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                        <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                      </div>
+
+                      <template is="dom-if" if="[[product.count]]">
+                        <paper-icon-button class="positive" icon="add-circle" on-tap="selectMatchingProductTapped"></paper-icon-button>
+                      </template>
                     </div>
+                  </template>
+                </div>
 
-                    <template is="dom-if" if="[[product.count]]">
-                      <paper-icon-button class="positive" icon="add-circle" on-tap="selectMatchingProductTapped"></paper-icon-button>
-                    </template>
-                  </div>
-                </template>
+                <div class="pagination">
+                  [[verses.general.loaded]]
+                  <span class="limit">[[productPagination.limit]]</span>
+                  [[verses.general.itemsOutOf]]
+                  <span class="total-count">[[productPagination.totalCount]]</span> [[verses.general.startingFrom]]
+                  <span class="offset">#[[$inc(productPagination.offset)]]</span>.
+                </div>
+
+                <div class="horizontal layout center">
+                  <template is="dom-if" if="[[$hasPreviousPagination(productPaginate.offset)]]">
+                    <paper-button raised class="flex neutral" on-tap="showPreviousProductsTapped">[[verses.general.showPrevious]]</paper-button>
+                  </template>
+
+                  <template is="dom-if" if="[[$hasMorePagination(productPagination.totalCount, productPaginate.offset, productPaginate.limit)]]">
+                    <paper-button raised class="flex neutral" on-tap="showMoreProductsTapped">[[verses.general.showMore]]</paper-button>
+                  </template>
+                </div>
+
               </div>
-
-              <div class="pagination">
-                [[verses.general.loaded]]
-                <span class="limit">[[productPagination.limit]]</span>
-                [[verses.general.itemsOutOf]]
-                <span class="total-count">[[productPagination.totalCount]]</span> [[verses.general.startingFrom]]
-                <span class="offset">#[[$inc(productPagination.offset)]]</span>.
-              </div>
-
-              <div class="horizontal layout center">
-                <template is="dom-if" if="[[$hasPreviousPagination(productPaginate.offset)]]">
-                  <paper-button raised class="flex neutral" on-tap="showPreviousProductsTapped">[[verses.general.showPrevious]]</paper-button>
-                </template>
-
-                <template is="dom-if" if="[[$hasMorePagination(productPagination.totalCount, productPaginate.offset, productPaginate.limit)]]">
-                  <paper-button raised class="flex neutral" on-tap="showMoreProductsTapped">[[verses.general.showMore]]</paper-button>
-                </template>
-              </div>
-
-            </div>
+            </template>
           </template>
           <!-- product search results - end -->
 
@@ -1184,6 +1275,8 @@
         }
         if (!this._ensureAccess()) return;
 
+        this._initProductCategorySubtab();
+
         this.notFoundMessage = '';
 
         // tabination
@@ -1277,6 +1370,16 @@
         this.productSourceToDisplay = this.app.verses.pos.currentOutlet;
         this.selectedWarehouse = this.app.getFromSession('pos-selected-warehouse') || '--current-outlet'; // for dropdown
         this.productsSelectedFromWarehouseId = this.app.getFromSession('product-selected-from-warehouse-id') || null; // for calculation
+      }
+
+      _initProductCategorySubtab() {
+        this.selectedProductCategory = null;
+        if (this.hasModule('MOD_RESTAURANT')) {
+          this.selectedProductSubtab = 'categories';
+        } else {
+          this.selectedProductSubtab = 'search';
+        }
+        // NOTE: _processEntireInventory Is called seperately
       }
 
       onNavigateOut() {
@@ -1493,8 +1596,111 @@
           if (!shouldSkipWarehouseSelection) {
             this.productSourceSelectionComplete = true;
           }
+
+          // Fetch full inventory to allow category-wise selection
+          this._processEntireInventory(() => {
+            this._processProductCategoryList(() => { });
+          });
+
           cbfn();
         });
+      }
+
+      // sub-region: product-subtab selection
+
+      $getProductSubtabClass(name, selectedProductSubtab) {
+        if (selectedProductSubtab === name) return 'selected';
+        return '';
+      }
+
+      productSubtabCategoryTapped() {
+        this.selectedProductSubtab = 'categories';
+      }
+
+      productSubtabSearchTapped() {
+        this.selectedProductSubtab = 'search';
+      }
+
+      // sub-region: product categories and category wise data
+
+      _fetchProductCategoryList(cbfn) {
+        let data = {
+          organizationId: this.app.organization.id,
+          searchString: this.searchString,
+          productCategoryIdList: [],
+        };
+        this.app.callGetProductCategoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.productCategoryList);
+        });
+      }
+
+      _processProductCategoryList(cbfn) {
+        this._fetchProductCategoryList(productCategoryList => {
+
+          productCategoryList.forEach(productCategory => {
+            productCategory.productCategoryProductList = this.entireProductList.filter(product => {
+              return product.product.productBlueprint.productCategoryIdList.indexOf(productCategory.id) > -1
+            });
+          });
+
+          this.productCategoryList = productCategoryList.filter(productCategory => productCategory.productCategoryProductList.length);
+          
+          return cbfn();
+        });
+      }
+
+      _fetchEntireInventoryDetails(cbfn) {
+        let inventoryId = this.defaultInventoryId;
+        let data = { inventoryId, includeZeroCountProducts: false, sortOrder: 'blueprint-created-date-descending' };
+        this.app.callGetAggregatedInventoryDetailsApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _processEntireInventory(cbfn) {
+        this._fetchEntireInventoryDetails(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
+
+          let productList = aggregatedProductList.map(product => {
+            let { purchasePrice, salePrice } = product.product;
+            let { name, unit } = product.product.productBlueprint;
+            product.isSelected = false;
+            Object.assign(product, { name, unit, purchasePrice, salePrice });
+            return product;
+          });
+
+          productList = productList.map(product => {
+            let { purchasePrice, salePrice } = product.product;
+            let { name, unit, defaultVat, identifierCode } = product.product.productBlueprint;
+            let vatValue = defaultVat;
+            Object.assign(product, { name, unit, purchasePrice, salePrice, vatValue, identifierCode });
+            return product;
+          });
+
+          this.entireProductList = productList;
+          cbfn();
+        });
+      }
+
+      productCategoryTapped(e) {
+        let { productCategory } = e.model;
+        this.selectedProductCategory = productCategory;
+        this.productCategoryProductList = this.entireProductList.filter(product => {
+          return product.product.productBlueprint.productCategoryIdList.indexOf(productCategory.id) > -1
+        });
+      }
+
+      backFromProductCategoryTapped() {
+        this.selectedProductCategory = null;
+      }
+
+      productFromProductCategorySelected(e) {
+        let { product } = e.model;
+        product.selectedCount = 1;
+        this._selectProduct({ product });
       }
 
       // sub-region: search
@@ -2291,12 +2497,46 @@
         }
       }
 
+      _sendReceiptBySms({ data, receiptToken }) {
+        let organizationName = this.organization.name;
+
+        if (organizationName.length > 48) {
+          organizationName = organizationName.slice(0, 45) + ' ..';
+        }
+        let { totalBilled, changeAmount } = data.payment;
+        totalBilled = Math.round(totalBilled * 100) / 100;
+        changeAmount = Math.round(changeAmount * 100) / 100;
+
+        let body = `${organizationName}
+Total ${totalBilled}
+Change ${changeAmount}
+
+Full receipt: https://lipi.shop/r/${receiptToken}
+
+Powered by Lipi for Business.`;
+
+        let phone = data.customer.phone;
+
+        phone = encodeURIComponent(phone);
+        body = encodeURIComponent(body);
+        let url = `sms:${phone};?&body=${body}`;
+
+        try {
+          window.open(url);
+        } catch (ex) {
+          const message = "Unable to send SMS. Please contact developers with the following messag: " + ex.message;
+          alert(message);
+        }
+      }
+
       saveSaleTapped(e = null) {
         let canHaveEmailReceipt = false;
+        let canHaveSmsReceipt = false;
         if (this.customer) {
           if (this.customer.email) canHaveEmailReceipt = true;
+          if (this.customer.phone) canHaveSmsReceipt = true;
         }
-        this.app.displayReceiptDialog({ canHaveEmailReceipt }, ({ receiptType }) => {
+        this.app.displayReceiptDialog({ canHaveEmailReceipt, canHaveSmsReceipt }, ({ receiptType }) => {
           if (receiptType === 'close') {
             'pass'
           } else if (receiptType === 'print-receipt') {
@@ -2309,6 +2549,25 @@
               let message = this.app.verses.pos.newSalesAdded;
               this.app.showToast(message, _ => {
                 this._resetSales();
+              });
+            });
+          } else if (receiptType === 'sms-receipt') {
+            this._processAddSales({ sentVia: 'sms' }, ({ receiptToken }) => {
+              let message = this.app.verses.pos.newSalesAdded;
+              this.app.showToast(message, _ => {
+
+                let data = {
+                  payment: this.payment,
+                  customer: this.customer,
+                }
+
+                this._sendReceiptBySms({
+                  data: JSON.parse(JSON.stringify(data)),
+                  receiptToken
+                });
+
+                this._resetSales();
+
               });
             });
           } else if (receiptType === 'no-receipt') {

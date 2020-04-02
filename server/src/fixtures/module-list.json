@@ -26,5 +26,9 @@
   {
     "code": "MOD_VENDOR",
     "name": "Unlocks the ability to manage product and service provider vendors."
+  },
+  {
+    "code": "MOD_RESTAURANT",
+    "name": "Unlocks restaurant and hospitality specific features."
   }
 ]
