@@ -547,10 +547,7 @@
                     [[selectedProductCategory.name]]
                   </div>
                 </div>
-                <div class="psb-container  card">
-                  <template is="dom-if" if="[[!productCategoryProductList.length]]">
-                    <div style="text-align: center;">No products selected</div>
-                  </template>
+                <div class="psb-container card">
                   <template is="dom-repeat" items="[[productCategoryProductList]]" as="product">
                     <div class="psb-product horizontal layout center" on-tap="productFromProductCategorySelected">
                       <div class="name">[[product.name]]</div>
