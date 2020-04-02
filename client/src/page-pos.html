@@ -1342,7 +1342,9 @@
           let isProductOrServiceSelectionDone = this.productList.length > 0 || this.serviceList.length > 0;
           let isCustomerSelectionDone = (!!this.customer) || this.isAnonymousSale;
           if (isProductOrServiceSelectionDone && isCustomerSelectionDone) {
-            selectedTabName = 'payment';
+            if (!this.isMultiColumn) {
+              selectedTabName = 'payment';
+            }
           }
         } this.selectedTabName = selectedTabName;
 
@@ -1481,6 +1483,7 @@
             classNames += 'hidden ';
           }
         }
+
         return classNames;
       }
 
