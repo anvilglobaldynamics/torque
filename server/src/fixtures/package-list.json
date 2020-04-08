@@ -149,5 +149,19 @@
       "maximumWarehouses": 0,
       "maximumEmployees": 5
     }
+  },
+  {
+    "code": "R-DFRESH-01",
+    "name": "Direct Fresh Warehouse Demo Package",
+    "price": 0,
+    "duration": {
+      "months": 0,
+      "days": 7
+    },
+    "limits": {
+      "maximumOutlets": 1,
+      "maximumWarehouses": 1,
+      "maximumEmployees": 5
+    }
   }
 ]
