@@ -653,6 +653,11 @@
         this.callCombinedJsonApi('get-transaction-list', data, cbfn);
       }
 
+      callReportTrialBalanceApi(data, cbfn){
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('report-trial-balance', data, cbfn);
+      }
+
     }
 
   })();

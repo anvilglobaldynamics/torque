@@ -63,9 +63,71 @@ exports.ReportTrialBalanceApi = class extends Api {
   async handle({ body }) {
     let { organizationId, fromDate, toDate } = body;
     toDate = this.__getExtendedToDate(toDate);
-    
-    let fakeReport = [];
-    return { fakeReport };
+
+    let transactionList = await this.database.transaction.listByFilters({
+      organizationId, accountIdList: [], fromDate, toDate, filter: 'query'
+    });
+
+    let accountList = await this.database.account.listByOrganizationId({ organizationId });
+
+    let accountMap = {};
+
+    const getAccount = (accountId) => {
+      if (!(String(accountId) in accountMap)) {
+
+        let account = accountList.find(account => account.id === accountId);
+        throwOnFalsy(account, "ACCOUNT_INVALID", "Account is invalid");
+
+        if (account.nature === 'asset' || account.nature === 'expense') { // balance is debit
+          account.isDebitBalance = true;
+        } else {
+          account.isDebitBalance = false;
+        }
+
+        account.balance = 0;
+        accountMap[String(accountId)] = account;
+      }
+      return accountMap[String(accountId)];
+    }
+
+    transactionList.forEach(transaction => {
+      let { debitList, creditList } = transaction;
+
+      debitList.forEach(debit => {
+        let account = getAccount(debit.accountId);
+        if (account.isDebitBalance) { // balance is debit
+          account.balance += debit.amount;
+        } else {
+          account.balance -= debit.amount;
+        }
+      });
+
+      creditList.forEach(credit => {
+        let account = getAccount(credit.accountId);
+        if (!(account.isDebitBalance)) { // balance is credit
+          account.balance += credit.amount;
+        } else {
+          account.balance -= credit.amount;
+        }
+      });
+
+    });
+
+    accountList = Object.keys(accountMap).map(key => accountMap[key]);
+
+    accountList = accountList.filter(account => account.balance > 0);
+
+    let totalDebitBalance = 0;
+    let totalCreditBalance = 0;
+    accountList.forEach(account => {
+      if (account.isDebitBalance) {
+        totalDebitBalance += account.balance;
+      } else {
+        totalCreditBalance += account.balance;
+      }
+    })
+
+    return { accountList, totalDebitBalance, totalCreditBalance };
   }
 
 }
