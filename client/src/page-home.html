@@ -206,14 +206,16 @@
               </template>
 
               <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
-                <template is="dom-if" if="[[hasPrivilege('PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES', organization)]]">
-                  <div class="touch-button" on-tap="buttonCreateProductAcquisitionTapped">
-                    <div class="icon">
-                      <iron-icon src="../../images/icons/package-right.png"></iron-icon>
+                <template is="dom-if" if="[[!hasModule('MOD_RESTAURANT')]]">
+                  <template is="dom-if" if="[[hasPrivilege('PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES', organization)]]">
+                    <div class="touch-button" on-tap="buttonCreateProductAcquisitionTapped">
+                      <div class="icon">
+                        <iron-icon src="../../images/icons/package-right.png"></iron-icon>
+                      </div>
+                      <div class="type title uppercase">[[verses.home.shortcutToAddProduct]]</div>
+                      <paper-ripple></paper-ripple>
                     </div>
-                    <div class="type title uppercase">[[verses.home.shortcutToAddProduct]]</div>
-                    <paper-ripple></paper-ripple>
-                  </div>
+                  </template>
                 </template>
               </template>
 

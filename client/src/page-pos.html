@@ -306,6 +306,12 @@
         cursor: pointer;
       }
 
+      .psb-container {
+        max-height: 300px;
+        /* scroll-behavior: auto; */
+        overflow-y: auto;
+      }
+
       .psb-product .price {}
     </style>
 
@@ -547,10 +553,7 @@
                     [[selectedProductCategory.name]]
                   </div>
                 </div>
-                <div class="psb-container  card">
-                  <template is="dom-if" if="[[!productCategoryProductList.length]]">
-                    <div style="text-align: center;">No products selected</div>
-                  </template>
+                <div class="psb-container card">
                   <template is="dom-repeat" items="[[productCategoryProductList]]" as="product">
                     <div class="psb-product horizontal layout center" on-tap="productFromProductCategorySelected">
                       <div class="name">[[product.name]]</div>
@@ -1339,7 +1342,9 @@
           let isProductOrServiceSelectionDone = this.productList.length > 0 || this.serviceList.length > 0;
           let isCustomerSelectionDone = (!!this.customer) || this.isAnonymousSale;
           if (isProductOrServiceSelectionDone && isCustomerSelectionDone) {
-            selectedTabName = 'payment';
+            if (!this.isMultiColumn) {
+              selectedTabName = 'payment';
+            }
           }
         } this.selectedTabName = selectedTabName;
 
@@ -1478,6 +1483,7 @@
             classNames += 'hidden ';
           }
         }
+
         return classNames;
       }
 
@@ -1646,7 +1652,7 @@
           });
 
           this.productCategoryList = productCategoryList.filter(productCategory => productCategory.productCategoryProductList.length);
-          
+
           return cbfn();
         });
       }
