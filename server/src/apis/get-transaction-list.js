@@ -56,8 +56,10 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
       return;
     }
 
-    // FIXME: fromDate - 1 day, then get extended
-    let pastTransactionList = await this.database.transaction.listByFilters({ organizationId, accountIdList, fromDate: 0, toDate: originalFromDate, preset });
+    // get past transactions
+    let toDate = originalFromDate - (24 * 60 * 60 * 1000);
+    toDate = this.__getExtendedToDate(toDate);
+    let pastTransactionList = await this.database.transaction.listByFilters({ organizationId, accountIdList, fromDate: 0, toDate, preset });
 
     // determine whether the main account balance is debit or credit
     let isBalanceDebit = false;
@@ -83,6 +85,8 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
         }
       }
     });
+
+    if (balance === 0) return;
 
     // push 1 entry dynamically into transactionList
     transactionList.push({
@@ -110,8 +114,6 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
       action: null,
 
       isDeleted: false
-
-
     })
   }
 

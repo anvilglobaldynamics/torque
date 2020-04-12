@@ -395,7 +395,7 @@
           let balance = 0;
           newTransactionList.reverse(); // reverse so that the balances are correct
           newTransactionList.forEach((transaction) => {
-            let isAccountDebited = transaction.debitList.find(({ accountId }) => accountId === this.accountId);
+            let isAccountDebited = transaction.debitList.find(({ accountId, amount }) => accountId === this.accountId && amount !== 0);
 
             if (isAccountDebited) {
               transaction.debit = transaction.amount;
