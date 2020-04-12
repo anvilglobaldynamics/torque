@@ -65,7 +65,7 @@ exports.ReportTrialBalanceApi = class extends Api {
     toDate = this.__getExtendedToDate(toDate);
 
     let transactionList = await this.database.transaction.listByFilters({
-      organizationId, accountIdList: [], fromDate, toDate, filter: 'query'
+      organizationId, accountIdList: [], fromDate: 0, toDate, filter: 'query'
     });
 
     let accountList = await this.database.account.listByOrganizationId({ organizationId });
@@ -91,10 +91,13 @@ exports.ReportTrialBalanceApi = class extends Api {
     }
 
     transactionList.forEach(transaction => {
-      let { debitList, creditList } = transaction;
+      let { debitList, creditList, transactionDatetimeStamp } = transaction;
 
       debitList.forEach(debit => {
         let account = getAccount(debit.accountId);
+        if ((account.nature === 'revenue' || account.nature === 'expense') && transactionDatetimeStamp < fromDate) {
+          return;
+        }
         if (account.isDebitBalance) { // balance is debit
           account.balance += debit.amount;
         } else {
@@ -104,6 +107,9 @@ exports.ReportTrialBalanceApi = class extends Api {
 
       creditList.forEach(credit => {
         let account = getAccount(credit.accountId);
+        if ((account.nature === 'revenue' || account.nature === 'expense') && transactionDatetimeStamp < fromDate) {
+          return;
+        }
         if (!(account.isDebitBalance)) { // balance is credit
           account.balance += credit.amount;
         } else {
@@ -125,7 +131,22 @@ exports.ReportTrialBalanceApi = class extends Api {
       } else {
         totalCreditBalance += account.balance;
       }
-    })
+    });
+
+    let retainedEarnings = totalDebitBalance - totalCreditBalance;
+    if (retainedEarnings !== 0){
+      accountList.push({
+        codeName: "RETAINED_EARNINGS",
+        displayName: "Retained Earnings",
+        nature:  'equity',
+        isMonetaryAccount: false,
+        note: '',
+        isDefaultAccount: true,
+        organizationId,
+        balance: retainedEarnings
+      });
+      totalCreditBalance += retainedEarnings;
+    }
 
     return { accountList, totalDebitBalance, totalCreditBalance };
   }
