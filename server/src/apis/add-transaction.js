@@ -27,7 +27,7 @@ exports.AddTransactionApi = class extends Api.mixin(AccountingMixin) {
         amount: Joi.number().max(999999999999999).required(),
       })).min(1).required(),
 
-      note: Joi.string().allow('').max(64).required(),
+      note: Joi.string().min(3).max(64).required(),
 
       party: Joi.object().keys({
         collectionName: Joi.string().min(1).max(32).required(),

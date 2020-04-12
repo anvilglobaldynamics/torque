@@ -15,7 +15,7 @@ exports.TransactionCollection = class extends Collection {
       transactionNumber: Joi.number().max(999999999999999).required(),
 
       transactionDatetimeStamp: Joi.number().max(999999999999999).required(),
-      note: Joi.string().allow('').max(64).required(),
+      note: Joi.string().min(3).max(64).required(),
       organizationId: Joi.number().max(999999999999999).required(),
 
       amount: Joi.number().max(999999999999999).required(),
