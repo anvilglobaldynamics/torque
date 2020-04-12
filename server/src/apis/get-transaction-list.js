@@ -23,6 +23,8 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
       preset: Joi.string().valid('all-expenses', 'all-revenues', 'all-assets', 'all-payables', 'all-receivables', 'query', 'single', 'only-manual').required(),
       accountIdList: Joi.array().items(Joi.number()).default([]).required(), // it is overriden by 'preset` unless 'preset' === 'query'
 
+      includeOpeningBalance: Joi.boolean().required(),
+
       transactionId: Joi.number().allow(null).required()
     });
   }
@@ -48,8 +50,73 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
     return toDate;
   }
 
+  async __includeOpeningBalance({ organizationId, accountIdList, originalFromDate, preset, account, transactionList }) {
+    if (account.nature === 'revenue' || account.nature === 'expense') {
+      // No opening balance for revenue and expense accounts
+      return;
+    }
+
+    // FIXME: fromDate - 1 day, then get extended
+    let pastTransactionList = await this.database.transaction.listByFilters({ organizationId, accountIdList, fromDate: 0, toDate: originalFromDate, preset });
+
+    // determine whether the main account balance is debit or credit
+    let isBalanceDebit = false;
+    if (account.nature === 'asset' || account.nature === 'expense') isBalanceDebit = true;
+
+    // prepare data for preview and compute balance
+    let balance = 0;
+    pastTransactionList.forEach((transaction) => {
+      let isAccountDebited = transaction.debitList.find(({ accountId }) => accountId === account.id);
+      console.log({ isAccountDebited })
+
+      if (isAccountDebited) {
+        if (isBalanceDebit) {
+          balance += transaction.amount;
+        } else {
+          balance -= transaction.amount;
+        }
+      } else {
+        if (isBalanceDebit) {
+          balance -= transaction.amount;
+        } else {
+          balance += transaction.amount;
+        }
+      }
+    });
+
+    // push 1 entry dynamically into transactionList
+    transactionList.push({
+      id: null,
+      transactionNumber: ' ',
+
+      transactionDatetimeStamp: originalFromDate,
+      note: "Opening Balance (Carried forward)",
+      organizationId,
+
+      amount: balance,
+      transactionOrigin: 'system',
+
+      debitList: [{
+        accountId: account.id,
+        amount: (isBalanceDebit ? balance : 0)
+      }],
+
+      creditList: [{
+        accountId: account.id,
+        amount: (isBalanceDebit ? 0 : balance)
+      }],
+
+      party: null,
+      action: null,
+
+      isDeleted: false
+
+
+    })
+  }
+
   async handle({ body }) {
-    let { organizationId, fromDate, toDate, preset, accountIdList, transactionId } = body;
+    let { organizationId, fromDate, toDate, preset, accountIdList, transactionId, includeOpeningBalance } = body;
 
     toDate = this.__getExtendedToDate(toDate);
 
@@ -84,6 +151,16 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
 
     // list all transactions
     let transactionList = await this.database.transaction.listByFilters({ organizationId, accountIdList, fromDate, toDate, preset });
+
+    // calculate opening balance if required
+    if (includeOpeningBalance) {
+      let account = await this.database.account.findByIdAndOrganizationId({ organizationId, id: accountIdList[0] });
+
+      await this.__includeOpeningBalance({
+        organizationId, accountIdList, originalFromDate: fromDate, preset, account, transactionList
+      });
+
+    }
 
     return { transactionList };
   }

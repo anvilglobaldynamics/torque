@@ -257,6 +257,8 @@
           preset: 'single',
           accountIdList: [],
 
+          includeOpeningBalance: false,
+
           transactionId,
         };
         this.app.callGetTransactionListApi(data, (err, response) => {
