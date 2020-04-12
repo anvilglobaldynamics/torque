@@ -161,7 +161,7 @@
         let data = { organizationId: this.page.app.organization.id };
         this.page.app.callGetVendorListApi(data, (err, response) => {
           if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
+          if (response.hasError) return this.page.onApiError(response.error);
           return cbfn(response.vendorList);
         });
       }
@@ -177,7 +177,7 @@
         let data = { organizationId: this.page.app.organization.id };
         this.page.app.callGetEmployeeListApi(data, (err, response) => {
           if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
+          if (response.hasError) return this.page.onApiError(response.error);
           return cbfn(response.employeeList);
         });
       }
