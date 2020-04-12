@@ -136,7 +136,7 @@ exports.ReportTrialBalanceApi = class extends Api {
     let retainedEarnings = totalDebitBalance - totalCreditBalance;
     if (retainedEarnings !== 0){
       accountList.push({
-        codeName: "RETAINED_EARNINGS",
+        codeName: "RETAINED_EARNINGS", // Not actually an account
         displayName: "Retained Earnings",
         nature:  'equity',
         isMonetaryAccount: false,
