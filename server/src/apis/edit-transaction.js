@@ -26,8 +26,6 @@ exports.EditTransactionApi = class extends Api.mixin(AccountingMixin) {
         amount: Joi.number().max(999999999999999).required(),
       })).min(1).required(),
 
-      note: Joi.string().allow('').max(64).required(),
-
       note: Joi.string().allow('').max(64).required()
     });
   }
