@@ -38,34 +38,85 @@ exports.ReportIncomeStatementApi = class extends Api {
     return toDate;
   }
 
-  async __includeUserInformation({ collectionList }) {
-    let map = await this.crossmap({
-      source: collectionList,
-      sourceKey: 'collectedByUserId',
-      target: 'user'
-    });
-    map.forEach((user, collection) => {
-      let { fullName, phone } = user;
-      collection.collectedByUser = {
-        fullName, phone
-      }
-    });
-  }
+  // NOTE: needs local variables. do not move to mixin
+  getAccount(accountMap, accountList, accountId) {
+    if (!(String(accountId) in accountMap)) {
 
-  // NOTE: This is needed in order to avoid the initial payment taken during the creation
-  // of a sale outside current boundary
-  __filterByDateRange({ fromDate, toDate, collectionList }) {
-    return collectionList.filter((collection) => {
-      return fromDate <= collection.collectedDatetimeStamp && collection.collectedDatetimeStamp <= toDate;
-    });
+      let account = accountList.find(account => account.id === accountId);
+      if (account.nature !== 'revenue' && account.nature !== 'expense') {
+        return null;
+      }
+
+      throwOnFalsy(account, "ACCOUNT_INVALID", "Account is invalid");
+
+      if (account.nature === 'asset' || account.nature === 'expense') { // balance is debit
+        account.isDebitBalance = true;
+      } else {
+        account.isDebitBalance = false;
+      }
+
+      account.balance = 0;
+      accountMap[String(accountId)] = account;
+    }
+    return accountMap[String(accountId)];
   }
 
   async handle({ body }) {
     let { organizationId, fromDate, toDate } = body;
     toDate = this.__getExtendedToDate(toDate);
-    
-    let fakeReport = [];
-    return { fakeReport };
+
+    let transactionList = await this.database.transaction.listByFilters({
+      organizationId, accountIdList: [], fromDate, toDate, filter: 'query'
+    });
+
+    let accountList = await this.database.account.listByOrganizationId({ organizationId });
+
+    let accountMap = {};
+
+    transactionList.forEach(transaction => {
+      let { debitList, creditList, transactionDatetimeStamp } = transaction;
+
+      debitList.forEach(debit => {
+        let account = this.getAccount(accountMap, accountList, debit.accountId);
+        if (!account) return;
+        if ((account.nature === 'revenue' || account.nature === 'expense') && transactionDatetimeStamp < fromDate) {
+          return;
+        }
+        if (account.isDebitBalance) { // balance is debit
+          account.balance += debit.amount;
+        } else {
+          account.balance -= debit.amount;
+        }
+      });
+
+      creditList.forEach(credit => {
+        let account = this.getAccount(accountMap, accountList, credit.accountId);
+        if (!account) return;
+        if ((account.nature === 'revenue' || account.nature === 'expense') && transactionDatetimeStamp < fromDate) {
+          return;
+        }
+        if (!(account.isDebitBalance)) { // balance is credit
+          account.balance += credit.amount;
+        } else {
+          account.balance -= credit.amount;
+        }
+      });
+
+    });
+
+    accountList = Object.keys(accountMap).map(key => accountMap[key]);
+
+    accountList = accountList.filter(account => account.balance > 0);
+
+    let revenueList = accountList.filter(account => account.nature === 'revenue');
+    let expenseList = accountList.filter(account => account.nature === 'expense');
+
+    let totalRevenue = revenueList.reduce((sum, account) => sum + account.balance, 0);
+    let totalExpense = expenseList.reduce((sum, account) => sum + account.balance, 0);
+
+    let netProfit = totalRevenue - totalExpense;
+
+    return { revenueList, expenseList, totalRevenue, totalExpense, netProfit };
   }
 
 }
