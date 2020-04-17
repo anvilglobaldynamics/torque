@@ -1252,8 +1252,11 @@
     "accountInvalidMessage": "The account is not valid.",
 
     "asset": "Asset",
+    "assets": "Assets",
     "liability": "Liability",
+    "liabilities": "Liabilities",
     "equity": "Equity",
+    "ownersEquity": "Owner's Equity",
     "revenue": "Revenue",
     "expense": "Expense",
     "ledger": "Ledger",
@@ -1280,7 +1283,12 @@
 
     "totalRevenue": "Total Revenue",
     "totalExpense": "Total Expense",
+    "totalAssets": "Total Assets",
+    "totalLiabilities": "Total Liabilities",
+    "totalEquity": "Total Equity",
     "netProfit": "Net Profit",
+
+    "totalLiabilitiesAndEquity": "Total Liabilities and Equity",
 
     "group": "Group",
     "particulars": "Particulars",
