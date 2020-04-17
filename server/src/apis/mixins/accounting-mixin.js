@@ -42,6 +42,15 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         note: "Money someone owes the business"
       },
 
+      // Equities
+      {
+        nature: 'equity',
+        codeName: "EQUITY_CAPITAL",
+        displayName: "Equity Capital",
+        isMonetaryAccount: false,
+        note: "Default Equity Account (Shareholder's/Owner's Equity Capital)"
+      },
+
       // Liabilities
       {
         nature: 'liability',
