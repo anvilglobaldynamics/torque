@@ -201,7 +201,7 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     });
   }
 
-  async __addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale }) {
+  async __addSales({ userId, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment: originalPayment, productsSelectedFromWarehouseId, wasOfflineSale, isLiteSales }) {
 
     if (!productList.length && !serviceList.length) {
       throw new CodedError("NO_PRODUCT_OR_SERVICE_SELECTED", "Both productList and serviceList can not be empty.");
@@ -240,7 +240,35 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
 
     payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
 
+    // get purchase price of products
+    productList = await this.__getAggregatedProductList({ productList });
+    productList.forEach(product => {
+      product.purchasePrice = product.product.purchasePrice
+      delete product.product;
+    });
+
     let salesId = await this.database.sales.create({ originApp: this.clientApplication, organizationId, outletId, customerId, productList, serviceList, assistedByEmployeeId, payment, productsSelectedFromWarehouseId, wasOfflineSale });
+    let sales = await this.database.sales.findById({ id: salesId });
+
+    if (!isLiteSales) {
+      await this.addSalesRevenueTransaction({
+        transactionData: {
+          createdByUserId: userId,
+          organizationId
+        },
+        operationData: { productList, serviceList, payment, salesId, salesNumber: sales.salesNumber, customer }
+      });
+
+      if (productList.length > 0) {
+        await this.addSalesInventoryTransaction({
+          transactionData: {
+            createdByUserId: userId,
+            organizationId
+          },
+          operationData: { productList, salesId, salesNumber: sales.salesNumber, customer }
+        });
+      }
+    }
 
     if (serviceList.length) {
       for (let i = 0; i < serviceList.length; i++) {

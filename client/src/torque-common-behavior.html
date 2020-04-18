@@ -83,6 +83,10 @@
         return a === b;
       }
 
+      $add(a, b) {
+        return a + b;
+      }
+
       /** $mkDate()
        * Converts a date to a user friendly string
        * See http://arshaw.com/xdate/ for formatting instruction
@@ -507,6 +511,26 @@
           return true;
         }
         return false;
+      }
+
+      // ====================== Accounting Module =============================
+
+      $getAccount(accountId) {
+        accountId = parseInt(String(accountId));
+        let account = this.fullAccountList.find((account) => account.id === accountId)
+        return account ? account.displayName : '';
+      }
+
+      __sortTransaction(newTransactionList) {
+        newTransactionList.sort((a, b) => {
+          let bTime = Math.floor(b.transactionDatetimeStamp / (24 * 60 * 60 * 1000));
+          let aTime = Math.floor(a.transactionDatetimeStamp / (24 * 60 * 60 * 1000));
+          if (bTime === aTime) {
+            return b.id - a.id;
+          } else {
+            return bTime - aTime;
+          }
+        });
       }
 
     }

@@ -127,6 +127,16 @@ const { EditOrganizationSettingsApi } = require('./apis/edit-organization-settin
 const { ShopLocateNearbyOutletsApi } = require('./apis/shop-locate-nearby-outlets');
 const { ShopGetOutletDetailsApi } = require('./apis/shop-get-outlet-details');
 
+const { AddAccountApi } = require('./apis/add-account');
+const { EditAccountApi } = require('./apis/edit-account');
+const { GetAccountListApi } = require('./apis/get-account-list');
+const { AddTransactionApi } = require('./apis/add-transaction');
+const { GetTransactionListApi } = require('./apis/get-transaction-list');
+const { EditTransactionApi } = require('./apis/edit-transaction');
+const { ReportIncomeStatementApi } = require('./apis/report-income-statement');
+const { ReportBalanceSheetApi } = require('./apis/report-balance-sheet');
+const { ReportTrialBalanceApi } = require('./apis/report-trial-balance');
+
 let { InternalStatusApi } = require('./legacy-apis/internal--status');
 
 const { AdminLoginApi } = require('./apis/admin-login');
@@ -144,6 +154,7 @@ const { AdminGetModuleListApi } = require('./apis/admin-get-module-list');
 const { AdminListOrganizationModulesApi } = require('./apis/admin-list-organization-modules');
 const { AdminSetModuleActivationStatusApi } = require('./apis/admin-set-module-activation-status');
 const { AdminGetStatisticsApi } = require('./apis/admin-get-statistics');
+const { AdminSetupAccountingModuleApi } = require('./apis/admin-setup-accounting-module');
 
 const { LiteSendVerificationSmsApi } = require('./apis/lite-send-verification-sms');
 const { LiteCheckVerificationTokenApi } = require('./apis/lite-check-verification-token');
@@ -384,6 +395,16 @@ class Program {
     server.registerPostApi('/api/edit-product-category', EditProductCategoryApi);
     server.registerPostApi('/api/get-product-category-list', GetProductCategoryListApi);
 
+    server.registerPostApi('/api/add-account', AddAccountApi);
+    server.registerPostApi('/api/edit-account', EditAccountApi);
+    server.registerPostApi('/api/get-account-list', GetAccountListApi);
+    server.registerPostApi('/api/add-transaction', AddTransactionApi);
+    server.registerPostApi('/api/get-transaction-list', GetTransactionListApi);
+    server.registerPostApi('/api/edit-transaction', EditTransactionApi);
+    server.registerPostApi('/api/report-income-statement', ReportIncomeStatementApi);
+    server.registerPostApi('/api/report-balance-sheet', ReportBalanceSheetApi);
+    server.registerPostApi('/api/report-trial-balance', ReportTrialBalanceApi);
+
     server.registerPostApi('/api/graph-sales-trend', GraphSalesTrendApi);
     server.registerPostApi('/api/add-vendor', AddVendorApi);
     server.registerPostApi('/api/get-vendor-list', GetVendorListApi);
@@ -404,6 +425,7 @@ class Program {
     server.registerPostApi('/api/admin-assign-package-to-organization', AdminAssignPackageToOrganizationApi);
     server.registerPostApi('/api/admin-list-organization-packages', AdminListOrganizationPackagesApi);
     server.registerPostApi('/api/admin-get-statistics', AdminGetStatisticsApi);
+    server.registerPostApi('/api/admin-setup-accounting-module', AdminSetupAccountingModuleApi);
 
     server.registerPostApi('/api/add-service-blueprint', AddServiceBlueprintApi);
     server.registerPostApi('/api/get-service-blueprint-list', GetServiceBlueprintListApi);

@@ -86,7 +86,7 @@
         <div class="horizontal layout end-justified">
           <paper-button raised class="secondary" on-tap="resendReceiptTapped">[[verses.receipt.resendReceipt]]</paper-button>
 
-          <template is="dom-if" if="{{!sales.isDiscarded}}">
+          <template is="dom-if" if="{{$shouldShowDiscardButton(sales.isDiscarded,sales.payment.paymentList.length)}}">
             <paper-button raised class="danger" on-tap="discardTapped">[[verses.general.discard]]</paper-button>
           </template>
         </div>
@@ -114,7 +114,7 @@
                   </template>
                 </div>
 
-                <template is="dom-if" if="{{checkIfProductReturnable(product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
+                <template is="dom-if" if="{{checkIfProductReturnable(sales.payment, product.returnedProductCount, product.count, product.productBlueprintIsReturnable)}}">
                   <paper-button raised class="danger return-button" on-tap="returnTapped">[[verses.sales.productReturn]]</paper-button>
                 </template>
               </div>
@@ -326,8 +326,9 @@
         });
       }
 
-      checkIfProductReturnable(returnedProductCount, soldProductCount, isReturnable) {
+      checkIfProductReturnable(payment, returnedProductCount, soldProductCount, isReturnable) {
         if (this.sales.isDiscarded) return false;
+        if (payment.totalBilled !== payment.totalPaidAmount) return false;
         returnedProductCount = returnedProductCount || 0;
         if (returnedProductCount < soldProductCount && isReturnable) return true;
         else return false;
@@ -363,6 +364,12 @@
       }
 
       // region: misc =================================
+
+      $shouldShowDiscardButton(isDiscarded, paymentListLength) {
+        console.log(isDiscarded, paymentListLength)
+        if (!isDiscarded && paymentListLength < 2) return true;
+        return false;
+      }
 
       $shouldTakeAdditionalPayment(totalBilled, totalPaidAmount) {
         this.amountLeftToPay = (totalBilled - totalPaidAmount);

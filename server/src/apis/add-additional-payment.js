@@ -5,8 +5,9 @@ const { extract } = require('./../utils/extract');
 const { InventoryMixin } = require('./mixins/inventory-mixin');
 const { CustomerMixin } = require('./mixins/customer-mixin');
 const { SalesMixin } = require('./mixins/sales-mixin');
+const { AccountingMixin } = require('./mixins/accounting-mixin');
 
-exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin) {
+exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, CustomerMixin, SalesMixin, AccountingMixin) {
 
   get autoValidates() { return true; }
 
@@ -70,6 +71,7 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
 
   async handle({ userId, body }) {
     let { salesId, customerId, payment: paymentListEntry } = body;
+    let { organizationId } = this.interimData;
     let sales = await this._getSales({ salesId });
     let customer = await this._getCustomer({ customerId });
     let payment = sales.payment;
@@ -77,6 +79,15 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
     await this._validateNewPayment({ payment, paymentListEntry, customer });
     payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
     await this.database.sales.setPayment({ id: salesId }, { payment });
+
+    await this.addAddtionalPaymentTransaction({
+      transactionData: {
+        createdByUserId: userId,
+        organizationId
+      },
+      operationData: { payment: paymentListEntry, salesId, salesNumber: sales.salesNumber, customer }
+    });
+
     return { status: "success" };
   }
 

@@ -5,8 +5,9 @@ const { extract } = require('./../utils/extract');
 const { InventoryMixin } = require('./mixins/inventory-mixin');
 const { CustomerMixin } = require('./mixins/customer-mixin');
 const { ProductMixin } = require('./mixins/product-mixin');
+const { AccountingMixin } = require('./mixins/accounting-mixin');
 
-exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixin, ProductMixin) {
+exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixin, ProductMixin, AccountingMixin) {
 
   get autoValidates() { return true; }
 
@@ -63,8 +64,9 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
     return;
   }
 
-  async handle({ body }) {
+  async handle({ body, userId }) {
     let { salesId, returnedProductList, creditedAmount, shouldSaveReturnableInChangeWallet } = body;
+    let { organizationId } = this.interimData;
 
     let sales = await this.database.sales.findById({ id: salesId });
     throwOnTruthy(sales.isDiscarded, "SALES_RETURN_FOR_DISCARDED_SALE_IS_INVALID", "Sales return is not allowed on discarded sales.");
@@ -72,8 +74,12 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
     await this._verifyProductsExist({ productList: returnedProductList });
     await this._verifyProductsAreReturnable({ productList: returnedProductList });
 
+    let customer = null;
+    if (sales.customerId){
+      customer = await this.database.customer.findById({ id: sales.customerId });      
+    }
+
     if (shouldSaveReturnableInChangeWallet && sales.customerId && creditedAmount) {
-      let customer = await this.database.customer.findById({ id: sales.customerId });
       await this._addChangeToChangeWallet({ customer, amount: creditedAmount });
     }
 
@@ -86,6 +92,29 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
 
     await this._returnProducts({ returnedProductList, returnedInventory });
     let salesReturnId = await this.database.salesReturn.create({ salesId, returnedProductList, creditedAmount, shouldSaveReturnableInChangeWallet });
+
+    // required for accounting
+    returnedProductList.forEach(returnedProduct => {
+      let product = sales.productList.find(product => product.productId === returnedProduct.productId);
+      returnedProduct.purchasePrice = product.purchasePrice;
+    });
+
+    await this.addSalesReturnInventoryTransaction({
+      transactionData: {
+        createdByUserId: userId,
+        organizationId
+      },
+      operationData: { returnedProductList, salesReturnId, salesNumber: sales.salesNumber, customer }
+    });
+
+    await this.addSalesReturnExpenseTransaction({
+      transactionData: {
+        createdByUserId: userId,
+        organizationId
+      },
+      // since 'creditedAmount' will be confusing
+      operationData: { refundedAmount: creditedAmount, salesReturnId, salesNumber: sales.salesNumber, customer }
+    });
 
     return { status: "success", salesReturnId };
   }

@@ -99,6 +99,9 @@ exports.EmploymentCollection = class extends LegacyCollection {
       "PRIV_VIEW_VENDOR",
       // "PRIV_MODIFY_VENDOR",
 
+      // "PRIV_MANAGE_ACCOUNTING",
+      // "PRIV_VIEW_ACCOUNTING_REPORTS",
+
       "PRIV_VIEW_REPORTS"
     ];
 

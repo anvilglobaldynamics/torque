@@ -39,6 +39,9 @@ const { ReceiptCollection } = require('./collections/receipt');
 const { UrlAnalyticsCollection } = require('./collections/url-analytics');
 const { UserLocationCollection } = require('./collections/user-location');
 
+const { AccountCollection } = require('./collections/account');
+const { TransactionCollection } = require('./collections/transaction');
+
 class DatabaseService {
 
   constructor({ path, name }) {
@@ -82,6 +85,9 @@ class DatabaseService {
     this.receipt = new ReceiptCollection(this.engine, this);
     this.urlAnalytics = new UrlAnalyticsCollection(this.engine, this);
     this.userLocation = new UserLocationCollection(this.engine, this);
+
+    this.account = new AccountCollection(this.engine, this);
+    this.transaction = new TransactionCollection(this.engine, this);
 
     /** @type {[Collection]} */
     this.collectionList = Object.keys(this).filter(key => this[key] instanceof Collection).map(key => this[key]);

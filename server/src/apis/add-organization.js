@@ -4,8 +4,9 @@ const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { extract } = require('./../utils/extract');
 const { OrganizationMixin } = require('./mixins/organization-mixin');
+const { AccountingMixin } = require('./mixins/accounting-mixin');
 
-exports.AddOrganizationApi = class extends Api.mixin(OrganizationMixin) {
+exports.AddOrganizationApi = class extends Api.mixin(OrganizationMixin, AccountingMixin) {
 
   get autoValidates() { return true; }
 
@@ -19,7 +20,7 @@ exports.AddOrganizationApi = class extends Api.mixin(OrganizationMixin) {
       email: Joi.string().email().min(3).max(30).allow('').required(),
       activeModuleCodeList: Joi.array().items(
         Joi.string().required()
-      ).optional().default(['MOD_PRODUCT', 'MOD_SERVICE'])
+      ).optional().default(['MOD_PRODUCT', 'MOD_SERVICE', 'MOD_ACCOUNTING'])
     });
   }
 
@@ -35,6 +36,8 @@ exports.AddOrganizationApi = class extends Api.mixin(OrganizationMixin) {
     let employmentId = await this._setUserAsOwner({ userId, organizationId });
     await this._setTrialPackage({ organizationId });
     await this._addModuleActivation({ organizationId, activeModuleCodeList });
+
+    await this.createDefaultAccounts({ organizationId, userId });
 
     return { status: "success", organizationId, employmentId };
   }

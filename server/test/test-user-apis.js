@@ -10,14 +10,14 @@ let {
 
 const prefix = 's';
 
-const email = `${rnd(prefix)}@gmail.com`;
+const email = `${rnd(prefix)}q@gmail.com`;
 const changedEmail = 'ce' + `${rnd(prefix)}@gmail.com`;
 const password = "123545678";
 const changedPassword = "1235456781";
 const changedPassword2 = "1235456782";
 const changedPassword3 = "1235456783";
 const fullName = "Test User";
-const phone = rnd(prefix, 11);
+const phone = '2' + rnd(prefix, 11);
 const changedPhone = '9' + rnd(prefix, 11);
 
 let apiKey = null;

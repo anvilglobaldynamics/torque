@@ -1,0 +1,397 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="elem-party-selector.html">
+
+<dom-module id="page-edit-usual-transaction">
+  <template>
+    <style include="shared-styles">
+      .edit-usual-transaction-subtitle {
+        font-size: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+      }
+
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="editTransactionForm" on-keypress="genericFormSubmitionKeypress">
+        <form>
+          <div class="card vertical layout">
+
+            <paper-input type="date" class="editTransactionForm--date" value="{{editTransactionForm.transactionDate}}" label="{{verses.accounting.transactionDate}}"></paper-input>
+            <paper-input class="editTransactionForm--amount" step="0.01" value="{{editTransactionForm.amount}}" type="number" required min="0" error-message=[[verses.accounting.transactionAmountInputError]] label=[[verses.accounting.transactionAmountInput]]></paper-input>
+
+            <template is="dom-if" if="[[editMode]]">
+              <div style="margin-top: 12px;">{{verses.accounting.debitAccount}}: {{$getAccount(editTransactionForm.debitedAccountId)}}</div>
+              <div>{{verses.accounting.creditAccount}}: {{$getAccount(editTransactionForm.creditedAccountId)}} </div>
+            </template>
+
+            <template is="dom-if" if="[[!editMode]]">
+
+              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.account]]" class="mr-4">
+                <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.usualAccountId}}" attr-for-selected="key">
+                  <template is="dom-repeat" items="[[accountList]]" as="account">
+                    <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
+                  </template>
+                </paper-listbox>
+              </paper-dropdown-menu>
+
+              <elem-party-selector selected-collection-name="{{partyCollectionName}}" selected-document-id="{{partyDocumentId}}" page="{{self}}"></elem-party-selector>
+
+              <paper-checkbox class="editTransactionForm--hasMonetaryTransactionOccurred" checked="{{editTransactionForm.hasMonetaryTransactionOccurred}}">
+                <template is="dom-if" if="[[$equals(transactionOrigin, 'add-income')]]">
+                  [[verses.accounting.moneyCollected]]
+                </template>
+                <template is="dom-if" if="[[$equals(transactionOrigin, 'add-expense')]]">
+                  [[verses.accounting.moneyPaid]]
+                </template>
+                <template is="dom-if" if="[[$equals(transactionOrigin, 'add-asset-purchase')]]">
+                  [[verses.accounting.moneyPaid]]
+                </template>
+              </paper-checkbox>
+
+              <template is="dom-if" if="[[editTransactionForm.hasMonetaryTransactionOccurred]]">
+                <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.monetaryAccount]]" class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{editTransactionForm.monetaryAccountId}}" attr-for-selected="key">
+                    <template is="dom-repeat" items="[[monetaryAccountList]]" as="account">
+                      <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
+                    </template>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+              </template>
+
+            </template>
+
+            <paper-textarea class="editTransactionForm--note" value="{{editTransactionForm.note}}" minlength="3" maxlength="64" error-message=[[verses.accounting.accountNoteInputError]] label=[[verses.accounting.accountNoteInput]] rows="4"></paper-textarea>
+
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editTransactionForm--submit" on-tap="createTransactionTapped">[[verses.accounting.createNewTransaction]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editTransactionForm--submit" on-tap="updateTransactionTapped">[[verses.accounting.updateOldTransaction]]</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+    </div>
+  </template>
+
+  <script>
+    class PageEditUsualTransaction extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+      static get is() {
+        return 'page-edit-usual-transaction';
+      }
+
+      static get properties() {
+        return {
+          fullAccountList: {
+            type: Array,
+            value: []
+          },
+          editMode: {
+            type: Boolean,
+            value: false
+          },
+          editingTransaction: {
+            type: Object,
+            value: null
+          },
+          editTransactionForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  note: 'Electricity Bill for March',
+                  amount: 2000,
+                  transactionDate: '',
+                  usualAccountId: null,
+                  monetaryAccountId: null,
+                  hasMonetaryTransactionOccurred: false
+                };
+              } else {
+                return {
+                  note: '',
+                  amount: 0,
+                  transactionDate: '',
+                  usualAccountId: null,
+                  monetaryAccountId: null,
+                  hasMonetaryTransactionOccurred: false
+                };
+              }
+            }
+          }
+        };
+      }
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.self = this;
+
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+
+        if ('transaction-origin' in this.params) {
+          this.transactionOrigin = this.params['transaction-origin'];
+        }
+
+        if (this.transactionOrigin == 'add-income') {
+          this.app.pushPageTitle(this.app.verses.accounting.addEditIncomeTransactionPageTitle);
+        } else if (this.transactionOrigin == 'add-expense') {
+          this.app.pushPageTitle(this.app.verses.accounting.addEditExpenseTransactionPageTitle);
+        } else if (this.transactionOrigin == 'add-asset-purchase') {
+          this.app.pushPageTitle(this.app.verses.accounting.addEditAssetPurchasePageTitle);
+        }
+
+        if ('transaction' in this.params) {
+          this.editMode = true;
+        } else {
+          this.editMode = false;
+          this.set('editTransactionForm.transactionDate', this.$mkDate(Date.now(), 'yyyy-MM-dd'));
+        }
+
+        this.partyCollectionName = 'no-party';
+        this.partyDocumentId = -1;
+
+        this._processAccountList(() => {
+          if (!this._ensureAccess()) return;
+          if (this.editMode) {
+            this._processGetTransaction(() => {
+              this.isReady = true;
+            });
+          } else {
+            this.delay(300, () => {
+              this.isReady = true;
+            });
+          }
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editTransactionForm');
+        this.removeAutoValidation('#editTransactionForm paper-input');
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MANAGE_ACCOUNTING']
+        });
+      }
+
+      // region: editTransaction =================================
+
+      _fetchAccountList(cbfn) {
+        let data = {
+          organizationId: this.app.organization.id,
+          filterByIsMonetary: 'all',
+          filterByNature: 'all',
+          accountIdList: [],
+        };
+        this.app.callGetAccountListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.accountList);
+        });
+      }
+
+      _processAccountList(cbfn) {
+        this._fetchAccountList(newAccountList => {
+          let nature = null;
+          if (this.transactionOrigin == 'add-income') {
+            nature = 'revenue';
+          } else if (this.transactionOrigin == 'add-expense') {
+            nature = 'expense';
+          } else if (this.transactionOrigin == 'add-asset-purchase') {
+            nature = 'asset';
+          }
+
+          this.fullAccountList = newAccountList;
+
+          this.accountList = newAccountList.filter(account => !account.isMonetaryAccount && account.nature === nature);
+          this.monetaryAccountList = newAccountList.filter(account => account.isMonetaryAccount);
+
+          // select payable and receivable account 
+          this.accountsPayableId = newAccountList.find(account => account.codeName === 'ACCOUNTS_PAYABLE').id;
+          this.accountsReceivableId = newAccountList.find(account => account.codeName === 'ACCOUNTS_RECEIVABLE').id;
+
+          cbfn();
+        });
+      }
+
+      _processGetTransaction(cbfn) {
+        let transactionId = parseInt(this.params.transaction);
+        let data = {
+          organizationId: this.app.organization.id,
+
+          fromDate: null,
+          toDate: null,
+          preset: 'single',
+          accountIdList: [],
+
+          includeOpeningBalance: false,
+
+          transactionId,
+        };
+        this.app.callGetTransactionListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.editingTransaction = response.transactionList[0];
+          let { note, amount, transactionDatetimeStamp, creditList, debitList } = this.editingTransaction;
+          let creditedAccountId = creditList[0].accountId;
+          let debitedAccountId = debitList[0].accountId;
+
+          let transactionDate = this.$mkDate(new Date(transactionDatetimeStamp), 'yyyy-MM-dd');
+          this.editTransactionForm = { note, amount, transactionDate, creditedAccountId, debitedAccountId };
+          cbfn();
+        });
+      }
+
+      _processCreateTransaction({ note, party, creditList, debitList, transactionDatetimeStamp }) {
+        let data = {
+          note, party, creditList, debitList, transactionDatetimeStamp,
+          transactionOrigin: this.transactionOrigin,
+          action: null,
+          organizationId: this.app.organization.id
+        };
+        this.app.callAddTransactionApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editTransactionForm');
+          let message = this.app.verses.accounting.transactionSaved;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      _processUpdateTransaction({ note, creditList, debitList, transactionDatetimeStamp }) {
+        let data = {
+          note, creditList, debitList, transactionDatetimeStamp,
+          transactionId: this.editingTransaction.id
+        };
+        this.app.callEditTransactionApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editTransactionForm');
+          let message = this.app.verses.accounting.transactionSaved;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-transactions');
+      }
+
+      createTransactionTapped(e = null) {
+        this.elemAll('#editTransactionForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editTransactionForm').validate()) return;
+
+        let { note, amount, transactionDate, hasMonetaryTransactionOccurred, usualAccountId, monetaryAccountId } = this.editTransactionForm;
+        let transactionDatetimeStamp = (new Date(transactionDate)).getTime();
+
+        let creditedAccountId = null;
+        let debitedAccountId = null;
+
+        if (this.transactionOrigin === 'add-income') {
+          // because income is always credited when increased
+          creditedAccountId = usualAccountId;
+          if (hasMonetaryTransactionOccurred) {
+            debitedAccountId = monetaryAccountId;
+          } else {
+            debitedAccountId = this.accountsReceivableId;
+          }
+        } else {
+          // because expense and assets are always debited when increased
+          debitedAccountId = usualAccountId;
+          if (hasMonetaryTransactionOccurred) {
+            creditedAccountId = monetaryAccountId;
+          } else {
+            creditedAccountId = this.accountsPayableId;
+          }
+        }
+
+        let creditList = [
+          {
+            accountId: creditedAccountId,
+            amount
+          }
+        ]
+
+        let debitList = [
+          {
+            accountId: debitedAccountId,
+            amount
+          }
+        ]
+
+        let party = null;
+        if (!(this.partyCollectionName === 'no-party' || this.partyDocumentId === null || this.partyDocumentId === -1)) {
+          party = {
+            collectionName: this.partyCollectionName,
+            documentId: this.partyDocumentId
+          }
+        }
+
+        this._processCreateTransaction({ note, party, creditList, debitList, transactionDatetimeStamp });
+      }
+
+      updateTransactionTapped(e = null) {
+        this.elemAll('#editTransactionForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editTransactionForm').validate()) return;
+
+        let { note, creditedAccountId, debitedAccountId, amount, transactionDate } = this.editTransactionForm;
+        let transactionDatetimeStamp = (new Date(transactionDate)).getTime();
+
+        let creditList = [
+          {
+            accountId: creditedAccountId,
+            amount
+          }
+        ]
+
+        let debitList = [
+          {
+            accountId: debitedAccountId,
+            amount
+          }
+        ]
+
+        this._processUpdateTransaction({ note, creditList, debitList, transactionDatetimeStamp });
+      }
+    }
+
+    window.customElements.define(PageEditUsualTransaction.is, PageEditUsualTransaction);
+  </script>
+</dom-module>

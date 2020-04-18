@@ -5,8 +5,9 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-er
 const { extract } = require('./../utils/extract');
 const { InventoryMixin } = require('./mixins/inventory-mixin');
 const { SalesMixin } = require('./mixins/sales-mixin');
+const { AccountingMixin } = require('./mixins/accounting-mixin');
 
-exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin) {
+exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin, AccountingMixin) {
 
   get autoValidates() { return true; }
 
@@ -67,7 +68,7 @@ exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin) {
   }
 
   async _addSalesDiscard({ productList, sales }) {
-    await this.database.salesDiscard.create({
+    return await this.database.salesDiscard.create({
       salesId: sales.id,
       returnedProductList: productList
     });
@@ -75,6 +76,7 @@ exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin) {
 
   async handle({ body }) {
     let { salesId } = body;
+    let { organizationId } = this.interimData;
 
     let sales = await this.database.sales.findById({ id: salesId });
     await this._addReturnedProductCountToSales({ sales });
@@ -90,11 +92,31 @@ exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin) {
 
     await this._returnProductsToDefaultInventory({ productList: returnableProductList, defaultInventory });
 
-    await this._addSalesDiscard({ productList: returnableProductList, sales });
+    let salesDiscardId = await this._addSalesDiscard({ productList: returnableProductList, sales });
 
     await this._listAndDiscardServiceMembership({ salesId });
 
     await this.database.sales.discard({ id: salesId });
+
+    // find sales accounting transactions and reverse them
+    let transactionList = await this.database.transaction._find({
+      organizationId,
+      'action.name': 'add-sales',
+      'action.documentId': salesId
+    });
+
+    let action = {
+      name: "discard-sales",
+      collectionName: 'sales-discard',
+      documentId: salesDiscardId
+    }
+
+    let note = `Discarded Sales #${sales.salesNumber}`;
+
+    for (let i = 0; i < transactionList.length; i++) {
+      let transaction = transactionList[i];
+      await this.reverseTransaction({ transaction, action, note });
+    }
 
     return { status: 'success' };
   }

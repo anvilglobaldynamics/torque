@@ -1,0 +1,216 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-manage-transactions">
+  <template>
+    <style include="shared-styles">
+      .transactions-card-title {
+        font-size: 20px;
+        padding-bottom: 10px;
+        padding-left: 4px;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <!-- Income Transactions - Start -->
+      <div class="card">
+        <div class="layout vertical">
+
+          <div class="transactions-card-title">[[verses.accounting.income]] [[verses.accounting.transaction]]</div>
+
+          <div class="layout horizontal">
+
+            <div class="touch-button" on-tap="buttonAddIncomeTransactionTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
+              <div class="type title uppercase">[[verses.accounting.addIncome]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+
+            <div class="touch-button" on-tap="buttonViewIncomeTransactionsTapped">
+              <div class="type title uppercase">[[verses.accounting.viewIncome]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!-- Income Transactions - End -->
+
+      <!-- Expense Transactions - Start -->
+      <div class="card">
+        <div class="layout vertical">
+
+          <div class="transactions-card-title">[[verses.accounting.expense]] [[verses.accounting.transaction]]</div>
+
+          <div class="layout horizontal">
+
+            <div class="touch-button" on-tap="buttonAddExpenseTransactionTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
+              <div class="type title uppercase">[[verses.accounting.addExpense]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+
+            <div class="touch-button" on-tap="buttonViewExpenseTransactionsTapped">
+              <div class="type title uppercase">[[verses.accounting.viewExpense]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!-- Expense Transactions - End -->
+
+      <!-- Asset Transactions - Start -->
+      <div class="card">
+        <div class="layout vertical">
+
+          <div class="transactions-card-title">[[verses.accounting.asset]] [[verses.accounting.purchase]]</div>
+
+          <div class="layout horizontal">
+
+            <div class="touch-button" on-tap="buttonAddAssetTransactionTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
+              <div class="type title uppercase">[[verses.accounting.addAssetPurchase]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+
+            <div class="touch-button" on-tap="buttonViewAssetTransactionsTapped">
+              <div class="type title uppercase">[[verses.accounting.viewAssetPurchase]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!-- Asset Transactions - End -->
+
+      <!-- Manual Transactions - Start -->
+      <div class="card">
+        <div class="layout vertical">
+
+          <div class="transactions-card-title">[[verses.accounting.manual]] [[verses.accounting.transaction]]</div>
+
+          <div class="layout horizontal">
+
+            <div class="touch-button" on-tap="buttonAddManualTransactionTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
+              <div class="type title uppercase">[[verses.accounting.addManualTransaction]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+
+            <div class="touch-button" on-tap="buttonViewManualTransactionsTapped">
+              <div class="type title uppercase">[[verses.accounting.viewManualTransaction]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!-- Manual Transactions - End -->
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageManageTransactions extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-manage-transactions';
+      }
+
+      static get properties() {
+        return {};
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.accounting.manageTransactionPageTitle);
+        if (!this._ensureAccess()) return;
+        this.onOrganizationChange(this.app.organization);
+        this.isReady = true;
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MANAGE_ACCOUNTING']
+        });
+      }
+
+      // region: ui  ===========================
+
+      buttonAddIncomeTransactionTapped(e = null) {
+        return this.app.navigateTo('/edit-usual-transaction/transaction-origin:add-income');
+      }
+
+      buttonViewIncomeTransactionsTapped(e = null) {
+        return this.app.navigateTo('/view-transaction-list/preset:all-revenues');
+      }
+
+      buttonAddExpenseTransactionTapped(e = null) {
+        return this.app.navigateTo('/edit-usual-transaction/transaction-origin:add-expense');
+      }
+
+      buttonViewExpenseTransactionsTapped(e = null) {
+        return this.app.navigateTo('/view-transaction-list/preset:all-expenses');
+      }
+
+      buttonAddAssetTransactionTapped(e = null) {
+        return this.app.navigateTo('/edit-usual-transaction/transaction-origin:add-asset-purchase');
+      }
+
+      buttonViewAssetTransactionsTapped(e = null) {
+        return this.app.navigateTo('/view-transaction-list/preset:all-assets');
+      }
+
+      buttonAddManualTransactionTapped(e = null) {
+        return this.app.navigateTo('/edit-manual-transaction');
+      }
+
+      buttonViewManualTransactionsTapped(e = null) {
+        return this.app.navigateTo('/view-transaction-list/preset:only-manual');
+      }
+
+      // region: misc =================================
+
+      onOrganizationChange(organization) {
+        this.organization = organization;
+      }
+    }
+
+    window.customElements.define(PageManageTransactions.is, PageManageTransactions);
+  </script>
+</dom-module>

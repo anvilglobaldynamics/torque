@@ -116,7 +116,7 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
       let productBlueprint = await this.database.productBlueprint.findById({ id: productBlueprintId });
       let purchasePrice = productBlueprint.defaultPurchasePrice;
       let salePrice = productBlueprint.defaultSalePrice;
-      await this.database.product.create({ originApp: this.clientApplication,  productBlueprintId, purchasePrice, salePrice });
+      await this.database.product.create({ originApp: this.clientApplication, productBlueprintId, purchasePrice, salePrice });
       product = await this.database.product.findByProductBlueprintId({ productBlueprintId });
     }
     throwOnFalsy(product, "PRODUCT_NOT_FOUND", "Product could not be found");
@@ -137,9 +137,9 @@ exports.InventoryMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
   async _addAcquisitionRecord({ createdByUserId, acquiredDatetimeStamp, inventoryId, productList, vendorId, organizationId }) {
-    await this.database.productAcquisition.create({ originApp: this.clientApplication,  createdByUserId, acquiredDatetimeStamp, inventoryId, productList: productList, vendorId, organizationId });
+    return await this.database.productAcquisition.create({ originApp: this.clientApplication, createdByUserId, acquiredDatetimeStamp, inventoryId, productList: productList, vendorId, organizationId });
   }
 
-    // Add Product To Inventory - End
+  // Add Product To Inventory - End
 
 }

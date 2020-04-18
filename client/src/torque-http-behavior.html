@@ -623,6 +623,51 @@
         this.callCombinedJsonApi('resend-sales-receipt', data, cbfn);
       }
 
+      callAddAccountApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-account', data, cbfn);
+      }
+
+      callEditAccountApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-account', data, cbfn);
+      }
+
+      callGetAccountListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-account-list', data, cbfn);
+      }
+
+      callAddTransactionApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-transaction', data, cbfn);
+      }
+
+      callEditTransactionApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-transaction', data, cbfn);
+      }
+
+      callGetTransactionListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-transaction-list', data, cbfn);
+      }
+
+      callReportTrialBalanceApi(data, cbfn){
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('report-trial-balance', data, cbfn);
+      }
+
+      callReportIncomeStatementApi(data, cbfn){
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('report-income-statement', data, cbfn);
+      }
+
+      callReportBalanceSheetApi(data, cbfn){
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('report-balance-sheet', data, cbfn);
+      }
+
     }
 
   })();

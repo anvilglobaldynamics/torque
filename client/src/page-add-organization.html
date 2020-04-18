@@ -150,6 +150,9 @@
           activeModuleCodeList = ['MOD_PRODUCT', 'MOD_SERVICE'];
         }
 
+        // Enabling accounting module for every new Lipi user
+        activeModuleCodeList.push('MOD_ACCOUNTING');
+
         let data = { name, phone, email, primaryBusinessAddress, activeModuleCodeList };
 
         this.app.callAddOrganizationApi(data, (err, response) => {

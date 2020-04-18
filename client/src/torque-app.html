@@ -120,6 +120,19 @@
 <link rel="lazy-import" href="page-manage-product-categories.html">
 <link rel="lazy-import" href="page-edit-product-category.html">
 
+<link rel="lazy-import" href="page-manage-transactions.html">
+<link rel="lazy-import" href="page-accounting-reports.html">
+<link rel="lazy-import" href="page-manage-monetary-accounts.html">
+<link rel="lazy-import" href="page-manage-accounts.html">
+<link rel="lazy-import" href="page-edit-account.html">
+<link rel="lazy-import" href="page-edit-manual-transaction.html">
+<link rel="lazy-import" href="page-edit-usual-transaction.html">
+<link rel="lazy-import" href="page-view-transaction-list.html">
+<link rel="lazy-import" href="page-view-account-ledger.html">
+<link rel="lazy-import" href="page-report-income-statement.html">
+<link rel="lazy-import" href="page-report-balance-sheet.html">
+<link rel="lazy-import" href="page-report-trial-balance.html">
+
 <link rel="lazy-import" href="page-report-select-product-blueprints.html">
 <link rel="lazy-import" href="page-report-select-product-categories.html">
 
@@ -477,6 +490,18 @@
                 </template>
                 <hr class="custom-sidebar-divider">
 
+                <!-- Accounting section - start -->
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_ACCOUNTING')]]">
+                  <a name="manage-monetary-accounts" href="#/manage-monetary-accounts">[[verses.sidebar.manageMonetaryAccounts]]</a>
+                  <a name="manage-accounts" href="#/manage-accounts">[[verses.sidebar.manageAccounts]]</a>
+                  <a name="accounts-payable" href="#/view-account-ledger/codeName:ACCOUNTS_PAYABLE">[[verses.sidebar.accountsPayable]]</a>
+                  <a name="accounts-receivable" href="#/view-account-ledger/codeName:ACCOUNTS_RECEIVABLE">[[verses.sidebar.accountsReceivable]]</a>
+                  <a name="manage-transactions" href="#/manage-transactions">[[verses.sidebar.manageTransactions]]</a>
+                  <a name="accounting-reports" href="#/accounting-reports">[[verses.sidebar.accountingReports]]</a>
+                  <hr class="custom-sidebar-divider">
+                </template>
+                <!-- Accounting section - end -->
+
                 <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
                 <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_VENDOR')]]">
@@ -609,6 +634,19 @@
               <page-report-select-product-blueprints name="report-select-product-blueprints"></page-report-select-product-blueprints>
               <page-report-select-product-categories name="report-select-product-categories"></page-report-select-product-categories>
               <page-graph-sales name="graph-sales"></page-graph-sales>
+
+              <page-manage-transactions name="manage-transactions"></page-manage-transactions>
+              <page-accounting-reports name="accounting-reports"></page-accounting-reports>
+              <page-manage-monetary-accounts name="manage-monetary-accounts"></page-manage-monetary-accounts>
+              <page-manage-accounts name="manage-accounts"></page-manage-accounts>
+              <page-edit-account name="edit-account"></page-edit-account>
+              <page-edit-manual-transaction name="edit-manual-transaction"></page-edit-manual-transaction>
+              <page-edit-usual-transaction name="edit-usual-transaction"></page-edit-usual-transaction>
+              <page-view-transaction-list name="view-transaction-list"></page-view-transaction-list>
+              <page-view-account-ledger name="view-account-ledger"></page-view-account-ledger>
+              <page-report-income-statement name="report-income-statement"></page-report-income-statement>
+              <page-report-balance-sheet name="report-balance-sheet"></page-report-balance-sheet>
+              <page-report-trial-balance name="report-trial-balance"></page-report-trial-balance>
             </iron-pages>
 
             <div class$="footer footer-[[pageName]]">

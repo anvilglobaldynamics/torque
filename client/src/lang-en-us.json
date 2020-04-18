@@ -105,6 +105,7 @@
     "customerAccountBalanceModule": "Customer Account Balance Module",
     "vendorModule": "Vendor Module",
     "restaurantModule": "Restaurant Module",
+    "accountingModule": "Accounting Module",
     "retail": "Retail",
     "service": "Service",
     "services": "Services",
@@ -170,6 +171,12 @@
     "employees": "Employees",
     "outlets": "Outlets",
     "warehouses": "Warehouses",
+    "manageMonetaryAccounts": "Monetary Accounts",
+    "manageAccounts": "Accounts",
+    "accountsPayable": "Accounts Payable",
+    "accountsReceivable": "Accounts Receivable",
+    "manageTransactions": "Manage Transactions",
+    "accountingReports": "Accounting Reports",
     "productBlueprints": "Product Blueprints",
     "serviceBlueprints": "Service Blueprints",
     "sales": "Sales Records",
@@ -1191,5 +1198,107 @@
     "smsReceipt": "Send Receipt by Sms",
     "resendReceipt": "Receipt",
     "resentSuccessfully": "Receipt has been sent successfully."
+  },
+  "accounting": {
+    "manageAccountPageTitle": "Manage Accounts",
+    "manageMonetaryAccountPageTitle": "Monetary Accounts",
+    "editAccountPageTitle": "Edit Account",
+    "addAccountPageTitle": "Add Account",
+
+    "manageTransactionPageTitle": "Manage Transactions",
+    "accountingReportPageTitle": "Accounting Reports",
+    
+    "viewManualTransaction": "View Manual Transactions",
+    "addManualTransaction": "Add Manual Transaction",
+    "viewIncome": "View Income",
+    "addIncome": "Add Income",
+    "viewExpense": "View Expense",
+    "addExpense": "Add Expense",
+    "viewAssetPurchase": "View Asset Purchase",
+    "addAssetPurchase": "Add Asset Purchase",
+
+    "addManualTransactionPageTitle": "Add Manual Transaction",
+    "editManualTransactionPageTitle": "Edit Manual Transaction",
+
+    "noAccountFound": "No account found",
+    "createNewAccount": "Create new account",
+    "updateOldAccount": "Update old account",
+    "accountCreated": "Account created successfully.",
+    "accountUpdated": "Account update successfully.",
+
+    "accountNameInput": "Account Name",
+    "accountNameInputError": "Enter valid account name.", 
+    "accountNoteInput": "Note",
+    "accountNoteInputError": "Note is too long.",
+    "transactionAmountInput": "Amount",
+    "transactionAmountInputError": "Enter valid amount",
+    "transactionDate": "Transaction Date",
+    "addEditIncomeTransactionPageTitle": "Income Transaction",
+    "addEditExpenseTransactionPageTitle": "Expense Transaction",
+    "addEditAssetPurchasePageTitle": "Asset Purchase",
+
+    "monetaryAccount": "Monetary Account",
+    "createNewTransaction": "Create Transaction",
+    "updateOldTransaction": "Update Transaction",
+
+    "natureOfAccount": "Nature of account",
+    "debitAccountNatureText": "Nature of Debit Account",
+    "creditAccountNatureText": "Nature of Credit Account",
+
+    "account": "Account",
+
+    "debitAccount": "Debited Account",
+    "creditAccount": "Credited Account",
+
+    "accountLedger": "Account Ledger",
+    "accountInvalidMessage": "The account is not valid.",
+
+    "asset": "Asset",
+    "assets": "Assets",
+    "liability": "Liability",
+    "liabilities": "Liabilities",
+    "equity": "Equity",
+    "ownersEquity": "Owner's Equity",
+    "revenue": "Revenue",
+    "expense": "Expense",
+    "ledger": "Ledger",
+    "income": "Income",
+    "manual": "Manual",
+    "transaction": "Transaction",
+    "purchase": "Purchase",
+    "moneyCollected": "Money Collected",
+    "moneyPaid": "Money Paid",
+    "transactions": "Transactions",
+
+    "debit": "Debit",
+    "credit": "Credit",
+    "balance": "Balance",
+    "againstAccount": "Against Account",
+    "note": "Note",
+
+    "employee": "Employee",
+    "noParty": "No Party",
+    "party": "Party",
+    "incomeStatement": "Income Statement",
+    "trialBalance": "Trial Balance",
+    "balanceSheet": "Balance Sheet",
+
+    "totalRevenue": "Total Revenue",
+    "totalExpense": "Total Expense",
+    "totalAssets": "Total Assets",
+    "totalLiabilities": "Total Liabilities",
+    "totalEquity": "Total Equity",
+    "netProfit": "Net Profit",
+
+    "totalLiabilitiesAndEquity": "Total Liabilities and Equity",
+
+    "group": "Group",
+    "particulars": "Particulars",
+
+    "transactionListTitle": "Transactions",
+
+    "productAcquisitionMessage": " will be added as Accounts Payable.",
+
+    "transactionSaved": "Transaction Saved!"
   }
 }
