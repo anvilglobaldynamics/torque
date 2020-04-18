@@ -59,13 +59,16 @@
       .item:last-of-type {
         border: none;
       }
+
     </style>
     <div class="horizontal layout center">
 
       <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.party]] [[verses.general.optional]]" class="mr-4" on-iron-select="collectionNameSelected">
         <paper-listbox slot="dropdown-content" selected="{{selectedCollectionName}}" attr-for-selected="key">
           <paper-item key="no-party">[[verses.accounting.noParty]]</paper-item>
-          <paper-item key="vendor">[[verses.general.vendor]] </paper-item>
+          <template is="dom-if" if="[[page.hasModule('MOD_VENDOR')]]">
+            <paper-item key="vendor">[[verses.general.vendor]] </paper-item>
+          </template>
           <paper-item key="employee">[[verses.accounting.employee]] </paper-item>
         </paper-listbox>
       </paper-dropdown-menu>
@@ -131,7 +134,9 @@
       pageChanged() {
         if (!this.page) return;
         this.useLanguageServices();
-        this._processVendorList(() => { });
+        if (this.page.hasModule('MOD_VENDOR')) {
+          this._processVendorList(() => { });
+        }
         this._processEmployeeList(() => { });
 
       }
