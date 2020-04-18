@@ -109,6 +109,15 @@
         padding-bottom: 8px;
         border-bottom: 1px dotted rgb(131, 131, 131);
       }
+
+      .account-name-column {
+        min-width: 300px;
+      }
+
+      .total-balance-cell {
+        font-weight: bold;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -140,11 +149,7 @@
       <div class="report">
         <div class="header vertical layout">
           <div class="name">
-            <template is="dom-if" if="[[$equals(preset, 'all-expenses')]]">[[verses.accounting.expense]]</template>
-            <template is="dom-if" if="[[$equals(preset, 'all-revenues')]]">[[verses.accounting.income]]</template>
-            <template is="dom-if" if="[[$equals(preset, 'all-assets')]]">[[verses.accounting.asset]]</template>
-            <template is="dom-if" if="[[$equals(preset, 'only-manual')]]">[[verses.accounting.manual]]</template>
-            [[verses.accounting.transactionListTitle]]
+            [[verses.accounting.incomeStatement]]
           </div>
           <div class="date"> [[$mkDate(fromDate, 'dd MMM yyyy')]] [[verses.general.from]] [[$mkDate(toDate, 'dd MMM yyyy')]]</div>
         </div>
@@ -155,54 +160,76 @@
 
               <tr>
                 <th class="cell" align="left" style="cursor: pointer;">
-                  <span>[[verses.general.date]]</span>
+                  <span>[[verses.accounting.group]]</span>
                 </th>
-                <th class="cell  transaction-list-column" style="cursor: pointer;">
-                  <span>[[verses.accounting.debit]]</span>
-                </th>
-                <th class="cell  transaction-list-column" style="cursor: pointer;">
-                  <span>[[verses.accounting.credit]]</span>
+                <th class="cell account-name-column" align="left" style="cursor: pointer;">
+                  <span>[[verses.accounting.particulars]]</span>
                 </th>
                 <th class="cell" style="cursor: pointer;">
                   <span>[[verses.general.amount]]</span>
                 </th>
-                <th class="cell  cell-right" style="cursor: pointer;">
-                  <span>[[verses.general.action]]</span>
-                </th>
               </tr>
 
-              <template is="dom-repeat" items="[[transactionList]]" as="transaction">
+              <template is="dom-repeat" items="[[revenueList]]" as="account">
                 <tr>
-                  <td class="cell" rowspan="2">
-                    [[$mkDate(transaction.transactionDatetimeStamp, 'yyyy-MM-dd')]]
+                  <template is="dom-if" if="[[!index]]">
+                    <td class="cell" rowspan$="[[$add(revenueList.length, 1)]]" style="vertical-align: top;">
+                      [[verses.accounting.revenue]]
+                    </td>
+                  </template>
+                  <td class="cell" align="left">
+                    [[account.displayName]]
                   </td>
                   <td class="cell" align="center">
-                    <template is="dom-repeat" items="[[transaction.debitList]]" as="debit">
-                      <div><i>[[$getAccount(debit.accountId)]]:</i> [[debit.amount]]</div>
-                    </template>
+                    [[account.balance]]
                   </td>
-                  <td class="cell" align="center">
-                    <template is="dom-repeat" items="[[transaction.creditList]]" as="credit">
-                      <div><i>[[$getAccount(credit.accountId)]]:</i> [[credit.amount]]</div>
-                    </template> </td>
-                  <td class="cell" align="center" rowspan="2">
-                    <div>[[transaction.amount]]</div>
-                  </td>
-                  <td class="cell cell-right" align="center" rowspan="2">
-                    <paper-icon-button icon="create" on-tap="editTransactionTapped"></paper-icon-button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="cell" colspan="2" align="center">[[transaction.note]]</td>
                 </tr>
               </template>
+              <tr>
+                <template is="dom-if" if="[[!revenueList.length]]">
+                  <td class="cell" style="vertical-align: top;">
+                    [[verses.accounting.revenue]]
+                  </td>
+                </template>
+                <td class="cell" align="left">
+                  <b>[[verses.accounting.totalRevenue]]</b>
+                </td>
+                <td class="cell" align="center">
+                  <b>[[totalRevenue]]</b>
+                </td>
+              </tr>
+
+              <template is="dom-repeat" items="[[expenseList]]" as="account">
+                <tr>
+                  <template is="dom-if" if="[[!index]]">
+                    <td class="cell" rowspan$="[[$add(expenseList.length, 1)]]" style="vertical-align: top;">Expense</td>
+                  </template>
+                  <td class="cell" align="left">
+                    [[account.displayName]]
+                  </td>
+                  <td class="cell" align="center">
+                    [[account.balance]]
+                  </td>
+                </tr>
+              </template>
+              <tr>
+                <template is="dom-if" if="[[!expenseList.length]]">
+                  <td class="cell" style="vertical-align: top;">
+                    [[verses.accounting.expense]]
+                  </td>
+                </template>
+                <td class="cell" align="left">
+                  <b>[[verses.accounting.totalExpense]]</b>
+                </td>
+                <td class="cell" align="center">
+                  <b>[[totalExpense]]</b>
+                </td>
+              </tr>
 
               <!-- total - start -->
               <tr>
-                <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
-                <td class="cell cell-bottom " colspan="3" align="center">
-                  {{transactionList.length}} [[verses.accounting.transactions]]
-                </td>
+                <td class="cell cell-bottom" colspan="2" style="font-weight: bold;">[[verses.accounting.netProfit]]</td>
+                <td class="cell cell-bottom total-balance-cell" align="center">[[netProfit]]</td>
               </tr>
               <!-- total - end -->
 
@@ -226,7 +253,7 @@
   </template>
 
   <script>
-    class PageReportIncomeStatement extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+    class pageReportIncomeStatement extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
       static get is() {
         return 'page-report-income-statement';
       }
@@ -271,18 +298,12 @@
         this.app.currentPageIsModal = true;
         this.app.shouldShowPrintButton = true;
         this.useLanguageServices();
-        this.app.pushPageTitle(this.app.verses.accounting.transactionListTitle);
+        this.app.pushPageTitle(this.app.verses.accounting.incomeStatement);
         if (!this._ensureAccess()) return;
 
-        this._processAccountList(() => {
-          this.preset = 'all';
-          if ('preset' in this.params) {
-            this.preset = this.params['preset'];
-          }
-          this._processTransactionList(() => {
-            this.self = this;
-            this.isReady = true;
-          });
+        this._processIncomeStatement(() => {
+          this.self = this;
+          this.isReady = true;
         });
       }
 
@@ -299,82 +320,38 @@
         });
       }
 
-      _fetchAccountList(cbfn) {
-        let data = {
-          organizationId: this.app.organization.id,
-          filterByIsMonetary: 'all',
-          filterByNature: 'all',
-          accountIdList: [],
-        };
-        this.app.callGetAccountListApi(data, (err, response) => {
-          if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.accountList);
-        });
-      }
-
-      _processAccountList(cbfn) {
-        this._fetchAccountList(newAccountList => {
-          this.fullAccountList = newAccountList;
-          cbfn();
-        });
-      }
-
-      _fetchTransactionList(cbfn) {
+      _fetchIncomeStatement(cbfn) {
         let fromDate = new Date(this.fromDate).getTime();
         let toDate = new Date(this.toDate).getTime();
 
-        let preset = 'query';
-        if ('preset' in this.params) {
-          preset = this.params['preset'];
-        }
-        console.log(preset)
-
         let data = {
           organizationId: this.app.organization.id,
-
-          preset,
-          accountIdList: [],
-
-          transactionId: null,
-          
-          includeOpeningBalance: false,
-          
           fromDate,
           toDate
         };
-        this.app.callGetTransactionListApi(data, (err, response) => {
+        this.app.callReportIncomeStatementApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response.transactionList);
+          return cbfn(response);
         });
       }
 
-      _processTransactionList(cbfn) {
-        this._fetchTransactionList(newTransactionList => {
+      _processIncomeStatement(cbfn) {
+        this._fetchIncomeStatement(({ revenueList, expenseList, totalRevenue, totalExpense, netProfit }) => {
 
-          // sort
-          this.__sortTransaction(newTransactionList);
+          Object.assign(this,
+            { revenueList, expenseList, totalRevenue, totalExpense, netProfit }
+          );
 
-          this.transactionList = newTransactionList;
           cbfn();
         });
       }
 
       // region: ui  ===========================
 
-      editTransactionTapped(e) {
-        let { transaction } = e.model;
-        if (transaction.transactionOrigin === 'manual') {
-          return this.app.navigateTo(`/edit-manual-transaction/transaction:${transaction.id}`);
-        } else {
-          return this.app.navigateTo(`/edit-usual-transaction/transaction:${transaction.id}/transaction-origin:${transaction.transactionOrigin}`);
-        }
-      }
-
       filterTapped(e = null) {
         this.isReady = false;
-        this._processTransactionList(() => {
+        this._processIncomeStatement(() => {
           this.isReady = true;
         });
       }
@@ -385,6 +362,6 @@
 
     }
 
-    window.customElements.define(PageReportIncomeStatement.is, PageReportIncomeStatement);
+    window.customElements.define(pageReportIncomeStatement.is, pageReportIncomeStatement);
   </script>
 </dom-module>

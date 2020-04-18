@@ -38,26 +38,23 @@ exports.ReportTrialBalanceApi = class extends Api {
     return toDate;
   }
 
-  async __includeUserInformation({ collectionList }) {
-    let map = await this.crossmap({
-      source: collectionList,
-      sourceKey: 'collectedByUserId',
-      target: 'user'
-    });
-    map.forEach((user, collection) => {
-      let { fullName, phone } = user;
-      collection.collectedByUser = {
-        fullName, phone
-      }
-    });
-  }
+  // NOTE: needs local variables. do not move to mixin
+  getAccount(accountMap, accountList, accountId){
+    if (!(String(accountId) in accountMap)) {
 
-  // NOTE: This is needed in order to avoid the initial payment taken during the creation
-  // of a sale outside current boundary
-  __filterByDateRange({ fromDate, toDate, collectionList }) {
-    return collectionList.filter((collection) => {
-      return fromDate <= collection.collectedDatetimeStamp && collection.collectedDatetimeStamp <= toDate;
-    });
+      let account = accountList.find(account => account.id === accountId);
+      throwOnFalsy(account, "ACCOUNT_INVALID", "Account is invalid");
+
+      if (account.nature === 'asset' || account.nature === 'expense') { // balance is debit
+        account.isDebitBalance = true;
+      } else {
+        account.isDebitBalance = false;
+      }
+
+      account.balance = 0;
+      accountMap[String(accountId)] = account;
+    }
+    return accountMap[String(accountId)];
   }
 
   async handle({ body }) {
@@ -72,29 +69,11 @@ exports.ReportTrialBalanceApi = class extends Api {
 
     let accountMap = {};
 
-    const getAccount = (accountId) => {
-      if (!(String(accountId) in accountMap)) {
-
-        let account = accountList.find(account => account.id === accountId);
-        throwOnFalsy(account, "ACCOUNT_INVALID", "Account is invalid");
-
-        if (account.nature === 'asset' || account.nature === 'expense') { // balance is debit
-          account.isDebitBalance = true;
-        } else {
-          account.isDebitBalance = false;
-        }
-
-        account.balance = 0;
-        accountMap[String(accountId)] = account;
-      }
-      return accountMap[String(accountId)];
-    }
-
     transactionList.forEach(transaction => {
       let { debitList, creditList, transactionDatetimeStamp } = transaction;
 
       debitList.forEach(debit => {
-        let account = getAccount(debit.accountId);
+        let account = this.getAccount(accountMap, accountList, debit.accountId);
         if ((account.nature === 'revenue' || account.nature === 'expense') && transactionDatetimeStamp < fromDate) {
           return;
         }
@@ -106,7 +85,7 @@ exports.ReportTrialBalanceApi = class extends Api {
       });
 
       creditList.forEach(credit => {
-        let account = getAccount(credit.accountId);
+        let account = this.getAccount(accountMap, accountList, credit.accountId);
         if ((account.nature === 'revenue' || account.nature === 'expense') && transactionDatetimeStamp < fromDate) {
           return;
         }

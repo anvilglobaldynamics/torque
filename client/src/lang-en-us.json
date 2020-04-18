@@ -1278,6 +1278,13 @@
     "trialBalance": "Trial Balance",
     "balanceSheet": "Balance Sheet",
 
+    "totalRevenue": "Total Revenue",
+    "totalExpense": "Total Expense",
+    "netProfit": "Net Profit",
+
+    "group": "Group",
+    "particulars": "Particulars",
+
     "transactionListTitle": "Transactions",
 
     "productAcquisitionMessage": " will be added as Accounts Payable.",

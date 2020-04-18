@@ -149,10 +149,6 @@
       <div class="report">
         <div class="header vertical layout">
           <div class="name">
-            <template is="dom-if" if="[[$equals(preset, 'all-expenses')]]">[[verses.accounting.expense]]</template>
-            <template is="dom-if" if="[[$equals(preset, 'all-revenues')]]">[[verses.accounting.income]]</template>
-            <template is="dom-if" if="[[$equals(preset, 'all-assets')]]">[[verses.accounting.asset]]</template>
-            <template is="dom-if" if="[[$equals(preset, 'only-manual')]]">[[verses.accounting.manual]]</template>
             [[verses.accounting.trialBalance]]
           </div>
           <div class="date"> [[$mkDate(fromDate, 'dd MMM yyyy')]] [[verses.general.from]] [[$mkDate(toDate, 'dd MMM yyyy')]]</div>
