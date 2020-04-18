@@ -478,11 +478,15 @@
                   <a name="manage-product-blueprints" href="#/manage-product-blueprints">[[verses.sidebar.productBlueprints]]</a>
                 </template>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
-                  <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
+                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+                    <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
+                  </template>
                 </template>
                 <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                  <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
+                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+                    <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
+                  </template>
                 </template>
                 <hr class="custom-sidebar-divider">
 
@@ -501,7 +505,9 @@
                 <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
                 <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_VENDOR')]]">
-                  <a name="manage-vendors" href="#/manage-vendors">[[verses.sidebar.vendors]]</a>
+                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+                    <a name="manage-vendors" href="#/manage-vendors">[[verses.sidebar.vendors]]</a>
+                  </template>
                 </template>
                 <hr class="custom-sidebar-divider">
 
@@ -514,7 +520,9 @@
                 <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
                 <a name="report-collections" href="#/report-collections">[[verses.sidebar.collectionReport]]</a>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                  <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
+                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+                    <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
+                  </template>
                   <a name="report-product-sales" href="#/report-product-sales">[[verses.sidebar.productSalesReport]]</a>
                 </template>
                 <hr class="custom-sidebar-divider">
@@ -527,11 +535,15 @@
                   <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
                 </template>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
-                  <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
+                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+                    <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
+                  </template>
                 </template>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                  <a name="manage-product-acquisitions" href="#/manage-product-acquisitions">[[verses.sidebar.manageProductAcquisition]]</a>
-                  <a name="manage-product-transfers" href="#/manage-product-transfers">[[verses.sidebar.manageProductTransfer]]</a>
+                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+                    <a name="manage-product-acquisitions" href="#/manage-product-acquisitions">[[verses.sidebar.manageProductAcquisition]]</a>
+                    <a name="manage-product-transfers" href="#/manage-product-transfers">[[verses.sidebar.manageProductTransfer]]</a>
+                  </template>
                 </template>
                 <hr class="custom-sidebar-divider">
 
@@ -731,6 +743,9 @@
               <template is="dom-if" if="[[_receiptDialogCanHaveEmailReceipt]]">
                 <paper-button raised class="primary receipt-dialog-button" on-click="receiptDialogEmailReceiptTapped">[[verses.receipt.emailReceipt]]</paper-button>
               </template>
+              <template is="dom-if" if="[[_receiptDialogCanHaveSmsReceipt]]">
+                <paper-button raised class="primary receipt-dialog-button" on-click="receiptDialogSmsReceiptTapped">[[verses.receipt.smsReceipt]]</paper-button>
+              </template>
               <paper-button raised class="primary receipt-dialog-button" on-click="receiptDialogPrintReceiptTapped">[[verses.receipt.printReceipt]]</paper-button>
               <paper-button raised class="danger receipt-dialog-button" on-click="receiptDialogNoReceiptTapped">[[verses.receipt.noReceipt]]</paper-button>
             </div>
@@ -761,7 +776,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":282,"datetimeStamp":1584346125183}');
+              return JSON.parse('{"build":293,"datetimeStamp":1585830655162}');
               '%__deploy-end'
             }
           },
@@ -1355,6 +1370,12 @@
         this._receiptDialogCbfn = cbfn;
         this._patchForPolymerModalDialogIssue();
         this.elem('#receipt-dialog').open();
+      }
+
+      receiptDialogSmsReceiptTapped(e = null) {
+        this.elem('#receipt-dialog').close();
+        this._receiptDialogCbfn({ receiptType: 'sms-receipt' });
+        this._receiptDialogCbfn = null;
       }
 
       receiptDialogEmailReceiptTapped(e = null) {

@@ -28,6 +28,10 @@
     "name": "Unlocks the ability to manage product and service provider vendors."
   },
   {
+    "code": "MOD_RESTAURANT",
+    "name": "Unlocks restaurant and hospitality specific features."
+  },
+  {
     "code": "MOD_ACCOUNTING",
     "name": "Unlocks the ability to manage accounts, transactions and view reports."
   }

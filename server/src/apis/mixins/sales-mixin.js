@@ -222,7 +222,13 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
       } else {
         inventoryContainerDefaultInventory = await this.__getOutletDefaultInventory({ outletId });
       }
-      this._reduceProductCountFromInventoryContainerDefaultInventory({ inventoryContainerDefaultInventory, productList });
+
+      // NOTE: Restaurants do not have inventory management
+      // So we do NOT decrease product count on sales
+      if (!await this.hasModule('MOD_RESTAURANT')) {
+        this._reduceProductCountFromInventoryContainerDefaultInventory({ inventoryContainerDefaultInventory, productList });
+      }
+
       await this.database.inventory.setProductList({ id: inventoryContainerDefaultInventory.id }, { productList: inventoryContainerDefaultInventory.productList });
     }
 

@@ -1,5 +1,19 @@
 [
   {
+    "code": "RS-D01",
+    "name": "Enterprise Demo Retail-Service Package",
+    "price": 0,
+    "duration": {
+      "months": 1,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 2,
+      "maximumWarehouses": 1,
+      "maximumEmployees": 5
+    }
+  },
+  {
     "code": "R-U01",
     "name": "Internal Unlimited Retail Package",
     "price": 0,
@@ -118,6 +132,34 @@
     },
     "limits": {
       "maximumOutlets": 2,
+      "maximumWarehouses": 1,
+      "maximumEmployees": 5
+    }
+  },
+  {
+    "code": "R-DFETCH-01",
+    "name": "Direct Fetch Restaurant Demo Package",
+    "price": 0,
+    "duration": {
+      "months": 0,
+      "days": 7
+    },
+    "limits": {
+      "maximumOutlets": 3,
+      "maximumWarehouses": 0,
+      "maximumEmployees": 5
+    }
+  },
+  {
+    "code": "R-DFRESH-01",
+    "name": "Direct Fresh Warehouse Demo Package",
+    "price": 0,
+    "duration": {
+      "months": 0,
+      "days": 7
+    },
+    "limits": {
+      "maximumOutlets": 1,
       "maximumWarehouses": 1,
       "maximumEmployees": 5
     }

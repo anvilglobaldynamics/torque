@@ -206,14 +206,16 @@
               </template>
 
               <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
-                <template is="dom-if" if="[[hasPrivilege('PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES', organization)]]">
-                  <div class="touch-button" on-tap="buttonCreateProductAcquisitionTapped">
-                    <div class="icon">
-                      <iron-icon src="../../images/icons/package-right.png"></iron-icon>
+                <template is="dom-if" if="[[!hasModule('MOD_RESTAURANT')]]">
+                  <template is="dom-if" if="[[hasPrivilege('PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES', organization)]]">
+                    <div class="touch-button" on-tap="buttonCreateProductAcquisitionTapped">
+                      <div class="icon">
+                        <iron-icon src="../../images/icons/package-right.png"></iron-icon>
+                      </div>
+                      <div class="type title uppercase">[[verses.home.shortcutToAddProduct]]</div>
+                      <paper-ripple></paper-ripple>
                     </div>
-                    <div class="type title uppercase">[[verses.home.shortcutToAddProduct]]</div>
-                    <paper-ripple></paper-ripple>
-                  </div>
+                  </template>
                 </template>
               </template>
 
@@ -691,6 +693,7 @@
         if (moduleCode === 'MOD_GYM') return this.app.verses.general.gymModule;
         if (moduleCode === 'MOD_CUSTOMER_ACCOUNT_BALANCE') return this.app.verses.general.customerAccountBalanceModule;
         if (moduleCode === 'MOD_VENDOR') return this.app.verses.general.vendorModule;
+        if (moduleCode === 'MOD_RESTAURANT') return this.app.verses.general.restaurantModule;
         if (moduleCode === 'MOD_ACCOUNTING') return this.app.verses.general.accountingModule;
       }
 

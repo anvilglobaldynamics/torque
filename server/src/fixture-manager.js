@@ -28,17 +28,17 @@ class FixtureManager {
       {
         name: "privilege-list",
         path: "./src/fixtures/privilege-list.json",
-        version: 20
+        version: 21
       },
       {
         name: "package-list",
         path: "./src/fixtures/package-list.json",
-        version: 18
+        version: 21
       },
       {
         name: "module-list",
         path: "./src/fixtures/module-list.json",
-        version: 6
+        version: 8
       },
       {
         name: "outlet-category-list",
