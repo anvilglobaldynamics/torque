@@ -1648,7 +1648,7 @@
       $hasEitherPrivilege(priv1, priv2, organization) {
         try {
           return this.hasPrivilege(priv1, organization) || this.hasPrivilege(priv2, organization);
-        } catch (ex) {}
+        } catch (ex) { }
       }
 
       // NOTE: We had to duplicate it since this.app is not defined in
@@ -1660,18 +1660,22 @@
         return this.organization.employment.privileges[privilege];
       }
 
-      accountsReceivableTapped(){
+      accountsReceivableTapped() {
         this.navigateTo('/view-account-ledger/codeName:ACCOUNTS_RECEIVABLE');
-        setTimeout(()=>{
-          this.refreshCurrentPage();
-        }, 1)
+        if (this.pageName === 'view-account-ledger') {
+          setTimeout(() => {
+            this.refreshCurrentPage();
+          }, 1);
+        }
       }
 
-      accountsPayableTapped(){
+      accountsPayableTapped() {
         this.navigateTo('/view-account-ledger/codeName:ACCOUNTS_PAYABLE');
-        setTimeout(()=>{
-          this.refreshCurrentPage();
-        }, 1)
+        if (this.pageName === 'view-account-ledger') {
+          setTimeout(() => {
+            this.refreshCurrentPage();
+          }, 1);
+        }
       }
 
     }
