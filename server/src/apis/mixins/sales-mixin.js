@@ -251,22 +251,24 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     let sales = await this.database.sales.findById({ id: salesId });
 
     if (!isLiteSales) {
-      await this.addSalesRevenueTransaction({
-        transactionData: {
-          createdByUserId: userId,
-          organizationId
-        },
-        operationData: { productList, serviceList, payment, salesId, salesNumber: sales.salesNumber, customer }
-      });
-
-      if (productList.length > 0) {
-        await this.addSalesInventoryTransaction({
+      if (this.hasModule('MOD_ACCOUNTING')) {
+        await this.addSalesRevenueTransaction({
           transactionData: {
             createdByUserId: userId,
             organizationId
           },
-          operationData: { productList, salesId, salesNumber: sales.salesNumber, customer }
+          operationData: { productList, serviceList, payment, salesId, salesNumber: sales.salesNumber, customer }
         });
+
+        if (productList.length > 0) {
+          await this.addSalesInventoryTransaction({
+            transactionData: {
+              createdByUserId: userId,
+              organizationId
+            },
+            operationData: { productList, salesId, salesNumber: sales.salesNumber, customer }
+          });
+        }
       }
     }
 
