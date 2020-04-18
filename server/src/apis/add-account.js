@@ -27,8 +27,7 @@ exports.AddAccountApi = class extends Api {
         "PRIV_MANAGE_ACCOUNTING"
       ],
       moduleList: [
-        // TODO: update moduleList with MOD_ACCOUNTING
-        // "MOD_ACCOUNTING",
+        "MOD_ACCOUNTING",
       ]
     }];
   }

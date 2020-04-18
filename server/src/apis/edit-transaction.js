@@ -42,8 +42,7 @@ exports.EditTransactionApi = class extends Api.mixin(AccountingMixin) {
         "PRIV_MANAGE_ACCOUNTING"
       ],
       moduleList: [
-        // TODO: update moduleList with MOD_ACCOUNTING
-        // "MOD_ACCOUNTING",
+        "MOD_ACCOUNTING",
       ]
     }];
   }
