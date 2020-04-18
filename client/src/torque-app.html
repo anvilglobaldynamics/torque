@@ -501,8 +501,8 @@
                   </template>
 
                   <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ACCOUNTING_REPORTS', organization)]]">
-                    <a name="accounts-payable" href="#/view-account-ledger/codeName:ACCOUNTS_PAYABLE">[[verses.sidebar.accountsPayable]]</a>
-                    <a name="accounts-receivable" href="#/view-account-ledger/codeName:ACCOUNTS_RECEIVABLE">[[verses.sidebar.accountsReceivable]]</a>
+                    <a name="accounts-payable" on-click="accountsPayableTapped" style="cursor: pointer;">[[verses.sidebar.accountsPayable]]</a>
+                    <a name="accounts-receivable" on-click="accountsReceivableTapped" style="cursor: pointer;">[[verses.sidebar.accountsReceivable]]</a>
                     <a name="accounting-reports" href="#/accounting-reports">[[verses.sidebar.accountingReports]]</a>
                   </template>
 
@@ -1658,6 +1658,22 @@
           throw new Error(`No such privilege "${privilege}".`);
         }
         return this.organization.employment.privileges[privilege];
+      }
+
+      accountsReceivableTapped(){
+        this.navigateTo('/view-account-ledger/codeName:ACCOUNTS_RECEIVABLE');
+        setTimeout(()=>{
+          this.refreshCurrentPage();
+          // this._onHashChange();
+        }, 1)
+      }
+
+      accountsPayableTapped(){
+        this.navigateTo('/view-account-ledger/codeName:ACCOUNTS_PAYABLE');
+        setTimeout(()=>{
+          this.refreshCurrentPage();
+          // this._onHashChange();
+        }, 1)
       }
 
     }

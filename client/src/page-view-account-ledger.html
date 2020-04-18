@@ -289,6 +289,10 @@
         this.app.pushPageTitle(this.app.verses.accounting.transactionListTitle);
         if (!this._ensureAccess()) return;
 
+        // NOTE: This is necessary ONLY for this page since it's parameters
+        // can change when still being on the same page
+        this.params = this.app.getUrlParameters(this.app.paramString);
+
         this._processAccountList(() => {
           this.finalBalance = 0;
           this.accountId = null;
