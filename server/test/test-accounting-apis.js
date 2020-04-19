@@ -40,7 +40,7 @@ let cashAccount = null;
 let rentExpenseAccount = null;
 let interestIncomeAccount = null;
 
-describe.only('Accounting', _ => {
+describe('Accounting', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -216,6 +216,8 @@ describe.only('Accounting', _ => {
         preset: 'query',
         accountIdList: [],
 
+        includeOpeningBalance: false,
+
         transactionId: null
       }
     }, (err, response, body) => {
@@ -261,6 +263,8 @@ describe.only('Accounting', _ => {
 
         preset: 'query',
         accountIdList: [],
+
+        includeOpeningBalance: false,
 
         transactionId: null
       }

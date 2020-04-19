@@ -15,7 +15,7 @@ exports.GetAccountListApi = class extends Api {
   get requestSchema() {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
-      
+
       filterByNature: Joi.string().valid('all', 'asset', 'liability', 'equity', 'revenue', 'expense').required(),
       filterByIsMonetary: Joi.string().valid('all', 'only-monetary', 'exclude-monetary').required(),
       accountIdList: Joi.array().items(Joi.number()).default([]).required()
@@ -29,8 +29,7 @@ exports.GetAccountListApi = class extends Api {
         "PRIV_MANAGE_ACCOUNTING"
       ],
       moduleList: [
-        // TODO: update moduleList with MOD_ACCOUNTING
-        // "MOD_ACCOUNTING"
+        "MOD_ACCOUNTING"
       ]
     }];
   }

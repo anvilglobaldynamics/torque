@@ -70,13 +70,15 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin
       delete product.product;
     });
 
-    await this.addProductAcquisitionInventoryTransaction({
-      transactionData: {
-        createdByUserId: userId,
-        organizationId
-      },
-      operationData: { productList, productAcquisitionId, productAcquisitionNumber: productAcquisition.productAcquisitionNumber, vendorId }
-    });
+    if (await this.hasModule('MOD_ACCOUNTING')) {
+      await this.addProductAcquisitionInventoryTransaction({
+        transactionData: {
+          createdByUserId: userId,
+          organizationId
+        },
+        operationData: { productList, productAcquisitionId, productAcquisitionNumber: productAcquisition.productAcquisitionNumber, vendorId }
+      });
+    }
 
     return { status: "success", insertedProductList };
   }

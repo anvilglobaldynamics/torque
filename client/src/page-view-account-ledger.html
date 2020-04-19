@@ -115,6 +115,7 @@
         padding-bottom: 8px;
         border-bottom: 1px dotted rgb(131, 131, 131);
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -289,6 +290,10 @@
         this.app.pushPageTitle(this.app.verses.accounting.transactionListTitle);
         if (!this._ensureAccess()) return;
 
+        // NOTE: This is necessary ONLY for this page since it's parameters
+        // can change when still being on the same page
+        this.params = this.app.getUrlParameters(this.app.paramString);
+
         this._processAccountList(() => {
           this.finalBalance = 0;
           this.accountId = null;
@@ -398,21 +403,25 @@
             let isAccountDebited = transaction.debitList.find(({ accountId, amount }) => accountId === this.accountId && amount !== 0);
 
             if (isAccountDebited) {
-              transaction.debit = transaction.amount;
+              let { amount } = transaction.debitList.find(({ accountId }) => accountId === this.accountId);
+
+              transaction.debit = amount;
               transaction.againstAccountId = transaction.creditList[0].accountId;
               if (isBalanceDebit) {
-                balance += transaction.amount;
+                balance += amount;
               } else {
-                balance -= transaction.amount;
+                balance -= amount;
               }
               transaction.balance = balance;
             } else {
-              transaction.credit = transaction.amount;
+              let { amount } = transaction.creditList.find(({ accountId }) => accountId === this.accountId);
+
+              transaction.credit = amount;
               transaction.againstAccountId = transaction.debitList[0].accountId;
               if (isBalanceDebit) {
-                balance -= transaction.amount;
+                balance -= amount;
               } else {
-                balance += transaction.amount;
+                balance += amount;
               }
               transaction.balance = balance;
             }

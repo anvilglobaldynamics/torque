@@ -416,6 +416,7 @@
 
         /* max-width: 400px; */
       }
+
     </style>
 
     <app-drawer-layout responsive-width="4000px" fullbleed narrow="{{narrow}}">
@@ -492,13 +493,23 @@
 
                 <!-- Accounting section - start -->
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_ACCOUNTING')]]">
-                  <a name="manage-monetary-accounts" href="#/manage-monetary-accounts">[[verses.sidebar.manageMonetaryAccounts]]</a>
-                  <a name="manage-accounts" href="#/manage-accounts">[[verses.sidebar.manageAccounts]]</a>
-                  <a name="accounts-payable" href="#/view-account-ledger/codeName:ACCOUNTS_PAYABLE">[[verses.sidebar.accountsPayable]]</a>
-                  <a name="accounts-receivable" href="#/view-account-ledger/codeName:ACCOUNTS_RECEIVABLE">[[verses.sidebar.accountsReceivable]]</a>
-                  <a name="manage-transactions" href="#/manage-transactions">[[verses.sidebar.manageTransactions]]</a>
-                  <a name="accounting-reports" href="#/accounting-reports">[[verses.sidebar.accountingReports]]</a>
-                  <hr class="custom-sidebar-divider">
+
+                  <template is="dom-if" if="[[hasPrivilege('PRIV_MANAGE_ACCOUNTING', organization)]]">
+                    <a name="manage-monetary-accounts" href="#/manage-monetary-accounts">[[verses.sidebar.manageMonetaryAccounts]]</a>
+                    <a name="manage-accounts" href="#/manage-accounts">[[verses.sidebar.manageAccounts]]</a>
+                    <a name="manage-transactions" href="#/manage-transactions">[[verses.sidebar.manageTransactions]]</a>
+                  </template>
+
+                  <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ACCOUNTING_REPORTS', organization)]]">
+                    <a name="accounts-payable" on-click="accountsPayableTapped" style="cursor: pointer;">[[verses.sidebar.accountsPayable]]</a>
+                    <a name="accounts-receivable" on-click="accountsReceivableTapped" style="cursor: pointer;">[[verses.sidebar.accountsReceivable]]</a>
+                    <a name="accounting-reports" href="#/accounting-reports">[[verses.sidebar.accountingReports]]</a>
+                  </template>
+
+                  <template is="dom-if" if="[[$hasEitherPrivilege('PRIV_MANAGE_ACCOUNTING', 'PRIV_VIEW_ACCOUNTING_REPORTS', organization)]]">
+                    <hr class="custom-sidebar-divider">
+                  </template>
+
                 </template>
                 <!-- Accounting section - end -->
 
@@ -1632,6 +1643,39 @@
           else size = 12;
         }
         return `font-size: ${size}px`;
+      }
+
+      $hasEitherPrivilege(priv1, priv2, organization) {
+        try {
+          return this.hasPrivilege(priv1, organization) || this.hasPrivilege(priv2, organization);
+        } catch (ex) { }
+      }
+
+      // NOTE: We had to duplicate it since this.app is not defined in
+      // torque-app.
+      hasPrivilege(privilege) {
+        if (!(privilege in this.organization.employment.privileges)) {
+          throw new Error(`No such privilege "${privilege}".`);
+        }
+        return this.organization.employment.privileges[privilege];
+      }
+
+      accountsReceivableTapped() {
+        this.navigateTo('/view-account-ledger/codeName:ACCOUNTS_RECEIVABLE');
+        if (this.pageName === 'view-account-ledger') {
+          setTimeout(() => {
+            this.refreshCurrentPage();
+          }, 1);
+        }
+      }
+
+      accountsPayableTapped() {
+        this.navigateTo('/view-account-ledger/codeName:ACCOUNTS_PAYABLE');
+        if (this.pageName === 'view-account-ledger') {
+          setTimeout(() => {
+            this.refreshCurrentPage();
+          }, 1);
+        }
       }
 
     }

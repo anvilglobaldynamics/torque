@@ -75,8 +75,8 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
     await this._verifyProductsAreReturnable({ productList: returnedProductList });
 
     let customer = null;
-    if (sales.customerId){
-      customer = await this.database.customer.findById({ id: sales.customerId });      
+    if (sales.customerId) {
+      customer = await this.database.customer.findById({ id: sales.customerId });
     }
 
     if (shouldSaveReturnableInChangeWallet && sales.customerId && creditedAmount) {
@@ -99,22 +99,24 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
       returnedProduct.purchasePrice = product.purchasePrice;
     });
 
-    await this.addSalesReturnInventoryTransaction({
-      transactionData: {
-        createdByUserId: userId,
-        organizationId
-      },
-      operationData: { returnedProductList, salesReturnId, salesNumber: sales.salesNumber, customer }
-    });
+    if (await this.hasModule('MOD_ACCOUNTING')) {
+      await this.addSalesReturnInventoryTransaction({
+        transactionData: {
+          createdByUserId: userId,
+          organizationId
+        },
+        operationData: { returnedProductList, salesReturnId, salesNumber: sales.salesNumber, customer }
+      });
 
-    await this.addSalesReturnExpenseTransaction({
-      transactionData: {
-        createdByUserId: userId,
-        organizationId
-      },
-      // since 'creditedAmount' will be confusing
-      operationData: { refundedAmount: creditedAmount, salesReturnId, salesNumber: sales.salesNumber, customer }
-    });
+      await this.addSalesReturnExpenseTransaction({
+        transactionData: {
+          createdByUserId: userId,
+          organizationId
+        },
+        // since 'creditedAmount' will be confusing
+        operationData: { refundedAmount: creditedAmount, salesReturnId, salesNumber: sales.salesNumber, customer }
+      });
+    }
 
     return { status: "success", salesReturnId };
   }

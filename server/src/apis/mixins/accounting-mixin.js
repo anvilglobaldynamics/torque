@@ -147,6 +147,10 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     let debitSum = 0;
     debitList.forEach(({ amount }) => debitSum += amount);
     creditList.forEach(({ amount }) => creditSum += amount);
+
+    throwOnTruthy(debitList.length === 0, "TRANSACTION_NOT_BALANCED", "Debit List is empty");
+    throwOnTruthy(creditList.length === 0, "TRANSACTION_NOT_BALANCED", "Credit List is empty");
+
     throwOnTruthy(debitList[0].accountId === creditList[0].accountId, "TRANSACTION_NOT_BALANCED", "Debit and credit does not match.");
     return debitSum;
   }
@@ -298,22 +302,18 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     // debit
     let debitList = [];
 
-    if (accounting.debitCostOfGoodsSold) {
-      debitList.push({
-        accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'COST_OF_GOODS_SOLD' })).id,
-        amount: accounting.debitCostOfGoodsSold
-      });
-    }
+    debitList.push({
+      accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'COST_OF_GOODS_SOLD' })).id,
+      amount: accounting.debitCostOfGoodsSold
+    });
 
     // credit
     let creditList = [];
 
-    if (accounting.creditInventory) {
-      creditList.push({
-        accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'INVENTORY' })).id,
-        amount: accounting.creditInventory
-      });
-    }
+    creditList.push({
+      accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'INVENTORY' })).id,
+      amount: accounting.creditInventory
+    });
 
     let party = null;
     if (customer) {
@@ -359,29 +359,25 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     // debit
     let debitList = [];
 
-    if (accounting.debitMonetary) {
-      if (payment.paymentMethod === 'cash') {
-        debitList.push({
-          accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'CASH' })).id,
-          amount: accounting.debitMonetary
-        });
-      } else {
-        debitList.push({
-          accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'BANK' })).id,
-          amount: accounting.debitMonetary
-        });
-      }
+    if (payment.paymentMethod === 'cash') {
+      debitList.push({
+        accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'CASH' })).id,
+        amount: accounting.debitMonetary
+      });
+    } else {
+      debitList.push({
+        accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'BANK' })).id,
+        amount: accounting.debitMonetary
+      });
     }
 
     // credit
     let creditList = [];
 
-    if (accounting.creditAccountsReceivable) {
-      creditList.push({
-        accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'ACCOUNTS_RECEIVABLE' })).id,
-        amount: accounting.creditAccountsReceivable
-      });
-    }
+    creditList.push({
+      accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'ACCOUNTS_RECEIVABLE' })).id,
+      amount: accounting.creditAccountsReceivable
+    });
 
     let party = null;
     if (customer) {
