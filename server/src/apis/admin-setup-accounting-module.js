@@ -13,7 +13,7 @@ exports.AdminSetupAccountingModuleApi = class extends Api.mixin(OrganizationMixi
 
   get authenticationLevel() { return 'admin'; }
 
-  get isEnabled() { return true; }
+  get isEnabled() { return false; }
 
   get requestSchema() {
     return Joi.object().keys({
