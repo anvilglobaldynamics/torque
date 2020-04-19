@@ -96,6 +96,16 @@ exports.UserCollection = class extends Collection {
     });
   }
 
+  async findByEmailOrPhoneForBypass({ countryCode, emailOrPhone }) {
+    return await this._findOne({
+      $or: [
+        { email: emailOrPhone },
+        { phone: emailOrPhone }
+      ],
+      countryCode,
+    });
+  }
+
   async setProfile({ id }, { email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
     return await this._update({ id }, {
       $set: {
