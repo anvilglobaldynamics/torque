@@ -26,6 +26,8 @@ exports.AdminSetupAccountingModuleApi = class extends Api.mixin(OrganizationMixi
 
     let organizationList = await this.database.organization._find({ originApp: 'torque' });
 
+    let affectedList = [];
+
     for (let organization of organizationList) {
       let organizationId = organization.id;
 
@@ -40,13 +42,15 @@ exports.AdminSetupAccountingModuleApi = class extends Api.mixin(OrganizationMixi
 
       console.log({ userId, organizationId });
 
+      affectedList.push({ userId, organizationId });
+
       await this.createDefaultAccounts({ organizationId, userId });
 
     }
 
     // await this._remotelyTerminateSessionOfUsersInOrganization({ organizationId });
 
-    return { status: "success" };
+    return { status: "success", affectedList };
   }
 
 }
