@@ -99,23 +99,25 @@ exports.DiscardSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin, Ac
     await this.database.sales.discard({ id: salesId });
 
     // find sales accounting transactions and reverse them
-    let transactionList = await this.database.transaction._find({
-      organizationId,
-      'action.name': 'add-sales',
-      'action.documentId': salesId
-    });
+    if (await this.hasModule('MOD_ACCOUNTING')) {
+      let transactionList = await this.database.transaction._find({
+        organizationId,
+        'action.name': 'add-sales',
+        'action.documentId': salesId
+      });
 
-    let action = {
-      name: "discard-sales",
-      collectionName: 'sales-discard',
-      documentId: salesDiscardId
-    }
+      let action = {
+        name: "discard-sales",
+        collectionName: 'sales-discard',
+        documentId: salesDiscardId
+      }
 
-    let note = `Discarded Sales #${sales.salesNumber}`;
+      let note = `Discarded Sales #${sales.salesNumber}`;
 
-    for (let i = 0; i < transactionList.length; i++) {
-      let transaction = transactionList[i];
-      await this.reverseTransaction({ transaction, action, note });
+      for (let i = 0; i < transactionList.length; i++) {
+        let transaction = transactionList[i];
+        await this.reverseTransaction({ transaction, action, note });
+      }
     }
 
     return { status: 'success' };
