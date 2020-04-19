@@ -171,9 +171,12 @@
     "employees": "কর্মচারী",
     "outlets": "দোকান",
     "warehouses": "গুদাম",
-    "manageMonetaryAccounts": "আর্থিক হিসাব",
-    "manageAccounts": "হিসাব",
+    "manageMonetaryAccounts": "অর্থ অ্যাকাউন্ট",
+    "manageAccounts": "অ্যাকাউন্ট",
+    "accountsPayable": "অ্যাকাউন্ট পরিশোধযোগ্য",
+    "accountsReceivable": "অ্যাকাউন্ট গ্রহণযোগ্য",
     "manageTransactions": "লেনদেন পরিচালনা",
+    "accountingReports": "অ্যাকাউন্টিং রিপোর্ট",
     "productBlueprints": "পণ্যের পরিকল্পনা",
     "serviceBlueprints": "সেবা পরিকল্পনা",
     "sales": "বিক্রয় রেকর্ড",
@@ -1198,25 +1201,105 @@
     "resentSuccessfully": "রিসিট পাঠানো হয়েছে।"
   },
   "accounting": {
-    "manageAccountPageTitle": "Manage Accounts",
-    "editAccountPageTitle": "Edit Account",
-    "addAccountPageTitle": "Add Account",
-    "noAccountFound": "No account found",
-    "createNewAccount": "Create new account",
-    "updateOldAccount": "Update old account",
-    "accountCreated": "Account created successfully.",
-    "accountUpdated": "Account update successfully.",
+    "manageAccountPageTitle": "অ্যাকাউন্টিং",
+    "manageMonetaryAccountPageTitle": "অর্থ অ্যাকাউন্ট",
+    "editAccountPageTitle": "অ্যাকাউন্টিং পরিবর্তন",
+    "addAccountPageTitle": "অ্যাকাউন্টিং তৈরী",
 
-    "accountNameInput": "Account Name",
-    "accountNameInputError": "Enter valid account name.", 
-    "accountNoteInput": "Note",
-    "accountNoteInputError": "Note is too long.",
+    "manageTransactionPageTitle": "লেনদেন পরিচালনা",
+    "accountingReportPageTitle": "অ্যাকাউন্টিং রিপোর্ট",
+    
+    "viewManualTransaction": "ম্যানুয়াল লেনদেন দেখুন",
+    "addManualTransaction": "ম্যানুয়াল লেনদেন যোগ",
+    "viewIncome": "আয় দেখুন",
+    "addIncome": "আয় যোগ",
+    "viewExpense": "ব্যয় দেখুন",
+    "addExpense": "ব্যয় যোগ",
+    "viewAssetPurchase": "অ্যাসেট ক্রয় দেখুন",
+    "addAssetPurchase": "অ্যাসেট ক্রয় যোগ",
 
-    "nature": "Nature of account",
-    "asset": "Asset",
-    "liability": "Liability",
-    "equity": "Equity",
-    "revenue": "Revenue",
-    "expense": "Expense"
+    "addManualTransactionPageTitle": "ম্যানুয়াল লেনদেন যুক্ত করুন",
+    "editManualTransactionPageTitle": "ম্যানুয়াল লেনদেন আপডেট করুন",
+
+    "noAccountFound": "অ্যাকাউন্ট পাওয়া যায়",
+    "createNewAccount": "নতুন অ্যাকাউন্ট তৈরী করুন",
+    "updateOldAccount": "অ্যাকাউন্ট আপডেট করুন ",
+    "accountCreated": "নতুন অ্যাকাউন্ট তৈরী হয়েছে",
+    "accountUpdated": "অ্যাকাউন্ট আপডেট হয়েছে",
+
+    "accountNameInput": "অ্যাকাউন্ট এর নাম",
+    "accountNameInputError": "একটি বৈধ নাম দিন", 
+    "accountNoteInput": "মন্তব্য",
+    "accountNoteInputError": "মন্তব্য বেশি দীর্ঘ",
+    "transactionAmountInput": "অর্থ",
+    "transactionAmountInputError": "বৈধ অর্থ লিখুন",
+    "transactionDate": "লেনদেন তারিখ",
+    "addEditIncomeTransactionPageTitle": "আয় লেনদেন",
+    "addEditExpenseTransactionPageTitle": "ব্যয় লেনদেন",
+    "addEditAssetPurchasePageTitle": "অ্যাসেট ক্রয়",
+
+    "monetaryAccount": "অর্থ অ্যাকাউন্ট",
+    "createNewTransaction": "লেনদেন যোগ করুন",
+    "updateOldTransaction": "লেনদেন আপডেট করুন",
+
+    "natureOfAccount": "অ্যাকাউন্টের প্রকৃতি",
+    "debitAccountNatureText": "ডেবিট অ্যাকাউন্টের প্রকৃতি",
+    "creditAccountNatureText": "ক্রেডিট অ্যাকাউন্টের প্রকৃতি",
+
+    "account": "অ্যাকাউন্ট",
+
+    "debitAccount": "ডেবিট করা অ্যাকাউন্ট",
+    "creditAccount": "ক্রেডিট করা অ্যাকাউন্ট",
+
+    "accountLedger": "অ্যাকাউন্ট লেজার",
+    "accountInvalidMessage": "অ্যাকাউন্ট বৈধ না",
+
+    "asset": "অ্যাসেট",
+    "assets": "অ্যাসেটস",
+    "liability": "দায়",
+    "liabilities": "দায় গুলো",
+    "equity": "ইকুইটি",
+    "ownersEquity": "মালিকের ইকুইটি",
+    "revenue": "আয়",
+    "expense": "ব্যয়",
+    "ledger": "লেজার",
+    "income": "আয়",
+    "manual": "ম্যানুয়াল",
+    "transaction": "লেনদেন",
+    "purchase": "ক্রয়",
+    "moneyCollected": "অর্থ সংগ্রহ",
+    "moneyPaid": "অর্থ প্রদেয়",
+    "transactions": "লেনদেন",
+
+    "debit": "ডেবিট",
+    "credit": "ক্রেডিট",
+    "balance": "ব্যালান্স",
+    "againstAccount": "অ্যাকাউন্টের বিপরীতে",
+    "note": "মন্তব্য",
+
+    "employee": "কর্মচারী",
+    "noParty": "পার্টি নেই",
+    "party": "পার্টি",
+    "incomeStatement": "ইনকাম স্টেটমেন্ট",
+    "trialBalance": "ট্রায়াল ব্যালান্স",
+    "balanceSheet": "ব্যালান্স শিট",
+
+    "totalRevenue": "মোট রেভিনিউ",
+    "totalExpense": "মোট ব্যয়",
+    "totalAssets": "মোট অ্যাসেটস",
+    "totalLiabilities": "মোট দায়",
+    "totalEquity": "মোট ইকুইটি",
+    "netProfit": "মোট লাভ",
+
+    "totalLiabilitiesAndEquity": "মোট দায় এবং ইকুইটি",
+
+    "group": "শ্রেণী",
+    "particulars": "বিবরণ",
+
+    "transactionListTitle": "লেনদেন",
+
+    "productAcquisitionMessage": " অ্যাকাউন্ট পরিশোধযোগ্যে যোগ হবে",
+
+    "transactionSaved": "লেনদেন সংরক্ষিত"
   }
 }

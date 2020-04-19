@@ -309,7 +309,7 @@
 
           // get account
           if (!this.$getAccount(this.accountId)) {
-            let title = this.verses.accounting.errorMessageTitle;
+            let title = this.verses.general.errorMessageTitle;
             let message = this.verses.accounting.accountInvalidMessage;
             this.app.showModalDialog(title, message, _ => {
               this.app.navigateTo('/home');
