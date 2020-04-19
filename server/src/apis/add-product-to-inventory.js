@@ -70,7 +70,7 @@ exports.AddProductToInventoryApi = class extends Api.mixin(ProductBlueprintMixin
       delete product.product;
     });
 
-    if (this.hasModule('MOD_ACCOUNTING')) {
+    if (await this.hasModule('MOD_ACCOUNTING')) {
       await this.addProductAcquisitionInventoryTransaction({
         transactionData: {
           createdByUserId: userId,

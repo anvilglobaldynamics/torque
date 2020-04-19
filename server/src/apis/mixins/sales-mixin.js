@@ -251,7 +251,7 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     let sales = await this.database.sales.findById({ id: salesId });
 
     if (!isLiteSales) {
-      if (this.hasModule('MOD_ACCOUNTING')) {
+      if (await this.hasModule('MOD_ACCOUNTING')) {
         await this.addSalesRevenueTransaction({
           transactionData: {
             createdByUserId: userId,

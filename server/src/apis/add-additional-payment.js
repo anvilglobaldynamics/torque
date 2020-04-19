@@ -80,7 +80,7 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
     payment = await this._processASinglePayment({ userId, customer, payment, paymentListEntry });
     await this.database.sales.setPayment({ id: salesId }, { payment });
 
-    if (this.hasModule('MOD_ACCOUNTING')) {
+    if (await this.hasModule('MOD_ACCOUNTING')) {
       await this.addAddtionalPaymentTransaction({
         transactionData: {
           createdByUserId: userId,

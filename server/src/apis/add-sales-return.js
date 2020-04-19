@@ -99,7 +99,7 @@ exports.AddSalesReturnApi = class extends Api.mixin(InventoryMixin, CustomerMixi
       returnedProduct.purchasePrice = product.purchasePrice;
     });
 
-    if (this.hasModule('MOD_ACCOUNTING')) {
+    if (await this.hasModule('MOD_ACCOUNTING')) {
       await this.addSalesReturnInventoryTransaction({
         transactionData: {
           createdByUserId: userId,
