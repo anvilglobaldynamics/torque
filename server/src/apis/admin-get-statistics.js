@@ -25,8 +25,8 @@ exports.AdminGetStatisticsApi = class extends Api {
       },
       liteUsers: {
         total: 0,
-        hasAtLeast1Sale: 0,
-        hasAtLeast5Sales: 0
+        hasAtLeast1Sale: NaN,
+        hasAtLeast5Sales: NaN
       },
       liteCustomers: {
         total: 0
@@ -54,22 +54,23 @@ exports.AdminGetStatisticsApi = class extends Api {
     let userList = await this.database.user._find({ originApp: 'torque-lite' });
     statistics.liteUsers.total = userList.length;
 
-    for (let user of userList) {
-      // because on lipi lite, there is only one owner and they are the one accepting payment.
-      let salesList = await this.database.sales._find({ originApp: 'torque-lite', "payment.paymentList.acceptedByUserId": user.id });
+    // // NOTE: Uncomment to show hasAtLeast1Sale and hasAtLeast5Sales
+    // for (let user of userList) {
+    //   // because on lipi lite, there is only one owner and they are the one accepting payment.
+    //   let salesList = await this.database.sales._find({ originApp: 'torque-lite', "payment.paymentList.acceptedByUserId": user.id });
 
-      if (salesList.length > 1) {
-        statistics.liteUsers.hasAtLeast1Sale += 1;
-      }
+    //   if (salesList.length > 1) {
+    //     statistics.liteUsers.hasAtLeast1Sale += 1;
+    //   }
 
-      if (salesList.length >= 5) {
-        let salesIdList = salesList.map(i => i.id);
-        let receiptList = await this.database.receipt._find({ salesId: { $in: salesIdList }, sentHistory: { $ne: [] } });
-        if (receiptList.length >= 5) {
-          statistics.liteUsers.hasAtLeast5Sales += 1;
-        }
-      }
-    }
+    //   if (salesList.length >= 5) {
+    //     let salesIdList = salesList.map(i => i.id);
+    //     let receiptList = await this.database.receipt._find({ salesId: { $in: salesIdList }, sentHistory: { $ne: [] } });
+    //     if (receiptList.length >= 5) {
+    //       statistics.liteUsers.hasAtLeast5Sales += 1;
+    //     }
+    //   }
+    // }
 
     // receipts
     let receiptList = await this.database.receipt._find({ originApp: 'torque-lite' });
@@ -117,6 +118,8 @@ exports.AdminGetStatisticsApi = class extends Api {
         statistics.premiumReceipts.printed += 1;
       }
     });
+
+    console.log("STATISTICS END")
 
     // Daily Statistics
     let dailyStatistics = {

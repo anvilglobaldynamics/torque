@@ -91,6 +91,7 @@
         color: white;
         text-transform: capitalize;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -186,6 +187,11 @@
           item(s) out of
           <span class="total-count">[[pagination.totalCount]]</span> item(s) starting from
           <span class="offset">#[[pagination.offset]]</span>.
+
+          <br />
+
+          <div><b>NOTE: </b>Total {{totalUserCount}} users matched the query. But userList is capped at 15 to reduce server load. Search with a specific search string to find result.</div>
+
         </div>
 
         <div class="horizontal layout center-center" style="margin-top: 8px;">
@@ -290,13 +296,14 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.pagination = response.pagination;
-          return cbfn(response.userList);
+          return cbfn(response);
         });
       }
 
       _processUserList(cbfn) {
-        this._fetchUserList(newUserList => {
-          this.userList = newUserList;
+        this._fetchUserList(({ userList, totalUserCount }) => {
+          this.userList = userList;
+          this.totalUserCount = totalUserCount;
           cbfn();
         });
       }

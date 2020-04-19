@@ -56,18 +56,23 @@ exports.AdminGetAggregatedUserListApi = class extends Api {
       userList = userList.filter(user => user.originType === originType);
     }
 
+    let totalUserCount = userList.length;
+
+    // Cap userList at 18 to reduce server load.
+    userList = userList.slice(0, 15);
+
     await Promise.all(userList.map(async user => {
       user.organizationList = await this._getOrganizationsThatEmployedUser({ user });
       user.passwordHash = 'REDACTED';
     }));
 
-    return userList;
+    return { userList, totalUserCount };
   }
 
   async handle({ body }) {
     let { userSearchString, originType } = body;
-    let userList = await this._getAggregatedUserList({ userSearchString, originType });
-    return { status: 'success', userList };
+    let { userList, totalUserCount } = await this._getAggregatedUserList({ userSearchString, originType });
+    return { status: 'success', userList, totalUserCount };
   }
 
 }
