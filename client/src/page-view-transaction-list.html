@@ -109,6 +109,7 @@
         padding-bottom: 8px;
         border-bottom: 1px dotted rgb(131, 131, 131);
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -144,7 +145,7 @@
             <template is="dom-if" if="[[$equals(preset, 'all-revenues')]]">[[verses.accounting.income]]</template>
             <template is="dom-if" if="[[$equals(preset, 'all-assets')]]">[[verses.accounting.asset]]</template>
             <template is="dom-if" if="[[$equals(preset, 'only-manual')]]">[[verses.accounting.manual]]</template>
-            [[verses.accounting.transactionListTitle]]
+            &nbsp;[[verses.accounting.transactionListTitle]]
           </div>
           <div class="date"> [[$mkDate(fromDate, 'dd MMM yyyy')]] [[verses.general.from]] [[$mkDate(toDate, 'dd MMM yyyy')]]</div>
         </div>
