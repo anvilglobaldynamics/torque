@@ -273,6 +273,7 @@
         font-style: italic;
         padding-bottom: 8px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -292,7 +293,7 @@
               <!-- <div>[[app.organization.phone]]</div> -->
             </div>
             <div class="outlet-block">
-              <div class="author-title">[[verses.general.outlet]]: [[outlet.name]]</div>
+              <div class="author-title">[[outlet.name]]</div>
               <div>[[outlet.physicalAddress]]</div>
               <!-- <div>[[outlet.contactPersonName]]</div> -->
               <div>[[outlet.phone]]</div>
@@ -308,7 +309,7 @@
             <div class="vertical layout customer-area">
               <template is="dom-if" if="{{sales.customerId}}">
                 <div><b>[[verses.salesReceipt.customerName]]:</b> [[customer.fullName]]</div>
-                <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
+                <div><b>[[verses.general.phone]]:</b> [[customer.phone]]</div>
               </template>
             </div>
 
@@ -454,12 +455,12 @@
 
                 <template is="dom-if" if="{{sales.customerId}}">
                   <div><b>[[verses.salesReceipt.customerName]]:</b> [[customer.fullName]]</div>
-                  <div><b>[[verses.salesReceipt.customerPhone]]:</b> [[customer.phone]]</div>
+                  <div><b>[[verses.general.phone]]:</b> [[customer.phone]]</div>
                 </template>
               </div>
               <div class="flex"></div>
               <div style="text-align: right;">
-                <div class="author-title">[[verses.general.outlet]]: [[outlet.name]]</div>
+                <div class="author-title">[[outlet.name]]</div>
                 <div>[[outlet.physicalAddress]]</div>
                 <!-- <div>[[outlet.contactPersonName]]</div> -->
                 <div>[[outlet.phone]]</div>
