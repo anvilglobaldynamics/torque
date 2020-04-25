@@ -38,6 +38,7 @@
       .period-message {
         font-size: 14px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -175,6 +176,10 @@
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.resetProperties(
+          'graphTypeSelectedIndex',
+          'fromDate'
+        );
         this.app.popPageTitle();
       }
 
