@@ -1399,7 +1399,7 @@
         this._receiptDialogCanHaveEmailReceipt = canHaveEmailReceipt;
 
         this._receiptDialogCanHaveSmsReceipt = canHaveSmsReceipt;
-        let isDesktop = this.isDesktop();
+        let isDesktop = this.isRunningOnDesktop();
         if (isDesktop) {
           this._receiptDialogCanHaveSmsReceipt = false;
         }

@@ -533,11 +533,11 @@
         });
       }
 
-      isDesktop() {
-        if (navigator.platform.toLowerCase().indexOf('win') === 0) {
+      isRunningOnDesktop() {
+        if (String(navigator.platform).toLowerCase().indexOf('win') === 0) {
           return true;
         }
-        if (navigator.platform.toLowerCase().indexOf('mac') === 0) {
+        if (String(navigator.platform).toLowerCase().indexOf('mac') === 0) {
           return true;
         }
         return false;
