@@ -1121,7 +1121,7 @@
             this.pageNameForNavigationMenu = 'accounts-payable';
           } else if (window.location.href.indexOf('ACCOUNTS_RECEIVABLE') > -1) {
             this.pageNameForNavigationMenu = 'accounts-receivable';
-          }else {
+          } else {
             this.pageNameForNavigationMenu = this.pageName;
           }
         } else {
@@ -1397,7 +1397,13 @@
 
       displayReceiptDialog({ canHaveEmailReceipt, canHaveSmsReceipt }, cbfn) {
         this._receiptDialogCanHaveEmailReceipt = canHaveEmailReceipt;
+
         this._receiptDialogCanHaveSmsReceipt = canHaveSmsReceipt;
+        let isDesktop = this.isDesktop();
+        if (isDesktop) {
+          this._receiptDialogCanHaveSmsReceipt = false;
+        }
+
         this._receiptDialogCbfn = cbfn;
         this._patchForPolymerModalDialogIssue();
         this.elem('#receipt-dialog').open();

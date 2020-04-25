@@ -533,6 +533,16 @@
         });
       }
 
+      isDesktop() {
+        if (navigator.platform.toLowerCase().indexOf('win') === 0) {
+          return true;
+        }
+        if (navigator.platform.toLowerCase().indexOf('mac') === 0) {
+          return true;
+        }
+        return false;
+      }
+
     }
 
   })();
