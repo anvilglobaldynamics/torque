@@ -99,6 +99,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
     if (sentVia === 'email') {
       let customer = await this.database.customer._findOne({ organizationId, id: customerId });
       await this._sendReceiptByEmail({
+        outletId,
         payment: originalPayment,
         organization: this.interimData.organization,
         customer,

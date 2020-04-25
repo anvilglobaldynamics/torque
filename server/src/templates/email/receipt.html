@@ -20,8 +20,8 @@
 					<table>
 						<tr>
 							<td>
-								<h3>{{{organizationName}}}</h3>
-								<p class="lead">Phone: {{organizationPhone}}</p>
+								<h3>{{{outletName}}}</h3>
+								<h4>{{organizationName}}</h4>
 								<p>{{date}}</p>
 
 								<p style="padding-top: 10px;">Dear {{customerName}}, thank you for your purchase.</p>
@@ -41,6 +41,10 @@
 								</div>
 
 								<p style="margin-top: 24px;">You are receiving this email because your email address {{email}} was used to make a purchase on {{{organizationName}}} through <b>Lipi for Business.</b></p>
+
+								<p>Phone: {{outletPhone}}<br>
+									Address: {{outletPhysicalAddress}}</p>
+
 							</td>
 						</tr>
 					</table>

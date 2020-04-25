@@ -240,6 +240,7 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
 
     if (sentVia === 'email') {
       await this._sendReceiptByEmail({
+        outletId,
         payment: originalPayment,
         organization: this.interimData.organization,
         customer,
