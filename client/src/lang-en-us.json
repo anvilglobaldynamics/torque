@@ -821,7 +821,8 @@
     "invalidTotalBillAmountMessage": "You can not increase total billed amount. Please update individual prices or add service charge.",
     "discardSalesTitle": "Discard Sale",
     "discardSalesText": "Are you sure you want to discard this sale?",
-    "whyCustomerInfo": "To send Digital Receipts and make Credit Sale, customer information is needed."
+    "whyCustomerInfo": "To send Digital Receipts and make Credit Sale, customer information is needed.",
+    "noProductCategoryFound": "None of the Products in this inventory are categorised. Add Product Categories to Product Blueprints."
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",

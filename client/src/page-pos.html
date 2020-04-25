@@ -538,9 +538,17 @@
 
             <template is="dom-if" if="[[!selectedProductCategory]]">
               <div class="card horizontal layout wrap">
-                <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
-                  <div class="category-box" on-tap="productCategoryTapped" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}">[[productCategory.name]]</div>
+
+                <template is="dom-if" if="[[!productCategoryList.length]]">
+                  <div>[[verses.pos.noProductCategoryFound]]</div>
                 </template>
+
+                <template is="dom-if" if="[[productCategoryList.length]]">
+                  <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
+                    <div class="category-box" on-tap="productCategoryTapped" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}">[[productCategory.name]]</div>
+                  </template>
+                </template>
+                
               </div>
             </template>
 
