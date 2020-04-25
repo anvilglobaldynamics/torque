@@ -1119,8 +1119,10 @@
         if (this.pageName === 'view-account-ledger') {
           if (window.location.href.indexOf('ACCOUNTS_PAYABLE') > -1) {
             this.pageNameForNavigationMenu = 'accounts-payable';
-          } else {
+          } else if (window.location.href.indexOf('ACCOUNTS_RECEIVABLE') > -1) {
             this.pageNameForNavigationMenu = 'accounts-receivable';
+          }else {
+            this.pageNameForNavigationMenu = this.pageName;
           }
         } else {
           this.pageNameForNavigationMenu = this.pageName;
