@@ -524,48 +524,52 @@
           </template>
           <!-- warehouse selection - end -->
 
-          <div class="horizontal layout">
-            <div class$="product-subtab flex [[$getProductSubtabClass('categories', selectedProductSubtab)]]" on-tap="productSubtabCategoryTapped" style="margin-right: 1px;;">
-              Categories
+          <template is="dom-if" if="[[productSourceSelectionComplete]]">
+            <div class="horizontal layout">
+              <div class$="product-subtab flex [[$getProductSubtabClass('categories', selectedProductSubtab)]]" on-tap="productSubtabCategoryTapped" style="margin-right: 1px;;">
+                Categories
+              </div>
+              <div class$="product-subtab flex [[$getProductSubtabClass('search', selectedProductSubtab)]]" on-tap="productSubtabSearchTapped">
+                Search
+              </div>
             </div>
-            <div class$="product-subtab flex [[$getProductSubtabClass('search', selectedProductSubtab)]]" on-tap="productSubtabSearchTapped">
-              Search
-            </div>
-          </div>
+          </template>
 
           <!-- categories - subtab - start -->
-          <template is="dom-if" if="[[$equals(selectedProductSubtab, 'categories')]]">
+          <template is="dom-if" if="[[productSourceSelectionComplete]]">
+            <template is="dom-if" if="[[$equals(selectedProductSubtab, 'categories')]]">
 
-            <template is="dom-if" if="[[!selectedProductCategory]]">
-              <div class="card horizontal layout wrap">
-                <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
-                  <div class="category-box" on-tap="productCategoryTapped" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}">[[productCategory.name]]</div>
-                </template>
-              </div>
-            </template>
-
-            <!-- product selection box - start -->
-            <template is="dom-if" if="[[selectedProductCategory]]">
-              <div class="">
-                <div class="product-selection-box">
-                  <div class="psb-category-container horizontal layout center" style$="background-color: #{{selectedProductCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(selectedProductCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(selectedProductCategory.colorCode)}}">
-                    <paper-icon-button icon="arrow-back" on-tap="backFromProductCategoryTapped"></paper-icon-button>
-                    [[selectedProductCategory.name]]
-                  </div>
-                </div>
-                <div class="psb-container card">
-                  <template is="dom-repeat" items="[[productCategoryProductList]]" as="product">
-                    <div class="psb-product horizontal layout center" on-tap="productFromProductCategorySelected">
-                      <div class="name">[[product.name]]</div>
-                      <div class="flex"></div>
-                      <div class="price">[[product.salePrice]]</div>
-                    </div>
+              <template is="dom-if" if="[[!selectedProductCategory]]">
+                <div class="card horizontal layout wrap">
+                  <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
+                    <div class="category-box" on-tap="productCategoryTapped" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}">[[productCategory.name]]</div>
                   </template>
                 </div>
-              </div>
-            </template>
-            <!-- product selection box - end -->
+              </template>
 
+              <!-- product selection box - start -->
+              <template is="dom-if" if="[[selectedProductCategory]]">
+                <div class="">
+                  <div class="product-selection-box">
+                    <div class="psb-category-container horizontal layout center" style$="background-color: #{{selectedProductCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(selectedProductCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(selectedProductCategory.colorCode)}}">
+                      <paper-icon-button icon="arrow-back" on-tap="backFromProductCategoryTapped"></paper-icon-button>
+                      [[selectedProductCategory.name]]
+                    </div>
+                  </div>
+                  <div class="psb-container card">
+                    <template is="dom-repeat" items="[[productCategoryProductList]]" as="product">
+                      <div class="psb-product horizontal layout center" on-tap="productFromProductCategorySelected">
+                        <div class="name">[[product.name]]</div>
+                        <div class="flex"></div>
+                        <div class="price">[[product.salePrice]]</div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </template>
+              <!-- product selection box - end -->
+
+            </template>
           </template>
           <!-- categories - subtab - end -->
 
