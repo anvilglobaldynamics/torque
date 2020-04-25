@@ -469,7 +469,7 @@
               <app-toolbar class="sidebar-title">
                 <img class="custom-sidebar-logo-image" src="../images/logo.png">
               </app-toolbar>
-              <iron-selector selected="[[pageName]]" attr-for-selected="name" class="custom-drawer-list" role="navigation">
+              <iron-selector selected="[[pageNameForNavigationMenu]]" attr-for-selected="name" class="custom-drawer-list" role="navigation">
 
                 <a name="home" href="#/home">[[verses.sidebar.home]]</a>
                 <a name="help" href="#/help">[[verses.sidebar.help]]</a>
@@ -857,6 +857,11 @@
           isFloatingAppDrawerExpanded: {
             type: Boolean,
             value: false
+          },
+          pageNameForNavigationMenu: {
+            type: String,
+            value: '',
+            notify: true
           }
         };
       }
@@ -1110,8 +1115,21 @@
 
       // ====================== navigation =============================
 
+      _preparePageNameForNavigationMenu() {
+        if (this.pageName === 'view-account-ledger') {
+          if (window.location.href.indexOf('ACCOUNTS_PAYABLE') > -1) {
+            this.pageNameForNavigationMenu = 'accounts-payable';
+          } else {
+            this.pageNameForNavigationMenu = 'accounts-receivable';
+          }
+        } else {
+          this.pageNameForNavigationMenu = this.pageName;
+        }
+      }
+
       _pageNameChanged() {
         this.isFloatingAppDrawerExpanded = false;
+        this._preparePageNameForNavigationMenu();
         this.initiateAppDrawerControls();
         if (this.isInOfflineMode) {
           const allowedPageNameList = [
@@ -1663,6 +1681,7 @@
       accountsReceivableTapped() {
         this.navigateTo('/view-account-ledger/codeName:ACCOUNTS_RECEIVABLE');
         if (this.pageName === 'view-account-ledger') {
+          this._preparePageNameForNavigationMenu();
           setTimeout(() => {
             this.refreshCurrentPage();
           }, 1);
@@ -1672,6 +1691,7 @@
       accountsPayableTapped() {
         this.navigateTo('/view-account-ledger/codeName:ACCOUNTS_PAYABLE');
         if (this.pageName === 'view-account-ledger') {
+          this._preparePageNameForNavigationMenu();
           setTimeout(() => {
             this.refreshCurrentPage();
           }, 1);
