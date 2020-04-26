@@ -24,6 +24,7 @@
       .toc {
         margin-top: 8px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -103,7 +104,16 @@
       }
 
       onNavigateIn() {
-        this.app.removeUser();
+        // erase all local data
+        try {
+          this.app.removeUser();
+          this.app.removePreviousOrganization();
+          this.disableOfflineMode();
+          this.app.removeOfflineData();
+          this.removePreviousUser();
+          this.app.removeSettings();
+        } catch (ex) { }
+
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.useLanguageServices();

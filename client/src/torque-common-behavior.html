@@ -543,6 +543,12 @@
         return false;
       }
 
+      disableOfflineMode() {
+        if (this.app.isInOfflineMode) {
+          this.app.toggleOfflineMode();
+        }
+      }
+
     }
 
   })();
