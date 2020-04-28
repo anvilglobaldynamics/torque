@@ -47,7 +47,7 @@
           display: none;
         }
       }
-      
+
 
       .report {
         background-color: white;
@@ -142,6 +142,7 @@
       .mr-4 {
         margin-right: 4px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -430,6 +431,15 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.app.shouldShowPrintButton = false;
+        this.resetProperties(
+          'shouldShowFilters',
+          'productSalesSummaryList',
+          'sortBy',
+          'sortDirection',
+          'selectedOutletId',
+          'fromDate',
+          'toDate'
+        );
         this.app.popPageTitle();
       }
 

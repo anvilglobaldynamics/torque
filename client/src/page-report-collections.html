@@ -374,6 +374,19 @@
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.resetProperties('shouldShowFilters',
+          'shouldFilterByOutlet',
+          'shouldFilterByCustomer',
+          'outletId',
+          'fromDate',
+          'toDate',
+          'isSearchingCustomer',
+          'customer',
+          'isSearchingOutlet',
+          'outlet',
+          'showProductDetails',
+          'paymentMethod'
+        );
         this.app.shouldShowPrintButton = false;
         this.app.popPageTitle();
       }

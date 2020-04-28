@@ -53,6 +53,7 @@
       .min-input {
         min-width: 200px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -207,6 +208,11 @@
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.resetProperties(
+          'vendorSelectedIndex',
+          'fromDate',
+          'toDate'
+        );
         this.app.popPageTitle();
       }
 

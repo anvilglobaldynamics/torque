@@ -13,7 +13,6 @@ exports.ReportBalanceSheetApi = class extends Api {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
 
-      fromDate: Joi.number().max(999999999999999).required(),
       toDate: Joi.number().max(999999999999999).required()
     });
   }
@@ -59,7 +58,7 @@ exports.ReportBalanceSheetApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { organizationId, fromDate, toDate } = body;
+    let { organizationId, toDate } = body;
     toDate = this.__getExtendedToDate(toDate);
 
     let transactionList = await this.database.transaction.listByFilters({
