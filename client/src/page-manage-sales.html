@@ -89,9 +89,12 @@
                 </template>
                 <template is="dom-if" if="[[customer]]">
                   [[verses.general.customer]]:
-                  <b>[[customer.fullName]]</b> ([[customer.phone]])
-                  <br>[[verses.general.balance]]:
-                  <b>[[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</b>
+                  <b>[[customer.fullName]]</b> [[customer.phone]]
+                  
+                  <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                    <br>
+                    [[verses.general.balance]]: <b>[[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</b>
+                  </template>
                 </template>
               </div>
               <div class="horizontal layout center">

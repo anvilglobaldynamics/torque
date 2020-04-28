@@ -40,7 +40,7 @@
           <div class="card vertical layout">
             <paper-input class="addOrganizationForm--name" value="{{addOrganizationForm.name}}" required minlength="3" error-message=[[verses.organization.pleaseEnterAValidName]] label=[[verses.organization.nameOfYourOrganization]]></paper-input>
             <paper-input class="addOrganizationForm--phone" value="{{addOrganizationForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.organization.phoneInputError]] label=[[verses.organization.phoneInput]]></paper-input>
-            <paper-input class="addOrganizationForm--email" value="{{addOrganizationForm.email}}" pattern="^.+@.+\..+$" minlength="0" error-message=[[verses.organization.emailInputError]] label=[[verses.organization.emailInput]]></paper-input>
+            <!-- <paper-input class="addOrganizationForm--email" value="{{addOrganizationForm.email}}" pattern="^.+@.+\..+$" minlength="0" error-message=[[verses.organization.emailInputError]] label=[[verses.organization.emailInput]]></paper-input> -->
             <paper-textarea class="addOrganizationForm--primaryBusinessAddress" value="{{addOrganizationForm.primaryBusinessAddress}}" required minlength="8" error-message=[[verses.organization.primaryBusinessAddressInputError]] label=[[verses.organization.primaryBusinessAddressInput]] rows="4"></paper-textarea>
 
             <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.organization.industryCategory]]" class="mr-4">

@@ -539,11 +539,30 @@
           <template is="dom-if" if="[[productSourceSelectionComplete]]">
             <template is="dom-if" if="[[$equals(selectedProductSubtab, 'categories')]]">
 
-              <template is="dom-if" if="[[!selectedProductCategory]]">
-                <div class="card horizontal layout wrap">
+            <template is="dom-if" if="[[!selectedProductCategory]]">
+              <div class="card horizontal layout wrap">
+
+                <template is="dom-if" if="[[!productCategoryList.length]]">
+                  <div>[[verses.pos.noProductCategoryFound]]</div>
+                </template>
+
+                <template is="dom-if" if="[[productCategoryList.length]]">
                   <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory">
                     <div class="category-box" on-tap="productCategoryTapped" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}">[[productCategory.name]]</div>
                   </template>
+                </template>
+                
+              </div>
+            </template>
+
+            <!-- product selection box - start -->
+            <template is="dom-if" if="[[selectedProductCategory]]">
+              <div class="">
+                <div class="product-selection-box">
+                  <div class="psb-category-container horizontal layout center" style$="background-color: #{{selectedProductCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(selectedProductCategory.colorCode)}}; border-color: #{{$guessCategoryFontColorCode(selectedProductCategory.colorCode)}}">
+                    <paper-icon-button icon="arrow-back" on-tap="backFromProductCategoryTapped"></paper-icon-button>
+                    [[selectedProductCategory.name]]
+                  </div>
                 </div>
               </template>
 
