@@ -174,7 +174,7 @@
         this.app.callAddVendorApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editVendorForm');
-          let message = this.app.verses.vendor.vendorCreated;
+          let message = this.app.verses.vendor.newVendorCreated;
           this.app.showToast(message, _ => {
             this.backButtonOnTopBarPressed();
           });
