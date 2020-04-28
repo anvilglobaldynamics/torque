@@ -238,6 +238,17 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.salesNumberToSearch = '';
+        this.resetProperties(
+          'shouldFilterByOutlet',
+          'shouldFilterByCustomer',
+          'outletId',
+          'fromDate',
+          'toDate',
+          'isSearchingCustomer',
+          'customer',
+          'isSearchingOutlet',
+          'outlet'
+        );
         this.app.popPageTitle();
       }
 

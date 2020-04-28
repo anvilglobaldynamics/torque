@@ -57,6 +57,7 @@
       .min-input {
         min-width: 200px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -300,7 +301,17 @@
 
       onNavigateOut() {
         super.onNavigateOut();
-        this.resetProperties('customer')
+        this.resetProperties(
+          'shouldFilterByOutlet',
+          'shouldFilterByCustomer',
+          'outletId',
+          'fromDate',
+          'toDate',
+          'isSearchingCustomer',
+          'customer',
+          'isSearchingOutlet',
+          'outlet'
+        );
         this.app.popPageTitle();
       }
 

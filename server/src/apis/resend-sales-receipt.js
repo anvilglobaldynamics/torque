@@ -76,6 +76,7 @@ exports.ResendSalesReceiptApi = class extends Api.mixin(InventoryMixin, Customer
 
     if (sentVia === 'email') {
       await this._sendReceiptByEmail({
+        outletId: sales.outletId,
         payment: sales.payment,
         organization: this.interimData.organization,
         customer,

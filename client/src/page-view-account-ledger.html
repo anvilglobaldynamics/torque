@@ -326,6 +326,11 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.app.shouldShowPrintButton = false;
+        this.resetProperties(
+          'shouldShowFilters',
+          'fromDate',
+          'toDate'
+        );
         this.app.popPageTitle();
       }
 

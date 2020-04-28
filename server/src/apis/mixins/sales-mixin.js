@@ -420,7 +420,7 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     }
   }
 
-  async _sendReceiptByEmail({ payment, organization, customer, receiptToken }) {
+  async _sendReceiptByEmail({ payment, organization, customer, receiptToken, outletId }) {
     let organizationName = organization.name;
     let organizationPhone = organization.phone;
 
@@ -431,9 +431,15 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     let { totalBilled, changeAmount, totalPaidAmount } = payment;
     totalBilled = Math.round(totalBilled * 100) / 100;
     changeAmount = Math.round(changeAmount * 100) / 100;
+    changeAmount = changeAmount || 0;
 
     let email = customer.email;
     let customerName = customer.fullName;
+
+    let outlet = await this.database.outlet.findById({ id: outletId });
+    let outletPhone = outlet.phone;
+    let outletName = outlet.name;
+    let outletPhysicalAddress = outlet.physicalAddress
 
     await this._sendReceiptMail({
       email,
@@ -441,6 +447,9 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
       changeAmount,
       organizationName,
       organizationPhone,
+      outletPhone,
+      outletName,
+      outletPhysicalAddress,
       receiptToken,
       customerName,
       date
