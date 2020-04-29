@@ -91,7 +91,7 @@ exports.TransactionCollection = class extends Collection {
     return await this._find(query);
   }
 
-  async listByFilters({ organizationId, accountIdList, fromDate, toDate, preset }) {
+  async listByFilters({ organizationId, accountIdList, fromDate, toDate, preset, filterByParty = null }) {
 
     let query = { $and: [] };
 

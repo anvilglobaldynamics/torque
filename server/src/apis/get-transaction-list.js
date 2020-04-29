@@ -23,6 +23,11 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
       preset: Joi.string().valid('all-expenses', 'all-revenues', 'all-assets', 'all-payables', 'all-receivables', 'query', 'single', 'only-manual').required(),
       accountIdList: Joi.array().items(Joi.number()).default([]).required(), // it is overriden by 'preset` unless 'preset' === 'query'
 
+      filterByParty: Joi.object().keys({
+        collectionName: Joi.string().min(1).max(32).required(),
+        documentId: Joi.number().max(999999999999999).required()
+      }).allow(null).required(),
+
       includeOpeningBalance: Joi.boolean().required(),
 
       transactionId: Joi.number().allow(null).required()
@@ -117,7 +122,7 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
   }
 
   async handle({ body }) {
-    let { organizationId, fromDate, toDate, preset, accountIdList, transactionId, includeOpeningBalance } = body;
+    let { organizationId, fromDate, toDate, preset, accountIdList, filterByParty, transactionId, includeOpeningBalance } = body;
 
     toDate = this.__getExtendedToDate(toDate);
 
@@ -151,7 +156,7 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
     }
 
     // list all transactions
-    let transactionList = await this.database.transaction.listByFilters({ organizationId, accountIdList, fromDate, toDate, preset });
+    let transactionList = await this.database.transaction.listByFilters({ organizationId, accountIdList, fromDate, toDate, preset, filterByParty });
 
     // calculate opening balance if required
     if (includeOpeningBalance) {
