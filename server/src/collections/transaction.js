@@ -114,6 +114,13 @@ exports.TransactionCollection = class extends Collection {
       });
     }
 
+    if (filterByParty){
+      query.$and.push({
+        'party.collectionName': filterByParty.collectionName,
+        'party.documentId': filterByParty.documentId
+      });
+    }
+
     query.$and.push({
       transactionDatetimeStamp: {
         $gte: fromDate,
