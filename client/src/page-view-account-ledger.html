@@ -301,8 +301,17 @@
         // can change when still being on the same page
         this.params = this.app.getUrlParameters(this.app.paramString);
 
-        this.partyCollectionName = 'no-party';
-        this.partyDocumentId = -1;
+        if ('collectionName' in this.params) {
+          this.partyCollectionName = this.params.collectionName;
+        } else {
+          this.partyCollectionName = 'no-party';
+        }
+
+        if ('documentId' in this.params) {
+          this.partyDocumentId = this.params.documentId;
+        } else {
+          this.partyDocumentId = -1;
+        }
 
         this._processAccountList(() => {
           this.finalBalance = 0;

@@ -1298,6 +1298,9 @@
     "group": "Group",
     "particulars": "Particulars",
 
+    "payables": "Payables",
+    "receivables": "Receivables",
+
     "transactionListTitle": "Transactions",
 
     "productAcquisitionMessage": " will be added as Accounts Payable.",

@@ -1299,6 +1299,9 @@
     "group": "শ্রেণী",
     "particulars": "বিবরণ",
 
+    "payables": "পরিশোধযোগ্য",
+    "receivables": "গ্রহণযোগ্য",
+
     "transactionListTitle": "লেনদেন",
 
     "productAcquisitionMessage": " অ্যাকাউন্ট পরিশোধযোগ্যে যোগ হবে",
