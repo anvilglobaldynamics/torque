@@ -533,6 +533,22 @@
         });
       }
 
+      isRunningOnDesktop() {
+        if (String(navigator.platform).toLowerCase().indexOf('win') === 0) {
+          return true;
+        }
+        if (String(navigator.platform).toLowerCase().indexOf('mac') === 0) {
+          return true;
+        }
+        return false;
+      }
+
+      disableOfflineMode() {
+        if (this.app.isInOfflineMode) {
+          this.app.toggleOfflineMode();
+        }
+      }
+
     }
 
   })();

@@ -86,6 +86,7 @@
         margin-top: 2px;
         margin-bottom: 2px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -262,9 +263,9 @@
                     <strong>[[verses.salesReport.products]]:</strong>
                     <ol class="product-service-list-ol">
                       <template is="dom-repeat" items="[[sales.productList]]" as="product">
-                          <li>
-                            <i>[[product.productBlueprint.name]]:</i> [[$round(product.count)]] [[product.productBlueprint.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]
-                          </li>
+                        <li>
+                          <i>[[product.productBlueprint.name]]:</i> [[$round(product.count)]] [[product.productBlueprint.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]
+                        </li>
                       </template>
                     </ol>
                   </template>
@@ -273,9 +274,9 @@
                     <strong>[[verses.salesReport.services]]:</strong>
                     <ol class="product-service-list-ol">
                       <template is="dom-repeat" items="[[sales.serviceList]]" as="service">
-                          <li>
-                            <i>[[service.serviceBlueprint.name]]:</i> [[$round(service.salePrice)]] [[app.settings.monetaryUnit]]
-                          </li>
+                        <li>
+                          <i>[[service.serviceBlueprint.name]]:</i> [[$round(service.salePrice)]] [[app.settings.monetaryUnit]]
+                        </li>
                       </template>
                     </ol>
                   </template>
@@ -416,6 +417,18 @@
 
       onNavigateOut() {
         super.onNavigateOut();
+        this.resetProperties('shouldShowFilters',
+          'shouldFilterByOutlet',
+          'shouldFilterByCustomer',
+          'outletId',
+          'fromDate',
+          'toDate',
+          'isSearchingCustomer',
+          'customer',
+          'isSearchingOutlet',
+          'outlet',
+          'showProductDetails'
+        );
         this.app.shouldShowPrintButton = false;
         this.app.popPageTitle();
       }

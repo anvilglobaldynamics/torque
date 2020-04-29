@@ -56,6 +56,10 @@
     "name": "Stationery Shop"
   },
   {
+    "code": "CAT_FOOD_AND_BEVERAGE",
+    "name": "Food and Beverage"
+  },
+  {
     "code": "CAT_SALON",
     "name": "Men's Salon"
   },
