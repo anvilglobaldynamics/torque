@@ -54,7 +54,7 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
     return toDate;
   }
 
-  async __includeOpeningBalance({ organizationId, accountIdList, originalFromDate, preset, account, transactionList }) {
+  async __includeOpeningBalance({ organizationId, accountIdList, originalFromDate, preset, account, transactionList, filterByParty }) {
     if (account.nature === 'revenue' || account.nature === 'expense') {
       // No opening balance for revenue and expense accounts
       return;
@@ -63,7 +63,7 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
     // get past transactions
     let toDate = originalFromDate - (24 * 60 * 60 * 1000);
     toDate = this.__getExtendedToDate(toDate);
-    let pastTransactionList = await this.database.transaction.listByFilters({ organizationId, accountIdList, fromDate: 0, toDate, preset });
+    let pastTransactionList = await this.database.transaction.listByFilters({ organizationId, accountIdList, fromDate: 0, toDate, preset, filterByParty });
 
     // determine whether the main account balance is debit or credit
     let isBalanceDebit = false;
@@ -163,7 +163,7 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
       let account = await this.database.account.findByIdAndOrganizationId({ organizationId, id: accountIdList[0] });
 
       await this.__includeOpeningBalance({
-        organizationId, accountIdList, originalFromDate: fromDate, preset, account, transactionList
+        organizationId, accountIdList, originalFromDate: fromDate, preset, account, transactionList, filterByParty
       });
 
     }
