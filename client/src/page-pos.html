@@ -579,118 +579,119 @@
               <!-- product selection box - end -->
 
             </template>
-            <!-- categories - subtab - end -->
+          </template>
+          <!-- categories - subtab - end -->
 
-            <!-- product searchbar - start -->
-            <template is="dom-if" if="[[$equals(selectedProductSubtab, 'search')]]">
-              <template is="dom-if" if="[[productSourceSelectionComplete]]">
-                <div class="card vertical layout product-search-bar">
-                  <template is="dom-if" if="[[isScanningActive]]">
-                    <div class="scanning-active-message">[[verses.pos.scanningActive]]</div>
+          <!-- product searchbar - start -->
+          <template is="dom-if" if="[[$equals(selectedProductSubtab, 'search')]]">
+            <template is="dom-if" if="[[productSourceSelectionComplete]]">
+              <div class="card vertical layout product-search-bar">
+                <template is="dom-if" if="[[isScanningActive]]">
+                  <div class="scanning-active-message">[[verses.pos.scanningActive]]</div>
+                </template>
+                <div class="horizontal layout center">
+                  <paper-input id="product-search-field" class="flex" value="{{productSearchString}}" always-float-label label="[[verses.pos.productSearchLabel]]" on-keydown="productSearchFieldKeypressed" on-focus="productSearchFieldFocused" on-blur="productSearchFieldBlurred"></paper-input>
+                  <template is="dom-if" if="[[!matchingProductList.length]]">
+                    <paper-icon-button icon="search" on-tap="productSearchTapped"></paper-icon-button>
                   </template>
-                  <div class="horizontal layout center">
-                    <paper-input id="product-search-field" class="flex" value="{{productSearchString}}" always-float-label label="[[verses.pos.productSearchLabel]]" on-keydown="productSearchFieldKeypressed" on-focus="productSearchFieldFocused" on-blur="productSearchFieldBlurred"></paper-input>
-                    <template is="dom-if" if="[[!matchingProductList.length]]">
-                      <paper-icon-button icon="search" on-tap="productSearchTapped"></paper-icon-button>
-                    </template>
-                    <template is="dom-if" if="[[matchingProductList.length]]">
-                      <paper-icon-button icon="clear" on-tap="productSearchClearTapped"></paper-icon-button>
-                    </template>
-                  </div>
-                  <template is="dom-if" if="[[notFoundMessage]]">
-                    <div class="not-found-message">[[notFoundMessage]]</div>
+                  <template is="dom-if" if="[[matchingProductList.length]]">
+                    <paper-icon-button icon="clear" on-tap="productSearchClearTapped"></paper-icon-button>
                   </template>
                 </div>
-              </template>
+                <template is="dom-if" if="[[notFoundMessage]]">
+                  <div class="not-found-message">[[notFoundMessage]]</div>
+                </template>
+              </div>
             </template>
-            <!-- product searchbar - end -->
+          </template>
+          <!-- product searchbar - end -->
 
-            <!-- product search results - start -->
-            <template is="dom-if" if="[[$equals(selectedProductSubtab, 'search')]]">
-              <template is="dom-if" if="{{matchingProductList.length}}">
+          <!-- product search results - start -->
+          <template is="dom-if" if="[[$equals(selectedProductSubtab, 'search')]]">
+            <template is="dom-if" if="{{matchingProductList.length}}">
 
-                <div class="card vertical layout">
+              <div class="card vertical layout">
 
-                  <div class="list">
-                    <template is="dom-repeat" items="[[matchingProductList]]" as="product">
-                      <div class="horizontal layout item center">
-                        <div class="flex" style="min-width: 128px;">
-                          <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                          <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
-                        </div>
-
-                        <template is="dom-if" if="[[product.count]]">
-                          <paper-icon-button class="positive" icon="add-circle" on-tap="selectMatchingProductTapped"></paper-icon-button>
-                        </template>
-                      </div>
-                    </template>
-                  </div>
-
-                  <div class="pagination">
-                    [[verses.general.loaded]]
-                    <span class="limit">[[productPagination.limit]]</span>
-                    [[verses.general.itemsOutOf]]
-                    <span class="total-count">[[productPagination.totalCount]]</span> [[verses.general.startingFrom]]
-                    <span class="offset">#[[$inc(productPagination.offset)]]</span>.
-                  </div>
-
-                  <div class="horizontal layout center">
-                    <template is="dom-if" if="[[$hasPreviousPagination(productPaginate.offset)]]">
-                      <paper-button raised class="flex neutral" on-tap="showPreviousProductsTapped">[[verses.general.showPrevious]]</paper-button>
-                    </template>
-
-                    <template is="dom-if" if="[[$hasMorePagination(productPagination.totalCount, productPaginate.offset, productPaginate.limit)]]">
-                      <paper-button raised class="flex neutral" on-tap="showMoreProductsTapped">[[verses.general.showMore]]</paper-button>
-                    </template>
-                  </div>
-
-                </div>
-              </template>
-            </template>
-            <!-- product search results - end -->
-
-            <!-- selected product list - start -->
-            <template is="dom-if" if="[[productList.length]]">
-
-              <div class="card vertical layout selected-products-or-services-card">
-
-                <div class="horizontal layout center pos-card-heading">
-                  <div class="flex pos-card-heading-label">[[verses.pos.selectedProducts]]</div>
-                  <template is="dom-if" if="[[!isMultiColumn]]">
-                    <paper-button raised class="primary" on-tap="productSelectionDoneTapped" style="margin-bottom: 8px;">
-                      [[verses.general.nextOrContinue]]
-                    </paper-button>
-                  </template>
-                </div>
-
-                <div class="list selected-products-or-services-list">
-                  <template is="dom-repeat" items="[[productList]]" as="product" index-as="productIndex">
+                <div class="list">
+                  <template is="dom-repeat" items="[[matchingProductList]]" as="product">
                     <div class="horizontal layout item center">
-                      <div class="vertical layout flex">
-                        <div>
-                          <span class="product-title">[[product.name]]</span>
-                        </div>
-                        <div class="horizontal layout center">
-                          <paper-input no-label-float class="small-input m-horizontal-4 product-count-input" value="{{product.selectedCount}}" on-change="productSelectedCountInputChanged" type="number" min="1" max="99999999999" label="[[verses.posSelectProduct.count]]">
-                            <div slot="suffix">&nbsp;[[product.unit]]</div>
-                          </paper-input>
-
-                          <div>&nbsp;@&nbsp;[[product.salePrice]]</div>
-                          <div class="description">[[app.settings.monetaryUnit]]</div>
-                          <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
-                            <paper-icon-button on-tap="editProductSalePriceTapped" icon="create" class="edit-product-price-icon"></paper-icon-button>
-                          </template>
-                          <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
-                        </div>
+                      <div class="flex" style="min-width: 128px;">
+                        <div class="inventory-product-important-detail-container">[[product.name]]</div>
+                        <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
                       </div>
-                      <paper-icon-button class="negative" on-tap="discardProductTapped" icon="remove-circle"></paper-icon-button>
+
+                      <template is="dom-if" if="[[product.count]]">
+                        <paper-icon-button class="positive" icon="add-circle" on-tap="selectMatchingProductTapped"></paper-icon-button>
+                      </template>
                     </div>
                   </template>
                 </div>
+
+                <div class="pagination">
+                  [[verses.general.loaded]]
+                  <span class="limit">[[productPagination.limit]]</span>
+                  [[verses.general.itemsOutOf]]
+                  <span class="total-count">[[productPagination.totalCount]]</span> [[verses.general.startingFrom]]
+                  <span class="offset">#[[$inc(productPagination.offset)]]</span>.
+                </div>
+
+                <div class="horizontal layout center">
+                  <template is="dom-if" if="[[$hasPreviousPagination(productPaginate.offset)]]">
+                    <paper-button raised class="flex neutral" on-tap="showPreviousProductsTapped">[[verses.general.showPrevious]]</paper-button>
+                  </template>
+
+                  <template is="dom-if" if="[[$hasMorePagination(productPagination.totalCount, productPaginate.offset, productPaginate.limit)]]">
+                    <paper-button raised class="flex neutral" on-tap="showMoreProductsTapped">[[verses.general.showMore]]</paper-button>
+                  </template>
+                </div>
+
+              </div>
+            </template>
+          </template>
+          <!-- product search results - end -->
+
+          <!-- selected product list - start -->
+          <template is="dom-if" if="[[productList.length]]">
+
+            <div class="card vertical layout selected-products-or-services-card">
+
+              <div class="horizontal layout center pos-card-heading">
+                <div class="flex pos-card-heading-label">[[verses.pos.selectedProducts]]</div>
+                <template is="dom-if" if="[[!isMultiColumn]]">
+                  <paper-button raised class="primary" on-tap="productSelectionDoneTapped" style="margin-bottom: 8px;">
+                    [[verses.general.nextOrContinue]]
+                  </paper-button>
+                </template>
               </div>
 
-            </template>
-            <!-- selected product list - end -->
+              <div class="list selected-products-or-services-list">
+                <template is="dom-repeat" items="[[productList]]" as="product" index-as="productIndex">
+                  <div class="horizontal layout item center">
+                    <div class="vertical layout flex">
+                      <div>
+                        <span class="product-title">[[product.name]]</span>
+                      </div>
+                      <div class="horizontal layout center">
+                        <paper-input no-label-float class="small-input m-horizontal-4 product-count-input" value="{{product.selectedCount}}" on-change="productSelectedCountInputChanged" type="number" min="1" max="99999999999" label="[[verses.posSelectProduct.count]]">
+                          <div slot="suffix">&nbsp;[[product.unit]]</div>
+                        </paper-input>
+
+                        <div>&nbsp;@&nbsp;[[product.salePrice]]</div>
+                        <div class="description">[[app.settings.monetaryUnit]]</div>
+                        <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
+                          <paper-icon-button on-tap="editProductSalePriceTapped" icon="create" class="edit-product-price-icon"></paper-icon-button>
+                        </template>
+                        <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
+                      </div>
+                    </div>
+                    <paper-icon-button class="negative" on-tap="discardProductTapped" icon="remove-circle"></paper-icon-button>
+                  </div>
+                </template>
+              </div>
+            </div>
+
+          </template>
+          <!-- selected product list - end -->
 
         </div>
         <!-- products column - end -->
