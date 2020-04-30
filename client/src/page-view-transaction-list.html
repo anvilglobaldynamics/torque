@@ -23,6 +23,7 @@
 
 <link rel="import" href="elem-customer-selector.html">
 <link rel="import" href="elem-outlet-selector.html">
+<link rel="import" href="elem-party-selector.html">
 
 <dom-module id="page-view-transaction-list">
   <template>
@@ -124,9 +125,13 @@
       <!-- filters - start -->
       <div class="filter-region" hidden="[[!shouldShowFilters]]">
 
-        <div class="card horizontal layout center">
-          <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
-          <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+        <div class="card">
+          <div class=" horizontal layout center">
+            <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+            <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]" style="margin-left: 4px;"></paper-input>
+          </div>
+
+          <elem-party-selector selected-collection-name="{{partyCollectionName}}" selected-document-id="{{partyDocumentId}}" page="{{self}}"></elem-party-selector>
         </div>
 
         <div class="lone-controls">
@@ -274,12 +279,17 @@
       }
 
       onNavigateIn() {
+        this.self = this;
+
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.app.shouldShowPrintButton = true;
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.accounting.transactionListTitle);
         if (!this._ensureAccess()) return;
+
+        this.partyCollectionName = 'no-party';
+        this.partyDocumentId = -1;
 
         this._processAccountList(() => {
           this.preset = 'all';
@@ -340,7 +350,14 @@
         if ('preset' in this.params) {
           preset = this.params['preset'];
         }
-        console.log(preset)
+
+        let filterByParty = null;
+        if (this.partyCollectionName !== 'no-party' && this.partyDocumentId !== -1) {
+          filterByParty = {
+            collectionName: this.partyCollectionName,
+            documentId: this.partyDocumentId
+          }
+        }
 
         let data = {
           organizationId: this.app.organization.id,
@@ -349,6 +366,7 @@
           accountIdList: [],
 
           transactionId: null,
+          filterByParty,
 
           includeOpeningBalance: false,
 

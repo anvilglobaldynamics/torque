@@ -91,7 +91,7 @@ exports.TransactionCollection = class extends Collection {
     return await this._find(query);
   }
 
-  async listByFilters({ organizationId, accountIdList, fromDate, toDate, preset }) {
+  async listByFilters({ organizationId, accountIdList, fromDate, toDate, preset, filterByParty = null }) {
 
     let query = { $and: [] };
 
@@ -111,6 +111,13 @@ exports.TransactionCollection = class extends Collection {
     if (preset === 'only-manual') {
       query.$and.push({
         transactionOrigin: 'manual'
+      });
+    }
+
+    if (filterByParty){
+      query.$and.push({
+        'party.collectionName': filterByParty.collectionName,
+        'party.documentId': filterByParty.documentId
       });
     }
 

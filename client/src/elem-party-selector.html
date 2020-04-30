@@ -74,7 +74,7 @@
       </paper-dropdown-menu>
 
       <template is="dom-if" if="[[$equals(selectedCollectionName, 'vendor')]]">
-        <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.general.vendor]]" class="mr-4" on-iron-select="documentIdSelected">
+        <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.general.vendor]]" class="mr-4" on-iron-select="documentIdSelected" style="margin-left: 4px;">
           <paper-listbox slot="dropdown-content" selected="{{selectedDocumentId}}" attr-for-selected="key">
             <template is="dom-repeat" items="[[vendorList]]" as="vendor">
               <paper-item key="[[vendor.id]]">[[vendor.name]]</paper-item>
@@ -84,7 +84,7 @@
       </template>
 
       <template is="dom-if" if="[[$equals(selectedCollectionName, 'employee')]]">
-        <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.employee]]" class="mr-4" on-iron-select="documentIdSelected">
+        <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.employee]]" class="mr-4" on-iron-select="documentIdSelected" style="margin-left: 4px;">
           <paper-listbox slot="dropdown-content" selected="{{selectedDocumentId}}" attr-for-selected="key">
             <template is="dom-repeat" items="[[employeeList]]" as="employee">
               <paper-item key="[[employee.id]]">[[employee.userDetails.fullName]]</paper-item>

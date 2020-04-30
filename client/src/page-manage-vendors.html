@@ -23,7 +23,6 @@
 <dom-module id="page-manage-vendors">
   <template>
     <style include="shared-styles">
-
       .vendor-name-container {
         font-weight: bold;
       }
@@ -36,6 +35,7 @@
         font-size: 13px;
         color: gray;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -45,9 +45,9 @@
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
           <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.vendor.searchForVendorInputError]] label=[[verses.vendor.searchForVendorInput]] on-keypress="searchFieldKeypressed"></paper-input>
-          
+
           <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
-          
+
           <paper-button raised class="primary" on-tap="searchTapped">
             [[verses.general.search]]
           </paper-button>
@@ -70,21 +70,31 @@
 
           <div class="list">
             <template is="dom-repeat" items="[[vendorList]]" as="vendor">
-              <div class="horizontal layout item center">
+              <div class="vertical layout item">
 
-                <div class="vertical layout flex">
+                <div class="vertical layout flex" style="margin-bottom: 8px;">
                   <div class="vendor-name-container">[[vendor.name]]</div>
                   <div class="vendor-detail-container">[[verses.general.contactPerson]]: [[vendor.contactPersonName]]</div>
                   <div class="vendor-detail-container">[[verses.general.phone]]: [[vendor.phone]]</div>
                   <div class="vendor-detail-container-small">[[vendor.physicalAddress]]</div>
                 </div>
 
-                <div class="horizontal layout wrap">
+                <div class="horizontal layout wrap ">
                   <!-- <paper-button raised class="secondary" on-tap="viewTapped">
                     <iron-icon class="button-icon" icon="icons:visibility"></iron-icon>
-                    [[verses.general.view]]
-                  </paper-button> -->
+                      [[verses.general.view]]
+                    </paper-button> -->
                   <!-- <paper-icon-button class="button-icon" icon="icons:create" on-tap="editTapped"></paper-icon-button> -->
+                  <div class="flex"></div>
+                  <template is="dom-if" if="[[hasModule('MOD_ACCOUNTING')]]">
+                    <paper-button raised class="secondary" on-tap="viewAccountsPayableTapped">
+                      [[verses.accounting.payables]]
+                    </paper-button>
+
+                    <paper-button raised class="secondary" on-tap="viewAccountsReceivableTapped">
+                      [[verses.accounting.receivables]]
+                    </paper-button>
+                  </template>
 
                   <paper-button raised class="secondary" on-tap="editTapped">
                     [[verses.general.edit]]
@@ -92,6 +102,7 @@
                 </div>
 
               </div>
+
             </template>
           </div>
 
@@ -211,6 +222,16 @@
       editTapped(e) {
         let { vendor } = e.model;
         return this.app.navigateTo(`/edit-vendor/vendor:${vendor.id}`);
+      }
+
+      viewAccountsPayableTapped(e) {
+        let { vendor } = e.model;
+        return this.app.navigateTo(`/view-account-ledger/codeName:ACCOUNTS_PAYABLE/collectionName:vendor/documentId:${vendor.id}`);
+      }
+
+      viewAccountsReceivableTapped(e) {
+        let { vendor } = e.model;
+        return this.app.navigateTo(`/view-account-ledger/codeName:ACCOUNTS_RECEIVABLE/collectionName:vendor/documentId:${vendor.id}`);
       }
 
       searchFieldKeypressed(e) {

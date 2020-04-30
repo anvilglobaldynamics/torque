@@ -23,6 +23,7 @@
 
 <link rel="import" href="elem-customer-selector.html">
 <link rel="import" href="elem-outlet-selector.html">
+<link rel="import" href="elem-party-selector.html">
 
 <dom-module id="page-view-account-ledger">
   <template>
@@ -130,9 +131,13 @@
       <!-- filters - start -->
       <div class="filter-region" hidden="[[!shouldShowFilters]]">
 
-        <div class="card horizontal layout center">
-          <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
-          <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+        <div class="card">
+          <div class=" horizontal layout center">
+            <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+            <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]" style="margin-left: 4px;"></paper-input>
+          </div>
+
+          <elem-party-selector selected-collection-name="{{partyCollectionName}}" selected-document-id="{{partyDocumentId}}" page="{{self}}"></elem-party-selector>
         </div>
 
         <div class="lone-controls">
@@ -283,6 +288,8 @@
       }
 
       onNavigateIn() {
+        this.self = this;
+
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.app.shouldShowPrintButton = true;
@@ -293,6 +300,18 @@
         // NOTE: This is necessary ONLY for this page since it's parameters
         // can change when still being on the same page
         this.params = this.app.getUrlParameters(this.app.paramString);
+
+        if ('collectionName' in this.params) {
+          this.partyCollectionName = this.params.collectionName;
+        } else {
+          this.partyCollectionName = 'no-party';
+        }
+
+        if ('documentId' in this.params) {
+          this.partyDocumentId = this.params.documentId;
+        } else {
+          this.partyDocumentId = -1;
+        }
 
         this._processAccountList(() => {
           this.finalBalance = 0;
@@ -368,6 +387,14 @@
 
         let preset = 'query';
 
+        let filterByParty = null;
+        if (this.partyCollectionName !== 'no-party' && this.partyDocumentId !== -1) {
+          filterByParty = {
+            collectionName: this.partyCollectionName,
+            documentId: this.partyDocumentId
+          }
+        }
+
         let data = {
           organizationId: this.app.organization.id,
 
@@ -375,6 +402,7 @@
           accountIdList: [this.accountId],
 
           transactionId: null,
+          filterByParty,
 
           includeOpeningBalance: true,
 
