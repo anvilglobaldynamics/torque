@@ -243,6 +243,14 @@
         </div>
       </div>
 
+      <template is="dom-if" if="[[$showPayButton(accountId, partyCollectionName, partyDocumentId, finalBalance)]]">
+        <div class="lone-controls">
+          <paper-button raised class="secondary" on-tap="makePaymentTapped">
+            [[verses.accounting.makePayment]]
+          </paper-button>
+        </div>
+      </template>
+
     </div>
   </template>
 
@@ -491,6 +499,19 @@
       onPartyChange() {
         let name = this.$['party-selector'].getPartyName();
         this.partyName = (name ? ': ' + name : '');
+      }
+
+      $showPayButton(accountId, partyCollectionName, partyDocumentId, finalBalance) {
+        if (this.params['codeName'] === 'ACCOUNTS_PAYABLE' && finalBalance > 0) {
+          if (partyCollectionName !== 'no-party' && partyDocumentId > -1) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      makePaymentTapped() {
+        return this.app.navigateTo(`/edit-usual-transaction/transaction-origin:debt-payment/collectionName:${this.partyCollectionName}/documentId:${this.partyDocumentId}/amount:${this.finalBalance}`);
       }
 
     }
