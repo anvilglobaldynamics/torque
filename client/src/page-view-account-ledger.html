@@ -137,7 +137,7 @@
             <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]" style="margin-left: 4px;"></paper-input>
           </div>
 
-          <elem-party-selector selected-collection-name="{{partyCollectionName}}" selected-document-id="{{partyDocumentId}}" page="{{self}}"></elem-party-selector>
+          <elem-party-selector id="party-selector" selected-collection-name="{{partyCollectionName}}" selected-document-id="{{partyDocumentId}}" page="{{self}}"></elem-party-selector>
         </div>
 
         <div class="lone-controls">
@@ -155,7 +155,7 @@
             [[$getAccount(accountId)]]
           </div>
           <div class="account-name">
-            [[verses.accounting.accountLedger]]
+            [[verses.accounting.accountLedger]][[partyName]]
           </div>
           <div class="date"> [[$mkDate(fromDate, 'dd MMM yyyy')]] [[verses.general.from]] [[$mkDate(toDate, 'dd MMM yyyy')]]</div>
         </div>
@@ -416,8 +416,6 @@
         });
       }
 
-
-
       _processTransactionList(cbfn) {
         this._fetchTransactionList(newTransactionList => {
 
@@ -488,6 +486,11 @@
 
       printButtonOnTopBarPressed(e = null) {
         window.print();
+      }
+
+      onPartyChange() {
+        let name = this.$['party-selector'].getPartyName();
+        this.partyName = (name ? ': ' + name : '');
       }
 
     }
