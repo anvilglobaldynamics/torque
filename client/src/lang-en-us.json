@@ -902,7 +902,7 @@
     "useBackgroundSync": "Enable 'Offline Mode'",
     "useBackgroundSyncDetails": "'Offline Mode' lets you keep using regularly used outlet's POS during network outage. Note that data usage will increase if you enable this feature.",
     "defaultOutletSelection": "Select Outlet",
-    "monetaryUnit": "Monetary Unit",
+    "monetaryUnit": "Monetary Unit (Max. 3 characters, example: USD)",
     "monetaryUnitDetail": "Note: Changing the monetary unit does not affect your sales.",
     "moreOptionsForthcoming": "More options are forthcoming.",
     "minimumProductQuantity": "Minimum Product Quantity",
