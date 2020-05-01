@@ -118,6 +118,12 @@
         font-weight: bold;
       }
 
+      th,
+      td {
+        padding: 4px;
+        ;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -141,6 +147,9 @@
                 </th>
                 <th class="cell account-name-column" align="left" style="cursor: pointer;">
                   <span>[[verses.accounting.account]]</span>
+                </th>
+                <th class="cell account-name-column" align="left" style="cursor: pointer; border-right: none;">
+                  <span>[[verses.accounting.note]]</span>
                 </th>
               </tr>
 
@@ -168,6 +177,9 @@
                     </template>
                     <td class="cell" align="left">
                       [[account.displayName]]
+                    </td>
+                    <td class="cell" align="left" style="border-right: none;;">
+                      [[account.note]]
                     </td>
                   </tr>
                 </template>

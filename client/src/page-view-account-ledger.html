@@ -32,7 +32,8 @@
 
         .filter-toggle-region,
         .filter-toggle-region paper-toggle-button,
-        .filter-region {
+        .filter-region,
+        .debt-button {
           display: none;
         }
 
@@ -233,6 +234,13 @@
         </div>
         <div class="vertical layout">
           <div class="horizontal layout wrap">
+            <template is="dom-if" if="[[$showPayButton(accountId, partyCollectionName, partyDocumentId, finalBalance)]]">
+              <div class="lone-controls debt-button">
+                <paper-button raised class="secondary" on-tap="makePaymentTapped">
+                  [[verses.accounting.makePayment]]
+                </paper-button>
+              </div>
+            </template>
             <div class="flex"></div>
             <div>
               <div class="author-title">[[verses.general.author]]: [[app.user.fullName]]</div>
@@ -242,14 +250,6 @@
           </div>
         </div>
       </div>
-
-      <template is="dom-if" if="[[$showPayButton(accountId, partyCollectionName, partyDocumentId, finalBalance)]]">
-        <div class="lone-controls">
-          <paper-button raised class="secondary" on-tap="makePaymentTapped">
-            [[verses.accounting.makePayment]]
-          </paper-button>
-        </div>
-      </template>
 
     </div>
   </template>
