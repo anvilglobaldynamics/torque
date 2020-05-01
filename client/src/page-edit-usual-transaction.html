@@ -173,6 +173,8 @@
           this.app.pushPageTitle(this.app.verses.accounting.addEditAssetPurchasePageTitle);
         } else if (this.transactionOrigin == 'debt-payment') {
           this.app.pushPageTitle(this.app.verses.accounting.addEditDebtPaymentPageTitle);
+        } else if (this.transactionOrigin == 'debt-collection') {
+          this.app.pushPageTitle(this.app.verses.accounting.addEditDebtCollectionPageTitle);
         }
 
         if ('transaction' in this.params) {
