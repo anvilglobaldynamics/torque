@@ -257,7 +257,11 @@
             this.accountList = newAccountList.filter(account => account.codeName === "ACCOUNTS_PAYABLE");
             this.set('editTransactionForm.usualAccountId', this.accountList[0].id);
             this.set('editTransactionForm.note', "Outgoing Debt Payment");
-            this.set('editTransactionForm.amount', parseInt(String(this.params.amount)));
+            this.set('editTransactionForm.hasMonetaryTransactionOccurred', true);
+          } else if (this.transactionOrigin === 'debt-collection') {
+            this.accountList = newAccountList.filter(account => account.codeName === "ACCOUNTS_RECEIVABLE");
+            this.set('editTransactionForm.usualAccountId', this.accountList[0].id);
+            this.set('editTransactionForm.note', "Incoming Debt Collection");
             this.set('editTransactionForm.hasMonetaryTransactionOccurred', true);
           }
 
