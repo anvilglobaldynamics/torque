@@ -916,7 +916,8 @@
     "receiptText2": "Line 2 (Bottom)",
     "noOrganizationSettingsPrivilege": "You do not have the required privilege to modify organization-wide settings.",
     "entireOrganizationWarning": "The settings below affect the entire organization.",
-    "changesSaved": "Changes have been saved for the entire organization. Log in again."
+    "changesSaved": "Changes have been saved for the entire organization. Log in again.",
+    "decimanFormatPreset": "Decimal Format"
   },
   "verify": {
     "verificationModalTitle": "Verification SMS Sent",

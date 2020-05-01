@@ -186,6 +186,8 @@ describe('Organization', _ => {
       json: {
         apiKey,
         organizationId: organizationToBeEdited.id,
+        monetaryUnit: 'BDT',
+        decimanFormatPreset: 'XX,XX,XXX.XX',
         receiptText1: 'Test Change',
         receiptText2: '',
         logoImageId: null

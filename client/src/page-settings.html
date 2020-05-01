@@ -53,6 +53,7 @@
       .error {
         color: red;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -115,14 +116,6 @@
 
         <div class="card vertical layout">
           <div class="option">
-            <paper-input on-change="monetaryUnitChanged" on-input="monetaryUnitChanged" value="{{monetaryUnit}}" label="[[verses.settings.monetaryUnit]]"></paper-input>
-            <div class="note">
-              [[verses.settings.monetaryUnitDetail]]
-            </div>
-            <div class="error">[[moneytaryUnitError]]</div>
-          </div>
-
-          <div class="option">
             <paper-input on-input="settingsChanged" type="number" min="0" max="100" value="{{minimumProductQuantity}}" label="[[verses.settings.minimumProductQuantity]]"></paper-input>
             <div class="note">
               [[verses.settings.minimumProductQuantityDetail]]
@@ -144,6 +137,28 @@
         </template>
 
         <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ORGANIZATION_SETTINGS')]]">
+          <div class="card vertical layout">
+            <div class="note">
+              [[verses.settings.monetaryUnitDetail]]
+            </div>
+
+            <paper-input value="{{organizationSettings.monetaryUnit}}" maxlength="3" label="[[verses.settings.monetaryUnit]]"></paper-input>
+
+            <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.decimanFormatPreset]]" class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{organizationSettings.decimanFormatPreset}}" attr-for-selected="key">
+                <paper-item key="XX,XX,XXX.XX">4,29,49,67,295.01</paper-item>
+                <paper-item key="X,XXX,XXX.XX">4,294,967,295.01</paper-item>
+                <paper-item key="X XXX XXX,XX">4 294 967 295,01</paper-item>
+                <paper-item key="X.XXX.XXX,XX">4.294.967.295,01</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+
+            <!-- <paper-input value="{{organizationSettings.decimanFormatPreset}}" maxlength="64" label="[[verses.settings.decimanFormatPreset]]"></paper-input> -->
+
+            <paper-button class="primary" raised on-tap="updateOrganizationSettingsTapped" style="margin-top: 8px;">[[verses.general.update]]</paper-button>
+
+          </div>
+
           <div class="card vertical layout">
             <div class="note">
               [[verses.settings.receiptText]]:
@@ -205,10 +220,6 @@
           moneytaryUnitError: {
             type: String,
             value: ''
-          },
-          monetaryUnit: {
-            type: String,
-            value: 'BDT'
           },
           minimumProductQuantity: {
             type: Number,
@@ -273,7 +284,6 @@
         this.paperTabSelectedViewIndex = 0;
         let settings = this._getNormalizedSettings();
         this.shouldUseWebsockets = settings.shouldUseWebsockets;
-        this.monetaryUnit = settings.monetaryUnit;
         this.minimumProductQuantity = settings.minimumProductQuantity;
         this.outletIndexForBackgroundSync = null;
         this.indexOfDefaultPrinterFormat = this.printerFormatOptionList.indexOf(settings.defaultPrinterFormat);
@@ -346,10 +356,9 @@
 
       monetaryUnitChanged() {
         if (this.monetaryUnit.length < 1 || this.monetaryUnit.length > 3) {
-          this.moneytaryUnitError = 'Monetary Unit should be 3 characters.';
+          this.moneytaryUnitError = 'Monetary Unit should be between 1 to 3 characters long.';
         } else {
           this.moneytaryUnitError = '';
-          this.settingsChanged();
         }
       }
 
@@ -370,16 +379,10 @@
         let { allowBackgroundSync, bypassHomepage } = this;
         Object.assign(settings.defaultOutletMetaMap[this.app.organization.id], { outletId, allowBackgroundSync, bypassHomepage });
 
-        if (this.monetaryUnit === '') {
-          this.monetaryUnit = 'BDT';
-          this.moneytaryUnitError = '';
-        }
-
         this.app.db.update('settings', ({
           which
         }) => which === 'only', (doc) => {
           doc.shouldUseWebsockets = this.shouldUseWebsockets;
-          doc.monetaryUnit = this.monetaryUnit;
           doc.minimumProductQuantity = this.minimumProductQuantity;
           doc.defaultOutletMetaMap = settings.defaultOutletMetaMap;
           doc.defaultPrinterFormat = this.printerFormatOptionList[this.indexOfDefaultPrinterFormat];
@@ -390,9 +393,9 @@
       // region: organization-settings =================================
 
       _loadOrganizationSettings() {
-        let { receiptText1, receiptText2, logoImageId } = this.app.organization.settings;
+        let { receiptText1, receiptText2, monetaryUnit, decimanFormatPreset, logoImageId } = this.app.organization.settings;
         this.organizationSettings = {
-          receiptText1, receiptText2, logoImageId
+          receiptText1, receiptText2, monetaryUnit, decimanFormatPreset, logoImageId
         };
       }
 
