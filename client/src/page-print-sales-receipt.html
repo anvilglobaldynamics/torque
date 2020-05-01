@@ -324,7 +324,7 @@
                 <th>[[verses.salesReceipt.goodsTitle]]</th>
                 <th>[[verses.salesReceipt.quantity]]</th>
                 <!-- <th>[[verses.general.unitPrice]]</th> -->
-                <th>[[verses.general.price]] [[app.settings.monetaryUnit]]</th>
+                <th>[[verses.general.price]] [[app.organization.settings.monetaryUnit]]</th>
               </tr>
 
               <template is="dom-repeat" items="{{sales.productList}}" as="product">
@@ -347,7 +347,7 @@
                     [[service.serviceBlueprintName]]
                   </td>
                   <td class="quantitive-cell">1</td>
-                  <!-- <td class="monetary-cell">[[service.salePrice]] [[app.settings.monetaryUnit]]</td> -->
+                  <!-- <td class="monetary-cell">[[service.salePrice]] [[app.organization.settings.monetaryUnit]]</td> -->
                   <td class="monetary-cell">[[$calculateIndividualServicePrice(service)]]</td>
                 </tr>
               </template>
@@ -393,7 +393,7 @@
               </tr>
             </table>
 
-            <div class="section-header"><b>[[verses.salesReceipt.payment]] ([[app.settings.monetaryUnit]])</b></div>
+            <div class="section-header"><b>[[verses.salesReceipt.payment]] ([[app.organization.settings.monetaryUnit]])</b></div>
 
             <table class="payment-table">
               <tr class="tr-border-top-bottom">
@@ -492,8 +492,8 @@
               <tr class="tr-border-top-bottom">
                 <th>[[verses.salesReceipt.goodsTitle]]</th>
                 <th>[[verses.general.quantity]]</th>
-                <th>[[verses.general.unitPrice]] [[app.settings.monetaryUnit]]</th>
-                <th>[[verses.general.price]] [[app.settings.monetaryUnit]]</th>
+                <th>[[verses.general.unitPrice]] [[app.organization.settings.monetaryUnit]]</th>
+                <th>[[verses.general.price]] [[app.organization.settings.monetaryUnit]]</th>
               </tr>
 
               <template is="dom-repeat" items="{{sales.productList}}" as="product">
@@ -563,7 +563,7 @@
               </tr>
             </table>
 
-            <div class="section-header"><b>[[verses.salesReceipt.payment]] ([[app.settings.monetaryUnit]])</b></div>
+            <div class="section-header"><b>[[verses.salesReceipt.payment]] ([[app.organization.settings.monetaryUnit]])</b></div>
 
             <table class="payment-table">
               <tr class="tr-border-top-bottom">

@@ -142,10 +142,10 @@
               [[verses.settings.monetaryUnitDetail]]
             </div>
 
-            <paper-input value="{{organizationSettings.monetaryUnit}}" maxlength="3" label="[[verses.settings.monetaryUnit]]"></paper-input>
+            <paper-input value="{{organizationSettings.monetaryUnit}}" maxlength="3" label="[[verses.organization.settings.monetaryUnit]]"></paper-input>
 
-            <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.decimanFormatPreset]]" class="mr-4">
-              <paper-listbox slot="dropdown-content" selected="{{organizationSettings.decimanFormatPreset}}" attr-for-selected="key">
+            <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.decimalFormatPreset]]" class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{organizationSettings.decimalFormatPreset}}" attr-for-selected="key">
                 <paper-item key="XX,XX,XXX.XX">4,29,49,67,295.01</paper-item>
                 <paper-item key="X,XXX,XXX.XX">4,294,967,295.01</paper-item>
                 <paper-item key="X XXX XXX,XX">4 294 967 295,01</paper-item>
@@ -153,7 +153,7 @@
               </paper-listbox>
             </paper-dropdown-menu>
 
-            <!-- <paper-input value="{{organizationSettings.decimanFormatPreset}}" maxlength="64" label="[[verses.settings.decimanFormatPreset]]"></paper-input> -->
+            <!-- <paper-input value="{{organizationSettings.decimalFormatPreset}}" maxlength="64" label="[[verses.settings.decimalFormatPreset]]"></paper-input> -->
 
             <paper-button class="primary" raised on-tap="updateOrganizationSettingsTapped" style="margin-top: 8px;">[[verses.general.update]]</paper-button>
 
@@ -393,9 +393,9 @@
       // region: organization-settings =================================
 
       _loadOrganizationSettings() {
-        let { receiptText1, receiptText2, monetaryUnit, decimanFormatPreset, logoImageId } = this.app.organization.settings;
+        let { receiptText1, receiptText2, monetaryUnit, decimalFormatPreset, logoImageId } = this.app.organization.settings;
         this.organizationSettings = {
-          receiptText1, receiptText2, monetaryUnit, decimanFormatPreset, logoImageId
+          receiptText1, receiptText2, monetaryUnit, decimalFormatPreset, logoImageId
         };
       }
 

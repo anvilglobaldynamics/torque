@@ -30,10 +30,10 @@ exports.OrganizationMixin = (SuperApiClass) => class extends SuperApiClass {
 
     // TODO: Collect during signup
     let monetaryUnit = 'BDT';
-    let decimanFormatPreset = 'XX,XX,XXX.XX';
+    let decimalFormatPreset = 'XX,XX,XXX.XX';
 
     let logoImageId = null;
-    return await this.database.organizationSettings.create({ organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, decimanFormatPreset });
+    return await this.database.organizationSettings.create({ organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, decimalFormatPreset });
   }
 
   async _setUserAsOwner({ userId, organizationId }) {

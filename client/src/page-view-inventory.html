@@ -99,10 +99,10 @@
                     </div>
 
                     <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                      <div class="inventory-product-price-container">[[verses.inventory.buyingPrice]]: [[product.purchasePrice]][[app.settings.monetaryUnit]]</div>
+                      <div class="inventory-product-price-container">[[verses.inventory.buyingPrice]]: [[product.purchasePrice]][[app.organization.settings.monetaryUnit]]</div>
                     </template>
 
-                    <div class="inventory-product-price-container">[[verses.inventory.sellingPrice]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                    <div class="inventory-product-price-container">[[verses.inventory.sellingPrice]]: [[product.salePrice]][[app.organization.settings.monetaryUnit]]</div>
                   </div>
 
                 </div>

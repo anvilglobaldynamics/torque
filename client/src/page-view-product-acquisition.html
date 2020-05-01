@@ -116,7 +116,7 @@
                   <div>[[product.productBlueprint.name]]</div>
                   <div>[[verses.general.count]]: [[product.count]] [[product.productBlueprint.unit]] 
                     <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                    @ [[product.product.purchasePrice]] [[app.settings.monetaryUnit]]
+                    @ [[product.product.purchasePrice]] [[app.organization.settings.monetaryUnit]]
                     </template>
                   </div>
 

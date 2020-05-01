@@ -116,7 +116,7 @@
                   [[verses.general.customer]]:
                   <b>[[customer.fullName]]</b> ([[customer.phone]])
                   <br> [[verses.general.balance]]:
-                  <b>[[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</b>
+                  <b>[[$round(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]</b>
                 </template>
               </div>
               <div class="horizontal layout center">
@@ -175,7 +175,7 @@
               <strong>[[verses.salesReport.total]] ([[salesList.length]] [[verses.salesReport.salesCount]])</strong>
             </div>
             <div>
-              <strong>[[app.settings.monetaryUnit]]</strong>
+              <strong>[[app.organization.settings.monetaryUnit]]</strong>
             </div>
           </div>
           <div class="ul"></div>
@@ -242,7 +242,7 @@
               <strong>[[verses.salesReport.particulars]]</strong>
             </div>
             <div>
-              <strong>[[verses.salesReport.billedAmount]] ([[app.settings.monetaryUnit]])</strong>
+              <strong>[[verses.salesReport.billedAmount]] ([[app.organization.settings.monetaryUnit]])</strong>
             </div>
           </div>
           <template is="dom-repeat" items="[[salesList]]" as="sales">
@@ -264,7 +264,7 @@
                     <ol class="product-service-list-ol">
                       <template is="dom-repeat" items="[[sales.productList]]" as="product">
                         <li>
-                          <i>[[product.productBlueprint.name]]:</i> [[$round(product.count)]] [[product.productBlueprint.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.settings.monetaryUnit]]
+                          <i>[[product.productBlueprint.name]]:</i> [[$round(product.count)]] [[product.productBlueprint.unit]] x [[$calculateIndividuallyDiscountedSalePrice(product)]] [[app.organization.settings.monetaryUnit]]
                         </li>
                       </template>
                     </ol>
@@ -275,7 +275,7 @@
                     <ol class="product-service-list-ol">
                       <template is="dom-repeat" items="[[sales.serviceList]]" as="service">
                         <li>
-                          <i>[[service.serviceBlueprint.name]]:</i> [[$round(service.salePrice)]] [[app.settings.monetaryUnit]]
+                          <i>[[service.serviceBlueprint.name]]:</i> [[$round(service.salePrice)]] [[app.organization.settings.monetaryUnit]]
                         </li>
                       </template>
                     </ol>
@@ -283,22 +283,22 @@
 
                   <template is="dom-if" if="[[sales.payment.discountedAmount]]">
                     <div class="description">
-                      <strong>[[verses.salesReport.discountedAmount]]: </strong>[[$round(sales.payment.discountedAmount)]] [[app.settings.monetaryUnit]]</div>
+                      <strong>[[verses.salesReport.discountedAmount]]: </strong>[[$round(sales.payment.discountedAmount)]] [[app.organization.settings.monetaryUnit]]</div>
                   </template>
                   <template is="dom-if" if="[[sales.payment.vatAmount]]">
                     <div class="description">
-                      <strong>[[verses.salesReport.vat]]: </strong>[[$round(sales.payment.vatAmount)]] [[app.settings.monetaryUnit]]</div>
+                      <strong>[[verses.salesReport.vat]]: </strong>[[$round(sales.payment.vatAmount)]] [[app.organization.settings.monetaryUnit]]</div>
                   </template>
                   <template is="dom-if" if="[[sales.payment.serviceChargeAmount]]">
                     <div class="description">
-                      <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]] [[app.settings.monetaryUnit]]</div>
+                      <strong>[[verses.salesReport.serviceCharge]]: </strong>[[$round(sales.payment.serviceChargeAmount)]] [[app.organization.settings.monetaryUnit]]</div>
                   </template>
                   <template is="dom-if" if="[[sales.payment.roundedByAmount]]">
                     <div>[[verses.salesReceipt.lessDueToRounding]]: [[$round(sales.payment.roundedByAmount)]]</div>
                   </template>
                   <template is="dom-if" if="[[sales.payment.dueAmount]]">
                     <div class="description">
-                      <strong>[[verses.salesReport.dueAmount]]: </strong>[[$round(sales.payment.dueAmount)]] [[app.settings.monetaryUnit]]</div>
+                      <strong>[[verses.salesReport.dueAmount]]: </strong>[[$round(sales.payment.dueAmount)]] [[app.organization.settings.monetaryUnit]]</div>
                   </template>
                 </template>
 

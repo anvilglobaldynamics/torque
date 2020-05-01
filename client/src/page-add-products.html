@@ -175,7 +175,7 @@
 
           <template is="dom-if" if="[[selectedProductBlueprintList.length]]">
             <template is="dom-if" if="[[hasModule('MOD_ACCOUNTING')]]">
-              <div class="acc-payable"> [[totalAccountsPayable]] [[app.settings.monetaryUnit]] [[verses.accounting.productAcquisitionMessage]]</div>
+              <div class="acc-payable"> [[totalAccountsPayable]] [[app.organization.settings.monetaryUnit]] [[verses.accounting.productAcquisitionMessage]]</div>
             </template>
           </template>
 

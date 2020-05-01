@@ -45,7 +45,7 @@
         <div class="service-card-content horizontal layout item center">
           <div class="vertical layout flex">
             <div class="service-name">[[serviceBlueprint.name]]</div>
-            <div>[[verses.serviceBlueprint.sellingPrice]]: [[serviceBlueprint.defaultSalePrice]] [[app.settings.monetaryUnit]]</div>
+            <div>[[verses.serviceBlueprint.sellingPrice]]: [[serviceBlueprint.defaultSalePrice]] [[app.organization.settings.monetaryUnit]]</div>
             <template is="dom-if" if="[[serviceBlueprint.isLongstanding]]">
               <div class="duration-text">[[verses.serviceBlueprint.serviceDuration]]: [[serviceBlueprint.serviceDuration.months]] [[verses.serviceBlueprint.serviceDurationMonths]], [[serviceBlueprint.serviceDuration.days]] [[verses.serviceBlueprint.serviceDurationDays]]</div>
             </template>

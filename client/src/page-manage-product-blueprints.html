@@ -45,10 +45,10 @@
             <div class="inventory-product-important-detail-container">[[productBlueprint.name]]</div>
 
             <template is="dom-if" if="[[shouldDisplayPurchasePrice]]">
-              <div class="inventory-product-price-container">[[verses.productBlueprint.buyingPrice]]: [[productBlueprint.defaultPurchasePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productBlueprint.unit]]</div>
+              <div class="inventory-product-price-container">[[verses.productBlueprint.buyingPrice]]: [[productBlueprint.defaultPurchasePrice]] [[app.organization.settings.monetaryUnit]] [[verses.general.per]] [[productBlueprint.unit]]</div>
             </template>
 
-            <div class="inventory-product-price-container">[[verses.productBlueprint.sellingPrice]]: [[productBlueprint.defaultSalePrice]] [[app.settings.monetaryUnit]] [[verses.general.per]] [[productBlueprint.unit]]</div>
+            <div class="inventory-product-price-container">[[verses.productBlueprint.sellingPrice]]: [[productBlueprint.defaultSalePrice]] [[app.organization.settings.monetaryUnit]] [[verses.general.per]] [[productBlueprint.unit]]</div>
 
             <div class="product-status-container">
               <template is="dom-if" if="[[productBlueprint.productCategoryIdList.length]]">

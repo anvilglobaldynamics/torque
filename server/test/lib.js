@@ -618,7 +618,7 @@ exports.validateGetOrganizationListApiSuccessResponse = (doc) => {
       }),
       settings: Joi.object().keys({
         monetaryUnit: Joi.string().min(1).max(3).required(),
-        decimanFormatPreset: Joi.string().valid('XX,XX,XXX.XX', 'X,XXX,XXX.XX', 'X XXX XXX,XX', 'X.XXX.XXX,XX').required(),
+        decimalFormatPreset: Joi.string().valid('XX,XX,XXX.XX', 'X,XXX,XXX.XX', 'X XXX XXX,XX', 'X.XXX.XXX,XX').required(),
         receiptText1: Joi.string().min(0).max(64).allow('').required(),
         receiptText2: Joi.string().min(0).max(64).allow('').required(),
         logoImageId: Joi.number().max(999999999999999).allow(null).required(),
@@ -1241,7 +1241,7 @@ exports.validateResponseOrganizationSchema = (doc) => {
     }),
     settings: Joi.object().keys({
       monetaryUnit: Joi.string().min(1).max(3).required(),
-      decimanFormatPreset: Joi.string().valid('XX,XX,XXX.XX', 'X,XXX,XXX.XX', 'X XXX XXX,XX', 'X.XXX.XXX,XX').required(),
+      decimalFormatPreset: Joi.string().valid('XX,XX,XXX.XX', 'X,XXX,XXX.XX', 'X XXX XXX,XX', 'X.XXX.XXX,XX').required(),
       receiptText1: Joi.string().min(0).max(64).allow('').required(),
       receiptText2: Joi.string().min(0).max(64).allow('').required(),
       logoImageId: Joi.number().max(999999999999999).allow(null).required(),

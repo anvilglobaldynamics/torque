@@ -93,7 +93,7 @@
                   
                   <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
                     <br>
-                    [[verses.general.balance]]: <b>[[$round(customer.changeWalletBalance)]] [[app.settings.monetaryUnit]]</b>
+                    [[verses.general.balance]]: <b>[[$round(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]</b>
                   </template>
                 </template>
               </div>
@@ -171,7 +171,7 @@
                     </div>
 
                     <div class="description-time">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-                    <div class="description">[[verses.sales.billed]]: [[$round(sale.payment.totalBilled)]] [[app.settings.monetaryUnit]], [[verses.sales.paid]]: [[$round(sale.payment.totalPaidAmount)]] [[app.settings.monetaryUnit]]</div>
+                    <div class="description">[[verses.sales.billed]]: [[$round(sale.payment.totalBilled)]] [[app.organization.settings.monetaryUnit]], [[verses.sales.paid]]: [[$round(sale.payment.totalPaidAmount)]] [[app.organization.settings.monetaryUnit]]</div>
 
                     <template is="dom-if" if="{{sale.productList.length}}">
                       <span class="description">[[sale.productList.length]] [[verses.sales.products]]</span>

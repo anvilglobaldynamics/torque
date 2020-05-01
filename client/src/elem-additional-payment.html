@@ -49,7 +49,7 @@
 
         <div class="individual-calculation-field-container">
           [[verses.additionalPayment.dueAmount]]:
-          <b>{{$round(amountLeftToPay)}} [[page.app.settings.monetaryUnit]]</b>
+          <b>{{$round(amountLeftToPay)}} [[page.app.organization.settings.monetaryUnit]]</b>
         </div>
 
         <div class="individual-calculation-field-container">
@@ -67,13 +67,13 @@
 
           <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
             <paper-input class="payment--paidAmount" value="{{payment.paidAmount}}" min="1" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.additionalPayment.paidAmountInputError]]" label="[[verses.additionalPayment.paidAmountInput]]">
-              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+              <div slot="suffix">[[app.organization.settings.monetaryUnit]]</div>
             </paper-input>
           </template>
 
           <template is="dom-if" if="[[payment.changeAmount]]">
             <br> [[verses.additionalPayment.changeAmount]]:
-            <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
+            <b>{{$round(payment.changeAmount)}} [[app.organization.settings.monetaryUnit]]</b>
             <br>
             <template is="dom-if" if="[[customer]]">
               <template is="dom-if" if="[[payment.changeAmount]]">

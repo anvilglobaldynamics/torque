@@ -918,7 +918,7 @@
     "noOrganizationSettingsPrivilege": "সংগঠন-ব্যাপী সেটিংস পরিবর্তন করার জন্য আপনার প্রয়োজনীয় বিশেষাধিকার নেই।",
     "entireOrganizationWarning": "নীচের সেটিংস পুরো সংস্থাটিকে প্রভাবিত করে.",
     "changesSaved": "সংগঠন-ব্যাপী সেটিংসগুলি সংরক্ষণ করা হয়েছে। পুনরায় লগ ইন করুন। ",
-    "decimanFormatPreset": "দশমিক নিয়ম"
+    "decimalFormatPreset": "দশমিক নিয়ম"
   },
   "verify": {
     "verificationModalTitle": "যাচাইকরণ এসএমএস পাঠানো হয়েছে",
