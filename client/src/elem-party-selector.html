@@ -135,13 +135,13 @@
         if (!this.page) return;
         this.useLanguageServices();
         if (this.page.hasModule('MOD_VENDOR')) {
-          this._processVendorList(() => { });
+          this._processVendorList(() => { this.__notify(); });
         }
-        this._processEmployeeList(() => { });
-
+        this._processEmployeeList(() => { this.__notify(); });
       }
 
       selectedCollectionNameChanged(newValue, oldValue) {
+        this.__notify();
         if (!this.selectedCollectionName) return;
         if (oldValue) {
           this.selectedDocumentId = -1;
@@ -149,6 +149,7 @@
       }
 
       selectedDocumentIdChanged(newValue, oldValue) {
+        this.__notify();
         if (!this.selectedDocumentId) return;
       }
 
@@ -158,6 +159,32 @@
 
       documentIdSelected(e, item) {
         // pass. change handled in observer
+      }
+
+      __notify() {
+        if (this.page && this.page.onPartyChange) {
+          this.page.onPartyChange();
+        }
+      }
+
+      getPartyName() {
+        if (!this.selectedCollectionName) return null;
+        if (this.selectedDocumentId === -1) return null;
+        if (this.selectedCollectionName === 'vendor') {
+          if (!this.vendorList.length) return 0;
+          let vendor = this.vendorList
+            .find(i => i.id === parseInt(this.selectedDocumentId))
+          if (!vendor) return null;
+          return vendor.name;
+        }
+        if (this.selectedCollectionName === 'employee') {
+          if (!this.employeeList.length) return 0;
+          let employee = this.employeeList
+            .find(i => i.id === parseInt(this.selectedDocumentId));
+          if (!employee) return null;
+          return employee.userDetails.fullName;
+        }
+        return null;
       }
 
       // fetch
