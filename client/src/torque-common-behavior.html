@@ -549,6 +549,24 @@
         }
       }
 
+      $applyThousandDecimalFormatting(number) {
+        if (typeof number !== 'number') {
+          number = parseFloat(number);
+        }
+
+        let format = this.organization.settings.decimalFormatPreset;
+
+        let locale = 'en-US';
+        if (format === 'XX,XX,XXX.XX') locale = 'en-IN';
+        if (format === 'X,XXX,XXX.XX') locale = 'en-US';
+        if (format === 'X XXX XXX,XX') locale = 'fr-FR';
+        if (format === 'X.XXX.XXX,XX') locale = 'de-DE';
+
+        let str = number.toLocaleString(locale, { maximumFractionDigits: 2 });
+
+        return str;
+      }
+
     }
 
   })();
