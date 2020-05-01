@@ -40,7 +40,7 @@ let cashAccount = null;
 let rentExpenseAccount = null;
 let interestIncomeAccount = null;
 
-describe('Accounting', _ => {
+describe.only('Accounting', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -216,6 +216,8 @@ describe('Accounting', _ => {
         preset: 'query',
         accountIdList: [],
 
+        filterByParty: null,
+
         includeOpeningBalance: false,
 
         transactionId: null
@@ -263,6 +265,7 @@ describe('Accounting', _ => {
 
         preset: 'query',
         accountIdList: [],
+        filterByParty: null,
 
         includeOpeningBalance: false,
 
@@ -305,7 +308,6 @@ describe('Accounting', _ => {
       json: {
         apiKey,
         organizationId,
-        fromDate: (new Date()).getTime() - 24 * 60 * 60 * 1000,
         toDate: (new Date()).getTime()
       }
     }, (err, response, body) => {
