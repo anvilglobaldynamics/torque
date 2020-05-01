@@ -32,7 +32,8 @@
 
         .filter-toggle-region,
         .filter-toggle-region paper-toggle-button,
-        .filter-region {
+        .filter-region,
+        .debt-button {
           display: none;
         }
 
@@ -233,6 +234,20 @@
         </div>
         <div class="vertical layout">
           <div class="horizontal layout wrap">
+            <template is="dom-if" if="[[$showPayButton(accountId, partyCollectionName, partyDocumentId, finalBalance)]]">
+              <div class="lone-controls debt-button">
+                <paper-button raised class="secondary" on-tap="makePaymentTapped">
+                  [[verses.accounting.makePayment]]
+                </paper-button>
+              </div>
+            </template>
+            <template is="dom-if" if="[[$showCollectButton(accountId, partyCollectionName, partyDocumentId, finalBalance)]]">
+              <div class="lone-controls debt-button">
+                <paper-button raised class="secondary" on-tap="collectPaymentTapped">
+                  [[verses.accounting.collectPayment]]
+                </paper-button>
+              </div>
+            </template>
             <div class="flex"></div>
             <div>
               <div class="author-title">[[verses.general.author]]: [[app.user.fullName]]</div>
@@ -491,6 +506,32 @@
       onPartyChange() {
         let name = this.$['party-selector'].getPartyName();
         this.partyName = (name ? ': ' + name : '');
+      }
+
+      $showPayButton(accountId, partyCollectionName, partyDocumentId, finalBalance) {
+        if (this.params['codeName'] === 'ACCOUNTS_PAYABLE' && finalBalance > 0) {
+          if (partyCollectionName !== 'no-party' && partyDocumentId > -1) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      $showCollectButton(accountId, partyCollectionName, partyDocumentId, finalBalance) {
+        if (this.params['codeName'] === 'ACCOUNTS_RECEIVABLE' && finalBalance > 0) {
+          if (partyCollectionName !== 'no-party' && partyDocumentId > -1) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      makePaymentTapped() {
+        return this.app.navigateTo(`/edit-usual-transaction/transaction-origin:debt-payment/collectionName:${this.partyCollectionName}/documentId:${this.partyDocumentId}`);
+      }
+
+      collectPaymentTapped() {
+        return this.app.navigateTo(`/edit-usual-transaction/transaction-origin:debt-collection/collectionName:${this.partyCollectionName}/documentId:${this.partyDocumentId}`);
       }
 
     }

@@ -1309,8 +1309,14 @@
 
     "chartOfAccounts": "Chart of Accounts",
 
+    "makePayment": "Make Payment",
+    "collectPayment": "Collect Payment",
+    "addEditDebtPaymentPageTitle": "Debt Payment",
+    "addEditDebtCollectionPageTitle": "Debt Collection",
+
     "incomeStatementDescription": "Income Statement (also called Profit and Loss Statement) shows your business's Revenues, Expenses and Net Profit over a certain period of time.",
     "balanceSheetDescription": "Balance sheet shows you the financial position of your business. It lists the total value of your Fixed and Current Assets, your Liabilities, your Investments and any Retained Profits.",
-    "trialBalanceDescription": "Trial Balance is a list of all your account heads and their total balance. Trial Balance is specially useful to your accountant."
+    "trialBalanceDescription": "Trial Balance is a list of all your account heads and their total balance. Trial Balance is specially useful to your accountant.",
+    "chartOfAccountsDescription": "The chart of accounts is a listing of all accounts used in the general ledger of your organization."
   }
 }

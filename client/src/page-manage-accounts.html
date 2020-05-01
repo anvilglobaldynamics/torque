@@ -74,10 +74,17 @@
       </template>
 
       <div class="lone-controls">
+
+        <paper-button raised class="btn secondary" on-tap="buttonViewChartOfAccountsTapped">
+          <iron-icon class="button-icon" icon="icons:description"></iron-icon>
+          [[verses.accounting.chartOfAccounts]]
+        </paper-button>
+
         <paper-button raised class="btn primary" on-tap="createTapped">
           <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
           [[verses.accounting.createNewAccount]]
         </paper-button>
+
       </div>
 
     </div>
@@ -127,12 +134,12 @@
       }
 
       _fetchAccountList(cbfn) {
-        let data = { 
-          organizationId: this.app.organization.id, 
+        let data = {
+          organizationId: this.app.organization.id,
           filterByIsMonetary: 'exclude-monetary',
           filterByNature: 'all',
           accountIdList: [],
-          paginate: this.paginate 
+          paginate: this.paginate
         };
         this.app.callGetAccountListApi(data, (err, response) => {
           if (err) return;
@@ -175,6 +182,10 @@
       viewLedgerTapped(e) {
         let { account } = e.model;
         return this.app.navigateTo(`/view-account-ledger/account:${account.id}`);
+      }
+
+      buttonViewChartOfAccountsTapped(e = null) {
+        return this.app.navigateTo('/report-chart-of-accounts');
       }
 
       // region: misc =================================

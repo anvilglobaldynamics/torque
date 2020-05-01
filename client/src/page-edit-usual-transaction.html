@@ -71,6 +71,9 @@
                 <template is="dom-if" if="[[$equals(transactionOrigin, 'add-asset-purchase')]]">
                   [[verses.accounting.moneyPaid]]
                 </template>
+                <template is="dom-if" if="[[$equals(transactionOrigin, 'debt-payment')]]">
+                  [[verses.accounting.moneyPaid]]
+                </template>
               </paper-checkbox>
 
               <template is="dom-if" if="[[editTransactionForm.hasMonetaryTransactionOccurred]]">
@@ -168,6 +171,10 @@
           this.app.pushPageTitle(this.app.verses.accounting.addEditExpenseTransactionPageTitle);
         } else if (this.transactionOrigin == 'add-asset-purchase') {
           this.app.pushPageTitle(this.app.verses.accounting.addEditAssetPurchasePageTitle);
+        } else if (this.transactionOrigin == 'debt-payment') {
+          this.app.pushPageTitle(this.app.verses.accounting.addEditDebtPaymentPageTitle);
+        } else if (this.transactionOrigin == 'debt-collection') {
+          this.app.pushPageTitle(this.app.verses.accounting.addEditDebtCollectionPageTitle);
         }
 
         if ('transaction' in this.params) {
@@ -177,8 +184,17 @@
           this.set('editTransactionForm.transactionDate', this.$mkDate(Date.now(), 'yyyy-MM-dd'));
         }
 
-        this.partyCollectionName = 'no-party';
-        this.partyDocumentId = -1;
+        if ('collectionName' in this.params) {
+          this.partyCollectionName = this.params.collectionName;
+        } else {
+          this.partyCollectionName = 'no-party';
+        }
+
+        if ('documentId' in this.params) {
+          this.partyDocumentId = this.params.documentId;
+        } else {
+          this.partyDocumentId = -1;
+        }
 
         this._processAccountList(() => {
           if (!this._ensureAccess()) return;
@@ -237,7 +253,20 @@
 
           this.fullAccountList = newAccountList;
 
-          this.accountList = newAccountList.filter(account => !account.isMonetaryAccount && account.nature === nature);
+          if (nature) {
+            this.accountList = newAccountList.filter(account => !account.isMonetaryAccount && account.nature === nature);
+          } else if (this.transactionOrigin === 'debt-payment') {
+            this.accountList = newAccountList.filter(account => account.codeName === "ACCOUNTS_PAYABLE");
+            this.set('editTransactionForm.usualAccountId', this.accountList[0].id);
+            this.set('editTransactionForm.note', "Outgoing Debt Payment");
+            this.set('editTransactionForm.hasMonetaryTransactionOccurred', true);
+          } else if (this.transactionOrigin === 'debt-collection') {
+            this.accountList = newAccountList.filter(account => account.codeName === "ACCOUNTS_RECEIVABLE");
+            this.set('editTransactionForm.usualAccountId', this.accountList[0].id);
+            this.set('editTransactionForm.note', "Incoming Debt Collection");
+            this.set('editTransactionForm.hasMonetaryTransactionOccurred', true);
+          }
+
           this.monetaryAccountList = newAccountList.filter(account => account.isMonetaryAccount);
 
           // select payable and receivable account 
