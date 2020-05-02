@@ -27,8 +27,13 @@ exports.OrganizationMixin = (SuperApiClass) => class extends SuperApiClass {
   async _createOrganizationSettings({ organizationId }) {
     let receiptText1 = '';
     let receiptText2 = '';
+
+    // TODO: Collect during signup
+    let monetaryUnit = 'BDT';
+    let decimalFormatPreset = 'XX,XX,XXX.XX';
+
     let logoImageId = null;
-    return await this.database.organizationSettings.create({ organizationId, receiptText1, receiptText2, logoImageId });
+    return await this.database.organizationSettings.create({ organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, decimalFormatPreset });
   }
 
   async _setUserAsOwner({ userId, organizationId }) {

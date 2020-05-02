@@ -254,11 +254,11 @@
                       [[product.productBlueprint.name]]
                     </td>
                     <td class="cell" align="center">
-                      <div>[[$round(product.count)]]</div>
+                      <div>[[$applyThousandDecimalFormatting(product.count)]]</div>
                     </td>
                     <td class="cell cell-right" align="center">
                       <div>[[computeTotalPriceOfProduct(product.productBlueprint.defaultSalePrice, product.count)]]</div>
-                      <div class="price-rate">@ [[product.productBlueprint.defaultSalePrice]]</div>
+                      <div class="price-rate">@ [[$applyThousandDecimalFormatting(product.productBlueprint.defaultSalePrice)]]</div>
                     </td>
                   </tr>
                 </template>
@@ -404,7 +404,7 @@
         productList.forEach(product => {
           totalCount += product.count;
         });
-        return this.$round(totalCount);
+        return this.$applyThousandDecimalFormatting(totalCount);
       }
 
       computeTotalSalePrice(productList) {
@@ -412,11 +412,11 @@
         productList.forEach(product => {
           totalCount += product.productBlueprint.defaultSalePrice * product.count;
         });
-        return this.$round(totalCount);
+        return this.$applyThousandDecimalFormatting(totalCount);
       }
 
       computeTotalPriceOfProduct(count, unitPrice) {
-        return this.$round(count * unitPrice);
+        return this.$applyThousandDecimalFormatting(count * unitPrice);
       }
       // region: ui  ===========================
 

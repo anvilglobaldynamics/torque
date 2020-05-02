@@ -171,7 +171,7 @@
       </template>
       <!-- filters - end -->
 
-      <hr style="border: 1px solid lightgrey; width: 100%;">
+      <hr style="border: 1px solid lightgrey; width: calc(100% - 26px);">
 
       <!-- report - start -->
       <div class="report">
@@ -277,20 +277,20 @@
                         [[aggregatedProduct.product.productBlueprint.name]]
                       </td>
                       <td class="cell" align="center">
-                        <div>[[$round(aggregatedProduct.count)]]</div>
+                        <div>[[$applyThousandDecimalFormatting(aggregatedProduct.count)]]</div>
                         <div class="price-rate no-visibility">-</div>
                       </td>
 
                       <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
                         <td class="cell" align="center">
                           <div>[[computeTotalPriceOfProduct(aggregatedProduct.product.purchasePrice, aggregatedProduct.count)]]</div>
-                          <div class="price-rate">@ [[aggregatedProduct.product.purchasePrice]]</div>
+                          <div class="price-rate">@ [[$applyThousandDecimalFormatting(aggregatedProduct.product.purchasePrice)]]</div>
                         </td>
                       </template>
 
                       <td class="cell cell-right" align="center">
                         <div>[[computeTotalPriceOfProduct(aggregatedProduct.product.salePrice, aggregatedProduct.count)]]</div>
-                        <div class="price-rate">@ [[aggregatedProduct.product.salePrice]]</div>
+                        <div class="price-rate">@ [[$applyThousandDecimalFormatting(aggregatedProduct.product.salePrice)]]</div>
                       </td>
                     </tr>
                   </template>
@@ -540,7 +540,7 @@
         productList.forEach(product => {
           totalCount += product.count;
         });
-        return this.$round(totalCount);
+        return this.$applyThousandDecimalFormatting(totalCount);
       }
 
       computeTotalPurchasePrice(productList) {
@@ -548,7 +548,7 @@
         productList.forEach(product => {
           totalPurchasePrice += product.product.purchasePrice * product.count;
         });
-        return this.$round(totalPurchasePrice);
+        return this.$applyThousandDecimalFormatting(totalPurchasePrice);
       }
 
       computeTotalSalePrice(productList) {
@@ -556,11 +556,11 @@
         productList.forEach(product => {
           totalSalePrice += product.product.salePrice * product.count;
         });
-        return this.$round(totalSalePrice);
+        return this.$applyThousandDecimalFormatting(totalSalePrice);
       }
 
       computeTotalPriceOfProduct(count, unitPrice) {
-        return this.$round(count * unitPrice);
+        return this.$applyThousandDecimalFormatting(count * unitPrice);
       }
 
       $shouldShowClearFilter(_productCategoryListLength, _productBlueprintListLength) {

@@ -1247,6 +1247,7 @@
       logoutTapped(e = null) {
         this.callUserLogoutApi({}, (err, response) => {
           this.removeUser();
+          this.removePreviousOrganization();
           window.sessionStorage.clear();
           this.navigateTo('/login');
           window.location.reload();

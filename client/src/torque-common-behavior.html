@@ -549,6 +549,41 @@
         }
       }
 
+      $applyThousandDecimalFormatting(number) {
+        if (number === '' || (typeof number === 'undefined')) return '';
+
+        if (typeof number !== 'number') {
+          number = parseFloat(number);
+        }
+
+        let format = null;
+        try {
+          if (this.organization) {
+            format = this.organization.settings.decimalFormatPreset;
+          } else if (this.app) {
+            format = this.app.organization.settings.decimalFormatPreset;
+          } else if (this.page) {
+            format = this.page.app.organization.settings.decimalFormatPreset;
+          }
+        } catch (ex) { }
+
+        // fallback
+        if (!format) {
+          console.log("$applyThousandDecimalFormatting NO FORMAT FOUND!");
+          format = 'X,XXX,XXX.XX';
+        }
+
+        let locale = 'en-US';
+        if (format === 'XX,XX,XXX.XX') locale = 'en-IN';
+        if (format === 'X,XXX,XXX.XX') locale = 'en-US';
+        if (format === 'X XXX XXX,XX') locale = 'fr-FR';
+        if (format === 'X.XXX.XXX,XX') locale = 'de-DE';
+
+        let str = number.toLocaleString(locale, { maximumFractionDigits: 2 });
+
+        return str;
+      }
+
     }
 
   })();

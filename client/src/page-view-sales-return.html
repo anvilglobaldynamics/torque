@@ -41,7 +41,7 @@
         <div class="list">
           <div style="font-size: 16px; font-weight: 500;">[[verses.salesReturn.associatedSalesId]]: [[salesReturn.salesNumber]] </div>
           <div>[[verses.general.date]]: [[$mkDate(salesReturn.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
-          <div>[[verses.salesReturn.creditedAmount]]: [[$round(salesReturn.creditedAmount)]] [[app.settings.monetaryUnit]]</div>
+          <div>[[verses.salesReturn.creditedAmount]]: [[$applyThousandDecimalFormatting(salesReturn.creditedAmount)]] [[app.organization.settings.monetaryUnit]]</div>
         </div>
       </div>
 

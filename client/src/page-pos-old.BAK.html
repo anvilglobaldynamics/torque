@@ -189,7 +189,7 @@
                       <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
                         <div class="horizontal layout center">
                           <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
-                          <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.settings.monetaryUnit]]</div>
+                          <div class="type body secondary">[[customer.changeWalletBalance]] [[page.app.organization.settings.monetaryUnit]]</div>
                         </div>
                       </template>
 
@@ -233,7 +233,7 @@
                     <div class="description">[[product.selectedCount]] [[product.unit]] @&nbsp;</div>
                     <!-- <paper-input class="flex height-adjusted" value="{{product.salePrice}}" on-change="genericPaymentInputChanged" type="number" auto-validate min="[[product.minSalePrice]]"></paper-input> -->
                     <div>[[product.salePrice]]</div>
-                    <div class="description">[[app.settings.monetaryUnit]]</div>
+                    <div class="description">[[app.organization.settings.monetaryUnit]]</div>
                     <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
                   </div>
                 </div>
@@ -313,7 +313,7 @@
                       <!-- <paper-input class=" flex height-adjusted" value="{{service.salePrice}}" min="[[service.minSalePrice]]" on-change="genericPaymentInputChanged" type="number" auto-validate>
                       </paper-input> -->
                       <div>[[service.salePrice]]</div>
-                      <div class="description">[[app.settings.monetaryUnit]]</div>
+                      <div class="description">[[app.organization.settings.monetaryUnit]]</div>
                       <span class="service-vat-detail">(+ [[verses.pos.vat]]: {{service.vatValue}}%)</span>
                     </div>
 
@@ -335,7 +335,7 @@
       <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
         <div class="card vertical layout">
           <div class="individual-calculation-field-container">
-            <span>[[verses.pos.totalSalePrice]]: <b>{{$round(payment.totalAmount)}} [[app.settings.monetaryUnit]]</b></span>
+            <span>[[verses.pos.totalSalePrice]]: <b>{{$applyThousandDecimalFormatting(payment.totalAmount)}} [[app.organization.settings.monetaryUnit]]</b></span>
           </div>
         </div>
       </template>
@@ -346,7 +346,7 @@
 
             <div class="individual-calculation-field-container">
               [[verses.pos.vatAmount]]:
-              <b>{{$round(payment.vatAmount)}} [[app.settings.monetaryUnit]]</b>
+              <b>{{$applyThousandDecimalFormatting(payment.vatAmount)}} [[app.organization.settings.monetaryUnit]]</b>
             </div>
 
             <div class="individual-calculation-field-container">
@@ -367,14 +367,14 @@
               </div>
 
               [[verses.pos.discountedAmount]]:
-              <b>{{$round(payment.discountedAmount)}} [[app.settings.monetaryUnit]]</b>
+              <b>{{$applyThousandDecimalFormatting(payment.discountedAmount)}} [[app.organization.settings.monetaryUnit]]</b>
 
             </div>
 
             <div class="individual-calculation-field-container horizontal layout center">
 
               <paper-input class="payment--serviceChargeAmount flex" value="{{payment.serviceChargeAmount}}" on-change="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.serviceChargeInputError]]" label="[[verses.pos.serviceChargeInput]]">
-                <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                <div slot="suffix">[[app.organization.settings.monetaryUnit]]</div>
               </paper-input>
 
               <template is="dom-if" if="{{!isInOfflineMode}}">
@@ -409,13 +409,13 @@
                 <div class="horizontal layout center m-top-16">
                   <div class="flex">
                     [[verses.sales.totalBillBeforeRounding]]:
-                    <b>{{$round(payment.totalBillBeforeRounding)}} [[app.settings.monetaryUnit]]</b>
+                    <b>{{$applyThousandDecimalFormatting(payment.totalBillBeforeRounding)}} [[app.organization.settings.monetaryUnit]]</b>
                   </div>
                 </div>
                 <div class="horizontal layout center">
                   <div class="flex">
                     [[verses.sales.roundedByAmount]]:
-                    <b>{{$round(payment.roundedByAmount)}} [[app.settings.monetaryUnit]]</b>
+                    <b>{{$applyThousandDecimalFormatting(payment.roundedByAmount)}} [[app.organization.settings.monetaryUnit]]</b>
                   </div>
                   <paper-icon-button on-tap="clearRounderByAmountTapped" icon="clear"></paper-icon-button>
                 </div>
@@ -424,7 +424,7 @@
             <div class="horizontal layout center individual-calculation-field-container light">
               <div class="flex">
                 [[verses.pos.totalBilled]]:
-                <b>{{$round(payment.totalBilled)}} [[app.settings.monetaryUnit]]</b>
+                <b>{{$applyThousandDecimalFormatting(payment.totalBilled)}} [[app.organization.settings.monetaryUnit]]</b>
               </div>
               <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
                 <paper-icon-button on-tap="editTotalBilledTapped" icon="create"></paper-icon-button>
@@ -446,13 +446,13 @@
 
               <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
                 <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]">
-                  <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                  <div slot="suffix">[[app.organization.settings.monetaryUnit]]</div>
                 </paper-input>
               </template>
 
               <template is="dom-if" if="[[payment.changeAmount]]">
                 <br> [[verses.pos.changeAmount]]:
-                <b>{{$round(payment.changeAmount)}} [[app.settings.monetaryUnit]]</b>
+                <b>{{$applyThousandDecimalFormatting(payment.changeAmount)}} [[app.organization.settings.monetaryUnit]]</b>
 
                 <br>
                 <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
@@ -1251,7 +1251,7 @@
         if (discountType === 'percent') {
           return `${name} (${discountValue}%)`;
         } else {
-          return `${name} (${discountValue} ${this.app.settings.monetaryUnit})`;
+          return `${name} (${discountValue} ${this.app.organization.settings.monetaryUnit})`;
         }
       }
 

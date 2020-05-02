@@ -202,13 +202,13 @@
                     <div>[[transaction.note]]</div>
                   </td>
                   <td class="cell" align="center">
-                    <div>[[transaction.debit]]</div>
+                    <div>[[$applyThousandDecimalFormatting(transaction.debit)]]</div>
                   </td>
                   <td class="cell" align="center">
-                    <div>[[transaction.credit]]</div>
+                    <div>[[$applyThousandDecimalFormatting(transaction.credit)]]</div>
                   </td>
                   <td class="cell" align="center">
-                    <div>[[transaction.balance]]</div>
+                    <div>[[$applyThousandDecimalFormatting(transaction.balance)]]</div>
                   </td>
                   <td class="cell cell-right" align="center">
                     <paper-icon-button icon="create" on-tap="editTransactionTapped" disabled="[[$equals(transaction.transactionOrigin, 'system')]]"></paper-icon-button>
@@ -220,10 +220,10 @@
               <tr>
                 <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
                 <td class="cell cell-bottom " colspan="4" align="center">
-                  {{transactionList.length}} [[verses.accounting.transactions]]
+                  {{$applyThousandDecimalFormatting(transactionList.length)}} [[verses.accounting.transactions]]
                 </td>
                 <td class="cell cell-bottom " align="center">
-                  [[finalBalance]]
+                  [[$applyThousandDecimalFormatting(finalBalance)]]
                 </td>
               </tr>
               <!-- total - end -->

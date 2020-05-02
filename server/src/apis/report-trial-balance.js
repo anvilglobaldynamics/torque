@@ -112,7 +112,7 @@ exports.ReportTrialBalanceApi = class extends Api {
       }
     });
 
-    let retainedEarnings = totalDebitBalance - totalCreditBalance;
+    let retainedEarnings = Math.round((totalDebitBalance - totalCreditBalance) * 10000) / 10000;
     if (retainedEarnings !== 0){
       accountList.push({
         codeName: "RETAINED_EARNINGS", // Not actually an account

@@ -190,15 +190,15 @@
                   </td>
                   <td class="cell" align="center">
                     <template is="dom-repeat" items="[[transaction.debitList]]" as="debit">
-                      <div><i>[[$getAccount(debit.accountId)]]:</i> [[debit.amount]]</div>
+                      <div><i>[[$getAccount(debit.accountId)]]:</i> [[$applyThousandDecimalFormatting(debit.amount)]]</div>
                     </template>
                   </td>
                   <td class="cell" align="center">
                     <template is="dom-repeat" items="[[transaction.creditList]]" as="credit">
-                      <div><i>[[$getAccount(credit.accountId)]]:</i> [[credit.amount]]</div>
+                      <div><i>[[$getAccount(credit.accountId)]]:</i> [[$applyThousandDecimalFormatting(credit.amount)]]</div>
                     </template> </td>
                   <td class="cell" align="center" rowspan="2">
-                    <div>[[transaction.amount]]</div>
+                    <div>[[$applyThousandDecimalFormatting(transaction.amount)]]</div>
                   </td>
                   <td class="cell cell-right" align="center" rowspan="2">
                     <paper-icon-button icon="create" on-tap="editTransactionTapped" disabled="[[$equals(transaction.transactionOrigin, 'system')]]"></paper-icon-button>
@@ -213,7 +213,7 @@
               <tr>
                 <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
                 <td class="cell cell-bottom " colspan="4" align="center">
-                  {{transactionList.length}} [[verses.accounting.transactions]]
+                  [[$applyThousandDecimalFormatting(transactionList.length)]] [[verses.accounting.transactions]]
                 </td>
               </tr>
               <!-- total - end -->

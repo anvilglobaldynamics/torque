@@ -903,7 +903,7 @@
     "useBackgroundSync": "'অফলাইন মোড' চালু করুন",
     "useBackgroundSyncDetails": "'অফলাইন মোড' এর মাধ্যমে লিপি ব্যবহার করতে পারবেন নেট না থাকলেও। যদি অফলাইন মোড চালু করেন তবে আপনার ডেটা ব্যবহার বাড়বে।",
     "defaultOutletSelection": "আউটলেট বাছাই",
-    "monetaryUnit": "মুদ্রা",
+    "monetaryUnit": "মুদ্রা (সর্বোচ দৈর্ঘ ৩, যেমন USD)",
     "monetaryUnitDetail": "নোট: আর্থিক মুদ্রা পরিবর্তন আপনার বিক্রয় প্রভাবিত করে না।",
     "moreOptionsForthcoming": "আরো সেটিংস আসন্ন।",
     "minimumProductQuantity": "নূন্যতম পণ্য পরিমান",
@@ -917,7 +917,8 @@
     "receiptText2": "দ্বিতীয় লাইন (নীচ)",
     "noOrganizationSettingsPrivilege": "সংগঠন-ব্যাপী সেটিংস পরিবর্তন করার জন্য আপনার প্রয়োজনীয় বিশেষাধিকার নেই।",
     "entireOrganizationWarning": "নীচের সেটিংস পুরো সংস্থাটিকে প্রভাবিত করে.",
-    "changesSaved": "সংগঠন-ব্যাপী সেটিংসগুলি সংরক্ষণ করা হয়েছে। পুনরায় লগ ইন করুন। "
+    "changesSaved": "সংগঠন-ব্যাপী সেটিংসগুলি সংরক্ষণ করা হয়েছে। পুনরায় লগ ইন করুন। ",
+    "decimalFormatPreset": "দশমিক নিয়ম"
   },
   "verify": {
     "verificationModalTitle": "যাচাইকরণ এসএমএস পাঠানো হয়েছে",
@@ -1216,7 +1217,7 @@
     "addIncome": "আয় যোগ",
     "viewExpense": "ব্যয় দেখুন",
     "addExpense": "ব্যয় যোগ",
-    "viewAssetPurchase": "অ্যাসেট ক্রয় দেখুন",
+    "viewAssetPurchase": "অ্যাসেট লেনদেন দেখুন",
     "addAssetPurchase": "অ্যাসেট ক্রয় যোগ",
 
     "addManualTransactionPageTitle": "ম্যানুয়াল লেনদেন যুক্ত করুন",

@@ -81,7 +81,7 @@
                 <div class="horizontal layout item center">
                   <div class="flex" style="min-width: 128px;">
                     <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                    <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                    <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.organization.settings.monetaryUnit]]</div>
                   </div>
 
                   <template is="dom-if" if="[[product.count]]">
@@ -118,7 +118,7 @@
               <div class="horizontal layout item center">
                 <div class="flex" style="min-width: 128px;">
                   <div class="inventory-product-important-detail-container">[[product.name]]</div>
-                  <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.settings.monetaryUnit]]</div>
+                  <div class="inventory-product-price-container">[[verses.posSelectProduct.sale]]: [[product.salePrice]][[app.organization.settings.monetaryUnit]]</div>
                 </div>
 
                 <div class="horizontal layout center" style="max-width: 220px;">

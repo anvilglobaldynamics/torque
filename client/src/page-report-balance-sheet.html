@@ -111,7 +111,7 @@
       }
 
       .account-name-column {
-        min-width: 800px;
+        min-width: 600px;
       }
 
       .total-balance-cell {
@@ -168,7 +168,7 @@
                     [[account.displayName]]
                   </td>
                   <td class="cell" align="center">
-                    [[account.balance]]
+                    [[$applyThousandDecimalFormatting(account.balance)]]
                   </td>
                 </tr>
               </template>
@@ -176,7 +176,7 @@
               <!-- total - start -->
               <tr>
                 <td class="cell cell-bottom" style="font-weight: bold;">[[verses.accounting.totalAssets]]</td>
-                <td class="cell cell-bottom total-balance-cell" align="center">[[totalAssets]]</td>
+                <td class="cell cell-bottom total-balance-cell" align="center">[[$applyThousandDecimalFormatting(totalAssets)]]</td>
               </tr>
               <!-- total - end -->
 
@@ -199,7 +199,7 @@
                     [[account.displayName]]
                   </td>
                   <td class="cell" align="center">
-                    [[account.balance]]
+                    [[$applyThousandDecimalFormatting(account.balance)]]
                   </td>
                 </tr>
               </template>
@@ -208,7 +208,7 @@
                   <b>[[verses.accounting.totalLiabilities]]</b>
                 </td>
                 <td class="cell" align="center">
-                  <b>[[totalLiabilities]]</b>
+                  <b>[[$applyThousandDecimalFormatting(totalLiabilities)]]</b>
                 </td>
               </tr>
 
@@ -223,7 +223,7 @@
                     [[account.displayName]]
                   </td>
                   <td class="cell balance-cell" align="center">
-                    [[account.balance]]
+                    [[$applyThousandDecimalFormatting(account.balance)]]
                   </td>
                 </tr>
               </template>
@@ -232,14 +232,14 @@
                   <b>[[verses.accounting.totalEquity]]</b>
                 </td>
                 <td class="cell" align="center">
-                  <b>[[totalEquity]]</b>
+                  <b>[[$applyThousandDecimalFormatting(totalEquity)]]</b>
                 </td>
               </tr>
 
               <!-- total - start -->
               <tr>
                 <td class="cell cell-bottom" style="font-weight: bold;">[[verses.accounting.totalLiabilitiesAndEquity]]</td>
-                <td class="cell cell-bottom total-balance-cell" align="center">[[$add(totalLiabilities, totalEquity)]]</td>
+                <td class="cell cell-bottom total-balance-cell" align="center">[[$addLiabilitiesAndEquity(totalLiabilities, totalEquity)]]</td>
               </tr>
               <!-- total - end -->
 
@@ -356,6 +356,10 @@
 
       printButtonOnTopBarPressed(e = null) {
         window.print();
+      }
+
+      $addLiabilitiesAndEquity(a, b) {
+        return this.$applyThousandDecimalFormatting(a + b);
       }
 
     }

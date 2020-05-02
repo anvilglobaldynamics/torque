@@ -274,28 +274,28 @@
         <!-- metrics - start -->
         <div class="horizontal layout wrap">
           <div class="card flex metrics-box">
-            <div class="value">[[$translateNumber(metrics.totalNumberOfSalesToday, selectedLanguageIdentifier)]]</div>
+            <div class="value">[[$applyThousandDecimalFormatting(metrics.totalNumberOfSalesToday, organization)]]</div>
             <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesToday, 'countable',
               selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
             <div class="item-description">[[verses.home.todayInovices]]</div>
           </div>
           <div class="card flex metrics-box">
-            <div class="value">[[$translateNumber(metrics.totalAmountSoldToday, selectedLanguageIdentifier)]]</div>
-            <div class="unit">[[settings.monetaryUnit]]</div>
+            <div class="value">[[$applyThousandDecimalFormatting(metrics.totalAmountSoldToday, organization)]]</div>
+            <div class="unit">[[organization.settings.monetaryUnit]]</div>
             <div class="item-description">[[verses.home.salesToday]]</div>
           </div>
         </div>
 
         <div class="horizontal layout wrap">
           <div class="card flex metrics-box">
-            <div class="value">[[$translateNumber(metrics.totalNumberOfSalesThisMonth, selectedLanguageIdentifier)]]</div>
+            <div class="value">[[$applyThousandDecimalFormatting(metrics.totalNumberOfSalesThisMonth, organization)]]</div>
             <div class="unit">[[$translateNumeralPostfix(metrics.totalNumberOfSalesThisMonth, 'countable',
               selectedLanguageIdentifier)]] [[verses.home.invoices]]</div>
             <div class="item-description">[[verses.home.thisMonthInovices]]</div>
           </div>
           <div class="card flex metrics-box">
-            <div class="value">[[$translateNumber(metrics.totalAmountSoldThisMonth, selectedLanguageIdentifier)]]</div>
-            <div class="unit">[[settings.monetaryUnit]]</div>
+            <div class="value">[[$applyThousandDecimalFormatting(metrics.totalAmountSoldThisMonth, organization)]]</div>
+            <div class="unit">[[organization.settings.monetaryUnit]]</div>
             <div class="item-description">[[verses.home.salesThisMonth]]</div>
           </div>
         </div>

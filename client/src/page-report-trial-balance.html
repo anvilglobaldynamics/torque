@@ -177,12 +177,12 @@
                   </td>
                   <td class="cell" align="center">
                     <template is="dom-if" if="[[account.isDebitBalance]]">
-                      [[account.balance]]
+                      [[$applyThousandDecimalFormatting(account.balance)]]
                     </template>
                   </td>
                   <td class="cell" align="center">
                     <template is="dom-if" if="[[!account.isDebitBalance]]">
-                      [[account.balance]]
+                      [[$applyThousandDecimalFormatting(account.balance)]]
                     </template>
                   </td>
                 </tr>
@@ -191,8 +191,8 @@
               <!-- total - start -->
               <tr>
                 <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
-                <td class="cell cell-bottom total-balance-cell" align="center">[[totalDebitBalance]]</td>
-                <td class="cell cell-bottom total-balance-cell" align="center">[[totalCreditBalance]]</td>
+                <td class="cell cell-bottom total-balance-cell" align="center">[[$applyThousandDecimalFormatting(totalDebitBalance)]]</td>
+                <td class="cell cell-bottom total-balance-cell" align="center">[[$applyThousandDecimalFormatting(totalCreditBalance)]]</td>
               </tr>
               <!-- total - end -->
 

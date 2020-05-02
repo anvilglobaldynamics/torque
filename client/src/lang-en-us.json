@@ -902,7 +902,7 @@
     "useBackgroundSync": "Enable 'Offline Mode'",
     "useBackgroundSyncDetails": "'Offline Mode' lets you keep using regularly used outlet's POS during network outage. Note that data usage will increase if you enable this feature.",
     "defaultOutletSelection": "Select Outlet",
-    "monetaryUnit": "Monetary Unit",
+    "monetaryUnit": "Monetary Unit (Max. 3 characters, example: USD)",
     "monetaryUnitDetail": "Note: Changing the monetary unit does not affect your sales.",
     "moreOptionsForthcoming": "More options are forthcoming.",
     "minimumProductQuantity": "Minimum Product Quantity",
@@ -916,7 +916,8 @@
     "receiptText2": "Line 2 (Bottom)",
     "noOrganizationSettingsPrivilege": "You do not have the required privilege to modify organization-wide settings.",
     "entireOrganizationWarning": "The settings below affect the entire organization.",
-    "changesSaved": "Changes have been saved for the entire organization. Log in again."
+    "changesSaved": "Changes have been saved for the entire organization. Log in again.",
+    "decimalFormatPreset": "Decimal Format"
   },
   "verify": {
     "verificationModalTitle": "Verification SMS Sent",
@@ -1215,7 +1216,7 @@
     "addIncome": "Add Income",
     "viewExpense": "View Expense",
     "addExpense": "Add Expense",
-    "viewAssetPurchase": "View Asset Purchase",
+    "viewAssetPurchase": "View Asset Transactions",
     "addAssetPurchase": "Add Asset Purchase",
 
     "addManualTransactionPageTitle": "Add Manual Transaction",

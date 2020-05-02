@@ -307,10 +307,10 @@
                       [[productSalesSummary.name]]
                     </td>
                     <td class="cell" align="center">
-                      <div>[[$round(productSalesSummary.sumCount)]]</div>
+                      <div>[[$applyThousandDecimalFormatting(productSalesSummary.sumCount)]]</div>
                     </td>
                     <td class="cell cell-right" align="center">
-                      <div>[[$round(productSalesSummary.sumSalePrice)]]</div>
+                      <div>[[$applyThousandDecimalFormatting(productSalesSummary.sumSalePrice)]]</div>
                     </td>
                   </tr>
                 </template>
@@ -608,7 +608,7 @@
         productList.forEach(product => {
           totalCount += product.sumCount;
         });
-        return this.$round(totalCount);
+        return this.$applyThousandDecimalFormatting(totalCount);
       }
 
       computeTotalSalePrice(productList) {
@@ -616,7 +616,7 @@
         productList.forEach(product => {
           totalSalePrice += product.sumSalePrice;
         });
-        return this.$round(totalSalePrice);
+        return this.$applyThousandDecimalFormatting(totalSalePrice);
       }
 
       computeTotalPriceOfProduct(count, unitPrice) {
