@@ -73,7 +73,7 @@
         return (JSON.stringify(obj));
       }
 
-      $applyThousandDecimalFormatting(number) {
+      $round(number) {
         const epsilon = 0.0000000000000001;
         number = (number || 0) + epsilon;
         return (Math.round(number * 100) / 100);
@@ -550,6 +550,8 @@
       }
 
       $applyThousandDecimalFormatting(number) {
+        if (number === '' || (typeof number === 'undefined')) return '';
+
         if (typeof number !== 'number') {
           number = parseFloat(number);
         }

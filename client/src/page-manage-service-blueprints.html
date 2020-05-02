@@ -63,7 +63,7 @@
   </template>
 
   <script>
-    class ServiceBlueprint extends FxElement.mixin(TorqueLanguageBehavior) {
+    class ServiceBlueprint extends FxElement.mixin(TorqueLanguageBehavior, TorqueCommonBehavior) {
 
       static get is() {
         return 'service-blueprint';

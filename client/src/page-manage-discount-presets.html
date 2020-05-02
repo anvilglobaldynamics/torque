@@ -37,7 +37,7 @@
               <div>[[verses.discountPreset.discountAmount]]: [[discountPreset.discountValue]]%</div>
             </template>
             <template is="dom-if" if="[[$equals(discountPreset.discountType, 'fixed')]]">
-              <div>[[verses.discountPreset.discountAmount]]: [[discountPreset.discountValue]] [[app.organization.settings.monetaryUnit]]</div>
+              <div>[[verses.discountPreset.discountAmount]]: [[$applyThousandDecimalFormatting(discountPreset.discountValue)]] [[app.organization.settings.monetaryUnit]]</div>
             </template>
           </div>
           <div class="horizontal layout wrap">

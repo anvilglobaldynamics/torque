@@ -181,7 +181,7 @@
                     [[account.displayName]]
                   </td>
                   <td class="cell" align="center">
-                    [[account.balance]]
+                    [[$applyThousandDecimalFormatting(account.balance)]]
                   </td>
                 </tr>
               </template>
@@ -195,7 +195,7 @@
                   <b>[[verses.accounting.totalRevenue]]</b>
                 </td>
                 <td class="cell" align="center">
-                  <b>[[totalRevenue]]</b>
+                  <b>[[$applyThousandDecimalFormatting(totalRevenue)]]</b>
                 </td>
               </tr>
 
@@ -208,7 +208,7 @@
                     [[account.displayName]]
                   </td>
                   <td class="cell" align="center">
-                    [[account.balance]]
+                    [[$applyThousandDecimalFormatting(account.balance)]]
                   </td>
                 </tr>
               </template>
@@ -222,14 +222,14 @@
                   <b>[[verses.accounting.totalExpense]]</b>
                 </td>
                 <td class="cell" align="center">
-                  <b>[[totalExpense]]</b>
+                  <b>[[$applyThousandDecimalFormatting(totalExpense)]]</b>
                 </td>
               </tr>
 
               <!-- total - start -->
               <tr>
                 <td class="cell cell-bottom" colspan="2" style="font-weight: bold;">[[verses.accounting.netProfit]]</td>
-                <td class="cell cell-bottom total-balance-cell" align="center">[[netProfit]]</td>
+                <td class="cell cell-bottom total-balance-cell" align="center">[[$applyThousandDecimalFormatting(netProfit)]]</td>
               </tr>
               <!-- total - end -->
 

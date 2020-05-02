@@ -109,14 +109,14 @@
                   <div class="vertical layout flex">
                     <div class="inventory-product-important-detail-container">[[product.name]]</div>
                     <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
-                      [[product.count]] [[product.unit]]
+                      [[$applyThousandDecimalFormatting(product.count)]] [[product.unit]]
                     </div>
 
                     <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                      <div class="inventory-product-price-container">[[verses.inventory.buyingPrice]]: [[product.purchasePrice]][[app.organization.settings.monetaryUnit]]</div>
+                      <div class="inventory-product-price-container">[[verses.inventory.buyingPrice]]: [[$applyThousandDecimalFormatting(product.purchasePrice)]] [[app.organization.settings.monetaryUnit]]</div>
                     </template>
 
-                    <div class="inventory-product-price-container">[[verses.inventory.sellingPrice]]: [[product.salePrice]][[app.organization.settings.monetaryUnit]]</div>
+                    <div class="inventory-product-price-container">[[verses.inventory.sellingPrice]]: [[$applyThousandDecimalFormatting(product.salePrice)]] [[app.organization.settings.monetaryUnit]]</div>
                   </div>
 
                   <!-- select -->
@@ -150,7 +150,7 @@
       <template is="dom-if" if="[[selectedProductList.length]]">
         <div class="card vertical layout">
           <div class="selected-products-text">
-            [[verses.inventory.totalSelectedProducts]]: [[selectedProductCount]]
+            [[verses.inventory.totalSelectedProducts]]: [[$applyThousandDecimalFormatting(selectedProductCount)]]
           </div>
 
           <div class="list">
@@ -160,14 +160,14 @@
                 <div class="vertical layout flex">
                   <div class="inventory-product-important-detail-container">[[product.name]]</div>
                   <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
-                    [[product.count]][[product.unit]]
+                    [[$applyThousandDecimalFormatting(product.count)]] [[product.unit]]
                   </div>
 
                   <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                    <div class="inventory-product-price-container">[[verses.general.purchase]]: [[product.purchasePrice]][[app.organization.settings.monetaryUnit]]</div>
+                    <div class="inventory-product-price-container">[[verses.general.purchase]]: [[$applyThousandDecimalFormatting(product.purchasePrice)]] [[app.organization.settings.monetaryUnit]]</div>
                   </template>
 
-                  <div class="inventory-product-price-container">[[verses.general.sale]]: [[product.salePrice]][[app.organization.settings.monetaryUnit]]</div>
+                  <div class="inventory-product-price-container">[[verses.general.sale]]: [[$applyThousandDecimalFormatting(product.salePrice)]] [[app.organization.settings.monetaryUnit]]</div>
                 </div>
 
                 <template is="dom-if" if="[[product.isSelected]]">

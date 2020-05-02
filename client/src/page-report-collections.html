@@ -192,7 +192,7 @@
               [[verses.collectionReport.collectedAmount]]
             </div>
             <div>
-              <strong>[[collectionSummary.collectedAmountSum]]</strong>
+              <strong>[[$applyThousandDecimalFormatting(collectionSummary.collectedAmountSum)]]</strong>
             </div>
           </div>
           <template is="dom-if" if="[[$equals(paymentMethod, 'all')]]">
@@ -201,7 +201,7 @@
                 [[verses.general.cash]]
               </div>
               <div>
-                <strong>[[collectionSummary.collectedCashSum]]</strong>
+                <strong>[[$applyThousandDecimalFormatting(collectionSummary.collectedCashSum)]]</strong>
               </div>
             </div>
             <div class="horizontal layout center item wrap">
@@ -209,7 +209,7 @@
                 [[verses.general.card]]
               </div>
               <div>
-                <strong>[[collectionSummary.collectedCardSum]]</strong>
+                <strong>[[$applyThousandDecimalFormatting(collectionSummary.collectedCardSum)]]</strong>
               </div>
             </div>
             <div class="horizontal layout center item wrap">
@@ -217,7 +217,7 @@
                 [[verses.general.digital]]
               </div>
               <div>
-                <strong>[[collectionSummary.collectedDigitalSum]]</strong>
+                <strong>[[$applyThousandDecimalFormatting(collectionSummary.collectedDigitalSum)]]</strong>
               </div>
             </div>
             <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
@@ -226,7 +226,7 @@
                   [[verses.general.balance]]
                 </div>
                 <div>
-                  <strong>[[collectionSummary.collectedAccountBalanceSum]]</strong>
+                  <strong>[[$applyThousandDecimalFormatting(collectionSummary.collectedAccountBalanceSum)]]</strong>
                 </div>
               </div>
             </template>
