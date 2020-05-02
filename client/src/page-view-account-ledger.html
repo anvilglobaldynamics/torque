@@ -118,6 +118,13 @@
         border-bottom: 1px dotted rgb(131, 131, 131);
       }
 
+      .other-account-summary{
+        font-size: 10px;
+        max-width: 300px;
+        font-style: italic;
+        color: #303030;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -200,6 +207,7 @@
                   <td class="cell" align="center">
                     <!-- <div>[[$getAccount(transaction.againstAccountId)]]</div> -->
                     <div>[[transaction.note]]</div>
+                    <div class="other-account-summary">[[transaction.otherAccountSummary]]</div>
                   </td>
                   <td class="cell" align="center">
                     <div>[[$applyThousandDecimalFormatting(transaction.debit)]]</div>
@@ -471,6 +479,19 @@
               }
               transaction.balance = balance;
             }
+
+            // list other accounts
+            let otherAccountSummaryList = [];
+            transaction.debitList.forEach(account => {
+              if (this.accountId === account.accountId) return;
+              otherAccountSummaryList.push(`${this.$getAccount(account.accountId)} (Debit)`);
+            });
+            transaction.creditList.forEach(account => {
+              if (this.accountId === account.accountId) return;
+              otherAccountSummaryList.push(`${this.$getAccount(account.accountId)} (Credit)`);
+            });
+            transaction.otherAccountSummary = otherAccountSummaryList.join(', ');
+
           });
           newTransactionList.reverse(); // reverse back so that the order is correct
 
