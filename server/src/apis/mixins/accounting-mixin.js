@@ -73,7 +73,7 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         codeName: "SERVICE_SALES_REVENUE",
         displayName: "Service Sales Revenue",
         isMonetaryAccount: false,
-        note: "All revenue generated from Product Sales"
+        note: "All revenue generated from Service Sales"
       },
       {
         nature: 'revenue',
