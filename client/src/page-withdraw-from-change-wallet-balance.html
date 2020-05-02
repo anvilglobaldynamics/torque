@@ -39,7 +39,7 @@
 
             <div>
               <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
-              [[verses.general.balance]]: [[$round(editingCustomer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]
+              [[verses.general.balance]]: [[$applyThousandDecimalFormatting(editingCustomer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]
             </div>
             <paper-input class="withdrawFromChangeWalletBalanceForm--amount" value="{{withdrawFromChangeWalletBalanceForm.amount}}" type="number" required min="1" max="[[editingCustomer.changeWalletBalance]]" on-change="genericNumericInputChanged" error-message=[[verses.withdrawFromChangeWalletBalance.amountInputError]] label=[[verses.withdrawFromChangeWalletBalance.amountInput]]></paper-input>
             <paper-button raised class="primary" on-tap="withdrawFromChangeWalletBalanceTapped">[[verses.withdrawFromChangeWalletBalance.withdraw]]</paper-button>

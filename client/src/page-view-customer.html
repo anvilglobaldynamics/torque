@@ -50,7 +50,7 @@
         <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
           <div>
             <iron-icon icon="icons:account-balance-wallet" class="icon secondary small m-right-8"></iron-icon>
-            [[verses.general.balance]]: [[$round(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]
+            [[verses.general.balance]]: [[$applyThousandDecimalFormatting(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]
           </div>
         </template>
         <div>[[verses.general.number]]: [[customer.phone]]</div>
@@ -79,7 +79,7 @@
                     <b>#[[index]]</b> [[verses.general.date]]: [[$mkDate(withdrawal.creditedDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]
                   </div>
                   <div>
-                    [[verses.general.amount]]: [[$round(withdrawal.amount)]] [[app.organization.settings.monetaryUnit]]
+                    [[verses.general.amount]]: [[$applyThousandDecimalFormatting(withdrawal.amount)]] [[app.organization.settings.monetaryUnit]]
                   </div>
                 </div>
 

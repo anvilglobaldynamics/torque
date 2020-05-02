@@ -49,7 +49,7 @@
 
         <div class="individual-calculation-field-container">
           [[verses.additionalPayment.dueAmount]]:
-          <b>{{$round(amountLeftToPay)}} [[page.app.organization.settings.monetaryUnit]]</b>
+          <b>{{$applyThousandDecimalFormatting(amountLeftToPay)}} [[page.app.organization.settings.monetaryUnit]]</b>
         </div>
 
         <div class="individual-calculation-field-container">
@@ -73,7 +73,7 @@
 
           <template is="dom-if" if="[[payment.changeAmount]]">
             <br> [[verses.additionalPayment.changeAmount]]:
-            <b>{{$round(payment.changeAmount)}} [[app.organization.settings.monetaryUnit]]</b>
+            <b>{{$applyThousandDecimalFormatting(payment.changeAmount)}} [[app.organization.settings.monetaryUnit]]</b>
             <br>
             <template is="dom-if" if="[[customer]]">
               <template is="dom-if" if="[[payment.changeAmount]]">

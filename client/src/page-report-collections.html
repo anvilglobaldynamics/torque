@@ -113,7 +113,7 @@
                   [[verses.general.customer]]:
                   <b>[[customer.fullName]]</b> ([[customer.phone]])
                   <br> [[verses.general.balance]]:
-                  <b>[[$round(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]</b>
+                  <b>[[$applyThousandDecimalFormatting(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]</b>
                 </template>
               </div>
               <div class="horizontal layout center">
@@ -256,7 +256,7 @@
                   <strong>[[verses.collectionReport.paymentMethod]]: </strong>[[collection.paymentMethod]]
                 </div>
               </div>
-              <div class="description" style="padding-top: 10px; padding-bottom: 10px; padding-left: 20px;">[[$round(collection.collectedAmount)]]</div>
+              <div class="description" style="padding-top: 10px; padding-bottom: 10px; padding-left: 20px;">[[$applyThousandDecimalFormatting(collection.collectedAmount)]]</div>
             </div>
           </template>
           <!-- Detailed - End -->

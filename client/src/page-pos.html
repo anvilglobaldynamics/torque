@@ -935,7 +935,7 @@
           <template is="dom-if" if="[[productListOrServiceListHasElement(productList.length, serviceList.length)]]">
             <div class="card vertical layout">
               <div class="individual-calculation-field-container">
-                <span>[[verses.pos.totalSalePrice]]: <b>{{$round(payment.totalAmount)}} [[app.organization.settings.monetaryUnit]]</b></span>
+                <span>[[verses.pos.totalSalePrice]]: <b>{{$applyThousandDecimalFormatting(payment.totalAmount)}} [[app.organization.settings.monetaryUnit]]</b></span>
               </div>
             </div>
           </template>
@@ -946,7 +946,7 @@
 
                 <div class="individual-calculation-field-container">
                   [[verses.pos.vatAmount]]:
-                  <b>{{$round(payment.vatAmount)}} [[app.organization.settings.monetaryUnit]]</b>
+                  <b>{{$applyThousandDecimalFormatting(payment.vatAmount)}} [[app.organization.settings.monetaryUnit]]</b>
                 </div>
 
                 <div class="individual-calculation-field-container">
@@ -967,7 +967,7 @@
                   </div>
 
                   [[verses.pos.discountedAmount]]:
-                  <b>{{$round(payment.discountedAmount)}} [[app.organization.settings.monetaryUnit]]</b>
+                  <b>{{$applyThousandDecimalFormatting(payment.discountedAmount)}} [[app.organization.settings.monetaryUnit]]</b>
 
                 </div>
 
@@ -1010,13 +1010,13 @@
                     <div class="horizontal layout center m-top-16">
                       <div class="flex">
                         [[verses.sales.totalBillBeforeRounding]]:
-                        <b>{{$round(payment.totalBillBeforeRounding)}} [[app.organization.settings.monetaryUnit]]</b>
+                        <b>{{$applyThousandDecimalFormatting(payment.totalBillBeforeRounding)}} [[app.organization.settings.monetaryUnit]]</b>
                       </div>
                     </div>
                     <div class="horizontal layout center">
                       <div class="flex">
                         [[verses.sales.roundedByAmount]]:
-                        <b>{{$round(payment.roundedByAmount)}} [[app.organization.settings.monetaryUnit]]</b>
+                        <b>{{$applyThousandDecimalFormatting(payment.roundedByAmount)}} [[app.organization.settings.monetaryUnit]]</b>
                       </div>
                       <paper-icon-button on-tap="clearRounderByAmountTapped" icon="clear"></paper-icon-button>
                     </div>
@@ -1025,7 +1025,7 @@
                 <div class="horizontal layout center individual-calculation-field-container light">
                   <div class="flex">
                     [[verses.pos.totalBilled]]:
-                    <b>{{$round(payment.totalBilled)}} [[app.organization.settings.monetaryUnit]]</b>
+                    <b>{{$applyThousandDecimalFormatting(payment.totalBilled)}} [[app.organization.settings.monetaryUnit]]</b>
                   </div>
                   <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
                     <paper-icon-button on-tap="editTotalBilledTapped" icon="create"></paper-icon-button>
@@ -1053,7 +1053,7 @@
 
                   <template is="dom-if" if="[[payment.changeAmount]]">
                     <br> [[verses.pos.changeAmount]]:
-                    <b>{{$round(payment.changeAmount)}} [[app.organization.settings.monetaryUnit]]</b>
+                    <b>{{$applyThousandDecimalFormatting(payment.changeAmount)}} [[app.organization.settings.monetaryUnit]]</b>
 
                     <br>
                     <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">

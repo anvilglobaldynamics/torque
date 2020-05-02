@@ -161,18 +161,18 @@
             <span class="credit-text"> [[verses.sales.isCredit]] </span>
           </template>
         </div>
-        <div>[[verses.sales.totalBilled]]: [[$round(sales.payment.totalBilled)]] [[app.organization.settings.monetaryUnit]]</div>
-        <div>[[verses.sales.discounted]]: [[$round(sales.payment.discountedAmount)]] [[app.organization.settings.monetaryUnit]] [[verses.general.by]] [[sales.payment.discountValue]] [[sales.payment.discountType]]</div>
+        <div>[[verses.sales.totalBilled]]: [[$applyThousandDecimalFormatting(sales.payment.totalBilled)]] [[app.organization.settings.monetaryUnit]]</div>
+        <div>[[verses.sales.discounted]]: [[$applyThousandDecimalFormatting(sales.payment.discountedAmount)]] [[app.organization.settings.monetaryUnit]] [[verses.general.by]] [[sales.payment.discountValue]] [[sales.payment.discountType]]</div>
         <template is="dom-if" if="[[sales.payment.discountPresetName]]">
           <div>[[verses.sales.discountPreset]]: {{sales.payment.discountPresetName}}</div>
         </template>
 
-        <div>[[verses.sales.serviceChargeAmount]]: [[$round(sales.payment.serviceChargeAmount)]] [[app.organization.settings.monetaryUnit]]</div>
-        <div>[[verses.sales.vat]]: [[$round(sales.payment.vatAmount)]] [[app.organization.settings.monetaryUnit]]</div>
+        <div>[[verses.sales.serviceChargeAmount]]: [[$applyThousandDecimalFormatting(sales.payment.serviceChargeAmount)]] [[app.organization.settings.monetaryUnit]]</div>
+        <div>[[verses.sales.vat]]: [[$applyThousandDecimalFormatting(sales.payment.vatAmount)]] [[app.organization.settings.monetaryUnit]]</div>
         <template is="dom-if" if="[[sales.payment.roundedByAmount]]">
           <div>[[verses.sales.lessDueToRounding]]: [[sales.payment.roundedByAmount]]</div>
         </template>
-        <div>[[verses.sales.totalPaid]]: [[$round(sales.payment.totalPaidAmount)]] [[app.organization.settings.monetaryUnit]]</div>
+        <div>[[verses.sales.totalPaid]]: [[$applyThousandDecimalFormatting(sales.payment.totalPaidAmount)]] [[app.organization.settings.monetaryUnit]]</div>
         <template is="dom-if" if="[[$isCreditSale(sales.payment.totalBilled, sales.payment.totalPaidAmount)]]">
           <div>[[verses.sales.dueAmount]]: [[$calculateDue(sales.payment.totalBilled, sales.payment.totalPaidAmount)]]</div>
         </template>
@@ -182,8 +182,8 @@
         </div>
         <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
           <div class="list-object">
-            <div>[[verses.sales.paidAmount]]: [[$round(payment.paidAmount)]] [[app.organization.settings.monetaryUnit]]</div>
-            <div>[[verses.sales.changeAmount]]: [[$round(payment.changeAmount)]] [[app.organization.settings.monetaryUnit]]</div>
+            <div>[[verses.sales.paidAmount]]: [[$applyThousandDecimalFormatting(payment.paidAmount)]] [[app.organization.settings.monetaryUnit]]</div>
+            <div>[[verses.sales.changeAmount]]: [[$applyThousandDecimalFormatting(payment.changeAmount)]] [[app.organization.settings.monetaryUnit]]</div>
             <div>[[verses.sales.paymentMethod]]: [[payment.paymentMethod]]</div>
             <div class="dated">[[verses.general.date]]: [[$mkDate(payment.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
           </div>
@@ -207,7 +207,7 @@
         <div class="card vertical layout">
           <div>[[verses.customer.customerName]]: [[customer.fullName]]</div>
           <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
-            <div>[[verses.general.balance]]: [[$round(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]</div>
+            <div>[[verses.general.balance]]: [[$applyThousandDecimalFormatting(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]</div>
           </template>
           <div>[[verses.general.number]]: [[customer.phone]]</div>
         </div>

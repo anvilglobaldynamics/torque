@@ -354,38 +354,38 @@
 
               <tr class="tr-border-top">
                 <th colspan="2" style="text-align: right;">[[verses.salesReceipt.totalAmount]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.totalAmount)]] </th>
+                <th class="monetary-cell">[[$addTailingZeros(sales.payment.totalAmount)]] </th>
               </tr>
               <tr>
                 <th colspan="2" style="text-align: right;">[[verses.salesReceipt.vatAmount]] (+)</th>
-                <th class="monetary-cell">[[$round(sales.payment.vatAmount)]]</th>
+                <th class="monetary-cell">[[$addTailingZeros(sales.payment.vatAmount)]]</th>
               </tr>
               <tr>
                 <th colspan="2" style="text-align: right;">[[verses.salesReceipt.discountedAmount]] (-)</th>
-                <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]]</th>
+                <th class="monetary-cell">[[$addTailingZeros(sales.payment.discountedAmount)]]</th>
               </tr>
               <template is="dom-if" if="[[sales.payment.roundedByAmount]]">
                 <tr>
                   <th colspan="2" style="text-align: right;">[[verses.salesReceipt.lessDueToRounding]] (-)</th>
-                  <th class="monetary-cell">[[$round(sales.payment.roundedByAmount)]]</th>
+                  <th class="monetary-cell">[[$addTailingZeros(sales.payment.roundedByAmount)]]</th>
                 </tr>
               </template>
               <tr class="tr-border-bottom">
                 <th colspan="2" style="text-align: right;">[[verses.salesReceipt.serviceChargeInput]] (+)</th>
-                <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]]</th>
+                <th class="monetary-cell">[[$addTailingZeros(sales.payment.serviceChargeAmount)]]</th>
               </tr>
               <tr>
                 <th colspan="2" style="text-align: right;">[[verses.salesReceipt.totalBilled]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.totalBilled)]]</th>
+                <th class="monetary-cell">[[$addTailingZeros(sales.payment.totalBilled)]]</th>
               </tr>
               <tr>
                 <th colspan="2" style="text-align: right;">[[verses.salesReceipt.totalPaid]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]]</th>
+                <th class="monetary-cell">[[$addTailingZeros(sales.payment.totalPaidAmount)]]</th>
               </tr>
               <template is="dom-if" if="[[sales.payment.dueAmount]]">
                 <tr>
                   <th colspan="2" style="text-align: right;">[[verses.salesReceipt.dueAmount]]</th>
-                  <th class="monetary-cell">[[$round(sales.payment.dueAmount)]]</th>
+                  <th class="monetary-cell">[[$addTailingZeros(sales.payment.dueAmount)]]</th>
                 </tr>
               </template>
               <tr class="tr-border-bottom">
@@ -406,8 +406,8 @@
                 <tr>
                   <td class="centered-cell">[[$mkDate(payment.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</td>
                   <td class="monetary-cell"> [[payment.paymentMethod]]</td>
-                  <td class="monetary-cell">[[$round(payment.paidAmount)]]</td>
-                  <td class="monetary-cell">[[$round(payment.changeAmount)]] </td>
+                  <td class="monetary-cell">[[$addTailingZeros(payment.paidAmount)]]</td>
+                  <td class="monetary-cell">[[$addTailingZeros(payment.changeAmount)]] </td>
                 </tr>
               </template>
               <tr class="tr-border-bottom">
@@ -524,38 +524,38 @@
               <tr class="tr-border-top">
                 <!-- <th rowspan="7" colspan="2" style="border:none;"></th> -->
                 <th colspan="3" style="text-align: right;">[[verses.salesReceipt.totalAmount]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.totalAmount)]]</th>
+                <th class="monetary-cell">[[$addTailingZeros(sales.payment.totalAmount)]]</th>
               </tr>
               <tr>
                 <th colspan="3" style="text-align: right;">[[verses.salesReceipt.vatAmount]] (+)</th>
-                <th class="monetary-cell">[[$round(sales.payment.vatAmount)]]</th>
+                <th class="monetary-cell">[[$addTailingZeros(sales.payment.vatAmount)]]</th>
               </tr>
               <tr>
                 <th colspan="3" style="text-align: right;">[[verses.salesReceipt.discountedAmount]] (-)</th>
-                <th class="monetary-cell">[[$round(sales.payment.discountedAmount)]]</th>
+                <th class="monetary-cell">[[$addTailingZeros(sales.payment.discountedAmount)]]</th>
               </tr>
               <tr>
                 <th colspan="3" style="text-align: right;">[[verses.salesReceipt.serviceChargeInput]] (+)</th>
-                <th class="monetary-cell">[[$round(sales.payment.serviceChargeAmount)]]</th>
+                <th class="monetary-cell">[[$addTailingZeros(sales.payment.serviceChargeAmount)]]</th>
               </tr>
               <template is="dom-if" if="[[sales.payment.roundedByAmount]]">
                 <tr>
                   <th colspan="3" style="text-align: right;">[[verses.salesReceipt.lessDueToRounding]] (-)</th>
-                  <th class="monetary-cell">[[$round(sales.payment.roundedByAmount)]]</th>
+                  <th class="monetary-cell">[[$addTailingZeros(sales.payment.roundedByAmount)]]</th>
                 </tr>
               </template>
               <tr>
                 <th colspan="3" style="text-align: right;">[[verses.salesReceipt.totalBilled]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.totalBilled)]]</th>
+                <th class="monetary-cell">[[$addTailingZeros(sales.payment.totalBilled)]]</th>
               </tr>
               <tr>
                 <th colspan="3" style="text-align: right;">[[verses.salesReceipt.totalPaid]]</th>
-                <th class="monetary-cell">[[$round(sales.payment.totalPaidAmount)]]</th>
+                <th class="monetary-cell">[[$addTailingZeros(sales.payment.totalPaidAmount)]]</th>
               </tr>
               <template is="dom-if" if="[[sales.payment.dueAmount]]">
                 <tr>
                   <th colspan="3" style="text-align: right;">[[verses.salesReceipt.dueAmount]]</th>
-                  <th class="monetary-cell">[[$round(sales.payment.dueAmount)]]</th>
+                  <th class="monetary-cell">[[$addTailingZeros(sales.payment.dueAmount)]]</th>
                 </tr>
               </template>
               <tr class="tr-border-bottom">
@@ -576,8 +576,8 @@
                 <tr>
                   <td class="centered-cell">[[$mkDate(payment.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</td>
                   <td class="centered-cell">[[payment.paymentMethod]]</td>
-                  <td class="monetary-cell">[[$round(payment.paidAmount)]]</td>
-                  <td class="monetary-cell">[[$round(payment.changeAmount)]]</td>
+                  <td class="monetary-cell">[[$addTailingZeros(payment.paidAmount)]]</td>
+                  <td class="monetary-cell">[[$addTailingZeros(payment.changeAmount)]]</td>
                 </tr>
               </template>
               <tr class="tr-border-bottom">
@@ -788,20 +788,20 @@
 
       $calculateIndividualProductPrice(product) {
         let { salePrice, count } = product;
-        return this.$round(salePrice * count);
+        return this.$addTailingZeros(salePrice * count);
       }
 
       $calculateIndividualServicePrice(service) {
         let { salePrice } = service;
-        return this.$round(salePrice);
+        return this.$addTailingZeros(salePrice);
       }
 
       printButtonOnTopBarPressed(e = null) {
         window.print();
       }
 
-      $round(number) {
-        number = String(super.$round(number));
+      $addTailingZeros(number) {
+        number = String(super.$applyThousandDecimalFormatting(number));
         let [left, right] = number.split('.');
         if (!right) right = '0'
         if (right.length < 1) right += '0';
