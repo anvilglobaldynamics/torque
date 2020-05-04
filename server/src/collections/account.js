@@ -13,7 +13,7 @@ exports.AccountCollection = class extends Collection {
       createdByUserId: Joi.number().max(999999999999999).required(),
 
       codeName: Joi.string().min(1).max(32).required(),
-      displayName: Joi.string().min(1).max(32).required(),
+      displayName: Joi.string().min(1).max(64).required(),
       nature: Joi.string().valid('asset', 'liability', 'equity', 'revenue', 'expense').required(),
       isMonetaryAccount: Joi.boolean().required(),
       note: Joi.string().allow('').max(64).required(),
