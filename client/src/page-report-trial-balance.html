@@ -159,28 +159,28 @@
             <table class="transaction-list-table">
 
               <tr>
-                <th class="cell account-name-column" align="left" style="cursor: pointer;">
+                <th class="cell account-name-column label-cell-in-reports" align="left" style="cursor: pointer;">
                   <span>[[verses.accounting.account]]</span>
                 </th>
-                <th class="cell" style="cursor: pointer;">
+                <th class="cell monetary-cell-in-reports" style="cursor: pointer;">
                   <span>[[verses.accounting.debit]]</span>
                 </th>
-                <th class="cell" style="cursor: pointer;">
+                <th class="cell monetary-cell-in-reports" style="cursor: pointer;">
                   <span>[[verses.accounting.credit]]</span>
                 </th>
               </tr>
 
               <template is="dom-repeat" items="[[accountList]]" as="account">
                 <tr>
-                  <td class="cell" align="left">
+                  <td class="cell label-cell-in-reports" align="left">
                     [[account.displayName]]
                   </td>
-                  <td class="cell" align="center">
+                  <td class="cell monetary-cell-in-reports" align="center">
                     <template is="dom-if" if="[[account.isDebitBalance]]">
                       [[$applyThousandDecimalFormatting(account.balance)]]
                     </template>
                   </td>
-                  <td class="cell" align="center">
+                  <td class="cell monetary-cell-in-reports" align="center">
                     <template is="dom-if" if="[[!account.isDebitBalance]]">
                       [[$applyThousandDecimalFormatting(account.balance)]]
                     </template>
@@ -190,9 +190,9 @@
 
               <!-- total - start -->
               <tr>
-                <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
-                <td class="cell cell-bottom total-balance-cell" align="center">[[$applyThousandDecimalFormatting(totalDebitBalance)]]</td>
-                <td class="cell cell-bottom total-balance-cell" align="center">[[$applyThousandDecimalFormatting(totalCreditBalance)]]</td>
+                <td class="cell cell-bottom label-cell-in-reports" style="font-weight: bold;">[[verses.general.total]]</td>
+                <td class="cell cell-bottom total-balance-cell monetary-cell-in-reports" align="center">[[$applyThousandDecimalFormatting(totalDebitBalance)]]</td>
+                <td class="cell cell-bottom total-balance-cell monetary-cell-in-reports" align="center">[[$applyThousandDecimalFormatting(totalCreditBalance)]]</td>
               </tr>
               <!-- total - end -->
 

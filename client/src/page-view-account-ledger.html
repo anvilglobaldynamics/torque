@@ -118,7 +118,7 @@
         border-bottom: 1px dotted rgb(131, 131, 131);
       }
 
-      .other-account-summary{
+      .other-account-summary {
         font-size: 10px;
         max-width: 300px;
         font-style: italic;
@@ -204,18 +204,17 @@
                   <td class="cell" align="center">
                     <div>[[transaction.transactionNumber]]</div>
                   </td>
-                  <td class="cell" align="center">
-                    <!-- <div>[[$getAccount(transaction.againstAccountId)]]</div> -->
+                  <td class="cell label-cell-in-reports">
                     <div>[[transaction.note]]</div>
                     <div class="other-account-summary">[[transaction.otherAccountSummary]]</div>
                   </td>
-                  <td class="cell" align="center">
+                  <td class="cell monetary-cell-in-reports">
                     <div>[[$applyThousandDecimalFormatting(transaction.debit)]]</div>
                   </td>
-                  <td class="cell" align="center">
+                  <td class="cell monetary-cell-in-reports">
                     <div>[[$applyThousandDecimalFormatting(transaction.credit)]]</div>
                   </td>
-                  <td class="cell" align="center">
+                  <td class="cell monetary-cell-in-reports">
                     <div>[[$applyThousandDecimalFormatting(transaction.balance)]]</div>
                   </td>
                   <td class="cell cell-right" align="center">
@@ -230,7 +229,7 @@
                 <td class="cell cell-bottom " colspan="4" align="center">
                   {{$applyThousandDecimalFormatting(transactionList.length)}} [[verses.accounting.transactions]]
                 </td>
-                <td class="cell cell-bottom " align="center">
+                <td class="cell cell-bottom monetary-cell-in-reports">
                   [[$applyThousandDecimalFormatting(finalBalance)]]
                 </td>
               </tr>

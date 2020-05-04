@@ -157,17 +157,17 @@
             <table class="transaction-list-table">
 
               <tr>
-                <th class="cell account-name-column" colspan="2" align="left" style="cursor: pointer;">
+                <th class="cell account-name-column label-cell-in-reports" colspan="2" align="left" style="cursor: pointer;">
                   <span>[[verses.accounting.assets]]</span>
                 </th>
               </tr>
 
               <template is="dom-repeat" items="[[assetList]]" as="account">
                 <tr>
-                  <td class="cell" align="left">
+                  <td class="cell label-cell-in-reports" align="left">
                     [[account.displayName]]
                   </td>
-                  <td class="cell" align="center">
+                  <td class="cell monetary-cell-in-reports" align="center">
                     [[$applyThousandDecimalFormatting(account.balance)]]
                   </td>
                 </tr>
@@ -175,8 +175,8 @@
 
               <!-- total - start -->
               <tr>
-                <td class="cell cell-bottom" style="font-weight: bold;">[[verses.accounting.totalAssets]]</td>
-                <td class="cell cell-bottom total-balance-cell" align="center">[[$applyThousandDecimalFormatting(totalAssets)]]</td>
+                <td class="cell cell-bottom label-cell-in-reports" style="font-weight: bold;">[[verses.accounting.totalAssets]]</td>
+                <td class="cell cell-bottom total-balance-cell monetary-cell-in-reports" align="center">[[$applyThousandDecimalFormatting(totalAssets)]]</td>
               </tr>
               <!-- total - end -->
 
@@ -189,57 +189,57 @@
             <table class="transaction-list-table">
 
               <tr>
-                <th class="cell account-name-column" align="left" colspan="2" style="cursor: pointer;">
+                <th class="cell account-name-column label-cell-in-reports" align="left" colspan="2" style="cursor: pointer;">
                   <span>[[verses.accounting.liabilities]]</span>
                 </th>
               </tr>
               <template is="dom-repeat" items="[[liabilityList]]" as="account">
                 <tr>
-                  <td class="cell" align="left">
+                  <td class="cell label-cell-in-reports" align="left">
                     [[account.displayName]]
                   </td>
-                  <td class="cell" align="center">
+                  <td class="cell monetary-cell-in-reports" align="center">
                     [[$applyThousandDecimalFormatting(account.balance)]]
                   </td>
                 </tr>
               </template>
               <tr>
-                <td class="cell" align="left">
+                <td class="cell label-cell-in-reports" align="left">
                   <b>[[verses.accounting.totalLiabilities]]</b>
                 </td>
-                <td class="cell" align="center">
+                <td class="cell monetary-cell-in-reports" align="center">
                   <b>[[$applyThousandDecimalFormatting(totalLiabilities)]]</b>
                 </td>
               </tr>
 
               <tr>
-                <th class="cell account-name-column" align="left" colspan="2" style="cursor: pointer;">
+                <th class="cell account-name-column label-cell-in-reports" align="left" colspan="2" style="cursor: pointer;">
                   <span>[[verses.accounting.equity]]</span>
                 </th>
               </tr>
               <template is="dom-repeat" items="[[equityList]]" as="account">
                 <tr>
-                  <td class="cell" align="left">
+                  <td class="cell label-cell-in-reports" align="left">
                     [[account.displayName]]
                   </td>
-                  <td class="cell balance-cell" align="center">
+                  <td class="cell balance-cell monetary-cell-in-reports" align="center">
                     [[$applyThousandDecimalFormatting(account.balance)]]
                   </td>
                 </tr>
               </template>
               <tr>
-                <td class="cell" align="left">
+                <td class="cell label-cell-in-reports" align="left">
                   <b>[[verses.accounting.totalEquity]]</b>
                 </td>
-                <td class="cell" align="center">
+                <td class="cell monetary-cell-in-reports" align="center">
                   <b>[[$applyThousandDecimalFormatting(totalEquity)]]</b>
                 </td>
               </tr>
 
               <!-- total - start -->
               <tr>
-                <td class="cell cell-bottom" style="font-weight: bold;">[[verses.accounting.totalLiabilitiesAndEquity]]</td>
-                <td class="cell cell-bottom total-balance-cell" align="center">[[$addLiabilitiesAndEquity(totalLiabilities, totalEquity)]]</td>
+                <td class="cell cell-bottom label-cell-in-reports" style="font-weight: bold;">[[verses.accounting.totalLiabilitiesAndEquity]]</td>
+                <td class="cell cell-bottom total-balance-cell monetary-cell-in-reports" align="center">[[$addLiabilitiesAndEquity(totalLiabilities, totalEquity)]]</td>
               </tr>
               <!-- total - end -->
 

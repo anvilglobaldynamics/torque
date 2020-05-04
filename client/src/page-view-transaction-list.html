@@ -197,7 +197,7 @@
                     <template is="dom-repeat" items="[[transaction.creditList]]" as="credit">
                       <div><i>[[$getAccount(credit.accountId)]]:</i> [[$applyThousandDecimalFormatting(credit.amount)]]</div>
                     </template> </td>
-                  <td class="cell" align="center" rowspan="2">
+                  <td class="cell monetary-cell-in-reports" rowspan="2">
                     <div>[[$applyThousandDecimalFormatting(transaction.amount)]]</div>
                   </td>
                   <td class="cell cell-right" align="center" rowspan="2">
