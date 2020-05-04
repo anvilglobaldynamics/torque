@@ -147,6 +147,7 @@
         font-weight: bold;
         text-transform: capitalize;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -192,7 +193,7 @@
               <table class="product-sales-table" style="margin-top: 8px;">
 
                 <tr>
-                  <th class="cell product-column" align="left" on-tap="columnHeaderProductTapped" style="cursor: pointer;">
+                  <th class="cell product-column label-cell-in-reports" align="left" on-tap="columnHeaderProductTapped" style="cursor: pointer;">
                     <span>[[verses.general.product]]</span>
                     <template is="dom-if" if="[[$equals(sortBy, 'product')]]">
                       <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
@@ -203,8 +204,9 @@
                       </template>
                     </template>
                   </th>
-                  <th class="cell" on-tap="columnHeaderCountTapped" style="cursor: pointer;">
+                  <th class="cell monetary-cell-in-reports" on-tap="columnHeaderCountTapped" style="cursor: pointer;">
                     <div class="horizontal layout center-center">
+                      <div class="flex"></div>
                       <span>[[verses.general.count]]</span>
                       <template is="dom-if" if="[[$equals(sortBy, 'count')]]">
                         <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
@@ -216,8 +218,9 @@
                       </template>
                     </div>
                   </th>
-                  <th class="cell cell-right" on-tap="columnHeaderCountTapped" style="cursor: pointer;">
+                  <th class="cell cell-right monetary-cell-in-reports" on-tap="columnHeaderCountTapped" style="cursor: pointer;">
                     <div class="horizontal layout center-center">
+                      <div class="flex"></div>
                       <span>[[verses.general.salePrice]]</span>
                       <template is="dom-if" if="[[$equals(sortBy, 'defaultSalePrice')]]">
                         <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
@@ -233,11 +236,11 @@
 
                 <!-- total - start -->
                 <tr>
-                  <td class="cell" style="font-weight: bold;">[[verses.general.total]]</td>
-                  <td class="cell" align="center">
+                  <td class="cell label-cell-in-reports" style="font-weight: bold;">[[verses.general.total]]</td>
+                  <td class="cell monetary-cell-in-reports" align="center">
                     {{computeTotalProductCount(productTransfer.productList)}}
                   </td>
-                  <td class="cell cell-right" align="center">
+                  <td class="cell cell-right monetary-cell-in-reports" align="center">
                     {{computeTotalSalePrice(productTransfer.productList)}}
                   </td>
                 </tr>
@@ -245,13 +248,13 @@
 
                 <template is="dom-repeat" items="[[productTransfer.productList]]" as="product">
                   <tr>
-                    <td class="cell">
+                    <td class="cell label-cell-in-reports">
                       [[product.productBlueprint.name]]
                     </td>
-                    <td class="cell" align="center">
+                    <td class="cell monetary-cell-in-reports" align="center">
                       <div>[[$applyThousandDecimalFormatting(product.count)]]</div>
                     </td>
-                    <td class="cell cell-right" align="center">
+                    <td class="cell cell-right monetary-cell-in-reports" align="center">
                       <div>[[computeTotalPriceOfProduct(product.productBlueprint.defaultSalePrice, product.count)]]</div>
                       <div class="price-rate">@ [[$applyThousandDecimalFormatting(product.productBlueprint.defaultSalePrice)]]</div>
                     </td>
@@ -260,11 +263,11 @@
 
                 <!-- total - start -->
                 <tr>
-                  <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
-                  <td class="cell cell-bottom" align="center">
+                  <td class="cell cell-bottom label-cell-in-reports" style="font-weight: bold;">[[verses.general.total]]</td>
+                  <td class="cell cell-bottom monetary-cell-in-reports" align="center">
                     {{computeTotalProductCount(productTransfer.productList)}}
                   </td>
-                  <td class="cell-right cell-bottom" align="center">
+                  <td class="cell-right cell-bottom monetary-cell-in-reports" align="center">
                     {{computeTotalSalePrice(productTransfer.productList)}}
                   </td>
                 </tr>
