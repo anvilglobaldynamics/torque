@@ -102,6 +102,8 @@ const runCode = async () => {
       lastModifiedDatetimeStamp: Date.now(),
       isDeleted: false,
       organizationId: organization.id,
+      monetaryUnit: 'BDT',
+      decimalFormatPreset: 'XX,XX,XXX.XX',
       receiptText1: '',
       receiptText2: '',
       logoImageId: null
