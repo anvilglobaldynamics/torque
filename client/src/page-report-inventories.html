@@ -171,7 +171,7 @@
       </template>
       <!-- filters - end -->
 
-      <hr style="border: 1px solid lightgrey; width: 100%;">
+      <hr style="border: 1px solid lightgrey; width: calc(100% - 26px);">
 
       <!-- report - start -->
       <div class="report">
@@ -220,7 +220,7 @@
 
                 <template is="dom-if" if="[[aggregatedInventoryDetail.aggregatedProductList.length]]">
                   <tr>
-                    <th class="cell product-column" align="left" on-tap="columnHeaderProductTapped" style="cursor: pointer;">
+                    <th class="cell product-column label-cell-in-reports" align="left" on-tap="columnHeaderProductTapped" style="cursor: pointer;">
                       <span>[[verses.general.product]]</span>
                       <template is="dom-if" if="[[$equals(sortBy, 'product')]]">
                         <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
@@ -231,8 +231,9 @@
                         </template>
                       </template>
                     </th>
-                    <th class="cell" on-tap="columnHeaderCountTapped" style="cursor: pointer;">
-                      <div class="horizontal layout center-center">
+                    <th class="cell monetary-cell-in-reports" on-tap="columnHeaderCountTapped" style="cursor: pointer;">
+                      <div class="horizontal layout">
+                        <div class="flex"></div>
                         <span>[[verses.general.count]]</span>
                         <template is="dom-if" if="[[$equals(sortBy, 'count')]]">
                           <template is="dom-if" if="[[$equals(sortDirection, 'ascending')]]">
@@ -246,26 +247,26 @@
                     </th>
 
                     <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                      <th class="cell">[[verses.general.purchase]]</th>
+                      <th class="cell monetary-cell-in-reports">[[verses.general.purchase]]</th>
                     </template>
 
-                    <th class="cell cell-right">[[verses.general.sale]]</th>
+                    <th class="cell cell-right monetary-cell-in-reports">[[verses.general.sale]]</th>
                   </tr>
 
                   <!-- total - start -->
                   <tr>
-                    <td class="cell" style="font-weight: bold;">[[verses.general.total]]</td>
-                    <td class="cell" align="center">
+                    <td class="cell label-cell-in-reports" style="font-weight: bold;">[[verses.general.total]]</td>
+                    <td class="cell monetary-cell-in-reports"  style="font-weight: bold;" align="center">
                       {{computeTotalProductCount(aggregatedInventoryDetail.aggregatedProductList)}}
                     </td>
 
                     <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                      <td class="cell" align="center">
+                      <td class="cell monetary-cell-in-reports"  style="font-weight: bold;" align="center">
                         {{computeTotalPurchasePrice(aggregatedInventoryDetail.aggregatedProductList)}}
                       </td>
                     </template>
 
-                    <td class="cell cell-right" align="center">
+                    <td class="cell cell-right monetary-cell-in-reports"  style="font-weight: bold;" align="center">
                       {{computeTotalSalePrice(aggregatedInventoryDetail.aggregatedProductList)}}
                     </td>
                   </tr>
@@ -273,42 +274,42 @@
 
                   <template is="dom-repeat" items="[[aggregatedInventoryDetail.aggregatedProductList]]" as="aggregatedProduct">
                     <tr>
-                      <td class="cell">
+                      <td class="cell label-cell-in-reports">
                         [[aggregatedProduct.product.productBlueprint.name]]
                       </td>
-                      <td class="cell" align="center">
-                        <div>[[$round(aggregatedProduct.count)]]</div>
+                      <td class="cell monetary-cell-in-reports" align="center">
+                        <div>[[$applyThousandDecimalFormatting(aggregatedProduct.count)]]</div>
                         <div class="price-rate no-visibility">-</div>
                       </td>
 
                       <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                        <td class="cell" align="center">
+                        <td class="cell monetary-cell-in-reports" align="center">
                           <div>[[computeTotalPriceOfProduct(aggregatedProduct.product.purchasePrice, aggregatedProduct.count)]]</div>
-                          <div class="price-rate">@ [[aggregatedProduct.product.purchasePrice]]</div>
+                          <div class="price-rate">@ [[$applyThousandDecimalFormatting(aggregatedProduct.product.purchasePrice)]]</div>
                         </td>
                       </template>
 
-                      <td class="cell cell-right" align="center">
+                      <td class="cell cell-right monetary-cell-in-reports" align="center">
                         <div>[[computeTotalPriceOfProduct(aggregatedProduct.product.salePrice, aggregatedProduct.count)]]</div>
-                        <div class="price-rate">@ [[aggregatedProduct.product.salePrice]]</div>
+                        <div class="price-rate">@ [[$applyThousandDecimalFormatting(aggregatedProduct.product.salePrice)]]</div>
                       </td>
                     </tr>
                   </template>
 
                   <!-- total - start -->
                   <tr>
-                    <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
-                    <td class="cell cell-bottom" align="center">
+                    <td class="cell cell-bottom label-cell-in-reports" style="font-weight: bold;">[[verses.general.total]]</td>
+                    <td class="cell cell-bottom monetary-cell-in-reports"  style="font-weight: bold;" align="center">
                       {{computeTotalProductCount(aggregatedInventoryDetail.aggregatedProductList)}}
                     </td>
 
                     <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                      <td class="cell cell-bottom" align="center">
+                      <td class="cell cell-bottom monetary-cell-in-reports"  style="font-weight: bold;" align="center">
                         {{computeTotalPurchasePrice(aggregatedInventoryDetail.aggregatedProductList)}}
                       </td>
                     </template>
 
-                    <td class="cell cell-bottom cell-right" align="center">
+                    <td class="cell cell-bottom cell-right monetary-cell-in-reports"  style="font-weight: bold;" align="center">
                       {{computeTotalSalePrice(aggregatedInventoryDetail.aggregatedProductList)}}
                     </td>
                   </tr>
@@ -540,7 +541,7 @@
         productList.forEach(product => {
           totalCount += product.count;
         });
-        return this.$round(totalCount);
+        return this.$applyThousandDecimalFormatting(totalCount);
       }
 
       computeTotalPurchasePrice(productList) {
@@ -548,7 +549,7 @@
         productList.forEach(product => {
           totalPurchasePrice += product.product.purchasePrice * product.count;
         });
-        return this.$round(totalPurchasePrice);
+        return this.$applyThousandDecimalFormatting(totalPurchasePrice);
       }
 
       computeTotalSalePrice(productList) {
@@ -556,11 +557,11 @@
         productList.forEach(product => {
           totalSalePrice += product.product.salePrice * product.count;
         });
-        return this.$round(totalSalePrice);
+        return this.$applyThousandDecimalFormatting(totalSalePrice);
       }
 
       computeTotalPriceOfProduct(count, unitPrice) {
-        return this.$round(count * unitPrice);
+        return this.$applyThousandDecimalFormatting(count * unitPrice);
       }
 
       $shouldShowClearFilter(_productCategoryListLength, _productBlueprintListLength) {

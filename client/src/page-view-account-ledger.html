@@ -23,6 +23,7 @@
 
 <link rel="import" href="elem-customer-selector.html">
 <link rel="import" href="elem-outlet-selector.html">
+<link rel="import" href="elem-party-selector.html">
 
 <dom-module id="page-view-account-ledger">
   <template>
@@ -31,7 +32,8 @@
 
         .filter-toggle-region,
         .filter-toggle-region paper-toggle-button,
-        .filter-region {
+        .filter-region,
+        .debt-button {
           display: none;
         }
 
@@ -116,6 +118,13 @@
         border-bottom: 1px dotted rgb(131, 131, 131);
       }
 
+      .other-account-summary {
+        font-size: 10px;
+        max-width: 300px;
+        font-style: italic;
+        color: #303030;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -130,9 +139,13 @@
       <!-- filters - start -->
       <div class="filter-region" hidden="[[!shouldShowFilters]]">
 
-        <div class="card horizontal layout center">
-          <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
-          <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+        <div class="card">
+          <div class=" horizontal layout center">
+            <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+            <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]" style="margin-left: 4px;"></paper-input>
+          </div>
+
+          <elem-party-selector id="party-selector" selected-collection-name="{{partyCollectionName}}" selected-document-id="{{partyDocumentId}}" page="{{self}}"></elem-party-selector>
         </div>
 
         <div class="lone-controls">
@@ -150,7 +163,7 @@
             [[$getAccount(accountId)]]
           </div>
           <div class="account-name">
-            [[verses.accounting.accountLedger]]
+            [[verses.accounting.accountLedger]][[partyName]]
           </div>
           <div class="date"> [[$mkDate(fromDate, 'dd MMM yyyy')]] [[verses.general.from]] [[$mkDate(toDate, 'dd MMM yyyy')]]</div>
         </div>
@@ -191,18 +204,18 @@
                   <td class="cell" align="center">
                     <div>[[transaction.transactionNumber]]</div>
                   </td>
-                  <td class="cell" align="center">
-                    <!-- <div>[[$getAccount(transaction.againstAccountId)]]</div> -->
+                  <td class="cell label-cell-in-reports">
                     <div>[[transaction.note]]</div>
+                    <div class="other-account-summary">[[transaction.otherAccountSummary]]</div>
                   </td>
-                  <td class="cell" align="center">
-                    <div>[[transaction.debit]]</div>
+                  <td class="cell monetary-cell-in-reports">
+                    <div>[[$applyThousandDecimalFormatting(transaction.debit)]]</div>
                   </td>
-                  <td class="cell" align="center">
-                    <div>[[transaction.credit]]</div>
+                  <td class="cell monetary-cell-in-reports">
+                    <div>[[$applyThousandDecimalFormatting(transaction.credit)]]</div>
                   </td>
-                  <td class="cell" align="center">
-                    <div>[[transaction.balance]]</div>
+                  <td class="cell monetary-cell-in-reports">
+                    <div>[[$applyThousandDecimalFormatting(transaction.balance)]]</div>
                   </td>
                   <td class="cell cell-right" align="center">
                     <paper-icon-button icon="create" on-tap="editTransactionTapped" disabled="[[$equals(transaction.transactionOrigin, 'system')]]"></paper-icon-button>
@@ -214,10 +227,10 @@
               <tr>
                 <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
                 <td class="cell cell-bottom " colspan="4" align="center">
-                  {{transactionList.length}} [[verses.accounting.transactions]]
+                  {{$applyThousandDecimalFormatting(transactionList.length)}} [[verses.accounting.transactions]]
                 </td>
-                <td class="cell cell-bottom " align="center">
-                  [[finalBalance]]
+                <td class="cell cell-bottom monetary-cell-in-reports">
+                  [[$applyThousandDecimalFormatting(finalBalance)]]
                 </td>
               </tr>
               <!-- total - end -->
@@ -228,6 +241,20 @@
         </div>
         <div class="vertical layout">
           <div class="horizontal layout wrap">
+            <template is="dom-if" if="[[$showPayButton(accountId, partyCollectionName, partyDocumentId, finalBalance)]]">
+              <div class="lone-controls debt-button">
+                <paper-button raised class="secondary" on-tap="makePaymentTapped">
+                  [[verses.accounting.makePayment]]
+                </paper-button>
+              </div>
+            </template>
+            <template is="dom-if" if="[[$showCollectButton(accountId, partyCollectionName, partyDocumentId, finalBalance)]]">
+              <div class="lone-controls debt-button">
+                <paper-button raised class="secondary" on-tap="collectPaymentTapped">
+                  [[verses.accounting.collectPayment]]
+                </paper-button>
+              </div>
+            </template>
             <div class="flex"></div>
             <div>
               <div class="author-title">[[verses.general.author]]: [[app.user.fullName]]</div>
@@ -283,6 +310,8 @@
       }
 
       onNavigateIn() {
+        this.self = this;
+
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.app.shouldShowPrintButton = true;
@@ -293,6 +322,18 @@
         // NOTE: This is necessary ONLY for this page since it's parameters
         // can change when still being on the same page
         this.params = this.app.getUrlParameters(this.app.paramString);
+
+        if ('collectionName' in this.params) {
+          this.partyCollectionName = this.params.collectionName;
+        } else {
+          this.partyCollectionName = 'no-party';
+        }
+
+        if ('documentId' in this.params) {
+          this.partyDocumentId = this.params.documentId;
+        } else {
+          this.partyDocumentId = -1;
+        }
 
         this._processAccountList(() => {
           this.finalBalance = 0;
@@ -368,6 +409,14 @@
 
         let preset = 'query';
 
+        let filterByParty = null;
+        if (this.partyCollectionName !== 'no-party' && this.partyDocumentId !== -1) {
+          filterByParty = {
+            collectionName: this.partyCollectionName,
+            documentId: this.partyDocumentId
+          }
+        }
+
         let data = {
           organizationId: this.app.organization.id,
 
@@ -375,6 +424,7 @@
           accountIdList: [this.accountId],
 
           transactionId: null,
+          filterByParty,
 
           includeOpeningBalance: true,
 
@@ -387,8 +437,6 @@
           return cbfn(response.transactionList);
         });
       }
-
-
 
       _processTransactionList(cbfn) {
         this._fetchTransactionList(newTransactionList => {
@@ -430,6 +478,19 @@
               }
               transaction.balance = balance;
             }
+
+            // list other accounts
+            let otherAccountSummaryList = [];
+            transaction.debitList.forEach(account => {
+              if (this.accountId === account.accountId) return;
+              otherAccountSummaryList.push(`${this.$getAccount(account.accountId)} (Debit)`);
+            });
+            transaction.creditList.forEach(account => {
+              if (this.accountId === account.accountId) return;
+              otherAccountSummaryList.push(`${this.$getAccount(account.accountId)} (Credit)`);
+            });
+            transaction.otherAccountSummary = otherAccountSummaryList.join(', ');
+
           });
           newTransactionList.reverse(); // reverse back so that the order is correct
 
@@ -460,6 +521,37 @@
 
       printButtonOnTopBarPressed(e = null) {
         window.print();
+      }
+
+      onPartyChange() {
+        let name = this.$['party-selector'].getPartyName();
+        this.partyName = (name ? ': ' + name : '');
+      }
+
+      $showPayButton(accountId, partyCollectionName, partyDocumentId, finalBalance) {
+        if (this.params['codeName'] === 'ACCOUNTS_PAYABLE' && finalBalance > 0) {
+          if (partyCollectionName !== 'no-party' && partyDocumentId > -1) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      $showCollectButton(accountId, partyCollectionName, partyDocumentId, finalBalance) {
+        if (this.params['codeName'] === 'ACCOUNTS_RECEIVABLE' && finalBalance > 0) {
+          if (partyCollectionName !== 'no-party' && partyDocumentId > -1) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      makePaymentTapped() {
+        return this.app.navigateTo(`/edit-usual-transaction/transaction-origin:debt-payment/collectionName:${this.partyCollectionName}/documentId:${this.partyDocumentId}`);
+      }
+
+      collectPaymentTapped() {
+        return this.app.navigateTo(`/edit-usual-transaction/transaction-origin:debt-collection/collectionName:${this.partyCollectionName}/documentId:${this.partyDocumentId}`);
       }
 
     }

@@ -132,6 +132,7 @@
 <link rel="lazy-import" href="page-report-income-statement.html">
 <link rel="lazy-import" href="page-report-balance-sheet.html">
 <link rel="lazy-import" href="page-report-trial-balance.html">
+<link rel="lazy-import" href="page-report-chart-of-accounts.html">
 
 <link rel="lazy-import" href="page-report-select-product-blueprints.html">
 <link rel="lazy-import" href="page-report-select-product-categories.html">
@@ -658,6 +659,7 @@
               <page-report-income-statement name="report-income-statement"></page-report-income-statement>
               <page-report-balance-sheet name="report-balance-sheet"></page-report-balance-sheet>
               <page-report-trial-balance name="report-trial-balance"></page-report-trial-balance>
+              <page-report-chart-of-accounts name="report-chart-of-accounts"></page-report-chart-of-accounts>
             </iron-pages>
 
             <div class$="footer footer-[[pageName]]">
@@ -1245,6 +1247,7 @@
       logoutTapped(e = null) {
         this.callUserLogoutApi({}, (err, response) => {
           this.removeUser();
+          this.removePreviousOrganization();
           window.sessionStorage.clear();
           this.navigateTo('/login');
           window.location.reload();

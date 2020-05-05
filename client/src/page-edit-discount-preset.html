@@ -51,7 +51,7 @@
             </template>
             <template is="dom-if" if="[[$equals(editDiscountPresetForm.discountType, 'fixed')]]">
               <paper-input class="editDiscountPresetForm--discountValue flex" on-change="genericDiscountValueInputChanged" value="{{editDiscountPresetForm.discountValue}}" type="number" required min="0" label="[[verses.discountPreset.discountValueInput]]">
-                <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+                <div slot="suffix">[[app.organization.settings.monetaryUnit]]</div>
               </paper-input>
             </template>
 

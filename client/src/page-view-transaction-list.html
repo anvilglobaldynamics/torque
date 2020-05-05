@@ -23,6 +23,7 @@
 
 <link rel="import" href="elem-customer-selector.html">
 <link rel="import" href="elem-outlet-selector.html">
+<link rel="import" href="elem-party-selector.html">
 
 <dom-module id="page-view-transaction-list">
   <template>
@@ -124,9 +125,13 @@
       <!-- filters - start -->
       <div class="filter-region" hidden="[[!shouldShowFilters]]">
 
-        <div class="card horizontal layout center">
-          <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
-          <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
+        <div class="card">
+          <div class=" horizontal layout center">
+            <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+            <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]" style="margin-left: 4px;"></paper-input>
+          </div>
+
+          <elem-party-selector selected-collection-name="{{partyCollectionName}}" selected-document-id="{{partyDocumentId}}" page="{{self}}"></elem-party-selector>
         </div>
 
         <div class="lone-controls">
@@ -185,15 +190,15 @@
                   </td>
                   <td class="cell" align="center">
                     <template is="dom-repeat" items="[[transaction.debitList]]" as="debit">
-                      <div><i>[[$getAccount(debit.accountId)]]:</i> [[debit.amount]]</div>
+                      <div><i>[[$getAccount(debit.accountId)]]:</i> [[$applyThousandDecimalFormatting(debit.amount)]]</div>
                     </template>
                   </td>
                   <td class="cell" align="center">
                     <template is="dom-repeat" items="[[transaction.creditList]]" as="credit">
-                      <div><i>[[$getAccount(credit.accountId)]]:</i> [[credit.amount]]</div>
+                      <div><i>[[$getAccount(credit.accountId)]]:</i> [[$applyThousandDecimalFormatting(credit.amount)]]</div>
                     </template> </td>
-                  <td class="cell" align="center" rowspan="2">
-                    <div>[[transaction.amount]]</div>
+                  <td class="cell monetary-cell-in-reports" rowspan="2">
+                    <div>[[$applyThousandDecimalFormatting(transaction.amount)]]</div>
                   </td>
                   <td class="cell cell-right" align="center" rowspan="2">
                     <paper-icon-button icon="create" on-tap="editTransactionTapped" disabled="[[$equals(transaction.transactionOrigin, 'system')]]"></paper-icon-button>
@@ -208,7 +213,7 @@
               <tr>
                 <td class="cell cell-bottom" style="font-weight: bold;">[[verses.general.total]]</td>
                 <td class="cell cell-bottom " colspan="4" align="center">
-                  {{transactionList.length}} [[verses.accounting.transactions]]
+                  [[$applyThousandDecimalFormatting(transactionList.length)]] [[verses.accounting.transactions]]
                 </td>
               </tr>
               <!-- total - end -->
@@ -274,12 +279,17 @@
       }
 
       onNavigateIn() {
+        this.self = this;
+
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.app.shouldShowPrintButton = true;
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.accounting.transactionListTitle);
         if (!this._ensureAccess()) return;
+
+        this.partyCollectionName = 'no-party';
+        this.partyDocumentId = -1;
 
         this._processAccountList(() => {
           this.preset = 'all';
@@ -340,7 +350,14 @@
         if ('preset' in this.params) {
           preset = this.params['preset'];
         }
-        console.log(preset)
+
+        let filterByParty = null;
+        if (this.partyCollectionName !== 'no-party' && this.partyDocumentId !== -1) {
+          filterByParty = {
+            collectionName: this.partyCollectionName,
+            documentId: this.partyDocumentId
+          }
+        }
 
         let data = {
           organizationId: this.app.organization.id,
@@ -349,6 +366,7 @@
           accountIdList: [],
 
           transactionId: null,
+          filterByParty,
 
           includeOpeningBalance: false,
 

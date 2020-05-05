@@ -74,7 +74,7 @@
       </paper-dropdown-menu>
 
       <template is="dom-if" if="[[$equals(selectedCollectionName, 'vendor')]]">
-        <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.general.vendor]]" class="mr-4" on-iron-select="documentIdSelected">
+        <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.general.vendor]]" class="mr-4" on-iron-select="documentIdSelected" style="margin-left: 4px;">
           <paper-listbox slot="dropdown-content" selected="{{selectedDocumentId}}" attr-for-selected="key">
             <template is="dom-repeat" items="[[vendorList]]" as="vendor">
               <paper-item key="[[vendor.id]]">[[vendor.name]]</paper-item>
@@ -84,7 +84,7 @@
       </template>
 
       <template is="dom-if" if="[[$equals(selectedCollectionName, 'employee')]]">
-        <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.employee]]" class="mr-4" on-iron-select="documentIdSelected">
+        <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.employee]]" class="mr-4" on-iron-select="documentIdSelected" style="margin-left: 4px;">
           <paper-listbox slot="dropdown-content" selected="{{selectedDocumentId}}" attr-for-selected="key">
             <template is="dom-repeat" items="[[employeeList]]" as="employee">
               <paper-item key="[[employee.id]]">[[employee.userDetails.fullName]]</paper-item>
@@ -135,13 +135,13 @@
         if (!this.page) return;
         this.useLanguageServices();
         if (this.page.hasModule('MOD_VENDOR')) {
-          this._processVendorList(() => { });
+          this._processVendorList(() => { this.__notify(); });
         }
-        this._processEmployeeList(() => { });
-
+        this._processEmployeeList(() => { this.__notify(); });
       }
 
       selectedCollectionNameChanged(newValue, oldValue) {
+        this.__notify();
         if (!this.selectedCollectionName) return;
         if (oldValue) {
           this.selectedDocumentId = -1;
@@ -149,6 +149,7 @@
       }
 
       selectedDocumentIdChanged(newValue, oldValue) {
+        this.__notify();
         if (!this.selectedDocumentId) return;
       }
 
@@ -158,6 +159,32 @@
 
       documentIdSelected(e, item) {
         // pass. change handled in observer
+      }
+
+      __notify() {
+        if (this.page && this.page.onPartyChange) {
+          this.page.onPartyChange();
+        }
+      }
+
+      getPartyName() {
+        if (!this.selectedCollectionName) return null;
+        if (this.selectedDocumentId === -1) return null;
+        if (this.selectedCollectionName === 'vendor') {
+          if (!this.vendorList.length) return 0;
+          let vendor = this.vendorList
+            .find(i => i.id === parseInt(this.selectedDocumentId))
+          if (!vendor) return null;
+          return vendor.name;
+        }
+        if (this.selectedCollectionName === 'employee') {
+          if (!this.employeeList.length) return 0;
+          let employee = this.employeeList
+            .find(i => i.id === parseInt(this.selectedDocumentId));
+          if (!employee) return null;
+          return employee.userDetails.fullName;
+        }
+        return null;
       }
 
       // fetch

@@ -14,7 +14,7 @@ exports.AddTransactionApi = class extends Api.mixin(AccountingMixin) {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
 
-      transactionOrigin: Joi.string().valid('system', 'manual', 'add-income', 'add-expense', 'add-asset-purchase').required(),
+      transactionOrigin: Joi.string().valid('system', 'manual', 'add-income', 'add-expense', 'add-asset-purchase', 'debt-payment', 'debt-collection').required(),
       transactionDatetimeStamp: Joi.number().max(999999999999999).required(),
 
       debitList: Joi.array().items(Joi.object().keys({

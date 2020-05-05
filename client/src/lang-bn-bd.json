@@ -903,7 +903,7 @@
     "useBackgroundSync": "'অফলাইন মোড' চালু করুন",
     "useBackgroundSyncDetails": "'অফলাইন মোড' এর মাধ্যমে লিপি ব্যবহার করতে পারবেন নেট না থাকলেও। যদি অফলাইন মোড চালু করেন তবে আপনার ডেটা ব্যবহার বাড়বে।",
     "defaultOutletSelection": "আউটলেট বাছাই",
-    "monetaryUnit": "মুদ্রা",
+    "monetaryUnit": "মুদ্রা (সর্বোচ দৈর্ঘ ৩, যেমন USD)",
     "monetaryUnitDetail": "নোট: আর্থিক মুদ্রা পরিবর্তন আপনার বিক্রয় প্রভাবিত করে না।",
     "moreOptionsForthcoming": "আরো সেটিংস আসন্ন।",
     "minimumProductQuantity": "নূন্যতম পণ্য পরিমান",
@@ -917,7 +917,8 @@
     "receiptText2": "দ্বিতীয় লাইন (নীচ)",
     "noOrganizationSettingsPrivilege": "সংগঠন-ব্যাপী সেটিংস পরিবর্তন করার জন্য আপনার প্রয়োজনীয় বিশেষাধিকার নেই।",
     "entireOrganizationWarning": "নীচের সেটিংস পুরো সংস্থাটিকে প্রভাবিত করে.",
-    "changesSaved": "সংগঠন-ব্যাপী সেটিংসগুলি সংরক্ষণ করা হয়েছে। পুনরায় লগ ইন করুন। "
+    "changesSaved": "সংগঠন-ব্যাপী সেটিংসগুলি সংরক্ষণ করা হয়েছে। পুনরায় লগ ইন করুন। ",
+    "decimalFormatPreset": "দশমিক নিয়ম"
   },
   "verify": {
     "verificationModalTitle": "যাচাইকরণ এসএমএস পাঠানো হয়েছে",
@@ -1216,7 +1217,7 @@
     "addIncome": "আয় যোগ",
     "viewExpense": "ব্যয় দেখুন",
     "addExpense": "ব্যয় যোগ",
-    "viewAssetPurchase": "অ্যাসেট ক্রয় দেখুন",
+    "viewAssetPurchase": "অ্যাসেট লেনদেন দেখুন",
     "addAssetPurchase": "অ্যাসেট ক্রয় যোগ",
 
     "addManualTransactionPageTitle": "ম্যানুয়াল লেনদেন যুক্ত করুন",
@@ -1299,14 +1300,25 @@
     "group": "শ্রেণী",
     "particulars": "বিবরণ",
 
+    "payables": "পরিশোধযোগ্য",
+    "receivables": "গ্রহণযোগ্য",
+
     "transactionListTitle": "লেনদেন",
 
     "productAcquisitionMessage": " অ্যাকাউন্ট পরিশোধযোগ্যে যোগ হবে",
 
     "transactionSaved": "লেনদেন সংরক্ষিত",
 
+    "chartOfAccounts": "চার্ট অফ একাউন্টস",
+
+    "makePayment": "বাকি পরিশোধ করুন",
+    "collectPayment": "পাওনা সংগ্রহ করুন",
+    "addEditDebtPaymentPageTitle": "বাকি পরিশোধ",
+    "addEditDebtCollectionPageTitle": "পাওনা সংগ্রহ",
+
     "incomeStatementDescription": "ইনকাম স্টেটমেন্ট (যাকে লাভ ও ক্ষতির বিবৃতিও বলা হয়) আপনার ব্যবসায়িক আয়, ব্যয় এবং মোট লাভ দেখায়।",
     "balanceSheetDescription": "ব্যালেন্স শিট আপনাকে আপনার ব্যবসায়ের আর্থিক অবস্থান দেখায়। এই রিপোর্টএ আপনার ফিক্সড এবং কারেন্ট অ্যাসেটস, আপনার দায়, আপনার বিনিয়োগ এবং মোট লাভ দেখতে পারবেন।",
-    "trialBalanceDescription": "ট্রায়াল ব্যালেন্স আপনার সমস্ত অ্যাকাউন্টের এবং তাদের মোট ব্যালেন্সের একটি তালিকা। ট্রায়াল ব্যালান্স আপনার একাউন্টেন্টএর জন্য প্রয়োজনীয়।"
+    "trialBalanceDescription": "ট্রায়াল ব্যালেন্স আপনার সমস্ত অ্যাকাউন্টের এবং তাদের মোট ব্যালেন্সের একটি তালিকা। ট্রায়াল ব্যালান্স আপনার একাউন্টেন্টএর জন্য প্রয়োজনীয়।",
+    "chartOfAccountsDescription": "চার্ট অফ অ্যাকাউন্টস আপনার সংস্থায় ব্যবহৃত সমস্ত অ্যাকাউন্টের একটি তালিকা।"
   }
 }

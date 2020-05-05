@@ -13,7 +13,7 @@ exports.EditAccountApi = class extends Api {
     return Joi.object().keys({
       accountId: Joi.number().max(999999999999999).required(),
 
-      displayName: Joi.string().min(1).max(32).required(),
+      displayName: Joi.string().min(1).max(64).required(),
       note: Joi.string().allow('').max(64).required()
     });
   }

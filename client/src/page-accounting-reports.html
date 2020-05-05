@@ -26,6 +26,7 @@
       .accounting-report-card-helpful-text {
         padding-bottom: 10px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -47,7 +48,7 @@
               [[verses.general.view]]
             </paper-button>
           </div>
-            
+
         </div>
       </div>
       <!-- Income Statement - End -->
@@ -67,11 +68,11 @@
               [[verses.general.view]]
             </paper-button>
           </div>
-            
+
         </div>
       </div>
       <!-- Balance Sheet - End -->
-      
+
       <!-- Trial Balance - Start -->
       <div class="card">
         <div class="layout vertical">
@@ -87,10 +88,30 @@
               [[verses.general.view]]
             </paper-button>
           </div>
-            
+
         </div>
       </div>
       <!-- Trial Balance - End -->
+
+      <!-- Chart of Accounts - Start -->
+      <div class="card">
+        <div class="layout vertical">
+
+          <h2>[[verses.accounting.chartOfAccounts]]</h2>
+
+          <div class="accounting-report-card-helpful-text">
+            [[verses.accounting.chartOfAccountsDescription]]
+          </div>
+
+          <div class="lone-controls">
+            <paper-button raised class="btn primary" on-tap="buttonViewChartOfAccountsTapped">
+              [[verses.general.view]]
+            </paper-button>
+          </div>
+
+        </div>
+      </div>
+      <!-- Chart of Accounts - End -->
 
     </div>
 
@@ -148,6 +169,10 @@
 
       buttonViewTrialBalanceTapped(e = null) {
         return this.app.navigateTo('/report-trial-balance');
+      }
+
+      buttonViewChartOfAccountsTapped(e = null) {
+        return this.app.navigateTo('/report-chart-of-accounts');
       }
 
       // region: misc =================================

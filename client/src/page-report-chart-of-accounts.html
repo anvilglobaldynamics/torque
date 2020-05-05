@@ -24,7 +24,7 @@
 <link rel="import" href="elem-customer-selector.html">
 <link rel="import" href="elem-outlet-selector.html">
 
-<dom-module id="page-report-trial-balance">
+<dom-module id="page-report-chart-of-accounts">
   <template>
     <style include="shared-styles">
       @media print {
@@ -36,7 +36,7 @@
         }
 
         .report {
-          margin-top: -48px;
+          margin-top: -32px;
         }
       }
 
@@ -111,11 +111,18 @@
       }
 
       .account-name-column {
-        min-width: 300px;
+        min-width: 200px;
+        max-width: 240px;
       }
 
       .total-balance-cell {
         font-weight: bold;
+      }
+
+      th,
+      td {
+        padding: 4px;
+        ;
       }
 
     </style>
@@ -124,34 +131,11 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <div class="filter-toggle-region horizontal layout center">
-        <div class="flex"></div>
-        <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.general.showFilters]]</paper-toggle-button>
-      </div>
-
-      <!-- filters - start -->
-      <div class="filter-region" hidden="[[!shouldShowFilters]]">
-
-        <div class="card horizontal layout center">
-          <paper-input class="flex" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
-          <paper-input class="flex" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
-        </div>
-
-        <div class="lone-controls">
-          <paper-button raised class="primary" on-tap="filterTapped">
-            [[verses.general.filter]]
-          </paper-button>
-        </div>
-
-      </div>
-      <!-- filters - end -->
-
       <div class="report">
         <div class="header vertical layout">
           <div class="name">
-            [[verses.accounting.trialBalance]]
+            [[verses.accounting.chartOfAccounts]]
           </div>
-          <div class="date"> [[$mkDate(fromDate, 'dd MMM yyyy')]] [[verses.general.from]] [[$mkDate(toDate, 'dd MMM yyyy')]]</div>
         </div>
         <div class="body">
           <!-- table - Start -->
@@ -159,42 +143,48 @@
             <table class="transaction-list-table">
 
               <tr>
-                <th class="cell account-name-column label-cell-in-reports" align="left" style="cursor: pointer;">
+                <th class="cell" align="left" style="cursor: pointer;">
+                  <span>[[verses.accounting.group]]</span>
+                </th>
+                <th class="cell account-name-column" align="left" style="cursor: pointer;">
                   <span>[[verses.accounting.account]]</span>
                 </th>
-                <th class="cell monetary-cell-in-reports" style="cursor: pointer;">
-                  <span>[[verses.accounting.debit]]</span>
-                </th>
-                <th class="cell monetary-cell-in-reports" style="cursor: pointer;">
-                  <span>[[verses.accounting.credit]]</span>
+                <th class="cell account-note-column" align="left" style="cursor: pointer; border-right: none;">
+                  <span>[[verses.accounting.note]]</span>
                 </th>
               </tr>
 
-              <template is="dom-repeat" items="[[accountList]]" as="account">
-                <tr>
-                  <td class="cell label-cell-in-reports" align="left">
-                    [[account.displayName]]
-                  </td>
-                  <td class="cell monetary-cell-in-reports" align="center">
-                    <template is="dom-if" if="[[account.isDebitBalance]]">
-                      [[$applyThousandDecimalFormatting(account.balance)]]
+              <template is="dom-repeat" items="[[accountGroupList]]" as="accountGroup">
+                <template is="dom-repeat" items="[[accountGroup.accountList]]" as="account" index-as="accountIndex">
+                  <tr>
+                    <template is="dom-if" if="[[!accountIndex]]">
+                      <td class="cell" rowspan$="[[accountGroup.accountList.length]]" style="vertical-align: top;">
+                        <template is="dom-if" if="[[$equals(accountGroup.name, 'asset')]]">
+                          [[verses.accounting.assets]]
+                        </template>
+                        <template is="dom-if" if="[[$equals(accountGroup.name, 'liability')]]">
+                          [[verses.accounting.liabilities]]
+                        </template>
+                        <template is="dom-if" if="[[$equals(accountGroup.name, 'equity')]]">
+                          [[verses.accounting.equity]]
+                        </template>
+                        <template is="dom-if" if="[[$equals(accountGroup.name, 'revenue')]]">
+                          [[verses.accounting.revenue]]
+                        </template>
+                        <template is="dom-if" if="[[$equals(accountGroup.name, 'expense')]]">
+                          [[verses.accounting.expense]]
+                        </template>
+                      </td>
                     </template>
-                  </td>
-                  <td class="cell monetary-cell-in-reports" align="center">
-                    <template is="dom-if" if="[[!account.isDebitBalance]]">
-                      [[$applyThousandDecimalFormatting(account.balance)]]
-                    </template>
-                  </td>
-                </tr>
+                    <td class="cell" align="left">
+                      [[account.displayName]]
+                    </td>
+                    <td class="cell" align="left" style="border-right: none;;">
+                      [[account.note]]
+                    </td>
+                  </tr>
+                </template>
               </template>
-
-              <!-- total - start -->
-              <tr>
-                <td class="cell cell-bottom label-cell-in-reports" style="font-weight: bold;">[[verses.general.total]]</td>
-                <td class="cell cell-bottom total-balance-cell monetary-cell-in-reports" align="center">[[$applyThousandDecimalFormatting(totalDebitBalance)]]</td>
-                <td class="cell cell-bottom total-balance-cell monetary-cell-in-reports" align="center">[[$applyThousandDecimalFormatting(totalCreditBalance)]]</td>
-              </tr>
-              <!-- total - end -->
 
             </table>
           </div>
@@ -216,9 +206,9 @@
   </template>
 
   <script>
-    class pageReportTrialBalance extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+    class pageReportChartOfAccounts extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
       static get is() {
-        return 'page-report-trial-balance';
+        return 'page-report-chart-of-accounts';
       }
 
       static get properties() {
@@ -261,10 +251,10 @@
         this.app.currentPageIsModal = true;
         this.app.shouldShowPrintButton = true;
         this.useLanguageServices();
-        this.app.pushPageTitle(this.app.verses.accounting.trialBalance);
+        this.app.pushPageTitle(this.app.verses.accounting.chartOfAccounts);
         if (!this._ensureAccess()) return;
 
-        this._processTrialBalance(() => {
+        this._processAccountList(() => {
           this.self = this;
           this.isReady = true;
         });
@@ -283,28 +273,42 @@
         });
       }
 
-      _fetchTrialBalance(cbfn) {
-        let fromDate = new Date(this.fromDate).getTime();
-        let toDate = new Date(this.toDate).getTime();
-
+      _fetchAccountList(cbfn) {
         let data = {
           organizationId: this.app.organization.id,
-          fromDate,
-          toDate
+          filterByIsMonetary: 'all',
+          filterByNature: 'all',
+          accountIdList: [],
         };
-        this.app.callReportTrialBalanceApi(data, (err, response) => {
+        this.app.callGetAccountListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
-          return cbfn(response);
+          return cbfn(response.accountList);
         });
       }
 
-      _processTrialBalance(cbfn) {
-        this._fetchTrialBalance(({ accountList, totalDebitBalance, totalCreditBalance }) => {
+      _processAccountList(cbfn) {
+        this._fetchAccountList(newAccountList => {
+          // this.accountList = newAccountList;
 
-          this.accountList = accountList;
-          this.totalDebitBalance = totalDebitBalance;
-          this.totalCreditBalance = totalCreditBalance;
+          let groupMap = {};
+          newAccountList.forEach(account => {
+            if (!(account.nature in groupMap)) {
+              groupMap[account.nature] = {
+                name: account.nature,
+                accountList: []
+              };
+            }
+            groupMap[account.nature].accountList.push(account);
+          });
+
+          let groupingOrder = ['asset', 'liability', 'equity', 'revenue', 'expense'];
+
+          this.accountGroupList = groupingOrder.map(key => {
+            return groupMap[key];
+          });
+
+          console.log(this.accountGroupList)
 
           cbfn();
         });
@@ -312,19 +316,12 @@
 
       // region: ui  ===========================
 
-      filterTapped(e = null) {
-        this.isReady = false;
-        this._processTrialBalance(() => {
-          this.isReady = true;
-        });
-      }
-
       printButtonOnTopBarPressed(e = null) {
         window.print();
       }
 
     }
 
-    window.customElements.define(pageReportTrialBalance.is, pageReportTrialBalance);
+    window.customElements.define(pageReportChartOfAccounts.is, pageReportChartOfAccounts);
   </script>
 </dom-module>

@@ -162,10 +162,10 @@
                 <th class="cell" align="left" style="cursor: pointer;">
                   <span>[[verses.accounting.group]]</span>
                 </th>
-                <th class="cell account-name-column" align="left" style="cursor: pointer;">
+                <th class="cell account-name-column label-cell-in-reports" align="left" style="cursor: pointer;">
                   <span>[[verses.accounting.particulars]]</span>
                 </th>
-                <th class="cell" style="cursor: pointer;">
+                <th class="cell monetary-cell-in-reports" style="cursor: pointer;">
                   <span>[[verses.general.amount]]</span>
                 </th>
               </tr>
@@ -177,11 +177,11 @@
                       [[verses.accounting.revenue]]
                     </td>
                   </template>
-                  <td class="cell" align="left">
+                  <td class="cell label-cell-in-reports" align="left">
                     [[account.displayName]]
                   </td>
-                  <td class="cell" align="center">
-                    [[account.balance]]
+                  <td class="cell monetary-cell-in-reports">
+                    [[$applyThousandDecimalFormatting(account.balance)]]
                   </td>
                 </tr>
               </template>
@@ -191,24 +191,24 @@
                     [[verses.accounting.revenue]]
                   </td>
                 </template>
-                <td class="cell" align="left">
+                <td class="cell label-cell-in-reports" align="left">
                   <b>[[verses.accounting.totalRevenue]]</b>
                 </td>
-                <td class="cell" align="center">
-                  <b>[[totalRevenue]]</b>
+                <td class="cell monetary-cell-in-reports">
+                  <b>[[$applyThousandDecimalFormatting(totalRevenue)]]</b>
                 </td>
               </tr>
 
               <template is="dom-repeat" items="[[expenseList]]" as="account">
                 <tr>
                   <template is="dom-if" if="[[!index]]">
-                    <td class="cell" rowspan$="[[$add(expenseList.length, 1)]]" style="vertical-align: top;">Expense</td>
+                    <td class="cell" rowspan$="[[$add(expenseList.length, 1)]]" style="vertical-align: top;">[[verses.accounting.expense]]</td>
                   </template>
-                  <td class="cell" align="left">
+                  <td class="cell label-cell-in-reports" align="left">
                     [[account.displayName]]
                   </td>
-                  <td class="cell" align="center">
-                    [[account.balance]]
+                  <td class="cell monetary-cell-in-reports">
+                    [[$applyThousandDecimalFormatting(account.balance)]]
                   </td>
                 </tr>
               </template>
@@ -218,18 +218,18 @@
                     [[verses.accounting.expense]]
                   </td>
                 </template>
-                <td class="cell" align="left">
+                <td class="cell label-cell-in-reports" align="left">
                   <b>[[verses.accounting.totalExpense]]</b>
                 </td>
-                <td class="cell" align="center">
-                  <b>[[totalExpense]]</b>
+                <td class="cell monetary-cell-in-reports">
+                  <b>[[$applyThousandDecimalFormatting(totalExpense)]]</b>
                 </td>
               </tr>
 
               <!-- total - start -->
               <tr>
                 <td class="cell cell-bottom" colspan="2" style="font-weight: bold;">[[verses.accounting.netProfit]]</td>
-                <td class="cell cell-bottom total-balance-cell" align="center">[[netProfit]]</td>
+                <td class="cell cell-bottom total-balance-cell monetary-cell-in-reports" align="center">[[$applyThousandDecimalFormatting(netProfit)]]</td>
               </tr>
               <!-- total - end -->
 

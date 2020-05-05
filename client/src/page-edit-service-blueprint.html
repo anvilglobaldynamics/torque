@@ -48,7 +48,7 @@
             </paper-input>
 
             <paper-input class="editServiceBlueprintForm--defaultSalePrice" step="0.01" value="{{editServiceBlueprintForm.defaultSalePrice}}" type="number" required min="0" error-message=[[verses.serviceBlueprint.serviceBlueprintDefaultSalePriceInputError]] label=[[verses.serviceBlueprint.serviceBlueprintDefaultSalePriceInput]]>
-              <div slot="suffix">[[app.settings.monetaryUnit]]</div>
+              <div slot="suffix">[[app.organization.settings.monetaryUnit]]</div>
             </paper-input>
 
             <paper-checkbox checked="{{editServiceBlueprintForm.isLongstanding}}" on-change="isServiceLongstandingInputChanged">[[verses.serviceBlueprint.isServiceLongstanding]]</paper-checkbox>

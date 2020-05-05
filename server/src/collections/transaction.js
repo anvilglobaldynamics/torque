@@ -19,7 +19,7 @@ exports.TransactionCollection = class extends Collection {
       organizationId: Joi.number().max(999999999999999).required(),
 
       amount: Joi.number().max(999999999999999).required(),
-      transactionOrigin: Joi.string().valid('system', 'manual', 'add-income', 'add-expense', 'add-asset-purchase').required(),
+      transactionOrigin: Joi.string().valid('system', 'manual', 'add-income', 'add-expense', 'add-asset-purchase', 'debt-payment', 'debt-collection').required(),
 
       debitList: Joi.array().items(Joi.object().keys({
         accountId: Joi.number().max(999999999999999).required(),
@@ -91,7 +91,7 @@ exports.TransactionCollection = class extends Collection {
     return await this._find(query);
   }
 
-  async listByFilters({ organizationId, accountIdList, fromDate, toDate, preset }) {
+  async listByFilters({ organizationId, accountIdList, fromDate, toDate, preset, filterByParty = null }) {
 
     let query = { $and: [] };
 
@@ -111,6 +111,13 @@ exports.TransactionCollection = class extends Collection {
     if (preset === 'only-manual') {
       query.$and.push({
         transactionOrigin: 'manual'
+      });
+    }
+
+    if (filterByParty) {
+      query.$and.push({
+        'party.collectionName': filterByParty.collectionName,
+        'party.documentId': filterByParty.documentId
       });
     }
 

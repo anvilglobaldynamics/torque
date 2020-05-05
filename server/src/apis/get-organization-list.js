@@ -20,11 +20,11 @@ exports.GetOrganizationListApi = class extends Api {
   __getAggregatedOrganization({ employment, organization, settings }) {
     let { id, name, primaryBusinessAddress, phone, email, activeModuleCodeList } = organization;
     let { designation, role, companyProvidedId, isActive, privileges } = employment;
-    let { receiptText1, receiptText2, logoImageId } = settings;
+    let { receiptText1, receiptText2, monetaryUnit, decimalFormatPreset, logoImageId } = settings;
     return {
       id, name, primaryBusinessAddress, phone, email, activeModuleCodeList,
       employment: { designation, role, companyProvidedId, isActive, privileges },
-      settings: { receiptText1, receiptText2, logoImageId }
+      settings: { receiptText1, receiptText2, monetaryUnit, decimalFormatPreset, logoImageId }
     };
   }
 
