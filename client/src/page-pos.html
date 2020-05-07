@@ -526,14 +526,16 @@
           <!-- warehouse selection - end -->
 
           <template is="dom-if" if="[[productSourceSelectionComplete]]">
-            <div class="horizontal layout">
-              <div class$="product-subtab flex [[$getProductSubtabClass('categories', selectedProductSubtab)]]" on-tap="productSubtabCategoryTapped" style="margin-right: 1px;;">
-                Categories
+            <template is="dom-if" if="[[!isInOfflineMode]]">
+              <div class="horizontal layout">
+                <div class$="product-subtab flex [[$getProductSubtabClass('categories', selectedProductSubtab)]]" on-tap="productSubtabCategoryTapped" style="margin-right: 1px;;">
+                  Categories
+                </div>
+                <div class$="product-subtab flex [[$getProductSubtabClass('search', selectedProductSubtab)]]" on-tap="productSubtabSearchTapped">
+                  Search
+                </div>
               </div>
-              <div class$="product-subtab flex [[$getProductSubtabClass('search', selectedProductSubtab)]]" on-tap="productSubtabSearchTapped">
-                Search
-              </div>
-            </div>
+            </template>
           </template>
 
           <!-- categories - subtab - start -->
@@ -1392,7 +1394,7 @@
 
       _initProductCategorySubtab() {
         this.selectedProductCategory = null;
-        if (this.hasModule('MOD_RESTAURANT')) {
+        if (this.hasModule('MOD_RESTAURANT') && !this.isInOfflineMode) {
           this.selectedProductSubtab = 'categories';
         } else {
           this.selectedProductSubtab = 'search';
@@ -1616,10 +1618,12 @@
             this.productSourceSelectionComplete = true;
           }
 
-          // Fetch full inventory to allow category-wise selection
-          this._processEntireInventory(() => {
-            this._processProductCategoryList(() => { });
-          });
+          if (this.hasModule('MOD_PRODUCT') && !this.isInOfflineMode) {
+            // Fetch full inventory to allow category-wise selection
+            this._processEntireInventory(() => {
+              this._processProductCategoryList(() => { });
+            });
+          }
 
           cbfn();
         });
