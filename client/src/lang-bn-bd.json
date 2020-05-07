@@ -127,7 +127,8 @@
     "outlets": "দোকান",
     "warehouses": "গুদাম",
     "author": "রচক",
-    "salePrice": "বিক্রয় মূল্য"
+    "salePrice": "বিক্রয় মূল্য",
+    "reportScrollNote": "রিপোর্টটি বাম থেকে ডানে স্ক্রল করা যায় "
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",

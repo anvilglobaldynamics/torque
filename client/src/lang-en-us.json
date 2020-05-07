@@ -127,7 +127,8 @@
     "outlets": "Outlets",
     "warehouses": "Warehouses",
     "author": "Author",
-    "salePrice": "Sale Price"
+    "salePrice": "Sale Price",
+    "reportScrollNote": "Reports scroll left to right"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",

@@ -78,10 +78,6 @@
 
       /*  */
 
-      .transaction-list-table-container {
-        margin-bottom: 20px;
-        margin-top: 16px;
-      }
 
       .transaction-list-table {
         width: 100%;
@@ -118,6 +114,7 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="filter-toggle-region horizontal layout center">
+        <div class="report-is-filterable-note">[[verses.general.reportScrollNote]]</div>
         <div class="flex"></div>
         <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.general.showFilters]]</paper-toggle-button>
       </div>
@@ -156,7 +153,7 @@
         </div>
         <div class="body">
           <!-- transaction-list - Start -->
-          <div class="transaction-list-table-container">
+          <div class="report-primary-table-container">
             <table class="transaction-list-table">
 
               <tr>

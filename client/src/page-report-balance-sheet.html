@@ -77,10 +77,6 @@
 
       /*  */
 
-      .transaction-list-table-container {
-        margin-bottom: 20px;
-        margin-top: 16px;
-      }
 
       .transaction-list-table {
         width: 100%;
@@ -118,6 +114,12 @@
         font-weight: bold;
       }
 
+      @media (max-width: 480px) {
+        .account-name-column {
+          min-width: unset;
+        }
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -125,6 +127,7 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <div class="filter-toggle-region horizontal layout center">
+        <div class="report-is-filterable-note">[[verses.general.reportScrollNote]]</div>
         <div class="flex"></div>
         <paper-toggle-button checked="{{shouldShowFilters}}">[[verses.general.showFilters]]</paper-toggle-button>
       </div>
@@ -153,7 +156,7 @@
         </div>
         <div class="body">
           <!-- asset-table - Start -->
-          <div class="transaction-list-table-container">
+          <div class="report-primary-table-container">
             <table class="transaction-list-table">
 
               <tr>
@@ -185,7 +188,7 @@
           <!-- asset-table - End -->
 
           <!-- liabilities-and-equity-table - Start -->
-          <div class="transaction-list-table-container">
+          <div class="report-primary-table-container">
             <table class="transaction-list-table">
 
               <tr>
