@@ -173,12 +173,12 @@
                     <div class="description-time">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
                     <div class="description">[[verses.sales.billed]]: [[$applyThousandDecimalFormatting(sale.payment.totalBilled)]] [[app.organization.settings.monetaryUnit]], [[verses.sales.paid]]: [[$applyThousandDecimalFormatting(sale.payment.totalPaidAmount)]] [[app.organization.settings.monetaryUnit]]</div>
 
-                    <template is="dom-if" if="{{sale.productList.length}}">
+                    <!-- <template is="dom-if" if="{{sale.productList.length}}">
                       <span class="description">[[sale.productList.length]] [[verses.sales.products]]</span>
                     </template>
                     <template is="dom-if" if="{{sale.serviceList.length}}">
                       <span class="description">[[sale.serviceList.length]] [[verses.sales.services]]</span>
-                    </template>
+                    </template> -->
 
                   </div>
                 </div>
