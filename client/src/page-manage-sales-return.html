@@ -34,6 +34,7 @@
       .description-time {
         font-size: 12px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -164,6 +165,10 @@
 
       static get properties() {
         return {
+          shouldShowFilters: {
+            type: Boolean,
+            value: false
+          },
           outletId: {
             type: String,
             value: null
@@ -237,18 +242,25 @@
 
       onNavigateOut() {
         super.onNavigateOut();
+
         this.salesNumberToSearch = '';
-        this.resetProperties(
-          'shouldFilterByOutlet',
-          'shouldFilterByCustomer',
-          'outletId',
-          'fromDate',
-          'toDate',
-          'isSearchingCustomer',
-          'customer',
-          'isSearchingOutlet',
-          'outlet'
-        );
+        if (!this.doNotResetOnNextNavigation) {
+          this.resetProperties(
+            'shouldShowFilters',
+            'shouldFilterByOutlet',
+            'shouldFilterByCustomer',
+            'outletId',
+            'fromDate',
+            'toDate',
+            'isSearchingCustomer',
+            'customer',
+            'isSearchingOutlet',
+            'outlet'
+          );
+        } else {
+          this.doNotResetOnNextNavigation = false;
+        }
+
         this.app.popPageTitle();
       }
 
@@ -371,6 +383,7 @@
 
       viewTapped(e) {
         let { saleReturn } = e.model;
+        this.doNotResetOnNextNavigation = true;
         return this.app.navigateTo(`/view-sales-return/salesReturn:${saleReturn.id}`);
       }
 

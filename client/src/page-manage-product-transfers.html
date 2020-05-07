@@ -158,6 +158,10 @@
 
       static get properties() {
         return {
+          shouldShowFilters: {
+            type: Boolean,
+            value: false
+          },
           vendorList: {
             type: Array,
             value: () => []
@@ -211,11 +215,18 @@
 
       onNavigateOut() {
         super.onNavigateOut();
-        this.resetProperties(
-          'vendorSelectedIndex',
-          'fromDate',
-          'toDate'
-        );
+
+        if (!this.doNotResetOnNextNavigation) {
+          this.resetProperties(
+            'shouldShowFilters',
+            'vendorSelectedIndex',
+            'fromDate',
+            'toDate'
+          );
+        } else {
+          this.doNotResetOnNextNavigation = false;
+        }
+
         this.app.popPageTitle();
       }
 
@@ -307,6 +318,7 @@
 
       viewTapped(e) {
         let { productTransfer } = e.model;
+        this.doNotResetOnNextNavigation = true;
         return this.app.navigateTo(`/view-product-transfer/product-transfer:${productTransfer.productTransferNumber}`);
       }
 
