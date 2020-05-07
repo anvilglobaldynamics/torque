@@ -1041,8 +1041,10 @@
                       <paper-item name="cash">[[verses.general.cash]]</paper-item>
                       <paper-item name="card">[[verses.general.card]]</paper-item>
                       <paper-item name="digital">[[verses.general.digital]]</paper-item>
-                      <template is="dom-if" if="[[customer]]">
-                        <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
+                      <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                        <template is="dom-if" if="[[customer]]">
+                          <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
+                        </template>
                       </template>
                     </paper-listbox>
                   </paper-dropdown-menu>
