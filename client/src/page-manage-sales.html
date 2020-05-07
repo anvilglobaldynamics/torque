@@ -132,8 +132,10 @@
 
         <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
-        <div class="horizontal layout">
-          <paper-button raised class="primary flex" on-tap="filterTapped">[[verses.general.filter]]</paper-button>
+        <div class="lone-controls">
+          <paper-button raised class="primary" on-tap="filterTapped">
+            [[verses.general.filter]]
+          </paper-button>
         </div>
 
       </div>
