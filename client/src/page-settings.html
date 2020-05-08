@@ -54,6 +54,13 @@
         color: red;
       }
 
+      .settings-save-button {
+        margin-top: 8px;
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -74,7 +81,7 @@
           <div>[[verses.home.promptForDefaultOutlet]]</div>
           <div class="horizontal layout center">
             <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.defaultOutletSelection]]">
-              <paper-listbox slot="dropdown-content" on-iron-select="backgroundSyncDropdownSelected" selected="{{outletIndexForBackgroundSync}}">
+              <paper-listbox slot="dropdown-content" selected="{{outletIndexForBackgroundSync}}">
                 <template is="dom-repeat" items="[[outletList]]" as="outlet">
                   <paper-item data-id="[[outlet.id]]">[[outlet.name]]</paper-item>
                 </template>
@@ -84,25 +91,27 @@
           </div>
 
           <div class="option">
-            <paper-checkbox on-change="settingsChanged" checked="{{bypassHomepage}}" disabled="[[$notSelected(outletIndexForBackgroundSync)]]">[[verses.settings.takeToDefaultOutlet]]</paper-checkbox>
+            <paper-checkbox checked="{{bypassHomepage}}" disabled="[[$notSelected(outletIndexForBackgroundSync)]]">[[verses.settings.takeToDefaultOutlet]]</paper-checkbox>
             <div class="note">
               [[verses.settings.takeToDefaultOutletDetail]]
             </div>
           </div>
 
           <div class="option">
-            <paper-checkbox on-change="settingsChanged" checked="{{allowBackgroundSync}}" disabled="[[$notSelected(outletIndexForBackgroundSync)]]">[[verses.settings.useBackgroundSync]]</paper-checkbox>
+            <paper-checkbox checked="{{allowBackgroundSync}}" disabled="[[$notSelected(outletIndexForBackgroundSync)]]">[[verses.settings.useBackgroundSync]]</paper-checkbox>
             <div class="note">
               [[verses.settings.useBackgroundSyncDetails]]
             </div>
           </div>
+
+          <paper-button class="secondary settings-save-button" raised on-tap="updateOfflineModeSettingsTapped">[[verses.general.update]]</paper-button>
         </div>
 
         <div class="card vertical layout">
           <div class="option">
             <div class="horizontal layout center">
               <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.defaultPrinterFormat]]">
-                <paper-listbox slot="dropdown-content" on-iron-select="defaultPrinterFormatDropdownSelected" selected="{{indexOfDefaultPrinterFormat}}">
+                <paper-listbox slot="dropdown-content" selected="{{indexOfDefaultPrinterFormat}}">
                   <paper-item data-id="a4">[[verses.settings.defaultPrinterFormatA4]]</paper-item>
                   <paper-item data-id="slim">[[verses.settings.defaultPrinterFormatSlim]]</paper-item>
                 </paper-listbox>
@@ -111,15 +120,17 @@
             <div class="note">
               [[verses.settings.defaultPrinterFormatDetail]]
             </div>
+            <paper-button class="secondary settings-save-button" raised on-tap="updatePrinterFormatSettingsTapped">[[verses.general.update]]</paper-button>
           </div>
         </div>
 
         <div class="card vertical layout">
           <div class="option">
-            <paper-input on-input="settingsChanged" type="number" min="0" max="100" value="{{minimumProductQuantity}}" label="[[verses.settings.minimumProductQuantity]]"></paper-input>
+            <paper-input type="number" min="0" max="100" value="{{minimumProductQuantity}}" label="[[verses.settings.minimumProductQuantity]]"></paper-input>
             <div class="note">
               [[verses.settings.minimumProductQuantityDetail]]
             </div>
+            <paper-button class="secondary settings-save-button" raised on-tap="updateMinimumProductQuantitySettingsTapped">[[verses.general.update]]</paper-button>
           </div>
         </div>
 
@@ -153,9 +164,7 @@
               </paper-listbox>
             </paper-dropdown-menu>
 
-            <!-- <paper-input value="{{organizationSettings.decimalFormatPreset}}" maxlength="64" label="[[verses.settings.decimalFormatPreset]]"></paper-input> -->
-
-            <paper-button class="primary" raised on-tap="updateOrganizationSettingsTapped" style="margin-top: 8px;">[[verses.general.update]]</paper-button>
+            <paper-button class="secondary" raised on-tap="updateOrganizationMonetarySettingsTapped" style="margin-top: 8px;">[[verses.general.update]]</paper-button>
 
           </div>
 
@@ -168,7 +177,7 @@
 
             <paper-input value="{{organizationSettings.receiptText2}}" maxlength="64" label="[[verses.settings.receiptText2]]"></paper-input>
 
-            <paper-button class="primary" raised on-tap="updateOrganizationSettingsTapped" style="margin-top: 8px;">[[verses.general.update]]</paper-button>
+            <paper-button class="secondary" raised on-tap="updateOrganizationReceiptSettingsTapped" style="margin-top: 8px;">[[verses.general.update]]</paper-button>
 
           </div>
         </template>
@@ -186,11 +195,12 @@
 
         <div class="card vertical layout">
           <div class="option">
-            <paper-checkbox on-change="settingsChanged" checked="{{shouldUseWebsockets}}">[[verses.settings.useWebsockets]]</paper-checkbox>
+            <paper-checkbox checked="{{shouldUseWebsockets}}">[[verses.settings.useWebsockets]]</paper-checkbox>
             <div class="note">
               [[verses.settings.useWebsocketsDetail]]
             </div>
           </div>
+          <paper-button class="secondary settings-save-button" raised on-tap="updateWebSocketSettingsTapped">[[verses.general.update]]</paper-button>
         </div>
 
       </template>
@@ -332,26 +342,8 @@
         });
       }
 
-      backgroundSyncDropdownSelected() {
-        window.setTimeout(() => {
-          this.settingsChanged();
-          window.setTimeout(() => {
-            this.app._processBackgroundSync(() => { });
-          })
-        }, 100);
-      }
-
-      defaultPrinterFormatDropdownSelected() {
-        window.setTimeout(() => {
-          this.settingsChanged();
-        }, 100);
-      }
-
       cancelTapped() {
         this.outletIndexForBackgroundSync = null;
-        window.setTimeout(() => {
-          this.settingsChanged();
-        }, 100);
       }
 
       monetaryUnitChanged() {
@@ -362,7 +354,7 @@
         }
       }
 
-      settingsChanged(e) {
+      settingsChanged(mode) {
         let settings = this._getNormalizedSettings();
 
         if ((!this.outletList) || (this.outletList.length === 0)) return;
@@ -382,12 +374,44 @@
         this.app.db.update('settings', ({
           which
         }) => which === 'only', (doc) => {
-          doc.shouldUseWebsockets = this.shouldUseWebsockets;
-          doc.minimumProductQuantity = this.minimumProductQuantity;
-          doc.defaultOutletMetaMap = settings.defaultOutletMetaMap;
-          doc.defaultPrinterFormat = this.printerFormatOptionList[this.indexOfDefaultPrinterFormat];
+          if (mode === 'websocket') {
+            doc.shouldUseWebsockets = this.shouldUseWebsockets;
+          }
+          if (mode === 'product-quantity') {
+            doc.minimumProductQuantity = this.minimumProductQuantity;
+          }
+          if (mode === 'offline-mode') {
+            doc.defaultOutletMetaMap = settings.defaultOutletMetaMap;
+          }
+          if (mode === 'printer-format') {
+            doc.defaultPrinterFormat = this.printerFormatOptionList[this.indexOfDefaultPrinterFormat];
+          }
           return doc
         });
+
+        let message = this.app.verses.settings.settingsSaved;
+        this.app.showToast(message, _ => { });
+      }
+
+      updateWebSocketSettingsTapped(e = null) {
+        this.settingsChanged('websocket');
+      }
+
+      updatePrinterFormatSettingsTapped(e = null) {
+        this.settingsChanged('printer-format');
+      }
+
+      updateMinimumProductQuantitySettingsTapped(e = null) {
+        this.settingsChanged('product-quantity');
+      }
+
+      updateOfflineModeSettingsTapped() {
+        window.setTimeout(() => {
+          this.settingsChanged('offline-mode');
+          window.setTimeout(() => {
+            this.app._processBackgroundSync(() => { });
+          }, 10);
+        }, 10);
       }
 
       // region: organization-settings =================================
@@ -399,11 +423,33 @@
         };
       }
 
-      updateOrganizationSettingsTapped(e = null) {
+      updateOrganizationReceiptSettingsTapped(e = null) {
         let data = {
-          organizationId: this.app.organization.id
+          organizationId: this.app.organization.id,
+          receiptText1: this.organizationSettings.receiptText1,
+          receiptText2: this.organizationSettings.receiptText2,
+          monetaryUnit: this.app.organization.settings.monetaryUnit,
+          decimalFormatPreset: this.app.organization.settings.decimalFormatPreset,
+          logoImageId: this.app.organization.settings.logoImageId
         };
-        Object.assign(data, this.organizationSettings);
+        this.app.callEditOrganizationSettingsApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.app.showModalDialog(this.verses.general.saved, this.verses.settings.changesSaved, () => {
+            this.app.logoutTapped();
+          });
+        });
+      }
+
+      updateOrganizationMonetarySettingsTapped(e = null) {
+        let data = {
+          organizationId: this.app.organization.id,
+          receiptText1: this.app.organization.settings.receiptText1,
+          receiptText2: this.app.organization.settings.receiptText2,
+          monetaryUnit: this.organizationSettings.monetaryUnit,
+          decimalFormatPreset: this.organizationSettings.decimalFormatPreset,
+          logoImageId: this.app.organization.settings.logoImageId
+        };
         this.app.callEditOrganizationSettingsApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);

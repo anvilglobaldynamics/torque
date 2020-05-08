@@ -918,7 +918,8 @@
     "noOrganizationSettingsPrivilege": "You do not have the required privilege to modify organization-wide settings.",
     "entireOrganizationWarning": "The settings below affect the entire organization.",
     "changesSaved": "Changes have been saved for the entire organization. Log in again.",
-    "decimalFormatPreset": "Decimal Format"
+    "decimalFormatPreset": "Decimal Format",
+    "settingsSaved": "Settings has been updated."
   },
   "verify": {
     "verificationModalTitle": "Verification SMS Sent",
