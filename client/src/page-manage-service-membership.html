@@ -114,9 +114,13 @@
                 </template>
                 <template is="dom-if" if="[[customer]]">
                   [[verses.general.customer]]:
-                  <b>[[customer.fullName]]</b> ([[customer.phone]])
-                  <br>[[verses.general.balance]]:
-                  <b>[[$applyThousandDecimalFormatting(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]</b>
+                  <b>[[customer.fullName]]</b> 
+                  <br>[[customer.phone]]
+
+                  <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                    <br>[[verses.general.balance]]:
+                    <b>[[$applyThousandDecimalFormatting(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]</b>
+                  </template>
                 </template>
               </div>
               <div class="horizontal layout center">
@@ -158,8 +162,10 @@
         <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
         <!-- outlet search - end -->
 
-        <div class="horizontal layout">
-          <paper-button raised class="primary flex" on-tap="filterTapped">[[verses.general.filter]]</paper-button>
+        <div class="lone-controls">
+          <paper-button raised class="primary flex" on-tap="filterTapped">
+            [[verses.general.filter]]
+          </paper-button>
         </div>
 
       </div>
@@ -237,6 +243,10 @@
 
       static get properties() {
         return {
+          shouldShowFilters: {
+            type: Boolean,
+            value: false
+          },
           outletId: {
             type: String,
             value: null

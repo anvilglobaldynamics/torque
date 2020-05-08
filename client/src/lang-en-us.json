@@ -59,7 +59,7 @@
     "customer": "Customer",
     "vendor": "Vendor",
     "outlet": "Outlet",
-    "filter": "Filter",
+    "filter": "Apply Filter",
     "date": "Date",
     "dated": "Dated",
     "number": "Number",
@@ -127,7 +127,8 @@
     "outlets": "Outlets",
     "warehouses": "Warehouses",
     "author": "Author",
-    "salePrice": "Sale Price"
+    "salePrice": "Sale Price",
+    "reportScrollNote": "Reports scroll left to right"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -917,7 +918,8 @@
     "noOrganizationSettingsPrivilege": "You do not have the required privilege to modify organization-wide settings.",
     "entireOrganizationWarning": "The settings below affect the entire organization.",
     "changesSaved": "Changes have been saved for the entire organization. Log in again.",
-    "decimalFormatPreset": "Decimal Format"
+    "decimalFormatPreset": "Decimal Format",
+    "settingsSaved": "Settings has been updated."
   },
   "verify": {
     "verificationModalTitle": "Verification SMS Sent",

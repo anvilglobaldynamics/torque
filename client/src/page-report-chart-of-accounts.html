@@ -77,10 +77,6 @@
 
       /*  */
 
-      .transaction-list-table-container {
-        margin-bottom: 20px;
-        margin-top: 16px;
-      }
 
       .transaction-list-table {
         width: 100%;
@@ -130,6 +126,7 @@
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+      <div class="report-is-filterable-note" style="margin-top: 8px; margin-bottom: 8px;">[[verses.general.reportScrollNote]]</div>
 
       <div class="report">
         <div class="header vertical layout">
@@ -139,7 +136,7 @@
         </div>
         <div class="body">
           <!-- table - Start -->
-          <div class="transaction-list-table-container">
+          <div class="report-primary-table-container">
             <table class="transaction-list-table">
 
               <tr>

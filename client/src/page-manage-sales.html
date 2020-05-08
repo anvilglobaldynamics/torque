@@ -90,7 +90,7 @@
                 <template is="dom-if" if="[[customer]]">
                   [[verses.general.customer]]:
                   <b>[[customer.fullName]]</b> [[customer.phone]]
-                  
+
                   <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
                     <br>
                     [[verses.general.balance]]: <b>[[$applyThousandDecimalFormatting(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]</b>
@@ -132,8 +132,10 @@
 
         <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
-        <div class="horizontal layout">
-          <paper-button raised class="primary flex" on-tap="filterTapped">[[verses.general.filter]]</paper-button>
+        <div class="lone-controls">
+          <paper-button raised class="primary" on-tap="filterTapped">
+            [[verses.general.filter]]
+          </paper-button>
         </div>
 
       </div>
@@ -173,12 +175,12 @@
                     <div class="description-time">[[$mkDate(sale.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
                     <div class="description">[[verses.sales.billed]]: [[$applyThousandDecimalFormatting(sale.payment.totalBilled)]] [[app.organization.settings.monetaryUnit]], [[verses.sales.paid]]: [[$applyThousandDecimalFormatting(sale.payment.totalPaidAmount)]] [[app.organization.settings.monetaryUnit]]</div>
 
-                    <template is="dom-if" if="{{sale.productList.length}}">
+                    <!-- <template is="dom-if" if="{{sale.productList.length}}">
                       <span class="description">[[sale.productList.length]] [[verses.sales.products]]</span>
                     </template>
                     <template is="dom-if" if="{{sale.serviceList.length}}">
                       <span class="description">[[sale.serviceList.length]] [[verses.sales.services]]</span>
-                    </template>
+                    </template> -->
 
                   </div>
                 </div>
@@ -216,6 +218,10 @@
 
       static get properties() {
         return {
+          shouldShowFilters:{
+            type: Boolean,
+            value: false
+          },
           outletId: {
             type: String,
             value: null
@@ -304,17 +310,24 @@
 
       onNavigateOut() {
         super.onNavigateOut();
-        this.resetProperties(
-          'shouldFilterByOutlet',
-          'shouldFilterByCustomer',
-          'outletId',
-          'fromDate',
-          'toDate',
-          'isSearchingCustomer',
-          'customer',
-          'isSearchingOutlet',
-          'outlet'
-        );
+
+        if (!this.doNotResetOnNextNavigation) {
+          this.resetProperties(
+            'shouldShowFilters',
+            'shouldFilterByOutlet',
+            'shouldFilterByCustomer',
+            'outletId',
+            'fromDate',
+            'toDate',
+            'isSearchingCustomer',
+            'customer',
+            'isSearchingOutlet',
+            'outlet'
+          );
+        } else {
+          this.doNotResetOnNextNavigation = false;
+        }
+
         this.app.popPageTitle();
       }
 
@@ -437,6 +450,7 @@
 
       viewTapped(e) {
         let { sale } = e.model;
+        this.doNotResetOnNextNavigation = true;
         return this.app.navigateTo(`/view-sales/sales:${sale.id}`);
       }
 

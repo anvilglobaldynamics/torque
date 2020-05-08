@@ -111,9 +111,13 @@
                 </template>
                 <template is="dom-if" if="[[customer]]">
                   [[verses.general.customer]]:
-                  <b>[[customer.fullName]]</b> ([[customer.phone]])
-                  <br> [[verses.general.balance]]:
-                  <b>[[$applyThousandDecimalFormatting(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]</b>
+                  <b>[[customer.fullName]]</b> 
+                  <br>[[customer.phone]]
+                  
+                  <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                    <br> [[verses.general.balance]]:
+                    <b>[[$applyThousandDecimalFormatting(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]</b>
+                  </template>
                 </template>
               </div>
               <div class="horizontal layout center">
@@ -157,7 +161,9 @@
               <paper-item name="cash">[[verses.general.cash]]</paper-item>
               <paper-item name="card">[[verses.general.card]]</paper-item>
               <paper-item name="digital">[[verses.general.digital]]</paper-item>
-              <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
+              <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+                <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
+              </template>
             </paper-listbox>
           </paper-dropdown-menu>
         </div>
