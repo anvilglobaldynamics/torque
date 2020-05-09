@@ -147,6 +147,7 @@
     "emailOrPhoneInputMessage": "আপনি আপনার অ্যাকাউন্ট খুলতে ব্যবহৃত ফোন নম্বর/ইমেইল লিখুন।"
   },
   "register": {
+    "registerTitle": "লিপি অ্যাকাউন্ট খুলুন",
     "register": "অ্যাকাউন্ট খুলুন",
     "fullnameInput": "আপনার পুরো নাম দিন",
     "fullnameInputError": "এই নামটি গ্রহণযোগ্য নয়।",
