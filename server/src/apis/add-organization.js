@@ -24,6 +24,26 @@ exports.AddOrganizationApi = class extends Api.mixin(OrganizationMixin, Accounti
     });
   }
 
+  async createDefaultPaymentMethods({ organizationId }) {
+    await this.database.paymentMethod.create({
+      organizationId,
+      name: 'Cash', 
+      monetaryAccountId: (await this.getAccountByCodeName({ organizationId, codeName: 'CASH' })).id
+    });
+
+    await this.database.paymentMethod.create({
+      organizationId,
+      name: 'Card', 
+      monetaryAccountId: (await this.getAccountByCodeName({ organizationId, codeName: 'BANK' })).id
+    });
+
+    await this.database.paymentMethod.create({
+      organizationId,
+      name: 'Digital', 
+      monetaryAccountId: (await this.getAccountByCodeName({ organizationId, codeName: 'BANK' })).id
+    });
+  }
+
   async handle({ body, userId }) {
     let { name, primaryBusinessAddress, phone, email, activeModuleCodeList } = body;
     await this._checkIfMaxOrganizationLimitReached({ userId });
@@ -38,6 +58,7 @@ exports.AddOrganizationApi = class extends Api.mixin(OrganizationMixin, Accounti
     await this._addModuleActivation({ organizationId, activeModuleCodeList });
 
     await this.createDefaultAccounts({ organizationId, userId });
+    await this.createDefaultPaymentMethods({ organizationId });
 
     return { status: "success", organizationId, employmentId };
   }

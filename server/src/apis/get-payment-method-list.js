@@ -48,7 +48,7 @@ exports.GetPaymentMethodListApi = class extends Api {
   async handle({ body }) {
     let { organizationId, paymentMethodIdList } = body;
     let paymentMethodList = await this.__getPaymentMethodList({ organizationId, paymentMethodIdList });
-    this.__appendMonetaryAccountDetails({ paymentMethodList })
+    await this.__appendMonetaryAccountDetails({ paymentMethodList })
     return { paymentMethodList };
   }
 
