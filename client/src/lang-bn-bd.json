@@ -198,6 +198,7 @@
     "manageProductTransfer": "পণ্য ট্রান্সফার রেকর্ড",
     "manageProductAcquisition": "পণ্য ক্রয় রেকর্ড",
     "manageDiscountPresets": "ডিসকাউন্টস",
+    "managePaymentMethods": "পেমেন্ট মেথড",
     "productSalesReport": "পণ্য বিক্রয় রিপোর্ট"
   },
   "titleBar": {

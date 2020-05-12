@@ -22,7 +22,7 @@ exports.AddPaymentMethodApi = class extends Api {
     return [{
       organizationBy: "organizationId",
       privilegeList: [
-        "PRIV_MODIFY_PAYMENT_METHODS"
+        // "PRIV_MODIFY_PAYMENT_METHODS"
       ]
     }];
   }

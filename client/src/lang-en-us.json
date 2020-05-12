@@ -198,6 +198,7 @@
     "manageProductTransfer": "Product Transfer Records",
     "manageProductAcquisition": "Product Acquisition Records",
     "manageDiscountPresets": "Discounts",
+    "managePaymentMethods": "Payment Methods",
     "productSalesReport": "Product Sales Report"
   },
   "titleBar": {
@@ -1102,6 +1103,24 @@
     "deleteQuestion": "Delete discount preset?",
     "deleteQuestionMessage": "Are you sure you want to delete this discount preset",
     "discountPresetNameInput": "Discount Preset Name"
+  },
+  "paymentMethod": {
+    "pageTitle": "Payment Methods",
+    "editPaymentMethodTitle": "Edit Payment Method",
+    "addPaymentMethodTitle": "Add Payment Method",
+    "noPaymentMethodFound": "No Payment Method found.",
+    "discountType": "Discount Type",
+    "discountValueInput": "Discount Value",
+    "discountAmount": "Discount",
+    "createPaymentMethod": "Create Payment Method",
+    "updatePaymentMethod": "Update Payment Method",
+    "paymentMethodCreated": "New Payment Method has been created.",
+    "paymentMethodUpdated": "Payment Method has been updated.",
+    "createNewPaymentMethod": "Create New Payment Method",
+    "paymentMethodDeleted": "Payment Method has been deleted.",
+    "deleteQuestion": "Delete Payment Method?",
+    "deleteQuestionMessage": "Are you sure you want to delete this Payment Method",
+    "paymentMethodNameInput": "Payment Method Name"
   },
   "collectionReport": {
     "collectionReportTitle": "Collection Report",

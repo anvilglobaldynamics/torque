@@ -113,6 +113,8 @@
 <link rel="lazy-import" href="page-scan-identifier-code.html">
 <link rel="lazy-import" href="page-manage-discount-presets.html">
 <link rel="lazy-import" href="page-edit-discount-preset.html">
+<link rel="lazy-import" href="page-manage-payment-methods.html">
+<link rel="lazy-import" href="page-edit-payment-method.html">
 <link rel="lazy-import" href="page-graph-sales.html">
 <link rel="lazy-import" href="page-print-product-transfer.html">
 <link rel="lazy-import" href="page-print-product-acquisition.html">
@@ -524,6 +526,7 @@
                 <hr class="custom-sidebar-divider">
 
                 <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>
+                <a name="manage-payment-methods" href="#/manage-payment-methods">[[verses.sidebar.managePaymentMethods]]</a>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
                   <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.manageProductCategories]]</a>
                 </template>
@@ -643,6 +646,8 @@
               <page-scan-identifier-code name="scan-identifier-code"></page-scan-identifier-code>
               <page-manage-discount-presets name="manage-discount-presets"></page-manage-discount-presets>
               <page-edit-discount-preset name="edit-discount-preset"></page-edit-discount-preset>
+              <page-manage-payment-methods name="manage-payment-methods"></page-manage-payment-methods>
+              <page-edit-payment-method name="edit-payment-method"></page-edit-payment-method>
               <page-report-select-product-blueprints name="report-select-product-blueprints"></page-report-select-product-blueprints>
               <page-report-select-product-categories name="report-select-product-categories"></page-report-select-product-categories>
               <page-graph-sales name="graph-sales"></page-graph-sales>

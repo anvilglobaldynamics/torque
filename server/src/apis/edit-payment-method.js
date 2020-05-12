@@ -27,7 +27,7 @@ exports.EditPaymentMethodApi = class extends Api {
         errorCode: "PAYMENT_METHOD_INVALID"
       },
       privilegeList: [
-        "PRIV_MODIFY_PAYMENT_METHODS"
+        // "PRIV_MODIFY_PAYMENT_METHODS"
       ]
     }];
   }
