@@ -37,14 +37,18 @@ exports.GetPaymentMethodListApi = class extends Api {
     }
   }
 
-  async handle({ body }) {
-    let { organizationId, paymentMethodIdList } = body;
-    let paymentMethodList = await this.__getPaymentMethodList({ organizationId, paymentMethodIdList });
+  async __appendMonetaryAccountDetails({ paymentMethodList }) {
     (await this.crossmap({
       source: paymentMethodList,
       sourceKey: 'monetaryAccountId',
       target: 'account'
     })).forEach((account, paymentMethod) => paymentMethod.monetaryAccountDetails = account);
+  }
+
+  async handle({ body }) {
+    let { organizationId, paymentMethodIdList } = body;
+    let paymentMethodList = await this.__getPaymentMethodList({ organizationId, paymentMethodIdList });
+    this.__appendMonetaryAccountDetails({ paymentMethodList })
     return { paymentMethodList };
   }
 

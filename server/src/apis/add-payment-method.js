@@ -13,7 +13,7 @@ exports.AddPaymentMethodApi = class extends Api {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
 
-      name: Joi.string().min(1).max(64).required(),
+      name: Joi.string().min(1).max(32).required(),
       monetaryAccountId: Joi.number().max(999999999999999).required(),
     });
   }
