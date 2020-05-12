@@ -113,6 +113,11 @@ const { EditDiscountPresetApi } = require('./apis/edit-discount-preset');
 const { DeleteDiscountPresetApi } = require('./apis/delete-discount-preset');
 const { GetDiscountPresetListApi } = require('./apis/get-discount-preset-list');
 
+
+const { AddPaymentMethodApi } = require('./apis/add-payment-method');
+const { EditPaymentMethodApi } = require('./apis/edit-payment-method');
+const { GetPaymentMethodListApi } = require('./apis/get-payment-method-list');
+
 const { AddProductCategoryApi } = require('./apis/add-product-category');
 const { EditProductCategoryApi } = require('./apis/edit-product-category');
 const { GetProductCategoryListApi } = require('./apis/get-product-category-list');
@@ -390,6 +395,10 @@ class Program {
     server.registerPostApi('/api/edit-discount-preset', EditDiscountPresetApi);
     server.registerPostApi('/api/delete-discount-preset', DeleteDiscountPresetApi);
     server.registerPostApi('/api/get-discount-preset-list', GetDiscountPresetListApi);
+
+    server.registerPostApi('/api/add-payment-method', AddPaymentMethodApi);
+    server.registerPostApi('/api/edit-payment-method', EditPaymentMethodApi);
+    server.registerPostApi('/api/get-payment-method-list', GetPaymentMethodListApi);
 
     server.registerPostApi('/api/add-product-category', AddProductCategoryApi);
     server.registerPostApi('/api/edit-product-category', EditProductCategoryApi);

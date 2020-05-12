@@ -31,6 +31,7 @@ const { ServiceCollection } = require('./collections/service');
 const { ServiceMembershipCollection } = require('./collections/service-membership');
 const { ModuleActivationCollection } = require('./collections/module-activation');
 const { DiscountPresetCollection } = require('./collections/discount-preset');
+const { PaymentMethodCollection } = require('./collections/payment-method');
 const { CacheOutletGeolocationCollection } = require('./collections/cache-outlet-geolocation');
 const { ProductCategoryCollection } = require('./collections/product-category');
 const { VendorCollection } = require('./collections/vendor');
@@ -78,6 +79,7 @@ class DatabaseService {
     this.serviceMembership = new ServiceMembershipCollection(this.engine, this);
     this.moduleActivation = new ModuleActivationCollection(this.engine, this);
     this.discountPreset = new DiscountPresetCollection(this.engine, this);
+    this.paymentMethod = new PaymentMethodCollection(this.engine, this);
     this.productCategory = new ProductCategoryCollection(this.engine, this);
     this.vendor = new VendorCollection(this.engine, this);
     this.cacheOutletGeolocation = new CacheOutletGeolocationCollection(this.engine, this);
