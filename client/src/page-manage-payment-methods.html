@@ -53,7 +53,7 @@
                 <div class="horizontal layout item center">
                   <div class="vertical layout flex">
                     <div class="name">[[paymentMethod.name]]</div>
-                    [[verses.accounting.monetaryAccount]]: [[paymentMethod.monetaryAccountId]]
+                    [[verses.accounting.monetaryAccount]]: [[paymentMethod.monetaryAccountDetails.displayName]]
                   </div>
                   <div class="horizontal layout wrap">
                     <paper-icon-button class="button-icon" icon="icons:create" on-tap="editTapped"></paper-icon-button>
@@ -173,7 +173,8 @@
       // region: ui  ===========================
 
       editTapped(e) {
-        return this.app.navigateTo(`/edit-payment-method/payment-method:${this.paymentMethod.id}`);
+        let { paymentMethod } = e.model;
+        return this.app.navigateTo(`/edit-payment-method/payment-method:${paymentMethod.id}`);
       }
 
       createTapped(e = null) {

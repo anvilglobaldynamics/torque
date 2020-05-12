@@ -37,7 +37,7 @@
           <div class="card vertical layout">
             <paper-input class="editPaymentMethodForm--name" value="{{editPaymentMethodForm.name}}" required minlength="3" error-message=[[verses.paymentMethod.paymentMethodNameInputError]] label=[[verses.paymentMethod.paymentMethodNameInput]]></paper-input>
 
-            <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.account]]" class="mr-4">
+            <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.monetaryAccount]]" class="mr-4">
               <paper-listbox slot="dropdown-content" selected="{{editPaymentMethodForm.monetaryAccountId}}" attr-for-selected="key">
                 <template is="dom-repeat" items="[[accountList]]" as="account">
                   <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>

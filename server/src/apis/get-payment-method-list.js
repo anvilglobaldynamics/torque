@@ -15,7 +15,7 @@ exports.GetPaymentMethodListApi = class extends Api {
   get requestSchema() {
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
-      paymentMethodIdList: Joi.array().items(Joi.number()).default([]).optional() 
+      paymentMethodIdList: Joi.array().items(Joi.number()).default([]).optional()
     });
   }
 
@@ -34,12 +34,17 @@ exports.GetPaymentMethodListApi = class extends Api {
       return paymentMethodList;
     } else {
       return await this.database.paymentMethod.listByOrganizationId({ organizationId });
-    }   
+    }
   }
 
   async handle({ body }) {
-    let { organizationId , paymentMethodIdList} = body;
+    let { organizationId, paymentMethodIdList } = body;
     let paymentMethodList = await this.__getPaymentMethodList({ organizationId, paymentMethodIdList });
+    (await this.crossmap({
+      source: paymentMethodList,
+      sourceKey: 'monetaryAccountId',
+      target: 'account'
+    })).forEach((account, paymentMethod) => paymentMethod.monetaryAccountDetails = account);
     return { paymentMethodList };
   }
 
