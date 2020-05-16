@@ -27,10 +27,6 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     // NOTE: since paidAmount includes changeAmount, we confirmed after discussion.
     let paidAmountWithoutChange = (paymentListEntry.paidAmount - paymentListEntry.changeAmount);
 
-    if (paymentListEntry.paymentMethod === 'change-wallet') {
-      await this._deductFromChangeWalletAsPayment({ customer, amount: paidAmountWithoutChange });
-    }
-
     payment.totalPaidAmount += paidAmountWithoutChange;
     let wasChangeSavedInChangeWallet = false;
     if (paymentListEntry.changeAmount && paymentListEntry.shouldSaveChangeInAccount) {
@@ -43,13 +39,13 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     }
 
     let {
-      paymentMethod, paidAmount, changeAmount
+      paymentMethodId, paidAmount, changeAmount
     } = paymentListEntry;
 
     payment.paymentList.push({
       createdDatetimeStamp: Date.now(),
       acceptedByUserId: userId,
-      paymentMethod, paidAmount, changeAmount,
+      paymentMethodId, paidAmount, changeAmount,
       wasChangeSavedInChangeWallet
     });
 
@@ -84,9 +80,9 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     // TODO: should check if adding product(s) salePrice and modifiers (discountedAmount, serviceChargeAmount) equals totalBilled
     // throw new CodedError("BILL_INACCURATE", "Bill is mathematically inaccurate");
     // Also should validate the new payment portion. i.e. paidAmount > changeAmount etc
-    // Also, if paymentMethod is 'change-wallet' then customer must exist
+    // Also, if paymentMethodId is 'change-wallet' then customer must exist
 
-    if (paymentListEntry.paymentMethod === 'change-wallet' || paymentListEntry.shouldSaveChangeInAccount) {
+    if (paymentListEntry.shouldSaveChangeInAccount) {
       await this.ensureModule('MOD_CUSTOMER_ACCOUNT_BALANCE');
     }
 
@@ -130,7 +126,7 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     let {
       totalAmount, vatAmount, discountPresetId, discountType, discountValue, discountedAmount, serviceChargeAmount,
       totalBilled, totalBillBeforeRounding, roundedByAmount,
-      paymentMethod, paidAmount, changeAmount, shouldSaveChangeInAccount
+      paymentMethodId, paidAmount, changeAmount, shouldSaveChangeInAccount
     } = originalPayment;
 
     let payment = {
@@ -140,7 +136,7 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
     }
 
     let paymentListEntry = {
-      paymentMethod, paidAmount, changeAmount, shouldSaveChangeInAccount
+      paymentMethodId, paidAmount, changeAmount, shouldSaveChangeInAccount
     }
 
     return { payment, paymentListEntry };

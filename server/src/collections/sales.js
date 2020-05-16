@@ -60,7 +60,9 @@ exports.SalesCollection = class extends Collection {
 
             paidAmount: Joi.number().max(999999999999999).required(),
             changeAmount: Joi.number().max(999999999999999).required(),
-            paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
+
+            paymentMethodId: Joi.number().max(999999999999999).required(),
+            
             wasChangeSavedInChangeWallet: Joi.boolean().required()
           })
         )
