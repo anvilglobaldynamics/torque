@@ -178,7 +178,6 @@ describe.only('Sales', _ => {
               apiKey,
               organizationId,
             }, (data) => {
-              console.log(data)
               paymentMethodCash = data.paymentMethodCash;
               addOutlet({
                 apiKey,
@@ -381,7 +380,7 @@ describe.only('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -427,7 +426,7 @@ describe.only('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -480,7 +479,7 @@ describe.only('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -533,7 +532,7 @@ describe.only('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -586,7 +585,7 @@ describe.only('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -608,7 +607,7 @@ describe.only('Sales', _ => {
 
   let liteProductBlueprintIdList = null;
 
-  it('api/lite-add-sales (Valid, No Customer)', testDoneFn => {
+  it.skip('api/lite-add-sales (Valid, No Customer)', testDoneFn => {
 
     callApi('api/lite-add-sales', {
       json: {
@@ -641,7 +640,7 @@ describe.only('Sales', _ => {
           totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         }
       }
     }, (err, response, body) => {
@@ -654,7 +653,7 @@ describe.only('Sales', _ => {
 
   });
 
-  it('api/lite-add-sales (Valid, No Customer, Existing Blueprint)', testDoneFn => {
+  it.skip('api/lite-add-sales (Valid, No Customer, Existing Blueprint)', testDoneFn => {
 
     callApi('api/lite-add-sales', {
       json: {
@@ -687,7 +686,7 @@ describe.only('Sales', _ => {
           totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         }
       }
     }, (err, response, body) => {
@@ -773,7 +772,7 @@ describe.only('Sales', _ => {
           paidAmount: 0,
           changeAmount: (0 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -826,7 +825,7 @@ describe.only('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -879,7 +878,7 @@ describe.only('Sales', _ => {
           paidAmount: 1300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: true,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -988,7 +987,7 @@ describe.only('Sales', _ => {
           paidAmount: 1300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: true,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -1869,7 +1868,7 @@ describe.only('Sales', _ => {
           paidAmount: 30, // out of total billed 212.799999999
           changeAmount: 0,
           shouldSaveChangeInAccount: true,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -1900,7 +1899,7 @@ describe.only('Sales', _ => {
           paidAmount: 20,
           changeAmount: 0,
           shouldSaveChangeInAccount: true,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         }
       }
     }, (err, response, body) => {
@@ -1911,7 +1910,7 @@ describe.only('Sales', _ => {
 
   });
 
-  it('api/add-additional-payment (Valid, change-wallet, Less than total billed, user has that amount)', testDoneFn => {
+  it.skip('api/add-additional-payment (Valid, change-wallet, Less than total billed, user has that amount)', testDoneFn => {
 
     callApi('api/add-additional-payment', {
       json: {
@@ -1933,7 +1932,7 @@ describe.only('Sales', _ => {
 
   });
 
-  it('api/add-additional-payment (Invalid, change-wallet, Less than total billed, user does not have that amount)', testDoneFn => {
+  it.skip('api/add-additional-payment (Invalid, change-wallet, Less than total billed, user does not have that amount)', testDoneFn => {
 
     callApi('api/add-additional-payment', {
       json: {
@@ -1967,7 +1966,7 @@ describe.only('Sales', _ => {
           paidAmount: 20,
           changeAmount: 5,
           shouldSaveChangeInAccount: true,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         }
       }
     }, (err, response, body) => {
@@ -2006,10 +2005,10 @@ describe.only('Sales', _ => {
         salesId,
         customerId,
         payment: {
-          paidAmount: 180,
-          changeAmount: 16,
-          shouldSaveChangeInAccount: true,
-          paymentMethod: 'cash'
+          paidAmount: 180+60,
+          changeAmount: 66,
+          shouldSaveChangeInAccount: false,
+          paymentMethodId: paymentMethodCash.id
         }
       }
     }, (err, response, body) => {
@@ -2020,7 +2019,7 @@ describe.only('Sales', _ => {
 
   });
 
-  it('api/get-customer (to verify impact of add-additional-payment)', testDoneFn => {
+  it.skip('api/get-customer (to verify impact of add-additional-payment)', testDoneFn => {
 
     callApi('api/get-customer', {
       json: {
@@ -2102,7 +2101,7 @@ describe.only('Sales', _ => {
           paidAmount: 1000,
           changeAmount: (1000 - (basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2155,7 +2154,7 @@ describe.only('Sales', _ => {
           paidAmount: 1000,
           changeAmount: (1000 - (basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2224,7 +2223,7 @@ describe.only('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2277,7 +2276,7 @@ describe.only('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2330,7 +2329,7 @@ describe.only('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2383,7 +2382,7 @@ describe.only('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2808,7 +2807,7 @@ describe.only('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2849,7 +2848,7 @@ describe.only('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2890,7 +2889,7 @@ describe.only('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2931,7 +2930,7 @@ describe.only('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2972,7 +2971,7 @@ describe.only('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -3397,7 +3396,7 @@ describe.only('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -3450,7 +3449,7 @@ describe.only('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -3526,7 +3525,7 @@ describe.only('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -3628,7 +3627,7 @@ describe.only('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -3681,7 +3680,7 @@ describe.only('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -3749,7 +3748,7 @@ describe.only('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,

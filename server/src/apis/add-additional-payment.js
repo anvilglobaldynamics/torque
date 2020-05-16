@@ -18,7 +18,7 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
       salesId: Joi.number().max(999999999999999).required(),
       customerId: Joi.number().max(999999999999999).required(),
       payment: Joi.object().keys({
-        paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
+        paymentMethodId: Joi.number().max(999999999999999).required(),
         paidAmount: Joi.number().min(1).max(999999999999999).required(),
         changeAmount: Joi.number().max(999999999999999).required(),
         shouldSaveChangeInAccount: Joi.boolean().required()
@@ -55,14 +55,10 @@ exports.AddAdditionalPaymentApi = class extends Api.mixin(InventoryMixin, Custom
   }
 
   async _validateNewPayment({ payment, paymentListEntry, customer }) {
-    if (paymentListEntry.paymentMethod === 'change-wallet' || paymentListEntry.shouldSaveChangeInAccount) {
+    if ( paymentListEntry.shouldSaveChangeInAccount) {
       await this.ensureModule('MOD_CUSTOMER_ACCOUNT_BALANCE');
     }
 
-    if (paymentListEntry.paymentMethod === 'change-wallet' && customer.changeWalletBalance < paymentListEntry.paidAmount) {
-      // throw new CodedError("CUSTOMER_HAS_INSUFFICIENT_BALANCE_IN_CHANGE_WALLET", "The customer does not have enough balance in change wallet.");
-      // NOTE: skipping the error throwing here since the error is being thrown by _deductFromChangeWalletAsPayment
-    }
     let calculatedChangeAmount = Math.max((payment.totalPaidAmount + paymentListEntry.paidAmount) - payment.totalBilled, 0);
     if (this.round(calculatedChangeAmount) !== this.round(paymentListEntry.changeAmount)) {
       throw new CodedError("INCORRECT_PAYMENT_CALCULATION", "Change calculation is not accurate.");

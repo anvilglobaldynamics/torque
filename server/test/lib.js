@@ -1994,7 +1994,10 @@ exports.validateCollectionSchema = (doc) => {
       fullName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
     }),
-    paymentMethodId: Joi.number().max(999999999999999).required(),
+    // FIXME
+    // paymentMethodId: Joi.number().max(999999999999999).required(),
+    paymentMethodId: Joi.optional(),
+    paymentMethod: Joi.optional(),
   });
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
