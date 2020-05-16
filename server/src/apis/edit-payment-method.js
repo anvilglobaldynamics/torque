@@ -2,8 +2,9 @@ const { Api } = require('../api-base');
 const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('../utils/coded-error');
 const { extract } = require('../utils/extract');
+const { AccountingMixin } = require('./mixins/accounting-mixin');
 
-exports.EditPaymentMethodApi = class extends Api {
+exports.EditPaymentMethodApi = class extends Api.mixin(AccountingMixin) {
 
   get autoValidates() { return true; }
 
@@ -14,7 +15,7 @@ exports.EditPaymentMethodApi = class extends Api {
       paymentMethodId: Joi.number().max(999999999999999).required(),
 
       name: Joi.string().min(1).max(32).required(),
-      monetaryAccountId: Joi.number().max(999999999999999).required(),
+      monetaryAccountId: Joi.number().max(999999999999999).required().allow(null), // to allow users without accounting
     });
   }
 
@@ -40,6 +41,12 @@ exports.EditPaymentMethodApi = class extends Api {
 
   async handle({ body }) {
     let { paymentMethodId, name, monetaryAccountId } = body;
+
+    // set monetary account to cash if none provided
+    if (!monetaryAccountId) {
+      monetaryAccountId = (await this.getAccountByCodeName({ organizationId, codeName: 'CASH' })).id;
+    }
+
     await this._updatePaymentMethod({ paymentMethodId, name, monetaryAccountId });
     return { status: "success" };
   }

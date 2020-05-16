@@ -37,13 +37,15 @@
           <div class="card vertical layout">
             <paper-input class="editPaymentMethodForm--name" value="{{editPaymentMethodForm.name}}" required minlength="1" error-message=[[verses.paymentMethod.paymentMethodNameInputError]] label=[[verses.paymentMethod.paymentMethodNameInput]]></paper-input>
 
-            <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.monetaryAccount]]" class="mr-4">
-              <paper-listbox slot="dropdown-content" selected="{{editPaymentMethodForm.monetaryAccountId}}" attr-for-selected="key">
-                <template is="dom-repeat" items="[[accountList]]" as="account">
-                  <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
-                </template>
-              </paper-listbox>
-            </paper-dropdown-menu>
+            <template is="dom-if" if="[[hasModule('MOD_ACCOUNTING')]]">
+              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.monetaryAccount]]" class="mr-4">
+                <paper-listbox slot="dropdown-content" selected="{{editPaymentMethodForm.monetaryAccountId}}" attr-for-selected="key">
+                  <template is="dom-repeat" items="[[accountList]]" as="account">
+                    <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
+                  </template>
+                </paper-listbox>
+              </paper-dropdown-menu>
+            </template>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -114,7 +116,7 @@
         }
         if (!this._ensureAccess()) return;
 
-        this._processAccountList(() => {
+        let fn = () => {
           if (this.editMode) {
             this._processGetPaymentMethod(() => {
               this.isReady = true;
@@ -124,7 +126,14 @@
               this.isReady = true;
             });
           }
-        });
+        };
+
+        if (this.hasModule('MOD_ACCOUNTING')){
+          this._processAccountList(fn);
+        } else {
+          fn();
+        }
+
 
       }
 
@@ -219,7 +228,7 @@
 
       _processAccountList(cbfn) {
         this._fetchAccountList(newAccountList => {
-            this.accountList = newAccountList
+          this.accountList = newAccountList
           cbfn();
         });
       }
