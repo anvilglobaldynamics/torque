@@ -113,6 +113,18 @@ exports.addOrganization = (data, callback) => {
   })
 }
 
+// ===================================== Payment Method
+
+exports.getPaymentMethodCash = (data, callback) => {
+  callApi('api/get-payment-method-list', {
+    json: data
+  }, (err, response, body) => {
+    let { paymentMethodList } = body;
+    let paymentMethodCash = paymentMethodList.find(pm => pm.monetaryAccountDetails.codeName === 'CASH');
+    callback({ paymentMethodCash });
+  })
+}
+
 // ===================================== Warehouse
 
 exports.addWarehouse = (data, callback) => {
@@ -1549,7 +1561,7 @@ exports.validateSalesSchema = (doc) => {
 
           paidAmount: Joi.number().max(999999999999999).required(),
           changeAmount: Joi.number().max(999999999999999).required(),
-          paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
+          paymentMethodId: Joi.number().max(999999999999999).required(),
           wasChangeSavedInChangeWallet: Joi.boolean().required()
         })
       )
@@ -1713,7 +1725,7 @@ exports.validateSalesSchemaWhenListObj = (doc) => {
 
           paidAmount: Joi.number().max(999999999999999).required(),
           changeAmount: Joi.number().max(999999999999999).required(),
-          paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
+          paymentMethodId: Joi.number().max(999999999999999).required(),
           wasChangeSavedInChangeWallet: Joi.boolean().required()
         })
       )
@@ -1982,7 +1994,7 @@ exports.validateCollectionSchema = (doc) => {
       fullName: Joi.string().min(1).max(64).required(),
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
     }),
-    paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required()
+    paymentMethodId: Joi.number().max(999999999999999).required(),
   });
   let { error, value } = Joi.validate(doc, schema);
   if (error) throw error;
