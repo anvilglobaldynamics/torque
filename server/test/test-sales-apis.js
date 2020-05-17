@@ -153,7 +153,7 @@ let validDiscountPresetId2 = null;
 
 let paymentMethodCash = null;
 
-describe.only('Sales', _ => {
+describe('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -1910,51 +1910,6 @@ describe.only('Sales', _ => {
 
   });
 
-  it.skip('api/add-additional-payment (Valid, change-wallet, Less than total billed, user has that amount)', testDoneFn => {
-
-    callApi('api/add-additional-payment', {
-      json: {
-        apiKey,
-        salesId,
-        customerId,
-        payment: {
-          paidAmount: 10,
-          changeAmount: 0,
-          shouldSaveChangeInAccount: true,
-          paymentMethod: 'change-wallet'
-        }
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiSuccessResponse(body);
-      testDoneFn();
-    });
-
-  });
-
-  it.skip('api/add-additional-payment (Invalid, change-wallet, Less than total billed, user does not have that amount)', testDoneFn => {
-
-    callApi('api/add-additional-payment', {
-      json: {
-        apiKey,
-        salesId,
-        customerId,
-        payment: {
-          paidAmount: 60,
-          changeAmount: 0,
-          shouldSaveChangeInAccount: true,
-          paymentMethod: 'change-wallet'
-        }
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiFailureResponse(body);
-      expect(body.error.code).to.equal('INSUFFICIENT_BALANCE');
-      testDoneFn();
-    });
-
-  });
-
   it('api/add-additional-payment (Invalid, cash, incorrect change calculation)', testDoneFn => {
 
     callApi('api/add-additional-payment', {
@@ -2016,25 +1971,6 @@ describe.only('Sales', _ => {
       validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
-
-  });
-
-  it.skip('api/get-customer (to verify impact of add-additional-payment)', testDoneFn => {
-
-    callApi('api/get-customer', {
-      json: {
-        apiKey,
-        customerId
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGetCustomerApiSuccessResponse(body);
-      validateCustomerSchema(body.customer);
-      let diff = body.customer.changeWalletBalance - customerRef1.changeWalletBalance;
-      diff = Math.round(diff * 100) / 100;
-      expect(diff).to.equal(16)
-      testDoneFn();
-    })
 
   });
 
