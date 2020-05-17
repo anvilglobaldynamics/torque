@@ -56,7 +56,7 @@ exports.PaymentMethodCollection = class extends Collection {
   }
 
   async listByOrganizationId({ organizationId }) {
-    return await this._find({ organizationId });
+    return await this._find({ organizationId }, { sort: { id: 1 } });
   }
 
   async findByIdAndOrganizationId({ id, organizationId }) {
@@ -65,7 +65,7 @@ exports.PaymentMethodCollection = class extends Collection {
 
   async listByOrganizationIdAndIdList({ organizationId, idList }) {
     let query = { organizationId, id: { $in: idList } };
-    return await this._find(query);
+    return await this._find(query, { sort: { id: 1 } });
   }
 
 }

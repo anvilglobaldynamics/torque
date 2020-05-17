@@ -153,7 +153,7 @@ let validDiscountPresetId2 = null;
 
 let paymentMethodCash = null;
 
-describe('Sales', _ => {
+describe.only('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -2510,12 +2510,13 @@ describe('Sales', _ => {
         shouldFilterByOutlet: false,
         shouldFilterByCustomer: false,
 
-        paymentMethod: null,
+        paymentMethodId: null,
 
         fromDate: monthsEarlierDate,
         toDate: (new Date()).getTime(),
       }
     }, (err, response, body) => {
+      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateReportCollectionDetailsApiSuccessResponse(body);
       body.collectionList.forEach(doc => {
@@ -2538,16 +2539,17 @@ describe('Sales', _ => {
         shouldFilterByOutlet: false,
         shouldFilterByCustomer: false,
 
-        paymentMethod: 'cash',
+        paymentMethodId: paymentMethodCash.id,
 
         fromDate: monthsEarlierDate,
         toDate: (new Date()).getTime(),
       }
     }, (err, response, body) => {
+      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateReportCollectionDetailsApiSuccessResponse(body);
       body.collectionList.forEach(doc => {
-        expect(doc.paymentMethod).to.equal('cash')
+        expect(doc.paymentMethodId).to.equal(paymentMethodCash.id)
         validateCollectionSchema(doc);
       });
       testDoneFn();

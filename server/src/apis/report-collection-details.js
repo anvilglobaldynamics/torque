@@ -19,7 +19,7 @@ exports.ReportCollectionDetailsApi = class extends Api {
       shouldFilterByOutlet: Joi.boolean().required(),
       shouldFilterByCustomer: Joi.boolean().required(),
 
-      paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet', null).required(),
+      paymentMethodId: Joi.number().max(999999999999999).required().allow(null),
 
       fromDate: Joi.number().max(999999999999999).required(),
       toDate: Joi.number().max(999999999999999).required()
@@ -102,7 +102,7 @@ exports.ReportCollectionDetailsApi = class extends Api {
           collectedAmount: payment.paidAmount - (payment.changeAmount || 0),
           collectedByUserId: payment.acceptedByUserId,
           collectedDatetimeStamp: payment.createdDatetimeStamp,
-          paymentMethod: payment.paymentMethod
+          paymentMethodId: payment.paymentMethodId
         });
       });
     });
@@ -117,22 +117,22 @@ exports.ReportCollectionDetailsApi = class extends Api {
     });
   }
 
-  __filterByPaymentMethod({ paymentMethod, collectionList }) {
-    if (paymentMethod === null) return collectionList;
+  __filterByPaymentMethod({ paymentMethodId, collectionList }) {
+    if (paymentMethodId === null) return collectionList;
     return collectionList.filter((collection) => {
-      return collection.paymentMethod === paymentMethod;
+      return collection.paymentMethodId === paymentMethodId;
     });
   }
 
   async handle({ body }) {
-    let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, paymentMethod } = body;
+    let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, paymentMethodId } = body;
     toDate = this.__getExtendedToDate(toDate);
     await this.__verifyOutletIfNeeded({ outletId, shouldFilterByOutlet });
     await this.__verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer });
     let salesList = await this.__getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate });
     let collectionList = this.__prepareCollectionDetails({ salesList });
     collectionList = this.__filterByDateRange({ fromDate, toDate, collectionList });
-    collectionList = this.__filterByPaymentMethod({ paymentMethod, collectionList });
+    collectionList = this.__filterByPaymentMethod({ paymentMethodId, collectionList });
     await this.__includeUserInformation({ collectionList });
     return { collectionList };
   }

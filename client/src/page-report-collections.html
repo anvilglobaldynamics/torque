@@ -84,6 +84,7 @@
       .date-span {
         font-size: 12px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -111,9 +112,9 @@
                 </template>
                 <template is="dom-if" if="[[customer]]">
                   [[verses.general.customer]]:
-                  <b>[[customer.fullName]]</b> 
+                  <b>[[customer.fullName]]</b>
                   <br>[[customer.phone]]
-                  
+
                   <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
                     <br> [[verses.general.balance]]:
                     <b>[[$applyThousandDecimalFormatting(customer.changeWalletBalance)]] [[app.organization.settings.monetaryUnit]]</b>
@@ -155,17 +156,18 @@
         <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
         <div class="card vertical layout">
-          <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.collectionReport.paymentMethod]]" class="mr-4">
-            <paper-listbox slot="dropdown-content" selected="{{paymentMethod}}" attr-for-selected="name">
+
+          <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4">
+            <paper-listbox slot="dropdown-content" selected="{{paymentMethodId}}" attr-for-selected="name">
               <paper-item name="all">[[verses.collectionReport.allPaymentMethods]]</paper-item>
-              <paper-item name="cash">[[verses.general.cash]]</paper-item>
-              <paper-item name="card">[[verses.general.card]]</paper-item>
-              <paper-item name="digital">[[verses.general.digital]]</paper-item>
-              <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
-                <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
+              <template is="dom-repeat" items="[[paymentMethodList]]" as="paymentMethod">
+                <paper-item name="[[paymentMethod.id]]">
+                  [[paymentMethod.name]]
+                </paper-item>
               </template>
             </paper-listbox>
           </paper-dropdown-menu>
+
         </div>
 
         <div class="lone-controls">
@@ -201,38 +203,14 @@
               <strong>[[$applyThousandDecimalFormatting(collectionSummary.collectedAmountSum)]]</strong>
             </div>
           </div>
-          <template is="dom-if" if="[[$equals(paymentMethod, 'all')]]">
-            <div class="horizontal layout center item wrap">
-              <div class="flex">
-                [[verses.general.cash]]
-              </div>
-              <div>
-                <strong>[[$applyThousandDecimalFormatting(collectionSummary.collectedCashSum)]]</strong>
-              </div>
-            </div>
-            <div class="horizontal layout center item wrap">
-              <div class="flex">
-                [[verses.general.card]]
-              </div>
-              <div>
-                <strong>[[$applyThousandDecimalFormatting(collectionSummary.collectedCardSum)]]</strong>
-              </div>
-            </div>
-            <div class="horizontal layout center item wrap">
-              <div class="flex">
-                [[verses.general.digital]]
-              </div>
-              <div>
-                <strong>[[$applyThousandDecimalFormatting(collectionSummary.collectedDigitalSum)]]</strong>
-              </div>
-            </div>
-            <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
+          <template is="dom-if" if="[[$equals(paymentMethodId, 'all')]]">
+            <template is="dom-repeat" items="[[collectionSummary.sumList]]" as="sum">
               <div class="horizontal layout center item wrap">
                 <div class="flex">
-                  [[verses.general.balance]]
+                  [[sum.name]]
                 </div>
                 <div>
-                  <strong>[[$applyThousandDecimalFormatting(collectionSummary.collectedAccountBalanceSum)]]</strong>
+                  <strong>[[$applyThousandDecimalFormatting(sum.sum)]]</strong>
                 </div>
               </div>
             </template>
@@ -259,7 +237,7 @@
                   <strong>[[verses.collectionReport.collectedBy]]: </strong>[[collection.collectedByUser.fullName]] ([[collection.collectedByUser.phone]])
                 </div>
                 <div class="description">
-                  <strong>[[verses.collectionReport.paymentMethod]]: </strong>[[collection.paymentMethod]]
+                  <strong>[[verses.collectionReport.paymentMethod]]: </strong>[[$getPaymentMethodName(collection.paymentMethodId)]]
                 </div>
               </div>
               <div class="description" style="padding-top: 10px; padding-bottom: 10px; padding-left: 20px;">[[$applyThousandDecimalFormatting(collection.collectedAmount)]]</div>
@@ -343,7 +321,7 @@
             value: null,
             observer: 'outletChanged'
           },
-          paymentMethod: {
+          paymentMethodId: {
             type: String,
             value: 'all'
           },
@@ -368,13 +346,15 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.collectionReport.collectionReportTitle);
         if (!this._ensureAccess()) return;
-        this._processCollectionList(() => {
-          if ('outlet' in this.params) {
-            this.isSearchingOutlet = true;
-            this.elem('elem-outlet-selector').forceSelect(this.params.outlet);
-          }
-          this.self = this;
-          this.isReady = true;
+        this._processPaymentMethodList(() => {
+          this._processCollectionList(() => {
+            if ('outlet' in this.params) {
+              this.isSearchingOutlet = true;
+              this.elem('elem-outlet-selector').forceSelect(this.params.outlet);
+            }
+            this.self = this;
+            this.isReady = true;
+          });
         });
       }
 
@@ -391,7 +371,7 @@
           'isSearchingOutlet',
           'outlet',
           'showProductDetails',
-          'paymentMethod'
+          'paymentMethodId'
         );
         this.app.shouldShowPrintButton = false;
         this.app.popPageTitle();
@@ -430,6 +410,7 @@
           this.shouldFilterByOutlet = false;
         }
 
+        let paymentMethodId = (this.paymentMethodId === 'all' ? null : parseInt(String(this.paymentMethodId)));
         let data = {
           organizationId: this.app.organization.id,
           outletId,
@@ -438,7 +419,7 @@
           shouldFilterByCustomer: this.shouldFilterByCustomer,
           fromDate,
           toDate,
-          paymentMethod: (this.paymentMethod === 'all' ? null : (this.paymentMethod || null))
+          paymentMethodId
         };
 
         this.app.callReportCollectionDetailsApi(data, (err, response) => {
@@ -459,23 +440,57 @@
         this.app.storeInSession('last-selected-outlet', this.outlet);
       }
 
+      _fetchPaymentMethodList(cbfn) {
+        let data = { organizationId: this.app.organization.id, paginate: this.paginate };
+        this.app.callGetPaymentMethodListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.paymentMethodList);
+        });
+      }
+
+      _processPaymentMethodList(cbfn) {
+        this._fetchPaymentMethodList(paymentMethodList => {
+          this.paymentMethodList = paymentMethodList;
+          if (paymentMethodList.length === 0) {
+            return this.app.navigateTo('/manage-payment-methods');
+          }
+
+          let defaultPaymentMethod = 'all';
+
+          this.set('paymentMethodId', defaultPaymentMethod);
+          return cbfn();
+        });
+      }
+
+      _findPaymentMethod(id) {
+        return this.paymentMethodList.find(pm => pm.id === id);
+      }
+
+      $getPaymentMethodName(id) {
+        return this._findPaymentMethod(id).name;
+      }
+
       _processCollectionList(cbfn) {
         this._fetchCollectionList(newCollectionList => {
           this.collectionList = newCollectionList;
+
+          let sumMap = {};
+          newCollectionList.forEach(collection => {
+            let pm = this._findPaymentMethod(collection.paymentMethodId);
+            if (!(pm.name in sumMap)) {
+              sumMap[pm.name] = {
+                name: pm.name,
+                sum: 0
+              }
+            }
+            sumMap[pm.name].sum += collection.collectedAmount;
+          });
+
           this.collectionSummary = {
             collectedAmountSum: newCollectionList.reduce((sum, collection) => (sum + collection.collectedAmount), 0),
-            collectedCashSum: newCollectionList
-              .filter(collection => collection.paymentMethod === 'cash')
-              .reduce((sum, collection) => (sum + collection.collectedAmount), 0),
-            collectedCardSum: newCollectionList
-              .filter(collection => collection.paymentMethod === 'card')
-              .reduce((sum, collection) => (sum + collection.collectedAmount), 0),
-            collectedDigitalSum: newCollectionList
-              .filter(collection => collection.paymentMethod === 'digital')
-              .reduce((sum, collection) => (sum + collection.collectedAmount), 0),
-            collectedAccountBalanceSum: newCollectionList
-              .filter(collection => collection.paymentMethod === 'change-wallet')
-              .reduce((sum, collection) => (sum + collection.collectedAmount), 0)
+            sumList: Object.keys(sumMap).map(key => sumMap[key])
           }
           cbfn();
         });
