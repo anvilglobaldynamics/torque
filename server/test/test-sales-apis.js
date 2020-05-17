@@ -2516,7 +2516,6 @@ describe.only('Sales', _ => {
         toDate: (new Date()).getTime(),
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateReportCollectionDetailsApiSuccessResponse(body);
       body.collectionList.forEach(doc => {
@@ -2545,7 +2544,6 @@ describe.only('Sales', _ => {
         toDate: (new Date()).getTime(),
       }
     }, (err, response, body) => {
-      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateReportCollectionDetailsApiSuccessResponse(body);
       body.collectionList.forEach(doc => {
