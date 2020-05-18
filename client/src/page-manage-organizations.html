@@ -57,6 +57,8 @@
                 <div class="title">[[organization.name]]</div>
                 <div class="description">[[organization.employment.designation]] ([[organization.employment.role]])</div>
               </div>
+
+              <paper-icon-button icon="create" on-tap="editTapped"></paper-icon-button>
               <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
             </div>
           </template>
@@ -143,6 +145,11 @@
         return this.app.navigateTo(`/home/org:${organization.id}`);
         // this.app.wasLastNavigationBypassed = false;
         // return this.app.navigateTo('/home/bypassable:yes');
+      }
+
+      editTapped(e) {
+        let { organization } = e.model;
+        return this.app.navigateTo(`/edit-organization/organization:${organization.id}`);
       }
 
       // region: misc =================================
