@@ -38,8 +38,7 @@ exports.EditOrganizationApi = class extends Api.mixin(OrganizationMixin) {
     this.ensureUpdate('organization', res);
   }
 
-  handle({ body }) {
-    // TODO: modify user id?
+  async handle({ body }) {
     let { organizationId, name, primaryBusinessAddress, phone, email } = body;
 
     await this._updateOrganization({ organizationId, name, primaryBusinessAddress, phone, email });
