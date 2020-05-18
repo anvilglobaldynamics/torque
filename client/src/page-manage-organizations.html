@@ -97,7 +97,9 @@
         this.app.pushPageTitle(this.app.verses.organization.manageOrganizationTitle);
         if (!this._ensureAccess()) return;
         this._processOrganizationList(_ => {
-          this.isReady = true;
+          this._updateCurrentOrganization(_ => {
+            this.isReady = true;
+          });
         });
       }
 
@@ -129,6 +131,14 @@
           this.organizationList = newOrganizationList;
           cbfn();
         });
+      }
+
+      _updateCurrentOrganization(cbfn) {
+        let organization = this.organizationList.find(organization => organization.id === this.app.organization.id);
+        this.app.removeSettings();
+        this.app.removePreviousOrganization();
+        this.app.saveOrganization(organization);
+        cbfn();
       }
 
       // region: ui  ===========================
