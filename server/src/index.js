@@ -33,7 +33,7 @@ let { UserResetPasswordConfirmApi } = require('./legacy-apis/user-reset-password
 
 const { AddOrganizationApi } = require('./apis/add-organization');
 const { GetOrganizationListApi } = require('./apis/get-organization-list');
-let { EditOrganizationApi } = require('./legacy-apis/edit-organization');
+const { EditOrganizationApi } = require('./apis/edit-organization');
 const { GetActivatedPackageListApi } = require('./apis/get-activated-package-list');
 
 const { AddNewEmployeeApi } = require('./apis/add-new-employee');
