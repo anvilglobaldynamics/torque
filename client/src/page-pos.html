@@ -1046,11 +1046,9 @@
                     </paper-listbox>
                   </paper-dropdown-menu>
 
-                  <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
-                    <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]" on-focus="paidAmountInputFocuesd">
-                      <div slot="suffix">[[app.organization.settings.monetaryUnit]]</div>
-                    </paper-input>
-                  </template>
+                  <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]" on-focus="paidAmountInputFocuesd">
+                    <div slot="suffix">[[app.organization.settings.monetaryUnit]]</div>
+                  </paper-input>
 
                   <template is="dom-if" if="[[payment.changeAmount]]">
                     <br> [[verses.pos.changeAmount]]:
@@ -2502,9 +2500,9 @@
       //   return (paymentMethod === 'cash');
       // }
 
-      isPaymentMethodChangeWallet(paymentMethod) {
-        return (paymentMethod === 'change-wallet');
-      }
+      // isPaymentMethodChangeWallet(paymentMethod) {
+      //   return (paymentMethod === 'change-wallet');
+      // }
 
       isValidCreditSale(customer, totalBilled, paidAmount) {
         return (customer && totalBilled > paidAmount);
