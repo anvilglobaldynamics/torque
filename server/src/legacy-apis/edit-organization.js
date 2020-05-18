@@ -1,10 +1,10 @@
+const { Api } = require('./../api-base');
+const Joi = require('joi');
+const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
+const { extract } = require('./../utils/extract');
+const { OrganizationMixin } = require('./mixins/organization-mixin');
 
-let { LegacyApi } = require('./../legacy-api-base');
-let Joi = require('joi');
-
-let { collectionCommonMixin } = require('./mixins/collection-common');
-
-exports.EditOrganizationApi = class extends collectionCommonMixin(LegacyApi) {
+exports.EditOrganizationApi = class extends Api.mixin(OrganizationMixin) {
 
   get autoValidates() { return true; }
 
@@ -12,7 +12,6 @@ exports.EditOrganizationApi = class extends collectionCommonMixin(LegacyApi) {
 
   get requestSchema() {
     return Joi.object().keys({
-      // apiKey: Joi.string().length(64).required(),
       organizationId: Joi.number().max(999999999999999).required(),
 
       name: Joi.string().min(1).max(64).required(),
@@ -24,25 +23,27 @@ exports.EditOrganizationApi = class extends collectionCommonMixin(LegacyApi) {
 
   get accessControl() {
     return [{
-      organizationBy: "organizationId",
+      organizationBy: {
+        select: "organizationId",
+        errorCode: "OUTLET_INVALID"
+      },
       privilegeList: [
         "PRIV_MODIFY_ORGANIZATION"
       ]
     }];
   }
 
-  _updateOrganization({ organizationId, name, primaryBusinessAddress, phone, email }, cbfn) {
-    this.legacyDatabase.organization.update({ organizationId }, { name, primaryBusinessAddress, phone, email }, (err, wasUpdated) => {
-      if (!this._ensureUpdate(err, wasUpdated, "organization")) return;
-      return cbfn();
-    });
+  async _updateOrganization({ organizationId, name, primaryBusinessAddress, phone, email }) {
+    let res = await this.database.organization.setDetails({ id: organizationId }, { name, primaryBusinessAddress, phone, email });
+    this.ensureUpdate('organization', res);
   }
 
-  handle({ body, userId }) {
+  handle({ body }) {
+    // TODO: modify user id?
     let { organizationId, name, primaryBusinessAddress, phone, email } = body;
-    this._updateOrganization({ organizationId, name, primaryBusinessAddress, phone, email }, _ => {
-      this.success({ status: "success" });
-    });
+
+    await this._updateOrganization({ organizationId, name, primaryBusinessAddress, phone, email });
+    return { status: "success" };
   }
 
 }
