@@ -132,6 +132,7 @@ describe.only('Organization', _ => {
         email: organizationToBeEdited.email
       }
     }, (err, response, body) => {
+      console.log(body);
       expect(response.statusCode).to.equal(200);
       validateGenericApiSuccessResponse(body);
       testDoneFn();
