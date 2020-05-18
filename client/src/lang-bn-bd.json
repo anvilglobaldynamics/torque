@@ -272,6 +272,8 @@
   },
   "organization": {
     "addOrganizationTitle": "সংস্থা তৈরি করুন",
+    "editOrganizationTitle": "আপডেট সংস্থা",
+    "updateOrganization": "সংস্থা আপডেট করুন ",
     "isNotOneOutletOrg": "এই সংস্থার একের বেশি দোকান আছে।",
     "industryCategory": "সংস্থার শিল্পের ধরণ",
     "nameOfYourOrganization": "আপনার সংস্থার নাম",

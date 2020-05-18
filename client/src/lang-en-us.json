@@ -270,6 +270,8 @@
   },
   "organization": {
     "addOrganizationTitle": "Add Organization",
+    "editOrganizationTitle": "Edit Organization",
+    "updateOrganization": "Update Organization",
     "isNotOneOutletOrg": "This organization has more than one outlets.",
     "industryCategory": "Industry Category of Organization",
     "nameOfYourOrganization": "Name of your Organization",
