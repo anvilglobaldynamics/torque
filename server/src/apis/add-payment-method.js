@@ -23,7 +23,7 @@ exports.AddPaymentMethodApi = class extends Api.mixin(AccountingMixin) {
     return [{
       organizationBy: "organizationId",
       privilegeList: [
-        // "PRIV_MODIFY_PAYMENT_METHODS"
+        "PRIV_MODIFY_PAYMENT_METHODS"
       ]
     }];
   }

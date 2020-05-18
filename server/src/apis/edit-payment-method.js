@@ -28,7 +28,7 @@ exports.EditPaymentMethodApi = class extends Api.mixin(AccountingMixin) {
         errorCode: "PAYMENT_METHOD_INVALID"
       },
       privilegeList: [
-        // "PRIV_MODIFY_PAYMENT_METHODS"
+        "PRIV_MODIFY_PAYMENT_METHODS"
       ]
     }];
   }

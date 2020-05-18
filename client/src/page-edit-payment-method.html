@@ -128,7 +128,7 @@
           }
         };
 
-        if (this.hasModule('MOD_ACCOUNTING')){
+        if (this.hasModule('MOD_ACCOUNTING')) {
           this._processAccountList(fn);
         } else {
           fn();
@@ -149,7 +149,7 @@
           authLevel: 'organization-selected',
           privilegeList: [
             'PRIV_MANAGE_ACCOUNTING',
-            // 'PRIV_MODIFY_DISCOUNT_PRESETS'
+            'PRIV_MODIFY_PAYMENT_METHODS'
           ]
         });
       }
