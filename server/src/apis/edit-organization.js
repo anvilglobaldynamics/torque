@@ -23,10 +23,7 @@ exports.EditOrganizationApi = class extends Api.mixin(OrganizationMixin) {
 
   get accessControl() {
     return [{
-      organizationBy: {
-        select: "organizationId",
-        errorCode: "OUTLET_INVALID"
-      },
+      organizationBy: "organizationId",
       privilegeList: [
         "PRIV_MODIFY_ORGANIZATION"
       ]
