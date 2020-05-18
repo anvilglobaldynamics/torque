@@ -153,7 +153,7 @@ let validDiscountPresetId2 = null;
 
 let paymentMethodCash = null;
 
-describe.only('Sales', _ => {
+describe('Sales', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {

@@ -202,17 +202,14 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     let debitList = [];
 
     if (accounting.debitMonetary) {
-      if (payment.paymentList[0].paymentMethod === 'cash') {
-        debitList.push({
-          accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'CASH' })).id,
-          amount: accounting.debitMonetary
-        });
-      } else {
-        debitList.push({
-          accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'BANK' })).id,
-          amount: accounting.debitMonetary
-        });
-      }
+      let { paymentMethodId } = payment.paymentList[0];
+      let paymentMethodDetails = await this.database.paymentMethod.findByIdAndOrganizationId({ organizationId, id: paymentMethodId });
+      throwOnFalsy(paymentMethodDetails, "INVALID_PAYMENT_METHOD", "Payment method is not valid");
+
+      debitList.push({
+        accountId: paymentMethodDetails.monetaryAccountId,
+        amount: accounting.debitMonetary
+      });
     }
 
     if (accounting.debitAccountsReceivable) {
@@ -359,17 +356,14 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
     // debit
     let debitList = [];
 
-    if (payment.paymentMethod === 'cash') {
-      debitList.push({
-        accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'CASH' })).id,
-        amount: accounting.debitMonetary
-      });
-    } else {
-      debitList.push({
-        accountId: (await this.getAccountByCodeName({ organizationId, codeName: 'BANK' })).id,
-        amount: accounting.debitMonetary
-      });
-    }
+    let { paymentMethodId } = payment;
+    let paymentMethodDetails = await this.database.paymentMethod.findByIdAndOrganizationId({ organizationId, id: paymentMethodId });
+    throwOnFalsy(paymentMethodDetails, "INVALID_PAYMENT_METHOD", "Payment method is not valid");
+
+    debitList.push({
+      accountId: paymentMethodDetails.monetaryAccountId,
+      amount: accounting.debitMonetary
+    });
 
     // credit
     let creditList = [];
