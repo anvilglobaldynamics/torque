@@ -454,4 +454,11 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
 
   // Sales Receipt - End
 
+  async _appendPaymentMethodDetails({ organizationId, sales }) {
+    let paymentMethodList = await this.database.paymentMethod.listByOrganizationId({ organizationId });
+    for (let payment of sales.payment.paymentList) {
+      payment.paymentMethodDetails = paymentMethodList.find(pm => pm.id === payment.paymentMethodId);
+    }
+  }
+
 }

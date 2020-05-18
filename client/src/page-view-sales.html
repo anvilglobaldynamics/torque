@@ -184,7 +184,7 @@
           <div class="list-object">
             <div>[[verses.sales.paidAmount]]: [[$applyThousandDecimalFormatting(payment.paidAmount)]] [[app.organization.settings.monetaryUnit]]</div>
             <div>[[verses.sales.changeAmount]]: [[$applyThousandDecimalFormatting(payment.changeAmount)]] [[app.organization.settings.monetaryUnit]]</div>
-            <div>[[verses.sales.paymentMethod]]: [[payment.paymentMethod]]</div>
+            <div>[[verses.sales.paymentMethod]]: [[payment.paymentMethodDetails.name]]</div>
             <div class="dated">[[verses.general.date]]: [[$mkDate(payment.createdDatetimeStamp, 'hh:mmtt dd-MM-yyyy')]]</div>
           </div>
         </template>
