@@ -352,6 +352,8 @@ exports.SalesMixin = (SuperApiClass) => class extends SuperApiClass {
 
     await this.__addDiscountPresetName({ sales });
 
+    await this._appendPaymentMethodDetails({ organizationId: organization.id, sales });
+
     return {
       sales,
       outlet,
