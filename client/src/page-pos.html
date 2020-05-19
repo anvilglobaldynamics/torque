@@ -2262,6 +2262,14 @@
       }
 
       _fetchPaymentMethodList(cbfn) {
+        // only for offline mode
+        if (this.isInOfflineMode) {
+          window.setTimeout(() => {
+            cbfn(this.app.offlineData.cache.getPaymentMethodListResponse.paymentMethodList);
+          }, 10);
+          return;
+        }
+
         let data = { organizationId: this.app.organization.id, paginate: this.paginate };
         this.app.callGetPaymentMethodListApi(data, (err, response) => {
           if (err) return;

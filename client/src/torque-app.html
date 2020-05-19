@@ -1027,7 +1027,8 @@
             getOutlet: null,
             getAggregatedInventoryDetails: null,
             getActiveServiceList: null,
-            getUserDisplayInformation: null
+            getUserDisplayInformation: null,
+            getPaymentMethodList: null
           },
           data: {
             unsyncedSalesIdSeed: 0,
@@ -1329,7 +1330,8 @@
         //     getOutlet: null,
         //     getAggregatedInventoryDetails: null,
         //     getActiveServiceList: null,
-        //     getUserDisplayInformation: null
+        //     getUserDisplayInformation: null,
+        //     getPaymentMethodList: null
         //   },
         //   data: {
         //     unsyncedSalesIdSeed: 0
@@ -1563,22 +1565,39 @@
           });
         }
 
+        const _backgroundSyncGetPaymentMethodListApi = (outletId, cbfn) => {
+          let data = {
+            organizationId: this.organization.id
+          };
+          data.shouldBlockUi = false;
+          this.app.callGetPaymentMethodListApi(data, (err, response) => {
+            if (err) return;
+            if (response.hasError) return onApiError(response.error);
+            return cbfn(response);
+          });
+        }
+
         _backgroundSyncGetOutlet(defaultOutletId, (getOutletResponse) => {
           let inventoryId = getOutletResponse.defaultInventory.id;
           _backgroundSyncGetAggregatedInventoryDetailsApi(inventoryId, (getAggregatedInventoryDetailsResponse) => {
-            _backgroundSyncGetActiveServiceListApi(defaultOutletId, (getActiveServiceListResponse) => {
-              _backgroundSyncGetUserDisplayInformation((getUserDisplayInformationResponse) => {
 
-                this.db.update('offline-data', (({ which }) => which === 'only'), data => {
-                  data.lastFetchedDatetimeStamp = Date.now();
-                  data.cache.getOutlet = getOutletResponse;
-                  data.cache.getAggregatedInventoryDetails = getAggregatedInventoryDetailsResponse;
-                  data.cache.getActiveServiceList = getActiveServiceListResponse;
-                  data.cache.getUserDisplayInformation = getUserDisplayInformationResponse;
-                  return data;
+            _backgroundSyncGetPaymentMethodListApi(defaultOutletId, (getPaymentMethodListResponse) => {
+              _backgroundSyncGetActiveServiceListApi(defaultOutletId, (getActiveServiceListResponse) => {
+                _backgroundSyncGetUserDisplayInformation((getUserDisplayInformationResponse) => {
+
+                  this.db.update('offline-data', (({ which }) => which === 'only'), data => {
+                    data.lastFetchedDatetimeStamp = Date.now();
+                    data.cache.getOutlet = getOutletResponse;
+                    data.cache.getAggregatedInventoryDetails = getAggregatedInventoryDetailsResponse;
+                    data.cache.getActiveServiceList = getActiveServiceListResponse;
+                    data.cache.getPaymentMethodListResponse = getPaymentMethodListResponse;
+
+                    data.cache.getUserDisplayInformation = getUserDisplayInformationResponse;
+                    return data;
+                  });
+                  return cbfn(true);
+
                 });
-                return cbfn(true);
-
               });
             });
           });
