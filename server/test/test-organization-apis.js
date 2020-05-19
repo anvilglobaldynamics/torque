@@ -45,7 +45,7 @@ let adminApiKey = null;
 const adminUsername = "default";
 const adminPassword = "johndoe1pass";
 
-describe.only('Organization', _ => {
+describe('Organization', _ => {
 
   it('START', testDoneFn => {
     initializeServer(_ => {
@@ -187,6 +187,7 @@ describe.only('Organization', _ => {
         apiKey,
         organizationId: organizationToBeEdited.id,
         monetaryUnit: 'BDT',
+        vatRule: 'vat-after-discount',
         decimalFormatPreset: 'XX,XX,XXX.XX',
         receiptText1: 'Test Change',
         receiptText2: '',

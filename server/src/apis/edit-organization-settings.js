@@ -14,6 +14,7 @@ exports.EditOrganizationSettingsApi = class extends Api.mixin(OrganizationMixin)
     return Joi.object().keys({
       organizationId: Joi.number().max(999999999999999).required(),
       monetaryUnit: Joi.string().min(1).max(3).required(),
+      vatRule: Joi.string().valid('vat-before-discount', 'vat-after-discount').required(),
       decimalFormatPreset: Joi.string().valid('XX,XX,XXX.XX', 'X,XXX,XXX.XX', 'X XXX XXX,XX', 'X.XXX.XXX,XX').required(),
       receiptText1: Joi.string().min(0).max(64).allow('').required(),
       receiptText2: Joi.string().min(0).max(64).allow('').required(),
@@ -30,15 +31,15 @@ exports.EditOrganizationSettingsApi = class extends Api.mixin(OrganizationMixin)
     }];
   }
 
-  async _updateOrganizationSettings({ organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, decimalFormatPreset }) {
-    let res = await this.database.organizationSettings.setDetailsByOrganizationId({ organizationId }, { receiptText1, receiptText2, logoImageId, monetaryUnit, decimalFormatPreset });
+  async _updateOrganizationSettings({ organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, vatRule, decimalFormatPreset }) {
+    let res = await this.database.organizationSettings.setDetailsByOrganizationId({ organizationId }, { receiptText1, receiptText2, logoImageId, monetaryUnit, vatRule, decimalFormatPreset });
     this.ensureUpdate(res, 'organizationSettings');
   }
 
   async handle({ body }) {
-    let { organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, decimalFormatPreset } = body;
+    let { organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, vatRule, decimalFormatPreset } = body;
 
-    await this._updateOrganizationSettings({ organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, decimalFormatPreset });
+    await this._updateOrganizationSettings({ organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, vatRule, decimalFormatPreset });
 
     await this._remotelyTerminateSessionOfUsersInOrganization({ organizationId });
 
