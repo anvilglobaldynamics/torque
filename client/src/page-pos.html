@@ -2304,9 +2304,8 @@
           discountPresetId = null
         } = this.payment;
 
-        if (paymentMethodId === null) return;
+        if (paymentMethodId === null || typeof (paymentMethodId) === 'undefined') return;
         let paymentMethodDetails = this.paymentMethodList.find(pm => pm.id === paymentMethodId);
-        console.log({ paymentMethodDetails, paymentMethodId })
 
         // setting vatAmount to default value of 0 before calculating vatAmount on a loop
         vatAmount = 0;

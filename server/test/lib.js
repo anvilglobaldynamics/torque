@@ -1562,6 +1562,19 @@ exports.validateSalesSchema = (doc) => {
           paidAmount: Joi.number().max(999999999999999).required(),
           changeAmount: Joi.number().max(999999999999999).required(),
           paymentMethodId: Joi.number().max(999999999999999).required(),
+
+          paymentMethodDetails: Joi.object().keys({
+            id: Joi.any(),
+            createdDatetimeStamp: Joi.number().max(999999999999999).required(),
+            lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+
+            name: Joi.string().min(1).max(32).required(),
+            organizationId: Joi.number().max(999999999999999).required(),
+            monetaryAccountId: Joi.number().max(999999999999999).required(),
+
+            isDeleted: Joi.boolean().required()
+          }).required(),
+
           wasChangeSavedInChangeWallet: Joi.boolean().required()
         })
       )

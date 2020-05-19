@@ -607,7 +607,7 @@ describe('Sales', _ => {
 
   let liteProductBlueprintIdList = null;
 
-  it.skip('api/lite-add-sales (Valid, No Customer)', testDoneFn => {
+  it('api/lite-add-sales (Valid, No Customer)', testDoneFn => {
 
     callApi('api/lite-add-sales', {
       json: {
@@ -653,7 +653,7 @@ describe('Sales', _ => {
 
   });
 
-  it.skip('api/lite-add-sales (Valid, No Customer, Existing Blueprint)', testDoneFn => {
+  it('api/lite-add-sales (Valid, No Customer, Existing Blueprint)', testDoneFn => {
 
     callApi('api/lite-add-sales', {
       json: {
@@ -1041,6 +1041,7 @@ describe('Sales', _ => {
 
   });
 
+
   it('api/get-sales (Valid)', testDoneFn => {
 
     callApi('api/get-sales', {
@@ -1145,6 +1146,7 @@ describe('Sales', _ => {
         salesId,
       }
     }, (err, response, body) => {
+
       expect(response.statusCode).to.equal(200);
       validateGetSalesApiSuccessResponse(body);
       validateSalesSchema(body.sales);
@@ -1960,7 +1962,7 @@ describe('Sales', _ => {
         salesId,
         customerId,
         payment: {
-          paidAmount: 180+60,
+          paidAmount: 180 + 60,
           changeAmount: 66,
           shouldSaveChangeInAccount: false,
           paymentMethodId: paymentMethodCash.id
@@ -2612,6 +2614,12 @@ describe('Sales', _ => {
       }))
       .then(({ organizationId }) => membershipTest.organizationId = organizationId)
 
+      .then(() => promisifyApiCall({}, getPaymentMethodCash, {
+        apiKey,
+        organizationId: membershipTest.organizationId
+      }))
+      .then(({ paymentMethodCash }) => membershipTest.paymentMethodCash = paymentMethodCash)
+
       .then(() => promisifyApiCall({}, addCustomer, {
         apiKey,
         organizationId: membershipTest.organizationId,
@@ -2715,7 +2723,10 @@ describe('Sales', _ => {
       })
 
       // add sale - outlet 1, customer 1, service 1
-      .then(() => { longstandingService = membershipTest.outlet1ServiceList.find(i => i.serviceBlueprint.name === 'Long 1'); return Promise.resolve() })
+      .then(() => {
+        longstandingService = membershipTest.outlet1ServiceList.find(i => i.serviceBlueprint.name === 'Long 1');
+        return Promise.resolve()
+      })
       .then(() => promisifyApiCall({}, addSales, {
         apiKey,
         outletId: membershipTest.outlet1Id,
@@ -2743,7 +2754,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethodId: paymentMethodCash.id
+          paymentMethodId: membershipTest.paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2784,7 +2795,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethodId: paymentMethodCash.id
+          paymentMethodId: membershipTest.paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2825,7 +2836,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethodId: paymentMethodCash.id
+          paymentMethodId: membershipTest.paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2866,7 +2877,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethodId: paymentMethodCash.id
+          paymentMethodId: membershipTest.paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2907,7 +2918,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethodId: paymentMethodCash.id
+          paymentMethodId: membershipTest.paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
