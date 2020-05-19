@@ -2284,45 +2284,18 @@
           discountPresetId = null
         } = this.payment;
 
-        // setting vatAmount to default value of 0 before calculating vatAmount on a loop
-        vatAmount = 0;
+        let totalProductAmount = this.calculateTotalProductAmount();
+        let totalServiceAmount = this.calculateTotalServiceAmount();
 
-        // reducing to find totalProductAmount
-        let totalProductAmount = 0;
-        totalProductAmount = this.productList.reduce((sum, product) => {
-          let { salePrice, selectedCount, vatValue } = product;
-
-          let salePriceForAllSelected = parseFloat(salePrice * selectedCount);
-
-          // adding product vat value to to total vatAmount
-          vatAmount += salePriceForAllSelected * (vatValue / 100);
-
-          // the sum to be set as totalProductAmount
-          return parseFloat(sum) + salePriceForAllSelected;
-        }, 0);
-
-        // reducing to find totalServiceAmount
-        let totalServiceAmount = 0;
-        totalServiceAmount = this.serviceList.reduce((sum, service) => {
-          let { salePrice, vatValue } = service;
-
-          // adding service vat value to to total vatAmount
-          vatAmount += salePrice * (vatValue / 100);
-
-          // the sum to be set as totalServiceAmount
-          return parseFloat(sum) + parseFloat(salePrice);
-        }, 0);
+        vatAmount = this.calculateVatBeforeDiscount();
 
         // totalAmount of service and product sale price(s)
         totalAmount = parseFloat(totalProductAmount) + parseFloat(totalServiceAmount);
 
-        // overall discount calculation
-        if (discountValue) {
-          if (discountType === 'percent') {
-            discountedAmount = totalAmount * (discountValue / 100);
-          } else if (discountType === 'fixed') {
-            discountedAmount = discountValue;
-          }
+        discountedAmount = this.calculateDiscount({ discountType, discountValue, totalAmount });
+
+        if (this.app.organization.settings.vatRule === 'vat-after-discount' && discountType === 'percent') {
+          vatAmount = this.calculateVatAfterDiscount({ vatAmount, discountValue });
         }
 
         // updating totalBilled with calculated totalAmount, vatAmount and discountedAmount
@@ -2374,6 +2347,65 @@
           paymentMethod,
           discountPresetId
         };
+      }
+
+      calculateTotalProductAmount() {
+        let totalProductAmount = 0;
+
+        this.productList.forEach(product => {
+          let { salePrice, selectedCount } = product;
+          let salePriceForAllSelected = parseFloat(salePrice * selectedCount);
+          totalProductAmount += salePriceForAllSelected;
+        });
+
+        return totalProductAmount;
+      }
+
+      calculateTotalServiceAmount() {
+        let totalServiceAmount = 0;
+
+        this.serviceList.forEach(service => {
+          let { salePrice } = product;
+          totalServiceAmount += parseFloat(salePrice);
+        });
+
+        return totalServiceAmount;
+      }
+
+      calculateVatBeforeDiscount() {
+        let vatAmount = 0;
+
+        this.productList.forEach(product => {
+          let { salePrice, selectedCount, vatValue } = product;
+          let salePriceForAllSelected = parseFloat(salePrice * selectedCount);
+          vatAmount += salePriceForAllSelected * (vatValue / 100);
+        });
+
+        this.serviceList.forEach(service => {
+          let { salePrice, vatValue } = product;
+          vatAmount += parseFloat(salePrice) * (vatValue / 100);
+        });
+
+        return vatAmount;
+      }
+
+      calculateDiscount({ discountType, discountValue, totalAmount }) {
+        let discountedAmount = 0;
+
+        if (discountValue) {
+          if (discountType === 'percent') {
+            discountedAmount = totalAmount * (discountValue / 100);
+          } else if (discountType === 'fixed') {
+            discountedAmount = discountValue;
+          }
+        }
+
+        return discountedAmount;
+      }
+
+      calculateVatAfterDiscount({ vatAmount, discountValue }) {
+        vatAmount -= vatAmount * (discountValue / 100);
+        return vatAmount;
       }
 
       clearRounderByAmountTapped(e = null) {
