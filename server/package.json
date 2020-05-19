@@ -29,16 +29,21 @@
     "request": "^2.88.0"
   },
   "scripts": {
-    "deploy": "node ./scripts/deploy.js",
-    "import": "node ./scripts/import.js",
-    "backup": "node ./scripts/backup.js",
-    "bulk-gen": "node ./scripts/bulk-gen.js",
-    "bulk-stress": "node ./scripts/bulk-stress-cluster.js",
+    "//---------------- development": "",
     "start": "node start.js",
     "dev": "nodemon start.js",
-    "dev-imported": "nodemon start.js --db torque-imported",
     "test": "mocha -- --timeout 20000",
-    "test-bail": "mocha -- --timeout 10000 --bail"
+    "test-bail": "mocha -- --timeout 10000 --bail",
+    "//---------------- remote db clone": "",
+    "import": "node ./scripts/import.js",
+    "dev-imported": "nodemon start.js --db torque-imported",
+    "//---------------- deployment": "",
+    "deploy": "node ./scripts/deploy.js",
+    "//---------------- maintenance": "",
+    "backup": "node ./scripts/backup.js",
+    "//---------------- deprecated": "",
+    "//bulk-gen": "node ./scripts/bulk-gen.js",
+    "//bulk-stress": "node ./scripts/bulk-stress-cluster.js"
   },
   "private": true
 }

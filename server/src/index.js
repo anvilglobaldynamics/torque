@@ -226,12 +226,14 @@ class Program {
     try {
       config = ConfigLoader.getComputedConfig();
       if (params.db) {
+        console.log(`WARN Using db "${params.db}"`);
         config.db.name = params.db;
       }
+
       server = new Server(config, mode);
+      logger = new Logger(config.log, this.muteLogger);
       database = new DatabaseService(config.db);
       legacyDatabase = new LegacyDatabase(config.db);
-      logger = new Logger(config.log, this.muteLogger);
       emailService = new EmailService(config, mode, database);
       smsService = new SmsService(config, legacyDatabase);
       templateManager = new TemplateManager(config);

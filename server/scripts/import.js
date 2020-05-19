@@ -13,7 +13,7 @@ const importRemote = (password) => {
 }
 
 const exportToLocal = () => {
-  let command = `mongorestore --db torque --drop ./mongo-temp-import/torque`
+  let command = `mongorestore --db torque-imported --drop ./mongo-temp-import/torque`
   let res = shell.exec(command);
   if (res.code !== 0) {
     shell.echo(`Error: mongorestore failed`);
@@ -27,4 +27,4 @@ let password = readlineSync.question('Please enter your password for "torque-adm
 
 importRemote(password);
 exportToLocal();
-
+console.log('Imported as db: "torque-imported"')
